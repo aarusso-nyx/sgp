@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/portal-spec",
+    "types": ["vitest/globals"]
+  },
+  "include": ["portal/src/**/*.d.ts", "portal/src/**/*.spec.ts"]
+}

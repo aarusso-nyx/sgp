@@ -1,0 +1,3410 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["public", "hr", "payroll", "portal"]
+}
+
+enum RecordStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+  @@schema("public")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  LOCKED
+  @@schema("public")
+}
+
+enum AuditAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  IMPORT
+  EXPORT
+  GENERATE
+  PROCESS
+  APPROVE
+  REJECT
+  DOWNLOAD
+  @@schema("public")
+}
+
+enum BranchType {
+  HEADQUARTERS
+  BRANCH
+  DEPARTMENT
+  EXTERNAL
+  @@schema("public")
+}
+
+enum PersonGender {
+  FEMALE
+  MALE
+  OTHER
+  UNDECLARED
+  @@schema("public")
+}
+
+enum EmployeeLifecycleStatus {
+  ACTIVE
+  ON_LEAVE
+  SUSPENDED
+  TERMINATED
+  RETIRED
+  INTERN
+  @@schema("public")
+}
+
+enum PayrollRunStatus {
+  DRAFT
+  QUEUED
+  PROCESSING
+  GENERATED
+  APPROVED
+  PAID
+  CANCELED
+  FAILED
+  CLOSED
+  @@schema("public")
+}
+
+enum PayrollEntryKind {
+  EARNING
+  DEDUCTION
+  INFORMATION
+  BASE
+  @@schema("public")
+}
+
+enum PayrollEntrySource {
+  MANUAL
+  IMPORTED
+  CALCULATED
+  ADJUSTMENT
+  @@schema("public")
+}
+
+enum PaymentRemittanceStatus {
+  DRAFT
+  GENERATED
+  SENT
+  PAID
+  REJECTED
+  CANCELED
+  @@schema("public")
+}
+
+enum AdvanceRequestStatus {
+  REQUESTED
+  APPROVED
+  REJECTED
+  PROCESSED
+  CANCELED
+  @@schema("public")
+}
+
+enum AdvancePaymentStatus {
+  PENDING
+  GENERATED
+  PAID
+  CANCELED
+  @@schema("public")
+}
+
+enum ReportRequestStatus {
+  REQUESTED
+  RUNNING
+  COMPLETED
+  FAILED
+  EXPIRED
+  @@schema("public")
+}
+
+enum DocumentStorageKind {
+  LOCAL
+  S3
+  EXTERNAL
+  @@schema("public")
+}
+
+enum DocumentUploadStatus {
+  PENDING
+  REGISTERED
+  EXPIRED
+  ABORTED
+  @@schema("public")
+}
+
+enum AgreementStatus {
+  DRAFT
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  TERMINATED
+  @@schema("public")
+}
+
+enum RecruitmentRequestStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+  @@schema("public")
+}
+
+enum RecruitmentCandidateStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  @@schema("public")
+}
+
+enum RecruitmentHiringType {
+  EFFECTIVE
+  COMMISSIONED
+  CONTRACTOR
+  INTERN
+  @@schema("public")
+}
+
+enum MedicalAppointmentStatus {
+  SCHEDULED
+  ATTENDED
+  NO_SHOW
+  CANCELED
+  @@schema("public")
+}
+
+enum MedicalReportStatus {
+  PENDING_SUBMISSION
+  APPROVED
+  REJECTED
+  @@schema("public")
+}
+
+enum ESocialEventStatus {
+  PENDENTE
+  GERANDO_XML
+  ASSINANDO
+  ENVIANDO
+  AGUARDANDO_RETORNO
+  PROCESSADO_COM_SUCESSO
+  PROCESSADO_COM_ERROS
+  ERRO_TECNICO_RETENTAVEL
+  ERRO_DEFINITIVO
+  EXCLUIDO
+  @@schema("public")
+}
+
+enum PerformanceEvaluationStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  @@schema("public")
+}
+
+enum ProgressionKind {
+  MERIT
+  TITLE
+  JUDICIAL
+  CORRECTION
+  @@schema("public")
+}
+
+enum PensionCompensationStatus {
+  DRAFT
+  REQUESTED
+  APPROVED
+  REJECTED
+  SETTLED
+  @@schema("public")
+}
+
+enum RecertificationBeneficiaryType {
+  RETIREE
+  PENSIONER
+  UNIVERSITY_PENSIONER
+  @@schema("public")
+}
+
+enum RecertificationStatus {
+  PENDING
+  RECERTIFIED
+  NEAR_DUE
+  OVERDUE
+  BLOCKED
+  @@schema("public")
+}
+
+enum ExternalLifeProofChannel {
+  PORTAL_COLABORADOR
+  PREFEITURA_PUBLICA
+  GOV_BR
+  @@schema("public")
+}
+
+model Tenant {
+  id        String       @id @db.Uuid
+  slug      String       @unique
+  code      String       @unique
+  name      String
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([status])
+  @@schema("public")
+  @@map("tenant")
+}
+
+model UserAccount {
+  id                String     @id @default(uuid()) @db.Uuid
+  tenantId          String     @map("tenant_id") @db.Uuid
+  cognitoSub        String?    @map("cognito_sub")
+  login             String
+  cpf               String?
+  name              String
+  email             String?
+  status            UserStatus @default(ACTIVE)
+  lastLoginAt       DateTime?  @map("last_login_at") @db.Timestamptz(6)
+  passwordChangedAt DateTime?  @map("password_changed_at") @db.Timestamptz(6)
+  metadata          Json       @default("{}")
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deactivatedAt     DateTime?  @map("deactivated_at") @db.Timestamptz(6)
+
+  profileAssignments      ProfileAssignment[]
+  groupSnapshots          UserGroupSnapshot[]
+  auditEvents             AuditEvent[]              @relation("AuditActor")
+  reportRequests          ReportRequest[]           @relation("ReportRequestedBy")
+  downloads               DocumentDownloadAudit[]
+  payrollRuns             PayrollRun[]              @relation("PayrollCreatedBy")
+  remittanceFiles         PaymentRemittanceFile[]   @relation("RemittanceCreatedBy")
+  payrollRunStatusChanges PayrollRunStatusHistory[] @relation("PayrollRunStatusChangedBy")
+  systemParameterUpdates  SystemParameter[]         @relation("SystemParameterUpdatedBy")
+  notifications           Notification[]            @relation("NotificationUser")
+
+  @@unique([tenantId, cognitoSub])
+  @@unique([tenantId, login])
+  @@unique([tenantId, cpf])
+  @@unique([tenantId, email])
+  @@index([status])
+  @@index([tenantId, status])
+  @@schema("public")
+  @@map("user_account")
+}
+
+model AccessProfile {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  description String       @default("")
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  assignments ProfileAssignment[]
+  permissions ProfilePermission[]
+  menuItems   MenuItem[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("public")
+  @@map("access_profile")
+}
+
+model ProfileAssignment {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  profileId String    @map("profile_id") @db.Uuid
+  startsAt  DateTime  @default(now()) @map("starts_at") @db.Timestamptz(6)
+  endsAt    DateTime? @map("ends_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user    UserAccount   @relation(fields: [userId], references: [id])
+  profile AccessProfile @relation(fields: [profileId], references: [id])
+
+  @@unique([userId, profileId, startsAt])
+  @@index([profileId])
+  @@index([endsAt])
+  @@schema("public")
+  @@map("profile_assignment")
+}
+
+model Permission {
+  id           String   @id @default(uuid()) @db.Uuid
+  key          String   @unique
+  moduleKey    String   @map("module_key")
+  resourceKey  String   @map("resource_key")
+  actionKey    String   @map("action_key")
+  description  String   @default("")
+  routePattern String?  @map("route_pattern")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profiles ProfilePermission[]
+
+  @@unique([moduleKey, resourceKey, actionKey])
+  @@index([moduleKey])
+  @@index([resourceKey])
+  @@schema("public")
+  @@map("permission")
+}
+
+model ProfilePermission {
+  id           String   @id @default(uuid()) @db.Uuid
+  profileId    String   @map("profile_id") @db.Uuid
+  permissionId String   @map("permission_id") @db.Uuid
+  allowed      Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  profile    AccessProfile @relation(fields: [profileId], references: [id])
+  permission Permission    @relation(fields: [permissionId], references: [id])
+
+  @@unique([profileId, permissionId])
+  @@index([permissionId])
+  @@schema("public")
+  @@map("profile_permission")
+}
+
+model UserGroupSnapshot {
+  id         String    @id @default(uuid()) @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  provider   String    @default("cognito")
+  groupKey   String    @map("group_key")
+  capturedAt DateTime  @default(now()) @map("captured_at") @db.Timestamptz(6)
+  expiresAt  DateTime? @map("expires_at") @db.Timestamptz(6)
+  rawClaims  Json      @default("{}") @map("raw_claims")
+
+  user UserAccount @relation(fields: [userId], references: [id])
+
+  @@index([userId, capturedAt])
+  @@index([groupKey])
+  @@schema("public")
+  @@map("user_group_snapshot")
+}
+
+model MenuItem {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  parentId  String?      @map("parent_id") @db.Uuid
+  profileId String?      @map("profile_id") @db.Uuid
+  code      String
+  label     String
+  route     String?
+  moduleKey String       @map("module_key")
+  sortOrder Int          @default(0) @map("sort_order")
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  parent   MenuItem?      @relation("MenuHierarchy", fields: [parentId], references: [id])
+  children MenuItem[]     @relation("MenuHierarchy")
+  profile  AccessProfile? @relation(fields: [profileId], references: [id])
+
+  @@unique([tenantId, code])
+  @@index([parentId])
+  @@index([moduleKey, status])
+  @@index([profileId])
+  @@schema("public")
+  @@map("menu_item")
+}
+
+model AuditEvent {
+  id           String      @id @default(uuid()) @db.Uuid
+  tenantId     String      @map("tenant_id") @db.Uuid
+  occurredAt   DateTime    @default(now()) @map("occurred_at") @db.Timestamptz(6)
+  actorUserId  String?     @map("actor_user_id") @db.Uuid
+  actorSub     String?     @map("actor_sub")
+  actorLogin   String?     @map("actor_login")
+  action       AuditAction
+  resourceType String      @map("resource_type")
+  resourceId   String?     @map("resource_id")
+  tableName    String?     @map("table_name")
+  requestId    String?     @map("request_id")
+  ipAddress    String?     @map("ip_address") @db.Inet
+  userAgent    String?     @map("user_agent")
+  metadata     Json        @default("{}")
+
+  actor UserAccount? @relation("AuditActor", fields: [actorUserId], references: [id])
+
+  @@index([occurredAt])
+  @@index([actorUserId, occurredAt])
+  @@index([actorLogin])
+  @@index([resourceType, resourceId])
+  @@index([requestId])
+  @@schema("public")
+  @@map("audit_event")
+}
+
+model Company {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  code          String
+  legalName     String       @map("legal_name")
+  tradeName     String?      @map("trade_name")
+  cnpj          String?
+  legalNatureId String?      @map("legal_nature_id") @db.Uuid
+  status        RecordStatus @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  legalNature LegalNature? @relation(fields: [legalNatureId], references: [id])
+  branches    Branch[]
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, cnpj])
+  @@index([status])
+  @@index([legalNatureId])
+  @@schema("hr")
+  @@map("company")
+}
+
+model Branch {
+  id         String       @id @default(uuid()) @db.Uuid
+  tenantId   String       @map("tenant_id") @db.Uuid
+  companyId  String       @map("company_id") @db.Uuid
+  code       String
+  acronym    String?
+  name       String
+  cnpj       String?
+  branchType BranchType   @default(BRANCH) @map("branch_type")
+  status     RecordStatus @default(ACTIVE)
+  createdAt  DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  company           Company                  @relation(fields: [companyId], references: [id])
+  employees         Employee[]
+  workLocations     WorkLocation[]
+  costCenters       CostCenter[]
+  legalResponsibles LegalResponsible[]
+  payrollRuns       PayrollRun[]
+  remittanceFiles   PaymentRemittanceFile[]
+  financialRecords  PayrollFinancialRecord[]
+  blockedPayments   BlockedPayment[]
+  accountingAccounts PayrollAccountingAccount[]
+  fromTransfers     EmployeeTransfer[]       @relation("TransferFromBranch")
+  toTransfers       EmployeeTransfer[]       @relation("TransferToBranch")
+  exerciseRecords   EmployeeExercise[]       @relation("ExerciseBranch")
+  processFunctions  AdministrativeProcessFunction[] @relation("ProcessFunctionBranch")
+  reports           ReportRequest[]
+  recruitmentRequests RecruitmentRequest[]
+  performanceEvaluations PerformanceEvaluation[]
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, cnpj])
+  @@index([companyId])
+  @@index([status])
+  @@schema("hr")
+  @@map("branch")
+}
+
+model WorkLocation {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  branchId    String?      @map("branch_id") @db.Uuid
+  parentId    String?      @map("parent_id") @db.Uuid
+  code        String
+  name        String
+  description String       @default("")
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  branch              Branch?                      @relation(fields: [branchId], references: [id])
+  parent              WorkLocation?                @relation("WorkLocationHierarchy", fields: [parentId], references: [id])
+  children            WorkLocation[]               @relation("WorkLocationHierarchy")
+  employees           Employee[]
+  transfers           EmployeeTransfer[]
+  exerciseRecords     EmployeeExercise[]
+  processFunctions    AdministrativeProcessFunction[]
+  financialRecords    PayrollFinancialRecord[]
+  payrollRunRollups   PayrollRunWorkLocation[]
+  accountingAccountLinks PayrollAccountingAccountWorkLocation[]
+  recruitmentRequests RecruitmentRequest[]
+  performanceEvaluations PerformanceEvaluation[]
+  structureAssignments WorkLocationStructureAssignment[]
+
+  @@unique([tenantId, code])
+  @@index([branchId])
+  @@index([parentId])
+  @@index([status])
+  @@schema("hr")
+  @@map("work_location")
+}
+
+model CostCenter {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  branchId  String?      @map("branch_id") @db.Uuid
+  code      String
+  name      String
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  branch    Branch?    @relation(fields: [branchId], references: [id])
+  employees Employee[]
+  accountingAccounts PayrollAccountingAccount[]
+
+  @@unique([tenantId, code])
+  @@index([branchId])
+  @@index([status])
+  @@schema("hr")
+  @@map("cost_center")
+}
+
+model LegalResponsible {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  branchId  String       @map("branch_id") @db.Uuid
+  name      String
+  cpf       String?
+  roleTitle String       @map("role_title")
+  startsOn  DateTime     @map("starts_on") @db.Date
+  endsOn    DateTime?    @map("ends_on") @db.Date
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  branch Branch @relation(fields: [branchId], references: [id])
+
+  @@index([branchId, status])
+  @@index([cpf])
+  @@schema("hr")
+  @@map("legal_responsible")
+}
+
+model JobPosition {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  description String       @default("")
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employees    Employee[]
+  earningLinks JobPositionEarning[]
+  performanceEvaluations PerformanceEvaluation[]
+  referenceLinks JobStructureReferenceLink[]
+  employmentLinks JobStructureEmploymentLink[]
+  workLocationAssignments WorkLocationStructureAssignment[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("job_position")
+}
+
+model JobFunction {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  description String       @default("")
+  natureId    String?      @map("nature_id") @db.Uuid
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  nature    FunctionNature? @relation(fields: [natureId], references: [id])
+  employees Employee[]
+  exerciseRecords EmployeeExercise[]
+  processFunctions AdministrativeProcessFunction[]
+  requisitionFunctions RecruitmentRequestFunction[]
+  performanceEvaluations PerformanceEvaluation[]
+  referenceLinks JobStructureReferenceLink[]
+  employmentLinks JobStructureEmploymentLink[]
+  workLocationAssignments WorkLocationStructureAssignment[]
+  functionEarningLinks JobFunctionEarning[]
+
+  @@unique([tenantId, code])
+  @@index([natureId])
+  @@index([status])
+  @@schema("hr")
+  @@map("job_function")
+}
+
+model FunctionNature {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  code      String
+  name      String
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  functions JobFunction[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("function_nature")
+}
+
+model SalaryRange {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  code      String
+  groupCode String?      @map("group_code")
+  classCode String?      @map("class_code")
+  name      String
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  references SalaryReference[]
+  levels     SalaryRangeLevel[]
+
+  @@unique([tenantId, code])
+  @@index([groupCode, classCode])
+  @@index([status])
+  @@schema("hr")
+  @@map("salary_range")
+}
+
+model SalaryReference {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  rangeId     String?      @map("range_id") @db.Uuid
+  code        String
+  description String
+  amount      Decimal      @default(0) @db.Decimal(14, 2)
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  range        SalaryRange?         @relation(fields: [rangeId], references: [id])
+  employees    Employee[]
+  salaryLevels SalaryLevelHistory[]
+  rangeLevels  SalaryRangeLevel[]
+  sourceMeritProgressions MeritProgression[] @relation("MeritProgressionSourceSalaryReference")
+  targetMeritProgressions MeritProgression[] @relation("MeritProgressionTargetSalaryReference")
+
+  @@unique([tenantId, code])
+  @@index([rangeId])
+  @@index([status])
+  @@schema("hr")
+  @@map("salary_reference")
+}
+
+model FunctionalStatus {
+  id              String                  @id @default(uuid()) @db.Uuid
+  tenantId        String                  @map("tenant_id") @db.Uuid
+  code            String
+  description     String
+  modality        String?
+  kind            String?
+  entersPayroll   Boolean                 @default(false) @map("enters_payroll")
+  lifecycleStatus EmployeeLifecycleStatus @default(ACTIVE) @map("lifecycle_status")
+  status          RecordStatus            @default(ACTIVE)
+  createdAt       DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employees        Employee[]
+  statusHistory    EmployeeStatusHistory[]
+  financialRecords PayrollFinancialRecord[]
+  blockedPayments  BlockedPayment[]
+
+  @@unique([tenantId, code])
+  @@index([entersPayroll])
+  @@index([status])
+  @@schema("hr")
+  @@map("functional_status")
+}
+
+model EmploymentLink {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  code      String
+  name      String
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employees       Employee[]
+  processingTypes ProcessingType[]
+  earningLinks    EmploymentLinkEarning[]
+  structureLinks  JobStructureEmploymentLink[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("employment_link")
+}
+
+model ContractType {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  code      String
+  name      String
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employees Employee[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("contract_type")
+}
+
+model PayrollType {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  processingTypes ProcessingType[]
+  payrollRuns     PayrollRun[]
+  earningLinks    PayrollTypeEarning[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("payroll")
+  @@map("payroll_type")
+}
+
+model ProcessingType {
+  id               String       @id @default(uuid()) @db.Uuid
+  tenantId         String       @map("tenant_id") @db.Uuid
+  code             String
+  description      String
+  payrollTypeId    String?      @map("payroll_type_id") @db.Uuid
+  employmentLinkId String?      @map("employment_link_id") @db.Uuid
+  status           RecordStatus @default(ACTIVE)
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  payrollType     PayrollType?            @relation(fields: [payrollTypeId], references: [id])
+  employmentLink  EmploymentLink?         @relation(fields: [employmentLinkId], references: [id])
+  payrollRuns     PayrollRun[]
+  remittanceFiles PaymentRemittanceFile[]
+  reportRequests  ReportRequest[]
+
+  @@unique([tenantId, code])
+  @@index([payrollTypeId])
+  @@index([employmentLinkId])
+  @@index([status])
+  @@schema("payroll")
+  @@map("processing_type")
+}
+
+model Reason {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  eventKey    String?      @map("event_key")
+  kind        String?
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  statusHistory   EmployeeStatusHistory[]
+  transfers       EmployeeTransfer[]
+  remittanceFiles PaymentRemittanceFile[]
+  blockedPayments BlockedPayment[]
+
+  @@unique([tenantId, code])
+  @@index([kind, status])
+  @@schema("hr")
+  @@map("reason")
+}
+
+model AbsenceReason {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  leaves        LeaveRecord[]
+  medicalLeaves MedicalLeave[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("absence_reason")
+}
+
+model TerminationReason {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employees Employee[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("termination_reason")
+}
+
+model DocumentType {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  attachments DocumentAttachment[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("public")
+  @@map("document_type")
+}
+
+model VacationType {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  vacations VacationRecord[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("vacation_type")
+}
+
+model Shift {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  schedule    String?
+  dailyHours  Decimal?     @map("daily_hours") @db.Decimal(5, 2)
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employees                   Employee[]
+  recruitmentRequestFunctions RecruitmentRequestFunction[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("shift")
+}
+
+model ShiftDayOff {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  shiftId     String       @map("shift_id") @db.Uuid
+  weekday     Int          @map("weekday")
+  description String       @default("")
+  metadata    Json         @default("{}")
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, shiftId, weekday])
+  @@index([shiftId])
+  @@index([status])
+  @@schema("hr")
+  @@map("shift_day_off")
+}
+
+model UnionEntity {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  cnpj        String?
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employees            Employee[]
+  unionContributions   EmployeeUnionContribution[]
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, cnpj])
+  @@index([status])
+  @@schema("hr")
+  @@map("union_entity")
+}
+
+model Bank {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  agencyDigit String?      @map("agency_digit")
+  blocked     Boolean      @default(false)
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employees Employee[]
+
+  @@unique([tenantId, code])
+  @@index([blocked])
+  @@index([status])
+  @@schema("hr")
+  @@map("bank")
+}
+
+model LegalNature {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  code      String
+  groupName String?      @map("group_name")
+  name      String
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  companies Company[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("legal_nature")
+}
+
+model Legislation {
+  id              String       @id @default(uuid()) @db.Uuid
+  tenantId        String       @map("tenant_id") @db.Uuid
+  code            String
+  normNumber      String       @map("norm_number")
+  normYear        Int          @map("norm_year")
+  normType        String       @map("norm_type")
+  federatedEntity String?      @map("federated_entity")
+  detail          String       @default("")
+  status          RecordStatus @default(ACTIVE)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([normYear])
+  @@index([normType])
+  @@schema("hr")
+  @@map("legislation")
+}
+
+model JobFunctionLegislationHistory {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  jobFunctionId String       @map("job_function_id") @db.Uuid
+  legislationId String?      @map("legislation_id") @db.Uuid
+  code          String
+  description   String       @default("")
+  effectiveOn   DateTime     @map("effective_on") @db.Date
+  endsOn        DateTime?    @map("ends_on") @db.Date
+  metadata      Json         @default("{}")
+  status        RecordStatus @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, jobFunctionId, code, effectiveOn])
+  @@index([jobFunctionId])
+  @@index([legislationId])
+  @@index([status])
+  @@schema("hr")
+  @@map("job_function_legislation_history")
+}
+
+model ActClassification {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("act_classification")
+}
+
+model TransitBenefit {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  unitAmount  Decimal      @default(0) @map("unit_amount") @db.Decimal(12, 2)
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employeeBenefits EmployeeTransitBenefit[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("hr")
+  @@map("transit_benefit")
+}
+
+model ReferenceCatalogEntry {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  catalogKey  String       @map("catalog_key")
+  code        String
+  name        String
+  description String       @default("")
+  metadata    Json         @default("{}")
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  structureLinks JobStructureReferenceLink[]
+  providerAgreementLinks HealthProviderAgreementLink[] @relation("HealthProviderReference")
+  examProviderLinks      HealthExamProviderExamLink[]  @relation("HealthExamProviderReference")
+  providedExamLinks      HealthExamProviderExamLink[]  @relation("HealthExamReference")
+
+  @@unique([tenantId, catalogKey, code])
+  @@index([tenantId, catalogKey, status])
+  @@schema("hr")
+  @@map("reference_catalog_entry")
+}
+
+model JobStructureReferenceLink {
+  id                  String       @id @default(uuid()) @db.Uuid
+  tenantId            String       @map("tenant_id") @db.Uuid
+  jobPositionId       String?      @map("job_position_id") @db.Uuid
+  jobFunctionId       String?      @map("job_function_id") @db.Uuid
+  referenceCatalogKey String       @map("reference_catalog_key")
+  referenceEntryId    String       @map("reference_entry_id") @db.Uuid
+  code                String
+  name                String
+  description         String       @default("")
+  status              RecordStatus @default(ACTIVE)
+  createdAt           DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  jobPosition    JobPosition?          @relation(fields: [jobPositionId], references: [id])
+  jobFunction    JobFunction?          @relation(fields: [jobFunctionId], references: [id])
+  referenceEntry ReferenceCatalogEntry @relation(fields: [referenceEntryId], references: [id])
+
+  @@unique([tenantId, jobPositionId, referenceEntryId])
+  @@unique([tenantId, jobFunctionId, referenceEntryId])
+  @@index([jobPositionId, referenceCatalogKey])
+  @@index([jobFunctionId, referenceCatalogKey])
+  @@index([referenceEntryId])
+  @@index([status])
+  @@schema("hr")
+  @@map("job_structure_reference_link")
+}
+
+model JobStructureEmploymentLink {
+  id               String       @id @default(uuid()) @db.Uuid
+  tenantId         String       @map("tenant_id") @db.Uuid
+  jobPositionId    String?      @map("job_position_id") @db.Uuid
+  jobFunctionId    String?      @map("job_function_id") @db.Uuid
+  employmentLinkId String       @map("employment_link_id") @db.Uuid
+  code             String
+  name             String
+  description      String       @default("")
+  status           RecordStatus @default(ACTIVE)
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  jobPosition    JobPosition?    @relation(fields: [jobPositionId], references: [id])
+  jobFunction    JobFunction?    @relation(fields: [jobFunctionId], references: [id])
+  employmentLink EmploymentLink @relation(fields: [employmentLinkId], references: [id])
+
+  @@unique([tenantId, jobPositionId, employmentLinkId])
+  @@unique([tenantId, jobFunctionId, employmentLinkId])
+  @@index([jobPositionId])
+  @@index([jobFunctionId])
+  @@index([employmentLinkId])
+  @@index([status])
+  @@schema("hr")
+  @@map("job_structure_employment_link")
+}
+
+model WorkLocationStructureAssignment {
+  id             String       @id @default(uuid()) @db.Uuid
+  tenantId       String       @map("tenant_id") @db.Uuid
+  workLocationId String       @map("work_location_id") @db.Uuid
+  jobPositionId  String?      @map("job_position_id") @db.Uuid
+  jobFunctionId  String?      @map("job_function_id") @db.Uuid
+  code           String
+  name           String
+  description    String       @default("")
+  status         RecordStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  workLocation WorkLocation @relation(fields: [workLocationId], references: [id])
+  jobPosition  JobPosition? @relation(fields: [jobPositionId], references: [id])
+  jobFunction  JobFunction? @relation(fields: [jobFunctionId], references: [id])
+
+  @@unique([tenantId, workLocationId, jobPositionId], map: "work_location_structure_assignment_position_key")
+  @@unique([tenantId, workLocationId, jobFunctionId], map: "work_location_structure_assignment_function_key")
+  @@index([workLocationId])
+  @@index([jobPositionId])
+  @@index([jobFunctionId])
+  @@index([status])
+  @@schema("hr")
+  @@map("work_location_structure_assignment")
+}
+
+model SystemParameter {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  key             String
+  value           Json
+  description     String   @default("")
+  moduleKey       String?  @map("module_key")
+  updatedByUserId String?  @map("updated_by_user_id") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  updatedBy UserAccount? @relation("SystemParameterUpdatedBy", fields: [updatedByUserId], references: [id])
+
+  @@unique([tenantId, key])
+  @@index([moduleKey])
+  @@index([updatedByUserId])
+  @@schema("public")
+  @@map("system_parameter")
+}
+
+model Employee {
+  id                  String                  @id @default(uuid()) @db.Uuid
+  tenantId            String                  @map("tenant_id") @db.Uuid
+  registration        String
+  name                String
+  socialName          String?                 @map("social_name")
+  cpf                 String?
+  birthDate           DateTime?               @map("birth_date") @db.Date
+  gender              PersonGender            @default(UNDECLARED)
+  email               String?
+  phone               String?
+  branchId            String?                 @map("branch_id") @db.Uuid
+  workLocationId      String?                 @map("work_location_id") @db.Uuid
+  costCenterId        String?                 @map("cost_center_id") @db.Uuid
+  jobPositionId       String?                 @map("job_position_id") @db.Uuid
+  jobFunctionId       String?                 @map("job_function_id") @db.Uuid
+  salaryReferenceId   String?                 @map("salary_reference_id") @db.Uuid
+  functionalStatusId  String?                 @map("functional_status_id") @db.Uuid
+  employmentLinkId    String?                 @map("employment_link_id") @db.Uuid
+  contractTypeId      String?                 @map("contract_type_id") @db.Uuid
+  shiftId             String?                 @map("shift_id") @db.Uuid
+  unionId             String?                 @map("union_id") @db.Uuid
+  bankId              String?                 @map("bank_id") @db.Uuid
+  bankAgency          String?                 @map("bank_agency")
+  bankAccount         String?                 @map("bank_account")
+  hiredOn             DateTime?               @map("hired_on") @db.Date
+  terminatedOn        DateTime?               @map("terminated_on") @db.Date
+  terminationReasonId String?                 @map("termination_reason_id") @db.Uuid
+  lifecycleStatus     EmployeeLifecycleStatus @default(ACTIVE) @map("lifecycle_status")
+  createdAt           DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  branch                  Branch?                  @relation(fields: [branchId], references: [id])
+  workLocation            WorkLocation?            @relation(fields: [workLocationId], references: [id])
+  costCenter              CostCenter?              @relation(fields: [costCenterId], references: [id])
+  jobPosition             JobPosition?             @relation(fields: [jobPositionId], references: [id])
+  jobFunction             JobFunction?             @relation(fields: [jobFunctionId], references: [id])
+  salaryReference         SalaryReference?         @relation(fields: [salaryReferenceId], references: [id])
+  functionalStatus        FunctionalStatus?        @relation(fields: [functionalStatusId], references: [id])
+  employmentLink          EmploymentLink?          @relation(fields: [employmentLinkId], references: [id])
+  contractType            ContractType?            @relation(fields: [contractTypeId], references: [id])
+  shift                   Shift?                   @relation(fields: [shiftId], references: [id])
+  union                   UnionEntity?             @relation(fields: [unionId], references: [id])
+  bank                    Bank?                    @relation(fields: [bankId], references: [id])
+  terminationReason       TerminationReason?       @relation(fields: [terminationReasonId], references: [id])
+  dependents              EmployeeDependent[]
+  statusHistory           EmployeeStatusHistory[]
+  professionalExperiences ProfessionalExperience[]
+  transfers               EmployeeTransfer[]
+  frequencies             EmployeeFrequency[]
+  serviceTimes            ServiceTimeRecord[]
+  vacations               VacationRecord[]
+  leaves                  LeaveRecord[]
+  benefitDependents       EmployeeBenefitDependent[]
+  unionContributions      EmployeeUnionContribution[]
+  exercises               EmployeeExercise[]
+  alimonies               EmployeeAlimony[]
+  transitBenefits         EmployeeTransitBenefit[]
+  complementData          EmployeeComplementData?
+  salaryHistory           SalaryLevelHistory[]
+  payrollItems            EmployeePayrollItem[]
+  financialRecords        PayrollFinancialRecord[]
+  advanceRequests         AdvanceRequest[]
+  advancePayments         AdvancePayment[]
+  blockedPayments         BlockedPayment[]
+  internshipRecords       InternshipRecord[]
+  medicalAppointments     MedicalAppointment[]
+  medicalRecords          MedicalRecord[]
+  medicalLeaves           MedicalLeave[]
+  workAccidents           WorkAccident[]
+  performanceEvaluations  PerformanceEvaluation[]
+  meritProgressions       MeritProgression[]
+  salarySimulations       SalarySimulation[]
+  careerPlans             CareerPlan[]
+  retirementSimulations   RetirementSimulation[]
+  retirementGrants        RetirementGrant[]
+  institutedPensions      PensionGrant[]
+  contributionTimeCertificates ContributionTimeCertificate[]
+  previdentiaryDeclarations PrevidentiaryDeclaration[]
+  pensionCompensations    PensionCompensation[]
+  recertificationBeneficiary RecertificationBeneficiary?
+
+  @@unique([tenantId, registration])
+  @@unique([tenantId, cpf])
+  @@index([name])
+  @@index([branchId])
+  @@index([workLocationId])
+  @@index([costCenterId])
+  @@index([jobPositionId])
+  @@index([jobFunctionId])
+  @@index([salaryReferenceId])
+  @@index([functionalStatusId])
+  @@index([employmentLinkId])
+  @@index([contractTypeId])
+  @@index([shiftId])
+  @@index([unionId])
+  @@index([bankId])
+  @@index([terminationReasonId])
+  @@index([lifecycleStatus])
+  @@schema("hr")
+  @@map("employee")
+}
+
+model EmployeeDependent {
+  id                 String    @id @default(uuid()) @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  employeeId         String    @map("employee_id") @db.Uuid
+  name               String
+  cpf                String?
+  birthDate          DateTime? @map("birth_date") @db.Date
+  relationship       String
+  incomeTaxDependent Boolean   @default(false) @map("income_tax_dependent")
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee            Employee                   @relation(fields: [employeeId], references: [id])
+  benefitAssignments  EmployeeBenefitDependent[]
+
+  @@index([employeeId])
+  @@index([cpf])
+  @@schema("hr")
+  @@map("employee_dependent")
+}
+
+model EmployeeStatusHistory {
+  id                 String    @id @default(uuid()) @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  employeeId         String    @map("employee_id") @db.Uuid
+  functionalStatusId String    @map("functional_status_id") @db.Uuid
+  reasonId           String?   @map("reason_id") @db.Uuid
+  startsOn           DateTime  @map("starts_on") @db.Date
+  endsOn             DateTime? @map("ends_on") @db.Date
+  notes              String    @default("")
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  employee         Employee         @relation(fields: [employeeId], references: [id])
+  functionalStatus FunctionalStatus @relation(fields: [functionalStatusId], references: [id])
+  reason           Reason?          @relation(fields: [reasonId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@index([functionalStatusId])
+  @@index([reasonId])
+  @@schema("hr")
+  @@map("employee_status_history")
+}
+
+model ProfessionalExperience {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  employeeId  String    @map("employee_id") @db.Uuid
+  employer    String
+  roleTitle   String?   @map("role_title")
+  startsOn    DateTime? @map("starts_on") @db.Date
+  endsOn      DateTime? @map("ends_on") @db.Date
+  description String    @default("")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId])
+  @@schema("hr")
+  @@map("professional_experience")
+}
+
+model EmployeeTransfer {
+  id               String   @id @default(uuid()) @db.Uuid
+  tenantId         String   @map("tenant_id") @db.Uuid
+  employeeId       String   @map("employee_id") @db.Uuid
+  fromBranchId     String?  @map("from_branch_id") @db.Uuid
+  toBranchId       String?  @map("to_branch_id") @db.Uuid
+  toWorkLocationId String?  @map("to_work_location_id") @db.Uuid
+  reasonId         String?  @map("reason_id") @db.Uuid
+  effectiveOn      DateTime @map("effective_on") @db.Date
+  notes            String   @default("")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  employee       Employee      @relation(fields: [employeeId], references: [id])
+  fromBranch     Branch?       @relation("TransferFromBranch", fields: [fromBranchId], references: [id])
+  toBranch       Branch?       @relation("TransferToBranch", fields: [toBranchId], references: [id])
+  toWorkLocation WorkLocation? @relation(fields: [toWorkLocationId], references: [id])
+  reason         Reason?       @relation(fields: [reasonId], references: [id])
+
+  @@index([employeeId, effectiveOn])
+  @@index([fromBranchId])
+  @@index([toBranchId])
+  @@index([toWorkLocationId])
+  @@index([reasonId])
+  @@schema("hr")
+  @@map("employee_transfer")
+}
+
+model EmployeeFrequency {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  employeeId  String   @map("employee_id") @db.Uuid
+  year        Int
+  month       Int?
+  absenceDays Decimal  @default(0) @map("absence_days") @db.Decimal(8, 2)
+  workedDays  Decimal? @map("worked_days") @db.Decimal(8, 2)
+  notes       String   @default("")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@unique([tenantId, employeeId, year, month])
+  @@index([year, month])
+  @@schema("hr")
+  @@map("employee_frequency")
+}
+
+model ServiceTimeRecord {
+  id         String    @id @default(uuid()) @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  employeeId String    @map("employee_id") @db.Uuid
+  source     String
+  startsOn   DateTime  @map("starts_on") @db.Date
+  endsOn     DateTime? @map("ends_on") @db.Date
+  daysCount  Int?      @map("days_count")
+  notes      String    @default("")
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@schema("hr")
+  @@map("service_time_record")
+}
+
+model VacationRecord {
+  id             String       @id @default(uuid()) @db.Uuid
+  tenantId       String       @map("tenant_id") @db.Uuid
+  employeeId     String       @map("employee_id") @db.Uuid
+  vacationTypeId String?      @map("vacation_type_id") @db.Uuid
+  accrualStartOn DateTime?    @map("accrual_start_on") @db.Date
+  accrualEndOn   DateTime?    @map("accrual_end_on") @db.Date
+  startsOn       DateTime     @map("starts_on") @db.Date
+  endsOn         DateTime     @map("ends_on") @db.Date
+  days           Int
+  status         RecordStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee     Employee      @relation(fields: [employeeId], references: [id])
+  vacationType VacationType? @relation(fields: [vacationTypeId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@index([vacationTypeId])
+  @@index([status])
+  @@schema("hr")
+  @@map("vacation_record")
+}
+
+model LeaveRecord {
+  id              String       @id @default(uuid()) @db.Uuid
+  tenantId        String       @map("tenant_id") @db.Uuid
+  employeeId      String       @map("employee_id") @db.Uuid
+  absenceReasonId String?      @map("absence_reason_id") @db.Uuid
+  startsOn        DateTime     @map("starts_on") @db.Date
+  endsOn          DateTime?    @map("ends_on") @db.Date
+  days            Int?
+  status          RecordStatus @default(ACTIVE)
+  notes           String       @default("")
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee      Employee       @relation(fields: [employeeId], references: [id])
+  absenceReason AbsenceReason? @relation(fields: [absenceReasonId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@index([absenceReasonId])
+  @@index([status])
+  @@schema("hr")
+  @@map("leave_record")
+}
+
+model EmployeeBenefitDependent {
+  id              String       @id @default(uuid()) @db.Uuid
+  tenantId        String       @map("tenant_id") @db.Uuid
+  employeeId      String       @map("employee_id") @db.Uuid
+  dependentId     String?      @map("dependent_id") @db.Uuid
+  dependentName   String       @map("dependent_name")
+  dependentCpf    String?      @map("dependent_cpf")
+  relationship    String       @default("")
+  benefitCode     String       @map("benefit_code")
+  startsOn        DateTime     @map("starts_on") @db.Date
+  endsOn          DateTime?    @map("ends_on") @db.Date
+  notes           String       @default("")
+  status          RecordStatus @default(ACTIVE)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee   Employee          @relation(fields: [employeeId], references: [id])
+  dependent  EmployeeDependent? @relation(fields: [dependentId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@index([dependentId])
+  @@index([status])
+  @@schema("hr")
+  @@map("employee_benefit_dependent")
+}
+
+model EmployeeUnionContribution {
+  id               String       @id @default(uuid()) @db.Uuid
+  tenantId         String       @map("tenant_id") @db.Uuid
+  employeeId       String       @map("employee_id") @db.Uuid
+  unionId          String?      @map("union_id") @db.Uuid
+  deductionAmount  Decimal?     @map("deduction_amount") @db.Decimal(14, 2)
+  deductionPercent Decimal?     @map("deduction_percent") @db.Decimal(7, 4)
+  startsOn         DateTime     @map("starts_on") @db.Date
+  endsOn           DateTime?    @map("ends_on") @db.Date
+  notes            String       @default("")
+  status           RecordStatus @default(ACTIVE)
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee    @relation(fields: [employeeId], references: [id])
+  union    UnionEntity? @relation(fields: [unionId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@index([unionId])
+  @@index([status])
+  @@schema("hr")
+  @@map("employee_union_contribution")
+}
+
+model EmployeeExercise {
+  id             String       @id @default(uuid()) @db.Uuid
+  tenantId       String       @map("tenant_id") @db.Uuid
+  employeeId     String       @map("employee_id") @db.Uuid
+  branchId       String?      @map("branch_id") @db.Uuid
+  workLocationId String?      @map("work_location_id") @db.Uuid
+  jobFunctionId  String?      @map("job_function_id") @db.Uuid
+  startsOn       DateTime     @map("starts_on") @db.Date
+  endsOn         DateTime?    @map("ends_on") @db.Date
+  notes          String       @default("")
+  status         RecordStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee     Employee      @relation(fields: [employeeId], references: [id])
+  branch       Branch?       @relation("ExerciseBranch", fields: [branchId], references: [id])
+  workLocation WorkLocation? @relation(fields: [workLocationId], references: [id])
+  jobFunction  JobFunction?  @relation(fields: [jobFunctionId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@index([branchId])
+  @@index([workLocationId])
+  @@index([jobFunctionId])
+  @@index([status])
+  @@schema("hr")
+  @@map("employee_exercise")
+}
+
+model EmployeeAlimony {
+  id                 String       @id @default(uuid()) @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  employeeId         String       @map("employee_id") @db.Uuid
+  beneficiaryName    String       @map("beneficiary_name")
+  beneficiaryCpf     String?      @map("beneficiary_cpf")
+  courtProcessNumber String?      @map("court_process_number")
+  amount             Decimal      @default(0) @db.Decimal(14, 2)
+  startsOn           DateTime     @map("starts_on") @db.Date
+  endsOn             DateTime?    @map("ends_on") @db.Date
+  notes              String       @default("")
+  status             RecordStatus @default(ACTIVE)
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@index([status])
+  @@schema("hr")
+  @@map("employee_alimony")
+}
+
+model EmployeeTransitBenefit {
+  id               String       @id @default(uuid()) @db.Uuid
+  tenantId         String       @map("tenant_id") @db.Uuid
+  employeeId       String       @map("employee_id") @db.Uuid
+  transitBenefitId String       @map("transit_benefit_id") @db.Uuid
+  quantity         Decimal      @default(1) @db.Decimal(10, 2)
+  startsOn         DateTime     @map("starts_on") @db.Date
+  endsOn           DateTime?    @map("ends_on") @db.Date
+  notes            String       @default("")
+  status           RecordStatus @default(ACTIVE)
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee       Employee       @relation(fields: [employeeId], references: [id])
+  transitBenefit TransitBenefit @relation(fields: [transitBenefitId], references: [id])
+
+  @@index([employeeId, startsOn])
+  @@index([transitBenefitId])
+  @@index([status])
+  @@schema("hr")
+  @@map("employee_transit_benefit")
+}
+
+model AdministrativeProcess {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  processNumber String       @map("process_number")
+  subject       String
+  filedOn       DateTime     @map("filed_on") @db.Date
+  closedOn      DateTime?    @map("closed_on") @db.Date
+  notes         String       @default("")
+  status        RecordStatus @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  functions AdministrativeProcessFunction[]
+
+  @@unique([tenantId, processNumber])
+  @@index([filedOn])
+  @@index([status])
+  @@schema("hr")
+  @@map("administrative_process")
+}
+
+model AdministrativeProcessFunction {
+  id             String       @id @default(uuid()) @db.Uuid
+  tenantId       String       @map("tenant_id") @db.Uuid
+  processId      String       @map("process_id") @db.Uuid
+  jobFunctionId  String       @map("job_function_id") @db.Uuid
+  branchId       String?      @map("branch_id") @db.Uuid
+  workLocationId String?      @map("work_location_id") @db.Uuid
+  assignedOn     DateTime     @map("assigned_on") @db.Date
+  releasedOn     DateTime?    @map("released_on") @db.Date
+  notes          String       @default("")
+  status         RecordStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  process      AdministrativeProcess @relation(fields: [processId], references: [id])
+  jobFunction  JobFunction           @relation(fields: [jobFunctionId], references: [id])
+  branch       Branch?               @relation("ProcessFunctionBranch", fields: [branchId], references: [id])
+  workLocation WorkLocation?         @relation(fields: [workLocationId], references: [id])
+
+  @@index([processId, assignedOn])
+  @@index([jobFunctionId])
+  @@index([branchId])
+  @@index([workLocationId])
+  @@index([status])
+  @@schema("hr")
+  @@map("administrative_process_function")
+}
+
+model MedicalAppointment {
+  id                   String                   @id @default(uuid()) @db.Uuid
+  tenantId             String                   @map("tenant_id") @db.Uuid
+  employeeId           String                   @map("employee_id") @db.Uuid
+  specialtyRef         String?                  @map("specialty_ref")
+  scheduleRef          String?                  @map("schedule_ref")
+  slotRef              String                   @map("slot_ref")
+  scheduledOn          DateTime                 @map("scheduled_on") @db.Date
+  scheduledTime        String                   @map("scheduled_time")
+  contactPhone         String?                  @map("contact_phone")
+  instructorAttachment Json                     @default("{}") @map("instructor_attachment")
+  status               MedicalAppointmentStatus @default(SCHEDULED)
+  attendedAt           DateTime?                @map("attended_at") @db.Timestamptz(6)
+  createdAt            DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee       @relation(fields: [employeeId], references: [id])
+  records   MedicalRecord[]
+
+  @@unique([tenantId, slotRef])
+  @@index([employeeId, scheduledOn])
+  @@index([status])
+  @@schema("hr")
+  @@map("medical_appointment")
+}
+
+model MedicalRecord {
+  id                   String              @id @default(uuid()) @db.Uuid
+  tenantId             String              @map("tenant_id") @db.Uuid
+  appointmentId        String              @map("appointment_id") @db.Uuid
+  employeeId           String              @map("employee_id") @db.Uuid
+  physicianRef         String              @map("physician_ref")
+  reason               String
+  currentIllnessStory  String              @default("") @map("current_illness_story")
+  physicalExam         String              @default("") @map("physical_exam")
+  diagnosis            String              @default("")
+  expertAction         String              @default("") @map("expert_action")
+  reportType           String              @default("") @map("report_type")
+  reportStatus         MedicalReportStatus @default(PENDING_SUBMISSION) @map("report_status")
+  primaryIcdRef        String?             @map("primary_icd_ref")
+  multidisciplinaryTeam Json              @default("[]") @map("multidisciplinary_team")
+  approvedByRef        String?             @map("approved_by_ref")
+  approvedAt           DateTime?           @map("approved_at") @db.Timestamptz(6)
+  createdAt            DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  appointment MedicalAppointment @relation(fields: [appointmentId], references: [id])
+  employee    Employee           @relation(fields: [employeeId], references: [id])
+  leaves      MedicalLeave[]
+
+  @@index([appointmentId])
+  @@index([employeeId, createdAt])
+  @@index([reportStatus])
+  @@schema("hr")
+  @@map("medical_record")
+}
+
+model MedicalLeave {
+  id                    String       @id @default(uuid()) @db.Uuid
+  tenantId              String       @map("tenant_id") @db.Uuid
+  medicalRecordId       String       @map("medical_record_id") @db.Uuid
+  employeeId            String       @map("employee_id") @db.Uuid
+  evaluationType        String       @map("evaluation_type")
+  socialSecurityBenefit String?      @map("social_security_benefit")
+  absenceReasonId       String?      @map("absence_reason_id") @db.Uuid
+  icdRef                String?      @map("icd_ref")
+  grantedDays           Int          @map("granted_days")
+  startsOn              DateTime     @map("starts_on") @db.Date
+  endsOn                DateTime     @map("ends_on") @db.Date
+  status                RecordStatus @default(ACTIVE)
+  createdAt             DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  medicalRecord  MedicalRecord   @relation(fields: [medicalRecordId], references: [id])
+  employee       Employee        @relation(fields: [employeeId], references: [id])
+  absenceReason  AbsenceReason?  @relation(fields: [absenceReasonId], references: [id])
+  workAccidents  WorkAccident[]
+
+  @@index([medicalRecordId])
+  @@index([employeeId, startsOn])
+  @@index([absenceReasonId])
+  @@index([status])
+  @@schema("hr")
+  @@map("medical_leave")
+}
+
+model WorkAccident {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  employeeId     String    @map("employee_id") @db.Uuid
+  medicalLeaveId String?   @map("medical_leave_id") @db.Uuid
+  icdRef         String?   @map("icd_ref")
+  occurredOn     DateTime? @map("occurred_on") @db.Date
+  leaveDays      Int?      @map("leave_days")
+  notes          String    @default("")
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee    Employee      @relation(fields: [employeeId], references: [id])
+  medicalLeave MedicalLeave? @relation(fields: [medicalLeaveId], references: [id])
+
+  @@index([employeeId, occurredOn])
+  @@index([medicalLeaveId])
+  @@schema("hr")
+  @@map("work_accident")
+}
+
+model EmployeeComplementData {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  employeeId        String   @unique @map("employee_id") @db.Uuid
+  rg                String?
+  rgIssuer          String?  @map("rg_issuer")
+  pisPasep          String?  @map("pis_pasep")
+  voterRegistration String?  @map("voter_registration")
+  address           Json     @default("{}")
+  emergencyContact  Json     @default("{}") @map("emergency_contact")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+  @@schema("hr")
+  @@map("employee_complement_data")
+}
+
+model SalaryLevelHistory {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  employeeId        String   @map("employee_id") @db.Uuid
+  salaryReferenceId String?  @map("salary_reference_id") @db.Uuid
+  levelCode         String?  @map("level_code")
+  levelDescription  String?  @map("level_description")
+  adjustmentAmount  Decimal  @default(0) @map("adjustment_amount") @db.Decimal(14, 2)
+  effectiveOn       DateTime @map("effective_on") @db.Date
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  employee        Employee         @relation(fields: [employeeId], references: [id])
+  salaryReference SalaryReference? @relation(fields: [salaryReferenceId], references: [id])
+
+  @@index([employeeId, effectiveOn])
+  @@index([salaryReferenceId])
+  @@schema("hr")
+  @@map("salary_level_history")
+}
+
+model SalaryRangeLevel {
+  id                String       @id @default(uuid()) @db.Uuid
+  tenantId          String       @map("tenant_id") @db.Uuid
+  salaryRangeId     String       @map("salary_range_id") @db.Uuid
+  salaryReferenceId String?      @map("salary_reference_id") @db.Uuid
+  code              String
+  name              String
+  description       String       @default("")
+  levelNumber       Int          @default(1) @map("level_number")
+  amountOverride    Decimal?     @map("amount_override") @db.Decimal(14, 2)
+  status            RecordStatus @default(ACTIVE)
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  salaryRange     SalaryRange      @relation(fields: [salaryRangeId], references: [id])
+  salaryReference SalaryReference? @relation(fields: [salaryReferenceId], references: [id])
+
+  @@unique([tenantId, salaryRangeId, code])
+  @@index([salaryReferenceId])
+  @@index([status])
+  @@schema("hr")
+  @@map("salary_range_level")
+}
+
+model PayrollRun {
+  id               String           @id @default(uuid()) @db.Uuid
+  tenantId         String           @map("tenant_id") @db.Uuid
+  competenceYear   Int              @map("competence_year")
+  competenceMonth  Int              @map("competence_month")
+  branchId         String?          @map("branch_id") @db.Uuid
+  payrollTypeId    String           @map("payroll_type_id") @db.Uuid
+  processingTypeId String           @map("processing_type_id") @db.Uuid
+  status           PayrollRunStatus @default(DRAFT)
+  employeeCount    Int              @default(0) @map("employee_count")
+  totalEarnings    Decimal          @default(0) @map("total_earnings") @db.Decimal(16, 2)
+  totalDeductions  Decimal          @default(0) @map("total_deductions") @db.Decimal(16, 2)
+  totalNet         Decimal          @default(0) @map("total_net") @db.Decimal(16, 2)
+  createdByUserId  String?          @map("created_by_user_id") @db.Uuid
+  createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  closedAt         DateTime?        @map("closed_at") @db.Timestamptz(6)
+
+  branch           Branch?                   @relation(fields: [branchId], references: [id])
+  payrollType      PayrollType               @relation(fields: [payrollTypeId], references: [id])
+  processingType   ProcessingType            @relation(fields: [processingTypeId], references: [id])
+  createdBy        UserAccount?              @relation("PayrollCreatedBy", fields: [createdByUserId], references: [id])
+  statusHistory    PayrollRunStatusHistory[]
+  payrollItems     EmployeePayrollItem[]
+  financialRecords PayrollFinancialRecord[]
+  workLocationRollups PayrollRunWorkLocation[]
+  advanceRequests  AdvanceRequest[]
+  advancePayments  AdvancePayment[]
+  remittanceFiles  PaymentRemittanceFile[]
+  blockedPayments  BlockedPayment[]
+  reportRequests   ReportRequest[]
+
+  @@unique([tenantId, competenceYear, competenceMonth, branchId, payrollTypeId, processingTypeId])
+  @@index([competenceYear, competenceMonth])
+  @@index([branchId])
+  @@index([status])
+  @@schema("payroll")
+  @@map("payroll_run")
+}
+
+model PayrollRunStatusHistory {
+  id              String           @id @default(uuid()) @db.Uuid
+  tenantId        String           @map("tenant_id") @db.Uuid
+  payrollRunId    String           @map("payroll_run_id") @db.Uuid
+  status          PayrollRunStatus
+  changedAt       DateTime         @default(now()) @map("changed_at") @db.Timestamptz(6)
+  changedByUserId String?          @map("changed_by_user_id") @db.Uuid
+  note            String           @default("")
+  metadata        Json             @default("{}")
+
+  payrollRun PayrollRun   @relation(fields: [payrollRunId], references: [id])
+  changedBy  UserAccount? @relation("PayrollRunStatusChangedBy", fields: [changedByUserId], references: [id])
+
+  @@index([payrollRunId, changedAt])
+  @@index([status])
+  @@index([changedByUserId])
+  @@schema("payroll")
+  @@map("payroll_run_status_history")
+}
+
+model PayrollEarningDeduction {
+  id                  String           @id @default(uuid()) @db.Uuid
+  tenantId            String           @map("tenant_id") @db.Uuid
+  code                String
+  description         String
+  kind                PayrollEntryKind
+  taxable             Boolean          @default(false)
+  active              Boolean          @default(true)
+  formulaAlias        String?          @map("formula_alias")
+  formulaFunctionName String?          @map("formula_function_name")
+  formulaExpression   String?          @map("formula_expression")
+  formulaFunctionDdl  String?          @map("formula_function_ddl")
+  formulaDependencies String[]         @default([]) @map("formula_dependencies")
+  formulaReady        Boolean          @default(false) @map("formula_ready")
+  formulaError        String?          @map("formula_error")
+  createdAt           DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employeeItems    EmployeePayrollItem[]
+  jobPositionLinks JobPositionEarning[]
+  jobFunctionLinks JobFunctionEarning[]
+  employmentLinks  EmploymentLinkEarning[]
+  payrollTypeLinks PayrollTypeEarning[]
+  accountingAccounts PayrollAccountingAccount[]
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, formulaAlias])
+  @@unique([tenantId, formulaFunctionName])
+  @@index([kind])
+  @@index([active])
+  @@index([formulaAlias])
+  @@index([formulaReady])
+  @@schema("payroll")
+  @@map("payroll_earning_deduction")
+}
+
+model FormulaAttribute {
+  id             String       @id @default(uuid()) @db.Uuid
+  tenantId       String       @map("tenant_id") @db.Uuid
+  code           String
+  description    String
+  dataType       String       @map("data_type")
+  sourceScope    String       @map("source_scope")
+  expressionHint String       @default("") @map("expression_hint")
+  status         RecordStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("payroll")
+  @@map("formula_attribute")
+}
+
+model JobPositionEarning {
+  id                 String       @id @default(uuid()) @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  jobPositionId      String       @map("job_position_id") @db.Uuid
+  earningDeductionId String       @map("earning_deduction_id") @db.Uuid
+  defaultAmount      Decimal?     @map("default_amount") @db.Decimal(14, 2)
+  defaultQuantity    Decimal?     @map("default_quantity") @db.Decimal(12, 4)
+  startsOn           DateTime?    @map("starts_on") @db.Date
+  endsOn             DateTime?    @map("ends_on") @db.Date
+  status             RecordStatus @default(ACTIVE)
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  jobPosition       JobPosition             @relation(fields: [jobPositionId], references: [id])
+  earningDeduction  PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
+
+  @@unique([tenantId, jobPositionId, earningDeductionId])
+  @@index([status])
+  @@index([jobPositionId])
+  @@index([earningDeductionId])
+  @@schema("payroll")
+  @@map("job_position_earning")
+}
+
+model EmploymentLinkEarning {
+  id                 String       @id @default(uuid()) @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  employmentLinkId   String       @map("employment_link_id") @db.Uuid
+  earningDeductionId String       @map("earning_deduction_id") @db.Uuid
+  defaultAmount      Decimal?     @map("default_amount") @db.Decimal(14, 2)
+  defaultQuantity    Decimal?     @map("default_quantity") @db.Decimal(12, 4)
+  startsOn           DateTime?    @map("starts_on") @db.Date
+  endsOn             DateTime?    @map("ends_on") @db.Date
+  status             RecordStatus @default(ACTIVE)
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employmentLink    EmploymentLink          @relation(fields: [employmentLinkId], references: [id])
+  earningDeduction  PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
+
+  @@unique([tenantId, employmentLinkId, earningDeductionId])
+  @@index([status])
+  @@index([employmentLinkId])
+  @@index([earningDeductionId])
+  @@schema("payroll")
+  @@map("employment_link_earning")
+}
+
+model PayrollTypeEarning {
+  id                 String       @id @default(uuid()) @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  payrollTypeId      String       @map("payroll_type_id") @db.Uuid
+  earningDeductionId String       @map("earning_deduction_id") @db.Uuid
+  defaultAmount      Decimal?     @map("default_amount") @db.Decimal(14, 2)
+  defaultQuantity    Decimal?     @map("default_quantity") @db.Decimal(12, 4)
+  startsOn           DateTime?    @map("starts_on") @db.Date
+  endsOn             DateTime?    @map("ends_on") @db.Date
+  status             RecordStatus @default(ACTIVE)
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  payrollType       PayrollType              @relation(fields: [payrollTypeId], references: [id])
+  earningDeduction  PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
+
+  @@unique([tenantId, payrollTypeId, earningDeductionId])
+  @@index([status])
+  @@index([payrollTypeId])
+  @@index([earningDeductionId])
+  @@schema("payroll")
+  @@map("payroll_type_earning")
+}
+
+model JobFunctionEarning {
+  id                 String       @id @default(uuid()) @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  jobFunctionId      String       @map("job_function_id") @db.Uuid
+  earningDeductionId String       @map("earning_deduction_id") @db.Uuid
+  code               String
+  name               String
+  description        String       @default("")
+  defaultAmount      Decimal?     @map("default_amount") @db.Decimal(14, 2)
+  defaultQuantity    Decimal?     @map("default_quantity") @db.Decimal(12, 4)
+  startsOn           DateTime?    @map("starts_on") @db.Date
+  endsOn             DateTime?    @map("ends_on") @db.Date
+  status             RecordStatus @default(ACTIVE)
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  jobFunction      JobFunction              @relation(fields: [jobFunctionId], references: [id])
+  earningDeduction PayrollEarningDeduction  @relation(fields: [earningDeductionId], references: [id])
+
+  @@unique([tenantId, jobFunctionId, earningDeductionId])
+  @@index([status])
+  @@index([jobFunctionId])
+  @@index([earningDeductionId])
+  @@schema("payroll")
+  @@map("job_function_earning")
+}
+
+model ProfessionalCategoryEarning {
+  id                 String       @id @default(uuid()) @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  categoryEntryId    String       @map("category_entry_id") @db.Uuid
+  earningDeductionId String       @map("earning_deduction_id") @db.Uuid
+  code               String
+  name               String
+  description        String       @default("")
+  defaultAmount      Decimal?     @map("default_amount") @db.Decimal(14, 2)
+  defaultQuantity    Decimal?     @map("default_quantity") @db.Decimal(12, 4)
+  startsOn           DateTime?    @map("starts_on") @db.Date
+  endsOn             DateTime?    @map("ends_on") @db.Date
+  status             RecordStatus @default(ACTIVE)
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, categoryEntryId, earningDeductionId])
+  @@index([status])
+  @@index([categoryEntryId])
+  @@index([earningDeductionId])
+  @@schema("payroll")
+  @@map("professional_category_earning")
+}
+
+model EmployeePayrollItem {
+  id                 String             @id @default(uuid()) @db.Uuid
+  tenantId           String             @map("tenant_id") @db.Uuid
+  employeeId         String             @map("employee_id") @db.Uuid
+  payrollRunId       String?            @map("payroll_run_id") @db.Uuid
+  earningDeductionId String             @map("earning_deduction_id") @db.Uuid
+  source             PayrollEntrySource @default(MANUAL)
+  competenceYear     Int                @map("competence_year")
+  competenceMonth    Int                @map("competence_month")
+  quantity           Decimal?           @db.Decimal(12, 4)
+  referenceValue     Decimal?           @map("reference_value") @db.Decimal(14, 2)
+  amount             Decimal            @db.Decimal(14, 2)
+  notes              String             @default("")
+  createdAt          DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee         Employee                @relation(fields: [employeeId], references: [id])
+  payrollRun       PayrollRun?             @relation(fields: [payrollRunId], references: [id])
+  earningDeduction PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
+
+  @@index([employeeId, competenceYear, competenceMonth])
+  @@index([payrollRunId])
+  @@index([earningDeductionId])
+  @@schema("payroll")
+  @@map("employee_payroll_item")
+}
+
+model PayrollFinancialRecord {
+  id                 String   @id @default(uuid()) @db.Uuid
+  tenantId           String   @map("tenant_id") @db.Uuid
+  employeeId         String   @map("employee_id") @db.Uuid
+  payrollRunId       String?  @map("payroll_run_id") @db.Uuid
+  branchId           String?  @map("branch_id") @db.Uuid
+  workLocationId     String?  @map("work_location_id") @db.Uuid
+  functionalStatusId String?  @map("functional_status_id") @db.Uuid
+  competenceYear     Int      @map("competence_year")
+  competenceMonth    Int      @map("competence_month")
+  totalEarnings      Decimal  @default(0) @map("total_earnings") @db.Decimal(16, 2)
+  totalDeductions    Decimal  @default(0) @map("total_deductions") @db.Decimal(16, 2)
+  netAmount          Decimal  @default(0) @map("net_amount") @db.Decimal(16, 2)
+  generatedAt        DateTime @default(now()) @map("generated_at") @db.Timestamptz(6)
+  metadata           Json     @default("{}")
+
+  employee         Employee          @relation(fields: [employeeId], references: [id])
+  payrollRun       PayrollRun?       @relation(fields: [payrollRunId], references: [id])
+  branch           Branch?           @relation(fields: [branchId], references: [id])
+  workLocation     WorkLocation?     @relation(fields: [workLocationId], references: [id])
+  functionalStatus FunctionalStatus? @relation(fields: [functionalStatusId], references: [id])
+
+  @@unique([employeeId, competenceYear, competenceMonth, payrollRunId])
+  @@index([competenceYear, competenceMonth])
+  @@index([branchId])
+  @@index([payrollRunId])
+  @@index([workLocationId])
+  @@index([functionalStatusId])
+  @@schema("payroll")
+  @@map("payroll_financial_record")
+}
+
+model PayrollRunWorkLocation {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  payrollRunId    String   @map("payroll_run_id") @db.Uuid
+  workLocationId  String?  @map("work_location_id") @db.Uuid
+  employeeCount   Int      @default(0) @map("employee_count")
+  totalEarnings   Decimal  @default(0) @map("total_earnings") @db.Decimal(16, 2)
+  totalDeductions Decimal  @default(0) @map("total_deductions") @db.Decimal(16, 2)
+  totalNet        Decimal  @default(0) @map("total_net") @db.Decimal(16, 2)
+  generatedAt     DateTime @default(now()) @map("generated_at") @db.Timestamptz(6)
+  metadata        Json     @default("{}")
+
+  payrollRun    PayrollRun    @relation(fields: [payrollRunId], references: [id])
+  workLocation  WorkLocation? @relation(fields: [workLocationId], references: [id])
+
+  @@unique([payrollRunId, workLocationId])
+  @@index([workLocationId])
+  @@schema("payroll")
+  @@map("payroll_run_work_location")
+}
+
+model AdvanceRequest {
+  id              String               @id @default(uuid()) @db.Uuid
+  tenantId        String               @map("tenant_id") @db.Uuid
+  employeeId      String               @map("employee_id") @db.Uuid
+  payrollRunId    String?              @map("payroll_run_id") @db.Uuid
+  requestedAmount Decimal              @map("requested_amount") @db.Decimal(14, 2)
+  approvedAmount  Decimal?             @map("approved_amount") @db.Decimal(14, 2)
+  requestedOn     DateTime             @map("requested_on") @db.Date
+  processedOn     DateTime?            @map("processed_on") @db.Date
+  status          AdvanceRequestStatus @default(REQUESTED)
+  notes           String               @default("")
+  createdAt       DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee  Employee       @relation(fields: [employeeId], references: [id])
+  payrollRun PayrollRun?   @relation(fields: [payrollRunId], references: [id])
+  payments   AdvancePayment[]
+
+  @@index([employeeId, requestedOn])
+  @@index([payrollRunId])
+  @@index([status])
+  @@schema("payroll")
+  @@map("advance_request")
+}
+
+model AdvancePayment {
+  id              String               @id @default(uuid()) @db.Uuid
+  tenantId        String               @map("tenant_id") @db.Uuid
+  requestId       String?              @map("request_id") @db.Uuid
+  employeeId      String               @map("employee_id") @db.Uuid
+  payrollRunId    String?              @map("payroll_run_id") @db.Uuid
+  amount          Decimal              @db.Decimal(14, 2)
+  paymentDate     DateTime?            @map("payment_date") @db.Date
+  status          AdvancePaymentStatus @default(PENDING)
+  notes           String               @default("")
+  createdAt       DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  request    AdvanceRequest? @relation(fields: [requestId], references: [id])
+  employee   Employee        @relation(fields: [employeeId], references: [id])
+  payrollRun PayrollRun?     @relation(fields: [payrollRunId], references: [id])
+
+  @@index([requestId])
+  @@index([employeeId, paymentDate])
+  @@index([payrollRunId])
+  @@index([status])
+  @@schema("payroll")
+  @@map("advance_payment")
+}
+
+model GpsPaymentCode {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("payroll")
+  @@map("gps_payment_code")
+}
+
+model SefipCode {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  type        String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code, type])
+  @@index([status])
+  @@schema("payroll")
+  @@map("sefip_code")
+}
+
+model AccountingHistory {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  accountingAccounts PayrollAccountingAccount[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("payroll")
+  @@map("accounting_history")
+}
+
+model SimpleAccountingAccount {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  description String
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  accountingAccounts PayrollAccountingAccount[]
+
+  @@unique([tenantId, code])
+  @@index([status])
+  @@schema("payroll")
+  @@map("simple_account")
+}
+
+model PayrollAccountingAccount {
+  id                     String       @id @default(uuid()) @db.Uuid
+  tenantId               String       @map("tenant_id") @db.Uuid
+  branchId               String?      @map("branch_id") @db.Uuid
+  costCenterId           String?      @map("cost_center_id") @db.Uuid
+  earningDeductionId     String?      @map("earning_deduction_id") @db.Uuid
+  accountingHistoryId    String?      @map("accounting_history_id") @db.Uuid
+  simpleAccountingId     String?      @map("simple_account_id") @db.Uuid
+  accountType            String       @map("account_type")
+  accountCode            String       @map("account_code")
+  allocationPercent      Decimal      @default(0) @map("allocation_percent") @db.Decimal(8, 4)
+  totalAllocationPercent Decimal      @default(0) @map("total_allocation_percent") @db.Decimal(8, 4)
+  status                 RecordStatus @default(ACTIVE)
+  metadata               Json         @default("{}")
+  createdAt              DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  branch            Branch?                  @relation(fields: [branchId], references: [id])
+  costCenter        CostCenter?              @relation(fields: [costCenterId], references: [id])
+  earningDeduction  PayrollEarningDeduction? @relation(fields: [earningDeductionId], references: [id])
+  accountingHistory AccountingHistory?       @relation(fields: [accountingHistoryId], references: [id])
+  simpleAccount     SimpleAccountingAccount? @relation(fields: [simpleAccountingId], references: [id])
+  workLocations     PayrollAccountingAccountWorkLocation[]
+
+  @@index([branchId])
+  @@index([costCenterId])
+  @@index([earningDeductionId])
+  @@index([accountingHistoryId])
+  @@index([simpleAccountingId])
+  @@index([status])
+  @@schema("payroll")
+  @@map("accounting_account")
+}
+
+model PayrollAccountingAccountWorkLocation {
+  tenantId            String @map("tenant_id") @db.Uuid
+  accountingAccountId String @map("accounting_account_id") @db.Uuid
+  workLocationId      String @map("work_location_id") @db.Uuid
+
+  accountingAccount PayrollAccountingAccount @relation(fields: [accountingAccountId], references: [id])
+  workLocation      WorkLocation             @relation(fields: [workLocationId], references: [id])
+
+  @@id([accountingAccountId, workLocationId])
+  @@index([workLocationId])
+  @@schema("payroll")
+  @@map("accounting_account_work_location")
+}
+
+model PaymentRemittanceFile {
+  id               String                  @id @default(uuid()) @db.Uuid
+  tenantId         String                  @map("tenant_id") @db.Uuid
+  payrollRunId     String?                 @map("payroll_run_id") @db.Uuid
+  branchId         String?                 @map("branch_id") @db.Uuid
+  processingTypeId String?                 @map("processing_type_id") @db.Uuid
+  reasonId         String?                 @map("reason_id") @db.Uuid
+  status           PaymentRemittanceStatus @default(DRAFT)
+  competenceYear   Int                     @map("competence_year")
+  competenceMonth  Int                     @map("competence_month")
+  createdByUserId  String?                 @map("created_by_user_id") @db.Uuid
+  paymentDate      DateTime?               @map("payment_date") @db.Date
+  fileName         String?                 @map("file_name")
+  fileHash         String?                 @map("file_hash")
+  totalAmount      Decimal                 @default(0) @map("total_amount") @db.Decimal(16, 2)
+  createdAt        DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  payrollRun     PayrollRun?     @relation(fields: [payrollRunId], references: [id])
+  branch         Branch?         @relation(fields: [branchId], references: [id])
+  processingType ProcessingType? @relation(fields: [processingTypeId], references: [id])
+  reason         Reason?         @relation(fields: [reasonId], references: [id])
+  createdBy      UserAccount?    @relation("RemittanceCreatedBy", fields: [createdByUserId], references: [id])
+
+  @@index([competenceYear, competenceMonth])
+  @@index([status])
+  @@index([branchId])
+  @@index([payrollRunId])
+  @@index([processingTypeId])
+  @@index([reasonId])
+  @@schema("payroll")
+  @@map("payment_remittance_file")
+}
+
+model BlockedPayment {
+  id                 String    @id @default(uuid()) @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  employeeId         String    @map("employee_id") @db.Uuid
+  payrollRunId       String?   @map("payroll_run_id") @db.Uuid
+  branchId           String?   @map("branch_id") @db.Uuid
+  functionalStatusId String?   @map("functional_status_id") @db.Uuid
+  reasonId           String?   @map("reason_id") @db.Uuid
+  competenceYear     Int       @map("competence_year")
+  competenceMonth    Int       @map("competence_month")
+  blockedAt          DateTime  @default(now()) @map("blocked_at") @db.Timestamptz(6)
+  releasedAt         DateTime? @map("released_at") @db.Timestamptz(6)
+  notes              String    @default("")
+
+  employee         Employee          @relation(fields: [employeeId], references: [id])
+  payrollRun       PayrollRun?       @relation(fields: [payrollRunId], references: [id])
+  branch           Branch?           @relation(fields: [branchId], references: [id])
+  functionalStatus FunctionalStatus? @relation(fields: [functionalStatusId], references: [id])
+  reason           Reason?           @relation(fields: [reasonId], references: [id])
+
+  @@index([employeeId])
+  @@index([competenceYear, competenceMonth])
+  @@index([branchId])
+  @@index([payrollRunId])
+  @@index([functionalStatusId])
+  @@index([reasonId])
+  @@index([releasedAt])
+  @@schema("payroll")
+  @@map("blocked_payment")
+}
+
+model DocumentAttachment {
+  id             String              @id @default(uuid()) @db.Uuid
+  tenantId       String              @map("tenant_id") @db.Uuid
+  documentTypeId String?             @map("document_type_id") @db.Uuid
+  ownerType      String              @map("owner_type")
+  ownerId        String?             @map("owner_id")
+  storageKind    DocumentStorageKind @default(LOCAL) @map("storage_kind")
+  fileName       String              @map("file_name")
+  contentType    String?             @map("content_type")
+  sizeBytes      Int?                @map("size_bytes")
+  checksum       String?
+  storageKey     String              @map("storage_key")
+  public         Boolean             @default(false)
+  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  documentType         DocumentType?           @relation(fields: [documentTypeId], references: [id])
+  generatedReportFiles GeneratedReportFile[]
+  downloads            DocumentDownloadAudit[]
+  uploadSessions       DocumentUploadSession[] @relation("AttachmentUploadSessions")
+
+  @@index([ownerType, ownerId])
+  @@index([documentTypeId])
+  @@index([storageKind])
+  @@schema("public")
+  @@map("document_attachment")
+}
+
+model DocumentUploadSession {
+  id                     String               @id @default(uuid()) @db.Uuid
+  tenantId               String               @map("tenant_id") @db.Uuid
+  documentId             String               @unique @map("document_id") @db.Uuid
+  requestedBySub         String?              @map("requested_by_sub")
+  requestedByLogin       String?              @map("requested_by_login")
+  requestId              String?              @map("request_id")
+  ownerType              String               @map("owner_type")
+  ownerId                String?              @map("owner_id")
+  fileName               String               @map("file_name")
+  contentType            String               @map("content_type")
+  sizeBytes              Int?                 @map("size_bytes")
+  storageBucket          String               @map("storage_bucket")
+  storageKey             String               @map("storage_key")
+  requiredHeaders        Json                 @default("{}") @map("required_headers")
+  status                 DocumentUploadStatus @default(PENDING)
+  expiresAt              DateTime             @map("expires_at") @db.Timestamptz(6)
+  registeredAttachmentId String?              @map("registered_attachment_id") @db.Uuid
+  createdAt              DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  registeredAttachment DocumentAttachment? @relation("AttachmentUploadSessions", fields: [registeredAttachmentId], references: [id])
+
+  @@index([status, expiresAt])
+  @@index([requestedBySub, createdAt])
+  @@index([ownerType, ownerId])
+  @@schema("public")
+  @@map("document_upload_session")
+}
+
+model ESocialEvent {
+  id               String             @id @default(uuid()) @db.Uuid
+  tenantId         String             @map("tenant_id") @db.Uuid
+  eventType        String             @map("event_type")
+  reference        String
+  competence       String
+  payload          Json               @default("{}")
+  xmlPayload       String?            @map("xml_payload")
+  schemaVersion    String             @default("S-1.2") @map("schema_version")
+  status           ESocialEventStatus @default(PENDENTE)
+  receiptNumber    String?            @map("receipt_number")
+  protocolNumber   String?            @map("protocol_number")
+  retryCount       Int                @default(0) @map("retry_count")
+  lastErrorCode    String?            @map("last_error_code")
+  lastErrorMessage String?            @map("last_error_message")
+  generatedAt      DateTime?          @map("generated_at") @db.Timestamptz(6)
+  processedAt      DateTime?          @map("processed_at") @db.Timestamptz(6)
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([eventType, competence])
+  @@index([status, createdAt])
+  @@schema("public")
+  @@map("esocial_event")
+}
+
+model ReportDefinition {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  moduleKey   String       @map("module_key")
+  name        String
+  description String       @default("")
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  requests ReportRequest[]
+
+  @@unique([tenantId, code])
+  @@index([moduleKey, status])
+  @@schema("public")
+  @@map("report_definition")
+}
+
+model ReportRequest {
+  id                String              @id @default(uuid()) @db.Uuid
+  tenantId          String              @map("tenant_id") @db.Uuid
+  definitionId      String              @map("definition_id") @db.Uuid
+  requestedByUserId String?             @map("requested_by_user_id") @db.Uuid
+  branchId          String?             @map("branch_id") @db.Uuid
+  payrollRunId      String?             @map("payroll_run_id") @db.Uuid
+  processingTypeId  String?             @map("processing_type_id") @db.Uuid
+  competenceYear    Int?                @map("competence_year")
+  competenceMonth   Int?                @map("competence_month")
+  status            ReportRequestStatus @default(REQUESTED)
+  parameters        Json                @default("{}")
+  requestedAt       DateTime            @default(now()) @map("requested_at") @db.Timestamptz(6)
+  completedAt       DateTime?           @map("completed_at") @db.Timestamptz(6)
+  errorMessage      String?             @map("error_message")
+
+  definition     ReportDefinition      @relation(fields: [definitionId], references: [id])
+  requestedBy    UserAccount?          @relation("ReportRequestedBy", fields: [requestedByUserId], references: [id])
+  branch         Branch?               @relation(fields: [branchId], references: [id])
+  payrollRun     PayrollRun?           @relation(fields: [payrollRunId], references: [id])
+  processingType ProcessingType?       @relation(fields: [processingTypeId], references: [id])
+  files          GeneratedReportFile[]
+
+  @@index([definitionId, requestedAt])
+  @@index([requestedByUserId])
+  @@index([branchId])
+  @@index([payrollRunId])
+  @@index([processingTypeId])
+  @@index([status])
+  @@index([competenceYear, competenceMonth])
+  @@schema("public")
+  @@map("report_request")
+}
+
+model GeneratedReportFile {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  reportRequestId String   @map("report_request_id") @db.Uuid
+  attachmentId    String   @map("attachment_id") @db.Uuid
+  format          String
+  generatedAt     DateTime @default(now()) @map("generated_at") @db.Timestamptz(6)
+
+  reportRequest ReportRequest      @relation(fields: [reportRequestId], references: [id])
+  attachment    DocumentAttachment @relation(fields: [attachmentId], references: [id])
+
+  @@index([reportRequestId])
+  @@index([attachmentId])
+  @@schema("public")
+  @@map("generated_report_file")
+}
+
+model DocumentDownloadAudit {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  attachmentId String   @map("attachment_id") @db.Uuid
+  userId       String?  @map("user_id") @db.Uuid
+  downloadedAt DateTime @default(now()) @map("downloaded_at") @db.Timestamptz(6)
+  requestId    String?  @map("request_id")
+  ipAddress    String?  @map("ip_address") @db.Inet
+
+  attachment DocumentAttachment @relation(fields: [attachmentId], references: [id])
+  user       UserAccount?       @relation(fields: [userId], references: [id])
+
+  @@index([attachmentId, downloadedAt])
+  @@index([userId, downloadedAt])
+  @@schema("public")
+  @@map("document_download_audit")
+}
+
+model EducationInstitution {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  code      String
+  name      String
+  cnpj      String?
+  address   Json         @default("{}")
+  status    RecordStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  programs   InternshipProgram[]
+  agreements Agreement[]
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, cnpj])
+  @@index([status])
+  @@schema("hr")
+  @@map("education_institution")
+}
+
+model InternshipProgram {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  institutionId String?      @map("institution_id") @db.Uuid
+  code          String
+  name          String
+  description   String       @default("")
+  startsOn      DateTime?    @map("starts_on") @db.Date
+  endsOn        DateTime?    @map("ends_on") @db.Date
+  status        RecordStatus @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  institution EducationInstitution? @relation(fields: [institutionId], references: [id])
+  agreements  Agreement[]
+  internships InternshipRecord[]
+
+  @@unique([tenantId, code])
+  @@index([institutionId])
+  @@index([status])
+  @@schema("hr")
+  @@map("internship_program")
+}
+
+model Agreement {
+  id            String          @id @default(uuid()) @db.Uuid
+  tenantId      String          @map("tenant_id") @db.Uuid
+  code          String
+  institutionId String?         @map("institution_id") @db.Uuid
+  programId     String?         @map("program_id") @db.Uuid
+  description   String          @default("")
+  startsOn      DateTime?       @map("starts_on") @db.Date
+  endsOn        DateTime?       @map("ends_on") @db.Date
+  status        AgreementStatus @default(DRAFT)
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  institution EducationInstitution? @relation(fields: [institutionId], references: [id])
+  program     InternshipProgram?    @relation(fields: [programId], references: [id])
+  internships InternshipRecord[]
+  healthProviderLinks HealthProviderAgreementLink[]
+
+  @@unique([tenantId, code])
+  @@index([institutionId])
+  @@index([programId])
+  @@index([status])
+  @@schema("hr")
+  @@map("agreement")
+}
+
+model HealthProviderAgreementLink {
+  id              String       @id @default(uuid()) @db.Uuid
+  tenantId        String       @map("tenant_id") @db.Uuid
+  providerEntryId String       @map("provider_entry_id") @db.Uuid
+  agreementId     String       @map("agreement_id") @db.Uuid
+  code            String
+  name            String
+  description     String       @default("")
+  status          RecordStatus @default(ACTIVE)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  providerEntry ReferenceCatalogEntry @relation("HealthProviderReference", fields: [providerEntryId], references: [id])
+  agreement     Agreement             @relation(fields: [agreementId], references: [id])
+
+  @@unique([tenantId, providerEntryId, agreementId])
+  @@index([agreementId])
+  @@index([status])
+  @@schema("hr")
+  @@map("health_provider_agreement_link")
+}
+
+model HealthExamProviderExamLink {
+  id                  String       @id @default(uuid()) @db.Uuid
+  tenantId            String       @map("tenant_id") @db.Uuid
+  examProviderEntryId String       @map("exam_provider_entry_id") @db.Uuid
+  examEntryId         String       @map("exam_entry_id") @db.Uuid
+  code                String
+  name                String
+  description         String       @default("")
+  status              RecordStatus @default(ACTIVE)
+  createdAt           DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  examProviderEntry ReferenceCatalogEntry @relation("HealthExamProviderReference", fields: [examProviderEntryId], references: [id])
+  examEntry         ReferenceCatalogEntry @relation("HealthExamReference", fields: [examEntryId], references: [id])
+
+  @@unique([tenantId, examProviderEntryId, examEntryId])
+  @@index([examEntryId])
+  @@index([status])
+  @@schema("hr")
+  @@map("health_exam_provider_exam_link")
+}
+
+model InternshipRecord {
+  id             String          @id @default(uuid()) @db.Uuid
+  tenantId       String          @map("tenant_id") @db.Uuid
+  agreementId    String?         @map("agreement_id") @db.Uuid
+  programId      String?         @map("program_id") @db.Uuid
+  employeeId     String?         @map("employee_id") @db.Uuid
+  internName     String          @map("intern_name")
+  internCpf      String?         @map("intern_cpf")
+  supervisorName String?         @map("supervisor_name")
+  startsOn       DateTime        @map("starts_on") @db.Date
+  endsOn         DateTime?       @map("ends_on") @db.Date
+  stipendAmount  Decimal?        @map("stipend_amount") @db.Decimal(12, 2)
+  status         AgreementStatus @default(ACTIVE)
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  agreement Agreement?         @relation(fields: [agreementId], references: [id])
+  program   InternshipProgram? @relation(fields: [programId], references: [id])
+  employee  Employee?          @relation(fields: [employeeId], references: [id])
+
+  @@index([agreementId])
+  @@index([programId])
+  @@index([employeeId])
+  @@index([internCpf])
+  @@index([status])
+  @@schema("hr")
+  @@map("internship_record")
+}
+
+model RecruitmentRequest {
+  id             String                   @id @default(uuid()) @db.Uuid
+  tenantId       String                   @map("tenant_id") @db.Uuid
+  requesterRef   String                   @map("requester_ref")
+  branchId       String?                  @map("branch_id") @db.Uuid
+  workLocationId String?                  @map("work_location_id") @db.Uuid
+  reason         String
+  justification  String
+  requestDate    DateTime                 @map("request_date") @db.Date
+  dueDate        DateTime?                @map("due_date") @db.Date
+  status         RecruitmentRequestStatus @default(DRAFT)
+  completedAt    DateTime?                @map("completed_at") @db.Timestamptz(6)
+  createdAt      DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  branch       Branch?                      @relation(fields: [branchId], references: [id])
+  workLocation WorkLocation?                @relation(fields: [workLocationId], references: [id])
+  functions    RecruitmentRequestFunction[]
+  candidates   RecruitmentCandidate[]
+
+  @@index([tenantId, status])
+  @@index([branchId])
+  @@index([workLocationId])
+  @@schema("hr")
+  @@map("recruitment_request")
+}
+
+model RecruitmentRequestFunction {
+  id            String                @id @default(uuid()) @db.Uuid
+  tenantId      String                @map("tenant_id") @db.Uuid
+  requestId     String                @map("request_id") @db.Uuid
+  jobFunctionId String?               @map("job_function_id") @db.Uuid
+  hiringType    RecruitmentHiringType @map("hiring_type")
+  vacancyCount  Int                   @map("vacancy_count")
+  requirements  String                @default("")
+  shiftId       String?               @map("shift_id") @db.Uuid
+  createdAt     DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime              @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  request     RecruitmentRequest @relation(fields: [requestId], references: [id])
+  jobFunction JobFunction?       @relation(fields: [jobFunctionId], references: [id])
+  shift       Shift?             @relation(fields: [shiftId], references: [id])
+
+  @@index([tenantId, requestId])
+  @@index([jobFunctionId])
+  @@index([shiftId])
+  @@schema("hr")
+  @@map("recruitment_request_function")
+}
+
+model RecruitmentCandidate {
+  id              String                     @id @default(uuid()) @db.Uuid
+  tenantId        String                     @map("tenant_id") @db.Uuid
+  requestId       String                     @map("request_id") @db.Uuid
+  personRef       String                     @map("person_ref")
+  curriculumS3Key String?                    @map("curriculum_s3_key")
+  status          RecruitmentCandidateStatus @default(PENDING)
+  reviewComment   String                     @default("") @map("review_comment")
+  createdAt       DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime                   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  request RecruitmentRequest @relation(fields: [requestId], references: [id])
+
+  @@unique([requestId, personRef])
+  @@index([tenantId, requestId])
+  @@index([status])
+  @@schema("hr")
+  @@map("recruitment_candidate")
+}
+
+model TrainingSuggestion {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  courseEntryId String?      @map("course_entry_id") @db.Uuid
+  code          String
+  title         String
+  description   String       @default("")
+  priority      String       @default("NORMAL")
+  suggestedOn   DateTime?    @map("suggested_on") @db.Date
+  metadata      Json         @default("{}")
+  status        RecordStatus @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  complements TrainingSuggestionComplement[]
+  employees   TrainingSuggestionEmployee[]
+  costs       TrainingSuggestionCost[]
+
+  @@unique([tenantId, code])
+  @@index([courseEntryId])
+  @@index([status])
+  @@schema("hr")
+  @@map("training_suggestion")
+}
+
+model TrainingSuggestionComplement {
+  id           String       @id @default(uuid()) @db.Uuid
+  tenantId     String       @map("tenant_id") @db.Uuid
+  suggestionId String       @map("suggestion_id") @db.Uuid
+  cityEntryId  String?      @map("city_entry_id") @db.Uuid
+  code         String
+  description  String       @default("")
+  scheduledOn  DateTime?    @map("scheduled_on") @db.Date
+  metadata     Json         @default("{}")
+  status       RecordStatus @default(ACTIVE)
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  suggestion TrainingSuggestion @relation(fields: [suggestionId], references: [id])
+
+  @@unique([tenantId, suggestionId, code])
+  @@index([suggestionId])
+  @@index([cityEntryId])
+  @@index([status])
+  @@schema("hr")
+  @@map("training_suggestion_complement")
+}
+
+model TrainingSuggestionEmployee {
+  id           String       @id @default(uuid()) @db.Uuid
+  tenantId     String       @map("tenant_id") @db.Uuid
+  suggestionId String       @map("suggestion_id") @db.Uuid
+  employeeId   String       @map("employee_id") @db.Uuid
+  status       RecordStatus @default(ACTIVE)
+  metadata     Json         @default("{}")
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  suggestion TrainingSuggestion @relation(fields: [suggestionId], references: [id])
+
+  @@unique([tenantId, suggestionId, employeeId])
+  @@index([suggestionId])
+  @@index([employeeId])
+  @@index([status])
+  @@schema("hr")
+  @@map("training_suggestion_employee")
+}
+
+model TrainingSuggestionCost {
+  id           String       @id @default(uuid()) @db.Uuid
+  tenantId     String       @map("tenant_id") @db.Uuid
+  suggestionId String       @map("suggestion_id") @db.Uuid
+  code         String
+  costKind     String       @map("cost_kind")
+  amount       Decimal      @default(0) @db.Decimal(14, 2)
+  metadata     Json         @default("{}")
+  status       RecordStatus @default(ACTIVE)
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  suggestion TrainingSuggestion @relation(fields: [suggestionId], references: [id])
+
+  @@unique([tenantId, suggestionId, code])
+  @@index([suggestionId])
+  @@index([status])
+  @@schema("hr")
+  @@map("training_suggestion_cost")
+}
+
+model PerformanceEvaluation {
+  id             String                      @id @default(uuid()) @db.Uuid
+  tenantId       String                      @map("tenant_id") @db.Uuid
+  employeeId     String                      @map("employee_id") @db.Uuid
+  branchId       String?                     @map("branch_id") @db.Uuid
+  workLocationId String?                     @map("work_location_id") @db.Uuid
+  jobPositionId  String?                     @map("job_position_id") @db.Uuid
+  jobFunctionId  String?                     @map("job_function_id") @db.Uuid
+  periodLabel    String                      @map("period_label")
+  score          Decimal                     @default(0) @db.Decimal(8, 2)
+  criteria       Json                        @default("[]")
+  evaluatorRef   String                      @map("evaluator_ref")
+  evaluatedOn    DateTime                    @map("evaluated_on") @db.Date
+  status         PerformanceEvaluationStatus @default(DRAFT)
+  notes          String                      @default("")
+  createdAt      DateTime                    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime                    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee     Employee      @relation(fields: [employeeId], references: [id])
+  branch       Branch?       @relation(fields: [branchId], references: [id])
+  workLocation WorkLocation? @relation(fields: [workLocationId], references: [id])
+  jobPosition  JobPosition?  @relation(fields: [jobPositionId], references: [id])
+  jobFunction  JobFunction?  @relation(fields: [jobFunctionId], references: [id])
+  progressions MeritProgression[]
+
+  @@index([tenantId, employeeId])
+  @@index([branchId])
+  @@index([workLocationId])
+  @@index([jobPositionId])
+  @@index([jobFunctionId])
+  @@index([status])
+  @@schema("hr")
+  @@map("performance_evaluation")
+}
+
+model MeritProgression {
+  id                    String          @id @default(uuid()) @db.Uuid
+  tenantId              String          @map("tenant_id") @db.Uuid
+  employeeId            String          @map("employee_id") @db.Uuid
+  performanceEvaluationId String?       @map("performance_evaluation_id") @db.Uuid
+  sourceSalaryReferenceId String?       @map("source_salary_reference_id") @db.Uuid
+  targetSalaryReferenceId String?       @map("target_salary_reference_id") @db.Uuid
+  effectiveOn           DateTime        @map("effective_on") @db.Date
+  appointmentAct        String          @default("") @map("appointment_act")
+  kind                  ProgressionKind @default(MERIT)
+  justification         String          @default("")
+  approvedByRef         String?         @map("approved_by_ref")
+  createdAt             DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee              Employee               @relation(fields: [employeeId], references: [id])
+  evaluation            PerformanceEvaluation? @relation(fields: [performanceEvaluationId], references: [id])
+  sourceSalaryReference SalaryReference?       @relation("MeritProgressionSourceSalaryReference", fields: [sourceSalaryReferenceId], references: [id])
+  targetSalaryReference SalaryReference?       @relation("MeritProgressionTargetSalaryReference", fields: [targetSalaryReferenceId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([performanceEvaluationId])
+  @@index([sourceSalaryReferenceId])
+  @@index([targetSalaryReferenceId])
+  @@index([kind])
+  @@schema("hr")
+  @@map("merit_progression")
+}
+
+model SalarySimulation {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  employeeId     String   @map("employee_id") @db.Uuid
+  scenario       String
+  resultJson     Json     @default("{}") @map("result_json")
+  createdByRef   String?  @map("created_by_ref")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee    Employee                   @relation(fields: [employeeId], references: [id])
+  adjustments SalarySimulationAdjustment[]
+
+  @@index([tenantId, employeeId])
+  @@schema("hr")
+  @@map("salary_simulation")
+}
+
+model CareerPlan {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  employeeId     String?  @map("employee_id") @db.Uuid
+  name           String
+  version        String
+  effectiveOn    DateTime @map("effective_on") @db.Date
+  levelsJson     Json     @default("{}") @map("levels_json")
+  referencesJson Json     @default("{}") @map("references_json")
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee? @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, active, effectiveOn])
+  @@index([employeeId])
+  @@schema("hr")
+  @@map("career_plan")
+}
+
+model SalarySimulationAdjustment {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  simulationId      String   @map("simulation_id") @db.Uuid
+  label             String
+  percentAdjustment Decimal? @map("percent_adjustment") @db.Decimal(8, 4)
+  fixedAdjustment   Decimal? @map("fixed_adjustment") @db.Decimal(14, 2)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  simulation SalarySimulation @relation(fields: [simulationId], references: [id])
+
+  @@index([tenantId, simulationId])
+  @@schema("hr")
+  @@map("salary_simulation_adjustment")
+}
+
+model RetirementRule {
+  id                          String       @id @default(uuid()) @db.Uuid
+  tenantId                    String       @map("tenant_id") @db.Uuid
+  name                        String
+  legalBasis                  String       @map("legal_basis")
+  ageCriteria                 Json         @default("{}") @map("age_criteria")
+  contributionTimeCriteria    Json         @default("{}") @map("contribution_time_criteria")
+  gracePeriodCriteria         Json         @default("{}") @map("grace_period_criteria")
+  applicableEmploymentLink    String?      @map("applicable_employment_link")
+  active                      Boolean      @default(true)
+  createdAt                   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  simulations RetirementSimulation[]
+  grants      RetirementGrant[]
+
+  @@index([tenantId, active])
+  @@schema("hr")
+  @@map("retirement_rule")
+}
+
+model RetirementSimulation {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  employeeId    String   @map("employee_id") @db.Uuid
+  ruleId        String   @map("rule_id") @db.Uuid
+  result        Json     @default("{}")
+  detailsJson   Json     @default("{}") @map("details_json")
+  simulatedOn   DateTime @default(now()) @map("simulated_on") @db.Timestamptz(6)
+  createdByRef  String?  @map("created_by_ref")
+
+  employee Employee       @relation(fields: [employeeId], references: [id])
+  rule     RetirementRule @relation(fields: [ruleId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([ruleId])
+  @@schema("hr")
+  @@map("retirement_simulation")
+}
+
+model RetirementGrant {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  employeeId     String   @map("employee_id") @db.Uuid
+  ruleId         String   @map("rule_id") @db.Uuid
+  grantedOn      DateTime @map("granted_on") @db.Date
+  legalBasis     String   @map("legal_basis")
+  appointmentAct String   @map("appointment_act")
+  status         String   @default("CONCEDIDA")
+  notes          String   @default("")
+  grantedByRef   String?  @map("granted_by_ref")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee       @relation(fields: [employeeId], references: [id])
+  rule     RetirementRule @relation(fields: [ruleId], references: [id])
+
+  @@index([tenantId, employeeId, grantedOn])
+  @@index([ruleId])
+  @@schema("hr")
+  @@map("retirement_grant")
+}
+
+model PensionGrant {
+  id                   String   @id @default(uuid()) @db.Uuid
+  tenantId             String   @map("tenant_id") @db.Uuid
+  institutingEmployeeId String? @map("instituting_employee_id") @db.Uuid
+  beneficiaryName      String   @map("beneficiary_name")
+  beneficiaryCpf       String?  @map("beneficiary_cpf")
+  kinship              String?
+  benefitType          String   @map("benefit_type")
+  apportionmentType    String   @map("apportionment_type")
+  sharePercent         Decimal  @map("share_percent") @db.Decimal(8, 4)
+  adjustmentMode       String   @map("adjustment_mode")
+  nature               String
+  grantedOn            DateTime @map("granted_on") @db.Date
+  ceasedOn             DateTime? @map("ceased_on") @db.Date
+  legalBasis           String   @map("legal_basis")
+  notes                String   @default("")
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  institutingEmployee Employee? @relation(fields: [institutingEmployeeId], references: [id])
+
+  @@index([tenantId, grantedOn])
+  @@index([institutingEmployeeId])
+  @@index([benefitType])
+  @@schema("hr")
+  @@map("pension_grant")
+}
+
+model ContributionTimeCertificate {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  employeeId    String   @map("employee_id") @db.Uuid
+  periodStart   DateTime @map("period_start") @db.Date
+  periodEnd     DateTime @map("period_end") @db.Date
+  issuingAgency String   @map("issuing_agency")
+  issuanceAct   String   @map("issuance_act")
+  storageKey    String?  @map("storage_key")
+  issuedAt      DateTime @map("issued_at") @db.Timestamptz(6)
+  issuedByRef   String?  @map("issued_by_ref")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId, issuedAt])
+  @@schema("hr")
+  @@map("contribution_time_certificate")
+}
+
+model PrevidentiaryDeclaration {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  employeeId  String   @map("employee_id") @db.Uuid
+  type        String
+  issuedAt    DateTime @map("issued_at") @db.Timestamptz(6)
+  storageKey  String?  @map("storage_key")
+  issuedByRef String?  @map("issued_by_ref")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId, type])
+  @@schema("hr")
+  @@map("previdentiary_declaration")
+}
+
+model PensionCompensation {
+  id             String                     @id @default(uuid()) @db.Uuid
+  tenantId       String                     @map("tenant_id") @db.Uuid
+  employeeId     String?                    @map("employee_id") @db.Uuid
+  certificateRef String?                    @map("certificate_ref")
+  originRegime   String                     @map("origin_regime")
+  amount         Decimal                    @db.Decimal(14, 2)
+  status         PensionCompensationStatus  @default(DRAFT)
+  notes          String                     @default("")
+  createdAt      DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime                   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee Employee? @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([employeeId])
+  @@schema("hr")
+  @@map("pension_compensation")
+}
+
+model RecertificationCampaign {
+  id         String                        @id @default(uuid()) @db.Uuid
+  tenantId   String                        @map("tenant_id") @db.Uuid
+  type       RecertificationBeneficiaryType
+  cycleStart DateTime                      @map("cycle_start") @db.Date
+  cycleEnd   DateTime                      @map("cycle_end") @db.Date
+  filterJson Json                          @default("{}") @map("filter_json")
+  active     Boolean                       @default(true)
+  createdAt  DateTime                      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime                      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  beneficiaries RecertificationBeneficiary[]
+
+  @@index([tenantId, type, active])
+  @@schema("hr")
+  @@map("recertification_campaign")
+}
+
+model RecertificationBeneficiary {
+  id               String                        @id @default(uuid()) @db.Uuid
+  tenantId         String                        @map("tenant_id") @db.Uuid
+  employeeId       String                        @unique @map("employee_id") @db.Uuid
+  campaignId       String?                       @map("campaign_id") @db.Uuid
+  type             RecertificationBeneficiaryType
+  nextDueDate      DateTime                      @map("next_due_date") @db.Date
+  status           RecertificationStatus         @default(PENDING)
+  updatedAt        DateTime                      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt        DateTime                      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  employee    Employee                @relation(fields: [employeeId], references: [id])
+  campaign    RecertificationCampaign? @relation(fields: [campaignId], references: [id])
+  records     RecertificationRecord[]
+  lifeProofs  ExternalLifeProof[]
+  contactHistory BeneficiaryContactHistory[]
+
+  @@index([tenantId, status, nextDueDate])
+  @@index([campaignId])
+  @@schema("hr")
+  @@map("recertification_beneficiary")
+}
+
+model RecertificationRecord {
+  id               String   @id @default(uuid()) @db.Uuid
+  tenantId         String   @map("tenant_id") @db.Uuid
+  beneficiaryId    String   @map("beneficiary_id") @db.Uuid
+  recertifiedOn    DateTime @map("recertified_on") @db.Date
+  operatorRef      String   @map("operator_ref")
+  snapshotJson     Json     @default("{}") @map("snapshot_json")
+  receiptStorageKey String? @map("receipt_storage_key")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  beneficiary RecertificationBeneficiary @relation(fields: [beneficiaryId], references: [id])
+
+  @@index([tenantId, beneficiaryId, recertifiedOn])
+  @@schema("hr")
+  @@map("recertification_record")
+}
+
+model ExternalLifeProof {
+  id                String                   @id @default(uuid()) @db.Uuid
+  tenantId          String                   @map("tenant_id") @db.Uuid
+  beneficiaryId     String                   @map("beneficiary_id") @db.Uuid
+  channel           ExternalLifeProofChannel
+  authenticationJson Json                    @default("{}") @map("authentication_json")
+  provenAt          DateTime                 @map("proven_at") @db.Timestamptz(6)
+  createdAt         DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  beneficiary RecertificationBeneficiary @relation(fields: [beneficiaryId], references: [id])
+
+  @@index([tenantId, beneficiaryId, provenAt])
+  @@index([channel])
+  @@schema("hr")
+  @@map("external_life_proof")
+}
+
+model BeneficiaryContactHistory {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  beneficiaryId String   @map("beneficiary_id") @db.Uuid
+  contactedOn   DateTime @map("contacted_on") @db.Date
+  userRef       String   @map("user_ref")
+  notes         String   @default("")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  beneficiary RecertificationBeneficiary @relation(fields: [beneficiaryId], references: [id])
+
+  @@index([tenantId, beneficiaryId, contactedOn])
+  @@schema("hr")
+  @@map("beneficiary_contact_history")
+}
+
+model Notification {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  userId    String?   @map("user_id") @db.Uuid
+  moduleKey String?   @map("module_key")
+  title     String
+  body      String
+  readAt    DateTime? @map("read_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  metadata  Json      @default("{}")
+
+  user UserAccount? @relation("NotificationUser", fields: [userId], references: [id])
+
+  @@index([userId, readAt])
+  @@index([moduleKey])
+  @@schema("public")
+  @@map("notification")
+}
+
+model BusinessDay {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  code          String
+  name          String
+  description   String       @default("")
+  businessDate  DateTime?    @map("business_date") @db.Date
+  isBusinessDay Boolean      @default(true) @map("is_business_day")
+  status        RecordStatus @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([businessDate])
+  @@index([status])
+  @@schema("hr")
+  @@map("business_day")
+}
+
+model ConsignmentEntity {
+  id           String       @id @default(uuid()) @db.Uuid
+  tenantId     String       @map("tenant_id") @db.Uuid
+  code         String
+  name         String
+  description  String       @default("")
+  bankCode     String?      @map("bank_code")
+  contractRef  String?      @map("contract_ref")
+  discountKind String?      @map("discount_kind")
+  status       RecordStatus @default(ACTIVE)
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([bankCode])
+  @@index([status])
+  @@schema("hr")
+  @@map("consignment_entity")
+}
+
+model ServiceProvider {
+  id                 String       @id @default(uuid()) @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  branchId           String?      @map("branch_id") @db.Uuid
+  agreementId        String?      @map("agreement_id") @db.Uuid
+  categoryEntryId    String?      @map("category_entry_id") @db.Uuid
+  cboEntryId         String?      @map("cbo_entry_id") @db.Uuid
+  earningDeductionId String?      @map("earning_deduction_id") @db.Uuid
+  code               String
+  name               String
+  cpfCnpj            String?      @map("cpf_cnpj")
+  email              String?
+  phone              String?
+  address            Json         @default("{}")
+  metadata           Json         @default("{}")
+  status             RecordStatus @default(ACTIVE)
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, cpfCnpj])
+  @@index([branchId])
+  @@index([agreementId])
+  @@index([categoryEntryId])
+  @@index([cboEntryId])
+  @@index([earningDeductionId])
+  @@index([status])
+  @@schema("hr")
+  @@map("service_provider")
+}
+
+model ServiceTaker {
+  id               String       @id @default(uuid()) @db.Uuid
+  tenantId         String       @map("tenant_id") @db.Uuid
+  gpsPaymentCodeId String?      @map("gps_payment_code_id") @db.Uuid
+  sefipCodeId      String?      @map("sefip_code_id") @db.Uuid
+  code             String
+  name             String
+  cnpj             String?
+  contact          String       @default("")
+  address          Json         @default("{}")
+  metadata         Json         @default("{}")
+  status           RecordStatus @default(ACTIVE)
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, cnpj])
+  @@index([gpsPaymentCodeId])
+  @@index([sefipCodeId])
+  @@index([status])
+  @@schema("hr")
+  @@map("service_taker")
+}
+
+model FileExportJob {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String       @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  description String       @default("")
+  format      String       @default("CSV")
+  targetRoute String?      @map("target_route")
+  status      RecordStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([targetRoute])
+  @@index([status])
+  @@schema("hr")
+  @@map("file_export_job")
+}
+
+model ConsignmentImportJob {
+  id             String       @id @default(uuid()) @db.Uuid
+  tenantId       String       @map("tenant_id") @db.Uuid
+  code           String
+  name           String
+  description    String       @default("")
+  sourceFileName String?      @map("source_file_name")
+  status         RecordStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([sourceFileName])
+  @@index([status])
+  @@schema("hr")
+  @@map("consignment_import_job")
+}
+
+model EmployeePayrollItemImportJob {
+  id              String       @id @default(uuid()) @db.Uuid
+  tenantId        String       @map("tenant_id") @db.Uuid
+  code            String
+  name            String
+  description     String       @default("")
+  sourceFileName  String?      @map("source_file_name")
+  competenceYear  Int?         @map("competence_year")
+  competenceMonth Int?         @map("competence_month")
+  status          RecordStatus @default(ACTIVE)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([competenceYear, competenceMonth])
+  @@index([status])
+  @@schema("hr")
+  @@map("employee_payroll_item_import_job")
+}
+
+model CompetencePeriod {
+  id              String       @id @default(uuid()) @db.Uuid
+  tenantId        String       @map("tenant_id") @db.Uuid
+  competenceYear  Int          @map("competence_year")
+  competenceMonth Int?         @map("competence_month")
+  code            String
+  name            String
+  status          RecordStatus @default(ACTIVE)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, competenceYear, competenceMonth])
+  @@index([competenceYear, competenceMonth])
+  @@index([status])
+  @@schema("hr")
+  @@map("competence_period")
+}
+
+model TaxRate {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  code          String
+  name          String
+  description   String       @default("")
+  scope         String
+  referenceYear Int          @map("reference_year")
+  ratePercent   Decimal      @map("rate_percent") @db.Decimal(8, 4)
+  metadata      Json         @default("{}")
+  status        RecordStatus @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@index([scope, referenceYear])
+  @@index([status])
+  @@schema("public")
+  @@map("tax_rate")
+}

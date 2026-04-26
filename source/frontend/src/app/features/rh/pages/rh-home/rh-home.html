@@ -1,0 +1,138 @@
+<section class="rh-home" aria-labelledby="rh-title">
+  <header class="rh-home__hero">
+    <div>
+      <p class="rh-home__eyebrow">Recursos Humanos</p>
+      <h1 id="rh-title">{{ currentConfig.label }}</h1>
+      <p>
+        Workspace modernizado para rotas RH observadas no SGP legado. Rota:
+        <strong>{{ currentConfig.legacyRoute }}</strong>
+      </p>
+      <p class="rh-home__evidence">
+        Evidencia: {{ currentConfig.evidence }} · Status: {{ currentConfig.observedStatus }} ·
+        Workflows backend:
+        {{ backendDefinitionCount || 'indisponivel' }}
+      </p>
+    </div>
+
+    <div class="rh-home__hero-actions">
+      <button
+        type="button"
+        mat-stroked-button
+        (click)="requestImport()"
+        *ngIf="currentConfig.importKind"
+      >
+        <mat-icon aria-hidden="true">upload_file</mat-icon>
+        Importar
+      </button>
+      <button
+        type="button"
+        mat-stroked-button
+        (click)="requestReport()"
+        *ngIf="currentConfig.reportKey"
+      >
+        <mat-icon aria-hidden="true">description</mat-icon>
+        Relatorio
+      </button>
+      <button type="button" mat-flat-button color="primary" (click)="openCreateForm()">
+        <mat-icon aria-hidden="true">add</mat-icon>
+        Novo registro
+      </button>
+    </div>
+  </header>
+
+  <nav class="rh-home__modules" aria-label="Workflows de RH">
+    <a
+      *ngFor="let config of configs"
+      [routerLink]="['/rh', config.childPath]"
+      [class.rh-home__module--active]="config.key === currentConfig.key"
+    >
+      {{ config.label }}
+    </a>
+  </nav>
+
+  <app-filter-bar
+    [fields]="filterFields"
+    [initialValues]="{ search: search }"
+    applyLabel="Pesquisar"
+    clearLabel="Limpar"
+    (applyFilters)="applyFilters($event)"
+    (clearFilters)="clearFilters()"
+  ></app-filter-bar>
+
+  <mat-card appearance="outlined" class="rh-home__form" *ngIf="formOpen">
+    <mat-card-header>
+      <mat-card-title>
+        {{ editingRecord ? 'Editar registro' : 'Novo registro' }}
+      </mat-card-title>
+      <mat-card-subtitle>{{ currentConfig.label }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" class="rh-home__fields" (ngSubmit)="save()">
+        <ng-container *ngFor="let field of formFields; trackBy: trackByField">
+          <mat-checkbox
+            *ngIf="field.type === 'checkbox'; else inputField"
+            [formControlName]="field.key"
+          >
+            {{ field.label }}
+          </mat-checkbox>
+
+          <ng-template #inputField>
+            <mat-form-field
+              appearance="outline"
+              [class.rh-home__field--wide]="field.type === 'textarea'"
+            >
+              <mat-label>{{ field.label }}</mat-label>
+
+              <textarea
+                *ngIf="field.type === 'textarea'; else scalarInput"
+                matInput
+                rows="3"
+                [formControlName]="field.key"
+                [maxlength]="field.maxLength || null"
+                [placeholder]="field.placeholder || ''"
+              ></textarea>
+
+              <ng-template #scalarInput>
+                <input
+                  matInput
+                  [type]="field.type === 'number' || field.type === 'date' ? field.type : 'text'"
+                  [formControlName]="field.key"
+                  [maxlength]="field.maxLength || null"
+                  [placeholder]="field.placeholder || ''"
+                />
+              </ng-template>
+
+              <mat-error *ngIf="fieldControl(field).hasError('required')">
+                {{ field.label }} e obrigatorio.
+              </mat-error>
+              <mat-error *ngIf="fieldControl(field).hasError('maxlength')">
+                Valor excede o tamanho permitido.
+              </mat-error>
+            </mat-form-field>
+          </ng-template>
+        </ng-container>
+
+        <div class="rh-home__form-actions">
+          <button type="button" mat-stroked-button (click)="cancelForm()">Cancelar</button>
+          <button type="submit" mat-flat-button color="primary" [disabled]="saving">
+            {{ saving ? 'Salvando...' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <p class="rh-home__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="rh-home__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <app-crud-table
+    [columns]="columns"
+    [rows]="records"
+    [actions]="rowActions"
+    [loading]="loading"
+    [tableLabel]="currentConfig.label"
+    rowLabelKey="title"
+    (actionTriggered)="handleRowAction($event)"
+  ></app-crud-table>
+</section>

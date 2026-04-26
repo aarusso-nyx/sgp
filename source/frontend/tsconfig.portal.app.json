@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/portal",
+    "types": []
+  },
+  "include": ["portal/src/**/*.ts"],
+  "exclude": ["portal/src/**/*.spec.ts"]
+}

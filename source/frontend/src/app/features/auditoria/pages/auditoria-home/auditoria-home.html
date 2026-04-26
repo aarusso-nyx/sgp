@@ -1,0 +1,197 @@
+<section class="auditoria-home" aria-labelledby="auditoria-title">
+  <header class="auditoria-home__hero">
+    <div>
+      <p class="auditoria-home__eyebrow">Governanca</p>
+      <h1 id="auditoria-title">Auditoria</h1>
+      <p>
+        Consulta modernizada da trilha de auditoria do SGP. Rota legada:
+        <strong>#!/auditoria/gestao</strong>
+      </p>
+      <p class="auditoria-home__evidence">
+        Evidencia: docs/legacy-reverse/modules/auditoria.md · Filtros observados: periodo, usuario, tabela e
+        atualizacao da lista.
+      </p>
+    </div>
+
+    <div class="auditoria-home__hero-actions">
+      <button type="button" mat-stroked-button (click)="refresh()">
+        <mat-icon aria-hidden="true">refresh</mat-icon>
+        Atualizar
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        [disabled]="reporting"
+        (click)="requestReport()"
+      >
+        <mat-icon aria-hidden="true">description</mat-icon>
+        {{ reporting ? 'Solicitando...' : 'Solicitar relatorio' }}
+      </button>
+    </div>
+  </header>
+
+  <mat-card appearance="outlined" class="auditoria-home__filters">
+    <mat-card-header>
+      <mat-card-title>Filtros</mat-card-title>
+      <mat-card-subtitle>Use periodo, usuario, tabela, operacao ou texto livre.</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="filters" class="auditoria-home__filter-form" (ngSubmit)="applyFilters()">
+        <mat-form-field appearance="outline">
+          <mat-label>Pesquisa</mat-label>
+          <input matInput formControlName="search" placeholder="usuario, recurso, request id" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Periodo inicial</mat-label>
+          <input matInput type="date" formControlName="dateFrom" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Periodo final</mat-label>
+          <input matInput type="date" formControlName="dateTo" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Usuario</mat-label>
+          <input matInput formControlName="actor" [matAutocomplete]="actorAuto" />
+          <mat-autocomplete #actorAuto="matAutocomplete">
+            <mat-option
+              *ngFor="let facet of userFacets; trackBy: trackByFacet"
+              [value]="facet.value"
+            >
+              {{ facet.label }} ({{ facet.count }})
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Operacao</mat-label>
+          <mat-select formControlName="action">
+            <mat-option value="">Todas</mat-option>
+            <mat-option
+              *ngFor="let facet of actionFacets; trackBy: trackByFacet"
+              [value]="facet.value"
+            >
+              {{ facet.label }} ({{ facet.count }})
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tabela</mat-label>
+          <mat-select formControlName="tableName">
+            <mat-option value="">Todas</mat-option>
+            <mat-option
+              *ngFor="let facet of tableFacets; trackBy: trackByFacet"
+              [value]="facet.value"
+            >
+              {{ facet.label }} ({{ facet.count }})
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Recurso</mat-label>
+          <input matInput formControlName="resourceType" placeholder="employee, payroll_run" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>ID do registro</mat-label>
+          <input matInput formControlName="resourceId" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Request ID</mat-label>
+          <input matInput formControlName="requestId" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Status HTTP</mat-label>
+          <input matInput type="number" formControlName="statusCode" />
+        </mat-form-field>
+
+        <div class="auditoria-home__filter-actions">
+          <button type="button" mat-stroked-button (click)="clearFilters()">
+            <mat-icon aria-hidden="true">filter_alt_off</mat-icon>
+            Limpar
+          </button>
+          <button type="submit" mat-flat-button color="primary">
+            <mat-icon aria-hidden="true">search</mat-icon>
+            Pesquisar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <p class="auditoria-home__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="auditoria-home__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <app-crud-table
+    [columns]="columns"
+    [rows]="records"
+    [actions]="rowActions"
+    [loading]="loading"
+    tableLabel="Eventos de auditoria"
+    rowLabelKey="id"
+    (actionTriggered)="handleRowAction($event)"
+  ></app-crud-table>
+
+  <mat-card appearance="outlined" class="auditoria-home__details" *ngIf="selected">
+    <mat-card-header>
+      <mat-card-title>Detalhes do evento</mat-card-title>
+      <mat-card-subtitle>{{ selected.id }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <dl>
+        <div>
+          <dt>Data</dt>
+          <dd>{{ selected['occurredAtLabel'] }}</dd>
+        </div>
+        <div>
+          <dt>Usuario</dt>
+          <dd>{{ selected['actorLabel'] }}</dd>
+        </div>
+        <div>
+          <dt>Acao</dt>
+          <dd>{{ selected.action }}</dd>
+        </div>
+        <div>
+          <dt>Recurso</dt>
+          <dd>{{ selected.resourceType }}</dd>
+        </div>
+        <div>
+          <dt>Tabela</dt>
+          <dd>{{ selected.tableName || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Registro</dt>
+          <dd>{{ selected.resourceId || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Request ID</dt>
+          <dd>{{ selected.requestId || '-' }}</dd>
+        </div>
+        <div>
+          <dt>IP</dt>
+          <dd>{{ selected.ipAddress || '-' }}</dd>
+        </div>
+        <div>
+          <dt>User agent</dt>
+          <dd>{{ selected.userAgent || '-' }}</dd>
+        </div>
+      </dl>
+
+      <h3>Metadados redigidos</h3>
+      <dl class="auditoria-home__metadata">
+        <div *ngFor="let entry of metadataEntries(selected)">
+          <dt>{{ entry.key }}</dt>
+          <dd>{{ entry.value }}</dd>
+        </div>
+      </dl>
+    </mat-card-content>
+  </mat-card>
+</section>

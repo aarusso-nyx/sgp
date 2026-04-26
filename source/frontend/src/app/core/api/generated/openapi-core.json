@@ -1,0 +1,7918 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1": {
+      "get": {
+        "operationId": "AppController_getRootMetadata",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "root"
+        ]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "SessionController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current authenticated Cognito actor."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/menus": {
+      "get": {
+        "operationId": "SessionController_menus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Resolved menu entries for the authenticated actor."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "SessionController_logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Invalidate current actor session."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/recuperar-senha": {
+      "post": {
+        "operationId": "SessionController_recoverPassword",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Start password recovery flow."
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/confirmar-nova-senha": {
+      "post": {
+        "operationId": "SessionController_confirmNewPassword",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Confirm recovered password."
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/alterar-senha": {
+      "put": {
+        "operationId": "SessionController_changePassword",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Change current actor password."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/iam/permissions": {
+      "get": {
+        "operationId": "PermissionsController_listPermissions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List available runtime permissions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "iam"
+        ]
+      }
+    },
+    "/api/v1/auditoria/logs": {
+      "get": {
+        "operationId": "AuditController_events",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "required": false,
+            "in": "query",
+            "description": "Inclusive event start date/time.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateTo",
+            "required": false,
+            "in": "query",
+            "description": "Inclusive event end date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "actor",
+            "required": false,
+            "in": "query",
+            "description": "Actor login or Cognito subject.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CREATE",
+                "READ",
+                "UPDATE",
+                "DELETE",
+                "LOGIN",
+                "LOGOUT",
+                "IMPORT",
+                "EXPORT",
+                "GENERATE",
+                "PROCESS",
+                "APPROVE",
+                "REJECT",
+                "DOWNLOAD"
+              ]
+            }
+          },
+          {
+            "name": "tableName",
+            "required": false,
+            "in": "query",
+            "description": "Database table name.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resourceType",
+            "required": false,
+            "in": "query",
+            "description": "Domain resource type.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resourceId",
+            "required": false,
+            "in": "query",
+            "description": "Domain resource identifier.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "requestId",
+            "required": false,
+            "in": "query",
+            "description": "Request correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "statusCode",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 100,
+              "maximum": 599,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paged audit events."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "audit"
+        ]
+      }
+    },
+    "/api/v1/auditoria/logs/{id}": {
+      "get": {
+        "operationId": "AuditController_eventById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch audit event detail by id."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "audit"
+        ]
+      }
+    },
+    "/api/v1/auditoria/exportacoes": {
+      "post": {
+        "operationId": "AuditController_createReportRequest",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuditReportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an audit trail report request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "audit"
+        ]
+      }
+    },
+    "/api/v1/auditoria/exportacoes/{job_id}": {
+      "get": {
+        "operationId": "AuditController_reportRequestStatus",
+        "parameters": [
+          {
+            "name": "job_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch audit export request status."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "audit"
+        ]
+      }
+    },
+    "/api/v1/admin/usuarios": {
+      "get": {
+        "operationId": "UsersController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ACTIVE",
+                "INACTIVE",
+                "LOCKED"
+              ]
+            }
+          },
+          {
+            "name": "profileId",
+            "required": false,
+            "in": "query",
+            "description": "Filter users by assigned profile id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List admin users with current profile assignments."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      },
+      "post": {
+        "operationId": "UsersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a new admin user."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/admin/usuarios/{id}": {
+      "patch": {
+        "operationId": "UsersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update admin user identity/status."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/admin/usuarios/{id}/perfis": {
+      "put": {
+        "operationId": "UsersController_assignProfiles",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignProfilesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Replace admin user profile assignments."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/admin/usuarios/{id}/papeis-diretos": {
+      "put": {
+        "operationId": "UsersController_assignDirectRoles",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignDirectRolesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Replace direct role snapshots for a user."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/admin/usuarios/convite": {
+      "post": {
+        "operationId": "InvitesController_createInvite",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Create user invitation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/admin/convites/{id}": {
+      "delete": {
+        "operationId": "InvitesController_cancelInvite",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cancel invitation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/convites/{token}/aceitar": {
+      "post": {
+        "operationId": "InviteAcceptanceController_acceptInvite",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Accept invitation and create credentials."
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/admin/perfis": {
+      "get": {
+        "operationId": "ProfilesController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List access profiles."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "profiles"
+        ]
+      },
+      "post": {
+        "operationId": "ProfilesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an access profile."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "profiles"
+        ]
+      }
+    },
+    "/api/v1/admin/perfis/{id}": {
+      "get": {
+        "operationId": "ProfilesController_getById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch one profile with permissions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "profiles"
+        ]
+      },
+      "put": {
+        "operationId": "ProfilesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update profile metadata."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "profiles"
+        ]
+      },
+      "delete": {
+        "operationId": "ProfilesController_deactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate an access profile."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "profiles"
+        ]
+      }
+    },
+    "/api/v1/admin/perfis/{id}/papeis": {
+      "put": {
+        "operationId": "ProfilesController_setPermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignProfilePermissionsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Replace profile permission mappings."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "profiles"
+        ]
+      }
+    },
+    "/api/v1/admin/parametros/sistema": {
+      "get": {
+        "operationId": "SystemParametersController_listSystem",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Tenant system parameters."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "system-parameters"
+        ]
+      },
+      "put": {
+        "operationId": "SystemParametersController_upsertSystem",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertSystemParametersDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upsert tenant system parameters."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "system-parameters"
+        ]
+      }
+    },
+    "/api/v1/admin/parametros/globais": {
+      "get": {
+        "operationId": "SystemParametersController_listGlobal",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Global parameters."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "system-parameters"
+        ]
+      }
+    },
+    "/api/v1/admin/parametros/globais/{chave}": {
+      "put": {
+        "operationId": "SystemParametersController_upsertGlobal",
+        "parameters": [
+          {
+            "name": "chave",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertGlobalParameterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upsert one global parameter."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "system-parameters"
+        ]
+      }
+    },
+    "/api/v1/admin/feature-flags/{chave}": {
+      "patch": {
+        "operationId": "FeatureFlagsController_toggle",
+        "parameters": [
+          {
+            "name": "chave",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToggleFeatureFlagDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Toggle a tenant feature flag."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "feature-flags"
+        ]
+      }
+    },
+    "/api/v1/admin/menus": {
+      "get": {
+        "operationId": "AdminMenusController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List admin menus."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "menus"
+        ]
+      },
+      "post": {
+        "operationId": "AdminMenusController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Create admin menu."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "menus"
+        ]
+      }
+    },
+    "/api/v1/admin/menus/{id}": {
+      "put": {
+        "operationId": "AdminMenusController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update admin menu."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "menus"
+        ]
+      },
+      "delete": {
+        "operationId": "AdminMenusController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete admin menu."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "menus"
+        ]
+      }
+    },
+    "/api/admin/v1/feature-flags/{chave}": {
+      "patch": {
+        "operationId": "AdminPlatformController_toggleFeatureFlag",
+        "parameters": [
+          {
+            "name": "chave",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToggleFeatureFlagDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Toggle feature flag from admin namespace."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/v1/tenants": {
+      "post": {
+        "operationId": "AdminPlatformController_createTenant",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Create tenant."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/v1/tenants/{id}": {
+      "patch": {
+        "operationId": "AdminPlatformController_patchTenant",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patch tenant."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/v1/tenants/{id}/importacao": {
+      "post": {
+        "operationId": "AdminPlatformController_startImport",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Start tenant import job."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/v1/tenants/{id}/importacao/{job_id}/progresso": {
+      "get": {
+        "operationId": "AdminPlatformController_importProgress",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "job_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant import progress."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/v1/esocial/eventos/{id}/reprocessar": {
+      "post": {
+        "operationId": "AdminPlatformController_reprocessEsocialEvent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Reprocess eSocial event."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/v1/esocial/certificado": {
+      "put": {
+        "operationId": "AdminPlatformController_updateEsocialCertificate",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Update eSocial certificate."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/notificacoes": {
+      "get": {
+        "operationId": "NotificationsController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paged user notifications."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notificacoes/stream": {
+      "get": {
+        "operationId": "NotificationsController_stream",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Notifications SSE stream."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notificacoes/unread-count": {
+      "get": {
+        "operationId": "NotificationsController_unreadCount",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Unread notification count."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notificacoes/marcar-todas-lidas": {
+      "patch": {
+        "operationId": "NotificationsController_markAllRead",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Mark all unread notifications as read."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notificacoes/{id}": {
+      "patch": {
+        "operationId": "NotificationsController_markRead",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationReadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mark a notification read/unread."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/usuarios/me/preferencias-notificacao": {
+      "get": {
+        "operationId": "NotificationPreferencesController_getPreferences",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current user notification preferences."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      },
+      "put": {
+        "operationId": "NotificationPreferencesController_updatePreferences",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationPreferencesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update current user notification preferences."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/arquivos": {
+      "get": {
+        "operationId": "DocumentsController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paged document attachment metadata."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "documents"
+        ]
+      }
+    },
+    "/api/v1/arquivos/presigned-upload": {
+      "post": {
+        "operationId": "DocumentsController_presignUpload",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresignUploadRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a presigned upload URL for S3."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "documents"
+        ]
+      }
+    },
+    "/api/v1/arquivos/{anexo_id}/confirmar": {
+      "patch": {
+        "operationId": "DocumentsController_registerByPath",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Register a completed upload as attachment metadata."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "documents"
+        ]
+      }
+    },
+    "/api/v1/arquivos/{id}": {
+      "delete": {
+        "operationId": "DocumentsController_deleteAttachment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete a document attachment metadata record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "documents"
+        ]
+      }
+    },
+    "/api/v1/arquivos/{id}/download": {
+      "get": {
+        "operationId": "DocumentsController_presignDownload",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Create a short-lived presigned download URL."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "documents"
+        ]
+      }
+    },
+    "/api/portal/v1/auth/me": {
+      "get": {
+        "operationId": "PortalController_authMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated portal actor session alias."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/api/portal/v1/auth/govbr/status": {
+      "get": {
+        "operationId": "PortalController_govBrStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Gov.br identity provider status."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/api/external/v1/dados": {
+      "get": {
+        "operationId": "ExternalController_dados",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "External API health/data probe."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "external"
+        ]
+      }
+    },
+    "/api/external/v1/dicionario/entidades": {
+      "get": {
+        "operationId": "ExternalController_entidades",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "External API entity dictionary."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "external"
+        ]
+      }
+    },
+    "/api/publico/v1/{tenant}/transparencia/folha": {
+      "get": {
+        "operationId": "PublicTransparencyController_folha",
+        "parameters": [
+          {
+            "name": "tenant",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public payroll transparency listing."
+          }
+        },
+        "tags": [
+          "publico"
+        ]
+      }
+    },
+    "/api/v1/master-data": {
+      "get": {
+        "operationId": "MasterDataController_listResources",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List the foundational catalog resources."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "gestao"
+        ]
+      }
+    },
+    "/api/v1/master-data/{resource}": {
+      "get": {
+        "operationId": "MasterDataController_listRecords",
+        "parameters": [
+          {
+            "name": "resource",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List canonical records for one catalog."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "gestao"
+        ]
+      },
+      "post": {
+        "operationId": "MasterDataController_createRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MasterDataMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a canonical catalog record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "gestao"
+        ]
+      }
+    },
+    "/api/v1/master-data/{resource}/{id}": {
+      "patch": {
+        "operationId": "MasterDataController_updateRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MasterDataMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a canonical catalog record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "gestao"
+        ]
+      },
+      "delete": {
+        "operationId": "MasterDataController_deactivateRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate a canonical catalog record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "gestao"
+        ]
+      }
+    },
+    "/api/v1/funcionarios/{id}/dossie": {
+      "get": {
+        "operationId": "EmployeesController_dossier",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee dossier document."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/pericia/prontuarios/{id}/laudo/pdf": {
+      "get": {
+        "operationId": "EmployeesController_medicalReportPdf",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Medical report PDF metadata."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/recadastramento/{recadastramento_id}/comprovante": {
+      "get": {
+        "operationId": "EmployeesController_recadastramentoReceipt",
+        "parameters": [
+          {
+            "name": "recadastramento_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recadastramento receipt metadata."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/funcionarios/{func_rescisao}/desligamento": {
+      "post": {
+        "operationId": "EmployeesController_terminateEmployee",
+        "parameters": [
+          {
+            "name": "func_rescisao",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminateEmployeeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Terminate an employee and optionally create the termination payroll run."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/rh/afastamentos": {
+      "get": {
+        "operationId": "RhWorkflowsController_listLeaves",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List employee leave and absence records."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "post": {
+        "operationId": "RhWorkflowsController_createLeave",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Register an employee leave entry."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/rh/afastamentos/{id}": {
+      "patch": {
+        "operationId": "RhWorkflowsController_updateLeave",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update an employee leave record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "delete": {
+        "operationId": "RhWorkflowsController_deleteLeave",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate an employee leave record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/rh/processos": {
+      "get": {
+        "operationId": "RhWorkflowsController_listProcesses",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List administrative processes."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "post": {
+        "operationId": "RhWorkflowsController_createProcess",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an administrative process."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/rh/processos/{id}": {
+      "patch": {
+        "operationId": "RhWorkflowsController_updateProcess",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update an administrative process."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "delete": {
+        "operationId": "RhWorkflowsController_deleteProcess",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate an administrative process."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/rh/processos-funcao": {
+      "get": {
+        "operationId": "RhWorkflowsController_listProcessFunctions",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List process to function assignments."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "post": {
+        "operationId": "RhWorkflowsController_createProcessFunction",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a process to function assignment."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/rh/processos-funcao/{id}": {
+      "patch": {
+        "operationId": "RhWorkflowsController_updateProcessFunction",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a process to function assignment."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "delete": {
+        "operationId": "RhWorkflowsController_deleteProcessFunction",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate a process to function assignment."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/dependentes-beneficio": {
+      "get": {
+        "operationId": "EmployeeRhWorkflowsController_listBenefitDependents",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List benefit-dependent records for an employee."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "post": {
+        "operationId": "EmployeeRhWorkflowsController_createBenefitDependent",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a benefit-dependent record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/dependentes-beneficio/{id}": {
+      "patch": {
+        "operationId": "EmployeeRhWorkflowsController_updateBenefitDependent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a benefit-dependent record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "delete": {
+        "operationId": "EmployeeRhWorkflowsController_deleteBenefitDependent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate a benefit-dependent record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/contribuicoes-sindicais": {
+      "get": {
+        "operationId": "EmployeeRhWorkflowsController_listUnionContributions",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List union contribution records for an employee."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "post": {
+        "operationId": "EmployeeRhWorkflowsController_createUnionContribution",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a union contribution record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/contribuicoes-sindicais/{id}": {
+      "patch": {
+        "operationId": "EmployeeRhWorkflowsController_updateUnionContribution",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a union contribution record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "delete": {
+        "operationId": "EmployeeRhWorkflowsController_deleteUnionContribution",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate a union contribution record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/exercicios": {
+      "get": {
+        "operationId": "EmployeeRhWorkflowsController_listExercises",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List exercise assignments for an employee."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "post": {
+        "operationId": "EmployeeRhWorkflowsController_createExercise",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an exercise assignment."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/exercicios/{id}": {
+      "patch": {
+        "operationId": "EmployeeRhWorkflowsController_updateExercise",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update an exercise assignment."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "delete": {
+        "operationId": "EmployeeRhWorkflowsController_deleteExercise",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate an exercise assignment."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/pensoes-alimenticias": {
+      "get": {
+        "operationId": "EmployeeRhWorkflowsController_listAlimonies",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List alimony records for an employee."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "post": {
+        "operationId": "EmployeeRhWorkflowsController_createAlimony",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an alimony record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/pensoes-alimenticias/{id}": {
+      "patch": {
+        "operationId": "EmployeeRhWorkflowsController_updateAlimony",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update an alimony record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "delete": {
+        "operationId": "EmployeeRhWorkflowsController_deleteAlimony",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate an alimony record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/vales-transporte": {
+      "get": {
+        "operationId": "EmployeeRhWorkflowsController_listTransitBenefits",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List transit benefit grants for an employee."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "post": {
+        "operationId": "EmployeeRhWorkflowsController_createTransitBenefit",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a transit benefit grant."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/employees/{employeeId}/rh-workflows/vales-transporte/{id}": {
+      "patch": {
+        "operationId": "EmployeeRhWorkflowsController_updateTransitBenefit",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RhWorkflowMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a transit benefit grant."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      },
+      "delete": {
+        "operationId": "EmployeeRhWorkflowsController_deleteTransitBenefit",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate a transit benefit grant."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "rh"
+        ]
+      }
+    },
+    "/api/v1/avaliacao/desempenhos": {
+      "get": {
+        "operationId": "AvaliacaoController_listPerformanceEvaluations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List performance evaluations."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      },
+      "post": {
+        "operationId": "AvaliacaoController_createPerformanceEvaluation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePerformanceEvaluationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a performance evaluation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      }
+    },
+    "/api/v1/avaliacao/desempenhos/{id}": {
+      "patch": {
+        "operationId": "AvaliacaoController_updatePerformanceEvaluation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePerformanceEvaluationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a performance evaluation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      }
+    },
+    "/api/v1/avaliacao/progressoes": {
+      "get": {
+        "operationId": "AvaliacaoController_listProgressions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List career progressions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      },
+      "post": {
+        "operationId": "AvaliacaoController_createProgression",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMeritProgressionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a career progression."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      }
+    },
+    "/api/v1/avaliacao/simulacoes": {
+      "get": {
+        "operationId": "AvaliacaoController_listSimulations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List salary simulations."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      },
+      "post": {
+        "operationId": "AvaliacaoController_createSimulation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSalarySimulationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a salary simulation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      }
+    },
+    "/api/v1/avaliacao/planos-cargos": {
+      "get": {
+        "operationId": "AvaliacaoController_listCareerPlans",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List career plans."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      },
+      "post": {
+        "operationId": "AvaliacaoController_createCareerPlan",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCareerPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a career plan."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      }
+    },
+    "/api/v1/avaliacao/planos-cargos/{id}": {
+      "patch": {
+        "operationId": "AvaliacaoController_updateCareerPlan",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCareerPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a career plan."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      }
+    },
+    "/api/v1/avaliacao/desempenhos/{id}/ficha": {
+      "post": {
+        "operationId": "AvaliacaoController_requestEvaluationSheet",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateAvaliacaoReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a performance evaluation sheet."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      }
+    },
+    "/api/v1/avaliacao/ciclos/{periodo}/relatorio": {
+      "post": {
+        "operationId": "AvaliacaoController_requestCycleReport",
+        "parameters": [
+          {
+            "name": "periodo",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateAvaliacaoReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a cycle evaluation report."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "avaliacao"
+        ]
+      }
+    },
+    "/api/v1/consultas/ficha-financeira": {
+      "get": {
+        "operationId": "ManagerialQueriesController_listFinancialRecords",
+        "parameters": [
+          {
+            "name": "funcionarioId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "competenciaAno",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "competenciaMes",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List employee financial records."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "consultas"
+        ]
+      }
+    },
+    "/api/v1/consultas/ficha-funcional": {
+      "get": {
+        "operationId": "ManagerialQueriesController_listFunctionalRecords",
+        "parameters": [
+          {
+            "name": "situacaoFuncionalId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lotacaoId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List functional employee records."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "consultas"
+        ]
+      }
+    },
+    "/api/v1/consultas/relatorios-situacao": {
+      "get": {
+        "operationId": "ManagerialQueriesController_listSituationReports",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List grouped personnel status totals."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "consultas"
+        ]
+      }
+    },
+    "/api/v1/consultas/pagamentos-bloqueados": {
+      "get": {
+        "operationId": "ManagerialQueriesController_listBlockedPayments",
+        "parameters": [
+          {
+            "name": "competenciaAno",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "competenciaMes",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List blocked payments."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "consultas"
+        ]
+      }
+    },
+    "/api/v1/consultas/historico-operacional": {
+      "get": {
+        "operationId": "ManagerialQueriesController_listOperationalHistory",
+        "parameters": [
+          {
+            "name": "recurso",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List operational audit history."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "consultas"
+        ]
+      }
+    },
+    "/api/v1/consultas/dashboards": {
+      "get": {
+        "operationId": "ManagerialQueriesController_dashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return managerial dashboard totals."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "consultas"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/regras": {
+      "get": {
+        "operationId": "PrevidenciarioController_listRules",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List retirement rules."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createRule",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRetirementRuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a retirement rule."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/regras/{id}": {
+      "patch": {
+        "operationId": "PrevidenciarioController_updateRule",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRetirementRuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a retirement rule."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes": {
+      "get": {
+        "operationId": "PrevidenciarioController_listSimulations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List retirement simulations."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createSimulation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRetirementSimulationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a retirement simulation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/aposentadorias": {
+      "get": {
+        "operationId": "PrevidenciarioController_listRetirementGrants",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List retirement concessions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createRetirementGrant",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRetirementGrantDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Grant a retirement benefit."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/pensoes": {
+      "get": {
+        "operationId": "PrevidenciarioController_listPensions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List pension grants."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createPension",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePensionGrantDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a pension grant."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/certidoes-tempo": {
+      "get": {
+        "operationId": "PrevidenciarioController_listContributionTimeCertificates",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List contribution time certificates."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createContributionTimeCertificate",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContributionTimeCertificateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a contribution time certificate."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/certidoes-tempo/{id}/emitir": {
+      "post": {
+        "operationId": "PrevidenciarioController_requestContributionTimeCertificateOutput",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePrevidenciarioOutputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a contribution time certificate output."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/declaracoes": {
+      "get": {
+        "operationId": "PrevidenciarioController_listDeclarations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List previdentiary declarations."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createDeclaration",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePrevidentiaryDeclarationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a previdentiary declaration."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/declaracoes/{id}/emitir": {
+      "post": {
+        "operationId": "PrevidenciarioController_requestDeclarationOutput",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePrevidenciarioOutputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a previdentiary declaration output."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/compensacoes": {
+      "get": {
+        "operationId": "PrevidenciarioController_listCompensations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List pension compensations."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createCompensation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePensionCompensationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a pension compensation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/compensacoes/{id}": {
+      "patch": {
+        "operationId": "PrevidenciarioController_updateCompensation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePensionCompensationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update pension compensation status."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/recadastramentos/campanhas": {
+      "get": {
+        "operationId": "PrevidenciarioController_listCampaigns",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List recertification campaigns."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createCampaign",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecertificationCampaignDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a recertification campaign."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/recadastramentos/beneficiarios": {
+      "get": {
+        "operationId": "PrevidenciarioController_listBeneficiaries",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List recertification beneficiaries."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createBeneficiary",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecertificationBeneficiaryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Register a recertification beneficiary."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/recadastramentos/pendencias": {
+      "get": {
+        "operationId": "PrevidenciarioController_listPendingRecertifications",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List pending recertification beneficiaries."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/recadastramentos/historico": {
+      "get": {
+        "operationId": "PrevidenciarioController_listBeneficiaryContactHistory",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List beneficiary contact history."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      },
+      "post": {
+        "operationId": "PrevidenciarioController_createBeneficiaryContactHistory",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBeneficiaryContactHistoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Register beneficiary contact history."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/recadastramentos/atos": {
+      "post": {
+        "operationId": "PrevidenciarioController_createRecord",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecertificationRecordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Register a recertification act."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/provas-vida": {
+      "post": {
+        "operationId": "PrevidenciarioController_createExternalLifeProof",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateExternalLifeProofDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Register an external life proof."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/recadastramentos/convocacoes": {
+      "post": {
+        "operationId": "PrevidenciarioController_requestRecertificationNotice",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePrevidenciarioOutputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue recertification notices."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/recadastramentos/relatorios": {
+      "post": {
+        "operationId": "PrevidenciarioController_requestRecertificationPendingReport",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePrevidenciarioOutputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a recertification pending report."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/previdenciario/transferencia-siprev/exportar": {
+      "post": {
+        "operationId": "PrevidenciarioController_requestSiprevExport",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePrevidenciarioOutputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a SIPREV export request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "previdenciario"
+        ]
+      }
+    },
+    "/api/v1/pericia/agendamentos": {
+      "post": {
+        "operationId": "PericiaController_scheduleAppointment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SchedulePericiaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Schedule a medical appointment."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "saude"
+        ]
+      }
+    },
+    "/api/v1/pericia/agendamentos/{agendamento_id}": {
+      "patch": {
+        "operationId": "PericiaController_updateAppointment",
+        "parameters": [
+          {
+            "name": "agendamento_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePericiaAppointmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a medical appointment attendance status."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "saude"
+        ]
+      }
+    },
+    "/api/v1/pericia/prontuarios": {
+      "post": {
+        "operationId": "PericiaController_createMedicalRecord",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMedicalRecordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a medical record and optional leave."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "saude"
+        ]
+      }
+    },
+    "/api/v1/pericia/prontuarios/{prontuario_id}/validar": {
+      "patch": {
+        "operationId": "PericiaController_validateMedicalRecord",
+        "parameters": [
+          {
+            "name": "prontuario_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateMedicalRecordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Approve or reject a medical record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "saude"
+        ]
+      }
+    },
+    "/api/v1/pericia/prontuarios/{prontuario_id}/replicar": {
+      "post": {
+        "operationId": "PericiaController_replicateMedicalRecord",
+        "parameters": [
+          {
+            "name": "prontuario_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplicateMedicalRecordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Replicate medical leave to additional registrations."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "saude"
+        ]
+      }
+    },
+    "/api/v1/folhas": {
+      "get": {
+        "operationId": "PayrollController_listRuns",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List payroll runs."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      },
+      "post": {
+        "operationId": "PayrollController_createRun",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePayrollRunDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a payroll run."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/{folha_id}/status": {
+      "patch": {
+        "operationId": "PayrollController_updateStatus",
+        "parameters": [
+          {
+            "name": "folha_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePayrollRunStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update payroll run status."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/{folha_rescisao_id}/calcular": {
+      "post": {
+        "operationId": "PayrollController_calculateRun",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculatePayrollRunDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Calculate a payroll run."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/{folha_id}/massa": {
+      "post": {
+        "operationId": "PayrollController_populateRun",
+        "parameters": [
+          {
+            "name": "folha_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PopulatePayrollRunDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Populate a payroll run with eligible payroll items."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/{folha_id}/adiantamentos": {
+      "post": {
+        "operationId": "PayrollController_createAdvancePayment",
+        "parameters": [
+          {
+            "name": "folha_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdvancePaymentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create and process an advance request/payment for a payroll run."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/catalogos": {
+      "get": {
+        "operationId": "PayrollAccountingController_listCatalogResources",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List payroll catalog resources."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/catalogos/{resource}": {
+      "get": {
+        "operationId": "PayrollAccountingController_listCatalogRecords",
+        "parameters": [
+          {
+            "name": "resource",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List payroll catalog records."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      },
+      "post": {
+        "operationId": "PayrollAccountingController_createCatalogRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayrollCatalogMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a payroll catalog record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/catalogos/{resource}/{id}": {
+      "patch": {
+        "operationId": "PayrollAccountingController_updateCatalogRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayrollCatalogMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a payroll catalog record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      },
+      "delete": {
+        "operationId": "PayrollAccountingController_deactivateCatalogRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate a payroll catalog record."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/contabilidade": {
+      "get": {
+        "operationId": "PayrollAccountingController_listAccountingAccounts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List payroll accounting-account mappings."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      },
+      "post": {
+        "operationId": "PayrollAccountingController_createAccountingAccount",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayrollAccountingAccountMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a payroll accounting-account mapping."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folhas/contabilidade/{id}": {
+      "patch": {
+        "operationId": "PayrollAccountingController_updateAccountingAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayrollAccountingAccountMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a payroll accounting-account mapping."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      },
+      "delete": {
+        "operationId": "PayrollAccountingController_deactivateAccountingAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate a payroll accounting-account mapping."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/esocial/eventos": {
+      "post": {
+        "operationId": "ESocialController_createEvent",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateESocialEventDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a new eSocial event."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "esocial"
+        ]
+      }
+    },
+    "/api/v1/folha/{id}/remessa": {
+      "get": {
+        "operationId": "PayrollOperationsController_listRemittances",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List remittance requests for one payroll run."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      },
+      "post": {
+        "operationId": "PayrollOperationsController_requestRemittance",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRemittanceRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a CNAB remittance generation request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/folha/{id}/retorno": {
+      "post": {
+        "operationId": "PayrollOperationsController_requestReturnProcessing",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessReturnRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a CNAB return processing request for one payroll run."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/gfip/gerar": {
+      "post": {
+        "operationId": "PayrollGfipController_requestGfipGeneration",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGfipRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a GFIP/SEFIP generation request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "folha-pagamento"
+        ]
+      }
+    },
+    "/api/v1/convenios": {
+      "get": {
+        "operationId": "AgreementsController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List agreements."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "convenio"
+        ]
+      }
+    },
+    "/api/v1/recrutamento/requisicoes": {
+      "post": {
+        "operationId": "RecruitmentController_createRequest",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecruitmentRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a recruitment request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "recrutamento"
+        ]
+      }
+    },
+    "/api/v1/recrutamento/requisicoes/{requisicao_id}/encaminhar": {
+      "patch": {
+        "operationId": "RecruitmentController_forwardRequest",
+        "parameters": [
+          {
+            "name": "requisicao_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Forward a recruitment request to RH."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "recrutamento"
+        ]
+      }
+    },
+    "/api/v1/recrutamento/requisicoes/{requisicao_id}/candidatos": {
+      "post": {
+        "operationId": "RecruitmentController_attachCandidates",
+        "parameters": [
+          {
+            "name": "requisicao_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttachRecruitmentCandidatesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Attach candidates to a recruitment request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "recrutamento"
+        ]
+      }
+    },
+    "/api/v1/recrutamento/candidatos/{candidato_id}": {
+      "patch": {
+        "operationId": "RecruitmentController_updateCandidate",
+        "parameters": [
+          {
+            "name": "candidato_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRecruitmentCandidateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update recruitment candidate analysis."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "recrutamento"
+        ]
+      }
+    },
+    "/api/v1/recrutamento/requisicoes/{requisicao_id}/concluir": {
+      "patch": {
+        "operationId": "RecruitmentController_concludeRequest",
+        "parameters": [
+          {
+            "name": "requisicao_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conclude recruitment analysis."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "recrutamento"
+        ]
+      }
+    },
+    "/api/v1/relatorios": {
+      "get": {
+        "operationId": "ReportCatalogController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List report definitions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "relatorio"
+        ]
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/health/ready": {
+      "get": {
+        "operationId": "HealthController_readiness",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "SGP API",
+    "description": "Modern SGP NestJS API",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "Object": {
+        "type": "object",
+        "properties": {}
+      },
+      "AuditReportRequestDto": {
+        "type": "object",
+        "properties": {
+          "dateFrom": {
+            "type": "string"
+          },
+          "dateTo": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "CREATE",
+              "READ",
+              "UPDATE",
+              "DELETE",
+              "LOGIN",
+              "LOGOUT",
+              "IMPORT",
+              "EXPORT",
+              "GENERATE",
+              "PROCESS",
+              "APPROVE",
+              "REJECT",
+              "DOWNLOAD"
+            ]
+          },
+          "tableName": {
+            "type": "string"
+          },
+          "resourceType": {
+            "type": "string"
+          },
+          "search": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          }
+        }
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "cognitoSub": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "LOCKED"
+            ]
+          }
+        },
+        "required": [
+          "login",
+          "name"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "LOCKED"
+            ]
+          }
+        }
+      },
+      "AssignProfilesDto": {
+        "type": "object",
+        "properties": {
+          "perfis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "perfis"
+        ]
+      },
+      "AssignDirectRolesDto": {
+        "type": "object",
+        "properties": {
+          "papeis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "papeis"
+        ]
+      },
+      "CreateProfileDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AssignProfilePermissionsDto": {
+        "type": "object",
+        "properties": {
+          "papeis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "papeis"
+        ]
+      },
+      "UpsertSystemParametersDto": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "object",
+            "description": "Map of system parameter keys and values persisted under the system namespace."
+          }
+        },
+        "required": [
+          "values"
+        ]
+      },
+      "UpsertGlobalParameterDto": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "description": "Canonical global parameter value payload."
+          }
+        }
+      },
+      "ToggleFeatureFlagDto": {
+        "type": "object",
+        "properties": {
+          "ativo": {
+            "type": "boolean"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "ativo"
+        ]
+      },
+      "NotificationReadDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "NotificationPreferencesDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "PresignUploadRequestDto": {
+        "type": "object",
+        "properties": {
+          "ownerType": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "ownerId": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "fileName": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "contentType": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "sizeBytes": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 1073741824
+          }
+        },
+        "required": [
+          "ownerType",
+          "fileName",
+          "contentType"
+        ]
+      },
+      "MasterDataMutationDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "TerminateEmployeeDto": {
+        "type": "object",
+        "properties": {
+          "terminationDate": {
+            "type": "string"
+          },
+          "terminationReasonId": {
+            "type": "string"
+          },
+          "justification": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "generateTerminationPayroll": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "terminationDate",
+          "terminationReasonId"
+        ]
+      },
+      "RhWorkflowMutationDto": {
+        "type": "object",
+        "properties": {
+          "employeeId": {
+            "type": "string"
+          },
+          "dependentId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 180
+          },
+          "cpf": {
+            "type": "string",
+            "maxLength": 14
+          },
+          "relationship": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "employer": {
+            "type": "string",
+            "maxLength": 180
+          },
+          "roleTitle": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "functionalStatusId": {
+            "type": "string"
+          },
+          "jobFunctionId": {
+            "type": "string"
+          },
+          "reasonId": {
+            "type": "string"
+          },
+          "absenceReasonId": {
+            "type": "string"
+          },
+          "vacationTypeId": {
+            "type": "string"
+          },
+          "salaryReferenceId": {
+            "type": "string"
+          },
+          "unionId": {
+            "type": "string"
+          },
+          "transitBenefitId": {
+            "type": "string"
+          },
+          "processId": {
+            "type": "string"
+          },
+          "fromBranchId": {
+            "type": "string"
+          },
+          "toBranchId": {
+            "type": "string"
+          },
+          "toWorkLocationId": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "processNumber": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "benefitCode": {
+            "type": "string"
+          },
+          "beneficiaryName": {
+            "type": "string"
+          },
+          "beneficiaryCpf": {
+            "type": "string"
+          },
+          "courtProcessNumber": {
+            "type": "string"
+          },
+          "startsOn": {
+            "type": "string"
+          },
+          "endsOn": {
+            "type": "string"
+          },
+          "effectiveOn": {
+            "type": "string"
+          },
+          "year": {
+            "type": "number",
+            "minimum": 1900,
+            "maximum": 2200
+          },
+          "month": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "days": {
+            "type": "number"
+          },
+          "daysCount": {
+            "type": "number"
+          },
+          "absenceDays": {
+            "type": "string"
+          },
+          "workedDays": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "string"
+          },
+          "deductionAmount": {
+            "type": "string"
+          },
+          "deductionPercent": {
+            "type": "string"
+          },
+          "levelCode": {
+            "type": "string"
+          },
+          "levelDescription": {
+            "type": "string"
+          },
+          "adjustmentAmount": {
+            "type": "string"
+          },
+          "rg": {
+            "type": "string"
+          },
+          "rgIssuer": {
+            "type": "string"
+          },
+          "pisPasep": {
+            "type": "string"
+          },
+          "voterRegistration": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "incomeTaxDependent": {
+            "type": "boolean"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        }
+      },
+      "EvaluationCriteriaDto": {
+        "type": "object",
+        "properties": {
+          "criterio": {
+            "type": "string"
+          },
+          "nota": {
+            "type": "number"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "criterio",
+          "nota"
+        ]
+      },
+      "CreatePerformanceEvaluationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "periodo": {
+            "type": "string"
+          },
+          "nota": {
+            "type": "number"
+          },
+          "criterios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EvaluationCriteriaDto"
+            }
+          },
+          "avaliadorId": {
+            "type": "string"
+          },
+          "dataAvaliacao": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "RASCUNHO",
+              "SUBMETIDA",
+              "APROVADA",
+              "REPROVADA"
+            ]
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "periodo",
+          "nota",
+          "criterios",
+          "avaliadorId",
+          "dataAvaliacao"
+        ]
+      },
+      "UpdatePerformanceEvaluationDto": {
+        "type": "object",
+        "properties": {
+          "nota": {
+            "type": "number"
+          },
+          "criterios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EvaluationCriteriaDto"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "RASCUNHO",
+              "SUBMETIDA",
+              "APROVADA",
+              "REPROVADA"
+            ]
+          },
+          "dataAvaliacao": {
+            "type": "string",
+            "format": "date"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateMeritProgressionDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "avaliacaoId": {
+            "type": "string"
+          },
+          "referenciaOrigemId": {
+            "type": "string"
+          },
+          "referenciaDestinoId": {
+            "type": "string"
+          },
+          "dataVigencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "atoNomeacao": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "MERITO",
+              "TITULARIDADE",
+              "JUDICIAL",
+              "CORRECAO"
+            ],
+            "default": "MERITO"
+          },
+          "justificativa": {
+            "type": "string"
+          },
+          "aprovadoPorId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "referenciaDestinoId",
+          "dataVigencia",
+          "tipo"
+        ]
+      },
+      "SalarySimulationAdjustmentDto": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "percentual": {
+            "type": "string"
+          },
+          "valorFixo": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "descricao"
+        ]
+      },
+      "CreateSalarySimulationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "cenario": {
+            "type": "string"
+          },
+          "ajustes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SalarySimulationAdjustmentDto"
+            }
+          },
+          "contexto": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "cenario"
+        ]
+      },
+      "CreateCareerPlanDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "string"
+          },
+          "dataVigencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "niveis": {
+            "type": "object"
+          },
+          "referencias": {
+            "type": "object"
+          },
+          "ativo": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "nome",
+          "versao",
+          "dataVigencia"
+        ]
+      },
+      "UpdateCareerPlanDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "string"
+          },
+          "dataVigencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "niveis": {
+            "type": "object"
+          },
+          "referencias": {
+            "type": "object"
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GenerateAvaliacaoReportDto": {
+        "type": "object",
+        "properties": {
+          "formato": {
+            "type": "string",
+            "example": "PDF"
+          },
+          "lotacaoId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateRetirementRuleDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "fundamentoLegal": {
+            "type": "string"
+          },
+          "criteriosIdade": {
+            "type": "object"
+          },
+          "criteriosTempoContribuicao": {
+            "type": "object"
+          },
+          "criteriosCarencia": {
+            "type": "object"
+          },
+          "vinculoAplicavel": {
+            "type": "string"
+          },
+          "ativa": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "nome",
+          "fundamentoLegal"
+        ]
+      },
+      "UpdateRetirementRuleDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "fundamentoLegal": {
+            "type": "string"
+          },
+          "criteriosIdade": {
+            "type": "object"
+          },
+          "criteriosTempoContribuicao": {
+            "type": "object"
+          },
+          "criteriosCarencia": {
+            "type": "object"
+          },
+          "vinculoAplicavel": {
+            "type": "string"
+          },
+          "ativa": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "nome",
+          "fundamentoLegal"
+        ]
+      },
+      "CreateRetirementSimulationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "regraId": {
+            "type": "string"
+          },
+          "dataReferencia": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "regraId",
+          "dataReferencia"
+        ]
+      },
+      "CreateRetirementGrantDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "regraId": {
+            "type": "string"
+          },
+          "dataConcessao": {
+            "type": "string",
+            "format": "date"
+          },
+          "fundamento": {
+            "type": "string"
+          },
+          "atoNomeacao": {
+            "type": "string"
+          },
+          "observacao": {
+            "type": "string"
+          },
+          "concedidaPorId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "regraId",
+          "dataConcessao",
+          "fundamento",
+          "atoNomeacao"
+        ]
+      },
+      "CreatePensionGrantDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioInstituidorId": {
+            "type": "string"
+          },
+          "nomeBeneficiario": {
+            "type": "string"
+          },
+          "cpfBeneficiario": {
+            "type": "string"
+          },
+          "parentesco": {
+            "type": "string"
+          },
+          "tipoBeneficio": {
+            "type": "string"
+          },
+          "tipoRateio": {
+            "type": "string"
+          },
+          "cotaParte": {
+            "type": "string"
+          },
+          "formaReajuste": {
+            "type": "string"
+          },
+          "natureza": {
+            "type": "string"
+          },
+          "dataConcessao": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataCessacao": {
+            "type": "string",
+            "format": "date"
+          },
+          "fundamento": {
+            "type": "string"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nomeBeneficiario",
+          "tipoBeneficio",
+          "tipoRateio",
+          "cotaParte",
+          "formaReajuste",
+          "natureza",
+          "dataConcessao",
+          "fundamento"
+        ]
+      },
+      "CreateContributionTimeCertificateDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "periodoInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "periodoFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "orgaoEmitente": {
+            "type": "string"
+          },
+          "atoEmissao": {
+            "type": "string"
+          },
+          "storageKey": {
+            "type": "string"
+          },
+          "emitidaPorId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "periodoInicio",
+          "periodoFim",
+          "orgaoEmitente",
+          "atoEmissao"
+        ]
+      },
+      "GeneratePrevidenciarioOutputDto": {
+        "type": "object",
+        "properties": {
+          "formato": {
+            "type": "string",
+            "example": "PDF"
+          },
+          "competencia": {
+            "type": "string"
+          },
+          "campanhaId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreatePrevidentiaryDeclarationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "storageKey": {
+            "type": "string"
+          },
+          "emitidaPorId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "tipo"
+        ]
+      },
+      "CreatePensionCompensationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "certidaoReferencia": {
+            "type": "string"
+          },
+          "regimeOrigem": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "RASCUNHO",
+              "SOLICITADA",
+              "APROVADA",
+              "REPROVADA",
+              "LIQUIDADA"
+            ]
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "regimeOrigem",
+          "valor"
+        ]
+      },
+      "UpdatePensionCompensationDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "RASCUNHO",
+              "SOLICITADA",
+              "APROVADA",
+              "REPROVADA",
+              "LIQUIDADA"
+            ]
+          },
+          "observacao": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateRecertificationCampaignDto": {
+        "type": "object",
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "APOSENTADO",
+              "PENSIONISTA",
+              "PENSIONISTA_UNIVERSITARIO"
+            ]
+          },
+          "cicloInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "cicloFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "filtro": {
+            "type": "object"
+          },
+          "ativa": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "tipo",
+          "cicloInicio",
+          "cicloFim"
+        ]
+      },
+      "CreateRecertificationBeneficiaryDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "campanhaId": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "APOSENTADO",
+              "PENSIONISTA",
+              "PENSIONISTA_UNIVERSITARIO"
+            ]
+          },
+          "dataProxima": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDENTE",
+              "RECADASTRADO",
+              "PROXIMO_VENCIMENTO",
+              "VENCIDO",
+              "BLOQUEADO"
+            ]
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "tipo",
+          "dataProxima"
+        ]
+      },
+      "CreateRecertificationRecordDto": {
+        "type": "object",
+        "properties": {
+          "beneficiarioId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "operadorId": {
+            "type": "string"
+          },
+          "dadosSnapshot": {
+            "type": "object"
+          },
+          "comprovanteStorageKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "beneficiarioId",
+          "data",
+          "operadorId"
+        ]
+      },
+      "CreateBeneficiaryContactHistoryDto": {
+        "type": "object",
+        "properties": {
+          "beneficiarioId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "usuarioId": {
+            "type": "string"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "beneficiarioId",
+          "data",
+          "usuarioId"
+        ]
+      },
+      "CreateExternalLifeProofDto": {
+        "type": "object",
+        "properties": {
+          "beneficiarioId": {
+            "type": "string"
+          },
+          "canal": {
+            "type": "string",
+            "enum": [
+              "PORTAL_COLABORADOR",
+              "PREFEITURA_PUBLICA",
+              "GOV_BR"
+            ]
+          },
+          "data": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "autenticacao": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "beneficiarioId",
+          "canal",
+          "data"
+        ]
+      },
+      "InstructorAttachmentDto": {
+        "type": "object",
+        "properties": {
+          "s3Key": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "s3Key",
+          "tipo"
+        ]
+      },
+      "SchedulePericiaDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "especialidadeId": {
+            "type": "string"
+          },
+          "agendaId": {
+            "type": "string"
+          },
+          "janelaId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "type": "string",
+            "example": "09:00"
+          },
+          "telefoneContato": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "anexoInstrutor": {
+            "$ref": "#/components/schemas/InstructorAttachmentDto"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "janelaId",
+          "data",
+          "hora"
+        ]
+      },
+      "UpdatePericiaAppointmentDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "COMPARECEU",
+              "NAO_COMPARECEU",
+              "CANCELADO"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "PericiaTeamMemberDto": {
+        "type": "object",
+        "properties": {
+          "profissionalId": {
+            "type": "string"
+          },
+          "papel": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "profissionalId",
+          "papel"
+        ]
+      },
+      "CreateMedicalLeaveDto": {
+        "type": "object",
+        "properties": {
+          "tipoAvaliacao": {
+            "type": "string"
+          },
+          "beneficioPrevidenciario": {
+            "type": "object"
+          },
+          "motivoAfastamentoId": {
+            "type": "string"
+          },
+          "cidId": {
+            "type": "string"
+          },
+          "diasConcedidos": {
+            "type": "number",
+            "minimum": 1
+          },
+          "dataInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataFim": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "tipoAvaliacao",
+          "diasConcedidos",
+          "dataInicio",
+          "dataFim"
+        ]
+      },
+      "CreateMedicalRecordDto": {
+        "type": "object",
+        "properties": {
+          "agendamentoId": {
+            "type": "string"
+          },
+          "medicoId": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "hda": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "exameFisico": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "diagnostico": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "acaoPericial": {
+            "type": "string"
+          },
+          "tipoLaudo": {
+            "type": "string"
+          },
+          "situacaoLaudo": {
+            "type": "string"
+          },
+          "cidPrincipalId": {
+            "type": "string"
+          },
+          "equipeMultiprofissional": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PericiaTeamMemberDto"
+            }
+          },
+          "licenca": {
+            "$ref": "#/components/schemas/CreateMedicalLeaveDto"
+          }
+        },
+        "required": [
+          "agendamentoId",
+          "medicoId",
+          "motivo"
+        ]
+      },
+      "ValidateMedicalRecordDto": {
+        "type": "object",
+        "properties": {
+          "decisao": {
+            "type": "string",
+            "enum": [
+              "APROVAR",
+              "REPROVAR"
+            ]
+          },
+          "coordenadorId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decisao",
+          "coordenadorId"
+        ]
+      },
+      "ReplicateMedicalRecordDto": {
+        "type": "object",
+        "properties": {
+          "matriculasAlvo": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "matriculasAlvo"
+        ]
+      },
+      "CreatePayrollRunDto": {
+        "type": "object",
+        "properties": {
+          "competenceYear": {
+            "type": "number",
+            "minimum": 2000,
+            "maximum": 2100
+          },
+          "competenceMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "payrollTypeId": {
+            "type": "string"
+          },
+          "processingTypeId": {
+            "type": "string"
+          },
+          "branchId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "competenceYear",
+          "competenceMonth",
+          "payrollTypeId",
+          "processingTypeId"
+        ]
+      },
+      "UpdatePayrollRunStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "QUEUED",
+              "PROCESSING",
+              "GENERATED",
+              "APPROVED",
+              "PAID",
+              "CANCELED",
+              "FAILED",
+              "CLOSED"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "CalculatePayrollRunDto": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "TOTAL",
+              "RETROACTIVE"
+            ],
+            "default": "TOTAL"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "PopulatePayrollRunDto": {
+        "type": "object",
+        "properties": {
+          "replaceCalculatedItems": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "CreateAdvancePaymentDto": {
+        "type": "object",
+        "properties": {
+          "employeeId": {
+            "type": "string"
+          },
+          "requestedAmount": {
+            "type": "string"
+          },
+          "approvedAmount": {
+            "type": "string"
+          },
+          "requestedOn": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "employeeId",
+          "requestedAmount"
+        ]
+      },
+      "PayrollCatalogMutationDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "PayrollAccountingAccountMutationDto": {
+        "type": "object",
+        "properties": {
+          "accountType": {
+            "type": "string"
+          },
+          "accountCode": {
+            "type": "string"
+          },
+          "allocationPercent": {
+            "type": "string"
+          },
+          "totalAllocationPercent": {
+            "type": "string"
+          },
+          "branchId": {
+            "type": "string"
+          },
+          "costCenterId": {
+            "type": "string"
+          },
+          "earningDeductionId": {
+            "type": "string"
+          },
+          "accountingHistoryId": {
+            "type": "string"
+          },
+          "simpleAccountingId": {
+            "type": "string"
+          },
+          "workLocationIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "accountType",
+          "accountCode",
+          "allocationPercent"
+        ]
+      },
+      "CreateESocialEventDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateRemittanceRequestDto": {
+        "type": "object",
+        "properties": {
+          "bankId": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string",
+            "default": "CNAB240"
+          },
+          "paymentDate": {
+            "type": "string"
+          },
+          "launchType": {
+            "type": "string",
+            "default": "ACCOUNT_CREDIT"
+          }
+        },
+        "required": [
+          "bankId"
+        ]
+      },
+      "ProcessReturnRequestDto": {
+        "type": "object",
+        "properties": {
+          "remittanceId": {
+            "type": "string"
+          },
+          "s3Key": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string",
+            "default": "CNAB240"
+          },
+          "returnFileName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "remittanceId",
+          "s3Key"
+        ]
+      },
+      "CreateGfipRequestDto": {
+        "type": "object",
+        "properties": {
+          "payrollRunId": {
+            "type": "string"
+          },
+          "branchId": {
+            "type": "string"
+          },
+          "competenceYear": {
+            "type": "number",
+            "minimum": 2000,
+            "maximum": 2100
+          },
+          "competenceMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "collectionCode": {
+            "type": "string"
+          },
+          "modality": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "competenceYear",
+          "competenceMonth",
+          "collectionCode",
+          "modality"
+        ]
+      },
+      "RecruitmentRequestedFunctionDto": {
+        "type": "object",
+        "properties": {
+          "funcaoId": {
+            "type": "string"
+          },
+          "tipoContratacao": {
+            "type": "string",
+            "enum": [
+              "EFETIVO",
+              "COMISSIONADO",
+              "TERCEIRIZADO",
+              "ESTAGIO"
+            ]
+          },
+          "quantidadeVagas": {
+            "type": "number",
+            "minimum": 1
+          },
+          "requisitos": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "turnoId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tipoContratacao",
+          "quantidadeVagas"
+        ]
+      },
+      "CreateRecruitmentRequestDto": {
+        "type": "object",
+        "properties": {
+          "solicitanteId": {
+            "type": "string"
+          },
+          "filialId": {
+            "type": "string"
+          },
+          "lotacaoId": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "justificativa": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "dataEntrada": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataLimite": {
+            "type": "string",
+            "format": "date"
+          },
+          "funcoesRequisitadas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecruitmentRequestedFunctionDto"
+            }
+          }
+        },
+        "required": [
+          "solicitanteId",
+          "motivo",
+          "justificativa",
+          "dataEntrada",
+          "funcoesRequisitadas"
+        ]
+      },
+      "RecruitmentCandidateAttachmentDto": {
+        "type": "object",
+        "properties": {
+          "pessoaId": {
+            "type": "string"
+          },
+          "curriculoS3Key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pessoaId"
+        ]
+      },
+      "AttachRecruitmentCandidatesDto": {
+        "type": "object",
+        "properties": {
+          "candidatos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecruitmentCandidateAttachmentDto"
+            }
+          }
+        },
+        "required": [
+          "candidatos"
+        ]
+      },
+      "UpdateRecruitmentCandidateDto": {
+        "type": "object",
+        "properties": {
+          "situacao": {
+            "type": "string",
+            "enum": [
+              "PENDENTE",
+              "APROVADO",
+              "REPROVADO"
+            ]
+          },
+          "comentarioAnalise": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "situacao"
+        ]
+      }
+    }
+  }
+}

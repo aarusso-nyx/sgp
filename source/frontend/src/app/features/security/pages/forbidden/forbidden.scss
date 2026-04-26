@@ -1,0 +1,15 @@
+.forbidden {
+  display: grid;
+  place-items: center;
+  min-height: calc(100dvh - 180px);
+}
+
+mat-card {
+  width: min(500px, 100%);
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 1rem;
+}

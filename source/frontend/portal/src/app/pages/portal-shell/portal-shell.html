@@ -1,0 +1,35 @@
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" routerLink="/">
+      <span class="brand-mark">SGP</span>
+      <span>
+        <strong>Portal do Servidor</strong>
+        <small>Separated SPA runtime</small>
+      </span>
+    </a>
+
+    <nav>
+      <a
+        class="root-link"
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Dashboard pessoal
+      </a>
+
+      @for (section of sections; track section.label) {
+        <section class="nav-section">
+          <p>{{ section.label }}</p>
+          @for (item of section.items; track item.path) {
+            <a [routerLink]="item.path" routerLinkActive="active">{{ item.label }}</a>
+          }
+        </section>
+      }
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

@@ -1,0 +1,33 @@
+:root {
+  --portal-ink: #173042;
+  --portal-muted: #5d7481;
+  --portal-accent: #0f7a6c;
+  --portal-accent-soft: rgba(15, 122, 108, 0.12);
+  --portal-paper: #f7f5ef;
+  --portal-surface: rgba(255, 255, 255, 0.9);
+  --portal-line: rgba(23, 48, 66, 0.12);
+  --portal-shadow: 0 22px 60px rgba(23, 48, 66, 0.12);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(15, 122, 108, 0.14), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(194, 154, 60, 0.14), transparent 26%),
+    linear-gradient(180deg, #f3efe5 0%, #f9f7f1 100%);
+  color: var(--portal-ink);
+  font-family: 'Avenir Next', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}

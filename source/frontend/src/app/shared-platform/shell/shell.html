@@ -1,0 +1,112 @@
+<a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
+
+<mat-sidenav-container class="shell-layout">
+  <mat-sidenav
+    #drawer
+    class="shell-layout__sidenav"
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    [fixedInViewport]="isMobile()"
+    aria-label="Menu principal do SGP"
+  >
+    <a
+      class="shell-layout__brand"
+      routerLink="/gestao"
+      aria-label="Ir para a página inicial do SGP"
+    >
+      <span class="shell-layout__brand-mark">SGP</span>
+      <span class="shell-layout__brand-copy">
+        <strong>Sistema de Gestão de Pessoas</strong>
+        <span>Modernização Angular</span>
+      </span>
+    </a>
+
+    <nav class="shell-layout__menu" aria-label="Navegação principal">
+      <mat-accordion multi displayMode="flat">
+        <mat-expansion-panel
+          class="shell-layout__section"
+          *ngFor="let section of menuSections()"
+          [expanded]="isSectionActive(section)"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ section.moduleLabel }}</mat-panel-title>
+            <mat-panel-description>{{ section.items.length }} telas</mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-nav-list>
+            <a
+              mat-list-item
+              *ngFor="let item of section.items"
+              [routerLink]="item.routePath"
+              routerLinkActive="is-active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              ariaCurrentWhenActive="page"
+              [attr.aria-label]="menuItemAriaLabel(item)"
+              (click)="closeSidenavAfterNavigation(drawer)"
+            >
+              <span matListItemTitle>{{ item.label }}</span>
+              <span matListItemLine class="shell-layout__route">{{ item.legacyRoute }}</span>
+              <span class="visually-hidden">Status: {{ statusLabel(item.status) }}</span>
+            </a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="shell-layout__toolbar">
+      <button
+        *ngIf="isMobile()"
+        type="button"
+        mat-icon-button
+        aria-label="Abrir menu"
+        [attr.aria-expanded]="drawer.opened"
+        (click)="drawer.toggle()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="shell-layout__title">
+        <span>SGP</span>
+        <small>Gestão pública de pessoas</small>
+      </span>
+      <span class="shell-layout__spacer"></span>
+      <button
+        type="button"
+        mat-icon-button
+        matTooltip="Notificações"
+        aria-label="Abrir notificações"
+      >
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+      <span class="shell-layout__user" aria-label="Usuário autenticado">
+        {{ userDisplayName() }}
+      </span>
+      <button type="button" mat-stroked-button class="shell-layout__logout" (click)="logout()">
+        Sair
+      </button>
+    </mat-toolbar>
+
+    <div class="shell-layout__content">
+      <header class="shell-layout__page-context">
+        <nav class="shell-layout__breadcrumbs" aria-label="Caminho da página">
+          <ol>
+            <li>SGP</li>
+            <li>{{ pageModule() }}</li>
+            <li aria-current="page">{{ pageTitle() }}</li>
+          </ol>
+        </nav>
+
+        <div class="shell-layout__page-title">
+          <p>{{ pageModule() }}</p>
+          <h1>{{ pageTitle() }}</h1>
+        </div>
+      </header>
+
+      <main id="main-content" class="shell-layout__main" tabindex="-1">
+        <router-outlet />
+      </main>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

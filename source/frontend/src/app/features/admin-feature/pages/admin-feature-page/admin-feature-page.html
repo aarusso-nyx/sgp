@@ -1,0 +1,131 @@
+<section class="admin-feature" aria-labelledby="admin-feature-title">
+  <header class="admin-feature__header">
+    <div>
+      <p class="admin-feature__eyebrow">{{ feature.moduleLabel }}</p>
+      <h1 id="admin-feature-title">{{ feature.label }}</h1>
+      <dl class="admin-feature__metadata" aria-label="Metadados da tela">
+        <div>
+          <dt>Grupo</dt>
+          <dd>{{ feature.sectionLabel || feature.moduleLabel }}</dd>
+        </div>
+        <div>
+          <dt>Rota</dt>
+          <dd>{{ feature.routePath }}</dd>
+        </div>
+        <div>
+          <dt>Papel</dt>
+          <dd>{{ feature.requiredRole || 'Sem papel específico' }}</dd>
+        </div>
+        <div>
+          <dt>Modo</dt>
+          <dd>{{ modeLabel }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="admin-feature__actions">
+      <button type="button" mat-stroked-button>
+        <mat-icon aria-hidden="true">download</mat-icon>
+        Exportar
+      </button>
+      <button type="button" mat-stroked-button>
+        <mat-icon aria-hidden="true">history</mat-icon>
+        Auditoria
+      </button>
+      <button type="button" mat-flat-button color="primary" (click)="openCreateForm()">
+        <mat-icon aria-hidden="true">add</mat-icon>
+        Novo
+      </button>
+    </div>
+  </header>
+
+  <app-filter-bar
+    [fields]="filterFields"
+    [initialValues]="{ search: search, status: status }"
+    applyLabel="Pesquisar"
+    clearLabel="Limpar"
+    (applyFilters)="applyFilters($event)"
+    (clearFilters)="clearFilters()"
+  ></app-filter-bar>
+
+  <div class="admin-feature__workspace">
+    <section class="admin-feature__panel" *ngIf="formOpen" aria-label="Formulário da tela">
+      <header class="admin-feature__panel-header">
+        <div>
+          <p>{{ feature.backendModule }}</p>
+          <h2>{{ editingRecord ? 'Registro selecionado' : 'Novo registro' }}</h2>
+        </div>
+        <button type="button" mat-icon-button aria-label="Fechar formulário" (click)="cancelForm()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </header>
+
+      <form [formGroup]="form" class="admin-feature__form" (ngSubmit)="save()">
+        <mat-form-field appearance="outline">
+          <mat-label>Código</mat-label>
+          <input matInput formControlName="code" maxlength="40" />
+          <mat-error *ngIf="form.controls.code.invalid">Código obrigatório.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Registro</mat-label>
+          <input matInput formControlName="title" maxlength="160" />
+          <mat-error *ngIf="form.controls.title.invalid">Registro obrigatório.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="Ativo">Ativo</mat-option>
+            <mat-option value="Em revisão">Em revisão</mat-option>
+            <mat-option value="Pendente">Pendente</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Responsável</mat-label>
+          <input matInput formControlName="owner" maxlength="120" />
+          <mat-error *ngIf="form.controls.owner.invalid">Responsável obrigatório.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Atualização</mat-label>
+          <input matInput type="date" formControlName="updatedAt" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="admin-feature__notes">
+          <mat-label>Observação</mat-label>
+          <textarea matInput rows="3" formControlName="notes" maxlength="500"></textarea>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="generateAuditTrail">Registrar trilha de auditoria</mat-checkbox>
+
+        <div class="admin-feature__form-actions">
+          <button type="button" mat-stroked-button (click)="cancelForm()">Cancelar</button>
+          <button type="submit" mat-flat-button color="primary">Salvar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="admin-feature__panel admin-feature__panel--table">
+      <header class="admin-feature__panel-header">
+        <div>
+          <p>{{ feature.requiredRole || feature.backendModule }}</p>
+          <h2>{{ feature.sectionLabel || 'Registros' }}</h2>
+        </div>
+        <span class="admin-feature__count">{{ filteredRecords.length }} itens</span>
+      </header>
+
+      <p class="admin-feature__message" *ngIf="message" role="status">{{ message }}</p>
+
+      <app-crud-table
+        [columns]="columns"
+        [rows]="filteredRecords"
+        [actions]="rowActions"
+        [tableLabel]="feature.label"
+        rowLabelKey="title"
+        (actionTriggered)="handleRowAction($event)"
+      ></app-crud-table>
+    </section>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+<section
+  class="confirmation-dialog"
+  [class]="'confirmation-dialog tone-' + tone"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="'confirmation-title'"
+>
+  <header class="confirmation-dialog__header">
+    <span class="confirmation-dialog__marker" aria-hidden="true"></span>
+    <h2 id="confirmation-title">{{ title }}</h2>
+  </header>
+
+  <p>{{ message }}</p>
+
+  <footer class="confirmation-dialog__actions">
+    <button type="button" class="confirmation-dialog__button is-secondary" (click)="cancel()">
+      {{ cancelLabel }}
+    </button>
+    <button type="button" class="confirmation-dialog__button is-primary" (click)="confirm()">
+      {{ confirmLabel }}
+    </button>
+  </footer>
+</section>

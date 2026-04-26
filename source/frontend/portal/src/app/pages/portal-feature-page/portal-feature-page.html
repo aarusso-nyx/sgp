@@ -1,0 +1,32 @@
+<section class="feature-sheet">
+  <a class="back-link" routerLink="/">Back to dashboard</a>
+  <p class="kicker">{{ sectionLabel }}</p>
+  <h1>{{ item.label }}</h1>
+  <p class="summary">{{ sectionSummary }}</p>
+
+  <dl class="meta">
+    <div>
+      <dt>Portal route</dt>
+      <dd>
+        <code>{{ item.path }}</code>
+      </dd>
+    </div>
+    <div>
+      <dt>Module owner</dt>
+      <dd>{{ item.module }}</dd>
+    </div>
+    <div>
+      <dt>Visibility</dt>
+      <dd>{{ item.capability }}</dd>
+    </div>
+  </dl>
+
+  <article class="note">
+    <h2>Current status</h2>
+    <p>{{ item.description }}</p>
+    <p>
+      The page shell is live in `sgp-portal` so route/menu parity can be tracked independently from
+      `sgp-admin` while backend contracts continue to close by domain wave.
+    </p>
+  </article>
+</section>

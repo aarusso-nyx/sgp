@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "status": "inferred",
+  "tenant": {
+    "id": "00000000-0000-0000-0000-000000000100",
+    "slug": "default",
+    "code": "DEFAULT",
+    "name": "Default Tenant"
+  },
+  "testUsers": [
+    {
+      "login": "admin.local",
+      "name": "Administrador Local",
+      "email": "admin.local@example.invalid",
+      "cognitoSub": "00000000-0000-0000-0000-000000000001",
+      "profiles": ["ADMIN"]
+    },
+    {
+      "login": "rh.local",
+      "name": "Operador RH Local",
+      "email": "rh.local@example.invalid",
+      "cognitoSub": "00000000-0000-0000-0000-000000000002",
+      "profiles": ["RH_OPERADOR"]
+    }
+  ],
+  "employees": [
+    {
+      "registration": "MAT-0001",
+      "name": "Servidor Teste Ativo",
+      "cpf": "00000000191",
+      "branchCode": "MATRIZ",
+      "functionalStatusCode": "ATIVO",
+      "employmentLinkCode": "EFETIVO",
+      "contractTypeCode": "ESTATUTARIO"
+    },
+    {
+      "registration": "MAT-0002",
+      "name": "Servidor Teste Afastado",
+      "cpf": "00000000272",
+      "branchCode": "MATRIZ",
+      "functionalStatusCode": "AFASTADO",
+      "employmentLinkCode": "EFETIVO",
+      "contractTypeCode": "ESTATUTARIO"
+    }
+  ],
+  "payrollRuns": [
+    {
+      "competenceYear": 2026,
+      "competenceMonth": 4,
+      "branchCode": "MATRIZ",
+      "payrollTypeCode": "NORMAL",
+      "processingTypeCode": "MENSAL",
+      "status": "DRAFT"
+    }
+  ],
+  "convenio": {
+    "institutions": [
+      { "code": "IES-TESTE", "name": "Instituição de Ensino Teste", "cnpj": "00000000000191" }
+    ],
+    "programs": [
+      { "code": "ESTAGIO-TESTE", "name": "Programa de Estágio Teste", "institutionCode": "IES-TESTE" }
+    ],
+    "agreements": [
+      { "code": "CONV-TESTE", "institutionCode": "IES-TESTE", "programCode": "ESTAGIO-TESTE", "status": "ACTIVE" }
+    ]
+  }
+}

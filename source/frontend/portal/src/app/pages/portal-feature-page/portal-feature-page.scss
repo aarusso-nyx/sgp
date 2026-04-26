@@ -1,0 +1,73 @@
+.feature-sheet {
+  max-width: 54rem;
+  padding: 0.5rem 0 2rem;
+}
+
+.back-link {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  color: var(--portal-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.kicker {
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--portal-muted);
+  font-size: 0.78rem;
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Iowan Old Style', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+.summary {
+  max-width: 42rem;
+  color: var(--portal-muted);
+  line-height: 1.6;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.meta div,
+.note {
+  border-radius: 1.2rem;
+  border: 1px solid var(--portal-line);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--portal-shadow);
+}
+
+.meta div {
+  padding: 1rem 1.1rem;
+}
+
+dt {
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--portal-muted);
+}
+
+dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.note {
+  padding: 1.2rem 1.3rem;
+  line-height: 1.6;
+}
+
+.note h2 {
+  margin-top: 0;
+}

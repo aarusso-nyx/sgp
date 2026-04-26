@@ -1,0 +1,85 @@
+.crud-table {
+  border: 1px solid var(--sgp-color-border);
+  border-radius: 16px;
+  background: var(--sgp-color-surface);
+  box-shadow: 0 14px 32px rgba(14, 36, 54, 0.07);
+  overflow: hidden;
+}
+
+.crud-table__summary {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--sgp-color-border);
+  background: #f9fbfa;
+}
+
+.crud-table__summary h2 {
+  margin: 0;
+  color: var(--sgp-color-ink);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.crud-table__summary span {
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  background: #e9f2ef;
+  color: var(--sgp-color-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.crud-table__scroller {
+  overflow-x: auto;
+}
+
+.crud-table__scroller:focus-visible {
+  outline: 3px solid var(--sgp-color-focus);
+  outline-offset: -3px;
+}
+
+.crud-table__table {
+  min-width: 720px;
+  width: 100%;
+}
+
+.crud-table__table th {
+  color: var(--sgp-color-muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.crud-table__table td {
+  color: var(--sgp-color-ink);
+}
+
+.crud-table__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  min-width: 180px;
+}
+
+.crud-table__actions-heading {
+  min-width: 180px;
+}
+
+.crud-table__state {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--sgp-color-muted);
+  font-weight: 650;
+}
+
+@media (max-width: 640px) {
+  .crud-table__summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

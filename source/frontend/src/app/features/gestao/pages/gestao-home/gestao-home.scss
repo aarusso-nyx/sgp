@@ -1,0 +1,84 @@
+.gestao-home {
+  display: grid;
+  gap: 1rem;
+}
+
+.gestao-home__header {
+  align-items: flex-start;
+  background:
+    linear-gradient(135deg, rgba(15, 64, 81, 0.95), rgba(20, 94, 82, 0.88)),
+    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.28), transparent 34%);
+  border-radius: 1.25rem;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
+
+  h1 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    letter-spacing: -0.04em;
+    margin: 0.1rem 0 0.4rem;
+  }
+
+  p {
+    margin: 0;
+    max-width: 68ch;
+  }
+}
+
+.gestao-home__eyebrow {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gestao-home__form {
+  border-color: rgba(15, 64, 81, 0.22);
+}
+
+.gestao-home__fields {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: 1rem;
+}
+
+.gestao-home__description,
+.gestao-home__form-actions {
+  grid-column: 1 / -1;
+}
+
+.gestao-home__form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.gestao-home__message,
+.gestao-home__error {
+  border-radius: 0.85rem;
+  margin: 0;
+  padding: 0.85rem 1rem;
+}
+
+.gestao-home__message {
+  background: #e6f4ea;
+  color: #14532d;
+}
+
+.gestao-home__error {
+  background: #fde8e8;
+  color: #8a1f1f;
+}
+
+@media (max-width: 760px) {
+  .gestao-home__header {
+    flex-direction: column;
+  }
+
+  .gestao-home__fields {
+    grid-template-columns: 1fr;
+  }
+}

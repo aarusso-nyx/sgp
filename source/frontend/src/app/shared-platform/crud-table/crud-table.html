@@ -1,0 +1,57 @@
+<section class="crud-table" [attr.aria-label]="tableLabel">
+  <header class="crud-table__summary">
+    <h2>{{ tableLabel }}</h2>
+    <span>{{ rows.length }} registros</span>
+  </header>
+
+  <div
+    class="crud-table__state"
+    *ngIf="loading; else tableContent"
+    role="status"
+    aria-live="polite"
+  >
+    {{ loadingLabel }}
+  </div>
+
+  <ng-template #tableContent>
+    <div class="crud-table__scroller" *ngIf="rows.length > 0; else emptyState" tabindex="0">
+      <table mat-table [dataSource]="rows" class="crud-table__table" [attr.aria-label]="tableLabel">
+        <ng-container
+          *ngFor="let column of columns; trackBy: trackByColumn"
+          [matColumnDef]="column.key"
+        >
+          <th mat-header-cell *matHeaderCellDef scope="col">{{ column.header }}</th>
+          <td mat-cell *matCellDef="let row">{{ cellValue(column, row) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="__actions__" *ngIf="actions.length > 0">
+          <th mat-header-cell *matHeaderCellDef scope="col" class="crud-table__actions-heading">
+            Ações
+          </th>
+          <td mat-cell *matCellDef="let row" class="crud-table__actions">
+            <button
+              mat-stroked-button
+              type="button"
+              *ngFor="let action of actions; trackBy: trackByAction"
+              [hidden]="!isActionVisible(action, row)"
+              [disabled]="isActionDisabled(action, row)"
+              [matTooltip]="action.description || action.label"
+              [attr.aria-label]="actionAriaLabel(action, row)"
+              (click)="trigger(action.id, row)"
+            >
+              <mat-icon *ngIf="action.icon" aria-hidden="true">{{ action.icon }}</mat-icon>
+              {{ action.label }}
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+      </table>
+    </div>
+  </ng-template>
+
+  <ng-template #emptyState>
+    <div class="crud-table__state" role="status" aria-live="polite">{{ emptyLabel }}</div>
+  </ng-template>
+</section>

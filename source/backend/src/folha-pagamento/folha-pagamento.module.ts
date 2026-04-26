@@ -1,0 +1,34 @@
+import { Module } from '@nestjs/common';
+
+import { AuditModule } from '../audit/audit.module';
+import { AuthModule } from '../auth/auth.module';
+import { DatabaseModule } from '../database/database.module';
+import { PayrollAccountingController } from './accounting/payroll-accounting.controller';
+import { PayrollAccountingService } from './accounting/payroll-accounting.service';
+import { ESocialController } from './esocial/esocial.controller';
+import { ESocialService } from './esocial/esocial.service';
+import {
+  PayrollGfipController,
+  PayrollOperationsController,
+} from './operations/payroll-operations.controller';
+import { PayrollOperationsService } from './operations/payroll-operations.service';
+import { PayrollController } from './payroll/payroll.controller';
+import { PayrollService } from './payroll/payroll.service';
+
+@Module({
+  imports: [AuthModule, DatabaseModule, AuditModule],
+  controllers: [
+    PayrollController,
+    PayrollAccountingController,
+    ESocialController,
+    PayrollOperationsController,
+    PayrollGfipController,
+  ],
+  providers: [
+    PayrollService,
+    PayrollAccountingService,
+    PayrollOperationsService,
+    ESocialService,
+  ],
+})
+export class FolhaPagamentoModule {}

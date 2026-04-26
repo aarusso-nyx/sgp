@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "status": "inferred",
+  "masterData": {
+    "company": [
+      { "code": "SGP", "legalName": "Sistema de Gestão de Pessoas", "tradeName": "SGP" }
+    ],
+    "branches": [
+      { "code": "MATRIZ", "acronym": "MTZ", "name": "Matriz", "branchType": "HEADQUARTERS" }
+    ],
+    "functionalStatuses": [
+      { "code": "ATIVO", "description": "Ativo", "entersPayroll": true, "lifecycleStatus": "ACTIVE" },
+      { "code": "AFASTADO", "description": "Afastado", "entersPayroll": false, "lifecycleStatus": "ON_LEAVE" },
+      { "code": "DESLIGADO", "description": "Desligado", "entersPayroll": false, "lifecycleStatus": "TERMINATED" }
+    ],
+    "employmentLinks": [
+      { "code": "EFETIVO", "name": "Efetivo" },
+      { "code": "COMISSIONADO", "name": "Comissionado" },
+      { "code": "ESTAGIARIO", "name": "Estagiário" }
+    ],
+    "contractTypes": [
+      { "code": "CLT", "name": "CLT" },
+      { "code": "ESTATUTARIO", "name": "Estatutário" },
+      { "code": "ESTAGIO", "name": "Estágio" }
+    ],
+    "payrollTypes": [
+      { "code": "NORMAL", "description": "Folha normal" },
+      { "code": "DECIMO_TERCEIRO", "description": "13º salário" },
+      { "code": "FERIAS", "description": "Férias" }
+    ],
+    "processingTypes": [
+      { "code": "MENSAL", "description": "Processamento mensal", "payrollTypeCode": "NORMAL" },
+      { "code": "SUPLEMENTAR", "description": "Processamento suplementar", "payrollTypeCode": "NORMAL" }
+    ],
+    "earningDeductions": [
+      { "code": "100", "description": "Vencimento base", "kind": "EARNING", "taxable": true },
+      { "code": "900", "description": "Desconto previdenciário", "kind": "DEDUCTION", "taxable": false }
+    ],
+    "documentTypes": [
+      { "code": "RELATORIO", "description": "Relatório gerado" },
+      { "code": "ANEXO", "description": "Anexo" }
+    ],
+    "reportDefinitions": [
+      { "code": "FOLHA_GERENCIAL", "moduleKey": "folha", "name": "Relatório gerencial da folha" },
+      { "code": "SERVIDOR_PAGAMENTO_BLOQUEADO", "moduleKey": "folha", "name": "Servidores com pagamento bloqueado" },
+      { "code": "CONVENIO_ESTAGIO", "moduleKey": "convenio", "name": "Relatório de convênios de estágio" }
+    ]
+  }
+}

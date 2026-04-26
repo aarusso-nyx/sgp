@@ -1,0 +1,136 @@
+.auditoria-home {
+  display: grid;
+  gap: 1rem;
+}
+
+.auditoria-home__hero {
+  align-items: flex-start;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.28), transparent 28%),
+    linear-gradient(135deg, #263140, #48566a 52%, #9a6b3f);
+  border-radius: 1.35rem;
+  color: #fff;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: clamp(1rem, 2.4vw, 1.6rem);
+
+  h1 {
+    font-size: clamp(1.9rem, 4vw, 3.2rem);
+    letter-spacing: -0.045em;
+    margin: 0.1rem 0 0.4rem;
+  }
+
+  p {
+    margin: 0;
+    max-width: 74ch;
+  }
+}
+
+.auditoria-home__eyebrow {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.auditoria-home__evidence {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.9rem;
+  padding-top: 0.55rem;
+}
+
+.auditoria-home__hero-actions,
+.auditoria-home__filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.auditoria-home__filters,
+.auditoria-home__details {
+  border-color: rgba(38, 49, 64, 0.2);
+}
+
+.auditoria-home__filter-form {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding-top: 1rem;
+}
+
+.auditoria-home__filter-actions {
+  align-items: center;
+  grid-column: 1 / -1;
+}
+
+.auditoria-home__message,
+.auditoria-home__error {
+  border-radius: 0.85rem;
+  margin: 0;
+  padding: 0.85rem 1rem;
+}
+
+.auditoria-home__message {
+  background: #e6f4ea;
+  color: #14532d;
+}
+
+.auditoria-home__error {
+  background: #fde8e8;
+  color: #8a1f1f;
+}
+
+.auditoria-home__details dl {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 1rem 0;
+
+  div {
+    background: #f7f4ed;
+    border-radius: 0.8rem;
+    padding: 0.7rem 0.85rem;
+  }
+
+  dt {
+    color: #5c6470;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0.25rem 0 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.auditoria-home__metadata {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 1100px) {
+  .auditoria-home__filter-form,
+  .auditoria-home__details dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .auditoria-home__hero {
+    flex-direction: column;
+  }
+
+  .auditoria-home__hero-actions,
+  .auditoria-home__filter-actions {
+    justify-content: flex-start;
+  }
+
+  .auditoria-home__filter-form,
+  .auditoria-home__details dl,
+  .auditoria-home__metadata {
+    grid-template-columns: 1fr !important;
+  }
+}

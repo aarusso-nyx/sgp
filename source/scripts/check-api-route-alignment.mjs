@@ -1,0 +1,200 @@
+#!/usr/bin/env node
+
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+const sourceRoot = process.cwd();
+const alignmentPath = resolve(sourceRoot, '../docs/eng/69-api-route-alignment.json');
+const ALLOWED_STATUSES = new Set(['implemented', 'explicitly_excluded']);
+
+const argv = process.argv.slice(2);
+const asJson = argv.includes('--json');
+
+const findings = [];
+
+function ok(message) {
+  findings.push({ level: 'ok', message });
+}
+
+function fail(message) {
+  findings.push({ level: 'error', message });
+  process.exitCode = 1;
+}
+
+function routeLabel(route) {
+  return `${route.method} ${route.path}`;
+}
+
+function main() {
+  const alignment = JSON.parse(readFileSync(alignmentPath, 'utf8'));
+  const routes = Array.isArray(alignment.routes) ? alignment.routes : [];
+
+  if (routes.length === 0) {
+    fail('Route alignment file has no routes.');
+  } else {
+    ok(`Route alignment contains ${routes.length} documented routes.`);
+  }
+
+  const invalidStatus = routes.filter((route) => !ALLOWED_STATUSES.has(route.status));
+  if (invalidStatus.length > 0) {
+    fail(
+      `Route alignment has invalid statuses: ${invalidStatus
+        .slice(0, 20)
+        .map((route) => `${route.method} ${route.path}:${route.status}`)
+        .join(', ')}`,
+    );
+  } else {
+    ok('All route statuses are valid.');
+  }
+
+  const approved = new Set(
+    (Array.isArray(alignment.approved_out_of_scope_routes)
+      ? alignment.approved_out_of_scope_routes
+      : []
+    ).map((entry) => {
+      if (typeof entry === 'string') {
+        return entry.toUpperCase();
+      }
+      if (entry && typeof entry === 'object' && entry.method && entry.path) {
+        return `${String(entry.method).toUpperCase()} ${String(entry.path)}`;
+      }
+      return '';
+    }),
+  );
+
+  const excluded = routes.filter((route) => route.status === 'explicitly_excluded');
+  const unapprovedExcluded = excluded.filter(
+    (route) => !approved.has(routeLabel(route).toUpperCase()),
+  );
+  if (unapprovedExcluded.length > 0) {
+    fail(
+      `Route alignment has unapproved explicit exclusions: ${unapprovedExcluded
+        .slice(0, 20)
+        .map(routeLabel)
+        .join(', ')}`,
+    );
+  } else {
+    ok('All explicitly excluded routes are approved out-of-scope exceptions.');
+  }
+
+  const documentedMissing = Array.isArray(alignment.documented_missing)
+    ? alignment.documented_missing
+    : [];
+  if (documentedMissing.length > 0) {
+    fail(
+      `Documented routes missing in runtime: ${documentedMissing
+        .slice(0, 20)
+        .map(routeLabel)
+        .join(', ')}`,
+    );
+  } else {
+    ok('Runtime covers all documented routes.');
+  }
+
+  const runtimeOnly = Array.isArray(alignment.runtime_only)
+    ? alignment.runtime_only
+    : [];
+  if (runtimeOnly.length > 0) {
+    fail(
+      `Runtime exposes undocumented routes: ${runtimeOnly
+        .slice(0, 20)
+        .map(routeLabel)
+        .join(', ')}`,
+    );
+  } else {
+    ok('Runtime exposes only documented routes.');
+  }
+
+  const runtimeOutsideFamilies = Array.isArray(alignment.runtime_outside_families)
+    ? alignment.runtime_outside_families
+    : [];
+  if (runtimeOutsideFamilies.length > 0) {
+    fail(
+      `Runtime routes outside canonical families: ${runtimeOutsideFamilies
+        .slice(0, 20)
+        .map(routeLabel)
+        .join(', ')}`,
+    );
+  } else {
+    ok('All runtime routes are in canonical /api path families.');
+  }
+
+  const domainAlignment = Array.isArray(alignment.domain_alignment)
+    ? alignment.domain_alignment
+    : [];
+  if (domainAlignment.length > 0) {
+    const missingDomains = domainAlignment.filter(
+      (domain) => domain.status !== 'implemented',
+    );
+    if (missingDomains.length > 0) {
+      fail(
+        `Current-scope domain modules missing runtime evidence: ${missingDomains
+          .slice(0, 20)
+          .map((domain) => `${domain.menu} (${domain.nest_module})`)
+          .join(', ')}`,
+      );
+    } else {
+      ok(
+        `Domain/workflow alignment covers ${domainAlignment.length} current SGP domain modules.`,
+      );
+    }
+  }
+
+  const menuAlignment = alignment.menu_alignment ?? {};
+  const portalMenu = menuAlignment.portal ?? {};
+  const portalMissing = Array.isArray(portalMenu.missing)
+    ? portalMenu.missing
+    : [];
+  if (portalMissing.length > 0) {
+    fail(
+      `Portal menu routes missing runtime coverage: ${portalMissing
+        .slice(0, 20)
+        .map((route) => route.path)
+        .join(', ')}`,
+    );
+  } else if (portalMenu.documented_routes !== undefined) {
+    ok(
+      `Portal menu alignment covers ${portalMenu.implemented ?? 0} implemented route(s) and ${portalMenu.postponed ?? 0} postponed identity route(s).`,
+    );
+  }
+
+  const adminMenu = menuAlignment.admin ?? {};
+  const adminMissing = Array.isArray(adminMenu.missing)
+    ? adminMenu.missing
+    : [];
+  if (adminMissing.length > 0) {
+    fail(
+      `Admin menu routes missing current-scope coverage: ${adminMissing
+        .slice(0, 20)
+        .map((route) => route.path)
+        .join(', ')}`,
+    );
+  } else if (adminMenu.status === 'implemented') {
+    ok(
+      `Admin menu alignment covers ${adminMenu.implemented ?? 0} current-scope route(s).`,
+    );
+  } else if (adminMenu.status === 'postponed') {
+    ok(
+      `Admin menu parity is postponed under ${adminMenu.deferred_scope ?? 'deferred scope'}.`,
+    );
+  }
+
+  const output = {
+    ok: !(process.exitCode && process.exitCode !== 0),
+    findings,
+    counts: alignment.counts ?? null,
+  };
+
+  if (asJson) {
+    console.log(JSON.stringify(output, null, 2));
+    return;
+  }
+
+  for (const finding of findings) {
+    const prefix = finding.level === 'error' ? 'ERROR' : 'OK';
+    console.log(`[api-alignment] ${prefix}: ${finding.message}`);
+  }
+  console.log(`[api-alignment] ${output.ok ? 'PASSED' : 'FAILED'}`);
+}
+
+main();

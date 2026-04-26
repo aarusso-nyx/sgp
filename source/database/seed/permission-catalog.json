@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "status": "inferred",
+  "source": "docs/application-overview.md and inventories/routes.json",
+  "profiles": [
+    {
+      "code": "ADMIN",
+      "name": "Administrador",
+      "description": "Full local/test access profile for SGP modernization."
+    },
+    {
+      "code": "RH_OPERADOR",
+      "name": "Operador RH",
+      "description": "Employee lifecycle maintenance and read-only supporting master data."
+    },
+    {
+      "code": "FOLHA_OPERADOR",
+      "name": "Operador Folha",
+      "description": "Payroll generation, remittance, and payroll reports."
+    },
+    {
+      "code": "AUDITOR",
+      "name": "Auditor",
+      "description": "Audit and report consultation."
+    }
+  ],
+  "permissions": [
+    { "key": "gestao.master_data.read", "moduleKey": "gestao", "resourceKey": "master_data", "actionKey": "read", "routePattern": "#!/gestao/**" },
+    { "key": "gestao.master_data.write", "moduleKey": "gestao", "resourceKey": "master_data", "actionKey": "write", "routePattern": "#!/gestao/**" },
+    { "key": "gestao.security.read", "moduleKey": "gestao", "resourceKey": "security", "actionKey": "read", "routePattern": "#!/usuario/**" },
+    { "key": "gestao.security.write", "moduleKey": "gestao", "resourceKey": "security", "actionKey": "write", "routePattern": "#!/usuario/**" },
+    { "key": "rh.employee.read", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "read", "routePattern": "#!/funcionario/**" },
+    { "key": "rh.employee.write", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "write", "routePattern": "#!/funcionario/**" },
+    { "key": "rh.lifecycle.write", "moduleKey": "rh", "resourceKey": "lifecycle", "actionKey": "write", "routePattern": "#!/historicoSituacaoFuncional/**" },
+    { "key": "folha.payroll.read", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "read", "routePattern": "#!/folhaPagamento/**" },
+    { "key": "folha.payroll.process", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "process", "routePattern": "#!/folhaPagamento/**" },
+    { "key": "folha.remittance.write", "moduleKey": "folha", "resourceKey": "remittance", "actionKey": "write", "routePattern": "#!/arquivoRemessaPagamento/**" },
+    { "key": "relatorio.report.generate", "moduleKey": "relatorio", "resourceKey": "report", "actionKey": "generate", "routePattern": "#!/relatorio/**" },
+    { "key": "documents.upload", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "upload", "routePattern": "#!/documentos/**" },
+    { "key": "documents.register", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "register", "routePattern": "#!/documentos/**" },
+    { "key": "documents.download", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "download", "routePattern": "#!/documentos/**" },
+    { "key": "auditoria.audit.read", "moduleKey": "auditoria", "resourceKey": "audit", "actionKey": "read", "routePattern": "#!/auditoria/**" },
+    { "key": "convenio.agreement.read", "moduleKey": "convenio", "resourceKey": "agreement", "actionKey": "read", "routePattern": "#!/convenios/**" },
+    { "key": "convenio.agreement.write", "moduleKey": "convenio", "resourceKey": "agreement", "actionKey": "write", "routePattern": "#!/convenios/**" }
+  ],
+  "profilePermissions": {
+    "ADMIN": ["*"],
+    "RH_OPERADOR": ["gestao.master_data.read", "rh.employee.read", "rh.employee.write", "rh.lifecycle.write", "relatorio.report.generate"],
+    "FOLHA_OPERADOR": ["gestao.master_data.read", "rh.employee.read", "folha.payroll.read", "folha.payroll.process", "folha.remittance.write", "relatorio.report.generate"],
+    "AUDITOR": ["gestao.master_data.read", "rh.employee.read", "folha.payroll.read", "relatorio.report.generate", "auditoria.audit.read"]
+  }
+}

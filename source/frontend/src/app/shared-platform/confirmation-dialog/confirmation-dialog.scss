@@ -1,0 +1,88 @@
+.confirmation-dialog {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 440px);
+  padding: 1.25rem;
+  border: 1px solid var(--sgp-color-border);
+  border-radius: 16px;
+  background: var(--sgp-color-surface);
+  color: var(--sgp-color-ink);
+  box-shadow: 0 24px 54px rgba(14, 36, 54, 0.16);
+}
+
+.confirmation-dialog__header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.confirmation-dialog__marker {
+  width: 0.75rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  background: var(--sgp-color-accent);
+}
+
+.confirmation-dialog h2,
+.confirmation-dialog p {
+  margin: 0;
+}
+
+.confirmation-dialog h2 {
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.confirmation-dialog p {
+  color: var(--sgp-color-muted);
+  line-height: 1.5;
+}
+
+.confirmation-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.confirmation-dialog__button {
+  min-height: 40px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0 1rem;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.confirmation-dialog__button:focus-visible {
+  outline: 3px solid var(--sgp-color-focus);
+  outline-offset: 2px;
+}
+
+.confirmation-dialog__button.is-secondary {
+  border-color: var(--sgp-color-border);
+  background: #ffffff;
+  color: var(--sgp-color-ink);
+}
+
+.confirmation-dialog__button.is-primary {
+  background: var(--sgp-color-accent);
+  color: #ffffff;
+}
+
+.confirmation-dialog.tone-warning .confirmation-dialog__marker {
+  background: #b7791f;
+}
+
+.confirmation-dialog.tone-danger .confirmation-dialog__marker,
+.confirmation-dialog.tone-danger .confirmation-dialog__button.is-primary {
+  background: #a23a32;
+}
+
+@media (max-width: 480px) {
+  .confirmation-dialog__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

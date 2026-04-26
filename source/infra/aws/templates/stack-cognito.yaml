@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: SGP Cognito stack placeholder.
+
+Parameters:
+  Environment:
+    Type: String
+    AllowedValues:
+      - stage
+      - prod
+    Default: stage
+  CognitoDomainPrefix:
+    Type: String
+    Description: TODO_SET_DOMAIN_PREFIX
+
+Resources: {}
+
+Outputs:
+  NextStep:
+    Description: Placeholder output to signal template completion requirements.
+    Value: Replace with Cognito User Pool, App Client, Hosted UI domain, and callback/logout URLs.

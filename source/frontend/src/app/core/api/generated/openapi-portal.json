@@ -1,0 +1,212 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "SessionController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current authenticated Cognito actor."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/menus": {
+      "get": {
+        "operationId": "SessionController_menus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Resolved menu entries for the authenticated actor."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "SessionController_logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Invalidate current actor session."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/recuperar-senha": {
+      "post": {
+        "operationId": "SessionController_recoverPassword",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Start password recovery flow."
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/confirmar-nova-senha": {
+      "post": {
+        "operationId": "SessionController_confirmNewPassword",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Confirm recovered password."
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/alterar-senha": {
+      "put": {
+        "operationId": "SessionController_changePassword",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Change current actor password."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/iam/permissions": {
+      "get": {
+        "operationId": "PermissionsController_listPermissions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List available runtime permissions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "iam"
+        ]
+      }
+    },
+    "/api/portal/v1/auth/me": {
+      "get": {
+        "operationId": "PortalController_authMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated portal actor session alias."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/api/portal/v1/auth/govbr/status": {
+      "get": {
+        "operationId": "PortalController_govBrStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Gov.br identity provider status."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/health/ready": {
+      "get": {
+        "operationId": "HealthController_readiness",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "SGP Portal API",
+    "description": "Read-only SGP portal API",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {}
+  }
+}

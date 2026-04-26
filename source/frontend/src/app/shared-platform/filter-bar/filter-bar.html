@@ -1,0 +1,55 @@
+<form class="filter-bar" [formGroup]="form" [attr.aria-label]="ariaLabel" (ngSubmit)="onApply()">
+  <div class="filter-bar__fields">
+    <ng-container *ngFor="let field of fields; trackBy: trackByField">
+      <mat-form-field appearance="outline" class="filter-bar__field">
+        <mat-label>{{ field.label }}</mat-label>
+
+        <ng-container [ngSwitch]="field.type || 'text'">
+          <mat-select
+            *ngSwitchCase="'select'"
+            [formControlName]="field.key"
+            [attr.aria-label]="field.label"
+          >
+            <mat-option value="">{{ allOptionsLabel }}</mat-option>
+            <mat-option
+              *ngFor="let option of field.options || []; trackBy: trackByOption"
+              [value]="option.value"
+            >
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+
+          <input
+            *ngSwitchCase="'date'"
+            matInput
+            type="date"
+            [formControlName]="field.key"
+            [attr.aria-label]="field.label"
+            autocomplete="off"
+          />
+
+          <input
+            *ngSwitchDefault
+            matInput
+            type="text"
+            [formControlName]="field.key"
+            [attr.aria-label]="field.label"
+            [placeholder]="field.placeholder || ''"
+            [autocomplete]="fieldAutocomplete(field)"
+          />
+        </ng-container>
+      </mat-form-field>
+    </ng-container>
+  </div>
+
+  <div class="filter-bar__actions">
+    <button type="button" mat-stroked-button [attr.aria-label]="clearLabel" (click)="onClear()">
+      <mat-icon aria-hidden="true">filter_alt_off</mat-icon>
+      {{ clearLabel }}
+    </button>
+    <button type="submit" mat-flat-button color="primary" [attr.aria-label]="applyLabel">
+      <mat-icon aria-hidden="true">search</mat-icon>
+      {{ applyLabel }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,177 @@
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import { QueryResultRow } from 'pg';
+
+import { DatabaseService } from '../database/database.service';
+import {
+  ToggleFeatureFlagDto,
+  UpsertGlobalParameterDto,
+  UpsertSystemParametersDto,
+} from './system-parameters.dto';
+
+interface ParameterRow extends QueryResultRow {
+  key: string;
+  value: unknown;
+  description: string;
+  updated_at: Date | string;
+}
+
+@Injectable()
+export class SystemParametersService {
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  async listSystemParameters(): Promise<unknown> {
+    this.ensureDatabase();
+    const rows = await this.databaseService.query<ParameterRow>(
+      `
+      SELECT key, value, description, updated_at
+      FROM public.system_parameter
+      WHERE key LIKE 'system:%'
+      ORDER BY key ASC
+      `,
+    );
+    return {
+      values: this.mapValues('system:', rows),
+      updatedAt: this.maxUpdatedAt(rows),
+    };
+  }
+
+  async upsertSystemParameters(
+    payload: UpsertSystemParametersDto,
+  ): Promise<unknown> {
+    this.ensureDatabase();
+    const entries = Object.entries(payload.values ?? {});
+    for (const [key, value] of entries) {
+      await this.upsertEntry(
+        `system:${key}`,
+        value,
+        'system',
+        `System parameter ${key}`,
+      );
+    }
+    return this.listSystemParameters();
+  }
+
+  async listGlobalParameters(): Promise<unknown> {
+    this.ensureDatabase();
+    const rows = await this.databaseService.query<ParameterRow>(
+      `
+      SELECT key, value, description, updated_at
+      FROM public.system_parameter
+      WHERE key LIKE 'global:%'
+      ORDER BY key ASC
+      `,
+    );
+    return {
+      values: this.mapValues('global:', rows),
+      updatedAt: this.maxUpdatedAt(rows),
+    };
+  }
+
+  async upsertGlobalParameter(
+    key: string,
+    payload: UpsertGlobalParameterDto,
+  ): Promise<unknown> {
+    this.ensureDatabase();
+    const value = payload.value ?? null;
+    await this.upsertEntry(
+      `global:${key}`,
+      value,
+      'global',
+      `Global parameter ${key}`,
+    );
+    return this.listGlobalParameters();
+  }
+
+  async toggleFeatureFlag(
+    key: string,
+    payload: ToggleFeatureFlagDto,
+  ): Promise<unknown> {
+    this.ensureDatabase();
+    const value = {
+      active: payload.ativo,
+      ...(payload.metadata ?? {}),
+    };
+    await this.upsertEntry(
+      `feature-flag:${key}`,
+      value,
+      'feature-flag',
+      `Feature flag ${key}`,
+    );
+    const rows = await this.databaseService.query<ParameterRow>(
+      `
+      SELECT key, value, description, updated_at
+      FROM public.system_parameter
+      WHERE key = $1
+      `,
+      [`feature-flag:${key}`],
+    );
+    const row = rows[0];
+    return {
+      chave: key,
+      ativo: payload.ativo,
+      value: row?.value ?? value,
+      updatedAt: row?.updated_at
+        ? this.toIso(row.updated_at)
+        : new Date().toISOString(),
+    };
+  }
+
+  private async upsertEntry(
+    key: string,
+    value: unknown,
+    moduleKey: string,
+    description: string,
+  ): Promise<void> {
+    await this.databaseService.query(
+      `
+      INSERT INTO public.system_parameter (
+        tenant_id,
+        key,
+        value,
+        description,
+        module_key
+      )
+      VALUES (public.sgp_current_tenant_uuid(), $1, $2::jsonb, $3, $4)
+      ON CONFLICT (tenant_id, key) DO UPDATE
+      SET
+        value = EXCLUDED.value,
+        description = EXCLUDED.description,
+        module_key = EXCLUDED.module_key,
+        updated_at = now()
+      `,
+      [key, JSON.stringify(value ?? null), description, moduleKey],
+    );
+  }
+
+  private mapValues(
+    prefix: string,
+    rows: ParameterRow[],
+  ): Record<string, unknown> {
+    const values: Record<string, unknown> = {};
+    for (const row of rows) {
+      values[row.key.slice(prefix.length)] = row.value;
+    }
+    return values;
+  }
+
+  private maxUpdatedAt(rows: ParameterRow[]): string | null {
+    const values = rows
+      .map((row) => this.toIso(row.updated_at))
+      .sort((left, right) => left.localeCompare(right));
+    return values.at(-1) ?? null;
+  }
+
+  private ensureDatabase(): void {
+    if (!this.databaseService.configured) {
+      throw new ServiceUnavailableException(
+        'DATABASE_URL is required for system parameters operations',
+      );
+    }
+  }
+
+  private toIso(value: Date | string): string {
+    return value instanceof Date
+      ? value.toISOString()
+      : new Date(value).toISOString();
+  }
+}

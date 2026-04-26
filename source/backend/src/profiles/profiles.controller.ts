@@ -1,0 +1,81 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
+import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
+import { RequirePermissions } from '../auth/permissions.decorator';
+import { PermissionsGuard } from '../auth/permissions.guard';
+import {
+  AssignProfilePermissionsDto,
+  CreateProfileDto,
+  ProfileListQueryDto,
+  UpdateProfileDto,
+} from './profiles.dto';
+import { ProfilesService } from './profiles.service';
+
+@ApiTags('profiles')
+@ApiBearerAuth()
+@UseGuards(CognitoJwtGuard, PermissionsGuard)
+@Controller('v1/admin/perfis')
+export class ProfilesController {
+  constructor(private readonly profilesService: ProfilesService) {}
+
+  @Get()
+  @RequirePermissions('gestao:read')
+  @ApiOkResponse({ description: 'List access profiles.' })
+  list(@Query() query: ProfileListQueryDto) {
+    return this.profilesService.list(query);
+  }
+
+  @Get(':id')
+  @RequirePermissions('gestao:read')
+  @ApiOkResponse({ description: 'Fetch one profile with permissions.' })
+  getById(@Param('id') id: string) {
+    return this.profilesService.getById(id);
+  }
+
+  @Post()
+  @RequirePermissions('gestao:write')
+  @ApiCreatedResponse({ description: 'Create an access profile.' })
+  create(@Body() body: CreateProfileDto) {
+    return this.profilesService.create(body);
+  }
+
+  @Put(':id')
+  @RequirePermissions('gestao:write')
+  @ApiOkResponse({ description: 'Update profile metadata.' })
+  update(@Param('id') id: string, @Body() body: UpdateProfileDto) {
+    return this.profilesService.update(id, body);
+  }
+
+  @Delete(':id')
+  @RequirePermissions('gestao:write')
+  @ApiOkResponse({ description: 'Deactivate an access profile.' })
+  deactivate(@Param('id') id: string) {
+    return this.profilesService.deactivate(id);
+  }
+
+  @Put(':id/papeis')
+  @RequirePermissions('gestao:write')
+  @ApiOkResponse({ description: 'Replace profile permission mappings.' })
+  setPermissions(
+    @Param('id') id: string,
+    @Body() body: AssignProfilePermissionsDto,
+  ) {
+    return this.profilesService.setPermissions(id, body);
+  }
+}
