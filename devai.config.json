@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "project": "sgp",
+  "version": "0.0.1",
+  "sourceRoot": "source",
+  "authority": {
+    "productAndEngineering": "docs/eng",
+    "payrollEngine": "folia-first",
+    "legacySchemaReference": "docs/sql-reference",
+    "reverseEvidenceArchive": "docs/legacy-reverse"
+  },
+  "authoritativeDocs": [
+    "docs/eng/README.md",
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/43-maquinas-estado.md",
+    "docs/eng/50-arvore-menus.md",
+    "docs/eng/60-catalogo-saidas-oficiais.md",
+    "docs/eng/62-estrategia-testes.md",
+    "docs/eng/63-guia-migracao-legado.md",
+    "docs/eng/71-folia-engine-reconciliation.md"
+  ],
+  "generatedSurfaces": [
+    "docs/eng/69-api-route-alignment.json",
+    "docs/eng/64-database-alignment-matrix.json",
+    "source/runtime/topology.json",
+    "docs/governance/governance-manifest.json"
+  ],
+  "hardFailGates": [
+    {
+      "id": "lint-check",
+      "command": "npm --prefix source run lint:check"
+    },
+    {
+      "id": "format-check",
+      "command": "npm --prefix source run format:check"
+    },
+    {
+      "id": "typecheck",
+      "command": "npm --prefix source run typecheck"
+    },
+    {
+      "id": "api-alignment",
+      "command": "npm --prefix source run api:alignment:check -- --json"
+    },
+    {
+      "id": "db-alignment",
+      "command": "npm --prefix source run db:alignment:check -- --json"
+    },
+    {
+      "id": "health-json",
+      "command": "npm --prefix source run health:json"
+    },
+    {
+      "id": "governance-check",
+      "command": "npm --prefix source run governance:check"
+    }
+  ],
+  "deferredOwnerDecisions": [
+    "docs/work/prompts/admin-identity-install.prompt.md",
+    "docs/work/prompts/esocial-transmission.prompt.md",
+    "docs/work/prompts/infra-strategy.prompt.md",
+    "docs/work/prompts/governance-release-gates.prompt.md"
+  ]
+}

@@ -11,6 +11,11 @@ Generated at: 2026-04-16T21:16:12.967Z
 | Módulo RH | 12 | 12 | 4 | [modulo-rh.md](./modulo-rh.md) |
 | Relatório | 2 | 2 | 1 | [relatorio.md](./relatorio.md) |
 | Unmapped | 10 | 1 | 0 | [unmapped.md](./unmapped.md) |
+| Funcionário | — | — | — | [funcionario/](./funcionario/) |
+| Folha de Pagamento (deep) | — | — | — | [folha/](./folha/) |
+| Perícia Médica | — | — | — | [pericias/](./pericias/) |
+| Recadastramento | — | — | — | [recadastramento/](./recadastramento/) |
+| Recrutamento / Req. Pessoal | — | — | — | [recrutamento/](./recrutamento/) |
 
 ## Notes
 - Permission findings are based on observed 403-like pages/actions in the current session.

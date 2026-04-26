@@ -946,6 +946,23 @@ flowchart TD
 
 ---
 
+### 7.4 Sucessão de menus provados no legado em 2026-04-26
+
+A evidência reversa de 2026-04-26 confirma superfícies de navegação e APIs funcionais. A árvore canônica permanece a deste documento; rotas legadas servem apenas para rastrear cobertura.
+
+| Evidência | Menu canônico | Observação de cobertura |
+|---|---|---|
+| `modules/funcionario/mapa-fino.md` | `3.2 Módulo RH > Cadastro Funcional > Servidor` | A lista, criação, edição, detalhe, ficha, importação, dossiê, observação documental, posse, lotação e transferência ficam sob RH/Gestão conforme §§3.2 e 3.1. |
+| `modules/folha/mapa-fino.md` | `3.3 Folha de Pgt` | Competência, folha, contracheque, lançamentos, importações, reprocessamento, fechamento, remessa/retorno e relatórios já possuem ramos canônicos. |
+| `modules/pericias/mapa-fino.md` | `3.10 Área de Saúde / Junta Médica` | Agenda, atendimento, prontuário, validação de laudo, licença médica e catálogos clínicos ficam nos subgrupos Agenda, Perícia e Suporte Clínico. |
+| `modules/recadastramento/mapa-fino.md` | `3.8 Módulo Previdenciário > Operacionais > Prova de Vida / Recadastramento` | Carteira, atendimento, histórico de ligações, anexos, comprovante, relatório e canal público ficam no ramo previdenciário; portal/autoatendimento depende da flag pública. |
+| `modules/recrutamento/mapa-fino.md` | `3.5 Recrutamento e Seleção` | Demanda, gestão de requisições, banco de talentos, currículo, análise curricular e estágio ficam no ramo de R&S. |
+| `data-archaeology/dumps-superficies-provadas.md` | §§3.1 a 3.11 | Superfícies provadas pelos dumps validam rastreabilidade, mas não adicionam novos itens obrigatórios ao escopo v0.0.1. |
+
+Rotas administrativas completas continuam sob `ADMIN_INSTALL_LATER`; esta seção define o alvo de produto, não muda o gate corrente.
+
+---
+
 ## Glossário rápido de abreviações
 
 | Sigla / Termo | Significado |

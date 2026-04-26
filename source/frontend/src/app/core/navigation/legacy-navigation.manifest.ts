@@ -10,12 +10,13 @@ import {
   LegacyNavigationSection,
 } from './legacy-navigation.types';
 
-export const LEGACY_NAVIGATION_MANIFEST: LegacyNavigationSection[] =
-  ADMIN_NAVIGATION_SECTIONS.map((section) => ({
+export const LEGACY_NAVIGATION_MANIFEST: LegacyNavigationSection[] = ADMIN_NAVIGATION_SECTIONS.map(
+  (section) => ({
     ...section,
     status: 'inferred',
     items: section.items.map(toNavigationItem),
-  }));
+  }),
+);
 
 export const LEGACY_MODULE_ROUTES: Record<LegacyModuleKey, LegacyModuleRouteEntry[]> =
   Object.fromEntries(

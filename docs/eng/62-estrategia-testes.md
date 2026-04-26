@@ -26,7 +26,8 @@
 - Paridade de `sgp-admin`, rotas administrativas e fluxos OAuth/Cognito/Gov.br não bloqueia o pacote atual; esses itens são classificados como `ADMIN_INSTALL_LATER` ou `IDENTITY_INSTALL_LATER` nos artefatos de alinhamento.
 - O gate `api:alignment:check` passa a validar também paridade de domínio, workflow e menu: todos os 11 domínios devem ter evidência backend corrente; os menus do portal devem estar cobertos; a árvore do admin é registrada como postergada.
 - Em testes sem `S3_DOCUMENTS_BUCKET`/`S3_REGION`, o runtime pode usar MiniIO em Docker como substituto S3-compatible. Produção e homologação continuam exigindo S3 real.
-- Pact broker/provider, GitHub Actions completos, scanners, observabilidade produtiva e demais gates de governança ficam temporariamente postergados. Devem continuar documentados como alvo de release, mas não são bloqueadores de reavaliação do código atual.
+- GitHub Actions passa a ter gate baseline de `source/` com Node 24, npm, PostgreSQL 16, lint/format não mutantes, typecheck, alinhamento de rotas, alinhamento de banco, health JSON, testes, build e cobertura.
+- Pact broker/provider, scanners, observabilidade produtiva e gates de release/homologação continuam postergados. Devem continuar documentados como alvo de release, mas não são bloqueadores de reavaliação do código atual.
 
 ---
 
@@ -1715,6 +1716,28 @@ flowchart TD
 ```
 
 ### 6.2 GitHub Actions — workflows
+
+#### Workflow baseline atual (`source-ci.yml`)
+
+O workflow corrente roda a partir da raiz do repositório, mas todos os comandos de aplicação usam `working-directory: source`. Ele usa `actions/setup-node@v4` com Node 24, cache npm em `source/package-lock.json`, um único lockfile de workspace e serviço PostgreSQL 16 para os gates com banco real.
+
+Etapas obrigatórias:
+
+1. `npm ci`
+2. `npm run lint:check`
+3. `npm run format:check`
+4. `npm run typecheck`
+5. `npm run api:alignment:check -- --json`
+6. `npm run db:alignment:check -- --json`
+7. `npm run health:json`
+8. `npm run test:unit`
+9. `npm run test:int`
+10. `npm run test:e2e`
+11. `npm run build`
+12. `npm run test:coverage`
+13. `npm run governance:check`
+
+Este baseline não exige S3 real, Cognito real, Gov.br real, eSocial produção restrita ou Pact Broker. Esses itens permanecem gates de release futura.
 
 #### Workflow PR (`ci-pr.yml`)
 

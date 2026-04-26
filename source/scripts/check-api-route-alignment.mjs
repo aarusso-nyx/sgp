@@ -91,15 +91,10 @@ function main() {
     ok('Runtime covers all documented routes.');
   }
 
-  const runtimeOnly = Array.isArray(alignment.runtime_only)
-    ? alignment.runtime_only
-    : [];
+  const runtimeOnly = Array.isArray(alignment.runtime_only) ? alignment.runtime_only : [];
   if (runtimeOnly.length > 0) {
     fail(
-      `Runtime exposes undocumented routes: ${runtimeOnly
-        .slice(0, 20)
-        .map(routeLabel)
-        .join(', ')}`,
+      `Runtime exposes undocumented routes: ${runtimeOnly.slice(0, 20).map(routeLabel).join(', ')}`,
     );
   } else {
     ok('Runtime exposes only documented routes.');
@@ -123,9 +118,7 @@ function main() {
     ? alignment.domain_alignment
     : [];
   if (domainAlignment.length > 0) {
-    const missingDomains = domainAlignment.filter(
-      (domain) => domain.status !== 'implemented',
-    );
+    const missingDomains = domainAlignment.filter((domain) => domain.status !== 'implemented');
     if (missingDomains.length > 0) {
       fail(
         `Current-scope domain modules missing runtime evidence: ${missingDomains
@@ -134,17 +127,13 @@ function main() {
           .join(', ')}`,
       );
     } else {
-      ok(
-        `Domain/workflow alignment covers ${domainAlignment.length} current SGP domain modules.`,
-      );
+      ok(`Domain/workflow alignment covers ${domainAlignment.length} current SGP domain modules.`);
     }
   }
 
   const menuAlignment = alignment.menu_alignment ?? {};
   const portalMenu = menuAlignment.portal ?? {};
-  const portalMissing = Array.isArray(portalMenu.missing)
-    ? portalMenu.missing
-    : [];
+  const portalMissing = Array.isArray(portalMenu.missing) ? portalMenu.missing : [];
   if (portalMissing.length > 0) {
     fail(
       `Portal menu routes missing runtime coverage: ${portalMissing
@@ -159,9 +148,7 @@ function main() {
   }
 
   const adminMenu = menuAlignment.admin ?? {};
-  const adminMissing = Array.isArray(adminMenu.missing)
-    ? adminMenu.missing
-    : [];
+  const adminMissing = Array.isArray(adminMenu.missing) ? adminMenu.missing : [];
   if (adminMissing.length > 0) {
     fail(
       `Admin menu routes missing current-scope coverage: ${adminMissing
@@ -170,13 +157,9 @@ function main() {
         .join(', ')}`,
     );
   } else if (adminMenu.status === 'implemented') {
-    ok(
-      `Admin menu alignment covers ${adminMenu.implemented ?? 0} current-scope route(s).`,
-    );
+    ok(`Admin menu alignment covers ${adminMenu.implemented ?? 0} current-scope route(s).`);
   } else if (adminMenu.status === 'postponed') {
-    ok(
-      `Admin menu parity is postponed under ${adminMenu.deferred_scope ?? 'deferred scope'}.`,
-    );
+    ok(`Admin menu parity is postponed under ${adminMenu.deferred_scope ?? 'deferred scope'}.`);
   }
 
   const output = {

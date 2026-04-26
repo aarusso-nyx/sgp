@@ -1,0 +1,94 @@
+banco,formula_id,verba_id,verba_codigo,verba_descricao,formula_descricao,formula_raw_html,formula_normalizada,formula_sha1
+rhlinkcon,9,9,1000,Salário,salario,<p></p><p>salario = r{vencimento} + r{titulacao_aperfeicoamento} /n</p><p>salario = salario - r{vale_transporte}   /n<br/></p><p>salario*1 /n </p><p></p><p> </p>,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1",57099f8cc8c96b27652fa964bb4190547215611a
+rhlinkcon,1,1,1101,Vencimento,vencimento,<p>o{referenciaSalarialCargo.valor} /n </p>,o{referenciaSalarialCargo.valor},59556039b35166faf45b735652258f15e496450c
+rhlinkcon,8,8,1107,Adicional de Titulação e Aperfeiçoamento,titulacao_aperfeicoamento,"<p>percent = 0 /n</p><p><br/></p><p>SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") </p><p><br/></p><p><br/></p><p>ENTAO percent = 0.07/n</p><p><br/></p><p><br/></p><p>SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) </p><p><br/></p><p><br/></p><p>ENTAO percent = 0.1/n</p><p><br/></p><p><br/></p><p>SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") /n</p><p><br/></p><p><br/></p><p>ENTAO percent = 0.12 /n</p><p><br/></p><p><br/></p><p>FIM_SE /n</p><p><br/></p><p><br/></p><p>r{vencimento} * percent </p>","percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent",a53a46f368dec83899f942c46ff0ec78f7eb5285
+rhlinkcon,16,12,1112,Gratificação por Regência de Classe,gratificacao_regencia_classe,<p>214.00 * 1<br/></p>,214.00 * 1,c1451840ede1b88b6a5c9c97b5426d2f7dbf9fba
+rhlinkcon,19,16,1158,Gratificação por Maturação Profissional,gratificacao_maturacao_profissional,<p>o{referenciaSalarialCargo.valor} /n * /n 0.2<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2",97faf53b770c329a10d60aed2043a3ba06fb6dee
+rhlinkcon,17,14,1229,Adicional de Incentivo Funcional ( Motorista),adicional_incentivo_funcional_motorista,<p>o{referenciaSalarialCargo.valor} /n * /n 0.3<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.3",bf0fb91fb786b6942d83f9a28499bdc8b3acdfc0
+rhlinkcon,18,15,1236,Adicional por Regime Especial de Trabalho Policial – RETP,adicional_rept,<p>o{referenciaSalarialCargo.valor} /n * /n 1.0<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0",9545733df5f4a53295c2ab35881fa3f0c47b70e8
+rhlinkcon,20,17,1237,Adicional Desempenho Profissional,adicional_desempenho_profissional,<p>o{referenciaSalarialCargo.valor} /n * /n  0.2<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2",ace6814acaab7b0b808cac7e929d146291b41eed
+rhlinkcon,21,18,1238,Adicional de Responsabilidade Técnica ( Engenheiro ),adicional_resp_tecnica_engenheiro,<p>o{referenciaSalarialCargo.valor} /n * /n 1.0 <br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0",9556511a824e9f8604f365bb2395417bf8ca7ed8
+rhlinkcon,15,11,124,INSS,inss,<p>a{inss} /n </p>,a{inss},55b213e180e908afab8cf716dddef1ceb986281f
+rhlinkcon,14,10,4963,Vale Transporte,vale_transporte,<p>r{vencimento} * 0.06 /n </p>,r{vencimento} * 0.06,4d785186da22a7f6f7acb470741ad2ba83212d97
+rhlinkcon_motor,9,9,1000,Salário,salario,<p></p><p>salario = r{vencimento} + r{titulacao_aperfeicoamento} /n</p><p>salario = salario - r{vale_transporte}   /n<br/></p><p>salario*1 /n </p><p></p><p> </p>,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1",57099f8cc8c96b27652fa964bb4190547215611a
+rhlinkcon_motor,1,1,1101,Vencimento,vencimento,<p>o{referenciaSalarialCargo.valor} /n </p>,o{referenciaSalarialCargo.valor},59556039b35166faf45b735652258f15e496450c
+rhlinkcon_motor,8,8,1107,Adicional de Titulação e Aperfeiçoamento,titulacao_aperfeicoamento,"<p>percent = 0 /n</p><p><br/></p><p>SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") </p><p><br/></p><p><br/></p><p>ENTAO percent = 0.07/n</p><p><br/></p><p><br/></p><p>SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) </p><p><br/></p><p><br/></p><p>ENTAO percent = 0.1/n</p><p><br/></p><p><br/></p><p>SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") /n</p><p><br/></p><p><br/></p><p>ENTAO percent = 0.12 /n</p><p><br/></p><p><br/></p><p>FIM_SE /n</p><p><br/></p><p><br/></p><p>r{vencimento} * percent </p>","percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent",a53a46f368dec83899f942c46ff0ec78f7eb5285
+rhlinkcon_motor,16,12,1112,Gratificação por Regência de Classe,gratificacao_regencia_classe,<p>214.00 * 1<br/></p>,214.00 * 1,c1451840ede1b88b6a5c9c97b5426d2f7dbf9fba
+rhlinkcon_motor,19,16,1158,Gratificação por Maturação Profissional,gratificacao_maturacao_profissional,<p>o{referenciaSalarialCargo.valor} /n * /n 0.2<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2",97faf53b770c329a10d60aed2043a3ba06fb6dee
+rhlinkcon_motor,17,14,1229,Adicional de Incentivo Funcional ( Motorista),adicional_incentivo_funcional_motorista,<p>o{referenciaSalarialCargo.valor} /n * /n 0.3<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.3",bf0fb91fb786b6942d83f9a28499bdc8b3acdfc0
+rhlinkcon_motor,18,15,1236,Adicional por Regime Especial de Trabalho Policial – RETP,adicional_rept,<p>o{referenciaSalarialCargo.valor} /n * /n 1.0<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0",9545733df5f4a53295c2ab35881fa3f0c47b70e8
+rhlinkcon_motor,20,17,1237,Adicional Desempenho Profissional,adicional_desempenho_profissional,<p>o{referenciaSalarialCargo.valor} /n * /n  0.2<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2",ace6814acaab7b0b808cac7e929d146291b41eed
+rhlinkcon_motor,21,18,1238,Adicional de Responsabilidade Técnica ( Engenheiro ),adicional_resp_tecnica_engenheiro,<p>o{referenciaSalarialCargo.valor} /n * /n 1.0 <br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0",9556511a824e9f8604f365bb2395417bf8ca7ed8
+rhlinkcon_motor,15,11,124,INSS,inss,<p>a{inss(r{vencimento}+r{gratificacao_regencia_classe})} /n </p>,a{inss(r{vencimento}+r{gratificacao_regencia_classe})},140863b68daa6b777dc992f1642b70aff2280aa1
+rhlinkcon_motor,14,10,4963,Vale Transporte,vale_transporte,<p>r{vencimento} * 0.06 /n </p>,r{vencimento} * 0.06,4d785186da22a7f6f7acb470741ad2ba83212d97
+rhlinkcon_20190701,9,9,1000,Salário,salario,<p></p><p>salario = r{vencimento} + r{titulacao_aperfeicoamento} /n</p><p>salario = salario - r{vale_transporte}   /n<br/></p><p>salario*1 /n </p><p></p><p> </p>,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1",57099f8cc8c96b27652fa964bb4190547215611a
+rhlinkcon_20190701,1,1,1101,Vencimento,vencimento,<p>o{referenciaSalarialCargo.valor} /n </p>,o{referenciaSalarialCargo.valor},59556039b35166faf45b735652258f15e496450c
+rhlinkcon_20190701,8,8,1107,Adicional de Titulação e Aperfeiçoamento,titulacao_aperfeicoamento,"<p>percent = 0 /n</p><p><br/></p><p>SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") </p><p><br/></p><p><br/></p><p>ENTAO percent = 0.07/n</p><p><br/></p><p><br/></p><p>SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) </p><p><br/></p><p><br/></p><p>ENTAO percent = 0.1/n</p><p><br/></p><p><br/></p><p>SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") /n</p><p><br/></p><p><br/></p><p>ENTAO percent = 0.12 /n</p><p><br/></p><p><br/></p><p>FIM_SE /n</p><p><br/></p><p><br/></p><p>r{vencimento} * percent </p>","percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent",a53a46f368dec83899f942c46ff0ec78f7eb5285
+rhlinkcon_20190701,16,12,1112,Gratificação por Regência de Classe,gratificacao_regencia_classe,<p>214.00 * 1<br/></p>,214.00 * 1,c1451840ede1b88b6a5c9c97b5426d2f7dbf9fba
+rhlinkcon_20190701,19,16,1158,Gratificação por Maturação Profissional,gratificacao_maturacao_profissional,<p>o{referenciaSalarialCargo.valor} /n * /n 0.2<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2",97faf53b770c329a10d60aed2043a3ba06fb6dee
+rhlinkcon_20190701,17,14,1229,Adicional de Incentivo Funcional ( Motorista),adicional_incentivo_funcional_motorista,<p>o{referenciaSalarialCargo.valor} /n * /n 0.3<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.3",bf0fb91fb786b6942d83f9a28499bdc8b3acdfc0
+rhlinkcon_20190701,18,15,1236,Adicional por Regime Especial de Trabalho Policial – RETP,adicional_rept,<p>o{referenciaSalarialCargo.valor} /n * /n 1.0<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0",9545733df5f4a53295c2ab35881fa3f0c47b70e8
+rhlinkcon_20190701,20,17,1237,Adicional Desempenho Profissional,adicional_desempenho_profissional,<p>o{referenciaSalarialCargo.valor} /n * /n  0.2<br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2",ace6814acaab7b0b808cac7e929d146291b41eed
+rhlinkcon_20190701,21,18,1238,Adicional de Responsabilidade Técnica ( Engenheiro ),adicional_resp_tecnica_engenheiro,<p>o{referenciaSalarialCargo.valor} /n * /n 1.0 <br/></p>,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0",9556511a824e9f8604f365bb2395417bf8ca7ed8
+rhlinkcon_20190701,15,11,124,INSS,inss,<p>a{inss} /n </p>,a{inss},55b213e180e908afab8cf716dddef1ceb986281f
+rhlinkcon_20190701,14,10,4963,Vale Transporte,vale_transporte,<p>r{vencimento} * 0.06 /n </p>,r{vencimento} * 0.06,4d785186da22a7f6f7acb470741ad2ba83212d97

@@ -1,0 +1,141 @@
+banco,verba_codigo,verba_descricao,formula_id,formula_descricao,tipo_dependencia,dependencia_bruta,dependencia_nome,dependencia_tipo_semantico,escopo_dependencia,resolucao_local,detalhe_resolucao,formula_normalizada
+rhlinkcon,1000,Salário,9,salario,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon,1000,Salário,9,salario,rubrica_referenciada,r{titulacao_aperfeicoamento},titulacao_aperfeicoamento,resultado_de_outra_rubrica,direta,alias_funcional,titulacao_aperfeicoamento,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon,1000,Salário,9,salario,rubrica_referenciada,r{vale_transporte},vale_transporte,resultado_de_outra_rubrica,direta,alias_funcional,vale_transporte,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon,1101,Vencimento,1,vencimento,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,o{referenciaSalarialCargo.valor}
+rhlinkcon,1107,Adicional de Titulação e Aperfeiçoamento,8,titulacao_aperfeicoamento,campo_objeto,o{grauInstrucao},grauInstrucao,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Grau Instrução,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon,1107,Adicional de Titulação e Aperfeiçoamento,8,titulacao_aperfeicoamento,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon,1112,Gratificação por Regência de Classe,16,gratificacao_regencia_classe,nenhuma_ref_explicita,,,,direta,,,214.00 * 1
+rhlinkcon,1158,Gratificação por Maturação Profissional,19,gratificacao_maturacao_profissional,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2"
+rhlinkcon,1229,Adicional de Incentivo Funcional ( Motorista),17,adicional_incentivo_funcional_motorista,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.3"
+rhlinkcon,1236,Adicional por Regime Especial de Trabalho Policial – RETP,18,adicional_rept,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0"
+rhlinkcon,1237,Adicional Desempenho Profissional,20,adicional_desempenho_profissional,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2"
+rhlinkcon,1238,Adicional de Responsabilidade Técnica ( Engenheiro ),21,adicional_resp_tecnica_engenheiro,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0"
+rhlinkcon,124,INSS,15,inss,atributo_ou_funcao,a{inss},inss,atributo_ou_funcao_simples,direta,funcao_ou_agregado_do_motor,inss,a{inss}
+rhlinkcon,4963,Vale Transporte,14,vale_transporte,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,r{vencimento} * 0.06
+rhlinkcon_motor,1000,Salário,9,salario,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_motor,1000,Salário,9,salario,rubrica_referenciada,r{titulacao_aperfeicoamento},titulacao_aperfeicoamento,resultado_de_outra_rubrica,direta,alias_funcional,titulacao_aperfeicoamento,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_motor,1000,Salário,9,salario,rubrica_referenciada,r{vale_transporte},vale_transporte,resultado_de_outra_rubrica,direta,alias_funcional,vale_transporte,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_motor,1101,Vencimento,1,vencimento,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,o{referenciaSalarialCargo.valor}
+rhlinkcon_motor,1107,Adicional de Titulação e Aperfeiçoamento,8,titulacao_aperfeicoamento,campo_objeto,o{grauInstrucao},grauInstrucao,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Grau Instrução,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon_motor,1107,Adicional de Titulação e Aperfeiçoamento,8,titulacao_aperfeicoamento,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon_motor,1112,Gratificação por Regência de Classe,16,gratificacao_regencia_classe,nenhuma_ref_explicita,,,,direta,,,214.00 * 1
+rhlinkcon_motor,1158,Gratificação por Maturação Profissional,19,gratificacao_maturacao_profissional,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2"
+rhlinkcon_motor,1229,Adicional de Incentivo Funcional ( Motorista),17,adicional_incentivo_funcional_motorista,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.3"
+rhlinkcon_motor,1236,Adicional por Regime Especial de Trabalho Policial – RETP,18,adicional_rept,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0"
+rhlinkcon_motor,1237,Adicional Desempenho Profissional,20,adicional_desempenho_profissional,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2"
+rhlinkcon_motor,1238,Adicional de Responsabilidade Técnica ( Engenheiro ),21,adicional_resp_tecnica_engenheiro,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0"
+rhlinkcon_motor,124,INSS,15,inss,atributo_ou_funcao,a{inss(r{vencimento}+r{gratificacao_regencia_classe})},inss(r{vencimento}+r{gratificacao_regencia_classe}),funcao_com_parametros,direta,funcao_com_refs_internas,"rubrica:vencimento, rubrica:gratificacao_regencia_classe",a{inss(r{vencimento}+r{gratificacao_regencia_classe})}
+rhlinkcon_motor,124,INSS,15,inss,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,interna_em_a{inss(r{vencimento}+r{gratificacao_regencia_classe})},alias_funcional,vencimento,a{inss(r{vencimento}+r{gratificacao_regencia_classe})}
+rhlinkcon_motor,124,INSS,15,inss,rubrica_referenciada,r{gratificacao_regencia_classe},gratificacao_regencia_classe,resultado_de_outra_rubrica,interna_em_a{inss(r{vencimento}+r{gratificacao_regencia_classe})},alias_funcional,gratificacao_regencia_classe,a{inss(r{vencimento}+r{gratificacao_regencia_classe})}
+rhlinkcon_motor,4963,Vale Transporte,14,vale_transporte,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,r{vencimento} * 0.06
+rhlinkcon_20190701,1000,Salário,9,salario,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_20190701,1000,Salário,9,salario,rubrica_referenciada,r{titulacao_aperfeicoamento},titulacao_aperfeicoamento,resultado_de_outra_rubrica,direta,alias_funcional,titulacao_aperfeicoamento,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_20190701,1000,Salário,9,salario,rubrica_referenciada,r{vale_transporte},vale_transporte,resultado_de_outra_rubrica,direta,alias_funcional,vale_transporte,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_20190701,1101,Vencimento,1,vencimento,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,o{referenciaSalarialCargo.valor}
+rhlinkcon_20190701,1107,Adicional de Titulação e Aperfeiçoamento,8,titulacao_aperfeicoamento,campo_objeto,o{grauInstrucao},grauInstrucao,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Grau Instrução,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon_20190701,1107,Adicional de Titulação e Aperfeiçoamento,8,titulacao_aperfeicoamento,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon_20190701,1112,Gratificação por Regência de Classe,16,gratificacao_regencia_classe,nenhuma_ref_explicita,,,,direta,,,214.00 * 1
+rhlinkcon_20190701,1158,Gratificação por Maturação Profissional,19,gratificacao_maturacao_profissional,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2"
+rhlinkcon_20190701,1229,Adicional de Incentivo Funcional ( Motorista),17,adicional_incentivo_funcional_motorista,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.3"
+rhlinkcon_20190701,1236,Adicional por Regime Especial de Trabalho Policial – RETP,18,adicional_rept,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0"
+rhlinkcon_20190701,1237,Adicional Desempenho Profissional,20,adicional_desempenho_profissional,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 0.2"
+rhlinkcon_20190701,1238,Adicional de Responsabilidade Técnica ( Engenheiro ),21,adicional_resp_tecnica_engenheiro,campo_objeto,o{referenciaSalarialCargo.valor},referenciaSalarialCargo.valor,campo_do_contexto_objeto,direta,atributo_formula_catalogado,Referencia Salarial Cargo,"o{referenciaSalarialCargo.valor} 
+ * 
+ 1.0"
+rhlinkcon_20190701,124,INSS,15,inss,atributo_ou_funcao,a{inss},inss,atributo_ou_funcao_simples,direta,funcao_ou_agregado_do_motor,inss,a{inss}
+rhlinkcon_20190701,4963,Vale Transporte,14,vale_transporte,rubrica_referenciada,r{vencimento},vencimento,resultado_de_outra_rubrica,direta,alias_funcional,vencimento,r{vencimento} * 0.06

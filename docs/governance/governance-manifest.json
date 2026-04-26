@@ -31,6 +31,31 @@
       "id": "archive.deprecation.coverage-tracker",
       "status": "implemented",
       "evidence": "docs/legacy-reverse/deprecation-status.md"
+    },
+    {
+      "id": "archive.reverse-evidence-succession",
+      "status": "implemented",
+      "evidence": "docs/eng/README.md"
+    },
+    {
+      "id": "tooling.node24-npm-workspace",
+      "status": "implemented",
+      "evidence": "source/package.json"
+    },
+    {
+      "id": "tooling.single-source-lockfile",
+      "status": "implemented",
+      "evidence": "source/package-lock.json"
+    },
+    {
+      "id": "ci.source-baseline",
+      "status": "implemented",
+      "evidence": ".github/workflows/source-ci.yml"
+    },
+    {
+      "id": "governance.devai-config",
+      "status": "implemented",
+      "evidence": "devai.config.json"
     }
   ]
 }

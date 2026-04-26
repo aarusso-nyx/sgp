@@ -13,10 +13,16 @@
     "watch:portal": "ng build sgp-portal --watch --configuration development",
     "test": "ng test sgp-admin --watch=false",
     "test:admin": "ng test sgp-admin --watch=false",
-    "test:portal": "ng test sgp-portal --watch=false"
+    "test:portal": "ng test sgp-portal --watch=false",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.portal.app.json && tsc --noEmit -p tsconfig.spec.json && tsc --noEmit -p tsconfig.portal.spec.json"
   },
   "private": true,
-  "packageManager": "npm@11.10.1",
+  "packageManager": "npm@11.12.1",
+  "engines": {
+    "node": ">=24.0.0 <25",
+    "npm": ">=11.12.1 <12"
+  },
   "dependencies": {
     "@angular/cdk": "^21.2.7",
     "@angular/common": "^21.2.0",

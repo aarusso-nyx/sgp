@@ -1,0 +1,60 @@
+banco,tipo_aresta,escopo_dependencia,rubrica_origem_alias,rubrica_origem_codigo,rubrica_origem_descricao,rubrica_destino_alias,rubrica_destino_codigo,rubrica_destino_descricao,formula_destino
+rhlinkcon,dependencia_rubrica,direta,vencimento,1101,Vencimento,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon,dependencia_rubrica,direta,titulacao_aperfeicoamento,1107,Adicional de Titulação e Aperfeiçoamento,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon,dependencia_rubrica,direta,vale_transporte,4963,Vale Transporte,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon,dependencia_rubrica,direta,vencimento,1101,Vencimento,titulacao_aperfeicoamento,1107,Adicional de Titulação e Aperfeiçoamento,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon,dependencia_rubrica,direta,vencimento,1101,Vencimento,vale_transporte,4963,Vale Transporte,r{vencimento} * 0.06
+rhlinkcon_motor,dependencia_rubrica,direta,vencimento,1101,Vencimento,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_motor,dependencia_rubrica,direta,titulacao_aperfeicoamento,1107,Adicional de Titulação e Aperfeiçoamento,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_motor,dependencia_rubrica,direta,vale_transporte,4963,Vale Transporte,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_motor,dependencia_rubrica,direta,vencimento,1101,Vencimento,titulacao_aperfeicoamento,1107,Adicional de Titulação e Aperfeiçoamento,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon_motor,dependencia_rubrica,interna_em_a{inss(r{vencimento}+r{gratificacao_regencia_classe})},vencimento,1101,Vencimento,inss,124,INSS,a{inss(r{vencimento}+r{gratificacao_regencia_classe})}
+rhlinkcon_motor,dependencia_rubrica,interna_em_a{inss(r{vencimento}+r{gratificacao_regencia_classe})},gratificacao_regencia_classe,1112,Gratificação por Regência de Classe,inss,124,INSS,a{inss(r{vencimento}+r{gratificacao_regencia_classe})}
+rhlinkcon_motor,dependencia_rubrica,direta,vencimento,1101,Vencimento,vale_transporte,4963,Vale Transporte,r{vencimento} * 0.06
+rhlinkcon_20190701,dependencia_rubrica,direta,vencimento,1101,Vencimento,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_20190701,dependencia_rubrica,direta,titulacao_aperfeicoamento,1107,Adicional de Titulação e Aperfeiçoamento,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_20190701,dependencia_rubrica,direta,vale_transporte,4963,Vale Transporte,salario,1000,Salário,"salario = r{vencimento} + r{titulacao_aperfeicoamento} 
+salario = salario - r{vale_transporte} 
+salario*1"
+rhlinkcon_20190701,dependencia_rubrica,direta,vencimento,1101,Vencimento,titulacao_aperfeicoamento,1107,Adicional de Titulação e Aperfeiçoamento,"percent = 0 
+SE ( ""o{grauInstrucao}"" == ""SUPERIOR_COMPLETO"") 
+ENTAO percent = 0.07
+SENAO_SE ( ""o{grauInstrucao}"" == ""ESPECIALIZACAO_POS_GRADUACAO"" ) 
+ENTAO percent = 0.1
+SENAO_SE ( ""o{grauInstrucao}"" == ""MESTRADO"") 
+ENTAO percent = 0.12 
+FIM_SE 
+r{vencimento} * percent"
+rhlinkcon_20190701,dependencia_rubrica,direta,vencimento,1101,Vencimento,vale_transporte,4963,Vale Transporte,r{vencimento} * 0.06

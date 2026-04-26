@@ -19,10 +19,7 @@ describe('permissionGuard', () => {
     vi.clearAllMocks();
 
     TestBed.configureTestingModule({
-      providers: [
-        provideRouter([]),
-        { provide: Permission, useValue: permission },
-      ],
+      providers: [provideRouter([]), { provide: Permission, useValue: permission }],
     });
 
     router = TestBed.inject(Router);

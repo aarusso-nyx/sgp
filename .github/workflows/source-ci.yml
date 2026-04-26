@@ -1,0 +1,106 @@
+name: Source CI
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/source-ci.yml'
+      - 'devai.config.json'
+      - 'docs/eng/**'
+      - 'docs/governance/**'
+      - 'docs/legacy-reverse/deprecation-status.md'
+      - 'source/**'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - '.github/workflows/source-ci.yml'
+      - 'devai.config.json'
+      - 'docs/eng/**'
+      - 'docs/governance/**'
+      - 'docs/legacy-reverse/deprecation-status.md'
+      - 'source/**'
+
+jobs:
+  source-gates:
+    name: Source workspace gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sgp_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d sgp_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: source
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/sgp_ci
+      SGP_DB_ALIGNMENT_PHASE: full_closure
+      CI: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+
+      - name: Install source workspace dependencies
+        run: npm ci
+
+      - name: Lint check
+        run: npm run lint:check
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: API route alignment
+        run: npm run api:alignment:check -- --json
+
+      - name: DB alignment
+        run: npm run db:alignment:check -- --json
+
+      - name: Runtime health JSON
+        run: npm run health:json
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Integration smoke
+        run: npm run test:int
+
+      - name: Backend e2e
+        run: npm --workspace backend run test:e2e -- --runInBand
+
+      - name: Build
+        run: npm run build
+
+      - name: Backend coverage
+        run: npm --workspace backend run test:cov -- --runInBand
+
+      - name: Governance validation
+        run: npm run governance:check
+
+      - name: Upload backend coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: source/backend/coverage
+          if-no-files-found: ignore

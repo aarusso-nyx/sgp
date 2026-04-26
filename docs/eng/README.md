@@ -7,6 +7,7 @@ This directory is the authoritative engineering and product specification source
 - If `docs/eng` conflicts with reverse docs, `docs/eng` wins.
 - For payroll engine internals, folia-derived implementation decisions may supersede specs; unresolved conflicts must be escalated.
 - Keep file numbering and structure stable to preserve cross-references.
+- Reverse evidence from `docs/legacy-reverse` must be succeeded here before it can be treated as current product/runtime truth.
 
 ## Key artifacts
 
@@ -23,3 +24,15 @@ This directory is the authoritative engineering and product specification source
 - `68-alinhamento-banco-relatorio-fechamento.md`
 - `70-adrs.md`
 - `71-folia-engine-reconciliation.md`
+
+## Reverse Evidence Succession
+
+The 2026-04-26 reverse-engineering wave is canonicalized in:
+
+- `40-divisao-modular.md` §11
+- `43-maquinas-estado.md` "Refinamentos da Evidência Reversa de 2026-04-26"
+- `50-arvore-menus.md` §7.4
+- `60-catalogo-saidas-oficiais.md` §14
+- `62-estrategia-testes.md` §6.2 baseline
+- `63-guia-migracao-legado.md` §13
+- `71-folia-engine-reconciliation.md` "Reverse evidence folded in on 2026-04-26"

@@ -271,14 +271,12 @@ export const ADMIN_FEATURES: AdminFeature[] = RAW_ADMIN_FEATURES.trim()
     };
   });
 
-export const ADMIN_NAVIGATION_SECTIONS: AdminNavigationSection[] = ADMIN_MODULES.map(
-  (module) => ({
-    moduleLabel: module.label,
-    moduleKey: module.key,
-    routePath: module.routePath,
-    items: ADMIN_FEATURES.filter((feature) => feature.moduleKey === module.key),
-  }),
-);
+export const ADMIN_NAVIGATION_SECTIONS: AdminNavigationSection[] = ADMIN_MODULES.map((module) => ({
+  moduleLabel: module.label,
+  moduleKey: module.key,
+  routePath: module.routePath,
+  items: ADMIN_FEATURES.filter((feature) => feature.moduleKey === module.key),
+}));
 
 export const ADMIN_FEATURES_BY_MODULE: Record<AdminModuleKey, AdminFeature[]> =
   ADMIN_MODULES.reduce(

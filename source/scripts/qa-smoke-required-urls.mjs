@@ -14,8 +14,7 @@ const groups = [
     name: 'Backend auth/domain smoke',
     keys: ['QA_API_BASE_URL', 'API_BASE_URL'],
     example: 'http://127.0.0.1:3000',
-    note:
-      'Required for tests/backend/e2e/*.test.mjs. Unsigned-token runs also need AUTH_ALLOW_UNSIGNED_TEST_TOKENS=true on the running backend.',
+    note: 'Required for tests/backend/e2e/*.test.mjs. Unsigned-token runs also need AUTH_ALLOW_UNSIGNED_TEST_TOKENS=true on the running backend.',
   },
   {
     name: 'Admin frontend smoke',
@@ -80,9 +79,7 @@ if (asJson) {
   console.log('[qa-smoke] required live base URLs');
   for (const group of status) {
     if (group.configured) {
-      console.log(
-        `[qa-smoke] OK ${group.name}: ${group.configured_key}=${group.configured_value}`,
-      );
+      console.log(`[qa-smoke] OK ${group.name}: ${group.configured_key}=${group.configured_value}`);
       continue;
     }
     console.log(

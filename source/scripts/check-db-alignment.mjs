@@ -16,7 +16,10 @@ const tenantMigrationPaths = [
   resolve(cwd, 'backend/prisma/migrations/20260426003000_rh_correlates_module/migration.sql'),
   resolve(cwd, 'backend/prisma/migrations/20260426013000_folha_core_module/migration.sql'),
   resolve(cwd, 'backend/prisma/migrations/20260426030000_folha_accounting_catalogs/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260426043000_avaliacao_consultas_previdenciario_module/migration.sql'),
+  resolve(
+    cwd,
+    'backend/prisma/migrations/20260426043000_avaliacao_consultas_previdenciario_module/migration.sql',
+  ),
   resolve(cwd, 'backend/prisma/migrations/20260426070000_gestao_structure_links/migration.sql'),
   resolve(cwd, 'backend/prisma/migrations/20260426100000_residue_cluster_support/migration.sql'),
   resolve(cwd, 'backend/prisma/migrations/20260426123000_db_full_closure_residuals/migration.sql'),

@@ -18,6 +18,18 @@ Define how folia payroll engine improvements are applied in SGP runtime implemen
 - Deterministic evaluation strategy with cache-aware execution.
 - Runtime diagnostics suitable for audit and reconciliation.
 
+## Reverse evidence folded in on 2026-04-26
+
+The legacy formula artifacts under `docs/legacy-reverse/modules/folha/calculo/` are evidence inputs for the SGP engine port. They do not override folia precedence, but they define the legacy behavior that the engine must reconcile during shadow mode:
+
+- `formulas-lista-completa.csv`: raw legacy formula inventory by restored database.
+- `formulas-dependencias.csv` and `formulas-grafo.csv`: dependency graph evidence used to validate extraction and cycle detection.
+- `formulas-dependencias-analise.md`: semantic reading of relevant chains such as salary, base remuneration, INSS, transport allowance, and qualification additions.
+- `formulas-ordem-calculo.md`: probable topological execution order; the SGP runtime must record the actual evaluated order per calculation.
+- `verbas-formulas-atributos.md`: observed formula tokens, persisted attributes, aliquot usage, and differences between `rhlinkcon` and `rhlinkcon_motor`.
+
+Any high-impact difference between the folia engine behavior and these legacy outputs must be handled through the conflict rule below.
+
 ## Port target inside SGP
 
 - Runtime SQL implementation: `source/database/sql/25-payroll-formula-engine.sql`

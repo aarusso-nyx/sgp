@@ -1467,4 +1467,28 @@ graph TD
 
 ---
 
+## 11. Sucessão da Evidência Reversa de 2026-04-26
+
+Os levantamentos em `docs/legacy-reverse/data-archaeology/` e `docs/legacy-reverse/modules/` são evidência de descoberta. A divisão modular canônica para o SGP Moderno é a tabela abaixo; o legado não cria novos bounded contexts nem reabre escopo postergado.
+
+| Evidência reversa | Contexto canônico | Decisão de arquitetura |
+|---|---|---|
+| `modules/funcionario/*` | `pessoa`, `rh`, `organizacao`, `gestao`, `arquivos` | Pessoa civil fica separada do vínculo funcional. Posse, lotação, transferência, situação funcional, dossiê, observações e verbas vinculadas ao servidor pertencem ao `rh`; cadastros estruturantes ficam em `organizacao`/`gestao`; anexos usam `arquivos`/S3. |
+| `modules/folha/*` | `folha`, `sgp-payroll-engine`, `sgp-integrations-worker`, `sgp-report-service` | O `sgp-core-api` orquestra competência, folha, população pagável, lançamentos, importações e leitura de contracheques. O cálculo e a ordem de fórmulas ficam no `sgp-payroll-engine`; remessas, retornos, DIRF/SIPREV/CNAB ficam nos workers; PDFs/XLSX ficam no report service. |
+| `modules/pericias/*` | `saude`, `rh`, `arquivos` | Regulação de agenda e atendimento clínico são subdomínios do `saude`. Laudos/licenças publicam eventos para `rh` atualizar afastamentos/situação funcional; anexos e documentos clínicos usam o módulo `arquivos`. |
+| `modules/recadastramento/*` | `previdenciario`, `pessoa`, `arquivos`, `sgp-portal` | Campanha/carteira, atendimento, histórico de ligações, comprovantes e API pública de prova de vida pertencem ao `previdenciario`. Endereço/contato confirmado retroalimenta `pessoa`; comprovantes e anexos usam `arquivos`; autoatendimento fica no portal. |
+| `modules/recrutamento/*` | `recrutamento`, `pessoa`, `organizacao`, `arquivos`, `notificacoes` | Demanda de pessoal e pipeline de seleção são camadas internas do mesmo bounded context. Banco de talentos, currículo, análise curricular e estágio consomem pessoa/organização e usam arquivos/notificações por contrato. |
+| `data-archaeology/*` | `63-guia-migracao-legado.md`, `50-arvore-menus.md`, `64-*` a `68-*` | Dumps SQL Server, superfícies provadas e achados operacionais são insumos de migração/alinhamento. Nenhum nome físico legado se torna contrato runtime. |
+
+### 11.1 Regras de fronteira confirmadas
+
+- A nomenclatura legada `funcionario` continua sendo termo de negócio, mas o modelo físico separa `pessoa` de `funcionario/vinculo`.
+- Fórmulas de folha, dependências entre verbas e atributos calculáveis são responsabilidade do engine; telas e APIs de folha apenas solicitam cálculo e leem resultados.
+- Recadastramento permanece em `previdenciario`, mesmo quando a jornada atualiza dados civis ou usa canal público.
+- Perícia médica não grava situação funcional diretamente; ela publica decisão homologada/licença para o `rh`.
+- Recrutamento não vira submódulo de RH; integração ocorre por eventos de nomeação, estágio e desligamento.
+- Arrecadação Previdenciária, árvore administrativa completa, identidade OAuth/Cognito/Gov.br e transmissão real de eSocial continuam fora do escopo corrente até decisão de owner.
+
+---
+
 *Documento gerado em 2026-04-21. Referências: BRIEF.md, docs legados `/Users/aarusso/Downloads/interno-rh/docs/` (especialmente `06-modulos-prioritarios-detalhados.md`, `52-folha-verbas-formulas-atributos.md`, `34-rotinas-operacionais-jobs-e-integracoes.md`).*

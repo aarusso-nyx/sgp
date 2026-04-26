@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { UserSession } from '../models/user-session';
-import {
-  LEGACY_MODULE_ROUTES,
-  LEGACY_NAVIGATION_MANIFEST,
-} from './legacy-navigation.manifest';
+import { LEGACY_MODULE_ROUTES, LEGACY_NAVIGATION_MANIFEST } from './legacy-navigation.manifest';
 import {
   LegacyModuleKey,
   LegacyModuleRouteEntry,

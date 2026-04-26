@@ -1372,6 +1372,22 @@ Cada evento de `EXPORT` ou `PRINT` grava em `audit_log`:
 
 ---
 
+## §14 Sucessão de Saídas Provadas em 2026-04-26
+
+Os novos artefatos reversos confirmam saídas documentais e operacionais que já têm destino canônico neste catálogo. A tabela abaixo é o registro de sucessão; documentos não listados continuam como evidência até nova decisão de owner.
+
+| Evidência reversa | Saída canônica | Critério de paridade |
+|---|---|---|
+| `modules/funcionario/mapa-fino.md` e `pessoa-x-vinculo.md` | Ficha funcional, dossiê do servidor, documento de amparo e histórico operacional (§3) | CPF/pessoa, matrícula/vínculo, lotação, cargo/função, situação funcional, documentos e eventos da vida funcional devem reconciliar com o legado por servidor amostrado. |
+| `modules/folha/mapa-fino.md` | Contracheque servidor/pensionista, resumo de folha, folha por lotação/verba/fonte, ficha financeira, CNAB, DIRF/SIPREV/eSocial (§1 e §9) | Totais por verba, líquido, contagens por folha, layout de remessa e PDFs devem respeitar as tolerâncias de §1 e do guia de migração. |
+| `modules/folha/calculo/*` | Relatório de reconciliação de fórmulas e memória de cálculo (§1, §11.3 de `62-estrategia-testes.md`, §6 de `63-guia-migracao-legado.md`) | A ordem de cálculo, dependências, atributos e divergências devem ser arquivados com a competência e o contracheque usados no shadow mode. |
+| `modules/pericias/*` | Laudo pericial, licença médica, encaminhamento especializado, documentos de SST (§4) | CID, tipo de laudo, dias concedidos, restrições, decisão homologada e anexos clínicos devem ser íntegros e auditáveis. |
+| `modules/recadastramento/*` | Comprovante, notificação e relatório de pendências de recadastramento (§6) | Status por beneficiário, protocolo, próximo vencimento, comprovante e histórico de ligações devem bater com a campanha de origem. |
+| `modules/recrutamento/*` | Edital/relatório de requisição, resultado de análise, termo de nomeação, contrato/prorrogação/rescisão de estágio (§5) | Demanda aprovada, candidatos vinculados, decisão curricular e eventos de estágio devem preservar histórico e responsável. |
+| `data-archaeology/dumps-eixo-folha-tabelas.md` | Anexos, modelos de documento e evidências de saída | Tabelas documentais genéricas são insumo de migração; saída oficial só nasce quando mapeada neste catálogo ou em ADR posterior. |
+
+---
+
 ## Apêndice A — Engines e Dependências de Geração
 
 | Engine | Uso | Pacote npm |

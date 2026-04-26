@@ -30,9 +30,19 @@ const steps = [
     args: ['run', 'health:json'],
   },
   {
-    name: 'lint',
+    name: 'lint-check',
     command: npm,
-    args: ['run', 'lint'],
+    args: ['run', 'lint:check'],
+  },
+  {
+    name: 'format-check',
+    command: npm,
+    args: ['run', 'format:check'],
+  },
+  {
+    name: 'typecheck',
+    command: npm,
+    args: ['run', 'typecheck'],
   },
   {
     name: 'openapi-client-generate',
@@ -78,6 +88,11 @@ const steps = [
     requiredEnv: ['DATABASE_URL'],
   },
   {
+    name: 'governance-check',
+    command: npm,
+    args: ['run', 'governance:check'],
+  },
+  {
     name: 'qa-smoke-url-config',
     command: node,
     args: ['scripts/qa-smoke-required-urls.mjs', '--check'],
@@ -103,9 +118,7 @@ function hasRequiredEnvironment(step) {
 function runStep(step) {
   const required = hasRequiredEnvironment(step);
   if (!required.ok) {
-    console.error(
-      `[evidence] BLOCKED ${step.name}: missing ${required.missing.join(', ')}`,
-    );
+    console.error(`[evidence] BLOCKED ${step.name}: missing ${required.missing.join(', ')}`);
     return {
       name: step.name,
       status: 'blocked',
@@ -133,9 +146,7 @@ function runStep(step) {
   }
 
   if (step.blockedPattern?.test(output)) {
-    console.error(
-      `[evidence] BLOCKED ${step.name}: smoke tests reported blocked evidence`,
-    );
+    console.error(`[evidence] BLOCKED ${step.name}: smoke tests reported blocked evidence`);
     return {
       name: step.name,
       status: 'blocked',

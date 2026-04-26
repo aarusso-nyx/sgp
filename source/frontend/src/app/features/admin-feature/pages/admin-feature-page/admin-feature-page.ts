@@ -197,8 +197,7 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
       generateAuditTrail: true,
     });
     this.formOpen = true;
-    this.message =
-      event.actionId === 'details' ? 'Registro aberto em modo de consulta.' : '';
+    this.message = event.actionId === 'details' ? 'Registro aberto em modo de consulta.' : '';
   }
 
   save(): void {
@@ -245,7 +244,7 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
 
   private resetWorkspace(mode: AdminFeatureMode): void {
     this.formOpen = mode === 'form' || mode === 'details';
-    this.editingRecord = this.formOpen ? this.records[0] ?? null : null;
+    this.editingRecord = this.formOpen ? (this.records[0] ?? null) : null;
     const selected = this.editingRecord;
     this.form.reset({
       code: selected?.code ?? this.feature.requiredRole.split('.')[0] ?? '',
@@ -274,9 +273,7 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
   }
 
   private findFirstFeatureForModule(moduleKey: string | undefined): AdminFeature {
-    return (
-      ADMIN_FEATURES.find((feature) => feature.moduleKey === moduleKey) ?? ADMIN_FEATURES[0]
-    );
+    return ADMIN_FEATURES.find((feature) => feature.moduleKey === moduleKey) ?? ADMIN_FEATURES[0];
   }
 
   private seedRecords(feature: AdminFeature, routeId: string | null): WorkspaceRecord[] {

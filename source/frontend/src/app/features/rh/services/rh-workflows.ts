@@ -115,10 +115,7 @@ export class RhWorkflows {
       .pipe(map((result) => this.toEmployee({ ...(result as object), id, status: 'INACTIVE' })));
   }
 
-  listWorkflow(
-    workflow: string,
-    query: RhQuery = {},
-  ): Observable<PagedResult<RhWorkflowRecord>> {
+  listWorkflow(workflow: string, query: RhQuery = {}): Observable<PagedResult<RhWorkflowRecord>> {
     return of({
       items: [],
       page: query.page ?? 1,
@@ -132,11 +129,7 @@ export class RhWorkflows {
     return of(this.toWorkflowRecord({ workflow, ...body, id: crypto.randomUUID() }));
   }
 
-  updateWorkflow(
-    workflow: string,
-    id: string,
-    body: RhMutation,
-  ): Observable<RhWorkflowRecord> {
+  updateWorkflow(workflow: string, id: string, body: RhMutation): Observable<RhWorkflowRecord> {
     return of(this.toWorkflowRecord({ workflow, ...body, id }));
   }
 

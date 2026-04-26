@@ -63,9 +63,7 @@ export class AuditEvents {
   constructor(private readonly api: OpenApiClient) {}
 
   list(query: AuditEventQuery = {}): Observable<PagedResult<AuditEventRecord>> {
-    return this.api
-      .getApiV1AuditoriaLogs(query)
-      .pipe(map((result) => this.toPagedResult(result)));
+    return this.api.getApiV1AuditoriaLogs(query).pipe(map((result) => this.toPagedResult(result)));
   }
 
   actionFacets(query: AuditEventQuery = {}): Observable<AuditFacet[]> {
@@ -73,10 +71,7 @@ export class AuditEvents {
   }
 
   tableFacets(query: AuditEventQuery = {}): Observable<AuditFacet[]> {
-    return this.buildFacets(
-      query,
-      (item) => item.tableName ?? item.resourceType,
-    );
+    return this.buildFacets(query, (item) => item.tableName ?? item.resourceType);
   }
 
   userFacets(query: AuditEventQuery = {}): Observable<AuditFacet[]> {

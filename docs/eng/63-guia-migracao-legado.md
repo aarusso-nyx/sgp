@@ -1,7 +1,7 @@
 # Guia de Migração do Legado SGP → SGP Moderno
 
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
-**Escopo:** todos os bounded contexts | **Depende de:** BRIEF.md, 42-extracao-operacional-dumps-sqlserver.md, 43-inventario-real-bases-restauradas.csv, 50-inventario-tabelas-relacionadas-funcionario-verba-folha.csv, 52-folha-verbas-formulas-atributos.md, 54-menus-de-folha-tabelas-preenchidas-e-lacunas.md, 55-sintese-transversal-das-trilhas-de-folha.md, 63-lista-completa-formulas-folha-bancos.csv, 64-extracao-formulas-folha-bancos.md
+**Escopo:** todos os bounded contexts | **Depende de:** BRIEF.md, ../legacy-reverse/data-archaeology/dumps-extracao-operacional.md, ../legacy-reverse/modules/folha/calculo/verbas-formulas-atributos.md, ../legacy-reverse/modules/folha/sintese-trilhas.md, ../legacy-reverse/modules/folha/calculo/formulas-lista-completa.csv, ../legacy-reverse/modules/folha/calculo/formulas-extracao.md
 
 ---
 
@@ -1652,6 +1652,39 @@ Para cada tenant migrado, arquivar em S3 (`sgp-{tenant}-relatorios/migracao/`):
 - [ ] Evidências de paridade de contracheques (comparativo PDF ou planilha)
 - [ ] Dump final do legado antes do corte (S3 Glacier)
 - [ ] Ata de autorização do corte
+
+---
+
+## 13. Sucessão dos Achados Reversos de 2026-04-26
+
+Os achados em `docs/legacy-reverse` viram critérios de migração quando apontam dado, documento, regra ou jornada que deve reconciliar com o SGP Moderno. Eles não são fonte de verdade runtime.
+
+### 13.1 Dados e dumps
+
+- Os bancos restaurados, superfícies provadas e achados operacionais são usados para montar inventário de extração, plano de staging e amostras de homologação.
+- Tabelas documentais genéricas (`modelo_documento`, `anexo`, `funcionario_anexo`, `anexo_processo`) alimentam migração de anexos e templates; só viram saída oficial quando mapeadas em `60-catalogo-saidas-oficiais.md`.
+- Qualquer ausência relevante detectada nos dumps deve ser tratada como limitação de evidência, não como dispensa de requisito já especificado em `docs/eng`.
+
+### 13.2 Funcionário
+
+- Separar pessoa civil, vínculo/matrícula e eventos de vida funcional antes da carga final.
+- Migrar posse, lotação, transferência, situação funcional, afastamentos, dossiê, observações e documentos de amparo com `_legado_id` rastreável.
+- Reaproveitar pessoa por CPF quando houver múltiplos vínculos; conflitos de CPF/documento exigem fila de saneamento.
+- Homologar ficha funcional por amostra com dados civis, vínculo, cargos/funções, lotações, situações e anexos.
+
+### 13.3 Folha
+
+- Migrar competência, folha, população pagável, contracheque, lançamentos, verbas de servidor/pensionista, importações e consignados como cadeia transacional.
+- A ordem de cálculo e dependências de fórmulas devem ser reconciliadas pelo `sgp-payroll-engine`; divergências acima da tolerância entram no relatório de reconciliação.
+- Fórmulas brutas permanecem evidência; o contrato canônico é o comportamento folia-first descrito em `71-folia-engine-reconciliation.md`.
+- Relatórios, remessas e retornos devem reconciliar totais, layout e rastreabilidade com o catálogo de saídas.
+
+### 13.4 Perícia, recadastramento e recrutamento
+
+- Perícia migra agenda, atendimento, prontuário, laudo, licença, CID, médico/especialidade e anexos clínicos; a atualização de situação funcional ocorre por evento para RH.
+- Recadastramento migra campanha/carteira, beneficiário, atendimento, histórico de ligações, anexos, comprovante e canal público quando habilitado.
+- Recrutamento migra requisição, função requerida, tramitação, candidatos, banco de talentos, análise curricular e estágio preservando responsável e status.
+- Cada domínio deve ter contagens, amostras documentais e trilha de auditoria arquivadas junto ao pacote de homologação.
 
 ---
 

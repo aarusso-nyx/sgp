@@ -1286,4 +1286,43 @@ A tabela abaixo cruza as 18 máquinas de estado com os papéis que disparam tran
 
 ---
 
+## Refinamentos da Evidência Reversa de 2026-04-26
+
+Os mapas finos de funcionário, folha, perícia, recadastramento e recrutamento confirmam as máquinas acima e acrescentam regras canônicas que devem ser preservadas no runtime novo.
+
+### Folha
+
+- A competência é o lock de ciclo: abertura, fechamento, reabertura e refechamento controlam se folhas, lançamentos e contracheques aceitam mutação.
+- A folha é sempre recortada por competência, filial e tipo de processamento; inclusão de servidor/pensionista exige elegibilidade funcional/previdenciária na competência.
+- Lançamento manual, importação de verbas de servidor, importação de verbas de pensionista e importação de consignado entram como lotes rastreáveis antes da efetivação.
+- Reprocessamento total, reprocessamento de pendentes e recálculo individual usam a mesma transição para `em_calculo`, mas mantêm motivo, usuário e escopo do disparo na memória de cálculo.
+- Dependências entre verbas formam grafo dirigido; o engine deve recusar ciclos e registrar a ordem efetiva executada.
+
+### Recadastramento
+
+- A carteira da prova de vida é derivada de campanha, tipo de beneficiário, vencimento, histórico de atendimento e último status validado.
+- Atendimento de aposentado e pensionista compartilha a máquina de prova de vida, mas pensionista mantém validações próprias de instituidor, cota e condição universitária quando aplicável.
+- Ligações, anexos, comprovante individual e histórico formal são eventos ou documentos associados ao ciclo; não substituem o estado canônico do beneficiário.
+- Canal público/autoatendimento só participa quando `PROVA_VIDA_PUBLIC_API_ENABLED=true` e deve produzir evidência auditável equivalente ao atendimento interno.
+
+### Perícia Médica
+
+- Agenda/regulação e atendimento clínico são fases separadas: a primeira controla data, médico, especialidade e comparecimento; a segunda controla prontuário, CID, parecer, laudo e licença.
+- Homologação de laudo ou concessão de licença publica evento para `rh` atualizar afastamento/situação funcional; o módulo `saude` preserva o prontuário e a decisão médica.
+- Falta, reagendamento, pendência de validação e atendimento concluído são estados distintos para evitar perda de rastreabilidade operacional.
+
+### Funcionário e Vínculo
+
+- CPF identifica `pessoa`; matrícula e vínculo identificam a relação funcional com o tenant.
+- Posse, lotação, transferência, cedência, desligamento, afastamento e situação funcional são eventos de vínculo, não mutações soltas no cadastro civil.
+- Dossiê, documento de amparo e observações permanentes ficam associados ao servidor/vínculo e participam da ficha funcional.
+
+### Recrutamento
+
+- Requisição de pessoal tem camada de demanda: abertura, motivação, função requerida, quantitativo, lotação, aprovação e conclusão.
+- Pipeline de seleção tem camada própria: captação, vínculo de currículo, análise curricular, convocação, entrevista, nomeação ou rejeição.
+- Banco de talentos e estágio são reutilizáveis pelo contexto, mas não alteram a máquina da requisição sem evento explícito.
+
+---
+
 *Fim do documento. Para refinamentos ou ADRs decorrentes deste artefato, criar `adr/0002-state-machines-refinamentos.md`.*

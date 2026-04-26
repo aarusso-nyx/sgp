@@ -16,9 +16,7 @@ describe('NavigationFilter', () => {
       permissions: ['gestao.listar'],
     };
 
-    expect(
-      service.canAccess({ requiredPermissions: ['gestao.editar'] }, session),
-    ).toBe(false);
+    expect(service.canAccess({ requiredPermissions: ['gestao.editar'] }, session)).toBe(false);
   });
 
   it('allows access only when all permissions and groups are present', () => {

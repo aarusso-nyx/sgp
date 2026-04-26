@@ -9,13 +9,7 @@ import { Shell } from '../../shared-platform/shell/shell';
 
 @NgModule({
   declarations: [ConfirmationDialog],
-  imports: [
-    CommonModule,
-    SharedPlatformRoutingModule,
-    CrudTable,
-    FilterBar,
-    Shell,
-  ],
+  imports: [CommonModule, SharedPlatformRoutingModule, CrudTable, FilterBar, Shell],
   exports: [ConfirmationDialog, CrudTable, FilterBar, Shell],
 })
 export class SharedPlatformModule {}

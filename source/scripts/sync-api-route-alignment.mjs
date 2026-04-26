@@ -91,7 +91,11 @@ const DOMAIN_RUNTIME_HINTS = {
   },
   relatorios: {
     route_prefixes: ['/api/v1/relatorios', '/api/v1/reports', '/api/v1/report-service'],
-    source_prefixes: ['backend/src/relatorio/', 'backend/src/reports/', 'backend/src/report-service/'],
+    source_prefixes: [
+      'backend/src/relatorio/',
+      'backend/src/reports/',
+      'backend/src/report-service/',
+    ],
   },
   previdenciario: {
     route_prefixes: ['/api/v1/previdenciario'],
@@ -146,9 +150,7 @@ function normalizePath(path) {
     .replace(/\/+/g, '/');
 
   const [withoutQuery] = cleaned.split(/[?#]/);
-  const withLeadingSlash = withoutQuery.startsWith('/')
-    ? withoutQuery
-    : `/${withoutQuery}`;
+  const withLeadingSlash = withoutQuery.startsWith('/') ? withoutQuery : `/${withoutQuery}`;
 
   return withLeadingSlash.endsWith('/') && withLeadingSlash.length > 1
     ? withLeadingSlash.slice(0, -1)
@@ -164,15 +166,11 @@ function listAuthorityDocs() {
 }
 
 function listDomainWorkflowMenuDocs() {
-  return DOMAIN_WORKFLOW_MENU_DOCS.map((relativePath) =>
-    resolve(repoRoot, relativePath),
-  );
+  return DOMAIN_WORKFLOW_MENU_DOCS.map((relativePath) => resolve(repoRoot, relativePath));
 }
 
 function listSupplementalRuntimeRouteDocs() {
-  return SUPPLEMENTAL_RUNTIME_ROUTE_DOCS.map((relativePath) =>
-    resolve(repoRoot, relativePath),
-  );
+  return SUPPLEMENTAL_RUNTIME_ROUTE_DOCS.map((relativePath) => resolve(repoRoot, relativePath));
 }
 
 function deferredScopeForRoute(route) {
@@ -272,12 +270,8 @@ function parseDocumentedRoutes(docFiles) {
 }
 
 function mergeRuntimeBackedDocumentedRoutes(primaryRoutes, supplementalRoutes, runtimeRoutes) {
-  const runtimeKeys = new Set(
-    runtimeRoutes.map((route) => routeKey(route.method, route.path)),
-  );
-  const merged = new Map(
-    primaryRoutes.map((route) => [routeKey(route.method, route.path), route]),
-  );
+  const runtimeKeys = new Set(runtimeRoutes.map((route) => routeKey(route.method, route.path)));
+  const merged = new Map(primaryRoutes.map((route) => [routeKey(route.method, route.path), route]));
 
   for (const route of supplementalRoutes) {
     const key = routeKey(route.method, route.path);
@@ -298,7 +292,8 @@ function parseDomainModules() {
   const briefPath = resolve(repoRoot, 'docs/eng/BRIEF.md');
   const content = readFileSync(briefPath, 'utf8');
   const rows = [];
-  const pattern = /^\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|\s*([^|]+?)\s*\|$/gm;
+  const pattern =
+    /^\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|\s*([^|]+?)\s*\|$/gm;
   let match;
   while ((match = pattern.exec(content)) !== null) {
     const menu = match[1].trim();
@@ -326,9 +321,7 @@ function buildDomainAlignment(domainModules, runtimeRoutes) {
       source_prefixes: [`backend/src/${domain.nest_module}/`],
     };
     const routeEvidence = runtimeRoutes
-      .filter((route) =>
-        hints.route_prefixes.some((prefix) => routeMatchesPrefix(route, prefix)),
-      )
+      .filter((route) => hints.route_prefixes.some((prefix) => routeMatchesPrefix(route, prefix)))
       .slice(0, 8)
       .map((route) => ({
         method: route.method,
@@ -344,10 +337,7 @@ function buildDomainAlignment(domainModules, runtimeRoutes) {
 
     return {
       ...domain,
-      status:
-        routeEvidence.length > 0 || sourceEvidence.length > 0
-          ? 'implemented'
-          : 'missing',
+      status: routeEvidence.length > 0 || sourceEvidence.length > 0 ? 'implemented' : 'missing',
       route_evidence: routeEvidence,
       source_evidence: [...new Set(sourceEvidence)],
       frontend_status: 'postponed_admin_tree',
@@ -362,10 +352,7 @@ function parseMarkdownTableRoutes(markdown, sectionStart, sectionEnd) {
   const startIndex = markdown.indexOf(sectionStart);
   if (startIndex < 0) return [];
   const endIndex = sectionEnd ? markdown.indexOf(sectionEnd, startIndex) : -1;
-  const section = markdown.slice(
-    startIndex,
-    endIndex > startIndex ? endIndex : markdown.length,
-  );
+  const section = markdown.slice(startIndex, endIndex > startIndex ? endIndex : markdown.length);
   const routes = [];
 
   for (const line of section.split(/\r?\n/)) {
@@ -392,10 +379,7 @@ function parsePortalRuntimePaths() {
     'frontend/portal/src/app/core/portal/portal-feature-catalog.ts',
   );
   const content = readFileSync(catalogPath, 'utf8');
-  return [
-    '/',
-    ...[...content.matchAll(/path:\s*'([^']+)'/g)].map((match) => match[1]),
-  ];
+  return ['/', ...[...content.matchAll(/path:\s*'([^']+)'/g)].map((match) => match[1])];
 }
 
 function pathMatchesPattern(pattern, actual) {
@@ -403,9 +387,7 @@ function pathMatchesPattern(pattern, actual) {
   const escaped = pattern
     .split('/')
     .map((segment) =>
-      segment.startsWith(':')
-        ? '[^/]+'
-        : segment.replace(/[.+?^${}()|[\]\\]/g, '\\$&'),
+      segment.startsWith(':') ? '[^/]+' : segment.replace(/[.+?^${}()|[\]\\]/g, '\\$&'),
     )
     .join('/');
   return new RegExp(`^${escaped}$`).test(actual);
@@ -431,8 +413,7 @@ function buildMenuAlignment() {
     deferred_scope: 'ADMIN_INSTALL_LATER',
   }));
   const portalRows = portalMenuRoutes.map((route) => {
-    const deferred =
-      route.module === 'auth' ? 'IDENTITY_INSTALL_LATER' : undefined;
+    const deferred = route.module === 'auth' ? 'IDENTITY_INSTALL_LATER' : undefined;
     const implemented = portalRuntimePaths.some((runtimePath) =>
       pathMatchesPattern(route.path, runtimePath),
     );
@@ -454,9 +435,7 @@ function buildMenuAlignment() {
       routes: adminRows,
     },
     portal: {
-      status: portalRows.some((row) => row.status === 'missing')
-        ? 'missing'
-        : 'implemented',
+      status: portalRows.some((row) => row.status === 'missing') ? 'missing' : 'implemented',
       documented_routes: portalRows.length,
       implemented: portalRows.filter((row) => row.status === 'implemented').length,
       postponed: portalRows.filter((row) => row.status === 'postponed').length,
@@ -479,15 +458,11 @@ function main() {
   const deferredDocumentedRoutes = documentedRoutesAll
     .map((route) => ({ route, scope: deferredScopeForRoute(route) }))
     .filter((entry) => entry.scope);
-  const documentedRoutes = documentedRoutesAll.filter(
-    (route) => !deferredScopeForRoute(route),
-  );
+  const documentedRoutes = documentedRoutesAll.filter((route) => !deferredScopeForRoute(route));
   const deferredRuntimeRoutes = runtimeRoutes
     .map((route) => ({ route, scope: deferredScopeForRoute(route) }))
     .filter((entry) => entry.scope);
-  const currentRuntimeRoutes = runtimeRoutes.filter(
-    (route) => !deferredScopeForRoute(route),
-  );
+  const currentRuntimeRoutes = runtimeRoutes.filter((route) => !deferredScopeForRoute(route));
 
   const runtimeByKey = new Map(
     currentRuntimeRoutes.map((route) => [routeKey(route.method, route.path), route]),
@@ -529,24 +504,15 @@ function main() {
         (family) => route.path === family || route.path.startsWith(`${family}/`),
       ),
   );
-  const domainAlignment = buildDomainAlignment(
-    parseDomainModules(),
-    currentRuntimeRoutes,
-  );
+  const domainAlignment = buildDomainAlignment(parseDomainModules(), currentRuntimeRoutes);
   const menuAlignment = buildMenuAlignment();
 
   const output = {
     generated_at: new Date().toISOString().slice(0, 10),
     authority: [
-      ...new Set([
-        ...authorityDocs,
-        ...domainWorkflowMenuDocs,
-        ...supplementalRuntimeRouteDocs,
-      ]),
+      ...new Set([...authorityDocs, ...domainWorkflowMenuDocs, ...supplementalRuntimeRouteDocs]),
     ].map((file) => file.replace(`${repoRoot}/`, '')),
-    route_contract_authority: authorityDocs.map((file) =>
-      file.replace(`${repoRoot}/`, ''),
-    ),
+    route_contract_authority: authorityDocs.map((file) => file.replace(`${repoRoot}/`, '')),
     domain_workflow_menu_authority: domainWorkflowMenuDocs.map((file) =>
       file.replace(`${repoRoot}/`, ''),
     ),
@@ -564,9 +530,7 @@ function main() {
       deferred_documented: deferredDocumentedRoutes.length,
       deferred_runtime: deferredRuntimeRoutes.length,
       implemented: routes.filter((route) => route.status === 'implemented').length,
-      explicitly_excluded: routes.filter(
-        (route) => route.status === 'explicitly_excluded',
-      ).length,
+      explicitly_excluded: routes.filter((route) => route.status === 'explicitly_excluded').length,
       documented_missing: documentedMissing.length,
       runtime_only: runtimeOnly.length,
       runtime_outside_families: runtimeOutsideFamilies.length,

@@ -22,8 +22,7 @@ export function getBaseUrl(name, fallbackNames = []) {
 
 export function testWhen(name, requiredValue, options, fn) {
   if (!requiredValue) {
-    const skipReason =
-      options.skipReason ?? 'Required smoke-test configuration is missing.';
+    const skipReason = options.skipReason ?? 'Required smoke-test configuration is missing.';
     blockedSkips.push({ name, skipReason });
     console.warn(`[qa-smoke] BLOCKED ${name}: ${skipReason}`);
     if (!blockedSkipSummaryRegistered) {

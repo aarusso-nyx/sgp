@@ -29,6 +29,13 @@ The current implementation covers:
 - Document module S3-compatible flow with MiniIO permitted for tests when S3 is
   not configured.
 - QA bootstrap support for local API/admin/portal smoke execution.
+- Reverse-engineering evidence from 2026-04-26 is canonicalized in
+  `docs/eng` successor sections and tracked in
+  `docs/legacy-reverse/deprecation-status.md`.
+- Source workspace CI/governance baseline is installed with Node 24, npm,
+  single `source/package-lock.json`, non-mutating lint/format/typecheck gates,
+  alignment gates, health JSON, tests, build, coverage, and governance
+  validation.
 
 ## Current Verification
 
@@ -90,6 +97,12 @@ The current status is based on these gates:
 - Backend e2e, DB smoke, and backend coverage gates are green.
 - QA smoke is real evidence: required base URLs were bootstrapped locally and
   live backend/frontend smoke tests passed.
+- Reverse evidence coverage is no longer `not_covered` for the 2026-04-26
+  artifact wave; raw formula CSVs and dump inventories remain partial evidence
+  with canonical targets in `docs/eng`.
+- `.github/workflows/source-ci.yml` is the active CI entry point for the
+  `source/` workspace. The older workflow under `source/.github` remains a
+  source-local reference and is not the root GitHub Actions entry point.
 
 ### Accepted Future-Version Arrecadacao Scope
 
@@ -111,8 +124,8 @@ not current implementation blockers:
 - Arrecadacao Previdenciaria.
 - Real eSocial external transmission, production certificates, and homologation.
 - Final `./infra` strategy choice.
-- Governance/release gates such as CI policy gates, Pact/scanners, and
-  production observability enforcement.
+- Release/homologation gates such as Pact/scanners and production observability
+  enforcement.
 
 ## Remaining Open Work
 
@@ -124,7 +137,8 @@ Open work is limited to deferred product/operations decisions:
 - Decide and implement the final infrastructure strategy.
 - Replace eSocial stub/sandbox behavior with real external integration when that
   version is scheduled.
-- Reintroduce governance/release gates when the postponed gate scope is approved.
+- Expand beyond the source CI baseline into full release/homologation gates when
+  the postponed gate scope is approved.
 
 ## Notes
 

@@ -40,19 +40,7 @@ function runCommand(command, args, workdir = cwd) {
 }
 
 function runPrismaDbExecute(filePath) {
-  runCommand(
-    'npm',
-    [
-      'exec',
-      '--',
-      'prisma',
-      'db',
-      'execute',
-      '--file',
-      filePath,
-    ],
-    backendDir,
-  );
+  runCommand('npm', ['exec', '--', 'prisma', 'db', 'execute', '--file', filePath], backendDir);
 }
 
 async function runSqlSnippet(fileName, sql) {
@@ -214,7 +202,9 @@ END
 $$;
     `,
   );
-  console.log('[db-smoke] validated schema split, tenant coverage, RLS, and portal read-only privileges');
+  console.log(
+    '[db-smoke] validated schema split, tenant coverage, RLS, and portal read-only privileges',
+  );
 
   console.log('[db-smoke] PASSED');
 }

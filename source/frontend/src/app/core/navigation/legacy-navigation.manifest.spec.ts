@@ -24,7 +24,9 @@ describe('legacy navigation manifest', () => {
   });
 
   it('maps documented admin menu routes to modern route paths', () => {
-    const gestaoSection = LEGACY_NAVIGATION_MANIFEST.find((section) => section.moduleKey === 'gestao');
+    const gestaoSection = LEGACY_NAVIGATION_MANIFEST.find(
+      (section) => section.moduleKey === 'gestao',
+    );
     const bancos = gestaoSection?.items.find((item) => item.label === 'Banco');
 
     expect(bancos?.routePath).toBe('/gestao/banco/gestao');

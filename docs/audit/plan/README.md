@@ -27,7 +27,7 @@ Scope decisions added on 2026-04-26:
 - Admin frontend tree, backend admin routes, and identity/OAuth/Cognito/Gov.br paths remain postponed under `ADMIN_INSTALL_LATER` and `IDENTITY_INSTALL_LATER`.
 - eSocial remains a stub/sandbox external provider for the current package.
 - Tests may use Docker MiniIO when S3 is not configured.
-- `./infra` implementation strategy and governance gates are postponed until a later owner decision.
+- `./infra` implementation strategy and release-grade governance gates are postponed until a later owner decision. The source workspace now has a baseline CI/governance gate in `.github/workflows/source-ci.yml`.
 
 ## Executed Prompt Sequence
 

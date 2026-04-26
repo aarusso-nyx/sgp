@@ -111,9 +111,7 @@ export class MasterData {
               return true;
             }
             const search = query.search.toLowerCase();
-            return `${item.code} ${item.name} ${item.description}`
-              .toLowerCase()
-              .includes(search);
+            return `${item.code} ${item.name} ${item.description}`.toLowerCase().includes(search);
           });
 
         return {

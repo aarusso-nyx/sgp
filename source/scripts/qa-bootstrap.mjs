@@ -176,8 +176,7 @@ if (!databaseUrl) {
 const env = {
   ...process.env,
   DATABASE_URL: databaseUrl,
-  AUTH_ALLOW_UNSIGNED_TEST_TOKENS:
-    process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS ?? 'true',
+  AUTH_ALLOW_UNSIGNED_TEST_TOKENS: process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS ?? 'true',
   QA_API_BASE_URL: ensureUrl(
     'QA_API_BASE_URL',
     process.env.QA_API_BASE_URL ?? process.env.API_BASE_URL ?? defaults.apiBaseUrl,
@@ -266,8 +265,6 @@ try {
     stopServices(status);
   }
 } catch (error) {
-  console.error(
-    `[qa-bootstrap] ${error instanceof Error ? error.message : String(error)}`,
-  );
+  console.error(`[qa-bootstrap] ${error instanceof Error ? error.message : String(error)}`);
   stopServices(1);
 }

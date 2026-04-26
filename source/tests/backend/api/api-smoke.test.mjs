@@ -5,21 +5,17 @@ import { getBaseUrl, testWhen } from '../../lib/env.mjs';
 import { requestJson } from '../../lib/http.mjs';
 
 const apiBaseUrl = getBaseUrl('QA_API_BASE_URL', ['API_BASE_URL']);
-const skipReason = 'Set QA_API_BASE_URL or API_BASE_URL to run API smoke tests against a Nest backend.';
+const skipReason =
+  'Set QA_API_BASE_URL or API_BASE_URL to run API smoke tests against a Nest backend.';
 
 describe('SGP API smoke', () => {
-  testWhen(
-    'returns root API metadata',
-    apiBaseUrl,
-    { skipReason },
-    async () => {
-      const { response, body } = await requestJson(apiBaseUrl, '/api/v1');
+  testWhen('returns root API metadata', apiBaseUrl, { skipReason }, async () => {
+    const { response, body } = await requestJson(apiBaseUrl, '/api/v1');
 
-      assert.equal(response.status, 200);
-      assert.equal(body.service, 'sgp-core-api');
-      assert.equal(body.status, 'ok');
-    },
-  );
+    assert.equal(response.status, 200);
+    assert.equal(body.service, 'sgp-core-api');
+    assert.equal(body.status, 'ok');
+  });
 
   testWhen(
     'returns health status and keeps request ids visible',

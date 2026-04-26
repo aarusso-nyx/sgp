@@ -4,10 +4,16 @@
   "description": "",
   "author": "",
   "private": true,
+  "packageManager": "npm@11.12.1",
+  "engines": {
+    "node": ">=24.0.0 <25",
+    "npm": ">=11.12.1 <12"
+  },
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start --entryFile main",
     "start:dev": "nest start --watch --entryFile main",
     "start:debug": "nest start --debug --watch --entryFile main",
@@ -28,6 +34,8 @@
     "start:report-service:dev": "nest start --watch --entryFile main-report-service",
     "start:report-service:prod": "node dist/main-report-service",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint:check": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage --rootDir . --testRegex \"(src/.*\\\\.spec\\\\.ts|test/.*\\\\.e2e-spec\\\\.ts)$\" --setupFiles \"<rootDir>/test/test-env.ts\" --collectCoverageFrom \"src/**/*.ts\" --collectCoverageFrom \"!src/**/*.spec.ts\" --collectCoverageFrom \"!src/main*.ts\" --collectCoverageFrom \"!src/**/*.controller.ts\" --collectCoverageFrom \"!src/**/*.dto.ts\" --collectCoverageFrom \"!src/**/*.module.ts\" --collectCoverageFrom \"!src/config/environment.ts\" --collectCoverageFrom \"!src/common/pagination/paged-response.ts\" --collectCoverageFrom \"!src/common/errors/standard-exception.filter.ts\" --coverageDirectory coverage",

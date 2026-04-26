@@ -29,14 +29,16 @@ export function buildModuleRouteGroup(
       continue;
     }
 
-    routes.push(routeForEntry(moduleKey, entry.childPath, component, {
-      featureRoutePath: entry.routePath,
-      requiredRole: entry.requiredRole,
-      featureFlag: entry.featureFlag,
-      legacyRoute: entry.legacyRoute,
-      permissions: entry.requiredPermissions ?? [],
-      groups: entry.requiredGroups ?? [],
-    }));
+    routes.push(
+      routeForEntry(moduleKey, entry.childPath, component, {
+        featureRoutePath: entry.routePath,
+        requiredRole: entry.requiredRole,
+        featureFlag: entry.featureFlag,
+        legacyRoute: entry.legacyRoute,
+        permissions: entry.requiredPermissions ?? [],
+        groups: entry.requiredGroups ?? [],
+      }),
+    );
   }
 
   routes.push({

@@ -4,8 +4,8 @@ This guide is for local development of `source/`.
 
 ## 1. Prerequisites
 
-- Node.js `>=22`
-- npm `>=11`
+- Node.js `>=24 <25`
+- npm `>=11.12.1 <12`
 - Docker (optional, for local PostgreSQL workflows)
 - PostgreSQL (optional if not using Docker)
 

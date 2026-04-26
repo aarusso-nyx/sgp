@@ -16,11 +16,7 @@ describe('Permission', () => {
     vi.clearAllMocks();
 
     TestBed.configureTestingModule({
-      providers: [
-        Permission,
-        NavigationFilter,
-        { provide: CognitoAuth, useValue: auth },
-      ],
+      providers: [Permission, NavigationFilter, { provide: CognitoAuth, useValue: auth }],
     });
 
     service = TestBed.inject(Permission);
@@ -59,11 +55,11 @@ describe('Permission', () => {
       permissions: ['rh.listar'],
     });
 
-    expect(
-      service.allows({ requiredPermissions: ['rh.listar'], requiredGroups: ['rh'] }),
-    ).toBe(true);
-    expect(
-      service.allows({ requiredPermissions: ['rh.listar'], requiredGroups: ['gestao'] }),
-    ).toBe(false);
+    expect(service.allows({ requiredPermissions: ['rh.listar'], requiredGroups: ['rh'] })).toBe(
+      true,
+    );
+    expect(service.allows({ requiredPermissions: ['rh.listar'], requiredGroups: ['gestao'] })).toBe(
+      false,
+    );
   });
 });
