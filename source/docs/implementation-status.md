@@ -1,122 +1,135 @@
 # Implementation Status
 
-This document tracks implementation progress for SGP v0.0.1.
+This document tracks the current implementation state for SGP v0.0.1 after the stale
+`docs/audit/diag` and `docs/audit/inv` evidence snapshots were removed.
 
-## Architecture Reset
+Last reassessed: 2026-04-26 by running the final reassessment gates from
+`docs/audit/plan/05-final-reassessment.prompt.md`.
 
-Status: split runtime topology is now first-class in the workspace.
+## Current Scope
 
-Implemented:
+Status: current non-deferred scope is aligned with the authoritative `docs/eng`
+specifications.
 
-- Runtime topology manifest in `source/runtime/topology.json` covering:
-  - `sgp-admin`
-  - `sgp-portal`
-  - `sgp-core-api`
-  - `sgp-portal-api`
-  - scaffold entries for `sgp-payroll-engine`, `sgp-esocial-worker`, `sgp-integrations-worker`, and `sgp-report-service`
-- Workspace orchestration now starts the documented admin/portal/API runtimes instead of the earlier single-frontend shorthand.
-- Angular workspace now exposes two SPAs:
-  - `sgp-admin` on the existing `src/` application tree
-  - `sgp-portal` on `portal/src/`, with documented portal sections and routes derived from `docs/eng/50-arvore-menus.md`
-- OpenAPI generation now emits admin artifacts plus a dedicated portal generated client/spec destination.
-- Runtime entrypoints exist for the planned split service/worker runtimes, and `sgp-integrations-worker` now processes the Folha export contract path (`remessa.gerar`, `retorno.processar`, `gfip.gerada`) against persisted `report_request` jobs.
+The current implementation covers:
 
-## Current Vertical Slice: Gestao Master Data, RH Workflows, and Auditoria
+- Split runtime topology for `sgp-admin`, `sgp-portal`, `sgp-core-api`,
+  `sgp-portal-api`, `sgp-payroll-engine`, `sgp-esocial-worker`,
+  `sgp-integrations-worker`, and `sgp-report-service`.
+- Canonical API route alignment for the current SGP route set.
+- Portal menu/workflow route parity for current portal scope.
+- Full database closure for in-scope legacy objects, with tenant-aware canonical
+  runtime targets.
+- PostgreSQL-only runtime persistence, Prisma models, SQL support files, seed
+  orchestration, tenant session context, and RLS policy coverage.
+- Current domain modules for Gestao, RH workflows, Folha orchestration,
+  eSocial stub/sandbox processing, Saude/Pericia, SST support catalogs,
+  Recrutamento, Avaliacao, Consultas Gerenciais, Previdenciario, portal,
+  public, and external API surfaces.
+- Document module S3-compatible flow with MiniIO permitted for tests when S3 is
+  not configured.
+- QA bootstrap support for local API/admin/portal smoke execution.
 
-Status: PostgreSQL-only foundation implemented; feature expansion remains incremental.
+## Current Verification
 
-Implemented:
+The current status is based on these gates:
 
-- Backend read endpoints for observed Gestao master-data resources.
-- Backend mutation endpoints for master-data records:
-  - `POST /api/v1/master-data/:resource`
-  - `PATCH /api/v1/master-data/:resource/:id`
-  - `DELETE /api/v1/master-data/:resource/:id`
-- Runtime persistence is PostgreSQL-only. There is no application in-memory fallback.
-- Payroll formula engine primitives ported from folia into SGP SQL runtime:
-  - schema `payroll_calc`
-  - compile/evaluate functions
-  - dependency and circular-reference safeguards
-  - cache table and trigger wiring
-- Server-side Cognito group permission enforcement:
-  - read requires `gestao:read`
-  - mutations require `gestao:write`
-- Protected IAM permission-catalog endpoint (`GET /api/v1/iam/permissions`) requires `iam:read`.
-- Standard DTO validation for code, name, description, active flag, and metadata.
-- PostgreSQL mappings for all currently exposed Gestao master-data resources.
-- Dedicated RH workflow APIs and Angular workspace for employees, dependents, experience, frequency, status history, service time, transfers, salary history, complement data, vacations, leaves, and organic definitions.
-- Auditoria search workspace with period/user/table/action filters, facets, detail panel, and audit report request.
-- Audit backend split into query and writer services with redaction and richer request context.
-- Read-only PostgreSQL mappings for resources that require dedicated workflows rather than generic CRUD:
-  - `empresaFilial` -> `hr.branch`
-  - `responsavelLegal` -> `hr.legal_responsible`
-  - `usuario` -> `public.user_account`
-- Explicit PostgreSQL runtime tables and Prisma models for legacy routes that had no normalized table yet:
-  - `business_day`
-  - `file_export_job`
-  - `consignment_import_job`
-  - `employee_payroll_item_import_job`
-  - `competence_period`
-- Prisma baseline schema for the inferred SGP relational model.
-- Deterministic database seed orchestration from `source/database/seed/*.json` and SQL seed files.
-- Angular Gestao page with:
-  - route-aware resource selection
-  - filter bar
-  - CRUD table
-  - create/edit form
-  - deactivate row action
-  - error/status messages
-- Unit/e2e coverage for backend mutation flow and frontend page behavior.
-- Document module S3 flow:
-  - `POST /api/v1/arquivos/presigned-upload`
-  - `PATCH /api/v1/arquivos/:id/confirmar`
-  - `GET /api/v1/arquivos/:id/download`
-  - `GET /api/v1/arquivos/:id/download-audit`
-  - audit records for upload/register/download actions
+- `npm run qa:bootstrap -- --evidence`
+  - OK.
+  - Ran with `DATABASE_URL=postgresql://aarusso@localhost:5432/pecam-test`.
+  - Started local API, admin frontend, and portal frontend for live QA smoke.
+  - Completed all evidence steps: route sync/check, DB alignment, health, lint,
+    OpenAPI client generation, full build, frontend tests, backend tests, DB
+    smoke, backend coverage, URL validation, and live QA smoke.
+- `npm run api:alignment:check -- --json`
+  - OK.
+  - `153` current documented routes.
+  - `0` documented missing routes.
+  - `0` runtime-only routes.
+  - `11/11` current SGP domain modules covered.
+  - Portal menu alignment green.
+  - Admin menu parity postponed under `ADMIN_INSTALL_LATER`.
+- `npm run db:alignment:check -- --json`
+  - OK.
+  - `full_closure` covers `150` in-scope objects.
+  - `0` deferred full-closure objects.
+  - `0` in-scope explicit exclusions.
+  - Tenant session, RLS helper, RLS policy, and portal projection checks green.
+- `npm run health:json`
+  - OK.
+  - All declared runtimes are present and healthy.
+- `npm --workspace frontend run build:portal`
+  - OK.
+- `npm run test:portal`
+  - OK: `2` files and `3` tests passed.
+- `npm --workspace backend run test:e2e -- --runInBand`
+  - OK: `1` suite and `18` tests passed.
+- `npm run db:smoke`
+  - OK.
+- `npm --workspace backend run test:cov -- --runInBand`
+  - OK: `60` suites and `201` tests passed.
+  - Coverage: statements `94.91%`, branches `85.09%`, functions `97.21%`,
+    lines `95.56%`.
+- Live QA smoke
+  - OK: backend API/auth/domain smoke passed `10` tests.
+  - OK: admin/portal frontend smoke passed `4` tests.
 
-- Admin domain modules now backed by runtime persistence:
-  - `users`: `/api/v1/admin/usuarios`
-  - `profiles`: `/api/v1/admin/perfis`
-  - `system-parameters`: `/api/v1/admin/parametros/*` and `/api/v1/admin/feature-flags/:chave`
-  - `reports`: `/api/v1/reports/requests`
-  - `avaliacao`: `/api/v1/avaliacao/*`
-  - `consultas`: `/api/v1/consultas/*`
-  - `previdenciario`: `/api/v1/previdenciario/*`
-- Additional documented API families exposed in runtime:
-  - `/api/portal/v1/*`
-  - `/api/external/v1/*`
-  - `/api/publico/v1/*`
+## Final Reassessment
 
-Evidence source:
+### Closed Gaps
 
-- Legacy routes and menus (evidence archive): `inventories/routes.json`, `inventories/menus.json`
-- Legacy screen/action observations (evidence archive): `inventories/screens.json`, `inventories/actions.json`
-- Reverse database inference (evidence archive): `docs/legacy-reverse/database-model.md`
-- Modern implementation: `source/backend/src/gestao`, `source/backend/prisma/schema.prisma`, `source/database/sql`
+- Database full closure is green for current scope: `150` full-closure objects,
+  `0` deferred objects, and `0` in-scope explicit exclusions.
+- Route alignment is green for current scope: `153` documented runtime routes,
+  `0` documented missing routes, and `0` runtime-only routes.
+- Domain/workflow/menu parity is green for current non-deferred scope:
+  `11/11` current domain modules covered, portal menu alignment green, and
+  admin menu parity explicitly postponed.
+- Runtime topology is green: all declared runtimes report implemented/healthy.
+- Portal build and portal tests are green.
+- Backend e2e, DB smoke, and backend coverage gates are green.
+- QA smoke is real evidence: required base URLs were bootstrapped locally and
+  live backend/frontend smoke tests passed.
 
-Runtime requirements:
+### Accepted Future-Version Arrecadacao Scope
 
-- `DATABASE_URL` is required for master-data record endpoints.
-- Prisma migrations must be applied before SQL support files.
-- SQL support files must be applied in lexical order.
-- Missing PostgreSQL schema objects produce explicit service-unavailable errors rather than fallback data.
+Arrecadacao Previdenciaria remains later-version scope. It is outside current
+route, menu, DB, frontend, backend, authorization, and test gates until
+`docs/eng` explicitly reinstates it as current scope.
 
-Known limits:
+### Current-Scope Blockers
 
-- Generic master-data CRUD intentionally supports only tables whose required fields can be represented by the shared DTO plus metadata. Complex resources remain read-only until dedicated workflow endpoints are implemented.
-- Resource-specific UI fields such as bank digit, blocked flag, branch type, legislation details, and payroll earning kind are represented through metadata today; richer dynamic Angular forms are still pending.
-- Delete currently means deactivate/soft-delete. Hard delete behavior has not been confirmed from legacy evidence.
-- Audit records are appended for implemented mutations when audit persistence is configured.
-- The implementation now covers Gestao master-data and structure links, RH workflow slices, Folha orchestration, eSocial event queuing/XML generation, Saude/Pericia plus SST support catalogs, Recrutamento, Avaliacao, Consultas Gerenciais, and a broader Previdenciario slice including rules, simulations, concessions, pensoes, certidoes, declaracoes, recadastramento history, and queued official outputs; remaining parity gaps are concentrated in residual DB exclusions, portal workflows, and still-scaffolded runtimes.
-- `sgp-portal` currently closes route/menu shell parity for the documented self-service tree; domain workflows behind those routes remain wave-based closure work.
-- Runtime implementation intentionally avoids backwards compatibility schemas/shims in v0.0.1.
+None known.
 
-## Remaining High-Priority Parity Work
+## Deferred Scope
 
-- Add dedicated workflow endpoints for complex Gestao resources: public agencies/branches, legal responsible users, and Cognito-backed users.
-- Extend audit capture to future modules as they are implemented.
-- Expand dynamic forms from observed `inventories/screens.json` field definitions.
-- Expand RH lookup fields into autocomplete selectors and complete employee registry detail tabs.
-- Implement Folha de Pgt payroll/remittance workflows.
-- Expand the remaining worker runtimes (`sgp-payroll-engine`, `sgp-esocial-worker`, `sgp-report-service`) beyond their current scaffold state.
-- Add browser e2e coverage once Cognito local/test auth flow is stable.
+The following items are intentionally postponed by `docs/eng` decisions and are
+not current implementation blockers:
+
+- Admin frontend tree and backend administrative route installation.
+- OAuth/Cognito/Gov.br identity paths and administrative identity management.
+- Arrecadacao Previdenciaria.
+- Real eSocial external transmission, production certificates, and homologation.
+- Final `./infra` strategy choice.
+- Governance/release gates such as CI policy gates, Pact/scanners, and
+  production observability enforcement.
+
+## Remaining Open Work
+
+No non-deferred implementation blocker is currently known.
+
+Open work is limited to deferred product/operations decisions:
+
+- Install the admin tree and identity flows when the owner reopens that scope.
+- Decide and implement the final infrastructure strategy.
+- Replace eSocial stub/sandbox behavior with real external integration when that
+  version is scheduled.
+- Reintroduce governance/release gates when the postponed gate scope is approved.
+
+## Notes
+
+- `docs/audit/diag` and `docs/audit/inv` were removed because they were stale
+  derived evidence snapshots. Current verification should be produced from live
+  commands instead of relying on those archived artifacts.
+- `docs/eng` remains the authoritative source for SGP v0.0.1 scope and
+  acceptance.

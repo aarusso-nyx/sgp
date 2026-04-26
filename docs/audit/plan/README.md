@@ -1,17 +1,26 @@
-# Next Sprint SGP Gap Closure Plan
+# Historical SGP Gap Closure Plan
 
-Grounded in the current audit package generated at `2026-04-25T23:24:29.504Z` under `docs/audit/inv/` and `docs/audit/diag/`.
+These prompts document the gap-closure sprint that was executed for SGP v0.0.1.
+They are retained as planning history, not as current implementation evidence.
+
+The derived evidence snapshots that originally lived under `docs/audit/inv/` and
+`docs/audit/diag/` were removed after becoming stale. Current implementation
+status is tracked in `source/docs/implementation-status.md` and should be
+verified from live commands.
 
 ## Source Boundaries
 
 - `docs/eng/` remains authoritative for v0.0.1 architecture, domain scope, contracts, and acceptance.
 - `docs/sql-reference/` remains the legacy database coverage baseline.
 - `docs/legacy-reverse/` remains evidence only and must not override `docs/eng/`.
-- `docs/audit/inv/` and `docs/audit/diag/` are derived snapshots. Refresh them during final reassessment.
+- `source/docs/implementation-status.md` is the current status document.
+- `docs/audit/plan/` is historical planning material only.
 
 ## Sprint Boundary
 
-This next sprint closes the remaining implementation gaps currently accepted by `docs/eng/`. Arrecadacao is later-version scope and must not be treated as a v0.0.1 route, UI, DB, or test blocker.
+This sprint closed the implementation gaps that were in scope at the time.
+Arrecadacao is later-version scope and must not be treated as a v0.0.1 route,
+UI, DB, or test blocker.
 
 Scope decisions added on 2026-04-26:
 
@@ -20,7 +29,7 @@ Scope decisions added on 2026-04-26:
 - Tests may use Docker MiniIO when S3 is not configured.
 - `./infra` implementation strategy and governance gates are postponed until a later owner decision.
 
-## Prompt Sequence
+## Executed Prompt Sequence
 
 | Order | Prompt | Purpose |
 |---|---|---|
@@ -28,11 +37,11 @@ Scope decisions added on 2026-04-26:
 | 2 | `02-runtime-services.prompt.md` | Replace scaffolded payroll, eSocial, and report runtimes with implemented entrypoints. |
 | 3 | `03-portal-and-contract-cleanup.prompt.md` | Fix portal build/test gaps, frontend contract mismatch, and compatibility alias wording. |
 | 4 | `04-test-gates-and-coverage.prompt.md` | Make backend e2e, DB smoke, QA smoke semantics, and coverage gates truthful. |
-| 5 | `05-final-reassessment.prompt.md` | Refresh audit inventories/diagnostics and classify remaining gaps. |
+| 5 | `05-final-reassessment.prompt.md` | Reassess current gates and classify remaining gaps. |
 
 Future Arrecadacao scope is tracked separately in `future-arrecadacao.prompt.md`.
 
-## Definition of Done
+## Historical Definition of Done
 
 - `docs/eng/64-database-alignment-matrix.json` has no in-scope explicit exclusions left; `dbo.sysdiagrams` remains the only approved technical out-of-scope object unless `docs/eng/` explicitly approves another exclusion.
 - Scaffolded runtime status is removed for `sgp-payroll-engine`, `sgp-esocial-worker`, and `sgp-report-service`.
