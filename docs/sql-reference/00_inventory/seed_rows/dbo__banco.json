@@ -1,0 +1,13 @@
+[
+  {
+    "id": "1",
+    "created_at": "1900-01-01T00:00:00.000Z",
+    "updated_at": "1900-01-01T00:00:00.000Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "bloqueado": false,
+    "codigo": "1",
+    "nome": "teste",
+    "principal": true
+  }
+]

@@ -1,0 +1,73 @@
+
+> sgp-modernization-source@0.1.0 test:frontend
+> npm --workspace frontend run test:admin
+
+
+> frontend@0.0.0 test:admin
+> ng test sgp-admin --watch=false
+
+❯ Building...
+✔ Building...
+Initial chunk files                                                                  | Names                                                                             |  Raw size
+spec-app-features-rh-pages-rh-home-rh-home.js                                        | spec-app-features-rh-pages-rh-home-rh-home                                        |  48.94 kB | 
+spec-app-features-auditoria-pages-auditoria-home-auditoria-home.js                   | spec-app-features-auditoria-pages-auditoria-home-auditoria-home                   |  42.90 kB | 
+spec-app-features-admin-feature-pages-admin-feature-page-admin-feature-page.js       | spec-app-features-admin-feature-pages-admin-feature-page-admin-feature-page       |  35.28 kB | 
+chunk-GL5EIU3R.js                                                                    | -                                                                                 |  30.04 kB | 
+spec-app-features-gestao-pages-gestao-home-gestao-home.js                            | spec-app-features-gestao-pages-gestao-home-gestao-home                            |  29.03 kB | 
+chunk-OKKTEZZN.js                                                                    | -                                                                                 |  28.23 kB | 
+chunk-WVHZJPO3.js                                                                    | -                                                                                 |  18.91 kB | 
+chunk-LBLKX3EP.js                                                                    | -                                                                                 |  13.60 kB | 
+styles.css                                                                           | styles                                                                            |   9.84 kB | 
+chunk-5RBRNADL.js                                                                    | -                                                                                 |   8.72 kB | 
+chunk-ZXN4VWGC.js                                                                    | -                                                                                 |   8.08 kB | 
+chunk-37VYPUUD.js                                                                    | -                                                                                 |   5.06 kB | 
+chunk-RSTWSNOR.js                                                                    | -                                                                                 |   4.75 kB | 
+chunk-5EGGQZGA.js                                                                    | -                                                                                 |   4.74 kB | 
+chunk-GKIIVIVI.js                                                                    | -                                                                                 |   4.17 kB | 
+chunk-OA3R76A6.js                                                                    | -                                                                                 |   2.81 kB | 
+spec-app-shared-platform-shell-shell.js                                              | spec-app-shared-platform-shell-shell                                              |   2.15 kB | 
+spec-app-features-folha-pagamento-pages-folha-pagamento-home-folha-pagamento-home.js | spec-app-features-folha-pagamento-pages-folha-pagamento-home-folha-pagamento-home |   2.14 kB | 
+chunk-2QAZ2QXR.js                                                                    | -                                                                                 |   2.06 kB | 
+spec-app-features-gestao-services-master-data.js                                     | spec-app-features-gestao-services-master-data                                     |   1.98 kB | 
+chunk-632JPHY3.js                                                                    | -                                                                                 |   1.97 kB | 
+spec-app-features-relatorio-pages-relatorio-home-relatorio-home.js                   | spec-app-features-relatorio-pages-relatorio-home-relatorio-home                   |   1.96 kB | 
+spec-app-app.js                                                                      | spec-app-app                                                                      |   1.94 kB | 
+spec-app-features-convenio-pages-convenio-home-convenio-home.js                      | spec-app-features-convenio-pages-convenio-home-convenio-home                      |   1.93 kB | 
+spec-app-core-auth-permission.js                                                     | spec-app-core-auth-permission                                                     |   1.92 kB | 
+chunk-ORXMS7X6.js                                                                    | -                                                                                 |   1.88 kB | 
+spec-app-core-auth-auth-guard.js                                                     | spec-app-core-auth-auth-guard                                                     |   1.74 kB | 
+spec-app-features-rh-services-rh-workflows.js                                        | spec-app-features-rh-services-rh-workflows                                        |   1.71 kB | 
+spec-app-core-navigation-navigation-filter.js                                        | spec-app-core-navigation-navigation-filter                                        |   1.65 kB | 
+chunk-4W4AMQZ3.js                                                                    | -                                                                                 |   1.64 kB | 
+spec-app-features-auditoria-services-audit-events.js                                 | spec-app-features-auditoria-services-audit-events                                 |   1.62 kB | 
+spec-app-shared-platform-filter-bar-filter-bar.js                                    | spec-app-shared-platform-filter-bar-filter-bar                                    |   1.57 kB | 
+spec-app-core-auth-permission-guard.js                                               | spec-app-core-auth-permission-guard                                               |   1.54 kB | 
+spec-app-shared-platform-crud-table-crud-table.js                                    | spec-app-shared-platform-crud-table-crud-table                                    |   1.42 kB | 
+chunk-7D5EDADN.js                                                                    | -                                                                                 |   1.33 kB | 
+spec-app-core-navigation-legacy-navigation.manifest.js                               | spec-app-core-navigation-legacy-navigation.manifest                               |   1.30 kB | 
+init-testbed.js                                                                      | init-testbed                                                                      |   1.21 kB | 
+spec-app-core-navigation-admin-feature-catalog.js                                    | spec-app-core-navigation-admin-feature-catalog                                    |   1.12 kB | 
+spec-app-core-audit-action-audit.js                                                  | spec-app-core-audit-action-audit                                                  |   1.10 kB | 
+spec-app-shared-platform-confirmation-dialog-confirmation-dialog.js                  | spec-app-shared-platform-confirmation-dialog-confirmation-dialog                  |   1.08 kB | 
+spec-app-shared-platform-crud-crud.js                                                | spec-app-shared-platform-crud-crud                                                |   1.04 kB | 
+spec-app-reports-report.js                                                           | spec-app-reports-report                                                           |   1.02 kB | 
+vitest-mock-patch.js                                                                 | vitest-mock-patch                                                                 | 969 bytes | 
+spec-app-core-http-auth-token-interceptor.js                                         | spec-app-core-http-auth-token-interceptor                                         | 923 bytes | 
+spec-app-core-http-error-interceptor.js                                              | spec-app-core-http-error-interceptor                                              | 753 bytes | 
+chunk-35X24TDI.js                                                                    | -                                                                                 | 568 bytes | 
+spec-app-core-auth-cognito-auth.js                                                   | spec-app-core-auth-cognito-auth                                                   | 470 bytes | 
+spec-app-core-api-api-client.js                                                      | spec-app-core-api-api-client                                                      | 458 bytes | 
+
+                                                                                     | Initial total                                                                     | 341.26 kB
+
+Application bundle generation complete. [3.549 seconds] - 2026-04-26T04:06:19.083Z
+
+
+ RUN  v4.1.4 /Users/aarusso/Development/stech/sgp/source/frontend
+
+
+ Test Files  28 passed (28)
+      Tests  56 passed (56)
+   Start at  01:06:19
+   Duration  3.17s (transform 652ms, setup 2.87s, import 4.88s, tests 5.58s, environment 22.22s)
+

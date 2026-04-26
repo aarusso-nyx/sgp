@@ -1,0 +1,30 @@
+[
+  {
+    "type": "DEFAULT_CONSTRAINT",
+    "count": 7
+  },
+  {
+    "type": "FOREIGN_KEY_CONSTRAINT",
+    "count": 255
+  },
+  {
+    "type": "primary_key",
+    "count": 143
+  },
+  {
+    "type": "scalar_function",
+    "count": 1
+  },
+  {
+    "type": "SQL_STORED_PROCEDURE",
+    "count": 7
+  },
+  {
+    "type": "unique_constraint",
+    "count": 1
+  },
+  {
+    "type": "USER_TABLE",
+    "count": 151
+  }
+]

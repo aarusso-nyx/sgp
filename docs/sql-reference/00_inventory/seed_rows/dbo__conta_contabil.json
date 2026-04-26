@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "empresa_id": "2",
+    "filial_id": null,
+    "centro_custo_id": "1",
+    "tipo_conta": "DEBITO",
+    "conta": 122,
+    "rateio": 0,
+    "rateio_total": 0,
+    "created_at": "2019-06-07T14:23:33.464Z",
+    "updated_at": "2019-06-07T14:23:33.464Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "id_verba": null
+  },
+  {
+    "id": "2",
+    "empresa_id": "1",
+    "filial_id": null,
+    "centro_custo_id": "1",
+    "tipo_conta": "CREDITO",
+    "conta": 222,
+    "rateio": 0,
+    "rateio_total": 0,
+    "created_at": "2019-06-07T14:23:49.777Z",
+    "updated_at": "2019-06-07T14:23:49.777Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "id_verba": null
+  }
+]

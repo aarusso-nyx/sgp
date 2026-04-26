@@ -1,0 +1,757 @@
+[
+  {
+    "schema_name": "dbo",
+    "table_name": "acidente_trabalho",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "adiantamento_pagamento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "afastamento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "agencia",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "aliquota",
+    "row_count": "4"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "anexo",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "anexo_processo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "area_formacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "atividade",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "atributo_formula",
+    "row_count": "2"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "avaliacao_cargo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "avaliacao_desempenho",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "avaliacao_funcao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "avaliacao_lotacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "banco",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_atividade",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_curso",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_habilidade",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_verba",
+    "row_count": "2"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_vinculo",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_doenca",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_economica",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_profissional",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_profissional_verba",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "causa_afastamento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cbo",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "centro_custo",
+    "row_count": "2"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "classe_salarial",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "classificacao_agente_nocivo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "classificacao_ato",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "classificacao_internacional_doenca",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cnae",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "codigo_pagamento_gps",
+    "row_count": "2"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "codigo_recolhimento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "compensacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "consignado",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "conta_contabil",
+    "row_count": "2"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "conta_contabil_lotacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "conta_contabil_simples",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "contribuicao_sindical",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "convenio",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "correcao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "crm_crea",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "crm_crea_convenio",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "curso",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "dado_cadastral_complementar",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "definicao_de_organico",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "dependente",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "dependente_beneficio",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "dia_util",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "empresa_filial",
+    "row_count": "3"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "empresa_filial_lotacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "entidade_exame",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "entidade_exame_exame",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "equipamento_protecao_coletiva",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "equipamento_protecao_individual",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "esocial",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "etapa",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "evento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "exame",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "experiencia_profissional",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "faixa_salarial",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "faixa_salarial_nivel",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "falta",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "ferias_programacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "flyway_schema_history",
+    "row_count": "385"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_competencia",
+    "row_count": "3"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_pagamento",
+    "row_count": "2"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_pagamento_funcionario_verba",
+    "row_count": "20"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_pagamento_lotacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "frequencia",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_atividade",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_curso",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_habilidade",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_historico_lei",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_requisito",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_verba",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_vinculo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario",
+    "row_count": "16"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_anexo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_exercicio",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_vale_transporte",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_verba",
+    "row_count": "16"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "grau_academico",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "grupo_salarial",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "habilidade",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "historico_contabil",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "licenca_medica",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "licenca_premio",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "lotacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "lotacao_cargo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "lotacao_funcao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "menu",
+    "row_count": "99"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "modelo_documento",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "motivo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "motivo_afastamento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "motivo_desligamento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "motor_calculo_regra",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "municipio",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "nacionalidade",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "natureza_funcao",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "natureza_juridica",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "nivel_salarial_historico",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "notificacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "papel",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "pensao_alimenticia",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "prestador_servico",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "processo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "processo_funcao",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "recisao_contrato",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "referencia_salarial",
+    "row_count": "3"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "regra_aposentadoria",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "requisicao_pessoal",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "requisicao_pessoal_candidato",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "requisicao_pessoal_funcao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "requisito",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "responsavel_legal",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sefip",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "simulador_nivel_salarial",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "simulador_nivel_salarial_acordo",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "simulador_nivel_salarial_valores",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sindicato",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "situacao_funcional",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sol_adiantamento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sub_categoria_doenca",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sysdiagrams",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tempo_servico",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_averbacao",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_contrato",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_ferias",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_folha",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_folha_verbas",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_processamento",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tomador_servico",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "transferencia_funcionario",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "treinamento_sugerido",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "treinamento_sugerido_complemento",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "treinamento_sugerido_funcionario",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "treinamento_sugerido_valores",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "turno",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "turno_folga",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "unidade_federativa",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "usuario",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "usuario_papel",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "vale_transporte",
+    "row_count": "0"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "verba",
+    "row_count": "11"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "verba_formula",
+    "row_count": "11"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "vinculo",
+    "row_count": "1"
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "vinculo_verba",
+    "row_count": "0"
+  }
+]

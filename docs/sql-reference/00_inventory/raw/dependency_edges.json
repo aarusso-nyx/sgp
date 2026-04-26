@@ -1,0 +1,2122 @@
+[
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "acidente_trabalho",
+    "to_schema": "dbo",
+    "to_object": "tomador_servico",
+    "detail": "fk_acidente_trabalho_entidade_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "acidente_trabalho",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_acidente_trabalho_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "acidente_trabalho",
+    "to_schema": "dbo",
+    "to_object": "anexo",
+    "detail": "fk_acidente_trabalho_id_anexo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "acidente_trabalho",
+    "to_schema": "dbo",
+    "to_object": "tomador_servico",
+    "detail": "fk_acidente_trabalho_tomador_servido_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "adiantamento_pagamento",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_adiantamento_pagamento_empresa_filial"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "adiantamento_pagamento",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_adiantamento_pagamento_funcionario"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "adiantamento_pagamento",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "fk_adiantamento_pagamento_lotacao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "agencia",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "agencia_municipio_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "agencia",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "agencia_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "agencia",
+    "to_schema": "dbo",
+    "to_object": "banco",
+    "detail": "fk_agencia_banco_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "anexo_processo",
+    "to_schema": "dbo",
+    "to_object": "processo",
+    "detail": "fk_anexo_processo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "anexo_processo",
+    "to_schema": "dbo",
+    "to_object": "anexo",
+    "detail": "fk_processo_anexo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "avaliacao_cargo",
+    "to_schema": "dbo",
+    "to_object": "avaliacao_desempenho",
+    "detail": "fk_avaliacao_cargo_avaliacao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "avaliacao_cargo",
+    "to_schema": "dbo",
+    "to_object": "cargo",
+    "detail": "fk_avaliacao_cargo_cargo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "avaliacao_desempenho",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_avaliacao_desempenho_empresa_filial"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "avaliacao_funcao",
+    "to_schema": "dbo",
+    "to_object": "avaliacao_desempenho",
+    "detail": "fk_avaliacao_funcao_avaliacao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "avaliacao_funcao",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_avaliacao_funcao_funcao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "avaliacao_lotacao",
+    "to_schema": "dbo",
+    "to_object": "avaliacao_desempenho",
+    "detail": "fk_avaliacao_lotacao_avaliacao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "avaliacao_lotacao",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "fk_avaliacao_lotacao_lotacao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo",
+    "to_schema": "dbo",
+    "to_object": "categoria_profissional",
+    "detail": "fk_cargo_categoria_profissional_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo",
+    "to_schema": "dbo",
+    "to_object": "cbo",
+    "detail": "fk_cargo_cbo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo",
+    "to_schema": "dbo",
+    "to_object": "grupo_salarial",
+    "detail": "fk_cargo_grupo_salarial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo",
+    "to_schema": "dbo",
+    "to_object": "natureza_funcao",
+    "detail": "fk_cargo_natureza_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo",
+    "to_schema": "dbo",
+    "to_object": "processo_funcao",
+    "detail": "fk_cargo_processo_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo",
+    "to_schema": "dbo",
+    "to_object": "sindicato",
+    "detail": "fk_cargo_sindicato_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_atividade",
+    "to_schema": "dbo",
+    "to_object": "atividade",
+    "detail": "fk_cargo_atividade_atividade_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_atividade",
+    "to_schema": "dbo",
+    "to_object": "cargo",
+    "detail": "fk_cargo_atividade_cargo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_curso",
+    "to_schema": "dbo",
+    "to_object": "cargo",
+    "detail": "fk_cargo_curso_cargo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_curso",
+    "to_schema": "dbo",
+    "to_object": "atividade",
+    "detail": "fk_cargo_curso_curso_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_habilidade",
+    "to_schema": "dbo",
+    "to_object": "cargo",
+    "detail": "fk_cargo_habilidade_cargo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_habilidade",
+    "to_schema": "dbo",
+    "to_object": "atividade",
+    "detail": "fk_cargo_habilidade_habilidade_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_verba",
+    "to_schema": "dbo",
+    "to_object": "cargo",
+    "detail": "fk_cargo_verba_cargo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_verba",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_cargo_verba_verba"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_vinculo",
+    "to_schema": "dbo",
+    "to_object": "cargo",
+    "detail": "fk_cargo_vinculo_cargo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "cargo_vinculo",
+    "to_schema": "dbo",
+    "to_object": "vinculo",
+    "detail": "fk_cargo_vinculo_vinculo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "categoria_profissional_verba",
+    "to_schema": "dbo",
+    "to_object": "categoria_profissional",
+    "detail": "fk_categoria_profissional_verba_categoria"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "categoria_profissional_verba",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_categoria_profissional_verba_verba"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "classe_salarial",
+    "to_schema": "dbo",
+    "to_object": "grupo_salarial",
+    "detail": "fk_id_grupo_salarial_classe_salarial"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "classificacao_internacional_doenca",
+    "to_schema": "dbo",
+    "to_object": "categoria_doenca",
+    "detail": "fk_classificacao_internacional_doenca_categoria_doenca_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "classificacao_internacional_doenca",
+    "to_schema": "dbo",
+    "to_object": "sub_categoria_doenca",
+    "detail": "fk_classificacao_internacional_doenca_sub_categoria_doenca_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "compensacao",
+    "to_schema": "dbo",
+    "to_object": "tomador_servico",
+    "detail": "fk_tomador_servico"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "consignado",
+    "to_schema": "dbo",
+    "to_object": "banco",
+    "detail": "fk_consignado_id_banco"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "consignado",
+    "to_schema": "dbo",
+    "to_object": "centro_custo",
+    "detail": "fk_consignado_id_centro_custo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "consignado",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_unidade_federativa_consignatario"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "conta_contabil",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "FK__conta_con__id_ve__12FDD1B2"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "conta_contabil",
+    "to_schema": "dbo",
+    "to_object": "centro_custo",
+    "detail": "fk_conta_contabil_centro_custo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "conta_contabil",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_conta_contabil_empresa_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "conta_contabil",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_conta_contabil_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "conta_contabil_lotacao",
+    "to_schema": "dbo",
+    "to_object": "conta_contabil",
+    "detail": "fk_conta_contabil_lotacao_conta_contabil_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "conta_contabil_lotacao",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "fk_conta_contabil_lotacao_conta_lotacao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "contribuicao_sindical",
+    "to_schema": "dbo",
+    "to_object": "anexo",
+    "detail": "fk_contribuicao_sindical_anexo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "contribuicao_sindical",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_contribuicao_sindical_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "contribuicao_sindical",
+    "to_schema": "dbo",
+    "to_object": "sindicato",
+    "detail": "fk_contribuicao_sindical_sindicato_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "centro_custo",
+    "detail": "fk_correcao_centro_custo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_correcao_empresa_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_correcao_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_correcao_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "referencia_salarial",
+    "detail": "fk_correcao_nivel_salarial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "sindicato",
+    "detail": "fk_correcao_sindicato_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "afastamento",
+    "detail": "fk_correcao_situacao_afastamento_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "tipo_folha",
+    "detail": "fk_correcao_tipo_folha_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "tipo_processamento",
+    "detail": "fk_correcao_tipo_processamento_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "correcao",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_correcao_verba_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "crm_crea_convenio",
+    "to_schema": "dbo",
+    "to_object": "convenio",
+    "detail": "fk_crm_crea_convenio_convenio_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "crm_crea_convenio",
+    "to_schema": "dbo",
+    "to_object": "crm_crea",
+    "detail": "fk_crm_crea_convenio_crm_crea_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "curso",
+    "to_schema": "dbo",
+    "to_object": "area_formacao",
+    "detail": "fk_curso_id_area_formacao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "curso",
+    "to_schema": "dbo",
+    "to_object": "grau_academico",
+    "detail": "fk_curso_id_grau_academico"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "dado_cadastral_complementar",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_dado_cadastral_complementar_funcionario_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "definicao_de_organico",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_definicao_de_organico_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "dependente",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_dependente_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "dependente",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "fk_dependente_municipio_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "dependente",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_dependente_unidade_federativa_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "dependente_beneficio",
+    "to_schema": "dbo",
+    "to_object": "consignado",
+    "detail": "fk_dependente_beneficio_consignado_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "dependente_beneficio",
+    "to_schema": "dbo",
+    "to_object": "dependente",
+    "detail": "fk_dependente_beneficio_dependente_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial",
+    "to_schema": "dbo",
+    "to_object": "anexo",
+    "detail": "fk_anexo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial",
+    "to_schema": "dbo",
+    "to_object": "banco",
+    "detail": "fk_banco_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial",
+    "to_schema": "dbo",
+    "to_object": "cnae",
+    "detail": "fk_cnae_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial",
+    "to_schema": "dbo",
+    "to_object": "codigo_pagamento_gps",
+    "detail": "fk_codigo_pagamento_gps_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial",
+    "to_schema": "dbo",
+    "to_object": "nacionalidade",
+    "detail": "fk_empresa_filial_pais_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "fk_municipio_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial_lotacao",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_empresa_filial_lotacao_empresa_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "empresa_filial_lotacao",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "fk_empresa_filial_lotacao_empresa_filial_lotacao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "entidade_exame",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "fk_entidade_exame_municipio_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "entidade_exame",
+    "to_schema": "dbo",
+    "to_object": "tomador_servico",
+    "detail": "fk_entidade_exame_tomador_servico_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "entidade_exame",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_entidade_exame_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "entidade_exame_exame",
+    "to_schema": "dbo",
+    "to_object": "entidade_exame",
+    "detail": "fk_entidade_exame_exame_entidade_exame_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "entidade_exame_exame",
+    "to_schema": "dbo",
+    "to_object": "exame",
+    "detail": "fk_entidade_exame_exame_exame_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "experiencia_profissional",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "experiencia_profissional_funcao_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "experiencia_profissional",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_experiencia_profissional_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "faixa_salarial",
+    "to_schema": "dbo",
+    "to_object": "classe_salarial",
+    "detail": "fk_id_classe_salarial_faixa_salarial"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "faixa_salarial",
+    "to_schema": "dbo",
+    "to_object": "grupo_salarial",
+    "detail": "fk_id_grupo_salarial_faixa_salarial"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "faixa_salarial_nivel",
+    "to_schema": "dbo",
+    "to_object": "faixa_salarial",
+    "detail": "fk_id_faixa_salarial_faixa_salarial_nivel"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "faixa_salarial_nivel",
+    "to_schema": "dbo",
+    "to_object": "referencia_salarial",
+    "detail": "fk_id_nivel_salarial_faixa_salarial_nivel"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "falta",
+    "to_schema": "dbo",
+    "to_object": "afastamento",
+    "detail": "fk_falta_afastamento"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "falta",
+    "to_schema": "dbo",
+    "to_object": "anexo",
+    "detail": "fk_falta_anexo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "falta",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_falta_funcionario"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "falta",
+    "to_schema": "dbo",
+    "to_object": "motivo_afastamento",
+    "detail": "fk_falta_motivo_afastamento"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "ferias_programacao",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_ferias_programacao_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "folha_pagamento",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_folha_pagamento_empresa_filial"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "folha_pagamento",
+    "to_schema": "dbo",
+    "to_object": "tipo_processamento",
+    "detail": "fk_folha_pagamento_tipo_processamento"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "folha_pagamento",
+    "to_schema": "dbo",
+    "to_object": "folha_competencia",
+    "detail": "folha_pagamento_competencia"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "folha_pagamento_funcionario_verba",
+    "to_schema": "dbo",
+    "to_object": "folha_pagamento",
+    "detail": "fk_folha_pagamento_funcionario_verba_folha"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "folha_pagamento_funcionario_verba",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_folha_pagamento_funcionario_verba_funcionario"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "folha_pagamento_funcionario_verba",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_folha_pagamento_funcionario_verba_verba"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "folha_pagamento_lotacao",
+    "to_schema": "dbo",
+    "to_object": "folha_pagamento",
+    "detail": "fk_folha_pagamento_folha"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "folha_pagamento_lotacao",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "fk_folha_pagamento_lotacao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "frequencia",
+    "to_schema": "dbo",
+    "to_object": "falta",
+    "detail": "fk_frequencia_falta"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "frequencia",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_frequencia_funcionario"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao",
+    "to_schema": "dbo",
+    "to_object": "categoria_profissional",
+    "detail": "fk_categoria_profissional_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao",
+    "to_schema": "dbo",
+    "to_object": "cbo",
+    "detail": "fk_cbo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao",
+    "to_schema": "dbo",
+    "to_object": "centro_custo",
+    "detail": "fk_funcao_centro_custo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao",
+    "to_schema": "dbo",
+    "to_object": "grupo_salarial",
+    "detail": "fk_funcao_grupo_salarial_grupo_salarial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao",
+    "to_schema": "dbo",
+    "to_object": "natureza_funcao",
+    "detail": "fk_natureza_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao",
+    "to_schema": "dbo",
+    "to_object": "processo_funcao",
+    "detail": "fk_processo_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_atividade",
+    "to_schema": "dbo",
+    "to_object": "atividade",
+    "detail": "fk_funcao_atividade_atividade_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_atividade",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_funcao_atividade_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_curso",
+    "to_schema": "dbo",
+    "to_object": "curso",
+    "detail": "fk_funcao_curso_curso_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_curso",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_funcao_curso_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_habilidade",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_funcao_habilidade_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_habilidade",
+    "to_schema": "dbo",
+    "to_object": "habilidade",
+    "detail": "fk_funcao_habilidade_habilidade_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_historico_lei",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_funcao_historico_lei_funcao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_requisito",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_funcao_requisito_funcao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_requisito",
+    "to_schema": "dbo",
+    "to_object": "requisito",
+    "detail": "fk_funcao_requisito_requisito"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_verba",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_funcao_verba_funcao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_verba",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_funcao_verba_verba"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_vinculo",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_funcao_vinculo_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcao_vinculo",
+    "to_schema": "dbo",
+    "to_object": "vinculo",
+    "detail": "fk_funcao_vinculo_vinculo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "afastamento",
+    "detail": "fk_funcionario_afastamento_tp_sit_func_afastamento_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "banco",
+    "detail": "fk_funcionario_banco_banco_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "cargo",
+    "detail": "fk_funcionario_cargo_cargo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "classificacao_ato",
+    "detail": "fk_funcionario_classificacao_ato_classificacao_ato_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "dado_cadastral_complementar",
+    "detail": "fk_funcionario_dado_cadastral_complementar_dado_cadastral_complementar_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_funcionario_empresa_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_funcionario_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_funcionario_funcao_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "fk_funcionario_lotacao_lotacao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "motivo_afastamento",
+    "detail": "fk_funcionario_motivo_afastamento_motivo_afastamento_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "fk_funcionario_municipio_municipio_registro_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "fk_funcionario_municipio_municipio_trabalho_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "sindicato",
+    "detail": "fk_funcionario_sindicato_sindicato_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "turno",
+    "detail": "fk_funcionario_turno_jornada_trabalho_turno_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_funcionario_unidade_federativa_ctps_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_funcionario_unidade_federativa_orgao_expeditor_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_funcionario_unidade_federativa_registro_estrangeiro_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_funcionario_unidade_federativa_titulo_eleitor_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_funcionario_unidade_federativa_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_funcionario_unidade_federativa_uf_trabalho_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "vinculo",
+    "detail": "fk_funcionario_vinculo_vinculo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "centro_custo",
+    "detail": "fk_functionario_cetro_custo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "funcionario_municipio_municipio_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario",
+    "to_schema": "dbo",
+    "to_object": "nacionalidade",
+    "detail": "funcionario_nacionalidade_nacionalidade_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario_anexo",
+    "to_schema": "dbo",
+    "to_object": "anexo",
+    "detail": "fk_funcionario_anexo_anexo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario_anexo",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_funcionario_anexo_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario_exercicio",
+    "to_schema": "dbo",
+    "to_object": "classificacao_ato",
+    "detail": "fk_funcionario_exercicio_classificacao_ato_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario_exercicio",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_funcionario_exercicio_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario_vale_transporte",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "ffk_funcionario_vale_transporte_vale_transporte_vale_tranporte_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario_vale_transporte",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_funcionario_vale_transporte_funcionario_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario_verba",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_funcionario_verba_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "funcionario_verba",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_funcionario_verba_verba_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "licenca_medica",
+    "to_schema": "dbo",
+    "to_object": "classificacao_internacional_doenca",
+    "detail": "fk_licenca_cid"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "licenca_medica",
+    "to_schema": "dbo",
+    "to_object": "afastamento",
+    "detail": "fk_licenca_medica_afastamento"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "licenca_medica",
+    "to_schema": "dbo",
+    "to_object": "crm_crea",
+    "detail": "fk_licenca_medica_crm"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "licenca_medica",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_licenca_medica_funcionaio"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "licenca_medica",
+    "to_schema": "dbo",
+    "to_object": "motivo_afastamento",
+    "detail": "fk_licenca_medica_motivo_afastamento"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "licenca_premio",
+    "to_schema": "dbo",
+    "to_object": "funcionario_exercicio",
+    "detail": "fk_licenca_premio_funcionario_exercicio_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "lotacao",
+    "to_schema": "dbo",
+    "to_object": "centro_custo",
+    "detail": "fk_lotacao_id_centro_custo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "lotacao_cargo",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_lotacao_cargo_empresa_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "lotacao_cargo",
+    "to_schema": "dbo",
+    "to_object": "cargo",
+    "detail": "fk_lotacao_cargo_lotacao_cargo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "lotacao_cargo",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "fk_lotacao_cargo_lotacao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "lotacao_funcao",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_lotacao_funcao_empresa_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "lotacao_funcao",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_lotacao_funcao_lotacao_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "lotacao_funcao",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "fk_lotacao_funcao_lotacao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "motor_calculo_regra",
+    "to_schema": "dbo",
+    "to_object": "tipo_processamento",
+    "detail": "motor_calculo_regra_tipo_processamento"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "motor_calculo_regra",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "motor_calculo_regra_verba"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "municipio",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_unidade_federativa_municipio"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "nivel_salarial_historico",
+    "to_schema": "dbo",
+    "to_object": "referencia_salarial",
+    "detail": "fk_nivel_salarial_historico_nivel_salarial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "nivel_salarial_historico",
+    "to_schema": "dbo",
+    "to_object": "simulador_nivel_salarial",
+    "detail": "fk_nivel_salarial_historico_simulador_nivel_salarial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "notificacao",
+    "to_schema": "dbo",
+    "to_object": "usuario",
+    "detail": "fk_notificacao_id_usuario_destinatario"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "papel",
+    "to_schema": "dbo",
+    "to_object": "menu",
+    "detail": "fk_papel_id_menu"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "agencia",
+    "detail": "pensao_alimenticia_agencia_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "banco",
+    "detail": "pensao_alimenticia_banco_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "centro_custo",
+    "detail": "pensao_alimenticia_centro_custo_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "pensao_alimenticia_funcionario_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "pensao_alimenticia_municipio_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "responsavel_legal",
+    "detail": "pensao_alimenticia_responsavel_legal_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "pensao_alimenticia_unidade_federativa_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "pensao_alimenticia_unidade_federativa_id_fk_2"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "pensao_alimenticia",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "pensao_alimenticia_verba_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "categoria_profissional",
+    "detail": "fk_categoria_prestador_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "cbo",
+    "detail": "fk_cbo_prestador_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "convenio",
+    "detail": "fk_convenio_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_empresa_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "fk_municipio_prestador_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "nacionalidade",
+    "detail": "fk_nacionalidade_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_uf_id_cnh"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_uf_id_ctps"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_uf_id_endereco"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "prestador_servico",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_verba_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "processo",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_processo_funcionaio"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "recisao_contrato",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_recisao_contrato_funcionario"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "recisao_contrato",
+    "to_schema": "dbo",
+    "to_object": "motivo_desligamento",
+    "detail": "fk_recisao_contrato_motivo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "requisicao_pessoal",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "requisicao_pessoal_solicitante"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "requisicao_pessoal",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "requisicao_pessoal_substituto"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "requisicao_pessoal_candidato",
+    "to_schema": "dbo",
+    "to_object": "anexo",
+    "detail": "fk_req_pes_cand_to_anexo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "requisicao_pessoal_candidato",
+    "to_schema": "dbo",
+    "to_object": "requisicao_pessoal",
+    "detail": "fk_req_pes_cand_to_req_pessoal"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "requisicao_pessoal_funcao",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "requisicao_pessoal_funcao_funcao"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "requisicao_pessoal_funcao",
+    "to_schema": "dbo",
+    "to_object": "requisicao_pessoal",
+    "detail": "requisicao_pessoal_funcao_requisicao_pessoal"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "requisicao_pessoal_funcao",
+    "to_schema": "dbo",
+    "to_object": "turno",
+    "detail": "requisicao_pessoal_funcaoturno"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "responsavel_legal",
+    "to_schema": "dbo",
+    "to_object": "banco",
+    "detail": "fk_id_banco"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "responsavel_legal",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "fk_id_municipio"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "responsavel_legal",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_id_unidade_federativa"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "simulador_nivel_salarial_acordo",
+    "to_schema": "dbo",
+    "to_object": "simulador_nivel_salarial",
+    "detail": "fk_simulador_nivel_salarial_acordo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "simulador_nivel_salarial_valores",
+    "to_schema": "dbo",
+    "to_object": "referencia_salarial",
+    "detail": "fk_simulador_nivel_salarial_nivel"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "simulador_nivel_salarial_valores",
+    "to_schema": "dbo",
+    "to_object": "simulador_nivel_salarial",
+    "detail": "fk_simulador_nivel_salarial_valores"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "sindicato",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_id_unidade_federativa_sindicato"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "situacao_funcional",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_situacao_funcional_empresa_filial_empresa_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "situacao_funcional",
+    "to_schema": "dbo",
+    "to_object": "funcao",
+    "detail": "fk_situacao_funcional_funcao_funcao_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "situacao_funcional",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_situacao_funcional_funcionario_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "situacao_funcional",
+    "to_schema": "dbo",
+    "to_object": "motivo_afastamento",
+    "detail": "fk_situacao_funcional_motivo_afastamento_sit_motivo_afastamento_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "situacao_funcional",
+    "to_schema": "dbo",
+    "to_object": "motivo",
+    "detail": "fk_situacao_funcional_motivo_motivo_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "situacao_funcional",
+    "to_schema": "dbo",
+    "to_object": "referencia_salarial",
+    "detail": "fk_situacao_funcional_nivel_salarial_nivel_salarial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "sol_adiantamento",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "sol_adiantamento_funcionario_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "tempo_servico",
+    "to_schema": "dbo",
+    "to_object": "classificacao_ato",
+    "detail": "fk_tempo_servico_classificacao_ato_classificacao_ato_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "tempo_servico",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_tempo_servico_funcionario_funcionario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "tempo_servico",
+    "to_schema": "dbo",
+    "to_object": "sefip",
+    "detail": "fk_tempo_servico_sefip_sefip_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "tempo_servico",
+    "to_schema": "dbo",
+    "to_object": "unidade_federativa",
+    "detail": "fk_tempo_servico_unidade_federativa_uf_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "tipo_folha_verbas",
+    "to_schema": "dbo",
+    "to_object": "tipo_folha",
+    "detail": "fk_tipo_folha_verbas_tipo_folha"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "tipo_folha_verbas",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_tipo_folha_verbas_verba"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "tomador_servico",
+    "to_schema": "dbo",
+    "to_object": "codigo_pagamento_gps",
+    "detail": "fk_id_codigo_pagamento_gps"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "tomador_servico",
+    "to_schema": "dbo",
+    "to_object": "codigo_recolhimento",
+    "detail": "fk_id_codigo_recolhimento"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "transferencia_funcionario",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "transferencia_funcionario_empresa_filial_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "transferencia_funcionario",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "transferencia_funcionario_funcionario_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "transferencia_funcionario",
+    "to_schema": "dbo",
+    "to_object": "lotacao",
+    "detail": "transferencia_funcionario_lotacao_id_fk"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "treinamento_sugerido",
+    "to_schema": "dbo",
+    "to_object": "curso",
+    "detail": "treinamento_sugerido_curso"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "treinamento_sugerido_complemento",
+    "to_schema": "dbo",
+    "to_object": "municipio",
+    "detail": "fk_tre_sug_comp_to_municipio"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "treinamento_sugerido_complemento",
+    "to_schema": "dbo",
+    "to_object": "treinamento_sugerido",
+    "detail": "fk_tre_sug_comp_to_treinamento_sugerido"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "treinamento_sugerido_funcionario",
+    "to_schema": "dbo",
+    "to_object": "funcionario",
+    "detail": "fk_tre_sug_func_funcionario"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "treinamento_sugerido_funcionario",
+    "to_schema": "dbo",
+    "to_object": "treinamento_sugerido",
+    "detail": "fk_tre_sug_func_treinamento_sugerido"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "treinamento_sugerido_valores",
+    "to_schema": "dbo",
+    "to_object": "treinamento_sugerido",
+    "detail": "fk_tre_sug_val_treinamento_sugerido"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "turno_folga",
+    "to_schema": "dbo",
+    "to_object": "turno",
+    "detail": "fk_turno_folga_turno_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "usuario",
+    "to_schema": "dbo",
+    "to_object": "empresa_filial",
+    "detail": "fk_usuario_empresa_filial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "usuario",
+    "to_schema": "dbo",
+    "to_object": "anexo",
+    "detail": "fk_usuario_id_anexo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "usuario_papel",
+    "to_schema": "dbo",
+    "to_object": "papel",
+    "detail": "fk_usuario_papel_papel_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "usuario_papel",
+    "to_schema": "dbo",
+    "to_object": "usuario",
+    "detail": "fk_usuario_papel_usuario_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "verba",
+    "to_schema": "dbo",
+    "to_object": "centro_custo",
+    "detail": "fk_verba_centro_custo"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "verba_formula",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_verba_formula_verba"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "vinculo",
+    "to_schema": "dbo",
+    "to_object": "esocial",
+    "detail": "fk_vinculo_categoria_esocial_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "vinculo",
+    "to_schema": "dbo",
+    "to_object": "sefip",
+    "detail": "fk_vinculo_categoria_sefip_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "vinculo",
+    "to_schema": "dbo",
+    "to_object": "sefip",
+    "detail": "fk_vinculo_ocorrencia_sefip_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "vinculo",
+    "to_schema": "dbo",
+    "to_object": "afastamento",
+    "detail": "fk_vinculo_situacao_inicial_afastamento_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "vinculo",
+    "to_schema": "dbo",
+    "to_object": "tipo_contrato",
+    "detail": "fk_vinculo_tipo_contrato_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "vinculo",
+    "to_schema": "dbo",
+    "to_object": "vinculo",
+    "detail": "fk_vinculo_vinculo_apos_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "vinculo_verba",
+    "to_schema": "dbo",
+    "to_object": "verba",
+    "detail": "fk_vinculo_verba_verba_id"
+  },
+  {
+    "edge_type": "foreign_key",
+    "from_schema": "dbo",
+    "from_object": "vinculo_verba",
+    "to_schema": "dbo",
+    "to_object": "vinculo",
+    "detail": "fk_vinculo_verba_vinculo_id"
+  },
+  {
+    "edge_type": "sql_expression_dependency",
+    "from_schema": "dbo",
+    "from_object": "sp_alterdiagram",
+    "to_schema": "dbo",
+    "to_object": "sysdiagrams",
+    "to_database": null,
+    "to_server": null,
+    "detail": "SQL_STORED_PROCEDURE"
+  },
+  {
+    "edge_type": "sql_expression_dependency",
+    "from_schema": "dbo",
+    "from_object": "sp_creatediagram",
+    "to_schema": "dbo",
+    "to_object": "sysdiagrams",
+    "to_database": null,
+    "to_server": null,
+    "detail": "SQL_STORED_PROCEDURE"
+  },
+  {
+    "edge_type": "sql_expression_dependency",
+    "from_schema": "dbo",
+    "from_object": "sp_dropdiagram",
+    "to_schema": "dbo",
+    "to_object": "sysdiagrams",
+    "to_database": null,
+    "to_server": null,
+    "detail": "SQL_STORED_PROCEDURE"
+  },
+  {
+    "edge_type": "sql_expression_dependency",
+    "from_schema": "dbo",
+    "from_object": "sp_helpdiagramdefinition",
+    "to_schema": "dbo",
+    "to_object": "sysdiagrams",
+    "to_database": null,
+    "to_server": null,
+    "detail": "SQL_STORED_PROCEDURE"
+  },
+  {
+    "edge_type": "sql_expression_dependency",
+    "from_schema": "dbo",
+    "from_object": "sp_helpdiagrams",
+    "to_schema": null,
+    "to_object": "sysdiagrams",
+    "to_database": null,
+    "to_server": null,
+    "detail": "SQL_STORED_PROCEDURE"
+  },
+  {
+    "edge_type": "sql_expression_dependency",
+    "from_schema": "dbo",
+    "from_object": "sp_renamediagram",
+    "to_schema": "dbo",
+    "to_object": "sysdiagrams",
+    "to_database": null,
+    "to_server": null,
+    "detail": "SQL_STORED_PROCEDURE"
+  },
+  {
+    "edge_type": "sql_expression_dependency",
+    "from_schema": "dbo",
+    "from_object": "sp_upgraddiagrams",
+    "to_schema": "dbo",
+    "to_object": "dtproperties",
+    "to_database": null,
+    "to_server": null,
+    "detail": "SQL_STORED_PROCEDURE"
+  },
+  {
+    "edge_type": "sql_expression_dependency",
+    "from_schema": "dbo",
+    "from_object": "sp_upgraddiagrams",
+    "to_schema": "dbo",
+    "to_object": "sysdiagrams",
+    "to_database": null,
+    "to_server": null,
+    "detail": "SQL_STORED_PROCEDURE"
+  }
+]

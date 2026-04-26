@@ -1,0 +1,17 @@
+[
+  {
+    "id": "2",
+    "created_at": "1900-01-01T00:00:00.000Z",
+    "updated_at": "1900-01-01T00:00:00.000Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "bloqueado": false,
+    "digito": 1,
+    "nome": "teste",
+    "numero": 0,
+    "referencia": "",
+    "banco_id": "1",
+    "unidade_federativa_id": "1",
+    "municipio_id": "1"
+  }
+]

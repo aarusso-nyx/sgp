@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "codigo": "23",
+    "descricao": "Técnico I",
+    "valor": 2500,
+    "nivel_referencia": false,
+    "created_at": "2019-06-07T16:07:52.282Z",
+    "updated_at": "2019-06-07T16:07:52.282Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "mes_ano_competencia": "2019/06"
+  },
+  {
+    "id": "2",
+    "codigo": "24",
+    "descricao": "Técnico II",
+    "valor": 2800,
+    "nivel_referencia": false,
+    "created_at": "2019-06-10T16:10:40.900Z",
+    "updated_at": "2019-06-10T16:10:40.900Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "mes_ano_competencia": "336"
+  },
+  {
+    "id": "3",
+    "codigo": "25",
+    "descricao": "Técnico III",
+    "valor": 3200,
+    "nivel_referencia": false,
+    "created_at": "2019-06-10T16:10:53.866Z",
+    "updated_at": "2019-06-10T16:10:53.866Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "mes_ano_competencia": "336"
+  }
+]

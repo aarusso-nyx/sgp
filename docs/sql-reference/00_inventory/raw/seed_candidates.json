@@ -1,0 +1,326 @@
+[
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario",
+    "row_count": 16,
+    "referenced_by_fk_count": 26,
+    "references_other_tables_count": 24,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "unidade_federativa",
+    "row_count": 1,
+    "referenced_by_fk_count": 20,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "empresa_filial",
+    "row_count": 3,
+    "referenced_by_fk_count": 16,
+    "references_other_tables_count": 7,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao",
+    "row_count": 1,
+    "referenced_by_fk_count": 15,
+    "references_other_tables_count": 6,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "verba",
+    "row_count": 11,
+    "referenced_by_fk_count": 13,
+    "references_other_tables_count": 1,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "municipio",
+    "row_count": 1,
+    "referenced_by_fk_count": 11,
+    "references_other_tables_count": 1,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "anexo",
+    "row_count": 1,
+    "referenced_by_fk_count": 8,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo",
+    "row_count": 1,
+    "referenced_by_fk_count": 8,
+    "references_other_tables_count": 6,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "centro_custo",
+    "row_count": 2,
+    "referenced_by_fk_count": 8,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "banco",
+    "row_count": 1,
+    "referenced_by_fk_count": 6,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "vinculo",
+    "row_count": 1,
+    "referenced_by_fk_count": 5,
+    "references_other_tables_count": 6,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "referencia_salarial",
+    "row_count": 3,
+    "referenced_by_fk_count": 5,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "atividade",
+    "row_count": 1,
+    "referenced_by_fk_count": 4,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_profissional",
+    "row_count": 1,
+    "referenced_by_fk_count": 4,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "grupo_salarial",
+    "row_count": 1,
+    "referenced_by_fk_count": 4,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cbo",
+    "row_count": 1,
+    "referenced_by_fk_count": 3,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_processamento",
+    "row_count": 1,
+    "referenced_by_fk_count": 3,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "turno",
+    "row_count": 1,
+    "referenced_by_fk_count": 3,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "natureza_funcao",
+    "row_count": 1,
+    "referenced_by_fk_count": 2,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "processo_funcao",
+    "row_count": 1,
+    "referenced_by_fk_count": 2,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_folha",
+    "row_count": 1,
+    "referenced_by_fk_count": 2,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "usuario",
+    "row_count": 1,
+    "referenced_by_fk_count": 2,
+    "references_other_tables_count": 2,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "codigo_pagamento_gps",
+    "row_count": 2,
+    "referenced_by_fk_count": 2,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_pagamento",
+    "row_count": 2,
+    "referenced_by_fk_count": 2,
+    "references_other_tables_count": 3,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "agencia",
+    "row_count": 1,
+    "referenced_by_fk_count": 1,
+    "references_other_tables_count": 3,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cnae",
+    "row_count": 1,
+    "referenced_by_fk_count": 1,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "papel",
+    "row_count": 1,
+    "referenced_by_fk_count": 1,
+    "references_other_tables_count": 1,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "conta_contabil",
+    "row_count": 2,
+    "referenced_by_fk_count": 1,
+    "references_other_tables_count": 4,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_competencia",
+    "row_count": 3,
+    "referenced_by_fk_count": 1,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "menu",
+    "row_count": 99,
+    "referenced_by_fk_count": 1,
+    "references_other_tables_count": 0,
+    "heuristic_name_match": false,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_atividade",
+    "row_count": 1,
+    "referenced_by_fk_count": 0,
+    "references_other_tables_count": 2,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_vinculo",
+    "row_count": 1,
+    "referenced_by_fk_count": 0,
+    "references_other_tables_count": 2,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_verba",
+    "row_count": 2,
+    "referenced_by_fk_count": 0,
+    "references_other_tables_count": 2,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "verba_formula",
+    "row_count": 11,
+    "referenced_by_fk_count": 0,
+    "references_other_tables_count": 1,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_verba",
+    "row_count": 16,
+    "referenced_by_fk_count": 0,
+    "references_other_tables_count": 2,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_pagamento_funcionario_verba",
+    "row_count": 20,
+    "referenced_by_fk_count": 0,
+    "references_other_tables_count": 3,
+    "heuristic_name_match": true,
+    "seed_candidate": true
+  }
+]

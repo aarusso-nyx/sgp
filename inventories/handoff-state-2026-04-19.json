@@ -1,0 +1,78 @@
+{
+  "date": "2026-04-19",
+  "status": "observed",
+  "scope": {
+    "backend": "documents + auth/permissions + tests",
+    "database": "rls helpers/policies + seed alignment",
+    "governance": "baseline docs added"
+  },
+  "api": {
+    "documents": {
+      "presignUpload": {
+        "route": "POST /documents/presign-upload",
+        "permission": "documents:upload"
+      },
+      "registerUpload": {
+        "route": "POST /documents/uploads/:id/register",
+        "permission": "documents:register"
+      },
+      "presignDownload": {
+        "route": "GET /documents/:id/presign-download",
+        "permission": "documents:download"
+      },
+      "list": {
+        "route": "GET /documents",
+        "permission": "documents:download"
+      },
+      "downloadAudit": {
+        "route": "GET /documents/:id/download-audit",
+        "permission": "auditoria:read"
+      }
+    },
+    "iam": {
+      "permissionCatalog": {
+        "route": "GET /iam/permissions",
+        "permission": "iam:read"
+      }
+    }
+  },
+  "permissions": {
+    "added": [
+      "documents:upload",
+      "documents:register",
+      "documents:download"
+    ],
+    "groupMappingsUpdated": [
+      "SGP_RELATORIO",
+      "RELATORIO"
+    ]
+  },
+  "errors": {
+    "registerUpload": {
+      "missingSession": 404,
+      "invalidOrExpiredSession": 409,
+      "missingS3Object": 404,
+      "s3InfrastructureFailure": 503
+    }
+  },
+  "validation": {
+    "build": "pass",
+    "unitTests": "pass",
+    "e2eTests": "pass",
+    "lint": "pre-existing failures in source/backend/src/audit/*"
+  },
+  "resume": {
+    "readFirst": [
+      "docs/handoff-2026-04-19.md",
+      "source/docs/implementation-status.md",
+      "source/database/legacy-assumptions.md"
+    ],
+    "commands": [
+      "cd source/backend && npm install",
+      "cd source/backend && npm run build",
+      "cd source/backend && npm test",
+      "cd source/backend && npm run test:e2e"
+    ],
+    "nextSuggestedItem": "Implement domain ownership checks for document access by ownerType/ownerId"
+  }
+}

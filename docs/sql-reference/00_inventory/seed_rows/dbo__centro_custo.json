@@ -1,0 +1,36 @@
+[
+  {
+    "id": "1",
+    "codigo": "0001",
+    "descricao": "Centro de Custo Padrão",
+    "efetivo": null,
+    "nivel": null,
+    "tipo_debito": "",
+    "tipo_credito": null,
+    "conta_credito": null,
+    "conta_debito": null,
+    "created_at": "2019-05-27T14:59:29.307Z",
+    "updated_at": "2019-05-27T14:59:29.307Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "tipo_centro_custo": "ANALITICO",
+    "cnpj": null
+  },
+  {
+    "id": "2",
+    "codigo": "00001",
+    "descricao": "Centro de Custo Geral",
+    "efetivo": null,
+    "nivel": null,
+    "tipo_debito": null,
+    "tipo_credito": null,
+    "conta_credito": null,
+    "conta_debito": null,
+    "created_at": "2019-05-08T14:09:35.310Z",
+    "updated_at": "2019-05-08T14:09:35.310Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "tipo_centro_custo": "ANALITICO",
+    "cnpj": null
+  }
+]

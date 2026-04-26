@@ -1,0 +1,147 @@
+# Sitemap
+
+Generated at: 2026-04-16T20:56:31.520Z
+
+## Top-level navigation
+- Gestão (35)
+- Módulo RH (12)
+- Folha de Pgt (9)
+- Relatório (2)
+- Auditoria (1)
+- Convênio (3)
+
+## Menu paths
+- Auditoria > Auditoria -> #!/auditoria/gestao
+- Convênio > Estagiario -> #!/convenios/estagiario
+- Convênio > Instituicao de Ensino -> #!/convenios/instituicaoEnsino
+- Convênio > Programas de Estagios -> #!/convenios/programa
+- Folha de Pgt > Arquivo remessa pagamento -> #!/arquivoRemessaPagamento/gestao
+- Folha de Pgt > Ficha Financeira -> #!/fichaFinanceira/gestao
+- Folha de Pgt > Folha de Pagamento -> #!/folhaPagamento/gestao
+- Folha de Pgt > Rel. Batimento da Folha -> #!/batimentoFolhaPagamento/relatorio
+- Folha de Pgt > Rel. Financeiro -> #!/relatorio/financeiro/gestao
+- Folha de Pgt > Rel. Folha de Pagamento -> #!/relatorioFolhaPagamento/gestao
+- Folha de Pgt > Rel. Gerencial -> #!/relatorioGerencial/gestao
+- Folha de Pgt > Rel. Pagamento Bloqueados -> #!/relatorioServidorPagBloqueado/gestao
+- Folha de Pgt > Verbas do Funcionario -> #!/verbasFuncionario/gestao
+- Gestão > Bancos -> #!/banco/gestao
+- Gestão > Cargos -> #!/cargo/gestao
+- Gestão > Causas de Afastamento -> #!/causaAfastamento/gestao
+- Gestão > Centro de Custo -> #!/centroCusto/gestao
+- Gestão > Classificacoes dos Atos -> #!/classificacaoAto/gestao
+- Gestão > Convenios -> #!/convenio/gestao
+- Gestão > Dias Uteis -> #!/diaUtil/gestao
+- Gestão > Exportacao de Arquivo -> #!/exportacaoArquivo/gestao
+- Gestão > Faixas Salariais -> #!/faixaSalarial/gestao
+- Gestão > Funcao -> #!/funcao/gestao
+- Gestão > Importação Consignado -> #!/importacaoConsignado
+- Gestão > Legislacao -> #!/legislacao/gestao
+- Gestão > Lotacao -> #!/lotacao/gestao
+- Gestão > Motivo Afastamento -> #!/motivoAfastamento/gestao
+- Gestão > Motivos -> #!/motivo/gestao
+- Gestão > Motivos do Desligamento -> #!/motivoDesligamento/gestao
+- Gestão > Natureza da Funcao -> #!/naturezaFuncao/gestao
+- Gestão > Naturezas Juridicas -> #!/naturezaJuridica/gestao
+- Gestão > Orgaos Publicos -> #!/empresaFilial/gestao
+- Gestão > Parametro do Sistema -> #!/parametroSistema/gestao
+- Gestão > Perfis de Acesso -> #!/perfilAcesso/gestao
+- Gestão > Referencia Salarial -> #!/referenciaSalarial/gestao
+- Gestão > Responsavel Legal -> #!/responsavelLegal/gestao
+- Gestão > Sindicatos -> #!/sindicato/gestao
+- Gestão > Situacao Funcional -> #!/situacaoFuncional/gestao
+- Gestão > Tipo de Processamento -> #!/tipoProcessamento/gestao
+- Gestão > Tipos de Contrato -> #!/tipoContrato/gestao
+- Gestão > Tipos de Documento -> #!/tipoDocumento/gestao
+- Gestão > Tipos de Ferias -> #!/tipoFerias/gestao
+- Gestão > Tipos de Folhas -> #!/tipoFolha/gestao
+- Gestão > Turno -> #!/turno/gestao
+- Gestão > Usuarios -> #!/usuario/gestao
+- Gestão > Vales Transporte -> #!/valeTransporte/gestao
+- Gestão > Verbas -> #!/verba/gestao
+- Gestão > Vinculos -> #!/vinculo/gestao
+- Módulo RH > Afastamentos dos Funcionários -> #!/historicoSituacaoFuncional/gestao
+- Módulo RH > Dados Cadastrais -> #!/dadoCadastralComplementar/gestao
+- Módulo RH > Definicao de Organico -> #!/definicaoOrganico/gestao
+- Módulo RH > Dependentes -> #!/dependente/gestao
+- Módulo RH > Experiencia Profissional -> #!/experienciaProfissional/gestao
+- Módulo RH > Funcionario -> #!/funcionario/gestao
+- Módulo RH > Historico Nível Salarial -> #!/nivelSalarialHistorico/gestao
+- Módulo RH > Licenca Premio -> #!/licencaPremio/gestao
+- Módulo RH > Programacao de Ferias -> #!/feriasProgramacao/gestao
+- Módulo RH > Registo de Frequêcia -> #!/frequencia/gestao
+- Módulo RH > Tempo de Servico -> #!/tempoServico/gestao
+- Módulo RH > Transferencia Funcionário -> #!/transferenciaFuncionario/gestao
+- Relatório > Relatório Repasse Fundo RH -> #!/relatorios/relatorioRepasseFundoRh
+- Relatório > Relatórios de Estágio -> #!/relatorios/estagio
+
+## Hash routes
+- #!/arquivoRemessaPagamento/gestao
+- #!/auditoria/gestao
+- #!/banco/gestao
+- #!/batimentoFolhaPagamento/relatorio
+- #!/cargo/gestao
+- #!/causaAfastamento/gestao
+- #!/centroCusto/gestao
+- #!/classificacaoAto/gestao
+- #!/convenio/gestao
+- #!/convenios/estagiario
+- #!/convenios/instituicaoEnsino
+- #!/convenios/programa
+- #!/dadoCadastralComplementar/gestao
+- #!/definicaoOrganico/gestao
+- #!/dependente/gestao
+- #!/diaUtil/gestao
+- #!/empresaFilial/gestao
+- #!/experienciaProfissional/gestao
+- #!/exportacaoArquivo/gestao
+- #!/faixaSalarial/gestao
+- #!/feriasProgramacao/gestao
+- #!/fichaFinanceira/gestao
+- #!/folhaPagamento/gestao
+- #!/frequencia/gestao
+- #!/funcao/gestao
+- #!/funcionario/gestao
+- #!/historicoSituacaoFuncional/gestao
+- #!/importacaoConsignado
+- #!/legislacao/gestao
+- #!/licencaPremio/gestao
+- #!/lotacao/gestao
+- #!/motivo/gestao
+- #!/motivoAfastamento/gestao
+- #!/motivoDesligamento/gestao
+- #!/naturezaFuncao/gestao
+- #!/naturezaJuridica/gestao
+- #!/nivelSalarialHistorico/gestao
+- #!/page/home
+- #!/parametroSistema/gestao
+- #!/perfilAcesso/gestao
+- #!/referenciaSalarial/gestao
+- #!/relatorio/financeiro/gestao
+- #!/relatorioFolhaPagamento/gestao
+- #!/relatorioGerencial/gestao
+- #!/relatorios/estagio
+- #!/relatorios/relatorioRepasseFundoRh
+- #!/relatorioServidorPagBloqueado/gestao
+- #!/responsavelLegal/gestao
+- #!/sindicato/gestao
+- #!/situacaoFuncional/gestao
+- #!/tempoServico/gestao
+- #!/tipoContrato/gestao
+- #!/tipoDocumento/gestao
+- #!/tipoFerias/gestao
+- #!/tipoFolha/gestao
+- #!/tipoProcessamento/gestao
+- #!/transferenciaFuncionario/gestao
+- #!/turno/gestao
+- #!/usuario/gestao
+- #!/valeTransporte/gestao
+- #!/verba/gestao
+- #!/verbasFuncionario/gestao
+- #!/vinculo/gestao
+
+## Path routes
+- none discovered
+
+## Notes
+- Discovery source: Chrome DevTools extraction from legacy AngularJS container `ul#nav.nav`.
+- All entries are marked `observed` and linked to evidence screenshot `playwright/reports/devtools-nav.png`.

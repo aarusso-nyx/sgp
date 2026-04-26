@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "codigo": "2100",
+    "descricao": "Empresas em Geral - CNPJ",
+    "created_at": "2019-06-07T10:30:25.585Z",
+    "updated_at": "2019-06-07T10:30:25.585Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "2",
+    "codigo": "2119",
+    "descricao": "Empresas em Geral - CNPJ - Pagamento exclusivo para Outras Entidades (SESC, SESI, SENAI, etc.)",
+    "created_at": "2019-06-07T10:31:36.664Z",
+    "updated_at": "2019-06-07T10:31:36.664Z",
+    "created_by": "1",
+    "updated_by": "1"
+  }
+]

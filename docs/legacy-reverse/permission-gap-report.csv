@@ -1,0 +1,20 @@
+route,module,screen_title,status,evidence,reason,inferred_permission_scope,inferred_permission_key,fields_count,actions_count,nested_routes_count,observed_at_route
+#!/batimentoFolhaPagamento/relatorio,Folha de Pgt,403,observed,playwright/reports/deep/004-batimentofolhapagamento-relatorio.png,403-page,reporting,folha_de_pgt.access..batimentoFolhaPagamento.relatorio,2,2,4,#!/page/403
+#!/centroCusto/gestao,Gestão,403,observed,playwright/reports/deep/007-centrocusto-gestao.png,403-page,master-data-management,gestao.access..centroCusto.gestao,2,2,4,#!/page/403
+#!/classificacaoAto/gestao,Gestão,403,observed,playwright/reports/deep/008-classificacaoato-gestao.png,403-page,master-data-management,gestao.access..classificacaoAto.gestao,2,2,4,#!/page/403
+#!/convenios/estagiario,Convênio,403,observed,playwright/reports/deep/010-convenios-estagiario.png,403-page,internship-agreements,convenio.access..convenios.estagiario,2,2,4,#!/page/403
+#!/dadoCadastralComplementar/gestao,Módulo RH,403,observed,playwright/reports/deep/013-dadocadastralcomplementar-gestao.png,403-page,master-data-management,modulo_rh.access..dadoCadastralComplementar.gestao,2,2,4,#!/page/403
+#!/definicaoOrganico/gestao,Módulo RH,403,observed,playwright/reports/deep/014-definicaoorganico-gestao.png,403-page,master-data-management,modulo_rh.access..definicaoOrganico.gestao,2,2,4,#!/page/403
+#!/diaUtil/gestao,Gestão,403,observed,playwright/reports/deep/016-diautil-gestao.png,403-page,master-data-management,gestao.access..diaUtil.gestao,2,2,4,#!/page/403
+#!/feriasProgramacao/gestao,Módulo RH,403,observed,playwright/reports/deep/021-feriasprogramacao-gestao.png,403-page,master-data-management,modulo_rh.access..feriasProgramacao.gestao,2,2,4,#!/page/403
+#!/funcao/gestao,Gestão,403,observed,playwright/reports/deep/025-funcao-gestao.png,403-page,master-data-management,gestao.access..funcao.gestao,2,2,4,#!/page/403
+#!/licencaPremio/gestao,Módulo RH,403,observed,playwright/reports/deep/030-licencapremio-gestao.png,403-page,master-data-management,modulo_rh.access..licencaPremio.gestao,2,2,4,#!/page/403
+#!/lotacao/gestao,Gestão,403,observed,playwright/reports/deep/031-lotacao-gestao.png,403-page,master-data-management,gestao.access..lotacao.gestao,2,2,4,#!/page/403
+#!/motivoAfastamento/gestao,Gestão,403,observed,playwright/reports/deep/033-motivoafastamento-gestao.png,403-page,master-data-management,gestao.access..motivoAfastamento.gestao,2,2,4,#!/page/403
+#!/naturezaFuncao/gestao,Gestão,403,observed,playwright/reports/deep/035-naturezafuncao-gestao.png,403-page,master-data-management,gestao.access..naturezaFuncao.gestao,2,2,4,#!/page/403
+#!/relatorio/financeiro/gestao,Folha de Pgt,403,observed,playwright/reports/deep/042-relatorio-financeiro-gestao.png,403-page,reporting,folha_de_pgt.access..relatorio.financeiro.gestao,2,2,4,#!/page/403
+#!/relatorios/relatorioRepasseFundoRh,Relatório,403,observed,playwright/reports/deep/046-relatorios-relatoriorepassefundorh.png,403-page,reporting,relatorio.access..relatorios.relatorioRepasseFundoRh,2,2,4,#!/page/403
+#!/responsavelLegal/gestao,Gestão,403,observed,playwright/reports/deep/048-responsavellegal-gestao.png,403-page,master-data-management,gestao.access..responsavelLegal.gestao,2,2,4,#!/page/403
+#!/tipoFerias/gestao,Gestão,403,observed,playwright/reports/deep/054-tipoferias-gestao.png,403-page,master-data-management,gestao.access..tipoFerias.gestao,2,2,4,#!/page/403
+#!/valeTransporte/gestao,Gestão,403,observed,playwright/reports/deep/060-valetransporte-gestao.png,403-page,master-data-management,gestao.access..valeTransporte.gestao,2,2,4,#!/page/403
+#!/vinculo/gestao,Gestão,403,observed,playwright/reports/deep/063-vinculo-gestao.png,403-page,master-data-management,gestao.access..vinculo.gestao,2,2,4,#!/page/403

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Routes Inventory",
+  "type": "object",
+  "required": ["meta", "routes"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["version", "updatedAt", "source"],
+      "properties": {
+        "version": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "status", "evidence"],
+        "properties": {
+          "id": { "type": "string" },
+          "path": { "type": "string" },
+          "name": { "type": "string" },
+          "module": { "type": "string" },
+          "access": { "type": "string" },
+          "status": { "enum": ["observed", "inferred", "unverified"] },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

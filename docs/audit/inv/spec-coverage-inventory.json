@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-04-26T04:20:00Z",
+  "route_sync_contract_docs": [
+    "docs/eng/10-uc-administracao-seguranca.md",
+    "docs/eng/42-contratos-integracao.md",
+    "docs/eng/60-catalogo-saidas-oficiais.md",
+    "docs/eng/62-estrategia-testes.md"
+  ],
+  "supplemental_runtime_route_docs": [
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/41-arquitetura-sistema.md"
+  ],
+  "domain_workflow_menu_docs": [
+    "docs/eng/BRIEF.md",
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/50-arvore-menus.md"
+  ],
+  "route_alignment_counts": {
+    "documented_total": 211,
+    "documented_current": 152,
+    "runtime_total": 190,
+    "runtime_current": 152,
+    "deferred_documented": 59,
+    "deferred_runtime": 38,
+    "implemented": 152,
+    "explicitly_excluded": 0,
+    "documented_missing": 0,
+    "runtime_only": 0,
+    "runtime_outside_families": 0,
+    "domain_modules": 11,
+    "domain_modules_implemented": 11,
+    "portal_menu_routes": 34,
+    "portal_menu_missing": 0,
+    "admin_menu_routes": 182,
+    "admin_menu_implemented": 0,
+    "admin_menu_missing": 0,
+    "admin_menu_routes_postponed": 182
+  },
+  "deferred_scopes": [
+    "ADMIN_INSTALL_LATER",
+    "IDENTITY_INSTALL_LATER",
+    "ARRECADACAO_PREVIDENCIARIA"
+  ],
+  "current_route_gap_endpoints": []
+}

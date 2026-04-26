@@ -1,0 +1,162 @@
+[
+  {
+    "id": "1",
+    "funcionario_id": "4",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "3",
+    "funcionario_id": "34",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "4",
+    "funcionario_id": "37",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "5",
+    "funcionario_id": "39",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "6",
+    "funcionario_id": "41",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "7",
+    "funcionario_id": "40",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "8",
+    "funcionario_id": "42",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "9",
+    "funcionario_id": "45",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "10",
+    "funcionario_id": "46",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "11",
+    "funcionario_id": "48",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "12",
+    "funcionario_id": "49",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "13",
+    "funcionario_id": "50",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "14",
+    "funcionario_id": "51",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "15",
+    "funcionario_id": "52",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "16",
+    "funcionario_id": "53",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  },
+  {
+    "id": "17",
+    "funcionario_id": "54",
+    "verba_id": "9",
+    "valor": null,
+    "created_at": null,
+    "updated_at": null,
+    "created_by": null,
+    "updated_by": null
+  }
+]

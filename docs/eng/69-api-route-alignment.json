@@ -1,0 +1,4593 @@
+{
+  "generated_at": "2026-04-26",
+  "authority": [
+    "docs/eng/10-uc-administracao-seguranca.md",
+    "docs/eng/42-contratos-integracao.md",
+    "docs/eng/60-catalogo-saidas-oficiais.md",
+    "docs/eng/62-estrategia-testes.md",
+    "docs/eng/BRIEF.md",
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/50-arvore-menus.md",
+    "docs/eng/41-arquitetura-sistema.md"
+  ],
+  "route_contract_authority": [
+    "docs/eng/10-uc-administracao-seguranca.md",
+    "docs/eng/42-contratos-integracao.md",
+    "docs/eng/60-catalogo-saidas-oficiais.md",
+    "docs/eng/62-estrategia-testes.md"
+  ],
+  "domain_workflow_menu_authority": [
+    "docs/eng/BRIEF.md",
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/50-arvore-menus.md"
+  ],
+  "supplemental_runtime_route_authority": [
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/41-arquitetura-sistema.md"
+  ],
+  "route_families": [
+    "/api/v1",
+    "/api/admin/v1",
+    "/api/portal/v1",
+    "/api/external/v1",
+    "/api/publico/v1"
+  ],
+  "deferred_scopes": [
+    {
+      "key": "ADMIN_INSTALL_LATER",
+      "status": "postponed",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers.",
+      "path_prefixes": [
+        "/api/v1/admin",
+        "/api/admin/v1"
+      ]
+    },
+    {
+      "key": "IDENTITY_INSTALL_LATER",
+      "status": "postponed",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework.",
+      "path_prefixes": [
+        "/api/v1/auth",
+        "/api/v1/iam",
+        "/api/portal/v1/auth"
+      ]
+    },
+    {
+      "key": "ARRECADACAO_PREVIDENCIARIA",
+      "status": "future_version",
+      "reason": "Arrecadacao Previdenciaria is later-version scope and has no current v0.0.1 route, menu, DB, UI, or test blocker.",
+      "path_prefixes": [
+        "/api/v1/arrecadacao",
+        "/api/v1/arrecadacao-previdenciaria"
+      ]
+    }
+  ],
+  "approved_out_of_scope_routes": [],
+  "counts": {
+    "documented_total": 212,
+    "documented": 153,
+    "runtime_total": 191,
+    "runtime": 153,
+    "deferred_documented": 59,
+    "deferred_runtime": 38,
+    "implemented": 153,
+    "explicitly_excluded": 0,
+    "documented_missing": 0,
+    "runtime_only": 0,
+    "runtime_outside_families": 0,
+    "domain_modules": 11,
+    "domain_modules_implemented": 11,
+    "portal_menu_routes": 34,
+    "portal_menu_missing": 0,
+    "admin_menu_routes": 182,
+    "admin_menu_implemented": 0,
+    "admin_menu_missing": 0,
+    "admin_menu_routes_postponed": 182
+  },
+  "deferred_documented_routes": [
+    {
+      "method": "DELETE",
+      "path": "/api/v1/admin/convites/:id",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/admin/menus/:id",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/admin/perfis/:id",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/feature-flags",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/integracoes/cnab/remessas",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/integracoes/esocial/status",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/notificacoes/templates",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/papeis",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/parametros/globais",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/parametros/sistema",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/perfis",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/tenants",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/tenants/:id/importacao/:job_id/progresso",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/tenants/:id/parametros",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/usuarios",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/portal/v1/auth/govbr/status",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "GET",
+      "path": "/api/portal/v1/auth/me",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/menus",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/parametros/globais",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/parametros/sistema",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/perfis",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/perfis/:id",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/usuarios",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/menus",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/v1/feature-flags/:chave",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/v1/tenants/:id",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/feature-flags/:chave",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/usuarios/:id",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/esocial/eventos/:id/reprocessar",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/integracoes/cnab/gerar",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/integracoes/dirf/gerar",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/integracoes/esocial/reenviar/:id",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/integracoes/siprev/gerar",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/perfis",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/tenants",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/tenants/:id/importacao",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/usuarios",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/menus",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/perfis",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/usuarios",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/usuarios/convite",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/confirmar-nova-senha",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/recuperar-senha",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/admin/v1/esocial/certificado",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/admin/v1/feature-flags/:flag",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/admin/v1/parametros/sistema/:chave",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/admin/v1/tenants/:id/parametros",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/admin/v1/usuarios/:id/perfis",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/menus/:id",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/parametros/globais/:chave",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/parametros/sistema",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/perfis/:id",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/perfis/:id/papeis",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/usuarios/:id/papeis-diretos",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/usuarios/:id/perfis",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/auth/alterar-senha",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    }
+  ],
+  "deferred_runtime_routes": [
+    {
+      "method": "DELETE",
+      "path": "/api/v1/admin/convites/:id",
+      "source_file": "backend/src/users/invites.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/admin/menus/:id",
+      "source_file": "backend/src/system-parameters/admin-menus.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/admin/perfis/:id",
+      "source_file": "backend/src/profiles/profiles.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/v1/tenants/:id/importacao/:job_id/progresso",
+      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/portal/v1/auth/govbr/status",
+      "source_file": "backend/src/portal/portal.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "GET",
+      "path": "/api/portal/v1/auth/me",
+      "source_file": "backend/src/portal/portal.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/menus",
+      "source_file": "backend/src/system-parameters/admin-menus.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/parametros/globais",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/parametros/sistema",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/perfis",
+      "source_file": "backend/src/profiles/profiles.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/perfis/:id",
+      "source_file": "backend/src/profiles/profiles.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/usuarios",
+      "source_file": "backend/src/users/users.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "source_file": "backend/src/auth/session/session.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/menus",
+      "source_file": "backend/src/auth/session/session.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/permissions",
+      "source_file": "backend/src/iam/permissions/permissions.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/v1/feature-flags/:chave",
+      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/v1/tenants/:id",
+      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/feature-flags/:chave",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/usuarios/:id",
+      "source_file": "backend/src/users/users.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/esocial/eventos/:id/reprocessar",
+      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/tenants",
+      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/v1/tenants/:id/importacao",
+      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/menus",
+      "source_file": "backend/src/system-parameters/admin-menus.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/perfis",
+      "source_file": "backend/src/profiles/profiles.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/usuarios",
+      "source_file": "backend/src/users/users.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/usuarios/convite",
+      "source_file": "backend/src/users/invites.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/confirmar-nova-senha",
+      "source_file": "backend/src/auth/session/session.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "source_file": "backend/src/auth/session/session.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/recuperar-senha",
+      "source_file": "backend/src/auth/session/session.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/admin/v1/esocial/certificado",
+      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/menus/:id",
+      "source_file": "backend/src/system-parameters/admin-menus.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/parametros/globais/:chave",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/parametros/sistema",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/perfis/:id",
+      "source_file": "backend/src/profiles/profiles.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/perfis/:id/papeis",
+      "source_file": "backend/src/profiles/profiles.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/usuarios/:id/papeis-diretos",
+      "source_file": "backend/src/users/users.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/usuarios/:id/perfis",
+      "source_file": "backend/src/users/users.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/auth/alterar-senha",
+      "source_file": "backend/src/auth/session/session.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    }
+  ],
+  "documented_missing": [],
+  "runtime_only": [],
+  "runtime_outside_families": [],
+  "domain_alignment": [
+    {
+      "menu": "Gestão",
+      "category": "GESTAO",
+      "nest_module": "gestao",
+      "angular_lib": "@sgp/gestao",
+      "bounded_context": "Estrutura Corporativa & Parametrizações",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/master-data/:resource/:id",
+          "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/master-data",
+          "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/master-data/:resource",
+          "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/master-data/:resource/:id",
+          "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/master-data/:resource",
+          "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/gestao/master-data/master-data.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Módulo RH",
+      "category": "MODULO_RH",
+      "nest_module": "rh",
+      "angular_lib": "@sgp/rh",
+      "bounded_context": "Cadastro Funcional e Vida Laboral",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/rh/afastamentos/:id",
+          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/rh/processos-funcao/:id",
+          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/rh/processos/:id",
+          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/funcionarios/:id/dossie",
+          "source_file": "backend/src/rh/employees/employees.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/rh/afastamentos",
+          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/rh/processos",
+          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/rh/processos-funcao",
+          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/rh/afastamentos/:id",
+          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/rh/workflows/rh-workflows.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Folha de Pgt",
+      "category": "FOLHA_PAGAMENTO",
+      "nest_module": "folha",
+      "angular_lib": "@sgp/folha",
+      "bounded_context": "Folha e Financeiro",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/folhas/catalogos/:resource/:id",
+          "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/folhas/contabilidade/:id",
+          "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/folha/:id/remessa",
+          "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/folhas",
+          "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/folhas/catalogos",
+          "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/folhas/catalogos/:resource",
+          "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/folhas/contabilidade",
+          "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/payroll-engine/health",
+          "source_file": "backend/src/payroll-engine/payroll-engine.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts",
+        "backend/src/folha-pagamento/operations/payroll-operations.controller.ts",
+        "backend/src/folha-pagamento/payroll/payroll.controller.ts",
+        "backend/src/payroll-engine/payroll-engine.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Módulo Avaliação",
+      "category": "MODULO_AVALIACAO",
+      "nest_module": "avaliacao",
+      "angular_lib": "@sgp/avaliacao",
+      "bounded_context": "Avaliação e Progressão",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "GET",
+          "path": "/api/v1/avaliacao/desempenhos",
+          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/avaliacao/planos-cargos",
+          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/avaliacao/progressoes",
+          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/avaliacao/simulacoes",
+          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/avaliacao/desempenhos/:id",
+          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/avaliacao/planos-cargos/:id",
+          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/avaliacao/ciclos/:periodo/relatorio",
+          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/avaliacao/desempenhos",
+          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/avaliacao/avaliacao.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Recrutamento e Seleção",
+      "category": "RECRUTAMENTO_SELECAO",
+      "nest_module": "recrutamento",
+      "angular_lib": "@sgp/recrutamento",
+      "bounded_context": "Recrutamento, Seleção e Estágio",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/recrutamento/candidatos/:candidato_id",
+          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/concluir",
+          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/encaminhar",
+          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/recrutamento/requisicoes",
+          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/candidatos",
+          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/recrutamento/recruitment.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Consultas Gerenciais",
+      "category": "CONSULTAS_GERENCIAIS",
+      "nest_module": "consultas",
+      "angular_lib": "@sgp/consultas",
+      "bounded_context": "Consultas e BI",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "GET",
+          "path": "/api/v1/consultas/dashboards",
+          "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/consultas/ficha-financeira",
+          "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/consultas/ficha-funcional",
+          "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/consultas/historico-operacional",
+          "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/consultas/pagamentos-bloqueados",
+          "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/consultas/relatorios-situacao",
+          "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/consultas/managerial-queries.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Relatório",
+      "category": "RELATORIO",
+      "nest_module": "relatorios",
+      "angular_lib": "@sgp/relatorios",
+      "bounded_context": "Emissão de Relatórios",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "GET",
+          "path": "/api/v1/relatorios",
+          "source_file": "backend/src/relatorio/report-catalog/report-catalog.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/report-service/health",
+          "source_file": "backend/src/report-service/report-service.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/report-service/status",
+          "source_file": "backend/src/report-service/report-service.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/report-service/poll",
+          "source_file": "backend/src/report-service/report-service.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/report-service/requests",
+          "source_file": "backend/src/report-service/report-service.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/relatorio/report-catalog/report-catalog.controller.ts",
+        "backend/src/report-service/report-service.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Módulo Previdenciário",
+      "category": "MODULO_PREVIDENCIARIO",
+      "nest_module": "previdenciario",
+      "angular_lib": "@sgp/previdenciario",
+      "bounded_context": "Previdenciário e Benefícios",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "GET",
+          "path": "/api/v1/previdenciario/aposentadorias",
+          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/previdenciario/certidoes-tempo",
+          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/previdenciario/compensacoes",
+          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/previdenciario/declaracoes",
+          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/previdenciario/pensoes",
+          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/previdenciario/recadastramentos/beneficiarios",
+          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/previdenciario/recadastramentos/campanhas",
+          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/previdenciario/recadastramentos/historico",
+          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/previdenciario/previdenciario.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Auditoria",
+      "category": "AUDITORIA",
+      "nest_module": "auditoria",
+      "angular_lib": "@sgp/auditoria",
+      "bounded_context": "Trilha de Auditoria",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auditoria/exportacoes/:job_id",
+          "source_file": "backend/src/audit/audit.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auditoria/logs",
+          "source_file": "backend/src/audit/audit.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auditoria/logs/:id",
+          "source_file": "backend/src/audit/audit.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/auditoria/exportacoes",
+          "source_file": "backend/src/audit/audit.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/audit/audit.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Area de Saúde",
+      "category": "JUNTA_MEDICA",
+      "nest_module": "saude",
+      "angular_lib": "@sgp/saude",
+      "bounded_context": "Saúde Ocupacional e Perícia",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "GET",
+          "path": "/api/v1/pericia/prontuarios/:id/laudo/pdf",
+          "source_file": "backend/src/rh/employees/employees.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/pericia/agendamentos/:agendamento_id",
+          "source_file": "backend/src/saude/pericia.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/pericia/prontuarios/:prontuario_id/validar",
+          "source_file": "backend/src/saude/pericia.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/pericia/agendamentos",
+          "source_file": "backend/src/saude/pericia.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/pericia/prontuarios",
+          "source_file": "backend/src/saude/pericia.controller.ts"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/pericia/prontuarios/:prontuario_id/replicar",
+          "source_file": "backend/src/saude/pericia.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/saude/pericia.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    },
+    {
+      "menu": "Convênio",
+      "category": "CONVENIO",
+      "nest_module": "convenio",
+      "angular_lib": "@sgp/convenio",
+      "bounded_context": "Convênios e Descontos",
+      "source_doc": "docs/eng/BRIEF.md",
+      "status": "implemented",
+      "route_evidence": [
+        {
+          "method": "GET",
+          "path": "/api/v1/convenios",
+          "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
+        }
+      ],
+      "source_evidence": [
+        "backend/src/convenio/agreements/agreements.controller.ts"
+      ],
+      "frontend_status": "postponed_admin_tree",
+      "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+      "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+    }
+  ],
+  "workflow_alignment": {
+    "status": "implemented",
+    "domain_modules": [
+      {
+        "menu": "Gestão",
+        "category": "GESTAO",
+        "nest_module": "gestao",
+        "angular_lib": "@sgp/gestao",
+        "bounded_context": "Estrutura Corporativa & Parametrizações",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "DELETE",
+            "path": "/api/v1/master-data/:resource/:id",
+            "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/master-data",
+            "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/master-data/:resource",
+            "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/master-data/:resource/:id",
+            "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/master-data/:resource",
+            "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/gestao/master-data/master-data.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Módulo RH",
+        "category": "MODULO_RH",
+        "nest_module": "rh",
+        "angular_lib": "@sgp/rh",
+        "bounded_context": "Cadastro Funcional e Vida Laboral",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "DELETE",
+            "path": "/api/v1/rh/afastamentos/:id",
+            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/v1/rh/processos-funcao/:id",
+            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/v1/rh/processos/:id",
+            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/funcionarios/:id/dossie",
+            "source_file": "backend/src/rh/employees/employees.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/rh/afastamentos",
+            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/rh/processos",
+            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/rh/processos-funcao",
+            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/rh/afastamentos/:id",
+            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/rh/workflows/rh-workflows.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Folha de Pgt",
+        "category": "FOLHA_PAGAMENTO",
+        "nest_module": "folha",
+        "angular_lib": "@sgp/folha",
+        "bounded_context": "Folha e Financeiro",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "DELETE",
+            "path": "/api/v1/folhas/catalogos/:resource/:id",
+            "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/v1/folhas/contabilidade/:id",
+            "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/folha/:id/remessa",
+            "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/folhas",
+            "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/folhas/catalogos",
+            "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/folhas/catalogos/:resource",
+            "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/folhas/contabilidade",
+            "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/payroll-engine/health",
+            "source_file": "backend/src/payroll-engine/payroll-engine.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts",
+          "backend/src/folha-pagamento/operations/payroll-operations.controller.ts",
+          "backend/src/folha-pagamento/payroll/payroll.controller.ts",
+          "backend/src/payroll-engine/payroll-engine.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Módulo Avaliação",
+        "category": "MODULO_AVALIACAO",
+        "nest_module": "avaliacao",
+        "angular_lib": "@sgp/avaliacao",
+        "bounded_context": "Avaliação e Progressão",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "GET",
+            "path": "/api/v1/avaliacao/desempenhos",
+            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/avaliacao/planos-cargos",
+            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/avaliacao/progressoes",
+            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/avaliacao/simulacoes",
+            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/avaliacao/desempenhos/:id",
+            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/avaliacao/planos-cargos/:id",
+            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/avaliacao/ciclos/:periodo/relatorio",
+            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/avaliacao/desempenhos",
+            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/avaliacao/avaliacao.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Recrutamento e Seleção",
+        "category": "RECRUTAMENTO_SELECAO",
+        "nest_module": "recrutamento",
+        "angular_lib": "@sgp/recrutamento",
+        "bounded_context": "Recrutamento, Seleção e Estágio",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "PATCH",
+            "path": "/api/v1/recrutamento/candidatos/:candidato_id",
+            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/concluir",
+            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/encaminhar",
+            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/recrutamento/requisicoes",
+            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/candidatos",
+            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/recrutamento/recruitment.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Consultas Gerenciais",
+        "category": "CONSULTAS_GERENCIAIS",
+        "nest_module": "consultas",
+        "angular_lib": "@sgp/consultas",
+        "bounded_context": "Consultas e BI",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "GET",
+            "path": "/api/v1/consultas/dashboards",
+            "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/consultas/ficha-financeira",
+            "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/consultas/ficha-funcional",
+            "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/consultas/historico-operacional",
+            "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/consultas/pagamentos-bloqueados",
+            "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/consultas/relatorios-situacao",
+            "source_file": "backend/src/consultas/managerial-queries.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/consultas/managerial-queries.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Relatório",
+        "category": "RELATORIO",
+        "nest_module": "relatorios",
+        "angular_lib": "@sgp/relatorios",
+        "bounded_context": "Emissão de Relatórios",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "GET",
+            "path": "/api/v1/relatorios",
+            "source_file": "backend/src/relatorio/report-catalog/report-catalog.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/report-service/health",
+            "source_file": "backend/src/report-service/report-service.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/report-service/status",
+            "source_file": "backend/src/report-service/report-service.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/report-service/poll",
+            "source_file": "backend/src/report-service/report-service.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/report-service/requests",
+            "source_file": "backend/src/report-service/report-service.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/relatorio/report-catalog/report-catalog.controller.ts",
+          "backend/src/report-service/report-service.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Módulo Previdenciário",
+        "category": "MODULO_PREVIDENCIARIO",
+        "nest_module": "previdenciario",
+        "angular_lib": "@sgp/previdenciario",
+        "bounded_context": "Previdenciário e Benefícios",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "GET",
+            "path": "/api/v1/previdenciario/aposentadorias",
+            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/previdenciario/certidoes-tempo",
+            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/previdenciario/compensacoes",
+            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/previdenciario/declaracoes",
+            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/previdenciario/pensoes",
+            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/previdenciario/recadastramentos/beneficiarios",
+            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/previdenciario/recadastramentos/campanhas",
+            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/previdenciario/recadastramentos/historico",
+            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/previdenciario/previdenciario.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Auditoria",
+        "category": "AUDITORIA",
+        "nest_module": "auditoria",
+        "angular_lib": "@sgp/auditoria",
+        "bounded_context": "Trilha de Auditoria",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "GET",
+            "path": "/api/v1/auditoria/exportacoes/:job_id",
+            "source_file": "backend/src/audit/audit.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/auditoria/logs",
+            "source_file": "backend/src/audit/audit.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/auditoria/logs/:id",
+            "source_file": "backend/src/audit/audit.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/auditoria/exportacoes",
+            "source_file": "backend/src/audit/audit.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/audit/audit.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Area de Saúde",
+        "category": "JUNTA_MEDICA",
+        "nest_module": "saude",
+        "angular_lib": "@sgp/saude",
+        "bounded_context": "Saúde Ocupacional e Perícia",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "GET",
+            "path": "/api/v1/pericia/prontuarios/:id/laudo/pdf",
+            "source_file": "backend/src/rh/employees/employees.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/pericia/agendamentos/:agendamento_id",
+            "source_file": "backend/src/saude/pericia.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/pericia/prontuarios/:prontuario_id/validar",
+            "source_file": "backend/src/saude/pericia.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/pericia/agendamentos",
+            "source_file": "backend/src/saude/pericia.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/pericia/prontuarios",
+            "source_file": "backend/src/saude/pericia.controller.ts"
+          },
+          {
+            "method": "POST",
+            "path": "/api/v1/pericia/prontuarios/:prontuario_id/replicar",
+            "source_file": "backend/src/saude/pericia.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/saude/pericia.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      },
+      {
+        "menu": "Convênio",
+        "category": "CONVENIO",
+        "nest_module": "convenio",
+        "angular_lib": "@sgp/convenio",
+        "bounded_context": "Convênios e Descontos",
+        "source_doc": "docs/eng/BRIEF.md",
+        "status": "implemented",
+        "route_evidence": [
+          {
+            "method": "GET",
+            "path": "/api/v1/convenios",
+            "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
+          }
+        ],
+        "source_evidence": [
+          "backend/src/convenio/agreements/agreements.controller.ts"
+        ],
+        "frontend_status": "postponed_admin_tree",
+        "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
+        "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
+      }
+    ],
+    "portal_menu": {
+      "status": "implemented",
+      "documented_routes": 34,
+      "implemented": 31,
+      "postponed": 3,
+      "missing": [],
+      "routes": [
+        {
+          "label": "Meus Dados / Cadastro Pessoal",
+          "path": "/meus-dados/cadastro",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Meus Dados / Endereço",
+          "path": "/meus-dados/endereco",
+          "module": "pessoa",
+          "status": "implemented"
+        },
+        {
+          "label": "Meus Dados / Contato",
+          "path": "/meus-dados/contato",
+          "module": "pessoa",
+          "status": "implemented"
+        },
+        {
+          "label": "Meus Dados / Documentos",
+          "path": "/meus-dados/documentos",
+          "module": "pessoa",
+          "status": "implemented"
+        },
+        {
+          "label": "Meus Dados / Dependentes",
+          "path": "/meus-dados/dependentes",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Contracheques / Mês Atual",
+          "path": "/contracheques/atual",
+          "module": "folha",
+          "status": "implemented"
+        },
+        {
+          "label": "Contracheques / Histórico",
+          "path": "/contracheques/historico",
+          "module": "folha",
+          "status": "implemented"
+        },
+        {
+          "label": "Contracheques / Download PDF",
+          "path": "/contracheques/download/:id",
+          "module": "folha",
+          "status": "implemented"
+        },
+        {
+          "label": "Contracheques / Financeiro Anual",
+          "path": "/contracheques/financeiro-anual",
+          "module": "folha",
+          "status": "implemented"
+        },
+        {
+          "label": "Licenças e Afastamentos / Solicitações",
+          "path": "/licencas/solicitacoes",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Licenças e Afastamentos / Histórico",
+          "path": "/licencas/historico",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Licenças e Afastamentos / Documentos",
+          "path": "/licencas/documentos",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Perícias / Agendadas",
+          "path": "/pericias/agendadas",
+          "module": "saude",
+          "status": "implemented"
+        },
+        {
+          "label": "Perícias / Histórico",
+          "path": "/pericias/historico",
+          "module": "saude",
+          "status": "implemented"
+        },
+        {
+          "label": "Perícias / Anexos",
+          "path": "/pericias/anexos",
+          "module": "saude",
+          "status": "implemented"
+        },
+        {
+          "label": "Recadastramento / Iniciar",
+          "path": "/recadastramento/iniciar",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Recadastramento / Histórico",
+          "path": "/recadastramento/historico",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Recadastramento / Comprovantes",
+          "path": "/recadastramento/comprovantes",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Férias / Solicitar",
+          "path": "/ferias/solicitar",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Férias / Histórico",
+          "path": "/ferias/historico",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Férias / Programação",
+          "path": "/ferias/programacao",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Currículo / Meu Currículo",
+          "path": "/curriculo/meu-curriculo",
+          "module": "recrutamento",
+          "status": "implemented"
+        },
+        {
+          "label": "Currículo / Candidaturas",
+          "path": "/curriculo/candidaturas",
+          "module": "recrutamento",
+          "status": "implemented"
+        },
+        {
+          "label": "Requisições / Nova Requisição",
+          "path": "/requisicoes/nova",
+          "module": "recrutamento",
+          "status": "implemented"
+        },
+        {
+          "label": "Requisições / Acompanhamento",
+          "path": "/requisicoes/acompanhamento",
+          "module": "recrutamento",
+          "status": "implemented"
+        },
+        {
+          "label": "Documentos Pessoais / Ficha Funcional",
+          "path": "/documentos/ficha-funcional",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Documentos Pessoais / Declarações",
+          "path": "/documentos/declaracoes",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Documentos Pessoais / Certidões",
+          "path": "/documentos/certidoes",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Avaliação / Auto-Avaliação",
+          "path": "/avaliacao/auto-avaliacao",
+          "module": "avaliacao",
+          "status": "implemented"
+        },
+        {
+          "label": "Avaliação / Resultados",
+          "path": "/avaliacao/resultados",
+          "module": "avaliacao",
+          "status": "implemented"
+        },
+        {
+          "label": "Notificações / Inbox",
+          "path": "/notificacoes",
+          "module": "notificacoes",
+          "status": "implemented"
+        },
+        {
+          "label": "Configurações / MFA",
+          "path": "/configuracoes/mfa",
+          "module": "auth",
+          "status": "postponed",
+          "deferred_scope": "IDENTITY_INSTALL_LATER"
+        },
+        {
+          "label": "Configurações / Alterar Senha",
+          "path": "/configuracoes/senha",
+          "module": "auth",
+          "status": "postponed",
+          "deferred_scope": "IDENTITY_INSTALL_LATER"
+        },
+        {
+          "label": "Configurações / Consentimentos LGPD",
+          "path": "/configuracoes/lgpd",
+          "module": "auth",
+          "status": "postponed",
+          "deferred_scope": "IDENTITY_INSTALL_LATER"
+        }
+      ]
+    }
+  },
+  "menu_alignment": {
+    "admin": {
+      "status": "postponed",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "documented_routes": 182,
+      "implemented": 0,
+      "postponed": 182,
+      "missing": [],
+      "routes": [
+        {
+          "label": "Área de Formação / `/gestao/area-formacao/gestao`",
+          "path": "/gestao/area-formacao/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Atividade / `/gestao/atividade/gestao`",
+          "path": "/gestao/atividade/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Banco / `/gestao/banco/gestao`",
+          "path": "/gestao/banco/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Categoria Profissional / `/gestao/categoria-profissional/gestao`",
+          "path": "/gestao/categoria-profissional/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "CBO / `/gestao/cbo/gestao`",
+          "path": "/gestao/cbo/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "CNAE / `/gestao/cnae/gestao`",
+          "path": "/gestao/cnae/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Centro de Custo / `/gestao/centro-custo/gestao`",
+          "path": "/gestao/centro-custo/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Consignado / `/gestao/consignado/gestao`",
+          "path": "/gestao/consignado/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Conta Contábil / `/gestao/conta-contabil/gestao`",
+          "path": "/gestao/conta-contabil/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Convênio (mestre) / `/gestao/convenio/gestao`",
+          "path": "/gestao/convenio/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Curso / `/gestao/curso/gestao`",
+          "path": "/gestao/curso/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Grau Acadêmico / `/gestao/grau-academico/gestao`",
+          "path": "/gestao/grau-academico/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Município / `/gestao/municipio/gestao`",
+          "path": "/gestao/municipio/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Nacionalidade / País / `/gestao/nacionalidade/gestao`",
+          "path": "/gestao/nacionalidade/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Sindicato / `/gestao/sindicato/gestao`",
+          "path": "/gestao/sindicato/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Turno / `/gestao/turno/gestao`",
+          "path": "/gestao/turno/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "UF / `/gestao/uf/gestao`",
+          "path": "/gestao/uf/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Tipo de Documento / `/gestao/tipo-documento/gestao`",
+          "path": "/gestao/tipo-documento/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Modelo de Documento / `/gestao/modelo-documento/gestao`",
+          "path": "/gestao/modelo-documento/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Parâmetro Sistema / `/gestao/parametro-sistema/formulario`",
+          "path": "/gestao/parametro-sistema/formulario",
+          "module": "parametros",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Parâmetro Global / `/gestao/parametro-global/gestao`",
+          "path": "/gestao/parametro-global/gestao",
+          "module": "parametros",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Feature Flag / `/gestao/feature-flag/gestao`",
+          "path": "/gestao/feature-flag/gestao",
+          "module": "parametros",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Cargo / `/gestao/cargo/gestao`",
+          "path": "/gestao/cargo/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Função / `/gestao/funcao/gestao`",
+          "path": "/gestao/funcao/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Faixa Salarial / `/gestao/faixa-salarial/gestao`",
+          "path": "/gestao/faixa-salarial/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Referência Salarial / `/gestao/referencia-salarial/gestao`",
+          "path": "/gestao/referencia-salarial/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Lotação / `/gestao/lotacao/gestao`",
+          "path": "/gestao/lotacao/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Empresa Filial / `/gestao/empresa-filial/gestao`",
+          "path": "/gestao/empresa-filial/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Nível Salarial / `/gestao/nivel-salarial/gestao`",
+          "path": "/gestao/nivel-salarial/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Grupo Salarial / `/gestao/grupo-salarial/gestao`",
+          "path": "/gestao/grupo-salarial/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Vínculo / `/gestao/vinculo/gestao`",
+          "path": "/gestao/vinculo/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Tipo de Contrato / `/gestao/tipo-contrato/gestao`",
+          "path": "/gestao/tipo-contrato/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Tipo de Folha / `/gestao/tipo-folha/gestao`",
+          "path": "/gestao/tipo-folha/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Tipo de Processamento / `/gestao/tipo-processamento/gestao`",
+          "path": "/gestao/tipo-processamento/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Verba / Rubrica / `/gestao/verba/gestao`",
+          "path": "/gestao/verba/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Evento / `/gestao/evento/gestao`",
+          "path": "/gestao/evento/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Requisito / `/gestao/requisito/gestao`",
+          "path": "/gestao/requisito/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Classificação de Atos / `/gestao/classificacao-ato/gestao`",
+          "path": "/gestao/classificacao-ato/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Legislação / Motivo / `/gestao/motivo/gestao`",
+          "path": "/gestao/motivo/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Tipo de Desligamento / `/gestao/tipo-desligamento/gestao`",
+          "path": "/gestao/tipo-desligamento/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Causa de Afastamento / `/gestao/causa-afastamento/gestao`",
+          "path": "/gestao/causa-afastamento/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Motivo de Afastamento / `/gestao/motivo-afastamento/gestao`",
+          "path": "/gestao/motivo-afastamento/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Tipo de Averbação / `/gestao/tipo-averbacao/gestao`",
+          "path": "/gestao/tipo-averbacao/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Tipo de Aposentadoria / `/gestao/tipo-aposentadoria/gestao`",
+          "path": "/gestao/tipo-aposentadoria/gestao",
+          "module": "gestao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Servidor (Funcionário) — lista / `/rh/servidor/gestao`",
+          "path": "/rh/servidor/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Servidor — novo / `/rh/servidor/formulario`",
+          "path": "/rh/servidor/formulario",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Servidor — editar / `/rh/servidor/formulario/:id`",
+          "path": "/rh/servidor/formulario/:id",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Servidor — detalhes / `/rh/servidor/detalhes/:id`",
+          "path": "/rh/servidor/detalhes/:id",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Dado Complementar / `/rh/dado-complementar/gestao`",
+          "path": "/rh/dado-complementar/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Dependente / `/rh/dependente/gestao`",
+          "path": "/rh/dependente/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Dependente Benefício / `/rh/dependente-beneficio/gestao`",
+          "path": "/rh/dependente-beneficio/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Tempo de Serviço / `/rh/tempo-servico/gestao`",
+          "path": "/rh/tempo-servico/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Experiência Profissional / `/rh/experiencia-profissional/gestao`",
+          "path": "/rh/experiencia-profissional/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Dossiê / Observação Documental / `/rh/dossie/gestao`",
+          "path": "/rh/dossie/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Documento de Amparo / `/rh/documento-amparo/gestao`",
+          "path": "/rh/documento-amparo/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Posse — Efetivo / `/rh/posse-efetivo/gestao`",
+          "path": "/rh/posse-efetivo/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Posse — Efetivo (formulário) / `/rh/posse-efetivo/formulario/:id`",
+          "path": "/rh/posse-efetivo/formulario/:id",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Posse — Comissionado / `/rh/posse-comissionado/gestao`",
+          "path": "/rh/posse-comissionado/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Posse — Comissionado (formulário) / `/rh/posse-comissionado/formulario/:id`",
+          "path": "/rh/posse-comissionado/formulario/:id",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Posse — Contratado / `/rh/posse-contratado/gestao`",
+          "path": "/rh/posse-contratado/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Posse — Contratado (formulário) / `/rh/posse-contratado/formulario/:id`",
+          "path": "/rh/posse-contratado/formulario/:id",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Histórico de Situação / `/rh/historico-situacao/gestao`",
+          "path": "/rh/historico-situacao/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Afastamento / `/rh/afastamento/gestao`",
+          "path": "/rh/afastamento/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Transferência / `/rh/transferencia/gestao`",
+          "path": "/rh/transferencia/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Exoneração / Desligamento / `/rh/desligamento/gestao`",
+          "path": "/rh/desligamento/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Rescisão de Contrato / `/rh/rescisao/gestao`",
+          "path": "/rh/rescisao/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Falta / `/rh/falta/gestao`",
+          "path": "/rh/falta/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Frequência / `/rh/frequencia/gestao`",
+          "path": "/rh/frequencia/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Programação de Férias / `/rh/ferias-programacao/gestao`",
+          "path": "/rh/ferias-programacao/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Licença-Prêmio / `/rh/licenca-premio/gestao`",
+          "path": "/rh/licenca-premio/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Progressão Salarial / `/rh/nivel-salarial-historico/gestao`",
+          "path": "/rh/nivel-salarial-historico/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Pensão Alimentícia / `/rh/pensao-alimenticia/gestao`",
+          "path": "/rh/pensao-alimenticia/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Contribuição Sindical / `/rh/contribuicao-sindical/gestao`",
+          "path": "/rh/contribuicao-sindical/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Decisão Judicial / `/rh/decisao-judicial/gestao`",
+          "path": "/rh/decisao-judicial/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Categoria Profissional (vínculo) / `/rh/categoria-profissional-vinculo/gestao`",
+          "path": "/rh/categoria-profissional-vinculo/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Processo / `/rh/processo/gestao`",
+          "path": "/rh/processo/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Processo-Função / `/rh/processo-funcao/gestao`",
+          "path": "/rh/processo-funcao/gestao",
+          "module": "rh",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Competência / `/folha/competencia/gestao`",
+          "path": "/folha/competencia/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Folha de Pagamento / `/folha/folha-pagamento/gestao`",
+          "path": "/folha/folha-pagamento/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Contracheque — lista / `/folha/contracheque/gestao`",
+          "path": "/folha/contracheque/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Contracheque — detalhes / `/folha/contracheque/detalhes/:id`",
+          "path": "/folha/contracheque/detalhes/:id",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Verbas (cadastro) / `/folha/verba/gestao`",
+          "path": "/folha/verba/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Verbas por Servidor / `/folha/verbas-servidor/gestao`",
+          "path": "/folha/verbas-servidor/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Verbas por Pensionista / `/folha/verbas-pensionista/gestao`",
+          "path": "/folha/verbas-pensionista/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Lançamento Manual / `/folha/lancamento-manual/gestao`",
+          "path": "/folha/lancamento-manual/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Importador Verbas Servidor / `/folha/importacao-verbas-servidor/gestao`",
+          "path": "/folha/importacao-verbas-servidor/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Importador Verbas Pensionista / `/folha/importacao-verbas-pensionista/gestao`",
+          "path": "/folha/importacao-verbas-pensionista/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Importação Consignado / `/folha/importacao-consignado/gestao`",
+          "path": "/folha/importacao-consignado/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "DIRF / `/folha/dirf/gestao`",
+          "path": "/folha/dirf/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "SEFIP / `/folha/sefip/gestao`",
+          "path": "/folha/sefip/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Remessa Bancária / `/folha/remessa-bancaria/gestao`",
+          "path": "/folha/remessa-bancaria/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Retorno Bancário / `/folha/retorno-bancario/gestao`",
+          "path": "/folha/retorno-bancario/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Batimento de Folha / `/folha/batimento/gestao`",
+          "path": "/folha/batimento/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "eSocial / `/folha/esocial/gestao`",
+          "path": "/folha/esocial/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório de Folha / `/folha/relatorio-folha/gestao`",
+          "path": "/folha/relatorio-folha/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório Financeiro / `/folha/relatorio-financeiro/gestao`",
+          "path": "/folha/relatorio-financeiro/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Proventos e Descontos / `/folha/relatorio-proventos-descontos/gestao`",
+          "path": "/folha/relatorio-proventos-descontos/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Repasse Fundo RH / `/folha/relatorio-repasse-fundo/gestao`",
+          "path": "/folha/relatorio-repasse-fundo/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório de Verbas / `/folha/relatorio-verbas/gestao`",
+          "path": "/folha/relatorio-verbas/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Resumo de Folha / `/folha/resumo/gestao`",
+          "path": "/folha/resumo/gestao",
+          "module": "folha",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Avaliação de Desempenho / `/avaliacao/avaliacao-desempenho/gestao`",
+          "path": "/avaliacao/avaliacao-desempenho/gestao",
+          "module": "avaliacao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Progressão por Mérito / `/avaliacao/progressao-merito/gestao`",
+          "path": "/avaliacao/progressao-merito/gestao",
+          "module": "avaliacao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Progressão por Titularidade / `/avaliacao/progressao-titularidade/gestao`",
+          "path": "/avaliacao/progressao-titularidade/gestao",
+          "module": "avaliacao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Progressão Judicial / `/avaliacao/progressao-judicial/gestao`",
+          "path": "/avaliacao/progressao-judicial/gestao",
+          "module": "avaliacao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Correção Salarial / `/avaliacao/correcao-salarial/gestao`",
+          "path": "/avaliacao/correcao-salarial/gestao",
+          "module": "avaliacao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Plano de Cargos e Carreira / `/avaliacao/plano-cargos-carreira/gestao`",
+          "path": "/avaliacao/plano-cargos-carreira/gestao",
+          "module": "avaliacao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Simulador de Nível Salarial / `/avaliacao/simulador-nivel/gestao`",
+          "path": "/avaliacao/simulador-nivel/gestao",
+          "module": "avaliacao",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Requisição de Pessoal / `/recrutamento/requisicao-pessoal/gestao`",
+          "path": "/recrutamento/requisicao-pessoal/gestao",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Requisição — nova / `/recrutamento/requisicao-pessoal/formulario`",
+          "path": "/recrutamento/requisicao-pessoal/formulario",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Requisição — editar / `/recrutamento/requisicao-pessoal/formulario/:id`",
+          "path": "/recrutamento/requisicao-pessoal/formulario/:id",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Gestão de Requisições / `/recrutamento/gestao-requisicoes/gestao`",
+          "path": "/recrutamento/gestao-requisicoes/gestao",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Banco de Talentos / `/recrutamento/banco-talentos/gestao`",
+          "path": "/recrutamento/banco-talentos/gestao",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Cadastro de Currículo / `/recrutamento/curriculo/formulario`",
+          "path": "/recrutamento/curriculo/formulario",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Currículo — editar / `/recrutamento/curriculo/formulario/:id`",
+          "path": "/recrutamento/curriculo/formulario/:id",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Análise Curricular / `/recrutamento/analise-curricular/gestao`",
+          "path": "/recrutamento/analise-curricular/gestao",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Estagiário / `/recrutamento/estagiario/gestao`",
+          "path": "/recrutamento/estagiario/gestao",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Estagiário — novo / `/recrutamento/estagiario/formulario`",
+          "path": "/recrutamento/estagiario/formulario",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Estagiário — editar / `/recrutamento/estagiario/formulario/:id`",
+          "path": "/recrutamento/estagiario/formulario/:id",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Programa de Estágio / `/recrutamento/programa-estagio/gestao`",
+          "path": "/recrutamento/programa-estagio/gestao",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Prorrogação de Estágio / `/recrutamento/prorrogacao-estagio/gestao`",
+          "path": "/recrutamento/prorrogacao-estagio/gestao",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Recesso de Estágio / `/recrutamento/recesso-estagio/gestao`",
+          "path": "/recrutamento/recesso-estagio/gestao",
+          "module": "recrutamento",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Ficha Financeira / `/consultas/ficha-financeira/gestao`",
+          "path": "/consultas/ficha-financeira/gestao",
+          "module": "consultas",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Ficha Funcional / `/consultas/ficha-funcional/detalhes/:id`",
+          "path": "/consultas/ficha-funcional/detalhes/:id",
+          "module": "consultas",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatórios por Situação / `/consultas/relatorio-situacao/gestao`",
+          "path": "/consultas/relatorio-situacao/gestao",
+          "module": "consultas",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Servidor com Pagamento Bloqueado / `/consultas/pagamento-bloqueado/gestao`",
+          "path": "/consultas/pagamento-bloqueado/gestao",
+          "module": "consultas",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Histórico Operacional / `/consultas/historico-operacional/gestao`",
+          "path": "/consultas/historico-operacional/gestao",
+          "module": "consultas",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Dashboard Geral / `/consultas/dashboard`",
+          "path": "/consultas/dashboard",
+          "module": "consultas",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório Gerencial / `/relatorios/gerencial/gestao`",
+          "path": "/relatorios/gerencial/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório de Folha / `/relatorios/folha/gestao`",
+          "path": "/relatorios/folha/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório Financeiro / `/relatorios/financeiro/gestao`",
+          "path": "/relatorios/financeiro/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Aposentados e Pensionistas / `/relatorios/aposentados-pensionistas/gestao`",
+          "path": "/relatorios/aposentados-pensionistas/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Repasse Fundo RH / `/relatorios/repasse-fundo/gestao`",
+          "path": "/relatorios/repasse-fundo/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Proventos e Descontos / `/relatorios/proventos-descontos/gestao`",
+          "path": "/relatorios/proventos-descontos/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório de Verbas / `/relatorios/verbas/gestao`",
+          "path": "/relatorios/verbas/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório de Estágio / `/relatorios/estagio/gestao`",
+          "path": "/relatorios/estagio/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Recrutamento e Seleção / `/relatorios/recrutamento/gestao`",
+          "path": "/relatorios/recrutamento/gestao",
+          "module": "relatorios",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Regra de Aposentadoria / `/previdenciario/regra-aposentadoria/gestao`",
+          "path": "/previdenciario/regra-aposentadoria/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Regra — nova / `/previdenciario/regra-aposentadoria/formulario`",
+          "path": "/previdenciario/regra-aposentadoria/formulario",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Regra — editar / `/previdenciario/regra-aposentadoria/formulario/:id`",
+          "path": "/previdenciario/regra-aposentadoria/formulario/:id",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Simulador de Aposentadoria / `/previdenciario/simulador-aposentadoria/gestao`",
+          "path": "/previdenciario/simulador-aposentadoria/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Pensão / `/previdenciario/pensao/gestao`",
+          "path": "/previdenciario/pensao/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Compensação Previdenciária / `/previdenciario/compensacao/gestao`",
+          "path": "/previdenciario/compensacao/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Certidão de Tempo de Contribuição / `/previdenciario/certidao-tempo/gestao`",
+          "path": "/previdenciario/certidao-tempo/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Declaração de Aposentado / `/previdenciario/declaracao-aposentado/gestao`",
+          "path": "/previdenciario/declaracao-aposentado/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Declaração de Ex-Servidor / `/previdenciario/declaracao-ex-servidor/gestao`",
+          "path": "/previdenciario/declaracao-ex-servidor/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Certidão de Compensação / `/previdenciario/certidao-compensacao/gestao`",
+          "path": "/previdenciario/certidao-compensacao/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Prova de Vida / Recadastramento / `/previdenciario/recadastramento/gestao`",
+          "path": "/previdenciario/recadastramento/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Recadastramento — atendimento / `/previdenciario/recadastramento/formulario/:id`",
+          "path": "/previdenciario/recadastramento/formulario/:id",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Transferência Previdenciária / `/previdenciario/transferencia-previdenciaria/gestao`",
+          "path": "/previdenciario/transferencia-previdenciaria/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatórios Previdenciários / `/previdenciario/relatorios/gestao`",
+          "path": "/previdenciario/relatorios/gestao",
+          "module": "previdenciario",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Consulta de Trilha / `/auditoria/trilha/gestao`",
+          "path": "/auditoria/trilha/gestao",
+          "module": "auditoria",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Detalhe de Evento / `/auditoria/trilha/detalhes/:id`",
+          "path": "/auditoria/trilha/detalhes/:id",
+          "module": "auditoria",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Relatório de Auditoria / `/auditoria/relatorio/gestao`",
+          "path": "/auditoria/relatorio/gestao",
+          "module": "auditoria",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Filtros por Entidade / `/auditoria/entidade/gestao`",
+          "path": "/auditoria/entidade/gestao",
+          "module": "auditoria",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Filtros por Usuário / `/auditoria/usuario/gestao`",
+          "path": "/auditoria/usuario/gestao",
+          "module": "auditoria",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Filtros por Período / `/auditoria/periodo/gestao`",
+          "path": "/auditoria/periodo/gestao",
+          "module": "auditoria",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Configurar Agenda Médica / `/saude/agenda-medica/formulario`",
+          "path": "/saude/agenda-medica/formulario",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Configurar — editar / `/saude/agenda-medica/formulario/:id`",
+          "path": "/saude/agenda-medica/formulario/:id",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Painel de Agenda / `/saude/agenda-medica/gestao`",
+          "path": "/saude/agenda-medica/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Atendimento Agendado / `/saude/pericia/agendados/gestao`",
+          "path": "/saude/pericia/agendados/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Atendimento Pendente / `/saude/pericia/pendentes/gestao`",
+          "path": "/saude/pericia/pendentes/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Prontuário / `/saude/pericia/prontuario/formulario/:id`",
+          "path": "/saude/pericia/prontuario/formulario/:id",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Validação de Laudo / `/saude/pericia/validacao-laudo/gestao`",
+          "path": "/saude/pericia/validacao-laudo/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Licença Médica / `/saude/licenca-medica/gestao`",
+          "path": "/saude/licenca-medica/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Licença — formulário / `/saude/licenca-medica/formulario/:id`",
+          "path": "/saude/licenca-medica/formulario/:id",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Médico / `/saude/medico/gestao`",
+          "path": "/saude/medico/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Especialidade Médica / `/saude/especialidade-medica/gestao`",
+          "path": "/saude/especialidade-medica/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Exame Ocupacional / `/saude/exame/gestao`",
+          "path": "/saude/exame/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Entidade de Exames / `/saude/entidade-exame/gestao`",
+          "path": "/saude/entidade-exame/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Profissional de Saúde / `/saude/profissional-saude/gestao`",
+          "path": "/saude/profissional-saude/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Acidente de Trabalho / `/saude/acidente-trabalho/gestao`",
+          "path": "/saude/acidente-trabalho/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "CID / `/saude/cid/gestao`",
+          "path": "/saude/cid/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Categoria de Doenças / `/saude/categoria-doenca/gestao`",
+          "path": "/saude/categoria-doenca/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Subcategoria de Doenças / `/saude/subcategoria-doenca/gestao`",
+          "path": "/saude/subcategoria-doenca/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Agente Nocivo / `/saude/agente-nocivo/gestao`",
+          "path": "/saude/agente-nocivo/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "EPI / `/saude/epi/gestao`",
+          "path": "/saude/epi/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "EPC / `/saude/epc/gestao`",
+          "path": "/saude/epc/gestao",
+          "module": "saude",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Convênios / `/convenio/convenio/gestao`",
+          "path": "/convenio/convenio/gestao",
+          "module": "convenio",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Convênio — novo / `/convenio/convenio/formulario`",
+          "path": "/convenio/convenio/formulario",
+          "module": "convenio",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Convênio — editar / `/convenio/convenio/formulario/:id`",
+          "path": "/convenio/convenio/formulario/:id",
+          "module": "convenio",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Beneficiários / `/convenio/beneficiario/gestao`",
+          "path": "/convenio/beneficiario/gestao",
+          "module": "convenio",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        },
+        {
+          "label": "Descontos em Folha / `/convenio/desconto-folha/gestao`",
+          "path": "/convenio/desconto-folha/gestao",
+          "module": "convenio",
+          "status": "postponed",
+          "deferred_scope": "ADMIN_INSTALL_LATER"
+        }
+      ]
+    },
+    "portal": {
+      "status": "implemented",
+      "documented_routes": 34,
+      "implemented": 31,
+      "postponed": 3,
+      "missing": [],
+      "routes": [
+        {
+          "label": "Meus Dados / Cadastro Pessoal",
+          "path": "/meus-dados/cadastro",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Meus Dados / Endereço",
+          "path": "/meus-dados/endereco",
+          "module": "pessoa",
+          "status": "implemented"
+        },
+        {
+          "label": "Meus Dados / Contato",
+          "path": "/meus-dados/contato",
+          "module": "pessoa",
+          "status": "implemented"
+        },
+        {
+          "label": "Meus Dados / Documentos",
+          "path": "/meus-dados/documentos",
+          "module": "pessoa",
+          "status": "implemented"
+        },
+        {
+          "label": "Meus Dados / Dependentes",
+          "path": "/meus-dados/dependentes",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Contracheques / Mês Atual",
+          "path": "/contracheques/atual",
+          "module": "folha",
+          "status": "implemented"
+        },
+        {
+          "label": "Contracheques / Histórico",
+          "path": "/contracheques/historico",
+          "module": "folha",
+          "status": "implemented"
+        },
+        {
+          "label": "Contracheques / Download PDF",
+          "path": "/contracheques/download/:id",
+          "module": "folha",
+          "status": "implemented"
+        },
+        {
+          "label": "Contracheques / Financeiro Anual",
+          "path": "/contracheques/financeiro-anual",
+          "module": "folha",
+          "status": "implemented"
+        },
+        {
+          "label": "Licenças e Afastamentos / Solicitações",
+          "path": "/licencas/solicitacoes",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Licenças e Afastamentos / Histórico",
+          "path": "/licencas/historico",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Licenças e Afastamentos / Documentos",
+          "path": "/licencas/documentos",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Perícias / Agendadas",
+          "path": "/pericias/agendadas",
+          "module": "saude",
+          "status": "implemented"
+        },
+        {
+          "label": "Perícias / Histórico",
+          "path": "/pericias/historico",
+          "module": "saude",
+          "status": "implemented"
+        },
+        {
+          "label": "Perícias / Anexos",
+          "path": "/pericias/anexos",
+          "module": "saude",
+          "status": "implemented"
+        },
+        {
+          "label": "Recadastramento / Iniciar",
+          "path": "/recadastramento/iniciar",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Recadastramento / Histórico",
+          "path": "/recadastramento/historico",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Recadastramento / Comprovantes",
+          "path": "/recadastramento/comprovantes",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Férias / Solicitar",
+          "path": "/ferias/solicitar",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Férias / Histórico",
+          "path": "/ferias/historico",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Férias / Programação",
+          "path": "/ferias/programacao",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Currículo / Meu Currículo",
+          "path": "/curriculo/meu-curriculo",
+          "module": "recrutamento",
+          "status": "implemented"
+        },
+        {
+          "label": "Currículo / Candidaturas",
+          "path": "/curriculo/candidaturas",
+          "module": "recrutamento",
+          "status": "implemented"
+        },
+        {
+          "label": "Requisições / Nova Requisição",
+          "path": "/requisicoes/nova",
+          "module": "recrutamento",
+          "status": "implemented"
+        },
+        {
+          "label": "Requisições / Acompanhamento",
+          "path": "/requisicoes/acompanhamento",
+          "module": "recrutamento",
+          "status": "implemented"
+        },
+        {
+          "label": "Documentos Pessoais / Ficha Funcional",
+          "path": "/documentos/ficha-funcional",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Documentos Pessoais / Declarações",
+          "path": "/documentos/declaracoes",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Documentos Pessoais / Certidões",
+          "path": "/documentos/certidoes",
+          "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Avaliação / Auto-Avaliação",
+          "path": "/avaliacao/auto-avaliacao",
+          "module": "avaliacao",
+          "status": "implemented"
+        },
+        {
+          "label": "Avaliação / Resultados",
+          "path": "/avaliacao/resultados",
+          "module": "avaliacao",
+          "status": "implemented"
+        },
+        {
+          "label": "Notificações / Inbox",
+          "path": "/notificacoes",
+          "module": "notificacoes",
+          "status": "implemented"
+        },
+        {
+          "label": "Configurações / MFA",
+          "path": "/configuracoes/mfa",
+          "module": "auth",
+          "status": "postponed",
+          "deferred_scope": "IDENTITY_INSTALL_LATER"
+        },
+        {
+          "label": "Configurações / Alterar Senha",
+          "path": "/configuracoes/senha",
+          "module": "auth",
+          "status": "postponed",
+          "deferred_scope": "IDENTITY_INSTALL_LATER"
+        },
+        {
+          "label": "Configurações / Consentimentos LGPD",
+          "path": "/configuracoes/lgpd",
+          "module": "auth",
+          "status": "postponed",
+          "deferred_scope": "IDENTITY_INSTALL_LATER"
+        }
+      ]
+    }
+  },
+  "routes": [
+    {
+      "method": "DELETE",
+      "path": "/api/v1/arquivos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/dependentes-beneficio/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/exercicios/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/pensoes-alimenticias/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/vales-transporte/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/folhas/catalogos/:resource/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/folhas/contabilidade/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/master-data/:resource/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/rh/afastamentos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/rh/processos-funcao/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/rh/processos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/external/v1/dados",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/external/v1/dicionario/entidades",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/publico/v1/:tenant/transparencia/folha",
+      "status": "implemented",
+      "source_doc": "docs/eng/60-catalogo-saidas-oficiais.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/arquivos",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/arquivos/:id/download",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auditoria/exportacoes/:job_id",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auditoria/logs",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auditoria/logs/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/desempenhos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/planos-cargos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/progressoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/simulacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/consultas/dashboards",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/consultas/ficha-financeira",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/consultas/ficha-funcional",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/consultas/historico-operacional",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/consultas/pagamentos-bloqueados",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/consultas/relatorios-situacao",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/convenios",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/dependentes-beneficio",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/exercicios",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/pensoes-alimenticias",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/vales-transporte",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folha/:id/remessa",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folhas",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folhas/catalogos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folhas/catalogos/:resource",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folhas/contabilidade",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id/dossie",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": "implemented",
+      "source_doc": "docs/eng/41-arquitetura-sistema.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health/ready",
+      "status": "implemented",
+      "source_doc": "docs/eng/41-arquitetura-sistema.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/master-data",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/master-data/:resource",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/notificacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/notificacoes/stream",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/notificacoes/unread-count",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/payroll-engine/health",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/payroll-engine/status",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/pericia/prontuarios/:id/laudo/pdf",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/aposentadorias",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/certidoes-tempo",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/compensacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/declaracoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/pensoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/recadastramentos/beneficiarios",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/recadastramentos/campanhas",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/recadastramentos/historico",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/recadastramentos/pendencias",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/regras",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/previdenciario/simulacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recadastramento/:recadastramento_id/comprovante",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/relatorios",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/report-service/health",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/report-service/status",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/afastamentos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/processos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/processos-funcao",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usuarios/me/preferencias-notificacao",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/arquivos/:anexo_id/confirmar",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/arquivos/:id/confirmar",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/avaliacao/desempenhos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/avaliacao/planos-cargos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/dependentes-beneficio/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/exercicios/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/pensoes-alimenticias/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/vales-transporte/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/folhas/:folha_id/status",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/folhas/catalogos/:resource/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/folhas/contabilidade/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/master-data/:resource/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/notificacoes/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/notificacoes/marcar-todas-lidas",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/pericia/agendamentos/:agendamento_id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/pericia/prontuarios/:prontuario_id/validar",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/previdenciario/compensacoes/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/previdenciario/regras/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/candidatos/:candidato_id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/concluir",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/encaminhar",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/rh/afastamentos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/rh/processos-funcao/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/rh/processos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/arquivos/presigned-upload",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auditoria/exportacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/ciclos/:periodo/relatorio",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/desempenhos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/desempenhos/:id/ficha",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/planos-cargos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/progressoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/simulacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/convites/:token/aceitar",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/dependentes-beneficio",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/exercicios",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/pensoes-alimenticias",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/vales-transporte",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folha/:id/remessa",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folha/:id/retorno",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/adiantamentos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/calcular",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/massa",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_rescisao_id/calcular",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/catalogos/:resource",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/contabilidade",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/funcionarios/:func_rescisao/desligamento",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/gfip/gerar",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/master-data/:resource",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/payroll-engine/calculations",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/pericia/agendamentos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/pericia/prontuarios",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/pericia/prontuarios/:prontuario_id/replicar",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/aposentadorias",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/certidoes-tempo",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/certidoes-tempo/:id/emitir",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/compensacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/declaracoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/declaracoes/:id/emitir",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/pensoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/provas-vida",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/atos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/beneficiarios",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/campanhas",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/convocacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/historico",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/relatorios",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/regras",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/transferencia-siprev/exportar",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/requisicoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/candidatos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/report-service/poll",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/report-service/requests",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/afastamentos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/processos",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/processos-funcao",
+      "status": "implemented",
+      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/usuarios/me/preferencias-notificacao",
+      "status": "implemented",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "note": "Implemented in runtime route map."
+    }
+  ]
+}

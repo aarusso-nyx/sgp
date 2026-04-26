@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "inicio_competencia": "2019-05-24T14:28:48.066Z",
+    "fim_competencia": null,
+    "created_at": "2019-05-24T14:28:48.215Z",
+    "updated_at": "2019-05-24T14:28:48.215Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "mes_competencia": 5,
+    "ano_competencia": 2019
+  },
+  {
+    "id": "2",
+    "inicio_competencia": "2019-06-07T10:23:20.659Z",
+    "fim_competencia": null,
+    "created_at": "2019-06-07T10:23:20.837Z",
+    "updated_at": "2019-06-07T10:23:20.837Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "mes_competencia": 6,
+    "ano_competencia": 2019
+  },
+  {
+    "id": "3",
+    "inicio_competencia": "2019-07-01T12:39:13.037Z",
+    "fim_competencia": null,
+    "created_at": "2019-07-01T12:39:13.198Z",
+    "updated_at": "2019-07-01T12:39:13.198Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "mes_competencia": 7,
+    "ano_competencia": 2019
+  }
+]

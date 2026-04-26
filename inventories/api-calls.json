@@ -1,0 +1,1201 @@
+{
+  "meta": {
+    "generatedAt": "2026-04-16T21:51:45.042Z",
+    "source": "playwright-route-api-capture",
+    "origin": "https://sgp.detran.am.gov.br",
+    "totalApiMethodPathCalls": 20,
+    "inferredMutatingMethodPathCalls": 0,
+    "routesCrawled": 71,
+    "note": "Sensitive values redacted.",
+    "prefilledFormActions": 0
+  },
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/detran-am/api/competencia/anos",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/competencia/anos",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/relatorioGerencial/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:38 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/contadorNotificacao/",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/contadorNotificacao/",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/page/home"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:34 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/listaEmpresasFiliais",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/listaEmpresasFiliais",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/vinculo/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:44 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/listaEmpresasNaoMatrizesAtivas",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/listaEmpresasNaoMatrizesAtivas",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/folhaPagamento/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:29 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/listaEnums",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/listaEnums?nomeEnum=TipoHistoricoSituacaoFuncionalEnum",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [
+        "nomeEnum"
+      ],
+      "calledFromRoutes": [
+        "#!/page/home"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:30 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/listaFiliais",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/listaFiliais",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/relatorioGerencial/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:38 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/listaSiglaEmpresaFilial",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/listaSiglaEmpresaFilial",
+      "hitCount": 3,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/page/403",
+        "#!/page/home",
+        "#!/relatorioServidorPagBloqueado/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:27 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/listaSituacoesFuncionais/entraFolha/true",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/listaSituacoesFuncionais/entraFolha/true",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/relatorioGerencial/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:38 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/listaSituacoesFuncionaisDto",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/listaSituacoesFuncionaisDto",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/page/403"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:39 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/listaVinculos",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/listaVinculos",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/folhaPagamento/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:29 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/menus/papeis/gestao",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/menus/papeis/gestao",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/relatorio/financeiro/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:38 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/notificacoes",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/notificacoes?page=0&size=5",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [
+        "page",
+        "size"
+      ],
+      "calledFromRoutes": [
+        "#!/page/home"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:34 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/parametroSistema/publico",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/parametroSistema/publico",
+      "hitCount": 2,
+      "statuses": [
+        200
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/page/home",
+        "#!/perfilAcesso/formulario"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]"
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:20 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/programas/listProgramasDto",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/programas/listProgramasDto",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/relatorioServidorPagBloqueado/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:39 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/publico/anexo/downloadFile/105_imagemSistema_brasao_detran1.png",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/publico/anexo/downloadFile/105_imagemSistema_brasao_detran1.png",
+      "hitCount": 1,
+      "statuses": [
+        200
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/page/home"
+      ],
+      "requestHeadersObserved": {
+        "accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "accept-ranges": "bytes",
+        "content-length": "103063",
+        "date": "Thu, 16 Apr 2026 21:51:20 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-disposition": "attachment; filename=\"105_imagemSistema_brasao_detran1.png\"",
+        "content-type": "image/png",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": false,
+        "authorizationScheme": "",
+        "usesCookieHeader": false,
+        "tokenLikeHeaders": []
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/publico/anexo/downloadFile/330_imagemSistema_DETRAN_HOR_2COR2.png",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/publico/anexo/downloadFile/330_imagemSistema_DETRAN_HOR_2COR2.png",
+      "hitCount": 3,
+      "statuses": [
+        200
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/legislacao/formulario",
+        "#!/page/home",
+        "#!/perfil"
+      ],
+      "requestHeadersObserved": {
+        "accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "cookie": "[REDACTED]"
+      },
+      "responseHeadersObserved": {
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "accept-ranges": "bytes",
+        "content-length": "101101",
+        "date": "Thu, 16 Apr 2026 21:51:20 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-disposition": "attachment; filename=\"330_imagemSistema_DETRAN_HOR_2COR2.png\"",
+        "content-type": "image/png",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": false,
+        "authorizationScheme": "",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": []
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/relatorioServidorPagBloqueado/empresa/filial/search",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/relatorioServidorPagBloqueado/empresa/filial/search",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/sindicato/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:40 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/relatorioServidorPagBloqueado/situacao/funcional/search",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/relatorioServidorPagBloqueado/situacao/funcional/search",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/situacaoFuncional/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:40 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/situacoesFuncionais",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/situacoesFuncionais",
+      "hitCount": 1,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [],
+      "calledFromRoutes": [
+        "#!/folhaPagamento/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:29 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    },
+    {
+      "method": "GET",
+      "path": "/detran-am/api/usuario/verificaPermissao",
+      "sampleUrl": "https://sgp.detran.am.gov.br/detran-am/api/usuario/verificaPermissao?role=ROLE_ADMIN",
+      "hitCount": 165,
+      "statuses": [
+        401
+      ],
+      "queryKeys": [
+        "role"
+      ],
+      "calledFromRoutes": [
+        "#!/auditoria/gestao",
+        "#!/banco/gestao",
+        "#!/batimentoFolhaPagamento/relatorio",
+        "#!/cargo/gestao",
+        "#!/causaAfastamento/gestao",
+        "#!/centroCusto/gestao",
+        "#!/classificacaoAto/gestao",
+        "#!/convenio/gestao",
+        "#!/convenios/estagiario",
+        "#!/convenios/instituicaoEnsino",
+        "#!/convenios/programa",
+        "#!/dadoCadastralComplementar/gestao",
+        "#!/definicaoOrganico/gestao",
+        "#!/dependente/gestao",
+        "#!/diaUtil/gestao",
+        "#!/empresaFilial/gestao",
+        "#!/exportacaoArquivo/gestao",
+        "#!/faixaSalarial/gestao",
+        "#!/feriasProgramacao/gestao",
+        "#!/fichaFinanceira/gestao",
+        "#!/folhaPagamento/gestao",
+        "#!/frequencia/gestao",
+        "#!/funcao/gestao",
+        "#!/funcionario/gestao",
+        "#!/historicoSituacaoFuncional/gestao",
+        "#!/importadorVerbaFuncionario/gestao",
+        "#!/legislacao/formulario",
+        "#!/legislacao/gestao",
+        "#!/lotacao/gestao",
+        "#!/motivo/gestao",
+        "#!/motivoAfastamento/gestao",
+        "#!/motivoDesligamento/gestao",
+        "#!/naturezaFuncao/gestao",
+        "#!/naturezaJuridica/gestao",
+        "#!/nivelSalarialHistorico/gestao",
+        "#!/notificacoes",
+        "#!/page/403",
+        "#!/page/home",
+        "#!/parametroSistema/gestao",
+        "#!/perfil",
+        "#!/perfilAcesso/formulario",
+        "#!/perfilAcesso/gestao",
+        "#!/referenciaSalarial/gestao",
+        "#!/relatorio/financeiro/gestao",
+        "#!/relatorioFolhaPagamento/gestao",
+        "#!/relatorioGerencial/gestao",
+        "#!/relatorioServidorPagBloqueado/gestao",
+        "#!/relatorios/estagio",
+        "#!/relatorios/relatorioRepasseFundoRh",
+        "#!/sindicato/gestao",
+        "#!/situacaoFuncional/gestao",
+        "#!/tempoServico/gestao",
+        "#!/tipoContrato/gestao",
+        "#!/tipoDocumento/formulario",
+        "#!/tipoDocumento/gestao",
+        "#!/tipoFerias/gestao",
+        "#!/tipoFolha/gestao",
+        "#!/transferenciaFuncionario/gestao",
+        "#!/turno/gestao",
+        "#!/usuario/gestao",
+        "#!/valeTransporte/gestao",
+        "#!/verba/gestao",
+        "#!/verbasFuncionario/gestao",
+        "#!/vinculo/gestao"
+      ],
+      "requestHeadersObserved": {
+        "accept": "application/json, text/plain, */*",
+        "referer": "https://sgp.detran.am.gov.br/detran-am/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+        "sec-ch-ua": "\"HeadlessChrome\";v=\"147\", \"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"147\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "[REDACTED]",
+        "cookie": "[REDACTED]"
+      },
+      "responseHeadersObserved": {
+        "transfer-encoding": "chunked",
+        "strict-transport-security": "max-age=31536000 ; includeSubDomains",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "connection": "keep-alive",
+        "x-content-type-options": "nosniff",
+        "expires": "0",
+        "date": "Thu, 16 Apr 2026 21:51:23 GMT",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "server": "nginx/1.28.0",
+        "x-frame-options": "DENY"
+      },
+      "authInference": {
+        "usesAuthorizationHeader": true,
+        "authorizationScheme": "Other",
+        "usesCookieHeader": true,
+        "tokenLikeHeaders": [
+          "authorization"
+        ]
+      },
+      "payloadKinds": [
+        "none"
+      ],
+      "payloadKeys": [],
+      "payloadSamples": []
+    }
+  ],
+  "inferredMutatingCalls": [],
+  "mutationActionCandidates": [
+    {
+      "route": "#!/parametroSistema/gestao",
+      "label": "Salvar",
+      "ngClick": "save()",
+      "href": "",
+      "tag": "button",
+      "type": "button",
+      "className": "btn btn-primary btn-w-md ui-wave ng-scope",
+      "formId": "",
+      "formName": "",
+      "formAction": "",
+      "formMethod": "",
+      "formNgSubmit": "",
+      "hostComponent": "parametroSistemaCtrl",
+      "inferredMethod": "POST",
+      "methodScore": {
+        "POST": 5,
+        "PUT": 0,
+        "PATCH": 0,
+        "DELETE": 0
+      },
+      "methodReasons": [
+        "POST+5:save in create context"
+      ],
+      "inferredPathHint": "/detran-am/api/parametroSistema/publico",
+      "inferredPathHints": [
+        "/detran-am/api/parametroSistema/publico"
+      ],
+      "confidence": "low"
+    },
+    {
+      "route": "#!/perfil",
+      "label": "Salvar",
+      "ngClick": "save()",
+      "href": "",
+      "tag": "button",
+      "type": "button",
+      "className": "btn btn-primary btn-w-md ui-wave ng-scope",
+      "formId": "",
+      "formName": "",
+      "formAction": "",
+      "formMethod": "",
+      "formNgSubmit": "",
+      "hostComponent": "parametroSistemaCtrl",
+      "inferredMethod": "POST",
+      "methodScore": {
+        "POST": 5,
+        "PUT": 0,
+        "PATCH": 0,
+        "DELETE": 0
+      },
+      "methodReasons": [
+        "POST+5:save in create context"
+      ],
+      "inferredPathHint": "/detran-am/api/perfil",
+      "inferredPathHints": [
+        "/detran-am/api/perfil"
+      ],
+      "confidence": "low"
+    },
+    {
+      "route": "#!/perfilAcesso/formulario",
+      "label": "Alterar minha senha",
+      "ngClick": "alterarSenha()",
+      "href": "",
+      "tag": "a",
+      "type": "",
+      "className": "",
+      "formId": "",
+      "formName": "",
+      "formAction": "",
+      "formMethod": "",
+      "formNgSubmit": "",
+      "hostComponent": "profileCtrl",
+      "inferredMethod": "PUT",
+      "methodScore": {
+        "POST": 0,
+        "PUT": 13,
+        "PATCH": 0,
+        "DELETE": 0
+      },
+      "methodReasons": [
+        "PUT+7:update verb",
+        "PUT+6:ng-click indicates update"
+      ],
+      "inferredPathHint": "/detran-am/api/perfilAcesso",
+      "inferredPathHints": [
+        "/detran-am/api/perfilAcesso"
+      ],
+      "confidence": "high"
+    }
+  ],
+  "prefillEvidence": []
+}

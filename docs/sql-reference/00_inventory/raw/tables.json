@@ -1,0 +1,1512 @@
+[
+  {
+    "schema_name": "dbo",
+    "table_name": "acidente_trabalho",
+    "object_id": 363148339,
+    "create_date": "2019-05-24T11:55:07.047Z",
+    "modify_date": "2019-05-24T11:55:07.047Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "adiantamento_pagamento",
+    "object_id": 103671417,
+    "create_date": "2019-05-24T11:55:09.940Z",
+    "modify_date": "2019-05-24T11:55:10.033Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "afastamento",
+    "object_id": 1893581784,
+    "create_date": "2019-05-24T11:55:02.367Z",
+    "modify_date": "2019-05-24T11:55:08.167Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "agencia",
+    "object_id": 1509580416,
+    "create_date": "2019-05-24T11:55:02.030Z",
+    "modify_date": "2019-05-24T11:55:09.750Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "aliquota",
+    "object_id": 683149479,
+    "create_date": "2019-05-24T11:55:07.143Z",
+    "modify_date": "2019-05-28T10:14:45.893Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "anexo",
+    "object_id": 613577224,
+    "create_date": "2019-05-24T11:55:00.703Z",
+    "modify_date": "2019-06-07T10:20:50.107Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "anexo_processo",
+    "object_id": 2110630562,
+    "create_date": "2019-05-24T11:55:06.710Z",
+    "modify_date": "2019-05-24T11:55:06.710Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "area_formacao",
+    "object_id": 885578193,
+    "create_date": "2019-05-24T11:55:00.887Z",
+    "modify_date": "2019-05-24T11:55:02.297Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "atividade",
+    "object_id": 933578364,
+    "create_date": "2019-05-24T11:55:00.980Z",
+    "modify_date": "2019-05-24T11:55:07.470Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "atributo_formula",
+    "object_id": 983674552,
+    "create_date": "2019-05-29T09:51:42.767Z",
+    "modify_date": "2019-05-29T09:51:42.767Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "avaliacao_cargo",
+    "object_id": 519672899,
+    "create_date": "2019-05-24T11:55:10.230Z",
+    "modify_date": "2019-05-24T11:55:10.230Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "avaliacao_desempenho",
+    "object_id": 423672557,
+    "create_date": "2019-05-24T11:55:10.223Z",
+    "modify_date": "2019-05-24T11:55:10.233Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "avaliacao_funcao",
+    "object_id": 567673070,
+    "create_date": "2019-05-24T11:55:10.230Z",
+    "modify_date": "2019-05-24T11:55:10.230Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "avaliacao_lotacao",
+    "object_id": 471672728,
+    "create_date": "2019-05-24T11:55:10.227Z",
+    "modify_date": "2019-05-24T11:55:10.227Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "banco",
+    "object_id": 901578250,
+    "create_date": "2019-05-24T11:55:00.957Z",
+    "modify_date": "2019-05-24T11:55:10.360Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo",
+    "object_id": 142623551,
+    "create_date": "2019-05-24T11:55:04.973Z",
+    "modify_date": "2019-05-24T11:55:10.330Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_atividade",
+    "object_id": 891150220,
+    "create_date": "2019-05-24T11:55:07.343Z",
+    "modify_date": "2019-05-24T11:55:07.343Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_curso",
+    "object_id": 1035150733,
+    "create_date": "2019-05-24T11:55:07.467Z",
+    "modify_date": "2019-05-24T11:55:07.467Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_habilidade",
+    "object_id": 971150505,
+    "create_date": "2019-05-24T11:55:07.437Z",
+    "modify_date": "2019-05-24T11:55:07.437Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_verba",
+    "object_id": 679673469,
+    "create_date": "2019-05-24T11:55:10.327Z",
+    "modify_date": "2019-05-24T11:55:10.327Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cargo_vinculo",
+    "object_id": 414624520,
+    "create_date": "2019-05-24T11:55:05.077Z",
+    "modify_date": "2019-05-24T11:55:05.077Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_doenca",
+    "object_id": 981578535,
+    "create_date": "2019-05-24T11:55:01.110Z",
+    "modify_date": "2019-05-24T11:55:01.480Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_economica",
+    "object_id": 1013578649,
+    "create_date": "2019-05-24T11:55:01.137Z",
+    "modify_date": "2019-05-24T11:55:06.480Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_profissional",
+    "object_id": 949578421,
+    "create_date": "2019-05-24T11:55:01.050Z",
+    "modify_date": "2019-05-24T11:55:09.273Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "categoria_profissional_verba",
+    "object_id": 2027154267,
+    "create_date": "2019-05-24T11:55:09.273Z",
+    "modify_date": "2019-05-24T11:55:09.273Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "causa_afastamento",
+    "object_id": 1925581898,
+    "create_date": "2019-05-24T11:55:02.433Z",
+    "modify_date": "2019-05-24T11:55:02.433Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cbo",
+    "object_id": 1029578706,
+    "create_date": "2019-05-24T11:55:01.200Z",
+    "modify_date": "2019-05-24T11:55:06.493Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "centro_custo",
+    "object_id": 1093578934,
+    "create_date": "2019-05-24T11:55:01.330Z",
+    "modify_date": "2019-05-24T11:55:08.477Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "classe_salarial",
+    "object_id": 1586104691,
+    "create_date": "2019-05-24T11:55:04.680Z",
+    "modify_date": "2019-05-24T11:55:08.670Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "classificacao_agente_nocivo",
+    "object_id": 1061578820,
+    "create_date": "2019-05-24T11:55:01.257Z",
+    "modify_date": "2019-05-24T11:55:06.483Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "classificacao_ato",
+    "object_id": 402100473,
+    "create_date": "2019-05-24T11:55:03.753Z",
+    "modify_date": "2019-05-24T11:55:08.227Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "classificacao_internacional_doenca",
+    "object_id": 1157579162,
+    "create_date": "2019-05-24T11:55:01.450Z",
+    "modify_date": "2019-05-24T11:55:07.410Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "cnae",
+    "object_id": 1221579390,
+    "create_date": "2019-05-24T11:55:01.500Z",
+    "modify_date": "2019-05-24T11:55:03.890Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "codigo_pagamento_gps",
+    "object_id": 2053582354,
+    "create_date": "2019-05-24T11:55:02.710Z",
+    "modify_date": "2019-05-24T11:55:06.507Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "codigo_recolhimento",
+    "object_id": 2021582240,
+    "create_date": "2019-05-24T11:55:02.647Z",
+    "modify_date": "2019-05-24T11:55:03.030Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "compensacao",
+    "object_id": 242099903,
+    "create_date": "2019-05-24T11:55:03.223Z",
+    "modify_date": "2019-05-24T11:55:03.223Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "consignado",
+    "object_id": 1349579846,
+    "create_date": "2019-05-24T11:55:01.693Z",
+    "modify_date": "2019-05-24T11:55:06.873Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "conta_contabil",
+    "object_id": 174623665,
+    "create_date": "2019-05-24T11:55:04.997Z",
+    "modify_date": "2019-05-24T11:55:05.040Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "conta_contabil_lotacao",
+    "object_id": 254623950,
+    "create_date": "2019-05-24T11:55:04.997Z",
+    "modify_date": "2019-05-24T11:55:04.997Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "conta_contabil_simples",
+    "object_id": 1253579504,
+    "create_date": "2019-05-24T11:55:01.550Z",
+    "modify_date": "2019-05-24T11:55:06.493Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "contribuicao_sindical",
+    "object_id": 1342627826,
+    "create_date": "2019-05-24T11:55:06.073Z",
+    "modify_date": "2019-05-24T11:55:06.073Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "convenio",
+    "object_id": 1285579618,
+    "create_date": "2019-05-24T11:55:01.603Z",
+    "modify_date": "2019-05-24T11:55:09.050Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "correcao",
+    "object_id": 2098106515,
+    "create_date": "2019-05-24T11:55:04.927Z",
+    "modify_date": "2019-05-24T11:55:04.927Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "crm_crea",
+    "object_id": 1797581442,
+    "create_date": "2019-05-24T11:55:02.333Z",
+    "modify_date": "2019-05-24T11:55:06.427Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "crm_crea_convenio",
+    "object_id": 1829581556,
+    "create_date": "2019-05-24T11:55:02.337Z",
+    "modify_date": "2019-05-24T11:55:02.337Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "curso",
+    "object_id": 1733581214,
+    "create_date": "2019-05-24T11:55:02.280Z",
+    "modify_date": "2019-07-01T12:01:48.360Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "dado_cadastral_complementar",
+    "object_id": 1502628396,
+    "create_date": "2019-05-24T11:55:06.167Z",
+    "modify_date": "2019-05-24T11:55:10.413Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "definicao_de_organico",
+    "object_id": 846626059,
+    "create_date": "2019-05-24T11:55:05.740Z",
+    "modify_date": "2019-05-24T11:55:05.797Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "dependente",
+    "object_id": 542624976,
+    "create_date": "2019-05-24T11:55:05.477Z",
+    "modify_date": "2019-05-24T11:55:06.107Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "dependente_beneficio",
+    "object_id": 1438628168,
+    "create_date": "2019-05-24T11:55:06.103Z",
+    "modify_date": "2019-05-24T11:55:06.103Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "dia_util",
+    "object_id": 1490104349,
+    "create_date": "2019-05-24T11:55:04.600Z",
+    "modify_date": "2019-05-24T11:55:04.600Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "empresa_filial",
+    "object_id": 498100815,
+    "create_date": "2019-05-24T11:55:03.887Z",
+    "modify_date": "2019-05-24T11:55:10.227Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "empresa_filial_lotacao",
+    "object_id": 894626230,
+    "create_date": "2019-05-24T11:55:05.743Z",
+    "modify_date": "2019-05-24T11:55:05.743Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "entidade_exame",
+    "object_id": 850102069,
+    "create_date": "2019-05-24T11:55:04.193Z",
+    "modify_date": "2019-05-24T11:55:04.197Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "entidade_exame_exame",
+    "object_id": 930102354,
+    "create_date": "2019-05-24T11:55:04.197Z",
+    "modify_date": "2019-05-24T11:55:04.197Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "equipamento_protecao_coletiva",
+    "object_id": 1445580188,
+    "create_date": "2019-05-24T11:55:01.823Z",
+    "modify_date": "2019-05-24T11:55:09.447Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "equipamento_protecao_individual",
+    "object_id": 1413580074,
+    "create_date": "2019-05-24T11:55:01.753Z",
+    "modify_date": "2019-05-24T11:55:09.380Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "esocial",
+    "object_id": 290100074,
+    "create_date": "2019-05-24T11:55:03.267Z",
+    "modify_date": "2019-05-24T11:55:04.443Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "etapa",
+    "object_id": 1557580587,
+    "create_date": "2019-05-24T11:55:02.060Z",
+    "modify_date": "2019-05-24T11:55:02.060Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "evento",
+    "object_id": 1477580302,
+    "create_date": "2019-05-24T11:55:01.933Z",
+    "modify_date": "2019-05-24T11:55:01.933Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "exame",
+    "object_id": 1589580701,
+    "create_date": "2019-05-24T11:55:02.110Z",
+    "modify_date": "2019-05-24T11:55:06.500Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "experiencia_profissional",
+    "object_id": 91147370,
+    "create_date": "2019-05-24T11:55:06.820Z",
+    "modify_date": "2019-05-24T11:55:06.973Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "faixa_salarial",
+    "object_id": 1634104862,
+    "create_date": "2019-05-24T11:55:04.720Z",
+    "modify_date": "2019-05-24T11:55:09.817Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "faixa_salarial_nivel",
+    "object_id": 1698105090,
+    "create_date": "2019-05-24T11:55:04.720Z",
+    "modify_date": "2019-05-24T11:55:04.720Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "falta",
+    "object_id": 1099150961,
+    "create_date": "2019-05-24T11:55:07.520Z",
+    "modify_date": "2019-05-24T11:55:07.553Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "ferias_programacao",
+    "object_id": 715149593,
+    "create_date": "2019-05-24T11:55:07.193Z",
+    "modify_date": "2019-05-24T11:55:08.203Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "flyway_schema_history",
+    "object_id": 565577053,
+    "create_date": "2019-05-24T11:55:00.640Z",
+    "modify_date": "2019-05-24T11:55:00.673Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_competencia",
+    "object_id": 2075154438,
+    "create_date": "2019-05-24T11:55:09.473Z",
+    "modify_date": "2019-05-24T11:55:09.717Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_pagamento",
+    "object_id": 1771153355,
+    "create_date": "2019-05-24T11:55:08.983Z",
+    "modify_date": "2019-05-24T11:55:09.857Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_pagamento_funcionario_verba",
+    "object_id": 23671132,
+    "create_date": "2019-05-24T11:55:09.853Z",
+    "modify_date": "2019-07-15T13:46:13.523Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "folha_pagamento_lotacao",
+    "object_id": 1835153583,
+    "create_date": "2019-05-24T11:55:08.990Z",
+    "modify_date": "2019-05-24T11:55:08.990Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "frequencia",
+    "object_id": 1195151303,
+    "create_date": "2019-05-24T11:55:07.550Z",
+    "modify_date": "2019-05-24T11:55:07.550Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao",
+    "object_id": 1938105945,
+    "create_date": "2019-05-24T11:55:04.813Z",
+    "modify_date": "2019-05-24T11:55:10.263Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_atividade",
+    "object_id": 1918629878,
+    "create_date": "2019-05-24T11:55:06.403Z",
+    "modify_date": "2019-05-24T11:55:06.403Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_curso",
+    "object_id": 1630628852,
+    "create_date": "2019-05-24T11:55:06.250Z",
+    "modify_date": "2019-05-24T11:55:06.250Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_habilidade",
+    "object_id": 1854629650,
+    "create_date": "2019-05-24T11:55:06.380Z",
+    "modify_date": "2019-05-24T11:55:06.380Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_historico_lei",
+    "object_id": 1499152386,
+    "create_date": "2019-05-24T11:55:08.523Z",
+    "modify_date": "2019-05-24T11:55:08.523Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_requisito",
+    "object_id": 343672272,
+    "create_date": "2019-05-24T11:55:10.137Z",
+    "modify_date": "2019-05-24T11:55:10.137Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_verba",
+    "object_id": 615673241,
+    "create_date": "2019-05-24T11:55:10.260Z",
+    "modify_date": "2019-05-24T11:55:10.260Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcao_vinculo",
+    "object_id": 2034106287,
+    "create_date": "2019-05-24T11:55:04.817Z",
+    "modify_date": "2019-05-24T11:55:04.817Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario",
+    "object_id": 478624748,
+    "create_date": "2019-05-24T11:55:05.333Z",
+    "modify_date": "2019-07-01T12:01:48.363Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_anexo",
+    "object_id": 1790629422,
+    "create_date": "2019-05-24T11:55:06.310Z",
+    "modify_date": "2019-05-24T11:55:06.310Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_exercicio",
+    "object_id": 27147142,
+    "create_date": "2019-05-24T11:55:06.763Z",
+    "modify_date": "2019-05-24T11:55:07.010Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_vale_transporte",
+    "object_id": 1275151588,
+    "create_date": "2019-05-24T11:55:07.643Z",
+    "modify_date": "2019-05-24T11:55:07.643Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "funcionario_verba",
+    "object_id": 1339151816,
+    "create_date": "2019-05-24T11:55:07.683Z",
+    "modify_date": "2019-06-28T12:22:22.197Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "grau_academico",
+    "object_id": 1621580815,
+    "create_date": "2019-05-24T11:55:02.160Z",
+    "modify_date": "2019-05-24T11:55:02.297Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "grupo_salarial",
+    "object_id": 1554104577,
+    "create_date": "2019-05-24T11:55:04.680Z",
+    "modify_date": "2019-05-24T11:55:08.747Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "habilidade",
+    "object_id": 18099105,
+    "create_date": "2019-05-24T11:55:02.850Z",
+    "modify_date": "2019-05-24T11:55:06.507Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "historico_contabil",
+    "object_id": 834102012,
+    "create_date": "2019-05-24T11:55:04.177Z",
+    "modify_date": "2019-05-24T11:55:06.520Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "licenca_medica",
+    "object_id": 1694629080,
+    "create_date": "2019-05-24T11:55:06.280Z",
+    "modify_date": "2019-05-24T11:55:07.410Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "licenca_premio",
+    "object_id": 315148168,
+    "create_date": "2019-05-24T11:55:07.010Z",
+    "modify_date": "2019-05-24T11:55:07.010Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "lotacao",
+    "object_id": 2085582468,
+    "create_date": "2019-05-24T11:55:02.753Z",
+    "modify_date": "2019-05-24T11:55:10.227Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "lotacao_cargo",
+    "object_id": 1547152557,
+    "create_date": "2019-05-24T11:55:08.560Z",
+    "modify_date": "2019-05-24T11:55:08.560Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "lotacao_funcao",
+    "object_id": 1627152842,
+    "create_date": "2019-05-24T11:55:08.567Z",
+    "modify_date": "2019-05-24T11:55:08.567Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "menu",
+    "object_id": 645577338,
+    "create_date": "2019-05-24T11:55:00.713Z",
+    "modify_date": "2019-05-24T11:55:05.170Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "modelo_documento",
+    "object_id": 658101385,
+    "create_date": "2019-05-24T11:55:03.950Z",
+    "modify_date": "2019-05-24T11:55:03.953Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "motivo",
+    "object_id": 2133582639,
+    "create_date": "2019-05-24T11:55:02.783Z",
+    "modify_date": "2019-05-24T11:55:09.680Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "motivo_afastamento",
+    "object_id": 1957582012,
+    "create_date": "2019-05-24T11:55:02.480Z",
+    "modify_date": "2019-05-24T11:55:07.520Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "motivo_desligamento",
+    "object_id": 1989582126,
+    "create_date": "2019-05-24T11:55:02.523Z",
+    "modify_date": "2019-05-24T11:55:09.687Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "motor_calculo_regra",
+    "object_id": 807673925,
+    "create_date": "2019-05-24T11:55:10.490Z",
+    "modify_date": "2019-05-24T11:55:10.490Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "municipio",
+    "object_id": 82099333,
+    "create_date": "2019-05-24T11:55:02.953Z",
+    "modify_date": "2019-07-01T12:01:48.390Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "nacionalidade",
+    "object_id": 50099219,
+    "create_date": "2019-05-24T11:55:02.900Z",
+    "modify_date": "2019-05-24T11:55:07.960Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "natureza_funcao",
+    "object_id": 1170103209,
+    "create_date": "2019-05-24T11:55:04.417Z",
+    "modify_date": "2019-05-24T11:55:05.313Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "natureza_juridica",
+    "object_id": 434100587,
+    "create_date": "2019-05-24T11:55:03.800Z",
+    "modify_date": "2019-05-24T11:55:06.513Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "nivel_salarial_historico",
+    "object_id": 1566628624,
+    "create_date": "2019-05-24T11:55:06.210Z",
+    "modify_date": "2019-05-24T11:55:06.210Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "notificacao",
+    "object_id": 725577623,
+    "create_date": "2019-05-24T11:55:00.717Z",
+    "modify_date": "2019-05-24T11:55:00.717Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "papel",
+    "object_id": 773577794,
+    "create_date": "2019-05-24T11:55:00.757Z",
+    "modify_date": "2019-05-24T11:55:00.783Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "pensao_alimenticia",
+    "object_id": 459148681,
+    "create_date": "2019-05-24T11:55:07.093Z",
+    "modify_date": "2019-05-24T11:55:07.107Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "prestador_servico",
+    "object_id": 1746105261,
+    "create_date": "2019-05-24T11:55:04.760Z",
+    "modify_date": "2019-05-24T11:55:04.760Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "processo",
+    "object_id": 2062630391,
+    "create_date": "2019-05-24T11:55:06.683Z",
+    "modify_date": "2019-05-24T11:55:06.713Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "processo_funcao",
+    "object_id": 1458104235,
+    "create_date": "2019-05-24T11:55:04.560Z",
+    "modify_date": "2019-05-24T11:55:05.377Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "recisao_contrato",
+    "object_id": 1899153811,
+    "create_date": "2019-05-24T11:55:09.010Z",
+    "modify_date": "2019-05-24T11:55:09.690Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "referencia_salarial",
+    "object_id": 1378103950,
+    "create_date": "2019-05-24T11:55:04.480Z",
+    "modify_date": "2019-05-24T11:55:09.900Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "regra_aposentadoria",
+    "object_id": 1317579732,
+    "create_date": "2019-05-24T11:55:01.663Z",
+    "modify_date": "2019-05-24T11:55:06.123Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "requisicao_pessoal",
+    "object_id": 183671702,
+    "create_date": "2019-05-24T11:55:09.983Z",
+    "modify_date": "2019-07-01T12:01:48.447Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "requisicao_pessoal_candidato",
+    "object_id": 1015674666,
+    "create_date": "2019-06-07T10:20:49.973Z",
+    "modify_date": "2019-06-07T10:20:49.973Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "requisicao_pessoal_funcao",
+    "object_id": 247671930,
+    "create_date": "2019-05-24T11:55:10.010Z",
+    "modify_date": "2019-05-24T11:55:10.010Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "requisito",
+    "object_id": 1154103152,
+    "create_date": "2019-05-24T11:55:04.347Z",
+    "modify_date": "2019-05-24T11:55:10.140Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "responsavel_legal",
+    "object_id": 1074102867,
+    "create_date": "2019-05-24T11:55:04.310Z",
+    "modify_date": "2019-05-24T11:55:07.100Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sefip",
+    "object_id": 210099789,
+    "create_date": "2019-05-24T11:55:03.177Z",
+    "modify_date": "2019-05-24T11:55:06.943Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "simulador_nivel_salarial",
+    "object_id": 654625375,
+    "create_date": "2019-05-24T11:55:05.620Z",
+    "modify_date": "2019-05-24T11:55:06.210Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "simulador_nivel_salarial_acordo",
+    "object_id": 750625717,
+    "create_date": "2019-05-24T11:55:05.623Z",
+    "modify_date": "2019-05-24T11:55:05.623Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "simulador_nivel_salarial_valores",
+    "object_id": 686625489,
+    "create_date": "2019-05-24T11:55:05.623Z",
+    "modify_date": "2019-05-24T11:55:05.623Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sindicato",
+    "object_id": 690101499,
+    "create_date": "2019-05-24T11:55:03.993Z",
+    "modify_date": "2019-05-24T11:55:06.077Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "situacao_funcional",
+    "object_id": 763149764,
+    "create_date": "2019-05-24T11:55:07.290Z",
+    "modify_date": "2019-05-24T11:55:07.290Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sol_adiantamento",
+    "object_id": 759673754,
+    "create_date": "2019-05-24T11:55:10.443Z",
+    "modify_date": "2019-05-24T11:55:10.443Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sub_categoria_doenca",
+    "object_id": 1125579048,
+    "create_date": "2019-05-24T11:55:01.353Z",
+    "modify_date": "2019-05-24T11:55:01.453Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "sysdiagrams",
+    "object_id": 1271675578,
+    "create_date": "2019-06-19T09:45:31.017Z",
+    "modify_date": "2019-06-19T09:45:31.017Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tempo_servico",
+    "object_id": 203147769,
+    "create_date": "2019-05-24T11:55:06.940Z",
+    "modify_date": "2019-05-24T11:55:06.940Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_averbacao",
+    "object_id": 626101271,
+    "create_date": "2019-05-24T11:55:03.917Z",
+    "modify_date": "2019-05-24T11:55:03.917Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_contrato",
+    "object_id": 466100701,
+    "create_date": "2019-05-24T11:55:03.840Z",
+    "modify_date": "2019-05-24T11:55:04.443Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_ferias",
+    "object_id": 322100188,
+    "create_date": "2019-05-24T11:55:03.313Z",
+    "modify_date": "2019-05-24T11:55:03.313Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_folha",
+    "object_id": 354100302,
+    "create_date": "2019-05-24T11:55:03.360Z",
+    "modify_date": "2019-07-01T12:01:47.867Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_folha_verbas",
+    "object_id": 1575676661,
+    "create_date": "2019-07-01T12:01:47.657Z",
+    "modify_date": "2019-07-01T12:01:47.657Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tipo_processamento",
+    "object_id": 770101784,
+    "create_date": "2019-05-24T11:55:04.093Z",
+    "modify_date": "2019-05-24T11:55:10.490Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "tomador_servico",
+    "object_id": 114099447,
+    "create_date": "2019-05-24T11:55:03.013Z",
+    "modify_date": "2019-05-24T11:55:07.050Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "transferencia_funcionario",
+    "object_id": 1982630106,
+    "create_date": "2019-05-24T11:55:06.650Z",
+    "modify_date": "2019-05-24T11:55:06.660Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "treinamento_sugerido",
+    "object_id": 1655676946,
+    "create_date": "2019-07-01T12:01:48.340Z",
+    "modify_date": "2019-07-01T12:33:16.480Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "treinamento_sugerido_complemento",
+    "object_id": 1767677345,
+    "create_date": "2019-07-01T12:01:48.363Z",
+    "modify_date": "2019-07-01T12:01:48.363Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "treinamento_sugerido_funcionario",
+    "object_id": 1703677117,
+    "create_date": "2019-07-01T12:01:48.360Z",
+    "modify_date": "2019-07-01T12:01:48.360Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "treinamento_sugerido_valores",
+    "object_id": 1831677573,
+    "create_date": "2019-07-01T12:01:48.393Z",
+    "modify_date": "2019-07-01T12:01:48.393Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "turno",
+    "object_id": 994102582,
+    "create_date": "2019-05-24T11:55:04.247Z",
+    "modify_date": "2019-05-24T11:55:10.013Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "turno_folga",
+    "object_id": 1026102696,
+    "create_date": "2019-05-24T11:55:04.267Z",
+    "modify_date": "2019-05-24T11:55:04.267Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "unidade_federativa",
+    "object_id": 178099675,
+    "create_date": "2019-05-24T11:55:03.090Z",
+    "modify_date": "2019-07-01T12:01:48.170Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "usuario",
+    "object_id": 677577452,
+    "create_date": "2019-05-24T11:55:00.713Z",
+    "modify_date": "2019-05-24T11:55:10.173Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "usuario_papel",
+    "object_id": 821577965,
+    "create_date": "2019-05-24T11:55:00.760Z",
+    "modify_date": "2019-05-24T11:55:00.760Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "vale_transporte",
+    "object_id": 802101898,
+    "create_date": "2019-05-24T11:55:04.140Z",
+    "modify_date": "2019-05-24T11:55:04.140Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "verba",
+    "object_id": 738101670,
+    "create_date": "2019-05-24T11:55:04.073Z",
+    "modify_date": "2019-07-15T13:46:13.350Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "verba_formula",
+    "object_id": 935674381,
+    "create_date": "2019-05-24T11:55:10.587Z",
+    "modify_date": "2019-06-07T14:42:33.543Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "vinculo",
+    "object_id": 1250103494,
+    "create_date": "2019-05-24T11:55:04.440Z",
+    "modify_date": "2019-05-24T11:55:08.780Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  },
+  {
+    "schema_name": "dbo",
+    "table_name": "vinculo_verba",
+    "object_id": 1723153184,
+    "create_date": "2019-05-24T11:55:08.780Z",
+    "modify_date": "2019-05-24T11:55:08.780Z",
+    "temporal_type_desc": "NON_TEMPORAL_TABLE",
+    "durability_desc": "SCHEMA_AND_DATA",
+    "description": null
+  }
+]

@@ -1,0 +1,66 @@
+
+> sgp-modernization-source@0.1.0 api:alignment:check
+> node scripts/check-api-route-alignment.mjs --json
+
+{
+  "ok": true,
+  "findings": [
+    {
+      "level": "ok",
+      "message": "Route alignment contains 152 documented routes."
+    },
+    {
+      "level": "ok",
+      "message": "All route statuses are valid."
+    },
+    {
+      "level": "ok",
+      "message": "All explicitly excluded routes are approved out-of-scope exceptions."
+    },
+    {
+      "level": "ok",
+      "message": "Runtime covers all documented routes."
+    },
+    {
+      "level": "ok",
+      "message": "Runtime exposes only documented routes."
+    },
+    {
+      "level": "ok",
+      "message": "All runtime routes are in canonical /api path families."
+    },
+    {
+      "level": "ok",
+      "message": "Domain/workflow alignment covers 11 current SGP domain modules."
+    },
+    {
+      "level": "ok",
+      "message": "Portal menu alignment covers 31 implemented route(s) and 3 postponed identity route(s)."
+    },
+    {
+      "level": "ok",
+      "message": "Admin menu parity is postponed under ADMIN_INSTALL_LATER."
+    }
+  ],
+  "counts": {
+    "documented_total": 211,
+    "documented": 152,
+    "runtime_total": 190,
+    "runtime": 152,
+    "deferred_documented": 59,
+    "deferred_runtime": 38,
+    "implemented": 152,
+    "explicitly_excluded": 0,
+    "documented_missing": 0,
+    "runtime_only": 0,
+    "runtime_outside_families": 0,
+    "domain_modules": 11,
+    "domain_modules_implemented": 11,
+    "portal_menu_routes": 34,
+    "portal_menu_missing": 0,
+    "admin_menu_routes": 182,
+    "admin_menu_implemented": 0,
+    "admin_menu_missing": 0,
+    "admin_menu_routes_postponed": 182
+  }
+}

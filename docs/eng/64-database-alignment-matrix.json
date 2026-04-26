@@ -1,0 +1,1078 @@
+{
+  "generated_at": "2026-04-25",
+  "authority": [
+    "docs/eng",
+    "docs/sql-reference/00_inventory/raw/tables.json",
+    "inventories/database-model.json"
+  ],
+  "status_values": [
+    "implemented",
+    "canonicalized",
+    "deferred",
+    "explicitly_excluded"
+  ],
+  "phase_1_target_set": {
+    "schemas": ["hr", "payroll", "portal"],
+    "core_only": true,
+    "excluded_legacy_objects": ["dbo.sysdiagrams"]
+  },
+  "objects": [
+    {
+      "legacy_object": "dbo.acidente_trabalho",
+      "status": "canonicalized",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.work_accident",
+      "note": "Canonicalized as the occupational health work-accident register linked to employee medical leave records."
+    },
+    {
+      "legacy_object": "dbo.adiantamento_pagamento",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.advance_payment",
+      "note": "Advance payment generation is implemented in the canonical payroll runtime and linked to payroll runs and employee payroll items."
+    },
+    {
+      "legacy_object": "dbo.afastamento",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.leave_record",
+      "note": "RH afastamento routes now persist canonical leave records and synchronize employee lifecycle/status history to ON_LEAVE."
+    },
+    {
+      "legacy_object": "dbo.agencia",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.bank",
+      "note": "Foundational bank and agency catalog is managed through the canonical bank master-data resource."
+    },
+    {
+      "legacy_object": "dbo.aliquota",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "public.tax_rate",
+      "note": "Implemented as tenant-scoped canonical aliquota records with scope, year, percentage, and metadata in the generic master-data runtime."
+    },
+    {
+      "legacy_object": "dbo.anexo",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "public.document_attachment",
+      "note": "Canonicalized into the tenant-scoped document attachment runtime used by upload, download, and generated artifact flows."
+    },
+    {
+      "legacy_object": "dbo.anexo_processo",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "public.document_attachment",
+      "note": "Canonicalized into document attachments bound by owner_type/owner_id to the canonical administrative-process aggregate."
+    },
+    {
+      "legacy_object": "dbo.area_formacao",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key AREA_FORMACAO."
+    },
+    {
+      "legacy_object": "dbo.atividade",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key ATIVIDADE."
+    },
+    {
+      "legacy_object": "dbo.atributo_formula",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.formula_attribute",
+      "note": "Formula metadata attributes are implemented in the canonical payroll formula-attribute catalog."
+    },
+    {
+      "legacy_object": "dbo.avaliacao_cargo",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.performance_evaluation",
+      "note": "Canonicalized into the consolidated performance-evaluation aggregate, which snapshots cargo context directly on each avaliação."
+    },
+    {
+      "legacy_object": "dbo.avaliacao_desempenho",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.performance_evaluation",
+      "note": "Implemented in the Avaliacao runtime with criação, atualização, score breakdown, evaluator reference, and approval status."
+    },
+    {
+      "legacy_object": "dbo.avaliacao_funcao",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.performance_evaluation",
+      "note": "Canonicalized into the consolidated performance-evaluation aggregate, which snapshots funcao context directly on each avaliação."
+    },
+    {
+      "legacy_object": "dbo.avaliacao_lotacao",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.performance_evaluation",
+      "note": "Canonicalized into the consolidated performance-evaluation aggregate, which snapshots lotacao context directly on each avaliação."
+    },
+    {
+      "legacy_object": "dbo.banco",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.bank",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.cargo",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.job_position",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.cargo_atividade",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_reference_link",
+      "note": "Implemented in the Gestao master-data runtime as a canonical cargo-to-reference linkage filtered to catalog key ATIVIDADE."
+    },
+    {
+      "legacy_object": "dbo.cargo_curso",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_reference_link",
+      "note": "Implemented in the Gestao master-data runtime as a canonical cargo-to-reference linkage filtered to catalog key CURSO."
+    },
+    {
+      "legacy_object": "dbo.cargo_habilidade",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_reference_link",
+      "note": "Implemented in the Gestao master-data runtime as a canonical cargo-to-reference linkage filtered to catalog key HABILIDADE."
+    },
+    {
+      "legacy_object": "dbo.cargo_verba",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.job_position_earning",
+      "note": "Job-position to verba linkage is implemented as canonical payroll earning assignments by cargo."
+    },
+    {
+      "legacy_object": "dbo.cargo_vinculo",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_employment_link",
+      "note": "Implemented in the Gestao master-data runtime as canonical cargo-to-vinculo assignments."
+    },
+    {
+      "legacy_object": "dbo.categoria_doenca",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key CATEGORIA_DOENCA."
+    },
+    {
+      "legacy_object": "dbo.categoria_economica",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key CATEGORIA_ECONOMICA."
+    },
+    {
+      "legacy_object": "dbo.categoria_profissional",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key CATEGORIA_PROFISSIONAL."
+    },
+    {
+      "legacy_object": "dbo.categoria_profissional_verba",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "payroll.professional_category_earning",
+      "note": "Implemented as tenant-scoped professional-category to verba earning assignments, preserving categoria_profissional eligibility without a legacy join table."
+    },
+    {
+      "legacy_object": "dbo.causa_afastamento",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.absence_reason",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.cbo",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key CBO."
+    },
+    {
+      "legacy_object": "dbo.centro_custo",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.cost_center",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.classe_salarial",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key CLASSE_SALARIAL."
+    },
+    {
+      "legacy_object": "dbo.classificacao_agente_nocivo",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key CLASSIFICACAO_AGENTE_NOCIVO."
+    },
+    {
+      "legacy_object": "dbo.classificacao_ato",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.act_classification",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.classificacao_internacional_doenca",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key CLASSIFICACAO_INTERNACIONAL_DOENCA."
+    },
+    {
+      "legacy_object": "dbo.cnae",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key CNAE."
+    },
+    {
+      "legacy_object": "dbo.codigo_pagamento_gps",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.gps_payment_code",
+      "note": "Payroll accounting catalogs now implement canonical GPS payment codes for Folha accounting and export configuration."
+    },
+    {
+      "legacy_object": "dbo.codigo_recolhimento",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key CODIGO_RECOLHIMENTO."
+    },
+    {
+      "legacy_object": "dbo.compensacao",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.pension_compensation",
+      "note": "Implemented in the Previdenciario runtime with persisted compensation register, regime/valor fields, and lifecycle status updates."
+    },
+    {
+      "legacy_object": "dbo.consignado",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.consignment_entity",
+      "note": "Implemented as canonical consignado entities with bank, contract, and discount-kind metadata through the master-data runtime."
+    },
+    {
+      "legacy_object": "dbo.conta_contabil",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.accounting_account",
+      "note": "Payroll accounting mappings are implemented as canonical accounting-account configurations linked to filial, centro de custo, verba, and supporting catalogs."
+    },
+    {
+      "legacy_object": "dbo.conta_contabil_lotacao",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.accounting_account_work_location",
+      "note": "Accounting-account to lotacao linkage is implemented in the canonical payroll accounting work-location join table."
+    },
+    {
+      "legacy_object": "dbo.conta_contabil_simples",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.simple_account",
+      "note": "Simple accounting accounts are implemented in the canonical payroll accounting catalog runtime."
+    },
+    {
+      "legacy_object": "dbo.contribuicao_sindical",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.employee_union_contribution",
+      "note": "Implemented as canonical employee union-contribution records with union linkage, deduction values, and current employee union synchronization."
+    },
+    {
+      "legacy_object": "dbo.convenio",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.agreement",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.correcao",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.merit_progression",
+      "note": "Salary corrections are canonicalized into the merit-progression aggregate using kind CORRECAO and linked salary-reference history."
+    },
+    {
+      "legacy_object": "dbo.crm_crea",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key CRM_CREA."
+    },
+    {
+      "legacy_object": "dbo.crm_crea_convenio",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.health_provider_agreement_link",
+      "note": "Implemented as canonical CRM/CREA-to-convenio links for occupational-health provider assignment."
+    },
+    {
+      "legacy_object": "dbo.curso",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key CURSO."
+    },
+    {
+      "legacy_object": "dbo.dado_cadastral_complementar",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.employee_complement_data",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.definicao_de_organico",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.work_location",
+      "note": "RH organic definition workflow uses canonical work location model."
+    },
+    {
+      "legacy_object": "dbo.dependente",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.employee_dependent",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.dependente_beneficio",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.employee_benefit_dependent",
+      "note": "Implemented as canonical employee benefit-dependent records linked to the employee dossier and optional dependent registry rows."
+    },
+    {
+      "legacy_object": "dbo.dia_util",
+      "status": "implemented",
+      "phase": "phase_2_core",
+      "canonical_object": "hr.business_day",
+      "note": "Implemented in canonical hr schema via Prisma migration."
+    },
+    {
+      "legacy_object": "dbo.empresa_filial",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.branch",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.empresa_filial_lotacao",
+      "status": "canonicalized",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.work_location",
+      "note": "Canonicalized into the branch-owned work-location aggregate; hr.work_location.branch_id replaces the legacy empresa_filial_lotacao join."
+    },
+    {
+      "legacy_object": "dbo.entidade_exame",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key ENTIDADE_EXAME."
+    },
+    {
+      "legacy_object": "dbo.entidade_exame_exame",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.health_exam_provider_exam_link",
+      "note": "Implemented as canonical exam-provider to exam catalog links for occupational-health support."
+    },
+    {
+      "legacy_object": "dbo.equipamento_protecao_coletiva",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key EQUIPAMENTO_PROTECAO_COLETIVA."
+    },
+    {
+      "legacy_object": "dbo.equipamento_protecao_individual",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key EQUIPAMENTO_PROTECAO_INDIVIDUAL."
+    },
+    {
+      "legacy_object": "dbo.esocial",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "public.esocial_event",
+      "note": "Implemented as tenant-scoped eSocial event records with queue orchestration, XML generation, and status-machine persistence."
+    },
+    {
+      "legacy_object": "dbo.etapa",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped reference-catalog runtime under catalog key ETAPA for workflow and recruitment stage catalogs."
+    },
+    {
+      "legacy_object": "dbo.evento",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key EVENTO."
+    },
+    {
+      "legacy_object": "dbo.exame",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key EXAME."
+    },
+    {
+      "legacy_object": "dbo.experiencia_profissional",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.professional_experience",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.faixa_salarial",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.salary_range",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.faixa_salarial_nivel",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.salary_range_level",
+      "note": "Implemented as canonical faixa-salarial to nivel records linked to salary ranges and optional salary references."
+    },
+    {
+      "legacy_object": "dbo.falta",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.leave_record",
+      "note": "RH leave workflow persists canonical leave records for absence entries."
+    },
+    {
+      "legacy_object": "dbo.ferias_programacao",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.vacation_record",
+      "note": "RH vacations workflow persists canonical vacation records."
+    },
+    {
+      "legacy_object": "dbo.flyway_schema_history",
+      "status": "canonicalized",
+      "phase": "post_phase_1",
+      "canonical_object": "public._prisma_migrations",
+      "note": "Canonicalized to Prisma Migrate metadata; v0.0.1 uses Prisma as the migration ledger instead of carrying a Flyway compatibility table."
+    },
+    {
+      "legacy_object": "dbo.folha_competencia",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.competence_period",
+      "note": "Operational competence periods implemented as canonical hr.competence_period."
+    },
+    {
+      "legacy_object": "dbo.folha_pagamento",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "payroll.payroll_run",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.folha_pagamento_funcionario_verba",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.employee_payroll_item",
+      "note": "Employee payroll line items implemented in canonical payroll table."
+    },
+    {
+      "legacy_object": "dbo.folha_pagamento_lotacao",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.payroll_run_work_location",
+      "note": "Payroll rollups by lotacao are implemented as canonical work-location summaries per payroll run."
+    },
+    {
+      "legacy_object": "dbo.frequencia",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.employee_frequency",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.funcao",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.job_function",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.funcao_atividade",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_reference_link",
+      "note": "Implemented in the Gestao master-data runtime as a canonical funcao-to-reference linkage filtered to catalog key ATIVIDADE."
+    },
+    {
+      "legacy_object": "dbo.funcao_curso",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_reference_link",
+      "note": "Implemented in the Gestao master-data runtime as a canonical funcao-to-reference linkage filtered to catalog key CURSO."
+    },
+    {
+      "legacy_object": "dbo.funcao_habilidade",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_reference_link",
+      "note": "Implemented in the Gestao master-data runtime as a canonical funcao-to-reference linkage filtered to catalog key HABILIDADE."
+    },
+    {
+      "legacy_object": "dbo.funcao_historico_lei",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.job_function_legislation_history",
+      "note": "Implemented as tenant-scoped job-function legislation history linked to the canonical função and legislação catalogs."
+    },
+    {
+      "legacy_object": "dbo.funcao_requisito",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_reference_link",
+      "note": "Implemented in the Gestao master-data runtime as a canonical funcao-to-reference linkage filtered to catalog key REQUISITO."
+    },
+    {
+      "legacy_object": "dbo.funcao_verba",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.job_function_earning",
+      "note": "Implemented as canonical funcao-to-verba earning assignments in the payroll runtime."
+    },
+    {
+      "legacy_object": "dbo.funcao_vinculo",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.job_structure_employment_link",
+      "note": "Implemented in the Gestao master-data runtime as canonical funcao-to-vinculo assignments."
+    },
+    {
+      "legacy_object": "dbo.funcionario",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.employee",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.funcionario_anexo",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "public.document_attachment",
+      "note": "Canonicalized into document attachments bound by owner_type/owner_id to the canonical employee aggregate."
+    },
+    {
+      "legacy_object": "dbo.funcionario_exercicio",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.employee_exercise",
+      "note": "Implemented as canonical employee exercise assignments with branch, work-location, and job-function linkage plus current employee synchronization."
+    },
+    {
+      "legacy_object": "dbo.funcionario_vale_transporte",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.employee_transit_benefit",
+      "note": "Implemented as canonical employee transit-benefit grants linked to the shared transit benefit catalog."
+    },
+    {
+      "legacy_object": "dbo.funcionario_verba",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.employee_payroll_item",
+      "note": "Legacy employee-earning association canonicalized to payroll employee payroll items."
+    },
+    {
+      "legacy_object": "dbo.grau_academico",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key GRAU_ACADEMICO."
+    },
+    {
+      "legacy_object": "dbo.grupo_salarial",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key GRUPO_SALARIAL."
+    },
+    {
+      "legacy_object": "dbo.habilidade",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key HABILIDADE."
+    },
+    {
+      "legacy_object": "dbo.historico_contabil",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.accounting_history",
+      "note": "Accounting-history codes are implemented in the canonical payroll accounting catalog runtime."
+    },
+    {
+      "legacy_object": "dbo.licenca_medica",
+      "status": "canonicalized",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.medical_leave",
+      "note": "Canonicalized as tenant-scoped medical leave records created from pericia/prontuario evaluation."
+    },
+    {
+      "legacy_object": "dbo.licenca_premio",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.leave_record",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.lotacao",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.work_location",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.lotacao_cargo",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.work_location_structure_assignment",
+      "note": "Implemented in the Gestao master-data runtime as canonical lotacao-to-cargo structure assignments."
+    },
+    {
+      "legacy_object": "dbo.lotacao_funcao",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.work_location_structure_assignment",
+      "note": "Implemented in the Gestao master-data runtime as canonical lotacao-to-funcao structure assignments."
+    },
+    {
+      "legacy_object": "dbo.menu",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "public.menu_item",
+      "note": "Implemented in the canonical tenant-scoped menu tree used by the auth/menu runtime."
+    },
+    {
+      "legacy_object": "dbo.modelo_documento",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key MODELO_DOCUMENTO."
+    },
+    {
+      "legacy_object": "dbo.motivo",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.reason",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.motivo_afastamento",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.absence_reason",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.motivo_desligamento",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.termination_reason",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.motor_calculo_regra",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.payroll_earning_deduction",
+      "note": "The payroll calculation-rule substrate is canonicalized on the earning/deduction aggregate through stored formula alias, expression, dependency, and readiness metadata."
+    },
+    {
+      "legacy_object": "dbo.municipio",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key MUNICIPIO."
+    },
+    {
+      "legacy_object": "dbo.nacionalidade",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key NACIONALIDADE."
+    },
+    {
+      "legacy_object": "dbo.natureza_funcao",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.function_nature",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.natureza_juridica",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.legal_nature",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.nivel_salarial_historico",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.salary_level_history",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.notificacao",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "public.notification",
+      "note": "Runtime notifications endpoints persist/read canonical public.notification."
+    },
+    {
+      "legacy_object": "dbo.papel",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "public.permission",
+      "note": "Implemented as canonical permission keys in the RBAC permission catalog; access_profile remains the grouping layer."
+    },
+    {
+      "legacy_object": "dbo.pensao_alimenticia",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.employee_alimony",
+      "note": "Implemented as canonical employee alimony records with beneficiary identity, judicial process reference, and effective period tracking."
+    },
+    {
+      "legacy_object": "dbo.prestador_servico",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.service_provider",
+      "note": "Implemented as a tenant-scoped service-provider registry linked to branch, convenio, professional category, CBO, and optional verba metadata."
+    },
+    {
+      "legacy_object": "dbo.processo",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.administrative_process",
+      "note": "Implemented as canonical RH administrative processes with process number, subject, filing date, and closure tracking."
+    },
+    {
+      "legacy_object": "dbo.processo_funcao",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.administrative_process_function",
+      "note": "Implemented as canonical process-to-function assignments tied to job functions, branches, and work locations."
+    },
+    {
+      "legacy_object": "dbo.recisao_contrato",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.employee + payroll.payroll_run",
+      "note": "RH desligamento flow updates canonical employee termination state, records status history, and can create the termination payroll run."
+    },
+    {
+      "legacy_object": "dbo.referencia_salarial",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.salary_reference",
+      "note": "Gestao referencia-salarial resource already persists canonical salary reference records."
+    },
+    {
+      "legacy_object": "dbo.regra_aposentadoria",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.retirement_rule",
+      "note": "Implemented in the Previdenciario runtime with legal basis, age/contribution/carencia criteria, and active applicability controls."
+    },
+    {
+      "legacy_object": "dbo.requisicao_pessoal",
+      "status": "canonicalized",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.recruitment_request",
+      "note": "Canonicalized as the tenant-scoped recruitment request aggregate in the recruitment module."
+    },
+    {
+      "legacy_object": "dbo.requisicao_pessoal_candidato",
+      "status": "canonicalized",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.recruitment_candidate",
+      "note": "Canonicalized as tenant-scoped candidate attachments and review state for recruitment requests."
+    },
+    {
+      "legacy_object": "dbo.requisicao_pessoal_funcao",
+      "status": "canonicalized",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.recruitment_request_function",
+      "note": "Canonicalized as requested job-function rows linked to each recruitment request."
+    },
+    {
+      "legacy_object": "dbo.requisito",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key REQUISITO."
+    },
+    {
+      "legacy_object": "dbo.responsavel_legal",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.legal_responsible",
+      "note": "Gestao responsavel-legal resource already exposes canonical legal responsible records."
+    },
+    {
+      "legacy_object": "dbo.sefip",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.sefip_code",
+      "note": "SEFIP categories and occurrences are implemented in the canonical payroll catalog runtime with typed code records."
+    },
+    {
+      "legacy_object": "dbo.simulador_nivel_salarial",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.salary_simulation",
+      "note": "Implemented in the Avaliacao runtime with persisted scenario runs, projected outcome JSON, and actor traceability."
+    },
+    {
+      "legacy_object": "dbo.simulador_nivel_salarial_acordo",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.salary_simulation_adjustment",
+      "note": "Implemented as per-simulation adjustment rows carrying percentual and valor-fixo agreement scenarios."
+    },
+    {
+      "legacy_object": "dbo.simulador_nivel_salarial_valores",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.salary_simulation",
+      "note": "Canonicalized into the result_json payload of the canonical salary-simulation aggregate."
+    },
+    {
+      "legacy_object": "dbo.sindicato",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.union_entity",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.situacao_funcional",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.functional_status",
+      "note": "RH status-history and employee flows use canonical functional status records."
+    },
+    {
+      "legacy_object": "dbo.sol_adiantamento",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.advance_request",
+      "note": "Advance requests are implemented in the canonical payroll runtime and progress through approval and processing status."
+    },
+    {
+      "legacy_object": "dbo.sub_categoria_doenca",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao/Saude reference-catalog runtime under catalog key SUB_CATEGORIA_DOENCA."
+    },
+    {
+      "legacy_object": "dbo.sysdiagrams",
+      "status": "explicitly_excluded",
+      "phase": "out_of_scope",
+      "canonical_object": null,
+      "note": "Legacy SQL Server diagram artifact; excluded from v0.0.1 runtime."
+    },
+    {
+      "legacy_object": "dbo.tempo_servico",
+      "status": "canonicalized",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.service_time_record",
+      "note": "Canonicalized to the existing RH service-time workflow and tenant-scoped service_time_record table."
+    },
+    {
+      "legacy_object": "dbo.tipo_averbacao",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped reference-catalog runtime under catalog key TIPO_AVERBACAO for service-time averbação classification."
+    },
+    {
+      "legacy_object": "dbo.tipo_contrato",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.contract_type",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.tipo_ferias",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.vacation_type",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.tipo_folha",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "payroll.payroll_type",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.tipo_folha_verbas",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.payroll_type_earning",
+      "note": "Payroll-type to verba linkage is implemented as canonical payroll earning assignments by tipo de folha."
+    },
+    {
+      "legacy_object": "dbo.tipo_processamento",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "payroll.processing_type",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.tomador_servico",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.service_taker",
+      "note": "Implemented as a tenant-scoped service-taker registry linked to GPS/SEFIP collection metadata without carrying legacy table names."
+    },
+    {
+      "legacy_object": "dbo.transferencia_funcionario",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.employee_transfer",
+      "note": "RH transfer workflow persists canonical employee transfer records."
+    },
+    {
+      "legacy_object": "dbo.treinamento_sugerido",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.training_suggestion",
+      "note": "Implemented as canonical tenant-scoped training suggestions tied to course catalog metadata and prioritization."
+    },
+    {
+      "legacy_object": "dbo.treinamento_sugerido_complemento",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.training_suggestion_complement",
+      "note": "Implemented as complement rows for canonical training suggestions, including city/scheduling metadata."
+    },
+    {
+      "legacy_object": "dbo.treinamento_sugerido_funcionario",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.training_suggestion_employee",
+      "note": "Implemented as the canonical employee assignment join for training suggestions."
+    },
+    {
+      "legacy_object": "dbo.treinamento_sugerido_valores",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.training_suggestion_cost",
+      "note": "Implemented as canonical cost/value rows for each training suggestion."
+    },
+    {
+      "legacy_object": "dbo.turno",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "hr.shift",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.turno_folga",
+      "status": "implemented",
+      "phase": "post_phase_1",
+      "canonical_object": "hr.shift_day_off",
+      "note": "Implemented as tenant-scoped day-off rules attached to the canonical shift catalog."
+    },
+    {
+      "legacy_object": "dbo.unidade_federativa",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.reference_catalog_entry",
+      "note": "Implemented through the tenant-scoped Gestao reference-catalog runtime under catalog key UNIDADE_FEDERATIVA."
+    },
+    {
+      "legacy_object": "dbo.usuario",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "public.user_account",
+      "note": "Gestao usuario resource maps to canonical user account runtime table."
+    },
+    {
+      "legacy_object": "dbo.usuario_papel",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "public.profile_assignment",
+      "note": "Legacy user-role association canonicalized to profile assignments."
+    },
+    {
+      "legacy_object": "dbo.vale_transporte",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.transit_benefit",
+      "note": "Implemented in the canonical master-data runtime as the shared transit benefit catalog consumed by employee transit-benefit grants."
+    },
+    {
+      "legacy_object": "dbo.verba",
+      "status": "canonicalized",
+      "phase": "phase_1_core",
+      "canonical_object": "payroll.payroll_earning_deduction",
+      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+    },
+    {
+      "legacy_object": "dbo.verba_formula",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.payroll_earning_deduction",
+      "note": "Canonical payroll earning definitions now persist formula alias, function name, expression, dependencies, and readiness on the earning/deduction aggregate."
+    },
+    {
+      "legacy_object": "dbo.vinculo",
+      "status": "canonicalized",
+      "phase": "phase_3_core",
+      "canonical_object": "hr.employment_link",
+      "note": "Foundational employment-link catalog is managed through the canonical vinculo master-data resource."
+    },
+    {
+      "legacy_object": "dbo.vinculo_verba",
+      "status": "implemented",
+      "phase": "phase_3_core",
+      "canonical_object": "payroll.employment_link_earning",
+      "note": "Employment-link to verba linkage is implemented as canonical payroll earning assignments by vinculo."
+    }
+  ]
+}

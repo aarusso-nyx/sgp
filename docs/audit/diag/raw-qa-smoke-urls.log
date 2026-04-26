@@ -1,0 +1,13 @@
+
+> sgp-modernization-source@0.1.0 qa:smoke:urls
+> node scripts/qa-smoke-required-urls.mjs
+
+[qa-smoke] required live base URLs
+[qa-smoke] BLOCKED API smoke: set one of QA_API_BASE_URL, API_BASE_URL; example QA_API_BASE_URL=http://127.0.0.1:3000
+[qa-smoke]   Required for tests/backend/api/*.test.mjs.
+[qa-smoke] BLOCKED Backend auth/domain smoke: set one of QA_API_BASE_URL, API_BASE_URL; example QA_API_BASE_URL=http://127.0.0.1:3000
+[qa-smoke]   Required for tests/backend/e2e/*.test.mjs. Unsigned-token runs also need AUTH_ALLOW_UNSIGNED_TEST_TOKENS=true on the running backend.
+[qa-smoke] BLOCKED Admin frontend smoke: set one of QA_ADMIN_FRONTEND_BASE_URL, QA_FRONTEND_BASE_URL, FRONTEND_BASE_URL; example QA_ADMIN_FRONTEND_BASE_URL=http://127.0.0.1:4200
+[qa-smoke]   Required for sgp-admin shell smoke tests.
+[qa-smoke] BLOCKED Portal frontend smoke: set one of QA_PORTAL_FRONTEND_BASE_URL, PORTAL_FRONTEND_BASE_URL; example QA_PORTAL_FRONTEND_BASE_URL=http://127.0.0.1:4300
+[qa-smoke]   Required for sgp-portal shell smoke tests.

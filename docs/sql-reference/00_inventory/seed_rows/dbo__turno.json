@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "codigo": "001",
+    "data_inicio": "2019-05-01T10:12:57.295Z",
+    "data_fim": "2020-05-02T10:12:57.323Z",
+    "horario_flexivel": true,
+    "horario_flexivel_inicio": null,
+    "horario_flexivel_fim": null,
+    "intervalo_flexivel": true,
+    "intervalo_flexivel_inicio": null,
+    "intervalo_flexivel_fim": null,
+    "created_at": "2019-05-09T10:13:57.691Z",
+    "updated_at": "2019-05-09T10:13:57.691Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "intervalo": "1970-01-01T12:00:00.000Z",
+    "jornada": "1970-01-01T08:08:00.000Z"
+  }
+]

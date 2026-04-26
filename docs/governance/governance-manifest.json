@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "status": "implemented",
+  "controls": [
+    {
+      "id": "docs.authority.docs-eng",
+      "status": "implemented",
+      "evidence": "docs/eng/README.md"
+    },
+    {
+      "id": "engine.payroll.folia-precedence",
+      "status": "implemented",
+      "evidence": "docs/eng/71-folia-engine-reconciliation.md"
+    },
+    {
+      "id": "code.naming.english-authoritative",
+      "status": "implemented",
+      "evidence": "GOVERNANCE.md"
+    },
+    {
+      "id": "runtime.no-compat-shim",
+      "status": "implemented",
+      "evidence": "source/database/README.md"
+    },
+    {
+      "id": "archive.legacy-reverse.non-authoritative",
+      "status": "implemented",
+      "evidence": "docs/legacy-reverse/README.md"
+    },
+    {
+      "id": "archive.deprecation.coverage-tracker",
+      "status": "implemented",
+      "evidence": "docs/legacy-reverse/deprecation-status.md"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "schema_id": 16385,
+    "schema_name": "db_accessadmin",
+    "principal_id": 16385
+  },
+  {
+    "schema_id": 16389,
+    "schema_name": "db_backupoperator",
+    "principal_id": 16389
+  },
+  {
+    "schema_id": 16390,
+    "schema_name": "db_datareader",
+    "principal_id": 16390
+  },
+  {
+    "schema_id": 16391,
+    "schema_name": "db_datawriter",
+    "principal_id": 16391
+  },
+  {
+    "schema_id": 16387,
+    "schema_name": "db_ddladmin",
+    "principal_id": 16387
+  },
+  {
+    "schema_id": 16392,
+    "schema_name": "db_denydatareader",
+    "principal_id": 16392
+  },
+  {
+    "schema_id": 16393,
+    "schema_name": "db_denydatawriter",
+    "principal_id": 16393
+  },
+  {
+    "schema_id": 16384,
+    "schema_name": "db_owner",
+    "principal_id": 16384
+  },
+  {
+    "schema_id": 16386,
+    "schema_name": "db_securityadmin",
+    "principal_id": 16386
+  },
+  {
+    "schema_id": 1,
+    "schema_name": "dbo",
+    "principal_id": 1
+  },
+  {
+    "schema_id": 2,
+    "schema_name": "guest",
+    "principal_id": 2
+  },
+  {
+    "schema_id": 3,
+    "schema_name": "INFORMATION_SCHEMA",
+    "principal_id": 3
+  },
+  {
+    "schema_id": 4,
+    "schema_name": "sys",
+    "principal_id": 4
+  }
+]

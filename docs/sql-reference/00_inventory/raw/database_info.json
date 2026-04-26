@@ -1,0 +1,18 @@
+[
+  {
+    "name": "rhlinkcon",
+    "database_id": 5,
+    "create_date": "2026-04-21T22:18:49.513Z",
+    "compatibility_level": 130,
+    "collation_name": "Latin1_General_CI_AS",
+    "containment_desc": "NONE",
+    "recovery_model_desc": "SIMPLE",
+    "snapshot_isolation_state_desc": "OFF",
+    "is_read_committed_snapshot_on": false,
+    "page_verify_option_desc": "CHECKSUM",
+    "is_auto_close_on": false,
+    "is_auto_shrink_on": false,
+    "is_auto_create_stats_on": true,
+    "is_auto_update_stats_on": true
+  }
+]

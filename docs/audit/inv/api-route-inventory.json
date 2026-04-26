@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-04-26T04:20:00Z",
+  "authority": [
+    "docs/eng/10-uc-administracao-seguranca.md",
+    "docs/eng/42-contratos-integracao.md",
+    "docs/eng/60-catalogo-saidas-oficiais.md",
+    "docs/eng/62-estrategia-testes.md",
+    "docs/eng/BRIEF.md",
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/50-arvore-menus.md",
+    "docs/eng/41-arquitetura-sistema.md"
+  ],
+  "route_contract_docs_scanned_by_sync_script": [
+    "docs/eng/10-uc-administracao-seguranca.md",
+    "docs/eng/42-contratos-integracao.md",
+    "docs/eng/60-catalogo-saidas-oficiais.md",
+    "docs/eng/62-estrategia-testes.md"
+  ],
+  "domain_workflow_menu_docs_scanned_by_sync_script": [
+    "docs/eng/BRIEF.md",
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/50-arvore-menus.md"
+  ],
+  "supplemental_runtime_route_docs_scanned_by_sync_script": [
+    "docs/eng/40-divisao-modular.md",
+    "docs/eng/41-arquitetura-sistema.md"
+  ],
+  "route_families_declared": [
+    "/api/v1",
+    "/api/admin/v1",
+    "/api/portal/v1",
+    "/api/external/v1",
+    "/api/publico/v1"
+  ],
+  "deferred_scopes": [
+    "ADMIN_INSTALL_LATER",
+    "IDENTITY_INSTALL_LATER",
+    "ARRECADACAO_PREVIDENCIARIA"
+  ],
+  "counts": {
+    "documented_total": 211,
+    "documented": 152,
+    "runtime_total": 190,
+    "runtime": 152,
+    "deferred_documented": 59,
+    "deferred_runtime": 38,
+    "implemented": 152,
+    "explicitly_excluded": 0,
+    "documented_missing": 0,
+    "runtime_only": 0,
+    "runtime_outside_families": 0,
+    "domain_modules": 11,
+    "domain_modules_implemented": 11,
+    "portal_menu_routes": 34,
+    "portal_menu_missing": 0,
+    "admin_menu_routes": 182,
+    "admin_menu_implemented": 0,
+    "admin_menu_missing": 0,
+    "admin_menu_routes_postponed": 182
+  },
+  "status_counts": {
+    "implemented": 152
+  },
+  "current_family_counts": {
+    "/api/v1": 149,
+    "/api/external/v1": 2,
+    "/api/publico/v1": 1
+  },
+  "deferred_documented_family_counts": {
+    "/api/v1": 29,
+    "/api/admin/v1": 28,
+    "/api/portal/v1": 2
+  },
+  "deferred_runtime_family_counts": {
+    "/api/v1": 29,
+    "/api/admin/v1": 7,
+    "/api/portal/v1": 2
+  },
+  "documented_missing_count": 0,
+  "runtime_only_count": 0,
+  "runtime_outside_families_count": 0,
+  "domain_alignment": {
+    "implemented": 11,
+    "missing": 0
+  },
+  "portal_menu_alignment": {
+    "documented_routes": 34,
+    "implemented": 31,
+    "postponed_identity_routes": 3,
+    "missing": 0
+  },
+  "admin_menu_alignment": {
+    "documented_routes": 182,
+    "implemented": 0,
+    "postponed": 182,
+    "missing": 0,
+    "status": "postponed",
+    "deferred_scope": "ADMIN_INSTALL_LATER"
+  }
+}

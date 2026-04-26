@@ -1,0 +1,105 @@
+
+> sgp-modernization-source@0.1.0 health:json
+> node scripts/run.mjs health --json
+
+{
+  "ok": true,
+  "workspace": "sgp-modernization-source",
+  "node": "v22.22.0",
+  "checks": [
+    {
+      "path": "frontend/package.json",
+      "ok": true
+    },
+    {
+      "path": "frontend/angular.json",
+      "ok": true
+    },
+    {
+      "path": "frontend/src/main.ts",
+      "ok": true
+    },
+    {
+      "path": "frontend/portal/src/main.ts",
+      "ok": true
+    },
+    {
+      "path": "backend/package.json",
+      "ok": true
+    },
+    {
+      "path": "database/README.md",
+      "ok": true
+    },
+    {
+      "path": "infra/README.md",
+      "ok": true
+    },
+    {
+      "path": "infra/aws/README.md",
+      "ok": true
+    },
+    {
+      "path": "scripts/run.mjs",
+      "ok": true
+    },
+    {
+      "path": "backend/src/main-payroll-engine.ts",
+      "ok": true
+    },
+    {
+      "path": "backend/src/main-esocial-worker.ts",
+      "ok": true
+    },
+    {
+      "path": "backend/src/main-report-service.ts",
+      "ok": true
+    },
+    {
+      "path": "runtime/topology.json",
+      "ok": true
+    }
+  ],
+  "runtimes": [
+    {
+      "name": "sgp-admin",
+      "status": "implemented",
+      "ok": true
+    },
+    {
+      "name": "sgp-portal",
+      "status": "implemented",
+      "ok": true
+    },
+    {
+      "name": "sgp-core-api",
+      "status": "implemented",
+      "ok": true
+    },
+    {
+      "name": "sgp-portal-api",
+      "status": "implemented",
+      "ok": true
+    },
+    {
+      "name": "sgp-payroll-engine",
+      "status": "implemented",
+      "ok": true
+    },
+    {
+      "name": "sgp-esocial-worker",
+      "status": "implemented",
+      "ok": true
+    },
+    {
+      "name": "sgp-integrations-worker",
+      "status": "implemented",
+      "ok": true
+    },
+    {
+      "name": "sgp-report-service",
+      "status": "implemented",
+      "ok": true
+    }
+  ]
+}

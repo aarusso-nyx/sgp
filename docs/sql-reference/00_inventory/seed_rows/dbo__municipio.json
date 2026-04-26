@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "descricao": "Natal",
+    "cep": "59000000",
+    "naturalidade": "Natalense",
+    "regiao_fiscal": "teste",
+    "created_at": "2019-05-24T10:17:02.839Z",
+    "updated_at": "2019-05-24T10:17:02.839Z",
+    "created_by": "1",
+    "updated_by": "1",
+    "id_unidade_federativa": null
+  }
+]

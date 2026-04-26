@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-04-26T03:39:47Z",
+  "authority": [
+    "docs/eng",
+    "docs/sql-reference/00_inventory/raw/tables.json",
+    "inventories/database-model.json"
+  ],
+  "total_objects": 151,
+  "status_counts": {
+    "canonicalized": 52,
+    "implemented": 98,
+    "explicitly_excluded": 1
+  },
+  "phase_counts": {
+    "post_phase_1": 21,
+    "phase_3_core": 98,
+    "phase_1_core": 30,
+    "phase_2_core": 1,
+    "out_of_scope": 1
+  },
+  "phase_status_counts": {
+    "post_phase_1|canonicalized": 8,
+    "phase_3_core|implemented": 84,
+    "phase_3_core|canonicalized": 14,
+    "phase_1_core|canonicalized": 30,
+    "post_phase_1|implemented": 13,
+    "phase_2_core|implemented": 1,
+    "out_of_scope|explicitly_excluded": 1
+  },
+  "explicit_exclusion_count": 1,
+  "in_scope_explicit_exclusion_count": 0,
+  "approved_out_of_scope_exclusions": [
+    "dbo.sysdiagrams"
+  ],
+  "in_scope_explicit_exclusions": [],
+  "full_closure_status": "passed",
+  "notes": [
+    "All in-scope database reference objects are implemented or canonicalized.",
+    "dbo.sysdiagrams remains the only approved technical out-of-scope artifact."
+  ]
+}

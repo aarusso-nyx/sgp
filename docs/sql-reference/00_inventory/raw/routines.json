@@ -1,0 +1,82 @@
+[
+  {
+    "schema_name": "dbo",
+    "routine_name": "fn_diagramobjects",
+    "object_id": 1415676091,
+    "type": "FN",
+    "type_desc": "SQL_SCALAR_FUNCTION",
+    "create_date": "2019-06-19T09:45:31.350Z",
+    "modify_date": "2026-04-21T22:18:50.560Z",
+    "definition": "\r\n\tCREATE FUNCTION dbo.fn_diagramobjects() \r\n\tRETURNS int\r\n\tWITH EXECUTE AS N'dbo'\r\n\tAS\r\n\tBEGIN\r\n\t\tdeclare @id_upgraddiagrams\t\tint\r\n\t\tdeclare @id_sysdiagrams\t\t\tint\r\n\t\tdeclare @id_helpdiagrams\t\tint\r\n\t\tdeclare @id_helpdiagramdefinition\tint\r\n\t\tdeclare @id_creatediagram\tint\r\n\t\tdeclare @id_renamediagram\tint\r\n\t\tdeclare @id_alterdiagram \tint \r\n\t\tdeclare @id_dropdiagram\t\tint\r\n\t\tdeclare @InstalledObjects\tint\r\n\r\n\t\tselect @InstalledObjects = 0\r\n\r\n\t\tselect \t@id_upgraddiagrams = object_id(N'dbo.sp_upgraddiagrams'),\r\n\t\t\t@id_sysdiagrams = object_id(N'dbo.sysdiagrams'),\r\n\t\t\t@id_helpdiagrams = object_id(N'dbo.sp_helpdiagrams'),\r\n\t\t\t@id_helpdiagramdefinition = object_id(N'dbo.sp_helpdiagramdefinition'),\r\n\t\t\t@id_creatediagram = object_id(N'dbo.sp_creatediagram'),\r\n\t\t\t@id_renamediagram = object_id(N'dbo.sp_renamediagram'),\r\n\t\t\t@id_alterdiagram = object_id(N'dbo.sp_alterdiagram'), \r\n\t\t\t@id_dropdiagram = object_id(N'dbo.sp_dropdiagram')\r\n\r\n\t\tif @id_upgraddiagrams is not null\r\n\t\t\tselect @InstalledObjects = @InstalledObjects + 1\r\n\t\tif @id_sysdiagrams is not null\r\n\t\t\tselect @InstalledObjects = @InstalledObjects + 2\r\n\t\tif @id_helpdiagrams is not null\r\n\t\t\tselect @InstalledObjects = @InstalledObjects + 4\r\n\t\tif @id_helpdiagramdefinition is not null\r\n\t\t\tselect @InstalledObjects = @InstalledObjects + 8\r\n\t\tif @id_creatediagram is not null\r\n\t\t\tselect @InstalledObjects = @InstalledObjects + 16\r\n\t\tif @id_renamediagram is not null\r\n\t\t\tselect @InstalledObjects = @InstalledObjects + 32\r\n\t\tif @id_alterdiagram  is not null\r\n\t\t\tselect @InstalledObjects = @InstalledObjects + 64\r\n\t\tif @id_dropdiagram is not null\r\n\t\t\tselect @InstalledObjects = @InstalledObjects + 128\r\n\t\t\r\n\t\treturn @InstalledObjects \r\n\tEND\r\n\t"
+  },
+  {
+    "schema_name": "dbo",
+    "routine_name": "sp_alterdiagram",
+    "object_id": 1383675977,
+    "type": "P ",
+    "type_desc": "SQL_STORED_PROCEDURE",
+    "create_date": "2019-06-19T09:45:31.313Z",
+    "modify_date": "2019-06-19T09:45:31.313Z",
+    "definition": "\r\n\tCREATE PROCEDURE dbo.sp_alterdiagram\r\n\t(\r\n\t\t@diagramname \tsysname,\r\n\t\t@owner_id\tint\t= null,\r\n\t\t@version \tint,\r\n\t\t@definition \tvarbinary(max)\r\n\t)\r\n\tWITH EXECUTE AS 'dbo'\r\n\tAS\r\n\tBEGIN\r\n\t\tset nocount on\r\n\t\r\n\t\tdeclare @theId \t\t\tint\r\n\t\tdeclare @retval \t\tint\r\n\t\tdeclare @IsDbo \t\t\tint\r\n\t\t\r\n\t\tdeclare @UIDFound \t\tint\r\n\t\tdeclare @DiagId\t\t\tint\r\n\t\tdeclare @ShouldChangeUID\tint\r\n\t\r\n\t\tif(@diagramname is null)\r\n\t\tbegin\r\n\t\t\tRAISERROR ('Invalid ARG', 16, 1)\r\n\t\t\treturn -1\r\n\t\tend\r\n\t\r\n\t\texecute as caller;\r\n\t\tselect @theId = DATABASE_PRINCIPAL_ID();\t \r\n\t\tselect @IsDbo = IS_MEMBER(N'db_owner'); \r\n\t\tif(@owner_id is null)\r\n\t\t\tselect @owner_id = @theId;\r\n\t\trevert;\r\n\t\r\n\t\tselect @ShouldChangeUID = 0\r\n\t\tselect @DiagId = diagram_id, @UIDFound = principal_id from dbo.sysdiagrams where principal_id = @owner_id and name = @diagramname \r\n\t\t\r\n\t\tif(@DiagId IS NULL or (@IsDbo = 0 and @theId <> @UIDFound))\r\n\t\tbegin\r\n\t\t\tRAISERROR ('Diagram does not exist or you do not have permission.', 16, 1);\r\n\t\t\treturn -3\r\n\t\tend\r\n\t\r\n\t\tif(@IsDbo <> 0)\r\n\t\tbegin\r\n\t\t\tif(@UIDFound is null or USER_NAME(@UIDFound) is null) -- invalid principal_id\r\n\t\t\tbegin\r\n\t\t\t\tselect @ShouldChangeUID = 1 ;\r\n\t\t\tend\r\n\t\tend\r\n\r\n\t\t-- update dds data\t\t\t\r\n\t\tupdate dbo.sysdiagrams set definition = @definition where diagram_id = @DiagId ;\r\n\r\n\t\t-- change owner\r\n\t\tif(@ShouldChangeUID = 1)\r\n\t\t\tupdate dbo.sysdiagrams set principal_id = @theId where diagram_id = @DiagId ;\r\n\r\n\t\t-- update dds version\r\n\t\tif(@version is not null)\r\n\t\t\tupdate dbo.sysdiagrams set version = @version where diagram_id = @DiagId ;\r\n\r\n\t\treturn 0\r\n\tEND\r\n\t"
+  },
+  {
+    "schema_name": "dbo",
+    "routine_name": "sp_creatediagram",
+    "object_id": 1351675863,
+    "type": "P ",
+    "type_desc": "SQL_STORED_PROCEDURE",
+    "create_date": "2019-06-19T09:45:31.267Z",
+    "modify_date": "2019-06-19T09:45:31.267Z",
+    "definition": "\r\n\tCREATE PROCEDURE dbo.sp_creatediagram\r\n\t(\r\n\t\t@diagramname \tsysname,\r\n\t\t@owner_id\t\tint\t= null, \t\r\n\t\t@version \t\tint,\r\n\t\t@definition \tvarbinary(max)\r\n\t)\r\n\tWITH EXECUTE AS 'dbo'\r\n\tAS\r\n\tBEGIN\r\n\t\tset nocount on\r\n\t\r\n\t\tdeclare @theId int\r\n\t\tdeclare @retval int\r\n\t\tdeclare @IsDbo\tint\r\n\t\tdeclare @userName sysname\r\n\t\tif(@version is null or @diagramname is null)\r\n\t\tbegin\r\n\t\t\tRAISERROR (N'E_INVALIDARG', 16, 1);\r\n\t\t\treturn -1\r\n\t\tend\r\n\t\r\n\t\texecute as caller;\r\n\t\tselect @theId = DATABASE_PRINCIPAL_ID(); \r\n\t\tselect @IsDbo = IS_MEMBER(N'db_owner');\r\n\t\trevert; \r\n\t\t\r\n\t\tif @owner_id is null\r\n\t\tbegin\r\n\t\t\tselect @owner_id = @theId;\r\n\t\tend\r\n\t\telse\r\n\t\tbegin\r\n\t\t\tif @theId <> @owner_id\r\n\t\t\tbegin\r\n\t\t\t\tif @IsDbo = 0\r\n\t\t\t\tbegin\r\n\t\t\t\t\tRAISERROR (N'E_INVALIDARG', 16, 1);\r\n\t\t\t\t\treturn -1\r\n\t\t\t\tend\r\n\t\t\t\tselect @theId = @owner_id\r\n\t\t\tend\r\n\t\tend\r\n\t\t-- next 2 line only for test, will be removed after define name unique\r\n\t\tif EXISTS(select diagram_id from dbo.sysdiagrams where principal_id = @theId and name = @diagramname)\r\n\t\tbegin\r\n\t\t\tRAISERROR ('The name is already used.', 16, 1);\r\n\t\t\treturn -2\r\n\t\tend\r\n\t\r\n\t\tinsert into dbo.sysdiagrams(name, principal_id , version, definition)\r\n\t\t\t\tVALUES(@diagramname, @theId, @version, @definition) ;\r\n\t\t\r\n\t\tselect @retval = @@IDENTITY \r\n\t\treturn @retval\r\n\tEND\r\n\t"
+  },
+  {
+    "schema_name": "dbo",
+    "routine_name": "sp_dropdiagram",
+    "object_id": 1399676034,
+    "type": "P ",
+    "type_desc": "SQL_STORED_PROCEDURE",
+    "create_date": "2019-06-19T09:45:31.337Z",
+    "modify_date": "2019-06-19T09:45:31.337Z",
+    "definition": "\r\n\tCREATE PROCEDURE dbo.sp_dropdiagram\r\n\t(\r\n\t\t@diagramname \tsysname,\r\n\t\t@owner_id\tint\t= null\r\n\t)\r\n\tWITH EXECUTE AS 'dbo'\r\n\tAS\r\n\tBEGIN\r\n\t\tset nocount on\r\n\t\tdeclare @theId \t\t\tint\r\n\t\tdeclare @IsDbo \t\t\tint\r\n\t\t\r\n\t\tdeclare @UIDFound \t\tint\r\n\t\tdeclare @DiagId\t\t\tint\r\n\t\r\n\t\tif(@diagramname is null)\r\n\t\tbegin\r\n\t\t\tRAISERROR ('Invalid value', 16, 1);\r\n\t\t\treturn -1\r\n\t\tend\r\n\t\r\n\t\tEXECUTE AS CALLER;\r\n\t\tselect @theId = DATABASE_PRINCIPAL_ID();\r\n\t\tselect @IsDbo = IS_MEMBER(N'db_owner'); \r\n\t\tif(@owner_id is null)\r\n\t\t\tselect @owner_id = @theId;\r\n\t\tREVERT; \r\n\t\t\r\n\t\tselect @DiagId = diagram_id, @UIDFound = principal_id from dbo.sysdiagrams where principal_id = @owner_id and name = @diagramname \r\n\t\tif(@DiagId IS NULL or (@IsDbo = 0 and @UIDFound <> @theId))\r\n\t\tbegin\r\n\t\t\tRAISERROR ('Diagram does not exist or you do not have permission.', 16, 1)\r\n\t\t\treturn -3\r\n\t\tend\r\n\t\r\n\t\tdelete from dbo.sysdiagrams where diagram_id = @DiagId;\r\n\t\r\n\t\treturn 0;\r\n\tEND\r\n\t"
+  },
+  {
+    "schema_name": "dbo",
+    "routine_name": "sp_helpdiagramdefinition",
+    "object_id": 1335675806,
+    "type": "P ",
+    "type_desc": "SQL_STORED_PROCEDURE",
+    "create_date": "2019-06-19T09:45:31.177Z",
+    "modify_date": "2019-06-19T09:45:31.177Z",
+    "definition": "\r\n\tCREATE PROCEDURE dbo.sp_helpdiagramdefinition\r\n\t(\r\n\t\t@diagramname \tsysname,\r\n\t\t@owner_id\tint\t= null \t\t\r\n\t)\r\n\tWITH EXECUTE AS N'dbo'\r\n\tAS\r\n\tBEGIN\r\n\t\tset nocount on\r\n\r\n\t\tdeclare @theId \t\tint\r\n\t\tdeclare @IsDbo \t\tint\r\n\t\tdeclare @DiagId\t\tint\r\n\t\tdeclare @UIDFound\tint\r\n\t\r\n\t\tif(@diagramname is null)\r\n\t\tbegin\r\n\t\t\tRAISERROR (N'E_INVALIDARG', 16, 1);\r\n\t\t\treturn -1\r\n\t\tend\r\n\t\r\n\t\texecute as caller;\r\n\t\tselect @theId = DATABASE_PRINCIPAL_ID();\r\n\t\tselect @IsDbo = IS_MEMBER(N'db_owner');\r\n\t\tif(@owner_id is null)\r\n\t\t\tselect @owner_id = @theId;\r\n\t\trevert; \r\n\t\r\n\t\tselect @DiagId = diagram_id, @UIDFound = principal_id from dbo.sysdiagrams where principal_id = @owner_id and name = @diagramname;\r\n\t\tif(@DiagId IS NULL or (@IsDbo = 0 and @UIDFound <> @theId ))\r\n\t\tbegin\r\n\t\t\tRAISERROR ('Diagram does not exist or you do not have permission.', 16, 1);\r\n\t\t\treturn -3\r\n\t\tend\r\n\r\n\t\tselect version, definition FROM dbo.sysdiagrams where diagram_id = @DiagId ; \r\n\t\treturn 0\r\n\tEND\r\n\t"
+  },
+  {
+    "schema_name": "dbo",
+    "routine_name": "sp_helpdiagrams",
+    "object_id": 1319675749,
+    "type": "P ",
+    "type_desc": "SQL_STORED_PROCEDURE",
+    "create_date": "2019-06-19T09:45:31.140Z",
+    "modify_date": "2019-06-19T09:45:31.140Z",
+    "definition": "\r\n\tCREATE PROCEDURE dbo.sp_helpdiagrams\r\n\t(\r\n\t\t@diagramname sysname = NULL,\r\n\t\t@owner_id int = NULL\r\n\t)\r\n\tWITH EXECUTE AS N'dbo'\r\n\tAS\r\n\tBEGIN\r\n\t\tDECLARE @user sysname\r\n\t\tDECLARE @dboLogin bit\r\n\t\tEXECUTE AS CALLER;\r\n\t\t\tSET @user = USER_NAME();\r\n\t\t\tSET @dboLogin = CONVERT(bit,IS_MEMBER('db_owner'));\r\n\t\tREVERT;\r\n\t\tSELECT\r\n\t\t\t[Database] = DB_NAME(),\r\n\t\t\t[Name] = name,\r\n\t\t\t[ID] = diagram_id,\r\n\t\t\t[Owner] = USER_NAME(principal_id),\r\n\t\t\t[OwnerID] = principal_id\r\n\t\tFROM\r\n\t\t\tsysdiagrams\r\n\t\tWHERE\r\n\t\t\t(@dboLogin = 1 OR USER_NAME(principal_id) = @user) AND\r\n\t\t\t(@diagramname IS NULL OR name = @diagramname) AND\r\n\t\t\t(@owner_id IS NULL OR principal_id = @owner_id)\r\n\t\tORDER BY\r\n\t\t\t4, 5, 1\r\n\tEND\r\n\t"
+  },
+  {
+    "schema_name": "dbo",
+    "routine_name": "sp_renamediagram",
+    "object_id": 1367675920,
+    "type": "P ",
+    "type_desc": "SQL_STORED_PROCEDURE",
+    "create_date": "2019-06-19T09:45:31.287Z",
+    "modify_date": "2019-06-19T09:45:31.287Z",
+    "definition": "\r\n\tCREATE PROCEDURE dbo.sp_renamediagram\r\n\t(\r\n\t\t@diagramname \t\tsysname,\r\n\t\t@owner_id\t\tint\t= null,\r\n\t\t@new_diagramname\tsysname\r\n\t\r\n\t)\r\n\tWITH EXECUTE AS 'dbo'\r\n\tAS\r\n\tBEGIN\r\n\t\tset nocount on\r\n\t\tdeclare @theId \t\t\tint\r\n\t\tdeclare @IsDbo \t\t\tint\r\n\t\t\r\n\t\tdeclare @UIDFound \t\tint\r\n\t\tdeclare @DiagId\t\t\tint\r\n\t\tdeclare @DiagIdTarg\t\tint\r\n\t\tdeclare @u_name\t\t\tsysname\r\n\t\tif((@diagramname is null) or (@new_diagramname is null))\r\n\t\tbegin\r\n\t\t\tRAISERROR ('Invalid value', 16, 1);\r\n\t\t\treturn -1\r\n\t\tend\r\n\t\r\n\t\tEXECUTE AS CALLER;\r\n\t\tselect @theId = DATABASE_PRINCIPAL_ID();\r\n\t\tselect @IsDbo = IS_MEMBER(N'db_owner'); \r\n\t\tif(@owner_id is null)\r\n\t\t\tselect @owner_id = @theId;\r\n\t\tREVERT;\r\n\t\r\n\t\tselect @u_name = USER_NAME(@owner_id)\r\n\t\r\n\t\tselect @DiagId = diagram_id, @UIDFound = principal_id from dbo.sysdiagrams where principal_id = @owner_id and name = @diagramname \r\n\t\tif(@DiagId IS NULL or (@IsDbo = 0 and @UIDFound <> @theId))\r\n\t\tbegin\r\n\t\t\tRAISERROR ('Diagram does not exist or you do not have permission.', 16, 1)\r\n\t\t\treturn -3\r\n\t\tend\r\n\t\r\n\t\t-- if((@u_name is not null) and (@new_diagramname = @diagramname))\t-- nothing will change\r\n\t\t--\treturn 0;\r\n\t\r\n\t\tif(@u_name is null)\r\n\t\t\tselect @DiagIdTarg = diagram_id from dbo.sysdiagrams where principal_id = @theId and name = @new_diagramname\r\n\t\telse\r\n\t\t\tselect @DiagIdTarg = diagram_id from dbo.sysdiagrams where principal_id = @owner_id and name = @new_diagramname\r\n\t\r\n\t\tif((@DiagIdTarg is not null) and  @DiagId <> @DiagIdTarg)\r\n\t\tbegin\r\n\t\t\tRAISERROR ('The name is already used.', 16, 1);\r\n\t\t\treturn -2\r\n\t\tend\t\t\r\n\t\r\n\t\tif(@u_name is null)\r\n\t\t\tupdate dbo.sysdiagrams set [name] = @new_diagramname, principal_id = @theId where diagram_id = @DiagId\r\n\t\telse\r\n\t\t\tupdate dbo.sysdiagrams set [name] = @new_diagramname where diagram_id = @DiagId\r\n\t\treturn 0\r\n\tEND\r\n\t"
+  },
+  {
+    "schema_name": "dbo",
+    "routine_name": "sp_upgraddiagrams",
+    "object_id": 1255675521,
+    "type": "P ",
+    "type_desc": "SQL_STORED_PROCEDURE",
+    "create_date": "2019-06-19T09:45:30.840Z",
+    "modify_date": "2019-06-19T09:45:30.840Z",
+    "definition": "\r\n\tCREATE PROCEDURE dbo.sp_upgraddiagrams\r\n\tAS\r\n\tBEGIN\r\n\t\tIF OBJECT_ID(N'dbo.sysdiagrams') IS NOT NULL\r\n\t\t\treturn 0;\r\n\t\r\n\t\tCREATE TABLE dbo.sysdiagrams\r\n\t\t(\r\n\t\t\tname sysname NOT NULL,\r\n\t\t\tprincipal_id int NOT NULL,\t-- we may change it to varbinary(85)\r\n\t\t\tdiagram_id int PRIMARY KEY IDENTITY,\r\n\t\t\tversion int,\r\n\t\r\n\t\t\tdefinition varbinary(max)\r\n\t\t\tCONSTRAINT UK_principal_name UNIQUE\r\n\t\t\t(\r\n\t\t\t\tprincipal_id,\r\n\t\t\t\tname\r\n\t\t\t)\r\n\t\t);\r\n\r\n\r\n\t\t/* Add this if we need to have some form of extended properties for diagrams */\r\n\t\t/*\r\n\t\tIF OBJECT_ID(N'dbo.sysdiagram_properties') IS NULL\r\n\t\tBEGIN\r\n\t\t\tCREATE TABLE dbo.sysdiagram_properties\r\n\t\t\t(\r\n\t\t\t\tdiagram_id int,\r\n\t\t\t\tname sysname,\r\n\t\t\t\tvalue varbinary(max) NOT NULL\r\n\t\t\t)\r\n\t\tEND\r\n\t\t*/\r\n\r\n\t\tIF OBJECT_ID(N'dbo.dtproperties') IS NOT NULL\r\n\t\tbegin\r\n\t\t\tinsert into dbo.sysdiagrams\r\n\t\t\t(\r\n\t\t\t\t[name],\r\n\t\t\t\t[principal_id],\r\n\t\t\t\t[version],\r\n\t\t\t\t[definition]\r\n\t\t\t)\r\n\t\t\tselect\t \r\n\t\t\t\tconvert(sysname, dgnm.[uvalue]),\r\n\t\t\t\tDATABASE_PRINCIPAL_ID(N'dbo'),\t\t\t-- will change to the sid of sa\r\n\t\t\t\t0,\t\t\t\t\t\t\t-- zero for old format, dgdef.[version],\r\n\t\t\t\tdgdef.[lvalue]\r\n\t\t\tfrom dbo.[dtproperties] dgnm\r\n\t\t\t\tinner join dbo.[dtproperties] dggd on dggd.[property] = 'DtgSchemaGUID' and dggd.[objectid] = dgnm.[objectid]\t\r\n\t\t\t\tinner join dbo.[dtproperties] dgdef on dgdef.[property] = 'DtgSchemaDATA' and dgdef.[objectid] = dgnm.[objectid]\r\n\t\t\t\t\r\n\t\t\twhere dgnm.[property] = 'DtgSchemaNAME' and dggd.[uvalue] like N'_EA3E6268-D998-11CE-9454-00AA00A3F36E_' \r\n\t\t\treturn 2;\r\n\t\tend\r\n\t\treturn 1;\r\n\tEND\r\n\t"
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "1",
+    "formula": "<p>o{referenciaSalarialCargo.valor} /n </p>",
+    "descricao": "vencimento",
+    "verba_id": "1",
+    "created_at": "2019-06-07T14:35:23.114Z",
+    "updated_at": "2019-06-07T14:35:23.114Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "8",
+    "formula": "<p>percent = 0 /n</p><p><br/></p><p>SE ( \"o{grauInstrucao}\" == \"SUPERIOR_COMPLETO\") </p><p><br/></p><p><br/></p><p>ENTAO percent = 0.07/n</p><p><br/></p><p><br/></p><p>SENAO_SE ( \"o{grauInstrucao}\" == \"ESPECIALIZACAO_POS_GRADUACAO\" ) </p><p><br/></p><p><br/></p><p>ENTAO percent = 0.1/n</p><p><br/></p><p><br/></p><p>SENAO_SE ( \"o{grauInstrucao}\" == \"MESTRADO\") /n</p><p><br/></p><p><br/></p><p>ENTAO percent = 0.12 /n</p><p><br/></p><p><br/></p><p>FIM_SE /n</p><p><br/></p><p><br/></p><p>r{vencimento} * percent </p>",
+    "descricao": "titulacao_aperfeicoamento",
+    "verba_id": "8",
+    "created_at": "2019-06-07T14:42:51.929Z",
+    "updated_at": "2019-06-07T14:42:51.929Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "9",
+    "formula": "<p></p><p>salario = r{vencimento} + r{titulacao_aperfeicoamento} /n</p><p>salario = salario - r{vale_transporte}   /n<br/></p><p>salario*1 /n </p><p></p><p> </p>",
+    "descricao": "salario",
+    "verba_id": "9",
+    "created_at": "2019-06-07T17:57:23.011Z",
+    "updated_at": "2019-06-11T10:02:38.072Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "14",
+    "formula": "<p>r{vencimento} * 0.06 /n </p>",
+    "descricao": "vale_transporte",
+    "verba_id": "10",
+    "created_at": "2019-06-10T16:10:35.697Z",
+    "updated_at": "2019-06-13T14:04:00.337Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "15",
+    "formula": "<p>a{inss} /n </p>",
+    "descricao": "inss",
+    "verba_id": "11",
+    "created_at": "2019-06-12T15:30:00.100Z",
+    "updated_at": "2019-06-12T15:30:00.100Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "16",
+    "formula": "<p>214.00 * 1<br/></p>",
+    "descricao": "gratificacao_regencia_classe",
+    "verba_id": "12",
+    "created_at": "2019-06-13T09:50:43.501Z",
+    "updated_at": "2019-06-13T09:50:43.501Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "17",
+    "formula": "<p>o{referenciaSalarialCargo.valor} /n * /n 0.3<br/></p>",
+    "descricao": "adicional_incentivo_funcional_motorista",
+    "verba_id": "14",
+    "created_at": "2019-06-13T10:13:11.655Z",
+    "updated_at": "2019-06-13T10:13:11.655Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "18",
+    "formula": "<p>o{referenciaSalarialCargo.valor} /n * /n 1.0<br/></p>",
+    "descricao": "adicional_rept",
+    "verba_id": "15",
+    "created_at": "2019-06-13T11:04:38.589Z",
+    "updated_at": "2019-06-13T11:04:38.589Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "19",
+    "formula": "<p>o{referenciaSalarialCargo.valor} /n * /n 0.2<br/></p>",
+    "descricao": "gratificacao_maturacao_profissional",
+    "verba_id": "16",
+    "created_at": "2019-06-13T11:09:58.252Z",
+    "updated_at": "2019-06-13T11:09:58.252Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "20",
+    "formula": "<p>o{referenciaSalarialCargo.valor} /n * /n  0.2<br/></p>",
+    "descricao": "adicional_desempenho_profissional",
+    "verba_id": "17",
+    "created_at": "2019-06-13T11:12:29.031Z",
+    "updated_at": "2019-06-13T11:12:29.031Z",
+    "created_by": "1",
+    "updated_by": "1"
+  },
+  {
+    "id": "21",
+    "formula": "<p>o{referenciaSalarialCargo.valor} /n * /n 1.0 <br/></p>",
+    "descricao": "adicional_resp_tecnica_engenheiro",
+    "verba_id": "18",
+    "created_at": "2019-06-13T11:14:47.889Z",
+    "updated_at": "2019-06-13T11:14:47.889Z",
+    "created_by": "1",
+    "updated_by": "1"
+  }
+]
