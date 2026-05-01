@@ -276,6 +276,21 @@
       "previous_failure": "logs/maestro/23-calc-07-abono-permanencia-ats.failure.md",
       "failure_log": "logs/maestro/23-calc-07-abono-permanencia-ats.failure.md",
       "recovery": "manual frontend test harness, permission seed, and formula-engine error propagation repair after high retry failure"
+    },
+    "24-calc-04-decimo-terceiro": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/24-calc-04-decimo-terceiro",
+      "commit": "829d028",
+      "started_at": "2026-05-01T18:47:08-03:00",
+      "retry_started_at": "2026-05-01T18:57:14-03:00",
+      "completed_at": "2026-05-01T19:08:06-03:00",
+      "retries": 1,
+      "agent": "019de58b-de11-7ef1-a95b-395729ad5277",
+      "previous_agent": "019de582-7163-7883-aaf8-ab36db972cec",
+      "previous_failure": "logs/maestro/24-calc-04-decimo-terceiro.failure.md",
+      "failure_log": "logs/maestro/24-calc-04-decimo-terceiro.failure.md",
+      "recovery": "manual tenant-context, audit coverage, permission seed, and formula parity fixture repair after high retry failure"
     }
   },
   "current_wave": 12,

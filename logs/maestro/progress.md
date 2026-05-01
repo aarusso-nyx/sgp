@@ -40,3 +40,5 @@ W11 ✗ 22-calc-06 (medium → high retry failed: admin catalog count stale afte
 W11 ✓ 22-calc-06 (1 slice, medium→high + manual recovery, gates passed, commit 75d0deb) — completeness 26.2% → 26.2%
 W11 ✗ 23-calc-07 (medium → high retry failed: frontend RhFuncionarios routerLink harness and permission seed drift) — recovered manually
 W11 ✓ 23-calc-07 (1 slice, medium→high + manual recovery, gates passed, commit e13c7f9) — completeness 26.2% → 26.2%; Wave 11 complete
+W12 ✗ 24-calc-04 (medium → high retry failed: permission catalog drift and e2e audit tenant context) — recovered manually
+W12 ✓ 24-calc-04 (1 slice, medium→high + manual recovery, gates passed, commit 829d028) — completeness 26.2% → 26.2%
