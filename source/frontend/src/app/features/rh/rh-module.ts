@@ -9,11 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 import { SharedPlatformModule } from '../shared-platform/shared-platform-module';
+import { RhFuncionarios } from './funcionarios/funcionarios';
 import { RhRoutingModule } from './rh-routing-module';
 import { RhHome } from './pages/rh-home/rh-home';
 
 @NgModule({
-  declarations: [RhHome],
+  declarations: [RhHome, RhFuncionarios],
   imports: [
     CommonModule,
     ReactiveFormsModule,

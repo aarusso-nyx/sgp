@@ -1,11 +1,17 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
-import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
+import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
+import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
+import { AdmitEmployeeDto, TerminateEmployeeDto } from './employees.dto';
 import { EmployeesService } from './employees.service';
-import { TerminateEmployeeDto } from './employees.dto';
 
 @ApiTags('rh')
 @ApiBearerAuth()
@@ -16,16 +22,37 @@ export class EmployeesController {
     private readonly auditService: AuditService,
   ) {}
 
+  @Get('funcionarios')
+  @RequirePermission('rh.employee.read')
+  @ApiOkResponse({ description: 'Paged employee registry.' })
+  list(@Query() query: DomainListQueryDto) {
+    return this.employeesService.list(query);
+  }
+
+  @Post('funcionarios')
+  @RequirePermission('rh.employee.admit')
+  @ApiCreatedResponse({ description: 'Admit an employee.' })
+  async admitEmployee(
+    @Req() request: RequestWithContext,
+    @Body() body: AdmitEmployeeDto,
+  ) {
+    const admitted = await this.employeesService.admit(body);
+    await this.auditService.auditMutation(request, 'CREATE', 'employee', {
+      resourceId: admitted.employeeId,
+      tableName: 'employee',
+      metadata: {
+        transition: 'admission',
+        employmentContractId: admitted.employmentContractId,
+      },
+    });
+    return admitted;
+  }
+
   @Get('funcionarios/:id/dossie')
-  @RequirePermission('rh.read')
+  @RequirePermission('rh.employee.read')
   @ApiOkResponse({ description: 'Employee dossier document.' })
   dossier(@Param('id') id: string) {
-    return {
-      funcionarioId: id,
-      tipo: 'dossie',
-      emitidoEm: new Date().toISOString(),
-      status: 'AVAILABLE',
-    };
+    return this.employeesService.getDossier(id);
   }
 
   @Get('pericia/prontuarios/:id/laudo/pdf')
@@ -41,7 +68,7 @@ export class EmployeesController {
   }
 
   @Get('recadastramento/:recadastramento_id/comprovante')
-  @RequirePermission('rh.read')
+  @RequirePermission('rh.employee.read')
   @ApiOkResponse({ description: 'Recadastramento receipt metadata.' })
   recadastramentoReceipt(
     @Param('recadastramento_id') recadastramentoId: string,
@@ -55,7 +82,7 @@ export class EmployeesController {
   }
 
   @Post('funcionarios/:func_rescisao/desligamento')
-  @RequirePermission('rh.write')
+  @RequirePermission('rh.employee.terminate')
   @ApiOkResponse({
     description:
       'Terminate an employee and optionally create the termination payroll run.',

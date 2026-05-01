@@ -745,6 +745,7 @@ model EmploymentLink {
   updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employees       Employee[]
+  contracts       EmploymentContract[]
   processingTypes ProcessingType[]
   earningLinks    EmploymentLinkEarning[]
   structureLinks  JobStructureEmploymentLink[]
@@ -765,6 +766,7 @@ model ContractType {
   updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employees Employee[]
+  contracts EmploymentContract[]
 
   @@unique([tenantId, code])
   @@index([status])
@@ -1228,6 +1230,14 @@ model Employee {
   bankId              String?                 @map("bank_id") @db.Uuid
   bankAgency          String?                 @map("bank_agency")
   bankAccount         String?                 @map("bank_account")
+  pisPasep            String?                 @map("pis_pasep")
+  rg                  String?
+  rgIssuer            String?                 @map("rg_issuer")
+  motherName          String?                 @map("mother_name")
+  fatherName          String?                 @map("father_name")
+  nationalityCode     String?                 @map("nationality_code")
+  birthCityCode       String?                 @map("birth_city_code")
+  address             Json                    @default("{}")
   hiredOn             DateTime?               @map("hired_on") @db.Date
   terminatedOn        DateTime?               @map("terminated_on") @db.Date
   terminationReasonId String?                 @map("termination_reason_id") @db.Uuid
@@ -1262,6 +1272,7 @@ model Employee {
   alimonies               EmployeeAlimony[]
   transitBenefits         EmployeeTransitBenefit[]
   complementData          EmployeeComplementData?
+  contracts               EmploymentContract[]
   salaryHistory           SalaryLevelHistory[]
   payrollItems            EmployeePayrollItem[]
   financialRecords        PayrollFinancialRecord[]
@@ -1304,6 +1315,33 @@ model Employee {
   @@index([lifecycleStatus])
   @@schema("hr")
   @@map("employee")
+}
+
+model EmploymentContract {
+  id               String       @id @default(uuid()) @db.Uuid
+  tenantId         String       @map("tenant_id") @db.Uuid
+  employeeId       String       @map("employee_id") @db.Uuid
+  employmentLinkId String       @map("employment_link_id") @db.Uuid
+  contractTypeId   String       @map("contract_type_id") @db.Uuid
+  appointedOn      DateTime?    @map("appointed_on") @db.Date
+  possessionOn     DateTime?    @map("possession_on") @db.Date
+  exerciseOn       DateTime?    @map("exercise_on") @db.Date
+  startsOn         DateTime     @map("starts_on") @db.Date
+  endsOn           DateTime?    @map("ends_on") @db.Date
+  legalBasis       String       @default("") @map("legal_basis")
+  status           RecordStatus @default(ACTIVE)
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  employee       Employee       @relation(fields: [employeeId], references: [id])
+  employmentLink EmploymentLink @relation(fields: [employmentLinkId], references: [id])
+  contractType   ContractType   @relation(fields: [contractTypeId], references: [id])
+
+  @@index([tenantId, employeeId, startsOn])
+  @@index([employmentLinkId])
+  @@index([contractTypeId])
+  @@schema("hr")
+  @@map("employment_contract")
 }
 
 model EmployeeDependent {

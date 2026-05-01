@@ -4,6 +4,9 @@ import { resolve } from 'node:path';
 interface PermissionSeed {
   permissions: Array<{
     key: string;
+    moduleKey: string;
+    resourceKey: string;
+    actionKey: string;
     routePattern?: string;
   }>;
 }
@@ -23,19 +26,31 @@ function readSeed(): PermissionSeed {
   const parsed = JSON.parse(readFileSync(seedPath, 'utf8')) as PermissionSeed;
   const codes = parsed.permissions.map((permission) => permission.key);
   const unique = new Set(codes);
-  if (codes.length !== 25) {
+  if (codes.length !== 31) {
     throw new Error(
-      `permission-catalog.json must contain exactly 25 permissions; found ${codes.length}`,
+      `permission-catalog.json must contain exactly 31 permissions; found ${codes.length}`,
     );
   }
   if (unique.size !== codes.length) {
     throw new Error('permission-catalog.json contains duplicate keys');
   }
+  const tuples = parsed.permissions.map(
+    (permission) =>
+      `${permission.moduleKey}:${permission.resourceKey}:${permission.actionKey}`,
+  );
+  const uniqueTuples = new Set(tuples);
+  if (uniqueTuples.size !== tuples.length) {
+    throw new Error(
+      'permission-catalog.json contains duplicate module/resource/action tuples',
+    );
+  }
   return parsed;
 }
 
 function writeBackendCatalog(seed: PermissionSeed): void {
-  const permissions = seed.permissions.map((permission) => permission.key).sort();
+  const permissions = seed.permissions
+    .map((permission) => permission.key)
+    .sort();
   const permissionLines = permissions
     .map((permission) => `  '${permission}',`)
     .join('\n');
@@ -52,7 +67,10 @@ export type Permission = (typeof PERMISSIONS)[number];
 function writeFrontendCatalog(seed: PermissionSeed): void {
   const entries: Array<[string, string]> = seed.permissions
     .filter((permission) => permission.routePattern?.startsWith('#!'))
-    .map((permission) => [permission.routePattern ?? '', permission.key] as [string, string])
+    .map(
+      (permission) =>
+        [permission.routePattern ?? '', permission.key] as [string, string],
+    )
     .sort((left, right) => left[0].localeCompare(right[0]));
   const entryLines = entries
     .map(([pattern, permission]) => `  ['${pattern}', '${permission}'],`)

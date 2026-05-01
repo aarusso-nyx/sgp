@@ -1749,11 +1749,17 @@ R: Acesse o contracheque antes do fechamento da competência. O sistema aplica a
 
 ### Módulo RH
 
+**P: Como admitir um servidor?**
+R: Acesse **Módulo RH > Cadastro do servidor**. Preencha matrícula, nome, CPF, data de admissão e, quando aplicável, datas de nomeação, posse e exercício. Ao salvar, o sistema cria o vínculo funcional ativo, registra o contrato e grava a primeira linha do histórico de situação.
+
+**P: Onde consulto o dossiê do servidor?**
+R: Na mesma tela, selecione o servidor na lista. O painel de dossiê exibe os dados principais e usa o endpoint protegido por `rh.employee.read`.
+
 **P: Cadastrei um servidor mas não consigo registrar a posse.**
 R: Verifique se o servidor está na situação `CADASTRO_BASE`. Caso esteja em outra situação, contate o Analista de RH responsável.
 
 **P: Como desligar um servidor?**
-R: Acesse **Módulo RH > Funcionário > [Servidor] > Situação Funcional > Registrar Desligamento**. Informe o motivo, data e documentação. A situação muda para `DESLIGAMENTO`.
+R: Acesse **Módulo RH > Cadastro do servidor**, selecione o servidor e preencha data, motivo e justificativa no bloco **Desligamento**. A situação muda para `DESLIGAMENTO`, o contrato ativo recebe data final e a operação é auditada.
 
 **P: O sistema permitiu cadastrar dois servidores com o mesmo CPF?**
 R: Não é possível. O CPF é único por tenant. Se houver dois registros, um deles pode ser de tenant diferente — contate o suporte.

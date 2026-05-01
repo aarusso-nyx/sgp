@@ -213,6 +213,125 @@ $$;
   );
 
   await runSqlSnippet(
+    '99-hr01-employee-lifecycle.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  v_employee_id uuid;
+  status_id uuid;
+  link_id uuid;
+  contract_type_id uuid;
+  contract_id uuid;
+  history_count integer;
+  audit_count integer;
+  visible_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employee TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.functional_status TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employment_link TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.contract_type TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employment_contract TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON hr.employee_status_history TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'gestao.write' || chr(10) || 'rh.employee.read' || chr(10) || 'rh.employee.admit' || chr(10) || 'rh.employee.terminate' || chr(10) || 'auditoria.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+
+  INSERT INTO hr.functional_status (
+    tenant_id, code, description, modality, kind, enters_payroll, lifecycle_status, status
+  )
+  VALUES (
+    tenant_a, 'HR01_SMOKE_ATIVO', 'HR01 Smoke Ativo', 'ATIVO', 'EXERCICIO', true, 'ACTIVE'::"EmployeeLifecycleStatus", 'ACTIVE'::"RecordStatus"
+  )
+  ON CONFLICT (tenant_id, code) DO UPDATE SET updated_at = now()
+  RETURNING id INTO status_id;
+
+  INSERT INTO hr.employment_link (tenant_id, code, name, status)
+  VALUES (tenant_a, 'HR01_SMOKE_LINK', 'HR01 Smoke Link', 'ACTIVE'::"RecordStatus")
+  ON CONFLICT (tenant_id, code) DO UPDATE SET updated_at = now()
+  RETURNING id INTO link_id;
+
+  INSERT INTO hr.contract_type (tenant_id, code, name, status)
+  VALUES (tenant_a, 'HR01_SMOKE_CONTRACT', 'HR01 Smoke Contract', 'ACTIVE'::"RecordStatus")
+  ON CONFLICT (tenant_id, code) DO UPDATE SET updated_at = now()
+  RETURNING id INTO contract_type_id;
+
+  INSERT INTO hr.employee (
+    tenant_id, registration, name, cpf, functional_status_id, employment_link_id, contract_type_id, hired_on, lifecycle_status
+  )
+  VALUES (
+    tenant_a, 'HR01-SMOKE', 'HR01 Smoke Employee', '99900011122', status_id, link_id, contract_type_id, DATE '2026-05-01', 'ACTIVE'::"EmployeeLifecycleStatus"
+  )
+  ON CONFLICT (tenant_id, registration) DO UPDATE
+  SET functional_status_id = EXCLUDED.functional_status_id, updated_at = now()
+  RETURNING id INTO v_employee_id;
+
+  INSERT INTO hr.employment_contract (
+    tenant_id, employee_id, employment_link_id, contract_type_id, starts_on, status
+  )
+  VALUES (
+    tenant_a, v_employee_id, link_id, contract_type_id, DATE '2026-05-01', 'ACTIVE'::"RecordStatus"
+  )
+  ON CONFLICT DO NOTHING
+  RETURNING id INTO contract_id;
+
+  IF contract_id IS NULL THEN
+    SELECT id INTO contract_id
+    FROM hr.employment_contract
+    WHERE tenant_id = tenant_a AND employee_id = v_employee_id AND ends_on IS NULL
+    LIMIT 1;
+  END IF;
+
+  SELECT count(*) INTO history_count
+  FROM hr.employee_status_history
+  WHERE tenant_id = tenant_a AND employee_id = v_employee_id;
+  IF history_count = 0 THEN
+    RAISE EXCEPTION 'Expected HR-01 admission to create employee_status_history';
+  END IF;
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND resource_type = 'rh.employee'
+    AND resource_id = v_employee_id::text;
+  IF audit_count = 0 THEN
+    RAISE EXCEPTION 'Expected HR-01 admission to append audit_event';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.employee.read', true);
+  SELECT count(*) INTO visible_count FROM hr.employee WHERE id = v_employee_id;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 hr.employee rows from tenant A, found %', visible_count;
+  END IF;
+  SELECT count(*) INTO visible_count FROM hr.employment_contract WHERE id = contract_id;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 hr.employment_contract rows from tenant A, found %', visible_count;
+  END IF;
+  SELECT count(*) INTO visible_count FROM hr.employee_status_history WHERE employee_id = v_employee_id;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 hr.employee_status_history rows from tenant A, found %', visible_count;
+  END IF;
+
+  RESET ROLE;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated HR-01 employee admission audit, timeline, and RLS');
+
+  await runSqlSnippet(
     '99-xcut04-audit-immutability.sql',
     `
 DO $$

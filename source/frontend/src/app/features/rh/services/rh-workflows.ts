@@ -85,22 +85,27 @@ export class RhWorkflows {
   }
 
   listEmployees(query: RhQuery = {}): Observable<PagedResult<RhEmployeeRecord>> {
-    return this.api.getApiV1AdminUsuarios(query).pipe(
+    return this.api.getApiV1Funcionarios(query).pipe(
       map((result) => {
         const items = this.extractItems(result).map((item) => this.toEmployee(item));
+        const value = result as Partial<PagedResult<unknown>>;
         return {
           items,
-          page: query.page ?? 1,
-          pageSize: query.pageSize ?? 25,
-          total: items.length,
-          totalPages: 1,
+          page: Number(value.page ?? query.page ?? 1),
+          pageSize: Number(value.pageSize ?? query.pageSize ?? 25),
+          total: Number(value.total ?? items.length),
+          totalPages: Number(value.totalPages ?? 1),
         };
       }),
     );
   }
 
   createEmployee(body: RhMutation): Observable<RhEmployeeRecord> {
-    return this.api.postApiV1AdminUsuarios(body).pipe(map((result) => this.toEmployee(result)));
+    return this.api
+      .postApiV1Funcionarios(body)
+      .pipe(
+        map((result) => this.toEmployee((result as { employee?: unknown }).employee ?? result)),
+      );
   }
 
   updateEmployee(id: string, body: RhMutation): Observable<RhEmployeeRecord> {
@@ -110,9 +115,18 @@ export class RhWorkflows {
   }
 
   deactivateEmployee(id: string): Observable<RhEmployeeRecord> {
+    return this.terminateEmployee(id, {
+      terminationDate: new Date().toISOString().slice(0, 10),
+      terminationReasonId: '00000000-0000-0000-0000-000000000000',
+    });
+  }
+
+  terminateEmployee(id: string, body: RhMutation): Observable<RhEmployeeRecord> {
     return this.api
-      .patchApiV1AdminUsuariosById({ id }, { status: 'INACTIVE' })
-      .pipe(map((result) => this.toEmployee({ ...(result as object), id, status: 'INACTIVE' })));
+      .postApiV1FuncionariosDesligamentoByFuncRescisao({ func_rescisao: id }, body)
+      .pipe(
+        map((result) => this.toEmployee((result as { employee?: unknown }).employee ?? result)),
+      );
   }
 
   listWorkflow(workflow: string, query: RhQuery = {}): Observable<PagedResult<RhWorkflowRecord>> {

@@ -10,7 +10,7 @@ import { Forbidden } from './features/security/pages/forbidden/forbidden';
 import { Shell } from './shared-platform/shell/shell';
 
 const adminFeatureRoutes = ADMIN_MODULES.filter(
-  (module) => module.key !== 'gestao',
+  (module) => module.key !== 'gestao' && module.key !== 'rh',
 ).map((module) => ({
   path: module.routePath.replace(/^\//, ''),
   children: buildModuleRouteGroup(module.key as LegacyModuleKey, AdminFeaturePage, {
@@ -37,8 +37,11 @@ export const routes: Routes = [
       { path: 'relatorio', pathMatch: 'full', redirectTo: 'relatorios' },
       {
         path: 'gestao',
-        loadChildren: () =>
-          import('./features/gestao/gestao-module').then((m) => m.GestaoModule),
+        loadChildren: () => import('./features/gestao/gestao-module').then((m) => m.GestaoModule),
+      },
+      {
+        path: 'rh',
+        loadChildren: () => import('./features/rh/rh-module').then((m) => m.RhModule),
       },
       ...adminFeatureRoutes,
     ],

@@ -1,0 +1,149 @@
+<section class="funcionarios" aria-labelledby="funcionarios-title">
+  <header class="funcionarios__header">
+    <div>
+      <p>Recursos Humanos</p>
+      <h1 id="funcionarios-title">Cadastro do servidor</h1>
+    </div>
+    <label>
+      <span>Filtro</span>
+      <input
+        type="search"
+        [value]="search"
+        (input)="search = $any($event.target).value"
+        (keyup.enter)="load()"
+        placeholder="Matricula, nome, CPF ou situacao"
+      />
+    </label>
+    <button type="button" mat-stroked-button (click)="load()">Pesquisar</button>
+  </header>
+
+  <p class="funcionarios__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="funcionarios__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="funcionarios__layout">
+    <section class="funcionarios__panel">
+      <h2>Servidores</h2>
+      <p *ngIf="loading">Carregando...</p>
+      <table aria-label="Servidores admitidos">
+        <thead>
+          <tr>
+            <th>Matricula</th>
+            <th>Nome</th>
+            <th>Situacao</th>
+            <th>Lotacao</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let employee of employees"
+            (click)="select(employee)"
+            [class.funcionarios__row--selected]="employee.id === selected?.id"
+          >
+            <td>{{ employee.registration }}</td>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.functionalStatus || employee.lifecycleStatus }}</td>
+            <td>{{ employee.branch || '-' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="funcionarios__panel" *ngIf="selected">
+      <h2>Dossie</h2>
+      <dl>
+        <dt>Matricula</dt>
+        <dd>{{ selected.registration }}</dd>
+        <dt>Nome</dt>
+        <dd>{{ selected.name }}</dd>
+        <dt>CPF</dt>
+        <dd>{{ selected.cpf || '-' }}</dd>
+        <dt>E-mail</dt>
+        <dd>{{ selected.email || '-' }}</dd>
+      </dl>
+    </section>
+  </div>
+
+  <div class="funcionarios__forms">
+    <form [formGroup]="admissionForm" (ngSubmit)="admit()" class="funcionarios__panel">
+      <h2>Admissao</h2>
+      <div class="funcionarios__fields">
+        <label>
+          <span>Matricula</span>
+          <input formControlName="registration" />
+        </label>
+        <label>
+          <span>Nome</span>
+          <input formControlName="name" />
+        </label>
+        <label>
+          <span>CPF</span>
+          <input formControlName="cpf" />
+        </label>
+        <label>
+          <span>E-mail</span>
+          <input formControlName="email" />
+        </label>
+        <label>
+          <span>Data de admissao</span>
+          <input type="date" formControlName="hiredOn" />
+        </label>
+        <label>
+          <span>Nomeacao</span>
+          <input type="date" formControlName="appointedOn" />
+        </label>
+        <label>
+          <span>Posse</span>
+          <input type="date" formControlName="possessionOn" />
+        </label>
+        <label>
+          <span>Exercicio</span>
+          <input type="date" formControlName="exerciseOn" />
+        </label>
+        <label>
+          <span>PIS/PASEP</span>
+          <input formControlName="pisPasep" />
+        </label>
+        <label>
+          <span>RG</span>
+          <input formControlName="rg" />
+        </label>
+        <label>
+          <span>Mae</span>
+          <input formControlName="motherName" />
+        </label>
+        <label>
+          <span>Pai</span>
+          <input formControlName="fatherName" />
+        </label>
+        <label class="funcionarios__wide">
+          <span>Fundamento legal</span>
+          <textarea rows="3" formControlName="legalBasis"></textarea>
+        </label>
+      </div>
+      <button type="submit" mat-flat-button color="primary" [disabled]="saving">Admitir</button>
+    </form>
+
+    <form [formGroup]="terminationForm" (ngSubmit)="terminate()" class="funcionarios__panel">
+      <h2>Desligamento</h2>
+      <div class="funcionarios__fields">
+        <label>
+          <span>Servidor</span>
+          <input formControlName="employeeId" />
+        </label>
+        <label>
+          <span>Data</span>
+          <input type="date" formControlName="terminationDate" />
+        </label>
+        <label>
+          <span>Motivo</span>
+          <input formControlName="terminationReasonId" placeholder="UUID do motivo" />
+        </label>
+        <label class="funcionarios__wide">
+          <span>Justificativa</span>
+          <textarea rows="3" formControlName="justification"></textarea>
+        </label>
+      </div>
+      <button type="submit" mat-flat-button color="warn" [disabled]="saving">Desligar</button>
+    </form>
+  </div>
+</section>

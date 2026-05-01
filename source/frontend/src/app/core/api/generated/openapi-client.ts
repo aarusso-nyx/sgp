@@ -244,6 +244,10 @@ export class OpenApiClient {
     return this.api.get<unknown>(`/v1/funcionarios/${encodeURIComponent(params.id)}/dossie`);
   }
 
+  getApiV1Funcionarios(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/funcionarios', query);
+  }
+
   getApiV1Health(): Observable<unknown> {
     return this.api.get<unknown>('/v1/health');
   }
@@ -594,6 +598,10 @@ export class OpenApiClient {
 
   postApiV1FuncionariosDesligamentoByFuncRescisao(params: { func_rescisao: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>(`/v1/funcionarios/${encodeURIComponent(params.func_rescisao)}/desligamento`, body);
+  }
+
+  postApiV1Funcionarios(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/funcionarios', body);
   }
 
   postApiV1GfipGerar(body: ApiBody = {}): Observable<unknown> {

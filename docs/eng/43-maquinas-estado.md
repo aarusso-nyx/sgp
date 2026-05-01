@@ -25,6 +25,25 @@
 
 ---
 
+## 0.1. Cadastro do servidor HR-01
+
+`hr.employee_status_history` é a linha do tempo imutável da situação funcional do servidor. A admissão cria `hr.employee`, vincula `hr.employment_contract` ativo ao vínculo funcional e registra o primeiro status; o desligamento altera o status para desligado, fecha `employment_contract.ends_on` e registra novo ponto na linha do tempo. Atualizações e exclusões diretas em `employee_status_history` são bloqueadas.
+
+| Estado | Descrição |
+|---|---|
+| `cadastro_base` | Dados civis e matrícula recebidos para admissão |
+| `em_exercicio` | Servidor admitido, com posse/exercício e contrato ativo |
+| `desligado` | Servidor desligado, contrato encerrado e folha rescisória opcional |
+
+| Transição | De | Evento | Guarda | Ação | Para |
+|---|---|---|---|---|---|
+| HR01-T1 | *(início)* | `ADMITIR` | matrícula única por tenant; vínculo/cargo/lotação válidos quando informados | cria `employee`, `employment_contract`, `employee_status_history`; emite `audit_event` | `em_exercicio` |
+| HR01-T2 | `em_exercicio` | `DESLIGAR` | motivo e data obrigatórios | muda `functional_status`, preenche `terminated_on`, fecha contrato ativo, emite `audit_event` | `desligado` |
+
+Permissões: leitura exige `rh.employee.read`; admissão exige `rh.employee.admit`; desligamento exige `rh.employee.terminate`.
+
+---
+
 ## 1. Competência
 
 **Agregado:** `competencia` (tenant_id, mes, ano)

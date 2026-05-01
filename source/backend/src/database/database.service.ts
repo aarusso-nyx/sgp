@@ -49,6 +49,28 @@ export class DatabaseService implements OnModuleDestroy {
     }
   }
 
+  async transaction<T>(
+    callback: (client: PoolClient) => Promise<T>,
+  ): Promise<T> {
+    const client = await this.getPool().connect();
+    try {
+      await client.query('BEGIN');
+      await this.applySessionContext(client);
+      const result = await callback(client);
+      await client.query('COMMIT');
+      return result;
+    } catch (error) {
+      try {
+        await client.query('ROLLBACK');
+      } catch {
+        // no-op
+      }
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
   async onModuleDestroy(): Promise<void> {
     if (this.pool) {
       await this.pool.end();

@@ -9,16 +9,18 @@ describe('RhWorkflows', () => {
   let service: RhWorkflows;
 
   const api = {
-    getApiV1AdminUsuarios: vi.fn(),
-    postApiV1AdminUsuarios: vi.fn(),
-    patchApiV1AdminUsuariosById: vi.fn(),
+    getApiV1Funcionarios: vi.fn(),
+    postApiV1Funcionarios: vi.fn(),
+    postApiV1FuncionariosDesligamentoByFuncRescisao: vi.fn(),
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
-    api.getApiV1AdminUsuarios.mockReturnValue(of({ items: [] }));
-    api.postApiV1AdminUsuarios.mockReturnValue(of({ id: '1' }));
-    api.patchApiV1AdminUsuariosById.mockReturnValue(of({ id: '1' }));
+    api.getApiV1Funcionarios.mockReturnValue(of({ items: [] }));
+    api.postApiV1Funcionarios.mockReturnValue(of({ employee: { id: '1' } }));
+    api.postApiV1FuncionariosDesligamentoByFuncRescisao.mockReturnValue(
+      of({ employee: { id: '1', lifecycleStatus: 'TERMINATED' } }),
+    );
 
     TestBed.configureTestingModule({
       providers: [{ provide: OpenApiClient, useValue: api }],
@@ -30,20 +32,28 @@ describe('RhWorkflows', () => {
     service.listWorkflowDefinitions().subscribe();
     service.listEmployees({ search: 'filho' }).subscribe();
 
-    expect(api.getApiV1AdminUsuarios).toHaveBeenCalledWith({ search: 'filho' });
+    expect(api.getApiV1Funcionarios).toHaveBeenCalledWith({ search: 'filho' });
   });
 
-  it('creates and updates employee records via canonical users endpoint', () => {
+  it('creates and terminates employee records via canonical funcionarios endpoint', () => {
     service.createEmployee({ registration: 'M1', name: 'Servidor' }).subscribe();
-    service.updateEmployee('u-1', { name: 'Servidor 2' }).subscribe();
+    service
+      .terminateEmployee('u-1', {
+        terminationDate: '2026-04-15',
+        terminationReasonId: 'reason-1',
+      })
+      .subscribe();
 
-    expect(api.postApiV1AdminUsuarios).toHaveBeenCalledWith({
+    expect(api.postApiV1Funcionarios).toHaveBeenCalledWith({
       registration: 'M1',
       name: 'Servidor',
     });
-    expect(api.patchApiV1AdminUsuariosById).toHaveBeenCalledWith(
-      { id: 'u-1' },
-      { name: 'Servidor 2' },
+    expect(api.postApiV1FuncionariosDesligamentoByFuncRescisao).toHaveBeenCalledWith(
+      { func_rescisao: 'u-1' },
+      {
+        terminationDate: '2026-04-15',
+        terminationReasonId: 'reason-1',
+      },
     );
   });
 });

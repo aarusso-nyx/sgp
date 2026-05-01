@@ -15,6 +15,20 @@ describe('EmployeesService', () => {
     updated_at: '2026-01-02T00:00:00.000Z',
   };
 
+  function databaseWithTransaction(rows: unknown[][]) {
+    const query = jest.fn();
+    for (const row of rows) {
+      query.mockResolvedValueOnce({ rows: row });
+    }
+    return {
+      configured: true,
+      transaction: (
+        callback: (client: { query: jest.Mock }) => Promise<unknown>,
+      ) => callback({ query }),
+      query,
+    };
+  }
+
   it('returns paged employees', async () => {
     const query = jest
       .fn()
@@ -43,10 +57,9 @@ describe('EmployeesService', () => {
   });
 
   it('terminates an employee and creates the termination payroll run', async () => {
-    const query = jest
-      .fn()
-      .mockResolvedValueOnce([{ id: 'status-1' }])
-      .mockResolvedValueOnce([
+    const database = databaseWithTransaction([
+      [{ id: 'status-1' }],
+      [
         {
           id: 'emp-1',
           registration: 'MAT-001',
@@ -61,12 +74,14 @@ describe('EmployeesService', () => {
           created_at: new Date('2026-01-01T00:00:00.000Z'),
           updated_at: new Date('2026-04-15T00:00:00.000Z'),
         },
-      ])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([{ id: 'payroll-type-1' }])
-      .mockResolvedValueOnce([{ id: 'processing-type-1' }])
-      .mockResolvedValueOnce([{ id: 'run-1', status: 'DRAFT' }]);
-    const service = new EmployeesService({ configured: true, query } as never);
+      ],
+      [],
+      [],
+      [{ id: 'payroll-type-1' }],
+      [{ id: 'processing-type-1' }],
+      [{ id: 'run-1', status: 'DRAFT' }],
+    ]);
+    const service = new EmployeesService(database as never);
 
     const result = await service.terminate('emp-1', {
       terminationDate: '2026-04-15',
@@ -78,6 +93,32 @@ describe('EmployeesService', () => {
     expect(result.payrollRunId).toBe('run-1');
   });
 
+  it('admits an employee and returns the created contract id', async () => {
+    const database = databaseWithTransaction([
+      [{ id: 'status-1' }],
+      [{ id: 'link-1' }],
+      [{ id: 'contract-type-1' }],
+      [{ ...employeeRow, contract_id: 'contract-1' }],
+    ]);
+    const service = new EmployeesService(database as never);
+
+    await expect(
+      service.admit({
+        registration: ' MAT-001 ',
+        name: ' Servidor ',
+        cpf: ' 00011122233 ',
+        email: ' SERVIDOR@EXAMPLE.TEST ',
+        hiredOn: '2026-04-01',
+        possessionOn: '2026-04-10',
+        exerciseOn: '2026-04-15',
+      }),
+    ).resolves.toMatchObject({
+      employeeId: 'emp-1',
+      employmentContractId: 'contract-1',
+      employee: { registration: 'MAT-001' },
+    });
+  });
+
   it('creates, updates, deactivates, and terminates employees without payroll', async () => {
     const query = jest
       .fn()
@@ -87,19 +128,7 @@ describe('EmployeesService', () => {
       ])
       .mockResolvedValueOnce([
         { ...employeeRow, lifecycle_status: 'TERMINATED', active: false },
-      ])
-      .mockResolvedValueOnce([{ id: 'status-1' }])
-      .mockResolvedValueOnce([
-        {
-          ...employeeRow,
-          lifecycle_status: 'TERMINATED',
-          functional_status: 'Desligamento',
-          branch_name: null,
-          branch_id: null,
-          active: false,
-        },
-      ])
-      .mockResolvedValueOnce([]);
+      ]);
     const service = new EmployeesService({ configured: true, query } as never);
 
     await expect(
@@ -125,8 +154,25 @@ describe('EmployeesService', () => {
     await expect(service.deactivate('emp-1')).resolves.toMatchObject({
       lifecycleStatus: 'TERMINATED',
     });
+    const terminateService = new EmployeesService(
+      databaseWithTransaction([
+        [{ id: 'status-1' }],
+        [
+          {
+            ...employeeRow,
+            lifecycle_status: 'TERMINATED',
+            functional_status: 'Desligamento',
+            branch_name: null,
+            branch_id: null,
+            active: false,
+          },
+        ],
+        [],
+        [],
+      ]) as never,
+    );
     await expect(
-      service.terminate('emp-1', {
+      terminateService.terminate('emp-1', {
         terminationDate: '2026-04-15',
         terminationReasonId: 'reason-1',
         justification: ' Justificativa ',
@@ -177,13 +223,9 @@ describe('EmployeesService', () => {
       } as never).deactivate('missing'),
     ).rejects.toThrow('Employee not found');
     await expect(
-      new EmployeesService({
-        configured: true,
-        query: jest
-          .fn()
-          .mockResolvedValueOnce([{ id: 'status-1' }])
-          .mockResolvedValueOnce([]),
-      } as never).terminate('missing', {
+      new EmployeesService(
+        databaseWithTransaction([[{ id: 'status-1' }], []]) as never,
+      ).terminate('missing', {
         terminationDate: '2026-04-15',
         terminationReasonId: 'reason-1',
       }),

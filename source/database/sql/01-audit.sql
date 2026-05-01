@@ -15,6 +15,7 @@ CREATE OR REPLACE FUNCTION public.sgp_append_audit_event(
   p_user_agent text DEFAULT NULL
 ) RETURNS uuid
 LANGUAGE plpgsql
+SECURITY DEFINER
 AS $$
 DECLARE
   v_event_id uuid;

@@ -464,7 +464,7 @@ Arrecadação Previdenciária é versão futura. O layout atual não declara bib
 
 **Responsabilidades:** gestão completa do funcionário/servidor desde a posse até o desligamento; controle de matrículas; situação funcional e histórico; transferências; dossiê digital; ficha funcional; observações funcionais; afastamentos; cedência.
 
-**Entidades:** `funcionario`, `vinculo`, `situacao_funcional`, `posse`, `transferencia`, `cedido_detalhe`, `anexo_funcionario`, `dossie`, `observacao_funcional`, `controle_anual_afastamento`.
+**Entidades:** `hr.employee`, `hr.employment_link`, `hr.employment_contract`, `hr.employee_status_history`, `posse`, `transferencia`, `cedido_detalhe`, `anexo_funcionario`, `dossie`, `observacao_funcional`, `controle_anual_afastamento`.
 
 **Lifecycle:**
 
@@ -485,18 +485,18 @@ stateDiagram-v2
     DESLIGAMENTO --> [*]
 ```
 
-**Serviços:** `FuncionarioService`, `VinculoService`, `SituacaoFuncionalService`, `PosseService`, `TransferenciaService`, `CedidoService`, `DossieService`, `ObservacaoFuncionalService`, `MatriculaService`, `AfastamentoService`, `FichaFuncionalService`.
+**Serviços:** `EmployeesService` (`rh.employees`), `VinculoService`, `SituacaoFuncionalService`, `PosseService`, `TransferenciaService`, `CedidoService`, `DossieService`, `ObservacaoFuncionalService`, `MatriculaService`, `AfastamentoService`, `FichaFuncionalService`.
 
 **Controladores:**
-- `GET /api/v1/rh/funcionarios` — listagem paginada com filtros
-- `POST /api/v1/rh/funcionarios` — criação (etapa 1 se `funcionario_etapas = true`)
+- `GET /api/v1/funcionarios` — listagem paginada com filtros
+- `POST /api/v1/funcionarios` — admissão HR-01; cria `employee`, contrato ativo, linha imutável em `employee_status_history` e evento em `audit_event`
 - `GET /api/v1/rh/funcionarios/:id` — perfil completo
 - `PUT /api/v1/rh/funcionarios/:id` — atualização
 - `POST /api/v1/rh/funcionarios/:id/posse` — registrar posse
 - `POST /api/v1/rh/funcionarios/:id/situacoes` — alterar situação funcional
 - `GET /api/v1/rh/funcionarios/:id/situacoes` — histórico de situações
 - `POST /api/v1/rh/funcionarios/:id/transferencias` — transferir
-- `POST /api/v1/rh/funcionarios/:id/desligamento` — desligar
+- `POST /api/v1/funcionarios/:id/desligamento` — desligar; altera situação funcional, encerra contrato ativo e audita a mutação
 - `GET /api/v1/rh/funcionarios/:id/ficha-funcional` — ficha funcional consolidada
 - `GET /api/v1/rh/funcionarios/:id/dossie` — listar anexos
 - `POST /api/v1/rh/funcionarios/:id/dossie` — anexar documento
