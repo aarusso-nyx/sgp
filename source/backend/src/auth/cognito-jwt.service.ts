@@ -171,7 +171,9 @@ export class CognitoJwtService {
     return payload.aud === expected;
   }
 
-  private toActor(payload: CognitoJwtPayload): AuthenticatedActor {
+  private async toActor(
+    payload: CognitoJwtPayload,
+  ): Promise<AuthenticatedActor> {
     const groups = Array.isArray(payload['cognito:groups'])
       ? payload['cognito:groups']
       : [];
@@ -191,7 +193,10 @@ export class CognitoJwtService {
         '',
       tenantId,
       groups,
-      permissions: this.permissionsService.permissionsForGroups(groups),
+      permissions: await this.permissionsService.permissionsForGroups(
+        groups,
+        tenantId,
+      ),
       claims: this.safeClaims(payload),
     };
   }

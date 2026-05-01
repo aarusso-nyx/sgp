@@ -81,10 +81,10 @@ describe('UsersService', () => {
       profiles: [{ id: 'profile-1', code: 'ADMIN', name: 'Administradores' }],
     });
     await expect(
-      service.assignDirectRoles('user-1', { papeis: ['rh:read', 'rh:write'] }),
+      service.assignDirectRoles('user-1', { papeis: ['rh.read', 'rh.write'] }),
     ).resolves.toMatchObject({
       userId: 'user-1',
-      papeis: ['rh:read', 'rh:write'],
+      papeis: ['rh.read', 'rh.write'],
     });
     await expect(
       service.assignProfiles('user-1', { perfis: [] }),
@@ -95,7 +95,7 @@ describe('UsersService', () => {
 
     expect(query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO public.user_group_snapshot'),
-      ['user-1', ['rh:read', 'rh:write']],
+      ['user-1', ['rh.read', 'rh.write']],
     );
   });
 

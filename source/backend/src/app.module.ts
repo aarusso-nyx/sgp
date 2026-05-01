@@ -5,7 +5,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 import { AuditModule } from './audit/audit.module';
 import { AuditoriaModule } from './auditoria/auditoria.module';
@@ -24,6 +24,7 @@ import { FolhaPagamentoModule } from './folha-pagamento/folha-pagamento.module';
 import { GestaoModule } from './gestao/gestao.module';
 import { HealthModule } from './health/health.module';
 import { IamModule } from './iam/iam.module';
+import { PermissionGuard } from './iam/guards/permission.guard';
 import { NotificationsModule } from './notifications/notifications.module';
 import { PortalModule } from './portal/portal.module';
 import { PrevidenciarioModule } from './previdenciario/previdenciario.module';
@@ -87,6 +88,10 @@ import { AppService } from './app.service';
     {
       provide: APP_INTERCEPTOR,
       useClass: AuditRequiredInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
     },
   ],
 })

@@ -11,6 +11,7 @@
   },
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "ts-node scripts/gen-permissions.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",

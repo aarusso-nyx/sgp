@@ -7,7 +7,6 @@ import {
   Post,
   Query,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,9 +16,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
-import { CognitoJwtGuard } from '../../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../../auth/permissions.decorator';
-import { PermissionsGuard } from '../../auth/permissions.guard';
+import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import {
@@ -33,7 +30,6 @@ import { PayrollService } from './payroll.service';
 
 @ApiTags('folha-pagamento')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/folhas')
 export class PayrollController {
   constructor(
@@ -42,14 +38,14 @@ export class PayrollController {
   ) {}
 
   @Get()
-  @RequirePermissions('folha:read')
+  @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll runs.' })
   listRuns(@Query() query: DomainListQueryDto) {
     return this.payrollService.listRuns(query);
   }
 
   @Post()
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiCreatedResponse({ description: 'Create a payroll run.' })
   async createRun(
     @Req() request: RequestWithContext,
@@ -64,7 +60,7 @@ export class PayrollController {
   }
 
   @Patch(':folha_id/status')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiOkResponse({ description: 'Update payroll run status.' })
   async updateStatus(
     @Req() request: RequestWithContext,
@@ -85,7 +81,7 @@ export class PayrollController {
 
   @Post(':folha_rescisao_id/calcular')
   @Post(':folha_id/calcular')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiOkResponse({ description: 'Calculate a payroll run.' })
   async calculateRun(
     @Req() request: RequestWithContext,
@@ -103,7 +99,7 @@ export class PayrollController {
   }
 
   @Post(':folha_id/massa')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiOkResponse({
     description: 'Populate a payroll run with eligible payroll items.',
   })
@@ -122,7 +118,7 @@ export class PayrollController {
   }
 
   @Post(':folha_id/adiantamentos')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiCreatedResponse({
     description:
       'Create and process an advance request/payment for a payroll run.',

@@ -5,6 +5,10 @@ import type { App as SupertestApp } from 'supertest/types';
 
 import { DatabaseService } from '../src/database/database.service';
 import { DocumentsStorageService } from '../src/documents/documents-storage.service';
+import {
+  PERMISSIONS,
+  Permission,
+} from '../src/iam/permissions/permission-catalog.generated';
 import { AppModule } from './../src/app.module';
 
 interface FakeJobPositionRow {
@@ -29,6 +33,22 @@ interface FakeDocumentAttachmentRow {
   storage_key: string;
   created_at: Date;
 }
+
+const fakeProfilePermissions: Record<string, readonly Permission[]> = {
+  ADMIN: PERMISSIONS,
+  AUDITORIA: ['auth.read', 'auditoria.read'],
+  CONVENIO: ['auth.read', 'convenio.read', 'convenio.write'],
+  FOLHA: [
+    'auth.read',
+    'gestao.read',
+    'rh.read',
+    'folha.read',
+    'folha.write',
+    'relatorio.generate',
+  ],
+  RELATORIO: ['auth.read', 'relatorio.read', 'relatorio.generate'],
+  RH: ['auth.read', 'gestao.read', 'rh.read', 'rh.write', 'relatorio.generate'],
+};
 
 class FakeDatabaseService {
   readonly configured = true;
@@ -61,6 +81,24 @@ class FakeDatabaseService {
   query<T>(sql: string, values: readonly unknown[] = []): Promise<T[]> {
     if (sql.includes('SELECT gen_random_uuid()::text AS id')) {
       return Promise.resolve([{ id: 'doc-upload-1' }] as T[]);
+    }
+
+    if (
+      sql.includes('FROM public.access_profile ap') &&
+      sql.includes('JOIN public.profile_permission pp') &&
+      sql.includes('JOIN public.permission p') &&
+      sql.includes('SELECT DISTINCT p.key')
+    ) {
+      return Promise.resolve(this.permissionRowsForGroups(values[0]) as T[]);
+    }
+
+    if (
+      sql.includes('FROM public.access_profile ap') &&
+      sql.includes('LEFT JOIN public.profile_permission pp') &&
+      sql.includes('LEFT JOIN public.permission p') &&
+      sql.includes('GROUP BY ap.code')
+    ) {
+      return Promise.resolve(this.groupMappingRows() as T[]);
     }
 
     if (
@@ -183,6 +221,32 @@ class FakeDatabaseService {
     }
 
     return Promise.resolve([] as T[]);
+  }
+
+  private permissionRowsForGroups(
+    groupsValue: unknown,
+  ): Array<{ key: string }> {
+    const groups = Array.isArray(groupsValue) ? groupsValue : [];
+    const keys = new Set<Permission>();
+    for (const group of groups) {
+      if (typeof group !== 'string') continue;
+      for (const permission of fakeProfilePermissions[group] ?? []) {
+        keys.add(permission);
+      }
+    }
+    return [...keys].sort().map((key) => ({ key }));
+  }
+
+  private groupMappingRows(): Array<{
+    group_code: string;
+    permissions: string[];
+  }> {
+    return Object.entries(fakeProfilePermissions)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([group_code, permissions]) => ({
+        group_code,
+        permissions: [...permissions].sort(),
+      }));
   }
 
   private filtered(values: readonly unknown[]): FakeJobPositionRow[] {
@@ -477,10 +541,10 @@ describe('SGP backend foundation (e2e)', () => {
     expect(body.actor.groups).toEqual(['SGP_RH']);
     expect(body.actor.permissions).toEqual(
       expect.arrayContaining([
-        'auth:read',
-        'gestao:read',
-        'rh:read',
-        'rh:write',
+        'auth.read',
+        'gestao.read',
+        'rh.read',
+        'rh.write',
       ]),
     );
   });

@@ -8,7 +8,6 @@ import {
   Post,
   Query,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -18,9 +17,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
-import { CognitoJwtGuard } from '../../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../../auth/permissions.decorator';
-import { PermissionsGuard } from '../../auth/permissions.guard';
+import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import {
@@ -31,7 +28,6 @@ import { PayrollAccountingService } from './payroll-accounting.service';
 
 @ApiTags('folha-pagamento')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/folhas')
 export class PayrollAccountingController {
   constructor(
@@ -40,14 +36,14 @@ export class PayrollAccountingController {
   ) {}
 
   @Get('catalogos')
-  @RequirePermissions('folha:read')
+  @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll catalog resources.' })
   listCatalogResources() {
     return this.payrollAccountingService.listCatalogResources();
   }
 
   @Get('catalogos/:resource')
-  @RequirePermissions('folha:read')
+  @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll catalog records.' })
   listCatalogRecords(
     @Param('resource') resource: string,
@@ -57,7 +53,7 @@ export class PayrollAccountingController {
   }
 
   @Post('catalogos/:resource')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiCreatedResponse({ description: 'Create a payroll catalog record.' })
   async createCatalogRecord(
     @Req() request: RequestWithContext,
@@ -82,7 +78,7 @@ export class PayrollAccountingController {
   }
 
   @Patch('catalogos/:resource/:id')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiOkResponse({ description: 'Update a payroll catalog record.' })
   async updateCatalogRecord(
     @Req() request: RequestWithContext,
@@ -109,7 +105,7 @@ export class PayrollAccountingController {
   }
 
   @Delete('catalogos/:resource/:id')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiOkResponse({ description: 'Deactivate a payroll catalog record.' })
   async deactivateCatalogRecord(
     @Req() request: RequestWithContext,
@@ -134,14 +130,14 @@ export class PayrollAccountingController {
   }
 
   @Get('contabilidade')
-  @RequirePermissions('folha:read')
+  @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll accounting-account mappings.' })
   listAccountingAccounts(@Query() query: DomainListQueryDto) {
     return this.payrollAccountingService.listAccountingAccounts(query);
   }
 
   @Post('contabilidade')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiCreatedResponse({
     description: 'Create a payroll accounting-account mapping.',
   })
@@ -165,7 +161,7 @@ export class PayrollAccountingController {
   }
 
   @Patch('contabilidade/:id')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiOkResponse({
     description: 'Update a payroll accounting-account mapping.',
   })
@@ -192,7 +188,7 @@ export class PayrollAccountingController {
   }
 
   @Delete('contabilidade/:id')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiOkResponse({
     description: 'Deactivate a payroll accounting-account mapping.',
   })

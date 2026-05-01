@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -7,9 +7,12 @@ import {
 } from '@nestjs/swagger';
 
 import { AuthenticatedActor } from '../auth.types';
-import { CognitoJwtGuard } from '../cognito-jwt.guard';
 import { CurrentActor } from '../current-actor.decorator';
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
+import {
+  Public,
+  RequirePermission,
+} from '../../iam/decorators/require-permission.decorator';
 import { SessionService } from './session.service';
 
 @ApiTags('auth')
@@ -19,32 +22,33 @@ export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
   @Get('me')
+  @RequirePermission('auth.read')
   @ApiBearerAuth()
   @ApiOkResponse({ description: 'Current authenticated Cognito actor.' })
-  @UseGuards(CognitoJwtGuard)
   me(@CurrentActor() actor: AuthenticatedActor | undefined) {
     return this.sessionService.currentSession(actor);
   }
 
   @Get('menus')
+  @RequirePermission('auth.read')
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Resolved menu entries for the authenticated actor.',
   })
-  @UseGuards(CognitoJwtGuard)
   menus(@CurrentActor() actor: AuthenticatedActor | undefined) {
     return this.sessionService.currentMenus(actor);
   }
 
   @Post('logout')
+  @RequirePermission('auth.read')
   @ApiBearerAuth()
   @ApiOkResponse({ description: 'Invalidate current actor session.' })
-  @UseGuards(CognitoJwtGuard)
   logout(@CurrentActor() actor: AuthenticatedActor | undefined) {
     return this.sessionService.logout(actor);
   }
 
   @Post('recuperar-senha')
+  @Public()
   @ApiCreatedResponse({ description: 'Start password recovery flow.' })
   recoverPassword(
     @Body()
@@ -57,6 +61,7 @@ export class SessionController {
   }
 
   @Post('confirmar-nova-senha')
+  @Public()
   @ApiCreatedResponse({ description: 'Confirm recovered password.' })
   confirmNewPassword(
     @Body()
@@ -69,9 +74,9 @@ export class SessionController {
   }
 
   @Put('alterar-senha')
+  @RequirePermission('auth.read')
   @ApiBearerAuth()
   @ApiOkResponse({ description: 'Change current actor password.' })
-  @UseGuards(CognitoJwtGuard)
   changePassword(
     @CurrentActor() actor: AuthenticatedActor | undefined,
     @Body()

@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -16,9 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../audit/audit.service';
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import {
   CreateCareerPlanDto,
@@ -33,7 +22,6 @@ import { AvaliacaoService } from './avaliacao.service';
 
 @ApiTags('avaliacao')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/avaliacao')
 export class AvaliacaoController {
   constructor(
@@ -42,14 +30,14 @@ export class AvaliacaoController {
   ) {}
 
   @Get('desempenhos')
-  @RequirePermissions('avaliacao:read')
+  @RequirePermission('avaliacao.read')
   @ApiOkResponse({ description: 'List performance evaluations.' })
   listPerformanceEvaluations() {
     return this.avaliacaoService.listPerformanceEvaluations();
   }
 
   @Post('desempenhos')
-  @RequirePermissions('avaliacao:write')
+  @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Create a performance evaluation.' })
   async createPerformanceEvaluation(
     @Req() request: RequestWithContext,
@@ -70,7 +58,7 @@ export class AvaliacaoController {
   }
 
   @Patch('desempenhos/:id')
-  @RequirePermissions('avaliacao:write')
+  @RequirePermission('avaliacao.write')
   @ApiOkResponse({ description: 'Update a performance evaluation.' })
   async updatePerformanceEvaluation(
     @Req() request: RequestWithContext,
@@ -94,14 +82,14 @@ export class AvaliacaoController {
   }
 
   @Get('progressoes')
-  @RequirePermissions('avaliacao:read')
+  @RequirePermission('avaliacao.read')
   @ApiOkResponse({ description: 'List career progressions.' })
   listProgressions() {
     return this.avaliacaoService.listProgressions();
   }
 
   @Post('progressoes')
-  @RequirePermissions('avaliacao:write')
+  @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Create a career progression.' })
   async createProgression(
     @Req() request: RequestWithContext,
@@ -121,14 +109,14 @@ export class AvaliacaoController {
   }
 
   @Get('simulacoes')
-  @RequirePermissions('avaliacao:read')
+  @RequirePermission('avaliacao.read')
   @ApiOkResponse({ description: 'List salary simulations.' })
   listSimulations() {
     return this.avaliacaoService.listSimulations();
   }
 
   @Post('simulacoes')
-  @RequirePermissions('avaliacao:write')
+  @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Create a salary simulation.' })
   async createSimulation(
     @Req() request: RequestWithContext,
@@ -151,14 +139,14 @@ export class AvaliacaoController {
   }
 
   @Get('planos-cargos')
-  @RequirePermissions('avaliacao:read')
+  @RequirePermission('avaliacao.read')
   @ApiOkResponse({ description: 'List career plans.' })
   listCareerPlans() {
     return this.avaliacaoService.listCareerPlans();
   }
 
   @Post('planos-cargos')
-  @RequirePermissions('avaliacao:write')
+  @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Create a career plan.' })
   async createCareerPlan(
     @Req() request: RequestWithContext,
@@ -173,7 +161,7 @@ export class AvaliacaoController {
   }
 
   @Patch('planos-cargos/:id')
-  @RequirePermissions('avaliacao:write')
+  @RequirePermission('avaliacao.write')
   @ApiOkResponse({ description: 'Update a career plan.' })
   async updateCareerPlan(
     @Req() request: RequestWithContext,
@@ -189,7 +177,7 @@ export class AvaliacaoController {
   }
 
   @Post('desempenhos/:id/ficha')
-  @RequirePermissions('avaliacao:write')
+  @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Queue a performance evaluation sheet.' })
   async requestEvaluationSheet(
     @Req() request: RequestWithContext,
@@ -213,7 +201,7 @@ export class AvaliacaoController {
   }
 
   @Post('ciclos/:periodo/relatorio')
-  @RequirePermissions('avaliacao:write')
+  @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Queue a cycle evaluation report.' })
   async requestCycleReport(
     @Req() request: RequestWithContext,

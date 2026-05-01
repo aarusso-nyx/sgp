@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Param,
-  Patch,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Param, Patch, Post, Req } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -15,9 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../audit/audit.service';
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import {
@@ -31,7 +21,6 @@ import { PericiaService } from './pericia.service';
 
 @ApiTags('saude')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @AuditMutation({ resourceType: 'medical_record', tableName: 'medical_record' })
 @Controller('v1/pericia')
 export class PericiaController {
@@ -41,7 +30,7 @@ export class PericiaController {
   ) {}
 
   @Post('agendamentos')
-  @RequirePermissions('saude:write')
+  @RequirePermission('saude.write')
   @ApiCreatedResponse({ description: 'Schedule a medical appointment.' })
   async scheduleAppointment(
     @Req() request: RequestWithContext,
@@ -61,7 +50,7 @@ export class PericiaController {
   }
 
   @Patch('agendamentos/:agendamento_id')
-  @RequirePermissions('saude:write')
+  @RequirePermission('saude.write')
   @ApiOkResponse({
     description: 'Update a medical appointment attendance status.',
   })
@@ -87,7 +76,7 @@ export class PericiaController {
   }
 
   @Post('prontuarios')
-  @RequirePermissions('saude:write')
+  @RequirePermission('saude.write')
   @ApiCreatedResponse({
     description: 'Create a medical record and optional leave.',
   })
@@ -105,7 +94,7 @@ export class PericiaController {
   }
 
   @Patch('prontuarios/:prontuario_id/validar')
-  @RequirePermissions('saude:write')
+  @RequirePermission('saude.write')
   @ApiOkResponse({ description: 'Approve or reject a medical record.' })
   async validateMedicalRecord(
     @Req() request: RequestWithContext,
@@ -130,7 +119,7 @@ export class PericiaController {
   }
 
   @Post('prontuarios/:prontuario_id/replicar')
-  @RequirePermissions('saude:write')
+  @RequirePermission('saude.write')
   @ApiCreatedResponse({
     description: 'Replicate medical leave to additional registrations.',
   })

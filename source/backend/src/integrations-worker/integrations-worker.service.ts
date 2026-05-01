@@ -156,14 +156,14 @@ export const REPORT_SERVICE_DEFINITIONS = SUPPORTED_DEFINITIONS.filter(
 );
 
 const WORKER_PERMISSIONS = [
-  'folha:read',
-  'folha:write',
-  'avaliacao:read',
-  'previdenciario:read',
-  'previdenciario:write',
-  'relatorio:read',
-  'relatorio:generate',
-  'documents:register',
+  'folha.read',
+  'folha.write',
+  'avaliacao.read',
+  'previdenciario.read',
+  'previdenciario.write',
+  'relatorio.read',
+  'relatorio.generate',
+  'documents.register',
 ] as const;
 
 @Injectable()

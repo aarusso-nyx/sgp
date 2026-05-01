@@ -27,7 +27,7 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['gestao:read', 'gestao:write'])
+              AND public.sgp_has_any_permission(ARRAY['gestao.read', 'gestao.write'])
             )
           )
       $sql$,
@@ -43,14 +43,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['gestao:write'])
+              AND public.sgp_has_any_permission(ARRAY['gestao.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['gestao:write'])
+              AND public.sgp_has_any_permission(ARRAY['gestao.write'])
             )
           )
       $sql$,
@@ -71,7 +71,7 @@ CREATE POLICY esocial_event_select ON public.esocial_event
     OR (
       public.sgp_tenant_matches(tenant_id)
       AND public.sgp_has_any_permission(
-        ARRAY['folha:read', 'folha:write', 'gestao:read', 'gestao:write']
+        ARRAY['folha.read', 'folha.write', 'gestao.read', 'gestao.write']
       )
     )
   );
@@ -82,14 +82,14 @@ CREATE POLICY esocial_event_write ON public.esocial_event
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['folha:write', 'gestao:write'])
+      AND public.sgp_has_any_permission(ARRAY['folha.write', 'gestao.write'])
     )
   )
   WITH CHECK (
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['folha:write', 'gestao:write'])
+      AND public.sgp_has_any_permission(ARRAY['folha.write', 'gestao.write'])
     )
   );
 
@@ -158,18 +158,18 @@ BEGIN
               public.sgp_tenant_matches(tenant_id)
               AND public.sgp_has_any_permission(
                 ARRAY[
-                  'gestao:read',
-                  'gestao:write',
-                  'rh:read',
-                  'rh:write',
-                  'recrutamento:read',
-                  'recrutamento:write',
-                  'saude:read',
-                  'saude:write',
-                  'folha:read',
-                  'folha:write',
-                  'relatorio:read',
-                  'relatorio:generate'
+                  'gestao.read',
+                  'gestao.write',
+                  'rh.read',
+                  'rh.write',
+                  'recrutamento.read',
+                  'recrutamento.write',
+                  'saude.read',
+                  'saude.write',
+                  'folha.read',
+                  'folha.write',
+                  'relatorio.read',
+                  'relatorio.generate'
                 ]
               )
             )
@@ -187,14 +187,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['gestao:write'])
+              AND public.sgp_has_any_permission(ARRAY['gestao.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['gestao:write'])
+              AND public.sgp_has_any_permission(ARRAY['gestao.write'])
             )
           )
       $sql$,
@@ -238,12 +238,12 @@ BEGIN
               public.sgp_tenant_matches(tenant_id)
               AND public.sgp_has_any_permission(
                 ARRAY[
-                  'gestao:read',
-                  'gestao:write',
-                  'folha:read',
-                  'folha:write',
-                  'relatorio:read',
-                  'relatorio:generate'
+                  'gestao.read',
+                  'gestao.write',
+                  'folha.read',
+                  'folha.write',
+                  'relatorio.read',
+                  'relatorio.generate'
                 ]
               )
             )
@@ -261,14 +261,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['gestao:write', 'folha:write'])
+              AND public.sgp_has_any_permission(ARRAY['gestao.write', 'folha.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['gestao:write', 'folha:write'])
+              AND public.sgp_has_any_permission(ARRAY['gestao.write', 'folha.write'])
             )
           )
       $sql$,
@@ -317,16 +317,16 @@ BEGIN
               public.sgp_tenant_matches(tenant_id)
               AND public.sgp_has_any_permission(
                 ARRAY[
-                  'rh:read',
-                  'rh:write',
-                  'recrutamento:read',
-                  'recrutamento:write',
-                  'saude:read',
-                  'saude:write',
-                  'folha:read',
-                  'folha:write',
-                  'relatorio:read',
-                  'relatorio:generate'
+                  'rh.read',
+                  'rh.write',
+                  'recrutamento.read',
+                  'recrutamento.write',
+                  'saude.read',
+                  'saude.write',
+                  'folha.read',
+                  'folha.write',
+                  'relatorio.read',
+                  'relatorio.generate'
                 ]
               )
             )
@@ -344,14 +344,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['rh:write', 'saude:write'])
+              AND public.sgp_has_any_permission(ARRAY['rh.write', 'saude.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['rh:write', 'saude:write'])
+              AND public.sgp_has_any_permission(ARRAY['rh.write', 'saude.write'])
             )
           )
       $sql$,
@@ -384,7 +384,7 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['saude:read', 'saude:write'])
+              AND public.sgp_has_any_permission(ARRAY['saude.read', 'saude.write'])
             )
           )
       $sql$,
@@ -400,14 +400,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['saude:write'])
+              AND public.sgp_has_any_permission(ARRAY['saude.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['saude:write'])
+              AND public.sgp_has_any_permission(ARRAY['saude.write'])
             )
           )
       $sql$,
@@ -441,7 +441,7 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['avaliacao:read', 'avaliacao:write'])
+              AND public.sgp_has_any_permission(ARRAY['avaliacao.read', 'avaliacao.write'])
             )
           )
       $sql$,
@@ -457,14 +457,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['avaliacao:write'])
+              AND public.sgp_has_any_permission(ARRAY['avaliacao.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['avaliacao:write'])
+              AND public.sgp_has_any_permission(ARRAY['avaliacao.write'])
             )
           )
       $sql$,
@@ -505,7 +505,7 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['previdenciario:read', 'previdenciario:write'])
+              AND public.sgp_has_any_permission(ARRAY['previdenciario.read', 'previdenciario.write'])
             )
           )
       $sql$,
@@ -521,14 +521,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['previdenciario:write'])
+              AND public.sgp_has_any_permission(ARRAY['previdenciario.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['previdenciario:write'])
+              AND public.sgp_has_any_permission(ARRAY['previdenciario.write'])
             )
           )
       $sql$,
@@ -560,7 +560,7 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['recrutamento:read', 'recrutamento:write'])
+              AND public.sgp_has_any_permission(ARRAY['recrutamento.read', 'recrutamento.write'])
             )
           )
       $sql$,
@@ -576,14 +576,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['recrutamento:write'])
+              AND public.sgp_has_any_permission(ARRAY['recrutamento.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['recrutamento:write'])
+              AND public.sgp_has_any_permission(ARRAY['recrutamento.write'])
             )
           )
       $sql$,
@@ -616,7 +616,7 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['convenio:read', 'convenio:write'])
+              AND public.sgp_has_any_permission(ARRAY['convenio.read', 'convenio.write'])
             )
           )
       $sql$,
@@ -632,14 +632,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['convenio:write'])
+              AND public.sgp_has_any_permission(ARRAY['convenio.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['convenio:write'])
+              AND public.sgp_has_any_permission(ARRAY['convenio.write'])
             )
           )
       $sql$,
@@ -680,7 +680,7 @@ BEGIN
             OR (
               public.sgp_tenant_matches(tenant_id)
               AND public.sgp_has_any_permission(
-                ARRAY['folha:read', 'folha:write', 'relatorio:read', 'relatorio:generate', 'auditoria:read']
+                ARRAY['folha.read', 'folha.write', 'relatorio.read', 'relatorio.generate', 'auditoria.read']
               )
             )
           )
@@ -697,14 +697,14 @@ BEGIN
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['folha:write'])
+              AND public.sgp_has_any_permission(ARRAY['folha.write'])
             )
           )
           WITH CHECK (
             public.sgp_bypass_rls()
             OR (
               public.sgp_tenant_matches(tenant_id)
-              AND public.sgp_has_any_permission(ARRAY['folha:write'])
+              AND public.sgp_has_any_permission(ARRAY['folha.write'])
             )
           )
       $sql$,
@@ -724,7 +724,7 @@ CREATE POLICY audit_event_select ON public.audit_event
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['auditoria:read'])
+      AND public.sgp_has_any_permission(ARRAY['auditoria.read'])
     )
   );
 DROP POLICY IF EXISTS audit_event_insert ON public.audit_event;
@@ -748,7 +748,7 @@ CREATE POLICY document_attachment_select ON public.document_attachment
     OR (
       public.sgp_tenant_matches(tenant_id)
       AND public.sgp_has_any_permission(
-        ARRAY['documents:download', 'documents:register', 'auditoria:read']
+        ARRAY['documents.download', 'documents.register', 'auditoria.read']
       )
     )
   );
@@ -759,14 +759,14 @@ CREATE POLICY document_attachment_write ON public.document_attachment
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['documents:register'])
+      AND public.sgp_has_any_permission(ARRAY['documents.register'])
     )
   )
   WITH CHECK (
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['documents:register'])
+      AND public.sgp_has_any_permission(ARRAY['documents.register'])
     )
   );
 
@@ -780,7 +780,7 @@ CREATE POLICY document_upload_session_select ON public.document_upload_session
     OR (
       public.sgp_tenant_matches(tenant_id)
       AND public.sgp_has_any_permission(
-        ARRAY['documents:upload', 'documents:register', 'auditoria:read']
+        ARRAY['documents.upload', 'documents.register', 'auditoria.read']
       )
     )
   );
@@ -791,14 +791,14 @@ CREATE POLICY document_upload_session_write ON public.document_upload_session
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['documents:upload', 'documents:register'])
+      AND public.sgp_has_any_permission(ARRAY['documents.upload', 'documents.register'])
     )
   )
   WITH CHECK (
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['documents:upload', 'documents:register'])
+      AND public.sgp_has_any_permission(ARRAY['documents.upload', 'documents.register'])
     )
   );
 
@@ -811,7 +811,7 @@ CREATE POLICY document_download_audit_select ON public.document_download_audit
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['auditoria:read', 'documents:download'])
+      AND public.sgp_has_any_permission(ARRAY['auditoria.read', 'documents.download'])
     )
   );
 DROP POLICY IF EXISTS document_download_audit_insert ON public.document_download_audit;
@@ -821,7 +821,7 @@ CREATE POLICY document_download_audit_insert ON public.document_download_audit
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['documents:download'])
+      AND public.sgp_has_any_permission(ARRAY['documents.download'])
     )
   );
 
@@ -834,7 +834,7 @@ CREATE POLICY report_definition_select ON public.report_definition
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio:read', 'relatorio:generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.read', 'relatorio.generate'])
     )
   );
 DROP POLICY IF EXISTS report_definition_write ON public.report_definition;
@@ -844,14 +844,14 @@ CREATE POLICY report_definition_write ON public.report_definition
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio:generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.generate'])
     )
   )
   WITH CHECK (
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio:generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.generate'])
     )
   );
 
@@ -865,7 +865,7 @@ CREATE POLICY report_request_select ON public.report_request
     OR (
       public.sgp_tenant_matches(tenant_id)
       AND public.sgp_has_any_permission(
-        ARRAY['relatorio:read', 'relatorio:generate', 'auditoria:read']
+        ARRAY['relatorio.read', 'relatorio.generate', 'auditoria.read']
       )
     )
   );
@@ -876,14 +876,14 @@ CREATE POLICY report_request_write ON public.report_request
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio:generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.generate'])
     )
   )
   WITH CHECK (
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio:generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.generate'])
     )
   );
 
@@ -897,7 +897,7 @@ CREATE POLICY generated_report_file_select ON public.generated_report_file
     OR (
       public.sgp_tenant_matches(tenant_id)
       AND public.sgp_has_any_permission(
-        ARRAY['relatorio:read', 'relatorio:generate', 'auditoria:read', 'documents:download']
+        ARRAY['relatorio.read', 'relatorio.generate', 'auditoria.read', 'documents.download']
       )
     )
   );
@@ -908,14 +908,14 @@ CREATE POLICY generated_report_file_write ON public.generated_report_file
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio:generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.generate'])
     )
   )
   WITH CHECK (
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio:generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.generate'])
     )
   );
 

@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -16,9 +15,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
   AssignProfilePermissionsDto,
@@ -30,49 +27,48 @@ import { ProfilesService } from './profiles.service';
 
 @ApiTags('profiles')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @AuditMutation({ resourceType: 'access_profile', tableName: 'access_profile' })
 @Controller('v1/admin/perfis')
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Get()
-  @RequirePermissions('gestao:read')
+  @RequirePermission('gestao.read')
   @ApiOkResponse({ description: 'List access profiles.' })
   list(@Query() query: ProfileListQueryDto) {
     return this.profilesService.list(query);
   }
 
   @Get(':id')
-  @RequirePermissions('gestao:read')
+  @RequirePermission('gestao.read')
   @ApiOkResponse({ description: 'Fetch one profile with permissions.' })
   getById(@Param('id') id: string) {
     return this.profilesService.getById(id);
   }
 
   @Post()
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create an access profile.' })
   create(@Body() body: CreateProfileDto) {
     return this.profilesService.create(body);
   }
 
   @Put(':id')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Update profile metadata.' })
   update(@Param('id') id: string, @Body() body: UpdateProfileDto) {
     return this.profilesService.update(id, body);
   }
 
   @Delete(':id')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Deactivate an access profile.' })
   deactivate(@Param('id') id: string) {
     return this.profilesService.deactivate(id);
   }
 
   @Put(':id/papeis')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Replace profile permission mappings.' })
   setPermissions(
     @Param('id') id: string,

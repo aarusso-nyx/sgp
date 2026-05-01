@@ -11,12 +11,12 @@ CREATE POLICY p_employee_dependent_rw ON hr.employee_dependent
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['rh.employee.read'])
+      AND public.sgp_has_any_permission(ARRAY['rh.read'])
     )
   )
   WITH CHECK (
     public.sgp_tenant_matches(tenant_id)
-    AND public.sgp_has_any_permission(ARRAY['rh.employee.write'])
+    AND public.sgp_has_any_permission(ARRAY['rh.write'])
   );
 
 CREATE SCHEMA IF NOT EXISTS payroll_calc;
@@ -81,10 +81,10 @@ CREATE POLICY p_formula_cache_rw ON payroll_calc.formula_cache
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['folha.calc.read'])
+      AND public.sgp_has_any_permission(ARRAY['folha.read'])
     )
   )
   WITH CHECK (
     public.sgp_tenant_matches(tenant_id)
-    AND public.sgp_has_any_permission(ARRAY['folha.calc.write'])
+    AND public.sgp_has_any_permission(ARRAY['folha.write'])
   );

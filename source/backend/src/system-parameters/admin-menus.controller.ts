@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -15,29 +14,26 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { AdminMenusService } from './admin-menus.service';
 
 @ApiTags('menus')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @AuditMutation({ resourceType: 'menu_item', tableName: 'menu_item' })
 @Controller('v1/admin/menus')
 export class AdminMenusController {
   constructor(private readonly adminMenusService: AdminMenusService) {}
 
   @Get()
-  @RequirePermissions('gestao:read')
+  @RequirePermission('gestao.read')
   @ApiOkResponse({ description: 'List admin menus.' })
   list() {
     return this.adminMenusService.listMenus();
   }
 
   @Post()
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create admin menu.' })
   create(
     @Body()
@@ -52,7 +48,7 @@ export class AdminMenusController {
   }
 
   @Put(':id')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Update admin menu.' })
   update(
     @Param('id') id: string,
@@ -68,7 +64,7 @@ export class AdminMenusController {
   }
 
   @Delete(':id')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Delete admin menu.' })
   delete(@Param('id') id: string) {
     return this.adminMenusService.deleteMenu(id);

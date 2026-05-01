@@ -17,7 +17,7 @@ describe('ProfilesService', () => {
         return [{ total: '1' }];
       }
       if (sql.includes('SELECT p.key')) {
-        return [{ key: 'rh:read' }, { key: 'rh:write' }];
+        return [{ key: 'rh.read' }, { key: 'rh.write' }];
       }
       if (sql.includes('public.access_profile')) {
         return [profileRow];
@@ -45,7 +45,7 @@ describe('ProfilesService', () => {
     });
     await expect(service.getById('profile-1')).resolves.toMatchObject({
       code: 'ADMIN',
-      papeis: ['rh:read', 'rh:write'],
+      papeis: ['rh.read', 'rh.write'],
     });
     await expect(
       service.create({
@@ -64,9 +64,9 @@ describe('ProfilesService', () => {
       status: 'ACTIVE',
     });
     await expect(
-      service.setPermissions('profile-1', { papeis: ['rh:read', 'rh:write'] }),
+      service.setPermissions('profile-1', { papeis: ['rh.read', 'rh.write'] }),
     ).resolves.toMatchObject({
-      papeis: ['rh:read', 'rh:write'],
+      papeis: ['rh.read', 'rh.write'],
     });
     await expect(
       service.setPermissions('profile-1', { papeis: [] }),
@@ -76,7 +76,7 @@ describe('ProfilesService', () => {
 
     expect(query).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO public.profile_permission'),
-      ['profile-1', ['rh:read', 'rh:write']],
+      ['profile-1', ['rh.read', 'rh.write']],
     );
   });
 

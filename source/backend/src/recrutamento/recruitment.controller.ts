@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Param,
-  Patch,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Param, Patch, Post, Req } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -15,9 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../audit/audit.service';
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import {
   AttachRecruitmentCandidatesDto,
@@ -28,7 +18,6 @@ import { RecruitmentService } from './recruitment.service';
 
 @ApiTags('recrutamento')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/recrutamento')
 export class RecruitmentController {
   constructor(
@@ -37,7 +26,7 @@ export class RecruitmentController {
   ) {}
 
   @Post('requisicoes')
-  @RequirePermissions('recrutamento:write')
+  @RequirePermission('recrutamento.write')
   @ApiCreatedResponse({ description: 'Create a recruitment request.' })
   async createRequest(
     @Req() request: RequestWithContext,
@@ -57,7 +46,7 @@ export class RecruitmentController {
   }
 
   @Patch('requisicoes/:requisicao_id/encaminhar')
-  @RequirePermissions('recrutamento:write')
+  @RequirePermission('recrutamento.write')
   @ApiOkResponse({ description: 'Forward a recruitment request to RH.' })
   async forwardRequest(
     @Req() request: RequestWithContext,
@@ -81,7 +70,7 @@ export class RecruitmentController {
   }
 
   @Post('requisicoes/:requisicao_id/candidatos')
-  @RequirePermissions('recrutamento:write')
+  @RequirePermission('recrutamento.write')
   @ApiCreatedResponse({
     description: 'Attach candidates to a recruitment request.',
   })
@@ -108,7 +97,7 @@ export class RecruitmentController {
   }
 
   @Patch('candidatos/:candidato_id')
-  @RequirePermissions('recrutamento:write')
+  @RequirePermission('recrutamento.write')
   @ApiOkResponse({ description: 'Update recruitment candidate analysis.' })
   async updateCandidate(
     @Req() request: RequestWithContext,
@@ -132,7 +121,7 @@ export class RecruitmentController {
   }
 
   @Patch('requisicoes/:requisicao_id/concluir')
-  @RequirePermissions('recrutamento:write')
+  @RequirePermission('recrutamento.write')
   @ApiOkResponse({ description: 'Conclude recruitment analysis.' })
   async concludeRequest(
     @Req() request: RequestWithContext,

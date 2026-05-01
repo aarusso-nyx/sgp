@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -13,22 +6,22 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import {
+  Public,
+  RequirePermission,
+} from '../iam/decorators/require-permission.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { InvitesService } from './invites.service';
 
 @ApiTags('users')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @AuditMutation({ resourceType: 'user_invite', tableName: 'user_account' })
 @Controller('v1')
 export class InvitesController {
   constructor(private readonly invitesService: InvitesService) {}
 
   @Post('admin/usuarios/convite')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create user invitation.' })
   createInvite(
     @Body()
@@ -43,7 +36,7 @@ export class InvitesController {
   }
 
   @Delete('admin/convites/:id')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Cancel invitation.' })
   cancelInvite(@Param('id') id: string) {
     return this.invitesService.cancelInvite(id);
@@ -56,6 +49,7 @@ export class InviteAcceptanceController {
   constructor(private readonly invitesService: InvitesService) {}
 
   @Post(':token/aceitar')
+  @Public()
   @ApiCreatedResponse({
     description: 'Accept invitation and create credentials.',
   })

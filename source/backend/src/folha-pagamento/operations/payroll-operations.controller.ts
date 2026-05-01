@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -16,9 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
-import { CognitoJwtGuard } from '../../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../../auth/permissions.decorator';
-import { PermissionsGuard } from '../../auth/permissions.guard';
+import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import {
@@ -30,7 +19,6 @@ import { PayrollOperationsService } from './payroll-operations.service';
 
 @ApiTags('folha-pagamento')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/folha')
 export class PayrollOperationsController {
   constructor(
@@ -39,7 +27,7 @@ export class PayrollOperationsController {
   ) {}
 
   @Get(':id/remessa')
-  @RequirePermissions('folha:read')
+  @RequirePermission('folha.read')
   @ApiOkResponse({
     description: 'List remittance requests for one payroll run.',
   })
@@ -51,7 +39,7 @@ export class PayrollOperationsController {
   }
 
   @Post(':id/remessa')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiCreatedResponse({
     description: 'Queue a CNAB remittance generation request.',
   })
@@ -77,7 +65,7 @@ export class PayrollOperationsController {
   }
 
   @Post(':id/retorno')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiCreatedResponse({
     description: 'Queue a CNAB return processing request for one payroll run.',
   })
@@ -110,7 +98,6 @@ export class PayrollOperationsController {
 
 @ApiTags('folha-pagamento')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/gfip')
 export class PayrollGfipController {
   constructor(
@@ -119,7 +106,7 @@ export class PayrollGfipController {
   ) {}
 
   @Post('gerar')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiCreatedResponse({
     description: 'Queue a GFIP/SEFIP generation request.',
   })

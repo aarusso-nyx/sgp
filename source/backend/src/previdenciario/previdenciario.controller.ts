@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -16,9 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../audit/audit.service';
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import {
   CreateBeneficiaryContactHistoryDto,
@@ -41,7 +30,6 @@ import { PrevidenciarioService } from './previdenciario.service';
 
 @ApiTags('previdenciario')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/previdenciario')
 export class PrevidenciarioController {
   constructor(
@@ -50,14 +38,14 @@ export class PrevidenciarioController {
   ) {}
 
   @Get('regras')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List retirement rules.' })
   listRules() {
     return this.previdenciarioService.listRules();
   }
 
   @Post('regras')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Create a retirement rule.' })
   async createRule(
     @Req() request: RequestWithContext,
@@ -77,7 +65,7 @@ export class PrevidenciarioController {
   }
 
   @Patch('regras/:id')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiOkResponse({ description: 'Update a retirement rule.' })
   async updateRule(
     @Req() request: RequestWithContext,
@@ -98,14 +86,14 @@ export class PrevidenciarioController {
   }
 
   @Get('simulacoes')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List retirement simulations.' })
   listSimulations() {
     return this.previdenciarioService.listSimulations();
   }
 
   @Post('simulacoes')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Create a retirement simulation.' })
   async createSimulation(
     @Req() request: RequestWithContext,
@@ -128,14 +116,14 @@ export class PrevidenciarioController {
   }
 
   @Get('aposentadorias')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List retirement concessions.' })
   listRetirementGrants() {
     return this.previdenciarioService.listRetirementGrants();
   }
 
   @Post('aposentadorias')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Grant a retirement benefit.' })
   async createRetirementGrant(
     @Req() request: RequestWithContext,
@@ -158,14 +146,14 @@ export class PrevidenciarioController {
   }
 
   @Get('pensoes')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List pension grants.' })
   listPensions() {
     return this.previdenciarioService.listPensions();
   }
 
   @Post('pensoes')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Create a pension grant.' })
   async createPension(
     @Req() request: RequestWithContext,
@@ -180,14 +168,14 @@ export class PrevidenciarioController {
   }
 
   @Get('certidoes-tempo')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List contribution time certificates.' })
   listContributionTimeCertificates() {
     return this.previdenciarioService.listContributionTimeCertificates();
   }
 
   @Post('certidoes-tempo')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({
     description: 'Create a contribution time certificate.',
   })
@@ -210,7 +198,7 @@ export class PrevidenciarioController {
   }
 
   @Post('certidoes-tempo/:id/emitir')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({
     description: 'Queue a contribution time certificate output.',
   })
@@ -237,14 +225,14 @@ export class PrevidenciarioController {
   }
 
   @Get('declaracoes')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List previdentiary declarations.' })
   listDeclarations() {
     return this.previdenciarioService.listDeclarations();
   }
 
   @Post('declaracoes')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Create a previdentiary declaration.' })
   async createDeclaration(
     @Req() request: RequestWithContext,
@@ -264,7 +252,7 @@ export class PrevidenciarioController {
   }
 
   @Post('declaracoes/:id/emitir')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({
     description: 'Queue a previdentiary declaration output.',
   })
@@ -290,14 +278,14 @@ export class PrevidenciarioController {
   }
 
   @Get('compensacoes')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List pension compensations.' })
   listCompensations() {
     return this.previdenciarioService.listCompensations();
   }
 
   @Post('compensacoes')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Create a pension compensation.' })
   async createCompensation(
     @Req() request: RequestWithContext,
@@ -317,7 +305,7 @@ export class PrevidenciarioController {
   }
 
   @Patch('compensacoes/:id')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiOkResponse({ description: 'Update pension compensation status.' })
   async updateCompensation(
     @Req() request: RequestWithContext,
@@ -341,14 +329,14 @@ export class PrevidenciarioController {
   }
 
   @Get('recadastramentos/campanhas')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List recertification campaigns.' })
   listCampaigns() {
     return this.previdenciarioService.listCampaigns();
   }
 
   @Post('recadastramentos/campanhas')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Create a recertification campaign.' })
   async createCampaign(
     @Req() request: RequestWithContext,
@@ -368,28 +356,28 @@ export class PrevidenciarioController {
   }
 
   @Get('recadastramentos/beneficiarios')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List recertification beneficiaries.' })
   listBeneficiaries() {
     return this.previdenciarioService.listBeneficiaries();
   }
 
   @Get('recadastramentos/pendencias')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List pending recertification beneficiaries.' })
   listPendingRecertifications() {
     return this.previdenciarioService.listPendingRecertifications();
   }
 
   @Get('recadastramentos/historico')
-  @RequirePermissions('previdenciario:read')
+  @RequirePermission('previdenciario.read')
   @ApiOkResponse({ description: 'List beneficiary contact history.' })
   listBeneficiaryContactHistory() {
     return this.previdenciarioService.listBeneficiaryContactHistory();
   }
 
   @Post('recadastramentos/beneficiarios')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({
     description: 'Register a recertification beneficiary.',
   })
@@ -411,7 +399,7 @@ export class PrevidenciarioController {
   }
 
   @Post('recadastramentos/atos')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Register a recertification act.' })
   async createRecord(
     @Req() request: RequestWithContext,
@@ -431,7 +419,7 @@ export class PrevidenciarioController {
   }
 
   @Post('recadastramentos/historico')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Register beneficiary contact history.' })
   async createBeneficiaryContactHistory(
     @Req() request: RequestWithContext,
@@ -452,7 +440,7 @@ export class PrevidenciarioController {
   }
 
   @Post('provas-vida')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Register an external life proof.' })
   async createExternalLifeProof(
     @Req() request: RequestWithContext,
@@ -473,7 +461,7 @@ export class PrevidenciarioController {
   }
 
   @Post('recadastramentos/convocacoes')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Queue recertification notices.' })
   async requestRecertificationNotice(
     @Req() request: RequestWithContext,
@@ -493,7 +481,7 @@ export class PrevidenciarioController {
   }
 
   @Post('recadastramentos/relatorios')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({
     description: 'Queue a recertification pending report.',
   })
@@ -517,7 +505,7 @@ export class PrevidenciarioController {
   }
 
   @Post('transferencia-siprev/exportar')
-  @RequirePermissions('previdenciario:write')
+  @RequirePermission('previdenciario.write')
   @ApiCreatedResponse({ description: 'Queue a SIPREV export request.' })
   async requestSiprevExport(
     @Req() request: RequestWithContext,

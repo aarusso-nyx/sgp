@@ -1,25 +1,14 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
-import { CognitoJwtGuard } from '../../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../../auth/permissions.decorator';
-import { PermissionsGuard } from '../../auth/permissions.guard';
+import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { EmployeesService } from './employees.service';
 import { TerminateEmployeeDto } from './employees.dto';
 
 @ApiTags('rh')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1')
 export class EmployeesController {
   constructor(
@@ -28,7 +17,7 @@ export class EmployeesController {
   ) {}
 
   @Get('funcionarios/:id/dossie')
-  @RequirePermissions('rh:read')
+  @RequirePermission('rh.read')
   @ApiOkResponse({ description: 'Employee dossier document.' })
   dossier(@Param('id') id: string) {
     return {
@@ -40,7 +29,7 @@ export class EmployeesController {
   }
 
   @Get('pericia/prontuarios/:id/laudo/pdf')
-  @RequirePermissions('saude:read')
+  @RequirePermission('saude.read')
   @ApiOkResponse({ description: 'Medical report PDF metadata.' })
   medicalReportPdf(@Param('id') id: string) {
     return {
@@ -52,7 +41,7 @@ export class EmployeesController {
   }
 
   @Get('recadastramento/:recadastramento_id/comprovante')
-  @RequirePermissions('rh:read')
+  @RequirePermission('rh.read')
   @ApiOkResponse({ description: 'Recadastramento receipt metadata.' })
   recadastramentoReceipt(
     @Param('recadastramento_id') recadastramentoId: string,
@@ -66,7 +55,7 @@ export class EmployeesController {
   }
 
   @Post('funcionarios/:func_rescisao/desligamento')
-  @RequirePermissions('rh:write')
+  @RequirePermission('rh.write')
   @ApiOkResponse({
     description:
       'Terminate an employee and optionally create the termination payroll run.',

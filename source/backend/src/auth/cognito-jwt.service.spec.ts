@@ -18,7 +18,7 @@ describe('CognitoJwtService', () => {
         permissionsForGroups: jest
           .fn()
           .mockImplementation((groups: string[]) =>
-            groups.map(() => 'auth:read'),
+            Promise.resolve(groups.map(() => 'auth.read')),
           ),
       } as never,
     );
@@ -104,7 +104,7 @@ describe('CognitoJwtService', () => {
       sub: 'user-4',
       username: 'plain.username',
       groups: ['SGP_ADMIN', 'RH'],
-      permissions: ['auth:read', 'auth:read'],
+      permissions: ['auth.read', 'auth.read'],
       claims: {
         username: 'plain.username',
         aud: ['other-client', 'client-1'],

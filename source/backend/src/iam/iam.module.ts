@@ -1,18 +1,12 @@
 import { Module } from '@nestjs/common';
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { CognitoJwtService } from '../auth/cognito-jwt.service';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { DatabaseModule } from '../database/database.module';
 import { PermissionsController } from './permissions/permissions.controller';
 import { PermissionsService } from './permissions/permissions.service';
 
 @Module({
+  imports: [DatabaseModule],
   controllers: [PermissionsController],
-  providers: [
-    PermissionsService,
-    CognitoJwtService,
-    CognitoJwtGuard,
-    PermissionsGuard,
-  ],
+  providers: [PermissionsService],
   exports: [PermissionsService],
 })
 export class IamModule {}

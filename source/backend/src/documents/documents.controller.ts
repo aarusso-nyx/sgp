@@ -8,7 +8,6 @@ import {
   Post,
   Query,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,9 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuditService } from '../audit/audit.service';
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import { PresignUploadRequestDto } from './documents.dto';
@@ -27,7 +24,6 @@ import { DocumentsService } from './documents.service';
 
 @ApiTags('documents')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/arquivos')
 export class DocumentsController {
   constructor(
@@ -36,14 +32,14 @@ export class DocumentsController {
   ) {}
 
   @Get()
-  @RequirePermissions('documents:download')
+  @RequirePermission('documents.download')
   @ApiOkResponse({ description: 'Paged document attachment metadata.' })
   list(@Query() query: DomainListQueryDto) {
     return this.documentsService.list(query);
   }
 
   @Post('presigned-upload')
-  @RequirePermissions('documents:upload')
+  @RequirePermission('documents.upload')
   @ApiCreatedResponse({ description: 'Create a presigned upload URL for S3.' })
   async presignUpload(
     @Req() request: RequestWithContext,
@@ -64,7 +60,7 @@ export class DocumentsController {
 
   @Patch(':anexo_id/confirmar')
   @Patch(':id/confirmar')
-  @RequirePermissions('documents:register')
+  @RequirePermission('documents.register')
   @ApiCreatedResponse({
     description: 'Register a completed upload as attachment metadata.',
   })
@@ -89,7 +85,7 @@ export class DocumentsController {
   }
 
   @Delete(':id')
-  @RequirePermissions('documents:register')
+  @RequirePermission('documents.register')
   @ApiOkResponse({
     description: 'Delete a document attachment metadata record.',
   })
@@ -111,7 +107,7 @@ export class DocumentsController {
   }
 
   @Get(':id/download')
-  @RequirePermissions('documents:download')
+  @RequirePermission('documents.download')
   @ApiOkResponse({
     description: 'Create a short-lived presigned download URL.',
   })

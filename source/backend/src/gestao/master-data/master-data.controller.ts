@@ -8,7 +8,6 @@ import {
   Post,
   Query,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -18,9 +17,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
-import { CognitoJwtGuard } from '../../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../../auth/permissions.decorator';
-import { PermissionsGuard } from '../../auth/permissions.guard';
+import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { MasterDataMutationDto } from './master-data.dto';
@@ -28,7 +25,6 @@ import { MasterDataService } from './master-data.service';
 
 @ApiTags('gestao')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/master-data')
 export class MasterDataController {
   constructor(
@@ -37,14 +33,14 @@ export class MasterDataController {
   ) {}
 
   @Get()
-  @RequirePermissions('gestao:read')
+  @RequirePermission('gestao.read')
   @ApiOkResponse({ description: 'List the foundational catalog resources.' })
   listResources(@Query() query: DomainListQueryDto) {
     return this.masterDataService.listResources(query);
   }
 
   @Get(':resource')
-  @RequirePermissions('gestao:read')
+  @RequirePermission('gestao.read')
   @ApiOkResponse({ description: 'List canonical records for one catalog.' })
   listRecords(
     @Param('resource') resource: string,
@@ -54,7 +50,7 @@ export class MasterDataController {
   }
 
   @Post(':resource')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create a canonical catalog record.' })
   async createRecord(
     @Req() request: RequestWithContext,
@@ -71,7 +67,7 @@ export class MasterDataController {
   }
 
   @Patch(':resource/:id')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Update a canonical catalog record.' })
   async updateRecord(
     @Req() request: RequestWithContext,
@@ -93,7 +89,7 @@ export class MasterDataController {
   }
 
   @Delete(':resource/:id')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Deactivate a canonical catalog record.' })
   async deactivateRecord(
     @Req() request: RequestWithContext,

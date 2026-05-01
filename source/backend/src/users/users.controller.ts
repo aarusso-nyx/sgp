@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -16,9 +15,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
   AssignDirectRolesDto,
@@ -31,14 +28,13 @@ import { UsersService } from './users.service';
 
 @ApiTags('users')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @AuditMutation({ resourceType: 'user_account', tableName: 'user_account' })
 @Controller('v1/admin/usuarios')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @RequirePermissions('gestao:read')
+  @RequirePermission('gestao.read')
   @ApiOkResponse({
     description: 'List admin users with current profile assignments.',
   })
@@ -47,28 +43,28 @@ export class UsersController {
   }
 
   @Post()
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create a new admin user.' })
   create(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
   }
 
   @Patch(':id')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Update admin user identity/status.' })
   update(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return this.usersService.update(id, body);
   }
 
   @Put(':id/perfis')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Replace admin user profile assignments.' })
   assignProfiles(@Param('id') id: string, @Body() body: AssignProfilesDto) {
     return this.usersService.assignProfiles(id, body);
   }
 
   @Put(':id/papeis-diretos')
-  @RequirePermissions('gestao:write')
+  @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Replace direct role snapshots for a user.' })
   assignDirectRoles(
     @Param('id') id: string,

@@ -196,7 +196,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', '00000000-0000-0000-0000-000000000999', true);
-  PERFORM set_config('app.current_permissions', 'rh:read', true);
+  PERFORM set_config('app.current_permissions', 'rh.read', true);
   PERFORM set_config('app.authenticated', 'true', true);
   SET LOCAL ROLE sgp_smoke_rls;
   SELECT count(*) INTO employee_count FROM hr.employee;
@@ -221,7 +221,7 @@ DECLARE
   event_id uuid;
 BEGIN
   PERFORM set_config('app.current_tenant_id', tenant_id::text, true);
-  PERFORM set_config('app.current_permissions', 'auditoria:read', true);
+  PERFORM set_config('app.current_permissions', 'auditoria.read', true);
   PERFORM set_config('app.authenticated', 'true', true);
 
   SELECT public.sgp_append_audit_event(
@@ -379,7 +379,7 @@ BEGIN
   DO UPDATE SET tenant_id = EXCLUDED.tenant_id, amount = EXCLUDED.amount, updated_at = now();
 
   PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
-  PERFORM set_config('app.current_permissions', 'rh.employee.read', true);
+  PERFORM set_config('app.current_permissions', 'rh.read', true);
   PERFORM set_config('app.authenticated', 'true', true);
   SET LOCAL ROLE sgp_smoke_rls;
   SELECT count(*) INTO visible_count FROM hr.employee_dependent WHERE id = dependent_a;
@@ -389,7 +389,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
-  PERFORM set_config('app.current_permissions', 'folha.calc.read', true);
+  PERFORM set_config('app.current_permissions', 'folha.read', true);
   SET LOCAL ROLE sgp_smoke_rls;
   SELECT count(*) INTO visible_count FROM payroll_calc.formula_cache WHERE earning_deduction_id = earning_a;
   RESET ROLE;
@@ -398,7 +398,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
-  PERFORM set_config('app.current_permissions', 'rh.employee.read\nrh.employee.write', true);
+  PERFORM set_config('app.current_permissions', 'rh.read\nrh.write', true);
   SET LOCAL ROLE sgp_smoke_rls;
   SELECT count(*) INTO visible_count
   FROM hr.employee_dependent
@@ -432,7 +432,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
-  PERFORM set_config('app.current_permissions', 'rh.employee.write', true);
+  PERFORM set_config('app.current_permissions', 'rh.write', true);
   SET LOCAL ROLE sgp_smoke_rls;
   DELETE FROM hr.employee_dependent WHERE id = dependent_a;
   GET DIAGNOSTICS affected_count = ROW_COUNT;
@@ -442,7 +442,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
-  PERFORM set_config('app.current_permissions', 'folha.calc.read', true);
+  PERFORM set_config('app.current_permissions', 'folha.read', true);
   BEGIN
     SET LOCAL ROLE sgp_smoke_rls;
     PERFORM payroll_calc.evaluate_earning_deduction(earning_a, employee_a, 1, 2026);

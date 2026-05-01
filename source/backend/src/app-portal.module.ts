@@ -5,7 +5,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
@@ -15,6 +15,7 @@ import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { validateEnvironment } from './config/environment';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
+import { PermissionGuard } from './iam/guards/permission.guard';
 import { PortalModule } from './portal/portal.module';
 
 @Module({
@@ -43,6 +44,10 @@ import { PortalModule } from './portal/portal.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: AuditRequiredInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
     },
   ],
 })

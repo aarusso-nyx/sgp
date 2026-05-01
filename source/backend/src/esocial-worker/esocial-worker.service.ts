@@ -41,10 +41,10 @@ export interface ESocialWorkerRunSummary {
 const ESOCIAL_EVENT_TYPE_PATTERN = /^S-\d{4}$/;
 const COMPETENCE_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
 const ESOCIAL_WORKER_PERMISSIONS = [
-  'folha:read',
-  'folha:write',
-  'relatorio:generate',
-  'documents:register',
+  'folha.read',
+  'folha.write',
+  'relatorio.generate',
+  'documents.register',
 ] as const;
 
 @Injectable()

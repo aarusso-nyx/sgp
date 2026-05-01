@@ -3,6 +3,10 @@ import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
+  Public,
+  RequirePermission,
+} from '../iam/decorators/require-permission.decorator';
+import {
   ReportServicePollDto,
   RuntimeReportRequestDto,
 } from './report-service.dto';
@@ -15,24 +19,28 @@ export class ReportServiceController {
   constructor(private readonly reportRuntimeService: ReportRuntimeService) {}
 
   @Get('health')
+  @Public()
   @ApiOkResponse({ description: 'Report service health.' })
   health() {
     return this.reportRuntimeService.health();
   }
 
   @Get('status')
+  @RequirePermission('relatorio.read')
   @ApiOkResponse({ description: 'Report service runtime status.' })
   status() {
     return this.reportRuntimeService.status();
   }
 
   @Post('requests')
+  @RequirePermission('relatorio.generate')
   @ApiCreatedResponse({ description: 'Queue a report request.' })
   queueReport(@Body() body: RuntimeReportRequestDto) {
     return this.reportRuntimeService.queueReport(body);
   }
 
   @Post('poll')
+  @RequirePermission('relatorio.generate')
   @ApiOkResponse({ description: 'Process pending report requests.' })
   pollOnce(@Body() body: ReportServicePollDto) {
     return this.reportRuntimeService.pollOnce(body);

@@ -36,8 +36,8 @@ O modelo de segurança do SGP é construído sobre quatro princípios inegociáv
 └──────────────────────────┬──────────────────────────────────────────┘
                            │ JWT verificado
 ┌──────────────────────────▼──────────────────────────────────────────┐
-│  AUTORIZAÇÃO — NestJS Guards                                        │
-│  AuthGuard → TenantGuard → PermissionsGuard                        │
+│  AUTORIZAÇÃO — NestJS APP_GUARD global                              │
+│  PermissionGuard → JWT Cognito → @RequirePermission/default-deny    │
 └──────────────────────────┬──────────────────────────────────────────┘
                            │ tenant_id + papeis
 ┌──────────────────────────▼──────────────────────────────────────────┐
@@ -267,6 +267,40 @@ RESET app.current_tenant_id;
 ---
 
 ## 4. Modelo RBAC
+
+### 4.0 Catálogo canônico XCUT-05
+
+O catálogo canônico de permissões é `source/database/seed/permission-catalog.json`; o arquivo TypeScript consumido pelo backend é gerado por `source/backend/scripts/gen-permissions.ts` e não é editado manualmente. As chaves usam formato `dominio.acao`, sem catálogo paralelo em TS.
+
+| Permissão | Uso |
+|---|---|
+| `auth.read` | Sessão autenticada, menus e aliases de sessão do portal |
+| `iam.read` | Leitura do catálogo de permissões |
+| `gestao.read` | Leitura de administração, segurança, parâmetros, usuários, perfis e master data |
+| `gestao.write` | Mutação de administração, segurança, parâmetros, usuários, perfis e master data |
+| `rh.read` | Leitura de dossiê, cadastro e fluxos de RH |
+| `rh.write` | Mutação de dossiê, cadastro e fluxos de RH |
+| `folha.read` | Leitura de folha, cálculo, contabilidade de folha e eSocial de folha |
+| `folha.write` | Mutação de folha, cálculo, contabilidade de folha e eSocial de folha |
+| `avaliacao.read` | Leitura de avaliação e progressão |
+| `avaliacao.write` | Mutação de avaliação e progressão |
+| `consultas.read` | Consultas gerenciais |
+| `previdenciario.read` | Leitura previdenciária |
+| `previdenciario.write` | Mutação previdenciária |
+| `recrutamento.read` | Leitura de recrutamento |
+| `recrutamento.write` | Mutação de recrutamento |
+| `saude.read` | Leitura de saúde ocupacional e perícia |
+| `saude.write` | Mutação de saúde ocupacional e perícia |
+| `convenio.read` | Leitura de convênios |
+| `convenio.write` | Mutação de convênios |
+| `relatorio.read` | Catálogo e status de relatórios |
+| `relatorio.generate` | Geração e enfileiramento de relatórios |
+| `documents.upload` | Sessões de upload de documentos |
+| `documents.register` | Confirmação e registro de anexos |
+| `documents.download` | Download de anexos |
+| `auditoria.read` | Trilha de auditoria e exportações |
+
+O backend registra `PermissionGuard` como `APP_GUARD` nos módulos `AppModule` e `AppPortalModule`. Toda rota é negada por padrão quando não possui `@RequirePermission(...)`; endpoints públicos precisam declarar `@Public()` explicitamente. O guard valida o bearer token Cognito, resolve grupos Cognito contra `public.access_profile`/`public.profile_permission`/`public.permission` com cache curto e propaga `tenant_id` e permissões ao contexto de banco usado pelas políticas RLS.
 
 ### 4.1 Quatro Camadas
 

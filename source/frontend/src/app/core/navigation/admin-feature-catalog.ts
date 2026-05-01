@@ -1,3 +1,5 @@
+import { permissionsForRoutePath } from './route-permission-map.generated';
+
 export type AdminModuleKey =
   | 'gestao'
   | 'rh'
@@ -263,7 +265,7 @@ export const ADMIN_FEATURES: AdminFeature[] = RAW_ADMIN_FEATURES.trim()
       routePath,
       childPath: childPathFromRoute(routePath),
       requiredRole,
-      requiredPermissions: [],
+      requiredPermissions: permissionsForRoutePath(routePath),
       featureFlag,
       backendModule,
       comment,

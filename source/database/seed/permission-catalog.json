@@ -1,7 +1,11 @@
 {
-  "version": 1,
-  "status": "inferred",
-  "source": "docs/application-overview.md and inventories/routes.json",
+  "version": 2,
+  "status": "canonical",
+  "source": "docs/eng/51-modelo-autorizacao.md",
+  "notes": [
+    "XCUT-05 consolidates the former TypeScript catalog into this JSON seed and canonicalizes permission keys from dominio:acao to dominio.acao.",
+    "The live pre-XCUT-05 JSON already had 19 entries; the 6 entries absent there and recovered from the TypeScript catalog are: auth.read, iam.read, gestao.read, gestao.write, rh.read, rh.write."
+  ],
   "profiles": [
     {
       "code": "ADMIN",
@@ -25,30 +29,36 @@
     }
   ],
   "permissions": [
-    { "key": "gestao.master_data.read", "moduleKey": "gestao", "resourceKey": "master_data", "actionKey": "read", "routePattern": "#!/gestao/**" },
-    { "key": "gestao.master_data.write", "moduleKey": "gestao", "resourceKey": "master_data", "actionKey": "write", "routePattern": "#!/gestao/**" },
-    { "key": "gestao.security.read", "moduleKey": "gestao", "resourceKey": "security", "actionKey": "read", "routePattern": "#!/usuario/**" },
-    { "key": "gestao.security.write", "moduleKey": "gestao", "resourceKey": "security", "actionKey": "write", "routePattern": "#!/usuario/**" },
-    { "key": "rh.employee.read", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "read", "routePattern": "#!/funcionario/**" },
-    { "key": "rh.employee.write", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "write", "routePattern": "#!/funcionario/**" },
-    { "key": "rh.lifecycle.write", "moduleKey": "rh", "resourceKey": "lifecycle", "actionKey": "write", "routePattern": "#!/historicoSituacaoFuncional/**" },
-    { "key": "folha.payroll.read", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "read", "routePattern": "#!/folhaPagamento/**" },
-    { "key": "folha.payroll.process", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "process", "routePattern": "#!/folhaPagamento/**" },
-    { "key": "folha.calc.read", "moduleKey": "folha", "resourceKey": "calc", "actionKey": "read", "routePattern": "#!/folhaPagamento/**" },
-    { "key": "folha.calc.write", "moduleKey": "folha", "resourceKey": "calc", "actionKey": "write", "routePattern": "#!/folhaPagamento/**" },
-    { "key": "folha.remittance.write", "moduleKey": "folha", "resourceKey": "remittance", "actionKey": "write", "routePattern": "#!/arquivoRemessaPagamento/**" },
-    { "key": "relatorio.report.generate", "moduleKey": "relatorio", "resourceKey": "report", "actionKey": "generate", "routePattern": "#!/relatorio/**" },
-    { "key": "documents.upload", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "upload", "routePattern": "#!/documentos/**" },
-    { "key": "documents.register", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "register", "routePattern": "#!/documentos/**" },
-    { "key": "documents.download", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "download", "routePattern": "#!/documentos/**" },
-    { "key": "auditoria.audit.read", "moduleKey": "auditoria", "resourceKey": "audit", "actionKey": "read", "routePattern": "#!/auditoria/**" },
-    { "key": "convenio.agreement.read", "moduleKey": "convenio", "resourceKey": "agreement", "actionKey": "read", "routePattern": "#!/convenios/**" },
-    { "key": "convenio.agreement.write", "moduleKey": "convenio", "resourceKey": "agreement", "actionKey": "write", "routePattern": "#!/convenios/**" }
+    { "key": "auth.read", "moduleKey": "auth", "resourceKey": "session", "actionKey": "read", "routePattern": "/api/v1/auth/**", "description": "Read authenticated session and base navigation." },
+    { "key": "iam.read", "moduleKey": "iam", "resourceKey": "permission", "actionKey": "read", "routePattern": "/api/v1/iam/**", "description": "Read the permission catalog." },
+    { "key": "gestao.read", "moduleKey": "gestao", "resourceKey": "admin", "actionKey": "read", "routePattern": "#!/gestao/**", "description": "Read administration, security, parameters, users, profiles, and master data." },
+    { "key": "gestao.write", "moduleKey": "gestao", "resourceKey": "admin", "actionKey": "write", "routePattern": "#!/gestao/**", "description": "Mutate administration, security, parameters, users, profiles, and master data." },
+    { "key": "rh.read", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "read", "routePattern": "#!/funcionario/**", "description": "Read RH employee lifecycle records." },
+    { "key": "rh.write", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "write", "routePattern": "#!/funcionario/**", "description": "Mutate RH employee lifecycle records." },
+    { "key": "folha.read", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "read", "routePattern": "#!/folhaPagamento/**", "description": "Read payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
+    { "key": "folha.write", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "write", "routePattern": "#!/folhaPagamento/**", "description": "Mutate payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
+    { "key": "avaliacao.read", "moduleKey": "avaliacao", "resourceKey": "performance", "actionKey": "read", "routePattern": "#!/avaliacao/**", "description": "Read evaluation and career progression records." },
+    { "key": "avaliacao.write", "moduleKey": "avaliacao", "resourceKey": "performance", "actionKey": "write", "routePattern": "#!/avaliacao/**", "description": "Mutate evaluation and career progression records." },
+    { "key": "consultas.read", "moduleKey": "consultas", "resourceKey": "managerial", "actionKey": "read", "routePattern": "#!/consultas/**", "description": "Read managerial query surfaces." },
+    { "key": "previdenciario.read", "moduleKey": "previdenciario", "resourceKey": "benefit", "actionKey": "read", "routePattern": "#!/previdenciario/**", "description": "Read previdenciario records and reports." },
+    { "key": "previdenciario.write", "moduleKey": "previdenciario", "resourceKey": "benefit", "actionKey": "write", "routePattern": "#!/previdenciario/**", "description": "Mutate previdenciario records and reports." },
+    { "key": "recrutamento.read", "moduleKey": "recrutamento", "resourceKey": "recruitment", "actionKey": "read", "routePattern": "#!/recrutamento/**", "description": "Read recruitment records." },
+    { "key": "recrutamento.write", "moduleKey": "recrutamento", "resourceKey": "recruitment", "actionKey": "write", "routePattern": "#!/recrutamento/**", "description": "Mutate recruitment records." },
+    { "key": "saude.read", "moduleKey": "saude", "resourceKey": "medical", "actionKey": "read", "routePattern": "#!/saude/**", "description": "Read occupational health and pericia records." },
+    { "key": "saude.write", "moduleKey": "saude", "resourceKey": "medical", "actionKey": "write", "routePattern": "#!/saude/**", "description": "Mutate occupational health and pericia records." },
+    { "key": "convenio.read", "moduleKey": "convenio", "resourceKey": "agreement", "actionKey": "read", "routePattern": "#!/convenios/**", "description": "Read convenio records." },
+    { "key": "convenio.write", "moduleKey": "convenio", "resourceKey": "agreement", "actionKey": "write", "routePattern": "#!/convenios/**", "description": "Mutate convenio records." },
+    { "key": "relatorio.read", "moduleKey": "relatorio", "resourceKey": "report", "actionKey": "read", "routePattern": "#!/relatorio/**", "description": "Read report catalog and generated report status." },
+    { "key": "relatorio.generate", "moduleKey": "relatorio", "resourceKey": "report", "actionKey": "generate", "routePattern": "#!/relatorio/**", "description": "Generate or queue reports." },
+    { "key": "documents.upload", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "upload", "routePattern": "#!/documentos/**", "description": "Create document upload sessions." },
+    { "key": "documents.register", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "register", "routePattern": "#!/documentos/**", "description": "Confirm or register document attachments." },
+    { "key": "documents.download", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "download", "routePattern": "#!/documentos/**", "description": "Download document attachments." },
+    { "key": "auditoria.read", "moduleKey": "auditoria", "resourceKey": "audit", "actionKey": "read", "routePattern": "#!/auditoria/**", "description": "Read audit trail and audit report exports." }
   ],
   "profilePermissions": {
     "ADMIN": ["*"],
-    "RH_OPERADOR": ["gestao.master_data.read", "rh.employee.read", "rh.employee.write", "rh.lifecycle.write", "relatorio.report.generate"],
-    "FOLHA_OPERADOR": ["gestao.master_data.read", "rh.employee.read", "folha.payroll.read", "folha.payroll.process", "folha.calc.read", "folha.calc.write", "folha.remittance.write", "relatorio.report.generate"],
-    "AUDITOR": ["gestao.master_data.read", "rh.employee.read", "folha.payroll.read", "folha.calc.read", "relatorio.report.generate", "auditoria.audit.read"]
+    "RH_OPERADOR": ["auth.read", "gestao.read", "rh.read", "rh.write", "relatorio.generate"],
+    "FOLHA_OPERADOR": ["auth.read", "gestao.read", "rh.read", "folha.read", "folha.write", "relatorio.generate"],
+    "AUDITOR": ["auth.read", "gestao.read", "rh.read", "folha.read", "relatorio.read", "relatorio.generate", "auditoria.read"]
   }
 }

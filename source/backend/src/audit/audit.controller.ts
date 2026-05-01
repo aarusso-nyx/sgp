@@ -7,7 +7,6 @@ import {
   Post,
   Query,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -16,29 +15,26 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import * as requestContext from '../common/request-id/request-with-context';
 import { AuditEventQueryDto, AuditReportRequestDto } from './audit.dto';
 import { AuditService } from './audit.service';
 
 @ApiTags('audit')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/auditoria')
 export class AuditController {
   constructor(private readonly auditService: AuditService) {}
 
   @Get('logs')
-  @RequirePermissions('auditoria:read')
+  @RequirePermission('auditoria.read')
   @ApiOkResponse({ description: 'Paged audit events.' })
   events(@Query() query: AuditEventQueryDto) {
     return this.auditService.list(query);
   }
 
   @Get('logs/:id')
-  @RequirePermissions('auditoria:read')
+  @RequirePermission('auditoria.read')
   @ApiOkResponse({ description: 'Fetch audit event detail by id.' })
   async eventById(@Param('id') id: string) {
     const event = await this.auditService.getById(id);
@@ -49,7 +45,7 @@ export class AuditController {
   }
 
   @Post('exportacoes')
-  @RequirePermissions('auditoria:read')
+  @RequirePermission('auditoria.read')
   @ApiCreatedResponse({ description: 'Create an audit trail report request.' })
   async createReportRequest(
     @Req() request: requestContext.RequestWithContext,
@@ -65,7 +61,7 @@ export class AuditController {
   }
 
   @Get('exportacoes/:job_id')
-  @RequirePermissions('auditoria:read')
+  @RequirePermission('auditoria.read')
   @ApiOkResponse({ description: 'Fetch audit export request status.' })
   async reportRequestStatus(@Param('job_id') jobId: string) {
     const status = await this.auditService.getReportRequestStatus(jobId);

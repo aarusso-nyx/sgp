@@ -1,9 +1,7 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../auth/permissions.decorator';
-import { PermissionsGuard } from '../auth/permissions.guard';
+import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import {
   BlockedPaymentQueryDto,
   FinancialRecordQueryDto,
@@ -14,7 +12,6 @@ import { ManagerialQueriesService } from './managerial-queries.service';
 
 @ApiTags('consultas')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/consultas')
 export class ManagerialQueriesController {
   constructor(
@@ -22,42 +19,42 @@ export class ManagerialQueriesController {
   ) {}
 
   @Get('ficha-financeira')
-  @RequirePermissions('consultas:read')
+  @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List employee financial records.' })
   listFinancialRecords(@Query() query: FinancialRecordQueryDto) {
     return this.managerialQueriesService.listFinancialRecords(query);
   }
 
   @Get('ficha-funcional')
-  @RequirePermissions('consultas:read')
+  @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List functional employee records.' })
   listFunctionalRecords(@Query() query: FunctionalRecordQueryDto) {
     return this.managerialQueriesService.listFunctionalRecords(query);
   }
 
   @Get('relatorios-situacao')
-  @RequirePermissions('consultas:read')
+  @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List grouped personnel status totals.' })
   listSituationReports() {
     return this.managerialQueriesService.listSituationReports();
   }
 
   @Get('pagamentos-bloqueados')
-  @RequirePermissions('consultas:read')
+  @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List blocked payments.' })
   listBlockedPayments(@Query() query: BlockedPaymentQueryDto) {
     return this.managerialQueriesService.listBlockedPayments(query);
   }
 
   @Get('historico-operacional')
-  @RequirePermissions('consultas:read')
+  @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List operational audit history.' })
   listOperationalHistory(@Query() query: OperationalHistoryQueryDto) {
     return this.managerialQueriesService.listOperationalHistory(query);
   }
 
   @Get('dashboards')
-  @RequirePermissions('consultas:read')
+  @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'Return managerial dashboard totals.' })
   dashboard() {
     return this.managerialQueriesService.dashboard();

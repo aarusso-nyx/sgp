@@ -1,17 +1,14 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
-import { CognitoJwtGuard } from '../../auth/cognito-jwt.guard';
-import { RequirePermissions } from '../../auth/permissions.decorator';
-import { PermissionsGuard } from '../../auth/permissions.guard';
+import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { CreateESocialEventDto } from './esocial.dto';
 import { ESocialService } from './esocial.service';
 
 @ApiTags('esocial')
 @ApiBearerAuth()
-@UseGuards(CognitoJwtGuard, PermissionsGuard)
 @Controller('v1/esocial')
 export class ESocialController {
   constructor(
@@ -20,7 +17,7 @@ export class ESocialController {
   ) {}
 
   @Post('eventos')
-  @RequirePermissions('folha:write')
+  @RequirePermission('folha.write')
   @ApiCreatedResponse({ description: 'Queue a new eSocial event.' })
   async createEvent(
     @Req() request: RequestWithContext,

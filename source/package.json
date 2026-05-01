@@ -13,6 +13,7 @@
     "npm": ">=11.12.1 <12"
   },
   "scripts": {
+    "prebuild": "npm --workspace backend run prebuild",
     "build": "node scripts/run.mjs build",
     "build:workspaces": "npm run build:admin && npm run build:portal && npm run build:backend",
     "build:admin": "npm --workspace frontend run build:admin",
