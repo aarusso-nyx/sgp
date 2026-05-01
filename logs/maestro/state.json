@@ -84,8 +84,19 @@
       "started_at": "2026-05-01T11:22:24-03:00",
       "completed_at": "2026-05-01T11:38:04-03:00",
       "retries": 0
+    },
+    "09-hr-03-ferias-programacao": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/09-hr-03-ferias-programacao",
+      "commit": "b213e74d1d470242903c3f0ddcecbcf608979fbe",
+      "started_at": "2026-05-01T11:38:26-03:00",
+      "completed_at": "2026-05-01T12:35:36-03:00",
+      "retries": 1,
+      "recovery": "manual migration dependency and smoke idempotency repair",
+      "failure_log": "logs/maestro/09-hr-03-ferias-programacao.failure.md"
     }
   },
-  "current_wave": 6,
+  "current_wave": 7,
   "active_subagents": []
 }

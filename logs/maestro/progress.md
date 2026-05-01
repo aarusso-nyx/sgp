@@ -14,3 +14,5 @@ W05 ✗ 06-hr-02 (medium → high retry failed: db:smoke P3018 relation "public.
 W05 ✓ 06-hr-02 (1 slice, medium→high recovery, gates passed, commit 4143973) — completeness 26.2% → 26.2%
 W05 ✓ 07-hr-07 (1 slice, low, gates passed, commit aa5c8c2) — completeness 26.2% → 26.2%; Wave 5 complete
 W06 ✓ 08-hr-08 (1 slice, low, gates passed, commit 9bf203a) — completeness 26.2% → 26.2%
+W06 ✗ 09-hr-03 (medium → high retry failed: db:smoke cannot alter hr.vacation_record.status while hr.v_employee_career_history depends on it) — see logs/maestro/09-hr-03-ferias-programacao.failure.md
+W06 ✓ 09-hr-03 (1 slice, medium→high recovery, gates passed, commit b213e74) — completeness 26.2% → 26.2%; Wave 6 complete
