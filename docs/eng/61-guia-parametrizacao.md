@@ -778,6 +778,14 @@ Resposta:
 }
 ```
 
+## 9. Empresa Cidadã
+
+| Parâmetro | Escopo | Valor | Efeito |
+|---|---|---|---|
+| `rh:empresa_cidada` | Tenant/órgão | `{"active": true}` ou `{"active": false}` | Quando ativo, `POST /api/v1/licencas` amplia maternidade para 180 dias e paternidade para a modalidade Empresa Cidadã. |
+
+Alterações devem ser feitas pelo módulo de parâmetros com trilha de auditoria. O parâmetro não substitui a validação legal de comprovantes: adoção, cônjuge e paternidade Empresa Cidadã continuam exigindo referência documental na solicitação.
+
 ---
 
 *Fim do Guia de Parametrização — SGP Moderno v1.0*

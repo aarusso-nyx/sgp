@@ -1567,7 +1567,12 @@ model LeaveRecord {
   endsOn          DateTime?    @map("ends_on") @db.Date
   days            Int?
   status          RecordStatus @default(ACTIVE)
+  paid            Boolean      @default(true)
   notes           String       @default("")
+  requestedAt     DateTime     @default(now()) @map("requested_at") @db.Timestamptz(6)
+  approvedAt      DateTime?    @map("approved_at") @db.Timestamptz(6)
+  approvedBy      String?      @map("approved_by")
+  supportingDocumentRef String? @map("supporting_document_ref")
   createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 

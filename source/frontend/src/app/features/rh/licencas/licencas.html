@@ -1,0 +1,49 @@
+<section class="rh-licencas">
+  <header>
+    <h2>Licencas</h2>
+    <p *ngIf="selected">{{ selected.name }}</p>
+  </header>
+
+  <aside>
+    <button type="button" *ngFor="let employee of employees" (click)="select(employee)">
+      {{ employee.registration }} - {{ employee.name }}
+    </button>
+  </aside>
+
+  <form [formGroup]="approvalForm" class="toolbar">
+    <label>
+      Licenca
+      <input formControlName="leaveId" />
+    </label>
+    <label>
+      Motivo
+      <input formControlName="reason" (input)="applyFilter()" />
+    </label>
+    <button type="button" (click)="approve()" [disabled]="saving">Aprovar</button>
+    <button type="button" (click)="cancel()" [disabled]="saving">Cancelar</button>
+  </form>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <table *ngIf="filtered.length > 0">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Motivo</th>
+        <th>Periodo</th>
+        <th>Dias</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of filtered">
+        <td>{{ record.id }}</td>
+        <td>{{ record.reason }}</td>
+        <td>{{ record.startsOn }} - {{ record.endsOn }}</td>
+        <td>{{ record.days }}</td>
+        <td>{{ record.status }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

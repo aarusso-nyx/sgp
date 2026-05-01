@@ -1819,6 +1819,17 @@ R: Verifique se todos os campos obrigatórios estão preenchidos: equipe multipr
 **P: O laudo foi reprovado pelo coordenador. O que o médico deve fazer?**
 R: O médico recebe notificação com as observações de reprovação. Acesse o prontuário, corrija os pontos indicados e reenvie para validação.
 
+### Licenças
+
+**P: Como solicitar licença maternidade, paternidade, adotante, capacitação, prêmio, interesse particular ou cônjuge?**
+R: Acesse **Portal do Servidor > Licenças > Solicitações**, informe servidor, motivo, data de início, dias e comprovante quando exigido. O sistema calcula o período, valida regras legais e registra a solicitação em `hr.leave_record`.
+
+**P: Quando a licença fica sem remuneração?**
+R: Licença para tratar de interesse particular é registrada automaticamente com `paid=false`. As demais licenças continuam remuneradas no cadastro funcional; reflexos de cálculo ficam no escopo da folha.
+
+**P: Como o RH aprova uma licença?**
+R: Acesse **Módulo RH > Licenças**, selecione o servidor, filtre por motivo se necessário e aprove ou cancele a solicitação. A aprovação grava auditoria e inclui a linha correspondente no histórico funcional do servidor.
+
 ### Portal do Servidor
 
 **P: Não consigo acessar o portal.**

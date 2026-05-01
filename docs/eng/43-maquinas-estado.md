@@ -1428,6 +1428,13 @@ Os mapas finos de funcionário, folha, perícia, recadastramento e recrutamento 
 - Homologação de laudo ou concessão de licença publica evento para `rh` atualizar afastamento/situação funcional; o módulo `saude` preserva o prontuário e a decisão médica.
 - Falta, reagendamento, pendência de validação e atendimento concluído são estados distintos para evitar perda de rastreabilidade operacional.
 
+### Licenças não médicas
+
+- A solicitação de licença geral nasce em `hr.leave_record` com `absence_reason_id`, período, dias, indicador `paid` e comprovante quando exigido.
+- A validação canônica é `hr.f_validate_leave_eligibility`: maternidade e paternidade respeitam limites legais, Empresa Cidadã amplia a duração quando parametrizada, capacitação e prêmio exigem quinquênio, e cônjuge/adotante/paternidade Empresa Cidadã exigem comprovante.
+- Aprovação registra `approved_at`, mantém a linha em `hr.leave_record`, grava auditoria por `sgp_append_audit_event(...)` e acrescenta evento em `hr.employee_status_history` para refletir afastamento funcional.
+- Cancelamento muda o registro para `INACTIVE`; não remove histórico nem apaga eventos de auditoria.
+
 ### Funcionário e Vínculo
 
 - CPF identifica `pessoa`; matrícula e vínculo identificam a relação funcional com o tenant.

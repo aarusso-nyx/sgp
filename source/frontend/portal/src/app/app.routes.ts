@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { PORTAL_FEATURE_CATALOG } from './core/portal/portal-feature-catalog';
 import { Ferias } from './pages/ferias/ferias';
+import { Licencas } from './pages/licencas/licencas';
 import { LicencasSaude } from './pages/licencas/saude/saude';
 import { MeusDados } from './pages/meus-dados/meus-dados';
 import { PortalFeaturePage } from './pages/portal-feature-page/portal-feature-page';
@@ -44,6 +45,10 @@ export const routes: Routes = [
       {
         path: 'licencas/saude/:section',
         component: LicencasSaude,
+      },
+      {
+        path: 'licencas/:section',
+        component: Licencas,
       },
       ...featureRoutes,
     ],

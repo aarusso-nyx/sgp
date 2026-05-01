@@ -16,6 +16,7 @@ import { RhFuncionariosHistorico } from './funcionarios/historico/historico';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhRoutingModule } from './rh-routing-module';
 import { RhHome } from './pages/rh-home/rh-home';
+import { RhLicencas } from './licencas/licencas';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { RhHome } from './pages/rh-home/rh-home';
     RhFuncionariosVinculos,
     RhCadastralChanges,
     RhFerias,
+    RhLicencas,
   ],
   imports: [
     CommonModule,

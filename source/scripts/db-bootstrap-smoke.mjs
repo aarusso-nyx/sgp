@@ -1074,6 +1074,7 @@ BEGIN
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.medical_record TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.medical_leave TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.leave_record TO sgp_smoke_rls;
+  GRANT SELECT ON hr.absence_reason TO sgp_smoke_rls;
   GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
 
   SELECT employee.id INTO employee_a
@@ -1191,6 +1192,161 @@ $$;
     `,
   );
   console.log('[db-smoke] validated HR-04 medical leave trigger, days, and RLS');
+
+  await runSqlSnippet(
+    '99-hr05-general-leaves.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  employee_a uuid;
+  maternity_reason uuid;
+  unpaid_reason uuid;
+  training_reason uuid;
+  leave_id uuid;
+  unpaid_leave_id uuid;
+  visible_count integer;
+  audit_count integer;
+  history_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT SELECT ON hr.employee, hr.absence_reason, hr.service_time_record TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.leave_record TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON hr.employee_status_history TO sgp_smoke_rls;
+  GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
+
+  SELECT employee.id INTO employee_a
+  FROM hr.employee employee
+  WHERE employee.tenant_id = tenant_a
+  LIMIT 1;
+
+  IF employee_a IS NULL THEN
+    RAISE EXCEPTION 'HR-05 smoke requires at least one seeded tenant A employee';
+  END IF;
+
+  INSERT INTO hr.absence_reason (tenant_id, code, description, status)
+  VALUES
+    (tenant_a, 'maternidade', 'Licenca maternidade', 'ACTIVE'::"RecordStatus"),
+    (tenant_a, 'interesse_particular', 'Licenca interesse particular', 'ACTIVE'::"RecordStatus"),
+    (tenant_a, 'capacitacao', 'Licenca capacitacao', 'ACTIVE'::"RecordStatus")
+  ON CONFLICT (tenant_id, code) DO UPDATE
+  SET description = EXCLUDED.description,
+      status = EXCLUDED.status;
+
+  SELECT id INTO maternity_reason FROM hr.absence_reason WHERE tenant_id = tenant_a AND code = 'maternidade';
+  SELECT id INTO unpaid_reason FROM hr.absence_reason WHERE tenant_id = tenant_a AND code = 'interesse_particular';
+  SELECT id INTO training_reason FROM hr.absence_reason WHERE tenant_id = tenant_a AND code = 'capacitacao';
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.leave.request' || chr(10) || 'rh.leave.approve' || chr(10) || 'rh.leave.read' || chr(10) || 'rh.read' || chr(10) || 'auditoria.read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO hr.leave_record (
+    tenant_id,
+    employee_id,
+    absence_reason_id,
+    starts_on,
+    days,
+    notes
+  )
+  VALUES (
+    tenant_a,
+    employee_a,
+    maternity_reason,
+    DATE '2026-05-01',
+    120,
+    'HR-05 maternity smoke'
+  )
+  RETURNING id INTO leave_id;
+
+  INSERT INTO hr.leave_record (
+    tenant_id,
+    employee_id,
+    absence_reason_id,
+    starts_on,
+    days,
+    notes
+  )
+  VALUES (
+    tenant_a,
+    employee_a,
+    unpaid_reason,
+    DATE '2026-06-01',
+    30,
+    'HR-05 unpaid smoke'
+  )
+  RETURNING id INTO unpaid_leave_id;
+
+  BEGIN
+    INSERT INTO hr.leave_record (
+      tenant_id,
+      employee_id,
+      absence_reason_id,
+      starts_on,
+      days,
+      notes
+    )
+    VALUES (
+      tenant_a,
+      employee_a,
+      training_reason,
+      DATE '2026-07-01',
+      90,
+      'HR-05 training negative smoke'
+    );
+    RAISE EXCEPTION 'Expected capacitacao without five years to fail';
+  EXCEPTION WHEN check_violation THEN
+    NULL;
+  END;
+
+  UPDATE hr.leave_record
+  SET approved_at = now()
+  WHERE id = leave_id;
+
+  SELECT count(*) INTO visible_count
+  FROM hr.leave_record
+  WHERE id = unpaid_leave_id
+    AND paid = false;
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE resource_type = 'hr.leave_record'
+    AND resource_id = leave_id::text;
+  SELECT count(*) INTO history_count
+  FROM hr.employee_status_history
+  WHERE employee_id = employee_a
+    AND notes = 'Licenca aprovada: ' || leave_id::text;
+  RESET ROLE;
+
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected interesse_particular leave to be paid=false';
+  END IF;
+  IF audit_count = 0 THEN
+    RAISE EXCEPTION 'Expected leave approval to append audit_event';
+  END IF;
+  IF history_count = 0 THEN
+    RAISE EXCEPTION 'Expected leave approval to append employee_status_history';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.leave.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.leave_record
+  WHERE id = leave_id;
+  RESET ROLE;
+
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 leave_record rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated HR-05 general leave rules, audit, and RLS');
 
   console.log('[db-smoke] PASSED');
 }

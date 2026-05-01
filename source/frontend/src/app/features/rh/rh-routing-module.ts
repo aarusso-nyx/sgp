@@ -8,6 +8,7 @@ import { RhFuncionarios } from './funcionarios/funcionarios';
 import { RhFuncionariosHistorico } from './funcionarios/historico/historico';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhHome } from './pages/rh-home/rh-home';
+import { RhLicencas } from './licencas/licencas';
 
 @NgModule({
   imports: [
@@ -35,6 +36,10 @@ import { RhHome } from './pages/rh-home/rh-home';
       {
         path: 'ferias',
         component: RhFerias,
+      },
+      {
+        path: 'licencas',
+        component: RhLicencas,
       },
       {
         path: '',

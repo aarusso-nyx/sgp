@@ -324,6 +324,30 @@
       "description": "Read employee medical leave records."
     },
     {
+      "key": "rh.leave.request",
+      "moduleKey": "rh",
+      "resourceKey": "leave",
+      "actionKey": "request",
+      "routePattern": "/api/v1/licencas",
+      "description": "Request general employee leaves."
+    },
+    {
+      "key": "rh.leave.approve",
+      "moduleKey": "rh",
+      "resourceKey": "leave",
+      "actionKey": "approve",
+      "routePattern": "/api/v1/licencas/*/aprovar",
+      "description": "Approve or cancel general employee leaves."
+    },
+    {
+      "key": "rh.leave.read",
+      "moduleKey": "rh",
+      "resourceKey": "leave",
+      "actionKey": "read",
+      "routePattern": "/api/v1/licencas/**",
+      "description": "Read general employee leaves."
+    },
+    {
       "key": "convenio.read",
       "moduleKey": "convenio",
       "resourceKey": "agreement",
@@ -409,6 +433,9 @@
       "rh.vacation.read",
       "rh.vacation.request",
       "rh.vacation.approve",
+      "rh.leave.request",
+      "rh.leave.approve",
+      "rh.leave.read",
       "rh.medical_leave.read",
       "saude.appointment.write",
       "saude.opinion.write",

@@ -1,0 +1,66 @@
+<section class="licencas">
+  <header>
+    <h1>Licencas</h1>
+    <nav>
+      <button type="button" [class.active]="section === 'solicitacoes'">Solicitacoes</button>
+      <button type="button" [class.active]="section === 'historico'" (click)="loadHistory()">Historico</button>
+      <button type="button" [class.active]="section === 'documentos'">Documentos</button>
+    </nav>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid" *ngIf="section !== 'historico'">
+    <label>
+      Servidor
+      <input formControlName="employeeId" autocomplete="off" />
+    </label>
+    <label>
+      Motivo
+      <select formControlName="reason">
+        <option *ngFor="let reason of reasons" [value]="reason">{{ reason }}</option>
+      </select>
+    </label>
+    <label>
+      Inicio
+      <input type="date" formControlName="startsOn" />
+    </label>
+    <label>
+      Dias
+      <input type="number" min="1" formControlName="days" />
+    </label>
+    <label>
+      Comprovante
+      <input formControlName="supportingDocumentRef" autocomplete="off" />
+    </label>
+    <label class="wide">
+      Observacoes
+      <textarea rows="3" formControlName="notes"></textarea>
+    </label>
+    <button type="submit" [disabled]="saving">Enviar</button>
+  </form>
+
+  <section class="history">
+    <button type="button" (click)="loadHistory()" [disabled]="loading">Atualizar historico</button>
+    <p class="message" *ngIf="message">{{ message }}</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+    <table *ngIf="records.length > 0">
+      <thead>
+        <tr>
+          <th>Motivo</th>
+          <th>Periodo</th>
+          <th>Dias</th>
+          <th>Remunerada</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of records">
+          <td>{{ record.reason }}</td>
+          <td>{{ record.startsOn }} - {{ record.endsOn }}</td>
+          <td>{{ record.days }}</td>
+          <td>{{ record.paid ? 'Sim' : 'Nao' }}</td>
+          <td>{{ record.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>
