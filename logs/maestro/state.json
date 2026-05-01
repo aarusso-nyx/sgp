@@ -95,6 +95,19 @@
       "retries": 1,
       "recovery": "manual migration dependency and smoke idempotency repair",
       "failure_log": "logs/maestro/09-hr-03-ferias-programacao.failure.md"
+    },
+    "10-hr-04-licenca-saude-pericia": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/10-hr-04-licenca-saude-pericia",
+      "commit": "2e4dde2c9fe0b7d64e7235171d67464fb87a0577",
+      "started_at": "2026-05-01T12:41:14-03:00",
+      "completed_at": "2026-05-01T13:04:16-03:00",
+      "retries": 1,
+      "retry_started_at": "2026-05-01T12:53:15-03:00",
+      "previous_failure": "logs/maestro/10-hr-04-licenca-saude-pericia.failure.md",
+      "recovery": "manual HR-04 RLS policy alignment after smoke failure",
+      "failure_log": "logs/maestro/10-hr-04-licenca-saude-pericia.failure.md"
     }
   },
   "current_wave": 7,

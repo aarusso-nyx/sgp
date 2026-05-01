@@ -1,0 +1,5 @@
+Acceptance gate failed: `DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run db:smoke`.
+
+Prior gates passed in this retry: `DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run lint`, `DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run typecheck`, `DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run test`, and `DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run test:e2e`.
+
+Diagnostic output: `db:smoke` applied migration `20260501150000_hr_04_medical_leave`, applied the SQL bootstrap files, seeded deterministic data, and validated the earlier schema/RLS/audit/HR smoke segments through HR-03. It then failed while executing the HR-04 smoke SQL file `/var/folders/5c/m4tbc9kj091cw8v71dnxtrt00000gn/T/sgp-db-smoke-oU8Jaq/99-hr04-medical-leave.sql` with `ERROR: new row violates row-level security policy for table "medical_appointment"`. The harness reported: `[db-smoke] FAILED: npm exec -- prisma db execute --file /var/folders/5c/m4tbc9kj091cw8v71dnxtrt00000gn/T/sgp-db-smoke-oU8Jaq/99-hr04-medical-leave.sql failed with exit code 1`.
