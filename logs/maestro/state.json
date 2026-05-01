@@ -291,8 +291,23 @@
       "previous_failure": "logs/maestro/24-calc-04-decimo-terceiro.failure.md",
       "failure_log": "logs/maestro/24-calc-04-decimo-terceiro.failure.md",
       "recovery": "manual tenant-context, audit coverage, permission seed, and formula parity fixture repair after high retry failure"
+    },
+    "25-calc-05-ferias-folha": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/25-calc-05-ferias-folha",
+      "commit": "3f82a6f",
+      "started_at": "2026-05-01T19:08:46-03:00",
+      "retry_started_at": "2026-05-01T19:21:17-03:00",
+      "completed_at": "2026-05-01T19:26:30-03:00",
+      "retries": 1,
+      "agent": "019de5a1-fe83-79a2-b173-ae41f1a6377f",
+      "previous_agent": "019de596-ab23-79a1-9254-79c294640a55",
+      "previous_failure": "logs/maestro/25-calc-05-ferias-folha.failure.md",
+      "failure_log": "logs/maestro/25-calc-05-ferias-folha.failure.md",
+      "recovery": "manual smoke audit tenant context repair after high retry failure"
     }
   },
-  "current_wave": 12,
+  "current_wave": 13,
   "active_subagents": []
 }
