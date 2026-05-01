@@ -66,8 +66,17 @@
       "retries": 1,
       "recovery": "manual schema alignment after retry failure",
       "failure_log": "logs/maestro/06-hr-02-vinculo-regime-juridico.failure.md"
+    },
+    "07-hr-07-formularios-cadastrais": {
+      "status": "completed",
+      "effort": "low",
+      "branch": "slice/07-hr-07-formularios-cadastrais",
+      "commit": "aa5c8c2108998bd78299d5584062e480e3c3ae87",
+      "started_at": "2026-05-01T00:20:01-03:00",
+      "completed_at": "2026-05-01T00:36:23-03:00",
+      "retries": 0
     }
   },
-  "current_wave": 5,
+  "current_wave": 6,
   "active_subagents": []
 }

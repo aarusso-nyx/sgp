@@ -12,3 +12,4 @@ W04 ✗ 04-hr-01-cadastro-servidor (medium → high retry failed: `db:smoke` fai
 W04 ✓ 04-hr-01-cadastro-servidor (1 slice, medium→high recovery, gates passed, commit 6bf7935) — completeness 26.2% → 26.2%
 W05 ✗ 06-hr-02 (medium → high retry failed: db:smoke P3018 relation "public.profile" does not exist) — see logs/maestro/06-hr-02-vinculo-regime-juridico.failure.md
 W05 ✓ 06-hr-02 (1 slice, medium→high recovery, gates passed, commit 4143973) — completeness 26.2% → 26.2%
+W05 ✓ 07-hr-07 (1 slice, low, gates passed, commit aa5c8c2) — completeness 26.2% → 26.2%; Wave 5 complete
