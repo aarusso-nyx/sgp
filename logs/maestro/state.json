@@ -139,6 +139,18 @@
       "completed_at": "2026-05-01T14:17:44-03:00",
       "retries": 0,
       "recovery": "manual smoke idempotency hardening during maestro gate rerun"
+    },
+    "14-fol-05-bases-salariais-historicas": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/14-fol-05-bases-salariais-historicas",
+      "commit": "75db340aa4bd876dfcb201d857e82fb62a23d7d7",
+      "started_at": "2026-05-01T14:18:00-03:00",
+      "completed_at": "2026-05-01T14:51:03-03:00",
+      "retries": 1,
+      "previous_failure": "logs/maestro/14-fol-05-bases-salariais-historicas.failure.md",
+      "recovery": "manual lint and smoke RLS permission repair after high retry failure",
+      "failure_log": "logs/maestro/14-fol-05-bases-salariais-historicas.failure.md"
     }
   },
   "current_wave": 8,
