@@ -261,8 +261,23 @@
       "previous_failure": "logs/maestro/22-calc-06-teto-remuneratorio.failure.md",
       "failure_log": "logs/maestro/22-calc-06-teto-remuneratorio.failure.md",
       "recovery": "manual admin catalog assertion and CALC-08 parity fixture repair after high retry failure"
+    },
+    "23-calc-07-abono-permanencia-ats": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/23-calc-07-abono-permanencia-ats",
+      "commit": "e13c7f973dfd322607d552533b7105112008b38a",
+      "started_at": "2026-05-01T18:27:29-03:00",
+      "retry_started_at": "2026-05-01T18:40:09-03:00",
+      "completed_at": "2026-05-01T18:46:06-03:00",
+      "retries": 1,
+      "agent": "019de57c-38e5-74a2-a7a7-5c5e643fe432",
+      "previous_agent": "019de570-7002-7b21-accb-a765f858f7a2",
+      "previous_failure": "logs/maestro/23-calc-07-abono-permanencia-ats.failure.md",
+      "failure_log": "logs/maestro/23-calc-07-abono-permanencia-ats.failure.md",
+      "recovery": "manual frontend test harness, permission seed, and formula-engine error propagation repair after high retry failure"
     }
   },
-  "current_wave": 11,
+  "current_wave": 12,
   "active_subagents": []
 }
