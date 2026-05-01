@@ -6,7 +6,7 @@ import {
 
 describe('admin feature catalog', () => {
   it('covers every documented sgp-admin route from the menu spec', () => {
-    expect(ADMIN_FEATURES.length).toBe(184);
+    expect(ADMIN_FEATURES.length).toBe(185);
     expect(ADMIN_NAVIGATION_SECTIONS.length).toBe(11);
     expect(ADMIN_NAVIGATION_SECTIONS.every((section) => section.items.length > 0)).toBe(true);
   });

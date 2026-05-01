@@ -1845,6 +1845,11 @@ R: Acesse **Gestão > Parâmetros > Tabela RPPS**, informe a vigência inicial, 
 **P: Como mantenho os subtetos por poder/cargo?**
 R: Acesse **Gestão > Parâmetros > Teto Remuneratório** e cadastre os valores de `TETO_PREFEITURA`, `TETO_VICE`, `TETO_VEREADOR` e `TETO_SECRETARIO` para o tenant. O cálculo da folha usa a rubrica `DESCONTO_TETO` para gerar o redutor quando a soma das parcelas sujeitas ao teto supera o subteto aplicável. Parcelas indenizatórias ficam imunes quando a rubrica está marcada com `subject_to_ceiling = false`; valores de teto não cadastrados fazem o cálculo falhar com erro explícito, sem redutor silencioso.
 
+### Folha — Simulação
+
+**P: Como simulo o impacto líquido antes de alterar uma folha?**
+R: Acesse **Folha de Pgt > Simulação**, informe o tenant, o vínculo ou servidor, a competência e os ajustes desejados de salário base, dependentes de IRRF ou rubrica adicional. A simulação usa o mesmo motor `payroll_calc` da folha real, executa em transação com rollback obrigatório e exibe o líquido atual, o líquido simulado e o impacto por rubrica. O processo não grava `payroll_run`, não grava linhas de folha e não dispara eSocial.
+
 ### Previdenciário e recadastramento
 
 **P: O beneficiário fez a prova de vida, mas o status ainda aparece como "Perto do Vencimento".**

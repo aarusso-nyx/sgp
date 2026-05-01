@@ -9,6 +9,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/documentos/**', 'documents.upload'],
   ['#!/documentos/**', 'documents.register'],
   ['#!/documentos/**', 'documents.download'],
+  ['#!/folha/simulacao', 'payroll.simulation.execute'],
   ['#!/folhaPagamento/**', 'folha.read'],
   ['#!/folhaPagamento/**', 'folha.write'],
   ['#!/funcionario/**', 'rh.employee.read'],

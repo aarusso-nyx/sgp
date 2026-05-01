@@ -284,6 +284,14 @@
       "description": "Execute payroll processing runs such as 13th salary generation."
     },
     {
+      "key": "payroll.simulation.execute",
+      "moduleKey": "payroll",
+      "resourceKey": "simulation",
+      "actionKey": "execute",
+      "routePattern": "#!/folha/simulacao",
+      "description": "Run payroll dry-run simulations without persisting payroll runs or eSocial events."
+    },
+    {
       "key": "rh.vacation.payout",
       "moduleKey": "rh",
       "resourceKey": "vacation",
@@ -698,6 +706,7 @@
       "folha.read",
       "folha.write",
       "payroll.run.execute",
+      "payroll.simulation.execute",
       "folha.rubrica.read",
       "folha.rubrica.write",
       "folha.rubrica.preview",

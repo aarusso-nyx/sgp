@@ -36,6 +36,13 @@ export const routes: Routes = [
       { path: 'folha-pagamento', pathMatch: 'full', redirectTo: 'folha' },
       { path: 'relatorio', pathMatch: 'full', redirectTo: 'relatorios' },
       {
+        path: 'folha',
+        loadChildren: () =>
+          import('./features/folha-pagamento/folha-pagamento-module').then(
+            (m) => m.FolhaPagamentoModule,
+          ),
+      },
+      {
         path: 'gestao',
         loadChildren: () => import('./features/gestao/gestao-module').then((m) => m.GestaoModule),
       },

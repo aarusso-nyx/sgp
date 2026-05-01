@@ -120,6 +120,7 @@ Módulo RH|Correlatos|Processo|/rh/processo/gestao|PROCESSO.GESTAO||rh|Processos
 Módulo RH|Correlatos|Processo-Função|/rh/processo-funcao/gestao|PROCESSO_FUNCAO.GESTAO||rh|Relação processo × função
 Folha de Pgt|Centrais|Competência|/folha/competencia/gestao|FOLHA_DE_PGT.GESTAO||folha|Abertura, programação e fechamento
 Folha de Pgt|Centrais|Folha de Pagamento|/folha/folha-pagamento/gestao|FOLHA_DE_PGT.GESTAO||folha|Por filial × tipo_processamento
+Folha de Pgt|Centrais|Simulação|/folha/simulacao|FOLHA_DE_PGT.SIMULACAO||folha|What-if com rollback obrigatório
 Folha de Pgt|Centrais|Contracheque — lista|/folha/contracheque/gestao|FOLHA_DE_PGT.GESTAO||folha|Listagem por competência
 Folha de Pgt|Centrais|Contracheque — detalhes|/folha/contracheque/detalhes/:id|FOLHA_DE_PGT.GESTAO||folha|Download PDF; marca d'água configurável
 Folha de Pgt|Verbas e Lançamentos|Verbas (cadastro)|/folha/verba/gestao|VERBA.GESTAO||folha|Fórmulas DSL; compilação SQL

@@ -5,10 +5,21 @@ import { permissionGuard } from '../../core/auth/permission-guard';
 import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { Rubricas } from './rubricas/rubricas';
+import { SimulacaoFolha } from './simulacao/simulacao';
 
 @NgModule({
   imports: [
     RouterModule.forChild([
+      {
+        path: 'simulacao',
+        component: SimulacaoFolha,
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['payroll.simulation.execute'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
       {
         path: 'verba/gestao',
         component: Rubricas,

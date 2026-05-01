@@ -18,6 +18,8 @@ import { PayrollController } from './payroll/payroll.controller';
 import { DecimoTerceiroService } from './payroll/decimo-terceiro.service';
 import { FeriasPayrollService } from './payroll/ferias-payroll.service';
 import { PayrollService } from './payroll/payroll.service';
+import { SimulacaoController } from './simulacao/simulacao.controller';
+import { SimulacaoService } from './simulacao/simulacao.service';
 import { FormulaCacheService } from '../payroll-engine/formula-cache.service';
 import { FormulaCompilerService } from '../payroll-engine/formula-compiler.service';
 import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
@@ -31,11 +33,13 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
     ESocialController,
     PayrollOperationsController,
     PayrollGfipController,
+    SimulacaoController,
   ],
   providers: [
     PayrollService,
     DecimoTerceiroService,
     FeriasPayrollService,
+    SimulacaoService,
     PayrollAccountingService,
     RubricaService,
     PayrollOperationsService,
