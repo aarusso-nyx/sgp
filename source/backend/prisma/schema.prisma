@@ -522,6 +522,8 @@ model WorkLocation {
   code        String
   name        String
   description String       @default("")
+  fpasCode    String       @default("000") @map("fpas_code")
+  fapRate     Decimal      @default(0) @map("fap_rate") @db.Decimal(18, 6)
   status      RecordStatus @default(ACTIVE)
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -596,6 +598,9 @@ model JobPosition {
   code        String
   name        String
   description String       @default("")
+  vacanciesTotal  Int      @default(0) @map("vacancies_total")
+  vacanciesFilled Int      @default(0) @map("vacancies_filled")
+  vacanciesOpen   Int      @default(0) @map("vacancies_open")
   status      RecordStatus @default(ACTIVE)
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)

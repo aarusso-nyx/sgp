@@ -33,14 +33,14 @@ export class MasterDataController {
   ) {}
 
   @Get()
-  @RequirePermission('gestao.read')
+  @RequirePermission('gestao.master_data.read')
   @ApiOkResponse({ description: 'List the foundational catalog resources.' })
   listResources(@Query() query: DomainListQueryDto) {
     return this.masterDataService.listResources(query);
   }
 
   @Get(':resource')
-  @RequirePermission('gestao.read')
+  @RequirePermission('gestao.master_data.read')
   @ApiOkResponse({ description: 'List canonical records for one catalog.' })
   listRecords(
     @Param('resource') resource: string,
@@ -50,7 +50,7 @@ export class MasterDataController {
   }
 
   @Post(':resource')
-  @RequirePermission('gestao.write')
+  @RequirePermission('gestao.master_data.write')
   @ApiCreatedResponse({ description: 'Create a canonical catalog record.' })
   async createRecord(
     @Req() request: RequestWithContext,
@@ -67,7 +67,7 @@ export class MasterDataController {
   }
 
   @Patch(':resource/:id')
-  @RequirePermission('gestao.write')
+  @RequirePermission('gestao.master_data.write')
   @ApiOkResponse({ description: 'Update a canonical catalog record.' })
   async updateRecord(
     @Req() request: RequestWithContext,
@@ -89,7 +89,7 @@ export class MasterDataController {
   }
 
   @Delete(':resource/:id')
-  @RequirePermission('gestao.write')
+  @RequirePermission('gestao.master_data.write')
   @ApiOkResponse({ description: 'Deactivate a canonical catalog record.' })
   async deactivateRecord(
     @Req() request: RequestWithContext,
@@ -103,5 +103,38 @@ export class MasterDataController {
       metadata: { resource, code: updated.code },
     });
     return updated;
+  }
+}
+
+@ApiTags('gestao')
+@ApiBearerAuth()
+@Controller('v1/cargos')
+export class JobPositionsController {
+  constructor(
+    private readonly masterDataService: MasterDataService,
+    private readonly auditService: AuditService,
+  ) {}
+
+  @Get()
+  @RequirePermission('gestao.master_data.read')
+  @ApiOkResponse({ description: 'List job positions.' })
+  list(@Query() query: DomainListQueryDto) {
+    return this.masterDataService.listRecords('cargo', query);
+  }
+
+  @Post()
+  @RequirePermission('gestao.master_data.write')
+  @ApiCreatedResponse({ description: 'Create a job position.' })
+  async create(
+    @Req() request: RequestWithContext,
+    @Body() body: MasterDataMutationDto,
+  ) {
+    const created = await this.masterDataService.createRecord('cargo', body);
+    await this.auditService.auditMutation(request, 'CREATE', 'master_data', {
+      resourceId: created.id,
+      tableName: 'hr.job_position',
+      metadata: { resource: 'cargo', code: created.code },
+    });
+    return created;
   }
 }

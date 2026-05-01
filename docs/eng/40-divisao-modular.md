@@ -448,6 +448,16 @@ Arrecadação Previdenciária é versão futura. O layout atual não declara bib
 
 **Dependências cross-module:** `organizacao` (faixas salariais ligadas a cargos).
 
+##### `gestao.master-data` — Estrutura organizacional
+
+**Responsabilidades:** CRUD administrativo de cargos, funções, lotações hierárquicas, centros de custo e vínculos entre cargo/função e vínculo funcional. Essa base é pré-requisito para o vínculo funcional (`rh`) e para o cadastro do servidor.
+
+**Entidades físicas:** `hr.job_position`, `hr.job_function`, `hr.work_location`, `hr.cost_center`, `hr.job_structure_employment_link`, `hr.work_location_structure_assignment`.
+
+**Controladores:** `GET/POST/PATCH/DELETE /api/v1/master-data/{resource}` para `cargo`, `funcao`, `lotacao`, `centroCusto`, `cargoVinculo` e `funcaoVinculo`; `POST /api/v1/cargos` é a rota operacional de cargo exigida pelo contrato HR-06.
+
+**Permissões:** leitura exige `gestao.master_data.read`; mutações exigem `gestao.master_data.write`. As tabelas tenant-scoped têm RLS por `tenant_id` e registram mutações por `sgp_append_audit_event(...)`.
+
 ---
 
 #### `rh` — Vida Funcional

@@ -13,6 +13,8 @@ export const PERMISSIONS = [
   'folha.read',
   'folha.write',
   'gestao.read',
+  'gestao.master_data.read',
+  'gestao.master_data.write',
   'gestao.write',
   'iam.read',
   'previdenciario.read',

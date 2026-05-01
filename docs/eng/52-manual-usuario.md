@@ -1758,6 +1758,17 @@ R: Acesse **Módulo RH > Funcionário > [Servidor] > Situação Funcional > Regi
 **P: O sistema permitiu cadastrar dois servidores com o mesmo CPF?**
 R: Não é possível. O CPF é único por tenant. Se houver dois registros, um deles pode ser de tenant diferente — contate o suporte.
 
+### Gestão — Estrutura organizacional
+
+**P: Onde cadastro cargos, funções, lotações e centros de custo?**
+R: Acesse **Gestão > Estrutura organizacional**. A tela exibe a árvore de lotações, listas de cargos com vagas, funções, centros de custo e vínculos entre cargo/função e vínculo funcional.
+
+**P: Posso criar vínculo funcional antes de cadastrar a estrutura?**
+R: Não. O cadastro de vínculo funcional depende de cargos, funções, lotações e vínculos de estrutura previamente ativos.
+
+**P: Como confiro a disponibilidade de vagas de um cargo?**
+R: Na lista de cargos, confira o total de vagas e as vagas providas. O sistema exige que o total seja igual à soma de vagas providas e vagas abertas.
+
 ### Previdenciário e recadastramento
 
 **P: O beneficiário fez a prova de vida, mas o status ainda aparece como "Perto do Vencimento".**

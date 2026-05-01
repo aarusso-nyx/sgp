@@ -2097,3 +2097,74 @@ erDiagram
 ---
 
 *Fim do documento — 32-diagramas-er.md*
+
+## Apêndice HR-06 — Estrutura Organizacional Runtime
+
+```mermaid
+erDiagram
+    job_position {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR code
+        VARCHAR name
+        INTEGER vacancies_total
+        INTEGER vacancies_filled
+        INTEGER vacancies_open
+    }
+
+    job_function {
+        UUID id PK
+        UUID tenant_id FK
+        VARCHAR code
+        VARCHAR name
+        UUID nature_id FK
+    }
+
+    work_location {
+        UUID id PK
+        UUID tenant_id FK
+        UUID branch_id FK
+        UUID parent_id FK
+        VARCHAR code
+        VARCHAR name
+        VARCHAR fpas_code
+        DECIMAL fap_rate
+    }
+
+    cost_center {
+        UUID id PK
+        UUID tenant_id FK
+        UUID branch_id FK
+        VARCHAR code
+        VARCHAR name
+    }
+
+    job_structure_employment_link {
+        UUID id PK
+        UUID tenant_id FK
+        UUID job_position_id FK
+        UUID job_function_id FK
+        UUID employment_link_id FK
+        VARCHAR code
+        VARCHAR name
+    }
+
+    work_location_structure_assignment {
+        UUID id PK
+        UUID tenant_id FK
+        UUID work_location_id FK
+        UUID job_position_id FK
+        UUID job_function_id FK
+        VARCHAR code
+        VARCHAR name
+    }
+
+    work_location ||--o{ work_location : "hierarquia"
+    job_position ||--o{ job_structure_employment_link : "restringe vínculos"
+    job_function ||--o{ job_structure_employment_link : "restringe vínculos"
+    work_location ||--o{ work_location_structure_assignment : "aceita estrutura"
+    job_position ||--o{ work_location_structure_assignment : "cargo lotável"
+    job_function ||--o{ work_location_structure_assignment : "função lotável"
+```
+
+Regra de vagas: `job_position.vacancies_total = vacancies_filled + vacancies_open`. Todas as entidades são tenant-scoped, protegidas por RLS e auditadas por `sgp_append_audit_event(...)`.

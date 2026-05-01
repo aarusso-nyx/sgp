@@ -361,7 +361,38 @@ const RESOURCE_SQL: Record<string, ResourceSqlMapping> = {
   categoriaProfissional: referenceCatalog('CATEGORIA_PROFISSIONAL'),
   categoriaEconomica: referenceCatalog('CATEGORIA_ECONOMICA'),
   cbo: referenceCatalog('CBO'),
-  cargo: nameDescription('hr.job_position'),
+  cargo: nameDescription('hr.job_position', {
+    metadata:
+      "jsonb_build_object('vacanciesTotal', vacancies_total, 'vacanciesFilled', vacancies_filled, 'vacanciesOpen', vacancies_open)",
+    extraInsertColumns: [
+      'vacancies_total',
+      'vacancies_filled',
+      'vacancies_open',
+    ],
+    extraInsertValues: (input) => {
+      const filled = numberMetadata(input.metadata, 'vacanciesFilled') ?? 0;
+      const open = numberMetadata(input.metadata, 'vacanciesOpen') ?? 0;
+      return [
+        numberMetadata(input.metadata, 'vacanciesTotal') ?? filled + open,
+        filled,
+        open,
+      ];
+    },
+    extraUpdateAssignments: [
+      'vacancies_total',
+      'vacancies_filled',
+      'vacancies_open',
+    ],
+    extraUpdateValues: (input) => {
+      const filled = numberMetadata(input.metadata, 'vacanciesFilled') ?? 0;
+      const open = numberMetadata(input.metadata, 'vacanciesOpen') ?? 0;
+      return [
+        numberMetadata(input.metadata, 'vacanciesTotal') ?? filled + open,
+        filled,
+        open,
+      ];
+    },
+  }),
   cargoAtividade: structureReferenceLink({
     ownerColumn: 'job_position_id',
     catalogKey: 'ATIVIDADE',
@@ -524,7 +555,24 @@ const RESOURCE_SQL: Record<string, ResourceSqlMapping> = {
       ],
     },
   }),
-  lotacao: nameDescription('hr.work_location'),
+  lotacao: nameDescription('hr.work_location', {
+    metadata:
+      "jsonb_build_object('parentId', parent_id, 'branchId', branch_id, 'fpasCode', fpas_code, 'fapRate', fap_rate)",
+    extraInsertColumns: ['parent_id', 'branch_id', 'fpas_code', 'fap_rate'],
+    extraInsertValues: (input) => [
+      stringMetadata(input.metadata, 'parentId'),
+      stringMetadata(input.metadata, 'branchId'),
+      stringMetadata(input.metadata, 'fpasCode') ?? '000',
+      numberMetadata(input.metadata, 'fapRate') ?? 0,
+    ],
+    extraUpdateAssignments: ['parent_id', 'branch_id', 'fpas_code', 'fap_rate'],
+    extraUpdateValues: (input) => [
+      stringMetadata(input.metadata, 'parentId'),
+      stringMetadata(input.metadata, 'branchId'),
+      stringMetadata(input.metadata, 'fpasCode') ?? '000',
+      numberMetadata(input.metadata, 'fapRate') ?? 0,
+    ],
+  }),
   lotacaoCargo: workLocationStructureAssignment({
     structureColumn: 'job_position_id',
   }),

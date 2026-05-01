@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, of } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-import { OpenApiClient } from '../../../core/api/generated/openapi-client';
 import { PagedResult } from '../../../core/models/paged-result';
 
 export interface MasterDataField {
@@ -54,42 +54,15 @@ export interface MasterDataQuery extends Record<string, string | number | boolea
   search?: string;
 }
 
-const ADMIN_MENUS_RESOURCE: MasterDataResource = {
-  key: 'adminMenus',
-  label: 'Menus Administrativos',
-  module: 'gestao',
-  route: '/v1/admin/menus',
-  status: 'observed',
-  observedActions: ['list', 'create', 'update', 'deactivate'],
-  fields: [
-    { key: 'code', label: 'Codigo', type: 'text', required: true, maxLength: 80 },
-    { key: 'name', label: 'Nome', type: 'text', required: true, maxLength: 180 },
-    { key: 'description', label: 'Rota', type: 'text', required: true, maxLength: 200 },
-    { key: 'active', label: 'Ativo', type: 'boolean', required: true },
-  ],
-  columns: [
-    { key: 'code', label: 'Codigo' },
-    { key: 'name', label: 'Nome' },
-    { key: 'description', label: 'Rota' },
-    { key: 'active', label: 'Ativo' },
-  ],
-};
-
 @Injectable({
   providedIn: 'root',
 })
 export class MasterData {
-  constructor(private readonly api: OpenApiClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   listResources(query: MasterDataQuery = {}): Observable<PagedResult<MasterDataResource>> {
-    const page = query.page ?? 1;
-    const pageSize = query.pageSize ?? 25;
-    return of({
-      items: [ADMIN_MENUS_RESOURCE],
-      page,
-      pageSize,
-      total: 1,
-      totalPages: 1,
+    return this.http.get<PagedResult<MasterDataResource>>('/api/v1/master-data', {
+      params: this.params(query),
     });
   }
 
@@ -97,47 +70,13 @@ export class MasterData {
     resource: string,
     query: MasterDataQuery = {},
   ): Observable<PagedResult<MasterDataRecord>> {
-    if (resource !== ADMIN_MENUS_RESOURCE.key) {
-      return of(this.emptyPage(query));
-    }
-
-    return this.api.getApiV1AdminMenus().pipe(
-      map((result) => {
-        const rawItems = this.extractItems(result);
-        const mapped = rawItems
-          .map((item) => this.toRecord(item))
-          .filter((item) => {
-            if (!query.search) {
-              return true;
-            }
-            const search = query.search.toLowerCase();
-            return `${item.code} ${item.name} ${item.description}`.toLowerCase().includes(search);
-          });
-
-        return {
-          items: mapped,
-          page: query.page ?? 1,
-          pageSize: query.pageSize ?? (mapped.length || 25),
-          total: mapped.length,
-          totalPages: 1,
-        };
-      }),
-    );
+    return this.http.get<PagedResult<MasterDataRecord>>(`/api/v1/master-data/${resource}`, {
+      params: this.params(query),
+    });
   }
 
   createRecord(resource: string, body: MasterDataMutation): Observable<MasterDataRecord> {
-    if (resource !== ADMIN_MENUS_RESOURCE.key) {
-      return of(this.toRecord({ ...body, id: '' }));
-    }
-
-    return this.api
-      .postApiV1AdminMenus({
-        codigo: body.code,
-        nome: body.name,
-        rota: body.description ?? '/',
-        ativo: body.active ?? true,
-      })
-      .pipe(map((result) => this.toRecord(result)));
+    return this.http.post<MasterDataRecord>(`/api/v1/master-data/${resource}`, body);
   }
 
   updateRecord(
@@ -145,67 +84,20 @@ export class MasterData {
     id: string,
     body: MasterDataMutation,
   ): Observable<MasterDataRecord> {
-    if (resource !== ADMIN_MENUS_RESOURCE.key) {
-      return of(this.toRecord({ ...body, id }));
-    }
-
-    return this.api
-      .putApiV1AdminMenusById(
-        { id },
-        {
-          codigo: body.code,
-          nome: body.name,
-          rota: body.description ?? '/',
-          ativo: body.active ?? true,
-        },
-      )
-      .pipe(map((result) => this.toRecord(result)));
+    return this.http.patch<MasterDataRecord>(`/api/v1/master-data/${resource}/${id}`, body);
   }
 
   deactivateRecord(resource: string, id: string): Observable<MasterDataRecord> {
-    if (resource !== ADMIN_MENUS_RESOURCE.key) {
-      return of(this.toRecord({ id, ativo: false }));
-    }
-
-    return this.api
-      .deleteApiV1AdminMenusById({ id })
-      .pipe(map((result) => this.toRecord({ ...(result as object), id, ativo: false })));
+    return this.http.delete<MasterDataRecord>(`/api/v1/master-data/${resource}/${id}`);
   }
 
-  private emptyPage(query: MasterDataQuery): PagedResult<MasterDataRecord> {
-    return {
-      items: [],
-      page: query.page ?? 1,
-      pageSize: query.pageSize ?? 25,
-      total: 0,
-      totalPages: 0,
-    };
-  }
-
-  private extractItems(result: unknown): Record<string, unknown>[] {
-    if (Array.isArray(result)) {
-      return result as Record<string, unknown>[];
+  private params(query: MasterDataQuery): HttpParams {
+    let params = new HttpParams();
+    for (const [key, value] of Object.entries(query)) {
+      if (value !== undefined && value !== '') {
+        params = params.set(key, String(value));
+      }
     }
-    const value = result as { items?: unknown };
-    if (Array.isArray(value?.items)) {
-      return value.items as Record<string, unknown>[];
-    }
-    return [];
-  }
-
-  private toRecord(raw: unknown): MasterDataRecord {
-    const value = (raw ?? {}) as Record<string, unknown>;
-    const now = new Date().toISOString();
-    return {
-      id: String(value['id'] ?? ''),
-      code: String(value['codigo'] ?? value['code'] ?? ''),
-      name: String(value['nome'] ?? value['name'] ?? ''),
-      description: String(value['rota'] ?? value['description'] ?? ''),
-      active: Boolean(value['ativo'] ?? value['active'] ?? true),
-      status: 'observed',
-      metadata: {},
-      createdAt: String(value['createdAt'] ?? now),
-      updatedAt: String(value['updatedAt'] ?? now),
-    };
+    return params;
   }
 }

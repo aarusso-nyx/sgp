@@ -10,10 +10,11 @@ import { MatInputModule } from '@angular/material/input';
 
 import { SharedPlatformModule } from '../shared-platform/shared-platform-module';
 import { GestaoRoutingModule } from './gestao-routing-module';
+import { GestaoMasterData } from './master-data/master-data';
 import { GestaoHome } from './pages/gestao-home/gestao-home';
 
 @NgModule({
-  declarations: [GestaoHome],
+  declarations: [GestaoHome, GestaoMasterData],
   imports: [
     CommonModule,
     ReactiveFormsModule,

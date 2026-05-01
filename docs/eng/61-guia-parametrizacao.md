@@ -349,6 +349,19 @@ Os catálogos mestres não são "parâmetros" no sentido estrito — são tabela
 | Cargo | `cargo` | código, denominação, CBO, nível, plano_cargos_id | Enquadramento, folha, eSocial S-1020 |
 | Função / Cargo em comissão | `funcao` | código, denominação, tipo (gratificada/comissão), natureza | Gratificação de função, eSocial S-1035 |
 | Plano de cargos e carreiras | `plano_cargos_carreira` | nome, versão, data_vigência, niveis_json | Progressão salarial, enquadramento |
+
+### 3.1 Carga inicial HR-06
+
+Antes de liberar cadastro de servidor ou vínculo funcional, o administrador deve carregar e validar:
+
+- `job_position`: código, nome, descrição e vagas (`vacancies_total`, `vacancies_filled`, `vacancies_open`) com consistência aritmética.
+- `job_function`: código, nome, descrição e natureza da função quando aplicável.
+- `work_location`: hierarquia de pelo menos órgão, secretaria e unidade, com `fpas_code` e `fap_rate` preenchidos.
+- `cost_center`: código único por tenant e nome oficial para rateio.
+- `job_structure_employment_link`: elegibilidade entre cargo/função e vínculo funcional.
+- `work_location_structure_assignment`: cargos e funções permitidos por lotação.
+
+As mutações usam `gestao.master_data.write`, geram `audit_event` e ficam visíveis apenas ao tenant corrente por RLS.
 | Referência salarial | `referencia_salarial` | nível, referência, valor, vigência | Cálculo do vencimento base |
 | Faixa / Grupo salarial | `faixa_salarial`, `grupo_salarial` | faixa inicial, faixa final, grupo | Validação de salário, salário-família |
 | Tipo de vínculo | `tipo_vinculo` | código, descrição, categoria eSocial | Regras de folha, eSocial S-1030, elegibilidade de verbas |

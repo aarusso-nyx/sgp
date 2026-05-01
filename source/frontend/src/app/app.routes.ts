@@ -9,7 +9,9 @@ import { AuthCallback } from './features/security/pages/auth-callback/auth-callb
 import { Forbidden } from './features/security/pages/forbidden/forbidden';
 import { Shell } from './shared-platform/shell/shell';
 
-const adminFeatureRoutes = ADMIN_MODULES.map((module) => ({
+const adminFeatureRoutes = ADMIN_MODULES.filter(
+  (module) => module.key !== 'gestao',
+).map((module) => ({
   path: module.routePath.replace(/^\//, ''),
   children: buildModuleRouteGroup(module.key as LegacyModuleKey, AdminFeaturePage, {
     moduleLabel: module.label,
@@ -33,6 +35,11 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'gestao' },
       { path: 'folha-pagamento', pathMatch: 'full', redirectTo: 'folha' },
       { path: 'relatorio', pathMatch: 'full', redirectTo: 'relatorios' },
+      {
+        path: 'gestao',
+        loadChildren: () =>
+          import('./features/gestao/gestao-module').then((m) => m.GestaoModule),
+      },
       ...adminFeatureRoutes,
     ],
   },
