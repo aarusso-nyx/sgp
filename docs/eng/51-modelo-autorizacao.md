@@ -572,3 +572,13 @@ A tabela abaixo lista todos os módulos do SGP com os papéis disponíveis. Colu
 | CATEGORIA_DOENCA | CRUD | `ROLE_CATEGORIA_DOENCA_VISUALIZAR`, `ROLE_CATEGORIA_DOENCA_CADASTRAR`, `ROLE_CATEGORIA_DOENCA_ATUALIZAR`, `ROLE_CATEGORIA_DOENCA_EXCLUIR`, `ROLE_CATEGORIA_DOENCA_GESTAO` |
 | CONVENIO_DESCONTO | CRUD | `ROLE_CONVENIO_DESCONTO_VISUALIZAR`, `ROLE_CONVENIO_DESCONTO_CADASTRAR`, `ROLE_CONVENIO_DESCONTO_ATUALIZAR`, `ROLE_CONVENIO_DESCONTO_EXCLUIR`, `ROLE_CONVENIO_DESCONTO_GESTAO` |
 | ESOCIAL | CRUD | `ROLE_ESOCIAL_VISUALIZAR`, `ROLE_ESOCIAL_CADASTRAR`, `ROLE_ESOCIAL_ATUALIZAR`, `ROLE_ESOCIAL_EXCLUIR`, `ROLE_ESOCIAL_GESTAO` |
+
+### Permissões v0.0.1 para atualização cadastral HR-07
+
+| Permissão | Uso |
+| --- | --- |
+| `portal.profile.read` | Leitura dos próprios dados em `/v1/portal/meus-dados/*`. |
+| `portal.profile.write` | Criação de solicitações em `hr.cadastral_change_request` pelo portal do servidor. |
+| `rh.dependent.read` | Leitura tenant-scoped de `hr.employee_dependent`, incluindo RLS para dependentes. |
+| `rh.dependent.write` | Mutação tenant-scoped de dependentes por fluxo aprovado. |
+| `rh.cadastral_change.approve` | Listar, aprovar e rejeitar solicitações cadastrais na administração de RH. |

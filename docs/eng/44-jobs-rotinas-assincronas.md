@@ -1264,3 +1264,9 @@ flowchart TD
 ---
 
 *Fim do documento. Próximas revisões devem atualizar os IDs de ARN, thresholds de alarme e formatos de leiaute conforme homologação com os órgãos externos.*
+
+## 7. Workflow de aprovação cadastral HR-07
+
+Atualizações em `/meus-dados/cadastro`, `/meus-dados/endereco`, `/meus-dados/contato`, `/meus-dados/dependentes` e `/meus-dados/documentos` são recebidas de forma síncrona pela API do portal e registradas em `hr.cadastral_change_request` com status `PENDING`, payload anterior, payload solicitado e identificadores do ator autenticado. Não há aplicação direta de PII pelo portal: a fila administrativa `GET /v1/funcionarios/cadastral-changes?status=pending` expõe as pendências para RH, e `POST /v1/funcionarios/cadastral-changes/:id/approve` aplica a alteração ao cadastro do servidor e muda a solicitação para `APPROVED`. Rejeições usam `POST /v1/funcionarios/cadastral-changes/:id/reject` e preservam o payload para rastreabilidade.
+
+Cada criação, aprovação, rejeição ou exclusão de solicitação cadastral emite evento por `sgp_append_audit_event(...)`; a aprovação também atualiza `hr.employee`, gerando trilha separada para a mudança efetiva de cadastro. A rotina operacional é monitorar a fila por idade de pendência e tratar solicitações paradas há mais de dois dias úteis como exceção de atendimento.

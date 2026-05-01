@@ -4,6 +4,7 @@ import {
   IsDateString,
   IsIn,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   MaxLength,
@@ -198,4 +199,38 @@ export class ChangeContractRegimeDto {
   @IsString()
   @MaxLength(500)
   justification?: string;
+}
+
+export class ApproveCadastralChangeDto {
+  @ApiPropertyOptional({ maxLength: 500 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  notes?: string;
+}
+
+export class RejectCadastralChangeDto {
+  @ApiProperty({ maxLength: 500 })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(500)
+  reason!: string;
+}
+
+export class CadastralChangeRequestDto {
+  @ApiProperty({
+    enum: ['cadastro', 'endereco', 'contato', 'dependentes', 'documentos'],
+  })
+  @IsString()
+  @IsIn(['cadastro', 'endereco', 'contato', 'dependentes', 'documentos'])
+  section!: 'cadastro' | 'endereco' | 'contato' | 'dependentes' | 'documentos';
+
+  @ApiProperty({ type: Object })
+  @IsObject()
+  payload!: Record<string, unknown>;
+
+  @ApiPropertyOptional({ type: Object })
+  @IsOptional()
+  @IsObject()
+  previousPayload?: Record<string, unknown>;
 }

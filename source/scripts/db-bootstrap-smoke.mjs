@@ -196,7 +196,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', '00000000-0000-0000-0000-000000000999', true);
-  PERFORM set_config('app.current_permissions', 'rh.read', true);
+  PERFORM set_config('app.current_permissions', 'rh.dependent.read', true);
   PERFORM set_config('app.authenticated', 'true', true);
   SET LOCAL ROLE sgp_smoke_rls;
   SELECT count(*) INTO employee_count FROM hr.employee;
@@ -670,7 +670,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
-  PERFORM set_config('app.current_permissions', 'rh.read\nrh.write', true);
+  PERFORM set_config('app.current_permissions', 'rh.dependent.read\nrh.dependent.write', true);
   SET LOCAL ROLE sgp_smoke_rls;
   SELECT count(*) INTO visible_count
   FROM hr.employee_dependent
@@ -704,7 +704,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
-  PERFORM set_config('app.current_permissions', 'rh.write', true);
+  PERFORM set_config('app.current_permissions', 'rh.dependent.write', true);
   SET LOCAL ROLE sgp_smoke_rls;
   DELETE FROM hr.employee_dependent WHERE id = dependent_a;
   GET DIAGNOSTICS affected_count = ROW_COUNT;

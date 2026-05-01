@@ -8,15 +8,12 @@ DROP POLICY IF EXISTS employee_dependent_write ON hr.employee_dependent;
 DROP POLICY IF EXISTS p_employee_dependent_rw ON hr.employee_dependent;
 CREATE POLICY p_employee_dependent_rw ON hr.employee_dependent
   USING (
-    public.sgp_bypass_rls()
-    OR (
-      public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['rh.read'])
-    )
+    public.sgp_tenant_matches(tenant_id)
+    AND public.sgp_has_any_permission(ARRAY['rh.dependent.read', 'rh.dependent.write'])
   )
   WITH CHECK (
     public.sgp_tenant_matches(tenant_id)
-    AND public.sgp_has_any_permission(ARRAY['rh.write'])
+    AND public.sgp_has_any_permission(ARRAY['rh.dependent.write'])
   );
 
 CREATE SCHEMA IF NOT EXISTS payroll_calc;

@@ -1,4 +1,8 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { AuthenticatedActor } from '../auth/auth.types';
@@ -27,6 +31,46 @@ interface CountRow extends QueryResultRow {
   total: string;
 }
 
+interface EmployeeProfileRow extends QueryResultRow {
+  id: string;
+  registration: string;
+  name: string;
+  social_name: string | null;
+  cpf: string | null;
+  birth_date: Date | string | null;
+  email: string | null;
+  phone: string | null;
+  pis_pasep: string | null;
+  rg: string | null;
+  rg_issuer: string | null;
+  mother_name: string | null;
+  father_name: string | null;
+  address: Record<string, unknown>;
+}
+
+interface DependentRow extends QueryResultRow {
+  id: string;
+  name: string;
+  cpf: string | null;
+  birth_date: Date | string | null;
+  relationship: string;
+  income_tax_dependent: boolean;
+  active: boolean;
+}
+
+interface DocumentRow extends QueryResultRow {
+  id: string;
+  file_name: string;
+  content_type: string | null;
+  size_bytes: number | null;
+  checksum: string | null;
+  created_at: Date | string;
+}
+
+interface IdRow extends QueryResultRow {
+  id: string;
+}
+
 @Injectable()
 export class PortalService {
   constructor(private readonly databaseService: DatabaseService) {}
@@ -43,6 +87,135 @@ export class PortalService {
       provider: 'govbr',
       status: 'available',
       checkedAt: new Date().toISOString(),
+    };
+  }
+
+  async getPersonalData(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    return {
+      id: employee.id,
+      registration: employee.registration,
+      name: employee.name,
+      socialName: employee.social_name,
+      cpf: employee.cpf,
+      birthDate: employee.birth_date ? this.toDate(employee.birth_date) : null,
+      pisPasep: employee.pis_pasep,
+      rg: employee.rg,
+      rgIssuer: employee.rg_issuer,
+      motherName: employee.mother_name,
+      fatherName: employee.father_name,
+    };
+  }
+
+  async getAddress(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    return employee.address ?? {};
+  }
+
+  async getContact(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    return {
+      email: employee.email,
+      phone: employee.phone,
+    };
+  }
+
+  async getDependents(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    const rows = await this.databaseService.query<DependentRow>(
+      `
+      SELECT
+        id::text,
+        name,
+        cpf,
+        birth_date,
+        relationship,
+        income_tax_dependent,
+        active
+      FROM hr.employee_dependent
+      WHERE employee_id = $1::uuid
+        AND tenant_id = public.sgp_current_tenant_uuid()
+      ORDER BY name ASC
+      `,
+      [employee.id],
+    );
+    return rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      cpf: row.cpf,
+      birthDate: row.birth_date ? this.toDate(row.birth_date) : null,
+      relationship: row.relationship,
+      incomeTaxDependent: row.income_tax_dependent,
+      active: row.active,
+    }));
+  }
+
+  async getDocuments(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    const rows = await this.databaseService.query<DocumentRow>(
+      `
+      SELECT id::text, file_name, content_type, size_bytes, checksum, created_at
+      FROM public.document_attachment
+      WHERE owner_type = 'employee'
+        AND owner_id = $1::text
+        AND tenant_id = public.sgp_current_tenant_uuid()
+      ORDER BY created_at DESC
+      `,
+      [employee.id],
+    );
+    return rows.map((row) => ({
+      id: row.id,
+      fileName: row.file_name,
+      contentType: row.content_type,
+      sizeBytes: row.size_bytes,
+      checksum: row.checksum,
+      createdAt: this.toIso(row.created_at),
+    }));
+  }
+
+  async requestProfileChange(
+    actor: AuthenticatedActor | undefined,
+    section: string,
+    payload: Record<string, unknown>,
+    previousPayload?: Record<string, unknown>,
+  ) {
+    const employee = await this.loadEmployee(actor);
+    const previous = previousPayload ?? this.currentSection(employee, section);
+    const rows = await this.databaseService.query<IdRow>(
+      `
+      INSERT INTO hr.cadastral_change_request (
+        employee_id,
+        section,
+        previous_payload,
+        requested_payload,
+        requested_by_sub,
+        requested_by_login
+      )
+      VALUES (
+        $1::uuid,
+        $2,
+        $3::jsonb,
+        $4::jsonb,
+        NULLIF($5, ''),
+        NULLIF($6, '')
+      )
+      RETURNING id::text
+      `,
+      [
+        employee.id,
+        section,
+        JSON.stringify(previous),
+        JSON.stringify(payload),
+        actor?.sub ?? '',
+        actor?.username ?? '',
+      ],
+    );
+    return {
+      id: rows[0].id,
+      status: 'PENDING',
+      section,
+      requestedPayload: payload,
+      previousPayload: previous,
     };
   }
 
@@ -140,9 +313,91 @@ export class PortalService {
     }
   }
 
+  private async loadEmployee(
+    actor: AuthenticatedActor | undefined,
+  ): Promise<EmployeeProfileRow> {
+    this.ensureDatabase();
+    const rows = await this.databaseService.query<EmployeeProfileRow>(
+      `
+      SELECT
+        id::text,
+        registration,
+        name,
+        social_name,
+        cpf,
+        birth_date,
+        email,
+        phone,
+        pis_pasep,
+        rg,
+        rg_issuer,
+        mother_name,
+        father_name,
+        address
+      FROM hr.employee
+      WHERE tenant_id = public.sgp_current_tenant_uuid()
+        AND (
+          cpf = NULLIF($1, '')
+          OR email = NULLIF($2, '')
+          OR registration = NULLIF($3, '')
+        )
+      ORDER BY updated_at DESC
+      LIMIT 1
+      `,
+      [
+        this.claimString(actor, 'cpf'),
+        this.claimString(actor, 'email'),
+        actor?.username ?? '',
+      ],
+    );
+    if (!rows[0]) {
+      throw new NotFoundException(
+        'Employee profile not found for portal actor',
+      );
+    }
+    return rows[0];
+  }
+
+  private currentSection(
+    employee: EmployeeProfileRow,
+    section: string,
+  ): Record<string, unknown> {
+    if (section === 'endereco') return employee.address ?? {};
+    if (section === 'contato') {
+      return { email: employee.email, phone: employee.phone };
+    }
+    if (section === 'cadastro') return this.getPersonalDataFrom(employee);
+    return {};
+  }
+
+  private claimString(
+    actor: AuthenticatedActor | undefined,
+    key: string,
+  ): string {
+    const value = actor?.claims?.[key];
+    return typeof value === 'string' ? value : '';
+  }
+
+  private getPersonalDataFrom(
+    employee: EmployeeProfileRow,
+  ): Record<string, unknown> {
+    return {
+      socialName: employee.social_name,
+      rg: employee.rg,
+      rgIssuer: employee.rg_issuer,
+      pisPasep: employee.pis_pasep,
+      motherName: employee.mother_name,
+      fatherName: employee.father_name,
+    };
+  }
+
   private toIso(value: Date | string): string {
     return value instanceof Date
       ? value.toISOString()
       : new Date(value).toISOString();
+  }
+
+  private toDate(value: Date | string): string {
+    return this.toIso(value).slice(0, 10);
   }
 }

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups';
+import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
 import { RhFuncionarios } from './funcionarios/funcionarios';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhHome } from './pages/rh-home/rh-home';
@@ -20,6 +21,10 @@ import { RhHome } from './pages/rh-home/rh-home';
       {
         path: 'funcionarios/vinculos',
         component: RhFuncionariosVinculos,
+      },
+      {
+        path: 'cadastral-changes',
+        component: RhCadastralChanges,
       },
       {
         path: '',

@@ -42,6 +42,11 @@
     { "key": "rh.employee.admit", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "admit", "routePattern": "/api/v1/funcionarios/**", "description": "Admit employees through HR-01." },
     { "key": "rh.employee.terminate", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "terminate", "routePattern": "/api/v1/funcionarios/**", "description": "Terminate employees through HR-01." },
     { "key": "rh.employment_link.write", "moduleKey": "rh", "resourceKey": "employment_link", "actionKey": "write", "routePattern": "/api/v1/funcionarios/**/vinculos", "description": "Change employee employment link and legal regime through HR-02." },
+    { "key": "rh.dependent.read", "moduleKey": "rh", "resourceKey": "dependent", "actionKey": "read", "routePattern": "/api/v1/portal/meus-dados/dependentes", "description": "Read employee dependent records." },
+    { "key": "rh.dependent.write", "moduleKey": "rh", "resourceKey": "dependent", "actionKey": "write", "routePattern": "/api/v1/portal/meus-dados/dependentes", "description": "Mutate employee dependent records through approved workflows." },
+    { "key": "rh.cadastral_change.approve", "moduleKey": "rh", "resourceKey": "cadastral_change", "actionKey": "approve", "routePattern": "/api/v1/funcionarios/cadastral-changes/**", "description": "Approve or reject employee self-service cadastral change requests." },
+    { "key": "portal.profile.read", "moduleKey": "portal", "resourceKey": "profile", "actionKey": "read", "routePattern": "/api/v1/portal/meus-dados/**", "description": "Read own employee portal profile data." },
+    { "key": "portal.profile.write", "moduleKey": "portal", "resourceKey": "profile", "actionKey": "write", "routePattern": "/api/v1/portal/meus-dados/**", "description": "Submit own employee portal profile change requests." },
     { "key": "folha.read", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "read", "routePattern": "#!/folhaPagamento/**", "description": "Read payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
     { "key": "folha.write", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "write", "routePattern": "#!/folhaPagamento/**", "description": "Mutate payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
     { "key": "avaliacao.read", "moduleKey": "avaliacao", "resourceKey": "performance", "actionKey": "read", "routePattern": "#!/avaliacao/**", "description": "Read evaluation and career progression records." },
@@ -64,8 +69,8 @@
   ],
   "profilePermissions": {
     "ADMIN": ["*"],
-    "RH_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "gestao.master_data.write", "rh.read", "rh.write", "rh.employee.read", "rh.employee.write", "rh.employee.admit", "rh.employee.terminate", "rh.employment_link.write", "relatorio.generate"],
-    "FOLHA_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "folha.read", "folha.write", "relatorio.generate"],
+    "RH_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "gestao.master_data.write", "rh.read", "rh.write", "rh.employee.read", "rh.employee.write", "rh.employee.admit", "rh.employee.terminate", "rh.employment_link.write", "rh.dependent.read", "rh.dependent.write", "rh.cadastral_change.approve", "relatorio.generate"],
+    "FOLHA_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "rh.dependent.read", "folha.read", "folha.write", "relatorio.generate"],
     "AUDITOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "folha.read", "relatorio.read", "relatorio.generate", "auditoria.read"]
   }
 }

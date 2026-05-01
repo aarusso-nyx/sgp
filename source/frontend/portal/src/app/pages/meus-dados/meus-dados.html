@@ -1,0 +1,62 @@
+<section class="meus-dados">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Meus Dados</h1>
+  </header>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <div *ngIf="rows.length; else editable" class="panel">
+    <h2>{{ section }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Registro</th>
+          <th>Detalhe</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rows">
+          <td>{{ row['name'] || row['fileName'] || row['id'] }}</td>
+          <td>{{ row['relationship'] || row['contentType'] || row['checksum'] || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #editable>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="panel">
+      <h2>{{ section }}</h2>
+      <div class="fields">
+        <label>
+          <span>Campo 1</span>
+          <input formControlName="fieldA" />
+        </label>
+        <label>
+          <span>Campo 2</span>
+          <input formControlName="fieldB" />
+        </label>
+        <label>
+          <span>Campo 3</span>
+          <input formControlName="fieldC" />
+        </label>
+        <label>
+          <span>Campo 4</span>
+          <input formControlName="fieldD" />
+        </label>
+      </div>
+
+      <section class="diff" aria-label="Alteracoes">
+        <h3>Alteracoes</h3>
+        <p *ngIf="!diff.length">Nenhuma alteracao informada.</p>
+        <dl *ngFor="let item of diff">
+          <dt>{{ item.field }}</dt>
+          <dd>{{ item.before }} -> {{ item.after }}</dd>
+        </dl>
+      </section>
+
+      <button type="submit" [disabled]="saving || loading || !diff.length">Enviar</button>
+    </form>
+  </ng-template>
+</section>

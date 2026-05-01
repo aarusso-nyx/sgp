@@ -1803,7 +1803,7 @@ R: Verifique se o portal está habilitado (`PORTAL_SERVIDOR_ENABLED`). Caso este
 R: O contracheque só fica disponível no portal após o fechamento da competência. Meses com competência ainda aberta não exibem contracheque.
 
 **P: Atualizei meu endereço no portal, mas o RH não viu a alteração.**
-R: As alterações feitas no portal retroalimentam automaticamente o cadastro base. Se o RH não visualizar, pode ser necessário recarregar a tela ou verificar os logs com o Administrador do Tenant.
+R: As alterações feitas em **Portal do Servidor > Meus Dados** geram uma solicitação de alteração cadastral com comparação entre dados atuais e dados propostos. O cadastro base só é atualizado depois da aprovação do RH em **Recursos Humanos > Atualizações cadastrais**; se a solicitação não aparecer, o Administrador do Tenant deve verificar a fila `hr.cadastral_change_request` e os eventos de auditoria.
 
 ### Integração e arquivos
 

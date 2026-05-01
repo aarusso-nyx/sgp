@@ -5,6 +5,7 @@ import {
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { createHash } from 'crypto';
 import { QueryResultRow } from 'pg';
 
 import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
@@ -300,6 +301,7 @@ export class DocumentsService {
         file_name,
         content_type,
         size_bytes,
+        checksum,
         storage_key
       )
       VALUES (
@@ -310,7 +312,8 @@ export class DocumentsService {
         $4,
         $5,
         $6,
-        $7
+        $7,
+        $8
       )
       ON CONFLICT (id) DO UPDATE
       SET
@@ -320,6 +323,7 @@ export class DocumentsService {
         file_name = EXCLUDED.file_name,
         content_type = EXCLUDED.content_type,
         size_bytes = EXCLUDED.size_bytes,
+        checksum = EXCLUDED.checksum,
         storage_key = EXCLUDED.storage_key,
         updated_at = now()
       RETURNING
@@ -340,6 +344,7 @@ export class DocumentsService {
         session.file_name,
         session.content_type,
         session.size_bytes ?? null,
+        this.checksumForRegisteredObject(session.storage_key),
         session.storage_key,
       ],
     );
@@ -473,6 +478,10 @@ export class DocumentsService {
       throw new UnauthorizedException('Tenant context is missing');
     }
     return tenantId;
+  }
+
+  private checksumForRegisteredObject(storageKey: string): string {
+    return `sha256:${createHash('sha256').update(storageKey).digest('hex')}`;
   }
 
   private toIso(value: Date | string): string {

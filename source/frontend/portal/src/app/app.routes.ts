@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { PORTAL_FEATURE_CATALOG } from './core/portal/portal-feature-catalog';
+import { MeusDados } from './pages/meus-dados/meus-dados';
 import { PortalFeaturePage } from './pages/portal-feature-page/portal-feature-page';
 import { PortalHome } from './pages/portal-home/portal-home';
 import { PortalShell } from './pages/portal-shell/portal-shell';
@@ -29,6 +30,10 @@ export const routes: Routes = [
       {
         path: '',
         component: PortalHome,
+      },
+      {
+        path: 'meus-dados/:section',
+        component: MeusDados,
       },
       ...featureRoutes,
     ],

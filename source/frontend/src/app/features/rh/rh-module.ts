@@ -9,13 +9,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 import { SharedPlatformModule } from '../shared-platform/shared-platform-module';
+import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
 import { RhFuncionarios } from './funcionarios/funcionarios';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhRoutingModule } from './rh-routing-module';
 import { RhHome } from './pages/rh-home/rh-home';
 
 @NgModule({
-  declarations: [RhHome, RhFuncionarios, RhFuncionariosVinculos],
+  declarations: [RhHome, RhFuncionarios, RhFuncionariosVinculos, RhCadastralChanges],
   imports: [
     CommonModule,
     ReactiveFormsModule,

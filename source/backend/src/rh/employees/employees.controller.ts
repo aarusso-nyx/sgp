@@ -13,7 +13,9 @@ import type { RequestWithContext } from '../../common/request-id/request-with-co
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import {
   AdmitEmployeeDto,
+  ApproveCadastralChangeDto,
   ChangeContractRegimeDto,
+  RejectCadastralChangeDto,
   TerminateEmployeeDto,
 } from './employees.dto';
 import { EmployeesService } from './employees.service';
@@ -32,6 +34,43 @@ export class EmployeesController {
   @ApiOkResponse({ description: 'Paged employee registry.' })
   list(@Query() query: DomainListQueryDto) {
     return this.employeesService.list(query);
+  }
+
+  @Get('funcionarios/cadastral-changes')
+  @RequirePermission('rh.cadastral_change.approve')
+  @ApiOkResponse({ description: 'Pending employee cadastral change requests.' })
+  listCadastralChanges(@Query('status') status = 'pending') {
+    return this.employeesService.listCadastralChanges(status);
+  }
+
+  @Post('funcionarios/cadastral-changes/:id/approve')
+  @RequirePermission('rh.cadastral_change.approve')
+  @AuditMutation({
+    action: 'UPDATE',
+    resourceType: 'hr.cadastral_change_request',
+    tableName: 'hr.cadastral_change_request',
+  })
+  @ApiOkResponse({ description: 'Approve and apply a cadastral change.' })
+  approveCadastralChange(
+    @Param('id') id: string,
+    @Body() body: ApproveCadastralChangeDto,
+  ) {
+    return this.employeesService.approveCadastralChange(id, body);
+  }
+
+  @Post('funcionarios/cadastral-changes/:id/reject')
+  @RequirePermission('rh.cadastral_change.approve')
+  @AuditMutation({
+    action: 'UPDATE',
+    resourceType: 'hr.cadastral_change_request',
+    tableName: 'hr.cadastral_change_request',
+  })
+  @ApiOkResponse({ description: 'Reject a cadastral change.' })
+  rejectCadastralChange(
+    @Param('id') id: string,
+    @Body() body: RejectCadastralChangeDto,
+  ) {
+    return this.employeesService.rejectCadastralChange(id, body);
   }
 
   @Post('funcionarios')
