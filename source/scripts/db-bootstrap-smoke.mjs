@@ -100,6 +100,9 @@ $$;
 
   await applySupportSql();
 
+  console.log('[db-smoke] checking forced RLS coverage');
+  runPrismaDbExecute(resolve(sqlDir, 'checks/rls-coverage.sql'));
+
   console.log('[db-smoke] running deterministic seed');
   runCommand('npm', ['run', 'db:seed'], backendDir);
 
@@ -205,6 +208,212 @@ $$;
   console.log(
     '[db-smoke] validated schema split, tenant coverage, RLS, and portal read-only privileges',
   );
+
+  await runSqlSnippet(
+    '99-xcut03-rls-hardening.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  employee_a uuid;
+  employee_b uuid;
+  earning_a uuid;
+  dependent_a uuid := gen_random_uuid();
+  visible_count integer;
+  affected_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, payroll, payroll_calc TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.employee_dependent TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll_calc.formula_cache TO sgp_smoke_rls;
+  GRANT SELECT ON hr.employee, payroll.payroll_earning_deduction TO sgp_smoke_rls;
+
+  INSERT INTO public.tenant (id, slug, code, name, status)
+  VALUES (tenant_b, 'xcut03-b', 'XCUT03B', 'XCUT03 Tenant B', 'ACTIVE'::"RecordStatus")
+  ON CONFLICT (id) DO NOTHING;
+
+  SELECT id INTO employee_a FROM hr.employee WHERE tenant_id = tenant_a LIMIT 1;
+  SELECT id INTO employee_b FROM hr.employee WHERE tenant_id = tenant_b LIMIT 1;
+
+  IF employee_a IS NULL THEN
+    RAISE EXCEPTION 'XCUT-03 smoke requires at least one seeded tenant A employee';
+  END IF;
+
+  IF employee_b IS NULL THEN
+    INSERT INTO hr.employee (
+      tenant_id,
+      registration,
+      name,
+      cpf,
+      branch_id,
+      functional_status_id,
+      employment_link_id,
+      contract_type_id,
+      lifecycle_status
+    )
+    SELECT
+      tenant_b,
+      'XCUT03-B',
+      'XCUT03 Tenant B Employee',
+      NULL,
+      branch.id,
+      functional_status.id,
+      employment_link.id,
+      contract_type.id,
+      'ACTIVE'::"EmployeeLifecycleStatus"
+    FROM hr.branch branch
+    CROSS JOIN hr.functional_status functional_status
+    CROSS JOIN hr.employment_link employment_link
+    CROSS JOIN hr.contract_type contract_type
+    WHERE branch.tenant_id = tenant_a
+      AND functional_status.tenant_id = tenant_a
+      AND employment_link.tenant_id = tenant_a
+      AND contract_type.tenant_id = tenant_a
+    LIMIT 1
+    RETURNING id INTO employee_b;
+  END IF;
+
+  SELECT id INTO earning_a
+  FROM payroll.payroll_earning_deduction
+  WHERE tenant_id = tenant_a
+  LIMIT 1;
+
+  IF earning_a IS NULL THEN
+    RAISE EXCEPTION 'XCUT-03 smoke requires at least one seeded payroll earning/deduction';
+  END IF;
+
+  INSERT INTO hr.employee_dependent (
+    id,
+    tenant_id,
+    employee_id,
+    name,
+    relationship,
+    income_tax_dependent
+  )
+  VALUES (
+    dependent_a,
+    tenant_a,
+    employee_a,
+    'XCUT03 Dependent',
+    'CHILD',
+    true
+  )
+  ON CONFLICT (id) DO NOTHING;
+
+  INSERT INTO payroll_calc.formula_cache (
+    tenant_id,
+    earning_deduction_id,
+    employee_id,
+    competence_month,
+    competence_year,
+    amount
+  )
+  VALUES (tenant_a, earning_a, employee_a, 1, 2026, 10.00)
+  ON CONFLICT (earning_deduction_id, employee_id, competence_month, competence_year)
+  DO UPDATE SET tenant_id = EXCLUDED.tenant_id, amount = EXCLUDED.amount, updated_at = now();
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.employee.read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count FROM hr.employee_dependent WHERE id = dependent_a;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 employee_dependent rows from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'folha.calc.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count FROM payroll_calc.formula_cache WHERE earning_deduction_id = earning_a;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 formula_cache rows from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.employee.read\nrh.employee.write', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.employee_dependent
+  WHERE id = dependent_a
+    AND tenant_id = tenant_a;
+  RESET ROLE;
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected tenant A to see the employee_dependent row before tenant rewrite, found %', visible_count;
+  END IF;
+
+  BEGIN
+    SET LOCAL ROLE sgp_smoke_rls;
+    UPDATE hr.employee_dependent SET tenant_id = tenant_b WHERE id = dependent_a;
+    RESET ROLE;
+    RAISE EXCEPTION 'Expected employee_dependent tenant rewrite to be rejected by RLS WITH CHECK';
+  EXCEPTION
+    WHEN insufficient_privilege THEN
+      RESET ROLE;
+    WHEN check_violation THEN
+      RESET ROLE;
+  END;
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.employee_dependent
+  WHERE id = dependent_a
+    AND tenant_id = tenant_a;
+  RESET ROLE;
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected employee_dependent row to remain in tenant A after rejected rewrite, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.employee.write', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  DELETE FROM hr.employee_dependent WHERE id = dependent_a;
+  GET DIAGNOSTICS affected_count = ROW_COUNT;
+  RESET ROLE;
+  IF affected_count <> 0 THEN
+    RAISE EXCEPTION 'Expected cross-tenant employee_dependent DELETE to affect 0 rows, affected %', affected_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'folha.calc.read', true);
+  BEGIN
+    SET LOCAL ROLE sgp_smoke_rls;
+    PERFORM payroll_calc.evaluate_earning_deduction(earning_a, employee_a, 1, 2026);
+    RESET ROLE;
+  EXCEPTION
+    WHEN OTHERS THEN
+      RESET ROLE;
+      IF SQLSTATE <> 'P0001' THEN
+        RAISE;
+      END IF;
+  END;
+
+  BEGIN
+    INSERT INTO hr.employee_dependent (
+      tenant_id,
+      employee_id,
+      name,
+      relationship,
+      income_tax_dependent
+    )
+    VALUES (
+      '00000000-0000-0000-0000-000000000000'::uuid,
+      employee_a,
+      'XCUT03 Invalid Tenant',
+      'CHILD',
+      false
+    );
+    RAISE EXCEPTION 'Expected invalid tenant_id insert to fail with foreign_key_violation';
+  EXCEPTION
+    WHEN foreign_key_violation THEN
+      NULL;
+  END;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated XCUT-03 RLS and tenant FK hardening');
 
   console.log('[db-smoke] PASSED');
 }

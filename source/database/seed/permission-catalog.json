@@ -34,6 +34,8 @@
     { "key": "rh.lifecycle.write", "moduleKey": "rh", "resourceKey": "lifecycle", "actionKey": "write", "routePattern": "#!/historicoSituacaoFuncional/**" },
     { "key": "folha.payroll.read", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "read", "routePattern": "#!/folhaPagamento/**" },
     { "key": "folha.payroll.process", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "process", "routePattern": "#!/folhaPagamento/**" },
+    { "key": "folha.calc.read", "moduleKey": "folha", "resourceKey": "calc", "actionKey": "read", "routePattern": "#!/folhaPagamento/**" },
+    { "key": "folha.calc.write", "moduleKey": "folha", "resourceKey": "calc", "actionKey": "write", "routePattern": "#!/folhaPagamento/**" },
     { "key": "folha.remittance.write", "moduleKey": "folha", "resourceKey": "remittance", "actionKey": "write", "routePattern": "#!/arquivoRemessaPagamento/**" },
     { "key": "relatorio.report.generate", "moduleKey": "relatorio", "resourceKey": "report", "actionKey": "generate", "routePattern": "#!/relatorio/**" },
     { "key": "documents.upload", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "upload", "routePattern": "#!/documentos/**" },
@@ -46,7 +48,7 @@
   "profilePermissions": {
     "ADMIN": ["*"],
     "RH_OPERADOR": ["gestao.master_data.read", "rh.employee.read", "rh.employee.write", "rh.lifecycle.write", "relatorio.report.generate"],
-    "FOLHA_OPERADOR": ["gestao.master_data.read", "rh.employee.read", "folha.payroll.read", "folha.payroll.process", "folha.remittance.write", "relatorio.report.generate"],
-    "AUDITOR": ["gestao.master_data.read", "rh.employee.read", "folha.payroll.read", "relatorio.report.generate", "auditoria.audit.read"]
+    "FOLHA_OPERADOR": ["gestao.master_data.read", "rh.employee.read", "folha.payroll.read", "folha.payroll.process", "folha.calc.read", "folha.calc.write", "folha.remittance.write", "relatorio.report.generate"],
+    "AUDITOR": ["gestao.master_data.read", "rh.employee.read", "folha.payroll.read", "folha.calc.read", "relatorio.report.generate", "auditoria.audit.read"]
   }
 }

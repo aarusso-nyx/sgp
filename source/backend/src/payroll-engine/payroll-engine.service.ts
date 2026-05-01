@@ -54,7 +54,12 @@ interface NormalizedCalculationRequest {
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-const PAYROLL_ENGINE_PERMISSIONS = ['folha:read', 'folha:write'] as const;
+const PAYROLL_ENGINE_PERMISSIONS = [
+  'folha:read',
+  'folha:write',
+  'folha.calc.read',
+  'folha.calc.write',
+] as const;
 
 @Injectable()
 export class PayrollEngineService {
@@ -427,7 +432,10 @@ export class PayrollEngineService {
   }
 
   private runBypassingRls<T>(fn: () => Promise<T>): Promise<T> {
-    return RequestContextStore.run({ bypassRls: true }, fn);
+    return RequestContextStore.run(
+      { bypassRls: true, bypassRlsReason: 'payroll-engine' },
+      fn,
+    );
   }
 
   private runWithinTenant<T>(

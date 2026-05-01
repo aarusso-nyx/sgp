@@ -241,6 +241,20 @@ CREATE POLICY tenant_isolation ON funcionario
 
 > O usuário de banco `sgp_app_role` **nunca** tem `BYPASSRLS`. Apenas o role de migração (`sgp_migration_role`) e o superusuário têm. Isso garante que nem mesmo bugs no código da aplicação permitem acesso cross-tenant.
 
+Cobertura XCUT-03: toda tabela física com `tenant_id` em `public`, `hr`,
+`payroll` e `payroll_calc` deve estar com `ENABLE ROW LEVEL SECURITY` e
+`FORCE ROW LEVEL SECURITY`. Os catálogos globais sem `tenant_id` permanecem
+fora desse conjunto: `public.permission` e `public.profile_permission`.
+`hr.employee_dependent` usa política dedicada com
+`rh.employee.read|rh.employee.write`, e `payroll_calc.formula_cache` possui
+`tenant_id` materializado e política dedicada com
+`folha.calc.read|folha.calc.write`, inclusive para impedir leitura de cache por
+funções de cálculo executadas com contexto de tenant incorreto.
+
+Regra de integridade: toda tabela tenant-scoped deve declarar FK de
+`tenant_id` para `public.tenant(id)` com `ON DELETE RESTRICT`. Linhas com
+`tenant_id` órfão são rejeitadas no banco antes de qualquer regra de aplicação.
+
 **Verificação de saúde (smoke test de RLS):**
 
 ```sql

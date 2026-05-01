@@ -1267,7 +1267,10 @@ export class IntegrationsWorkerService {
   }
 
   private runBypassingRls<T>(fn: () => Promise<T>): Promise<T> {
-    return RequestContextStore.run({ bypassRls: true }, fn);
+    return RequestContextStore.run(
+      { bypassRls: true, bypassRlsReason: 'integrations-worker' },
+      fn,
+    );
   }
 
   private runWithinTenant<T>(

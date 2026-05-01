@@ -1,0 +1,3 @@
+W00 ✗ 00-xcut-03-rls-hardening (medium, blocking no-retry: `npm run db:smoke` blocked because `DATABASE_URL` is not set) — see logs/maestro/00-xcut-03-rls-hardening.failure.md; completeness 26.2% → 26.2%
+W00 ✗ 00-xcut-03-rls-hardening (medium, blocking no-retry: `npm run db:smoke` with `DATABASE_URL=postgresql://aarusso@localhost:5432/pecam` failed: employee_dependent tenant rewrite not rejected by RLS WITH CHECK) — see logs/maestro/00-xcut-03-rls-hardening.failure.md; completeness 26.2% → 26.2%
+W00 ✓ 00-xcut-03-rls-hardening (1 slice, medium, resumed with DATABASE_URL, gates passed, commit pending) — completeness 26.2% → 26.2%

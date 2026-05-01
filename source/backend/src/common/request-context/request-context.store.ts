@@ -9,6 +9,7 @@ export interface RequestContextSnapshot {
   permissions?: string[];
   groups?: string[];
   bypassRls?: boolean;
+  bypassRlsReason?: string;
 }
 
 const store = new AsyncLocalStorage<RequestContextSnapshot>();

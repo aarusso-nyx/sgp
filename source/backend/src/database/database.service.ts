@@ -4,6 +4,17 @@ import { Pool, PoolClient, QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 
+const SENSITIVE_RLS_TABLES = [
+  /\bhr\.employee_dependent\b/i,
+  /\bpayroll_calc\.formula_cache\b/i,
+];
+
+const BYPASS_RLS_ALLOWLIST = new Set([
+  'payroll-engine',
+  'esocial-worker',
+  'integrations-worker',
+]);
+
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {
   private pool?: Pool;
@@ -18,6 +29,7 @@ export class DatabaseService implements OnModuleDestroy {
     sql: string,
     values: readonly unknown[] = [],
   ): Promise<T[]> {
+    this.assertBypassRlsAllowed(sql);
     const client = await this.getPool().connect();
     try {
       await client.query('BEGIN');
@@ -93,6 +105,23 @@ export class DatabaseService implements OnModuleDestroy {
       'app.bypass_rls',
       context?.bypassRls ? 'true' : 'false',
     ]);
+  }
+
+  private assertBypassRlsAllowed(sql: string): void {
+    const context = RequestContextStore.get();
+    if (!context?.bypassRls) return;
+
+    const touchesSensitiveTable = SENSITIVE_RLS_TABLES.some((pattern) =>
+      pattern.test(sql),
+    );
+    if (!touchesSensitiveTable) return;
+
+    const reason = context.bypassRlsReason ?? '';
+    if (BYPASS_RLS_ALLOWLIST.has(reason)) return;
+
+    throw new Error(
+      `app.bypass_rls=true is not allowed for sensitive RLS tables without an allowlisted job reason: ${reason || 'unspecified'}`,
+    );
   }
 
   private getPool(): Pool {

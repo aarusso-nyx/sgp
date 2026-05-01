@@ -93,6 +93,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS payroll_earning_deduction_formula_function_nam
   WHERE formula_function_name IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS payroll_calc.formula_cache (
+  tenant_id uuid NOT NULL DEFAULT public.sgp_current_tenant_uuid() REFERENCES public.tenant(id) ON DELETE RESTRICT,
   earning_deduction_id uuid NOT NULL REFERENCES payroll.payroll_earning_deduction(id) ON DELETE CASCADE,
   employee_id uuid NOT NULL REFERENCES hr.employee(id) ON DELETE CASCADE,
   competence_month integer NOT NULL CHECK (competence_month BETWEEN 1 AND 12),
@@ -105,6 +106,9 @@ CREATE TABLE IF NOT EXISTS payroll_calc.formula_cache (
 
 CREATE INDEX IF NOT EXISTS formula_cache_updated_at_idx
   ON payroll_calc.formula_cache (updated_at DESC);
+
+CREATE INDEX IF NOT EXISTS formula_cache_tenant_updated_at_idx
+  ON payroll_calc.formula_cache (tenant_id, updated_at DESC);
 
 CREATE OR REPLACE FUNCTION payroll_calc.base_salary(
   p_employee_id uuid
@@ -189,14 +193,31 @@ AS $$
 BEGIN
   NEW.updated_at := now();
 
-  SELECT CASE
+  SELECT
+    COALESCE(NEW.tenant_id, ped.tenant_id),
+    CASE
       WHEN ped.kind::text = 'EARNING' THEN 1
       WHEN ped.kind::text = 'DEDUCTION' THEN -1
       ELSE 0
     END
-  INTO NEW.signal
+  INTO NEW.tenant_id, NEW.signal
   FROM payroll.payroll_earning_deduction ped
   WHERE ped.id = NEW.earning_deduction_id;
+
+  IF NEW.tenant_id IS NULL THEN
+    RAISE EXCEPTION 'formula_cache tenant_id could not be derived for earning_deduction_id %', NEW.earning_deduction_id
+      USING ERRCODE = '23502';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1
+    FROM hr.employee employee
+    WHERE employee.id = NEW.employee_id
+      AND employee.tenant_id <> NEW.tenant_id
+  ) THEN
+    RAISE EXCEPTION 'formula_cache tenant mismatch for employee_id %', NEW.employee_id
+      USING ERRCODE = '42501';
+  END IF;
 
   IF NEW.signal IS NULL THEN
     NEW.signal := 0;
@@ -355,6 +376,7 @@ BEGIN
       INTO v_result
       FROM %I.formula_cache fc
       WHERE fc.earning_deduction_id = %L::uuid
+        AND fc.tenant_id = public.sgp_current_tenant_uuid()
         AND fc.employee_id = p_employee_id
         AND fc.competence_month = p_month
         AND fc.competence_year = p_year;
@@ -366,13 +388,16 @@ BEGIN
       v_result := %s;
 
       INSERT INTO %I.formula_cache (
+        tenant_id,
         earning_deduction_id,
         employee_id,
         competence_month,
         competence_year,
         amount
       )
-      VALUES (%L::uuid, p_employee_id, p_month, p_year, v_result)
+      SELECT ped.tenant_id, ped.id, p_employee_id, p_month, p_year, v_result
+      FROM payroll.payroll_earning_deduction ped
+      WHERE ped.id = %L::uuid
       ON CONFLICT (earning_deduction_id, employee_id, competence_month, competence_year)
       DO UPDATE SET amount = EXCLUDED.amount, updated_at = now();
 
@@ -508,6 +533,7 @@ BEGIN
   INTO v_amount
   FROM payroll_calc.formula_cache fc
   WHERE fc.earning_deduction_id = p_earning_deduction_id
+    AND fc.tenant_id = public.sgp_current_tenant_uuid()
     AND fc.employee_id = p_employee_id
     AND fc.competence_month = p_month
     AND fc.competence_year = p_year;

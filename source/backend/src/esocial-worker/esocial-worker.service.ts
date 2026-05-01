@@ -325,7 +325,10 @@ export class ESocialWorkerService {
   }
 
   private runBypassingRls<T>(fn: () => Promise<T>): Promise<T> {
-    return RequestContextStore.run({ bypassRls: true }, fn);
+    return RequestContextStore.run(
+      { bypassRls: true, bypassRlsReason: 'esocial-worker' },
+      fn,
+    );
   }
 
   private runWithinTenant<T>(

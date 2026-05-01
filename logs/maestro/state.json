@@ -1,0 +1,17 @@
+{
+  "head_at_start": "fa717c5ab2e075137f327d5a6619107a7164fcb3",
+  "model": "gpt-5.5",
+  "slices": {
+    "00-xcut-03-rls-hardening": {
+      "status": "completed",
+      "effort": "medium",
+      "branch": "slice/00-xcut-03-rls-hardening",
+      "commit": "c7cdf834770f8e7ba1c1c118b8b7a18d3ca43799",
+      "started_at": "2026-04-30T21:03:53-03:00",
+      "completed_at": "2026-04-30T21:39:57-03:00",
+      "retries": 0
+    }
+  },
+  "current_wave": 0,
+  "active_subagents": []
+}

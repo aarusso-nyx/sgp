@@ -133,4 +133,33 @@ describe('DatabaseService', () => {
     await service.onModuleDestroy();
     expect(mockEnd).toHaveBeenCalledTimes(1);
   });
+
+  it('rejects bypassed queries touching sensitive RLS tables without an allowlisted job reason', async () => {
+    const service = createService('postgresql://localhost/sgp-test');
+
+    await expect(
+      RequestContextStore.run({ bypassRls: true }, () =>
+        service.query('SELECT * FROM payroll_calc.formula_cache'),
+      ),
+    ).rejects.toThrow('app.bypass_rls=true is not allowed');
+
+    expect(mockConnect).not.toHaveBeenCalled();
+  });
+
+  it('allows declared jobs to bypass RLS for sensitive table maintenance', async () => {
+    const client = {
+      query: jest.fn(async () => ({ rows: [] })),
+      release: jest.fn(),
+    };
+    mockConnect.mockResolvedValue(client);
+    const service = createService('postgresql://localhost/sgp-test');
+
+    await RequestContextStore.run(
+      { bypassRls: true, bypassRlsReason: 'payroll-engine' },
+      () => service.query('SELECT * FROM payroll_calc.formula_cache'),
+    );
+
+    expect(client.query).toHaveBeenCalledWith('COMMIT');
+    expect(client.release).toHaveBeenCalledTimes(1);
+  });
 });

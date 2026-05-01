@@ -2,6 +2,8 @@
 -- Example:
 --   psql "$DATABASE_URL" -v seed_file=source/database/seed/permission-catalog.json -f source/database/sql/40-seed-loader.sql
 -- This file intentionally avoids credentials and does not overwrite existing records.
+-- Apply 13-rls-hardening.sql before seed files in fresh environments; db:smoke
+-- loads numbered support SQL automatically before invoking this optional helper.
 \if :{?seed_file}
 \set seed_json `cat :seed_file`
 \else
