@@ -28,8 +28,17 @@
       "started_at": "2026-04-30T22:08:00-03:00",
       "completed_at": "2026-04-30T22:29:00-03:00",
       "retries": 1
+    },
+    "03-xcut-08-money-decimal-policy": {
+      "status": "completed",
+      "effort": "low",
+      "branch": "slice/03-xcut-08-money-decimal-policy",
+      "commit": "1f0706b",
+      "started_at": "2026-04-30T22:32:06-03:00",
+      "completed_at": "2026-04-30T22:48:01-03:00",
+      "retries": 0
     }
   },
-  "current_wave": 2,
+  "current_wave": 4,
   "active_subagents": []
 }
