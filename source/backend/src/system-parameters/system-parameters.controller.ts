@@ -6,6 +6,7 @@ import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
   ToggleFeatureFlagDto,
   UpsertGlobalParameterDto,
+  UpsertRemunerationCeilingDto,
   UpsertSystemParametersDto,
 } from './system-parameters.dto';
 import { SystemParametersService } from './system-parameters.service';
@@ -37,20 +38,34 @@ export class SystemParametersController {
   }
 
   @Get('globais')
-  @RequirePermission('gestao.read')
+  @RequirePermission('system.parameter.read')
   @ApiOkResponse({ description: 'Global parameters.' })
   listGlobal() {
     return this.systemParametersService.listGlobalParameters();
   }
 
   @Put('globais/:chave')
-  @RequirePermission('gestao.write')
+  @RequirePermission('system.parameter.write')
   @ApiOkResponse({ description: 'Upsert one global parameter.' })
   upsertGlobal(
     @Param('chave') chave: string,
     @Body() body: UpsertGlobalParameterDto,
   ) {
     return this.systemParametersService.upsertGlobalParameter(chave, body);
+  }
+
+  @Get('teto-remuneratorio')
+  @RequirePermission('system.parameter.read')
+  @ApiOkResponse({ description: 'Tenant remuneration ceiling parameters.' })
+  listRemunerationCeilings() {
+    return this.systemParametersService.listRemunerationCeilings();
+  }
+
+  @Put('teto-remuneratorio')
+  @RequirePermission('system.parameter.write')
+  @ApiOkResponse({ description: 'Upsert one remuneration ceiling parameter.' })
+  upsertRemunerationCeiling(@Body() body: UpsertRemunerationCeilingDto) {
+    return this.systemParametersService.upsertRemunerationCeiling(body);
   }
 }
 

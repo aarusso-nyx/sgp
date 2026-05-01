@@ -5,6 +5,7 @@ import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups
 import { permissionGuard } from '../../core/auth/permission-guard';
 import { TaxRateIrrf } from '../admin/parametros/tax-rate-irrf/tax-rate-irrf';
 import { TaxRateRpps } from '../admin/parametros/tax-rate-rpps/tax-rate-rpps';
+import { TetoRemuneratorio } from '../admin/parametros/teto-remuneratorio/teto-remuneratorio';
 import { Cargos } from './cargos/cargos';
 import { GestaoMasterData } from './master-data/master-data';
 import { GestaoHome } from './pages/gestao-home/gestao-home';
@@ -23,6 +24,9 @@ const gestaoRoutes = buildModuleRouteGroup('gestao', GestaoHome, {
   }
   if (route.path === 'parametros/rpps') {
     return { ...route, component: TaxRateRpps };
+  }
+  if (route.path === 'parametros/teto-remuneratorio') {
+    return { ...route, component: TetoRemuneratorio };
   }
   return route;
 });
@@ -46,6 +50,16 @@ gestaoRoutes.push(
     data: {
       moduleKey: 'gestao',
       permissions: ['system.tax-rate.read'],
+      moduleLabel: 'Gestão',
+    },
+  },
+  {
+    path: 'parametros/teto-remuneratorio',
+    component: TetoRemuneratorio,
+    canActivate: [permissionGuard],
+    data: {
+      moduleKey: 'gestao',
+      permissions: ['system.parameter.read'],
       moduleLabel: 'Gestão',
     },
   },

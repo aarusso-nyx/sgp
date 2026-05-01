@@ -1,5 +1,19 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsObject, IsOptional } from 'class-validator';
+import {
+  IsBoolean,
+  IsIn,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+
+export const REMUNERATION_CEILING_KEYS = [
+  'TETO_PREFEITURA',
+  'TETO_VICE',
+  'TETO_VEREADOR',
+  'TETO_SECRETARIO',
+] as const;
+export type RemunerationCeilingKey = (typeof REMUNERATION_CEILING_KEYS)[number];
 
 export class UpsertSystemParametersDto {
   @ApiProperty({
@@ -27,4 +41,21 @@ export class ToggleFeatureFlagDto {
   @IsOptional()
   @IsObject()
   metadata?: Record<string, unknown>;
+}
+
+export class UpsertRemunerationCeilingDto {
+  @ApiProperty({ enum: REMUNERATION_CEILING_KEYS })
+  @IsIn(REMUNERATION_CEILING_KEYS)
+  key!: RemunerationCeilingKey;
+
+  @ApiProperty({
+    description: 'Decimal monetary amount persisted as a string.',
+  })
+  @IsString()
+  amount!: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  description?: string;
 }

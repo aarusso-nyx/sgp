@@ -1,0 +1,50 @@
+.teto {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.teto__header,
+.teto__form {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.teto__eyebrow {
+  color: #52616b;
+  font-size: 0.75rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.teto h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.teto__description {
+  min-width: 20rem;
+}
+
+.teto__table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.teto__table th,
+.teto__table td {
+  border-bottom: 1px solid #d9e2ec;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.teto__error {
+  color: #b42318;
+}
+
+.teto__success {
+  color: #027a48;
+}

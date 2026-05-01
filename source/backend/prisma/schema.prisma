@@ -2108,6 +2108,7 @@ model PayrollEarningDeduction {
   endsOn              DateTime?        @map("ends_on") @db.Date
   esocialCode         String?          @map("esocial_code")
   officialRubricCode  String?          @map("official_rubric_code")
+  subjectToCeiling    Boolean          @default(true) @map("subject_to_ceiling")
   formulaAlias        String?          @map("formula_alias")
   formulaFunctionName String?          @map("formula_function_name")
   formulaExpression   String?          @map("formula_expression")

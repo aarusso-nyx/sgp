@@ -1813,6 +1813,11 @@ R: Acesse **Gestão > Parâmetros > Tabela IRRF**, informe a vigência inicial, 
 **P: Como atualizo a tabela progressiva de contribuição RPPS?**
 R: Acesse **Gestão > Parâmetros > Tabela RPPS**, informe a vigência inicial, a vigência final quando existir, o teto da base RPPS e importe o CSV no formato `mínimo;máximo;alíquota`. A última faixa deve ficar sem valor máximo. Ao salvar, o sistema valida a continuidade centavo a centavo das faixas, grava a tabela por tenant em `public.tax_rate`, atualiza o parâmetro `TETO_RPPS`, registra auditoria e passa a usar a vigência informada no cálculo da rubrica `RPPS`. Vínculos celetistas não sofrem desconto RPPS; o cálculo retorna zero e registra evento de bypass para auditoria.
 
+### Gestão — Teto remuneratório
+
+**P: Como mantenho os subtetos por poder/cargo?**
+R: Acesse **Gestão > Parâmetros > Teto Remuneratório** e cadastre os valores de `TETO_PREFEITURA`, `TETO_VICE`, `TETO_VEREADOR` e `TETO_SECRETARIO` para o tenant. O cálculo da folha usa a rubrica `DESCONTO_TETO` para gerar o redutor quando a soma das parcelas sujeitas ao teto supera o subteto aplicável. Parcelas indenizatórias ficam imunes quando a rubrica está marcada com `subject_to_ceiling = false`; valores de teto não cadastrados fazem o cálculo falhar com erro explícito, sem redutor silencioso.
+
 ### Previdenciário e recadastramento
 
 **P: O beneficiário fez a prova de vida, mas o status ainda aparece como "Perto do Vencimento".**

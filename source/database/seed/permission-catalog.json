@@ -308,6 +308,22 @@
       "description": "Mutate progressive tax-rate tables such as IRRF."
     },
     {
+      "key": "system.parameter.read",
+      "moduleKey": "system",
+      "resourceKey": "parameter",
+      "actionKey": "read",
+      "routePattern": "#!/gestao/parametros/teto-remuneratorio",
+      "description": "Read tenant system parameters such as remuneration ceilings."
+    },
+    {
+      "key": "system.parameter.write",
+      "moduleKey": "system",
+      "resourceKey": "parameter",
+      "actionKey": "write",
+      "routePattern": "#!/gestao/parametros/teto-remuneratorio",
+      "description": "Mutate tenant system parameters such as remuneration ceilings."
+    },
+    {
       "key": "payroll.formula.read",
       "moduleKey": "payroll",
       "resourceKey": "formula",

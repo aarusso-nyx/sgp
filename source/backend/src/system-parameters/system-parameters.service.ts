@@ -3,7 +3,10 @@ import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../database/database.service';
 import {
+  REMUNERATION_CEILING_KEYS,
+  RemunerationCeilingKey,
   ToggleFeatureFlagDto,
+  UpsertRemunerationCeilingDto,
   UpsertGlobalParameterDto,
   UpsertSystemParametersDto,
 } from './system-parameters.dto';
@@ -11,6 +14,13 @@ import {
 interface ParameterRow extends QueryResultRow {
   key: string;
   value: unknown;
+  description: string;
+  updated_at: Date | string;
+}
+
+interface RemunerationCeilingRow extends QueryResultRow {
+  key: RemunerationCeilingKey;
+  amount: string | null;
   description: string;
   updated_at: Date | string;
 }
@@ -116,6 +126,50 @@ export class SystemParametersService {
     };
   }
 
+  async listRemunerationCeilings(): Promise<unknown> {
+    this.ensureDatabase();
+    const rows = await this.databaseService.query<RemunerationCeilingRow>(
+      `
+      SELECT
+        key,
+        NULLIF(value->>'amount', '') AS amount,
+        description,
+        updated_at
+      FROM public.system_parameter
+      WHERE key = ANY($1::text[])
+      ORDER BY array_position($1::text[], key)
+      `,
+      [[...REMUNERATION_CEILING_KEYS]],
+    );
+
+    const byKey = new Map(rows.map((row) => [row.key, row]));
+    return {
+      items: REMUNERATION_CEILING_KEYS.map((key) => {
+        const row = byKey.get(key);
+        return {
+          key,
+          amount: row?.amount ?? null,
+          description: row?.description ?? this.defaultCeilingDescription(key),
+          updatedAt: row?.updated_at ? this.toIso(row.updated_at) : null,
+        };
+      }),
+      immuneFlag: 'payroll.payroll_earning_deduction.subject_to_ceiling',
+    };
+  }
+
+  async upsertRemunerationCeiling(
+    payload: UpsertRemunerationCeilingDto,
+  ): Promise<unknown> {
+    this.ensureDatabase();
+    await this.upsertEntry(
+      payload.key,
+      { amount: payload.amount },
+      'payroll',
+      payload.description ?? this.defaultCeilingDescription(payload.key),
+    );
+    return this.listRemunerationCeilings();
+  }
+
   private async upsertEntry(
     key: string,
     value: unknown,
@@ -173,5 +227,15 @@ export class SystemParametersService {
     return value instanceof Date
       ? value.toISOString()
       : new Date(value).toISOString();
+  }
+
+  private defaultCeilingDescription(key: RemunerationCeilingKey): string {
+    const labels: Record<RemunerationCeilingKey, string> = {
+      TETO_PREFEITURA: 'Teto remuneratorio do Poder Executivo municipal.',
+      TETO_VICE: 'Subteto remuneratorio de vice-prefeito.',
+      TETO_VEREADOR: 'Subteto remuneratorio de vereador.',
+      TETO_SECRETARIO: 'Subteto remuneratorio de secretario municipal.',
+    };
+    return labels[key];
   }
 }

@@ -1,0 +1,64 @@
+<section class="teto" aria-labelledby="teto-title">
+  <header class="teto__header">
+    <div>
+      <p class="teto__eyebrow">Parametros</p>
+      <h1 id="teto-title">Teto remuneratorio</h1>
+    </div>
+    <button mat-raised-button color="primary" type="button" (click)="load()">
+      <mat-icon>refresh</mat-icon>
+      Atualizar
+    </button>
+  </header>
+
+  <form class="teto__form" [formGroup]="form" (ngSubmit)="save()">
+    <mat-form-field appearance="outline">
+      <mat-label>Subteto</mat-label>
+      <select matNativeControl formControlName="key">
+        <option value="TETO_PREFEITURA">Prefeitura</option>
+        <option value="TETO_VICE">Vice-prefeito</option>
+        <option value="TETO_VEREADOR">Vereador</option>
+        <option value="TETO_SECRETARIO">Secretario</option>
+      </select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Valor</mat-label>
+      <input matInput formControlName="amount" inputmode="decimal" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="teto__description">
+      <mat-label>Descricao</mat-label>
+      <input matInput formControlName="description" />
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+      <mat-icon>save</mat-icon>
+      Salvar
+    </button>
+  </form>
+
+  <p class="teto__error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="teto__success" *ngIf="success">{{ success }}</p>
+
+  <table class="teto__table">
+    <thead>
+      <tr>
+        <th>Cargo/poder</th>
+        <th>Parametro</th>
+        <th>Valor</th>
+        <th>Vigencia</th>
+        <th>Parcelas imunes</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ceiling of ceilings">
+        <td>{{ ceiling.description }}</td>
+        <td>{{ ceiling.key }}</td>
+        <td>{{ ceiling.amount || 'Pendente' }}</td>
+        <td>Atual</td>
+        <td>{{ immuneFlag }}</td>
+        <td>
+          <button mat-button type="button" (click)="edit(ceiling)">Editar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
