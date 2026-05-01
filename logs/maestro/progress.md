@@ -8,3 +8,5 @@ W03 ✗ 03-xcut-08-money-decimal-policy (low, blocking money/decimal policy: `db
 W03 ✓ 03-xcut-08-money-decimal-policy (1 slice, low, schema qualifier fixed, gates passed, commit 1f0706b) — completeness 26.2% → 26.2%
 W04 ✗ 05-hr-06-estrutura-organizacional (low → medium retry failed: `db:smoke` failed applying `50-gestao-master-data-seed.sql` after audit trigger wrote `gestao.master_data` event with null tenant context) — see logs/maestro/05-hr-06-estrutura-organizacional.failure.md
 W04 ✓ 05-hr-06-estrutura-organizacional (1 slice, low→medium recovery, gates passed, commit 5fde91a) — completeness 26.2% → 26.2%
+W04 ✗ 04-hr-01-cadastro-servidor (medium → high retry failed: `db:smoke` failed applying `20260501090000_hr_01_cadastro_servidor` on duplicate permission tuple `(rh, employee, read)`) — see logs/maestro/04-hr-01-cadastro-servidor.failure.md
+W04 ✓ 04-hr-01-cadastro-servidor (1 slice, medium→high recovery, gates passed, commit 6bf7935) — completeness 26.2% → 26.2%

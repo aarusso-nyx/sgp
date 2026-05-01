@@ -46,8 +46,17 @@
       "started_at": "2026-04-30T22:50:21-03:00",
       "completed_at": "2026-04-30T23:18:39-03:00",
       "retries": 1
+    },
+    "04-hr-01-cadastro-servidor": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/04-hr-01-cadastro-servidor",
+      "commit": "6bf7935",
+      "started_at": "2026-04-30T23:19:24-03:00",
+      "completed_at": "2026-04-30T23:51:26-03:00",
+      "retries": 1
     }
   },
-  "current_wave": 4,
+  "current_wave": 5,
   "active_subagents": []
 }
