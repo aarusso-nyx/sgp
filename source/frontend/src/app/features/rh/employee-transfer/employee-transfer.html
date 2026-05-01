@@ -1,0 +1,55 @@
+<section class="transfer">
+  <header>
+    <p>Recursos Humanos</p>
+    <h1>Movimentacao e transferencia</h1>
+  </header>
+
+  <p *ngIf="message" class="message" role="status">{{ message }}</p>
+  <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+  <p *ngIf="loading">Carregando...</p>
+
+  <div class="queue-grid">
+    <article *ngFor="let status of statuses" class="queue">
+      <h2>{{ status }}</h2>
+      <table [attr.aria-label]="'Movimentacoes ' + status">
+        <thead>
+          <tr>
+            <th>Servidor</th>
+            <th>Tipo</th>
+            <th>Efeito</th>
+            <th>Destino</th>
+            <th>Acoes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of queues[status]">
+            <td>{{ item.employeeId }}</td>
+            <td>{{ item.tipo }}</td>
+            <td>{{ item.dataEfeito }}</td>
+            <td>{{ item.destinoWorkLocationId }}</td>
+            <td>
+              <button
+                *ngIf="item.status === 'solicitada'"
+                type="button"
+                mat-stroked-button
+                (click)="approve(item)"
+                [disabled]="savingId === item.id"
+              >
+                Aprovar
+              </button>
+              <button
+                *ngIf="item.status === 'aprovada'"
+                type="button"
+                mat-stroked-button
+                (click)="effect(item)"
+                [disabled]="savingId === item.id"
+              >
+                Efetivar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+  </div>
+</section>

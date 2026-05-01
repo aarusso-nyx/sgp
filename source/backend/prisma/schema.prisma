@@ -1499,16 +1499,27 @@ model ProfessionalExperience {
 }
 
 model EmployeeTransfer {
-  id               String   @id @default(uuid()) @db.Uuid
-  tenantId         String   @map("tenant_id") @db.Uuid
-  employeeId       String   @map("employee_id") @db.Uuid
-  fromBranchId     String?  @map("from_branch_id") @db.Uuid
-  toBranchId       String?  @map("to_branch_id") @db.Uuid
-  toWorkLocationId String?  @map("to_work_location_id") @db.Uuid
-  reasonId         String?  @map("reason_id") @db.Uuid
-  effectiveOn      DateTime @map("effective_on") @db.Date
-  notes            String   @default("")
-  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  id                         String   @id @default(uuid()) @db.Uuid
+  tenantId                   String   @map("tenant_id") @db.Uuid
+  employeeId                 String   @map("employee_id") @db.Uuid
+  fromBranchId               String?  @map("from_branch_id") @db.Uuid
+  toBranchId                 String?  @map("to_branch_id") @db.Uuid
+  toWorkLocationId           String?  @map("to_work_location_id") @db.Uuid
+  reasonId                   String?  @map("reason_id") @db.Uuid
+  effectiveOn                DateTime @map("effective_on") @db.Date
+  origemWorkLocationId       String?  @map("origem_work_location_id") @db.Uuid
+  destinoWorkLocationId      String?  @map("destino_work_location_id") @db.Uuid
+  origemJobPositionId        String?  @map("origem_job_position_id") @db.Uuid
+  destinoJobPositionId       String?  @map("destino_job_position_id") @db.Uuid
+  tipo                       String   @default("oficio")
+  dataSolicitacao            DateTime @default(now()) @map("data_solicitacao") @db.Date
+  dataEfeito                 DateTime @map("data_efeito") @db.Date
+  processoAdministrativoId   String?  @map("processo_administrativo_id") @db.Uuid
+  status                     String   @default("solicitada")
+  aprovadorUserId            String?  @map("aprovador_user_id") @db.Uuid
+  notes                      String   @default("")
+  createdAt                  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                  DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee       Employee      @relation(fields: [employeeId], references: [id])
   fromBranch     Branch?       @relation("TransferFromBranch", fields: [fromBranchId], references: [id])
@@ -1517,6 +1528,7 @@ model EmployeeTransfer {
   reason         Reason?       @relation(fields: [reasonId], references: [id])
 
   @@index([employeeId, effectiveOn])
+  @@index([tenantId, employeeId, dataEfeito(sort: Desc)])
   @@index([fromBranchId])
   @@index([toBranchId])
   @@index([toWorkLocationId])

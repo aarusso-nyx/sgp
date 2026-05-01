@@ -18,6 +18,8 @@ import { MedicalLeaveController } from './workflows/medical-leave/medical-leave.
 import { MedicalLeaveService } from './workflows/medical-leave/medical-leave.service';
 import { LeavesController } from './workflows/leaves/leaves.controller';
 import { LeavesService } from './workflows/leaves/leaves.service';
+import { EmployeeTransferController } from './employee-transfer/employee-transfer.controller';
+import { EmployeeTransferService } from './employee-transfer/employee-transfer.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
@@ -28,6 +30,7 @@ import { LeavesService } from './workflows/leaves/leaves.service';
     VacationController,
     MedicalLeaveController,
     LeavesController,
+    EmployeeTransferController,
   ],
   providers: [
     EmployeesService,
@@ -37,6 +40,7 @@ import { LeavesService } from './workflows/leaves/leaves.service';
     VacationService,
     MedicalLeaveService,
     LeavesService,
+    EmployeeTransferService,
   ],
 })
 export class RhModule {}

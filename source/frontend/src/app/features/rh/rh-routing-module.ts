@@ -9,6 +9,8 @@ import { RhFuncionariosHistorico } from './funcionarios/historico/historico';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhHome } from './pages/rh-home/rh-home';
 import { RhLicencas } from './licencas/licencas';
+import { RhEmployeeTransfer } from './employee-transfer/employee-transfer';
+import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-employee-transfer';
 
 @NgModule({
   imports: [
@@ -40,6 +42,14 @@ import { RhLicencas } from './licencas/licencas';
       {
         path: 'licencas',
         component: RhLicencas,
+      },
+      {
+        path: 'transferencia/gestao',
+        component: RhEmployeeTransfer,
+      },
+      {
+        path: 'portal/transferencias',
+        component: RhPortalEmployeeTransfer,
       },
       {
         path: '',

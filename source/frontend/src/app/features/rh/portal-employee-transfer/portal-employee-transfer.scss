@@ -1,0 +1,30 @@
+.portal-transfer,
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+form {
+  max-width: 42rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+th,
+td {
+  padding: 0.65rem;
+  border-bottom: 1px solid #e5e8ee;
+  text-align: left;
+}
+
+.message {
+  color: #155724;
+}
+
+.error {
+  color: #8b1e1e;
+}

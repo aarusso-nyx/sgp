@@ -1460,6 +1460,9 @@ Os mapas finos de funcionário, folha, perícia, recadastramento e recrutamento 
 - CPF identifica `pessoa`; matrícula e vínculo identificam a relação funcional com o tenant.
 - Posse, lotação, transferência, cedência, desligamento, afastamento e situação funcional são eventos de vínculo, não mutações soltas no cadastro civil.
 - Dossiê, documento de amparo e observações permanentes ficam associados ao servidor/vínculo e participam da ficha funcional.
+- Movimentação/remoção nasce em `solicitada`, passa para `aprovada`, e somente então pode chegar a `efetivada`; `indeferida` e `cancelada` encerram o fluxo sem alterar a lotação corrente.
+- A efetivação de `hr.employee_transfer` é atômica: a transição para `efetivada` atualiza `hr.employee.work_location_id`, atualiza `job_position_id` quando houver destino informado e registra auditoria com evento `rh.movimentacao.efetivada`.
+- `data_efeito` não pode ser efetivada em competência de folha já fechada; recálculo retroativo de folha por movimentação é tratado fora desta máquina.
 
 ### Recrutamento
 

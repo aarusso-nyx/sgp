@@ -941,10 +941,13 @@ BEGIN
   INTO employee_a, link_id, v_contract_type_id
   FROM hr.employee employee
   WHERE employee.tenant_id = tenant_a
+    AND employee.employment_link_id IS NOT NULL
+    AND employee.contract_type_id IS NOT NULL
+  ORDER BY employee.created_at, employee.id
   LIMIT 1;
 
   IF employee_a IS NULL THEN
-    RAISE EXCEPTION 'HR-03 smoke requires at least one seeded tenant A employee';
+    RAISE EXCEPTION 'HR-03 smoke requires at least one seeded tenant A employee with employment_link_id and contract_type_id';
   END IF;
 
   SELECT id INTO contract_id
@@ -1870,6 +1873,8 @@ DECLARE
   target_level_id uuid := gen_random_uuid();
   job_position_id uuid := gen_random_uuid();
   v_functional_status_id uuid;
+  v_employment_link_id uuid;
+  v_contract_type_id uuid;
   v_employee_id uuid := gen_random_uuid();
   v_evaluation_id uuid := gen_random_uuid();
   v_progression_id uuid := gen_random_uuid();
@@ -1883,6 +1888,8 @@ BEGIN
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range_level TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.job_position TO sgp_smoke_rls;
   GRANT SELECT ON hr.functional_status TO sgp_smoke_rls;
+  GRANT SELECT ON hr.employment_link TO sgp_smoke_rls;
+  GRANT SELECT ON hr.contract_type TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE ON hr.employee TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.merit_progression TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_simulation TO sgp_smoke_rls;
@@ -1919,6 +1926,24 @@ BEGIN
   LIMIT 1;
   IF v_functional_status_id IS NULL THEN
     RAISE EXCEPTION 'FOL-03 smoke requires one tenant A functional_status';
+  END IF;
+
+  SELECT id INTO v_employment_link_id
+  FROM hr.employment_link
+  WHERE tenant_id = tenant_a
+  ORDER BY created_at
+  LIMIT 1;
+  IF v_employment_link_id IS NULL THEN
+    RAISE EXCEPTION 'FOL-03 smoke requires one tenant A employment_link';
+  END IF;
+
+  SELECT id INTO v_contract_type_id
+  FROM hr.contract_type
+  WHERE tenant_id = tenant_a
+  ORDER BY created_at
+  LIMIT 1;
+  IF v_contract_type_id IS NULL THEN
+    RAISE EXCEPTION 'FOL-03 smoke requires one tenant A contract_type';
   END IF;
 
   INSERT INTO hr.salary_range (id, tenant_id, code, name, starts_on)
@@ -1998,6 +2023,8 @@ BEGIN
     name,
     job_position_id,
     functional_status_id,
+    employment_link_id,
+    contract_type_id,
     salary_range_level_id,
     hired_on,
     lifecycle_status
@@ -2009,6 +2036,8 @@ BEGIN
     'FOL-03 Smoke Employee',
     job_position_id,
     v_functional_status_id,
+    v_employment_link_id,
+    v_contract_type_id,
     source_level_id,
     DATE '2024-01-01',
     'ACTIVE'::"EmployeeLifecycleStatus"
@@ -2135,6 +2164,143 @@ $$;
     `,
   );
   console.log('[db-smoke] validated FOL-03 progression trigger, audit, and RLS');
+
+  await runSqlSnippet(
+    '99-fol06-employee-transfer.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  v_employee_id uuid;
+  origin_location_id uuid;
+  target_location_id uuid;
+  v_transfer_id uuid := gen_random_uuid();
+  current_location_id uuid;
+  audit_count integer;
+  visible_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employee_transfer TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employee TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.work_location TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  SELECT id INTO v_employee_id
+  FROM hr.employee
+  WHERE tenant_id = tenant_a
+    AND employment_link_id IS NOT NULL
+    AND contract_type_id IS NOT NULL
+  ORDER BY created_at, id
+  LIMIT 1;
+
+  IF v_employee_id IS NULL THEN
+    RAISE EXCEPTION 'Expected seeded tenant A employee with employment_link_id and contract_type_id for FOL-06 smoke';
+  END IF;
+
+  INSERT INTO hr.work_location (tenant_id, code, name, description, status)
+  VALUES
+    (tenant_a, 'FOL06_ORIGIN', 'FOL-06 Origin', 'FOL-06 smoke origin', 'ACTIVE'::"RecordStatus"),
+    (tenant_a, 'FOL06_TARGET', 'FOL-06 Target', 'FOL-06 smoke target', 'ACTIVE'::"RecordStatus")
+  ON CONFLICT (tenant_id, code) DO UPDATE SET updated_at = now();
+
+  SELECT id INTO origin_location_id
+  FROM hr.work_location
+  WHERE tenant_id = tenant_a AND code = 'FOL06_ORIGIN';
+
+  SELECT id INTO target_location_id
+  FROM hr.work_location
+  WHERE tenant_id = tenant_a AND code = 'FOL06_TARGET';
+
+  UPDATE hr.employee
+  SET work_location_id = origin_location_id, updated_at = now()
+  WHERE id = v_employee_id;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'rh.movimentacao.read' || chr(10) ||
+    'rh.movimentacao.request' || chr(10) ||
+    'rh.movimentacao.approve' || chr(10) ||
+    'rh.movimentacao.effect' || chr(10) ||
+    'rh.employee.write' || chr(10) ||
+    'auditoria.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+
+  INSERT INTO hr.employee_transfer (
+    id,
+    tenant_id,
+    employee_id,
+    origem_work_location_id,
+    destino_work_location_id,
+    tipo,
+    data_solicitacao,
+    data_efeito,
+    status,
+    effective_on,
+    to_work_location_id,
+    notes
+  )
+  VALUES (
+    v_transfer_id,
+    tenant_a,
+    v_employee_id,
+    origin_location_id,
+    target_location_id,
+    'oficio'::hr.employee_transfer_type,
+    DATE '2026-05-01',
+    DATE '2026-06-01',
+    'aprovada'::hr.employee_transfer_status,
+    DATE '2026-06-01',
+    target_location_id,
+    'FOL-06 smoke'
+  );
+
+  UPDATE hr.employee_transfer
+  SET status = 'efetivada'::hr.employee_transfer_status,
+      updated_at = now()
+  WHERE id = v_transfer_id;
+
+  SELECT work_location_id INTO current_location_id
+  FROM hr.employee
+  WHERE id = v_employee_id;
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND resource_type = 'rh.employee_transfer'
+    AND resource_id = v_transfer_id::text
+    AND metadata->>'event' = 'rh.movimentacao.efetivada';
+  RESET ROLE;
+
+  IF current_location_id <> target_location_id THEN
+    RAISE EXCEPTION 'Expected employee work_location_id % after transfer, found %', target_location_id, current_location_id;
+  END IF;
+  IF audit_count <> 1 THEN
+    RAISE EXCEPTION 'Expected rh.movimentacao.efetivada audit_event, found %', audit_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.movimentacao.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.employee_transfer
+  WHERE id = v_transfer_id;
+  RESET ROLE;
+
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 employee_transfer rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated FOL-06 transfer trigger, audit, and RLS');
 
   console.log('[db-smoke] PASSED');
 }

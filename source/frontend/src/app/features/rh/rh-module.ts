@@ -17,6 +17,8 @@ import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhRoutingModule } from './rh-routing-module';
 import { RhHome } from './pages/rh-home/rh-home';
 import { RhLicencas } from './licencas/licencas';
+import { RhEmployeeTransfer } from './employee-transfer/employee-transfer';
+import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-employee-transfer';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { RhLicencas } from './licencas/licencas';
     RhCadastralChanges,
     RhFerias,
     RhLicencas,
+    RhEmployeeTransfer,
+    RhPortalEmployeeTransfer,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,52 @@
+<section class="portal-transfer">
+  <header>
+    <p>Portal do servidor</p>
+    <h1>Solicitacao de movimentacao</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>Servidor</mat-label>
+      <input matInput formControlName="employeeId" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Lotacao destino</mat-label>
+      <input matInput formControlName="destinoWorkLocationId" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Data de efeito</mat-label>
+      <input matInput type="date" formControlName="dataEfeito" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Tipo</mat-label>
+      <input matInput formControlName="tipo" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Justificativa</mat-label>
+      <input matInput formControlName="notes" />
+    </mat-form-field>
+    <button type="submit" mat-flat-button [disabled]="saving">Solicitar</button>
+    <button type="button" mat-stroked-button (click)="loadHistory()">Historico</button>
+  </form>
+
+  <p *ngIf="message" class="message" role="status">{{ message }}</p>
+  <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+  <p *ngIf="loading">Carregando...</p>
+
+  <table aria-label="Historico de movimentacoes">
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Efeito</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of history">
+        <td>{{ item.tipo }}</td>
+        <td>{{ item.dataEfeito }}</td>
+        <td>{{ item.status }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

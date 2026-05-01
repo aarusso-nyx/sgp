@@ -491,6 +491,51 @@ CREATE POLICY p_vacation_record_write ON hr.vacation_record
     )
   );
 
+ALTER TABLE hr.employee_transfer ENABLE ROW LEVEL SECURITY;
+ALTER TABLE hr.employee_transfer FORCE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS employee_transfer_select ON hr.employee_transfer;
+CREATE POLICY employee_transfer_select ON hr.employee_transfer
+  FOR SELECT
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY[
+        'rh.movimentacao.read',
+        'rh.movimentacao.request',
+        'rh.movimentacao.approve',
+        'rh.movimentacao.effect'
+      ])
+    )
+  );
+
+DROP POLICY IF EXISTS employee_transfer_write ON hr.employee_transfer;
+CREATE POLICY employee_transfer_write ON hr.employee_transfer
+  FOR ALL
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY[
+        'rh.movimentacao.request',
+        'rh.movimentacao.approve',
+        'rh.movimentacao.effect'
+      ])
+    )
+  )
+  WITH CHECK (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY[
+        'rh.movimentacao.request',
+        'rh.movimentacao.approve',
+        'rh.movimentacao.effect'
+      ])
+    )
+  );
+
 DO $$
 DECLARE
   table_name text;
@@ -500,7 +545,6 @@ BEGIN
     'employee_dependent',
     'employee_status_history',
     'professional_experience',
-    'employee_transfer',
     'employee_frequency',
     'service_time_record',
     'vacation_record',

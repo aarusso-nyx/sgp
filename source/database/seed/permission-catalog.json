@@ -204,6 +204,38 @@
       "description": "Approve or cancel employee vacation schedules."
     },
     {
+      "key": "rh.movimentacao.read",
+      "moduleKey": "rh",
+      "resourceKey": "movimentacao",
+      "actionKey": "read",
+      "routePattern": "/api/v1/rh/employee-transfer/**",
+      "description": "Read employee transfer requests and history."
+    },
+    {
+      "key": "rh.movimentacao.request",
+      "moduleKey": "rh",
+      "resourceKey": "movimentacao",
+      "actionKey": "request",
+      "routePattern": "/api/v1/rh/employee-transfer",
+      "description": "Request employee transfer workflows."
+    },
+    {
+      "key": "rh.movimentacao.approve",
+      "moduleKey": "rh",
+      "resourceKey": "movimentacao",
+      "actionKey": "approve",
+      "routePattern": "/api/v1/rh/employee-transfer/*/aprovar",
+      "description": "Approve employee transfer workflows."
+    },
+    {
+      "key": "rh.movimentacao.effect",
+      "moduleKey": "rh",
+      "resourceKey": "movimentacao",
+      "actionKey": "effect",
+      "routePattern": "/api/v1/rh/employee-transfer/*/efetivar",
+      "description": "Effect approved employee transfer workflows."
+    },
+    {
       "key": "portal.profile.read",
       "moduleKey": "portal",
       "resourceKey": "profile",
@@ -515,6 +547,10 @@
       "rh.vacation.read",
       "rh.vacation.request",
       "rh.vacation.approve",
+      "rh.movimentacao.read",
+      "rh.movimentacao.request",
+      "rh.movimentacao.approve",
+      "rh.movimentacao.effect",
       "rh.leave.request",
       "rh.leave.approve",
       "rh.leave.read",
