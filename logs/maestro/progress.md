@@ -18,3 +18,4 @@ W06 ✗ 09-hr-03 (medium → high retry failed: db:smoke cannot alter hr.vacatio
 W06 ✓ 09-hr-03 (1 slice, medium→high recovery, gates passed, commit b213e74) — completeness 26.2% → 26.2%; Wave 6 complete
 W07 ✗ 10-hr-04 (medium → high retry failed: db:smoke RLS insert violation on saude.medical_appointment) — see logs/maestro/10-hr-04-licenca-saude-pericia.failure.md
 W07 ✓ 10-hr-04 (1 slice, medium→high recovery, gates passed, commit 2e4dde2) — completeness 26.2% → 26.2%
+W07 ✓ 11-hr-05 (1 slice, low, gates passed, commit 2495cbc) — completeness 26.2% → 26.2%; Wave 7 complete

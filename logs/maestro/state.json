@@ -108,8 +108,17 @@
       "previous_failure": "logs/maestro/10-hr-04-licenca-saude-pericia.failure.md",
       "recovery": "manual HR-04 RLS policy alignment after smoke failure",
       "failure_log": "logs/maestro/10-hr-04-licenca-saude-pericia.failure.md"
+    },
+    "11-hr-05-licencas-diversas": {
+      "status": "completed",
+      "effort": "low",
+      "branch": "slice/11-hr-05-licencas-diversas",
+      "commit": "2495cbc6aa306a0c9be24212ac066a9229eb8955",
+      "started_at": "2026-05-01T13:04:30-03:00",
+      "completed_at": "2026-05-01T13:26:40-03:00",
+      "retries": 0
     }
   },
-  "current_wave": 7,
+  "current_wave": 8,
   "active_subagents": []
 }
