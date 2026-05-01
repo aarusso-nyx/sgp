@@ -1,0 +1,84 @@
+.cargos {
+  display: grid;
+  gap: 1rem;
+}
+
+.cargos__header,
+.cargos__layout {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cargos__eyebrow {
+  margin: 0 0 0.25rem;
+  color: #4b5563;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.cargos__header h1,
+.cargos__salary h2 {
+  margin: 0;
+}
+
+.cargos__form {
+  display: grid;
+  flex: 1 1 32rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.cargos__description {
+  grid-column: 1 / -1;
+}
+
+.cargos__table {
+  display: grid;
+  flex: 0 0 24rem;
+  gap: 0.5rem;
+}
+
+.cargos__table button {
+  display: grid;
+  justify-items: start;
+  min-height: 4rem;
+  border: 1px solid #d1d5db;
+}
+
+.cargos__row--active {
+  background: #e0f2fe;
+}
+
+.cargos__salary table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cargos__salary th,
+.cargos__salary td {
+  padding: 0.625rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.cargos__error {
+  margin: 0;
+  color: #b91c1c;
+}
+
+@media (max-width: 900px) {
+  .cargos__layout,
+  .cargos__header {
+    display: grid;
+  }
+
+  .cargos__form {
+    grid-template-columns: 1fr;
+  }
+
+  .cargos__table {
+    flex-basis: auto;
+  }
+}

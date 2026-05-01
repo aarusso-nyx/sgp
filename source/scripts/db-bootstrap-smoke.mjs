@@ -1348,6 +1348,154 @@ $$;
   );
   console.log('[db-smoke] validated HR-05 general leave rules, audit, and RLS');
 
+  await runSqlSnippet(
+    '99-fol02-cargos-estrutura.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  salary_range_id uuid := gen_random_uuid();
+  salary_level_id uuid := gen_random_uuid();
+  job_position_id uuid := gen_random_uuid();
+  visible_count integer;
+  audit_count integer;
+  null_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range_level TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.job_position TO sgp_smoke_rls;
+  GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'gestao.cargo.write' || chr(10) || 'gestao.cargo.read' || chr(10) || 'auditoria.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+  PERFORM set_config('app.request_id', 'fol02-smoke-' || suffix, true);
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO hr.salary_range (
+    id,
+    tenant_id,
+    code,
+    name,
+    starts_on
+  )
+  VALUES (
+    salary_range_id,
+    tenant_a,
+    'FOL02-SR-' || left(suffix, 8),
+    'FOL-02 smoke salary range',
+    DATE '2026-01-01'
+  );
+
+  INSERT INTO hr.salary_range_level (
+    id,
+    tenant_id,
+    salary_range_id,
+    code,
+    name,
+    level_number,
+    class_number,
+    level_number_fol02,
+    base_salary,
+    amount_override
+  )
+  VALUES (
+    salary_level_id,
+    tenant_a,
+    salary_range_id,
+    'FOL02-LVL-' || left(suffix, 8),
+    'FOL-02 smoke salary level',
+    1,
+    1,
+    1,
+    1234.56,
+    1234.56
+  );
+
+  INSERT INTO hr.job_position (
+    id,
+    tenant_id,
+    code,
+    name,
+    category,
+    legal_regime,
+    creation_law,
+    vacancies_count,
+    salary_range_id
+  )
+  VALUES (
+    job_position_id,
+    tenant_a,
+    'FOL02-JOB-' || left(suffix, 8),
+    'FOL-02 smoke job position',
+    'efetivo',
+    'estatutario',
+    'Lei smoke 2026',
+    1,
+    salary_range_id
+  );
+
+  PERFORM public.sgp_append_audit_event(
+    'CREATE',
+    'gestao.cargo',
+    job_position_id::text,
+    NULL::uuid,
+    NULLIF(current_setting('app.current_user_sub', true), ''),
+    NULLIF(current_setting('app.current_login', true), ''),
+    'hr.job_position',
+    NULLIF(current_setting('app.request_id', true), ''),
+    jsonb_build_object('event', 'gestao.cargo.created', 'after', jsonb_build_object('id', job_position_id, 'salaryRangeId', salary_range_id)),
+    NULL::text,
+    NULL::text,
+    NULL::text
+  );
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND resource_type = 'gestao.cargo'
+    AND resource_id = job_position_id::text
+    AND metadata->>'event' = 'gestao.cargo.created';
+
+  SELECT count(*) INTO null_count
+  FROM hr.salary_range_level
+  WHERE class_number IS NULL
+     OR level_number_fol02 IS NULL;
+  RESET ROLE;
+
+  IF audit_count <> 1 THEN
+    RAISE EXCEPTION 'Expected gestao.cargo.created audit_event, found %', audit_count;
+  END IF;
+  IF null_count <> 0 THEN
+    RAISE EXCEPTION 'Expected salary_range_level class/level numbers to be non-null, found %', null_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'gestao.cargo.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.job_position
+  WHERE id = job_position_id;
+  RESET ROLE;
+
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 job_position rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated FOL-02 cargos, salary matrix, audit, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

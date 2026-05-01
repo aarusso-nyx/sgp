@@ -68,6 +68,15 @@ export class PortalController {
     return this.portalService.getDocuments(actor);
   }
 
+  @Get('v1/portal/meus-dados/cargo')
+  @RequirePermission('portal.profile.read')
+  @ApiOkResponse({
+    description: 'Authenticated employee current job and salary level.',
+  })
+  cargo(@CurrentActor() actor: AuthenticatedActor | undefined) {
+    return this.portalService.getMyJob(actor);
+  }
+
   @Put('v1/portal/meus-dados/:section')
   @RequirePermission('portal.profile.write')
   @AuditMutation({

@@ -57,6 +57,12 @@ h1 {
   color: var(--portal-muted);
 }
 
+.my-job small {
+  display: block;
+  color: var(--portal-muted);
+  line-height: 1.4;
+}
+
 .section-grid {
   display: grid;
   gap: 1rem;

@@ -78,6 +78,22 @@
       "description": "Mutate organizational master data."
     },
     {
+      "key": "gestao.cargo.read",
+      "moduleKey": "gestao",
+      "resourceKey": "cargo",
+      "actionKey": "read",
+      "routePattern": "/api/v1/gestao/cargos/**",
+      "description": "Read job positions and salary range grids."
+    },
+    {
+      "key": "gestao.cargo.write",
+      "moduleKey": "gestao",
+      "resourceKey": "cargo",
+      "actionKey": "write",
+      "routePattern": "/api/v1/gestao/cargos/**",
+      "description": "Mutate job positions and salary range grids."
+    },
+    {
       "key": "rh.read",
       "moduleKey": "rh",
       "resourceKey": "workflow",
@@ -419,6 +435,8 @@
       "gestao.read",
       "gestao.master_data.read",
       "gestao.master_data.write",
+      "gestao.cargo.read",
+      "gestao.cargo.write",
       "rh.read",
       "rh.write",
       "rh.employee.read",
@@ -447,6 +465,7 @@
       "auth.read",
       "gestao.read",
       "gestao.master_data.read",
+      "gestao.cargo.read",
       "rh.read",
       "rh.employee.read",
       "rh.dependent.read",
@@ -458,6 +477,7 @@
       "auth.read",
       "gestao.read",
       "gestao.master_data.read",
+      "gestao.cargo.read",
       "rh.read",
       "rh.employee.read",
       "rh.history.read",

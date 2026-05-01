@@ -16,6 +16,17 @@ enum RecordStatus {
   @@schema("public")
 }
 
+enum JobPositionCategory {
+  efetivo
+  comissionado
+  temporario
+  eletivo
+  emprego_publico
+
+  @@map("job_position_category")
+  @@schema("hr")
+}
+
 enum UserStatus {
   ACTIVE
   INACTIVE
@@ -621,17 +632,22 @@ model LegalResponsible {
 }
 
 model JobPosition {
-  id              String       @id @default(uuid()) @db.Uuid
-  tenantId        String       @map("tenant_id") @db.Uuid
+  id              String              @id @default(uuid()) @db.Uuid
+  tenantId        String              @map("tenant_id") @db.Uuid
   code            String
   name            String
-  description     String       @default("")
-  vacanciesTotal  Int          @default(0) @map("vacancies_total")
-  vacanciesFilled Int          @default(0) @map("vacancies_filled")
-  vacanciesOpen   Int          @default(0) @map("vacancies_open")
-  status          RecordStatus @default(ACTIVE)
-  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  description     String              @default("")
+  vacanciesTotal  Int                 @default(0) @map("vacancies_total")
+  vacanciesFilled Int                 @default(0) @map("vacancies_filled")
+  vacanciesOpen   Int                 @default(0) @map("vacancies_open")
+  category        JobPositionCategory @default(efetivo)
+  legalRegime     String              @default("estatutario") @map("legal_regime")
+  creationLaw     String              @default("") @map("creation_law")
+  vacanciesCount  Int                 @default(0) @map("vacancies_count")
+  salaryRangeId   String?             @map("salary_range_id") @db.Uuid
+  status          RecordStatus        @default(ACTIVE)
+  createdAt       DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employees               Employee[]
   earningLinks            JobPositionEarning[]
@@ -639,9 +655,11 @@ model JobPosition {
   referenceLinks          JobStructureReferenceLink[]
   employmentLinks         JobStructureEmploymentLink[]
   workLocationAssignments WorkLocationStructureAssignment[]
+  salaryRange             SalaryRange? @relation(fields: [salaryRangeId], references: [id], onDelete: Restrict)
 
   @@unique([tenantId, code])
   @@index([status])
+  @@index([salaryRangeId])
   @@map("job_position")
   @@schema("hr")
 }
@@ -699,12 +717,15 @@ model SalaryRange {
   groupCode String?      @map("group_code")
   classCode String?      @map("class_code")
   name      String
+  startsOn  DateTime     @default(dbgenerated("'1900-01-01'::date")) @map("starts_on") @db.Date
+  endsOn    DateTime?    @map("ends_on") @db.Date
   status    RecordStatus @default(ACTIVE)
   createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   references SalaryReference[]
   levels     SalaryRangeLevel[]
+  jobPositions JobPosition[]
 
   @@unique([tenantId, code])
   @@index([groupCode, classCode])
@@ -1926,6 +1947,9 @@ model SalaryRangeLevel {
   name              String
   description       String       @default("")
   levelNumber       Int          @default(1) @map("level_number")
+  classNumber       Int          @default(1) @map("class_number")
+  fol02LevelNumber  Int          @default(1) @map("level_number_fol02")
+  baseSalary        Decimal      @default(0) @map("base_salary") @db.Decimal(14, 2)
   amountOverride    Decimal?     @map("amount_override") @db.Decimal(14, 2)
   status            RecordStatus @default(ACTIVE)
   createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -1935,6 +1959,7 @@ model SalaryRangeLevel {
   salaryReference SalaryReference? @relation(fields: [salaryReferenceId], references: [id])
 
   @@unique([tenantId, salaryRangeId, code])
+  @@unique([tenantId, salaryRangeId, classNumber, fol02LevelNumber])
   @@index([salaryReferenceId])
   @@index([status])
   @@map("salary_range_level")

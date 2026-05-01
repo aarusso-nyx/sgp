@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups';
+import { Cargos } from './cargos/cargos';
 import { GestaoMasterData } from './master-data/master-data';
 import { GestaoHome } from './pages/gestao-home/gestao-home';
 
@@ -10,11 +11,15 @@ import { GestaoHome } from './pages/gestao-home/gestao-home';
     RouterModule.forChild(
       buildModuleRouteGroup('gestao', GestaoHome, {
         moduleLabel: 'Gestão',
-      }).map((route) =>
-        route.path === ''
-          ? { ...route, component: GestaoMasterData }
-          : route,
-      ),
+      }).map((route) => {
+        if (route.path === '') {
+          return { ...route, component: GestaoMasterData };
+        }
+        if (route.path === 'cargo/gestao' || route.path === 'cargos') {
+          return { ...route, component: Cargos };
+        }
+        return route;
+      }),
     ),
   ],
   exports: [RouterModule],

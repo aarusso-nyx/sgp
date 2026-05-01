@@ -31,7 +31,7 @@ Citations use `audit/0X-...md` section anchors when no `path:line` is available.
 | 7 | contratacao-temporaria | Lei 8.745/1993 | Implicit | none | none | enum | none | 1 | |
 | 8 | terceirizados-prestadores | Lei 6.019/1974; Lei 13.429/2017 | Implicit | none | none | `hr.service_provider` `schema.prisma:3260`, `service_taker` :3291 | none | 2 | Tables only; no controllers. |
 | 9 | estagiarios | Lei 11.788/2008 | Yes (02 §2.8 rows 102–105) | none observed | none | `hr.internship_program` :2558, `internship_record` :2652 | none | 2 | Schema present, no controller/UI. |
-| 10 | cargos-empregos-funcoes | CF art.37 II; Lei 8.112 art.3 | Yes (02 §2.1) | `gestao/master-data` (1729 LOC) | Stub | `hr.job_position` :592, `job_function` :615, `job_structure_*` | `gestao/master-data/master-data.service.spec.ts` (5 it/17 exp) | 3 | Generic CRUD; no role-aware progressão. |
+| 10 | cargos-empregos-funcoes | CF art.37 II; Lei 8.112 art.3 | Yes (02 §2.1) | `gestao/cargos` + `gestao/master-data` | Partial | `hr.job_position` com categoria, regime, lei, vagas e `salary_range_id`; `job_function`; `job_structure_*` | `job-position.service.spec.ts`; `cargos.e2e-spec.ts`; RLS FOL-02 | 4 | FOL-02 entrega cadastro segregado e base salarial; progressão completa fica em FOL-04/FOL-03. |
 | 11 | tabela-rubricas | MOS S-1010 | Yes (02 §2.2 row 33) | `folha-pagamento/payroll-accounting` cataloging; payroll-engine | Stub | `payroll.payroll_earning_deduction` :1880 | `payroll-accounting.service.spec.ts` (6 it/19 exp) | 3 | |
 | 12 | tabela-lotacoes | MOS S-1020 | Yes | `master-data` for `work_location` | Stub | `hr.work_location` :516 | master-data spec | 3 | |
 | 13 | tabela-estabelecimentos | MOS S-1005 | Implicit | `master-data` for `branch`, `company` | Stub | `hr.branch` :477, `hr.company` :454 | master-data spec | 3 | |
@@ -148,7 +148,7 @@ Citations use `audit/0X-...md` section anchors when no `path:line` is available.
 | 99 | avaliacao-desempenho | CF art.41 §1 III | Yes (02 §2.6 rows 76–80) | `avaliacao/avaliacao.controller.ts:37` (1140 LOC svc) | Stub | `performance_evaluation` :2840 | `avaliacao.service.spec.ts` (5 it/29 exp) | 3 | |
 | 100 | progressao-funcional | Lei 11.091/2005 | Yes (02 §2.6 row 77) | `avaliacao` `progressoes` | Stub | `merit_progression` :2875 | avaliacao spec | 3 | |
 | 101 | promocao-vertical | Lei 11.091/2005 | Implicit | overlaps with 100 | Stub | merit_progression | avaliacao | 2 | |
-| 102 | pccs-tabela-vencimentos | CF art.39 §1 | Yes (02 §2.6 row 78) | `avaliacao` `planos-cargos` | Stub | `career_plan` :2922, `salary_range` :661, `salary_range_level` :1796 | avaliacao spec | 3 | |
+| 102 | pccs-tabela-vencimentos | CF art.39 §1 | Yes (02 §2.6 row 78) | `gestao/faixas-salariais`; `avaliacao` `planos-cargos` | Partial | `career_plan`; `hr.salary_range`; `hr.salary_range_level` com classe, nível e vencimento básico | `salary-range.service.spec.ts`; `cargos.e2e-spec.ts`; RLS FOL-02 | 4 | Estrutura de banda/nível pronta para PCCS; regras de carreira e histórico por competência ficam em FOL-04/FOL-05. |
 | 103 | capacitacao-treinamento | Decreto 9.991/2019 | Implicit | none active | none | `training_suggestion*` :2751–2819 | none | 2 | |
 | 104 | certificacoes-titulacao | Lei 11.091 art.11 | Implicit | none | none | `professional_experience` :1346 | none | 1 | |
 | 105 | movimentacao-remocao | Lei 8.112 art.36–38 | Implicit | none specific | Stub | `employee_transfer` :1365 | none | 2 | |

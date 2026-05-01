@@ -54,6 +54,32 @@ export interface MasterDataQuery extends Record<string, string | number | boolea
   search?: string;
 }
 
+export interface JobPositionRecord {
+  id: string;
+  code: string;
+  name: string;
+  description: string;
+  category: string;
+  legalRegime: string;
+  creationLaw: string;
+  vacanciesCount: number;
+  salaryRangeId: string | null;
+  salaryRangeCode: string | null;
+}
+
+export interface SalaryRangeRecord {
+  id: string;
+  code: string;
+  name: string;
+}
+
+export interface SalaryRangeLevelRecord {
+  id: string;
+  classNumber: number;
+  levelNumber: number;
+  baseSalary: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -89,6 +115,26 @@ export class MasterData {
 
   deactivateRecord(resource: string, id: string): Observable<MasterDataRecord> {
     return this.http.delete<MasterDataRecord>(`/api/v1/master-data/${resource}/${id}`);
+  }
+
+  listJobPositions(query: MasterDataQuery = {}): Observable<PagedResult<JobPositionRecord>> {
+    return this.http.get<PagedResult<JobPositionRecord>>('/api/v1/gestao/cargos', {
+      params: this.params(query),
+    });
+  }
+
+  createJobPosition(body: Partial<JobPositionRecord>): Observable<JobPositionRecord> {
+    return this.http.post<JobPositionRecord>('/api/v1/gestao/cargos', body);
+  }
+
+  listSalaryRanges(): Observable<SalaryRangeRecord[]> {
+    return this.http.get<SalaryRangeRecord[]>('/api/v1/gestao/faixas-salariais');
+  }
+
+  listSalaryLevels(salaryRangeId: string): Observable<SalaryRangeLevelRecord[]> {
+    return this.http.get<SalaryRangeLevelRecord[]>(
+      `/api/v1/gestao/faixas-salariais/${salaryRangeId}/niveis`,
+    );
   }
 
   private params(query: MasterDataQuery): HttpParams {

@@ -205,6 +205,30 @@ BEGIN
 END
 $$;
 
+DO $$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY['job_position', 'salary_range', 'salary_range_level']
+  LOOP
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', table_name || '_write', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', 'fol02_' || table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', 'fol02_' || table_name || '_write', table_name);
+    EXECUTE format(
+      'CREATE POLICY %I ON hr.%I FOR SELECT USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''gestao.cargo.read'', ''gestao.cargo.write''])))',
+      'fol02_' || table_name || '_select',
+      table_name
+    );
+    EXECUTE format(
+      'CREATE POLICY %I ON hr.%I FOR ALL USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''gestao.cargo.write'']))) WITH CHECK (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''gestao.cargo.write''])))',
+      'fol02_' || table_name || '_write',
+      table_name
+    );
+  END LOOP;
+END
+$$;
+
 DROP POLICY IF EXISTS vacation_type_select ON hr.vacation_type;
 DROP POLICY IF EXISTS vacation_type_write ON hr.vacation_type;
 DROP POLICY IF EXISTS p_vacation_type_select ON hr.vacation_type;

@@ -67,6 +67,14 @@ interface DocumentRow extends QueryResultRow {
   created_at: Date | string;
 }
 
+interface MyJobRow extends QueryResultRow {
+  job_position_code: string | null;
+  job_position_name: string | null;
+  class_number: number | null;
+  level_number: number | null;
+  base_salary: string | null;
+}
+
 interface IdRow extends QueryResultRow {
   id: string;
 }
@@ -171,6 +179,39 @@ export class PortalService {
       checksum: row.checksum,
       createdAt: this.toIso(row.created_at),
     }));
+  }
+
+  async getMyJob(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    const rows = await this.databaseService.query<MyJobRow>(
+      `
+      SELECT
+        jp.code AS job_position_code,
+        jp.name AS job_position_name,
+        l.class_number,
+        l.level_number_fol02 AS level_number,
+        l.base_salary::text
+      FROM hr.employee e
+      LEFT JOIN hr.job_position jp ON jp.id = e.job_position_id
+      LEFT JOIN LATERAL (
+        SELECT class_number, level_number_fol02, base_salary
+        FROM hr.salary_range_level
+        WHERE salary_range_id = jp.salary_range_id
+        ORDER BY class_number, level_number_fol02
+        LIMIT 1
+      ) l ON true
+      WHERE e.id = $1::uuid
+      `,
+      [employee.id],
+    );
+    const row = rows[0];
+    return {
+      cargo: row?.job_position_name ?? null,
+      codigoCargo: row?.job_position_code ?? null,
+      classe: row?.class_number ?? null,
+      nivel: row?.level_number ?? null,
+      vencimentoBasico: row?.base_salary ?? null,
+    };
   }
 
   async requestProfileChange(
