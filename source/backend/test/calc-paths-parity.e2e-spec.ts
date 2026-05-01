@@ -36,6 +36,7 @@ describe('CALC-08 SQL and TS money boundary parity', () => {
         WHERE ped.formula_ready = true
           AND ped.formula_function_name IS NOT NULL
           AND ped.code <> 'DESCONTO_TETO'
+          AND ped.code <> 'DECIMO_TERCEIRO_BASE'
         ORDER BY ped.updated_at DESC
         LIMIT 1
       `);

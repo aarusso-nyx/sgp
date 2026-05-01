@@ -24,8 +24,10 @@ import {
   CreateAdvancePaymentDto,
   CreatePayrollRunDto,
   PopulatePayrollRunDto,
+  RunDecimoTerceiroDto,
   UpdatePayrollRunStatusDto,
 } from './payroll.dto';
+import { DecimoTerceiroService } from './decimo-terceiro.service';
 import { PayrollService } from './payroll.service';
 
 @ApiTags('folha-pagamento')
@@ -34,6 +36,7 @@ import { PayrollService } from './payroll.service';
 export class PayrollController {
   constructor(
     private readonly payrollService: PayrollService,
+    private readonly decimoTerceiroService: DecimoTerceiroService,
     private readonly auditService: AuditService,
   ) {}
 
@@ -145,6 +148,52 @@ export class PayrollController {
         },
       },
     );
+    return created;
+  }
+
+  @Post('decimo-terceiro/adiantamento')
+  @RequirePermission('payroll.run.execute')
+  @ApiCreatedResponse({ description: 'Generate the first 13th salary parcel.' })
+  async runDecimoTerceiroAdiantamento(
+    @Req() request: RequestWithContext,
+    @Body() body: RunDecimoTerceiroDto,
+  ) {
+    const created = await this.decimoTerceiroService.runAdiantamento(
+      request.actor?.tenantId ?? request.tenantId ?? '',
+      body.year,
+    );
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: created.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'decimo_terceiro_adiantamento',
+        year: body.year,
+        employeeCount: created.employeeCount,
+      },
+    });
+    return created;
+  }
+
+  @Post('decimo-terceiro/fechamento')
+  @RequirePermission('payroll.run.execute')
+  @ApiCreatedResponse({ description: 'Generate the closing 13th salary run.' })
+  async runDecimoTerceiroFechamento(
+    @Req() request: RequestWithContext,
+    @Body() body: RunDecimoTerceiroDto,
+  ) {
+    const created = await this.decimoTerceiroService.runFechamento(
+      request.actor?.tenantId ?? request.tenantId ?? '',
+      body.year,
+    );
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: created.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'decimo_terceiro_fechamento',
+        year: body.year,
+        employeeCount: created.employeeCount,
+      },
+    });
     return created;
   }
 }

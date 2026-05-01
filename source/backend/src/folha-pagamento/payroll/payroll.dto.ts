@@ -96,3 +96,11 @@ export class CreateAdvancePaymentDto {
   @IsString()
   notes?: string;
 }
+
+export class RunDecimoTerceiroDto {
+  @ApiProperty({ minimum: 2000, maximum: 2100 })
+  @IsInt()
+  @Min(2000)
+  @Max(2100)
+  year!: number;
+}

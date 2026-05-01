@@ -276,6 +276,14 @@
       "description": "Mutate payroll records, accounting catalogs, eSocial payroll surfaces, and calculations."
     },
     {
+      "key": "payroll.run.execute",
+      "moduleKey": "payroll",
+      "resourceKey": "run",
+      "actionKey": "execute",
+      "routePattern": "/api/v1/folha/pagamentos/**",
+      "description": "Execute payroll processing runs such as 13th salary generation."
+    },
+    {
       "key": "folha.rubrica.read",
       "moduleKey": "folha",
       "resourceKey": "rubrica",
@@ -681,6 +689,7 @@
       "avaliacao.salary_history.write",
       "folha.read",
       "folha.write",
+      "payroll.run.execute",
       "folha.rubrica.read",
       "folha.rubrica.write",
       "folha.rubrica.preview",

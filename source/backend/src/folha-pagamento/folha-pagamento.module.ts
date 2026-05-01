@@ -15,6 +15,7 @@ import {
 } from './operations/payroll-operations.controller';
 import { PayrollOperationsService } from './operations/payroll-operations.service';
 import { PayrollController } from './payroll/payroll.controller';
+import { DecimoTerceiroService } from './payroll/decimo-terceiro.service';
 import { PayrollService } from './payroll/payroll.service';
 import { FormulaCacheService } from '../payroll-engine/formula-cache.service';
 import { FormulaCompilerService } from '../payroll-engine/formula-compiler.service';
@@ -32,6 +33,7 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
   ],
   providers: [
     PayrollService,
+    DecimoTerceiroService,
     PayrollAccountingService,
     RubricaService,
     PayrollOperationsService,

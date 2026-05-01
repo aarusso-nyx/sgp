@@ -1,1 +1,49 @@
-<p>folha-pagamento-home works!</p>
+<section class="payroll-page">
+  <header>
+    <h1>Processamentos de folha</h1>
+  </header>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Ano</mat-label>
+      <input matInput type="number" formControlName="year" min="2000" max="2100" />
+    </mat-form-field>
+    <button mat-stroked-button type="button" (click)="review('adiantamento')" [disabled]="loading">
+      <mat-icon>payments</mat-icon>
+      Gerar 1a parcela 13o
+    </button>
+    <button mat-stroked-button type="button" (click)="review('fechamento')" [disabled]="loading">
+      <mat-icon>task_alt</mat-icon>
+      Fechar 13o
+    </button>
+  </form>
+
+  <section *ngIf="preview as previewData" class="review-panel" aria-live="polite">
+    <div>
+      <h2>{{ previewData.label }}</h2>
+      <p>Competencia {{ previewData.year }}.</p>
+    </div>
+    <div class="review-actions">
+      <button mat-button type="button" (click)="cancelReview()" [disabled]="loading">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="approve()"
+        [disabled]="loading"
+      >
+        Aprovar
+      </button>
+    </div>
+  </section>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section *ngIf="result as resultData" class="result-panel" aria-live="polite">
+    <span>{{ resultData.kind }}</span>
+    <strong>{{ resultData.employeeCount }} servidores</strong>
+    <span>Total liquido {{ resultData.totalNet }}</span>
+  </section>
+</section>

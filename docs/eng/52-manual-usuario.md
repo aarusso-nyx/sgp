@@ -666,7 +666,20 @@ O fechamento programado permite definir uma data e hora para que o sistema feche
 
 > Para cancelar o agendamento, clique em **Cancelar Agendamento**. A competência volta ao status `ABERTA`.
 
-### 3.4.4 Executar lote de cálculo
+### 3.4.4 Gerar 13º salário
+
+O 13º salário é processado em duas rotinas anuais. A 1ª parcela usa a base de novembro e gera 50% do valor proporcional aos avos do ano; o fechamento usa a base total do 13º, desconta a 1ª parcela já paga e calcula o IRRF exclusivo do 13º.
+
+1. Acesse **Folha de Pagamento > Processamentos de folha**.
+2. Informe o **Ano** de referência.
+3. Para a primeira etapa, clique em **Gerar 1a parcela 13o**.
+4. Revise a ação exibida na tela e clique em **Aprovar**.
+5. Para a segunda etapa, depois da conferência do adiantamento, clique em **Fechar 13o**.
+6. Revise a ação e clique em **Aprovar**. O sistema gera a folha de dezembro com o saldo do 13º e o desconto de IRRF exclusivo.
+
+O sistema conta como avo cada mês em que o servidor teve pelo menos 15 dias em situação funcional que entra em folha. Reprocessar o fechamento recalcula o saldo e mantém o desconto da 1ª parcela a partir dos lançamentos já pagos, sem duplicar rubricas calculadas.
+
+### 3.4.5 Executar lote de cálculo
 
 1. Acesse **Folha de Pagamento > Lote de Processamento**.
 2. Clique em **Novo Lote**.
@@ -684,7 +697,7 @@ O fechamento programado permite definir uma data e hora para que o sistema feche
 
 📷 [inserir screenshot: tela de lote de processamento com barras de progresso]
 
-### 3.4.5 Reabrir competência anterior
+### 3.4.6 Reabrir competência anterior
 
 Use com cautela — reabrir uma competência fechada permite reprocessamento de folhas já bloqueadas.
 

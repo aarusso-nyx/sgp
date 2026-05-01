@@ -276,6 +276,15 @@ stateDiagram-v2
 
 > **Nota:** O legado separa `status` (administrativo) de `situacao` (processamento). O novo modelo unifica em estado canônico para clareza; os campos físicos `status` e `situacao` permanecem na tabela por retrocompatibilidade de relatórios.
 
+### 2.1.1 Tipos de processamento de folha
+
+| Código físico | Uso | Regra de cálculo |
+| --- | --- | --- |
+| `DECIMO_TERCEIRO_ADIANTAMENTO` | 1ª parcela do 13º salário, competência de novembro | Calcula 50% da base de novembro, proporcional aos avos do ano corrente; mês com fração de 15 dias ou mais conta como avo. |
+| `DECIMO_TERCEIRO_FECHAMENTO` | 2ª parcela do 13º salário, competência de dezembro | Calcula o total anual proporcional, desconta exatamente a 1ª parcela já paga e aplica IRRF exclusivo sobre o valor total do 13º. |
+
+Os dois tipos são executados como `payroll_run` separados e exigem a permissão `payroll.run.execute`. A apuração de avos usa `hr.employee_status_history` e considera somente situações funcionais que entram em folha.
+
 ### 2.2 Transições
 
 | #   | De                                      | Evento                                      | Guarda                                            | Efeito                                                               | Para            |
