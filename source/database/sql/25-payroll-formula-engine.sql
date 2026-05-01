@@ -765,6 +765,6 @@ BEGIN
       RETURN NULL;
   END;
 
-  RETURN v_amount;
+  RETURN round(v_amount, 2)::numeric(14, 2);
 END;
 $$;

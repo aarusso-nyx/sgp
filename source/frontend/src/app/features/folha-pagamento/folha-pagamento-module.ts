@@ -10,9 +10,10 @@ import { MatInputModule } from '@angular/material/input';
 import { FolhaPagamentoRoutingModule } from './folha-pagamento-routing-module';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { Rubricas } from './rubricas/rubricas';
+import { MoneyBrPipe } from '../../shared/money-br.pipe';
 
 @NgModule({
-  declarations: [FolhaPagamentoHome, Rubricas],
+  declarations: [FolhaPagamentoHome, Rubricas, MoneyBrPipe],
   imports: [
     CommonModule,
     ReactiveFormsModule,

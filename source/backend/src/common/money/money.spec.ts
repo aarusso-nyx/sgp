@@ -2,15 +2,24 @@ import { roundMoney, roundRate, toMoney } from './money';
 
 describe('money decimal policy', () => {
   it.each([
-    ['positive half cent rounds away from zero', '10.005', '10.01'],
-    ['negative half cent rounds away from zero', '-10.005', '-10.01'],
-    ['below half cent rounds down by magnitude', '10.004', '10.00'],
-    ['above half cent rounds up by magnitude', '10.006', '10.01'],
-    ['composition keeps full precision until boundary', '0.1', '0.30'],
-  ])('%s', (_caseName, input, expected) => {
-    const value = input === '0.1' ? toMoney(input).plus('0.2') : toMoney(input);
+    ['positive half-up cent', '10.005', 'half_up', '10.01'],
+    ['negative half-up cent', '-10.005', 'half_up', '-10.01'],
+    ['bankers tie to even cent', '10.005', 'half_even', '10.00'],
+    ['zero stays at scale', '0', 'half_up', '0.00'],
+    [
+      'large value rounds at cents',
+      '1000000000.005',
+      'half_up',
+      '1000000000.01',
+    ],
+  ] as const)('%s', (_caseName, input, mode, expected) => {
+    expect(roundMoney(input, mode).toFixed(2)).toBe(expected);
+  });
 
-    expect(roundMoney(value).toFixed(2)).toBe(expected);
+  it('keeps composition at full precision until the boundary', () => {
+    const value = toMoney('0.1').plus('0.2');
+
+    expect(roundMoney(value).toFixed(2)).toBe('0.30');
   });
 
   it('rounds rates at six decimal places', () => {

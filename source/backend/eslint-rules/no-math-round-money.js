@@ -14,6 +14,8 @@ module.exports = {
     messages: {
       forbidden:
         'Math.round is forbidden in monetary modules. Use roundMoney(...) from src/common/money/money.',
+      forbiddenNumberToFixed:
+        'Number(...).toFixed(...) is forbidden in monetary modules. Convert through roundMoney(...) before serializing.',
     },
   },
   create(context) {
@@ -31,6 +33,16 @@ module.exports = {
           callee.property.name === 'round'
         ) {
           context.report({ node: callee, messageId: 'forbidden' });
+        }
+        if (
+          callee.type === 'MemberExpression' &&
+          callee.property.type === 'Identifier' &&
+          callee.property.name === 'toFixed' &&
+          callee.object.type === 'CallExpression' &&
+          callee.object.callee.type === 'Identifier' &&
+          callee.object.callee.name === 'Number'
+        ) {
+          context.report({ node: callee, messageId: 'forbiddenNumberToFixed' });
         }
       },
     };

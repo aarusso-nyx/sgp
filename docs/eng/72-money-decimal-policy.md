@@ -13,7 +13,7 @@ Esta política é obrigatória para cálculo de folha, rubricas, rescisão, cach
 
 ## Arredondamento
 
-O arredondamento monetário é `half-away-from-zero`, com escala 2, e ocorre apenas no contorno da rubrica: entrada/saída de `payroll_earning_deduction`, retorno de `payroll_calc.evaluate_earning_deduction(...)`, gravação de `employee_payroll_item.amount` e agregados derivados. O `payroll_calc.formula_cache` armazena SQL compilado/versionado, não valores monetários calculados. Cálculos intermediários preservam precisão decimal plena até esse contorno.
+O arredondamento monetário padrão é `half-away-from-zero`, com escala 2, e ocorre apenas no contorno da rubrica: entrada/saída de `payroll_earning_deduction`, retorno de `payroll_calc.evaluate_earning_deduction(...)`, gravação de `employee_payroll_item.amount` e agregados derivados. O `payroll_calc.formula_cache` armazena SQL compilado/versionado, não valores monetários calculados. Cálculos intermediários preservam precisão decimal plena até esse contorno.
 
 Alíquotas e fatores usam escala 6 com a mesma regra de desempate. O helper `roundRate(...)` existe para fronteiras de parametrização; ele não substitui a seleção por vigência, que continua fora deste slice.
 
@@ -21,4 +21,13 @@ Alíquotas e fatores usam escala 6 com a mesma regra de desempate. O helper `rou
 
 O caminho SQL oficial de rubricas é `payroll_calc.evaluate_earning_deduction(...)`, definido em `source/database/sql/25-payroll-formula-engine.sql`, com retorno `numeric(14,2)`. O compilador em `source/backend/src/payroll-engine/formula-compiler.service.ts` emite funções `payroll_calc.f_<alias>(uuid, int, int)` que retornam nesse mesmo contorno decimal. Caminhos TypeScript remanescentes, como rescisão, devem chamar `roundMoney(...)` somente na fronteira da rubrica para manter paridade centavo-a-centavo com o SQL.
 
-O ESLint local `sgp/no-math-round-money` falha qualquer uso de `Math.round` em `src/folha-pagamento/**`, `src/payroll-engine/**` e `src/common/money/**`.
+O ESLint local `sgp/no-math-round-money` falha qualquer uso de `Math.round` e `Number(...).toFixed(...)` em `src/folha-pagamento/**`, `src/payroll-engine/**` e `src/common/money/**`.
+
+## Matriz rubrica → modo
+
+| Tipo de fronteira | Modo |
+| --- | --- |
+| Rubricas de vencimento, vantagens e rescisão | `roundMoney(valor, 'half_up')` |
+| Deduções não tributárias e descontos operacionais | `roundMoney(valor, 'half_up')` |
+| Impostos/contribuições quando a regra legal exigir desempate bancário | `roundMoney(valor, 'half_even')` |
+| Alíquotas e fatores legais | `roundRate(valor)` |

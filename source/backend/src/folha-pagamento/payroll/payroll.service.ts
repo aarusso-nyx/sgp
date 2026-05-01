@@ -552,7 +552,7 @@ export class PayrollService {
       paymentId: paymentId ?? '',
       employeeId: input.employeeId,
       payrollRunId,
-      amount: Number(approvedAmount).toFixed(2),
+      amount: roundMoney(approvedAmount).toFixed(2),
       requestStatus: 'PROCESSED',
       paymentStatus: 'GENERATED',
     };

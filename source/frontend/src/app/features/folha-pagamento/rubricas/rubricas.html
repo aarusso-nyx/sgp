@@ -162,7 +162,7 @@
         <mat-icon>calculate</mat-icon>
         Preview
       </button>
-      <strong class="rubricas__amount" *ngIf="previewAmount">{{ previewAmount }}</strong>
+      <strong class="rubricas__amount" *ngIf="previewAmount">{{ previewAmount | moneyBr }}</strong>
     </form>
 
     <form class="rubricas__panel" [formGroup]="linkForm" (ngSubmit)="linkJobPosition()">
