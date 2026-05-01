@@ -31,3 +31,4 @@ W09 ✗ 17-fol-01 (high → xhigh retry: maestro db:smoke P2002 unique constrain
 W09 ✓ 17-fol-01 (1 slice, high→xhigh recovery, gates passed, commit 745c0fa) — completeness 26.2% → 26.2%; Wave 9 complete
 W10 ✗ 18-calc-01 (high → xhigh retry failed: db:smoke failed during db:seed with inconsistent types deduced for parameter $3) — see logs/maestro/18-calc-01-formulas-engine.failure.md
 W10 ✓ 18-calc-01 (1 slice, high→xhigh + manual recovery, gates passed, commit 12000a6) — completeness 26.2% → 26.2%
+W10 ✓ 19-calc-08 (1 slice, medium manual recovery, gates passed, commit 3723507) — completeness 26.2% → 26.2%; Wave 10 complete

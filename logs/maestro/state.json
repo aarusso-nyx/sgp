@@ -206,8 +206,18 @@
       "previous_failure": "logs/maestro/18-calc-01-formulas-engine.failure.md",
       "failure_log": "logs/maestro/18-calc-01-formulas-engine.failure.md",
       "recovery": "manual seed parameter typing, compile trigger restoration, and base_salary overload repair after exhausted retry"
+    },
+    "19-calc-08-rounding-money-correctness": {
+      "status": "completed",
+      "effort": "medium",
+      "branch": "slice/19-calc-08-rounding-money-correctness",
+      "commit": "3723507db4fcf012ebf3a9ce139564b785b37473",
+      "started_at": "2026-05-01T17:26:38-03:00",
+      "completed_at": "2026-05-01T17:28:43-03:00",
+      "retries": 0,
+      "agent": "manual-maestro-recovery"
     }
   },
-  "current_wave": 10,
+  "current_wave": 11,
   "active_subagents": []
 }
