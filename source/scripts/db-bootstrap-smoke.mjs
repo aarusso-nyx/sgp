@@ -570,7 +570,12 @@ BEGIN
   VALUES (tenant_b, 'xcut03-b', 'XCUT03B', 'XCUT03 Tenant B', 'ACTIVE'::"RecordStatus")
   ON CONFLICT (id) DO NOTHING;
 
-  SELECT id INTO employee_a FROM hr.employee WHERE tenant_id = tenant_a LIMIT 1;
+  SELECT id INTO employee_a
+  FROM hr.employee
+  WHERE tenant_id = tenant_a
+    AND functional_status_id IS NOT NULL
+  ORDER BY created_at
+  LIMIT 1;
   SELECT id INTO employee_b FROM hr.employee WHERE tenant_id = tenant_b LIMIT 1;
 
   IF employee_a IS NULL THEN
@@ -771,7 +776,12 @@ BEGIN
   GRANT SELECT ON hr.employee, hr.employment_link, hr.employment_contract, hr.v_employee_career_history TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.probation_evaluation TO sgp_smoke_rls;
 
-  SELECT id INTO employee_a FROM hr.employee WHERE tenant_id = tenant_a LIMIT 1;
+  SELECT id INTO employee_a
+  FROM hr.employee
+  WHERE tenant_id = tenant_a
+    AND functional_status_id IS NOT NULL
+  ORDER BY created_at
+  LIMIT 1;
   IF employee_a IS NULL THEN
     RAISE EXCEPTION 'HR-08 smoke requires at least one seeded tenant A employee';
   END IF;
@@ -1846,6 +1856,285 @@ $$;
     `,
   );
   console.log('[db-smoke] validated FOL-05 salary history lookup, overlap, audit, and RLS');
+
+  await runSqlSnippet(
+    '99-fol03-progressao-funcional.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  salary_range_id uuid := gen_random_uuid();
+  source_level_id uuid := gen_random_uuid();
+  target_level_id uuid := gen_random_uuid();
+  job_position_id uuid := gen_random_uuid();
+  v_functional_status_id uuid;
+  v_employee_id uuid := gen_random_uuid();
+  v_evaluation_id uuid := gen_random_uuid();
+  v_progression_id uuid := gen_random_uuid();
+  visible_count integer;
+  history_count integer;
+  audit_count integer;
+  v_current_level_id uuid;
+BEGIN
+  GRANT USAGE ON SCHEMA avaliacao, hr, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range_level TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.job_position TO sgp_smoke_rls;
+  GRANT SELECT ON hr.functional_status TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employee TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.merit_progression TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_simulation TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON hr.performance_evaluation TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_level_history TO sgp_smoke_rls;
+  GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'avaliacao.progressao.read' || chr(10) ||
+    'avaliacao.progressao.simulate' || chr(10) ||
+    'avaliacao.progressao.apply' || chr(10) ||
+    'avaliacao.write' || chr(10) ||
+    'avaliacao.salary_history.write' || chr(10) ||
+    'avaliacao.salary_history.read' || chr(10) ||
+    'gestao.cargo.write' || chr(10) ||
+    'gestao.cargo.read' || chr(10) ||
+    'gestao.read' || chr(10) ||
+    'rh.employee.write' || chr(10) ||
+    'rh.employee.read' || chr(10) ||
+    'auditoria.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+  PERFORM set_config('app.request_id', 'fol03-smoke-' || suffix, true);
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT id INTO v_functional_status_id
+  FROM hr.functional_status
+  WHERE tenant_id = tenant_a
+  ORDER BY created_at
+  LIMIT 1;
+  IF v_functional_status_id IS NULL THEN
+    RAISE EXCEPTION 'FOL-03 smoke requires one tenant A functional_status';
+  END IF;
+
+  INSERT INTO hr.salary_range (id, tenant_id, code, name, starts_on)
+  VALUES (
+    salary_range_id,
+    tenant_a,
+    'FOL03-SR-' || left(suffix, 8),
+    'FOL-03 smoke salary range',
+    DATE '2026-01-01'
+  );
+
+  INSERT INTO hr.salary_range_level (
+    id,
+    tenant_id,
+    salary_range_id,
+    code,
+    name,
+    level_number,
+    class_number,
+    level_number_fol02,
+    base_salary,
+    amount_override
+  )
+  VALUES
+    (
+      source_level_id,
+      tenant_a,
+      salary_range_id,
+      'FOL03-LVL-A-' || left(suffix, 8),
+      'FOL-03 source level',
+      1,
+      1,
+      1,
+      1000.00,
+      1000.00
+    ),
+    (
+      target_level_id,
+      tenant_a,
+      salary_range_id,
+      'FOL03-LVL-B-' || left(suffix, 8),
+      'FOL-03 target level',
+      2,
+      1,
+      2,
+      1100.00,
+      1100.00
+    );
+
+  INSERT INTO hr.job_position (
+    id,
+    tenant_id,
+    code,
+    name,
+    category,
+    legal_regime,
+    creation_law,
+    vacancies_count,
+    salary_range_id
+  )
+  VALUES (
+    job_position_id,
+    tenant_a,
+    'FOL03-JOB-' || left(suffix, 8),
+    'FOL-03 smoke job position',
+    'efetivo',
+    'estatutario',
+    'Lei smoke 2026',
+    1,
+    salary_range_id
+  );
+
+  INSERT INTO hr.employee (
+    id,
+    tenant_id,
+    registration,
+    name,
+    job_position_id,
+    functional_status_id,
+    salary_range_level_id,
+    hired_on,
+    lifecycle_status
+  )
+  VALUES (
+    v_employee_id,
+    tenant_a,
+    'FOL03-' || left(suffix, 8),
+    'FOL-03 Smoke Employee',
+    job_position_id,
+    v_functional_status_id,
+    source_level_id,
+    DATE '2024-01-01',
+    'ACTIVE'::"EmployeeLifecycleStatus"
+  );
+
+  INSERT INTO hr.performance_evaluation (
+    id,
+    tenant_id,
+    employee_id,
+    period_label,
+    score,
+    criteria,
+    evaluator_ref,
+    evaluated_on,
+    status
+  )
+  VALUES (
+    v_evaluation_id,
+    tenant_a,
+    v_employee_id,
+    '2026',
+    95.00,
+    '[]'::jsonb,
+    'db-smoke',
+    DATE '2026-04-01',
+    'APPROVED'::"PerformanceEvaluationStatus"
+  );
+
+  INSERT INTO hr.merit_progression (
+    id,
+    tenant_id,
+    employee_id,
+    performance_evaluation_id,
+    source_salary_range_level_id,
+    target_salary_range_level_id,
+    effective_on,
+    data_efeito,
+    appointment_act,
+    kind,
+    progression_type,
+    status,
+    justification
+  )
+  VALUES (
+    v_progression_id,
+    tenant_a,
+    v_employee_id,
+    v_evaluation_id,
+    source_level_id,
+    target_level_id,
+    DATE '2026-05-01',
+    DATE '2026-05-01',
+    'Portaria smoke FOL-03',
+    'MERIT'::"ProgressionKind",
+    'merit_horizontal'::hr.progression_type,
+    'simulated'::hr.progression_status,
+    'Smoke progression'
+  );
+
+  UPDATE hr.merit_progression
+  SET status = 'applied'::hr.progression_status,
+    applied_at = now()
+  WHERE id = v_progression_id;
+
+  SELECT salary_range_level_id INTO v_current_level_id
+  FROM hr.employee
+  WHERE id = v_employee_id;
+
+  SELECT count(*) INTO history_count
+  FROM hr.salary_level_history
+  WHERE tenant_id = tenant_a
+    AND employee_id = v_employee_id
+    AND salary_range_level_id = target_level_id
+    AND vigencia_inicio = DATE '2026-05-01'
+    AND vencimento_basico = 1100.00;
+
+  PERFORM public.sgp_append_audit_event(
+    'UPDATE',
+    'avaliacao.progressao',
+    v_progression_id::text,
+    NULL::uuid,
+    NULLIF(current_setting('app.current_user_sub', true), ''),
+    NULLIF(current_setting('app.current_login', true), ''),
+    'hr.merit_progression',
+    NULLIF(current_setting('app.request_id', true), ''),
+    jsonb_build_object('event', 'avaliacao.progressao.applied', 'progressionId', v_progression_id),
+    NULL::text,
+    NULL::text,
+    NULL::text
+  );
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND resource_type = 'avaliacao.progressao'
+    AND resource_id = v_progression_id::text
+    AND metadata->>'event' = 'avaliacao.progressao.applied';
+  RESET ROLE;
+
+  IF v_current_level_id <> target_level_id THEN
+    RAISE EXCEPTION 'Expected employee current level % after applied progression, found %', target_level_id, v_current_level_id;
+  END IF;
+  IF history_count <> 1 THEN
+    RAISE EXCEPTION 'Expected applied progression to insert one target salary history row, found %', history_count;
+  END IF;
+  IF audit_count <> 1 THEN
+    RAISE EXCEPTION 'Expected avaliacao.progressao.applied audit_event, found %', audit_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'avaliacao.progressao.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.merit_progression
+  WHERE id = v_progression_id;
+  RESET ROLE;
+
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 merit_progression rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated FOL-03 progression trigger, audit, and RLS');
 
   console.log('[db-smoke] PASSED');
 }

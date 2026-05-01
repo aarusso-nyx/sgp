@@ -22,6 +22,13 @@
   padding: 12px 16px;
 }
 
+.career__next {
+  display: grid;
+  gap: 4px;
+  border-left: 4px solid #2563eb;
+  padding: 12px 16px;
+}
+
 .career__steps {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

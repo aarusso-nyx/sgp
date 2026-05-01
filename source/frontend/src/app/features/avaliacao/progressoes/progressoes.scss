@@ -1,0 +1,104 @@
+.progressions {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.progressions__header,
+.progressions__layout,
+.progressions__filters {
+  display: flex;
+  gap: 12px;
+}
+
+.progressions__header {
+  align-items: start;
+  justify-content: space-between;
+}
+
+.progressions__header h1,
+.progressions__header p {
+  margin: 0;
+}
+
+.progressions__header p {
+  color: #5f6673;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.progressions__form {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.progressions__form label {
+  display: grid;
+  gap: 6px;
+}
+
+.progressions__form input,
+.progressions__form select,
+.progressions__form textarea {
+  border: 1px solid #c8ced8;
+  border-radius: 6px;
+  min-height: 40px;
+  padding: 10px;
+}
+
+.progressions__wide {
+  grid-column: 1 / -1;
+}
+
+.progressions__result {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  border-left: 4px solid #2563eb;
+  min-width: 260px;
+  padding: 10px 14px;
+}
+
+.progressions__table {
+  overflow-x: auto;
+}
+
+.progressions__table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.progressions__table th,
+.progressions__table td {
+  border-bottom: 1px solid #d6dbe4;
+  padding: 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.progressions__table td:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.progressions__filter--active {
+  outline: 2px solid #2563eb;
+}
+
+.progressions__message {
+  color: #166534;
+}
+
+.progressions__error {
+  color: #b91c1c;
+}
+
+@media (max-width: 760px) {
+  .progressions__header,
+  .progressions__layout,
+  .progressions__filters {
+    flex-direction: column;
+  }
+}

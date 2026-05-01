@@ -266,6 +266,24 @@ enum ProgressionKind {
   @@schema("public")
 }
 
+enum FunctionalProgressionType {
+  merit_horizontal
+  vertical_promotion
+
+  @@map("progression_type")
+  @@schema("hr")
+}
+
+enum FunctionalProgressionStatus {
+  eligible
+  simulated
+  applied
+  revoked
+
+  @@map("progression_status")
+  @@schema("hr")
+}
+
 enum PensionCompensationStatus {
   DRAFT
   REQUESTED
@@ -1292,6 +1310,7 @@ model Employee {
   jobPositionId       String?                 @map("job_position_id") @db.Uuid
   jobFunctionId       String?                 @map("job_function_id") @db.Uuid
   salaryReferenceId   String?                 @map("salary_reference_id") @db.Uuid
+  salaryRangeLevelId  String?                 @map("salary_range_level_id") @db.Uuid
   functionalStatusId  String?                 @map("functional_status_id") @db.Uuid
   employmentLinkId    String?                 @map("employment_link_id") @db.Uuid
   contractTypeId      String?                 @map("contract_type_id") @db.Uuid
@@ -1321,6 +1340,7 @@ model Employee {
   jobPosition                  JobPosition?                  @relation(fields: [jobPositionId], references: [id])
   jobFunction                  JobFunction?                  @relation(fields: [jobFunctionId], references: [id])
   salaryReference              SalaryReference?              @relation(fields: [salaryReferenceId], references: [id])
+  salaryRangeLevel             SalaryRangeLevel?             @relation(fields: [salaryRangeLevelId], references: [id])
   functionalStatus             FunctionalStatus?             @relation(fields: [functionalStatusId], references: [id])
   employmentLink               EmploymentLink?               @relation(fields: [employmentLinkId], references: [id])
   contractType                 ContractType?                 @relation(fields: [contractTypeId], references: [id])
@@ -1376,6 +1396,7 @@ model Employee {
   @@index([jobPositionId])
   @@index([jobFunctionId])
   @@index([salaryReferenceId])
+  @@index([tenantId, salaryRangeLevelId])
   @@index([functionalStatusId])
   @@index([employmentLinkId])
   @@index([contractTypeId])
@@ -1978,7 +1999,10 @@ model SalaryRangeLevel {
 
   salaryRange     SalaryRange      @relation(fields: [salaryRangeId], references: [id])
   salaryReference SalaryReference? @relation(fields: [salaryReferenceId], references: [id])
+  employees       Employee[]
   salaryHistory   SalaryLevelHistory[]
+  sourceProgressions MeritProgression[] @relation("MeritProgressionSourceSalaryRangeLevel")
+  targetProgressions MeritProgression[] @relation("MeritProgressionTargetSalaryRangeLevel")
 
   @@unique([tenantId, salaryRangeId, code])
   @@unique([tenantId, salaryRangeId, classNumber, fol02LevelNumber])
@@ -3050,9 +3074,16 @@ model MeritProgression {
   performanceEvaluationId String?         @map("performance_evaluation_id") @db.Uuid
   sourceSalaryReferenceId String?         @map("source_salary_reference_id") @db.Uuid
   targetSalaryReferenceId String?         @map("target_salary_reference_id") @db.Uuid
+  sourceSalaryRangeLevelId String?        @map("source_salary_range_level_id") @db.Uuid
+  targetSalaryRangeLevelId String?        @map("target_salary_range_level_id") @db.Uuid
+  administrativeProcessId String?         @map("administrative_process_id") @db.Uuid
   effectiveOn             DateTime        @map("effective_on") @db.Date
+  dataEfeito              DateTime        @map("data_efeito") @db.Date
   appointmentAct          String          @default("") @map("appointment_act")
   kind                    ProgressionKind @default(MERIT)
+  progressionType         FunctionalProgressionType @default(merit_horizontal) @map("progression_type")
+  status                  FunctionalProgressionStatus @default(eligible)
+  appliedAt               DateTime?       @map("applied_at") @db.Timestamptz(6)
   justification           String          @default("")
   approvedByRef           String?         @map("approved_by_ref")
   createdAt               DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -3062,11 +3093,17 @@ model MeritProgression {
   evaluation            PerformanceEvaluation? @relation(fields: [performanceEvaluationId], references: [id])
   sourceSalaryReference SalaryReference?       @relation("MeritProgressionSourceSalaryReference", fields: [sourceSalaryReferenceId], references: [id])
   targetSalaryReference SalaryReference?       @relation("MeritProgressionTargetSalaryReference", fields: [targetSalaryReferenceId], references: [id])
+  sourceSalaryRangeLevel SalaryRangeLevel?     @relation("MeritProgressionSourceSalaryRangeLevel", fields: [sourceSalaryRangeLevelId], references: [id])
+  targetSalaryRangeLevel SalaryRangeLevel?     @relation("MeritProgressionTargetSalaryRangeLevel", fields: [targetSalaryRangeLevelId], references: [id])
+  salarySimulations     SalarySimulation[]
 
   @@index([tenantId, employeeId])
   @@index([performanceEvaluationId])
   @@index([sourceSalaryReferenceId])
   @@index([targetSalaryReferenceId])
+  @@index([sourceSalaryRangeLevelId])
+  @@index([targetSalaryRangeLevelId])
+  @@index([tenantId, status, dataEfeito])
   @@index([kind])
   @@map("merit_progression")
   @@schema("hr")
@@ -3076,6 +3113,7 @@ model SalarySimulation {
   id           String   @id @default(uuid()) @db.Uuid
   tenantId     String   @map("tenant_id") @db.Uuid
   employeeId   String   @map("employee_id") @db.Uuid
+  progressionId String? @map("progression_id") @db.Uuid
   scenario     String
   resultJson   Json     @default("{}") @map("result_json")
   createdByRef String?  @map("created_by_ref")
@@ -3083,9 +3121,11 @@ model SalarySimulation {
   updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee    Employee                     @relation(fields: [employeeId], references: [id])
+  progression MeritProgression?            @relation(fields: [progressionId], references: [id])
   adjustments SalarySimulationAdjustment[]
 
   @@index([tenantId, employeeId])
+  @@index([tenantId, progressionId])
   @@map("salary_simulation")
   @@schema("hr")
 }

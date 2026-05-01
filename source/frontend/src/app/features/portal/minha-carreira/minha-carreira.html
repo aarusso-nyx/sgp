@@ -15,6 +15,16 @@
     <small>{{ trail?.current?.jobPositionName }} · {{ trail?.current?.baseSalary }}</small>
   </div>
 
+  <section class="career__next" *ngIf="trail?.nextProgression" aria-label="Proxima progressao">
+    <span>Proxima Progressao</span>
+    <strong>{{ trail?.nextProgression?.eligible ? 'Elegivel' : 'Em acompanhamento' }}</strong>
+    <small *ngIf="trail?.nextProgression?.nextLevel">
+      Classe {{ trail?.nextProgression?.nextLevel?.classNumber }} · Referencia
+      {{ trail?.nextProgression?.nextLevel?.levelNumber }} ·
+      {{ trail?.nextProgression?.nextLevel?.salary }}
+    </small>
+  </section>
+
   <ol class="career__steps" aria-label="Trilha de progressao">
     <li *ngFor="let step of trail?.steps" [class.career__step--current]="step.current">
       <span>Classe {{ step.classNumber }}</span>

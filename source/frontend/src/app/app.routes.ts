@@ -55,6 +55,13 @@ export const routes: Routes = [
         loadComponent: () => import('./features/avaliacao/pccs/pccs').then((m) => m.AvaliacaoPccs),
       },
       {
+        path: 'avaliacao/progressoes',
+        loadComponent: () =>
+          import('./features/avaliacao/progressoes/progressoes').then(
+            (m) => m.AvaliacaoProgressoes,
+          ),
+      },
+      {
         path: 'portal/minha-carreira',
         loadComponent: () =>
           import('./features/portal/minha-carreira/minha-carreira').then(

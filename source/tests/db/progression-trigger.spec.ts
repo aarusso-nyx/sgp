@@ -1,0 +1,6 @@
+-- Exercised by npm run db:smoke in FOL-03 progression assertions.
+--
+-- Updating hr.merit_progression.status to applied inserts a row into
+-- hr.salary_level_history and updates hr.employee.salary_range_level_id.
+-- The API path also records public.audit_event metadata with
+-- avaliacao.progressao.applied through sgp_append_audit_event(...).

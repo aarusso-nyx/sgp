@@ -1,0 +1,108 @@
+<section class="progressions" aria-labelledby="progressions-title">
+  <header class="progressions__header">
+    <div>
+      <p>Avaliacao</p>
+      <h1 id="progressions-title">Progressoes</h1>
+    </div>
+    <div class="progressions__filters" role="tablist" aria-label="Filtro de status">
+      <button
+        mat-stroked-button
+        type="button"
+        *ngFor="let status of filters"
+        (click)="load(status)"
+        [class.progressions__filter--active]="status === selectedStatus"
+      >
+        {{ status }}
+      </button>
+    </div>
+  </header>
+
+  <p class="progressions__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="progressions__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="progressions__layout">
+    <form [formGroup]="simulationForm" (ngSubmit)="simulate()" class="progressions__form">
+      <label>
+        <span>Servidor</span>
+        <input formControlName="employeeId" />
+      </label>
+      <label>
+        <span>Data efeito</span>
+        <input type="date" formControlName="effectDate" />
+      </label>
+      <label>
+        <span>Tipo</span>
+        <select formControlName="progressionType">
+          <option value="merit_horizontal">Merito horizontal</option>
+          <option value="vertical_promotion">Promocao vertical</option>
+        </select>
+      </label>
+      <label>
+        <span>Nivel destino</span>
+        <input formControlName="targetSalaryRangeLevelId" />
+      </label>
+      <label>
+        <span>Rubrica de calculo</span>
+        <input formControlName="earningDeductionId" />
+      </label>
+      <label>
+        <span>Ato</span>
+        <input formControlName="appointmentAct" />
+      </label>
+      <label class="progressions__wide">
+        <span>Justificativa</span>
+        <textarea rows="4" formControlName="justification"></textarea>
+      </label>
+      <button mat-flat-button color="primary" type="submit">
+        <mat-icon>calculate</mat-icon>
+        Simular
+      </button>
+    </form>
+
+    <section class="progressions__result" *ngIf="simulation" aria-label="Resultado da simulacao">
+      <span>{{ simulation.progressionId }}</span>
+      <strong>{{ simulation.netDelta }}</strong>
+      <small>{{ simulation.sourceSalary }} -> {{ simulation.targetSalary }}</small>
+    </section>
+  </div>
+
+  <section class="progressions__table" aria-label="Lista de progressoes">
+    <p *ngIf="loading">Carregando...</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Servidor</th>
+          <th>Tipo</th>
+          <th>Status</th>
+          <th>Efeito</th>
+          <th>Impacto</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of records">
+          <td>
+            <strong>{{ record.registration }}</strong>
+            <span>{{ record.name }}</span>
+          </td>
+          <td>{{ record.progressionType }}</td>
+          <td>{{ record.status }}</td>
+          <td>{{ record.effectDate | date: 'yyyy-MM-dd' }}</td>
+          <td>{{ record.sourceSalary }} -> {{ record.targetSalary }}</td>
+          <td>
+            <button
+              mat-stroked-button
+              color="primary"
+              type="button"
+              (click)="apply(record)"
+              [disabled]="record.status === 'applied'"
+            >
+              <mat-icon>check_circle</mat-icon>
+              Aplicar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

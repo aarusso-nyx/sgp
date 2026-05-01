@@ -208,6 +208,43 @@ DO $$
 DECLARE
   table_name text;
 BEGIN
+  FOREACH table_name IN ARRAY ARRAY['merit_progression', 'salary_simulation']
+  LOOP
+    IF to_regclass(format('hr.%I', table_name)) IS NULL THEN
+      CONTINUE;
+    END IF;
+
+    EXECUTE format('ALTER TABLE hr.%I ENABLE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('ALTER TABLE hr.%I FORCE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', table_name || '_write', table_name);
+    EXECUTE format(
+      'CREATE POLICY %I ON hr.%I FOR SELECT USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''avaliacao.progressao.read'', ''avaliacao.progressao.simulate'', ''avaliacao.progressao.apply'', ''avaliacao.progressao.revoke''])))',
+      table_name || '_select',
+      table_name
+    );
+
+    IF table_name = 'salary_simulation' THEN
+      EXECUTE format(
+        'CREATE POLICY %I ON hr.%I FOR ALL USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''avaliacao.progressao.simulate'']))) WITH CHECK (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''avaliacao.progressao.simulate''])))',
+        table_name || '_write',
+        table_name
+      );
+    ELSE
+      EXECUTE format(
+        'CREATE POLICY %I ON hr.%I FOR ALL USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''avaliacao.progressao.simulate'', ''avaliacao.progressao.apply'', ''avaliacao.progressao.revoke'']))) WITH CHECK (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''avaliacao.progressao.simulate'', ''avaliacao.progressao.apply'', ''avaliacao.progressao.revoke''])))',
+        table_name || '_write',
+        table_name
+      );
+    END IF;
+  END LOOP;
+END
+$$;
+
+DO $$
+DECLARE
+  table_name text;
+BEGIN
   FOREACH table_name IN ARRAY ARRAY['salary_reference', 'salary_level_history']
   LOOP
     EXECUTE format('ALTER TABLE hr.%I ENABLE ROW LEVEL SECURITY', table_name);
@@ -696,8 +733,6 @@ DECLARE
 BEGIN
   FOREACH table_name IN ARRAY ARRAY[
     'performance_evaluation',
-    'merit_progression',
-    'salary_simulation',
     'career_plan',
     'salary_simulation_adjustment'
   ]
@@ -746,6 +781,25 @@ BEGIN
   END LOOP;
 END
 $$;
+
+DROP POLICY IF EXISTS performance_evaluation_select ON hr.performance_evaluation;
+CREATE POLICY performance_evaluation_select ON hr.performance_evaluation
+  FOR SELECT
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(
+        ARRAY[
+          'avaliacao.read',
+          'avaliacao.write',
+          'avaliacao.progressao.read',
+          'avaliacao.progressao.simulate',
+          'avaliacao.progressao.apply'
+        ]
+      )
+    )
+  );
 
 DO $$
 DECLARE

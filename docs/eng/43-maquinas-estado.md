@@ -86,6 +86,26 @@ O estágio probatório aplica-se somente a vínculos estatutários. O marco inic
 
 Permissões: leitura usa `avaliacao.read`; registro de avaliação exige `avaliacao.probation.write`.
 
+## 0.4. Progressão Funcional FOL-03
+
+`hr.merit_progression` registra progressão por mérito horizontal e promoção vertical. A transição para `applied` é executada em transação única: o banco insere `hr.salary_level_history`, atualiza `hr.employee.salary_range_level_id` e a API grava `public.audit_event` com o evento `avaliacao.progressao.applied`.
+
+| Estado      | Descrição                                                         |
+| ----------- | ----------------------------------------------------------------- |
+| `eligible`  | Servidor cumpre interstício mínimo e possui avaliação aprovada    |
+| `simulated` | Impacto financeiro prévio registrado em `hr.salary_simulation`    |
+| `applied`   | Progressão aplicada ao nível salarial vigente do servidor         |
+| `revoked`   | Registro não retroativo sinalizado para tratamento administrativo |
+
+| Transição | De          | Evento                 | Guarda                                                     | Ação                                                                                               | Para        |
+| --------- | ----------- | ---------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| FOL03-T1  | _(início)_  | `AVALIAR_ELEGIBILIDADE`| interstício de 18 meses; avaliação de desempenho aprovada  | identifica nível atual e próximo nível via PCCS                                                    | `eligible`  |
+| FOL03-T2  | `eligible`  | `SIMULAR_PROGRESSAO`   | nível destino existente                                    | usa `avaliacao.fn_get_vencimento_vigente(...)` e chama `payroll_calc.evaluate_earning_deduction(...)`; grava simulação | `simulated` |
+| FOL03-T3  | `simulated` | `APLICAR_PROGRESSAO`   | registro ainda não aplicado                                | trigger grava histórico salarial, atualiza servidor e emite auditoria `avaliacao.progressao.applied` | `applied`   |
+| FOL03-T4  | `eligible` ou `simulated` | `REVOGAR_PROGRESSAO` | decisão administrativa explícita                           | marca revogação sem recálculo retroativo                                                           | `revoked`   |
+
+Permissões: leitura exige `avaliacao.progressao.read`; simulação exige `avaliacao.progressao.simulate`; aplicação exige `avaliacao.progressao.apply`; revogação exige `avaliacao.progressao.revoke`.
+
 ## 0.4. Férias e Programação HR-03
 
 `hr.vacation_record` registra a programação anual de férias por período aquisitivo, com até três parcelas, abono pecuniário limitado a 10 dias e aprovação de chefia antes do gozo. O saldo é calculado por `hr.f_calculate_vacation_balance(employee_id, ref_date)` e exposto por `hr.v_vacation_balance`; o cálculo financeiro de férias permanece fora deste fluxo e pertence ao slice CALC-05.

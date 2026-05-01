@@ -276,6 +276,38 @@
       "description": "Mutate PCCS career plans and job-position links."
     },
     {
+      "key": "avaliacao.progressao.read",
+      "moduleKey": "avaliacao",
+      "resourceKey": "progressao",
+      "actionKey": "read",
+      "routePattern": "/api/v1/avaliacao/progression/**",
+      "description": "Read functional progression records."
+    },
+    {
+      "key": "avaliacao.progressao.simulate",
+      "moduleKey": "avaliacao",
+      "resourceKey": "progressao",
+      "actionKey": "simulate",
+      "routePattern": "/api/v1/avaliacao/progression/**/simulate",
+      "description": "Simulate functional progression salary impact."
+    },
+    {
+      "key": "avaliacao.progressao.apply",
+      "moduleKey": "avaliacao",
+      "resourceKey": "progressao",
+      "actionKey": "apply",
+      "routePattern": "/api/v1/avaliacao/progression/**/apply",
+      "description": "Apply functional progression to the employee current salary level."
+    },
+    {
+      "key": "avaliacao.progressao.revoke",
+      "moduleKey": "avaliacao",
+      "resourceKey": "progressao",
+      "actionKey": "revoke",
+      "routePattern": "/api/v1/avaliacao/progression/**/revoke",
+      "description": "Revoke non-retroactive functional progression records."
+    },
+    {
       "key": "avaliacao.salary_history.read",
       "moduleKey": "avaliacao",
       "resourceKey": "salary_history",
@@ -492,6 +524,9 @@
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",
+      "avaliacao.progressao.read",
+      "avaliacao.progressao.simulate",
+      "avaliacao.progressao.apply",
       "avaliacao.salary_history.read",
       "avaliacao.salary_history.write",
       "avaliacao.probation.write",
@@ -506,6 +541,9 @@
       "rh.employee.read",
       "rh.dependent.read",
       "avaliacao.pccs.read",
+      "avaliacao.progressao.read",
+      "avaliacao.progressao.simulate",
+      "avaliacao.progressao.apply",
       "avaliacao.salary_history.read",
       "avaliacao.salary_history.write",
       "folha.read",
@@ -521,6 +559,7 @@
       "rh.employee.read",
       "rh.history.read",
       "avaliacao.pccs.read",
+      "avaliacao.progressao.read",
       "avaliacao.salary_history.read",
       "folha.read",
       "relatorio.read",

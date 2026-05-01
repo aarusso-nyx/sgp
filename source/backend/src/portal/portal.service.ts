@@ -6,6 +6,7 @@ import {
 import { QueryResultRow } from 'pg';
 
 import { CareerPlanService } from '../avaliacao/career-plan/career-plan.service';
+import { EligibilityService } from '../avaliacao/progression/progression.service';
 import { AuthenticatedActor } from '../auth/auth.types';
 import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../common/pagination/paged-response';
@@ -85,6 +86,7 @@ export class PortalService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly careerPlanService: CareerPlanService,
+    private readonly eligibilityService: EligibilityService,
   ) {}
 
   currentSession(actor: AuthenticatedActor | undefined) {
@@ -247,7 +249,15 @@ export class PortalService {
       `,
       [employee.id],
     );
-    return { ...trail, salaryHistory: history };
+    let nextProgression: unknown = null;
+    try {
+      nextProgression = await this.eligibilityService.checkInterstice(
+        employee.id,
+      );
+    } catch {
+      nextProgression = null;
+    }
+    return { ...trail, salaryHistory: history, nextProgression };
   }
 
   async requestProfileChange(

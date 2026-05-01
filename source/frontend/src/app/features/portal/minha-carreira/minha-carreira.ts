@@ -22,6 +22,16 @@ interface CareerTrail {
     motivo: string;
     leiReferencia: string;
   }[];
+  nextProgression: {
+    eligible: boolean;
+    intersticeReferenceOn: string | null;
+    approvedEvaluationId: string | null;
+    nextLevel: {
+      classNumber: number;
+      levelNumber: number;
+      salary: string;
+    } | null;
+  } | null;
 }
 
 @Component({
