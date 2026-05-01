@@ -11,7 +11,10 @@ import {
   SystemParametersController,
 } from './system-parameters.controller';
 import { SystemParametersService } from './system-parameters.service';
-import { TaxRateController } from './tax-rate/tax-rate.controller';
+import {
+  RppsTaxRateController,
+  TaxRateController,
+} from './tax-rate/tax-rate.controller';
 import { TaxRateService } from './tax-rate/tax-rate.service';
 
 @Module({
@@ -22,6 +25,7 @@ import { TaxRateService } from './tax-rate/tax-rate.service';
     AdminMenusController,
     AdminPlatformController,
     TaxRateController,
+    RppsTaxRateController,
   ],
   providers: [
     SystemParametersService,

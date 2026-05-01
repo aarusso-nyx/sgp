@@ -10,13 +10,14 @@ import { MatInputModule } from '@angular/material/input';
 
 import { SharedPlatformModule } from '../shared-platform/shared-platform-module';
 import { TaxRateIrrf } from '../admin/parametros/tax-rate-irrf/tax-rate-irrf';
+import { TaxRateRpps } from '../admin/parametros/tax-rate-rpps/tax-rate-rpps';
 import { Cargos } from './cargos/cargos';
 import { GestaoRoutingModule } from './gestao-routing-module';
 import { GestaoMasterData } from './master-data/master-data';
 import { GestaoHome } from './pages/gestao-home/gestao-home';
 
 @NgModule({
-  declarations: [GestaoHome, GestaoMasterData, Cargos, TaxRateIrrf],
+  declarations: [GestaoHome, GestaoMasterData, Cargos, TaxRateIrrf, TaxRateRpps],
   imports: [
     CommonModule,
     ReactiveFormsModule,

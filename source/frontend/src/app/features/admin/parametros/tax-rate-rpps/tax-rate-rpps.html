@@ -1,0 +1,61 @@
+<section class="rpps" aria-labelledby="rpps-title">
+  <header class="rpps__header">
+    <div>
+      <p class="rpps__eyebrow">Parametros</p>
+      <h1 id="rpps-title">Tabela RPPS</h1>
+    </div>
+    <button mat-raised-button color="primary" type="button" (click)="load()">
+      <mat-icon>refresh</mat-icon>
+      Atualizar
+    </button>
+  </header>
+
+  <form class="rpps__form" [formGroup]="form" (ngSubmit)="importCsv()">
+    <mat-form-field appearance="outline">
+      <mat-label>Competencia inicial</mat-label>
+      <input matInput formControlName="competenceStart" type="date" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Competencia final</mat-label>
+      <input matInput formControlName="competenceEnd" type="date" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Ano</mat-label>
+      <input matInput formControlName="referenceYear" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Teto RPPS</mat-label>
+      <input matInput formControlName="ceilingAmount" />
+    </mat-form-field>
+    <mat-form-field class="rpps__csv" appearance="outline">
+      <mat-label>CSV: minimo;maximo;aliquota</mat-label>
+      <textarea matInput formControlName="csv" rows="6"></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+      <mat-icon>upload_file</mat-icon>
+      Importar CSV
+    </button>
+  </form>
+
+  <p class="rpps__error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="rpps__success" *ngIf="success">{{ success }}</p>
+
+  <table class="rpps__table">
+    <thead>
+      <tr>
+        <th>Faixa</th>
+        <th>Minimo</th>
+        <th>Maximo</th>
+        <th>Aliquota</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bracket of brackets">
+        <td>{{ bracket.code }}</td>
+        <td>{{ bracket.bracketMin }}</td>
+        <td>{{ bracket.bracketMax || 'Sem limite' }}</td>
+        <td>{{ bracket.rate }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

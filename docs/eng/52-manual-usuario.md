@@ -1808,6 +1808,11 @@ R: Na lista de cargos, confira o total de vagas e as vagas providas. O sistema e
 **P: Como atualizo a tabela progressiva mensal de IRRF?**
 R: Acesse **Gestão > Parâmetros > Tabela IRRF**, informe a vigência inicial, a vigência final quando existir e importe o CSV com cinco linhas no formato `mínimo;máximo;alíquota;dedução;dedução_dependente`. A última faixa deve ficar sem valor máximo. Ao salvar, o sistema valida a continuidade centavo a centavo das faixas, grava a nova tabela em `public.tax_rate`, registra auditoria e passa a usar a vigência informada no cálculo da rubrica `IRRF`.
 
+### Gestão — Parâmetros de RPPS
+
+**P: Como atualizo a tabela progressiva de contribuição RPPS?**
+R: Acesse **Gestão > Parâmetros > Tabela RPPS**, informe a vigência inicial, a vigência final quando existir, o teto da base RPPS e importe o CSV no formato `mínimo;máximo;alíquota`. A última faixa deve ficar sem valor máximo. Ao salvar, o sistema valida a continuidade centavo a centavo das faixas, grava a tabela por tenant em `public.tax_rate`, atualiza o parâmetro `TETO_RPPS`, registra auditoria e passa a usar a vigência informada no cálculo da rubrica `RPPS`. Vínculos celetistas não sofrem desconto RPPS; o cálculo retorna zero e registra evento de bypass para auditoria.
+
 ### Previdenciário e recadastramento
 
 **P: O beneficiário fez a prova de vida, mas o status ainda aparece como "Perto do Vencimento".**

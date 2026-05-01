@@ -2710,6 +2710,118 @@ $$;
   );
   console.log('[db-smoke] validated CALC-02 IRRF compute function and tax_rate RLS');
 
+  await runSqlSnippet(
+    '99-calc03-rpps.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  v_rate_id uuid := gen_random_uuid();
+  link_statutory uuid := gen_random_uuid();
+  link_celetista uuid := gen_random_uuid();
+  visible_count integer;
+  affected_count integer;
+  rpps_amount numeric(14, 2);
+  audit_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA public, payroll_calc, hr TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON public.tax_rate TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON public.system_parameter TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.employment_link TO sgp_smoke_rls;
+  GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'system.tax-rate.read' || chr(10) || 'system.tax-rate.write' || chr(10) || 'rh.employee.read' || chr(10) || 'gestao.write' || chr(10) || 'auditoria.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+
+  INSERT INTO public.system_parameter (tenant_id, key, value, description, module_key)
+  VALUES (tenant_a, 'TETO_RPPS', '{"amount":8157.41}'::jsonb, 'CALC-03 smoke ceiling', 'payroll')
+  ON CONFLICT (tenant_id, key) DO UPDATE SET value = EXCLUDED.value;
+
+  DELETE FROM public.tax_rate
+  WHERE tenant_id = tenant_a
+    AND code LIKE 'CALC03-SMOKE-%';
+
+  INSERT INTO hr.employment_link (
+    id, tenant_id, code, name, contract_type, regime_law_reference, status
+  )
+  VALUES
+    (link_statutory, tenant_a, 'CALC03-SMOKE-STAT-' || left(suffix, 8), 'CALC-03 statutory smoke', 'statutory', 'Lei 8.112/90', 'ACTIVE'::"RecordStatus"),
+    (link_celetista, tenant_a, 'CALC03-SMOKE-CLT-' || left(suffix, 8), 'CALC-03 celetista smoke', 'celetista', 'Lei 8.112/90', 'ACTIVE'::"RecordStatus");
+
+  INSERT INTO public.tax_rate (
+    id, tenant_id, code, name, description, scope, reference_year, rate_percent,
+    kind, competence_start, bracket_min, bracket_max, rate, deduction_amount,
+    dependent_deduction, status
+  )
+  VALUES
+    (v_rate_id, tenant_a, 'CALC03-SMOKE-01-' || left(suffix, 8), 'CALC-03 RPPS 1', 'CALC-03 smoke RPPS', 'RPPS_SMOKE', 2025, 7.500000, 'RPPS', DATE '2025-02-01', 0.00, 1518.00, 7.500000, 0.00, 0.00, 'ACTIVE'::"RecordStatus"),
+    (gen_random_uuid(), tenant_a, 'CALC03-SMOKE-02-' || left(suffix, 8), 'CALC-03 RPPS 2', 'CALC-03 smoke RPPS', 'RPPS_SMOKE', 2025, 9.000000, 'RPPS', DATE '2025-02-01', 1518.01, 2793.88, 9.000000, 0.00, 0.00, 'ACTIVE'::"RecordStatus"),
+    (gen_random_uuid(), tenant_a, 'CALC03-SMOKE-03-' || left(suffix, 8), 'CALC-03 RPPS 3', 'CALC-03 smoke RPPS', 'RPPS_SMOKE', 2025, 12.000000, 'RPPS', DATE '2025-02-01', 2793.89, 4190.83, 12.000000, 0.00, 0.00, 'ACTIVE'::"RecordStatus"),
+    (gen_random_uuid(), tenant_a, 'CALC03-SMOKE-04-' || left(suffix, 8), 'CALC-03 RPPS 4', 'CALC-03 smoke RPPS', 'RPPS_SMOKE', 2025, 14.000000, 'RPPS', DATE '2025-02-01', 4190.84, 8157.41, 14.000000, 0.00, 0.00, 'ACTIVE'::"RecordStatus"),
+    (gen_random_uuid(), tenant_a, 'CALC03-SMOKE-05-' || left(suffix, 8), 'CALC-03 RPPS 5', 'CALC-03 smoke RPPS', 'RPPS_SMOKE', 2025, 14.500000, 'RPPS', DATE '2025-02-01', 8157.42, NULL, 14.500000, 0.00, 0.00, 'ACTIVE'::"RecordStatus");
+
+  SELECT payroll_calc.compute_rpps(tenant_a, link_statutory, 10000.00, DATE '2025-02-01')
+  INTO rpps_amount;
+  IF rpps_amount <> 951.63 THEN
+    RAISE EXCEPTION 'Expected CALC-03 RPPS smoke amount 951.63, found %', rpps_amount;
+  END IF;
+
+  SELECT payroll_calc.compute_rpps(tenant_a, link_celetista, 5000.00, DATE '2025-02-01')
+  INTO rpps_amount;
+  IF rpps_amount <> 0.00 THEN
+    RAISE EXCEPTION 'Expected CALC-03 celetista RPPS bypass amount 0.00, found %', rpps_amount;
+  END IF;
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND resource_type = 'payroll.rpps'
+    AND resource_id = link_celetista::text
+    AND metadata->>'event' = 'payroll.rpps.bypassed';
+  RESET ROLE;
+  IF audit_count < 1 THEN
+    RAISE EXCEPTION 'Expected CALC-03 RPPS bypass audit event';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'system.tax-rate.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM public.tax_rate
+  WHERE id = v_rate_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 RPPS tax_rate rows from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'system.tax-rate.write', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  UPDATE public.tax_rate
+  SET tenant_id = tenant_b
+  WHERE id = v_rate_id;
+  GET DIAGNOSTICS affected_count = ROW_COUNT;
+  RESET ROLE;
+  IF affected_count <> 0 THEN
+    RAISE EXCEPTION 'Expected cross-tenant RPPS tax_rate rewrite to affect 0 rows, affected %', affected_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated CALC-03 RPPS compute function, bypass audit, and tax_rate RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

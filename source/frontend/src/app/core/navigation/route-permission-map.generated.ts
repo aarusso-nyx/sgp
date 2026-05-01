@@ -16,6 +16,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/gestao/**', 'gestao.write'],
   ['#!/gestao/parametros/irrf', 'system.tax-rate.read'],
   ['#!/gestao/parametros/irrf', 'system.tax-rate.write'],
+  ['#!/gestao/parametros/rpps', 'system.tax-rate.read'],
+  ['#!/gestao/parametros/rpps', 'system.tax-rate.write'],
   ['#!/previdenciario/**', 'previdenciario.read'],
   ['#!/previdenciario/**', 'previdenciario.write'],
   ['#!/recrutamento/**', 'recrutamento.read'],
