@@ -284,6 +284,14 @@
       "description": "Execute payroll processing runs such as 13th salary generation."
     },
     {
+      "key": "rh.vacation.payout",
+      "moduleKey": "rh",
+      "resourceKey": "vacation",
+      "actionKey": "payout",
+      "routePattern": "/api/v1/folhas/ferias/**",
+      "description": "Calculate and pay scheduled vacation payroll."
+    },
+    {
       "key": "folha.rubrica.read",
       "moduleKey": "folha",
       "resourceKey": "rubrica",

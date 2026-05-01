@@ -86,6 +86,15 @@ export class PortalController {
     return this.portalService.getMyCareer(actor);
   }
 
+  @Get('v1/portal/contracheques/ferias')
+  @RequirePermission('portal.profile.read')
+  @ApiOkResponse({
+    description: 'Authenticated employee vacation payroll payslips.',
+  })
+  feriasContracheques(@CurrentActor() actor: AuthenticatedActor | undefined) {
+    return this.portalService.vacationPayslips(actor);
+  }
+
   @Put('v1/portal/meus-dados/:section')
   @RequirePermission('portal.profile.write')
   @AuditMutation({

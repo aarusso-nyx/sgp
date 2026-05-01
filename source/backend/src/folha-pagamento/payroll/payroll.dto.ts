@@ -104,3 +104,10 @@ export class RunDecimoTerceiroDto {
   @Max(2100)
   year!: number;
 }
+
+export class RunFeriasPayrollDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  vacationRecordId!: string;
+}

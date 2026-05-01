@@ -34,6 +34,16 @@ interface CareerTrail {
   } | null;
 }
 
+interface VacationPayslip {
+  payrollRunId: string;
+  competenceYear: number;
+  competenceMonth: number;
+  status: string;
+  totalEarnings: string;
+  totalDeductions: string;
+  totalNet: string;
+}
+
 @Component({
   selector: 'app-portal-minha-carreira',
   standalone: true,
@@ -46,6 +56,7 @@ export class PortalMinhaCarreira implements OnInit, OnDestroy {
   private readonly http = inject(HttpClient);
 
   trail?: CareerTrail;
+  vacationPayslips: VacationPayslip[] = [];
   error = '';
 
   ngOnInit(): void {
@@ -58,6 +69,17 @@ export class PortalMinhaCarreira implements OnInit, OnDestroy {
         },
         error: () => {
           this.error = 'Nao foi possivel carregar a trilha de carreira.';
+        },
+      });
+    this.http
+      .get<VacationPayslip[]>('/api/v1/portal/contracheques/ferias')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (payslips) => {
+          this.vacationPayslips = payslips;
+        },
+        error: () => {
+          this.vacationPayslips = [];
         },
       });
   }

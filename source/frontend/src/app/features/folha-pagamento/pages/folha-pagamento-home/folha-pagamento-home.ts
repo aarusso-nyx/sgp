@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 import {
   DecimoTerceiroProcessamentosService,
   DecimoTerceiroRunResult,
+  FeriasRunResult,
 } from '../../processamentos/decimo-terceiro.service';
 
 @Component({
@@ -19,10 +21,17 @@ export class FolhaPagamentoHome {
   readonly currentYear = new Date().getFullYear();
   readonly form = this.fb.nonNullable.group({
     year: [this.currentYear, [Validators.required, Validators.min(2000), Validators.max(2100)]],
+    vacationRecordId: [''],
   });
 
-  preview: { action: 'adiantamento' | 'fechamento'; year: number; label: string } | null = null;
+  preview: {
+    action: 'adiantamento' | 'fechamento' | 'ferias';
+    year: number;
+    label: string;
+    vacationRecordId?: string;
+  } | null = null;
   result: DecimoTerceiroRunResult | null = null;
+  feriasResult: FeriasRunResult | null = null;
   errorMessage = '';
   loading = false;
 
@@ -38,6 +47,24 @@ export class FolhaPagamentoHome {
       label: action === 'adiantamento' ? 'Gerar 1a parcela 13o' : 'Fechar 13o',
     };
     this.result = null;
+    this.feriasResult = null;
+    this.errorMessage = '';
+  }
+
+  reviewFerias(): void {
+    const vacationRecordId = this.form.controls.vacationRecordId.value.trim();
+    if (!vacationRecordId) {
+      this.form.controls.vacationRecordId.markAsTouched();
+      return;
+    }
+    this.preview = {
+      action: 'ferias',
+      year: Number(this.form.controls.year.value),
+      label: 'Calcular folha de ferias',
+      vacationRecordId,
+    };
+    this.result = null;
+    this.feriasResult = null;
     this.errorMessage = '';
   }
 
@@ -49,22 +76,34 @@ export class FolhaPagamentoHome {
     if (!this.preview) return;
     this.loading = true;
     this.errorMessage = '';
-    const request =
-      this.preview.action === 'adiantamento'
-        ? this.service.runAdiantamento(this.preview.year)
-        : this.service.runFechamento(this.preview.year);
-
+    const request = this.buildRequest(this.preview);
     request.subscribe({
       next: (result) => {
-        this.result = result;
+        if ('vacationRecordId' in result) {
+          this.feriasResult = result;
+        } else {
+          this.result = result;
+        }
         this.preview = null;
         this.loading = false;
       },
       error: (error: unknown) => {
         this.errorMessage =
-          error instanceof Error ? error.message : 'Nao foi possivel processar o 13o.';
+          error instanceof Error ? error.message : 'Nao foi possivel processar a folha.';
         this.loading = false;
       },
     });
+  }
+
+  private buildRequest(
+    preview: NonNullable<FolhaPagamentoHome['preview']>,
+  ): Observable<DecimoTerceiroRunResult | FeriasRunResult> {
+    if (preview.action === 'ferias') {
+      return this.service.runFerias(preview.vacationRecordId ?? '');
+    }
+    if (preview.action === 'adiantamento') {
+      return this.service.runAdiantamento(preview.year);
+    }
+    return this.service.runFechamento(preview.year);
   }
 }

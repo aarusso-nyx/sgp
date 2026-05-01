@@ -64,6 +64,7 @@ export const PERMISSIONS = [
   'rh.movimentacao.request',
   'rh.read',
   'rh.vacation.approve',
+  'rh.vacation.payout',
   'rh.vacation.read',
   'rh.vacation.request',
   'rh.write',

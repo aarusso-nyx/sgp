@@ -21,7 +21,13 @@ Somente usuários com permissão de avaliação podem registrar decisões. A apr
 
 As férias são solicitadas pelo **Portal do Servidor > Férias > Solicitar** e aprovadas na aplicação administrativa em **Módulo RH > Férias**. O servidor informa o período aquisitivo, até três parcelas de gozo e, quando aplicável, o abono pecuniário limitado a 10 dias. O sistema consulta o saldo por período aquisitivo, bloqueia solicitações com mais de três parcelas e exige que servidores celetistas tenham uma das parcelas com pelo menos 14 dias contínuos.
 
-A chefia ou RH aprova ou cancela a programação antes do gozo. Cada alteração grava evento de auditoria imutável em `audit_event`, e o histórico funcional passa a exibir as férias aprovadas ou gozadas. O valor de férias, terço constitucional e reflexos em folha não são calculados nesta tela; esses valores são tratados no processamento de folha de férias.
+A chefia ou RH aprova ou cancela a programação antes do gozo. Cada alteração grava evento de auditoria imutável em `audit_event`, e o histórico funcional passa a exibir as férias aprovadas, pagas ou gozadas. O valor de férias, terço constitucional e reflexos em folha é tratado no processamento de folha de férias.
+
+### Folha de férias
+
+Quando uma programação aprovada chega à janela de adiantamento de 30 dias antes do início do gozo, a equipe de folha acessa **Folha de Pgt > Processamentos de folha**, informa a programação de férias e aciona **Calcular folha de ferias**. A revisão confirma a ação antes de gravar a `payroll_run` do tipo `FERIAS`, gerar as rubricas de salário do período, terço constitucional, abono pecuniário quando houver, RPPS aplicável e IRRF exclusivo.
+
+Ao concluir, o sistema vincula `vacation_record.payroll_run_id` e muda a programação para `paid`. Reprocessar a mesma programação reaproveita a mesma folha vinculada e substitui os itens calculados daquela programação, sem duplicar lançamentos. No Portal do Servidor, a seção **Contracheques de ferias** exibe a folha de férias gerada depois da aprovação do processamento.
 
 ## Licença Saúde / Perícia
 

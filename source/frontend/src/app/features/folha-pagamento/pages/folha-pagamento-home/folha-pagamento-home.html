@@ -16,6 +16,14 @@
       <mat-icon>task_alt</mat-icon>
       Fechar 13o
     </button>
+    <mat-form-field appearance="outline" class="vacation-input">
+      <mat-label>Programacao de ferias</mat-label>
+      <input matInput formControlName="vacationRecordId" />
+    </mat-form-field>
+    <button mat-stroked-button type="button" (click)="reviewFerias()" [disabled]="loading">
+      <mat-icon>beach_access</mat-icon>
+      Calcular folha de ferias
+    </button>
   </form>
 
   <section *ngIf="preview as previewData" class="review-panel" aria-live="polite">
@@ -44,6 +52,12 @@
   <section *ngIf="result as resultData" class="result-panel" aria-live="polite">
     <span>{{ resultData.kind }}</span>
     <strong>{{ resultData.employeeCount }} servidores</strong>
+    <span>Total liquido {{ resultData.totalNet }}</span>
+  </section>
+
+  <section *ngIf="feriasResult as resultData" class="result-panel" aria-live="polite">
+    <span>FERIAS</span>
+    <strong>{{ resultData.employeeCount }} servidor</strong>
     <span>Total liquido {{ resultData.totalNet }}</span>
   </section>
 </section>

@@ -23,11 +23,13 @@ import {
   CalculatePayrollRunDto,
   CreateAdvancePaymentDto,
   CreatePayrollRunDto,
+  RunFeriasPayrollDto,
   PopulatePayrollRunDto,
   RunDecimoTerceiroDto,
   UpdatePayrollRunStatusDto,
 } from './payroll.dto';
 import { DecimoTerceiroService } from './decimo-terceiro.service';
+import { FeriasPayrollService } from './ferias-payroll.service';
 import { PayrollService } from './payroll.service';
 
 @ApiTags('folha-pagamento')
@@ -37,6 +39,7 @@ export class PayrollController {
   constructor(
     private readonly payrollService: PayrollService,
     private readonly decimoTerceiroService: DecimoTerceiroService,
+    private readonly feriasPayrollService: FeriasPayrollService,
     private readonly auditService: AuditService,
   ) {}
 
@@ -191,6 +194,26 @@ export class PayrollController {
       metadata: {
         operation: 'decimo_terceiro_fechamento',
         year: body.year,
+        employeeCount: created.employeeCount,
+      },
+    });
+    return created;
+  }
+
+  @Post('ferias/calcular')
+  @RequirePermission(['payroll.run.execute', 'rh.vacation.payout'])
+  @ApiCreatedResponse({ description: 'Generate a vacation payroll run.' })
+  async runFeriasPayroll(
+    @Req() request: RequestWithContext,
+    @Body() body: RunFeriasPayrollDto,
+  ) {
+    const created = await this.feriasPayrollService.run(body.vacationRecordId);
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: created.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'ferias',
+        vacationRecordId: body.vacationRecordId,
         employeeCount: created.employeeCount,
       },
     });

@@ -2822,6 +2822,95 @@ $$;
   );
   console.log('[db-smoke] validated CALC-03 RPPS compute function, bypass audit, and tax_rate RLS');
 
+  await runSqlSnippet(
+    '99-calc05-ferias.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  v_employee_id uuid;
+  v_vacation_id uuid := gen_random_uuid();
+  v_payroll_run_id uuid;
+  visible_count integer;
+  linked_count integer;
+  salary_amount numeric(14, 2);
+BEGIN
+  GRANT USAGE ON SCHEMA public, hr, payroll, payroll_calc TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.vacation_record TO sgp_smoke_rls;
+  GRANT SELECT ON hr.employee, hr.employment_link, hr.salary_reference, hr.employee_dependent TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.payroll_type TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.processing_type TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.payroll_run TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.employee_payroll_item TO sgp_smoke_rls;
+  GRANT SELECT ON payroll.payroll_earning_deduction TO sgp_smoke_rls;
+
+  SELECT id INTO v_employee_id
+  FROM hr.employee
+  WHERE tenant_id = tenant_a
+    AND employment_link_id IS NOT NULL
+    AND salary_reference_id IS NOT NULL
+  ORDER BY created_at, id
+  LIMIT 1;
+  IF v_employee_id IS NULL THEN
+    RAISE EXCEPTION 'CALC-05 smoke requires one tenant A payroll-ready employee';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'payroll.run.execute' || chr(10) || 'rh.vacation.payout', true);
+
+  INSERT INTO hr.vacation_record (
+    id, tenant_id, employee_id, accrual_period_start, accrual_period_end,
+    installment_number, pecuniary_bonus_days, starts_on, ends_on, days, status
+  )
+  VALUES (
+    v_vacation_id, tenant_a, v_employee_id, DATE '2025-01-01', DATE '2025-12-31',
+    1, 0, CURRENT_DATE + INTERVAL '10 days', CURRENT_DATE + INTERVAL '39 days',
+    30, 'aprovado'
+  );
+
+  SELECT amount INTO salary_amount
+  FROM payroll_calc.compute_ferias(tenant_a, v_vacation_id)
+  WHERE item_code = 'VACATION_SALARY';
+  IF salary_amount IS NULL OR salary_amount <= 0 THEN
+    RAISE EXCEPTION 'Expected CALC-05 vacation salary amount, found %', salary_amount;
+  END IF;
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  UPDATE hr.vacation_record SET payroll_run_id = NULL WHERE id = v_vacation_id;
+  RESET ROLE;
+
+  SELECT payroll.process_due_vacation_payroll() INTO linked_count;
+  IF linked_count < 1 THEN
+    RAISE EXCEPTION 'Expected due vacation payroll job to process at least 1 record';
+  END IF;
+
+  SELECT payroll_run_id INTO v_payroll_run_id
+  FROM hr.vacation_record
+  WHERE id = v_vacation_id;
+  IF v_payroll_run_id IS NULL THEN
+    RAISE EXCEPTION 'Expected vacation_record.payroll_run_id to be set';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.vacation.payout' || chr(10) || 'payroll.run.execute', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.vacation_record
+  WHERE id = v_vacation_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 vacation payroll rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated CALC-05 vacation payroll compute, link, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

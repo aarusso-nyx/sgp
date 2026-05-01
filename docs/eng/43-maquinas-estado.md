@@ -108,12 +108,13 @@ Permissões: leitura exige `avaliacao.progressao.read`; simulação exige `avali
 
 ## 0.4. Férias e Programação HR-03
 
-`hr.vacation_record` registra a programação anual de férias por período aquisitivo, com até três parcelas, abono pecuniário limitado a 10 dias e aprovação de chefia antes do gozo. O saldo é calculado por `hr.f_calculate_vacation_balance(employee_id, ref_date)` e exposto por `hr.v_vacation_balance`; o cálculo financeiro de férias permanece fora deste fluxo e pertence ao slice CALC-05.
+`hr.vacation_record` registra a programação anual de férias por período aquisitivo, com até três parcelas, abono pecuniário limitado a 10 dias e aprovação de chefia antes do gozo. O saldo é calculado por `hr.f_calculate_vacation_balance(employee_id, ref_date)` e exposto por `hr.v_vacation_balance`; a folha de férias integrada vincula `vacation_record.payroll_run_id` quando o processamento `FERIAS` é gerado.
 
 | Estado       | Descrição                                                         |
 | ------------ | ----------------------------------------------------------------- |
 | `programado` | Solicitação registrada pelo servidor ou RH, aguardando aprovação  |
 | `aprovado`   | Chefia/RH aprovou a programação e bloqueou o saldo correspondente |
+| `paid`       | Folha de férias `FERIAS` foi gerada e vinculada à programação     |
 | `gozado`     | Período de férias realizado e preservado no histórico funcional   |
 | `cancelado`  | Programação cancelada antes do gozo                               |
 
@@ -121,10 +122,11 @@ Permissões: leitura exige `avaliacao.progressao.read`; simulação exige `avali
 | --------- | -------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------ |
 | HR03-T1   | _(início)_                 | `SOLICITAR_FERIAS` | período aquisitivo com 12 meses completos; até 3 parcelas; abono até 10 dias; celetista com uma parcela de pelo menos 14 dias | insere `vacation_record`; emite auditoria | `programado` |
 | HR03-T2   | `programado`               | `APROVAR_FERIAS`   | permissão `rh.vacation.approve`                                                                                               | atualiza `status`; emite auditoria        | `aprovado`   |
+| CALC05-T1 | `aprovado`                 | `CALCULAR_FOLHA_FERIAS` | permissões `payroll.run.execute` e `rh.vacation.payout`; início do gozo na janela de 30 dias                                  | cria/reusa `payroll_run` `FERIAS`, calcula rubricas e grava `payroll_run_id` | `paid` |
 | HR03-T3   | `aprovado`                 | `REGISTRAR_GOZO`   | período concluído administrativamente                                                                                         | atualiza `status`; preserva histórico     | `gozado`     |
 | HR03-T4   | `programado` ou `aprovado` | `CANCELAR_FERIAS`  | justificativa administrativa registrada                                                                                       | atualiza `status`; emite auditoria        | `cancelado`  |
 
-Permissões: saldo e histórico exigem `rh.vacation.read`; solicitação exige `rh.vacation.request`; aprovação e cancelamento exigem `rh.vacation.approve`.
+Permissões: saldo e histórico exigem `rh.vacation.read`; solicitação exige `rh.vacation.request`; aprovação e cancelamento exigem `rh.vacation.approve`; cálculo de folha de férias exige `payroll.run.execute` e `rh.vacation.payout`.
 
 ## 0.5. Licença Saúde e Perícia Oficial HR-04
 

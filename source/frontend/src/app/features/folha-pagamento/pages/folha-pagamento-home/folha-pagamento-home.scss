@@ -21,6 +21,10 @@ mat-form-field {
   width: 140px;
 }
 
+.vacation-input {
+  width: min(360px, 100%);
+}
+
 button mat-icon {
   margin-right: 6px;
 }

@@ -29,6 +29,17 @@ interface PayrollSummaryRow extends QueryResultRow {
   closed_at: Date | string | null;
 }
 
+interface VacationPayslipRow extends QueryResultRow {
+  payroll_run_id: string;
+  vacation_record_id: string;
+  competence_year: number;
+  competence_month: number;
+  status: string;
+  total_earnings: string;
+  total_deductions: string;
+  total_net: string;
+}
+
 interface CountRow extends QueryResultRow {
   total: string;
 }
@@ -258,6 +269,42 @@ export class PortalService {
       nextProgression = null;
     }
     return { ...trail, salaryHistory: history, nextProgression };
+  }
+
+  async vacationPayslips(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    const rows = await this.databaseService.query<VacationPayslipRow>(
+      `
+      SELECT
+        run.id::text AS payroll_run_id,
+        vacation.id::text AS vacation_record_id,
+        run.competence_year,
+        run.competence_month,
+        run.status::text,
+        run.total_earnings::text,
+        run.total_deductions::text,
+        run.total_net::text
+      FROM hr.vacation_record vacation
+      JOIN payroll.payroll_run run ON run.id = vacation.payroll_run_id
+      JOIN payroll.processing_type processing ON processing.id = run.processing_type_id
+      WHERE vacation.tenant_id = public.sgp_current_tenant_uuid()
+        AND vacation.employee_id = $1::uuid
+        AND processing.code = 'FERIAS'
+        AND run.status IN ('GENERATED'::"PayrollRunStatus", 'APPROVED'::"PayrollRunStatus", 'PAID'::"PayrollRunStatus", 'CLOSED'::"PayrollRunStatus")
+      ORDER BY run.competence_year DESC, run.competence_month DESC, run.created_at DESC
+      `,
+      [employee.id],
+    );
+    return rows.map((row) => ({
+      payrollRunId: row.payroll_run_id,
+      vacationRecordId: row.vacation_record_id,
+      competenceYear: row.competence_year,
+      competenceMonth: row.competence_month,
+      status: row.status,
+      totalEarnings: row.total_earnings,
+      totalDeductions: row.total_deductions,
+      totalNet: row.total_net,
+    }));
   }
 
   async requestProfileChange(

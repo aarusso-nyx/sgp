@@ -1622,6 +1622,7 @@ model VacationRecord {
   accrualPeriodEnd   DateTime? @map("accrual_period_end") @db.Date
   installmentNumber  Int       @default(1) @map("installment_number")
   pecuniaryBonusDays Int       @default(0) @map("pecuniary_bonus_days")
+  payrollRunId       String?   @map("payroll_run_id") @db.Uuid
   startsOn           DateTime  @map("starts_on") @db.Date
   endsOn             DateTime  @map("ends_on") @db.Date
   days               Int
@@ -1630,9 +1631,11 @@ model VacationRecord {
   updatedAt          DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee     Employee      @relation(fields: [employeeId], references: [id])
+  payrollRun   PayrollRun?   @relation(fields: [payrollRunId], references: [id])
   vacationType VacationType? @relation(fields: [vacationTypeId], references: [id])
 
   @@index([employeeId, startsOn])
+  @@index([payrollRunId])
   @@index([vacationTypeId])
   @@index([status])
   @@map("vacation_record")
@@ -2062,6 +2065,7 @@ model PayrollRun {
   createdBy           UserAccount?              @relation("PayrollCreatedBy", fields: [createdByUserId], references: [id])
   statusHistory       PayrollRunStatusHistory[]
   payrollItems        EmployeePayrollItem[]
+  vacationRecords     VacationRecord[]
   financialRecords    PayrollFinancialRecord[]
   workLocationRollups PayrollRunWorkLocation[]
   advanceRequests     AdvanceRequest[]

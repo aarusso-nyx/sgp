@@ -43,4 +43,15 @@
       </li>
     </ol>
   </section>
+
+  <section class="career__history" aria-labelledby="vacation-payslips-title">
+    <h2 id="vacation-payslips-title">Contracheques de ferias</h2>
+    <ol>
+      <li *ngFor="let item of vacationPayslips">
+        <span>{{ item.competenceYear }}-{{ item.competenceMonth }}</span>
+        <strong>{{ item.totalNet }}</strong>
+        <small>{{ item.status }}</small>
+      </li>
+    </ol>
+  </section>
 </section>
