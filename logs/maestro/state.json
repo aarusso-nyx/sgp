@@ -129,6 +129,16 @@
       "previous_failure": "logs/maestro/12-fol-02-cargos-estrutura-remuneratoria.failure.md",
       "recovery": "manual permission catalog and FOL-02 smoke/audit alignment after retry failure",
       "failure_log": "logs/maestro/12-fol-02-cargos-estrutura-remuneratoria.failure.md"
+    },
+    "13-fol-04-plano-carreira-tabela-vencimentos": {
+      "status": "completed",
+      "effort": "medium",
+      "branch": "slice/13-fol-04-plano-carreira-tabela-vencimentos",
+      "commit": "7c6ed9e3078b920e3da5565703f0a57dbd5330a3",
+      "started_at": "2026-05-01T14:00:30-03:00",
+      "completed_at": "2026-05-01T14:17:44-03:00",
+      "retries": 0,
+      "recovery": "manual smoke idempotency hardening during maestro gate rerun"
     }
   },
   "current_wave": 8,

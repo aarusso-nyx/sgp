@@ -21,3 +21,4 @@ W07 ✓ 10-hr-04 (1 slice, medium→high recovery, gates passed, commit 2e4dde2)
 W07 ✓ 11-hr-05 (1 slice, low, gates passed, commit 2495cbc) — completeness 26.2% → 26.2%; Wave 7 complete
 W08 ✗ 12-fol-02 (low → medium retry failed: permission catalog drift, JSON seed missing gestao.cargo.read/write) — see logs/maestro/12-fol-02-cargos-estrutura-remuneratoria.failure.md
 W08 ✓ 12-fol-02 (1 slice, low→medium recovery, gates passed, commit a1df9aa) — completeness 26.2% → 26.2%
+W08 ✓ 13-fol-04 (1 slice, medium, gates passed, commit 7c6ed9e) — completeness 26.2% → 26.2%
