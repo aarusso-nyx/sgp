@@ -119,6 +119,94 @@ describe('EmployeesService', () => {
     });
   });
 
+  it.each([
+    [
+      'statutory to commissioned',
+      {
+        contractType: 'commissioned' as const,
+        effectiveOn: '2026-05-01',
+        commissionPositionId: '00000000-0000-4000-8000-000000000101',
+      },
+      'commissioned',
+    ],
+    [
+      'celetista to statutory',
+      {
+        contractType: 'statutory' as const,
+        effectiveOn: '2026-05-01',
+        regimeLawReference: 'Lei 8.112/90',
+      },
+      'statutory',
+    ],
+    [
+      'temporary with fixed term',
+      {
+        contractType: 'temporary' as const,
+        effectiveOn: '2026-05-01',
+        endDate: '2026-11-01',
+      },
+      'temporary',
+    ],
+    [
+      'commissioned exonera-like regime closure',
+      {
+        contractType: 'celetista' as const,
+        effectiveOn: '2026-05-01',
+        justification: 'Exoneracao do cargo em comissao',
+      },
+      'celetista',
+    ],
+  ])('changes contract regime: %s', async (_name, payload, contractType) => {
+    const database = databaseWithTransaction([
+      [
+        {
+          id: 'emp-1',
+          tenant_id: 'tenant-1',
+          registration: 'MAT-001',
+          name: 'Servidor',
+          functional_status_id: 'status-1',
+        },
+      ],
+      [{ id: 'contract-type-1' }],
+      [{ id: 'link-1' }],
+      [
+        {
+          employee_id: 'emp-1',
+          employment_link_id: 'link-1',
+          employment_contract_id: 'contract-2',
+          contract_type: contractType,
+          effective_on: '2026-05-01',
+          end_date: payload.endDate ?? null,
+          status_history_id: 'history-1',
+          audit_event_id: 'audit-1',
+        },
+      ],
+    ]);
+    const service = new EmployeesService(database as never);
+
+    await expect(
+      service.changeContractRegime('emp-1', payload),
+    ).resolves.toMatchObject({
+      employeeId: 'emp-1',
+      employmentLinkId: 'link-1',
+      employmentContractId: 'contract-2',
+      contractType,
+      statusHistoryId: 'history-1',
+      auditEventId: 'audit-1',
+    });
+  });
+
+  it('rejects temporary regimes without end date', async () => {
+    const service = new EmployeesService({ configured: true } as never);
+
+    await expect(
+      service.changeContractRegime('emp-1', {
+        contractType: 'temporary',
+        effectiveOn: '2026-05-01',
+      }),
+    ).rejects.toThrow('Temporary contracts require endDate');
+  });
+
   it('creates, updates, deactivates, and terminates employees without payroll', async () => {
     const query = jest
       .fn()

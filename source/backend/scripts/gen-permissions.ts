@@ -26,9 +26,9 @@ function readSeed(): PermissionSeed {
   const parsed = JSON.parse(readFileSync(seedPath, 'utf8')) as PermissionSeed;
   const codes = parsed.permissions.map((permission) => permission.key);
   const unique = new Set(codes);
-  if (codes.length !== 31) {
+  if (codes.length !== 32) {
     throw new Error(
-      `permission-catalog.json must contain exactly 31 permissions; found ${codes.length}`,
+      `permission-catalog.json must contain exactly 32 permissions; found ${codes.length}`,
     );
   }
   if (unique.size !== codes.length) {

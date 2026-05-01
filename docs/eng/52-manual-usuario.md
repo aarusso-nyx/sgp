@@ -1761,6 +1761,9 @@ R: Verifique se o servidor está na situação `CADASTRO_BASE`. Caso esteja em o
 **P: Como desligar um servidor?**
 R: Acesse **Módulo RH > Cadastro do servidor**, selecione o servidor e preencha data, motivo e justificativa no bloco **Desligamento**. A situação muda para `DESLIGAMENTO`, o contrato ativo recebe data final e a operação é auditada.
 
+**P: Como faço uma alteração de regime jurídico?**
+R: Acesse **Módulo RH > Cadastro do servidor > Vínculos**, selecione o servidor e use **Alterar Regime**. Informe o regime, a data de vigência e os campos obrigatórios do tipo escolhido: fundamento legal para estatutário, cargo para comissionado ou data final para temporário. Marque a confirmação e digite `ALTERAR REGIME` para concluir. A operação fecha o contrato ativo, abre novo vínculo/contrato, registra a linha do tempo e grava auditoria.
+
 **P: O sistema permitiu cadastrar dois servidores com o mesmo CPF?**
 R: Não é possível. O CPF é único por tenant. Se houver dois registros, um deles pode ser de tenant diferente — contate o suporte.
 

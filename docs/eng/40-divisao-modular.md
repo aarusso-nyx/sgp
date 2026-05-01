@@ -1493,6 +1493,7 @@ Os levantamentos em `docs/legacy-reverse/data-archaeology/` e `docs/legacy-rever
 ### 11.1 Regras de fronteira confirmadas
 
 - A nomenclatura legada `funcionario` continua sendo termo de negócio, mas o modelo físico separa `pessoa` de `funcionario/vinculo`.
+- `rh.employees.vinculos` é a superfície HR-02 para reenquadramento de regime jurídico: o backend expõe `POST /api/v1/funcionarios/:id/vinculos`, usa `hr.employment_link` como registro tenant-scoped do regime e mantém a vigência em `hr.employment_contract`; a UI dedicada fica em `source/frontend/src/app/features/rh/funcionarios/vinculos/`.
 - Fórmulas de folha, dependências entre verbas e atributos calculáveis são responsabilidade do engine; telas e APIs de folha apenas solicitam cálculo e leem resultados.
 - Recadastramento permanece em `previdenciario`, mesmo quando a jornada atualiza dados civis ou usa canal público.
 - Perícia médica não grava situação funcional diretamente; ela publica decisão homologada/licença para o `rh`.

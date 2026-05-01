@@ -94,6 +94,30 @@ describe('EmployeesController', () => {
     expect(result.payrollRunId).toBe('run-1');
   });
 
+  it('delegates employee contract regime changes', async () => {
+    const changeContractRegime = jest.fn().mockResolvedValue({
+      employeeId: 'emp-1',
+      employmentLinkId: 'link-1',
+    });
+    const controller = new EmployeesController(
+      { changeContractRegime } as never,
+      {} as never,
+    );
+
+    await expect(
+      controller.changeContractRegime('emp-1', {
+        contractType: 'temporary',
+        effectiveOn: '2026-05-01',
+        endDate: '2026-11-01',
+      }),
+    ).resolves.toMatchObject({ employmentLinkId: 'link-1' });
+    expect(changeContractRegime).toHaveBeenCalledWith('emp-1', {
+      contractType: 'temporary',
+      effectiveOn: '2026-05-01',
+      endDate: '2026-11-01',
+    });
+  });
+
   it('declares HR-01 specific permission metadata', () => {
     expect(
       Reflect.getMetadata('requiredPermissions', controllerMethod('list')),
@@ -110,5 +134,11 @@ describe('EmployeesController', () => {
         controllerMethod('terminateEmployee'),
       ),
     ).toEqual(['rh.employee.terminate']);
+    expect(
+      Reflect.getMetadata(
+        'requiredPermissions',
+        controllerMethod('changeContractRegime'),
+      ),
+    ).toEqual(['rh.employment_link.write']);
   });
 });

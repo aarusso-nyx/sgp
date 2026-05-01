@@ -32,36 +32,71 @@ export class OpenApiClient {
     return this.api.delete<unknown>(`/v1/arquivos/${encodeURIComponent(params.id)}`);
   }
 
-  deleteApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeIdAndId(params: { employeeId: string; id: string }): Observable<unknown> {
-    return this.api.delete<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/contribuicoes-sindicais/${encodeURIComponent(params.id)}`);
+  deleteApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeIdAndId(params: {
+    employeeId: string;
+    id: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/contribuicoes-sindicais/${encodeURIComponent(params.id)}`,
+    );
   }
 
-  deleteApiV1EmployeesRhWorkflowsDependentesBeneficioByEmployeeIdAndId(params: { employeeId: string; id: string }): Observable<unknown> {
-    return this.api.delete<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/dependentes-beneficio/${encodeURIComponent(params.id)}`);
+  deleteApiV1EmployeesRhWorkflowsDependentesBeneficioByEmployeeIdAndId(params: {
+    employeeId: string;
+    id: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/dependentes-beneficio/${encodeURIComponent(params.id)}`,
+    );
   }
 
-  deleteApiV1EmployeesRhWorkflowsExerciciosByEmployeeIdAndId(params: { employeeId: string; id: string }): Observable<unknown> {
-    return this.api.delete<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/exercicios/${encodeURIComponent(params.id)}`);
+  deleteApiV1EmployeesRhWorkflowsExerciciosByEmployeeIdAndId(params: {
+    employeeId: string;
+    id: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/exercicios/${encodeURIComponent(params.id)}`,
+    );
   }
 
-  deleteApiV1EmployeesRhWorkflowsPensoesAlimenticiasByEmployeeIdAndId(params: { employeeId: string; id: string }): Observable<unknown> {
-    return this.api.delete<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/pensoes-alimenticias/${encodeURIComponent(params.id)}`);
+  deleteApiV1EmployeesRhWorkflowsPensoesAlimenticiasByEmployeeIdAndId(params: {
+    employeeId: string;
+    id: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/pensoes-alimenticias/${encodeURIComponent(params.id)}`,
+    );
   }
 
-  deleteApiV1EmployeesRhWorkflowsValesTransporteByEmployeeIdAndId(params: { employeeId: string; id: string }): Observable<unknown> {
-    return this.api.delete<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/vales-transporte/${encodeURIComponent(params.id)}`);
+  deleteApiV1EmployeesRhWorkflowsValesTransporteByEmployeeIdAndId(params: {
+    employeeId: string;
+    id: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/vales-transporte/${encodeURIComponent(params.id)}`,
+    );
   }
 
-  deleteApiV1FolhasCatalogosByResourceAndId(params: { resource: string; id: string }): Observable<unknown> {
-    return this.api.delete<unknown>(`/v1/folhas/catalogos/${encodeURIComponent(params.resource)}/${encodeURIComponent(params.id)}`);
+  deleteApiV1FolhasCatalogosByResourceAndId(params: {
+    resource: string;
+    id: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/folhas/catalogos/${encodeURIComponent(params.resource)}/${encodeURIComponent(params.id)}`,
+    );
   }
 
   deleteApiV1FolhasContabilidadeById(params: { id: string }): Observable<unknown> {
     return this.api.delete<unknown>(`/v1/folhas/contabilidade/${encodeURIComponent(params.id)}`);
   }
 
-  deleteApiV1MasterDataByResourceAndId(params: { resource: string; id: string }): Observable<unknown> {
-    return this.api.delete<unknown>(`/v1/master-data/${encodeURIComponent(params.resource)}/${encodeURIComponent(params.id)}`);
+  deleteApiV1MasterDataByResourceAndId(params: {
+    resource: string;
+    id: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/master-data/${encodeURIComponent(params.resource)}/${encodeURIComponent(params.id)}`,
+    );
   }
 
   deleteApiV1RhAfastamentosById(params: { id: string }): Observable<unknown> {
@@ -76,8 +111,13 @@ export class OpenApiClient {
     return this.api.delete<unknown>(`/v1/rh/processos/${encodeURIComponent(params.id)}`);
   }
 
-  getApiAdminV1TenantsImportacaoProgressoByIdAndJobId(params: { id: string; job_id: string }): Observable<unknown> {
-    return this.api.get<unknown>(`/admin/v1/tenants/${encodeURIComponent(params.id)}/importacao/${encodeURIComponent(params.job_id)}/progresso`);
+  getApiAdminV1TenantsImportacaoProgressoByIdAndJobId(params: {
+    id: string;
+    job_id: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/admin/v1/tenants/${encodeURIComponent(params.id)}/importacao/${encodeURIComponent(params.job_id)}/progresso`,
+    );
   }
 
   getApiExternalV1Dados(): Observable<unknown> {
@@ -96,8 +136,14 @@ export class OpenApiClient {
     return this.api.get<unknown>('/portal/v1/auth/me');
   }
 
-  getApiPublicoV1TransparenciaFolhaByTenant(params: { tenant: string }, query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>(`/publico/v1/${encodeURIComponent(params.tenant)}/transparencia/folha`, query);
+  getApiPublicoV1TransparenciaFolhaByTenant(
+    params: { tenant: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/publico/v1/${encodeURIComponent(params.tenant)}/transparencia/folha`,
+      query,
+    );
   }
 
   getApiV1(): Observable<unknown> {
@@ -200,24 +246,54 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/convenios', query);
   }
 
-  getApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeId(params: { employeeId: string }, query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/contribuicoes-sindicais`, query);
+  getApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeId(
+    params: { employeeId: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/contribuicoes-sindicais`,
+      query,
+    );
   }
 
-  getApiV1EmployeesRhWorkflowsDependentesBeneficioByEmployeeId(params: { employeeId: string }, query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/dependentes-beneficio`, query);
+  getApiV1EmployeesRhWorkflowsDependentesBeneficioByEmployeeId(
+    params: { employeeId: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/dependentes-beneficio`,
+      query,
+    );
   }
 
-  getApiV1EmployeesRhWorkflowsExerciciosByEmployeeId(params: { employeeId: string }, query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/exercicios`, query);
+  getApiV1EmployeesRhWorkflowsExerciciosByEmployeeId(
+    params: { employeeId: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/exercicios`,
+      query,
+    );
   }
 
-  getApiV1EmployeesRhWorkflowsPensoesAlimenticiasByEmployeeId(params: { employeeId: string }, query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/pensoes-alimenticias`, query);
+  getApiV1EmployeesRhWorkflowsPensoesAlimenticiasByEmployeeId(
+    params: { employeeId: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/pensoes-alimenticias`,
+      query,
+    );
   }
 
-  getApiV1EmployeesRhWorkflowsValesTransporteByEmployeeId(params: { employeeId: string }, query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/vales-transporte`, query);
+  getApiV1EmployeesRhWorkflowsValesTransporteByEmployeeId(
+    params: { employeeId: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/vales-transporte`,
+      query,
+    );
   }
 
   getApiV1FolhaRemessaById(params: { id: string }, query: ApiQuery = {}): Observable<unknown> {
@@ -232,8 +308,14 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/folhas/catalogos');
   }
 
-  getApiV1FolhasCatalogosByResource(params: { resource: string }, query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>(`/v1/folhas/catalogos/${encodeURIComponent(params.resource)}`, query);
+  getApiV1FolhasCatalogosByResource(
+    params: { resource: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/folhas/catalogos/${encodeURIComponent(params.resource)}`,
+      query,
+    );
   }
 
   getApiV1FolhasContabilidade(query: ApiQuery = {}): Observable<unknown> {
@@ -264,7 +346,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/master-data', query);
   }
 
-  getApiV1MasterDataByResource(params: { resource: string }, query: ApiQuery = {}): Observable<unknown> {
+  getApiV1MasterDataByResource(
+    params: { resource: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
     return this.api.get<unknown>(`/v1/master-data/${encodeURIComponent(params.resource)}`, query);
   }
 
@@ -281,7 +366,9 @@ export class OpenApiClient {
   }
 
   getApiV1PericiaProntuariosLaudoPdfById(params: { id: string }): Observable<unknown> {
-    return this.api.get<unknown>(`/v1/pericia/prontuarios/${encodeURIComponent(params.id)}/laudo/pdf`);
+    return this.api.get<unknown>(
+      `/v1/pericia/prontuarios/${encodeURIComponent(params.id)}/laudo/pdf`,
+    );
   }
 
   getApiV1PrevidenciarioAposentadorias(): Observable<unknown> {
@@ -328,8 +415,12 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/previdenciario/simulacoes');
   }
 
-  getApiV1RecadastramentoComprovanteByRecadastramentoId(params: { recadastramento_id: string }): Observable<unknown> {
-    return this.api.get<unknown>(`/v1/recadastramento/${encodeURIComponent(params.recadastramento_id)}/comprovante`);
+  getApiV1RecadastramentoComprovanteByRecadastramentoId(params: {
+    recadastramento_id: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/recadastramento/${encodeURIComponent(params.recadastramento_id)}/comprovante`,
+    );
   }
 
   getApiV1Relatorios(query: ApiQuery = {}): Observable<unknown> {
@@ -352,128 +443,284 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/usuarios/me/preferencias-notificacao');
   }
 
-  patchApiAdminV1FeatureFlagsByChave(params: { chave: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/admin/v1/feature-flags/${encodeURIComponent(params.chave)}`, body);
+  patchApiAdminV1FeatureFlagsByChave(
+    params: { chave: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/admin/v1/feature-flags/${encodeURIComponent(params.chave)}`,
+      body,
+    );
   }
 
   patchApiAdminV1TenantsById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/admin/v1/tenants/${encodeURIComponent(params.id)}`, body);
+    return this.api.patch<unknown, ApiBody>(
+      `/admin/v1/tenants/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1AdminFeatureFlagsByChave(params: { chave: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/admin/feature-flags/${encodeURIComponent(params.chave)}`, body);
+  patchApiV1AdminFeatureFlagsByChave(
+    params: { chave: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/feature-flags/${encodeURIComponent(params.chave)}`,
+      body,
+    );
   }
 
   patchApiV1AdminUsuariosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/admin/usuarios/${encodeURIComponent(params.id)}`, body);
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/usuarios/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1ArquivosConfirmarByAnexoId(params: { anexo_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/arquivos/${encodeURIComponent(params.anexo_id)}/confirmar`, body);
+  patchApiV1ArquivosConfirmarByAnexoId(
+    params: { anexo_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/arquivos/${encodeURIComponent(params.anexo_id)}/confirmar`,
+      body,
+    );
   }
 
-  patchApiV1AvaliacaoDesempenhosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/avaliacao/desempenhos/${encodeURIComponent(params.id)}`, body);
+  patchApiV1AvaliacaoDesempenhosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/avaliacao/desempenhos/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1AvaliacaoPlanosCargosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/avaliacao/planos-cargos/${encodeURIComponent(params.id)}`, body);
+  patchApiV1AvaliacaoPlanosCargosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/avaliacao/planos-cargos/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeIdAndId(params: { employeeId: string; id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/contribuicoes-sindicais/${encodeURIComponent(params.id)}`, body);
+  patchApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeIdAndId(
+    params: { employeeId: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/contribuicoes-sindicais/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1EmployeesRhWorkflowsDependentesBeneficioByEmployeeIdAndId(params: { employeeId: string; id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/dependentes-beneficio/${encodeURIComponent(params.id)}`, body);
+  patchApiV1EmployeesRhWorkflowsDependentesBeneficioByEmployeeIdAndId(
+    params: { employeeId: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/dependentes-beneficio/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1EmployeesRhWorkflowsExerciciosByEmployeeIdAndId(params: { employeeId: string; id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/exercicios/${encodeURIComponent(params.id)}`, body);
+  patchApiV1EmployeesRhWorkflowsExerciciosByEmployeeIdAndId(
+    params: { employeeId: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/exercicios/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1EmployeesRhWorkflowsPensoesAlimenticiasByEmployeeIdAndId(params: { employeeId: string; id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/pensoes-alimenticias/${encodeURIComponent(params.id)}`, body);
+  patchApiV1EmployeesRhWorkflowsPensoesAlimenticiasByEmployeeIdAndId(
+    params: { employeeId: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/pensoes-alimenticias/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1EmployeesRhWorkflowsValesTransporteByEmployeeIdAndId(params: { employeeId: string; id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/vales-transporte/${encodeURIComponent(params.id)}`, body);
+  patchApiV1EmployeesRhWorkflowsValesTransporteByEmployeeIdAndId(
+    params: { employeeId: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/vales-transporte/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1FolhasStatusByFolhaId(params: { folha_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/folhas/${encodeURIComponent(params.folha_id)}/status`, body);
+  patchApiV1FolhasStatusByFolhaId(
+    params: { folha_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/folhas/${encodeURIComponent(params.folha_id)}/status`,
+      body,
+    );
   }
 
-  patchApiV1FolhasCatalogosByResourceAndId(params: { resource: string; id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/folhas/catalogos/${encodeURIComponent(params.resource)}/${encodeURIComponent(params.id)}`, body);
+  patchApiV1FolhasCatalogosByResourceAndId(
+    params: { resource: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/folhas/catalogos/${encodeURIComponent(params.resource)}/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1FolhasContabilidadeById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/folhas/contabilidade/${encodeURIComponent(params.id)}`, body);
+  patchApiV1FolhasContabilidadeById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/folhas/contabilidade/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1MasterDataByResourceAndId(params: { resource: string; id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/master-data/${encodeURIComponent(params.resource)}/${encodeURIComponent(params.id)}`, body);
+  patchApiV1MasterDataByResourceAndId(
+    params: { resource: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/master-data/${encodeURIComponent(params.resource)}/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
   patchApiV1NotificacoesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/notificacoes/${encodeURIComponent(params.id)}`, body);
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/notificacoes/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
   patchApiV1NotificacoesMarcarTodasLidas(body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>('/v1/notificacoes/marcar-todas-lidas', body);
   }
 
-  patchApiV1PericiaAgendamentosByAgendamentoId(params: { agendamento_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/pericia/agendamentos/${encodeURIComponent(params.agendamento_id)}`, body);
+  patchApiV1PericiaAgendamentosByAgendamentoId(
+    params: { agendamento_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/pericia/agendamentos/${encodeURIComponent(params.agendamento_id)}`,
+      body,
+    );
   }
 
-  patchApiV1PericiaProntuariosValidarByProntuarioId(params: { prontuario_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/pericia/prontuarios/${encodeURIComponent(params.prontuario_id)}/validar`, body);
+  patchApiV1PericiaProntuariosValidarByProntuarioId(
+    params: { prontuario_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/pericia/prontuarios/${encodeURIComponent(params.prontuario_id)}/validar`,
+      body,
+    );
   }
 
-  patchApiV1PrevidenciarioCompensacoesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/previdenciario/compensacoes/${encodeURIComponent(params.id)}`, body);
+  patchApiV1PrevidenciarioCompensacoesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/previdenciario/compensacoes/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1PrevidenciarioRegrasById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/previdenciario/regras/${encodeURIComponent(params.id)}`, body);
+  patchApiV1PrevidenciarioRegrasById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/previdenciario/regras/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  patchApiV1RecrutamentoCandidatosByCandidatoId(params: { candidato_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/recrutamento/candidatos/${encodeURIComponent(params.candidato_id)}`, body);
+  patchApiV1RecrutamentoCandidatosByCandidatoId(
+    params: { candidato_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/recrutamento/candidatos/${encodeURIComponent(params.candidato_id)}`,
+      body,
+    );
   }
 
-  patchApiV1RecrutamentoRequisicoesConcluirByRequisicaoId(params: { requisicao_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/recrutamento/requisicoes/${encodeURIComponent(params.requisicao_id)}/concluir`, body);
+  patchApiV1RecrutamentoRequisicoesConcluirByRequisicaoId(
+    params: { requisicao_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/recrutamento/requisicoes/${encodeURIComponent(params.requisicao_id)}/concluir`,
+      body,
+    );
   }
 
-  patchApiV1RecrutamentoRequisicoesEncaminharByRequisicaoId(params: { requisicao_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/recrutamento/requisicoes/${encodeURIComponent(params.requisicao_id)}/encaminhar`, body);
+  patchApiV1RecrutamentoRequisicoesEncaminharByRequisicaoId(
+    params: { requisicao_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/recrutamento/requisicoes/${encodeURIComponent(params.requisicao_id)}/encaminhar`,
+      body,
+    );
   }
 
   patchApiV1RhAfastamentosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/rh/afastamentos/${encodeURIComponent(params.id)}`, body);
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/afastamentos/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
   patchApiV1RhProcessosFuncaoById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/rh/processos-funcao/${encodeURIComponent(params.id)}`, body);
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/processos-funcao/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
   patchApiV1RhProcessosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.patch<unknown, ApiBody>(`/v1/rh/processos/${encodeURIComponent(params.id)}`, body);
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/processos/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
-  postApiAdminV1EsocialEventosReprocessarById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/admin/v1/esocial/eventos/${encodeURIComponent(params.id)}/reprocessar`, body);
+  postApiAdminV1EsocialEventosReprocessarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/admin/v1/esocial/eventos/${encodeURIComponent(params.id)}/reprocessar`,
+      body,
+    );
   }
 
   postApiAdminV1Tenants(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/admin/v1/tenants', body);
   }
 
-  postApiAdminV1TenantsImportacaoById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/admin/v1/tenants/${encodeURIComponent(params.id)}/importacao`, body);
+  postApiAdminV1TenantsImportacaoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/admin/v1/tenants/${encodeURIComponent(params.id)}/importacao`,
+      body,
+    );
   }
 
   postApiV1AdminMenus(body: ApiBody = {}): Observable<unknown> {
@@ -512,16 +759,28 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/auth/recuperar-senha', body);
   }
 
-  postApiV1AvaliacaoCiclosRelatorioByPeriodo(params: { periodo: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/avaliacao/ciclos/${encodeURIComponent(params.periodo)}/relatorio`, body);
+  postApiV1AvaliacaoCiclosRelatorioByPeriodo(
+    params: { periodo: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/avaliacao/ciclos/${encodeURIComponent(params.periodo)}/relatorio`,
+      body,
+    );
   }
 
   postApiV1AvaliacaoDesempenhos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/desempenhos', body);
   }
 
-  postApiV1AvaliacaoDesempenhosFichaById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/avaliacao/desempenhos/${encodeURIComponent(params.id)}/ficha`, body);
+  postApiV1AvaliacaoDesempenhosFichaById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/avaliacao/desempenhos/${encodeURIComponent(params.id)}/ficha`,
+      body,
+    );
   }
 
   postApiV1AvaliacaoPlanosCargos(body: ApiBody = {}): Observable<unknown> {
@@ -536,28 +795,64 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/simulacoes', body);
   }
 
-  postApiV1ConvitesAceitarByToken(params: { token: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/convites/${encodeURIComponent(params.token)}/aceitar`, body);
+  postApiV1ConvitesAceitarByToken(
+    params: { token: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/convites/${encodeURIComponent(params.token)}/aceitar`,
+      body,
+    );
   }
 
-  postApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeId(params: { employeeId: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/contribuicoes-sindicais`, body);
+  postApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeId(
+    params: { employeeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/contribuicoes-sindicais`,
+      body,
+    );
   }
 
-  postApiV1EmployeesRhWorkflowsDependentesBeneficioByEmployeeId(params: { employeeId: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/dependentes-beneficio`, body);
+  postApiV1EmployeesRhWorkflowsDependentesBeneficioByEmployeeId(
+    params: { employeeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/dependentes-beneficio`,
+      body,
+    );
   }
 
-  postApiV1EmployeesRhWorkflowsExerciciosByEmployeeId(params: { employeeId: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/exercicios`, body);
+  postApiV1EmployeesRhWorkflowsExerciciosByEmployeeId(
+    params: { employeeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/exercicios`,
+      body,
+    );
   }
 
-  postApiV1EmployeesRhWorkflowsPensoesAlimenticiasByEmployeeId(params: { employeeId: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/pensoes-alimenticias`, body);
+  postApiV1EmployeesRhWorkflowsPensoesAlimenticiasByEmployeeId(
+    params: { employeeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/pensoes-alimenticias`,
+      body,
+    );
   }
 
-  postApiV1EmployeesRhWorkflowsValesTransporteByEmployeeId(params: { employeeId: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/vales-transporte`, body);
+  postApiV1EmployeesRhWorkflowsValesTransporteByEmployeeId(
+    params: { employeeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.employeeId)}/rh-workflows/vales-transporte`,
+      body,
+    );
   }
 
   postApiV1EsocialEventos(body: ApiBody = {}): Observable<unknown> {
@@ -565,39 +860,85 @@ export class OpenApiClient {
   }
 
   postApiV1FolhaRemessaById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/folha/${encodeURIComponent(params.id)}/remessa`, body);
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folha/${encodeURIComponent(params.id)}/remessa`,
+      body,
+    );
   }
 
   postApiV1FolhaRetornoById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/folha/${encodeURIComponent(params.id)}/retorno`, body);
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folha/${encodeURIComponent(params.id)}/retorno`,
+      body,
+    );
   }
 
   postApiV1Folhas(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/folhas', body);
   }
 
-  postApiV1FolhasAdiantamentosByFolhaId(params: { folha_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/folhas/${encodeURIComponent(params.folha_id)}/adiantamentos`, body);
+  postApiV1FolhasAdiantamentosByFolhaId(
+    params: { folha_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folhas/${encodeURIComponent(params.folha_id)}/adiantamentos`,
+      body,
+    );
   }
 
-  postApiV1FolhasMassaByFolhaId(params: { folha_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/folhas/${encodeURIComponent(params.folha_id)}/massa`, body);
+  postApiV1FolhasMassaByFolhaId(
+    params: { folha_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folhas/${encodeURIComponent(params.folha_id)}/massa`,
+      body,
+    );
   }
 
-  postApiV1FolhasCalcularByFolhaRescisaoId(params: { folha_rescisao_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/folhas/${encodeURIComponent(params.folha_rescisao_id)}/calcular`, body);
+  postApiV1FolhasCalcularByFolhaRescisaoId(
+    params: { folha_rescisao_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folhas/${encodeURIComponent(params.folha_rescisao_id)}/calcular`,
+      body,
+    );
   }
 
-  postApiV1FolhasCatalogosByResource(params: { resource: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/folhas/catalogos/${encodeURIComponent(params.resource)}`, body);
+  postApiV1FolhasCatalogosByResource(
+    params: { resource: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folhas/catalogos/${encodeURIComponent(params.resource)}`,
+      body,
+    );
   }
 
   postApiV1FolhasContabilidade(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/folhas/contabilidade', body);
   }
 
-  postApiV1FuncionariosDesligamentoByFuncRescisao(params: { func_rescisao: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/funcionarios/${encodeURIComponent(params.func_rescisao)}/desligamento`, body);
+  postApiV1FuncionariosDesligamentoByFuncRescisao(
+    params: { func_rescisao: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/funcionarios/${encodeURIComponent(params.func_rescisao)}/desligamento`,
+      body,
+    );
+  }
+
+  postApiV1FuncionariosVinculosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/funcionarios/${encodeURIComponent(params.id)}/vinculos`,
+      body,
+    );
   }
 
   postApiV1Funcionarios(body: ApiBody = {}): Observable<unknown> {
@@ -608,8 +949,14 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/gfip/gerar', body);
   }
 
-  postApiV1MasterDataByResource(params: { resource: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/master-data/${encodeURIComponent(params.resource)}`, body);
+  postApiV1MasterDataByResource(
+    params: { resource: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/master-data/${encodeURIComponent(params.resource)}`,
+      body,
+    );
   }
 
   postApiV1PericiaAgendamentos(body: ApiBody = {}): Observable<unknown> {
@@ -620,8 +967,14 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/pericia/prontuarios', body);
   }
 
-  postApiV1PericiaProntuariosReplicarByProntuarioId(params: { prontuario_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/pericia/prontuarios/${encodeURIComponent(params.prontuario_id)}/replicar`, body);
+  postApiV1PericiaProntuariosReplicarByProntuarioId(
+    params: { prontuario_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/pericia/prontuarios/${encodeURIComponent(params.prontuario_id)}/replicar`,
+      body,
+    );
   }
 
   postApiV1PrevidenciarioAposentadorias(body: ApiBody = {}): Observable<unknown> {
@@ -632,8 +985,14 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/previdenciario/certidoes-tempo', body);
   }
 
-  postApiV1PrevidenciarioCertidoesTempoEmitirById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/previdenciario/certidoes-tempo/${encodeURIComponent(params.id)}/emitir`, body);
+  postApiV1PrevidenciarioCertidoesTempoEmitirById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/previdenciario/certidoes-tempo/${encodeURIComponent(params.id)}/emitir`,
+      body,
+    );
   }
 
   postApiV1PrevidenciarioCompensacoes(body: ApiBody = {}): Observable<unknown> {
@@ -644,8 +1003,14 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/previdenciario/declaracoes', body);
   }
 
-  postApiV1PrevidenciarioDeclaracoesEmitirById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/previdenciario/declaracoes/${encodeURIComponent(params.id)}/emitir`, body);
+  postApiV1PrevidenciarioDeclaracoesEmitirById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/previdenciario/declaracoes/${encodeURIComponent(params.id)}/emitir`,
+      body,
+    );
   }
 
   postApiV1PrevidenciarioPensoes(body: ApiBody = {}): Observable<unknown> {
@@ -661,7 +1026,10 @@ export class OpenApiClient {
   }
 
   postApiV1PrevidenciarioRecadastramentosBeneficiarios(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/previdenciario/recadastramentos/beneficiarios', body);
+    return this.api.post<unknown, ApiBody>(
+      '/v1/previdenciario/recadastramentos/beneficiarios',
+      body,
+    );
   }
 
   postApiV1PrevidenciarioRecadastramentosCampanhas(body: ApiBody = {}): Observable<unknown> {
@@ -689,15 +1057,24 @@ export class OpenApiClient {
   }
 
   postApiV1PrevidenciarioTransferenciaSiprevExportar(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/previdenciario/transferencia-siprev/exportar', body);
+    return this.api.post<unknown, ApiBody>(
+      '/v1/previdenciario/transferencia-siprev/exportar',
+      body,
+    );
   }
 
   postApiV1RecrutamentoRequisicoes(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/recrutamento/requisicoes', body);
   }
 
-  postApiV1RecrutamentoRequisicoesCandidatosByRequisicaoId(params: { requisicao_id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(`/v1/recrutamento/requisicoes/${encodeURIComponent(params.requisicao_id)}/candidatos`, body);
+  postApiV1RecrutamentoRequisicoesCandidatosByRequisicaoId(
+    params: { requisicao_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/requisicoes/${encodeURIComponent(params.requisicao_id)}/candidatos`,
+      body,
+    );
   }
 
   postApiV1RhAfastamentos(body: ApiBody = {}): Observable<unknown> {
@@ -720,8 +1097,14 @@ export class OpenApiClient {
     return this.api.put<unknown, ApiBody>(`/v1/admin/menus/${encodeURIComponent(params.id)}`, body);
   }
 
-  putApiV1AdminParametrosGlobaisByChave(params: { chave: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.put<unknown, ApiBody>(`/v1/admin/parametros/globais/${encodeURIComponent(params.chave)}`, body);
+  putApiV1AdminParametrosGlobaisByChave(
+    params: { chave: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>(
+      `/v1/admin/parametros/globais/${encodeURIComponent(params.chave)}`,
+      body,
+    );
   }
 
   putApiV1AdminParametrosSistema(body: ApiBody = {}): Observable<unknown> {
@@ -729,19 +1112,34 @@ export class OpenApiClient {
   }
 
   putApiV1AdminPerfisById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.put<unknown, ApiBody>(`/v1/admin/perfis/${encodeURIComponent(params.id)}`, body);
+    return this.api.put<unknown, ApiBody>(
+      `/v1/admin/perfis/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
   putApiV1AdminPerfisPapeisById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.put<unknown, ApiBody>(`/v1/admin/perfis/${encodeURIComponent(params.id)}/papeis`, body);
+    return this.api.put<unknown, ApiBody>(
+      `/v1/admin/perfis/${encodeURIComponent(params.id)}/papeis`,
+      body,
+    );
   }
 
-  putApiV1AdminUsuariosPapeisDiretosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.put<unknown, ApiBody>(`/v1/admin/usuarios/${encodeURIComponent(params.id)}/papeis-diretos`, body);
+  putApiV1AdminUsuariosPapeisDiretosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>(
+      `/v1/admin/usuarios/${encodeURIComponent(params.id)}/papeis-diretos`,
+      body,
+    );
   }
 
   putApiV1AdminUsuariosPerfisById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
-    return this.api.put<unknown, ApiBody>(`/v1/admin/usuarios/${encodeURIComponent(params.id)}/perfis`, body);
+    return this.api.put<unknown, ApiBody>(
+      `/v1/admin/usuarios/${encodeURIComponent(params.id)}/perfis`,
+      body,
+    );
   }
 
   putApiV1AuthAlterarSenha(body: ApiBody = {}): Observable<unknown> {

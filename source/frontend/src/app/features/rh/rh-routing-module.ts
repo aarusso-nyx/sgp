@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups';
 import { RhFuncionarios } from './funcionarios/funcionarios';
+import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhHome } from './pages/rh-home/rh-home';
 
 @NgModule({
@@ -11,6 +12,14 @@ import { RhHome } from './pages/rh-home/rh-home';
       {
         path: 'funcionarios',
         component: RhFuncionarios,
+      },
+      {
+        path: 'funcionarios/:id/vinculos',
+        component: RhFuncionariosVinculos,
+      },
+      {
+        path: 'funcionarios/vinculos',
+        component: RhFuncionariosVinculos,
       },
       {
         path: '',

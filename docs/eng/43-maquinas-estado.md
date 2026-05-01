@@ -42,6 +42,41 @@
 
 Permissões: leitura exige `rh.employee.read`; admissão exige `rh.employee.admit`; desligamento exige `rh.employee.terminate`.
 
+## 0.2. Vínculo e regime jurídico HR-02
+
+`hr.employment_link` registra a classificação física do vínculo por regime jurídico e `hr.employment_contract` registra a vigência contratual do servidor. A alteração de regime fecha o contrato ativo, abre novo vínculo/contrato, insere uma linha em `hr.employee_status_history` e grava evento imutável em `public.audit_event` via `sgp_append_audit_event`.
+
+| Regime | Guarda obrigatória | Base normativa |
+|---|---|---|
+| `statutory` | `regime_law_reference` preenchido | Lei 8.112/90 ou estatuto local equivalente |
+| `celetista` | contrato CLT com vigência inicial | CLT e Lei 9.962/00 |
+| `commissioned` | `commission_position_id` preenchido | CF art. 37, V |
+| `temporary` | `end_date` preenchido | Lei 8.745/93 |
+
+| Transição | De | Evento | Guarda | Ação | Para |
+|---|---|---|---|---|---|
+| HR02-T1 | qualquer regime ativo | `ALTERAR_REGIME_ESTATUTARIO` | fundamento legal informado | fecha contrato anterior; cria vínculo `statutory`; cria contrato; registra histórico e auditoria | `statutory` |
+| HR02-T2 | qualquer regime ativo | `ALTERAR_REGIME_CELETISTA` | data de vigência válida | fecha contrato anterior; cria vínculo `celetista`; cria contrato; registra histórico e auditoria | `celetista` |
+| HR02-T3 | qualquer regime ativo | `NOMEAR_COMISSIONADO` | cargo em comissão informado | fecha contrato anterior; cria vínculo `commissioned`; cria contrato; registra histórico e auditoria | `commissioned` |
+| HR02-T4 | qualquer regime ativo | `CONTRATAR_TEMPORARIO` | data final obrigatória | fecha contrato anterior; cria vínculo `temporary`; cria contrato com `ends_on`; registra histórico e auditoria | `temporary` |
+
+Permissões: alteração de regime exige `rh.employment_link.write`.
+
+```mermaid
+stateDiagram-v2
+    [*] --> statutory
+    statutory --> commissioned : NOMEAR_COMISSIONADO [commission_position_id]
+    statutory --> temporary : CONTRATAR_TEMPORARIO [end_date]
+    statutory --> celetista : ALTERAR_REGIME_CELETISTA
+    celetista --> statutory : ALTERAR_REGIME_ESTATUTARIO [regime_law_reference]
+    celetista --> commissioned : NOMEAR_COMISSIONADO [commission_position_id]
+    commissioned --> statutory : ALTERAR_REGIME_ESTATUTARIO [regime_law_reference]
+    commissioned --> celetista : ALTERAR_REGIME_CELETISTA
+    commissioned --> temporary : CONTRATAR_TEMPORARIO [end_date]
+    temporary --> statutory : ALTERAR_REGIME_ESTATUTARIO [regime_law_reference]
+    temporary --> celetista : ALTERAR_REGIME_CELETISTA
+```
+
 ---
 
 ## 1. Competência

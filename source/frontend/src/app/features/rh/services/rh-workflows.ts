@@ -41,6 +41,19 @@ export interface RhEmployeeRecord {
   updatedAt: string;
 }
 
+export interface RhStatusHistoryRecord {
+  id: string;
+  functionalStatus: string;
+  startsOn: string;
+  endsOn: string | null;
+  notes: string;
+}
+
+export interface RhEmployeeDossier {
+  funcionarioId: string;
+  statusHistory: RhStatusHistoryRecord[];
+}
+
 export interface RhMutation extends Record<string, unknown> {}
 
 export interface RhQuery extends Record<string, string | number | boolean | undefined> {
@@ -129,6 +142,26 @@ export class RhWorkflows {
       );
   }
 
+  getEmployeeDossier(id: string): Observable<RhEmployeeDossier> {
+    return this.api.getApiV1FuncionariosDossieById({ id }).pipe(
+      map((result) => {
+        const value = result as Partial<RhEmployeeDossier>;
+        return {
+          funcionarioId: String(value.funcionarioId ?? id),
+          statusHistory: Array.isArray(value.statusHistory)
+            ? value.statusHistory.map((item) => this.toStatusHistory(item))
+            : [],
+        };
+      }),
+    );
+  }
+
+  changeContractRegime(id: string, body: RhMutation): Observable<RhMutation> {
+    return this.api
+      .postApiV1FuncionariosVinculosById({ id }, body)
+      .pipe(map((result) => (result ?? {}) as RhMutation));
+  }
+
   listWorkflow(workflow: string, query: RhQuery = {}): Observable<PagedResult<RhWorkflowRecord>> {
     return of({
       items: [],
@@ -194,6 +227,17 @@ export class RhWorkflows {
       active: status !== 'INACTIVE' && status !== 'LOCKED' && status !== 'TERMINATED',
       createdAt: String(value['createdAt'] ?? now),
       updatedAt: String(value['updatedAt'] ?? now),
+    };
+  }
+
+  private toStatusHistory(raw: unknown): RhStatusHistoryRecord {
+    const value = (raw ?? {}) as Record<string, unknown>;
+    return {
+      id: String(value['id'] ?? ''),
+      functionalStatus: String(value['functionalStatus'] ?? ''),
+      startsOn: String(value['startsOn'] ?? ''),
+      endsOn: value['endsOn'] ? String(value['endsOn']) : null,
+      notes: String(value['notes'] ?? ''),
     };
   }
 

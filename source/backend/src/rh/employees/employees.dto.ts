@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsDateString,
+  IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -157,4 +158,44 @@ export class TerminateEmployeeDto {
   @IsOptional()
   @IsBoolean()
   generateTerminationPayroll?: boolean;
+}
+
+export class ChangeContractRegimeDto {
+  @ApiProperty({
+    enum: ['statutory', 'celetista', 'commissioned', 'temporary'],
+  })
+  @IsString()
+  @IsIn(['statutory', 'celetista', 'commissioned', 'temporary'])
+  contractType!: 'statutory' | 'celetista' | 'commissioned' | 'temporary';
+
+  @ApiProperty()
+  @IsDateString()
+  effectiveOn!: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsDateString()
+  endDate?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  commissionPositionId?: string;
+
+  @ApiPropertyOptional({ maxLength: 120 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  regimeLawReference?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  functionalStatusId?: string;
+
+  @ApiPropertyOptional({ maxLength: 500 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  justification?: string;
 }

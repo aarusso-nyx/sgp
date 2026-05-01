@@ -332,6 +332,159 @@ $$;
   console.log('[db-smoke] validated HR-01 employee admission audit, timeline, and RLS');
 
   await runSqlSnippet(
+    '99-hr02-vinculo-regime.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  status_id uuid;
+  link_id uuid;
+  contract_type_id uuid;
+  v_employee_id uuid;
+  contract_id uuid;
+  history_before integer;
+  history_after integer;
+  audit_before integer;
+  audit_after integer;
+  visible_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employee TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.functional_status TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employment_link TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.contract_type TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employment_contract TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON hr.employee_status_history TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'rh.employee.read' || chr(10) || 'rh.employee.admit' || chr(10) || 'rh.employment_link.write' || chr(10) || 'gestao.write' || chr(10) || 'auditoria.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+
+  BEGIN
+    INSERT INTO hr.employment_link (tenant_id, code, name, contract_type, status)
+    VALUES (tenant_a, 'HR02_BAD_TEMP', 'HR02 Bad Temporary', 'temporary', 'ACTIVE'::"RecordStatus");
+    RAISE EXCEPTION 'Expected temporary employment_link without end_date to fail';
+  EXCEPTION
+    WHEN check_violation THEN
+      NULL;
+  END;
+
+  INSERT INTO hr.functional_status (
+    tenant_id, code, description, modality, kind, enters_payroll, lifecycle_status, status
+  )
+  VALUES (
+    tenant_a, 'HR02_SMOKE_ATIVO', 'HR02 Smoke Ativo', 'ATIVO', 'EXERCICIO', true, 'ACTIVE'::"EmployeeLifecycleStatus", 'ACTIVE'::"RecordStatus"
+  )
+  ON CONFLICT (tenant_id, code) DO UPDATE SET updated_at = now()
+  RETURNING id INTO status_id;
+
+  INSERT INTO hr.contract_type (tenant_id, code, name, status)
+  VALUES (tenant_a, 'TEMPORARIO', 'Temporario Lei 8.745/93', 'ACTIVE'::"RecordStatus")
+  ON CONFLICT (tenant_id, code) DO UPDATE SET updated_at = now()
+  RETURNING id INTO contract_type_id;
+
+  INSERT INTO hr.employment_link (
+    tenant_id, code, name, contract_type, end_date, regime_law_reference, functional_status_id, status
+  )
+  VALUES (
+    tenant_a, 'HR02_TEMP_LINK', 'HR02 Temporary Link', 'temporary', DATE '2026-11-01', 'Lei 8.745/93', status_id, 'ACTIVE'::"RecordStatus"
+  )
+  ON CONFLICT (tenant_id, code) DO UPDATE
+  SET contract_type = EXCLUDED.contract_type,
+      end_date = EXCLUDED.end_date,
+      regime_law_reference = EXCLUDED.regime_law_reference,
+      functional_status_id = EXCLUDED.functional_status_id,
+      updated_at = now()
+  RETURNING id INTO link_id;
+
+  INSERT INTO hr.employee (
+    tenant_id, registration, name, functional_status_id, employment_link_id, contract_type_id, hired_on, lifecycle_status
+  )
+  VALUES (
+    tenant_a, 'HR02-SMOKE', 'HR02 Smoke Employee', status_id, link_id, contract_type_id, DATE '2026-05-01', 'ACTIVE'::"EmployeeLifecycleStatus"
+  )
+  ON CONFLICT (tenant_id, registration) DO UPDATE
+  SET employment_link_id = EXCLUDED.employment_link_id,
+      contract_type_id = EXCLUDED.contract_type_id,
+      updated_at = now()
+  RETURNING id INTO v_employee_id;
+
+  SELECT count(*) INTO history_before
+  FROM hr.employee_status_history
+  WHERE tenant_id = tenant_a AND employee_id = v_employee_id;
+
+  SELECT count(*) INTO audit_before
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a AND resource_type = 'rh.employment_link' AND resource_id = link_id::text;
+
+  INSERT INTO hr.employment_contract (
+    tenant_id, employee_id, employment_link_id, contract_type_id, starts_on, ends_on, legal_basis, status
+  )
+  VALUES (
+    tenant_a, v_employee_id, link_id, contract_type_id, DATE '2026-05-01', DATE '2026-11-01', 'Lei 8.745/93', 'ACTIVE'::"RecordStatus"
+  )
+  RETURNING id INTO contract_id;
+
+  INSERT INTO hr.employee_status_history (
+    tenant_id, employee_id, functional_status_id, starts_on, ends_on, notes
+  )
+  VALUES (
+    tenant_a, v_employee_id, status_id, DATE '2026-05-01', DATE '2026-11-01', 'Alteracao de regime juridico: temporary'
+  );
+
+  PERFORM public.sgp_append_audit_event(
+    'PROCESS',
+    'rh.employment_link',
+    link_id::text,
+    NULL::uuid,
+    NULL::text,
+    'db-smoke',
+    'hr.employment_link',
+    'db-smoke-hr02',
+    jsonb_build_object('employeeId', v_employee_id::text, 'employmentContractId', contract_id::text),
+    'HR-02 smoke',
+    NULL::text,
+    NULL::text
+  );
+
+  SELECT count(*) INTO history_after
+  FROM hr.employee_status_history
+  WHERE tenant_id = tenant_a AND employee_id = v_employee_id;
+  IF history_after <> history_before + 1 THEN
+    RAISE EXCEPTION 'Expected HR-02 regime change to append exactly 1 employee_status_history row, before %, after %', history_before, history_after;
+  END IF;
+
+  SELECT count(*) INTO audit_after
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a AND resource_type = 'rh.employment_link' AND resource_id = link_id::text;
+  IF audit_after <> audit_before + 1 THEN
+    RAISE EXCEPTION 'Expected HR-02 regime change to append exactly 1 audit_event row, before %, after %', audit_before, audit_after;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.employee.read', true);
+  SELECT count(*) INTO visible_count FROM hr.employment_link WHERE id = link_id;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 hr.employment_link rows from tenant A, found %', visible_count;
+  END IF;
+
+  RESET ROLE;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated HR-02 regime checks, audit, timeline, and employment_link RLS');
+
+  await runSqlSnippet(
     '99-xcut04-audit-immutability.sql',
     `
 DO $$

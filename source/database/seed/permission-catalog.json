@@ -41,6 +41,7 @@
     { "key": "rh.employee.write", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "write", "routePattern": "/api/v1/funcionarios/**", "description": "Mutate employee lifecycle support records." },
     { "key": "rh.employee.admit", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "admit", "routePattern": "/api/v1/funcionarios/**", "description": "Admit employees through HR-01." },
     { "key": "rh.employee.terminate", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "terminate", "routePattern": "/api/v1/funcionarios/**", "description": "Terminate employees through HR-01." },
+    { "key": "rh.employment_link.write", "moduleKey": "rh", "resourceKey": "employment_link", "actionKey": "write", "routePattern": "/api/v1/funcionarios/**/vinculos", "description": "Change employee employment link and legal regime through HR-02." },
     { "key": "folha.read", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "read", "routePattern": "#!/folhaPagamento/**", "description": "Read payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
     { "key": "folha.write", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "write", "routePattern": "#!/folhaPagamento/**", "description": "Mutate payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
     { "key": "avaliacao.read", "moduleKey": "avaliacao", "resourceKey": "performance", "actionKey": "read", "routePattern": "#!/avaliacao/**", "description": "Read evaluation and career progression records." },
@@ -63,7 +64,7 @@
   ],
   "profilePermissions": {
     "ADMIN": ["*"],
-    "RH_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "gestao.master_data.write", "rh.read", "rh.write", "rh.employee.read", "rh.employee.write", "rh.employee.admit", "rh.employee.terminate", "relatorio.generate"],
+    "RH_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "gestao.master_data.write", "rh.read", "rh.write", "rh.employee.read", "rh.employee.write", "rh.employee.admit", "rh.employee.terminate", "rh.employment_link.write", "relatorio.generate"],
     "FOLHA_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "folha.read", "folha.write", "relatorio.generate"],
     "AUDITOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "folha.read", "relatorio.read", "relatorio.generate", "auditoria.read"]
   }

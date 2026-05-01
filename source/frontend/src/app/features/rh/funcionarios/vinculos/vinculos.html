@@ -1,0 +1,112 @@
+<section class="vinculos" aria-labelledby="vinculos-title">
+  <header class="vinculos__header">
+    <div>
+      <p>Recursos Humanos</p>
+      <h1 id="vinculos-title">Vinculos e regime juridico</h1>
+    </div>
+    <button type="button" mat-stroked-button (click)="loadEmployees()">Atualizar</button>
+  </header>
+
+  <p class="vinculos__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="vinculos__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="vinculos__layout">
+    <section class="vinculos__panel">
+      <h2>Servidores</h2>
+      <p *ngIf="loading">Carregando...</p>
+      <table aria-label="Servidores para alteracao de regime">
+        <thead>
+          <tr>
+            <th>Matricula</th>
+            <th>Nome</th>
+            <th>Situacao</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let employee of employees"
+            (click)="select(employee)"
+            [class.vinculos__row--selected]="employee.id === selected?.id"
+          >
+            <td>{{ employee.registration }}</td>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.functionalStatus || employee.lifecycleStatus }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="vinculos__panel">
+      <h2>Linha do tempo</h2>
+      <ol class="vinculos__timeline" *ngIf="timeline.length; else emptyTimeline">
+        <li *ngFor="let item of timeline">
+          <strong>{{ item.functionalStatus }}</strong>
+          <span>{{ item.startsOn | date: 'yyyy-MM-dd' }}</span>
+          <p>{{ item.notes }}</p>
+        </li>
+      </ol>
+      <ng-template #emptyTimeline>
+        <p>Nenhum historico carregado.</p>
+      </ng-template>
+    </section>
+  </div>
+
+  <form [formGroup]="regimeForm" (ngSubmit)="changeRegime()" class="vinculos__panel">
+    <header class="vinculos__form-header">
+      <h2>Alterar Regime</h2>
+      <span>{{ selected?.registration || 'Selecione um servidor' }}</span>
+    </header>
+
+    <div class="vinculos__fields">
+      <label>
+        <span>Servidor</span>
+        <input formControlName="employeeId" />
+      </label>
+      <label>
+        <span>Regime juridico</span>
+        <select formControlName="contractType">
+          <option value="statutory">Estatutario</option>
+          <option value="celetista">Celetista</option>
+          <option value="commissioned">Comissionado</option>
+          <option value="temporary">Temporario Lei 8.745/93</option>
+        </select>
+      </label>
+      <label>
+        <span>Inicio de vigencia</span>
+        <input type="date" formControlName="effectiveOn" />
+      </label>
+
+      <ng-container [ngSwitch]="contractType">
+        <label *ngSwitchCase="'temporary'">
+          <span>Fim do contrato temporario</span>
+          <input type="date" formControlName="endDate" />
+        </label>
+        <label *ngSwitchCase="'commissioned'">
+          <span>Cargo em comissao</span>
+          <input formControlName="commissionPositionId" placeholder="UUID do cargo" />
+        </label>
+        <label *ngSwitchCase="'statutory'">
+          <span>Fundamento do regime estatutario</span>
+          <input formControlName="regimeLawReference" />
+        </label>
+      </ng-container>
+
+      <label class="vinculos__wide">
+        <span>Justificativa</span>
+        <textarea rows="3" formControlName="justification"></textarea>
+      </label>
+      <label class="vinculos__check">
+        <input type="checkbox" formControlName="firstConfirmation" />
+        <span>Confirmo a alteracao do regime juridico.</span>
+      </label>
+      <label>
+        <span>Confirmacao final</span>
+        <input formControlName="secondConfirmation" placeholder="ALTERAR REGIME" />
+      </label>
+    </div>
+
+    <button type="submit" mat-flat-button color="primary" [disabled]="saving">
+      Alterar Regime
+    </button>
+  </form>
+</section>

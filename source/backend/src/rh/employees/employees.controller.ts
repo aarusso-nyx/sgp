@@ -7,10 +7,15 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
+import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
-import { AdmitEmployeeDto, TerminateEmployeeDto } from './employees.dto';
+import {
+  AdmitEmployeeDto,
+  ChangeContractRegimeDto,
+  TerminateEmployeeDto,
+} from './employees.dto';
 import { EmployeesService } from './employees.service';
 
 @ApiTags('rh')
@@ -102,5 +107,20 @@ export class EmployeesController {
       },
     });
     return terminated;
+  }
+
+  @Post('funcionarios/:id/vinculos')
+  @RequirePermission('rh.employment_link.write')
+  @AuditMutation({
+    action: 'PROCESS',
+    resourceType: 'rh.employment_link',
+    tableName: 'hr.employment_link',
+  })
+  @ApiCreatedResponse({ description: 'Change employee legal regime.' })
+  changeContractRegime(
+    @Param('id') id: string,
+    @Body() body: ChangeContractRegimeDto,
+  ) {
+    return this.employeesService.changeContractRegime(id, body);
   }
 }

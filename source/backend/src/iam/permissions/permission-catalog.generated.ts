@@ -27,6 +27,7 @@ export const PERMISSIONS = [
   'rh.employee.read',
   'rh.employee.terminate',
   'rh.employee.write',
+  'rh.employment_link.write',
   'rh.read',
   'rh.write',
   'saude.read',
