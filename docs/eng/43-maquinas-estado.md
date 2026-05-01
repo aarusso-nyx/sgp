@@ -62,6 +62,29 @@ Permissões: leitura exige `rh.employee.read`; admissão exige `rh.employee.admi
 
 Permissões: alteração de regime exige `rh.employment_link.write`.
 
+## 0.3. Estágio probatório HR-08
+
+O estágio probatório aplica-se somente a vínculos estatutários. O marco inicial é a data de exercício do contrato funcional ativo (`hr.employment_contract.exercise_on`) e a conclusão ordinária ocorre após 36 meses, conforme Lei 8.112/90 art. 20. As avaliações parciais são registradas em `hr.probation_evaluation` nos ciclos de 12, 24 e 36 meses, com trilha de auditoria e isolamento por tenant.
+
+| Estado | Descrição |
+|---|---|
+| `em_estagio` | Servidor estatutário em exercício há menos de 36 meses |
+| `avaliacao_12m` | Primeira avaliação parcial registrada |
+| `avaliacao_24m` | Segunda avaliação parcial registrada |
+| `avaliacao_36m` | Avaliação final registrada |
+| `estavel` | Servidor aprovado ao fim do estágio |
+| `nao_aprovado` | Avaliação final rejeitada, exigindo providência administrativa |
+
+| Transição | De | Evento | Guarda | Ação | Para |
+|---|---|---|---|---|---|
+| HR08-T1 | `em_estagio` | `REGISTRAR_AVALIACAO_12M` | vínculo estatutário; período de 12 meses | insere `probation_evaluation`; emite auditoria | `avaliacao_12m` |
+| HR08-T2 | `avaliacao_12m` | `REGISTRAR_AVALIACAO_24M` | vínculo estatutário; período de 24 meses | insere `probation_evaluation`; emite auditoria | `avaliacao_24m` |
+| HR08-T3 | `avaliacao_24m` | `REGISTRAR_AVALIACAO_36M` | vínculo estatutário; período de 36 meses | insere `probation_evaluation`; emite auditoria | `avaliacao_36m` |
+| HR08-T4 | `avaliacao_36m` | `APROVAR_ESTAGIO` | decisão `approved` | mantém histórico funcional imutável e libera estabilidade administrativa | `estavel` |
+| HR08-T5 | `avaliacao_36m` | `REPROVAR_ESTAGIO` | decisão `rejected` | registra decisão e sinaliza providência de desligamento/processo | `nao_aprovado` |
+
+Permissões: leitura usa `avaliacao.read`; registro de avaliação exige `avaliacao.probation.write`.
+
 ```mermaid
 stateDiagram-v2
     [*] --> statutory

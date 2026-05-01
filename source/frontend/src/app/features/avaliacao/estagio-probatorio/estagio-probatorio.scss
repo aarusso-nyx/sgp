@@ -1,0 +1,61 @@
+.probation {
+  display: grid;
+  gap: 1rem;
+}
+
+.probation header p {
+  color: #5f6673;
+  margin: 0;
+}
+
+.probation header h1 {
+  margin: 0.1rem 0 0;
+}
+
+.probation__layout {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(20rem, 1fr) minmax(18rem, 28rem);
+}
+
+.probation table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.probation th,
+.probation td {
+  border-bottom: 1px solid #d9dde5;
+  padding: 0.65rem;
+  text-align: left;
+}
+
+.probation form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.probation label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.probation input,
+.probation select,
+.probation textarea {
+  min-height: 2.25rem;
+}
+
+.probation__message {
+  color: #217a3c;
+}
+
+.probation__error {
+  color: #b42318;
+}
+
+@media (max-width: 860px) {
+  .probation__layout {
+    grid-template-columns: 1fr;
+  }
+}

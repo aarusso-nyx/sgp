@@ -3,11 +3,13 @@ import {
   IsBoolean,
   IsDateString,
   IsIn,
+  IsInt,
   IsNotEmpty,
   IsObject,
   IsOptional,
   IsString,
   MaxLength,
+  Min,
 } from 'class-validator';
 
 export class EmployeeMutationDto {
@@ -233,4 +235,33 @@ export class CadastralChangeRequestDto {
   @IsOptional()
   @IsObject()
   previousPayload?: Record<string, unknown>;
+}
+
+export class CreateServiceTimeRecordDto {
+  @ApiProperty({ maxLength: 120 })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(120)
+  source!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  startsOn!: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  endsOn?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  daysCount?: number;
+
+  @ApiPropertyOptional({ maxLength: 500 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  notes?: string;
 }

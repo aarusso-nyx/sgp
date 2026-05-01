@@ -753,6 +753,158 @@ $$;
   );
   console.log('[db-smoke] validated XCUT-03 RLS and tenant FK hardening');
 
+  await runSqlSnippet(
+    '99-hr08-history-probation.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  employee_a uuid;
+  employee_b uuid;
+  history_id uuid;
+  probation_id uuid := gen_random_uuid();
+  visible_count integer;
+  unordered_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr TO sgp_smoke_rls;
+  GRANT SELECT ON hr.employee, hr.employment_link, hr.employment_contract, hr.v_employee_career_history TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.probation_evaluation TO sgp_smoke_rls;
+
+  SELECT id INTO employee_a FROM hr.employee WHERE tenant_id = tenant_a LIMIT 1;
+  IF employee_a IS NULL THEN
+    RAISE EXCEPTION 'HR-08 smoke requires at least one seeded tenant A employee';
+  END IF;
+
+  SELECT id INTO history_id
+  FROM hr.employee_status_history
+  WHERE tenant_id = tenant_a
+    AND employee_id = employee_a
+  LIMIT 1;
+  IF history_id IS NULL THEN
+    INSERT INTO hr.employee_status_history (
+      tenant_id,
+      employee_id,
+      functional_status_id,
+      starts_on,
+      notes
+    )
+    SELECT
+      employee.tenant_id,
+      employee.id,
+      employee.functional_status_id,
+      COALESCE(employee.hired_on, CURRENT_DATE),
+      'HR-08 smoke history seed'
+    FROM hr.employee employee
+    WHERE employee.id = employee_a
+      AND employee.functional_status_id IS NOT NULL
+    RETURNING id INTO history_id;
+  END IF;
+
+  IF history_id IS NULL THEN
+    RAISE EXCEPTION 'HR-08 smoke requires a functional_status_id to seed employee_status_history';
+  END IF;
+
+  BEGIN
+    UPDATE hr.employee_status_history SET notes = notes WHERE id = history_id;
+    RAISE EXCEPTION 'Expected employee_status_history UPDATE to fail';
+  EXCEPTION
+    WHEN feature_not_supported THEN
+      NULL;
+  END;
+
+  BEGIN
+    DELETE FROM hr.employee_status_history WHERE id = history_id;
+    RAISE EXCEPTION 'Expected employee_status_history DELETE to fail';
+  EXCEPTION
+    WHEN feature_not_supported THEN
+      NULL;
+  END;
+
+  SELECT count(*) INTO unordered_count
+  FROM (
+    SELECT
+      event_date,
+      lag(event_date) OVER (ORDER BY event_date DESC, event_id DESC) AS previous_date
+    FROM hr.v_employee_career_history
+    WHERE employee_id = employee_a
+  ) ordered_events
+  WHERE previous_date IS NOT NULL
+    AND event_date > previous_date;
+  IF unordered_count <> 0 THEN
+    RAISE EXCEPTION 'Expected v_employee_career_history to be ordered by event_date DESC';
+  END IF;
+
+  UPDATE hr.employment_link link
+  SET contract_type = 'statutory',
+      regime_law_reference = 'Lei 8.112/90'
+  FROM hr.employee employee
+  WHERE employee.id = employee_a
+    AND employee.employment_link_id = link.id;
+
+  INSERT INTO hr.probation_evaluation (
+    id,
+    tenant_id,
+    employee_id,
+    period_start,
+    period_end,
+    score,
+    decision,
+    notes
+  )
+  VALUES (
+    probation_id,
+    tenant_a,
+    employee_a,
+    CURRENT_DATE - interval '36 months',
+    CURRENT_DATE,
+    9.00,
+    'approved',
+    'HR-08 smoke'
+  );
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'avaliacao.read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.probation_evaluation
+  WHERE id = probation_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 probation_evaluation rows from tenant A, found %', visible_count;
+  END IF;
+
+  SELECT id INTO employee_b FROM hr.employee WHERE tenant_id = tenant_b LIMIT 1;
+  IF employee_b IS NOT NULL THEN
+    PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+    PERFORM set_config('app.current_permissions', 'avaliacao.probation.write', true);
+    BEGIN
+      SET LOCAL ROLE sgp_smoke_rls;
+      INSERT INTO hr.probation_evaluation (
+        tenant_id,
+        employee_id,
+        period_start,
+        period_end,
+        score,
+        decision
+      )
+      VALUES (tenant_a, employee_a, CURRENT_DATE - interval '12 months', CURRENT_DATE, 8.00, 'pending');
+      RESET ROLE;
+      RAISE EXCEPTION 'Expected cross-tenant probation_evaluation INSERT to fail';
+    EXCEPTION
+      WHEN insufficient_privilege THEN
+        RESET ROLE;
+      WHEN check_violation THEN
+        RESET ROLE;
+    END;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated HR-08 immutable history, career view, and probation RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

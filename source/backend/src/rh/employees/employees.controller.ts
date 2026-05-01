@@ -15,10 +15,13 @@ import {
   AdmitEmployeeDto,
   ApproveCadastralChangeDto,
   ChangeContractRegimeDto,
+  CreateServiceTimeRecordDto,
   RejectCadastralChangeDto,
   TerminateEmployeeDto,
 } from './employees.dto';
 import { EmployeesService } from './employees.service';
+import { HistoryService } from './history.service';
+import { ServiceTimeService } from './service-time.service';
 
 @ApiTags('rh')
 @ApiBearerAuth()
@@ -27,6 +30,8 @@ export class EmployeesController {
   constructor(
     private readonly employeesService: EmployeesService,
     private readonly auditService: AuditService,
+    private readonly historyService: HistoryService,
+    private readonly serviceTimeService: ServiceTimeService,
   ) {}
 
   @Get('funcionarios')
@@ -97,6 +102,46 @@ export class EmployeesController {
   @ApiOkResponse({ description: 'Employee dossier document.' })
   dossier(@Param('id') id: string) {
     return this.employeesService.getDossier(id);
+  }
+
+  @Get('funcionarios/:id/historico')
+  @RequirePermission('rh.history.read')
+  @ApiOkResponse({ description: 'Immutable employee career timeline.' })
+  history(
+    @Param('id') id: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+    @Query('type') type?: string,
+  ) {
+    return this.historyService.listEmployeeHistory(id, {
+      startDate,
+      endDate,
+      type,
+    });
+  }
+
+  @Get('funcionarios/:id/tempo-servico')
+  @RequirePermission('rh.history.read')
+  @ApiOkResponse({ description: 'Employee service-time records.' })
+  listServiceTime(@Param('id') id: string) {
+    return this.serviceTimeService.list(id);
+  }
+
+  @Post('funcionarios/:id/tempo-servico')
+  @RequirePermission('rh.employee.write')
+  @AuditMutation({
+    action: 'CREATE',
+    resourceType: 'hr.service_time_record',
+    tableName: 'hr.service_time_record',
+  })
+  @ApiCreatedResponse({
+    description: 'Create an employee service-time record.',
+  })
+  createServiceTime(
+    @Param('id') id: string,
+    @Body() body: CreateServiceTimeRecordDto,
+  ) {
+    return this.serviceTimeService.create(id, body);
   }
 
   @Get('pericia/prontuarios/:id/laudo/pdf')

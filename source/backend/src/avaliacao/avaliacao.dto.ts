@@ -129,6 +129,51 @@ export class UpdatePerformanceEvaluationDto {
   observacao?: string;
 }
 
+export const PROBATION_DECISIONS = [
+  'pending',
+  'approved',
+  'rejected',
+  'extended',
+] as const;
+
+export type ProbationDecisionInput = (typeof PROBATION_DECISIONS)[number];
+
+export class CreateProbationEvaluationDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  funcionarioId!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  periodoInicio!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  periodoFim!: string;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  nota!: number;
+
+  @ApiProperty({ enum: PROBATION_DECISIONS })
+  @IsIn(PROBATION_DECISIONS)
+  decisao!: ProbationDecisionInput;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  avaliadorId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  observacao?: string;
+}
+
 export class CreateMeritProgressionDto {
   @ApiProperty()
   @IsString()

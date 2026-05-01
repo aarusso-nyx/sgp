@@ -200,6 +200,23 @@ Implementado como Step Functions `dirf-anual` — ver §3.2.
 
 ---
 
+### 2.1.1 Recursos Humanos
+
+#### `JOB_RH_ESTAGIO_PROBATORIO_36M`
+
+| Campo | Valor |
+|---|---|
+| **Owner** | `sgp-core-api` / módulo `avaliacao` |
+| **Trigger** | Cron diário via EventBridge Scheduler; endpoint operacional `GET /api/v1/avaliacao/estagio-probatorio/a-vencer` expõe a mesma seleção para conferência |
+| **Input** | `{ tenant_id, reference_date }` |
+| **Output** | Lista de servidores estatutários cujo `exercise_on + 36 months` ocorre nos próximos 90 dias; notificação operacional para RH/avaliação |
+| **Retry policy** | 3 tentativas; backoff exponencial; DLQ `sgp-rh-estagio-probatorio-dlq` |
+| **Idempotency key** | `{tenant_id}#ESTAGIO_PROBATORIO_36M#{reference_date}` |
+| **Timeout** | 5 min |
+| **Observabilidade** | Métrica `ProbationDueEmployees`; log estruturado com tenant e quantidade de servidores sinalizados |
+
+Pré-condições: vínculo `statutory`, contrato ativo e `exercise_on` preenchido. A avaliação final é sempre mutação explícita em `hr.probation_evaluation`, auditada pelo serviço de auditoria.
+
 ### 2.2 eSocial
 
 ---

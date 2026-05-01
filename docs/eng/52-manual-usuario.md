@@ -4,6 +4,18 @@
 
 ---
 
+## Histórico Funcional
+
+O histórico funcional do servidor fica disponível em **RH > Funcionários > Histórico funcional**. A tela apresenta uma linha do tempo somente leitura com eventos de situação funcional, férias, licenças, licenças médicas e averbações de tempo de serviço. Os filtros por período e tipo de evento refinam a consulta sem alterar os registros.
+
+O histórico é imutável: correções não editam nem removem eventos anteriores. Quando houver mudança funcional válida, o sistema cria novo evento na linha do tempo e preserva a trilha anterior para auditoria.
+
+## Estágio Probatório
+
+O estágio probatório é acompanhado em **Avaliação > Estágio probatório** para servidores estatutários. A lista operacional mostra servidores próximos de completar 36 meses de exercício e permite registrar avaliações parciais de 12, 24 e 36 meses com nota, decisão, avaliador e observação.
+
+Somente usuários com permissão de avaliação podem registrar decisões. A aprovação final encerra o ciclo administrativo do estágio; reprovação ou prorrogação deve ser acompanhada pelo procedimento formal aplicável.
+
 ## Sumário
 
 1. [Introdução](#1-introdução)

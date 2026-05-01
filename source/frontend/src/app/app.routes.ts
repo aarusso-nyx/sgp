@@ -43,6 +43,13 @@ export const routes: Routes = [
         path: 'rh',
         loadChildren: () => import('./features/rh/rh-module').then((m) => m.RhModule),
       },
+      {
+        path: 'avaliacao/estagio-probatorio',
+        loadComponent: () =>
+          import('./features/avaliacao/estagio-probatorio/estagio-probatorio').then(
+            (m) => m.AvaliacaoEstagioProbatorio,
+          ),
+      },
       ...adminFeatureRoutes,
     ],
   },

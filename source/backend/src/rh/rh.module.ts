@@ -5,6 +5,8 @@ import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
 import { EmployeesController } from './employees/employees.controller';
 import { EmployeesService } from './employees/employees.service';
+import { HistoryService } from './employees/history.service';
+import { ServiceTimeService } from './employees/service-time.service';
 import {
   EmployeeRhWorkflowsController,
   RhWorkflowsController,
@@ -18,6 +20,11 @@ import { RhWorkflowsService } from './workflows/rh-workflows.service';
     RhWorkflowsController,
     EmployeeRhWorkflowsController,
   ],
-  providers: [EmployeesService, RhWorkflowsService],
+  providers: [
+    EmployeesService,
+    HistoryService,
+    ServiceTimeService,
+    RhWorkflowsService,
+  ],
 })
 export class RhModule {}

@@ -1,0 +1,42 @@
+<section class="history" aria-labelledby="history-title">
+  <header class="history__header">
+    <div>
+      <p>Recursos Humanos</p>
+      <h1 id="history-title">Historico funcional</h1>
+    </div>
+    <label>
+      <span>Inicio</span>
+      <input type="date" [(ngModel)]="startDate" />
+    </label>
+    <label>
+      <span>Fim</span>
+      <input type="date" [(ngModel)]="endDate" />
+    </label>
+    <label>
+      <span>Tipo</span>
+      <select [(ngModel)]="type">
+        <option value="">Todos</option>
+        <option value="functional_status">Situacao</option>
+        <option value="vacation">Ferias</option>
+        <option value="leave">Licenca</option>
+        <option value="medical_leave">Licenca medica</option>
+        <option value="service_time">Tempo de servico</option>
+      </select>
+    </label>
+    <button type="button" mat-stroked-button (click)="load()">Filtrar</button>
+  </header>
+
+  <p class="history__error" *ngIf="error" role="alert">{{ error }}</p>
+  <p *ngIf="loading">Carregando...</p>
+
+  <ol class="history__timeline" aria-label="Linha do tempo funcional">
+    <li *ngFor="let event of events">
+      <time>{{ event.date }}</time>
+      <div>
+        <strong>{{ event.title }}</strong>
+        <span>{{ event.type }}</span>
+        <p *ngIf="event.notes">{{ event.notes }}</p>
+      </div>
+    </li>
+  </ol>
+</section>

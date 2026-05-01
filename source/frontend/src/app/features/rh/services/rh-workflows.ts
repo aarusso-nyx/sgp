@@ -49,6 +49,15 @@ export interface RhStatusHistoryRecord {
   notes: string;
 }
 
+export interface RhCareerHistoryEvent {
+  id: string;
+  type: string;
+  date: string;
+  endsOn: string | null;
+  title: string;
+  notes: string;
+}
+
 export interface RhEmployeeDossier {
   funcionarioId: string;
   statusHistory: RhStatusHistoryRecord[];
@@ -156,6 +165,16 @@ export class RhWorkflows {
     );
   }
 
+  getEmployeeHistory(id: string, query: RhQuery = {}): Observable<RhCareerHistoryEvent[]> {
+    return this.api
+      .getApiV1FuncionariosHistoricoById({ id }, query)
+      .pipe(
+        map((result) =>
+          Array.isArray(result) ? result.map((item) => this.toCareerHistoryEvent(item)) : [],
+        ),
+      );
+  }
+
   changeContractRegime(id: string, body: RhMutation): Observable<RhMutation> {
     return this.api
       .postApiV1FuncionariosVinculosById({ id }, body)
@@ -237,6 +256,18 @@ export class RhWorkflows {
       functionalStatus: String(value['functionalStatus'] ?? ''),
       startsOn: String(value['startsOn'] ?? ''),
       endsOn: value['endsOn'] ? String(value['endsOn']) : null,
+      notes: String(value['notes'] ?? ''),
+    };
+  }
+
+  private toCareerHistoryEvent(raw: unknown): RhCareerHistoryEvent {
+    const value = (raw ?? {}) as Record<string, unknown>;
+    return {
+      id: String(value['id'] ?? ''),
+      type: String(value['type'] ?? ''),
+      date: String(value['date'] ?? ''),
+      endsOn: value['endsOn'] ? String(value['endsOn']) : null,
+      title: String(value['title'] ?? ''),
       notes: String(value['notes'] ?? ''),
     };
   }

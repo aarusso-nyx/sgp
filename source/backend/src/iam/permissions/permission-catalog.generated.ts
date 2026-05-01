@@ -2,6 +2,7 @@
 export const PERMISSIONS = [
   'auditoria.read',
   'auth.read',
+  'avaliacao.probation.write',
   'avaliacao.read',
   'avaliacao.write',
   'consultas.read',
@@ -33,6 +34,7 @@ export const PERMISSIONS = [
   'rh.employee.terminate',
   'rh.employee.write',
   'rh.employment_link.write',
+  'rh.history.read',
   'rh.read',
   'rh.write',
   'saude.read',

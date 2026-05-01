@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups';
 import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
 import { RhFuncionarios } from './funcionarios/funcionarios';
+import { RhFuncionariosHistorico } from './funcionarios/historico/historico';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhHome } from './pages/rh-home/rh-home';
 
@@ -17,6 +18,10 @@ import { RhHome } from './pages/rh-home/rh-home';
       {
         path: 'funcionarios/:id/vinculos',
         component: RhFuncionariosVinculos,
+      },
+      {
+        path: 'funcionarios/:id/historico',
+        component: RhFuncionariosHistorico,
       },
       {
         path: 'funcionarios/vinculos',

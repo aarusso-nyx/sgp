@@ -42,6 +42,7 @@
     { "key": "rh.employee.admit", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "admit", "routePattern": "/api/v1/funcionarios/**", "description": "Admit employees through HR-01." },
     { "key": "rh.employee.terminate", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "terminate", "routePattern": "/api/v1/funcionarios/**", "description": "Terminate employees through HR-01." },
     { "key": "rh.employment_link.write", "moduleKey": "rh", "resourceKey": "employment_link", "actionKey": "write", "routePattern": "/api/v1/funcionarios/**/vinculos", "description": "Change employee employment link and legal regime through HR-02." },
+    { "key": "rh.history.read", "moduleKey": "rh", "resourceKey": "history", "actionKey": "read", "routePattern": "/api/v1/funcionarios/**/historico", "description": "Read immutable functional history timeline." },
     { "key": "rh.dependent.read", "moduleKey": "rh", "resourceKey": "dependent", "actionKey": "read", "routePattern": "/api/v1/portal/meus-dados/dependentes", "description": "Read employee dependent records." },
     { "key": "rh.dependent.write", "moduleKey": "rh", "resourceKey": "dependent", "actionKey": "write", "routePattern": "/api/v1/portal/meus-dados/dependentes", "description": "Mutate employee dependent records through approved workflows." },
     { "key": "rh.cadastral_change.approve", "moduleKey": "rh", "resourceKey": "cadastral_change", "actionKey": "approve", "routePattern": "/api/v1/funcionarios/cadastral-changes/**", "description": "Approve or reject employee self-service cadastral change requests." },
@@ -51,6 +52,7 @@
     { "key": "folha.write", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "write", "routePattern": "#!/folhaPagamento/**", "description": "Mutate payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
     { "key": "avaliacao.read", "moduleKey": "avaliacao", "resourceKey": "performance", "actionKey": "read", "routePattern": "#!/avaliacao/**", "description": "Read evaluation and career progression records." },
     { "key": "avaliacao.write", "moduleKey": "avaliacao", "resourceKey": "performance", "actionKey": "write", "routePattern": "#!/avaliacao/**", "description": "Mutate evaluation and career progression records." },
+    { "key": "avaliacao.probation.write", "moduleKey": "avaliacao", "resourceKey": "probation", "actionKey": "write", "routePattern": "/api/v1/avaliacao/estagio-probatorio/**", "description": "Create statutory probation evaluations." },
     { "key": "consultas.read", "moduleKey": "consultas", "resourceKey": "managerial", "actionKey": "read", "routePattern": "#!/consultas/**", "description": "Read managerial query surfaces." },
     { "key": "previdenciario.read", "moduleKey": "previdenciario", "resourceKey": "benefit", "actionKey": "read", "routePattern": "#!/previdenciario/**", "description": "Read previdenciario records and reports." },
     { "key": "previdenciario.write", "moduleKey": "previdenciario", "resourceKey": "benefit", "actionKey": "write", "routePattern": "#!/previdenciario/**", "description": "Mutate previdenciario records and reports." },
@@ -69,8 +71,8 @@
   ],
   "profilePermissions": {
     "ADMIN": ["*"],
-    "RH_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "gestao.master_data.write", "rh.read", "rh.write", "rh.employee.read", "rh.employee.write", "rh.employee.admit", "rh.employee.terminate", "rh.employment_link.write", "rh.dependent.read", "rh.dependent.write", "rh.cadastral_change.approve", "relatorio.generate"],
+    "RH_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "gestao.master_data.write", "rh.read", "rh.write", "rh.employee.read", "rh.employee.write", "rh.employee.admit", "rh.employee.terminate", "rh.employment_link.write", "rh.history.read", "rh.dependent.read", "rh.dependent.write", "rh.cadastral_change.approve", "avaliacao.read", "avaliacao.probation.write", "relatorio.generate"],
     "FOLHA_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "rh.dependent.read", "folha.read", "folha.write", "relatorio.generate"],
-    "AUDITOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "folha.read", "relatorio.read", "relatorio.generate", "auditoria.read"]
+    "AUDITOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "rh.history.read", "folha.read", "relatorio.read", "relatorio.generate", "auditoria.read"]
   }
 }

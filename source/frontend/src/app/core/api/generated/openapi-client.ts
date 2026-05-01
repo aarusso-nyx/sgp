@@ -326,8 +326,22 @@ export class OpenApiClient {
     return this.api.get<unknown>(`/v1/funcionarios/${encodeURIComponent(params.id)}/dossie`);
   }
 
+  getApiV1FuncionariosHistoricoById(
+    params: { id: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/funcionarios/${encodeURIComponent(params.id)}/historico`,
+      query,
+    );
+  }
+
   getApiV1Funcionarios(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/funcionarios', query);
+  }
+
+  getApiV1AvaliacaoEstagioProbatorioAVencer(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/estagio-probatorio/a-vencer', query);
   }
 
   getApiV1Health(): Observable<unknown> {
@@ -771,6 +785,10 @@ export class OpenApiClient {
 
   postApiV1AvaliacaoDesempenhos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/desempenhos', body);
+  }
+
+  postApiV1AvaliacaoEstagioProbatorio(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/estagio-probatorio', body);
   }
 
   postApiV1AvaliacaoDesempenhosFichaById(
