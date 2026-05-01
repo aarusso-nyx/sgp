@@ -18,6 +18,7 @@ import { AuditService } from '../audit/audit.service';
 import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 import { PermissionsGuard } from '../auth/permissions.guard';
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import {
   CreateMedicalRecordDto,
@@ -31,6 +32,7 @@ import { PericiaService } from './pericia.service';
 @ApiTags('saude')
 @ApiBearerAuth()
 @UseGuards(CognitoJwtGuard, PermissionsGuard)
+@AuditMutation({ resourceType: 'medical_record', tableName: 'medical_record' })
 @Controller('v1/pericia')
 export class PericiaController {
   constructor(
@@ -46,7 +48,7 @@ export class PericiaController {
     @Body() body: SchedulePericiaDto,
   ) {
     const created = await this.periciaService.scheduleAppointment(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'medical_appointment',
@@ -72,7 +74,7 @@ export class PericiaController {
       appointmentId,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'UPDATE',
       'medical_appointment',
@@ -94,16 +96,11 @@ export class PericiaController {
     @Body() body: CreateMedicalRecordDto,
   ) {
     const created = await this.periciaService.createMedicalRecord(body);
-    await this.auditService.appendMutation(
-      request,
-      'CREATE',
-      'medical_record',
-      {
-        resourceId: created.id,
-        tableName: 'medical_record',
-        metadata: { leaveId: created.licenca?.id ?? null },
-      },
-    );
+    await this.auditService.auditMutation(request, 'CREATE', 'medical_record', {
+      resourceId: created.id,
+      tableName: 'medical_record',
+      metadata: { leaveId: created.licenca?.id ?? null },
+    });
     return created;
   }
 
@@ -146,16 +143,11 @@ export class PericiaController {
       medicalRecordId,
       body,
     );
-    await this.auditService.appendMutation(
-      request,
-      'PROCESS',
-      'medical_leave',
-      {
-        resourceId: medicalRecordId,
-        tableName: 'medical_leave',
-        metadata: { replicatedEmployees: replicated.matriculasReplicadas },
-      },
-    );
+    await this.auditService.auditMutation(request, 'PROCESS', 'medical_leave', {
+      resourceId: medicalRecordId,
+      tableName: 'medical_leave',
+      metadata: { replicatedEmployees: replicated.matriculasReplicadas },
+    });
     return replicated;
   }
 }

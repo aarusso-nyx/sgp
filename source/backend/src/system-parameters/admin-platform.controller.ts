@@ -18,6 +18,7 @@ import {
 import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 import { PermissionsGuard } from '../auth/permissions.guard';
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { ToggleFeatureFlagDto } from './system-parameters.dto';
 import { SystemParametersService } from './system-parameters.service';
 import { AdminPlatformService } from './admin-platform.service';
@@ -25,6 +26,7 @@ import { AdminPlatformService } from './admin-platform.service';
 @ApiTags('admin')
 @ApiBearerAuth()
 @UseGuards(CognitoJwtGuard, PermissionsGuard)
+@AuditMutation({ resourceType: 'admin_platform' })
 @Controller('admin/v1')
 export class AdminPlatformController {
   constructor(

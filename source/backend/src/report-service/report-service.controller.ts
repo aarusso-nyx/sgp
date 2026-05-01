@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
   ReportServicePollDto,
   RuntimeReportRequestDto,
@@ -8,6 +9,7 @@ import {
 import { ReportRuntimeService } from './report-service.service';
 
 @ApiTags('report-service')
+@AuditMutation({ resourceType: 'report_request', tableName: 'report_request' })
 @Controller('v1/report-service')
 export class ReportServiceController {
   constructor(private readonly reportRuntimeService: ReportRuntimeService) {}

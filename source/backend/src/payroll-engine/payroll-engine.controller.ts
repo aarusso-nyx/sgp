@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { PayrollCalculationRequestDto } from './payroll-engine.dto';
 import { PayrollEngineService } from './payroll-engine.service';
 
 @ApiTags('payroll-engine')
+@AuditMutation({ resourceType: 'payroll_calculation', action: 'PROCESS' })
 @Controller('v1/payroll-engine')
 export class PayrollEngineController {
   constructor(private readonly payrollEngineService: PayrollEngineService) {}

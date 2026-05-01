@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import type { RequestWithContext } from '../common/request-id/request-with-context';
+import { AuditMutationContextStore } from '../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../database/database.service';
 import { AuditActionValue } from './audit.dto';
 import { redactAuditMetadata } from './audit-redaction.util';
@@ -10,13 +11,14 @@ export interface AuditAppendOptions {
   tableName?: string;
   metadata?: Record<string, unknown>;
   statusCode?: number;
+  reason?: string;
 }
 
 @Injectable()
 export class AuditWriterService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async appendMutation(
+  async auditMutation(
     request: RequestWithContext,
     action: Extract<
       AuditActionValue,
@@ -26,6 +28,7 @@ export class AuditWriterService {
     options: AuditAppendOptions = {},
   ): Promise<void> {
     await this.appendEvent(request, action, resourceType, options);
+    AuditMutationContextStore.markMutationAudited();
   }
 
   async appendEvent(
@@ -43,52 +46,38 @@ export class AuditWriterService {
       statusCode: options.statusCode,
       tenantId: request.actor?.tenantId ?? request.tenantId ?? null,
       actorGroups: request.actor?.groups ?? [],
+      ipAddress: this.clientIp(request) || null,
+      userAgent: this.userAgent(request),
     }) as Record<string, unknown>;
 
     await this.databaseService.query(
       `
-      INSERT INTO public.audit_event (
-        id,
-        occurred_at,
-        actor_user_id,
-        actor_sub,
-        actor_login,
-        action,
-        resource_type,
-        resource_id,
-        table_name,
-        request_id,
-        ip_address,
-        user_agent,
-        metadata
-      )
-      VALUES (
-        gen_random_uuid(),
-        now(),
-        NULL,
+      SELECT public.sgp_append_audit_event(
         $1,
         $2,
-        $3::"AuditAction",
+        $3,
         $4,
         $5,
         $6,
         $7,
-        NULLIF($8, '')::inet,
+        $8::jsonb,
         $9,
-        $10::jsonb
+        $10,
+        $11
       )
       `,
       [
-        request.actor?.sub ?? null,
-        request.actor?.username ?? null,
         action,
         resourceType,
         options.resourceId ?? null,
+        request.actor?.sub ?? null,
+        request.actor?.username ?? null,
         options.tableName ?? null,
         request.requestId ?? null,
+        JSON.stringify(metadata),
+        options.reason ?? null,
         this.clientIp(request),
         this.userAgent(request),
-        JSON.stringify(metadata),
       ],
     );
   }

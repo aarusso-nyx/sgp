@@ -24,10 +24,10 @@ describe('EmployeesController', () => {
       payrollRunId: 'run-1',
       payrollRunStatus: 'DRAFT',
     });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new EmployeesController(
       { terminate } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.terminateEmployee(

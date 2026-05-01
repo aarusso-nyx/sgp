@@ -56,7 +56,7 @@ export class PayrollController {
     @Body() body: CreatePayrollRunDto,
   ) {
     const created = await this.payrollService.createRun(body);
-    await this.auditService.appendMutation(request, 'CREATE', 'payroll_run', {
+    await this.auditService.auditMutation(request, 'CREATE', 'payroll_run', {
       resourceId: created.id,
       tableName: 'payroll_run',
     });
@@ -75,7 +75,7 @@ export class PayrollController {
       payrollRunId,
       body,
     );
-    await this.auditService.appendMutation(request, 'PROCESS', 'payroll_run', {
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
       resourceId: updated.id,
       tableName: 'payroll_run',
       metadata: { status: updated.status },
@@ -94,7 +94,7 @@ export class PayrollController {
   ) {
     const payrollRunId = params.folha_id ?? params.folha_rescisao_id ?? '';
     const updated = await this.payrollService.calculateRun(payrollRunId, body);
-    await this.auditService.appendMutation(request, 'PROCESS', 'payroll_run', {
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
       resourceId: updated.id,
       tableName: 'payroll_run',
       metadata: { operation: 'calculate', status: updated.status },
@@ -113,7 +113,7 @@ export class PayrollController {
     @Body() body: PopulatePayrollRunDto,
   ) {
     const updated = await this.payrollService.populateRun(payrollRunId, body);
-    await this.auditService.appendMutation(request, 'PROCESS', 'payroll_run', {
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
       resourceId: updated.id,
       tableName: 'payroll_run',
       metadata: { operation: 'populate', status: updated.status },
@@ -136,7 +136,7 @@ export class PayrollController {
       payrollRunId,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'advance_payment',

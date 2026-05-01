@@ -64,7 +64,7 @@ export class PrevidenciarioController {
     @Body() body: CreateRetirementRuleDto,
   ) {
     const created = await this.previdenciarioService.createRule(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'retirement_rule',
@@ -85,7 +85,7 @@ export class PrevidenciarioController {
     @Body() body: UpdateRetirementRuleDto,
   ) {
     const updated = await this.previdenciarioService.updateRule(id, body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'UPDATE',
       'retirement_rule',
@@ -115,7 +115,7 @@ export class PrevidenciarioController {
       body,
       request.actor?.username,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'retirement_simulation',
@@ -145,7 +145,7 @@ export class PrevidenciarioController {
       body,
       request.actor?.username,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'retirement_grant',
@@ -172,7 +172,7 @@ export class PrevidenciarioController {
     @Body() body: CreatePensionGrantDto,
   ) {
     const created = await this.previdenciarioService.createPension(body);
-    await this.auditService.appendMutation(request, 'CREATE', 'pension_grant', {
+    await this.auditService.auditMutation(request, 'CREATE', 'pension_grant', {
       resourceId: created.id,
       tableName: 'pension_grant',
     });
@@ -197,7 +197,7 @@ export class PrevidenciarioController {
   ) {
     const created =
       await this.previdenciarioService.createContributionTimeCertificate(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'contribution_time_certificate',
@@ -224,7 +224,7 @@ export class PrevidenciarioController {
         id,
         body,
       );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'contribution_time_certificate_report',
@@ -251,7 +251,7 @@ export class PrevidenciarioController {
     @Body() body: CreatePrevidentiaryDeclarationDto,
   ) {
     const created = await this.previdenciarioService.createDeclaration(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'previdentiary_declaration',
@@ -277,7 +277,7 @@ export class PrevidenciarioController {
       id,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'previdentiary_declaration_report',
@@ -304,7 +304,7 @@ export class PrevidenciarioController {
     @Body() body: CreatePensionCompensationDto,
   ) {
     const created = await this.previdenciarioService.createCompensation(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'pension_compensation',
@@ -328,7 +328,7 @@ export class PrevidenciarioController {
       id,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'UPDATE',
       'pension_compensation',
@@ -355,7 +355,7 @@ export class PrevidenciarioController {
     @Body() body: CreateRecertificationCampaignDto,
   ) {
     const created = await this.previdenciarioService.createCampaign(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'recertification_campaign',
@@ -398,7 +398,7 @@ export class PrevidenciarioController {
     @Body() body: CreateRecertificationBeneficiaryDto,
   ) {
     const created = await this.previdenciarioService.createBeneficiary(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'recertification_beneficiary',
@@ -418,7 +418,7 @@ export class PrevidenciarioController {
     @Body() body: CreateRecertificationRecordDto,
   ) {
     const created = await this.previdenciarioService.createRecord(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'recertification_record',
@@ -439,7 +439,7 @@ export class PrevidenciarioController {
   ) {
     const created =
       await this.previdenciarioService.createBeneficiaryContactHistory(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'beneficiary_contact_history',
@@ -460,7 +460,7 @@ export class PrevidenciarioController {
   ) {
     const created =
       await this.previdenciarioService.createExternalLifeProof(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'external_life_proof',
@@ -481,7 +481,7 @@ export class PrevidenciarioController {
   ) {
     const created =
       await this.previdenciarioService.requestRecertificationNotice(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'recertification_notice_report',
@@ -505,7 +505,7 @@ export class PrevidenciarioController {
       await this.previdenciarioService.requestRecertificationPendingReport(
         body,
       );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'recertification_pending_report',
@@ -524,7 +524,7 @@ export class PrevidenciarioController {
     @Body() body: GeneratePrevidenciarioOutputDto,
   ) {
     const created = await this.previdenciarioService.requestSiprevExport(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'siprev_export_request',

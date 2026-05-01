@@ -64,20 +64,15 @@ export class PayrollOperationsController {
       payrollRunId,
       body,
     );
-    await this.auditService.appendMutation(
-      request,
-      'CREATE',
-      'report_request',
-      {
-        resourceId: created.requestId,
-        tableName: 'report_request',
-        metadata: {
-          operation: 'remessa.gerar',
-          payrollRunId,
-          ...created.metadata,
-        },
+    await this.auditService.auditMutation(request, 'CREATE', 'report_request', {
+      resourceId: created.requestId,
+      tableName: 'report_request',
+      metadata: {
+        operation: 'remessa.gerar',
+        payrollRunId,
+        ...created.metadata,
       },
-    );
+    });
     return created;
   }
 
@@ -95,7 +90,7 @@ export class PayrollOperationsController {
       payrollRunId,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'report_request',
@@ -134,19 +129,14 @@ export class PayrollGfipController {
   ) {
     const created =
       await this.payrollOperationsService.requestGfipGeneration(body);
-    await this.auditService.appendMutation(
-      request,
-      'CREATE',
-      'report_request',
-      {
-        resourceId: created.requestId,
-        tableName: 'report_request',
-        metadata: {
-          operation: 'gfip.gerada',
-          ...created.metadata,
-        },
+    await this.auditService.auditMutation(request, 'CREATE', 'report_request', {
+      resourceId: created.requestId,
+      tableName: 'report_request',
+      metadata: {
+        operation: 'gfip.gerada',
+        ...created.metadata,
       },
-    );
+    });
     return created;
   }
 }

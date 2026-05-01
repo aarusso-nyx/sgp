@@ -44,7 +44,7 @@ export class RecruitmentController {
     @Body() body: CreateRecruitmentRequestDto,
   ) {
     const created = await this.recruitmentService.createRequest(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'recruitment_request',
@@ -67,7 +67,7 @@ export class RecruitmentController {
       requestId,
       request.actor?.username,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'recruitment_request',
@@ -94,7 +94,7 @@ export class RecruitmentController {
       requestId,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'recruitment_candidate',
@@ -119,7 +119,7 @@ export class RecruitmentController {
       candidateId,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'UPDATE',
       'recruitment_candidate',
@@ -139,7 +139,7 @@ export class RecruitmentController {
     @Param('requisicao_id') requestId: string,
   ) {
     const updated = await this.recruitmentService.concludeRequest(requestId);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'recruitment_request',

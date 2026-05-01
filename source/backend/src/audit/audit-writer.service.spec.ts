@@ -8,7 +8,7 @@ describe('AuditWriterService', () => {
       query,
     } as never);
 
-    await service.appendMutation(
+    await service.auditMutation(
       {
         requestId: 'req-1',
         method: 'PATCH',
@@ -34,19 +34,21 @@ describe('AuditWriterService', () => {
 
     const writeCall = query.mock.calls[0] as [string, unknown[]];
     const values = writeCall[1];
-    const metadata = JSON.parse(values[9] as string) as Record<string, unknown>;
+    const metadata = JSON.parse(values[7] as string) as Record<string, unknown>;
     expect(values.slice(0, 7)).toEqual([
-      'sub-1',
-      'tester',
       'UPDATE',
       'payroll_run',
       'pr-1',
+      'sub-1',
+      'tester',
       'payroll_run',
       'req-1',
     ]);
-    expect(values[8]).toBe('agent');
     expect(metadata['token']).toBe('[REDACTED]');
     expect(metadata['method']).toBe('PATCH');
+    expect(metadata['userAgent']).toBe('agent');
+    expect(values[9]).toBe('127.0.0.1');
+    expect(values[10]).toBe('agent');
   });
 
   it('skips writes when the database is unavailable', async () => {
@@ -88,17 +90,15 @@ describe('AuditWriterService', () => {
     );
 
     const values = query.mock.calls[0][1] as unknown[];
-    const metadata = JSON.parse(values[9] as string) as Record<string, unknown>;
-    expect(values.slice(0, 9)).toEqual([
-      null,
-      null,
+    const metadata = JSON.parse(values[7] as string) as Record<string, unknown>;
+    expect(values.slice(0, 7)).toEqual([
       'READ',
       'employee',
       null,
       null,
       null,
-      '203.0.113.10',
-      'agent-array',
+      null,
+      null,
     ]);
     expect(metadata).toMatchObject({
       method: 'GET',
@@ -106,6 +106,10 @@ describe('AuditWriterService', () => {
       statusCode: 200,
       tenantId: 'tenant-from-request',
       actorGroups: [],
+      ipAddress: '203.0.113.10',
+      userAgent: 'agent-array',
     });
+    expect(values[9]).toBe('203.0.113.10');
+    expect(values[10]).toBe('agent-array');
   });
 });

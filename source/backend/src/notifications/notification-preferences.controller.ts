@@ -4,6 +4,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 import { PermissionsGuard } from '../auth/permissions.guard';
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { NotificationsService } from './notifications.service';
 
 class NotificationPreferencesDto {
@@ -23,6 +24,7 @@ class NotificationPreferencesDto {
 @ApiTags('notifications')
 @ApiBearerAuth()
 @UseGuards(CognitoJwtGuard, PermissionsGuard)
+@AuditMutation({ resourceType: 'notification_preferences' })
 @Controller('v1/usuarios/me')
 export class NotificationPreferencesController {
   constructor(private readonly notificationsService: NotificationsService) {}

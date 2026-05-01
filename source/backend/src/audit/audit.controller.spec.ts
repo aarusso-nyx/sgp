@@ -14,10 +14,10 @@ describe('AuditController', () => {
 
   it('creates audit report requests and appends audit event', async () => {
     const createReportRequest = jest.fn().mockResolvedValue({ id: 'report-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new AuditController({
       createReportRequest,
-      appendMutation,
+      auditMutation,
     } as never);
 
     await controller.createReportRequest({ requestId: 'req-1' } as never, {
@@ -25,7 +25,7 @@ describe('AuditController', () => {
     });
 
     expect(createReportRequest).toHaveBeenCalledWith({ actor: 'tester' });
-    expect(appendMutation).toHaveBeenCalledWith(
+    expect(auditMutation).toHaveBeenCalledWith(
       expect.anything(),
       'GENERATE',
       'audit_report',

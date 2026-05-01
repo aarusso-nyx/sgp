@@ -3,10 +3,10 @@ import { PayrollController } from './payroll.controller';
 describe('PayrollController', () => {
   it('delegates payroll calculation', async () => {
     const calculateRun = jest.fn().mockResolvedValue({ id: 'run-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollController(
       { calculateRun } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.calculateRun(
@@ -21,10 +21,10 @@ describe('PayrollController', () => {
 
   it('delegates payroll mass population', async () => {
     const populateRun = jest.fn().mockResolvedValue({ id: 'run-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollController(
       { populateRun } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.populateRun(
@@ -43,10 +43,10 @@ describe('PayrollController', () => {
     const createAdvancePayment = jest
       .fn()
       .mockResolvedValue({ paymentId: 'adv-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollController(
       { createAdvancePayment } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.createAdvancePayment(

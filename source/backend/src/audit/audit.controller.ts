@@ -56,16 +56,11 @@ export class AuditController {
     @Body() body: AuditReportRequestDto,
   ) {
     const created = await this.auditService.createReportRequest(body);
-    await this.auditService.appendMutation(
-      request,
-      'GENERATE',
-      'audit_report',
-      {
-        resourceId: created.id,
-        tableName: 'report_request',
-        metadata: { reportCode: 'AUDIT_TRAIL_EXPORT' },
-      },
-    );
+    await this.auditService.auditMutation(request, 'GENERATE', 'audit_report', {
+      resourceId: created.id,
+      tableName: 'report_request',
+      metadata: { reportCode: 'AUDIT_TRAIL_EXPORT' },
+    });
     return created;
   }
 

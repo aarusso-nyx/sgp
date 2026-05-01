@@ -54,7 +54,7 @@ export class AuditService {
     return this.queryService.getReportRequestStatus(id);
   }
 
-  appendMutation(
+  auditMutation(
     request: RequestWithContext,
     action: Extract<
       AuditActionValue,
@@ -63,7 +63,7 @@ export class AuditService {
     resourceType: string,
     options?: AuditAppendOptions,
   ): Promise<void> {
-    return this.writerService.appendMutation(
+    return this.writerService.auditMutation(
       request,
       action,
       resourceType,

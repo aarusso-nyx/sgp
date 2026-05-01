@@ -19,6 +19,7 @@ import {
 import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 import { PermissionsGuard } from '../auth/permissions.guard';
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
   AssignDirectRolesDto,
   AssignProfilesDto,
@@ -31,6 +32,7 @@ import { UsersService } from './users.service';
 @ApiTags('users')
 @ApiBearerAuth()
 @UseGuards(CognitoJwtGuard, PermissionsGuard)
+@AuditMutation({ resourceType: 'user_account', tableName: 'user_account' })
 @Controller('v1/admin/usuarios')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

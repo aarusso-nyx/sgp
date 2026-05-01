@@ -5,13 +5,14 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 import { AuditModule } from './audit/audit.module';
 import { AuditoriaModule } from './auditoria/auditoria.module';
 import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { AuthModule } from './auth/auth.module';
 import { StandardExceptionFilter } from './common/errors/standard-exception.filter';
+import { AuditRequiredInterceptor } from './common/audit/audit-required.interceptor';
 import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { validateEnvironment } from './config/environment';
 import { ConvenioModule } from './convenio/convenio.module';
@@ -82,6 +83,10 @@ import { AppService } from './app.service';
     {
       provide: APP_FILTER,
       useClass: StandardExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditRequiredInterceptor,
     },
   ],
 })

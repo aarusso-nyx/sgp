@@ -11,17 +11,17 @@ describe('AuditService', () => {
   });
 
   it('delegates mutation writes to writer service', async () => {
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
-    const service = new AuditService({} as never, { appendMutation } as never);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
+    const service = new AuditService({} as never, { auditMutation } as never);
 
-    await service.appendMutation(
+    await service.auditMutation(
       { requestId: 'req-1' } as never,
       'UPDATE',
       'payroll_run',
       { resourceId: 'pr-1' },
     );
 
-    expect(appendMutation).toHaveBeenCalledWith(
+    expect(auditMutation).toHaveBeenCalledWith(
       expect.anything(),
       'UPDATE',
       'payroll_run',

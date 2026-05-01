@@ -21,6 +21,7 @@ import { AuditService } from '../../audit/audit.service';
 import { CognitoJwtGuard } from '../../auth/cognito-jwt.guard';
 import { RequirePermissions } from '../../auth/permissions.decorator';
 import { PermissionsGuard } from '../../auth/permissions.guard';
+import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { RhWorkflowMutationDto } from './rh-workflows.dto';
@@ -29,6 +30,7 @@ import { RhWorkflowsService } from './rh-workflows.service';
 @ApiTags('rh')
 @ApiBearerAuth()
 @UseGuards(CognitoJwtGuard, PermissionsGuard)
+@AuditMutation({ resourceType: 'rh_workflow' })
 @Controller('v1/rh')
 export class RhWorkflowsController {
   constructor(
@@ -243,7 +245,7 @@ export class RhWorkflowsController {
     tableName: string,
     resourceId: string,
   ) {
-    return this.auditService.appendMutation(request, action, tableName, {
+    return this.auditService.auditMutation(request, action, tableName, {
       resourceId,
       tableName,
     });
@@ -619,7 +621,7 @@ export class EmployeeRhWorkflowsController {
     tableName: string,
     resourceId: string,
   ) {
-    return this.auditService.appendMutation(request, action, tableName, {
+    return this.auditService.auditMutation(request, action, tableName, {
       resourceId,
       tableName,
     });

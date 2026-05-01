@@ -50,7 +50,7 @@ export class DocumentsController {
     @Body() body: PresignUploadRequestDto,
   ) {
     const created = await this.documentsService.presignUpload(request, body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'document_upload_session',
@@ -75,7 +75,7 @@ export class DocumentsController {
     const uploadSessionId = params.anexo_id ?? params.id ?? '';
     const registered =
       await this.documentsService.registerUpload(uploadSessionId);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'document_attachment',
@@ -98,7 +98,7 @@ export class DocumentsController {
     @Param('id') id: string,
   ) {
     const deleted = await this.documentsService.deleteAttachment(id);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'DELETE',
       'document_attachment',
@@ -120,7 +120,7 @@ export class DocumentsController {
     @Param('id') id: string,
   ) {
     const download = await this.documentsService.presignDownload(request, id);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'document_download_audit',

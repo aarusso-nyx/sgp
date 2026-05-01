@@ -5,9 +5,11 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
+import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
+import { AuditRequiredInterceptor } from './common/audit/audit-required.interceptor';
 import { StandardExceptionFilter } from './common/errors/standard-exception.filter';
 import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { validateEnvironment } from './config/environment';
@@ -19,6 +21,7 @@ import { PortalModule } from './portal/portal.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     AuthModule,
+    AuditModule,
     DatabaseModule,
     PortalModule,
     HealthModule,
@@ -36,6 +39,10 @@ import { PortalModule } from './portal/portal.module';
     {
       provide: APP_FILTER,
       useClass: StandardExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditRequiredInterceptor,
     },
   ],
 })

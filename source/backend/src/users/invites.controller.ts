@@ -16,11 +16,13 @@ import {
 import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 import { PermissionsGuard } from '../auth/permissions.guard';
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { InvitesService } from './invites.service';
 
 @ApiTags('users')
 @ApiBearerAuth()
 @UseGuards(CognitoJwtGuard, PermissionsGuard)
+@AuditMutation({ resourceType: 'user_invite', tableName: 'user_account' })
 @Controller('v1')
 export class InvitesController {
   constructor(private readonly invitesService: InvitesService) {}

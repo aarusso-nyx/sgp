@@ -1144,7 +1144,10 @@ flowchart TD
 
 **Regras de negócio:**
 - RN-ADM-038: CPF e dados de conta bancária sempre mascarados na exibição do diff, mesmo para admins.
-- RN-ADM-039: O `diff_jsonb` é imutável após gravação; nenhum processo pode alterá-lo.
+- RN-ADM-039: O `diff_jsonb` e o registro físico em `public.audit_event` são imutáveis após gravação; `UPDATE` e `DELETE` disparam a função `sgp_audit_event_immutable()` e falham com `audit_event is immutable`.
+- RN-ADM-039A: Toda rota mutante (`POST`, `PUT`, `PATCH`, `DELETE`) deve registrar auditoria por `sgp_append_audit_event(...)` na mesma unidade de trabalho lógica. Em `dev` e `test`, o interceptor global `AuditRequiredInterceptor` falha a requisição com `500` se uma rota mutante termina sem chamada de auditoria ou sem declaração explícita `@AuditMutation(...)` para fallback controlado.
+- RN-ADM-039B: O papel aplicacional `sgp_app_role` possui apenas `INSERT` e `SELECT` em `public.audit_event`; `UPDATE` e `DELETE` ficam revogados. Janelas de retenção de pelo menos 6 meses dependem de papel administrativo dedicado e não são feitas pela aplicação.
+- RN-ADM-039C: Mutações sensíveis podem informar `reason` no evento de auditoria. Quando um handler for marcado com `reasonRequired`, o interceptor rejeita a mutação em `dev` e `test` se a justificativa não vier no payload.
 
 **Endpoints REST:** `GET /api/v1/auditoria/logs/:id`.
 

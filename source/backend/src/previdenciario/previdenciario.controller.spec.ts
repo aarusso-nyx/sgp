@@ -43,7 +43,7 @@ describe('PrevidenciarioController', () => {
       })),
       requestSiprevExport: jest.fn(async () => ({ id: 'siprev-1' })),
     };
-    const audit = { appendMutation: jest.fn(async () => undefined) };
+    const audit = { auditMutation: jest.fn(async () => undefined) };
     return {
       service,
       audit,
@@ -204,7 +204,7 @@ describe('PrevidenciarioController', () => {
         )[controllerMethod](...args),
       ).resolves.toEqual(expect.objectContaining({ id: expect.any(String) }));
       expect(service[serviceMethod as keyof typeof service]).toHaveBeenCalled();
-      expect(audit.appendMutation).toHaveBeenCalledWith(
+      expect(audit.auditMutation).toHaveBeenCalledWith(
         request,
         expect.any(String),
         expect.any(String),

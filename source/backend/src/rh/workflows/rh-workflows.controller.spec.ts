@@ -34,10 +34,10 @@ describe('RhWorkflowsController', () => {
 
   it('creates leave records through the workflow service', async () => {
     const createWorkflowRecord = jest.fn().mockResolvedValue({ id: 'leave-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new RhWorkflowsController(
       { createWorkflowRecord } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.createLeave(
@@ -57,10 +57,10 @@ describe('RhWorkflowsController', () => {
     const createWorkflowRecord = jest
       .fn()
       .mockResolvedValue({ id: 'process-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new RhWorkflowsController(
       { createWorkflowRecord } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.createProcess(
@@ -86,10 +86,10 @@ describe('RhWorkflowsController', () => {
 
   it('employee controller creates transit benefit grants', async () => {
     const createWorkflowRecord = jest.fn().mockResolvedValue({ id: 'vt-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new EmployeeRhWorkflowsController(
       { createWorkflowRecord } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.createTransitBenefit(
@@ -108,10 +108,10 @@ describe('RhWorkflowsController', () => {
 
   it('delegates all global workflow handlers and audits mutations', async () => {
     const workflows = createWorkflowMocks();
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new RhWorkflowsController(
       workflows as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
     const routes = [
       {
@@ -162,7 +162,7 @@ describe('RhWorkflowsController', () => {
         )[route.remove](request, `${route.workflow}-id`),
       ).resolves.toMatchObject({ deleted: true });
 
-      expect(appendMutation).toHaveBeenCalledWith(
+      expect(auditMutation).toHaveBeenCalledWith(
         request,
         expect.any(String),
         route.table,
@@ -173,10 +173,10 @@ describe('RhWorkflowsController', () => {
 
   it('delegates all employee workflow handlers and audits mutations', async () => {
     const workflows = createWorkflowMocks();
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new EmployeeRhWorkflowsController(
       workflows as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
     const routes = [
       {
@@ -249,7 +249,7 @@ describe('RhWorkflowsController', () => {
         )[route.remove](request, `${route.workflow}-id`),
       ).resolves.toMatchObject({ deleted: true });
 
-      expect(appendMutation).toHaveBeenCalledWith(
+      expect(auditMutation).toHaveBeenCalledWith(
         request,
         expect.any(String),
         route.table,

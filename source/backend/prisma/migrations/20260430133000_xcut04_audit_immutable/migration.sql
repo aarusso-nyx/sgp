@@ -1,5 +1,25 @@
--- Audit helper for application and database-side operational events.
--- Run after Prisma migrations so public.audit_event and enum type "AuditAction" exist.
+-- XCUT-04: make public.audit_event physically immutable and role-scoped.
+
+ALTER TABLE public.audit_event
+  ADD COLUMN IF NOT EXISTS reason text;
+
+COMMENT ON TABLE public.audit_event IS
+  'Immutable audit trail for all mutating SGP transactions. Events are append-only, protected from UPDATE/DELETE, and retained for at least 6 months before administrative retention windows may truncate eligible partitions.';
+
+CREATE OR REPLACE FUNCTION public.sgp_audit_event_immutable()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RAISE EXCEPTION 'audit_event is immutable' USING ERRCODE = '0A000';
+END;
+$$;
+
+DROP TRIGGER IF EXISTS audit_event_immutable ON public.audit_event;
+CREATE TRIGGER audit_event_immutable
+  BEFORE UPDATE OR DELETE ON public.audit_event
+  FOR EACH ROW EXECUTE FUNCTION public.sgp_audit_event_immutable();
+
 CREATE OR REPLACE FUNCTION public.sgp_append_audit_event(
   p_action text,
   p_resource_type text,
@@ -60,29 +80,6 @@ BEGIN
   RETURN v_event_id;
 END;
 $$;
-
-CREATE INDEX IF NOT EXISTS audit_event_metadata_gin_idx
-  ON public.audit_event USING gin (metadata);
-
-CREATE OR REPLACE FUNCTION public.sgp_audit_event_immutable()
-RETURNS trigger
-LANGUAGE plpgsql
-AS $$
-BEGIN
-  RAISE EXCEPTION 'audit_event is immutable' USING ERRCODE = '0A000';
-END;
-$$;
-
-DROP TRIGGER IF EXISTS audit_event_immutable ON public.audit_event;
-CREATE TRIGGER audit_event_immutable
-  BEFORE UPDATE OR DELETE ON public.audit_event
-  FOR EACH ROW EXECUTE FUNCTION public.sgp_audit_event_immutable();
-
-ALTER TABLE public.audit_event
-  ADD COLUMN IF NOT EXISTS reason text;
-
-COMMENT ON TABLE public.audit_event IS
-  'Immutable audit trail for all mutating SGP transactions. Events are append-only, protected from UPDATE/DELETE, and retained for at least 6 months before administrative retention windows may truncate eligible partitions.';
 
 DO $$
 BEGIN

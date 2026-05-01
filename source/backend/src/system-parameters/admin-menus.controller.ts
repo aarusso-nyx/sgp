@@ -18,11 +18,13 @@ import {
 import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 import { PermissionsGuard } from '../auth/permissions.guard';
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { AdminMenusService } from './admin-menus.service';
 
 @ApiTags('menus')
 @ApiBearerAuth()
 @UseGuards(CognitoJwtGuard, PermissionsGuard)
+@AuditMutation({ resourceType: 'menu_item', tableName: 'menu_item' })
 @Controller('v1/admin/menus')
 export class AdminMenusController {
   constructor(private readonly adminMenusService: AdminMenusService) {}

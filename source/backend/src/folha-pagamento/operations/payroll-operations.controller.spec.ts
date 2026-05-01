@@ -9,10 +9,10 @@ describe('PayrollOperationsController', () => {
       requestId: 'req-1',
       metadata: { remittanceId: 'rem-1' },
     });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollOperationsController(
       { requestRemittance } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.requestRemittance(
@@ -33,10 +33,10 @@ describe('PayrollOperationsController', () => {
       requestId: 'req-2',
       metadata: { remittanceId: 'rem-1' },
     });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollOperationsController(
       { requestReturnProcessing } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.requestReturnProcessing(
@@ -59,10 +59,10 @@ describe('PayrollGfipController', () => {
       requestId: 'req-3',
       metadata: { branchId: 'branch-1' },
     });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollGfipController(
       { requestGfipGeneration } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.requestGfipGeneration(

@@ -57,7 +57,7 @@ export class AvaliacaoController {
   ) {
     const created =
       await this.avaliacaoService.createPerformanceEvaluation(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'performance_evaluation',
@@ -81,7 +81,7 @@ export class AvaliacaoController {
       id,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'UPDATE',
       'performance_evaluation',
@@ -108,7 +108,7 @@ export class AvaliacaoController {
     @Body() body: CreateMeritProgressionDto,
   ) {
     const created = await this.avaliacaoService.createProgression(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'PROCESS',
       'merit_progression',
@@ -138,7 +138,7 @@ export class AvaliacaoController {
       body,
       request.actor?.username,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'salary_simulation',
@@ -165,7 +165,7 @@ export class AvaliacaoController {
     @Body() body: CreateCareerPlanDto,
   ) {
     const created = await this.avaliacaoService.createCareerPlan(body);
-    await this.auditService.appendMutation(request, 'CREATE', 'career_plan', {
+    await this.auditService.auditMutation(request, 'CREATE', 'career_plan', {
       resourceId: created.id,
       tableName: 'career_plan',
     });
@@ -181,7 +181,7 @@ export class AvaliacaoController {
     @Body() body: UpdateCareerPlanDto,
   ) {
     const updated = await this.avaliacaoService.updateCareerPlan(id, body);
-    await this.auditService.appendMutation(request, 'UPDATE', 'career_plan', {
+    await this.auditService.auditMutation(request, 'UPDATE', 'career_plan', {
       resourceId: updated.id,
       tableName: 'career_plan',
     });
@@ -200,7 +200,7 @@ export class AvaliacaoController {
       id,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'performance_evaluation_report',
@@ -224,7 +224,7 @@ export class AvaliacaoController {
       periodLabel,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'GENERATE',
       'evaluation_cycle_report',

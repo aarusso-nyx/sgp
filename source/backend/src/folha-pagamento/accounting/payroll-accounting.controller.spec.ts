@@ -3,10 +3,10 @@ import { PayrollAccountingController } from './payroll-accounting.controller';
 describe('PayrollAccountingController', () => {
   it('creates payroll catalog records through the accounting service', async () => {
     const createCatalogRecord = jest.fn().mockResolvedValue({ id: 'gps-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollAccountingController(
       { createCatalogRecord } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.createCatalogRecord(
@@ -26,10 +26,10 @@ describe('PayrollAccountingController', () => {
     const createAccountingAccount = jest
       .fn()
       .mockResolvedValue({ id: 'acc-1' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollAccountingController(
       { createAccountingAccount } as never,
-      { appendMutation } as never,
+      { auditMutation } as never,
     );
 
     const result = await controller.createAccountingAccount(

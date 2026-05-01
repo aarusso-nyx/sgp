@@ -13,7 +13,7 @@ describe('DocumentsController', () => {
     const presignDownload = jest
       .fn()
       .mockResolvedValue({ downloadUrl: 'https://example.com' });
-    const appendMutation = jest.fn().mockResolvedValue(undefined);
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new DocumentsController(
       {
         list,
@@ -23,7 +23,7 @@ describe('DocumentsController', () => {
         presignDownload,
       } as never,
       {
-        appendMutation,
+        auditMutation,
       } as never,
     );
 
@@ -55,6 +55,6 @@ describe('DocumentsController', () => {
     expect(registerUpload).toHaveBeenCalledWith('up-1');
     expect(deleteAttachment).toHaveBeenCalledWith('doc-1');
     expect(presignDownload).toHaveBeenCalledWith(expect.any(Object), 'doc-1');
-    expect(appendMutation).toHaveBeenCalledTimes(4);
+    expect(auditMutation).toHaveBeenCalledTimes(4);
   });
 });

@@ -12,6 +12,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CognitoJwtGuard } from '../auth/cognito-jwt.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
 import { PermissionsGuard } from '../auth/permissions.guard';
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
   ToggleFeatureFlagDto,
   UpsertGlobalParameterDto,
@@ -22,6 +23,10 @@ import { SystemParametersService } from './system-parameters.service';
 @ApiTags('system-parameters')
 @ApiBearerAuth()
 @UseGuards(CognitoJwtGuard, PermissionsGuard)
+@AuditMutation({
+  resourceType: 'system_parameter',
+  tableName: 'system_parameter',
+})
 @Controller('v1/admin/parametros')
 export class SystemParametersController {
   constructor(

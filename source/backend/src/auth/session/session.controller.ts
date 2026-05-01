@@ -9,9 +9,11 @@ import {
 import { AuthenticatedActor } from '../auth.types';
 import { CognitoJwtGuard } from '../cognito-jwt.guard';
 import { CurrentActor } from '../current-actor.decorator';
+import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { SessionService } from './session.service';
 
 @ApiTags('auth')
+@AuditMutation({ resourceType: 'auth_session', tableName: 'user_account' })
 @Controller('v1/auth')
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}

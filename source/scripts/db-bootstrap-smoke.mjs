@@ -92,6 +92,9 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'sgp_smoke_rls') THEN
     CREATE ROLE sgp_smoke_rls;
   END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'sgp_app_role') THEN
+    CREATE ROLE sgp_app_role;
+  END IF;
 END
 $$;
     `,
@@ -208,6 +211,69 @@ $$;
   console.log(
     '[db-smoke] validated schema split, tenant coverage, RLS, and portal read-only privileges',
   );
+
+  await runSqlSnippet(
+    '99-xcut04-audit-immutability.sql',
+    `
+DO $$
+DECLARE
+  tenant_id constant uuid := '00000000-0000-0000-0000-000000000100';
+  event_id uuid;
+BEGIN
+  PERFORM set_config('app.current_tenant_id', tenant_id::text, true);
+  PERFORM set_config('app.current_permissions', 'auditoria:read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+
+  SELECT public.sgp_append_audit_event(
+    'UPDATE',
+    'audit_smoke',
+    'xcut04',
+    NULL,
+    'smoke-user',
+    'smoke',
+    'audit_event',
+    'xcut04-smoke',
+    '{"source":"db-smoke"}'::jsonb,
+    'immutability smoke'
+  ) INTO event_id;
+
+  BEGIN
+    UPDATE public.audit_event SET reason = 'changed' WHERE id = event_id;
+    RAISE EXCEPTION 'Expected audit_event UPDATE to fail';
+  EXCEPTION
+    WHEN SQLSTATE '0A000' THEN
+      IF SQLERRM <> 'audit_event is immutable' THEN
+        RAISE EXCEPTION 'Unexpected audit immutability message: %', SQLERRM;
+      END IF;
+  END;
+
+  BEGIN
+    DELETE FROM public.audit_event WHERE id = event_id;
+    RAISE EXCEPTION 'Expected audit_event DELETE to fail';
+  EXCEPTION
+    WHEN SQLSTATE '0A000' THEN
+      IF SQLERRM <> 'audit_event is immutable' THEN
+        RAISE EXCEPTION 'Unexpected audit immutability message: %', SQLERRM;
+      END IF;
+  END;
+
+  IF NOT has_table_privilege('sgp_app_role', 'public.audit_event', 'INSERT') THEN
+    RAISE EXCEPTION 'sgp_app_role must have INSERT on public.audit_event';
+  END IF;
+  IF NOT has_table_privilege('sgp_app_role', 'public.audit_event', 'SELECT') THEN
+    RAISE EXCEPTION 'sgp_app_role must have SELECT on public.audit_event';
+  END IF;
+  IF has_table_privilege('sgp_app_role', 'public.audit_event', 'UPDATE') THEN
+    RAISE EXCEPTION 'sgp_app_role must not have UPDATE on public.audit_event';
+  END IF;
+  IF has_table_privilege('sgp_app_role', 'public.audit_event', 'DELETE') THEN
+    RAISE EXCEPTION 'sgp_app_role must not have DELETE on public.audit_event';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated audit_event immutability and app-role privileges');
 
   await runSqlSnippet(
     '99-xcut03-rls-hardening.sql',

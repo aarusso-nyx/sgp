@@ -62,7 +62,7 @@ export class MasterDataController {
     @Body() body: MasterDataMutationDto,
   ) {
     const created = await this.masterDataService.createRecord(resource, body);
-    await this.auditService.appendMutation(request, 'CREATE', 'master_data', {
+    await this.auditService.auditMutation(request, 'CREATE', 'master_data', {
       resourceId: created.id,
       tableName: resource,
       metadata: { resource, code: created.code },
@@ -84,7 +84,7 @@ export class MasterDataController {
       id,
       body,
     );
-    await this.auditService.appendMutation(request, 'UPDATE', 'master_data', {
+    await this.auditService.auditMutation(request, 'UPDATE', 'master_data', {
       resourceId: updated.id,
       tableName: resource,
       metadata: { resource, code: updated.code },
@@ -101,7 +101,7 @@ export class MasterDataController {
     @Param('id') id: string,
   ) {
     const updated = await this.masterDataService.deactivateRecord(resource, id);
-    await this.auditService.appendMutation(request, 'DELETE', 'master_data', {
+    await this.auditService.auditMutation(request, 'DELETE', 'master_data', {
       resourceId: updated.id,
       tableName: resource,
       metadata: { resource, code: updated.code },

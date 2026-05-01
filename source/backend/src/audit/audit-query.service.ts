@@ -18,6 +18,7 @@ interface AuditEventRow extends QueryResultRow {
   request_id: string | null;
   ip_address: string | null;
   user_agent: string | null;
+  reason: string | null;
   metadata: Record<string, unknown> | null;
 }
 
@@ -51,6 +52,7 @@ export interface AuditEventDto {
   requestId: string | null;
   ipAddress: string | null;
   userAgent: string | null;
+  reason: string | null;
   statusCode: number | null;
   metadata: Record<string, unknown>;
 }
@@ -100,6 +102,7 @@ export class AuditQueryService {
         ae.request_id,
         ae.ip_address::text AS ip_address,
         ae.user_agent,
+        ae.reason,
         ae.metadata
       FROM public.audit_event ae
       ${where}
@@ -135,6 +138,7 @@ export class AuditQueryService {
         ae.request_id,
         ae.ip_address::text AS ip_address,
         ae.user_agent,
+        ae.reason,
         ae.metadata
       FROM public.audit_event ae
       WHERE ae.id = $1::uuid
@@ -353,6 +357,7 @@ export class AuditQueryService {
       requestId: row.request_id,
       ipAddress: row.ip_address,
       userAgent: row.user_agent,
+      reason: row.reason,
       statusCode: typeof statusValue === 'number' ? statusValue : null,
       metadata,
     };

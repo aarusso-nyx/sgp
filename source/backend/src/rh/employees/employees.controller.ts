@@ -77,7 +77,7 @@ export class EmployeesController {
     @Body() body: TerminateEmployeeDto,
   ) {
     const terminated = await this.employeesService.terminate(id, body);
-    await this.auditService.appendMutation(request, 'PROCESS', 'employee', {
+    await this.auditService.auditMutation(request, 'PROCESS', 'employee', {
       resourceId: id,
       tableName: 'employee',
       metadata: {

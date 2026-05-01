@@ -438,6 +438,7 @@ model AuditEvent {
   requestId    String?     @map("request_id")
   ipAddress    String?     @map("ip_address") @db.Inet
   userAgent    String?     @map("user_agent")
+  reason       String?
   metadata     Json        @default("{}")
 
   actor UserAccount? @relation("AuditActor", fields: [actorUserId], references: [id])

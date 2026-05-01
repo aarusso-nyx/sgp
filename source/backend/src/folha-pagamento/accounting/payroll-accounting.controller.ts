@@ -68,7 +68,7 @@ export class PayrollAccountingController {
       resource,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'payroll_catalog',
@@ -95,7 +95,7 @@ export class PayrollAccountingController {
       id,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'UPDATE',
       'payroll_catalog',
@@ -120,7 +120,7 @@ export class PayrollAccountingController {
       resource,
       id,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'DELETE',
       'payroll_catalog',
@@ -151,7 +151,7 @@ export class PayrollAccountingController {
   ) {
     const created =
       await this.payrollAccountingService.createAccountingAccount(body);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'CREATE',
       'accounting_account',
@@ -178,7 +178,7 @@ export class PayrollAccountingController {
       id,
       body,
     );
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'UPDATE',
       'accounting_account',
@@ -202,7 +202,7 @@ export class PayrollAccountingController {
   ) {
     const updated =
       await this.payrollAccountingService.deactivateAccountingAccount(id);
-    await this.auditService.appendMutation(
+    await this.auditService.auditMutation(
       request,
       'DELETE',
       'accounting_account',
