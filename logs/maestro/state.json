@@ -24,7 +24,7 @@
       "status": "completed",
       "effort": "high",
       "branch": "slice/02-xcut-05-permission-catalog-merge",
-      "commit": null,
+      "commit": "1814ebe",
       "started_at": "2026-04-30T22:08:00-03:00",
       "completed_at": "2026-04-30T22:29:00-03:00",
       "retries": 1
