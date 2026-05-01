@@ -32,3 +32,5 @@ W09 ✓ 17-fol-01 (1 slice, high→xhigh recovery, gates passed, commit 745c0fa)
 W10 ✗ 18-calc-01 (high → xhigh retry failed: db:smoke failed during db:seed with inconsistent types deduced for parameter $3) — see logs/maestro/18-calc-01-formulas-engine.failure.md
 W10 ✓ 18-calc-01 (1 slice, high→xhigh + manual recovery, gates passed, commit 12000a6) — completeness 26.2% → 26.2%
 W10 ✓ 19-calc-08 (1 slice, medium manual recovery, gates passed, commit 3723507) — completeness 26.2% → 26.2%; Wave 10 complete
+W11 ✗ 20-calc-02 (medium → high retry failed: db:smoke P2002 unique constraint in CALC-02 tax_rate smoke fixture) — recovered manually
+W11 ✓ 20-calc-02 (1 slice, medium→high + manual recovery, gates passed, commit 2c0cd24) — completeness 26.2% → 26.2%

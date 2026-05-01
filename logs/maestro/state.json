@@ -216,6 +216,21 @@
       "completed_at": "2026-05-01T17:28:43-03:00",
       "retries": 0,
       "agent": "manual-maestro-recovery"
+    },
+    "20-calc-02-irrf-progressivo": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/20-calc-02-irrf-progressivo",
+      "commit": "2c0cd24d6c1fc9520dad59e43b161b265e90d12d",
+      "started_at": "2026-05-01T17:30:10-03:00",
+      "retry_started_at": "2026-05-01T17:43:50-03:00",
+      "completed_at": "2026-05-01T17:50:22-03:00",
+      "retries": 1,
+      "agent": "019de548-a7c9-76f3-95e4-78871184a52e",
+      "previous_agent": "019de53c-240e-7782-a80f-9ed92eb26507",
+      "previous_failure": "logs/maestro/20-calc-02-irrf-progressivo.failure.md",
+      "failure_log": "logs/maestro/20-calc-02-irrf-progressivo.failure.md",
+      "recovery": "manual tax_rate RLS and smoke fixture uniqueness repair after high retry failure"
     }
   },
   "current_wave": 11,
