@@ -27,3 +27,5 @@ W08 ✓ 14-fol-05 (1 slice, medium→high recovery, gates passed, commit 75db340
 W08 ✓ 15-fol-03 (1 slice, medium + maestro smoke/RLS hardening, gates passed, commit f9a255e) — completeness 26.2% → 26.2%; Wave 8 complete
 W09 ✗ 16-fol-06 (low → medium retry failed: db:smoke failed in 99-hr03-vacation.sql after FOL-06 migration applied) — see logs/maestro/16-fol-06-movimentacao-transferencia.failure.md
 W09 ✓ 16-fol-06 (1 slice, low→medium recovery + smoke fixture hardening, gates passed, commit eee7f90) — completeness 26.2% → 26.2%
+W09 ✗ 17-fol-01 (high → xhigh retry: maestro db:smoke P2002 unique constraint in FOL-01 fixture) — recovered in retry
+W09 ✓ 17-fol-01 (1 slice, high→xhigh recovery, gates passed, commit 745c0fa) — completeness 26.2% → 26.2%; Wave 9 complete

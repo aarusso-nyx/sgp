@@ -176,8 +176,22 @@
       "previous_failure": "logs/maestro/16-fol-06-movimentacao-transferencia.failure.md",
       "recovery": "manual smoke fixture hardening after retry failed in HR-03 vacation smoke",
       "failure_log": "logs/maestro/16-fol-06-movimentacao-transferencia.failure.md"
+    },
+    "17-fol-01-tabela-rubricas": {
+      "status": "completed",
+      "effort": "xhigh",
+      "branch": "slice/17-fol-01-tabela-rubricas",
+      "commit": "745c0fa88da65bb20417f7f8270a3390d6363f8e",
+      "started_at": "2026-05-01T16:02:09-03:00",
+      "retry_started_at": "2026-05-01T16:34:01-03:00",
+      "completed_at": "2026-05-01T16:39:45-03:00",
+      "retries": 1,
+      "agent": "019de508-9179-7360-836b-351a4c1d6aa5",
+      "previous_agent": "019de4eb-a485-7952-86b6-eec136fb71be",
+      "previous_failure": "maestro defense gate db:smoke failed in 99-fol01-rubricas.sql with Prisma P2002 unique constraint",
+      "recovery": "xhigh retry made FOL-01 smoke fixture unique-key safe and maestro gates passed"
     }
   },
-  "current_wave": 9,
+  "current_wave": 10,
   "active_subagents": []
 }
