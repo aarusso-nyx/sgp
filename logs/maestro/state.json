@@ -37,6 +37,15 @@
       "started_at": "2026-04-30T22:32:06-03:00",
       "completed_at": "2026-04-30T22:48:01-03:00",
       "retries": 0
+    },
+    "05-hr-06-estrutura-organizacional": {
+      "status": "completed",
+      "effort": "medium",
+      "branch": "slice/05-hr-06-estrutura-organizacional",
+      "commit": "5fde91a",
+      "started_at": "2026-04-30T22:50:21-03:00",
+      "completed_at": "2026-04-30T23:18:39-03:00",
+      "retries": 1
     }
   },
   "current_wave": 4,
