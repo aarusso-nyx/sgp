@@ -55,6 +55,17 @@
       "started_at": "2026-04-30T23:19:24-03:00",
       "completed_at": "2026-04-30T23:51:26-03:00",
       "retries": 1
+    },
+    "06-hr-02-vinculo-regime-juridico": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/06-hr-02-vinculo-regime-juridico",
+      "commit": "4143973ec591ca9ae7ca3d64b1a2860eda1cd7a1",
+      "started_at": "2026-04-30T23:56:54-03:00",
+      "completed_at": "2026-05-01T00:19:33-03:00",
+      "retries": 1,
+      "recovery": "manual schema alignment after retry failure",
+      "failure_log": "logs/maestro/06-hr-02-vinculo-regime-juridico.failure.md"
     }
   },
   "current_wave": 5,

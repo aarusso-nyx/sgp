@@ -10,3 +10,5 @@ W04 ✗ 05-hr-06-estrutura-organizacional (low → medium retry failed: `db:smok
 W04 ✓ 05-hr-06-estrutura-organizacional (1 slice, low→medium recovery, gates passed, commit 5fde91a) — completeness 26.2% → 26.2%
 W04 ✗ 04-hr-01-cadastro-servidor (medium → high retry failed: `db:smoke` failed applying `20260501090000_hr_01_cadastro_servidor` on duplicate permission tuple `(rh, employee, read)`) — see logs/maestro/04-hr-01-cadastro-servidor.failure.md
 W04 ✓ 04-hr-01-cadastro-servidor (1 slice, medium→high recovery, gates passed, commit 6bf7935) — completeness 26.2% → 26.2%
+W05 ✗ 06-hr-02 (medium → high retry failed: db:smoke P3018 relation "public.profile" does not exist) — see logs/maestro/06-hr-02-vinculo-regime-juridico.failure.md
+W05 ✓ 06-hr-02 (1 slice, medium→high recovery, gates passed, commit 4143973) — completeness 26.2% → 26.2%
