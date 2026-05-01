@@ -301,7 +301,7 @@ Os dois tipos são executados como `payroll_run` separados e exigem a permissão
 | T8  | `aprovada`                              | `GERAR_REMESSA`                             | GF; integração bancária configurada               | enfileira `remessa.gerar`; emite `folha.remessa_gerada`              | `paga`          |
 | T9  | `paga`                                  | `CONTABILIZAR`                              | GF                                                | emite `folha.contabilizada`                                          | `contabilizada` |
 | T10 | `contabilizada` OU `paga` OU `aprovada` | `BLOQUEAR` _(SIS: competência fechou)_      | competência `fechada`                             | emite `folha.bloqueada`                                              | `bloqueada`     |
-| T11 | `calculada`                             | `REPROCESSAR_TOTAL`                         | GF; folha `DESBLOQUEADO`                          | reenfileira cálculo de todos; emite `folha.reprocessamento_iniciado` | `em_calculo`    |
+| T11 | `calculada`                             | `REPROCESSAR_TOTAL`                         | GF; folha `DESBLOQUEADO`                          | marca lançamentos calculados ativos com `deleted_at` e `deleted_reason`; cria nova execução idempotente; grava histórico `RECALCULATED` e auditoria | `em_calculo`    |
 | T12 | `calculada` OU `erro`                   | `REPROCESSAR_PENDENTES`                     | GF                                                | reenfileira somente contracheques `PENDENTE/ERRO`                    | `em_calculo`    |
 | T13 | `bloqueada`                             | `DESBLOQUEAR` _(SIS: competência reaberta)_ | competência `reaberta`                            | emite `folha.desbloqueada`                                           | `rascunho`      |
 | T14 | `rascunho`                              | `EXCLUIR_FOLHA`                             | GF; competência `aberta`; status `DESBLOQUEADO`   | deleta contracheques; emite `folha.excluindo`                        | `excluindo`     |
@@ -312,6 +312,8 @@ Os dois tipos são executados como `payroll_run` separados e exigem a permissão
 - `bloqueada` → nenhuma inclusão, lançamento, remoção ou recálculo permitido.
 - `em_calculo` → nenhum lançamento manual aceito (lock otimista).
 - `rascunho` → exige competência `aberta` para qualquer mutação.
+- Reprocessamento nunca remove fisicamente lançamentos calculados auditados: as consultas operacionais usam apenas linhas ativas (`deleted_at IS NULL`) e mantêm as linhas antigas para trilha.
+- A chave de idempotência de linhas calculadas impede duplicidade ativa por tenant, competência, folha, servidor, rubrica e origem quando duas execuções concorrem.
 
 ### 2.4 Papéis
 

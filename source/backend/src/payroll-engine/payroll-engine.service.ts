@@ -244,7 +244,7 @@ export class PayrollEngineService {
             run.competence_month,
             run.competence_year
           ) AS calculated_amount
-        FROM payroll.employee_payroll_item item
+        FROM payroll.v_payroll_run_line_active item
         JOIN payroll.payroll_run run ON run.id = item.payroll_run_id
         JOIN payroll.payroll_earning_deduction earning
           ON earning.id = item.earning_deduction_id
@@ -272,7 +272,7 @@ export class PayrollEngineService {
           coalesce(sum(CASE WHEN earning.kind = 'EARNING'::"PayrollEntryKind" THEN item.amount ELSE 0 END), 0)::numeric(16, 2) AS total_earnings,
           coalesce(sum(CASE WHEN earning.kind = 'DEDUCTION'::"PayrollEntryKind" THEN item.amount ELSE 0 END), 0)::numeric(16, 2) AS total_deductions
         FROM payroll.payroll_run run
-        LEFT JOIN payroll.employee_payroll_item item ON item.payroll_run_id = run.id
+        LEFT JOIN payroll.v_payroll_run_line_active item ON item.payroll_run_id = run.id
         LEFT JOIN payroll.payroll_earning_deduction earning ON earning.id = item.earning_deduction_id
         WHERE run.id = $1::uuid
         GROUP BY run.id

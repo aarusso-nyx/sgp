@@ -33,6 +33,16 @@ export interface PayrollRunSummary {
   updatedAt: string;
 }
 
+export interface PayrollRunExecutionHistory {
+  id: string;
+  status: string;
+  changedAt: string;
+  note: string;
+  kind: string | null;
+  employeeCount: string | null;
+  totalNet: string | null;
+}
+
 interface PayrollRunRow extends QueryResultRow {
   id: string;
   competence_year: number;
@@ -58,6 +68,16 @@ interface PayrollRunDetailRow extends PayrollRunRow {
   payroll_type_code: string | null;
   processing_type_id: string;
   processing_type_code: string | null;
+}
+
+interface PayrollRunHistoryRow extends QueryResultRow {
+  id: string;
+  status: string;
+  changed_at: Date | string;
+  note: string;
+  kind: string | null;
+  employee_count: string | null;
+  total_net: string | null;
 }
 
 interface TerminatedEmployeeRow extends QueryResultRow {
@@ -97,6 +117,10 @@ interface PayrollMappingRow extends QueryResultRow {
 }
 
 interface AdvanceInsertRow extends QueryResultRow {
+  id: string;
+}
+
+interface SoftDeletedItemRow extends QueryResultRow {
   id: string;
 }
 
@@ -276,6 +300,37 @@ export class PayrollService {
     }
   }
 
+  async listRunHistory(id: string): Promise<PayrollRunExecutionHistory[]> {
+    this.ensureDatabase();
+    const rows = await this.databaseService.query<PayrollRunHistoryRow>(
+      `
+      SELECT
+        history.id::text,
+        history.status::text,
+        history.changed_at,
+        history.note,
+        history.metadata->>'kind' AS kind,
+        coalesce(history.metadata->>'employeeCount', history.metadata->>'employee_count') AS employee_count,
+        coalesce(history.metadata->>'totalNet', history.metadata->>'total_net') AS total_net
+      FROM payroll.payroll_run_status_history history
+      JOIN payroll.payroll_run run ON run.id = history.payroll_run_id
+      WHERE run.id = $1::uuid
+      ORDER BY history.changed_at DESC, history.id DESC
+      `,
+      [id],
+    );
+
+    return rows.map((row) => ({
+      id: row.id,
+      status: row.status,
+      changedAt: this.toIso(row.changed_at),
+      note: row.note,
+      kind: row.kind,
+      employeeCount: row.employee_count,
+      totalNet: row.total_net,
+    }));
+  }
+
   async updateRunStatus(
     id: string,
     input: UpdatePayrollRunStatusDto,
@@ -318,102 +373,109 @@ export class PayrollService {
     input: PopulatePayrollRunDto,
   ): Promise<PayrollRunSummary> {
     this.ensureDatabase();
-    const run = await this.getRunDetail(id);
-    const replaceCalculatedItems = input.replaceCalculatedItems !== false;
+    try {
+      const run = await this.getRunDetail(id);
+      const replaceCalculatedItems = input.replaceCalculatedItems !== false;
 
-    if (replaceCalculatedItems) {
-      await this.databaseService.query(
-        `
-        DELETE FROM payroll.employee_payroll_item
-        WHERE payroll_run_id = $1::uuid
-          AND source = 'CALCULATED'::"PayrollEntrySource"
-        `,
-        [id],
-      );
-    }
-
-    const employees = await this.databaseService.query<EligibleEmployeeRow>(
-      `
-      SELECT
-        e.id::text AS employee_id,
-        e.branch_id::text AS branch_id,
-        e.work_location_id::text AS work_location_id,
-        e.functional_status_id::text AS functional_status_id,
-        e.job_position_id::text AS job_position_id,
-        e.employment_link_id::text AS employment_link_id,
-        sr.amount::text AS salary_amount
-      FROM hr.employee e
-      LEFT JOIN hr.salary_reference sr ON sr.id = e.salary_reference_id
-      WHERE e.lifecycle_status IN (
-          'ACTIVE'::"EmployeeLifecycleStatus",
-          'ON_LEAVE'::"EmployeeLifecycleStatus"
-        )
-        AND (
-          ($1::uuid IS NULL AND e.branch_id IS NULL)
-          OR e.branch_id = $1::uuid
-        )
-      `,
-      [run.branch_id],
-    );
-
-    for (const employee of employees) {
-      const mappings = await this.resolvePayrollMappings(run, employee);
-      for (const mapping of mappings) {
-        const quantity = toMoney(mapping.default_quantity ?? '1');
-        const amount = this.resolveMappedAmount(
-          mapping,
-          employee.salary_amount ?? '0',
-          quantity,
-        );
-        if (amount.lte(0)) {
-          continue;
-        }
-        await this.databaseService.query(
-          `
-          INSERT INTO payroll.employee_payroll_item (
-            tenant_id,
-            employee_id,
-            payroll_run_id,
-            earning_deduction_id,
-            source,
-            competence_year,
-            competence_month,
-            quantity,
-            reference_value,
-            amount,
-            notes
-          )
-          VALUES (
-            public.sgp_current_tenant_uuid(),
-            $1::uuid,
-            $2::uuid,
-            $3::uuid,
-            'CALCULATED'::"PayrollEntrySource",
-            $4,
-            $5,
-            $6::decimal,
-            NULLIF($7, '')::decimal,
-            $8::decimal,
-            $9
-          )
-          `,
-          [
-            employee.employee_id,
-            run.id,
-            mapping.earning_deduction_id,
-            run.competence_year,
-            run.competence_month,
-            quantity.toFixed(4),
-            employee.salary_amount ?? '',
-            amount.toFixed(2),
-            `Mass population from linkage ${mapping.code}`,
-          ],
+      if (replaceCalculatedItems) {
+        await this.prepareRunForReprocessing(id, run.status);
+        await this.softDeleteCalculatedItems(
+          id,
+          'payroll.populate.reprocessed',
+          'Payroll population reprocessed',
         );
       }
-    }
 
-    await this.refreshPayrollRunAggregates(run.id);
-    return this.getSummary(run.id);
+      const employees = await this.databaseService.query<EligibleEmployeeRow>(
+        `
+        SELECT
+          e.id::text AS employee_id,
+          e.branch_id::text AS branch_id,
+          e.work_location_id::text AS work_location_id,
+          e.functional_status_id::text AS functional_status_id,
+          e.job_position_id::text AS job_position_id,
+          e.employment_link_id::text AS employment_link_id,
+          sr.amount::text AS salary_amount
+        FROM hr.employee e
+        LEFT JOIN hr.salary_reference sr ON sr.id = e.salary_reference_id
+        WHERE e.lifecycle_status IN (
+            'ACTIVE'::"EmployeeLifecycleStatus",
+            'ON_LEAVE'::"EmployeeLifecycleStatus"
+          )
+          AND (
+            ($1::uuid IS NULL AND e.branch_id IS NULL)
+            OR e.branch_id = $1::uuid
+          )
+        `,
+        [run.branch_id],
+      );
+
+      for (const employee of employees) {
+        const mappings = await this.resolvePayrollMappings(run, employee);
+        for (const mapping of mappings) {
+          const quantity = toMoney(mapping.default_quantity ?? '1');
+          const amount = this.resolveMappedAmount(
+            mapping,
+            employee.salary_amount ?? '0',
+            quantity,
+          );
+          if (amount.lte(0)) {
+            continue;
+          }
+          await this.databaseService.query(
+            `
+            INSERT INTO payroll.employee_payroll_item (
+              tenant_id,
+              employee_id,
+              payroll_run_id,
+              earning_deduction_id,
+              source,
+              competence_year,
+              competence_month,
+              quantity,
+              reference_value,
+              amount,
+              notes
+            )
+            VALUES (
+              public.sgp_current_tenant_uuid(),
+              $1::uuid,
+              $2::uuid,
+              $3::uuid,
+              'CALCULATED'::"PayrollEntrySource",
+              $4,
+              $5,
+              $6::decimal,
+              NULLIF($7, '')::decimal,
+              $8::decimal,
+              $9
+            )
+            `,
+            [
+              employee.employee_id,
+              run.id,
+              mapping.earning_deduction_id,
+              run.competence_year,
+              run.competence_month,
+              quantity.toFixed(4),
+              employee.salary_amount ?? '',
+              amount.toFixed(2),
+              `Mass population from linkage ${mapping.code}`,
+            ],
+          );
+        }
+      }
+
+      await this.refreshPayrollRunAggregates(run.id);
+      return this.getSummary(run.id);
+    } catch (error: unknown) {
+      if (this.isIdempotencyConflict(error)) {
+        throw new ConflictException(
+          'Payroll run reprocessing conflicted with another execution',
+        );
+      }
+      throw error;
+    }
   }
 
   async createAdvancePayment(
@@ -563,117 +625,126 @@ export class PayrollService {
     input: CalculatePayrollRunDto,
   ): Promise<PayrollRunSummary> {
     this.ensureDatabase();
-    const run = await this.getRunDetail(id);
-    const mode = (input.mode ?? 'TOTAL').toUpperCase();
-    if (mode === 'TOTAL') {
-      await this.databaseService.query(
+    try {
+      const run = await this.getRunDetail(id);
+      const mode = (input.mode ?? 'TOTAL').toUpperCase();
+      const recalculated = run.status === 'GENERATED';
+      if (mode === 'TOTAL') {
+        await this.prepareRunForReprocessing(id, run.status);
+        await this.softDeleteCalculatedItems(
+          id,
+          'payroll.run.reprocessed',
+          'Payroll run recalculated',
+        );
+      }
+
+      if (
+        run.processing_type_code === 'RESCISAO' ||
+        run.payroll_type_code === 'RESCISAO'
+      ) {
+        await this.calculateTerminationRun(run);
+      }
+
+      const totals = await this.databaseService.query<FinancialTotalsRow>(
         `
-        DELETE FROM payroll.employee_payroll_item
-        WHERE payroll_run_id = $1::uuid
-          AND source = 'CALCULATED'::"PayrollEntrySource"
+        SELECT
+          count(DISTINCT employee_id)::text AS employee_count,
+          coalesce(sum(CASE WHEN ed.kind = 'EARNING'::"PayrollEntryKind" THEN item.amount ELSE 0 END), 0)::text AS total_earnings,
+          coalesce(sum(CASE WHEN ed.kind = 'DEDUCTION'::"PayrollEntryKind" THEN item.amount ELSE 0 END), 0)::text AS total_deductions,
+          coalesce(sum(CASE
+            WHEN ed.kind = 'EARNING'::"PayrollEntryKind" THEN item.amount
+            WHEN ed.kind = 'DEDUCTION'::"PayrollEntryKind" THEN -item.amount
+            ELSE 0
+          END), 0)::text AS total_net
+        FROM payroll.v_payroll_run_line_active item
+        JOIN payroll.payroll_earning_deduction ed
+          ON ed.id = item.earning_deduction_id
+        WHERE item.payroll_run_id = $1::uuid
         `,
         [id],
       );
+
+      const summary = totals[0] ?? {
+        employee_count: '0',
+        total_earnings: '0',
+        total_deductions: '0',
+        total_net: '0',
+      };
+
+      const rows = await this.databaseService.query<PayrollRunRow>(
+        `
+        UPDATE payroll.payroll_run
+        SET
+          employee_count = $2::int,
+          total_earnings = $3::decimal,
+          total_deductions = $4::decimal,
+          total_net = $5::decimal,
+          status = 'GENERATED'::"PayrollRunStatus",
+          updated_at = now()
+        WHERE id = $1::uuid
+        RETURNING
+          id,
+          competence_year,
+          competence_month,
+          NULL::text AS processing_type,
+          NULL::text AS payroll_type,
+          NULL::text AS branch_name,
+          NULL::date AS payment_date,
+          status::text AS status,
+          employee_count,
+          total_net::text AS total_net,
+          created_at,
+          updated_at
+        `,
+        [
+          id,
+          summary.employee_count,
+          summary.total_earnings,
+          summary.total_deductions,
+          summary.total_net,
+        ],
+      );
+
+      await this.databaseService.query(
+        `
+        INSERT INTO payroll.payroll_run_status_history (
+          tenant_id,
+          payroll_run_id,
+          status,
+          note,
+          metadata
+        )
+        VALUES (
+          public.sgp_current_tenant_uuid(),
+          $1::uuid,
+          'GENERATED'::"PayrollRunStatus",
+          $2,
+          $3::jsonb
+        )
+        `,
+        [
+          id,
+          recalculated ? 'Payroll recalculated' : 'Payroll calculated',
+          JSON.stringify({
+            kind: recalculated ? 'RECALCULATED' : 'CALCULATED',
+            mode,
+            totalNet: summary.total_net,
+            employeeCount: summary.employee_count,
+          }),
+        ],
+      );
+
+      await this.refreshWorkLocationRollups(id);
+
+      return this.toSummary(rows[0]);
+    } catch (error: unknown) {
+      if (this.isIdempotencyConflict(error)) {
+        throw new ConflictException(
+          'Payroll run reprocessing conflicted with another execution',
+        );
+      }
+      throw error;
     }
-
-    if (
-      run.processing_type_code === 'RESCISAO' ||
-      run.payroll_type_code === 'RESCISAO'
-    ) {
-      await this.calculateTerminationRun(run);
-    }
-
-    const totals = await this.databaseService.query<FinancialTotalsRow>(
-      `
-      SELECT
-        count(DISTINCT employee_id)::text AS employee_count,
-        coalesce(sum(CASE WHEN ed.kind = 'EARNING'::"PayrollEntryKind" THEN item.amount ELSE 0 END), 0)::text AS total_earnings,
-        coalesce(sum(CASE WHEN ed.kind = 'DEDUCTION'::"PayrollEntryKind" THEN item.amount ELSE 0 END), 0)::text AS total_deductions,
-        coalesce(sum(CASE
-          WHEN ed.kind = 'EARNING'::"PayrollEntryKind" THEN item.amount
-          WHEN ed.kind = 'DEDUCTION'::"PayrollEntryKind" THEN -item.amount
-          ELSE 0
-        END), 0)::text AS total_net
-      FROM payroll.employee_payroll_item item
-      JOIN payroll.payroll_earning_deduction ed
-        ON ed.id = item.earning_deduction_id
-      WHERE item.payroll_run_id = $1::uuid
-      `,
-      [id],
-    );
-
-    const summary = totals[0] ?? {
-      employee_count: '0',
-      total_earnings: '0',
-      total_deductions: '0',
-      total_net: '0',
-    };
-
-    const rows = await this.databaseService.query<PayrollRunRow>(
-      `
-      UPDATE payroll.payroll_run
-      SET
-        employee_count = $2::int,
-        total_earnings = $3::decimal,
-        total_deductions = $4::decimal,
-        total_net = $5::decimal,
-        status = 'GENERATED'::"PayrollRunStatus",
-        updated_at = now()
-      WHERE id = $1::uuid
-      RETURNING
-        id,
-        competence_year,
-        competence_month,
-        NULL::text AS processing_type,
-        NULL::text AS payroll_type,
-        NULL::text AS branch_name,
-        NULL::date AS payment_date,
-        status::text AS status,
-        employee_count,
-        total_net::text AS total_net,
-        created_at,
-        updated_at
-      `,
-      [
-        id,
-        summary.employee_count,
-        summary.total_earnings,
-        summary.total_deductions,
-        summary.total_net,
-      ],
-    );
-
-    await this.databaseService.query(
-      `
-      INSERT INTO payroll.payroll_run_status_history (
-        tenant_id,
-        payroll_run_id,
-        status,
-        note,
-        metadata
-      )
-      VALUES (
-        public.sgp_current_tenant_uuid(),
-        $1::uuid,
-        'GENERATED'::"PayrollRunStatus",
-        $2,
-        $3::jsonb
-      )
-      `,
-      [
-        id,
-        'Payroll calculated',
-        JSON.stringify({
-          mode,
-          totalNet: summary.total_net,
-          employeeCount: summary.employee_count,
-        }),
-      ],
-    );
-
-    await this.refreshWorkLocationRollups(id);
-
-    return this.toSummary(rows[0]);
   }
 
   private ensureDatabase(): void {
@@ -705,6 +776,87 @@ export class PayrollService {
     return value instanceof Date
       ? value.toISOString()
       : new Date(value).toISOString();
+  }
+
+  private async prepareRunForReprocessing(
+    id: string,
+    status: string,
+  ): Promise<void> {
+    if (['APPROVED', 'PAID', 'CLOSED'].includes(status)) {
+      throw new ConflictException(
+        `Payroll run in status ${status} cannot be reprocessed`,
+      );
+    }
+    await this.databaseService.query(
+      `
+      UPDATE payroll.payroll_run
+      SET status = 'PROCESSING'::"PayrollRunStatus",
+          updated_at = now()
+      WHERE id = $1::uuid
+        AND status <> 'PROCESSING'::"PayrollRunStatus"
+      `,
+      [id],
+    );
+  }
+
+  private async softDeleteCalculatedItems(
+    id: string,
+    reason: string,
+    note: string,
+  ): Promise<number> {
+    const rows = await this.databaseService.query<SoftDeletedItemRow>(
+      `
+      UPDATE payroll.employee_payroll_item
+      SET deleted_at = now(),
+          deleted_reason = $2,
+          updated_at = now()
+      WHERE payroll_run_id = $1::uuid
+        AND source = 'CALCULATED'::"PayrollEntrySource"
+        AND deleted_at IS NULL
+      RETURNING id::text
+      `,
+      [id, reason],
+    );
+
+    if (rows.length > 0) {
+      await this.databaseService.query(
+        `
+        SELECT public.sgp_append_audit_event(
+          'PROCESS',
+          'payroll.run',
+          $1::text,
+          NULL::uuid,
+          NULLIF(current_setting('app.current_user_sub', true), ''),
+          NULLIF(current_setting('app.current_login', true), ''),
+          'payroll.employee_payroll_item',
+          NULLIF(current_setting('app.request_id', true), ''),
+          $2::jsonb,
+          $3,
+          NULL::text,
+          NULL::text
+        )
+        `,
+        [
+          id,
+          JSON.stringify({
+            event: reason,
+            softDeletedLineCount: rows.length,
+            note,
+          }),
+          reason,
+        ],
+      );
+    }
+
+    return rows.length;
+  }
+
+  private isIdempotencyConflict(error: unknown): boolean {
+    const candidate = error as { code?: string; constraint?: string };
+    return (
+      candidate.code === '23505' &&
+      candidate.constraint === 'employee_payroll_item_active_idempotency_uq'
+    );
   }
 
   private async getRunDetail(id: string): Promise<PayrollRunDetailRow> {
@@ -1006,7 +1158,7 @@ export class PayrollService {
           WHEN ed.kind = 'DEDUCTION'::"PayrollEntryKind" THEN -item.amount
           ELSE 0
         END), 0)::text AS total_net
-      FROM payroll.employee_payroll_item item
+      FROM payroll.v_payroll_run_line_active item
       JOIN payroll.payroll_earning_deduction ed
         ON ed.id = item.earning_deduction_id
       WHERE item.payroll_run_id = $1::uuid
@@ -1074,7 +1226,7 @@ export class PayrollService {
           ELSE 0
         END), 0)::decimal,
         jsonb_build_object('origin', 'payroll_run')
-      FROM payroll.employee_payroll_item item
+      FROM payroll.v_payroll_run_line_active item
       JOIN hr.employee e ON e.id = item.employee_id
       JOIN payroll.payroll_earning_deduction ed
         ON ed.id = item.earning_deduction_id

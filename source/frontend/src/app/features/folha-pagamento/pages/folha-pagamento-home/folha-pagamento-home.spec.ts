@@ -32,6 +32,19 @@ describe('FolhaPagamentoHome', () => {
         totalDeductions: '5000.00',
         totalNet: '5000.00',
       }),
+    runFerias: () =>
+      of({
+        payrollRunId: 'run-3',
+        vacationRecordId: 'vacation-1',
+        employeeId: 'employee-1',
+        year: 2026,
+        month: 5,
+        employeeCount: 1,
+        totalEarnings: '1500.00',
+        totalDeductions: '0.00',
+        totalNet: '1500.00',
+      }),
+    getExecutionHistory: () => of([]),
   };
 
   beforeEach(async () => {

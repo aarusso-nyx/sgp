@@ -97,21 +97,21 @@ export class DecimoTerceiroService {
       throw new ConflictException('Tenant context is required');
     }
 
-    return this.databaseService.transaction(async (client) => {
-      const catalog = await this.ensureCatalog(client, kind);
-      const runId = await this.ensureRun(client, catalog, year, month);
+    try {
+      return await this.databaseService.transaction(async (client) => {
+        const catalog = await this.ensureCatalog(client, kind);
+        const run = await this.ensureRun(client, catalog, year, month);
 
-      await client.query(
-        `
-        DELETE FROM payroll.employee_payroll_item
-        WHERE payroll_run_id = $1::uuid
-          AND source = 'CALCULATED'::"PayrollEntrySource"
-        `,
-        [runId],
-      );
+        const recalculated = run.status === 'GENERATED';
+        await this.prepareRunForReprocessing(client, run.id, run.status);
+        await this.softDeleteCalculatedItems(
+          client,
+          run.id,
+          'calc09.decimo_terceiro.reprocessed',
+        );
 
-      const employees = await client.query<EligibleEmployeeRow>(
-        `
+        const employees = await client.query<EligibleEmployeeRow>(
+          `
         SELECT DISTINCT ON (employee.id)
           employee.id::text AS employee_id,
           employee.employment_link_id::text AS employment_link_id,
@@ -129,12 +129,12 @@ export class DecimoTerceiroService {
           AND employee.employment_link_id IS NOT NULL
         ORDER BY employee.id
         `,
-        [year],
-      );
+          [year],
+        );
 
-      for (const employee of employees.rows) {
-        const calcRows = await client.query<DecimoCalculationRow>(
-          `
+        for (const employee of employees.rows) {
+          const calcRows = await client.query<DecimoCalculationRow>(
+            `
           SELECT *
           FROM payroll_calc.compute_decimo_terceiro(
             public.sgp_current_tenant_uuid(),
@@ -143,73 +143,85 @@ export class DecimoTerceiroService {
             $3
           )
           `,
-          [employee.employment_link_id, kind, year],
-        );
-        const calc = calcRows.rows[0];
-        if (!calc) continue;
+            [employee.employment_link_id, kind, year],
+          );
+          const calc = calcRows.rows[0];
+          if (!calc) continue;
 
-        await this.insertItem(client, {
-          employeeId: employee.employee_id,
-          payrollRunId: runId,
-          earningDeductionId: catalog.earning_id,
-          year,
-          month,
-          quantity: calc.avos.toString(),
-          referenceValue: calc.base,
-          amount: calc.installment_amount,
-          notes: `${kind} avos=${calc.avos} first_discount=${calc.first_installment_discount}`,
-        });
-
-        if (
-          kind === 'DECIMO_TERCEIRO_FECHAMENTO' &&
-          Number(calc.irrf_amount) > 0
-        ) {
           await this.insertItem(client, {
             employeeId: employee.employee_id,
-            payrollRunId: runId,
-            earningDeductionId: catalog.irrf_id,
+            payrollRunId: run.id,
+            earningDeductionId: catalog.earning_id,
             year,
             month,
-            quantity: '1',
-            referenceValue: calc.installment_amount,
-            amount: calc.irrf_amount,
-            notes: `IRRF exclusivo 13 salario base=${calc.base}`,
+            quantity: calc.avos.toString(),
+            referenceValue: calc.base,
+            amount: calc.installment_amount,
+            notes: `${kind} avos=${calc.avos} first_discount=${calc.first_installment_discount}`,
+          });
+
+          if (
+            kind === 'DECIMO_TERCEIRO_FECHAMENTO' &&
+            Number(calc.irrf_amount) > 0
+          ) {
+            await this.insertItem(client, {
+              employeeId: employee.employee_id,
+              payrollRunId: run.id,
+              earningDeductionId: catalog.irrf_id,
+              year,
+              month,
+              quantity: '1',
+              referenceValue: calc.installment_amount,
+              amount: calc.irrf_amount,
+              notes: `IRRF exclusivo 13 salario base=${calc.base}`,
+            });
+          }
+
+          await this.upsertFinancialRecord(client, {
+            employeeId: employee.employee_id,
+            payrollRunId: run.id,
+            branchId: employee.branch_id,
+            functionalStatusId: employee.functional_status_id,
+            year,
+            month,
+            totalEarnings: calc.installment_amount,
+            totalDeductions:
+              kind === 'DECIMO_TERCEIRO_FECHAMENTO' ? calc.irrf_amount : '0.00',
+            metadata: {
+              origin: 'decimo_terceiro',
+              kind,
+              avos: calc.avos,
+              base: calc.base,
+              firstInstallmentDiscount: calc.first_installment_discount,
+            },
           });
         }
 
-        await this.upsertFinancialRecord(client, {
-          employeeId: employee.employee_id,
-          payrollRunId: runId,
-          branchId: employee.branch_id,
-          functionalStatusId: employee.functional_status_id,
+        const totals = await this.refreshAggregates(
+          client,
+          run.id,
+          recalculated,
+        );
+        await this.appendAuditEvent(client, run.id, kind, year, totals);
+        return {
+          payrollRunId: run.id,
+          kind,
           year,
           month,
-          totalEarnings: calc.installment_amount,
-          totalDeductions:
-            kind === 'DECIMO_TERCEIRO_FECHAMENTO' ? calc.irrf_amount : '0.00',
-          metadata: {
-            origin: 'decimo_terceiro',
-            kind,
-            avos: calc.avos,
-            base: calc.base,
-            firstInstallmentDiscount: calc.first_installment_discount,
-          },
-        });
+          employeeCount: Number(totals.employee_count),
+          totalEarnings: totals.total_earnings,
+          totalDeductions: totals.total_deductions,
+          totalNet: totals.total_net,
+        };
+      });
+    } catch (error: unknown) {
+      if (this.isIdempotencyConflict(error)) {
+        throw new ConflictException(
+          'Payroll run reprocessing conflicted with another execution',
+        );
       }
-
-      const totals = await this.refreshAggregates(client, runId);
-      await this.appendAuditEvent(client, runId, kind, year, totals);
-      return {
-        payrollRunId: runId,
-        kind,
-        year,
-        month,
-        employeeCount: Number(totals.employee_count),
-        totalEarnings: totals.total_earnings,
-        totalDeductions: totals.total_deductions,
-        totalNet: totals.total_net,
-      };
-    });
+      throw error;
+    }
   }
 
   private async ensureCatalog(
@@ -284,7 +296,7 @@ export class DecimoTerceiroService {
     catalog: CatalogRow,
     year: number,
     month: number,
-  ): Promise<string> {
+  ): Promise<PayrollRunRow> {
     const existing = await client.query<PayrollRunRow>(
       `
       SELECT id::text, status::text
@@ -300,9 +312,9 @@ export class DecimoTerceiroService {
       `,
       [year, month, catalog.payroll_type_id, catalog.processing_type_id],
     );
-    if (existing.rows[0]) return existing.rows[0].id;
+    if (existing.rows[0]) return existing.rows[0];
 
-    const inserted = await client.query<{ id: string }>(
+    const inserted = await client.query<PayrollRunRow>(
       `
       INSERT INTO payroll.payroll_run (
         tenant_id,
@@ -322,11 +334,89 @@ export class DecimoTerceiroService {
         NULL,
         'PROCESSING'::"PayrollRunStatus"
       )
-      RETURNING id::text
+      RETURNING id::text, status::text
       `,
       [year, month, catalog.payroll_type_id, catalog.processing_type_id],
     );
-    return inserted.rows[0].id;
+    return inserted.rows[0];
+  }
+
+  private async prepareRunForReprocessing(
+    client: PoolClient,
+    payrollRunId: string,
+    status: string,
+  ): Promise<void> {
+    if (['APPROVED', 'PAID', 'CLOSED'].includes(status)) {
+      throw new ConflictException(
+        `Payroll run in status ${status} cannot be reprocessed`,
+      );
+    }
+    await client.query(
+      `
+      UPDATE payroll.payroll_run
+      SET status = 'PROCESSING'::"PayrollRunStatus",
+          updated_at = now()
+      WHERE id = $1::uuid
+      `,
+      [payrollRunId],
+    );
+  }
+
+  private async softDeleteCalculatedItems(
+    client: PoolClient,
+    payrollRunId: string,
+    reason: string,
+  ): Promise<void> {
+    const result = await client.query<{ id: string }>(
+      `
+      UPDATE payroll.employee_payroll_item
+      SET deleted_at = now(),
+          deleted_reason = $2,
+          updated_at = now()
+      WHERE payroll_run_id = $1::uuid
+        AND source = 'CALCULATED'::"PayrollEntrySource"
+        AND deleted_at IS NULL
+      RETURNING id::text
+      `,
+      [payrollRunId, reason],
+    );
+
+    if (result.rowCount && result.rowCount > 0) {
+      await client.query(
+        `
+        SELECT public.sgp_append_audit_event(
+          'PROCESS',
+          'payroll.decimo_terceiro',
+          $1::text,
+          NULL::uuid,
+          NULLIF(current_setting('app.current_user_sub', true), ''),
+          NULLIF(current_setting('app.current_login', true), ''),
+          'payroll.employee_payroll_item',
+          NULLIF(current_setting('app.request_id', true), ''),
+          $2::jsonb,
+          $3,
+          NULL::text,
+          NULL::text
+        )
+        `,
+        [
+          payrollRunId,
+          JSON.stringify({
+            event: reason,
+            softDeletedLineCount: result.rowCount,
+          }),
+          reason,
+        ],
+      );
+    }
+  }
+
+  private isIdempotencyConflict(error: unknown): boolean {
+    const candidate = error as { code?: string; constraint?: string };
+    return (
+      candidate.code === '23505' &&
+      candidate.constraint === 'employee_payroll_item_active_idempotency_uq'
+    );
   }
 
   private async insertItem(
@@ -453,6 +543,7 @@ export class DecimoTerceiroService {
   private async refreshAggregates(
     client: PoolClient,
     payrollRunId: string,
+    recalculated = false,
   ): Promise<TotalsRow> {
     const totals = await client.query<TotalsRow>(
       `
@@ -465,7 +556,7 @@ export class DecimoTerceiroService {
           WHEN ed.kind = 'DEDUCTION'::"PayrollEntryKind" THEN -item.amount
           ELSE 0
         END), 0)::text AS total_net
-      FROM payroll.employee_payroll_item item
+      FROM payroll.v_payroll_run_line_active item
       JOIN payroll.payroll_earning_deduction ed ON ed.id = item.earning_deduction_id
       WHERE item.payroll_run_id = $1::uuid
       `,
@@ -511,11 +602,20 @@ export class DecimoTerceiroService {
         public.sgp_current_tenant_uuid(),
         $1::uuid,
         'GENERATED'::"PayrollRunStatus",
-        'Decimo terceiro calculated',
-        $2::jsonb
+        $2,
+        $3::jsonb
       )
       `,
-      [payrollRunId, JSON.stringify(summary)],
+      [
+        payrollRunId,
+        recalculated
+          ? 'Decimo terceiro recalculated'
+          : 'Decimo terceiro calculated',
+        JSON.stringify({
+          kind: recalculated ? 'RECALCULATED' : 'CALCULATED',
+          ...summary,
+        }),
+      ],
     );
     return summary;
   }

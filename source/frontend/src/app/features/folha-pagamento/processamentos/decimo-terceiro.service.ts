@@ -26,6 +26,16 @@ export interface FeriasRunResult {
   totalNet: string;
 }
 
+export interface PayrollRunExecutionHistory {
+  id: string;
+  status: string;
+  changedAt: string;
+  note: string;
+  kind: 'CALCULATED' | 'RECALCULATED' | null;
+  employeeCount: string | null;
+  totalNet: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class DecimoTerceiroProcessamentosService {
   constructor(private readonly api: ApiClient) {}
@@ -40,5 +50,11 @@ export class DecimoTerceiroProcessamentosService {
 
   runFerias(vacationRecordId: string): Observable<FeriasRunResult> {
     return this.api.post('v1/folhas/ferias/calcular', { vacationRecordId });
+  }
+
+  getExecutionHistory(
+    payrollRunId: string,
+  ): Observable<PayrollRunExecutionHistory[]> {
+    return this.api.get(`v1/folhas/${payrollRunId}/historico`);
   }
 }

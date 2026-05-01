@@ -2911,6 +2911,119 @@ $$;
   );
   console.log('[db-smoke] validated CALC-05 vacation payroll compute, link, and RLS');
 
+  await runSqlSnippet(
+    '99-calc09-reprocessing-idempotency.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  v_type_id uuid;
+  v_processing_id uuid;
+  v_run_id uuid;
+  v_employee_id uuid;
+  v_earning_id uuid;
+  active_count integer;
+  visible_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA public, hr, payroll TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.payroll_type TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.processing_type TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.payroll_run TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.employee_payroll_item TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.payroll_earning_deduction TO sgp_smoke_rls;
+  GRANT SELECT ON payroll.v_payroll_run_line_active TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.employee TO sgp_smoke_rls;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'payroll'
+      AND table_name = 'employee_payroll_item'
+      AND column_name IN ('deleted_at', 'deleted_reason', 'idempotency_key')
+    GROUP BY table_schema, table_name
+    HAVING count(*) = 3
+  ) THEN
+    RAISE EXCEPTION 'Expected CALC-09 soft-delete and idempotency columns on payroll.employee_payroll_item';
+  END IF;
+
+  IF to_regclass('payroll.v_payroll_run_line_active') IS NULL THEN
+    RAISE EXCEPTION 'Expected payroll.v_payroll_run_line_active to exist';
+  END IF;
+
+  INSERT INTO payroll.payroll_type (tenant_id, code, description, status)
+  VALUES (tenant_a, 'CALC09-SMOKE-TYPE-' || left(suffix, 8), 'CALC-09 smoke', 'ACTIVE'::"RecordStatus")
+  RETURNING id INTO v_type_id;
+
+  INSERT INTO payroll.processing_type (tenant_id, code, description, payroll_type_id, status)
+  VALUES (tenant_a, 'CALC09-SMOKE-PROC-' || left(suffix, 8), 'CALC-09 smoke', v_type_id, 'ACTIVE'::"RecordStatus")
+  RETURNING id INTO v_processing_id;
+
+  INSERT INTO payroll.payroll_earning_deduction (tenant_id, code, description, kind, taxable, active)
+  VALUES (tenant_a, 'CALC09-SMOKE-EARN-' || left(suffix, 8), 'CALC-09 earning', 'EARNING'::"PayrollEntryKind", true, true)
+  RETURNING id INTO v_earning_id;
+
+  INSERT INTO hr.employee (tenant_id, registration, name, hired_on, lifecycle_status)
+  VALUES (tenant_a, 'CALC09-SMOKE-' || left(suffix, 8), 'CALC-09 Smoke', DATE '2025-01-01', 'ACTIVE'::"EmployeeLifecycleStatus")
+  RETURNING id INTO v_employee_id;
+
+  INSERT INTO payroll.payroll_run (
+    tenant_id, competence_year, competence_month, payroll_type_id, processing_type_id, status
+  )
+  VALUES (tenant_a, 2025, 11, v_type_id, v_processing_id, 'PROCESSING'::"PayrollRunStatus")
+  RETURNING id INTO v_run_id;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'payroll.run.execute', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO payroll.employee_payroll_item (
+    tenant_id, employee_id, payroll_run_id, earning_deduction_id, source,
+    competence_year, competence_month, amount, notes
+  )
+  VALUES (
+    tenant_a, v_employee_id, v_run_id, v_earning_id, 'CALCULATED'::"PayrollEntrySource",
+    2025, 11, 100.00, 'calc09 smoke'
+  );
+  UPDATE payroll.employee_payroll_item
+  SET deleted_at = now(), deleted_reason = 'calc09 smoke reprocess'
+  WHERE payroll_run_id = v_run_id;
+  INSERT INTO payroll.employee_payroll_item (
+    tenant_id, employee_id, payroll_run_id, earning_deduction_id, source,
+    competence_year, competence_month, amount, notes
+  )
+  VALUES (
+    tenant_a, v_employee_id, v_run_id, v_earning_id, 'CALCULATED'::"PayrollEntrySource",
+    2025, 11, 100.00, 'calc09 smoke'
+  );
+  SELECT count(*) INTO active_count
+  FROM payroll.v_payroll_run_line_active
+  WHERE payroll_run_id = v_run_id;
+  RESET ROLE;
+
+  IF active_count <> 1 THEN
+    RAISE EXCEPTION 'Expected exactly one active CALC-09 payroll line, found %', active_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'payroll.run.execute', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM payroll.v_payroll_run_line_active
+  WHERE payroll_run_id = v_run_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 CALC-09 active payroll lines from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated CALC-09 payroll line soft-delete, idempotency, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

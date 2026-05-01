@@ -128,6 +128,7 @@ describe('PayrollService', () => {
         },
       ])
       .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
       .mockResolvedValueOnce([{ id: 'earning-1' }])
       .mockResolvedValueOnce([{ id: 'earning-2' }])
       .mockResolvedValueOnce([{ id: 'earning-3' }])
@@ -178,8 +179,8 @@ describe('PayrollService', () => {
 
     expect(result.status).toBe('GENERATED');
     expect(query).toHaveBeenCalledWith(
-      expect.stringContaining('DELETE FROM payroll.employee_payroll_item'),
-      ['run-1'],
+      expect.stringContaining('UPDATE payroll.employee_payroll_item'),
+      ['run-1', 'payroll.run.reprocessed'],
     );
   });
 
@@ -207,6 +208,7 @@ describe('PayrollService', () => {
           processing_type_code: 'MENSAL',
         },
       ])
+      .mockResolvedValueOnce([])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([
         {
@@ -372,7 +374,7 @@ describe('PayrollService', () => {
     ).resolves.toMatchObject({ id: 'run-1' });
 
     expect(query).not.toHaveBeenCalledWith(
-      expect.stringContaining('DELETE FROM payroll.employee_payroll_item'),
+      expect.stringContaining('UPDATE payroll.employee_payroll_item'),
       ['run-1'],
     );
     expect(
@@ -458,7 +460,7 @@ describe('PayrollService', () => {
       status: 'GENERATED',
     });
     expect(query).not.toHaveBeenCalledWith(
-      expect.stringContaining('DELETE FROM payroll.employee_payroll_item'),
+      expect.stringContaining('UPDATE payroll.employee_payroll_item'),
       ['run-1'],
     );
     await expect(

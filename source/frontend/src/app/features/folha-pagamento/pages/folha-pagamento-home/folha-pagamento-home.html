@@ -60,4 +60,30 @@
     <strong>{{ resultData.employeeCount }} servidor</strong>
     <span>Total liquido {{ resultData.totalNet }}</span>
   </section>
+
+  <section *ngIf="executionHistory.length > 0" class="history-panel" aria-live="polite">
+    <h2>Historico de execucoes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Status</th>
+          <th>Tipo</th>
+          <th>Servidores</th>
+          <th>Total liquido</th>
+          <th>Nota</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of executionHistory">
+          <td>{{ entry.changedAt | date: 'short' }}</td>
+          <td>{{ entry.status }}</td>
+          <td>{{ entry.kind || '-' }}</td>
+          <td>{{ entry.employeeCount || '-' }}</td>
+          <td>{{ entry.totalNet || '-' }}</td>
+          <td>{{ entry.note }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </section>

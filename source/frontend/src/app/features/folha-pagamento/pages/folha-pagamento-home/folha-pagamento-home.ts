@@ -6,6 +6,7 @@ import {
   DecimoTerceiroProcessamentosService,
   DecimoTerceiroRunResult,
   FeriasRunResult,
+  PayrollRunExecutionHistory,
 } from '../../processamentos/decimo-terceiro.service';
 
 @Component({
@@ -32,6 +33,7 @@ export class FolhaPagamentoHome {
   } | null = null;
   result: DecimoTerceiroRunResult | null = null;
   feriasResult: FeriasRunResult | null = null;
+  executionHistory: PayrollRunExecutionHistory[] = [];
   errorMessage = '';
   loading = false;
 
@@ -48,6 +50,7 @@ export class FolhaPagamentoHome {
     };
     this.result = null;
     this.feriasResult = null;
+    this.executionHistory = [];
     this.errorMessage = '';
   }
 
@@ -65,6 +68,7 @@ export class FolhaPagamentoHome {
     };
     this.result = null;
     this.feriasResult = null;
+    this.executionHistory = [];
     this.errorMessage = '';
   }
 
@@ -84,6 +88,7 @@ export class FolhaPagamentoHome {
         } else {
           this.result = result;
         }
+        this.loadExecutionHistory(result.payrollRunId);
         this.preview = null;
         this.loading = false;
       },
@@ -105,5 +110,16 @@ export class FolhaPagamentoHome {
       return this.service.runAdiantamento(preview.year);
     }
     return this.service.runFechamento(preview.year);
+  }
+
+  private loadExecutionHistory(payrollRunId: string): void {
+    this.service.getExecutionHistory(payrollRunId).subscribe({
+      next: (history) => {
+        this.executionHistory = history;
+      },
+      error: () => {
+        this.executionHistory = [];
+      },
+    });
   }
 }

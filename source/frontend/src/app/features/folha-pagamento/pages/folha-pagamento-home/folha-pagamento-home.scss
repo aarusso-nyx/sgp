@@ -49,6 +49,28 @@ button mat-icon {
   justify-content: flex-start;
 }
 
+.history-panel {
+  display: grid;
+  gap: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.14);
+  padding: 10px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-weight: 600;
+}
+
 .error {
   color: #b00020;
 }

@@ -2310,6 +2310,9 @@ model EmployeePayrollItem {
   referenceValue     Decimal?           @map("reference_value") @db.Decimal(14, 2)
   amount             Decimal            @db.Decimal(14, 2)
   notes              String             @default("")
+  deletedAt          DateTime?          @map("deleted_at") @db.Timestamptz(6)
+  deletedReason      String?            @map("deleted_reason")
+  idempotencyKey     String?            @map("idempotency_key")
   createdAt          DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 

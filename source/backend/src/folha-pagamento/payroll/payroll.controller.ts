@@ -50,6 +50,13 @@ export class PayrollController {
     return this.payrollService.listRuns(query);
   }
 
+  @Get(':folha_id/historico')
+  @RequirePermission('folha.read')
+  @ApiOkResponse({ description: 'List payroll run execution history.' })
+  listRunHistory(@Param('folha_id') payrollRunId: string) {
+    return this.payrollService.listRunHistory(payrollRunId);
+  }
+
   @Post()
   @RequirePermission('folha.write')
   @ApiCreatedResponse({ description: 'Create a payroll run.' })

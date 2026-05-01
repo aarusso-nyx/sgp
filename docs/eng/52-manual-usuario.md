@@ -780,7 +780,9 @@ O Analista de Folha opera o dia a dia do processamento: lançamentos manuais, im
    - **Pendentes apenas**: reprocessa apenas contracheques com situação `PENDENTE` ou `ERRO`.
 4. Para o modo seletivo, use a busca e marque os servidores.
 5. Clique em **Reprocessar**.
-6. Acompanhe o progresso na barra exibida.
+6. Acompanhe o progresso na barra exibida e consulte a aba **Historico de execucoes** para ver cada cálculo ou recálculo, com data, status, quantidade de servidores e total líquido.
+
+Ao reprocessar, o sistema preserva os lançamentos calculados anteriores como histórico técnico: eles deixam de aparecer nas consultas operacionais porque recebem marcação de exclusão lógica, mas continuam disponíveis para auditoria. A nova execução deve convergir para a mesma quantidade de linhas ativas e os mesmos totais quando não houver mudança cadastral, de fórmula ou de parâmetro entre as execuções. Se outra execução da mesma folha estiver em andamento, a segunda tentativa é recusada para evitar duplicidade.
 
 ### 3.5.4 Emissão de contracheques
 

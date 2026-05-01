@@ -128,10 +128,14 @@ describe('CALC-05 vacation payroll golden scenarios (e2e)', () => {
       );
       const linked = await pool.query<{
         payroll_run_id: string;
-        item_count: string;
+        active_item_count: string;
+        soft_deleted_item_count: string;
       }>(
         `
-        SELECT vacation.payroll_run_id::text, count(item.id)::text AS item_count
+        SELECT
+          vacation.payroll_run_id::text,
+          count(item.id) FILTER (WHERE item.deleted_at IS NULL)::text AS active_item_count,
+          count(item.id) FILTER (WHERE item.deleted_at IS NOT NULL)::text AS soft_deleted_item_count
         FROM hr.vacation_record vacation
         JOIN payroll.employee_payroll_item item
           ON item.payroll_run_id = vacation.payroll_run_id
@@ -144,7 +148,8 @@ describe('CALC-05 vacation payroll golden scenarios (e2e)', () => {
 
       expect(first.payrollRunId).toBe(second.payrollRunId);
       expect(linked.rows[0].payroll_run_id).toBe(first.payrollRunId);
-      expect(linked.rows[0].item_count).toBe('2');
+      expect(linked.rows[0].active_item_count).toBe('2');
+      expect(linked.rows[0].soft_deleted_item_count).toBe('2');
     } finally {
       await database.onModuleDestroy();
     }
