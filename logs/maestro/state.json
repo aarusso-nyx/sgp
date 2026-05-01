@@ -190,6 +190,22 @@
       "previous_agent": "019de4eb-a485-7952-86b6-eec136fb71be",
       "previous_failure": "maestro defense gate db:smoke failed in 99-fol01-rubricas.sql with Prisma P2002 unique constraint",
       "recovery": "xhigh retry made FOL-01 smoke fixture unique-key safe and maestro gates passed"
+    },
+    "18-calc-01-formulas-engine": {
+      "status": "completed",
+      "effort": "xhigh",
+      "branch": "slice/18-calc-01-formulas-engine",
+      "commit": "12000a68e5eb0322a07ca8974c36b79b8886adca",
+      "started_at": "2026-05-01T16:41:44-03:00",
+      "retry_started_at": "2026-05-01T16:58:41-03:00",
+      "failed_at": "2026-05-01T17:06:40-03:00",
+      "completed_at": "2026-05-01T17:23:47-03:00",
+      "retries": 1,
+      "agent": "019de51f-516e-7dd0-9e61-72ccde9f54f5",
+      "previous_agent": "019de50f-dacd-77a0-a08d-ec24a403601d",
+      "previous_failure": "logs/maestro/18-calc-01-formulas-engine.failure.md",
+      "failure_log": "logs/maestro/18-calc-01-formulas-engine.failure.md",
+      "recovery": "manual seed parameter typing, compile trigger restoration, and base_salary overload repair after exhausted retry"
     }
   },
   "current_wave": 10,
