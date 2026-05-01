@@ -1060,7 +1060,7 @@ model TransitBenefit {
   tenantId    String       @map("tenant_id") @db.Uuid
   code        String
   description String
-  unitAmount  Decimal      @default(0) @map("unit_amount") @db.Decimal(12, 2)
+  unitAmount  Decimal      @default(0) @map("unit_amount") @db.Decimal(14, 2)
   status      RecordStatus @default(ACTIVE)
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -1508,7 +1508,7 @@ model EmployeeUnionContribution {
   employeeId       String       @map("employee_id") @db.Uuid
   unionId          String?      @map("union_id") @db.Uuid
   deductionAmount  Decimal?     @map("deduction_amount") @db.Decimal(14, 2)
-  deductionPercent Decimal?     @map("deduction_percent") @db.Decimal(7, 4)
+  deductionPercent Decimal?     @map("deduction_percent") @db.Decimal(18, 6)
   startsOn         DateTime     @map("starts_on") @db.Date
   endsOn           DateTime?    @map("ends_on") @db.Date
   notes            String       @default("")
@@ -2260,8 +2260,8 @@ model PayrollAccountingAccount {
   simpleAccountingId     String?      @map("simple_account_id") @db.Uuid
   accountType            String       @map("account_type")
   accountCode            String       @map("account_code")
-  allocationPercent      Decimal      @default(0) @map("allocation_percent") @db.Decimal(8, 4)
-  totalAllocationPercent Decimal      @default(0) @map("total_allocation_percent") @db.Decimal(8, 4)
+  allocationPercent      Decimal      @default(0) @map("allocation_percent") @db.Decimal(18, 6)
+  totalAllocationPercent Decimal      @default(0) @map("total_allocation_percent") @db.Decimal(18, 6)
   status                 RecordStatus @default(ACTIVE)
   metadata               Json         @default("{}")
   createdAt              DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -2661,7 +2661,7 @@ model InternshipRecord {
   supervisorName String?         @map("supervisor_name")
   startsOn       DateTime        @map("starts_on") @db.Date
   endsOn         DateTime?       @map("ends_on") @db.Date
-  stipendAmount  Decimal?        @map("stipend_amount") @db.Decimal(12, 2)
+  stipendAmount  Decimal?        @map("stipend_amount") @db.Decimal(14, 2)
   status         AgreementStatus @default(ACTIVE)
   createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -2946,7 +2946,7 @@ model SalarySimulationAdjustment {
   tenantId          String   @map("tenant_id") @db.Uuid
   simulationId      String   @map("simulation_id") @db.Uuid
   label             String
-  percentAdjustment Decimal? @map("percent_adjustment") @db.Decimal(8, 4)
+  percentAdjustment Decimal? @map("percent_adjustment") @db.Decimal(18, 6)
   fixedAdjustment   Decimal? @map("fixed_adjustment") @db.Decimal(14, 2)
   createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -3030,7 +3030,7 @@ model PensionGrant {
   kinship              String?
   benefitType          String   @map("benefit_type")
   apportionmentType    String   @map("apportionment_type")
-  sharePercent         Decimal  @map("share_percent") @db.Decimal(8, 4)
+  sharePercent         Decimal  @map("share_percent") @db.Decimal(18, 6)
   adjustmentMode       String   @map("adjustment_mode")
   nature               String
   grantedOn            DateTime @map("granted_on") @db.Date
@@ -3397,7 +3397,7 @@ model TaxRate {
   description   String       @default("")
   scope         String
   referenceYear Int          @map("reference_year")
-  ratePercent   Decimal      @map("rate_percent") @db.Decimal(8, 4)
+  ratePercent   Decimal      @map("rate_percent") @db.Decimal(18, 6)
   metadata      Json         @default("{}")
   status        RecordStatus @default(ACTIVE)
   createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)

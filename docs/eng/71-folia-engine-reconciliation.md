@@ -34,6 +34,11 @@ Any high-impact difference between the folia engine behavior and these legacy ou
 
 - Runtime SQL implementation: `source/database/sql/25-payroll-formula-engine.sql`
 - Runtime notes: `source/database/formula-engine.md`
+- Money/rounding boundary: `docs/eng/72-money-decimal-policy.md`
+
+## Money boundary
+
+Folia-first formula evaluation must preserve decimal precision through intermediate calculation and apply the SGP money policy only at the rubrica boundary. SQL `payroll_calc.evaluate_earning_deduction(...)` and TypeScript payroll paths must reconcile to `numeric(14,2)` / `Decimal(14,2)` using half-away-from-zero rounding.
 
 ## Conflict handling
 

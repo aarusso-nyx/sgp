@@ -3,6 +3,7 @@ import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import noMathRoundMoneyRule from './eslint-rules/no-math-round-money.js';
 import requirePermissionRule from './eslint-rules/require-permission.js';
 
 export default tseslint.config(
@@ -29,6 +30,7 @@ export default tseslint.config(
     plugins: {
       sgp: {
         rules: {
+          'no-math-round-money': noMathRoundMoneyRule,
           'require-permission': requirePermissionRule,
         },
       },
@@ -38,6 +40,7 @@ export default tseslint.config(
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
       "prettier/prettier": ["error", { endOfLine: "auto" }],
+      'sgp/no-math-round-money': 'error',
       'sgp/require-permission': 'error',
     },
   },

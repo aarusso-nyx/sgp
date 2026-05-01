@@ -8,6 +8,7 @@ import { QueryResultRow } from 'pg';
 
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../common/pagination/paged-response';
+import { roundMoney, toMoney } from '../../common/money/money';
 import { DatabaseService } from '../../database/database.service';
 import {
   CalculatePayrollRunDto,
@@ -358,13 +359,13 @@ export class PayrollService {
     for (const employee of employees) {
       const mappings = await this.resolvePayrollMappings(run, employee);
       for (const mapping of mappings) {
-        const quantity = Number(mapping.default_quantity ?? '1');
+        const quantity = toMoney(mapping.default_quantity ?? '1');
         const amount = this.resolveMappedAmount(
           mapping,
-          Number(employee.salary_amount ?? '0'),
+          employee.salary_amount ?? '0',
           quantity,
         );
-        if (amount <= 0) {
+        if (amount.lte(0)) {
           continue;
         }
         await this.databaseService.query(
@@ -402,7 +403,7 @@ export class PayrollService {
             mapping.earning_deduction_id,
             run.competence_year,
             run.competence_month,
-            quantity,
+            quantity.toFixed(4),
             employee.salary_amount ?? '',
             amount.toFixed(2),
             `Mass population from linkage ${mapping.code}`,
@@ -773,31 +774,28 @@ export class PayrollService {
       const hiredOn = employee.hired_on ? new Date(employee.hired_on) : null;
       if (!terminatedOn) continue;
 
-      const monthlySalary = Number(employee.salary_amount ?? '0');
+      const monthlySalary = toMoney(employee.salary_amount ?? '0');
       const terminationDay = terminatedOn.getUTCDate();
       const proportionalMonths = this.calculateProportionalMonths(
         hiredOn,
         terminatedOn,
       );
-      const vacationProportional = this.roundCurrency(
-        (monthlySalary / 12) * proportionalMonths,
+      const vacationProportional = roundMoney(
+        monthlySalary.div(12).times(proportionalMonths),
       );
-      const items: Array<[string, number]> = [
-        [
-          'RESC_SALDO',
-          this.roundCurrency((monthlySalary / 30) * terminationDay),
-        ],
+      const items: Array<[string, ReturnType<typeof roundMoney>]> = [
+        ['RESC_SALDO', roundMoney(monthlySalary.div(30).times(terminationDay))],
         ['RESC_FERIAS_PROP', vacationProportional],
-        ['RESC_FERIAS_TERCO', this.roundCurrency(vacationProportional / 3)],
+        ['RESC_FERIAS_TERCO', roundMoney(vacationProportional.div(3))],
         [
           'RESC_13_PROP',
-          this.roundCurrency((monthlySalary / 12) * proportionalMonths),
+          roundMoney(monthlySalary.div(12).times(proportionalMonths)),
         ],
       ];
 
-      let totalEarnings = 0;
+      let totalEarnings = toMoney(0);
       for (const [code, amount] of items) {
-        totalEarnings += amount;
+        totalEarnings = totalEarnings.plus(amount);
         await this.databaseService.query(
           `
           INSERT INTO payroll.employee_payroll_item (
@@ -878,7 +876,7 @@ export class PayrollService {
           employee.functional_status_id ?? '',
           run.competence_year,
           run.competence_month,
-          this.roundCurrency(totalEarnings).toFixed(2),
+          roundMoney(totalEarnings).toFixed(2),
           JSON.stringify({
             origin: 'termination',
             proportionalMonths,
@@ -969,30 +967,31 @@ export class PayrollService {
 
   private resolveMappedAmount(
     mapping: PayrollMappingRow,
-    monthlySalary: number,
-    quantity: number,
-  ): number {
+    monthlySalary: string,
+    quantity: ReturnType<typeof toMoney>,
+  ): ReturnType<typeof roundMoney> {
     if (mapping.default_amount !== null) {
-      return this.roundCurrency(Number(mapping.default_amount) * quantity);
+      return roundMoney(toMoney(mapping.default_amount).times(quantity));
     }
 
     const expression = (mapping.formula_expression ?? '').toUpperCase();
     if (!expression) {
-      return 0;
+      return roundMoney(0);
     }
+    const salary = toMoney(monthlySalary);
     if (expression.includes('MONTHLY_SALARY / 2')) {
-      return this.roundCurrency((monthlySalary / 2) * quantity);
+      return roundMoney(salary.div(2).times(quantity));
     }
     if (expression.includes('MONTHLY_SALARY / 12')) {
-      return this.roundCurrency((monthlySalary / 12) * quantity);
+      return roundMoney(salary.div(12).times(quantity));
     }
     if (expression.includes('MONTHLY_SALARY')) {
-      return this.roundCurrency(monthlySalary * quantity);
+      return roundMoney(salary.times(quantity));
     }
     if (expression.includes('REFERENCE_VALUE')) {
-      return this.roundCurrency(monthlySalary * quantity);
+      return roundMoney(salary.times(quantity));
     }
-    return 0;
+    return roundMoney(0);
   }
 
   private async refreshPayrollRunAggregates(id: string): Promise<void> {
@@ -1231,9 +1230,5 @@ export class PayrollService {
       proportional -= hiredOn.getUTCMonth();
     }
     return Math.max(1, Math.min(12, proportional));
-  }
-
-  private roundCurrency(value: number): number {
-    return Math.round((value + Number.EPSILON) * 100) / 100;
   }
 }

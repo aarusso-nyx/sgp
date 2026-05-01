@@ -48,14 +48,14 @@ Citations use `audit/0X-...md` section anchors when no `path:line` is available.
 | # | Feature | Reg. ref. | Stated in repo? | Backend evidence | Frontend evidence | DB evidence | Tests evidence | Maturity (0–5) | Notes |
 |---|---|---|---|---|---|---|---|---:|---|
 | 21 | calculo-folha-mensal | MOS S-1200/S-1299 | Yes (02 §2.2 row 28–30, 44) | `folha-pagamento/payroll/payroll.controller.ts:37` (`calcular`), `payroll-engine/payroll-engine.service.ts` | Stub `/folha/*` (03d §3.2) | `payroll.payroll_run` :1820, `competence_period` :3372 | `payroll.service.spec.ts` (8 it/21 exp) — shape only | 3 | Tests do not assert monetary correctness (04 §6 finding 2). Capped per rule. |
-| 22 | folha-13-salario | CF art.7 VIII; Lei 4.090/1962 | Implicit (processing types enum) | none observed (enum only) | Stub | `payroll.processing_type` :788 | none | 2 | |
+| 22 | folha-13-salario | CF art.7 VIII; Lei 4.090/1962 | Implicit (processing types enum) | none observed (enum only) | Stub | `payroll.processing_type` :788 | none | 2 | CALC-08 money policy now governs future rubrica rounding. |
 | 23 | folha-ferias | CF art.7 XVII; Lei 8.112 art.76–80 | Implicit | termination math ts-coded; férias not implemented | Stub | `vacation_record` :1431 | none férias-specific | 2 | |
 | 24 | abono-pecuniario | Lei 8.112 art.78; CLT art.143 | Implicit | none | none | none specific | none | 1 | |
 | 25 | folha-rescisao | CLT art.477; Lei 8.036/1990 | Yes (02 §2.2) | `payroll.service.calculateTerminationRun:742` (TS math, JS number rounding) | Stub | payroll_run kind=RESCISAO | payroll spec asserts shape | 3 | Money handled as JS number (03c §8.1 finding 7). |
 | 26 | folha-complementar | MOS S-1200 | Yes (02 §2.2 row 30) | none observed | none | enum value | none | 1 | |
 | 27 | folha-suplementar-acordo | CLT art.614 | Implicit | none | none | none | none | 0 | |
-| 28 | rubricas-proventos | Lei 8.112 art.40–62 | Yes (02 §2.2 row 33) | `payroll-accounting`, payroll-engine formula compile | Stub | `payroll_earning_deduction` :1880 (formula columns), `formula_attribute` :1916 | accounting spec | 3 | Engine SQL works (formula_cache, evaluate_earning_deduction). |
-| 29 | rubricas-descontos | Lei 8.112 art.45–47 | Yes | same as 28 | Stub | same | accounting spec | 3 | |
+| 28 | rubricas-proventos | Lei 8.112 art.40–62 | Yes (02 §2.2 row 33) | `payroll-accounting`, payroll-engine formula compile | Stub | `payroll_earning_deduction` :1880 (formula columns), `formula_attribute` :1916 | accounting spec + CALC-08 money specs | 3 | Engine SQL works (formula_cache, evaluate_earning_deduction); money policy declared in `docs/eng/72-money-decimal-policy.md`. |
+| 29 | rubricas-descontos | Lei 8.112 art.45–47 | Yes | same as 28 | Stub | same | accounting spec + CALC-08 money specs | 3 | Money policy declared in `docs/eng/72-money-decimal-policy.md`. |
 | 30 | adicional-noturno | CF art.7 IX; Lei 8.112 art.75 | Implicit | none specific (would be a rubrica) | none | none | none | 1 | |
 | 31 | adicional-insalubridade | CLT art.189–192; NR-15 | Implicit | none | none | none | none | 1 | |
 | 32 | adicional-periculosidade | CLT art.193; NR-16 | Implicit | none | none | none | none | 1 | |
@@ -63,9 +63,9 @@ Citations use `audit/0X-...md` section anchors when no `path:line` is available.
 | 34 | gratificacao-natalina | Lei 8.112 art.63–66 | Implicit | none specific | none | enum | none | 1 | |
 | 35 | gratificacao-funcao | Lei 8.112 art.62; CF art.37 V | Implicit | none specific | none | none | none | 1 | |
 | 36 | salario-familia | Lei 8.213 art.65–70 | Implicit | none | none | none | none | 0 | |
-| 37 | irrf-progressivo | Lei 7.713; Lei 11.482 | Yes (02 §2.11 row 139, "Alíquotas IRRF por ano") | none observed (would be rubrica) | none | `tax_rate` :3391 | none | 2 | Schema only. |
+| 37 | irrf-progressivo | Lei 7.713; Lei 11.482 | Yes (02 §2.11 row 139, "Alíquotas IRRF por ano") | none observed (would be rubrica) | none | `tax_rate` :3391 uses Decimal(18,6) for rates | none | 2 | CALC-08 defines rate scale and rubrica money rounding. |
 | 38 | irrf-13-salario | Lei 7.713 art.16 | Implicit | none | none | none | none | 1 | |
-| 39 | rpps-aliquota-progressiva | EC 103 art.11 | Yes (02 §2.11 row 139) | none specific | none | `tax_rate` :3391 | none | 2 | |
+| 39 | rpps-aliquota-progressiva | EC 103 art.11 | Yes (02 §2.11 row 139) | none specific | none | `tax_rate` :3391 uses Decimal(18,6) for rates | none | 2 | CALC-08 defines rate scale and rubrica money rounding. |
 | 40 | rgps-aliquota | Lei 8.212 art.20 | Yes | none specific | none | `tax_rate` | none | 2 | |
 | 41 | abono-permanencia | EC 41 art.3 §1 | Yes (02 §2.1: `abono_permanencia` flag) | none specific | none | column on employee `abonoPermanencia*` | none | 1 | |
 | 42 | teto-remuneratorio | CF art.37 XI | Yes (02 §2.11 row 140 `TETO_PREFEITURA`) | none observed | none | `system_parameter` :1180 | none | 1 | |
