@@ -1053,6 +1053,145 @@ $$;
   );
   console.log('[db-smoke] validated HR-03 vacation balance, audit, and RLS');
 
+  await runSqlSnippet(
+    '99-hr04-medical-leave.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  employee_a uuid;
+  appointment_id uuid := gen_random_uuid();
+  record_id uuid := gen_random_uuid();
+  visible_count integer;
+  leave_count integer;
+  absence_count integer;
+  consolidated_days integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT SELECT, UPDATE ON hr.employee TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.medical_appointment TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.medical_record TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.medical_leave TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.leave_record TO sgp_smoke_rls;
+  GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
+
+  SELECT employee.id INTO employee_a
+  FROM hr.employee employee
+  WHERE employee.tenant_id = tenant_a
+  LIMIT 1;
+
+  IF employee_a IS NULL THEN
+    RAISE EXCEPTION 'HR-04 smoke requires at least one seeded tenant A employee';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'saude.appointment.write' || chr(10) ||
+    'saude.opinion.write' || chr(10) ||
+    'rh.write' || chr(10) ||
+    'rh.employee.write' || chr(10) ||
+    'rh.medical_leave.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO hr.medical_appointment (
+    id,
+    tenant_id,
+    employee_id,
+    slot_ref,
+    scheduled_on,
+    scheduled_time
+  )
+  VALUES (
+    appointment_id,
+    tenant_a,
+    employee_a,
+    'hr04-smoke-' || record_id::text,
+    DATE '2026-05-01',
+    '09:00'
+  );
+
+  INSERT INTO hr.medical_record (
+    id,
+    tenant_id,
+    appointment_id,
+    employee_id,
+    physician_ref,
+    reason,
+    diagnosis,
+    report_status,
+    decision,
+    granted_days,
+    leave_starts_on,
+    leave_ends_on,
+    cid_code,
+    cid_secondary
+  )
+  VALUES (
+    record_id,
+    tenant_a,
+    appointment_id,
+    employee_a,
+    'smoke-physician',
+    'HR-04 smoke',
+    'Smoke diagnosis',
+    'APPROVED'::"MedicalReportStatus",
+    'granted',
+    12,
+    DATE '2026-05-02',
+    DATE '2026-05-13',
+    'J10',
+    'R50'
+  );
+
+  SELECT count(*) INTO leave_count
+  FROM hr.medical_leave
+  WHERE medical_record_id = record_id;
+  SELECT count(*) INTO absence_count
+  FROM hr.leave_record
+  WHERE tenant_id = tenant_a
+    AND employee_id = employee_a
+    AND notes = 'Medical leave generated from official pericia opinion ' || record_id::text;
+  SELECT hr.f_consolidated_medical_days(employee_a, 2026) INTO consolidated_days;
+  RESET ROLE;
+
+  IF leave_count <> 1 THEN
+    RAISE EXCEPTION 'Expected granted medical_record to create one medical_leave, found %', leave_count;
+  END IF;
+  IF absence_count <> 1 THEN
+    RAISE EXCEPTION 'Expected granted medical_record to create one leave_record, found %', absence_count;
+  END IF;
+  IF consolidated_days < 12 THEN
+    RAISE EXCEPTION 'Expected consolidated medical days to include 12 smoke days, found %', consolidated_days;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'saude.read' || chr(10) || 'rh.medical_leave.read',
+    true
+  );
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.medical_record
+  WHERE id = record_id;
+  RESET ROLE;
+
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 medical_record rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated HR-04 medical leave trigger, days, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

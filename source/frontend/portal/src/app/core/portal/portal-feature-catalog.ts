@@ -120,6 +120,13 @@ export const PORTAL_FEATURE_CATALOG: PortalFeatureSection[] = [
     summary: 'Occupational health scheduling and approved reports.',
     items: [
       {
+        label: 'Licenca saude',
+        path: '/licencas/saude/solicitar',
+        capability: 'authenticated',
+        module: 'saude',
+        description: 'Initial health leave request and official pericia scheduling.',
+      },
+      {
         label: 'Agendadas',
         path: '/pericias/agendadas',
         capability: 'authenticated',

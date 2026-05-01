@@ -23,6 +23,12 @@ As férias são solicitadas pelo **Portal do Servidor > Férias > Solicitar** e 
 
 A chefia ou RH aprova ou cancela a programação antes do gozo. Cada alteração grava evento de auditoria imutável em `audit_event`, e o histórico funcional passa a exibir as férias aprovadas ou gozadas. O valor de férias, terço constitucional e reflexos em folha não são calculados nesta tela; esses valores são tratados no processamento de folha de férias.
 
+## Licença Saúde / Perícia
+
+A licença para tratamento de saúde inicia no **Portal do Servidor > Licença Saúde > Solicitar**, onde o servidor informa a janela desejada para a perícia oficial. A equipe de saúde acompanha a agenda em **Saúde > Licença de saúde e perícia**, registra o comparecimento e lança o parecer médico com decisão, CID-10, período e dias concedidos.
+
+Quando o parecer é concedido, o sistema cria automaticamente a licença médica e o afastamento funcional do servidor, sem edição manual paralela. A consulta por servidor mostra somente as licenças visíveis ao tenant atual e o histórico funcional passa a exibir o afastamento correspondente. Indeferimentos ficam preservados no prontuário pericial sem gerar afastamento.
+
 ## Sumário
 
 1. [Introdução](#1-introdução)

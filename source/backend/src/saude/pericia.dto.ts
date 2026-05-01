@@ -226,3 +226,57 @@ export class ReplicateMedicalRecordDto {
   @IsString({ each: true })
   matriculasAlvo!: string[];
 }
+
+export class RecordMedicalOpinionDto {
+  @ApiProperty({ enum: ['granted', 'denied'] })
+  @IsString()
+  @IsIn(['granted', 'denied'])
+  decision!: 'granted' | 'denied';
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  physicianId!: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  reason!: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  opinionNotes?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  diagnosis?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  cidCode?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  cidSecondary?: string;
+
+  @ApiPropertyOptional({ minimum: 1 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  grantedDays?: number;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  startsOn?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  endsOn?: string;
+}

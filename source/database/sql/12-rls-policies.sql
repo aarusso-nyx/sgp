@@ -436,9 +436,6 @@ DECLARE
   table_name text;
 BEGIN
   FOREACH table_name IN ARRAY ARRAY[
-    'medical_appointment',
-    'medical_record',
-    'medical_leave',
     'work_accident'
   ]
   LOOP
@@ -484,6 +481,107 @@ BEGIN
       table_name
     );
   END LOOP;
+END
+$$;
+
+DO $$
+BEGIN
+  ALTER TABLE hr.medical_appointment ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE hr.medical_appointment FORCE ROW LEVEL SECURITY;
+  ALTER TABLE hr.medical_record ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE hr.medical_record FORCE ROW LEVEL SECURITY;
+  ALTER TABLE hr.medical_leave ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE hr.medical_leave FORCE ROW LEVEL SECURITY;
+
+  DROP POLICY IF EXISTS medical_appointment_select ON hr.medical_appointment;
+  DROP POLICY IF EXISTS medical_appointment_write ON hr.medical_appointment;
+  DROP POLICY IF EXISTS p_medical_appointment_select ON hr.medical_appointment;
+  DROP POLICY IF EXISTS p_medical_appointment_write ON hr.medical_appointment;
+  CREATE POLICY p_medical_appointment_select ON hr.medical_appointment
+    FOR SELECT
+    USING (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['saude.read', 'saude.appointment.write'])
+      )
+    );
+  CREATE POLICY p_medical_appointment_write ON hr.medical_appointment
+    FOR ALL
+    USING (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['saude.appointment.write'])
+      )
+    )
+    WITH CHECK (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['saude.appointment.write'])
+      )
+    );
+
+  DROP POLICY IF EXISTS medical_record_select ON hr.medical_record;
+  DROP POLICY IF EXISTS medical_record_write ON hr.medical_record;
+  DROP POLICY IF EXISTS p_medical_record_select ON hr.medical_record;
+  DROP POLICY IF EXISTS p_medical_record_write ON hr.medical_record;
+  CREATE POLICY p_medical_record_select ON hr.medical_record
+    FOR SELECT
+    USING (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['saude.read', 'saude.opinion.write'])
+      )
+    );
+  CREATE POLICY p_medical_record_write ON hr.medical_record
+    FOR ALL
+    USING (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['saude.opinion.write'])
+      )
+    )
+    WITH CHECK (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['saude.opinion.write'])
+      )
+    );
+
+  DROP POLICY IF EXISTS medical_leave_select ON hr.medical_leave;
+  DROP POLICY IF EXISTS medical_leave_write ON hr.medical_leave;
+  DROP POLICY IF EXISTS p_medical_leave_select ON hr.medical_leave;
+  DROP POLICY IF EXISTS p_medical_leave_write ON hr.medical_leave;
+  CREATE POLICY p_medical_leave_select ON hr.medical_leave
+    FOR SELECT
+    USING (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['rh.medical_leave.read', 'saude.read', 'saude.opinion.write'])
+      )
+    );
+  CREATE POLICY p_medical_leave_write ON hr.medical_leave
+    FOR ALL
+    USING (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['saude.opinion.write'])
+      )
+    )
+    WITH CHECK (
+      public.sgp_bypass_rls()
+      OR (
+        public.sgp_tenant_matches(tenant_id)
+        AND public.sgp_has_any_permission(ARRAY['saude.opinion.write'])
+      )
+    );
 END
 $$;
 

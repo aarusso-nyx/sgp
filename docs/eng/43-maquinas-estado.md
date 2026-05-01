@@ -106,6 +106,25 @@ Permissões: leitura usa `avaliacao.read`; registro de avaliação exige `avalia
 
 Permissões: saldo e histórico exigem `rh.vacation.read`; solicitação exige `rh.vacation.request`; aprovação e cancelamento exigem `rh.vacation.approve`.
 
+## 0.5. Licença Saúde e Perícia Oficial HR-04
+
+`hr.medical_appointment` registra a agenda da perícia, `hr.medical_record` guarda o parecer oficial e `hr.medical_leave` registra a licença funcional resultante. Quando o parecer é concluído com decisão `granted`, o banco cria automaticamente a licença médica e o `hr.leave_record` correspondente, preservando auditoria imutável via `sgp_append_audit_event`.
+
+| Estado     | Descrição                                                   |
+| ---------- | ----------------------------------------------------------- |
+| `agendado` | Perícia solicitada e horário reservado                      |
+| `realizado`| Servidor compareceu e o atendimento pericial foi iniciado   |
+| `laudado`  | Parecer oficial registrado pelo médico/perito               |
+| `licenca`  | Licença saúde gerada e refletida no histórico funcional     |
+
+| Transição | De          | Evento               | Guarda                                                | Ação                                                          | Para        |
+| --------- | ----------- | -------------------- | ----------------------------------------------------- | ------------------------------------------------------------- | ----------- |
+| HR04-T1   | _(início)_  | `AGENDAR_PERICIA`    | servidor existente; janela única por tenant           | insere `medical_appointment`; emite auditoria                 | `agendado`  |
+| HR04-T2   | `agendado`  | `REGISTRAR_PARECER`  | permissão `saude.opinion.write`; CID e período válidos quando concedido | insere `medical_record`; trigger gera `medical_leave` e `leave_record` se `granted` | `laudado`   |
+| HR04-T3   | `laudado`   | `CONSOLIDAR_LICENCA` | decisão `granted`                                     | soma dias por `f_consolidated_medical_days`; mantém auditoria | `licenca`   |
+
+Permissões: agendamento exige `saude.appointment.write`; parecer exige `saude.opinion.write`; consulta de licenças exige `rh.medical_leave.read`.
+
 ```mermaid
 stateDiagram-v2
     [*] --> statutory

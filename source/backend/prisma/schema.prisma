@@ -1795,6 +1795,14 @@ model MedicalRecord {
   reportStatus          MedicalReportStatus @default(PENDING_SUBMISSION) @map("report_status")
   primaryIcdRef         String?             @map("primary_icd_ref")
   multidisciplinaryTeam Json                @default("[]") @map("multidisciplinary_team")
+  decision              String?
+  opinionNotes          String              @default("") @map("opinion_notes")
+  evaluationType        String              @default("official_pericia") @map("evaluation_type")
+  grantedDays           Int?                @map("granted_days")
+  leaveStartsOn         DateTime?           @map("leave_starts_on") @db.Date
+  leaveEndsOn           DateTime?           @map("leave_ends_on") @db.Date
+  cidCode               String?             @map("cid_code")
+  cidSecondary          String?             @map("cid_secondary")
   approvedByRef         String?             @map("approved_by_ref")
   approvedAt            DateTime?           @map("approved_at") @db.Timestamptz(6)
   createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -1820,6 +1828,9 @@ model MedicalLeave {
   socialSecurityBenefit String?      @map("social_security_benefit")
   absenceReasonId       String?      @map("absence_reason_id") @db.Uuid
   icdRef                String?      @map("icd_ref")
+  cidCode               String?      @map("cid_code")
+  cidSecondary          String?      @map("cid_secondary")
+  expertOpinionId       String?      @map("expert_opinion_id") @db.Uuid
   grantedDays           Int          @map("granted_days")
   startsOn              DateTime     @map("starts_on") @db.Date
   endsOn                DateTime     @map("ends_on") @db.Date
@@ -1833,6 +1844,7 @@ model MedicalLeave {
   workAccidents WorkAccident[]
 
   @@index([medicalRecordId])
+  @@index([expertOpinionId])
   @@index([employeeId, startsOn])
   @@index([absenceReasonId])
   @@index([status])

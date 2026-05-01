@@ -266,4 +266,32 @@ describe('PericiaService', () => {
       }),
     ).rejects.toThrow('Medical leave not found');
   });
+
+  it('records a granted opinion and returns the generated leave', async () => {
+    const query = jest.fn(async (sql: string) => {
+      if (sql.includes('INSERT INTO hr.medical_record')) {
+        return [record('APPROVED')];
+      }
+      if (sql.includes('FROM hr.medical_leave')) {
+        return [leave];
+      }
+      return [];
+    });
+    const service = new PericiaService({ configured: true, query } as never);
+
+    await expect(
+      service.recordOpinion('appt-1', {
+        decision: 'granted',
+        physicianId: 'medico-1',
+        reason: 'Official pericia',
+        cidCode: 'J10',
+        grantedDays: 15,
+        startsOn: '2026-04-23',
+        endsOn: '2026-05-07',
+      }),
+    ).resolves.toMatchObject({
+      situacaoLaudo: 'APROVADO',
+      licenca: { diasConcedidos: 15 },
+    });
+  });
 });

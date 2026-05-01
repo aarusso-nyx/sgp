@@ -300,6 +300,30 @@
       "description": "Mutate occupational health and pericia records."
     },
     {
+      "key": "saude.appointment.write",
+      "moduleKey": "saude",
+      "resourceKey": "appointment",
+      "actionKey": "write",
+      "routePattern": "/api/v1/licencas/saude/agendamento",
+      "description": "Schedule official medical pericia appointments."
+    },
+    {
+      "key": "saude.opinion.write",
+      "moduleKey": "saude",
+      "resourceKey": "opinion",
+      "actionKey": "write",
+      "routePattern": "/api/v1/pericia/**",
+      "description": "Record official medical pericia opinions."
+    },
+    {
+      "key": "rh.medical_leave.read",
+      "moduleKey": "rh",
+      "resourceKey": "medical_leave",
+      "actionKey": "read",
+      "routePattern": "/api/v1/licencas/saude/**",
+      "description": "Read employee medical leave records."
+    },
+    {
       "key": "convenio.read",
       "moduleKey": "convenio",
       "resourceKey": "agreement",
@@ -385,6 +409,9 @@
       "rh.vacation.read",
       "rh.vacation.request",
       "rh.vacation.approve",
+      "rh.medical_leave.read",
+      "saude.appointment.write",
+      "saude.opinion.write",
       "avaliacao.read",
       "avaliacao.probation.write",
       "relatorio.generate"

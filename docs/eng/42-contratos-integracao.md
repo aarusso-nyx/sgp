@@ -11,6 +11,8 @@ Arrecadação Previdenciária e DUAM ficam para versão futura; não há contrat
 
 Decisão temporária de 2026-04-26: eSocial permanece stubado/sandbox como qualquer outro provedor externo no pacote atual. As seções abaixo documentam o contrato-alvo e a homologação futura; o aceite corrente cobre geração de payload, persistência interna, estado do evento e adapter sandbox, não transmissão real ao ambiente nacional nem certificado produtivo.
 
+Licenças saúde geradas por perícia oficial permanecem internas no HR-04. O contrato futuro para INSS/SIASS deverá consumir `hr.medical_record` e `hr.medical_leave` após a decisão `granted`, incluindo CID-10 principal/secundário, período concedido, dias consolidados e identificador do parecer oficial; não há transmissão externa ativa neste slice.
+
 | # | Integração | Direção | Protocolo | Auth | Criticidade |
 |---|---|---|---|---|---|
 | 1 | eSocial S-1.2 | Saída / Entrada (recibo) | Stub/sandbox S-1.2 no pacote atual; SOAP/HTTPS + XML no alvo futuro | Adapter sandbox agora; mTLS/cert. A1/A3 futuro | Crítica |

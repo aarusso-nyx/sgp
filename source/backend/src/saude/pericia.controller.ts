@@ -13,6 +13,7 @@ import type { RequestWithContext } from '../common/request-id/request-with-conte
 import {
   CreateMedicalRecordDto,
   ReplicateMedicalRecordDto,
+  RecordMedicalOpinionDto,
   SchedulePericiaDto,
   UpdatePericiaAppointmentDto,
   ValidateMedicalRecordDto,
@@ -89,6 +90,31 @@ export class PericiaController {
       resourceId: created.id,
       tableName: 'medical_record',
       metadata: { leaveId: created.licenca?.id ?? null },
+    });
+    return created;
+  }
+
+  @Post('agendamentos/:agendamento_id/parecer')
+  @RequirePermission('saude.opinion.write')
+  @ApiCreatedResponse({
+    description: 'Record an official medical opinion for an appointment.',
+  })
+  async recordOpinion(
+    @Req() request: RequestWithContext,
+    @Param('agendamento_id') appointmentId: string,
+    @Body() body: RecordMedicalOpinionDto,
+  ) {
+    const created = await this.periciaService.recordOpinion(
+      appointmentId,
+      body,
+    );
+    await this.auditService.auditMutation(request, 'CREATE', 'medical_record', {
+      resourceId: created.id,
+      tableName: 'medical_record',
+      metadata: {
+        appointmentId,
+        leaveId: created.licenca?.id ?? null,
+      },
     });
     return created;
   }

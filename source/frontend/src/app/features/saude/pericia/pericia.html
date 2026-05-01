@@ -1,0 +1,116 @@
+<section class="pericia">
+  <header>
+    <p>Saude ocupacional</p>
+    <h1>Licenca de saude e pericia</h1>
+  </header>
+
+  <p *ngIf="message" class="message" role="status">{{ message }}</p>
+  <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+
+  <div class="layout">
+    <form [formGroup]="scheduleForm" (ngSubmit)="schedule()" class="panel">
+      <h2>Agenda de pericias</h2>
+      <label>
+        <span>Servidor</span>
+        <input formControlName="employeeId" placeholder="UUID do servidor" />
+      </label>
+      <label>
+        <span>Janela</span>
+        <input formControlName="slotRef" />
+      </label>
+      <label>
+        <span>Data</span>
+        <input type="date" formControlName="scheduledOn" />
+      </label>
+      <label>
+        <span>Hora</span>
+        <input formControlName="scheduledTime" />
+      </label>
+      <label>
+        <span>Telefone</span>
+        <input formControlName="contactPhone" />
+      </label>
+      <button type="submit" [disabled]="saving">Agendar</button>
+    </form>
+
+    <form [formGroup]="opinionForm" (ngSubmit)="recordOpinion()" class="panel">
+      <h2>Parecer pericial</h2>
+      <label>
+        <span>Agendamento</span>
+        <input formControlName="appointmentId" />
+      </label>
+      <label>
+        <span>Medico</span>
+        <input formControlName="physicianId" />
+      </label>
+      <label>
+        <span>Decisao</span>
+        <select formControlName="decision">
+          <option value="granted">Concedida</option>
+          <option value="denied">Negada</option>
+        </select>
+      </label>
+      <label>
+        <span>CID-10</span>
+        <input formControlName="cidCode" />
+      </label>
+      <label>
+        <span>CID secundario</span>
+        <input formControlName="cidSecondary" />
+      </label>
+      <label>
+        <span>Dias</span>
+        <input type="number" min="1" formControlName="grantedDays" />
+      </label>
+      <label>
+        <span>Inicio</span>
+        <input type="date" formControlName="startsOn" />
+      </label>
+      <label>
+        <span>Fim</span>
+        <input type="date" formControlName="endsOn" />
+      </label>
+      <label class="wide">
+        <span>Motivo</span>
+        <textarea formControlName="reason"></textarea>
+      </label>
+      <label class="wide">
+        <span>Parecer</span>
+        <textarea formControlName="opinionNotes"></textarea>
+      </label>
+      <button type="submit" [disabled]="saving">Registrar parecer</button>
+    </form>
+  </div>
+
+  <section class="panel">
+    <form [formGroup]="lookupForm" (ngSubmit)="loadLeaves()" class="toolbar">
+      <label>
+        <span>Servidor</span>
+        <input formControlName="employeeId" placeholder="UUID do servidor" />
+      </label>
+      <button type="submit" [disabled]="loading">Carregar licencas</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Periodo</th>
+          <th>Dias</th>
+          <th>CID</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let leave of leaves">
+          <td>{{ leave.startsOn }} a {{ leave.endsOn }}</td>
+          <td>{{ leave.grantedDays }}</td>
+          <td>{{ leave.cidCode || '-' }}</td>
+          <td>{{ leave.status }}</td>
+        </tr>
+        <tr *ngIf="!leaves.length">
+          <td colspan="4">Nenhuma licenca carregada.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

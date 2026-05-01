@@ -1,0 +1,87 @@
+.saude {
+  display: grid;
+  gap: 1rem;
+}
+
+.saude header p {
+  margin: 0;
+  color: #5c6670;
+  font-size: 0.85rem;
+}
+
+.saude header h1 {
+  margin: 0.25rem 0 0;
+  font-size: 1.75rem;
+}
+
+.saude nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.saude nav a,
+.saude button {
+  border: 1px solid #9aa7b2;
+  border-radius: 6px;
+  background: #fff;
+  color: #1c2b36;
+  padding: 0.55rem 0.8rem;
+  text-decoration: none;
+}
+
+.saude nav a.active,
+.saude button[type='submit'] {
+  background: #134e4a;
+  border-color: #134e4a;
+  color: #fff;
+}
+
+.panel {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid #d6dde3;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fff;
+}
+
+.fields,
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  align-items: end;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+input {
+  border: 1px solid #aeb8c2;
+  border-radius: 6px;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid #d6dde3;
+  padding: 0.65rem;
+  text-align: left;
+}
+
+.message {
+  color: #155724;
+}
+
+.error {
+  color: #8b1e1e;
+}

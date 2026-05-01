@@ -11,6 +11,7 @@ import { DatabaseService } from '../database/database.service';
 import {
   CreateMedicalRecordDto,
   ReplicateMedicalRecordDto,
+  RecordMedicalOpinionDto,
   SchedulePericiaDto,
   UpdatePericiaAppointmentDto,
   ValidateMedicalRecordDto,
@@ -384,6 +385,115 @@ export class PericiaService {
       LIMIT 1
       `,
       [medicalRecordId],
+    );
+
+    return this.toMedicalRecordSummary(
+      record,
+      this.toOptionalLeave(leaveRows[0]),
+    );
+  }
+
+  async recordOpinion(
+    appointmentId: string,
+    opinion: RecordMedicalOpinionDto,
+  ): Promise<MedicalRecordSummary> {
+    this.ensureDatabase();
+
+    if (opinion.decision === 'granted') {
+      if (!opinion.grantedDays || !opinion.startsOn || !opinion.endsOn) {
+        throw new BadRequestException(
+          'Granted opinion requires grantedDays, startsOn, and endsOn',
+        );
+      }
+    }
+
+    const recordRows = await this.databaseService.query<MedicalRecordRow>(
+      `
+      WITH appointment AS (
+        UPDATE hr.medical_appointment
+        SET status = 'ATTENDED'::"MedicalAppointmentStatus",
+            attended_at = COALESCE(attended_at, now()),
+            updated_at = now()
+        WHERE id = $1::uuid
+        RETURNING id, employee_id
+      )
+      INSERT INTO hr.medical_record (
+        appointment_id,
+        employee_id,
+        physician_ref,
+        reason,
+        diagnosis,
+        expert_action,
+        report_type,
+        report_status,
+        primary_icd_ref,
+        decision,
+        opinion_notes,
+        evaluation_type,
+        granted_days,
+        leave_starts_on,
+        leave_ends_on,
+        cid_code,
+        cid_secondary
+      )
+      SELECT
+        appointment.id,
+        appointment.employee_id,
+        $2,
+        $3,
+        $4,
+        'official_pericia',
+        'medical_leave',
+        CASE $5
+          WHEN 'granted' THEN 'APPROVED'::"MedicalReportStatus"
+          ELSE 'REJECTED'::"MedicalReportStatus"
+        END,
+        NULLIF($6, ''),
+        $5,
+        $7,
+        'official_pericia',
+        $8::integer,
+        NULLIF($9, '')::date,
+        NULLIF($10, '')::date,
+        NULLIF($6, ''),
+        NULLIF($11, '')
+      FROM appointment
+      RETURNING
+        id,
+        appointment_id::text,
+        employee_id::text,
+        report_status::text AS report_status,
+        approved_by_ref,
+        approved_at
+      `,
+      [
+        appointmentId,
+        opinion.physicianId.trim(),
+        opinion.reason.trim(),
+        opinion.diagnosis?.trim() ?? '',
+        opinion.decision,
+        opinion.cidCode?.trim() ?? '',
+        opinion.opinionNotes?.trim() ?? '',
+        opinion.grantedDays ?? null,
+        opinion.startsOn ?? '',
+        opinion.endsOn ?? '',
+        opinion.cidSecondary?.trim() ?? '',
+      ],
+    );
+    const record = recordRows[0];
+    if (!record) {
+      throw new NotFoundException('Medical appointment not found');
+    }
+
+    const leaveRows = await this.databaseService.query<MedicalLeaveRow>(
+      `
+      SELECT id, employee_id::text, granted_days, starts_on, ends_on
+      FROM hr.medical_leave
+      WHERE medical_record_id = $1::uuid
+      ORDER BY created_at DESC
+      LIMIT 1
+      `,
+      [record.id],
     );
 
     return this.toMedicalRecordSummary(

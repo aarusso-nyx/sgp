@@ -1,0 +1,72 @@
+<section class="saude">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Licenca Saude</h1>
+  </header>
+
+  <nav aria-label="Licenca saude">
+    <a href="/licencas/saude/solicitar" [class.active]="section === 'solicitar'">Solicitar</a>
+    <a href="/licencas/saude/acompanhar" [class.active]="section === 'acompanhar'">Acompanhar</a>
+    <a href="/licencas/saude/comprovante" [class.active]="section === 'comprovante'">Comprovante</a>
+  </nav>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <form *ngIf="section === 'solicitar'" [formGroup]="form" (ngSubmit)="submit()" class="panel">
+    <div class="fields">
+      <label>
+        <span>Servidor</span>
+        <input formControlName="employeeId" placeholder="UUID do servidor" />
+      </label>
+      <label>
+        <span>Janela</span>
+        <input formControlName="slotRef" />
+      </label>
+      <label>
+        <span>Data</span>
+        <input type="date" formControlName="scheduledOn" />
+      </label>
+      <label>
+        <span>Hora</span>
+        <input formControlName="scheduledTime" />
+      </label>
+      <label>
+        <span>Telefone</span>
+        <input formControlName="contactPhone" />
+      </label>
+    </div>
+    <button type="submit" [disabled]="saving">Solicitar pericia</button>
+  </form>
+
+  <section *ngIf="section !== 'solicitar'" class="panel" [formGroup]="form">
+    <div class="toolbar">
+      <label>
+        <span>Servidor</span>
+        <input formControlName="employeeId" placeholder="UUID do servidor" />
+      </label>
+      <button type="button" (click)="load()" [disabled]="loading">Atualizar</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Periodo</th>
+          <th>Dias</th>
+          <th>CID</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let leave of leaves">
+          <td>{{ leave.startsOn }} a {{ leave.endsOn }}</td>
+          <td>{{ leave.grantedDays }}</td>
+          <td>{{ leave.cidCode || '-' }}</td>
+          <td>{{ leave.status }}</td>
+        </tr>
+        <tr *ngIf="!leaves.length">
+          <td colspan="4">Nenhuma licenca encontrada para o servidor informado.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

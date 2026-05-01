@@ -50,6 +50,10 @@ export const routes: Routes = [
             (m) => m.AvaliacaoEstagioProbatorio,
           ),
       },
+      {
+        path: 'saude/pericia',
+        loadComponent: () => import('./features/saude/pericia/pericia').then((m) => m.SaudePericia),
+      },
       ...adminFeatureRoutes,
     ],
   },
