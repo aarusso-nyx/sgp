@@ -151,8 +151,19 @@
       "previous_failure": "logs/maestro/14-fol-05-bases-salariais-historicas.failure.md",
       "recovery": "manual lint and smoke RLS permission repair after high retry failure",
       "failure_log": "logs/maestro/14-fol-05-bases-salariais-historicas.failure.md"
+    },
+    "15-fol-03-progressao-funcional": {
+      "status": "completed",
+      "effort": "medium",
+      "branch": "slice/15-fol-03-progressao-funcional",
+      "commit": "f9a255eee719c95d8c04b36ac4b76ac726db7290",
+      "started_at": "2026-05-01T14:52:05-03:00",
+      "completed_at": "2026-05-01T15:15:59-03:00",
+      "retries": 0,
+      "agent": "019de4ab-3b0c-7942-ae3e-7dc5517a59f4",
+      "recovery": "maestro added executable FOL-03 smoke coverage and performance_evaluation RLS alignment during gate rerun"
     }
   },
-  "current_wave": 8,
+  "current_wave": 9,
   "active_subagents": []
 }

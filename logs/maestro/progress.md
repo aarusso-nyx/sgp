@@ -24,3 +24,4 @@ W08 ✓ 12-fol-02 (1 slice, low→medium recovery, gates passed, commit a1df9aa)
 W08 ✓ 13-fol-04 (1 slice, medium, gates passed, commit 7c6ed9e) — completeness 26.2% → 26.2%
 W08 ✗ 14-fol-05 (medium → high retry failed: lint no-unsafe-call/no-unsafe-return in salary-history.service.spec.ts) — see logs/maestro/14-fol-05-bases-salariais-historicas.failure.md
 W08 ✓ 14-fol-05 (1 slice, medium→high recovery, gates passed, commit 75db340) — completeness 26.2% → 26.2%
+W08 ✓ 15-fol-03 (1 slice, medium + maestro smoke/RLS hardening, gates passed, commit f9a255e) — completeness 26.2% → 26.2%; Wave 8 complete
