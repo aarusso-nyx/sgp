@@ -755,15 +755,13 @@ BEGIN
     RAISE EXCEPTION 'Formula not ready for earning_deduction_id %', p_earning_deduction_id;
   END IF;
 
-  BEGIN
-    EXECUTE format('SELECT %I.%I($1, $2, $3)', 'payroll_calc', v_function_name)
-      USING p_employee_id, p_month, p_year
-      INTO v_amount;
-  EXCEPTION
-    WHEN OTHERS THEN
-      RAISE WARNING 'Formula evaluation failed for %: %', p_earning_deduction_id, SQLERRM;
-      RETURN NULL;
-  END;
+  EXECUTE format('SELECT %I.%I($1, $2, $3)', 'payroll_calc', v_function_name)
+    USING p_employee_id, p_month, p_year
+    INTO v_amount;
+
+  IF v_amount IS NULL THEN
+    RAISE EXCEPTION 'Formula % returned NULL for earning_deduction_id %', v_function_name, p_earning_deduction_id;
+  END IF;
 
   RETURN round(v_amount, 2)::numeric(14, 2);
 END;

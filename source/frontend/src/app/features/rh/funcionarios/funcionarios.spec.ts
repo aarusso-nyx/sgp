@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 import { of } from 'rxjs';
 
 import { RhWorkflows } from '../services/rh-workflows';
@@ -39,7 +41,12 @@ describe('RhFuncionarios', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RhFuncionarios],
-      imports: [ReactiveFormsModule, MatButtonModule],
+      imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        RouterModule.forRoot([]),
+      ],
       providers: [{ provide: RhWorkflows, useValue: rhWorkflows }],
     }).compileComponents();
 

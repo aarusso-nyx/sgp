@@ -12,13 +12,22 @@ import { SharedPlatformModule } from '../shared-platform/shared-platform-module'
 import { TaxRateIrrf } from '../admin/parametros/tax-rate-irrf/tax-rate-irrf';
 import { TaxRateRpps } from '../admin/parametros/tax-rate-rpps/tax-rate-rpps';
 import { TetoRemuneratorio } from '../admin/parametros/teto-remuneratorio/teto-remuneratorio';
+import { AtsParametros } from '../admin/parametros/ats/ats-parametros';
 import { Cargos } from './cargos/cargos';
 import { GestaoRoutingModule } from './gestao-routing-module';
 import { GestaoMasterData } from './master-data/master-data';
 import { GestaoHome } from './pages/gestao-home/gestao-home';
 
 @NgModule({
-  declarations: [GestaoHome, GestaoMasterData, Cargos, TaxRateIrrf, TaxRateRpps, TetoRemuneratorio],
+  declarations: [
+    GestaoHome,
+    GestaoMasterData,
+    Cargos,
+    TaxRateIrrf,
+    TaxRateRpps,
+    TetoRemuneratorio,
+    AtsParametros,
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

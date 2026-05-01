@@ -29,6 +29,12 @@ A licença para tratamento de saúde inicia no **Portal do Servidor > Licença S
 
 Quando o parecer é concedido, o sistema cria automaticamente a licença médica e o afastamento funcional do servidor, sem edição manual paralela. A consulta por servidor mostra somente as licenças visíveis ao tenant atual e o histórico funcional passa a exibir o afastamento correspondente. Indeferimentos ficam preservados no prontuário pericial sem gerar afastamento.
 
+## Abono Permanência e Adicionais por Tempo de Serviço
+
+O abono permanência é administrado em **RH > Funcionários > Abono permanência** a partir do cadastro do servidor. O usuário habilita ou desabilita o benefício, informa a data de início e registra o fundamento legal. Cada ativação ou desativação grava evento de auditoria imutável, e o cálculo da folha gera a rubrica `ABONO_PERMANENCIA` com valor equivalente à contribuição RPPS calculada para a competência quando o benefício estiver ativo.
+
+Os adicionais por tempo de serviço são parametrizados em **Gestão > Parametrizações > ATS e sexta-parte**. O tenant define o percentual anual do ATS, os percentuais por triênio e quinquênio, a quantidade de anos exigida para sexta-parte e a fração aplicada sobre o vencimento. A folha usa a contagem consolidada de tempo de serviço do histórico funcional para gerar as rubricas `ATS`, `TRIENIO`, `QUINQUENIO` e `SEXTA_PARTE`.
+
 ## Sumário
 
 1. [Introdução](#1-introdução)

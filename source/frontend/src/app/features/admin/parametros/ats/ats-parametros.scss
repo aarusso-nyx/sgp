@@ -1,0 +1,52 @@
+.ats {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.ats__header,
+.ats__form {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.ats__header p {
+  color: #5b6472;
+  margin: 0 0 4px;
+}
+
+.ats__header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.ats__form {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.ats__description {
+  min-width: 280px;
+}
+
+.ats__table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.ats__table th,
+.ats__table td {
+  border-bottom: 1px solid #d9dee7;
+  padding: 10px;
+  text-align: left;
+}
+
+.ats__error {
+  color: #b42318;
+}
+
+.ats__success {
+  color: #176b45;
+}

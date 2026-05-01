@@ -5,6 +5,7 @@ import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups
 import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
 import { RhFerias } from './ferias/ferias';
 import { RhFuncionarios } from './funcionarios/funcionarios';
+import { RhAbonoPermanencia } from './funcionarios/abono-permanencia/abono-permanencia';
 import { RhFuncionariosHistorico } from './funcionarios/historico/historico';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhHome } from './pages/rh-home/rh-home';
@@ -26,6 +27,10 @@ import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-empl
       {
         path: 'funcionarios/:id/historico',
         component: RhFuncionariosHistorico,
+      },
+      {
+        path: 'funcionarios/:id/abono-permanencia',
+        component: RhAbonoPermanencia,
       },
       {
         path: 'funcionarios/vinculos',

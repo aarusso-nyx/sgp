@@ -1,0 +1,39 @@
+.abono {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.abono__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.abono__header p {
+  color: #5b6472;
+  margin: 0 0 4px;
+}
+
+.abono__header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.abono__panel {
+  display: grid;
+  gap: 16px;
+  max-width: 760px;
+}
+
+.abono__wide {
+  width: 100%;
+}
+
+.abono__message {
+  color: #176b45;
+}
+
+.abono__error {
+  color: #b42318;
+}

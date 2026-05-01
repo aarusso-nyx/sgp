@@ -18,6 +18,7 @@ import {
   CreateServiceTimeRecordDto,
   RejectCadastralChangeDto,
   TerminateEmployeeDto,
+  UpdateAbonoPermanenciaDto,
 } from './employees.dto';
 import { EmployeesService } from './employees.service';
 import { HistoryService } from './history.service';
@@ -142,6 +143,28 @@ export class EmployeesController {
     @Body() body: CreateServiceTimeRecordDto,
   ) {
     return this.serviceTimeService.create(id, body);
+  }
+
+  @Get('funcionarios/:id/abono-permanencia')
+  @RequirePermission('rh.employee.read')
+  @ApiOkResponse({ description: 'Employee permanence allowance state.' })
+  getAbonoPermanencia(@Param('id') id: string) {
+    return this.employeesService.getAbonoPermanencia(id);
+  }
+
+  @Post('funcionarios/:id/abono-permanencia')
+  @RequirePermission('rh.employee.abono.write')
+  @AuditMutation({
+    action: 'UPDATE',
+    resourceType: 'hr.employee.abono_permanencia',
+    tableName: 'hr.employee',
+  })
+  @ApiOkResponse({ description: 'Update employee permanence allowance state.' })
+  updateAbonoPermanencia(
+    @Param('id') id: string,
+    @Body() body: UpdateAbonoPermanenciaDto,
+  ) {
+    return this.employeesService.updateAbonoPermanencia(id, body);
   }
 
   @Get('pericia/prontuarios/:id/laudo/pdf')

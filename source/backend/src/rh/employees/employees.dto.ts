@@ -163,6 +163,23 @@ export class TerminateEmployeeDto {
   generateTerminationPayroll?: boolean;
 }
 
+export class UpdateAbonoPermanenciaDto {
+  @ApiProperty()
+  @IsBoolean()
+  active!: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsDateString()
+  startsOn?: string;
+
+  @ApiPropertyOptional({ maxLength: 500 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  legalBasis?: string;
+}
+
 export class ChangeContractRegimeDto {
   @ApiProperty({
     enum: ['statutory', 'celetista', 'commissioned', 'temporary'],

@@ -59,7 +59,16 @@
         <dd>{{ selected.cpf || '-' }}</dd>
         <dt>E-mail</dt>
         <dd>{{ selected.email || '-' }}</dd>
+        <dt>Abono permanencia</dt>
+        <dd>{{ selected.abonoPermanenciaAtivo ? 'Ativo' : 'Inativo' }}</dd>
       </dl>
+      <a
+        mat-stroked-button
+        [routerLink]="['/rh/funcionarios', selected.id, 'abono-permanencia']"
+      >
+        <mat-icon>paid</mat-icon>
+        Abono permanencia
+      </a>
     </section>
   </div>
 

@@ -18,6 +18,7 @@ import {
   EmployeeMutationDto,
   RejectCadastralChangeDto,
   TerminateEmployeeDto,
+  UpdateAbonoPermanenciaDto,
 } from './employees.dto';
 
 export interface EmployeeSummary {
@@ -30,6 +31,9 @@ export interface EmployeeSummary {
   functionalStatus: string | null;
   branch: string | null;
   active: boolean;
+  abonoPermanenciaAtivo: boolean;
+  abonoPermanenciaInicio: string | null;
+  abonoPermanenciaFundamento: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -45,7 +49,19 @@ interface EmployeeListRow extends QueryResultRow {
   branch_name: string | null;
   branch_id?: string | null;
   active: boolean;
+  abono_permanencia_ativo?: boolean;
+  abono_permanencia_inicio?: Date | string | null;
+  abono_permanencia_fundamento?: string | null;
   created_at: Date | string;
+  updated_at: Date | string;
+}
+
+interface AbonoPermanenciaRow extends QueryResultRow {
+  id: string;
+  active: boolean;
+  starts_on: Date | string | null;
+  legal_basis: string | null;
+  audit_event_id?: string;
   updated_at: Date | string;
 }
 
@@ -208,7 +224,10 @@ export class EmployeesService {
         b.name AS branch_name,
         (e.lifecycle_status <> 'TERMINATED'::"EmployeeLifecycleStatus") AS active,
         e.created_at,
-        e.updated_at
+        e.updated_at,
+        e.abono_permanencia_ativo,
+        e.abono_permanencia_inicio,
+        e.abono_permanencia_fundamento
       FROM hr.employee e
       LEFT JOIN hr.functional_status fs ON fs.id = e.functional_status_id
       LEFT JOIN hr.branch b ON b.id = e.branch_id
@@ -920,6 +939,130 @@ export class EmployeesService {
     });
   }
 
+  async getAbonoPermanencia(id: string): Promise<Record<string, unknown>> {
+    this.ensureDatabase();
+    const rows = await this.databaseService.query<AbonoPermanenciaRow>(
+      `
+      SELECT
+        id::text,
+        abono_permanencia_ativo AS active,
+        abono_permanencia_inicio AS starts_on,
+        abono_permanencia_fundamento AS legal_basis,
+        updated_at
+      FROM hr.employee
+      WHERE id = $1::uuid
+        AND tenant_id = public.sgp_current_tenant_uuid()
+      `,
+      [id],
+    );
+    const row = rows[0];
+    if (!row) throw new NotFoundException('Employee not found');
+    return this.toAbonoPermanencia(row);
+  }
+
+  async updateAbonoPermanencia(
+    id: string,
+    input: UpdateAbonoPermanenciaDto,
+  ): Promise<Record<string, unknown>> {
+    this.ensureDatabase();
+    if (input.active && !input.startsOn) {
+      throw new BadRequestException(
+        'startsOn is required when abono is active',
+      );
+    }
+    if (input.active && !input.legalBasis?.trim()) {
+      throw new BadRequestException(
+        'legalBasis is required when abono is active',
+      );
+    }
+
+    const row = await this.databaseService.transaction(async (client) => {
+      const updated = await client.query<AbonoPermanenciaRow>(
+        `
+        WITH previous AS (
+          SELECT
+            id,
+            abono_permanencia_ativo,
+            abono_permanencia_inicio,
+            abono_permanencia_fundamento
+          FROM hr.employee
+          WHERE id = $1::uuid
+            AND tenant_id = public.sgp_current_tenant_uuid()
+          FOR UPDATE
+        ),
+        changed AS (
+          UPDATE hr.employee employee
+          SET
+            abono_permanencia_ativo = $2,
+            abono_permanencia_inicio = CASE WHEN $2 THEN $3::date ELSE NULL END,
+            abono_permanencia_fundamento = NULLIF($4, ''),
+            updated_at = now()
+          FROM previous
+          WHERE employee.id = previous.id
+          RETURNING
+            employee.id,
+            employee.abono_permanencia_ativo,
+            employee.abono_permanencia_inicio,
+            employee.abono_permanencia_fundamento,
+            employee.updated_at,
+            previous.abono_permanencia_ativo AS previous_active,
+            previous.abono_permanencia_inicio AS previous_starts_on,
+            previous.abono_permanencia_fundamento AS previous_legal_basis
+        ),
+        audit AS (
+          SELECT public.sgp_append_audit_event(
+            'UPDATE',
+            'hr.employee.abono_permanencia',
+            $1::text,
+            NULL::uuid,
+            NULLIF(current_setting('app.current_user_sub', true), ''),
+            NULLIF(current_setting('app.current_login', true), ''),
+            'hr.employee',
+            NULLIF(current_setting('app.request_id', true), ''),
+            jsonb_build_object(
+              'event', CASE WHEN $2 THEN 'abono_permanencia.activated' ELSE 'abono_permanencia.deactivated' END,
+              'previous', jsonb_build_object(
+                'active', changed.previous_active,
+                'startsOn', changed.previous_starts_on,
+                'legalBasis', changed.previous_legal_basis
+              ),
+              'current', jsonb_build_object(
+                'active', changed.abono_permanencia_ativo,
+                'startsOn', changed.abono_permanencia_inicio,
+                'legalBasis', changed.abono_permanencia_fundamento
+              )
+            ),
+            NULLIF($4, ''),
+            NULL::text,
+            NULL::text
+          ) AS id
+          FROM changed
+        )
+        SELECT
+          changed.id::text,
+          changed.abono_permanencia_ativo AS active,
+          changed.abono_permanencia_inicio AS starts_on,
+          changed.abono_permanencia_fundamento AS legal_basis,
+          changed.updated_at,
+          audit.id::text AS audit_event_id
+        FROM changed
+        CROSS JOIN audit
+        `,
+        [
+          id,
+          input.active,
+          input.startsOn ?? null,
+          input.legalBasis?.trim() ?? '',
+        ],
+      );
+      return updated.rows[0];
+    });
+
+    if (!row) throw new NotFoundException('Employee not found');
+    AuditMutationContextStore.markMutationAudited();
+    return this.toAbonoPermanencia(row);
+  }
+
   async changeContractRegime(
     employeeId: string,
     input: ChangeContractRegimeDto,
@@ -1430,7 +1573,25 @@ export class EmployeesService {
       functionalStatus: row.functional_status,
       branch: row.branch_name,
       active: row.active,
+      abonoPermanenciaAtivo: row.abono_permanencia_ativo ?? false,
+      abonoPermanenciaInicio: row.abono_permanencia_inicio
+        ? this.toIso(row.abono_permanencia_inicio).slice(0, 10)
+        : null,
+      abonoPermanenciaFundamento: row.abono_permanencia_fundamento ?? null,
       createdAt: this.toIso(row.created_at),
+      updatedAt: this.toIso(row.updated_at),
+    };
+  }
+
+  private toAbonoPermanencia(
+    row: AbonoPermanenciaRow,
+  ): Record<string, unknown> {
+    return {
+      employeeId: row.id,
+      active: row.active,
+      startsOn: row.starts_on ? this.toIso(row.starts_on).slice(0, 10) : null,
+      legalBasis: row.legal_basis,
+      auditEventId: row.audit_event_id ?? null,
       updatedAt: this.toIso(row.updated_at),
     };
   }

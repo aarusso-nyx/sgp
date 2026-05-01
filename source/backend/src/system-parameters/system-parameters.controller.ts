@@ -5,6 +5,7 @@ import { RequirePermission } from '../iam/decorators/require-permission.decorato
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
   ToggleFeatureFlagDto,
+  UpsertAtsParameterDto,
   UpsertGlobalParameterDto,
   UpsertRemunerationCeilingDto,
   UpsertSystemParametersDto,
@@ -66,6 +67,20 @@ export class SystemParametersController {
   @ApiOkResponse({ description: 'Upsert one remuneration ceiling parameter.' })
   upsertRemunerationCeiling(@Body() body: UpsertRemunerationCeilingDto) {
     return this.systemParametersService.upsertRemunerationCeiling(body);
+  }
+
+  @Get('ats')
+  @RequirePermission('system.parameter.read')
+  @ApiOkResponse({ description: 'Tenant ATS and sixth-part parameters.' })
+  listAtsParameters() {
+    return this.systemParametersService.listAtsParameters();
+  }
+
+  @Put('ats')
+  @RequirePermission('system.parameter.write')
+  @ApiOkResponse({ description: 'Upsert one ATS or sixth-part parameter.' })
+  upsertAtsParameter(@Body() body: UpsertAtsParameterDto) {
+    return this.systemParametersService.upsertAtsParameter(body);
   }
 }
 

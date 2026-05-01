@@ -15,6 +15,15 @@ export const REMUNERATION_CEILING_KEYS = [
 ] as const;
 export type RemunerationCeilingKey = (typeof REMUNERATION_CEILING_KEYS)[number];
 
+export const ATS_PARAMETER_KEYS = [
+  'ATS_PERCENT_PER_YEAR',
+  'TRIENIO_PERCENT_PER_PERIOD',
+  'QUINQUENIO_PERCENT_PER_PERIOD',
+  'SEXTA_PARTE_SERVICE_YEARS',
+  'SEXTA_PARTE_FRACTION',
+] as const;
+export type AtsParameterKey = (typeof ATS_PARAMETER_KEYS)[number];
+
 export class UpsertSystemParametersDto {
   @ApiProperty({
     description:
@@ -53,6 +62,23 @@ export class UpsertRemunerationCeilingDto {
   })
   @IsString()
   amount!: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+export class UpsertAtsParameterDto {
+  @ApiProperty({ enum: ATS_PARAMETER_KEYS })
+  @IsIn(ATS_PARAMETER_KEYS)
+  key!: AtsParameterKey;
+
+  @ApiProperty({
+    description: 'Decimal parameter value persisted as a string.',
+  })
+  @IsString()
+  value!: string;
 
   @ApiPropertyOptional()
   @IsOptional()

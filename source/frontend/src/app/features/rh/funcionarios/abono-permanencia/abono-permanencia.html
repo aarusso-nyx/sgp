@@ -1,0 +1,31 @@
+<section class="abono" aria-labelledby="abono-title">
+  <header class="abono__header">
+    <div>
+      <p>Recursos Humanos</p>
+      <h1 id="abono-title">Abono permanencia</h1>
+    </div>
+    <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon>
+      Atualizar
+    </button>
+  </header>
+
+  <p class="abono__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="abono__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <form class="abono__panel" [formGroup]="form" (ngSubmit)="save()">
+    <mat-checkbox formControlName="active">Abono ativo</mat-checkbox>
+    <mat-form-field appearance="outline">
+      <mat-label>Inicio</mat-label>
+      <input matInput type="date" formControlName="startsOn" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="abono__wide">
+      <mat-label>Fundamento legal</mat-label>
+      <textarea matInput rows="4" formControlName="legalBasis"></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="saving">
+      <mat-icon>save</mat-icon>
+      Salvar
+    </button>
+  </form>
+</section>

@@ -140,6 +140,14 @@
       "description": "Terminate employees through HR-01."
     },
     {
+      "key": "rh.employee.abono.write",
+      "moduleKey": "rh",
+      "resourceKey": "employee_abono",
+      "actionKey": "write",
+      "routePattern": "/api/v1/funcionarios/*/abono-permanencia",
+      "description": "Activate or deactivate employee abono permanencia records."
+    },
+    {
       "key": "rh.employment_link.write",
       "moduleKey": "rh",
       "resourceKey": "employment_link",
@@ -338,6 +346,22 @@
       "actionKey": "write",
       "routePattern": "/api/v1/payroll-engine/formulas/**",
       "description": "Compile, invalidate, and maintain payroll formula definitions."
+    },
+    {
+      "key": "payroll.ats.read",
+      "moduleKey": "payroll",
+      "resourceKey": "ats",
+      "actionKey": "read",
+      "routePattern": "#!/gestao/parametros/ats",
+      "description": "Read ATS and service-time payroll parameters."
+    },
+    {
+      "key": "payroll.ats.write",
+      "moduleKey": "payroll",
+      "resourceKey": "ats",
+      "actionKey": "write",
+      "routePattern": "#!/gestao/parametros/ats",
+      "description": "Mutate ATS and service-time payroll parameters."
     },
     {
       "key": "avaliacao.read",
@@ -611,6 +635,7 @@
       "rh.employee.write",
       "rh.employee.admit",
       "rh.employee.terminate",
+      "rh.employee.abono.write",
       "rh.employment_link.write",
       "rh.history.read",
       "rh.dependent.read",
@@ -661,6 +686,8 @@
       "folha.rubrica.preview",
       "payroll.formula.read",
       "payroll.formula.write",
+      "payroll.ats.read",
+      "payroll.ats.write",
       "relatorio.generate"
     ],
     "AUDITOR": [

@@ -61,6 +61,7 @@ Gestão|Parametrizações|Modelo de Documento|/gestao/modelo-documento/gestao|MO
 Gestão|Parametrizações|Parâmetro Sistema|/gestao/parametro-sistema/formulario|PARAMETRO_SISTEMA.GESTAO||parametros|Identidade do tenant; formulário único
 Gestão|Parametrizações|Parâmetro Global|/gestao/parametro-global/gestao|PARAMETRO_GLOBAL.GESTAO||parametros|Chaves operacionais (teto, salário mínimo…)
 Gestão|Parametrizações|Teto Remuneratório|/gestao/parametros/teto-remuneratorio|TETO_REMUNERATORIO.GESTAO||parametros|Subtetos por cargo/poder e parcelas imunes
+Gestão|Parametrizações|ATS e Sexta-Parte|/gestao/parametros/ats|ATS_PARAMETROS.GESTAO||parametros|Percentuais de ATS, triênio, quinquênio e sexta-parte
 Gestão|Parametrizações|Feature Flag|/gestao/feature-flag/gestao|FEATURE_FLAG.GESTAO||parametros|Ativação/desativação de funcionalidades
 Gestão|Estrutura de Pessoal|Cargo|/gestao/cargo/gestao|CARGO.GESTAO||gestao|
 Gestão|Estrutura de Pessoal|Função|/gestao/funcao/gestao|FUNCAO.GESTAO||gestao|Função comissionada ou de confiança

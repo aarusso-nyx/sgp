@@ -3,9 +3,12 @@ import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../database/database.service';
 import {
+  ATS_PARAMETER_KEYS,
+  AtsParameterKey,
   REMUNERATION_CEILING_KEYS,
   RemunerationCeilingKey,
   ToggleFeatureFlagDto,
+  UpsertAtsParameterDto,
   UpsertRemunerationCeilingDto,
   UpsertGlobalParameterDto,
   UpsertSystemParametersDto,
@@ -21,6 +24,13 @@ interface ParameterRow extends QueryResultRow {
 interface RemunerationCeilingRow extends QueryResultRow {
   key: RemunerationCeilingKey;
   amount: string | null;
+  description: string;
+  updated_at: Date | string;
+}
+
+interface AtsParameterRow extends QueryResultRow {
+  key: AtsParameterKey;
+  value_text: string | null;
   description: string;
   updated_at: Date | string;
 }
@@ -170,6 +180,51 @@ export class SystemParametersService {
     return this.listRemunerationCeilings();
   }
 
+  async listAtsParameters(): Promise<unknown> {
+    this.ensureDatabase();
+    const rows = await this.databaseService.query<AtsParameterRow>(
+      `
+      SELECT
+        key,
+        COALESCE(
+          NULLIF(value->>'rate', ''),
+          NULLIF(value->>'value', ''),
+          NULLIF(value#>>'{}', '')
+        ) AS value_text,
+        description,
+        updated_at
+      FROM public.system_parameter
+      WHERE key = ANY($1::text[])
+      ORDER BY array_position($1::text[], key)
+      `,
+      [[...ATS_PARAMETER_KEYS]],
+    );
+
+    const byKey = new Map(rows.map((row) => [row.key, row]));
+    return {
+      items: ATS_PARAMETER_KEYS.map((key) => {
+        const row = byKey.get(key);
+        return {
+          key,
+          value: row?.value_text ?? this.defaultAtsValue(key),
+          description: row?.description ?? this.defaultAtsDescription(key),
+          updatedAt: row?.updated_at ? this.toIso(row.updated_at) : null,
+        };
+      }),
+    };
+  }
+
+  async upsertAtsParameter(payload: UpsertAtsParameterDto): Promise<unknown> {
+    this.ensureDatabase();
+    await this.upsertEntry(
+      payload.key,
+      this.atsValuePayload(payload.key, payload.value),
+      'payroll',
+      payload.description ?? this.defaultAtsDescription(payload.key),
+    );
+    return this.listAtsParameters();
+  }
+
   private async upsertEntry(
     key: string,
     value: unknown,
@@ -237,5 +292,35 @@ export class SystemParametersService {
       TETO_SECRETARIO: 'Subteto remuneratorio de secretario municipal.',
     };
     return labels[key];
+  }
+
+  private defaultAtsDescription(key: AtsParameterKey): string {
+    const labels: Record<AtsParameterKey, string> = {
+      ATS_PERCENT_PER_YEAR:
+        'Percentual anual do adicional por tempo de servico.',
+      TRIENIO_PERCENT_PER_PERIOD: 'Percentual por trienio completo.',
+      QUINQUENIO_PERCENT_PER_PERIOD: 'Percentual por quinquenio completo.',
+      SEXTA_PARTE_SERVICE_YEARS: 'Anos completos exigidos para sexta-parte.',
+      SEXTA_PARTE_FRACTION: 'Fracao aplicada na sexta-parte.',
+    };
+    return labels[key];
+  }
+
+  private defaultAtsValue(key: AtsParameterKey): string {
+    const values: Record<AtsParameterKey, string> = {
+      ATS_PERCENT_PER_YEAR: '1.000000',
+      TRIENIO_PERCENT_PER_PERIOD: '3.000000',
+      QUINQUENIO_PERCENT_PER_PERIOD: '5.000000',
+      SEXTA_PARTE_SERVICE_YEARS: '25',
+      SEXTA_PARTE_FRACTION: '0.166666666667',
+    };
+    return values[key];
+  }
+
+  private atsValuePayload(
+    key: AtsParameterKey,
+    value: string,
+  ): Record<string, string> {
+    return key === 'SEXTA_PARTE_SERVICE_YEARS' ? { value } : { rate: value };
   }
 }

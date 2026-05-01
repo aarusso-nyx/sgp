@@ -693,7 +693,7 @@ model JobPosition {
   referenceLinks          JobStructureReferenceLink[]
   employmentLinks         JobStructureEmploymentLink[]
   workLocationAssignments WorkLocationStructureAssignment[]
-  salaryRange             SalaryRange? @relation(fields: [salaryRangeId], references: [id], onDelete: Restrict)
+  salaryRange             SalaryRange?                      @relation(fields: [salaryRangeId], references: [id], onDelete: Restrict)
 
   @@unique([tenantId, code])
   @@index([status])
@@ -761,8 +761,8 @@ model SalaryRange {
   createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  references SalaryReference[]
-  levels     SalaryRangeLevel[]
+  references   SalaryReference[]
+  levels       SalaryRangeLevel[]
   jobPositions JobPosition[]
 
   @@unique([tenantId, code])
@@ -773,19 +773,19 @@ model SalaryRange {
 }
 
 model SalaryReference {
-  id          String       @id @default(uuid()) @db.Uuid
-  tenantId    String       @map("tenant_id") @db.Uuid
-  rangeId     String?      @map("range_id") @db.Uuid
-  code        String
-  description String
-  amount      Decimal      @default(0) @db.Decimal(14, 2)
-  vigenciaInicio DateTime  @default(dbgenerated("'1900-01-01'::date")) @map("vigencia_inicio") @db.Date
-  vigenciaFim    DateTime? @map("vigencia_fim") @db.Date
-  motivo      SalaryHistoryReason @default(reajuste_data_base)
-  leiReferencia String     @default("") @map("lei_referencia")
-  status      RecordStatus @default(ACTIVE)
-  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id             String              @id @default(uuid()) @db.Uuid
+  tenantId       String              @map("tenant_id") @db.Uuid
+  rangeId        String?             @map("range_id") @db.Uuid
+  code           String
+  description    String
+  amount         Decimal             @default(0) @db.Decimal(14, 2)
+  vigenciaInicio DateTime            @default(dbgenerated("'1900-01-01'::date")) @map("vigencia_inicio") @db.Date
+  vigenciaFim    DateTime?           @map("vigencia_fim") @db.Date
+  motivo         SalaryHistoryReason @default(reajuste_data_base)
+  leiReferencia  String              @default("") @map("lei_referencia")
+  status         RecordStatus        @default(ACTIVE)
+  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   range                   SalaryRange?         @relation(fields: [rangeId], references: [id])
   employees               Employee[]
@@ -1305,45 +1305,48 @@ model SystemParameter {
 }
 
 model Employee {
-  id                  String                  @id @default(uuid()) @db.Uuid
-  tenantId            String                  @map("tenant_id") @db.Uuid
-  registration        String
-  name                String
-  socialName          String?                 @map("social_name")
-  cpf                 String?
-  birthDate           DateTime?               @map("birth_date") @db.Date
-  gender              PersonGender            @default(UNDECLARED)
-  email               String?
-  phone               String?
-  branchId            String?                 @map("branch_id") @db.Uuid
-  workLocationId      String?                 @map("work_location_id") @db.Uuid
-  costCenterId        String?                 @map("cost_center_id") @db.Uuid
-  jobPositionId       String?                 @map("job_position_id") @db.Uuid
-  jobFunctionId       String?                 @map("job_function_id") @db.Uuid
-  salaryReferenceId   String?                 @map("salary_reference_id") @db.Uuid
-  salaryRangeLevelId  String?                 @map("salary_range_level_id") @db.Uuid
-  functionalStatusId  String?                 @map("functional_status_id") @db.Uuid
-  employmentLinkId    String?                 @map("employment_link_id") @db.Uuid
-  contractTypeId      String?                 @map("contract_type_id") @db.Uuid
-  shiftId             String?                 @map("shift_id") @db.Uuid
-  unionId             String?                 @map("union_id") @db.Uuid
-  bankId              String?                 @map("bank_id") @db.Uuid
-  bankAgency          String?                 @map("bank_agency")
-  bankAccount         String?                 @map("bank_account")
-  pisPasep            String?                 @map("pis_pasep")
-  rg                  String?
-  rgIssuer            String?                 @map("rg_issuer")
-  motherName          String?                 @map("mother_name")
-  fatherName          String?                 @map("father_name")
-  nationalityCode     String?                 @map("nationality_code")
-  birthCityCode       String?                 @map("birth_city_code")
-  address             Json                    @default("{}")
-  hiredOn             DateTime?               @map("hired_on") @db.Date
-  terminatedOn        DateTime?               @map("terminated_on") @db.Date
-  terminationReasonId String?                 @map("termination_reason_id") @db.Uuid
-  lifecycleStatus     EmployeeLifecycleStatus @default(ACTIVE) @map("lifecycle_status")
-  createdAt           DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                         String                  @id @default(uuid()) @db.Uuid
+  tenantId                   String                  @map("tenant_id") @db.Uuid
+  registration               String
+  name                       String
+  socialName                 String?                 @map("social_name")
+  cpf                        String?
+  birthDate                  DateTime?               @map("birth_date") @db.Date
+  gender                     PersonGender            @default(UNDECLARED)
+  email                      String?
+  phone                      String?
+  branchId                   String?                 @map("branch_id") @db.Uuid
+  workLocationId             String?                 @map("work_location_id") @db.Uuid
+  costCenterId               String?                 @map("cost_center_id") @db.Uuid
+  jobPositionId              String?                 @map("job_position_id") @db.Uuid
+  jobFunctionId              String?                 @map("job_function_id") @db.Uuid
+  salaryReferenceId          String?                 @map("salary_reference_id") @db.Uuid
+  salaryRangeLevelId         String?                 @map("salary_range_level_id") @db.Uuid
+  functionalStatusId         String?                 @map("functional_status_id") @db.Uuid
+  employmentLinkId           String?                 @map("employment_link_id") @db.Uuid
+  contractTypeId             String?                 @map("contract_type_id") @db.Uuid
+  shiftId                    String?                 @map("shift_id") @db.Uuid
+  unionId                    String?                 @map("union_id") @db.Uuid
+  bankId                     String?                 @map("bank_id") @db.Uuid
+  bankAgency                 String?                 @map("bank_agency")
+  bankAccount                String?                 @map("bank_account")
+  pisPasep                   String?                 @map("pis_pasep")
+  rg                         String?
+  rgIssuer                   String?                 @map("rg_issuer")
+  motherName                 String?                 @map("mother_name")
+  fatherName                 String?                 @map("father_name")
+  nationalityCode            String?                 @map("nationality_code")
+  birthCityCode              String?                 @map("birth_city_code")
+  address                    Json                    @default("{}")
+  hiredOn                    DateTime?               @map("hired_on") @db.Date
+  terminatedOn               DateTime?               @map("terminated_on") @db.Date
+  terminationReasonId        String?                 @map("termination_reason_id") @db.Uuid
+  abonoPermanenciaAtivo      Boolean                 @default(false) @map("abono_permanencia_ativo")
+  abonoPermanenciaInicio     DateTime?               @map("abono_permanencia_inicio") @db.Date
+  abonoPermanenciaFundamento String?                 @map("abono_permanencia_fundamento")
+  lifecycleStatus            EmployeeLifecycleStatus @default(ACTIVE) @map("lifecycle_status")
+  createdAt                  DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                  DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   branch                       Branch?                       @relation(fields: [branchId], references: [id])
   workLocation                 WorkLocation?                 @relation(fields: [workLocationId], references: [id])
@@ -1510,27 +1513,27 @@ model ProfessionalExperience {
 }
 
 model EmployeeTransfer {
-  id                         String   @id @default(uuid()) @db.Uuid
-  tenantId                   String   @map("tenant_id") @db.Uuid
-  employeeId                 String   @map("employee_id") @db.Uuid
-  fromBranchId               String?  @map("from_branch_id") @db.Uuid
-  toBranchId                 String?  @map("to_branch_id") @db.Uuid
-  toWorkLocationId           String?  @map("to_work_location_id") @db.Uuid
-  reasonId                   String?  @map("reason_id") @db.Uuid
-  effectiveOn                DateTime @map("effective_on") @db.Date
-  origemWorkLocationId       String?  @map("origem_work_location_id") @db.Uuid
-  destinoWorkLocationId      String?  @map("destino_work_location_id") @db.Uuid
-  origemJobPositionId        String?  @map("origem_job_position_id") @db.Uuid
-  destinoJobPositionId       String?  @map("destino_job_position_id") @db.Uuid
-  tipo                       String   @default("oficio")
-  dataSolicitacao            DateTime @default(now()) @map("data_solicitacao") @db.Date
-  dataEfeito                 DateTime @map("data_efeito") @db.Date
-  processoAdministrativoId   String?  @map("processo_administrativo_id") @db.Uuid
-  status                     String   @default("solicitada")
-  aprovadorUserId            String?  @map("aprovador_user_id") @db.Uuid
-  notes                      String   @default("")
-  createdAt                  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt                  DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                       String   @id @default(uuid()) @db.Uuid
+  tenantId                 String   @map("tenant_id") @db.Uuid
+  employeeId               String   @map("employee_id") @db.Uuid
+  fromBranchId             String?  @map("from_branch_id") @db.Uuid
+  toBranchId               String?  @map("to_branch_id") @db.Uuid
+  toWorkLocationId         String?  @map("to_work_location_id") @db.Uuid
+  reasonId                 String?  @map("reason_id") @db.Uuid
+  effectiveOn              DateTime @map("effective_on") @db.Date
+  origemWorkLocationId     String?  @map("origem_work_location_id") @db.Uuid
+  destinoWorkLocationId    String?  @map("destino_work_location_id") @db.Uuid
+  origemJobPositionId      String?  @map("origem_job_position_id") @db.Uuid
+  destinoJobPositionId     String?  @map("destino_job_position_id") @db.Uuid
+  tipo                     String   @default("oficio")
+  dataSolicitacao          DateTime @default(now()) @map("data_solicitacao") @db.Date
+  dataEfeito               DateTime @map("data_efeito") @db.Date
+  processoAdministrativoId String?  @map("processo_administrativo_id") @db.Uuid
+  status                   String   @default("solicitada")
+  aprovadorUserId          String?  @map("aprovador_user_id") @db.Uuid
+  notes                    String   @default("")
+  createdAt                DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee       Employee      @relation(fields: [employeeId], references: [id])
   fromBranch     Branch?       @relation("TransferFromBranch", fields: [fromBranchId], references: [id])
@@ -1637,22 +1640,22 @@ model VacationRecord {
 }
 
 model LeaveRecord {
-  id              String       @id @default(uuid()) @db.Uuid
-  tenantId        String       @map("tenant_id") @db.Uuid
-  employeeId      String       @map("employee_id") @db.Uuid
-  absenceReasonId String?      @map("absence_reason_id") @db.Uuid
-  startsOn        DateTime     @map("starts_on") @db.Date
-  endsOn          DateTime?    @map("ends_on") @db.Date
-  days            Int?
-  status          RecordStatus @default(ACTIVE)
-  paid            Boolean      @default(true)
-  notes           String       @default("")
-  requestedAt     DateTime     @default(now()) @map("requested_at") @db.Timestamptz(6)
-  approvedAt      DateTime?    @map("approved_at") @db.Timestamptz(6)
-  approvedBy      String?      @map("approved_by")
-  supportingDocumentRef String? @map("supporting_document_ref")
-  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                    String       @id @default(uuid()) @db.Uuid
+  tenantId              String       @map("tenant_id") @db.Uuid
+  employeeId            String       @map("employee_id") @db.Uuid
+  absenceReasonId       String?      @map("absence_reason_id") @db.Uuid
+  startsOn              DateTime     @map("starts_on") @db.Date
+  endsOn                DateTime?    @map("ends_on") @db.Date
+  days                  Int?
+  status                RecordStatus @default(ACTIVE)
+  paid                  Boolean      @default(true)
+  notes                 String       @default("")
+  requestedAt           DateTime     @default(now()) @map("requested_at") @db.Timestamptz(6)
+  approvedAt            DateTime?    @map("approved_at") @db.Timestamptz(6)
+  approvedBy            String?      @map("approved_by")
+  supportingDocumentRef String?      @map("supporting_document_ref")
+  createdAt             DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee      Employee       @relation(fields: [employeeId], references: [id])
   absenceReason AbsenceReason? @relation(fields: [absenceReasonId], references: [id])
@@ -1976,24 +1979,24 @@ model EmployeeComplementData {
 }
 
 model SalaryLevelHistory {
-  id                String   @id @default(uuid()) @db.Uuid
-  tenantId          String   @map("tenant_id") @db.Uuid
-  employeeId        String?  @map("employee_id") @db.Uuid
-  salaryReferenceId String?  @map("salary_reference_id") @db.Uuid
-  salaryRangeLevelId String? @map("salary_range_level_id") @db.Uuid
-  levelCode         String?  @map("level_code")
-  levelDescription  String?  @map("level_description")
-  adjustmentAmount  Decimal  @default(0) @map("adjustment_amount") @db.Decimal(14, 2)
-  effectiveOn       DateTime @map("effective_on") @db.Date
-  vigenciaInicio    DateTime @map("vigencia_inicio") @db.Date
-  vigenciaFim       DateTime? @map("vigencia_fim") @db.Date
-  vencimentoBasico  Decimal  @map("vencimento_basico") @db.Decimal(14, 2)
-  motivo            SalaryHistoryReason @default(reajuste_data_base)
-  leiReferencia     String   @default("") @map("lei_referencia")
-  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  id                 String              @id @default(uuid()) @db.Uuid
+  tenantId           String              @map("tenant_id") @db.Uuid
+  employeeId         String?             @map("employee_id") @db.Uuid
+  salaryReferenceId  String?             @map("salary_reference_id") @db.Uuid
+  salaryRangeLevelId String?             @map("salary_range_level_id") @db.Uuid
+  levelCode          String?             @map("level_code")
+  levelDescription   String?             @map("level_description")
+  adjustmentAmount   Decimal             @default(0) @map("adjustment_amount") @db.Decimal(14, 2)
+  effectiveOn        DateTime            @map("effective_on") @db.Date
+  vigenciaInicio     DateTime            @map("vigencia_inicio") @db.Date
+  vigenciaFim        DateTime?           @map("vigencia_fim") @db.Date
+  vencimentoBasico   Decimal             @map("vencimento_basico") @db.Decimal(14, 2)
+  motivo             SalaryHistoryReason @default(reajuste_data_base)
+  leiReferencia      String              @default("") @map("lei_referencia")
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  employee        Employee?        @relation(fields: [employeeId], references: [id])
-  salaryReference SalaryReference? @relation(fields: [salaryReferenceId], references: [id])
+  employee         Employee?         @relation(fields: [employeeId], references: [id])
+  salaryReference  SalaryReference?  @relation(fields: [salaryReferenceId], references: [id])
   salaryRangeLevel SalaryRangeLevel? @relation(fields: [salaryRangeLevelId], references: [id])
 
   @@index([employeeId, effectiveOn])
@@ -2020,12 +2023,12 @@ model SalaryRangeLevel {
   createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt         DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  salaryRange     SalaryRange      @relation(fields: [salaryRangeId], references: [id])
-  salaryReference SalaryReference? @relation(fields: [salaryReferenceId], references: [id])
-  employees       Employee[]
-  salaryHistory   SalaryLevelHistory[]
-  sourceProgressions MeritProgression[] @relation("MeritProgressionSourceSalaryRangeLevel")
-  targetProgressions MeritProgression[] @relation("MeritProgressionTargetSalaryRangeLevel")
+  salaryRange        SalaryRange          @relation(fields: [salaryRangeId], references: [id])
+  salaryReference    SalaryReference?     @relation(fields: [salaryReferenceId], references: [id])
+  employees          Employee[]
+  salaryHistory      SalaryLevelHistory[]
+  sourceProgressions MeritProgression[]   @relation("MeritProgressionSourceSalaryRangeLevel")
+  targetProgressions MeritProgression[]   @relation("MeritProgressionTargetSalaryRangeLevel")
 
   @@unique([tenantId, salaryRangeId, code])
   @@unique([tenantId, salaryRangeId, classNumber, fol02LevelNumber])
@@ -2140,21 +2143,21 @@ model PayrollEarningDeduction {
 }
 
 model FormulaAttribute {
-  id                 String                    @id @default(uuid()) @db.Uuid
-  tenantId           String                    @map("tenant_id") @db.Uuid
-  earningDeductionId String?                   @map("earning_deduction_id") @db.Uuid
+  id                 String                     @id @default(uuid()) @db.Uuid
+  tenantId           String                     @map("tenant_id") @db.Uuid
+  earningDeductionId String?                    @map("earning_deduction_id") @db.Uuid
   code               String
   description        String
   name               String?
-  dataType           String                    @map("data_type")
+  dataType           String                     @map("data_type")
   valueType          FormulaAttributeValueType? @map("value_type")
-  defaultValue       String?                   @map("default_value")
-  required           Boolean                   @default(false)
-  sourceScope        String                    @map("source_scope")
-  expressionHint     String                    @default("") @map("expression_hint")
-  status             RecordStatus              @default(ACTIVE)
-  createdAt          DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt          DateTime                  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  defaultValue       String?                    @map("default_value")
+  required           Boolean                    @default(false)
+  sourceScope        String                     @map("source_scope")
+  expressionHint     String                     @default("") @map("expression_hint")
+  status             RecordStatus               @default(ACTIVE)
+  createdAt          DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime                   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   earningDeduction PayrollEarningDeduction? @relation(fields: [earningDeductionId], references: [id])
 
@@ -2167,18 +2170,18 @@ model FormulaAttribute {
 }
 
 model JobPositionEarning {
-  id                 String       @id @default(uuid()) @db.Uuid
-  tenantId           String       @map("tenant_id") @db.Uuid
-  jobPositionId      String       @map("job_position_id") @db.Uuid
-  earningDeductionId String       @map("earning_deduction_id") @db.Uuid
-  defaultAmount      Decimal?     @map("default_amount") @db.Decimal(14, 2)
-  defaultQuantity    Decimal?     @map("default_quantity") @db.Decimal(12, 4)
-  startsOn           DateTime?    @map("starts_on") @db.Date
-  endsOn             DateTime?    @map("ends_on") @db.Date
-  applicationCondition String     @default("") @map("application_condition")
-  status             RecordStatus @default(ACTIVE)
-  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                   String       @id @default(uuid()) @db.Uuid
+  tenantId             String       @map("tenant_id") @db.Uuid
+  jobPositionId        String       @map("job_position_id") @db.Uuid
+  earningDeductionId   String       @map("earning_deduction_id") @db.Uuid
+  defaultAmount        Decimal?     @map("default_amount") @db.Decimal(14, 2)
+  defaultQuantity      Decimal?     @map("default_quantity") @db.Decimal(12, 4)
+  startsOn             DateTime?    @map("starts_on") @db.Date
+  endsOn               DateTime?    @map("ends_on") @db.Date
+  applicationCondition String       @default("") @map("application_condition")
+  status               RecordStatus @default(ACTIVE)
+  createdAt            DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   jobPosition      JobPosition             @relation(fields: [jobPositionId], references: [id])
   earningDeduction PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
@@ -3109,34 +3112,34 @@ model PerformanceEvaluation {
 }
 
 model MeritProgression {
-  id                      String          @id @default(uuid()) @db.Uuid
-  tenantId                String          @map("tenant_id") @db.Uuid
-  employeeId              String          @map("employee_id") @db.Uuid
-  performanceEvaluationId String?         @map("performance_evaluation_id") @db.Uuid
-  sourceSalaryReferenceId String?         @map("source_salary_reference_id") @db.Uuid
-  targetSalaryReferenceId String?         @map("target_salary_reference_id") @db.Uuid
-  sourceSalaryRangeLevelId String?        @map("source_salary_range_level_id") @db.Uuid
-  targetSalaryRangeLevelId String?        @map("target_salary_range_level_id") @db.Uuid
-  administrativeProcessId String?         @map("administrative_process_id") @db.Uuid
-  effectiveOn             DateTime        @map("effective_on") @db.Date
-  dataEfeito              DateTime        @map("data_efeito") @db.Date
-  appointmentAct          String          @default("") @map("appointment_act")
-  kind                    ProgressionKind @default(MERIT)
-  progressionType         FunctionalProgressionType @default(merit_horizontal) @map("progression_type")
-  status                  FunctionalProgressionStatus @default(eligible)
-  appliedAt               DateTime?       @map("applied_at") @db.Timestamptz(6)
-  justification           String          @default("")
-  approvedByRef           String?         @map("approved_by_ref")
-  createdAt               DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt               DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                       String                      @id @default(uuid()) @db.Uuid
+  tenantId                 String                      @map("tenant_id") @db.Uuid
+  employeeId               String                      @map("employee_id") @db.Uuid
+  performanceEvaluationId  String?                     @map("performance_evaluation_id") @db.Uuid
+  sourceSalaryReferenceId  String?                     @map("source_salary_reference_id") @db.Uuid
+  targetSalaryReferenceId  String?                     @map("target_salary_reference_id") @db.Uuid
+  sourceSalaryRangeLevelId String?                     @map("source_salary_range_level_id") @db.Uuid
+  targetSalaryRangeLevelId String?                     @map("target_salary_range_level_id") @db.Uuid
+  administrativeProcessId  String?                     @map("administrative_process_id") @db.Uuid
+  effectiveOn              DateTime                    @map("effective_on") @db.Date
+  dataEfeito               DateTime                    @map("data_efeito") @db.Date
+  appointmentAct           String                      @default("") @map("appointment_act")
+  kind                     ProgressionKind             @default(MERIT)
+  progressionType          FunctionalProgressionType   @default(merit_horizontal) @map("progression_type")
+  status                   FunctionalProgressionStatus @default(eligible)
+  appliedAt                DateTime?                   @map("applied_at") @db.Timestamptz(6)
+  justification            String                      @default("")
+  approvedByRef            String?                     @map("approved_by_ref")
+  createdAt                DateTime                    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime                    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee              Employee               @relation(fields: [employeeId], references: [id])
-  evaluation            PerformanceEvaluation? @relation(fields: [performanceEvaluationId], references: [id])
-  sourceSalaryReference SalaryReference?       @relation("MeritProgressionSourceSalaryReference", fields: [sourceSalaryReferenceId], references: [id])
-  targetSalaryReference SalaryReference?       @relation("MeritProgressionTargetSalaryReference", fields: [targetSalaryReferenceId], references: [id])
-  sourceSalaryRangeLevel SalaryRangeLevel?     @relation("MeritProgressionSourceSalaryRangeLevel", fields: [sourceSalaryRangeLevelId], references: [id])
-  targetSalaryRangeLevel SalaryRangeLevel?     @relation("MeritProgressionTargetSalaryRangeLevel", fields: [targetSalaryRangeLevelId], references: [id])
-  salarySimulations     SalarySimulation[]
+  employee               Employee               @relation(fields: [employeeId], references: [id])
+  evaluation             PerformanceEvaluation? @relation(fields: [performanceEvaluationId], references: [id])
+  sourceSalaryReference  SalaryReference?       @relation("MeritProgressionSourceSalaryReference", fields: [sourceSalaryReferenceId], references: [id])
+  targetSalaryReference  SalaryReference?       @relation("MeritProgressionTargetSalaryReference", fields: [targetSalaryReferenceId], references: [id])
+  sourceSalaryRangeLevel SalaryRangeLevel?      @relation("MeritProgressionSourceSalaryRangeLevel", fields: [sourceSalaryRangeLevelId], references: [id])
+  targetSalaryRangeLevel SalaryRangeLevel?      @relation("MeritProgressionTargetSalaryRangeLevel", fields: [targetSalaryRangeLevelId], references: [id])
+  salarySimulations      SalarySimulation[]
 
   @@index([tenantId, employeeId])
   @@index([performanceEvaluationId])
@@ -3151,15 +3154,15 @@ model MeritProgression {
 }
 
 model SalarySimulation {
-  id           String   @id @default(uuid()) @db.Uuid
-  tenantId     String   @map("tenant_id") @db.Uuid
-  employeeId   String   @map("employee_id") @db.Uuid
-  progressionId String? @map("progression_id") @db.Uuid
-  scenario     String
-  resultJson   Json     @default("{}") @map("result_json")
-  createdByRef String?  @map("created_by_ref")
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  employeeId    String   @map("employee_id") @db.Uuid
+  progressionId String?  @map("progression_id") @db.Uuid
+  scenario      String
+  resultJson    Json     @default("{}") @map("result_json")
+  createdByRef  String?  @map("created_by_ref")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee    Employee                     @relation(fields: [employeeId], references: [id])
   progression MeritProgression?            @relation(fields: [progressionId], references: [id])

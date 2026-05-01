@@ -18,6 +18,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/gestao/parametros/irrf', 'system.tax-rate.write'],
   ['#!/gestao/parametros/teto-remuneratorio', 'system.parameter.read'],
   ['#!/gestao/parametros/teto-remuneratorio', 'system.parameter.write'],
+  ['#!/gestao/parametros/ats', 'system.parameter.read'],
+  ['#!/gestao/parametros/ats', 'system.parameter.write'],
   ['#!/previdenciario/**', 'previdenciario.read'],
   ['#!/previdenciario/**', 'previdenciario.write'],
   ['#!/recrutamento/**', 'recrutamento.read'],

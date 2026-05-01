@@ -12,6 +12,7 @@ import { SharedPlatformModule } from '../shared-platform/shared-platform-module'
 import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
 import { RhFerias } from './ferias/ferias';
 import { RhFuncionarios } from './funcionarios/funcionarios';
+import { RhAbonoPermanencia } from './funcionarios/abono-permanencia/abono-permanencia';
 import { RhFuncionariosHistorico } from './funcionarios/historico/historico';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
 import { RhRoutingModule } from './rh-routing-module';
@@ -24,6 +25,7 @@ import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-empl
   declarations: [
     RhHome,
     RhFuncionarios,
+    RhAbonoPermanencia,
     RhFuncionariosHistorico,
     RhFuncionariosVinculos,
     RhCadastralChanges,
