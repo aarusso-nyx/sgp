@@ -231,6 +231,21 @@
       "previous_failure": "logs/maestro/20-calc-02-irrf-progressivo.failure.md",
       "failure_log": "logs/maestro/20-calc-02-irrf-progressivo.failure.md",
       "recovery": "manual tax_rate RLS and smoke fixture uniqueness repair after high retry failure"
+    },
+    "21-calc-03-rpps-progressivo": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/21-calc-03-rpps-progressivo",
+      "commit": "07491d4218f1e70f34f65d69b1619fd4b3fe4286",
+      "started_at": "2026-05-01T17:50:53-03:00",
+      "retry_started_at": "2026-05-01T17:59:57-03:00",
+      "completed_at": "2026-05-01T18:11:35-03:00",
+      "retries": 1,
+      "agent": "019de557-6a54-7de3-b240-1096c10b12bc",
+      "previous_agent": "019de54f-2182-7741-8464-9add2f2c845f",
+      "previous_failure": "logs/maestro/21-calc-03-rpps-progressivo.failure.md",
+      "failure_log": "logs/maestro/21-calc-03-rpps-progressivo.failure.md",
+      "recovery": "manual security-definer RPPS function, effective-table lookup, and smoke permission repair after high retry failure"
     }
   },
   "current_wave": 11,
