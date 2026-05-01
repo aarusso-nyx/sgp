@@ -1,0 +1,202 @@
+<section class="rubricas" aria-labelledby="rubricas-title">
+  <header class="rubricas__header">
+    <div>
+      <p class="rubricas__eyebrow">Folha</p>
+      <h1 id="rubricas-title">Rubricas</h1>
+    </div>
+    <div class="rubricas__actions">
+      <button mat-stroked-button type="button" (click)="newRubrica()">
+        <mat-icon>add</mat-icon>
+        Nova
+      </button>
+      <button mat-flat-button color="primary" type="button" (click)="save()">
+        <mat-icon>save</mat-icon>
+        Salvar
+      </button>
+    </div>
+  </header>
+
+  <p class="rubricas__error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="rubricas__message" *ngIf="message">{{ message }}</p>
+
+  <div class="rubricas__layout">
+    <nav class="rubricas__list" aria-label="Lista de rubricas">
+      <button
+        mat-button
+        type="button"
+        *ngFor="let rubrica of rubricas"
+        (click)="select(rubrica)"
+        [class.rubricas__row--active]="rubrica.id === selected?.id"
+      >
+        <span>{{ rubrica.code }}</span>
+        <strong>{{ rubrica.description }}</strong>
+        <small>{{ rubrica.type }} · {{ rubrica.formulaReady ? 'compilada' : 'pendente' }}</small>
+      </button>
+    </nav>
+
+    <form class="rubricas__form" [formGroup]="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Codigo</mat-label>
+        <input matInput formControlName="code" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Descricao</mat-label>
+        <input matInput formControlName="description" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo</mat-label>
+        <select matNativeControl formControlName="type">
+          <option value="provento">Provento</option>
+          <option value="desconto">Desconto</option>
+          <option value="informativa">Informativa</option>
+          <option value="base">Base</option>
+        </select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Inicio vigencia</mat-label>
+        <input matInput type="date" formControlName="startsOn" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fim vigencia</mat-label>
+        <input matInput type="date" formControlName="endsOn" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Alias formula</mat-label>
+        <input matInput formControlName="formulaAlias" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="rubricas__wide">
+        <mat-label>Formula</mat-label>
+        <textarea matInput rows="5" formControlName="formulaExpression"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Codigo eSocial</mat-label>
+        <input matInput formControlName="esocialCode" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Rubrica oficial</mat-label>
+        <input matInput formControlName="officialRubricCode" />
+      </mat-form-field>
+
+      <div class="rubricas__checks rubricas__wide">
+        <mat-checkbox formControlName="taxable">Tributavel</mat-checkbox>
+        <mat-checkbox formControlName="active">Ativa</mat-checkbox>
+        <mat-checkbox formControlName="irrf">IRRF</mat-checkbox>
+        <mat-checkbox formControlName="inss">INSS</mat-checkbox>
+        <mat-checkbox formControlName="fgts">FGTS</mat-checkbox>
+        <mat-checkbox formControlName="rpps">RPPS</mat-checkbox>
+        <mat-checkbox formControlName="employerContribution">Patronal</mat-checkbox>
+      </div>
+    </form>
+  </div>
+
+  <section class="rubricas__panel" aria-label="Atributos da formula">
+    <h2>Atributos</h2>
+    <form class="rubricas__attributes" [formGroup]="attributeForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo</mat-label>
+        <select matNativeControl formControlName="type">
+          <option value="decimal">Decimal</option>
+          <option value="int">Inteiro</option>
+          <option value="bool">Booleano</option>
+          <option value="date">Data</option>
+          <option value="text">Texto</option>
+        </select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Valor padrao</mat-label>
+        <input matInput formControlName="defaultValue" />
+      </mat-form-field>
+      <mat-checkbox formControlName="required">Obrigatorio</mat-checkbox>
+      <button mat-stroked-button type="button" (click)="addAttribute()">
+        <mat-icon>add</mat-icon>
+        Atributo
+      </button>
+    </form>
+    <div class="rubricas__chips">
+      <button
+        mat-stroked-button
+        type="button"
+        *ngFor="let attribute of attributes"
+        (click)="removeAttribute(attribute.name)"
+      >
+        {{ attribute.name }} · {{ attribute.type }}
+      </button>
+    </div>
+  </section>
+
+  <section class="rubricas__grid">
+    <form class="rubricas__panel" [formGroup]="previewForm" (ngSubmit)="preview()">
+      <h2>Preview</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Servidor</mat-label>
+        <input matInput formControlName="employeeId" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Ano</mat-label>
+        <input matInput type="number" formControlName="competenceYear" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Mes</mat-label>
+        <input matInput type="number" formControlName="competenceMonth" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">
+        <mat-icon>calculate</mat-icon>
+        Preview
+      </button>
+      <strong class="rubricas__amount" *ngIf="previewAmount">{{ previewAmount }}</strong>
+    </form>
+
+    <form class="rubricas__panel" [formGroup]="linkForm" (ngSubmit)="linkJobPosition()">
+      <h2>Cargo x Rubrica</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Cargo</mat-label>
+        <select matNativeControl formControlName="jobPositionId">
+          <option value=""></option>
+          <option *ngFor="let job of jobPositions" [value]="job.id">
+            {{ job.code }} - {{ job.name }}
+          </option>
+        </select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Inicio vigencia</mat-label>
+        <input matInput type="date" formControlName="startsOn" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fim vigencia</mat-label>
+        <input matInput type="date" formControlName="endsOn" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Condicao</mat-label>
+        <input matInput formControlName="applicationCondition" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">
+        <mat-icon>link</mat-icon>
+        Vincular
+      </button>
+    </form>
+  </section>
+
+  <section class="rubricas__panel" aria-label="Vinculos existentes">
+    <h2>Vinculos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cargo</th>
+          <th>Rubrica</th>
+          <th>Vigencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let link of jobPositionLinks">
+          <td>{{ link.jobPositionCode }} {{ link.jobPositionName }}</td>
+          <td>{{ link.rubricaCode }} {{ link.rubricaDescription }}</td>
+          <td>{{ link.startsOn }} - {{ link.endsOn || 'atual' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

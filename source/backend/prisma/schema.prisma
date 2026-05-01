@@ -123,6 +123,17 @@ enum PayrollEntrySource {
   @@schema("public")
 }
 
+enum FormulaAttributeValueType {
+  decimal
+  int
+  bool
+  date
+  text
+
+  @@map("formula_attribute_value_type")
+  @@schema("payroll")
+}
+
 enum PaymentRemittanceStatus {
   DRAFT
   GENERATED
@@ -2092,6 +2103,11 @@ model PayrollEarningDeduction {
   kind                PayrollEntryKind
   taxable             Boolean          @default(false)
   active              Boolean          @default(true)
+  incidences          Json             @default("{}")
+  startsOn            DateTime         @default(dbgenerated("'1900-01-01'::date")) @map("starts_on") @db.Date
+  endsOn              DateTime?        @map("ends_on") @db.Date
+  esocialCode         String?          @map("esocial_code")
+  officialRubricCode  String?          @map("official_rubric_code")
   formulaAlias        String?          @map("formula_alias")
   formulaFunctionName String?          @map("formula_function_name")
   formulaExpression   String?          @map("formula_expression")
@@ -2102,6 +2118,7 @@ model PayrollEarningDeduction {
   createdAt           DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt           DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
+  formulaAttributes  FormulaAttribute[]
   employeeItems      EmployeePayrollItem[]
   jobPositionLinks   JobPositionEarning[]
   jobFunctionLinks   JobFunctionEarning[]
@@ -2121,18 +2138,27 @@ model PayrollEarningDeduction {
 }
 
 model FormulaAttribute {
-  id             String       @id @default(uuid()) @db.Uuid
-  tenantId       String       @map("tenant_id") @db.Uuid
-  code           String
-  description    String
-  dataType       String       @map("data_type")
-  sourceScope    String       @map("source_scope")
-  expressionHint String       @default("") @map("expression_hint")
-  status         RecordStatus @default(ACTIVE)
-  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                 String                    @id @default(uuid()) @db.Uuid
+  tenantId           String                    @map("tenant_id") @db.Uuid
+  earningDeductionId String?                   @map("earning_deduction_id") @db.Uuid
+  code               String
+  description        String
+  name               String?
+  dataType           String                    @map("data_type")
+  valueType          FormulaAttributeValueType? @map("value_type")
+  defaultValue       String?                   @map("default_value")
+  required           Boolean                   @default(false)
+  sourceScope        String                    @map("source_scope")
+  expressionHint     String                    @default("") @map("expression_hint")
+  status             RecordStatus              @default(ACTIVE)
+  createdAt          DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime                  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  earningDeduction PayrollEarningDeduction? @relation(fields: [earningDeductionId], references: [id])
 
   @@unique([tenantId, code])
+  @@unique([tenantId, earningDeductionId, name])
+  @@index([earningDeductionId])
   @@index([status])
   @@map("formula_attribute")
   @@schema("payroll")
@@ -2147,6 +2173,7 @@ model JobPositionEarning {
   defaultQuantity    Decimal?     @map("default_quantity") @db.Decimal(12, 4)
   startsOn           DateTime?    @map("starts_on") @db.Date
   endsOn             DateTime?    @map("ends_on") @db.Date
+  applicationCondition String     @default("") @map("application_condition")
   status             RecordStatus @default(ACTIVE)
   createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)

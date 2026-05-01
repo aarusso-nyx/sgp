@@ -36,6 +36,16 @@ Any high-impact difference between the folia engine behavior and these legacy ou
 - Runtime notes: `source/database/formula-engine.md`
 - Money/rounding boundary: `docs/eng/72-money-decimal-policy.md`
 
+## FOL-01 contract with CALC-01
+
+FOL-01 is the official administrative interface for rubricas consumed by CALC-01. The contract is:
+
+- Rubricas live in `payroll.payroll_earning_deduction`, scoped by `tenant_id`, with unique `(tenant_id, code)`, type in `PayrollEntryKind`, incidence flags in `incidences jsonb`, validity dates, eSocial/offical rubric codes, and the `formula_*` compilation columns.
+- Formula attributes live in `payroll.formula_attribute` and are linked to one rubrica through `earning_deduction_id`; supported value types are `decimal`, `int`, `bool`, `date`, and `text`.
+- Cargo-based eligibility lives in `payroll.job_position_earning`, with validity dates and `application_condition`; CALC-01 can use this bridge to select rubricas for the servidor's current cargo without inventing a parallel mapping.
+- Formula validation uses `payroll_calc.compile_formula(...)`; persisted formula changes still recompile through the `trg_compile_formula_expression` trigger and expose readiness through `formula_ready` / `formula_error`.
+- Preview and later calculation paths call `payroll_calc.evaluate_earning_deduction(...)`. The admin preview removes transient cache rows after the call, while full calculation may keep `payroll_calc.formula_cache` as the engine cache.
+
 ## Money boundary
 
 Folia-first formula evaluation must preserve decimal precision through intermediate calculation and apply the SGP money policy only at the rubrica boundary. SQL `payroll_calc.evaluate_earning_deduction(...)` and TypeScript payroll paths must reconcile to `numeric(14,2)` / `Decimal(14,2)` using half-away-from-zero rounding.

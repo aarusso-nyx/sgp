@@ -32,6 +32,14 @@ interface FormulaUpdateRow extends QueryResultRow {
   id: string;
 }
 
+interface FormulaCompileRow extends QueryResultRow {
+  result: {
+    ready: boolean;
+    error: string | null;
+    dependencies: string[];
+  };
+}
+
 interface PayrollRunSummaryRow extends QueryResultRow {
   id: string;
   status: string;
@@ -192,6 +200,23 @@ export class PayrollEngineService {
       await this.markRunFailed(run, error);
       throw error;
     }
+  }
+
+  async compileAndValidate(expression: string, dependencies: string[] = []) {
+    this.ensureDatabase();
+    const rows = await this.databaseService.query<FormulaCompileRow>(
+      `
+      SELECT payroll_calc.compile_formula($1, $2::text[]) AS result
+      `,
+      [expression, dependencies],
+    );
+    return (
+      rows[0]?.result ?? {
+        ready: false,
+        error: 'Formula validation did not return a result',
+        dependencies: [],
+      }
+    );
   }
 
   private async calculateWithinTenant(

@@ -457,6 +457,36 @@ BEGIN
 END
 $$;
 
+DO $$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY[
+    'payroll_earning_deduction',
+    'formula_attribute',
+    'job_position_earning'
+  ]
+  LOOP
+    EXECUTE format('ALTER TABLE payroll.%I ENABLE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('ALTER TABLE payroll.%I FORCE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', table_name || '_write', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', 'fol01_' || table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', 'fol01_' || table_name || '_write', table_name);
+    EXECUTE format(
+      'CREATE POLICY %I ON payroll.%I FOR SELECT USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''folha.rubrica.read'', ''folha.rubrica.write'', ''folha.rubrica.preview''])))',
+      'fol01_' || table_name || '_select',
+      table_name
+    );
+    EXECUTE format(
+      'CREATE POLICY %I ON payroll.%I FOR ALL USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''folha.rubrica.write'']))) WITH CHECK (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''folha.rubrica.write''])))',
+      'fol01_' || table_name || '_write',
+      table_name
+    );
+  END LOOP;
+END
+$$;
+
 DROP POLICY IF EXISTS vacation_record_select ON hr.vacation_record;
 DROP POLICY IF EXISTS vacation_record_write ON hr.vacation_record;
 DROP POLICY IF EXISTS p_vacation_record_select ON hr.vacation_record;

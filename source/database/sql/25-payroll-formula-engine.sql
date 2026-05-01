@@ -236,6 +236,8 @@ EXECUTE FUNCTION payroll_calc.on_formula_cache_upsert();
 CREATE OR REPLACE FUNCTION payroll_calc.compile_formula_expression()
 RETURNS trigger
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = payroll_calc, payroll, hr, public, pg_catalog
 AS $$
 DECLARE
   v_schema text := 'payroll_calc';
@@ -249,7 +251,7 @@ DECLARE
   v_dep_function_name text;
   v_ddl text;
   v_smoke numeric;
-  v_builtin_fns text[] := ARRAY['abs', 'ceil', 'floor', 'sqrt', 'round'];
+  v_builtin_fns text[] := ARRAY['abs', 'ceil', 'floor', 'sqrt', 'round', 'make_date'];
   v_core_fns text[] := ARRAY['base_salary', 'days_in_month', 'worked_days', 'absence_days', 'proportional_ratio'];
 BEGIN
   -- Keep metadata deterministic for rows without formula expressions.
@@ -431,9 +433,78 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION payroll_calc.compile_formula(
+  p_expression text,
+  p_dependencies text[] DEFAULT ARRAY[]::text[]
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+STABLE
+AS $$
+DECLARE
+  v_tokens text[] := ARRAY[]::text[];
+  v_aliases text[] := ARRAY[]::text[];
+  v_invalid_tokens text[] := ARRAY[]::text[];
+  v_builtin_fns text[] := ARRAY['abs', 'ceil', 'floor', 'sqrt', 'round', 'make_date'];
+  v_core_fns text[] := ARRAY['base_salary', 'days_in_month', 'worked_days', 'absence_days', 'proportional_ratio'];
+BEGIN
+  IF p_expression IS NULL OR btrim(p_expression) = '' THEN
+    RETURN jsonb_build_object(
+      'ready', false,
+      'error', 'Formula expression is required',
+      'dependencies', ARRAY[]::text[]
+    );
+  END IF;
+
+  IF p_expression LIKE '%;%' OR p_expression ILIKE '%--%' THEN
+    RETURN jsonb_build_object(
+      'ready', false,
+      'error', 'Unsafe token detected in formula expression',
+      'dependencies', ARRAY[]::text[]
+    );
+  END IF;
+
+  SELECT array_agg(ped.formula_alias)
+  INTO v_aliases
+  FROM payroll.payroll_earning_deduction ped
+  WHERE ped.formula_alias IS NOT NULL;
+  v_aliases := coalesce(v_aliases, ARRAY[]::text[]);
+
+  SELECT array_agg(DISTINCT m[1])
+  INTO v_tokens
+  FROM regexp_matches(p_expression, '([A-Za-z_][A-Za-z0-9_]*)\s*\(', 'g') AS m;
+  v_tokens := coalesce(v_tokens, ARRAY[]::text[]);
+
+  SELECT array_agg(token)
+  INTO v_invalid_tokens
+  FROM unnest(v_tokens) AS token
+  WHERE NOT (token = ANY(v_aliases || v_core_fns || v_builtin_fns));
+  v_invalid_tokens := coalesce(v_invalid_tokens, ARRAY[]::text[]);
+
+  IF cardinality(v_invalid_tokens) > 0 THEN
+    RETURN jsonb_build_object(
+      'ready', false,
+      'error', format('Invalid function token(s): %s', array_to_string(v_invalid_tokens, ', ')),
+      'dependencies', ARRAY[]::text[]
+    );
+  END IF;
+
+  RETURN jsonb_build_object(
+    'ready', true,
+    'error', NULL,
+    'dependencies', (
+      SELECT coalesce(array_agg(DISTINCT token), ARRAY[]::text[])
+      FROM unnest(v_aliases) AS token
+      WHERE token = ANY(v_tokens)
+         OR token = ANY(coalesce(p_dependencies, ARRAY[]::text[]))
+    )
+  );
+END;
+$$;
+
 DROP TRIGGER IF EXISTS trg_compile_formula_expression ON payroll.payroll_earning_deduction;
 CREATE TRIGGER trg_compile_formula_expression
-BEFORE INSERT OR UPDATE OF formula_expression
+BEFORE INSERT OR UPDATE OF code, formula_alias, formula_expression
 ON payroll.payroll_earning_deduction
 FOR EACH ROW
 WHEN (NEW.formula_expression IS NOT NULL AND btrim(NEW.formula_expression) <> '')
@@ -468,6 +539,8 @@ EXECUTE FUNCTION payroll_calc.on_earning_before_delete();
 CREATE OR REPLACE FUNCTION payroll_calc.on_earning_after_delete()
 RETURNS trigger
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = payroll_calc, payroll, public, pg_catalog
 AS $$
 BEGIN
   IF OLD.formula_function_name IS NOT NULL THEN
@@ -490,6 +563,8 @@ EXECUTE FUNCTION payroll_calc.on_earning_after_delete();
 CREATE OR REPLACE FUNCTION payroll_calc.on_earning_before_truncate()
 RETURNS trigger
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = payroll_calc, payroll, public, pg_catalog
 AS $$
 DECLARE
   rec record;

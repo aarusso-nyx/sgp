@@ -2302,6 +2302,309 @@ $$;
   );
   console.log('[db-smoke] validated FOL-06 transfer trigger, audit, and RLS');
 
+  await runSqlSnippet(
+    '99-fol01-rubricas.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  v_salary_reference_id uuid := gen_random_uuid();
+  v_employee_id uuid;
+  v_job_position_id uuid;
+  rubrica_id uuid := gen_random_uuid();
+  bad_rubrica_id uuid := gen_random_uuid();
+  attribute_id uuid := gen_random_uuid();
+  attribute_code text := 'percentual_' || left(suffix, 8);
+  attribute_name text := 'percentual_' || left(suffix, 8);
+  link_id uuid := gen_random_uuid();
+  preview_amount numeric(14,2);
+  visible_count integer;
+  affected_count integer;
+  null_ready_count integer;
+  audit_count integer;
+  invalid_ready boolean;
+  invalid_error text;
+  compile_result jsonb;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, payroll, payroll_calc, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.payroll_earning_deduction TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.formula_attribute TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.job_position_earning TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON payroll_calc.formula_cache TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.salary_reference TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.employee TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON hr.job_position TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  SELECT id INTO v_employee_id
+  FROM hr.employee
+  WHERE tenant_id = tenant_a
+    AND functional_status_id IS NOT NULL
+    AND employment_link_id IS NOT NULL
+    AND contract_type_id IS NOT NULL
+  ORDER BY created_at, id
+  LIMIT 1;
+  IF v_employee_id IS NULL THEN
+    RAISE EXCEPTION 'FOL-01 smoke requires one tenant A employee with payroll-ready links';
+  END IF;
+
+  SELECT id INTO v_job_position_id
+  FROM hr.job_position
+  WHERE tenant_id = tenant_a
+  ORDER BY created_at, id
+  LIMIT 1;
+  IF v_job_position_id IS NULL THEN
+    INSERT INTO hr.job_position (
+      tenant_id,
+      code,
+      name,
+      category,
+      legal_regime,
+      creation_law,
+      vacancies_count
+    )
+    VALUES (
+      tenant_a,
+      'FOL01-JOB-' || left(suffix, 8),
+      'FOL-01 smoke job position',
+      'efetivo',
+      'estatutario',
+      'Lei smoke 2026',
+      1
+    )
+    RETURNING id INTO v_job_position_id;
+  END IF;
+
+  INSERT INTO hr.salary_reference (
+    id,
+    tenant_id,
+    code,
+    description,
+    amount,
+    vigencia_inicio
+  )
+  VALUES (
+    v_salary_reference_id,
+    tenant_a,
+    'FOL01-SAL-' || left(suffix, 8),
+    'FOL-01 smoke salary reference',
+    1234.56,
+    DATE '2026-01-01'
+  );
+
+  UPDATE hr.employee
+  SET salary_reference_id = v_salary_reference_id,
+      job_position_id = v_job_position_id,
+      updated_at = now()
+  WHERE id = v_employee_id;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'folha.rubrica.read' || chr(10) ||
+    'folha.rubrica.write' || chr(10) ||
+    'folha.rubrica.preview' || chr(10) ||
+    'folha.read' || chr(10) ||
+    'folha.write' || chr(10) ||
+    'avaliacao.salary_history.read' || chr(10) ||
+    'auditoria.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+  PERFORM set_config('app.request_id', 'fol01-smoke-' || suffix, true);
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO payroll.payroll_earning_deduction (
+    id,
+    tenant_id,
+    code,
+    description,
+    kind,
+    taxable,
+    active,
+    incidences,
+    starts_on,
+    formula_alias,
+    formula_expression,
+    esocial_code,
+    official_rubric_code
+  )
+  VALUES (
+    rubrica_id,
+    tenant_a,
+    'FOL01-VENC-' || left(suffix, 8),
+    'FOL-01 vencimento smoke',
+    'EARNING'::"PayrollEntryKind",
+    true,
+    true,
+    '{"irrf":true,"inss":true,"fgts":false,"rpps":false,"employerContribution":true}'::jsonb,
+    DATE '2026-01-01',
+    'fol01_venc_' || left(suffix, 8),
+    'base_salary(p_employee_id, make_date(p_year, p_month, 1))',
+    '1000',
+    '001'
+  );
+
+  INSERT INTO payroll.formula_attribute (
+    id,
+    tenant_id,
+    earning_deduction_id,
+    code,
+    description,
+    name,
+    data_type,
+    value_type,
+    default_value,
+    required,
+    source_scope,
+    expression_hint,
+    status
+  )
+  VALUES (
+    attribute_id,
+    tenant_a,
+    rubrica_id,
+    attribute_code,
+    'Percentual',
+    attribute_name,
+    'decimal',
+    'decimal'::payroll.formula_attribute_value_type,
+    '100.00',
+    true,
+    'rubrica',
+    '',
+    'ACTIVE'::"RecordStatus"
+  );
+
+  INSERT INTO payroll.job_position_earning (
+    id,
+    tenant_id,
+    job_position_id,
+    earning_deduction_id,
+    starts_on,
+    ends_on,
+    application_condition,
+    status
+  )
+  VALUES (
+    link_id,
+    tenant_a,
+    v_job_position_id,
+    rubrica_id,
+    DATE '2026-01-01',
+    NULL,
+    'active employee',
+    'ACTIVE'::"RecordStatus"
+  );
+
+  SELECT payroll_calc.evaluate_earning_deduction(rubrica_id, v_employee_id, 5, 2026)
+  INTO preview_amount;
+
+  INSERT INTO payroll.payroll_earning_deduction (
+    id,
+    tenant_id,
+    code,
+    description,
+    kind,
+    active,
+    formula_alias,
+    formula_expression
+  )
+  VALUES (
+    bad_rubrica_id,
+    tenant_a,
+    'FOL01-BAD-' || left(suffix, 8),
+    'FOL-01 invalid formula smoke',
+    'DEDUCTION'::"PayrollEntryKind",
+    true,
+    'fol01_bad_' || left(suffix, 8),
+    'not_allowed()'
+  );
+
+  SELECT formula_ready, formula_error INTO invalid_ready, invalid_error
+  FROM payroll.payroll_earning_deduction
+  WHERE id = bad_rubrica_id;
+
+  SELECT payroll_calc.compile_formula('not_allowed()', ARRAY[]::text[])
+  INTO compile_result;
+
+  PERFORM public.sgp_append_audit_event(
+    'CREATE',
+    'folha.rubrica',
+    rubrica_id::text,
+    NULL::uuid,
+    NULLIF(current_setting('app.current_user_sub', true), ''),
+    NULLIF(current_setting('app.current_login', true), ''),
+    'payroll.payroll_earning_deduction',
+    NULLIF(current_setting('app.request_id', true), ''),
+    jsonb_build_object('event', 'folha.rubrica.created', 'code', 'FOL01-VENC-' || left(suffix, 8)),
+    NULL::text,
+    NULL::text,
+    NULL::text
+  );
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND resource_type = 'folha.rubrica'
+    AND resource_id = rubrica_id::text
+    AND metadata->>'event' = 'folha.rubrica.created';
+
+  SELECT count(*) INTO null_ready_count
+  FROM payroll.payroll_earning_deduction
+  WHERE formula_expression IS NOT NULL
+    AND formula_ready IS NULL;
+  RESET ROLE;
+
+  IF preview_amount IS NULL OR preview_amount <> 1234.56 THEN
+    RAISE EXCEPTION 'Expected rubrica preview 1234.56, found %', preview_amount;
+  END IF;
+  IF invalid_ready IS DISTINCT FROM false OR invalid_error IS NULL THEN
+    RAISE EXCEPTION 'Expected invalid formula to set formula_ready=false and formula_error, ready %, error %', invalid_ready, invalid_error;
+  END IF;
+  IF compile_result->>'ready' <> 'false' OR compile_result->>'error' IS NULL THEN
+    RAISE EXCEPTION 'Expected compile_formula invalid expression result, found %', compile_result;
+  END IF;
+  IF audit_count <> 1 THEN
+    RAISE EXCEPTION 'Expected folha.rubrica.created audit_event, found %', audit_count;
+  END IF;
+  IF null_ready_count <> 0 THEN
+    RAISE EXCEPTION 'Expected zero formula rows with formula_ready IS NULL, found %', null_ready_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'folha.rubrica.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM payroll.payroll_earning_deduction
+  WHERE id = rubrica_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 rubricas from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'folha.rubrica.write', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  UPDATE payroll.formula_attribute
+  SET tenant_id = tenant_b
+  WHERE id = attribute_id;
+  GET DIAGNOSTICS affected_count = ROW_COUNT;
+  RESET ROLE;
+  IF affected_count <> 0 THEN
+    RAISE EXCEPTION 'Expected cross-tenant formula_attribute rewrite to affect 0 rows, affected %', affected_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated FOL-01 rubricas formulas, preview, audit, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 
