@@ -1,4 +1,5 @@
 # Máquinas de Estado — SGP Moderno
+
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
 **Escopo:** folha, previdenciário, saúde, recrutamento, consignado, estágio | **Depende de:** BRIEF.md, 12–15, 24–27.
 
@@ -29,16 +30,16 @@
 
 `hr.employee_status_history` é a linha do tempo imutável da situação funcional do servidor. A admissão cria `hr.employee`, vincula `hr.employment_contract` ativo ao vínculo funcional e registra o primeiro status; o desligamento altera o status para desligado, fecha `employment_contract.ends_on` e registra novo ponto na linha do tempo. Atualizações e exclusões diretas em `employee_status_history` são bloqueadas.
 
-| Estado | Descrição |
-|---|---|
-| `cadastro_base` | Dados civis e matrícula recebidos para admissão |
-| `em_exercicio` | Servidor admitido, com posse/exercício e contrato ativo |
-| `desligado` | Servidor desligado, contrato encerrado e folha rescisória opcional |
+| Estado          | Descrição                                                          |
+| --------------- | ------------------------------------------------------------------ |
+| `cadastro_base` | Dados civis e matrícula recebidos para admissão                    |
+| `em_exercicio`  | Servidor admitido, com posse/exercício e contrato ativo            |
+| `desligado`     | Servidor desligado, contrato encerrado e folha rescisória opcional |
 
-| Transição | De | Evento | Guarda | Ação | Para |
-|---|---|---|---|---|---|
-| HR01-T1 | *(início)* | `ADMITIR` | matrícula única por tenant; vínculo/cargo/lotação válidos quando informados | cria `employee`, `employment_contract`, `employee_status_history`; emite `audit_event` | `em_exercicio` |
-| HR01-T2 | `em_exercicio` | `DESLIGAR` | motivo e data obrigatórios | muda `functional_status`, preenche `terminated_on`, fecha contrato ativo, emite `audit_event` | `desligado` |
+| Transição | De             | Evento     | Guarda                                                                      | Ação                                                                                          | Para           |
+| --------- | -------------- | ---------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | -------------- |
+| HR01-T1   | _(início)_     | `ADMITIR`  | matrícula única por tenant; vínculo/cargo/lotação válidos quando informados | cria `employee`, `employment_contract`, `employee_status_history`; emite `audit_event`        | `em_exercicio` |
+| HR01-T2   | `em_exercicio` | `DESLIGAR` | motivo e data obrigatórios                                                  | muda `functional_status`, preenche `terminated_on`, fecha contrato ativo, emite `audit_event` | `desligado`    |
 
 Permissões: leitura exige `rh.employee.read`; admissão exige `rh.employee.admit`; desligamento exige `rh.employee.terminate`.
 
@@ -46,19 +47,19 @@ Permissões: leitura exige `rh.employee.read`; admissão exige `rh.employee.admi
 
 `hr.employment_link` registra a classificação física do vínculo por regime jurídico e `hr.employment_contract` registra a vigência contratual do servidor. A alteração de regime fecha o contrato ativo, abre novo vínculo/contrato, insere uma linha em `hr.employee_status_history` e grava evento imutável em `public.audit_event` via `sgp_append_audit_event`.
 
-| Regime | Guarda obrigatória | Base normativa |
-|---|---|---|
-| `statutory` | `regime_law_reference` preenchido | Lei 8.112/90 ou estatuto local equivalente |
-| `celetista` | contrato CLT com vigência inicial | CLT e Lei 9.962/00 |
-| `commissioned` | `commission_position_id` preenchido | CF art. 37, V |
-| `temporary` | `end_date` preenchido | Lei 8.745/93 |
+| Regime         | Guarda obrigatória                  | Base normativa                             |
+| -------------- | ----------------------------------- | ------------------------------------------ |
+| `statutory`    | `regime_law_reference` preenchido   | Lei 8.112/90 ou estatuto local equivalente |
+| `celetista`    | contrato CLT com vigência inicial   | CLT e Lei 9.962/00                         |
+| `commissioned` | `commission_position_id` preenchido | CF art. 37, V                              |
+| `temporary`    | `end_date` preenchido               | Lei 8.745/93                               |
 
-| Transição | De | Evento | Guarda | Ação | Para |
-|---|---|---|---|---|---|
-| HR02-T1 | qualquer regime ativo | `ALTERAR_REGIME_ESTATUTARIO` | fundamento legal informado | fecha contrato anterior; cria vínculo `statutory`; cria contrato; registra histórico e auditoria | `statutory` |
-| HR02-T2 | qualquer regime ativo | `ALTERAR_REGIME_CELETISTA` | data de vigência válida | fecha contrato anterior; cria vínculo `celetista`; cria contrato; registra histórico e auditoria | `celetista` |
-| HR02-T3 | qualquer regime ativo | `NOMEAR_COMISSIONADO` | cargo em comissão informado | fecha contrato anterior; cria vínculo `commissioned`; cria contrato; registra histórico e auditoria | `commissioned` |
-| HR02-T4 | qualquer regime ativo | `CONTRATAR_TEMPORARIO` | data final obrigatória | fecha contrato anterior; cria vínculo `temporary`; cria contrato com `ends_on`; registra histórico e auditoria | `temporary` |
+| Transição | De                    | Evento                       | Guarda                      | Ação                                                                                                           | Para           |
+| --------- | --------------------- | ---------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------- |
+| HR02-T1   | qualquer regime ativo | `ALTERAR_REGIME_ESTATUTARIO` | fundamento legal informado  | fecha contrato anterior; cria vínculo `statutory`; cria contrato; registra histórico e auditoria               | `statutory`    |
+| HR02-T2   | qualquer regime ativo | `ALTERAR_REGIME_CELETISTA`   | data de vigência válida     | fecha contrato anterior; cria vínculo `celetista`; cria contrato; registra histórico e auditoria               | `celetista`    |
+| HR02-T3   | qualquer regime ativo | `NOMEAR_COMISSIONADO`        | cargo em comissão informado | fecha contrato anterior; cria vínculo `commissioned`; cria contrato; registra histórico e auditoria            | `commissioned` |
+| HR02-T4   | qualquer regime ativo | `CONTRATAR_TEMPORARIO`       | data final obrigatória      | fecha contrato anterior; cria vínculo `temporary`; cria contrato com `ends_on`; registra histórico e auditoria | `temporary`    |
 
 Permissões: alteração de regime exige `rh.employment_link.write`.
 
@@ -66,24 +67,44 @@ Permissões: alteração de regime exige `rh.employment_link.write`.
 
 O estágio probatório aplica-se somente a vínculos estatutários. O marco inicial é a data de exercício do contrato funcional ativo (`hr.employment_contract.exercise_on`) e a conclusão ordinária ocorre após 36 meses, conforme Lei 8.112/90 art. 20. As avaliações parciais são registradas em `hr.probation_evaluation` nos ciclos de 12, 24 e 36 meses, com trilha de auditoria e isolamento por tenant.
 
-| Estado | Descrição |
-|---|---|
-| `em_estagio` | Servidor estatutário em exercício há menos de 36 meses |
-| `avaliacao_12m` | Primeira avaliação parcial registrada |
-| `avaliacao_24m` | Segunda avaliação parcial registrada |
-| `avaliacao_36m` | Avaliação final registrada |
-| `estavel` | Servidor aprovado ao fim do estágio |
-| `nao_aprovado` | Avaliação final rejeitada, exigindo providência administrativa |
+| Estado          | Descrição                                                      |
+| --------------- | -------------------------------------------------------------- |
+| `em_estagio`    | Servidor estatutário em exercício há menos de 36 meses         |
+| `avaliacao_12m` | Primeira avaliação parcial registrada                          |
+| `avaliacao_24m` | Segunda avaliação parcial registrada                           |
+| `avaliacao_36m` | Avaliação final registrada                                     |
+| `estavel`       | Servidor aprovado ao fim do estágio                            |
+| `nao_aprovado`  | Avaliação final rejeitada, exigindo providência administrativa |
 
-| Transição | De | Evento | Guarda | Ação | Para |
-|---|---|---|---|---|---|
-| HR08-T1 | `em_estagio` | `REGISTRAR_AVALIACAO_12M` | vínculo estatutário; período de 12 meses | insere `probation_evaluation`; emite auditoria | `avaliacao_12m` |
-| HR08-T2 | `avaliacao_12m` | `REGISTRAR_AVALIACAO_24M` | vínculo estatutário; período de 24 meses | insere `probation_evaluation`; emite auditoria | `avaliacao_24m` |
-| HR08-T3 | `avaliacao_24m` | `REGISTRAR_AVALIACAO_36M` | vínculo estatutário; período de 36 meses | insere `probation_evaluation`; emite auditoria | `avaliacao_36m` |
-| HR08-T4 | `avaliacao_36m` | `APROVAR_ESTAGIO` | decisão `approved` | mantém histórico funcional imutável e libera estabilidade administrativa | `estavel` |
-| HR08-T5 | `avaliacao_36m` | `REPROVAR_ESTAGIO` | decisão `rejected` | registra decisão e sinaliza providência de desligamento/processo | `nao_aprovado` |
+| Transição | De              | Evento                    | Guarda                                   | Ação                                                                     | Para            |
+| --------- | --------------- | ------------------------- | ---------------------------------------- | ------------------------------------------------------------------------ | --------------- |
+| HR08-T1   | `em_estagio`    | `REGISTRAR_AVALIACAO_12M` | vínculo estatutário; período de 12 meses | insere `probation_evaluation`; emite auditoria                           | `avaliacao_12m` |
+| HR08-T2   | `avaliacao_12m` | `REGISTRAR_AVALIACAO_24M` | vínculo estatutário; período de 24 meses | insere `probation_evaluation`; emite auditoria                           | `avaliacao_24m` |
+| HR08-T3   | `avaliacao_24m` | `REGISTRAR_AVALIACAO_36M` | vínculo estatutário; período de 36 meses | insere `probation_evaluation`; emite auditoria                           | `avaliacao_36m` |
+| HR08-T4   | `avaliacao_36m` | `APROVAR_ESTAGIO`         | decisão `approved`                       | mantém histórico funcional imutável e libera estabilidade administrativa | `estavel`       |
+| HR08-T5   | `avaliacao_36m` | `REPROVAR_ESTAGIO`        | decisão `rejected`                       | registra decisão e sinaliza providência de desligamento/processo         | `nao_aprovado`  |
 
 Permissões: leitura usa `avaliacao.read`; registro de avaliação exige `avaliacao.probation.write`.
+
+## 0.4. Férias e Programação HR-03
+
+`hr.vacation_record` registra a programação anual de férias por período aquisitivo, com até três parcelas, abono pecuniário limitado a 10 dias e aprovação de chefia antes do gozo. O saldo é calculado por `hr.f_calculate_vacation_balance(employee_id, ref_date)` e exposto por `hr.v_vacation_balance`; o cálculo financeiro de férias permanece fora deste fluxo e pertence ao slice CALC-05.
+
+| Estado       | Descrição                                                         |
+| ------------ | ----------------------------------------------------------------- |
+| `programado` | Solicitação registrada pelo servidor ou RH, aguardando aprovação  |
+| `aprovado`   | Chefia/RH aprovou a programação e bloqueou o saldo correspondente |
+| `gozado`     | Período de férias realizado e preservado no histórico funcional   |
+| `cancelado`  | Programação cancelada antes do gozo                               |
+
+| Transição | De                         | Evento             | Guarda                                                                                                                        | Ação                                      | Para         |
+| --------- | -------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------ |
+| HR03-T1   | _(início)_                 | `SOLICITAR_FERIAS` | período aquisitivo com 12 meses completos; até 3 parcelas; abono até 10 dias; celetista com uma parcela de pelo menos 14 dias | insere `vacation_record`; emite auditoria | `programado` |
+| HR03-T2   | `programado`               | `APROVAR_FERIAS`   | permissão `rh.vacation.approve`                                                                                               | atualiza `status`; emite auditoria        | `aprovado`   |
+| HR03-T3   | `aprovado`                 | `REGISTRAR_GOZO`   | período concluído administrativamente                                                                                         | atualiza `status`; preserva histórico     | `gozado`     |
+| HR03-T4   | `programado` ou `aprovado` | `CANCELAR_FERIAS`  | justificativa administrativa registrada                                                                                       | atualiza `status`; emite auditoria        | `cancelado`  |
+
+Permissões: saldo e histórico exigem `rh.vacation.read`; solicitação exige `rh.vacation.request`; aprovação e cancelamento exigem `rh.vacation.approve`.
 
 ```mermaid
 stateDiagram-v2
@@ -109,33 +130,33 @@ stateDiagram-v2
 
 ### 1.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `aberta` | Período liberado para criação e cálculo de folha |
-| `programada_fechar` | Fechamento futuro agendado |
-| `em_processamento` | Rotina de fechamento em execução (transição assíncrona) |
-| `fechada` | Folhas bloqueadas; somente leitura histórica |
-| `reaberta` | Reabertura para correção (ex-`fechada`) |
-| `em_reprocessamento` | Recálculo total em andamento após reabertura |
-| `refechada` | Segundo fechamento após reprocessamento |
-| `arquivada` | Imutável para consulta histórica de longo prazo |
+| Enum                 | Descrição                                               |
+| -------------------- | ------------------------------------------------------- |
+| `aberta`             | Período liberado para criação e cálculo de folha        |
+| `programada_fechar`  | Fechamento futuro agendado                              |
+| `em_processamento`   | Rotina de fechamento em execução (transição assíncrona) |
+| `fechada`            | Folhas bloqueadas; somente leitura histórica            |
+| `reaberta`           | Reabertura para correção (ex-`fechada`)                 |
+| `em_reprocessamento` | Recálculo total em andamento após reabertura            |
+| `refechada`          | Segundo fechamento após reprocessamento                 |
+| `arquivada`          | Imutável para consulta histórica de longo prazo         |
 
 ### 1.2 Transições permitidas
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(início)* | `ABRIR_COMPETENCIA` | mês/ano não existe no tenant | cria registro; `data_abertura = now()` | `aberta` |
-| T2 | `aberta` | `PROGRAMAR_FECHAMENTO` | `data_programada > today` | persiste `data_programada_fechamento` | `programada_fechar` |
-| T3 | `programada_fechar` | `CANCELAR_PROGRAMACAO` | laudo ainda em `aberta` | remove data programada | `aberta` |
-| T4 | `programada_fechar` | `job: daily:competencia-programada-fechamento` | `today >= data_programada_fechamento` | idem T5 | `em_processamento` |
-| T5 | `aberta` | `FECHAR_IMEDIATO` | — | bloqueia todas as folhas; emite `folha.competencia.fechamento_iniciado` | `em_processamento` |
-| T6 | `em_processamento` | `folha.competencia.fechamento_concluido` *(SIS)* | todas folhas `BLOQUEADO` | emite `folha.competencia.fechada` | `fechada` |
-| T7 | `em_processamento` | `folha.competencia.fechamento_erro` *(SIS)* | erro irrecuperável | emite `folha.competencia.erro`; alerta operador | `aberta` *(compensação)* |
-| T8 | `fechada` | `REABRIR_COMPETENCIA` | GF solicitante; competência imediatamente anterior | desbloqueia folhas; emite `folha.competencia.reaberta` | `reaberta` |
-| T9 | `reaberta` | `INICIAR_REPROCESSAMENTO` | GF | enfileira `folha.calculo.solicitada` para todas as folhas | `em_reprocessamento` |
-| T10 | `em_reprocessamento` | `folha.reprocessamento.concluido` *(SIS)* | — | emite `folha.competencia.refechada` | `refechada` |
-| T11 | `refechada` | `ARQUIVAR` | GF; competência com ≥ 12 meses de `refechada` | imutabiliza registro | `arquivada` |
-| T12 | `fechada` | `ARQUIVAR` | idem T11 | idem | `arquivada` |
+| #   | De                   | Evento                                           | Guarda                                             | Efeito                                                                  | Para                     |
+| --- | -------------------- | ------------------------------------------------ | -------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------ |
+| T1  | _(início)_           | `ABRIR_COMPETENCIA`                              | mês/ano não existe no tenant                       | cria registro; `data_abertura = now()`                                  | `aberta`                 |
+| T2  | `aberta`             | `PROGRAMAR_FECHAMENTO`                           | `data_programada > today`                          | persiste `data_programada_fechamento`                                   | `programada_fechar`      |
+| T3  | `programada_fechar`  | `CANCELAR_PROGRAMACAO`                           | laudo ainda em `aberta`                            | remove data programada                                                  | `aberta`                 |
+| T4  | `programada_fechar`  | `job: daily:competencia-programada-fechamento`   | `today >= data_programada_fechamento`              | idem T5                                                                 | `em_processamento`       |
+| T5  | `aberta`             | `FECHAR_IMEDIATO`                                | —                                                  | bloqueia todas as folhas; emite `folha.competencia.fechamento_iniciado` | `em_processamento`       |
+| T6  | `em_processamento`   | `folha.competencia.fechamento_concluido` _(SIS)_ | todas folhas `BLOQUEADO`                           | emite `folha.competencia.fechada`                                       | `fechada`                |
+| T7  | `em_processamento`   | `folha.competencia.fechamento_erro` _(SIS)_      | erro irrecuperável                                 | emite `folha.competencia.erro`; alerta operador                         | `aberta` _(compensação)_ |
+| T8  | `fechada`            | `REABRIR_COMPETENCIA`                            | GF solicitante; competência imediatamente anterior | desbloqueia folhas; emite `folha.competencia.reaberta`                  | `reaberta`               |
+| T9  | `reaberta`           | `INICIAR_REPROCESSAMENTO`                        | GF                                                 | enfileira `folha.calculo.solicitada` para todas as folhas               | `em_reprocessamento`     |
+| T10 | `em_reprocessamento` | `folha.reprocessamento.concluido` _(SIS)_        | —                                                  | emite `folha.competencia.refechada`                                     | `refechada`              |
+| T11 | `refechada`          | `ARQUIVAR`                                       | GF; competência com ≥ 12 meses de `refechada`      | imutabiliza registro                                                    | `arquivada`              |
+| T12 | `fechada`            | `ARQUIVAR`                                       | idem T11                                           | idem                                                                    | `arquivada`              |
 
 ### 1.3 Invariantes por estado
 
@@ -145,13 +166,13 @@ stateDiagram-v2
 
 ### 1.4 Papéis por transição
 
-| Evento | Papéis |
-|---|---|
-| ABRIR_COMPETENCIA | GF |
-| PROGRAMAR_FECHAMENTO / CANCELAR | GF |
-| FECHAR_IMEDIATO / REABRIR | GF |
-| ARQUIVAR | GF |
-| Fechamento automático | SIS (job `daily:competencia-programada-fechamento`) |
+| Evento                          | Papéis                                              |
+| ------------------------------- | --------------------------------------------------- |
+| ABRIR_COMPETENCIA               | GF                                                  |
+| PROGRAMAR_FECHAMENTO / CANCELAR | GF                                                  |
+| FECHAR_IMEDIATO / REABRIR       | GF                                                  |
+| ARQUIVAR                        | GF                                                  |
+| Fechamento automático           | SIS (job `daily:competencia-programada-fechamento`) |
 
 ### 1.5 Efeitos colaterais
 
@@ -180,16 +201,16 @@ stateDiagram-v2
 
 ### 1.7 Exemplo concreto — Janeiro/2026
 
-| Data | Evento | Estado |
-|---|---|---|
-| 02/01/2026 | GF abre competência 01/2026 | `aberta` |
-| 10/01/2026 | GF programa fechamento para 31/01 | `programada_fechar` |
-| 31/01/2026 00:05 | Job executa fechamento | `em_processamento` |
-| 31/01/2026 00:47 | Todas as folhas bloqueadas | `fechada` |
-| 05/02/2026 | GF reabre para corrigir contracheque de afastamento | `reaberta` |
-| 05/02/2026 | GF inicia reprocessamento | `em_reprocessamento` |
-| 05/02/2026 02:00 | Reprocessamento concluído | `refechada` |
-| 01/03/2027 | GF arquiva após 12 meses | `arquivada` |
+| Data             | Evento                                              | Estado               |
+| ---------------- | --------------------------------------------------- | -------------------- |
+| 02/01/2026       | GF abre competência 01/2026                         | `aberta`             |
+| 10/01/2026       | GF programa fechamento para 31/01                   | `programada_fechar`  |
+| 31/01/2026 00:05 | Job executa fechamento                              | `em_processamento`   |
+| 31/01/2026 00:47 | Todas as folhas bloqueadas                          | `fechada`            |
+| 05/02/2026       | GF reabre para corrigir contracheque de afastamento | `reaberta`           |
+| 05/02/2026       | GF inicia reprocessamento                           | `em_reprocessamento` |
+| 05/02/2026 02:00 | Reprocessamento concluído                           | `refechada`          |
+| 01/03/2027       | GF arquiva após 12 meses                            | `arquivada`          |
 
 ---
 
@@ -201,40 +222,40 @@ stateDiagram-v2
 
 ### 2.1 Estados
 
-| Enum | Eixo | Descrição |
-|---|---|---|
-| `rascunho` | status | Folha criada, sem cálculo |
-| `calculada` | situacao | Cálculo concluído com sucesso |
-| `em_calculo` | situacao | Cálculo em andamento |
-| `conferida` | situacao | Relatórios conferidos pelo analista |
-| `aprovada` | status | Gestor aprovou resultado |
-| `paga` | status | Remessa bancária enviada |
-| `contabilizada` | status | Contabilidade encerrou o mês |
-| `bloqueada` | status | Competência fechou; folha imutável |
-| `erro` | situacao | Cálculo com falha irrecuperável |
-| `excluindo` | situacao | Exclusão assíncrona em andamento |
+| Enum            | Eixo     | Descrição                           |
+| --------------- | -------- | ----------------------------------- |
+| `rascunho`      | status   | Folha criada, sem cálculo           |
+| `calculada`     | situacao | Cálculo concluído com sucesso       |
+| `em_calculo`    | situacao | Cálculo em andamento                |
+| `conferida`     | situacao | Relatórios conferidos pelo analista |
+| `aprovada`      | status   | Gestor aprovou resultado            |
+| `paga`          | status   | Remessa bancária enviada            |
+| `contabilizada` | status   | Contabilidade encerrou o mês        |
+| `bloqueada`     | status   | Competência fechou; folha imutável  |
+| `erro`          | situacao | Cálculo com falha irrecuperável     |
+| `excluindo`     | situacao | Exclusão assíncrona em andamento    |
 
 > **Nota:** O legado separa `status` (administrativo) de `situacao` (processamento). O novo modelo unifica em estado canônico para clareza; os campos físicos `status` e `situacao` permanecem na tabela por retrocompatibilidade de relatórios.
 
 ### 2.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(início)* | `CRIAR_FOLHA` | competência `aberta`; (filial × tipo) inexistente | cria registro `PENDENTE/DESBLOQUEADO`; emite `folha.criada` | `rascunho` |
-| T2 | `rascunho` | `CALCULAR_LOTE` | folha `DESBLOQUEADO`; ≥1 contracheque | enfileira `folha.calculo.solicitada` | `em_calculo` |
-| T3 | `rascunho` | `INCLUIR_SERVIDOR` | folha `DESBLOQUEADO`; servidor elegível | adiciona contracheque; enfileira cálculo individual | `rascunho` |
-| T4 | `em_calculo` | `folha.calculo.concluida` *(SIS)* | todos contracheques `CONCLUIDO` | emite `folha.calculada` | `calculada` |
-| T5 | `em_calculo` | `folha.calculo.erro` *(SIS)* | ≥1 contracheque `ERRO` sem retry | emite `folha.erro`; notifica GF | `erro` |
-| T6 | `calculada` | `CONFERIR` | GF/AF | marca `data_conferencia`; emite `folha.conferida` | `conferida` |
-| T7 | `conferida` | `APROVAR` | GF | emite `folha.aprovada` | `aprovada` |
-| T8 | `aprovada` | `GERAR_REMESSA` | GF; integração bancária configurada | enfileira `remessa.gerar`; emite `folha.remessa_gerada` | `paga` |
-| T9 | `paga` | `CONTABILIZAR` | GF | emite `folha.contabilizada` | `contabilizada` |
-| T10 | `contabilizada` OU `paga` OU `aprovada` | `BLOQUEAR` *(SIS: competência fechou)* | competência `fechada` | emite `folha.bloqueada` | `bloqueada` |
-| T11 | `calculada` | `REPROCESSAR_TOTAL` | GF; folha `DESBLOQUEADO` | reenfileira cálculo de todos; emite `folha.reprocessamento_iniciado` | `em_calculo` |
-| T12 | `calculada` OU `erro` | `REPROCESSAR_PENDENTES` | GF | reenfileira somente contracheques `PENDENTE/ERRO` | `em_calculo` |
-| T13 | `bloqueada` | `DESBLOQUEAR` *(SIS: competência reaberta)* | competência `reaberta` | emite `folha.desbloqueada` | `rascunho` |
-| T14 | `rascunho` | `EXCLUIR_FOLHA` | GF; competência `aberta`; status `DESBLOQUEADO` | deleta contracheques; emite `folha.excluindo` | `excluindo` |
-| T15 | `excluindo` | `folha.exclusao_concluida` *(SIS)* | — | registro removido | *(fim)* |
+| #   | De                                      | Evento                                      | Guarda                                            | Efeito                                                               | Para            |
+| --- | --------------------------------------- | ------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------- | --------------- |
+| T1  | _(início)_                              | `CRIAR_FOLHA`                               | competência `aberta`; (filial × tipo) inexistente | cria registro `PENDENTE/DESBLOQUEADO`; emite `folha.criada`          | `rascunho`      |
+| T2  | `rascunho`                              | `CALCULAR_LOTE`                             | folha `DESBLOQUEADO`; ≥1 contracheque             | enfileira `folha.calculo.solicitada`                                 | `em_calculo`    |
+| T3  | `rascunho`                              | `INCLUIR_SERVIDOR`                          | folha `DESBLOQUEADO`; servidor elegível           | adiciona contracheque; enfileira cálculo individual                  | `rascunho`      |
+| T4  | `em_calculo`                            | `folha.calculo.concluida` _(SIS)_           | todos contracheques `CONCLUIDO`                   | emite `folha.calculada`                                              | `calculada`     |
+| T5  | `em_calculo`                            | `folha.calculo.erro` _(SIS)_                | ≥1 contracheque `ERRO` sem retry                  | emite `folha.erro`; notifica GF                                      | `erro`          |
+| T6  | `calculada`                             | `CONFERIR`                                  | GF/AF                                             | marca `data_conferencia`; emite `folha.conferida`                    | `conferida`     |
+| T7  | `conferida`                             | `APROVAR`                                   | GF                                                | emite `folha.aprovada`                                               | `aprovada`      |
+| T8  | `aprovada`                              | `GERAR_REMESSA`                             | GF; integração bancária configurada               | enfileira `remessa.gerar`; emite `folha.remessa_gerada`              | `paga`          |
+| T9  | `paga`                                  | `CONTABILIZAR`                              | GF                                                | emite `folha.contabilizada`                                          | `contabilizada` |
+| T10 | `contabilizada` OU `paga` OU `aprovada` | `BLOQUEAR` _(SIS: competência fechou)_      | competência `fechada`                             | emite `folha.bloqueada`                                              | `bloqueada`     |
+| T11 | `calculada`                             | `REPROCESSAR_TOTAL`                         | GF; folha `DESBLOQUEADO`                          | reenfileira cálculo de todos; emite `folha.reprocessamento_iniciado` | `em_calculo`    |
+| T12 | `calculada` OU `erro`                   | `REPROCESSAR_PENDENTES`                     | GF                                                | reenfileira somente contracheques `PENDENTE/ERRO`                    | `em_calculo`    |
+| T13 | `bloqueada`                             | `DESBLOQUEAR` _(SIS: competência reaberta)_ | competência `reaberta`                            | emite `folha.desbloqueada`                                           | `rascunho`      |
+| T14 | `rascunho`                              | `EXCLUIR_FOLHA`                             | GF; competência `aberta`; status `DESBLOQUEADO`   | deleta contracheques; emite `folha.excluindo`                        | `excluindo`     |
+| T15 | `excluindo`                             | `folha.exclusao_concluida` _(SIS)_          | —                                                 | registro removido                                                    | _(fim)_         |
 
 ### 2.3 Invariantes por estado
 
@@ -244,14 +265,14 @@ stateDiagram-v2
 
 ### 2.4 Papéis
 
-| Ação | Papéis |
-|---|---|
-| CRIAR / EXCLUIR | GF |
-| CALCULAR / REPROCESSAR | GF |
-| CONFERIR | GF, AF |
-| APROVAR | GF |
-| GERAR_REMESSA / CONTABILIZAR | GF |
-| Bloquear/Desbloquear | SIS |
+| Ação                         | Papéis |
+| ---------------------------- | ------ |
+| CRIAR / EXCLUIR              | GF     |
+| CALCULAR / REPROCESSAR       | GF     |
+| CONFERIR                     | GF, AF |
+| APROVAR                      | GF     |
+| GERAR_REMESSA / CONTABILIZAR | GF     |
+| Bloquear/Desbloquear         | SIS    |
 
 ### 2.5 Efeitos colaterais
 
@@ -290,17 +311,17 @@ stateDiagram-v2
 
 ### 2.8 Exemplo concreto — Folha Mensal 01/2026, Filial Centro
 
-| Data | Evento | Estado |
-|---|---|---|
-| 02/01 09:00 | GF cria folha MENSAL / filial Centro | `rascunho` |
-| 02/01 09:30 | AF inclui 3 servidores tardios | `rascunho` |
-| 03/01 08:00 | GF dispara cálculo em lote | `em_calculo` |
-| 03/01 10:15 | Payroll engine conclui todos os contracheques | `calculada` |
-| 10/01 | AF confere relatórios e bate números | `conferida` |
-| 28/01 | GF aprova resultado | `aprovada` |
-| 29/01 | GF gera remessa CNAB ao banco | `paga` |
-| 31/01 | GF contabiliza | `contabilizada` |
-| 31/01 00:47 | SIS: competência fechou | `bloqueada` |
+| Data        | Evento                                        | Estado          |
+| ----------- | --------------------------------------------- | --------------- |
+| 02/01 09:00 | GF cria folha MENSAL / filial Centro          | `rascunho`      |
+| 02/01 09:30 | AF inclui 3 servidores tardios                | `rascunho`      |
+| 03/01 08:00 | GF dispara cálculo em lote                    | `em_calculo`    |
+| 03/01 10:15 | Payroll engine conclui todos os contracheques | `calculada`     |
+| 10/01       | AF confere relatórios e bate números          | `conferida`     |
+| 28/01       | GF aprova resultado                           | `aprovada`      |
+| 29/01       | GF gera remessa CNAB ao banco                 | `paga`          |
+| 31/01       | GF contabiliza                                | `contabilizada` |
+| 31/01 00:47 | SIS: competência fechou                       | `bloqueada`     |
 
 ---
 
@@ -312,29 +333,29 @@ stateDiagram-v2
 
 ### 3.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `draft` | Contracheque criado, cálculo não iniciado |
-| `em_calculo` | Engine processando |
-| `gerado` | Cálculo concluído com sucesso |
-| `erro_calculo` | Falha no cálculo; contém `memoria_calculo` com diagnóstico |
-| `disponibilizado_portal` | Visível no Portal do Servidor |
-| `impresso` | PDF emitido oficialmente (sem marca d'água) |
-| `republicado` | Reemitido após correção de dado ou retificação |
+| Enum                     | Descrição                                                  |
+| ------------------------ | ---------------------------------------------------------- |
+| `draft`                  | Contracheque criado, cálculo não iniciado                  |
+| `em_calculo`             | Engine processando                                         |
+| `gerado`                 | Cálculo concluído com sucesso                              |
+| `erro_calculo`           | Falha no cálculo; contém `memoria_calculo` com diagnóstico |
+| `disponibilizado_portal` | Visível no Portal do Servidor                              |
+| `impresso`               | PDF emitido oficialmente (sem marca d'água)                |
+| `republicado`            | Reemitido após correção de dado ou retificação             |
 
 ### 3.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(criação pela folha)* | `CONTRACHEQUE_CRIADO` | — | — | `draft` |
-| T2 | `draft` | `CALCULAR` *(SIS)* | folha `DESBLOQUEADO` | `sgp-payroll-engine` executa fórmulas SQL | `em_calculo` |
-| T3 | `em_calculo` | `calculo_concluido` *(SIS)* | todos os lançamentos ok | persiste lançamentos; emite `contracheque.calculado` | `gerado` |
-| T4 | `em_calculo` | `calculo_erro` *(SIS)* | falha de fórmula | persiste `memoria_calculo` com stack do erro | `erro_calculo` |
-| T5 | `erro_calculo` | `RECALCULAR` | GF; folha `DESBLOQUEADO` | reenfileira cálculo | `em_calculo` |
-| T6 | `gerado` | `DISPONIBILIZAR_PORTAL` | folha `aprovada`; `PORTAL_SERVIDOR_ENABLED = true` | emite `contracheque.disponibilizado`; notifica servidor | `disponibilizado_portal` |
-| T7 | `gerado` OU `disponibilizado_portal` | `IMPRIMIR` | GF/AF | gera PDF sem marca d'água; persiste `s3_key`; emite `contracheque.impresso` | `impresso` |
-| T8 | `impresso` | `REPUBLICAR` | GF; justificativa obrigatória | regera PDF; incrementa `versao`; emite `contracheque.republicado` | `republicado` |
-| T9 | `gerado` *(preview)* | `IMPRIMIR_RASCUNHO` | AF | gera PDF com marca d'água; não altera estado | `gerado` |
+| #   | De                                   | Evento                      | Guarda                                             | Efeito                                                                      | Para                     |
+| --- | ------------------------------------ | --------------------------- | -------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------ |
+| T1  | _(criação pela folha)_               | `CONTRACHEQUE_CRIADO`       | —                                                  | —                                                                           | `draft`                  |
+| T2  | `draft`                              | `CALCULAR` _(SIS)_          | folha `DESBLOQUEADO`                               | `sgp-payroll-engine` executa fórmulas SQL                                   | `em_calculo`             |
+| T3  | `em_calculo`                         | `calculo_concluido` _(SIS)_ | todos os lançamentos ok                            | persiste lançamentos; emite `contracheque.calculado`                        | `gerado`                 |
+| T4  | `em_calculo`                         | `calculo_erro` _(SIS)_      | falha de fórmula                                   | persiste `memoria_calculo` com stack do erro                                | `erro_calculo`           |
+| T5  | `erro_calculo`                       | `RECALCULAR`                | GF; folha `DESBLOQUEADO`                           | reenfileira cálculo                                                         | `em_calculo`             |
+| T6  | `gerado`                             | `DISPONIBILIZAR_PORTAL`     | folha `aprovada`; `PORTAL_SERVIDOR_ENABLED = true` | emite `contracheque.disponibilizado`; notifica servidor                     | `disponibilizado_portal` |
+| T7  | `gerado` OU `disponibilizado_portal` | `IMPRIMIR`                  | GF/AF                                              | gera PDF sem marca d'água; persiste `s3_key`; emite `contracheque.impresso` | `impresso`               |
+| T8  | `impresso`                           | `REPUBLICAR`                | GF; justificativa obrigatória                      | regera PDF; incrementa `versao`; emite `contracheque.republicado`           | `republicado`            |
+| T9  | `gerado` _(preview)_                 | `IMPRIMIR_RASCUNHO`         | AF                                                 | gera PDF com marca d'água; não altera estado                                | `gerado`                 |
 
 ### 3.3 Invariantes
 
@@ -373,23 +394,23 @@ stateDiagram-v2
 
 ### 4.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `provisorio` | Lançamento manual ou importado antes de cálculo |
-| `validado` | Passou pela checagem de elegibilidade e valor |
-| `efetivado` | Integrado ao contracheque calculado |
-| `estornado` | Revertido por correção ou reimportação saneadora |
+| Enum         | Descrição                                        |
+| ------------ | ------------------------------------------------ |
+| `provisorio` | Lançamento manual ou importado antes de cálculo  |
+| `validado`   | Passou pela checagem de elegibilidade e valor    |
+| `efetivado`  | Integrado ao contracheque calculado              |
+| `estornado`  | Revertido por correção ou reimportação saneadora |
 
 ### 4.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(inclusão)* | `INCLUIR_LANCAMENTO` | verba elegível para o vínculo; valor > 0 | cria registro; emite `lancamento.incluido` | `provisorio` |
-| T2 | `provisorio` | `VALIDAR` *(SIS: pré-cálculo)* | elegibilidade ok; limites respeitados | — | `validado` |
-| T3 | `provisorio` | `REJEITAR_VALIDACAO` *(SIS)* | elegibilidade falhou | emite `lancamento.rejeitado`; bloqueia contracheque | `provisorio` *(não avança)* |
-| T4 | `validado` | `EFETIVAR` *(SIS: cálculo concluído)* | — | persiste `valor_calculado`; emite `lancamento.efetivado` | `efetivado` |
-| T5 | `efetivado` | `ESTORNAR` | GF; folha `DESBLOQUEADO` OU importação saneadora | inverte valor; emite `lancamento.estornado` | `estornado` |
-| T6 | `provisorio` | `REMOVER` | GF; folha `DESBLOQUEADO` | exclui registro | *(fim)* |
+| #   | De           | Evento                                | Guarda                                           | Efeito                                                   | Para                        |
+| --- | ------------ | ------------------------------------- | ------------------------------------------------ | -------------------------------------------------------- | --------------------------- |
+| T1  | _(inclusão)_ | `INCLUIR_LANCAMENTO`                  | verba elegível para o vínculo; valor > 0         | cria registro; emite `lancamento.incluido`               | `provisorio`                |
+| T2  | `provisorio` | `VALIDAR` _(SIS: pré-cálculo)_        | elegibilidade ok; limites respeitados            | —                                                        | `validado`                  |
+| T3  | `provisorio` | `REJEITAR_VALIDACAO` _(SIS)_          | elegibilidade falhou                             | emite `lancamento.rejeitado`; bloqueia contracheque      | `provisorio` _(não avança)_ |
+| T4  | `validado`   | `EFETIVAR` _(SIS: cálculo concluído)_ | —                                                | persiste `valor_calculado`; emite `lancamento.efetivado` | `efetivado`                 |
+| T5  | `efetivado`  | `ESTORNAR`                            | GF; folha `DESBLOQUEADO` OU importação saneadora | inverte valor; emite `lancamento.estornado`              | `estornado`                 |
+| T6  | `provisorio` | `REMOVER`                             | GF; folha `DESBLOQUEADO`                         | exclui registro                                          | _(fim)_                     |
 
 ### 4.3 Invariantes
 
@@ -398,11 +419,11 @@ stateDiagram-v2
 
 ### 4.4 Papéis
 
-| Ação | Papéis |
-|---|---|
-| INCLUIR / REMOVER | GF, AF |
-| VALIDAR / EFETIVAR | SIS |
-| ESTORNAR | GF |
+| Ação               | Papéis |
+| ------------------ | ------ |
+| INCLUIR / REMOVER  | GF, AF |
+| VALIDAR / EFETIVAR | SIS    |
+| ESTORNAR           | GF     |
 
 ### 4.5 Diagrama
 
@@ -425,34 +446,34 @@ stateDiagram-v2
 
 ### 5.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `recebido` | Arquivo S3 salvo; ainda não processado |
-| `em_validacao` | Worker validando leiaute e regras de negócio |
-| `validado_com_erros` | Arquivo parcialmente válido; erros por linha disponíveis |
-| `rejeitado` | Erro crítico ou leiaute inválido; nenhum registro importável |
-| `aprovado` | Validação ok; aguarda confirmação do operador |
-| `em_processamento` | Worker aplicando registros ao domínio |
-| `processado` | Todos os registros aplicados |
-| `processado_parcialmente` | Alguns registros aplicados; pendências identificadas |
-| `arquivado` | Histórico imutável |
+| Enum                      | Descrição                                                    |
+| ------------------------- | ------------------------------------------------------------ |
+| `recebido`                | Arquivo S3 salvo; ainda não processado                       |
+| `em_validacao`            | Worker validando leiaute e regras de negócio                 |
+| `validado_com_erros`      | Arquivo parcialmente válido; erros por linha disponíveis     |
+| `rejeitado`               | Erro crítico ou leiaute inválido; nenhum registro importável |
+| `aprovado`                | Validação ok; aguarda confirmação do operador                |
+| `em_processamento`        | Worker aplicando registros ao domínio                        |
+| `processado`              | Todos os registros aplicados                                 |
+| `processado_parcialmente` | Alguns registros aplicados; pendências identificadas         |
+| `arquivado`               | Histórico imutável                                           |
 
 ### 5.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(upload)* | `UPLOAD_ARQUIVO` | S3 upload ok | persiste `s3_key`; emite `importacao.recebida` | `recebido` |
-| T2 | `recebido` | `INICIAR_VALIDACAO` *(SIS)* | — | worker valida leiaute e regras | `em_validacao` |
-| T3 | `em_validacao` | `validacao_concluida_ok` *(SIS)* | zero erros | emite `importacao.aprovada` | `aprovado` |
-| T4 | `em_validacao` | `validacao_concluida_parcial` *(SIS)* | ≥1 erro por linha | persiste lista de erros | `validado_com_erros` |
-| T5 | `em_validacao` | `validacao_falhou` *(SIS)* | leiaute inválido | emite `importacao.rejeitada` | `rejeitado` |
-| T6 | `validado_com_erros` | `APROVAR_PARCIAL` | GF; ciente dos erros | — | `aprovado` |
-| T7 | `validado_com_erros` | `REJEITAR` | GF | emite `importacao.rejeitada` | `rejeitado` |
-| T8 | `aprovado` | `CONFIRMAR_IMPORTACAO` | GF | worker aplica registros; emite `importacao.processamento_iniciado` | `em_processamento` |
-| T9 | `em_processamento` | `processamento_concluido` *(SIS)* | 100% ok | emite `importacao.processada` | `processado` |
-| T10 | `em_processamento` | `processamento_parcial` *(SIS)* | pendências restantes | emite `importacao.processada_parcialmente` | `processado_parcialmente` |
-| T11 | `processado_parcialmente` | `REIMPORTAR_PENDENTES` | GF | reenfileira pendências | `em_processamento` |
-| T12 | `processado` OU `rejeitado` | `ARQUIVAR` *(SIS: competência fechada)* | — | imutabiliza | `arquivado` |
+| #   | De                          | Evento                                  | Guarda               | Efeito                                                             | Para                      |
+| --- | --------------------------- | --------------------------------------- | -------------------- | ------------------------------------------------------------------ | ------------------------- |
+| T1  | _(upload)_                  | `UPLOAD_ARQUIVO`                        | S3 upload ok         | persiste `s3_key`; emite `importacao.recebida`                     | `recebido`                |
+| T2  | `recebido`                  | `INICIAR_VALIDACAO` _(SIS)_             | —                    | worker valida leiaute e regras                                     | `em_validacao`            |
+| T3  | `em_validacao`              | `validacao_concluida_ok` _(SIS)_        | zero erros           | emite `importacao.aprovada`                                        | `aprovado`                |
+| T4  | `em_validacao`              | `validacao_concluida_parcial` _(SIS)_   | ≥1 erro por linha    | persiste lista de erros                                            | `validado_com_erros`      |
+| T5  | `em_validacao`              | `validacao_falhou` _(SIS)_              | leiaute inválido     | emite `importacao.rejeitada`                                       | `rejeitado`               |
+| T6  | `validado_com_erros`        | `APROVAR_PARCIAL`                       | GF; ciente dos erros | —                                                                  | `aprovado`                |
+| T7  | `validado_com_erros`        | `REJEITAR`                              | GF                   | emite `importacao.rejeitada`                                       | `rejeitado`               |
+| T8  | `aprovado`                  | `CONFIRMAR_IMPORTACAO`                  | GF                   | worker aplica registros; emite `importacao.processamento_iniciado` | `em_processamento`        |
+| T9  | `em_processamento`          | `processamento_concluido` _(SIS)_       | 100% ok              | emite `importacao.processada`                                      | `processado`              |
+| T10 | `em_processamento`          | `processamento_parcial` _(SIS)_         | pendências restantes | emite `importacao.processada_parcialmente`                         | `processado_parcialmente` |
+| T11 | `processado_parcialmente`   | `REIMPORTAR_PENDENTES`                  | GF                   | reenfileira pendências                                             | `em_processamento`        |
+| T12 | `processado` OU `rejeitado` | `ARQUIVAR` _(SIS: competência fechada)_ | —                    | imutabiliza                                                        | `arquivado`               |
 
 ### 5.3 Efeitos colaterais
 
@@ -487,27 +508,27 @@ stateDiagram-v2
 
 ### 6.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `pendente` | Evento gerado; aguarda envio |
-| `em_envio` | Step Function `esocial-envio` em execução |
-| `aceito` | Recibo emitido pelo Governo Federal |
-| `rejeitado` | Erros de schema ou regra de negócio retornados |
-| `substituido` | Versão corrigida enviada e aceita |
-| `excluido` | S-3000 enviado e aceito |
+| Enum          | Descrição                                      |
+| ------------- | ---------------------------------------------- |
+| `pendente`    | Evento gerado; aguarda envio                   |
+| `em_envio`    | Step Function `esocial-envio` em execução      |
+| `aceito`      | Recibo emitido pelo Governo Federal            |
+| `rejeitado`   | Erros de schema ou regra de negócio retornados |
+| `substituido` | Versão corrigida enviada e aceita              |
+| `excluido`    | S-3000 enviado e aceito                        |
 
 ### 6.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(geração)* | `GERAR_EVENTO` | `esocial.enabled = true`; dados válidos | persiste XML; emite `esocial.evento.pendente` | `pendente` |
-| T2 | `pendente` | `INICIAR_ENVIO` *(SIS)* | — | Step Function inicia; assina XML com certificado A1 | `em_envio` |
-| T3 | `em_envio` | `retorno_aceito` *(SIS)* | recibo válido | persiste `numero_recibo`; emite `esocial.aceito` | `aceito` |
-| T4 | `em_envio` | `retorno_rejeitado` *(SIS)* | ocorrências de erro | persiste erros; emite `esocial.rejeitado`; retry ≤3 | `rejeitado` |
-| T5 | `rejeitado` | `CORRIGIR_E_REENVIAR` | GF; falha corrigida | gera nova versão XML; volta T2 | `pendente` |
-| T6 | `aceito` | `SUBSTITUIR` | GF; evento S-1.2 de retificação | gera S-evento com `{indRetif = S}`; volta T2 | `pendente` |
-| T7 | `aceito` | `EXCLUIR` | GF; prazo legal | gera S-3000; emite `esocial.exclusao_solicitada` | `em_envio` |
-| T8 | `em_envio` *(exclusão)* | `retorno_exclusao_aceita` *(SIS)* | — | emite `esocial.excluido` | `excluido` |
+| #   | De                      | Evento                            | Guarda                                  | Efeito                                              | Para        |
+| --- | ----------------------- | --------------------------------- | --------------------------------------- | --------------------------------------------------- | ----------- |
+| T1  | _(geração)_             | `GERAR_EVENTO`                    | `esocial.enabled = true`; dados válidos | persiste XML; emite `esocial.evento.pendente`       | `pendente`  |
+| T2  | `pendente`              | `INICIAR_ENVIO` _(SIS)_           | —                                       | Step Function inicia; assina XML com certificado A1 | `em_envio`  |
+| T3  | `em_envio`              | `retorno_aceito` _(SIS)_          | recibo válido                           | persiste `numero_recibo`; emite `esocial.aceito`    | `aceito`    |
+| T4  | `em_envio`              | `retorno_rejeitado` _(SIS)_       | ocorrências de erro                     | persiste erros; emite `esocial.rejeitado`; retry ≤3 | `rejeitado` |
+| T5  | `rejeitado`             | `CORRIGIR_E_REENVIAR`             | GF; falha corrigida                     | gera nova versão XML; volta T2                      | `pendente`  |
+| T6  | `aceito`                | `SUBSTITUIR`                      | GF; evento S-1.2 de retificação         | gera S-evento com `{indRetif = S}`; volta T2        | `pendente`  |
+| T7  | `aceito`                | `EXCLUIR`                         | GF; prazo legal                         | gera S-3000; emite `esocial.exclusao_solicitada`    | `em_envio`  |
+| T8  | `em_envio` _(exclusão)_ | `retorno_exclusao_aceita` _(SIS)_ | —                                       | emite `esocial.excluido`                            | `excluido`  |
 
 ### 6.3 Compensações
 
@@ -539,34 +560,34 @@ stateDiagram-v2
 
 ### 7.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `rascunho` | Criada pelo solicitante; editável |
-| `aberta` | Encaminhada ao RH; solicitante não pode mais editar |
-| `em_aprovacao` | RH em análise (renomeia legado `em_processo`) |
-| `aprovada` | RH aprovou; captação liberada |
-| `em_captacao` | RH vinculando candidatos e currículos |
-| `em_selecao` | Análise curricular formal em andamento |
-| `concluida` | Análise encerrada; solicitante notificado |
-| `cancelada` | Encerrada sem atendimento |
-| `rejeitada` | RH rejeitou a demanda |
+| Enum           | Descrição                                           |
+| -------------- | --------------------------------------------------- |
+| `rascunho`     | Criada pelo solicitante; editável                   |
+| `aberta`       | Encaminhada ao RH; solicitante não pode mais editar |
+| `em_aprovacao` | RH em análise (renomeia legado `em_processo`)       |
+| `aprovada`     | RH aprovou; captação liberada                       |
+| `em_captacao`  | RH vinculando candidatos e currículos               |
+| `em_selecao`   | Análise curricular formal em andamento              |
+| `concluida`    | Análise encerrada; solicitante notificado           |
+| `cancelada`    | Encerrada sem atendimento                           |
+| `rejeitada`    | RH rejeitou a demanda                               |
 
 ### 7.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(criação)* | `CRIAR_REQUISICAO` | SOL autenticado; ≥1 funcao_requisitada | cria rascunho; emite `requisicao.criada` | `rascunho` |
-| T2 | `rascunho` | `ENCAMINHAR` | SOL; justificativa + data_limite informados | emite `requisicao.encaminhada`; notifica RH por e-mail | `aberta` |
-| T3 | `aberta` | `RECEBER_NO_RH` *(SIS / GRH)* | — | muda para fila GRH | `em_aprovacao` |
-| T4 | `em_aprovacao` | `APROVAR` | GRH | emite `requisicao.aprovada`; notifica SOL | `aprovada` |
-| T5 | `em_aprovacao` | `REJEITAR` | GRH | emite `requisicao.rejeitada`; notifica SOL | `rejeitada` |
-| T6 | `em_aprovacao` | `CANCELAR` | GRH | emite `requisicao.cancelada` | `cancelada` |
-| T7 | `aprovada` | `INICIAR_CAPTACAO` | GRH | — | `em_captacao` |
-| T8 | `em_captacao` | `VINCULAR_CANDIDATO` | GRH; candidato_requisicao criado | cria `candidato_requisicao` em `inscrito` | `em_captacao` |
-| T9 | `em_captacao` | `INICIAR_SELECAO` | GRH; ≥1 candidato vinculado | — | `em_selecao` |
-| T10 | `em_selecao` | `CONCLUIR_ANALISE` | GRH; todos candidatos com parecer | emite `requisicao.concluida`; notifica SOL | `concluida` |
-| T11 | `rascunho` | `CANCELAR` | SOL | emite `requisicao.cancelada` | `cancelada` |
-| T12 | `aberta` | `CANCELAR` | SOL | idem | `cancelada` |
+| #   | De             | Evento                        | Guarda                                      | Efeito                                                 | Para           |
+| --- | -------------- | ----------------------------- | ------------------------------------------- | ------------------------------------------------------ | -------------- |
+| T1  | _(criação)_    | `CRIAR_REQUISICAO`            | SOL autenticado; ≥1 funcao_requisitada      | cria rascunho; emite `requisicao.criada`               | `rascunho`     |
+| T2  | `rascunho`     | `ENCAMINHAR`                  | SOL; justificativa + data_limite informados | emite `requisicao.encaminhada`; notifica RH por e-mail | `aberta`       |
+| T3  | `aberta`       | `RECEBER_NO_RH` _(SIS / GRH)_ | —                                           | muda para fila GRH                                     | `em_aprovacao` |
+| T4  | `em_aprovacao` | `APROVAR`                     | GRH                                         | emite `requisicao.aprovada`; notifica SOL              | `aprovada`     |
+| T5  | `em_aprovacao` | `REJEITAR`                    | GRH                                         | emite `requisicao.rejeitada`; notifica SOL             | `rejeitada`    |
+| T6  | `em_aprovacao` | `CANCELAR`                    | GRH                                         | emite `requisicao.cancelada`                           | `cancelada`    |
+| T7  | `aprovada`     | `INICIAR_CAPTACAO`            | GRH                                         | —                                                      | `em_captacao`  |
+| T8  | `em_captacao`  | `VINCULAR_CANDIDATO`          | GRH; candidato_requisicao criado            | cria `candidato_requisicao` em `inscrito`              | `em_captacao`  |
+| T9  | `em_captacao`  | `INICIAR_SELECAO`             | GRH; ≥1 candidato vinculado                 | —                                                      | `em_selecao`   |
+| T10 | `em_selecao`   | `CONCLUIR_ANALISE`            | GRH; todos candidatos com parecer           | emite `requisicao.concluida`; notifica SOL             | `concluida`    |
+| T11 | `rascunho`     | `CANCELAR`                    | SOL                                         | emite `requisicao.cancelada`                           | `cancelada`    |
+| T12 | `aberta`       | `CANCELAR`                    | SOL                                         | idem                                                   | `cancelada`    |
 
 ### 7.3 Invariantes
 
@@ -609,33 +630,33 @@ stateDiagram-v2
 
 ### 8.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `inscrito` | Candidato vinculado pelo RH; currículo anexado |
-| `triado` | Triagem inicial realizada |
-| `aprovado_curricular` | Currículo aprovado na análise formal |
-| `convocado` | Candidato notificado para entrevista |
-| `em_entrevista` | Entrevista em andamento |
-| `classificado` | Aprovado na entrevista; posição no ranking |
-| `nomeado` | Admitido / nomeado para o cargo |
-| `desistente` | Candidato desistiu do processo |
-| `reprovado` | Reprovado em qualquer etapa |
+| Enum                  | Descrição                                      |
+| --------------------- | ---------------------------------------------- |
+| `inscrito`            | Candidato vinculado pelo RH; currículo anexado |
+| `triado`              | Triagem inicial realizada                      |
+| `aprovado_curricular` | Currículo aprovado na análise formal           |
+| `convocado`           | Candidato notificado para entrevista           |
+| `em_entrevista`       | Entrevista em andamento                        |
+| `classificado`        | Aprovado na entrevista; posição no ranking     |
+| `nomeado`             | Admitido / nomeado para o cargo                |
+| `desistente`          | Candidato desistiu do processo                 |
+| `reprovado`           | Reprovado em qualquer etapa                    |
 
 ### 8.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(vínculo)* | `VINCULAR` | requisição `em_captacao`; currículo S3 anexado | emite `candidato.inscrito` | `inscrito` |
-| T2 | `inscrito` | `TRIAR` | GRH | registra comentário inicial | `triado` |
-| T3 | `triado` | `APROVAR_CURRICULO` | GRH; comentário obrigatório | emite `candidato.aprovado_curriculo` | `aprovado_curricular` |
-| T4 | `triado` | `REPROVAR` | GRH; comentário obrigatório | emite `candidato.reprovado` | `reprovado` |
-| T5 | `aprovado_curricular` | `CONVOCAR` | GRH | emite `candidato.convocado`; notifica candidato | `convocado` |
-| T6 | `convocado` | `INICIAR_ENTREVISTA` | GRH | — | `em_entrevista` |
-| T7 | `em_entrevista` | `CLASSIFICAR` | GRH; nota/posição informada | emite `candidato.classificado` | `classificado` |
-| T8 | `classificado` | `NOMEAR` | GRH; aprovação superior | emite `candidato.nomeado` | `nomeado` |
-| T9 | qualquer ativo | `DESISTIR` | candidato ou GRH | emite `candidato.desistente` | `desistente` |
-| T10 | `em_entrevista` | `REPROVAR` | GRH | emite `candidato.reprovado` | `reprovado` |
-| T11 | `inscrito` | `REMOVER` | GRH; requisição `em_captacao` | remove currículo S3; exclui registro | *(fim)* |
+| #   | De                    | Evento               | Guarda                                         | Efeito                                          | Para                  |
+| --- | --------------------- | -------------------- | ---------------------------------------------- | ----------------------------------------------- | --------------------- |
+| T1  | _(vínculo)_           | `VINCULAR`           | requisição `em_captacao`; currículo S3 anexado | emite `candidato.inscrito`                      | `inscrito`            |
+| T2  | `inscrito`            | `TRIAR`              | GRH                                            | registra comentário inicial                     | `triado`              |
+| T3  | `triado`              | `APROVAR_CURRICULO`  | GRH; comentário obrigatório                    | emite `candidato.aprovado_curriculo`            | `aprovado_curricular` |
+| T4  | `triado`              | `REPROVAR`           | GRH; comentário obrigatório                    | emite `candidato.reprovado`                     | `reprovado`           |
+| T5  | `aprovado_curricular` | `CONVOCAR`           | GRH                                            | emite `candidato.convocado`; notifica candidato | `convocado`           |
+| T6  | `convocado`           | `INICIAR_ENTREVISTA` | GRH                                            | —                                               | `em_entrevista`       |
+| T7  | `em_entrevista`       | `CLASSIFICAR`        | GRH; nota/posição informada                    | emite `candidato.classificado`                  | `classificado`        |
+| T8  | `classificado`        | `NOMEAR`             | GRH; aprovação superior                        | emite `candidato.nomeado`                       | `nomeado`             |
+| T9  | qualquer ativo        | `DESISTIR`           | candidato ou GRH                               | emite `candidato.desistente`                    | `desistente`          |
+| T10 | `em_entrevista`       | `REPROVAR`           | GRH                                            | emite `candidato.reprovado`                     | `reprovado`           |
+| T11 | `inscrito`            | `REMOVER`            | GRH; requisição `em_captacao`                  | remove currículo S3; exclui registro            | _(fim)_               |
 
 ### 8.3 Diagrama
 
@@ -671,33 +692,33 @@ stateDiagram-v2
 
 ### 9.1 Estados (beneficiário)
 
-| Enum | Descrição |
-|---|---|
-| `convocado` | Beneficiário na carteira com data de próximo recadastramento futura |
-| `perto_vencer` | Menos de 30 dias para o vencimento (`job: daily:prova-vida-proxima-vencer`) |
-| `em_atendimento` | Operador abriu o formulário de recadastramento |
-| `comprovantes_pendentes` | Atendimento salvo; anexos ainda não enviados |
-| `aguardando_validacao` | Dados e comprovantes enviados; aguarda checagem |
-| `validado` | Recadastramento concluído e comprovante emitível |
-| `rejeitado` | Dados inconsistentes ou comprovante insuficiente |
-| `reconvocado` | Recadastramento rejeitado; nova janela aberta |
-| `nao_recadastrado` | Prazo ultrapassado sem atendimento |
+| Enum                     | Descrição                                                                   |
+| ------------------------ | --------------------------------------------------------------------------- |
+| `convocado`              | Beneficiário na carteira com data de próximo recadastramento futura         |
+| `perto_vencer`           | Menos de 30 dias para o vencimento (`job: daily:prova-vida-proxima-vencer`) |
+| `em_atendimento`         | Operador abriu o formulário de recadastramento                              |
+| `comprovantes_pendentes` | Atendimento salvo; anexos ainda não enviados                                |
+| `aguardando_validacao`   | Dados e comprovantes enviados; aguarda checagem                             |
+| `validado`               | Recadastramento concluído e comprovante emitível                            |
+| `rejeitado`              | Dados inconsistentes ou comprovante insuficiente                            |
+| `reconvocado`            | Recadastramento rejeitado; nova janela aberta                               |
+| `nao_recadastrado`       | Prazo ultrapassado sem atendimento                                          |
 
 ### 9.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(concessão aposentadoria/pensão)* | `CRIAR_BENEFICIARIO` | beneficiário não existe | `proxima_data = concessao + 6m`; emite `recadastramento.convocado` | `convocado` |
-| T2 | `convocado` | `job: daily:prova-vida-proxima-vencer` | `proxima_data - today < 30d` | emite `recadastramento.perto_vencer` | `perto_vencer` |
-| T3 | `perto_vencer` OU `convocado` | `job: daily:prova-vida-proxima-vencer` | `today > proxima_data` | emite `recadastramento.nao_recadastrado` | `nao_recadastrado` |
-| T4 | qualquer | `INICIAR_ATENDIMENTO` | GR; beneficiário localizado | abre formulário; cria rascunho `recadastramento` | `em_atendimento` |
-| T5 | `em_atendimento` | `SALVAR_DADOS` | GR; dados pessoais completos | atualiza cadastro-base; inativa recadastramentos anteriores | `comprovantes_pendentes` |
-| T6 | `comprovantes_pendentes` | `ENVIAR_COMPROVANTES` | GR; ≥1 anexo PDF | associa anexos ao `recadastramento` | `aguardando_validacao` |
-| T7 | `aguardando_validacao` | `VALIDAR` | GR | emite `recadastramento.validado`; recalcula `proxima_data` | `validado` |
-| T8 | `aguardando_validacao` | `REJEITAR` | GR; motivo obrigatório | emite `recadastramento.rejeitado` | `rejeitado` |
-| T9 | `rejeitado` | `RECONVOCAR` | GR | abre nova janela; emite `recadastramento.reconvocado` | `reconvocado` |
-| T10 | `reconvocado` | `INICIAR_ATENDIMENTO` | GR | idem T4 | `em_atendimento` |
-| T11 | `validado` | `job: daily:prova-vida-proxima-vencer` | ciclo seguinte | recalcula próxima data (aposentado: anual; pensionista: semestral) | `convocado` |
+| #   | De                                 | Evento                                 | Guarda                       | Efeito                                                             | Para                     |
+| --- | ---------------------------------- | -------------------------------------- | ---------------------------- | ------------------------------------------------------------------ | ------------------------ |
+| T1  | _(concessão aposentadoria/pensão)_ | `CRIAR_BENEFICIARIO`                   | beneficiário não existe      | `proxima_data = concessao + 6m`; emite `recadastramento.convocado` | `convocado`              |
+| T2  | `convocado`                        | `job: daily:prova-vida-proxima-vencer` | `proxima_data - today < 30d` | emite `recadastramento.perto_vencer`                               | `perto_vencer`           |
+| T3  | `perto_vencer` OU `convocado`      | `job: daily:prova-vida-proxima-vencer` | `today > proxima_data`       | emite `recadastramento.nao_recadastrado`                           | `nao_recadastrado`       |
+| T4  | qualquer                           | `INICIAR_ATENDIMENTO`                  | GR; beneficiário localizado  | abre formulário; cria rascunho `recadastramento`                   | `em_atendimento`         |
+| T5  | `em_atendimento`                   | `SALVAR_DADOS`                         | GR; dados pessoais completos | atualiza cadastro-base; inativa recadastramentos anteriores        | `comprovantes_pendentes` |
+| T6  | `comprovantes_pendentes`           | `ENVIAR_COMPROVANTES`                  | GR; ≥1 anexo PDF             | associa anexos ao `recadastramento`                                | `aguardando_validacao`   |
+| T7  | `aguardando_validacao`             | `VALIDAR`                              | GR                           | emite `recadastramento.validado`; recalcula `proxima_data`         | `validado`               |
+| T8  | `aguardando_validacao`             | `REJEITAR`                             | GR; motivo obrigatório       | emite `recadastramento.rejeitado`                                  | `rejeitado`              |
+| T9  | `rejeitado`                        | `RECONVOCAR`                           | GR                           | abre nova janela; emite `recadastramento.reconvocado`              | `reconvocado`            |
+| T10 | `reconvocado`                      | `INICIAR_ATENDIMENTO`                  | GR                           | idem T4                                                            | `em_atendimento`         |
+| T11 | `validado`                         | `job: daily:prova-vida-proxima-vencer` | ciclo seguinte               | recalcula próxima data (aposentado: anual; pensionista: semestral) | `convocado`              |
 
 ### 9.3 Invariantes
 
@@ -707,11 +728,11 @@ stateDiagram-v2
 
 ### 9.4 Papéis
 
-| Ação | Papéis |
-|---|---|
-| INICIAR / SALVAR / VALIDAR / REJEITAR / RECONVOCAR | GR |
-| CRIAR_BENEFICIARIO | SIS (evento de concessão) |
-| Atualizações de status temporais | SIS (`daily:prova-vida-proxima-vencer`) |
+| Ação                                               | Papéis                                  |
+| -------------------------------------------------- | --------------------------------------- |
+| INICIAR / SALVAR / VALIDAR / REJEITAR / RECONVOCAR | GR                                      |
+| CRIAR_BENEFICIARIO                                 | SIS (evento de concessão)               |
+| Atualizações de status temporais                   | SIS (`daily:prova-vida-proxima-vencer`) |
 
 ### 9.5 Efeitos colaterais
 
@@ -748,28 +769,28 @@ stateDiagram-v2
 
 ### 10.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `agendado` | Vaga reservada; servidor convocado |
-| `confirmado` | Servidor confirmou presença |
-| `em_atendimento` | Atendimento iniciado no painel diário |
-| `concluido` | Atendimento encerrado; licença médica aberta |
-| `reagendado` | Nova data definida por decisão clínica ou ausência |
-| `faltou` | Servidor não compareceu sem justificativa |
-| `cancelado` | Agendamento cancelado administrativamente |
+| Enum             | Descrição                                          |
+| ---------------- | -------------------------------------------------- |
+| `agendado`       | Vaga reservada; servidor convocado                 |
+| `confirmado`     | Servidor confirmou presença                        |
+| `em_atendimento` | Atendimento iniciado no painel diário              |
+| `concluido`      | Atendimento encerrado; licença médica aberta       |
+| `reagendado`     | Nova data definida por decisão clínica ou ausência |
+| `faltou`         | Servidor não compareceu sem justificativa          |
+| `cancelado`      | Agendamento cancelado administrativamente          |
 
 ### 10.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(criação)* | `AGENDAR` | servidor `ativo`; janela disponível; especialidade com agenda | reserva `janela_agenda`; emite `agendamento.criado`; notifica servidor | `agendado` |
-| T2 | `agendado` | `CONFIRMAR` | servidor ou GM | emite `agendamento.confirmado` | `confirmado` |
-| T3 | `agendado` OU `confirmado` | `INICIAR_ATENDIMENTO` | MED ou GM; data = today | — | `em_atendimento` |
-| T4 | `em_atendimento` | `CONCLUIR` | MED; licença médica salva | libera janela; emite `agendamento.concluido` | `concluido` |
-| T5 | `em_atendimento` | `REGISTRAR_FALTA` | MED ou GM | incrementa contador_faltas do servidor; emite `agendamento.falta_registrada` | `faltou` |
-| T6 | `faltou` | `REAGENDAR` | GM; nova janela disponível | cria novo agendamento (T1); emite `agendamento.reagendado` | `reagendado` |
-| T7 | `agendado` OU `confirmado` | `CANCELAR` | GM | libera janela; emite `agendamento.cancelado` | `cancelado` |
-| T8 | `em_atendimento` | `REAGENDAR` *(por decisão clínica)* | MED; nova especialidade/data | cria novo agendamento; encerra atual | `concluido` *(parcial)* |
+| #   | De                         | Evento                              | Guarda                                                        | Efeito                                                                       | Para                    |
+| --- | -------------------------- | ----------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------- | ----------------------- |
+| T1  | _(criação)_                | `AGENDAR`                           | servidor `ativo`; janela disponível; especialidade com agenda | reserva `janela_agenda`; emite `agendamento.criado`; notifica servidor       | `agendado`              |
+| T2  | `agendado`                 | `CONFIRMAR`                         | servidor ou GM                                                | emite `agendamento.confirmado`                                               | `confirmado`            |
+| T3  | `agendado` OU `confirmado` | `INICIAR_ATENDIMENTO`               | MED ou GM; data = today                                       | —                                                                            | `em_atendimento`        |
+| T4  | `em_atendimento`           | `CONCLUIR`                          | MED; licença médica salva                                     | libera janela; emite `agendamento.concluido`                                 | `concluido`             |
+| T5  | `em_atendimento`           | `REGISTRAR_FALTA`                   | MED ou GM                                                     | incrementa contador_faltas do servidor; emite `agendamento.falta_registrada` | `faltou`                |
+| T6  | `faltou`                   | `REAGENDAR`                         | GM; nova janela disponível                                    | cria novo agendamento (T1); emite `agendamento.reagendado`                   | `reagendado`            |
+| T7  | `agendado` OU `confirmado` | `CANCELAR`                          | GM                                                            | libera janela; emite `agendamento.cancelado`                                 | `cancelado`             |
+| T8  | `em_atendimento`           | `REAGENDAR` _(por decisão clínica)_ | MED; nova especialidade/data                                  | cria novo agendamento; encerra atual                                         | `concluido` _(parcial)_ |
 
 ### 10.3 Invariantes
 
@@ -779,12 +800,12 @@ stateDiagram-v2
 
 ### 10.4 Papéis
 
-| Ação | Papéis |
-|---|---|
-| AGENDAR | GM, SIS |
-| CONFIRMAR | GM, servidor (portal) |
-| INICIAR_ATENDIMENTO / CONCLUIR / REGISTRAR_FALTA | MED, GM |
-| REAGENDAR / CANCELAR | GM |
+| Ação                                             | Papéis                |
+| ------------------------------------------------ | --------------------- |
+| AGENDAR                                          | GM, SIS               |
+| CONFIRMAR                                        | GM, servidor (portal) |
+| INICIAR_ATENDIMENTO / CONCLUIR / REGISTRAR_FALTA | MED, GM               |
+| REAGENDAR / CANCELAR                             | GM                    |
 
 ### 10.5 Efeitos colaterais
 
@@ -819,27 +840,27 @@ stateDiagram-v2
 
 ### 11.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `aberto` | Prontuário criado; médico iniciou atendimento |
-| `em_coleta` | Médico registrando anamnese, CID, exame físico |
-| `em_avaliacao` | Diagnóstico e decisão pericial sendo elaborados |
+| Enum            | Descrição                                                       |
+| --------------- | --------------------------------------------------------------- |
+| `aberto`        | Prontuário criado; médico iniciou atendimento                   |
+| `em_coleta`     | Médico registrando anamnese, CID, exame físico                  |
+| `em_avaliacao`  | Diagnóstico e decisão pericial sendo elaborados                 |
 | `laudo_emitido` | Laudo preenchido; enviado ao coordenador (`PENDENTE_VALIDACAO`) |
-| `homologado` | Coordenador aprovou (`APROVADO`) |
-| `impugnado` | Coordenador rejeitou (`REPROVADO`); devolvido para ajuste |
+| `homologado`    | Coordenador aprovou (`APROVADO`)                                |
+| `impugnado`     | Coordenador rejeitou (`REPROVADO`); devolvido para ajuste       |
 
 ### 11.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(agendamento concluído)* | `ABRIR_PRONTUARIO` | agendamento `concluido` | cria prontuário; emite `pericia.prontuario_aberto` | `aberto` |
-| T2 | `aberto` | `INICIAR_COLETA` | MED | — | `em_coleta` |
-| T3 | `em_coleta` | `ELABORAR_PARECER` | MED; CID + motivo afastamento informados | — | `em_avaliacao` |
-| T4 | `em_avaliacao` | `EMITIR_LAUDO` | MED; ≥1 profissional saúde na equipe; dias > 0 | situacao_laudo = `PENDENTE_VALIDACAO`; emite `pericia.laudo_emitido` | `laudo_emitido` |
-| T5 | `laudo_emitido` | `HOMOLOGAR` | GM (coordenador) | situacao_laudo = `APROVADO`; emite `pericia.homologado`; habilita PDF | `homologado` |
-| T6 | `laudo_emitido` | `IMPUGNAR` | GM; motivo obrigatório | situacao_laudo = `REPROVADO`; emite `pericia.impugnado` | `impugnado` |
-| T7 | `impugnado` | `REABRIR` | MED | retorna para revisão | `em_avaliacao` |
-| T8 | `homologado` | `REPLICAR_MATRICULAS` *(SIS)* | mesmo CPF com outras matrículas | cria licença médica em cada matrícula | `homologado` *(sem mudança de estado)* |
+| #   | De                        | Evento                        | Guarda                                         | Efeito                                                                | Para                                   |
+| --- | ------------------------- | ----------------------------- | ---------------------------------------------- | --------------------------------------------------------------------- | -------------------------------------- |
+| T1  | _(agendamento concluído)_ | `ABRIR_PRONTUARIO`            | agendamento `concluido`                        | cria prontuário; emite `pericia.prontuario_aberto`                    | `aberto`                               |
+| T2  | `aberto`                  | `INICIAR_COLETA`              | MED                                            | —                                                                     | `em_coleta`                            |
+| T3  | `em_coleta`               | `ELABORAR_PARECER`            | MED; CID + motivo afastamento informados       | —                                                                     | `em_avaliacao`                         |
+| T4  | `em_avaliacao`            | `EMITIR_LAUDO`                | MED; ≥1 profissional saúde na equipe; dias > 0 | situacao_laudo = `PENDENTE_VALIDACAO`; emite `pericia.laudo_emitido`  | `laudo_emitido`                        |
+| T5  | `laudo_emitido`           | `HOMOLOGAR`                   | GM (coordenador)                               | situacao_laudo = `APROVADO`; emite `pericia.homologado`; habilita PDF | `homologado`                           |
+| T6  | `laudo_emitido`           | `IMPUGNAR`                    | GM; motivo obrigatório                         | situacao_laudo = `REPROVADO`; emite `pericia.impugnado`               | `impugnado`                            |
+| T7  | `impugnado`               | `REABRIR`                     | MED                                            | retorna para revisão                                                  | `em_avaliacao`                         |
+| T8  | `homologado`              | `REPLICAR_MATRICULAS` _(SIS)_ | mesmo CPF com outras matrículas                | cria licença médica em cada matrícula                                 | `homologado` _(sem mudança de estado)_ |
 
 ### 11.3 Invariantes
 
@@ -850,11 +871,11 @@ stateDiagram-v2
 
 ### 11.4 Papéis
 
-| Ação | Papéis |
-|---|---|
-| ABRIR_PRONTUARIO / INICIAR_COLETA / ELABORAR / EMITIR_LAUDO | MED |
-| HOMOLOGAR / IMPUGNAR | GM (coordenador) |
-| REPLICAR_MATRICULAS | SIS |
+| Ação                                                        | Papéis           |
+| ----------------------------------------------------------- | ---------------- |
+| ABRIR_PRONTUARIO / INICIAR_COLETA / ELABORAR / EMITIR_LAUDO | MED              |
+| HOMOLOGAR / IMPUGNAR                                        | GM (coordenador) |
+| REPLICAR_MATRICULAS                                         | SIS              |
 
 ### 11.5 Efeitos colaterais
 
@@ -878,16 +899,16 @@ stateDiagram-v2
 
 ### 11.7 Exemplo concreto — Perícia de Afastamento
 
-| Data | Evento | Estado |
-|---|---|---|
-| 10/03 08:00 | Agenda: servidor convocado para perícia de clínica geral | agendamento `agendado` |
-| 10/03 09:00 | Médico abre o painel diário; inicia atendimento | prontuário `aberto` → `em_coleta` |
-| 10/03 09:20 | Médico registra CID J45 (asma), HDA, exame físico | `em_coleta` |
-| 10/03 09:40 | Médico elabora parecer: afastamento remunerado 30 dias | `em_avaliacao` |
-| 10/03 09:50 | Médico emite laudo; envia ao coordenador | `laudo_emitido` |
-| 10/03 14:00 | Coordenador homologa; licença médica criada | `homologado` |
-| 10/03 14:01 | SIS: replica licença para segunda matrícula do mesmo CPF | — |
-| 10/03 14:02 | SIS: atualiza situação funcional → AFASTAMENTO | — |
+| Data        | Evento                                                   | Estado                            |
+| ----------- | -------------------------------------------------------- | --------------------------------- |
+| 10/03 08:00 | Agenda: servidor convocado para perícia de clínica geral | agendamento `agendado`            |
+| 10/03 09:00 | Médico abre o painel diário; inicia atendimento          | prontuário `aberto` → `em_coleta` |
+| 10/03 09:20 | Médico registra CID J45 (asma), HDA, exame físico        | `em_coleta`                       |
+| 10/03 09:40 | Médico elabora parecer: afastamento remunerado 30 dias   | `em_avaliacao`                    |
+| 10/03 09:50 | Médico emite laudo; envia ao coordenador                 | `laudo_emitido`                   |
+| 10/03 14:00 | Coordenador homologa; licença médica criada              | `homologado`                      |
+| 10/03 14:01 | SIS: replica licença para segunda matrícula do mesmo CPF | —                                 |
+| 10/03 14:02 | SIS: atualiza situação funcional → AFASTAMENTO           | —                                 |
 
 ---
 
@@ -898,27 +919,27 @@ stateDiagram-v2
 
 ### 12.1 Estados
 
-| Enum | Descrição |
-|---|---|
+| Enum         | Descrição                                        |
+| ------------ | ------------------------------------------------ |
 | `registrada` | Licença criada a partir do prontuário homologado |
-| `em_pericia` | Vigência ativa; servidor em afastamento |
-| `deferida` | Licença confirmada com benefício concedido |
-| `indeferida` | Licença negada; servidor retorna ao trabalho |
-| `prorrogada` | Vigência estendida por nova perícia |
-| `encerrada` | Vigência expirada; servidor retornou |
+| `em_pericia` | Vigência ativa; servidor em afastamento          |
+| `deferida`   | Licença confirmada com benefício concedido       |
+| `indeferida` | Licença negada; servidor retorna ao trabalho     |
+| `prorrogada` | Vigência estendida por nova perícia              |
+| `encerrada`  | Vigência expirada; servidor retornou             |
 
 ### 12.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(prontuário homologado)* | `REGISTRAR_LICENCA` | prontuário `homologado`; servidor sem licença ativa | cria licença; emite `licenca.registrada`; atualiza `situacao_funcional` | `registrada` |
-| T2 | `registrada` | `ATIVAR` *(SIS: data_inicio atingida)* | — | emite `licenca.em_pericia` | `em_pericia` |
-| T3 | `em_pericia` | `DEFERIR` | GM; benefício concedido formalmente | emite `licenca.deferida` | `deferida` |
-| T4 | `em_pericia` | `INDEFERIR` | GM | emite `licenca.indeferida`; aciona retorno do servidor | `indeferida` |
-| T5 | `deferida` | `PRORROGAR` | GM; nova data_fim > atual; total ≤ 720 dias | atualiza `data_fim`; emite `licenca.prorrogada` | `prorrogada` |
-| T6 | `prorrogada` | `DEFERIR` | GM | emite `licenca.deferida` | `deferida` |
-| T7 | `deferida` OU `prorrogada` | `job: daily:licenca-medica-vencida` | `today > data_fim` | emite `licenca.encerrada`; aciona `situacao_funcional` retorno | `encerrada` |
-| T8 | `indeferida` | `ENCERRAR` | SIS | emite `licenca.encerrada` | `encerrada` |
+| #   | De                         | Evento                                 | Guarda                                              | Efeito                                                                  | Para         |
+| --- | -------------------------- | -------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------- | ------------ |
+| T1  | _(prontuário homologado)_  | `REGISTRAR_LICENCA`                    | prontuário `homologado`; servidor sem licença ativa | cria licença; emite `licenca.registrada`; atualiza `situacao_funcional` | `registrada` |
+| T2  | `registrada`               | `ATIVAR` _(SIS: data_inicio atingida)_ | —                                                   | emite `licenca.em_pericia`                                              | `em_pericia` |
+| T3  | `em_pericia`               | `DEFERIR`                              | GM; benefício concedido formalmente                 | emite `licenca.deferida`                                                | `deferida`   |
+| T4  | `em_pericia`               | `INDEFERIR`                            | GM                                                  | emite `licenca.indeferida`; aciona retorno do servidor                  | `indeferida` |
+| T5  | `deferida`                 | `PRORROGAR`                            | GM; nova data_fim > atual; total ≤ 720 dias         | atualiza `data_fim`; emite `licenca.prorrogada`                         | `prorrogada` |
+| T6  | `prorrogada`               | `DEFERIR`                              | GM                                                  | emite `licenca.deferida`                                                | `deferida`   |
+| T7  | `deferida` OU `prorrogada` | `job: daily:licenca-medica-vencida`    | `today > data_fim`                                  | emite `licenca.encerrada`; aciona `situacao_funcional` retorno          | `encerrada`  |
+| T8  | `indeferida`               | `ENCERRAR`                             | SIS                                                 | emite `licenca.encerrada`                                               | `encerrada`  |
 
 ### 12.3 Invariantes
 
@@ -951,36 +972,36 @@ stateDiagram-v2
 
 ### 13.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `protocolado` | Protocolo aberto; documentação inicial entregue |
-| `em_instrucao` | Analista colhendo documentos e histórico funcional |
-| `em_calculo` | Cálculo do benefício em andamento |
-| `parecer_tecnico` | Setor técnico elaborando parecer |
-| `parecer_juridico` | Assessoria jurídica revisando |
-| `deferido` | Aposentadoria aprovada |
-| `indeferido` | Aposentadoria negada; fundamentação comunicada |
-| `em_efetivacao` | Ato de concessão em emissão |
-| `concedido` | Aposentadoria efetivada no sistema; pensão habilitada |
-| `suspenso` | Processo suspenso por diligência |
-| `arquivado` | Processo encerrado sem concessão ou prescrito |
+| Enum               | Descrição                                             |
+| ------------------ | ----------------------------------------------------- |
+| `protocolado`      | Protocolo aberto; documentação inicial entregue       |
+| `em_instrucao`     | Analista colhendo documentos e histórico funcional    |
+| `em_calculo`       | Cálculo do benefício em andamento                     |
+| `parecer_tecnico`  | Setor técnico elaborando parecer                      |
+| `parecer_juridico` | Assessoria jurídica revisando                         |
+| `deferido`         | Aposentadoria aprovada                                |
+| `indeferido`       | Aposentadoria negada; fundamentação comunicada        |
+| `em_efetivacao`    | Ato de concessão em emissão                           |
+| `concedido`        | Aposentadoria efetivada no sistema; pensão habilitada |
+| `suspenso`         | Processo suspenso por diligência                      |
+| `arquivado`        | Processo encerrado sem concessão ou prescrito         |
 
 ### 13.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(abertura)* | `PROTOCOLAR` | GP; funcionário com critérios atendidos | cria processo; emite `aposentadoria.protocolada` | `protocolado` |
-| T2 | `protocolado` | `INICIAR_INSTRUCAO` | GP | analista responsável atribuído | `em_instrucao` |
-| T3 | `em_instrucao` | `ENVIAR_CALCULO` | GP; CTC / tempo de serviço validado | enfileira cálculo previdenciário | `em_calculo` |
-| T4 | `em_calculo` | `calculo_concluido` *(SIS)* | — | emite `aposentadoria.calculada` | `parecer_tecnico` |
-| T5 | `parecer_tecnico` | `EMITIR_PARECER_TECNICO` | GP; parecer assinado | emite `aposentadoria.parecer_tecnico_emitido` | `parecer_juridico` |
-| T6 | `parecer_juridico` | `DEFERIR` | GP; JURIDICO | emite `aposentadoria.deferida` | `deferido` |
-| T7 | `parecer_juridico` | `INDEFERIR` | GP; JURIDICO; fundamento obrigatório | emite `aposentadoria.indeferida`; notifica servidor | `indeferido` |
-| T8 | `deferido` | `INICIAR_EFETIVACAO` | GP | emite `aposentadoria.efetivacao_iniciada` | `em_efetivacao` |
-| T9 | `em_efetivacao` | `CONCEDER` | GP | cria `aposentadoria` em status `CONCEDIDA`; altera `situacao_funcional`; habilita folha de aposentado; emite `aposentadoria.concedida` | `concedido` |
-| T10 | qualquer ativo | `SUSPENDER` | GP; motivo diligência | emite `aposentadoria.suspensa` | `suspenso` |
-| T11 | `suspenso` | `RETOMAR` | GP | retorna ao estado anterior | *(estado salvo)* |
-| T12 | `indeferido` OU `suspenso` | `ARQUIVAR` | GP | imutabiliza | `arquivado` |
+| #   | De                         | Evento                      | Guarda                                  | Efeito                                                                                                                                 | Para               |
+| --- | -------------------------- | --------------------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| T1  | _(abertura)_               | `PROTOCOLAR`                | GP; funcionário com critérios atendidos | cria processo; emite `aposentadoria.protocolada`                                                                                       | `protocolado`      |
+| T2  | `protocolado`              | `INICIAR_INSTRUCAO`         | GP                                      | analista responsável atribuído                                                                                                         | `em_instrucao`     |
+| T3  | `em_instrucao`             | `ENVIAR_CALCULO`            | GP; CTC / tempo de serviço validado     | enfileira cálculo previdenciário                                                                                                       | `em_calculo`       |
+| T4  | `em_calculo`               | `calculo_concluido` _(SIS)_ | —                                       | emite `aposentadoria.calculada`                                                                                                        | `parecer_tecnico`  |
+| T5  | `parecer_tecnico`          | `EMITIR_PARECER_TECNICO`    | GP; parecer assinado                    | emite `aposentadoria.parecer_tecnico_emitido`                                                                                          | `parecer_juridico` |
+| T6  | `parecer_juridico`         | `DEFERIR`                   | GP; JURIDICO                            | emite `aposentadoria.deferida`                                                                                                         | `deferido`         |
+| T7  | `parecer_juridico`         | `INDEFERIR`                 | GP; JURIDICO; fundamento obrigatório    | emite `aposentadoria.indeferida`; notifica servidor                                                                                    | `indeferido`       |
+| T8  | `deferido`                 | `INICIAR_EFETIVACAO`        | GP                                      | emite `aposentadoria.efetivacao_iniciada`                                                                                              | `em_efetivacao`    |
+| T9  | `em_efetivacao`            | `CONCEDER`                  | GP                                      | cria `aposentadoria` em status `CONCEDIDA`; altera `situacao_funcional`; habilita folha de aposentado; emite `aposentadoria.concedida` | `concedido`        |
+| T10 | qualquer ativo             | `SUSPENDER`                 | GP; motivo diligência                   | emite `aposentadoria.suspensa`                                                                                                         | `suspenso`         |
+| T11 | `suspenso`                 | `RETOMAR`                   | GP                                      | retorna ao estado anterior                                                                                                             | _(estado salvo)_   |
+| T12 | `indeferido` OU `suspenso` | `ARQUIVAR`                  | GP                                      | imutabiliza                                                                                                                            | `arquivado`        |
 
 ### 13.3 Invariantes
 
@@ -1019,16 +1040,16 @@ stateDiagram-v2
 
 ### 13.6 Exemplo concreto
 
-| Data | Evento | Estado |
-|---|---|---|
-| 01/03 | GP protocola pedido do servidor | `protocolado` |
-| 03/03 | Analista abre instrução; coleta CTC | `em_instrucao` |
-| 15/03 | Analista envia para cálculo | `em_calculo` |
-| 16/03 | SIS conclui cálculo | `parecer_tecnico` |
-| 20/03 | Técnico emite parecer | `parecer_juridico` |
-| 25/03 | Jurídico defere | `deferido` |
-| 26/03 | GP inicia efetivação | `em_efetivacao` |
-| 28/03 | GP concede aposentadoria; eSocial S-2298 emitido | `concedido` |
+| Data  | Evento                                           | Estado             |
+| ----- | ------------------------------------------------ | ------------------ |
+| 01/03 | GP protocola pedido do servidor                  | `protocolado`      |
+| 03/03 | Analista abre instrução; coleta CTC              | `em_instrucao`     |
+| 15/03 | Analista envia para cálculo                      | `em_calculo`       |
+| 16/03 | SIS conclui cálculo                              | `parecer_tecnico`  |
+| 20/03 | Técnico emite parecer                            | `parecer_juridico` |
+| 25/03 | Jurídico defere                                  | `deferido`         |
+| 26/03 | GP inicia efetivação                             | `em_efetivacao`    |
+| 28/03 | GP concede aposentadoria; eSocial S-2298 emitido | `concedido`        |
 
 ---
 
@@ -1045,20 +1066,20 @@ stateDiagram-v2
 
 ### 14.2 Diferenças em relação à Aposentadoria
 
-| Aspecto | Aposentadoria | Pensão |
-|---|---|---|
-| Sujeito | Funcionário requerente | Beneficiário (dependente do instituidor) |
-| Gatilho | Requerimento voluntário | Óbito ou invalidez do instituidor |
-| Cálculo | Tempo de serviço + salário de benefício | Proventos do instituidor × cota-parte |
-| eSocial | S-2298 (desligamento) | S-2230 (afastamento por óbito) + benefício |
-| Recadastramento | Anual (aniversário) | Semestral |
+| Aspecto         | Aposentadoria                           | Pensão                                     |
+| --------------- | --------------------------------------- | ------------------------------------------ |
+| Sujeito         | Funcionário requerente                  | Beneficiário (dependente do instituidor)   |
+| Gatilho         | Requerimento voluntário                 | Óbito ou invalidez do instituidor          |
+| Cálculo         | Tempo de serviço + salário de benefício | Proventos do instituidor × cota-parte      |
+| eSocial         | S-2298 (desligamento)                   | S-2230 (afastamento por óbito) + benefício |
+| Recadastramento | Anual (aniversário)                     | Semestral                                  |
 
 ### 14.3 Transições específicas da pensão
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(óbito/invalidez)* | `PROTOCOLAR_PENSAO` | GP; certidão de óbito ou laudo | cria `processo_pensao` e `pensao` em rascunho | `protocolado` |
-| T9 | `em_efetivacao` | `CONCEDER_PENSAO` | GP | cria `pensao` ativa; cria `beneficiario_recadastramento` semestral; emite `pensao.concedida` | `concedido` |
+| #   | De                  | Evento              | Guarda                         | Efeito                                                                                       | Para          |
+| --- | ------------------- | ------------------- | ------------------------------ | -------------------------------------------------------------------------------------------- | ------------- |
+| T1  | _(óbito/invalidez)_ | `PROTOCOLAR_PENSAO` | GP; certidão de óbito ou laudo | cria `processo_pensao` e `pensao` em rascunho                                                | `protocolado` |
+| T9  | `em_efetivacao`     | `CONCEDER_PENSAO`   | GP                             | cria `pensao` ativa; cria `beneficiario_recadastramento` semestral; emite `pensao.concedida` | `concedido`   |
 
 ### 14.4 Diagrama
 
@@ -1089,23 +1110,23 @@ stateDiagram-v2
 
 ### 15.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `solicitada` | Pedido registrado; CTC base vinculada |
-| `em_analise` | Analista conferindo documentação e valor |
-| `emitida` | Certidão de compensação gerada e assinada |
-| `entregue` | Documento entregue ao servidor / RPPS de destino |
-| `cancelada` | Processo cancelado antes da emissão |
+| Enum         | Descrição                                        |
+| ------------ | ------------------------------------------------ |
+| `solicitada` | Pedido registrado; CTC base vinculada            |
+| `em_analise` | Analista conferindo documentação e valor         |
+| `emitida`    | Certidão de compensação gerada e assinada        |
+| `entregue`   | Documento entregue ao servidor / RPPS de destino |
+| `cancelada`  | Processo cancelado antes da emissão              |
 
 ### 15.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(solicitação)* | `SOLICITAR_CTC` | GP; `certidao_tempo_contribuicao` cadastrada | cria compensação; emite `ctc.solicitada` | `solicitada` |
-| T2 | `solicitada` | `INICIAR_ANALISE` | GP | analista atribuído | `em_analise` |
-| T3 | `em_analise` | `EMITIR` | GP; valor calculado; assinado | gera PDF; emite `ctc.emitida`; S3 key persistida | `emitida` |
-| T4 | `emitida` | `ENTREGAR` | GP; comprovante de entrega | emite `ctc.entregue` | `entregue` |
-| T5 | `solicitada` OU `em_analise` | `CANCELAR` | GP; motivo | emite `ctc.cancelada` | `cancelada` |
+| #   | De                           | Evento            | Guarda                                       | Efeito                                           | Para         |
+| --- | ---------------------------- | ----------------- | -------------------------------------------- | ------------------------------------------------ | ------------ |
+| T1  | _(solicitação)_              | `SOLICITAR_CTC`   | GP; `certidao_tempo_contribuicao` cadastrada | cria compensação; emite `ctc.solicitada`         | `solicitada` |
+| T2  | `solicitada`                 | `INICIAR_ANALISE` | GP                                           | analista atribuído                               | `em_analise` |
+| T3  | `em_analise`                 | `EMITIR`          | GP; valor calculado; assinado                | gera PDF; emite `ctc.emitida`; S3 key persistida | `emitida`    |
+| T4  | `emitida`                    | `ENTREGAR`        | GP; comprovante de entrega                   | emite `ctc.entregue`                             | `entregue`   |
+| T5  | `solicitada` OU `em_analise` | `CANCELAR`        | GP; motivo                                   | emite `ctc.cancelada`                            | `cancelada`  |
 
 ### 15.3 Diagrama
 
@@ -1130,23 +1151,23 @@ stateDiagram-v2
 
 ### 16.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `aberta` | Solicitação registrada |
+| Enum          | Descrição                          |
+| ------------- | ---------------------------------- |
+| `aberta`      | Solicitação registrada             |
 | `em_producao` | Responsável elaborando o documento |
-| `produzida` | Documento gerado; aguarda entrega |
-| `entregue` | Documento entregue ao solicitante |
-| `cancelada` | Requisição cancelada |
+| `produzida`   | Documento gerado; aguarda entrega  |
+| `entregue`    | Documento entregue ao solicitante  |
+| `cancelada`   | Requisição cancelada               |
 
 ### 16.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(solicitação)* | `ABRIR_REQUISICAO` | servidor ou gestor | cria registro; emite `documento.solicitado` | `aberta` |
-| T2 | `aberta` | `INICIAR_PRODUCAO` | GRH | — | `em_producao` |
-| T3 | `em_producao` | `FINALIZAR_PRODUCAO` | GRH; arquivo S3 gerado | emite `documento.produzido` | `produzida` |
-| T4 | `produzida` | `ENTREGAR` | GRH | emite `documento.entregue` | `entregue` |
-| T5 | `aberta` OU `em_producao` | `CANCELAR` | GRH; motivo | emite `documento.cancelado` | `cancelada` |
+| #   | De                        | Evento               | Guarda                 | Efeito                                      | Para          |
+| --- | ------------------------- | -------------------- | ---------------------- | ------------------------------------------- | ------------- |
+| T1  | _(solicitação)_           | `ABRIR_REQUISICAO`   | servidor ou gestor     | cria registro; emite `documento.solicitado` | `aberta`      |
+| T2  | `aberta`                  | `INICIAR_PRODUCAO`   | GRH                    | —                                           | `em_producao` |
+| T3  | `em_producao`             | `FINALIZAR_PRODUCAO` | GRH; arquivo S3 gerado | emite `documento.produzido`                 | `produzida`   |
+| T4  | `produzida`               | `ENTREGAR`           | GRH                    | emite `documento.entregue`                  | `entregue`    |
+| T5  | `aberta` OU `em_producao` | `CANCELAR`           | GRH; motivo            | emite `documento.cancelado`                 | `cancelada`   |
 
 ### 16.3 Diagrama
 
@@ -1171,31 +1192,31 @@ stateDiagram-v2
 
 ### 17.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `solicitado` | Pedido de averbação recebido |
-| `em_analise` | Margem consignável sendo verificada |
-| `autorizado` | Margem disponível confirmada |
-| `averbado` | Desconto incluído na folha |
-| `ativo` | Desconto em curso |
-| `suspenso` | Desconto temporariamente interrompido |
-| `quitado` | Todas as parcelas liquidadas |
-| `rescindido` | Contrato encerrado antecipadamente |
+| Enum         | Descrição                             |
+| ------------ | ------------------------------------- |
+| `solicitado` | Pedido de averbação recebido          |
+| `em_analise` | Margem consignável sendo verificada   |
+| `autorizado` | Margem disponível confirmada          |
+| `averbado`   | Desconto incluído na folha            |
+| `ativo`      | Desconto em curso                     |
+| `suspenso`   | Desconto temporariamente interrompido |
+| `quitado`    | Todas as parcelas liquidadas          |
+| `rescindido` | Contrato encerrado antecipadamente    |
 
 ### 17.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(solicitação)* | `SOLICITAR_AVERBACAO` | servidor; `convenio` ativo | cria contrato; emite `consignado.solicitado` | `solicitado` |
-| T2 | `solicitado` | `ANALISAR` | GF / convenio | verifica margem disponível = salario_liquido × 35% | `em_analise` |
-| T3 | `em_analise` | `AUTORIZAR` | GF; margem ok | emite `consignado.autorizado` | `autorizado` |
-| T4 | `em_analise` | `RECUSAR` | GF; margem insuficiente | emite `consignado.recusado` | `solicitado` *(devolve)* |
-| T5 | `autorizado` | `AVERBAR` | SIS: importação consignado | cria `lancamento` de desconto; emite `consignado.averbado` | `averbado` |
-| T6 | `averbado` | `ATIVAR` *(SIS: 1ª folha calculada com desconto)* | — | emite `consignado.ativo` | `ativo` |
-| T7 | `ativo` | `SUSPENDER` | GF; motivo (afastamento etc.) | remove lançamento da próxima competência; emite `consignado.suspenso` | `suspenso` |
-| T8 | `suspenso` | `REATIVAR` | GF | recria lançamento | `ativo` |
-| T9 | `ativo` | `QUITAR` *(SIS: parcelas_pagas = parcelas_totais)* | — | remove lançamento; emite `consignado.quitado` | `quitado` |
-| T10 | `ativo` OU `suspenso` | `RESCINDIR` | GF; motivo | emite `consignado.rescindido` | `rescindido` |
+| #   | De                    | Evento                                             | Guarda                        | Efeito                                                                | Para                     |
+| --- | --------------------- | -------------------------------------------------- | ----------------------------- | --------------------------------------------------------------------- | ------------------------ |
+| T1  | _(solicitação)_       | `SOLICITAR_AVERBACAO`                              | servidor; `convenio` ativo    | cria contrato; emite `consignado.solicitado`                          | `solicitado`             |
+| T2  | `solicitado`          | `ANALISAR`                                         | GF / convenio                 | verifica margem disponível = salario_liquido × 35%                    | `em_analise`             |
+| T3  | `em_analise`          | `AUTORIZAR`                                        | GF; margem ok                 | emite `consignado.autorizado`                                         | `autorizado`             |
+| T4  | `em_analise`          | `RECUSAR`                                          | GF; margem insuficiente       | emite `consignado.recusado`                                           | `solicitado` _(devolve)_ |
+| T5  | `autorizado`          | `AVERBAR`                                          | SIS: importação consignado    | cria `lancamento` de desconto; emite `consignado.averbado`            | `averbado`               |
+| T6  | `averbado`            | `ATIVAR` _(SIS: 1ª folha calculada com desconto)_  | —                             | emite `consignado.ativo`                                              | `ativo`                  |
+| T7  | `ativo`               | `SUSPENDER`                                        | GF; motivo (afastamento etc.) | remove lançamento da próxima competência; emite `consignado.suspenso` | `suspenso`               |
+| T8  | `suspenso`            | `REATIVAR`                                         | GF                            | recria lançamento                                                     | `ativo`                  |
+| T9  | `ativo`               | `QUITAR` _(SIS: parcelas_pagas = parcelas_totais)_ | —                             | remove lançamento; emite `consignado.quitado`                         | `quitado`                |
+| T10 | `ativo` OU `suspenso` | `RESCINDIR`                                        | GF; motivo                    | emite `consignado.rescindido`                                         | `rescindido`             |
 
 ### 17.3 Invariantes
 
@@ -1230,31 +1251,31 @@ stateDiagram-v2
 
 ### 18.1 Estados
 
-| Enum | Descrição |
-|---|---|
-| `vaga_publicada` | Programa ativo; vagas divulgadas |
-| `inscricao_aberta` | Candidaturas sendo recebidas |
-| `selecao` | Triagem e entrevistas em andamento |
-| `contrato_assinado` | Documentação e contrato formalizados |
-| `em_vigencia` | Estágio ativo com data_inicio ≤ today ≤ data_fim |
-| `prorrogado` | Vigência estendida dentro do limite do programa |
-| `rescindido` | Encerrado antecipadamente |
-| `concluido` | Atingiu data_fim natural; desligamento processado |
+| Enum                | Descrição                                         |
+| ------------------- | ------------------------------------------------- |
+| `vaga_publicada`    | Programa ativo; vagas divulgadas                  |
+| `inscricao_aberta`  | Candidaturas sendo recebidas                      |
+| `selecao`           | Triagem e entrevistas em andamento                |
+| `contrato_assinado` | Documentação e contrato formalizados              |
+| `em_vigencia`       | Estágio ativo com data_inicio ≤ today ≤ data_fim  |
+| `prorrogado`        | Vigência estendida dentro do limite do programa   |
+| `rescindido`        | Encerrado antecipadamente                         |
+| `concluido`         | Atingiu data_fim natural; desligamento processado |
 
 ### 18.2 Transições
 
-| # | De | Evento | Guarda | Efeito | Para |
-|---|---|---|---|---|---|
-| T1 | *(programa ativo)* | `PUBLICAR_VAGA` | GRH; `programa_estagio.vigencia_fim > today` | emite `estagio.vaga_publicada` | `vaga_publicada` |
-| T2 | `vaga_publicada` | `ABRIR_INSCRICOES` | GRH | emite `estagio.inscricoes_abertas` | `inscricao_aberta` |
-| T3 | `inscricao_aberta` | `INICIAR_SELECAO` | GRH; ≥1 candidato | — | `selecao` |
-| T4 | `selecao` | `CONTRATAR` | GRH; candidato selecionado; filial/lotação/banco informados | cria `estagiario`; cria vínculo `ESTAGIARIO`; ativa verbas; emite `estagio.contratado` | `contrato_assinado` |
-| T5 | `contrato_assinado` | `INICIAR_VIGENCIA` *(SIS: data_inicio atingida)* | — | emite `estagio.iniciado` | `em_vigencia` |
-| T6 | `em_vigencia` | `PRORROGAR` | GRH; renovacoes_realizadas < renovacoes_permitidas; total_meses ≤ 24 | atualiza `data_fim`; emite `estagio.prorrogado` | `prorrogado` |
-| T7 | `prorrogado` | `INICIAR_VIGENCIA` *(SIS)* | — | emite `estagio.retomado` | `em_vigencia` |
-| T8 | `em_vigencia` | `RESCINDIR` | GRH; motivo | inativa verbas; altera `situacao_funcional` → desligamento; emite `estagio.rescindido` | `rescindido` |
-| T9 | `em_vigencia` | `job: daily:estagio-desligamento-automatico` | `today >= data_fim` | idem T8 automático | `concluido` |
-| T10 | `prorrogado` | `RESCINDIR` | GRH | idem T8 | `rescindido` |
+| #   | De                  | Evento                                           | Guarda                                                               | Efeito                                                                                 | Para                |
+| --- | ------------------- | ------------------------------------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------- |
+| T1  | _(programa ativo)_  | `PUBLICAR_VAGA`                                  | GRH; `programa_estagio.vigencia_fim > today`                         | emite `estagio.vaga_publicada`                                                         | `vaga_publicada`    |
+| T2  | `vaga_publicada`    | `ABRIR_INSCRICOES`                               | GRH                                                                  | emite `estagio.inscricoes_abertas`                                                     | `inscricao_aberta`  |
+| T3  | `inscricao_aberta`  | `INICIAR_SELECAO`                                | GRH; ≥1 candidato                                                    | —                                                                                      | `selecao`           |
+| T4  | `selecao`           | `CONTRATAR`                                      | GRH; candidato selecionado; filial/lotação/banco informados          | cria `estagiario`; cria vínculo `ESTAGIARIO`; ativa verbas; emite `estagio.contratado` | `contrato_assinado` |
+| T5  | `contrato_assinado` | `INICIAR_VIGENCIA` _(SIS: data_inicio atingida)_ | —                                                                    | emite `estagio.iniciado`                                                               | `em_vigencia`       |
+| T6  | `em_vigencia`       | `PRORROGAR`                                      | GRH; renovacoes_realizadas < renovacoes_permitidas; total_meses ≤ 24 | atualiza `data_fim`; emite `estagio.prorrogado`                                        | `prorrogado`        |
+| T7  | `prorrogado`        | `INICIAR_VIGENCIA` _(SIS)_                       | —                                                                    | emite `estagio.retomado`                                                               | `em_vigencia`       |
+| T8  | `em_vigencia`       | `RESCINDIR`                                      | GRH; motivo                                                          | inativa verbas; altera `situacao_funcional` → desligamento; emite `estagio.rescindido` | `rescindido`        |
+| T9  | `em_vigencia`       | `job: daily:estagio-desligamento-automatico`     | `today >= data_fim`                                                  | idem T8 automático                                                                     | `concluido`         |
+| T10 | `prorrogado`        | `RESCINDIR`                                      | GRH                                                                  | idem T8                                                                                | `rescindido`        |
 
 ### 18.3 Invariantes
 
@@ -1264,11 +1285,11 @@ stateDiagram-v2
 
 ### 18.4 Papéis
 
-| Ação | Papéis |
-|---|---|
-| PUBLICAR_VAGA / ABRIR_INSCRICOES / INICIAR_SELECAO | GRH |
-| CONTRATAR / PRORROGAR / RESCINDIR | GRH |
-| Desligamento automático | SIS |
+| Ação                                               | Papéis |
+| -------------------------------------------------- | ------ |
+| PUBLICAR_VAGA / ABRIR_INSCRICOES / INICIAR_SELECAO | GRH    |
+| CONTRATAR / PRORROGAR / RESCINDIR                  | GRH    |
+| Desligamento automático                            | SIS    |
 
 ### 18.5 Efeitos colaterais
 
@@ -1300,66 +1321,66 @@ stateDiagram-v2
 
 A tabela abaixo cruza as 18 máquinas de estado com os papéis que disparam transições e os eventos publicados no barramento (EventBridge/SNS — cf. BRIEF §8). Coluna "Fila/Tópico" indica o canal SQS/SNS ou Step Function correspondente.
 
-| Máquina | Transição-chave | Papel | Evento publicado | Fila / Tópico |
-|---|---|---|---|---|
-| **Competência** | Fechar | GF | `folha.competencia.fechada` | SNS `folha-eventos` |
-| **Competência** | Fechamento agendado | SIS | `folha.competencia.fechamento_iniciado` | `daily:competencia-programada-fechamento` |
-| **Competência** | Reabertura | GF | `folha.competencia.reaberta` | SNS `folha-eventos` |
-| **Folha** | Criar | GF | `folha.criada` | SNS `folha-eventos` |
-| **Folha** | Calcular lote | GF | `folha.calculo.solicitada` | SQS `folha-calculo` → `sgp-payroll-engine` |
-| **Folha** | Cálculo concluído | SIS | `folha.calculo.concluida` | SQS `folha-calculo-resultado` → `sgp-core-api` |
-| **Folha** | Gerar remessa | GF | `folha.remessa_gerada` | SQS `remessa.gerar` → `sgp-integrations-worker` |
-| **Folha** | Bloquear | SIS | `folha.bloqueada` | SNS `folha-eventos` |
-| **Contracheque** | Calcular | SIS | `contracheque.calculado` | SQS `folha-calculo` |
-| **Contracheque** | Gerar PDF | SIS | `contracheque.gerar.pdf` | SQS `contracheque.gerar.pdf` → `sgp-report-service` |
-| **Contracheque** | Disponibilizar portal | GF | `contracheque.disponibilizado` | SNS `portal-eventos` → push/e-mail |
-| **Lançamento** | Efetivar | SIS | `lancamento.efetivado` | interno EventEmitter2 |
-| **Lançamento** | Estornar | GF | `lancamento.estornado` | SNS `audit-eventos` → `audit_log` |
-| **Lote Importação** | Aprovar e processar | GF | `importacao.processada` | SQS `importacao.processar` |
-| **Lote Importação** | Rejeitar | GF | `importacao.rejeitada` | interno |
-| **Evento eSocial** | Gerar | SIS | `esocial.evento.pendente` | SQS `esocial.evento.pendente` → `sgp-esocial-worker` |
-| **Evento eSocial** | Aceito | SIS | `esocial.aceito` | SNS `esocial-eventos` |
-| **Evento eSocial** | Rejeitado | SIS | `esocial.rejeitado` | SQS `esocial.evento.pendente` (retry ≤3) |
-| **Requisição Pessoal** | Encaminhar | SOL | `requisicao.encaminhada` | SNS `recrutamento-eventos` + e-mail |
-| **Requisição Pessoal** | Aprovar | GRH | `requisicao.aprovada` | SNS `recrutamento-eventos` + e-mail SOL |
-| **Requisição Pessoal** | Concluir análise | GRH | `requisicao.concluida` | SNS `recrutamento-eventos` + e-mail SOL |
-| **Candidato na Vaga** | Nomear | GRH | `candidato.nomeado` | SNS `recrutamento-eventos` |
-| **Recadastramento** | Validar | GR | `recadastramento.validado` | SNS `previdenciario-eventos` |
-| **Recadastramento** | Não recadastrado | SIS | `recadastramento.nao_recadastrado` | `daily:prova-vida-proxima-vencer` |
-| **Recadastramento** | Perto vencer | SIS | `recadastramento.perto_vencer` | `daily:prova-vida-proxima-vencer` |
-| **Agendamento Pericial** | Criar | GM | `agendamento.criado` | SNS `saude-eventos` + notificação servidor |
-| **Agendamento Pericial** | Concluir | MED | `agendamento.concluido` | SNS `saude-eventos` |
-| **Agendamento Pericial** | Falta | MED | `agendamento.falta_registrada` | SNS `saude-eventos` |
-| **Prontuário Perícia** | Emitir laudo | MED | `pericia.laudo_emitido` | SNS `saude-eventos` |
-| **Prontuário Perícia** | Homologar | GM | `pericia.homologado` | SNS `saude-eventos` → atualiza `situacao_funcional` |
-| **Prontuário Perícia** | Replicar matrículas | SIS | `pericia.replicada` | interno EventEmitter2 |
-| **Licença Médica** | Registrar | SIS | `licenca.registrada` | SNS `saude-eventos` → `situacao_funcional` |
-| **Licença Médica** | Encerrar | SIS | `licenca.encerrada` | `daily:licenca-medica-vencida` → `daily:situacao-funcional-retorno-afastamento` |
-| **Processo Aposentadoria** | Conceder | GP | `aposentadoria.concedida` | SNS `previdenciario-eventos` + eSocial S-2298 |
-| **Processo Pensão** | Conceder | GP | `pensao.concedida` | SNS `previdenciario-eventos` + eSocial S-2298 |
-| **CTC** | Emitir | GP | `ctc.emitida` | SNS `previdenciario-eventos` |
-| **Requisição Documento** | Entregar | GRH | `documento.entregue` | interno |
-| **Consignado** | Averbar | SIS | `consignado.averbado` | SNS `folha-eventos` → lançamento desconto |
-| **Consignado** | Quitar | SIS | `consignado.quitado` | SNS `folha-eventos` → remove lançamento |
-| **Estágio** | Contratar | GRH | `estagio.contratado` | SNS `recrutamento-eventos` + eSocial S-2200 |
-| **Estágio** | Prorrogar | GRH | `estagio.prorrogado` | SNS `recrutamento-eventos` + eSocial S-2206 |
-| **Estágio** | Concluir / Rescindir | GRH/SIS | `estagio.concluido` / `estagio.rescindido` | SNS `recrutamento-eventos` + eSocial S-2299 |
+| Máquina                    | Transição-chave       | Papel   | Evento publicado                           | Fila / Tópico                                                                   |
+| -------------------------- | --------------------- | ------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
+| **Competência**            | Fechar                | GF      | `folha.competencia.fechada`                | SNS `folha-eventos`                                                             |
+| **Competência**            | Fechamento agendado   | SIS     | `folha.competencia.fechamento_iniciado`    | `daily:competencia-programada-fechamento`                                       |
+| **Competência**            | Reabertura            | GF      | `folha.competencia.reaberta`               | SNS `folha-eventos`                                                             |
+| **Folha**                  | Criar                 | GF      | `folha.criada`                             | SNS `folha-eventos`                                                             |
+| **Folha**                  | Calcular lote         | GF      | `folha.calculo.solicitada`                 | SQS `folha-calculo` → `sgp-payroll-engine`                                      |
+| **Folha**                  | Cálculo concluído     | SIS     | `folha.calculo.concluida`                  | SQS `folha-calculo-resultado` → `sgp-core-api`                                  |
+| **Folha**                  | Gerar remessa         | GF      | `folha.remessa_gerada`                     | SQS `remessa.gerar` → `sgp-integrations-worker`                                 |
+| **Folha**                  | Bloquear              | SIS     | `folha.bloqueada`                          | SNS `folha-eventos`                                                             |
+| **Contracheque**           | Calcular              | SIS     | `contracheque.calculado`                   | SQS `folha-calculo`                                                             |
+| **Contracheque**           | Gerar PDF             | SIS     | `contracheque.gerar.pdf`                   | SQS `contracheque.gerar.pdf` → `sgp-report-service`                             |
+| **Contracheque**           | Disponibilizar portal | GF      | `contracheque.disponibilizado`             | SNS `portal-eventos` → push/e-mail                                              |
+| **Lançamento**             | Efetivar              | SIS     | `lancamento.efetivado`                     | interno EventEmitter2                                                           |
+| **Lançamento**             | Estornar              | GF      | `lancamento.estornado`                     | SNS `audit-eventos` → `audit_log`                                               |
+| **Lote Importação**        | Aprovar e processar   | GF      | `importacao.processada`                    | SQS `importacao.processar`                                                      |
+| **Lote Importação**        | Rejeitar              | GF      | `importacao.rejeitada`                     | interno                                                                         |
+| **Evento eSocial**         | Gerar                 | SIS     | `esocial.evento.pendente`                  | SQS `esocial.evento.pendente` → `sgp-esocial-worker`                            |
+| **Evento eSocial**         | Aceito                | SIS     | `esocial.aceito`                           | SNS `esocial-eventos`                                                           |
+| **Evento eSocial**         | Rejeitado             | SIS     | `esocial.rejeitado`                        | SQS `esocial.evento.pendente` (retry ≤3)                                        |
+| **Requisição Pessoal**     | Encaminhar            | SOL     | `requisicao.encaminhada`                   | SNS `recrutamento-eventos` + e-mail                                             |
+| **Requisição Pessoal**     | Aprovar               | GRH     | `requisicao.aprovada`                      | SNS `recrutamento-eventos` + e-mail SOL                                         |
+| **Requisição Pessoal**     | Concluir análise      | GRH     | `requisicao.concluida`                     | SNS `recrutamento-eventos` + e-mail SOL                                         |
+| **Candidato na Vaga**      | Nomear                | GRH     | `candidato.nomeado`                        | SNS `recrutamento-eventos`                                                      |
+| **Recadastramento**        | Validar               | GR      | `recadastramento.validado`                 | SNS `previdenciario-eventos`                                                    |
+| **Recadastramento**        | Não recadastrado      | SIS     | `recadastramento.nao_recadastrado`         | `daily:prova-vida-proxima-vencer`                                               |
+| **Recadastramento**        | Perto vencer          | SIS     | `recadastramento.perto_vencer`             | `daily:prova-vida-proxima-vencer`                                               |
+| **Agendamento Pericial**   | Criar                 | GM      | `agendamento.criado`                       | SNS `saude-eventos` + notificação servidor                                      |
+| **Agendamento Pericial**   | Concluir              | MED     | `agendamento.concluido`                    | SNS `saude-eventos`                                                             |
+| **Agendamento Pericial**   | Falta                 | MED     | `agendamento.falta_registrada`             | SNS `saude-eventos`                                                             |
+| **Prontuário Perícia**     | Emitir laudo          | MED     | `pericia.laudo_emitido`                    | SNS `saude-eventos`                                                             |
+| **Prontuário Perícia**     | Homologar             | GM      | `pericia.homologado`                       | SNS `saude-eventos` → atualiza `situacao_funcional`                             |
+| **Prontuário Perícia**     | Replicar matrículas   | SIS     | `pericia.replicada`                        | interno EventEmitter2                                                           |
+| **Licença Médica**         | Registrar             | SIS     | `licenca.registrada`                       | SNS `saude-eventos` → `situacao_funcional`                                      |
+| **Licença Médica**         | Encerrar              | SIS     | `licenca.encerrada`                        | `daily:licenca-medica-vencida` → `daily:situacao-funcional-retorno-afastamento` |
+| **Processo Aposentadoria** | Conceder              | GP      | `aposentadoria.concedida`                  | SNS `previdenciario-eventos` + eSocial S-2298                                   |
+| **Processo Pensão**        | Conceder              | GP      | `pensao.concedida`                         | SNS `previdenciario-eventos` + eSocial S-2298                                   |
+| **CTC**                    | Emitir                | GP      | `ctc.emitida`                              | SNS `previdenciario-eventos`                                                    |
+| **Requisição Documento**   | Entregar              | GRH     | `documento.entregue`                       | interno                                                                         |
+| **Consignado**             | Averbar               | SIS     | `consignado.averbado`                      | SNS `folha-eventos` → lançamento desconto                                       |
+| **Consignado**             | Quitar                | SIS     | `consignado.quitado`                       | SNS `folha-eventos` → remove lançamento                                         |
+| **Estágio**                | Contratar             | GRH     | `estagio.contratado`                       | SNS `recrutamento-eventos` + eSocial S-2200                                     |
+| **Estágio**                | Prorrogar             | GRH     | `estagio.prorrogado`                       | SNS `recrutamento-eventos` + eSocial S-2206                                     |
+| **Estágio**                | Concluir / Rescindir  | GRH/SIS | `estagio.concluido` / `estagio.rescindido` | SNS `recrutamento-eventos` + eSocial S-2299                                     |
 
 ---
 
 ### Legenda de papéis
 
-| Abreviação | Papel NestJS completo |
-|---|---|
-| GF | `ROLE_FOLHA_DE_PGT.GESTAO` |
-| AF | `ROLE_FOLHA_DE_PGT.ATUALIZAR` |
-| GP | `ROLE_MODULO_PREVIDENCIARIO.GESTAO` |
-| GR | `ROLE_RECADASTRAMENTO.GESTAO` |
-| GM | `ROLE_PERICIA_MEDICA.GESTAO` + `ROLE_AGENDA_MEDICA.GESTAO` |
-| GRH | `ROLE_RECRUTAMENTO_SELECAO.GESTAO` |
-| SOL | Solicitante — papel `ROLE_RECRUTAMENTO_SELECAO.CADASTRAR` |
-| MED | `ROLE_MEDICO.GESTAO` (identificado via CPF do usuário logado) |
-| SIS | Sistema / job assíncrono (sem papel — executa em contexto de serviço interno) |
+| Abreviação | Papel NestJS completo                                                         |
+| ---------- | ----------------------------------------------------------------------------- |
+| GF         | `ROLE_FOLHA_DE_PGT.GESTAO`                                                    |
+| AF         | `ROLE_FOLHA_DE_PGT.ATUALIZAR`                                                 |
+| GP         | `ROLE_MODULO_PREVIDENCIARIO.GESTAO`                                           |
+| GR         | `ROLE_RECADASTRAMENTO.GESTAO`                                                 |
+| GM         | `ROLE_PERICIA_MEDICA.GESTAO` + `ROLE_AGENDA_MEDICA.GESTAO`                    |
+| GRH        | `ROLE_RECRUTAMENTO_SELECAO.GESTAO`                                            |
+| SOL        | Solicitante — papel `ROLE_RECRUTAMENTO_SELECAO.CADASTRAR`                     |
+| MED        | `ROLE_MEDICO.GESTAO` (identificado via CPF do usuário logado)                 |
+| SIS        | Sistema / job assíncrono (sem papel — executa em contexto de serviço interno) |
 
 ---
 
@@ -1402,4 +1423,4 @@ Os mapas finos de funcionário, folha, perícia, recadastramento e recrutamento 
 
 ---
 
-*Fim do documento. Para refinamentos ou ADRs decorrentes deste artefato, criar `adr/0002-state-machines-refinamentos.md`.*
+_Fim do documento. Para refinamentos ou ADRs decorrentes deste artefato, criar `adr/0002-state-machines-refinamentos.md`._

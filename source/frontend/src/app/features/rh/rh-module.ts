@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { SharedPlatformModule } from '../shared-platform/shared-platform-module';
 import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
+import { RhFerias } from './ferias/ferias';
 import { RhFuncionarios } from './funcionarios/funcionarios';
 import { RhFuncionariosHistorico } from './funcionarios/historico/historico';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
@@ -23,6 +24,7 @@ import { RhHome } from './pages/rh-home/rh-home';
     RhFuncionariosHistorico,
     RhFuncionariosVinculos,
     RhCadastralChanges,
+    RhFerias,
   ],
   imports: [
     CommonModule,

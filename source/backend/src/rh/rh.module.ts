@@ -12,6 +12,8 @@ import {
   RhWorkflowsController,
 } from './workflows/rh-workflows.controller';
 import { RhWorkflowsService } from './workflows/rh-workflows.service';
+import { VacationController } from './workflows/vacation/vacation.controller';
+import { VacationService } from './workflows/vacation/vacation.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
@@ -19,12 +21,14 @@ import { RhWorkflowsService } from './workflows/rh-workflows.service';
     EmployeesController,
     RhWorkflowsController,
     EmployeeRhWorkflowsController,
+    VacationController,
   ],
   providers: [
     EmployeesService,
     HistoryService,
     ServiceTimeService,
     RhWorkflowsService,
+    VacationService,
   ],
 })
 export class RhModule {}

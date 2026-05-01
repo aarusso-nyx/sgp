@@ -205,6 +205,41 @@ BEGIN
 END
 $$;
 
+DROP POLICY IF EXISTS vacation_type_select ON hr.vacation_type;
+DROP POLICY IF EXISTS vacation_type_write ON hr.vacation_type;
+DROP POLICY IF EXISTS p_vacation_type_select ON hr.vacation_type;
+DROP POLICY IF EXISTS p_vacation_type_write ON hr.vacation_type;
+CREATE POLICY p_vacation_type_select ON hr.vacation_type
+  FOR SELECT
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY[
+        'rh.vacation.read',
+        'rh.vacation.request',
+        'rh.vacation.approve',
+        'gestao.master_data.read'
+      ])
+    )
+  );
+CREATE POLICY p_vacation_type_write ON hr.vacation_type
+  FOR ALL
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'])
+    )
+  )
+  WITH CHECK (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'])
+    )
+  );
+
 DO $$
 DECLARE
   table_name text;
@@ -278,6 +313,40 @@ BEGIN
   END LOOP;
 END
 $$;
+
+DROP POLICY IF EXISTS vacation_record_select ON hr.vacation_record;
+DROP POLICY IF EXISTS vacation_record_write ON hr.vacation_record;
+DROP POLICY IF EXISTS p_vacation_record_select ON hr.vacation_record;
+DROP POLICY IF EXISTS p_vacation_record_write ON hr.vacation_record;
+CREATE POLICY p_vacation_record_select ON hr.vacation_record
+  FOR SELECT
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY[
+        'rh.vacation.read',
+        'rh.vacation.request',
+        'rh.vacation.approve'
+      ])
+    )
+  );
+CREATE POLICY p_vacation_record_write ON hr.vacation_record
+  FOR ALL
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['rh.vacation.request', 'rh.vacation.approve'])
+    )
+  )
+  WITH CHECK (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['rh.vacation.request', 'rh.vacation.approve'])
+    )
+  );
 
 DO $$
 DECLARE

@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups';
 import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
+import { RhFerias } from './ferias/ferias';
 import { RhFuncionarios } from './funcionarios/funcionarios';
 import { RhFuncionariosHistorico } from './funcionarios/historico/historico';
 import { RhFuncionariosVinculos } from './funcionarios/vinculos/vinculos';
@@ -30,6 +31,10 @@ import { RhHome } from './pages/rh-home/rh-home';
       {
         path: 'cadastral-changes',
         component: RhCadastralChanges,
+      },
+      {
+        path: 'ferias',
+        component: RhFerias,
       },
       {
         path: '',

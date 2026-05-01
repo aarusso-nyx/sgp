@@ -1,4 +1,5 @@
 # Manual do Usuário — SGP Sistema de Gestão de Pessoas
+
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
 **Escopo:** Todos os módulos | **Depende de:** BRIEF.md, 50-arvore-menus.md, 00-glossario.md
 
@@ -15,6 +16,12 @@ O histórico é imutável: correções não editam nem removem eventos anteriore
 O estágio probatório é acompanhado em **Avaliação > Estágio probatório** para servidores estatutários. A lista operacional mostra servidores próximos de completar 36 meses de exercício e permite registrar avaliações parciais de 12, 24 e 36 meses com nota, decisão, avaliador e observação.
 
 Somente usuários com permissão de avaliação podem registrar decisões. A aprovação final encerra o ciclo administrativo do estágio; reprovação ou prorrogação deve ser acompanhada pelo procedimento formal aplicável.
+
+## Férias
+
+As férias são solicitadas pelo **Portal do Servidor > Férias > Solicitar** e aprovadas na aplicação administrativa em **Módulo RH > Férias**. O servidor informa o período aquisitivo, até três parcelas de gozo e, quando aplicável, o abono pecuniário limitado a 10 dias. O sistema consulta o saldo por período aquisitivo, bloqueia solicitações com mais de três parcelas e exige que servidores celetistas tenham uma das parcelas com pelo menos 14 dias contínuos.
+
+A chefia ou RH aprova ou cancela a programação antes do gozo. Cada alteração grava evento de auditoria imutável em `audit_event`, e o histórico funcional passa a exibir as férias aprovadas ou gozadas. O valor de férias, terço constitucional e reflexos em folha não são calculados nesta tela; esses valores são tratados no processamento de folha de férias.
 
 ## Sumário
 
@@ -68,10 +75,10 @@ O SGP opera em modelo **multi-tenant SaaS**: cada ente contratante (tenant) tem 
 
 ### 1.2 Onde acessar
 
-| Ambiente | URL | Público-alvo |
-|---|---|---|
-| **Aplicação Administrativa** | `https://sgp.seu-ente.gov.br/` | Servidores de RH, Folha, Previdência, Perícia, Auditoria, Gestores |
-| **Portal do Servidor** | `https://portal.seu-ente.gov.br/` | Servidores ativos, aposentados, pensionistas, candidatos |
+| Ambiente                     | URL                               | Público-alvo                                                       |
+| ---------------------------- | --------------------------------- | ------------------------------------------------------------------ |
+| **Aplicação Administrativa** | `https://sgp.seu-ente.gov.br/`    | Servidores de RH, Folha, Previdência, Perícia, Auditoria, Gestores |
+| **Portal do Servidor**       | `https://portal.seu-ente.gov.br/` | Servidores ativos, aposentados, pensionistas, candidatos           |
 
 > As URLs exatas são definidas pelo administrador de infraestrutura de cada ente. Consulte o responsável técnico local caso as URLs acima não funcionem.
 
@@ -114,14 +121,14 @@ O SGP utiliza autenticação **OAuth2/OIDC via AWS Cognito**. Dependendo da conf
 
 Este manual está dividido em seções por **perfil de usuário**. Localize seu perfil no Sumário e vá diretamente à seção correspondente. As seções de Navegação Geral (seção 2) e Operações Transversais (seção 5) são comuns a todos os perfis.
 
-| Seção | Conteúdo |
-|---|---|
-| 2 | Navegação da interface — menus, header, busca, notificações |
-| 3.1–3.18 | Manual específico por perfil administrativo |
-| 4.1–4.3 | Portal do Servidor — servidor ativo, aposentado/pensionista, candidato |
-| 5 | Operações comuns a todos (upload, MFA, suporte) |
-| 6 | Glossário rápido |
-| 7 | FAQ consolidado |
+| Seção    | Conteúdo                                                               |
+| -------- | ---------------------------------------------------------------------- |
+| 2        | Navegação da interface — menus, header, busca, notificações            |
+| 3.1–3.18 | Manual específico por perfil administrativo                            |
+| 4.1–4.3  | Portal do Servidor — servidor ativo, aposentado/pensionista, candidato |
+| 5        | Operações comuns a todos (upload, MFA, suporte)                        |
+| 6        | Glossário rápido                                                       |
+| 7        | FAQ consolidado                                                        |
 
 ---
 
@@ -131,13 +138,13 @@ Este manual está dividido em seções por **perfil de usuário**. Localize seu 
 
 O header é a barra horizontal no topo da tela. Ele contém:
 
-| Elemento | Descrição |
-|---|---|
-| **Logo do tenant** | Logotipo do ente configurado pelo Administrador. Clique para voltar ao Dashboard. |
-| **Nome do tenant** | Exibido ao lado do logo (sigla e nome completo). |
+| Elemento                  | Descrição                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| **Logo do tenant**        | Logotipo do ente configurado pelo Administrador. Clique para voltar ao Dashboard.          |
+| **Nome do tenant**        | Exibido ao lado do logo (sigla e nome completo).                                           |
 | **Campo de busca global** | Lupa ou caixa de texto — pesquisa pessoas, matrículas e funcionalidades. Atalho: `Ctrl+K`. |
-| **Ícone de notificações** | Sino com contador de alertas não lidos. Clique para abrir o painel lateral. |
-| **Menu do usuário** | Avatar com nome e papel atual. Clique para acessar Meu Perfil, Configurar MFA e Sair. |
+| **Ícone de notificações** | Sino com contador de alertas não lidos. Clique para abrir o painel lateral.                |
+| **Menu do usuário**       | Avatar com nome e papel atual. Clique para acessar Meu Perfil, Configurar MFA e Sair.      |
 
 📷 [inserir screenshot: header completo com logo, busca, notificações e menu do usuário]
 
@@ -210,13 +217,13 @@ O painel de notificações exibe alertas gerados pelo sistema, como:
 
 O SGP foi desenvolvido com suporte a acessibilidade:
 
-| Recurso | Detalhe |
-|---|---|
-| **Leitor de tela** | Compatível com NVDA (Windows) e VoiceOver (macOS/iOS). Todos os campos e botões possuem `aria-label`. |
-| **Navegação por teclado** | Use `Tab` para mover entre campos e `Shift+Tab` para retroceder. |
-| **Atalhos globais** | `Ctrl+K` (busca), `Ctrl+B` (sidebar), `Ctrl+S` (salvar), `Ctrl+Z` (desfazer), `Esc` (fechar modal/painel). |
-| **Contraste** | Interface em conformidade com WCAG 2.1 nível AA. |
-| **Zoom** | Use o zoom do navegador (`Ctrl++` / `Ctrl+-`) sem perda de funcionalidade até 200%. |
+| Recurso                   | Detalhe                                                                                                    |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **Leitor de tela**        | Compatível com NVDA (Windows) e VoiceOver (macOS/iOS). Todos os campos e botões possuem `aria-label`.      |
+| **Navegação por teclado** | Use `Tab` para mover entre campos e `Shift+Tab` para retroceder.                                           |
+| **Atalhos globais**       | `Ctrl+K` (busca), `Ctrl+B` (sidebar), `Ctrl+S` (salvar), `Ctrl+Z` (desfazer), `Esc` (fechar modal/painel). |
+| **Contraste**             | Interface em conformidade com WCAG 2.1 nível AA.                                                           |
+| **Zoom**                  | Use o zoom do navegador (`Ctrl++` / `Ctrl+-`) sem perda de funcionalidade até 200%.                        |
 
 ---
 
@@ -313,13 +320,13 @@ Os parâmetros do sistema (`ParametroSistema`) controlam a identidade do tenant 
 
 **Flags principais:**
 
-| Flag | Efeito ao habilitar |
-|---|---|
-| `esocial.enabled` | Ativa o menu e os envios eSocial S-1.2 |
-| `PORTAL_SERVIDOR_ENABLED` | Habilita o Portal do Servidor para login |
-| `GOV_BR_SSO_ENABLED` | Exibe o botão "Entrar com Gov.br" |
-| `PROVA_VIDA_PUBLIC_API_ENABLED` | Habilita prova de vida via API pública |
-| `AUDIT_FULL_TRACE_ENABLED` | Registra auditoria em todos os domínios |
+| Flag                            | Efeito ao habilitar                      |
+| ------------------------------- | ---------------------------------------- |
+| `esocial.enabled`               | Ativa o menu e os envios eSocial S-1.2   |
+| `PORTAL_SERVIDOR_ENABLED`       | Habilita o Portal do Servidor para login |
+| `GOV_BR_SSO_ENABLED`            | Exibe o botão "Entrar com Gov.br"        |
+| `PROVA_VIDA_PUBLIC_API_ENABLED` | Habilita prova de vida via API pública   |
+| `AUDIT_FULL_TRACE_ENABLED`      | Registra auditoria em todos os domínios  |
 
 ### 3.1.4 Monitorar trilha de auditoria
 
@@ -349,11 +356,11 @@ R: Sim. O sistema provisiona o usuário no Cognito UserPool do tenant e dispara 
 
 **Erros comuns:**
 
-| Erro | Causa | Solução |
-|---|---|---|
-| "E-mail já cadastrado" | O e-mail já existe no tenant | Verifique em Gestão > Usuários se o usuário já está cadastrado |
-| "Perfil não encontrado" | Nome do perfil na planilha não coincide | Use exatamente o nome do perfil como aparece na tela de Perfis |
-| "Upload de logo falhou" | Arquivo muito grande ou formato inválido | Use PNG ou SVG com menos de 2 MB |
+| Erro                    | Causa                                    | Solução                                                        |
+| ----------------------- | ---------------------------------------- | -------------------------------------------------------------- |
+| "E-mail já cadastrado"  | O e-mail já existe no tenant             | Verifique em Gestão > Usuários se o usuário já está cadastrado |
+| "Perfil não encontrado" | Nome do perfil na planilha não coincide  | Use exatamente o nome do perfil como aparece na tela de Perfis |
+| "Upload de logo falhou" | Arquivo muito grande ou formato inválido | Use PNG ou SVG com menos de 2 MB                               |
 
 ---
 
@@ -580,12 +587,12 @@ R: Selecione o tipo de vínculo **Cedido** e preencha a aba **Detalhe de Cedênc
 
 **Erros comuns:**
 
-| Erro | Causa | Solução |
-|---|---|---|
-| "CPF inválido" | Dígito verificador incorreto | Verifique o CPF no documento físico |
-| "Idade mínima não atingida" | Data de nascimento indica menos de 14 anos | Confirme a data informada |
-| "PIS/PASEP já cadastrado" | Duplicidade inter-tenant | Entre em contato com o suporte para análise |
-| "Matrícula já existe" | Matrícula manual já utilizada | Consulte o cadastro ou use outra numeração |
+| Erro                        | Causa                                      | Solução                                     |
+| --------------------------- | ------------------------------------------ | ------------------------------------------- |
+| "CPF inválido"              | Dígito verificador incorreto               | Verifique o CPF no documento físico         |
+| "Idade mínima não atingida" | Data de nascimento indica menos de 14 anos | Confirme a data informada                   |
+| "PIS/PASEP já cadastrado"   | Duplicidade inter-tenant                   | Entre em contato com o suporte para análise |
+| "Matrícula já existe"       | Matrícula manual já utilizada              | Consulte o cadastro ou use outra numeração  |
 
 ---
 
@@ -784,11 +791,11 @@ R: Não. A importação é feita folha a folha.
 
 **Erros comuns:**
 
-| Erro | Causa | Solução |
-|---|---|---|
-| "Folha bloqueada" | A folha está com status BLOQUEADO | Solicite ao Gestor de Folha o desbloqueio ou a reabertura da competência |
-| "Verba sem elegibilidade" | A verba não é elegível para o servidor | Verifique elegibilidades no cadastro da verba |
-| "Valor deve ser maior que zero" | Valor zero foi informado | Informe um valor positivo |
+| Erro                            | Causa                                  | Solução                                                                  |
+| ------------------------------- | -------------------------------------- | ------------------------------------------------------------------------ |
+| "Folha bloqueada"               | A folha está com status BLOQUEADO      | Solicite ao Gestor de Folha o desbloqueio ou a reabertura da competência |
+| "Verba sem elegibilidade"       | A verba não é elegível para o servidor | Verifique elegibilidades no cadastro da verba                            |
+| "Valor deve ser maior que zero" | Valor zero foi informado               | Informe um valor positivo                                                |
 
 ---
 
@@ -1626,12 +1633,12 @@ O SGP usa AWS S3 para armazenamento de todos os arquivos. O processo de upload u
 
 **Formatos e tamanhos suportados:**
 
-| Tipo de arquivo | Formatos aceitos | Tamanho máximo |
-|---|---|---|
-| Documentos | PDF | 20 MB |
-| Imagens (foto, logo) | PNG, JPG, SVG | 2 MB |
-| Planilhas | XLSX, CSV | 10 MB |
-| Arquivos de remessa | TXT, XML, CSV | 50 MB |
+| Tipo de arquivo      | Formatos aceitos | Tamanho máximo |
+| -------------------- | ---------------- | -------------- |
+| Documentos           | PDF              | 20 MB          |
+| Imagens (foto, logo) | PNG, JPG, SVG    | 2 MB           |
+| Planilhas            | XLSX, CSV        | 10 MB          |
+| Arquivos de remessa  | TXT, XML, CSV    | 50 MB          |
 
 ### 5.2 Como baixar relatório
 
@@ -1700,32 +1707,32 @@ Veja seção 3.5.4 — Emissão de contracheques em massa.
 
 > Para o glossário completo, consulte o documento `00-glossario.md`.
 
-| Termo | Definição |
-|---|---|
-| **Competência** | Mês e ano de referência de uma folha de pagamento. |
-| **Contracheque** | Documento que detalha os proventos e descontos de um servidor em uma competência. |
-| **DSL de fórmula** | Linguagem declarativa usada para escrever fórmulas de verbas, compilada para SQL. |
-| **Feature flag** | Chave de configuração que ativa ou desativa funcionalidades do sistema. |
-| **Filial** | Unidade administrativa do ente (secretaria, departamento, autarquia). |
-| **Folha de pagamento** | Processamento financeiro de um conjunto de servidores em uma competência. |
-| **Jornada A1–A4** | Sequência de etapas do golden scenario de admissão de servidor. |
-| **Laudo pericial** | Documento médico emitido após atendimento pericial, com ação e CID. |
-| **Lotação** | Setor ou unidade onde o servidor está alocado, dentro de uma filial. |
-| **MFA** | Multi-Factor Authentication — autenticação com segundo fator (código 6 dígitos). |
-| **Papel (role)** | Capacidade autorizada no sistema (`ROLE_MODULO_ACAO`). |
-| **Pensionista** | Beneficiário de pensão previdenciária decorrente de vínculo com servidor. |
-| **Perfil** | Agrupador de papéis atribuído a um usuário. |
-| **Posse** | Ato formal de ingresso do servidor no serviço público. |
-| **Provento** | Verba de crédito (salário, gratificações, adicionais). |
-| **Recadastramento** | Procedimento periódico de atualização cadastral de aposentados e pensionistas. |
-| **RLS** | Row-Level Security — mecanismo do PostgreSQL para isolamento multi-tenant. |
-| **RPPS** | Regime Próprio de Previdência Social — previdência do ente público. |
-| **Rubrica** | Sinônimo de verba — item da folha de pagamento. |
-| **Situação funcional** | Estado atual do vínculo do servidor: ativo, afastado, desligado, etc. |
-| **SST** | Saúde e Segurança do Trabalho. |
-| **Tenant** | Ente contratante do SGP (prefeitura, autarquia, instituto, etc.). |
-| **Verba** | Item de cálculo da folha (provento, desconto, base, apoio). |
-| **Vínculo** | Relação jurídica entre a pessoa e o ente (efetivo, comissionado, contratado, etc.). |
+| Termo                  | Definição                                                                           |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| **Competência**        | Mês e ano de referência de uma folha de pagamento.                                  |
+| **Contracheque**       | Documento que detalha os proventos e descontos de um servidor em uma competência.   |
+| **DSL de fórmula**     | Linguagem declarativa usada para escrever fórmulas de verbas, compilada para SQL.   |
+| **Feature flag**       | Chave de configuração que ativa ou desativa funcionalidades do sistema.             |
+| **Filial**             | Unidade administrativa do ente (secretaria, departamento, autarquia).               |
+| **Folha de pagamento** | Processamento financeiro de um conjunto de servidores em uma competência.           |
+| **Jornada A1–A4**      | Sequência de etapas do golden scenario de admissão de servidor.                     |
+| **Laudo pericial**     | Documento médico emitido após atendimento pericial, com ação e CID.                 |
+| **Lotação**            | Setor ou unidade onde o servidor está alocado, dentro de uma filial.                |
+| **MFA**                | Multi-Factor Authentication — autenticação com segundo fator (código 6 dígitos).    |
+| **Papel (role)**       | Capacidade autorizada no sistema (`ROLE_MODULO_ACAO`).                              |
+| **Pensionista**        | Beneficiário de pensão previdenciária decorrente de vínculo com servidor.           |
+| **Perfil**             | Agrupador de papéis atribuído a um usuário.                                         |
+| **Posse**              | Ato formal de ingresso do servidor no serviço público.                              |
+| **Provento**           | Verba de crédito (salário, gratificações, adicionais).                              |
+| **Recadastramento**    | Procedimento periódico de atualização cadastral de aposentados e pensionistas.      |
+| **RLS**                | Row-Level Security — mecanismo do PostgreSQL para isolamento multi-tenant.          |
+| **RPPS**               | Regime Próprio de Previdência Social — previdência do ente público.                 |
+| **Rubrica**            | Sinônimo de verba — item da folha de pagamento.                                     |
+| **Situação funcional** | Estado atual do vínculo do servidor: ativo, afastado, desligado, etc.               |
+| **SST**                | Saúde e Segurança do Trabalho.                                                      |
+| **Tenant**             | Ente contratante do SGP (prefeitura, autarquia, instituto, etc.).                   |
+| **Verba**              | Item de cálculo da folha (provento, desconto, base, apoio).                         |
+| **Vínculo**            | Relação jurídica entre a pessoa e o ente (efetivo, comissionado, contratado, etc.). |
 
 ---
 
@@ -1822,11 +1829,10 @@ R: As alterações feitas em **Portal do Servidor > Meus Dados** geram uma solic
 **P: O upload de arquivo falhou.**
 R: Verifique: (1) o formato do arquivo está correto para aquela tela; (2) o tamanho não excede o limite; (3) sua conexão de internet está estável. Se o problema persistir, tente um navegador diferente.
 
-
 **P: O retorno bancário não baixou os pagamentos corretos. O que fazer?**
 R: Acesse **Folha de Pagamento > Remessa/Retorno**, localize o arquivo de retorno e clique em **Processar Retorno**. Verifique as inconsistências reportadas. Se houver divergências, contate o banco.
 
 ---
 
-*Fim do Manual do Usuário — SGP Sistema de Gestão de Pessoas.*
-*Para dúvidas não cobertas neste manual, abra um chamado de suporte conforme a seção 5.4 ou consulte o Administrador do Tenant.*
+_Fim do Manual do Usuário — SGP Sistema de Gestão de Pessoas._
+_Para dúvidas não cobertas neste manual, abra um chamado de suporte conforme a seção 5.4 ou consulte o Administrador do Tenant._

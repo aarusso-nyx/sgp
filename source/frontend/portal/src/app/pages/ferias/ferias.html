@@ -1,0 +1,120 @@
+<section class="ferias">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Ferias</h1>
+  </header>
+
+  <nav aria-label="Ferias">
+    <a href="/ferias/solicitar" [class.active]="section === 'solicitar'">Solicitar</a>
+    <a href="/ferias/historico" [class.active]="section === 'historico'">Historico</a>
+    <a href="/ferias/programacao" [class.active]="section === 'programacao'">Programacao</a>
+  </nav>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <form *ngIf="section === 'solicitar'" [formGroup]="form" (ngSubmit)="submit()" class="panel">
+    <div class="toolbar">
+      <label>
+        <span>Servidor</span>
+        <input formControlName="employeeId" placeholder="UUID do servidor" />
+      </label>
+      <button type="button" (click)="loadBalance()" [disabled]="loading">Saldo</button>
+    </div>
+
+    <div class="balance" *ngIf="balances.length">
+      <article *ngFor="let balance of balances">
+        <strong>{{ balance.availableDays }} dias</strong>
+        <span>{{ balance.accrualPeriodStart }} a {{ balance.accrualPeriodEnd }}</span>
+      </article>
+    </div>
+
+    <div class="fields">
+      <label>
+        <span>Periodo aquisitivo inicial</span>
+        <input type="date" formControlName="accrualPeriodStart" />
+      </label>
+      <label>
+        <span>Periodo aquisitivo final</span>
+        <input type="date" formControlName="accrualPeriodEnd" />
+      </label>
+      <label>
+        <span>Abono pecuniario</span>
+        <input type="number" min="0" max="10" formControlName="pecuniaryBonusDays" />
+      </label>
+    </div>
+
+    <section class="installments" formArrayName="installments">
+      <header>
+        <h2>Parcelas</h2>
+        <button type="button" (click)="addInstallment()" [disabled]="installments.length >= 3">
+          Adicionar
+        </button>
+      </header>
+      <div
+        class="installment"
+        *ngFor="let installment of installments.controls; let index = index"
+        [formGroupName]="index"
+      >
+        <label>
+          <span>Inicio</span>
+          <input type="date" formControlName="startsOn" />
+        </label>
+        <label>
+          <span>Fim</span>
+          <input type="date" formControlName="endsOn" />
+        </label>
+        <label>
+          <span>Dias</span>
+          <input type="number" min="1" formControlName="days" />
+        </label>
+        <button
+          type="button"
+          (click)="removeInstallment(index)"
+          [disabled]="installments.length <= 1"
+        >
+          Remover
+        </button>
+      </div>
+    </section>
+
+    <button type="submit" [disabled]="saving">Enviar para aprovacao</button>
+  </form>
+
+  <section *ngIf="section !== 'solicitar'" class="panel">
+    <div class="toolbar">
+      <label>
+        <span>Servidor</span>
+        <input [formControl]="form.controls.employeeId" placeholder="UUID do servidor" />
+      </label>
+      <button type="button" (click)="loadBalance()" [disabled]="loading">Atualizar</button>
+    </div>
+    <div class="balance" *ngIf="balances.length">
+      <article *ngFor="let balance of balances">
+        <strong>{{ balance.availableDays }} dias</strong>
+        <span>{{ balance.accrualPeriodStart }} a {{ balance.accrualPeriodEnd }}</span>
+      </article>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Parcela</th>
+          <th>Periodo</th>
+          <th>Dias</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of records">
+          <td>{{ record.installmentNumber }}</td>
+          <td>{{ record.startsOn }} a {{ record.endsOn }}</td>
+          <td>{{ record.days }}</td>
+          <td>{{ record.status }}</td>
+        </tr>
+        <tr *ngIf="!records.length">
+          <td colspan="4">Nenhuma programacao carregada.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

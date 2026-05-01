@@ -1,0 +1,80 @@
+<section class="rh-ferias" aria-labelledby="rh-ferias-title">
+  <header class="rh-ferias__header">
+    <div>
+      <p>Recursos Humanos</p>
+      <h1 id="rh-ferias-title">Ferias</h1>
+    </div>
+    <button type="button" mat-stroked-button (click)="loadEmployees()">Atualizar</button>
+  </header>
+
+  <p class="rh-ferias__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="rh-ferias__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="rh-ferias__layout">
+    <section class="rh-ferias__panel">
+      <h2>Servidores</h2>
+      <p *ngIf="loading">Carregando...</p>
+      <table aria-label="Servidores com programacao de ferias">
+        <thead>
+          <tr>
+            <th>Matricula</th>
+            <th>Nome</th>
+            <th>Situacao</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let employee of employees"
+            (click)="select(employee)"
+            [class.rh-ferias__row--selected]="employee.id === selected?.id"
+          >
+            <td>{{ employee.registration }}</td>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.functionalStatus || employee.lifecycleStatus }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="rh-ferias__panel">
+      <h2>Fila de aprovacao</h2>
+      <form [formGroup]="approvalForm" (ngSubmit)="approve()">
+        <label>
+          <span>Programacao</span>
+          <input formControlName="scheduleId" placeholder="UUID da programacao" />
+        </label>
+        <div class="rh-ferias__actions">
+          <button type="submit" mat-flat-button color="primary" [disabled]="saving">Aprovar</button>
+          <button type="button" mat-stroked-button (click)="cancel()" [disabled]="saving">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <section class="rh-ferias__panel">
+    <h2>Atualizacoes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Programacao</th>
+          <th>Periodo</th>
+          <th>Dias</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of queue">
+          <td>{{ item.id }}</td>
+          <td>{{ item.startsOn }} a {{ item.endsOn }}</td>
+          <td>{{ item.days }}</td>
+          <td>{{ item.status }}</td>
+        </tr>
+        <tr *ngIf="!queue.length">
+          <td colspan="4">Nenhuma atualizacao nesta sessao.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

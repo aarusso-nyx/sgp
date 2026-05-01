@@ -29,50 +29,388 @@
     }
   ],
   "permissions": [
-    { "key": "auth.read", "moduleKey": "auth", "resourceKey": "session", "actionKey": "read", "routePattern": "/api/v1/auth/**", "description": "Read authenticated session and base navigation." },
-    { "key": "iam.read", "moduleKey": "iam", "resourceKey": "permission", "actionKey": "read", "routePattern": "/api/v1/iam/**", "description": "Read the permission catalog." },
-    { "key": "gestao.read", "moduleKey": "gestao", "resourceKey": "admin", "actionKey": "read", "routePattern": "#!/gestao/**", "description": "Read administration, security, parameters, users, profiles, and master data." },
-    { "key": "gestao.write", "moduleKey": "gestao", "resourceKey": "admin", "actionKey": "write", "routePattern": "#!/gestao/**", "description": "Mutate administration, security, parameters, users, profiles, and master data." },
-    { "key": "gestao.master_data.read", "moduleKey": "gestao", "resourceKey": "master_data", "actionKey": "read", "routePattern": "/api/v1/master-data/**", "description": "Read organizational master data." },
-    { "key": "gestao.master_data.write", "moduleKey": "gestao", "resourceKey": "master_data", "actionKey": "write", "routePattern": "/api/v1/master-data/**", "description": "Mutate organizational master data." },
-    { "key": "rh.read", "moduleKey": "rh", "resourceKey": "workflow", "actionKey": "read", "description": "Read broad RH workflow records." },
-    { "key": "rh.write", "moduleKey": "rh", "resourceKey": "workflow", "actionKey": "write", "description": "Mutate broad RH workflow records." },
-    { "key": "rh.employee.read", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "read", "routePattern": "#!/funcionario/**", "description": "Read employee admission, dossier, contracts, and lifecycle timeline." },
-    { "key": "rh.employee.write", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "write", "routePattern": "/api/v1/funcionarios/**", "description": "Mutate employee lifecycle support records." },
-    { "key": "rh.employee.admit", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "admit", "routePattern": "/api/v1/funcionarios/**", "description": "Admit employees through HR-01." },
-    { "key": "rh.employee.terminate", "moduleKey": "rh", "resourceKey": "employee", "actionKey": "terminate", "routePattern": "/api/v1/funcionarios/**", "description": "Terminate employees through HR-01." },
-    { "key": "rh.employment_link.write", "moduleKey": "rh", "resourceKey": "employment_link", "actionKey": "write", "routePattern": "/api/v1/funcionarios/**/vinculos", "description": "Change employee employment link and legal regime through HR-02." },
-    { "key": "rh.history.read", "moduleKey": "rh", "resourceKey": "history", "actionKey": "read", "routePattern": "/api/v1/funcionarios/**/historico", "description": "Read immutable functional history timeline." },
-    { "key": "rh.dependent.read", "moduleKey": "rh", "resourceKey": "dependent", "actionKey": "read", "routePattern": "/api/v1/portal/meus-dados/dependentes", "description": "Read employee dependent records." },
-    { "key": "rh.dependent.write", "moduleKey": "rh", "resourceKey": "dependent", "actionKey": "write", "routePattern": "/api/v1/portal/meus-dados/dependentes", "description": "Mutate employee dependent records through approved workflows." },
-    { "key": "rh.cadastral_change.approve", "moduleKey": "rh", "resourceKey": "cadastral_change", "actionKey": "approve", "routePattern": "/api/v1/funcionarios/cadastral-changes/**", "description": "Approve or reject employee self-service cadastral change requests." },
-    { "key": "portal.profile.read", "moduleKey": "portal", "resourceKey": "profile", "actionKey": "read", "routePattern": "/api/v1/portal/meus-dados/**", "description": "Read own employee portal profile data." },
-    { "key": "portal.profile.write", "moduleKey": "portal", "resourceKey": "profile", "actionKey": "write", "routePattern": "/api/v1/portal/meus-dados/**", "description": "Submit own employee portal profile change requests." },
-    { "key": "folha.read", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "read", "routePattern": "#!/folhaPagamento/**", "description": "Read payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
-    { "key": "folha.write", "moduleKey": "folha", "resourceKey": "payroll", "actionKey": "write", "routePattern": "#!/folhaPagamento/**", "description": "Mutate payroll records, accounting catalogs, eSocial payroll surfaces, and calculations." },
-    { "key": "avaliacao.read", "moduleKey": "avaliacao", "resourceKey": "performance", "actionKey": "read", "routePattern": "#!/avaliacao/**", "description": "Read evaluation and career progression records." },
-    { "key": "avaliacao.write", "moduleKey": "avaliacao", "resourceKey": "performance", "actionKey": "write", "routePattern": "#!/avaliacao/**", "description": "Mutate evaluation and career progression records." },
-    { "key": "avaliacao.probation.write", "moduleKey": "avaliacao", "resourceKey": "probation", "actionKey": "write", "routePattern": "/api/v1/avaliacao/estagio-probatorio/**", "description": "Create statutory probation evaluations." },
-    { "key": "consultas.read", "moduleKey": "consultas", "resourceKey": "managerial", "actionKey": "read", "routePattern": "#!/consultas/**", "description": "Read managerial query surfaces." },
-    { "key": "previdenciario.read", "moduleKey": "previdenciario", "resourceKey": "benefit", "actionKey": "read", "routePattern": "#!/previdenciario/**", "description": "Read previdenciario records and reports." },
-    { "key": "previdenciario.write", "moduleKey": "previdenciario", "resourceKey": "benefit", "actionKey": "write", "routePattern": "#!/previdenciario/**", "description": "Mutate previdenciario records and reports." },
-    { "key": "recrutamento.read", "moduleKey": "recrutamento", "resourceKey": "recruitment", "actionKey": "read", "routePattern": "#!/recrutamento/**", "description": "Read recruitment records." },
-    { "key": "recrutamento.write", "moduleKey": "recrutamento", "resourceKey": "recruitment", "actionKey": "write", "routePattern": "#!/recrutamento/**", "description": "Mutate recruitment records." },
-    { "key": "saude.read", "moduleKey": "saude", "resourceKey": "medical", "actionKey": "read", "routePattern": "#!/saude/**", "description": "Read occupational health and pericia records." },
-    { "key": "saude.write", "moduleKey": "saude", "resourceKey": "medical", "actionKey": "write", "routePattern": "#!/saude/**", "description": "Mutate occupational health and pericia records." },
-    { "key": "convenio.read", "moduleKey": "convenio", "resourceKey": "agreement", "actionKey": "read", "routePattern": "#!/convenios/**", "description": "Read convenio records." },
-    { "key": "convenio.write", "moduleKey": "convenio", "resourceKey": "agreement", "actionKey": "write", "routePattern": "#!/convenios/**", "description": "Mutate convenio records." },
-    { "key": "relatorio.read", "moduleKey": "relatorio", "resourceKey": "report", "actionKey": "read", "routePattern": "#!/relatorio/**", "description": "Read report catalog and generated report status." },
-    { "key": "relatorio.generate", "moduleKey": "relatorio", "resourceKey": "report", "actionKey": "generate", "routePattern": "#!/relatorio/**", "description": "Generate or queue reports." },
-    { "key": "documents.upload", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "upload", "routePattern": "#!/documentos/**", "description": "Create document upload sessions." },
-    { "key": "documents.register", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "register", "routePattern": "#!/documentos/**", "description": "Confirm or register document attachments." },
-    { "key": "documents.download", "moduleKey": "documents", "resourceKey": "attachment", "actionKey": "download", "routePattern": "#!/documentos/**", "description": "Download document attachments." },
-    { "key": "auditoria.read", "moduleKey": "auditoria", "resourceKey": "audit", "actionKey": "read", "routePattern": "#!/auditoria/**", "description": "Read audit trail and audit report exports." }
+    {
+      "key": "auth.read",
+      "moduleKey": "auth",
+      "resourceKey": "session",
+      "actionKey": "read",
+      "routePattern": "/api/v1/auth/**",
+      "description": "Read authenticated session and base navigation."
+    },
+    {
+      "key": "iam.read",
+      "moduleKey": "iam",
+      "resourceKey": "permission",
+      "actionKey": "read",
+      "routePattern": "/api/v1/iam/**",
+      "description": "Read the permission catalog."
+    },
+    {
+      "key": "gestao.read",
+      "moduleKey": "gestao",
+      "resourceKey": "admin",
+      "actionKey": "read",
+      "routePattern": "#!/gestao/**",
+      "description": "Read administration, security, parameters, users, profiles, and master data."
+    },
+    {
+      "key": "gestao.write",
+      "moduleKey": "gestao",
+      "resourceKey": "admin",
+      "actionKey": "write",
+      "routePattern": "#!/gestao/**",
+      "description": "Mutate administration, security, parameters, users, profiles, and master data."
+    },
+    {
+      "key": "gestao.master_data.read",
+      "moduleKey": "gestao",
+      "resourceKey": "master_data",
+      "actionKey": "read",
+      "routePattern": "/api/v1/master-data/**",
+      "description": "Read organizational master data."
+    },
+    {
+      "key": "gestao.master_data.write",
+      "moduleKey": "gestao",
+      "resourceKey": "master_data",
+      "actionKey": "write",
+      "routePattern": "/api/v1/master-data/**",
+      "description": "Mutate organizational master data."
+    },
+    {
+      "key": "rh.read",
+      "moduleKey": "rh",
+      "resourceKey": "workflow",
+      "actionKey": "read",
+      "description": "Read broad RH workflow records."
+    },
+    {
+      "key": "rh.write",
+      "moduleKey": "rh",
+      "resourceKey": "workflow",
+      "actionKey": "write",
+      "description": "Mutate broad RH workflow records."
+    },
+    {
+      "key": "rh.employee.read",
+      "moduleKey": "rh",
+      "resourceKey": "employee",
+      "actionKey": "read",
+      "routePattern": "#!/funcionario/**",
+      "description": "Read employee admission, dossier, contracts, and lifecycle timeline."
+    },
+    {
+      "key": "rh.employee.write",
+      "moduleKey": "rh",
+      "resourceKey": "employee",
+      "actionKey": "write",
+      "routePattern": "/api/v1/funcionarios/**",
+      "description": "Mutate employee lifecycle support records."
+    },
+    {
+      "key": "rh.employee.admit",
+      "moduleKey": "rh",
+      "resourceKey": "employee",
+      "actionKey": "admit",
+      "routePattern": "/api/v1/funcionarios/**",
+      "description": "Admit employees through HR-01."
+    },
+    {
+      "key": "rh.employee.terminate",
+      "moduleKey": "rh",
+      "resourceKey": "employee",
+      "actionKey": "terminate",
+      "routePattern": "/api/v1/funcionarios/**",
+      "description": "Terminate employees through HR-01."
+    },
+    {
+      "key": "rh.employment_link.write",
+      "moduleKey": "rh",
+      "resourceKey": "employment_link",
+      "actionKey": "write",
+      "routePattern": "/api/v1/funcionarios/**/vinculos",
+      "description": "Change employee employment link and legal regime through HR-02."
+    },
+    {
+      "key": "rh.history.read",
+      "moduleKey": "rh",
+      "resourceKey": "history",
+      "actionKey": "read",
+      "routePattern": "/api/v1/funcionarios/**/historico",
+      "description": "Read immutable functional history timeline."
+    },
+    {
+      "key": "rh.dependent.read",
+      "moduleKey": "rh",
+      "resourceKey": "dependent",
+      "actionKey": "read",
+      "routePattern": "/api/v1/portal/meus-dados/dependentes",
+      "description": "Read employee dependent records."
+    },
+    {
+      "key": "rh.dependent.write",
+      "moduleKey": "rh",
+      "resourceKey": "dependent",
+      "actionKey": "write",
+      "routePattern": "/api/v1/portal/meus-dados/dependentes",
+      "description": "Mutate employee dependent records through approved workflows."
+    },
+    {
+      "key": "rh.cadastral_change.approve",
+      "moduleKey": "rh",
+      "resourceKey": "cadastral_change",
+      "actionKey": "approve",
+      "routePattern": "/api/v1/funcionarios/cadastral-changes/**",
+      "description": "Approve or reject employee self-service cadastral change requests."
+    },
+    {
+      "key": "rh.vacation.read",
+      "moduleKey": "rh",
+      "resourceKey": "vacation",
+      "actionKey": "read",
+      "routePattern": "/api/v1/ferias/**",
+      "description": "Read employee vacation balances and schedules."
+    },
+    {
+      "key": "rh.vacation.request",
+      "moduleKey": "rh",
+      "resourceKey": "vacation",
+      "actionKey": "request",
+      "routePattern": "/api/v1/ferias/programacao",
+      "description": "Request an employee vacation schedule."
+    },
+    {
+      "key": "rh.vacation.approve",
+      "moduleKey": "rh",
+      "resourceKey": "vacation",
+      "actionKey": "approve",
+      "routePattern": "/api/v1/ferias/programacao/**",
+      "description": "Approve or cancel employee vacation schedules."
+    },
+    {
+      "key": "portal.profile.read",
+      "moduleKey": "portal",
+      "resourceKey": "profile",
+      "actionKey": "read",
+      "routePattern": "/api/v1/portal/meus-dados/**",
+      "description": "Read own employee portal profile data."
+    },
+    {
+      "key": "portal.profile.write",
+      "moduleKey": "portal",
+      "resourceKey": "profile",
+      "actionKey": "write",
+      "routePattern": "/api/v1/portal/meus-dados/**",
+      "description": "Submit own employee portal profile change requests."
+    },
+    {
+      "key": "folha.read",
+      "moduleKey": "folha",
+      "resourceKey": "payroll",
+      "actionKey": "read",
+      "routePattern": "#!/folhaPagamento/**",
+      "description": "Read payroll records, accounting catalogs, eSocial payroll surfaces, and calculations."
+    },
+    {
+      "key": "folha.write",
+      "moduleKey": "folha",
+      "resourceKey": "payroll",
+      "actionKey": "write",
+      "routePattern": "#!/folhaPagamento/**",
+      "description": "Mutate payroll records, accounting catalogs, eSocial payroll surfaces, and calculations."
+    },
+    {
+      "key": "avaliacao.read",
+      "moduleKey": "avaliacao",
+      "resourceKey": "performance",
+      "actionKey": "read",
+      "routePattern": "#!/avaliacao/**",
+      "description": "Read evaluation and career progression records."
+    },
+    {
+      "key": "avaliacao.write",
+      "moduleKey": "avaliacao",
+      "resourceKey": "performance",
+      "actionKey": "write",
+      "routePattern": "#!/avaliacao/**",
+      "description": "Mutate evaluation and career progression records."
+    },
+    {
+      "key": "avaliacao.probation.write",
+      "moduleKey": "avaliacao",
+      "resourceKey": "probation",
+      "actionKey": "write",
+      "routePattern": "/api/v1/avaliacao/estagio-probatorio/**",
+      "description": "Create statutory probation evaluations."
+    },
+    {
+      "key": "consultas.read",
+      "moduleKey": "consultas",
+      "resourceKey": "managerial",
+      "actionKey": "read",
+      "routePattern": "#!/consultas/**",
+      "description": "Read managerial query surfaces."
+    },
+    {
+      "key": "previdenciario.read",
+      "moduleKey": "previdenciario",
+      "resourceKey": "benefit",
+      "actionKey": "read",
+      "routePattern": "#!/previdenciario/**",
+      "description": "Read previdenciario records and reports."
+    },
+    {
+      "key": "previdenciario.write",
+      "moduleKey": "previdenciario",
+      "resourceKey": "benefit",
+      "actionKey": "write",
+      "routePattern": "#!/previdenciario/**",
+      "description": "Mutate previdenciario records and reports."
+    },
+    {
+      "key": "recrutamento.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "recruitment",
+      "actionKey": "read",
+      "routePattern": "#!/recrutamento/**",
+      "description": "Read recruitment records."
+    },
+    {
+      "key": "recrutamento.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "recruitment",
+      "actionKey": "write",
+      "routePattern": "#!/recrutamento/**",
+      "description": "Mutate recruitment records."
+    },
+    {
+      "key": "saude.read",
+      "moduleKey": "saude",
+      "resourceKey": "medical",
+      "actionKey": "read",
+      "routePattern": "#!/saude/**",
+      "description": "Read occupational health and pericia records."
+    },
+    {
+      "key": "saude.write",
+      "moduleKey": "saude",
+      "resourceKey": "medical",
+      "actionKey": "write",
+      "routePattern": "#!/saude/**",
+      "description": "Mutate occupational health and pericia records."
+    },
+    {
+      "key": "convenio.read",
+      "moduleKey": "convenio",
+      "resourceKey": "agreement",
+      "actionKey": "read",
+      "routePattern": "#!/convenios/**",
+      "description": "Read convenio records."
+    },
+    {
+      "key": "convenio.write",
+      "moduleKey": "convenio",
+      "resourceKey": "agreement",
+      "actionKey": "write",
+      "routePattern": "#!/convenios/**",
+      "description": "Mutate convenio records."
+    },
+    {
+      "key": "relatorio.read",
+      "moduleKey": "relatorio",
+      "resourceKey": "report",
+      "actionKey": "read",
+      "routePattern": "#!/relatorio/**",
+      "description": "Read report catalog and generated report status."
+    },
+    {
+      "key": "relatorio.generate",
+      "moduleKey": "relatorio",
+      "resourceKey": "report",
+      "actionKey": "generate",
+      "routePattern": "#!/relatorio/**",
+      "description": "Generate or queue reports."
+    },
+    {
+      "key": "documents.upload",
+      "moduleKey": "documents",
+      "resourceKey": "attachment",
+      "actionKey": "upload",
+      "routePattern": "#!/documentos/**",
+      "description": "Create document upload sessions."
+    },
+    {
+      "key": "documents.register",
+      "moduleKey": "documents",
+      "resourceKey": "attachment",
+      "actionKey": "register",
+      "routePattern": "#!/documentos/**",
+      "description": "Confirm or register document attachments."
+    },
+    {
+      "key": "documents.download",
+      "moduleKey": "documents",
+      "resourceKey": "attachment",
+      "actionKey": "download",
+      "routePattern": "#!/documentos/**",
+      "description": "Download document attachments."
+    },
+    {
+      "key": "auditoria.read",
+      "moduleKey": "auditoria",
+      "resourceKey": "audit",
+      "actionKey": "read",
+      "routePattern": "#!/auditoria/**",
+      "description": "Read audit trail and audit report exports."
+    }
   ],
   "profilePermissions": {
     "ADMIN": ["*"],
-    "RH_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "gestao.master_data.write", "rh.read", "rh.write", "rh.employee.read", "rh.employee.write", "rh.employee.admit", "rh.employee.terminate", "rh.employment_link.write", "rh.history.read", "rh.dependent.read", "rh.dependent.write", "rh.cadastral_change.approve", "avaliacao.read", "avaliacao.probation.write", "relatorio.generate"],
-    "FOLHA_OPERADOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "rh.dependent.read", "folha.read", "folha.write", "relatorio.generate"],
-    "AUDITOR": ["auth.read", "gestao.read", "gestao.master_data.read", "rh.read", "rh.employee.read", "rh.history.read", "folha.read", "relatorio.read", "relatorio.generate", "auditoria.read"]
+    "RH_OPERADOR": [
+      "auth.read",
+      "gestao.read",
+      "gestao.master_data.read",
+      "gestao.master_data.write",
+      "rh.read",
+      "rh.write",
+      "rh.employee.read",
+      "rh.employee.write",
+      "rh.employee.admit",
+      "rh.employee.terminate",
+      "rh.employment_link.write",
+      "rh.history.read",
+      "rh.dependent.read",
+      "rh.dependent.write",
+      "rh.cadastral_change.approve",
+      "rh.vacation.read",
+      "rh.vacation.request",
+      "rh.vacation.approve",
+      "avaliacao.read",
+      "avaliacao.probation.write",
+      "relatorio.generate"
+    ],
+    "FOLHA_OPERADOR": [
+      "auth.read",
+      "gestao.read",
+      "gestao.master_data.read",
+      "rh.read",
+      "rh.employee.read",
+      "rh.dependent.read",
+      "folha.read",
+      "folha.write",
+      "relatorio.generate"
+    ],
+    "AUDITOR": [
+      "auth.read",
+      "gestao.read",
+      "gestao.master_data.read",
+      "rh.read",
+      "rh.employee.read",
+      "rh.history.read",
+      "folha.read",
+      "relatorio.read",
+      "relatorio.generate",
+      "auditoria.read"
+    ]
   }
 }

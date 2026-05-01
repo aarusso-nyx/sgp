@@ -1,4 +1,5 @@
 # Divisão Modular — SGP
+
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
 **Escopo:** Todos os bounded contexts | **Depende de:** BRIEF.md
 
@@ -31,27 +32,27 @@ O SGP adota **Domain-Driven Design (DDD)** como filosofia central de divisão. C
 
 Os bounded contexts identificados são:
 
-| Bounded Context | Código | Módulo NestJS principal |
-|---|---|---|
-| Identidade e Acesso | `CORE_AUTH` | `auth` |
-| Multi-tenancy | `CORE_TENANT` | `tenant` |
-| Pessoa Civil | `CORE_PESSOA` | `pessoa` |
-| Estrutura Organizacional | `CORE_ORGANIZACAO` | `organizacao` |
-| Parametrizações e Estrutura | `GESTAO` | `gestao` |
-| Vida Funcional (RH) | `MODULO_RH` | `rh` |
-| Folha de Pagamento | `FOLHA_PAGAMENTO` | `folha` (cliente) + `sgp-payroll-engine` |
-| Avaliação e Progressão | `MODULO_AVALIACAO` | `avaliacao` |
-| Recrutamento e Seleção | `RECRUTAMENTO_SELECAO` | `recrutamento` |
-| Consultas Gerenciais | `CONSULTAS_GERENCIAIS` | `consultas` |
-| Relatórios | `RELATORIO` | `relatorios` |
-| Previdenciário | `MODULO_PREVIDENCIARIO` | `previdenciario` |
-| Auditoria | `AUDITORIA` | `auditoria` |
-| Saúde Ocupacional | `JUNTA_MEDICA` | `saude` |
-| Convênios | `CONVENIO` | `convenio` |
-| Notificações | `NOTIFICACOES` | `notificacoes` |
-| Arquivos | `ARQUIVOS` | `arquivos` |
-| Parâmetros e Feature Flags | `PARAMETROS` | `parametros` |
-| Integrações Externas | `INTEGRACOES` | `integracoes` |
+| Bounded Context             | Código                  | Módulo NestJS principal                  |
+| --------------------------- | ----------------------- | ---------------------------------------- |
+| Identidade e Acesso         | `CORE_AUTH`             | `auth`                                   |
+| Multi-tenancy               | `CORE_TENANT`           | `tenant`                                 |
+| Pessoa Civil                | `CORE_PESSOA`           | `pessoa`                                 |
+| Estrutura Organizacional    | `CORE_ORGANIZACAO`      | `organizacao`                            |
+| Parametrizações e Estrutura | `GESTAO`                | `gestao`                                 |
+| Vida Funcional (RH)         | `MODULO_RH`             | `rh`                                     |
+| Folha de Pagamento          | `FOLHA_PAGAMENTO`       | `folha` (cliente) + `sgp-payroll-engine` |
+| Avaliação e Progressão      | `MODULO_AVALIACAO`      | `avaliacao`                              |
+| Recrutamento e Seleção      | `RECRUTAMENTO_SELECAO`  | `recrutamento`                           |
+| Consultas Gerenciais        | `CONSULTAS_GERENCIAIS`  | `consultas`                              |
+| Relatórios                  | `RELATORIO`             | `relatorios`                             |
+| Previdenciário              | `MODULO_PREVIDENCIARIO` | `previdenciario`                         |
+| Auditoria                   | `AUDITORIA`             | `auditoria`                              |
+| Saúde Ocupacional           | `JUNTA_MEDICA`          | `saude`                                  |
+| Convênios                   | `CONVENIO`              | `convenio`                               |
+| Notificações                | `NOTIFICACOES`          | `notificacoes`                           |
+| Arquivos                    | `ARQUIVOS`              | `arquivos`                               |
+| Parâmetros e Feature Flags  | `PARAMETROS`            | `parametros`                             |
+| Integrações Externas        | `INTEGRACOES`           | `integracoes`                            |
 
 ### 1.2 Módulos NestJS por Contexto
 
@@ -78,6 +79,7 @@ src/modules/<contexto>/
 ```
 
 Os módulos NestJS **não importam diretamente** módulos de outros contextos de negócio. A comunicação ocorre:
+
 - Via injeção do `EventEmitter2` para publicar eventos de domínio internos.
 - Via publicação em tópicos SNS/EventBridge para eventos que cruzam fronteiras de deployment.
 - Via HTTP interno (chamadas REST entre `sgp-core-api` e `sgp-payroll-engine`).
@@ -102,6 +104,7 @@ O `shared-kernel` é uma biblioteca nx de tipo `type:lib, scope:shared`. Contém
 - Tipos de evento de domínio (interfaces `DomainEvent<T>`).
 
 **Proibições explícitas no shared-kernel:**
+
 - Entidades Prisma/TypeORM (ficam privadas em cada módulo).
 - Serviços com lógica de negócio.
 - Dependências de frameworks (NestJS, Angular).
@@ -127,13 +130,13 @@ graph LR
 
 **Regras de comunicação:**
 
-| Cenário | Mecanismo | Quando usar |
-|---|---|---|
-| Mesma app, mesmo processo | `EventEmitter2` (in-process) | Eventos de domínio dentro do `sgp-core-api` |
-| Mesma app, lógica cross-module | Injeção de DTO via contrato shared-kernel | Consulta de dados de outro módulo sem acoplamento |
-| Microservice para microservice | HTTP REST (API Gateway interna) | `sgp-core-api` ↔ `sgp-payroll-engine` (consultas síncronas) |
-| Notificação assíncrona cross-service | SNS → SQS | Folha calculo solicitada, eSocial evento pendente |
-| Orquestração complexa | Step Functions | Cálculo de lote, envio eSocial |
+| Cenário                              | Mecanismo                                 | Quando usar                                                 |
+| ------------------------------------ | ----------------------------------------- | ----------------------------------------------------------- |
+| Mesma app, mesmo processo            | `EventEmitter2` (in-process)              | Eventos de domínio dentro do `sgp-core-api`                 |
+| Mesma app, lógica cross-module       | Injeção de DTO via contrato shared-kernel | Consulta de dados de outro módulo sem acoplamento           |
+| Microservice para microservice       | HTTP REST (API Gateway interna)           | `sgp-core-api` ↔ `sgp-payroll-engine` (consultas síncronas) |
+| Notificação assíncrona cross-service | SNS → SQS                                 | Folha calculo solicitada, eSocial evento pendente           |
+| Orquestração complexa                | Step Functions                            | Cálculo de lote, envio eSocial                              |
 
 ### 1.6 Testes de Contrato
 
@@ -485,9 +488,10 @@ stateDiagram-v2
     DESLIGAMENTO --> [*]
 ```
 
-**Serviços:** `EmployeesService` (`rh.employees`), `VinculoService`, `SituacaoFuncionalService`, `PosseService`, `TransferenciaService`, `CedidoService`, `DossieService`, `ObservacaoFuncionalService`, `MatriculaService`, `AfastamentoService`, `FichaFuncionalService`.
+**Serviços:** `EmployeesService` (`rh.employees`), `VacationService` (`rh.vacation`), `VinculoService`, `SituacaoFuncionalService`, `PosseService`, `TransferenciaService`, `CedidoService`, `DossieService`, `ObservacaoFuncionalService`, `MatriculaService`, `AfastamentoService`, `FichaFuncionalService`.
 
 **Controladores:**
+
 - `GET /api/v1/funcionarios` — listagem paginada com filtros
 - `POST /api/v1/funcionarios` — admissão HR-01; cria `employee`, contrato ativo, linha imutável em `employee_status_history` e evento em `audit_event`
 - `GET /api/v1/rh/funcionarios/:id` — perfil completo
@@ -497,6 +501,10 @@ stateDiagram-v2
 - `GET /api/v1/rh/funcionarios/:id/situacoes` — histórico de situações
 - `POST /api/v1/rh/funcionarios/:id/transferencias` — transferir
 - `POST /api/v1/funcionarios/:id/desligamento` — desligar; altera situação funcional, encerra contrato ativo e audita a mutação
+- `GET /api/v1/ferias/saldo/:employee_id` — saldo de férias por período aquisitivo
+- `POST /api/v1/ferias/programacao` — programação de férias com até três parcelas e abono pecuniário limitado
+- `POST /api/v1/ferias/programacao/:id/aprovar` — aprovação de chefia/RH
+- `POST /api/v1/ferias/programacao/:id/cancelar` — cancelamento administrativo
 - `GET /api/v1/rh/funcionarios/:id/ficha-funcional` — ficha funcional consolidada
 - `GET /api/v1/rh/funcionarios/:id/dossie` — listar anexos
 - `POST /api/v1/rh/funcionarios/:id/dossie` — anexar documento
@@ -520,6 +528,7 @@ stateDiagram-v2
 **Serviços:** `CompetenciaService`, `FolhaPagamentoService`, `LancamentoService`, `ConsignadoService`, `ImportacaoService`, `CalculoOrquestradorService` (dispara para payroll-engine), `ContrachequeViewService`, `RelatorioFinanceiroService`.
 
 **Controladores:**
+
 - `POST /api/v1/folha/competencias` — abrir competência
 - `GET /api/v1/folha/competencias` — listar
 - `PUT /api/v1/folha/competencias/:id/fechar` — fechar (imediato ou agendar)
@@ -555,6 +564,7 @@ stateDiagram-v2
 **Serviços:** `AvaliacaoDesempenhoService`, `ProgressaoMeritoService`, `SimuladorNivelSalarialService`.
 
 **Controladores:**
+
 - `GET /api/v1/avaliacao/funcionarios/:id/avaliacoes`
 - `POST /api/v1/avaliacao/funcionarios/:id/avaliacoes`
 - `GET /api/v1/avaliacao/funcionarios/:id/progressoes`
@@ -579,6 +589,7 @@ stateDiagram-v2
 **Serviços:** `RequisicaoService`, `CandidatoService`, `BancoTalentosService`, `ProgramaEstagioService`, `EstagiarioService`, `ProrrogacaoEstagioService`, `RecessoEstagioService`.
 
 **Controladores:**
+
 - `POST /api/v1/recrutamento/requisicoes`
 - `GET /api/v1/recrutamento/requisicoes`
 - `PUT /api/v1/recrutamento/requisicoes/:id/encaminhar`
@@ -612,6 +623,7 @@ stateDiagram-v2
 **Serviços:** `QuadroServidoresService`, `IndicadoresFolhaService`, `DistribuicaoPessoalService`, `RelatorioAfastamentosService`, `ConsultaPersonalizadaService`.
 
 **Controladores:**
+
 - `GET /api/v1/consultas/quadro-servidores`
 - `GET /api/v1/consultas/distribuicao-por-cargo`
 - `GET /api/v1/consultas/distribuicao-por-lotacao`
@@ -638,6 +650,7 @@ stateDiagram-v2
 **Serviços:** `RelatorioService`, `RelatorioAgendadoService`.
 
 **Controladores:**
+
 - `POST /api/v1/relatorios/solicitar` — disparar geração assíncrona
 - `GET /api/v1/relatorios` — listar solicitações do tenant
 - `GET /api/v1/relatorios/:id/status` — verificar status
@@ -664,6 +677,7 @@ stateDiagram-v2
 **Serviços:** `AposentadoriaService`, `PensaoService`, `SimulacaoAposentadoriaService`, `CertidaoService`, `RecadastramentoService`, `BeneficiarioService`, `ProvaVidaService`, `CampanhaRecadastramentoService`.
 
 **Controladores:**
+
 - `GET /api/v1/previdenciario/aposentadorias`
 - `POST /api/v1/previdenciario/aposentadorias`
 - `POST /api/v1/previdenciario/simulacoes`
@@ -716,6 +730,7 @@ stateDiagram-v2
 **Serviços:** `MedicoService`, `EspecialidadeService`, `AgendaMedicaService`, `AgendamentoPericiasService`, `ProntuarioService`, `LaudoService`, `LicencaMedicaService`, `RestricaoOcupacionalService`, `AcidenteTrabalhoService`, `ExameOcupacionalService`.
 
 **Controladores:**
+
 - `GET /api/v1/saude/medicos`
 - `POST /api/v1/saude/medicos`
 - `GET /api/v1/saude/especialidades`
@@ -749,6 +764,7 @@ stateDiagram-v2
 **Serviços:** `ConvenioService`, `BeneficiarioConvenioService`, `DescontoFolhaConvenioService`.
 
 **Controladores:**
+
 - `GET /api/v1/convenios`
 - `POST /api/v1/convenios`
 - `PUT /api/v1/convenios/:id`
@@ -774,6 +790,7 @@ stateDiagram-v2
 **Serviços:** `AuditLogService`, `AuditQueryService`, `AuditExportService`.
 
 **Controladores:**
+
 - `GET /api/v1/auditoria/logs` — filtros: domínio, entidade, entidade_id, usuario_id, acao, data_inicio, data_fim
 - `GET /api/v1/auditoria/logs/:id`
 - `POST /api/v1/auditoria/exportar` — gerar relatório de auditoria
@@ -795,6 +812,7 @@ stateDiagram-v2
 **Serviços:** `NotificacaoService`, `EmailService` (SES), `PushService`, `InAppNotificationService`.
 
 **Controladores:**
+
 - `GET /api/v1/notificacoes` — notificações do usuário autenticado
 - `GET /api/v1/notificacoes/unread-count` — total de notificações não lidas para badge do portal/admin
 - `PUT /api/v1/notificacoes/:id/lida`
@@ -815,6 +833,7 @@ stateDiagram-v2
 **Serviços:** `ArquivoService` (upload presigned URL, download URL, delete), `S3StorageService`.
 
 **Controladores:**
+
 - `POST /api/v1/arquivos/upload-url` — retorna presigned URL para upload direto ao S3
 - `GET /api/v1/arquivos/:id/download-url` — retorna presigned URL para download
 - `DELETE /api/v1/arquivos/:id` — soft delete
@@ -830,6 +849,7 @@ stateDiagram-v2
 **Serviços:** `ParametroSistemaService`, `ParametroGlobalService`, `FeatureFlagService`.
 
 **Controladores:**
+
 - `GET /api/admin/v1/parametros/sistema`
 - `PUT /api/admin/v1/parametros/sistema/:chave`
 - `GET /api/admin/v1/parametros/globais`
@@ -845,6 +865,7 @@ stateDiagram-v2
 **Serviços:** `EsocialFacadeService`, `SiprevFacadeService`, `CnabFacadeService`, `NeoconsigFacadeService`, `GovBrFacadeService`, `PrefeituraPublicaFacadeService`.
 
 **Controladores:**
+
 - `GET /api/admin/v1/integracoes/esocial/status`
 - `POST /api/admin/v1/integracoes/esocial/reenviar/:id`
 - `GET /api/admin/v1/integracoes/cnab/remessas`
@@ -909,23 +930,24 @@ graph TD
 
 O `sgp-payroll-engine` opera com **schema próprio** (`payroll`) dentro do mesmo cluster PostgreSQL do `sgp-core-api`:
 
-| Schema | Proprietário | Conteúdo |
-|---|---|---|
-| `public` | `sgp-core-api` | Todos os dados de cadastro, vida funcional, competências, meta-dados de folha |
+| Schema    | Proprietário         | Conteúdo                                                                                  |
+| --------- | -------------------- | ----------------------------------------------------------------------------------------- |
+| `public`  | `sgp-core-api`       | Todos os dados de cadastro, vida funcional, competências, meta-dados de folha             |
 | `payroll` | `sgp-payroll-engine` | `contracheque`, `lancamento`, `formula` (compilada), `plano_calculo_cache`, `log_calculo` |
 
 **Read Replica para cadastros:** o `sgp-payroll-engine` mantém conexão com a **read replica** do RDS para leitura dos dados de cadastro (`pessoa`, `funcionario`, `vinculo`, `verba`, `cargo`, `lotacao`, `aliquota`, etc.) consumidos durante o cálculo. Isso garante que:
+
 - O cálculo em lote não cause contenção de I/O na instância primária.
 - Os cadastros são lidos no estado do momento do cálculo (snapshot por competência não volatizado).
 - A escrita de resultados (`contracheque`, `lancamento`) ocorre **apenas na instância primária** do schema `payroll`.
 
 ### 4.3 Eventos de Comunicação
 
-| Evento | Direção | Payload |
-|---|---|---|
+| Evento                     | Direção                               | Payload                                                                  |
+| -------------------------- | ------------------------------------- | ------------------------------------------------------------------------ |
 | `folha.calculo.solicitada` | `sgp-core-api` → `sgp-payroll-engine` | `{ folhaId, competenciaId, tenantId, tipoCalculo, filtroFuncionarios? }` |
-| `folha.calculo.concluida` | `sgp-payroll-engine` → `sgp-core-api` | `{ folhaId, status, totalCalculados, totalErros, duracaoMs }` |
-| `folha.calculo.progresso` | `sgp-payroll-engine` → `sgp-core-api` | `{ folhaId, pctContracheques, pctFolhas }` |
+| `folha.calculo.concluida`  | `sgp-payroll-engine` → `sgp-core-api` | `{ folhaId, status, totalCalculados, totalErros, duracaoMs }`            |
+| `folha.calculo.progresso`  | `sgp-payroll-engine` → `sgp-core-api` | `{ folhaId, pctContracheques, pctFolhas }`                               |
 
 ### 4.4 Compilador SQL de Fórmulas
 
@@ -946,6 +968,7 @@ DSL (texto_dsl)          → Lexer → Parser → AST → SQLBuilder → SQL (te
 **Cache de Plano de Cálculo:**
 
 O `PlanoCalculoCache` armazena, por `(tenant_id, competencia_id)`, o conjunto ordenado de verbas elegíveis e seus SQL compilados. O cache é invalidado quando:
+
 - Nova verba é ativada na competência.
 - Fórmula de verba é alterada.
 - Elegibilidade de cargo/função/vínculo é modificada.
@@ -1005,6 +1028,7 @@ sequenceDiagram
 ```
 
 **Módulos internos:**
+
 - `evento-consumer`: deserializa mensagem SQS, valida schema, roteia por tipo de evento.
 - `xml-builder`: invoca `libs/integrations/esocial-s12` para construção dos XML S-1.000, S-1.005, S-1.010, S-1.020, S-1.030, S-1.035, S-1.040, S-1.050, S-1.060, S-1.070, S-1.080, S-2.xxx, S-3.xxx.
 - `assinatura`: integra com AWS KMS ou certificado A1 armazenado criptografado no S3 + Secrets Manager.
@@ -1017,16 +1041,14 @@ sequenceDiagram
 
 ### 5.2 `sgp-integrations-worker`
 
-
 **Sub-módulos:**
 
-| Módulo | Fila | Responsabilidade |
-|---|---|---|
-| `cnab-remessa` | `remessa.gerar` | Gera arquivo CNAB 240/400 por banco; persiste em S3; notifica banco (SFTP ou portal) |
+| Módulo         | Fila                | Responsabilidade                                                                               |
+| -------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
+| `cnab-remessa` | `remessa.gerar`     | Gera arquivo CNAB 240/400 por banco; persiste em S3; notifica banco (SFTP ou portal)           |
 | `cnab-retorno` | `retorno.processar` | Processa arquivo de retorno bancário; atualiza status de pagamentos; gera relatório de retorno |
-| `siprev` | `siprev.gerar` | Gera XML SIPREV no leiaute MPS vigente; persiste em S3; notifica gestor para upload manual |
-| `dirf` | `dirf.gerar` | Gera arquivo TXT DIRF no leiaute RFB anual; persiste em S3; atualiza status |
-
+| `siprev`       | `siprev.gerar`      | Gera XML SIPREV no leiaute MPS vigente; persiste em S3; notifica gestor para upload manual     |
+| `dirf`         | `dirf.gerar`        | Gera arquivo TXT DIRF no leiaute RFB anual; persiste em S3; atualiza status                    |
 
 ---
 
@@ -1060,20 +1082,20 @@ sequenceDiagram
 
 **Tipos de relatório suportados:**
 
-| Tipo de evento | Saída | Motor |
-|---|---|---|
-| `report.gerar.contracheque` | PDF | Puppeteer + template Handlebars |
-| `report.gerar.folha` | PDF / XLSX | Puppeteer / ExcelJS |
-| `report.gerar.financeiro` | PDF / XLSX | Puppeteer / ExcelJS |
-| `report.gerar.batimento` | PDF | Puppeteer |
-| `report.gerar.ficha-funcional` | PDF | Puppeteer |
-| `report.gerar.ficha-financeira` | PDF / XLSX | Puppeteer / ExcelJS |
-| `report.gerar.carteira-recadastramento` | XLSX | ExcelJS |
-| `report.gerar.certidao` | PDF | Puppeteer |
-| `report.gerar.laudo-pericial` | PDF | Puppeteer |
-| `report.gerar.estagio` | PDF / XLSX | Puppeteer / ExcelJS |
-| `report.gerar.siprev` | XML | Builder tipesafe |
-| `report.gerar.dirf` | TXT | Builder tipesafe |
+| Tipo de evento                          | Saída      | Motor                           |
+| --------------------------------------- | ---------- | ------------------------------- |
+| `report.gerar.contracheque`             | PDF        | Puppeteer + template Handlebars |
+| `report.gerar.folha`                    | PDF / XLSX | Puppeteer / ExcelJS             |
+| `report.gerar.financeiro`               | PDF / XLSX | Puppeteer / ExcelJS             |
+| `report.gerar.batimento`                | PDF        | Puppeteer                       |
+| `report.gerar.ficha-funcional`          | PDF        | Puppeteer                       |
+| `report.gerar.ficha-financeira`         | PDF / XLSX | Puppeteer / ExcelJS             |
+| `report.gerar.carteira-recadastramento` | XLSX       | ExcelJS                         |
+| `report.gerar.certidao`                 | PDF        | Puppeteer                       |
+| `report.gerar.laudo-pericial`           | PDF        | Puppeteer                       |
+| `report.gerar.estagio`                  | PDF / XLSX | Puppeteer / ExcelJS             |
+| `report.gerar.siprev`                   | XML        | Builder tipesafe                |
+| `report.gerar.dirf`                     | TXT        | Builder tipesafe                |
 
 ---
 
@@ -1088,6 +1110,7 @@ O monorepo nx contém duas apps Angular (`sgp-admin` e `sgp-portal`) e um conjun
 Localização: `libs/ui-admin/shared/` e reusada pelo portal via alias `@sgp/ds`.
 
 **Conteúdo:**
+
 - Componentes atômicos: `SgpButton`, `SgpInput`, `SgpSelect`, `SgpDatepicker`, `SgpModal`, `SgpToast`, `SgpBadge`, `SgpAvatar`, `SgpSpinner`.
 - Componentes compostos: `SgpDataTable` (paginação, ordenação, filtros coluna, exportação), `SgpFilterBar`, `SgpFormBuilder`, `SgpTabs`, `SgpAccordion`, `SgpTimeline`.
 - Layout: `SgpShellLayout` (sidebar + topbar + content), `SgpPageHeader`, `SgpBreadcrumb`, `SgpSideNav`.
@@ -1101,41 +1124,51 @@ Localização: `libs/ui-admin/shared/` e reusada pelo portal via alias `@sgp/ds`
 ```typescript
 // app.routes.ts (sgp-admin)
 export const routes: Routes = [
-  { path: 'gestao',        loadChildren: () => import('@sgp/ui-admin/gestao') },
-  { path: 'rh',            loadChildren: () => import('@sgp/ui-admin/rh') },
-  { path: 'folha',         loadChildren: () => import('@sgp/ui-admin/folha') },
-  { path: 'avaliacao',     loadChildren: () => import('@sgp/ui-admin/avaliacao') },
-  { path: 'recrutamento',  loadChildren: () => import('@sgp/ui-admin/recrutamento') },
-  { path: 'consultas',     loadChildren: () => import('@sgp/ui-admin/consultas') },
-  { path: 'relatorios',    loadChildren: () => import('@sgp/ui-admin/relatorios') },
-  { path: 'previdenciario',loadChildren: () => import('@sgp/ui-admin/previdenciario') },
-  { path: 'auditoria',     loadChildren: () => import('@sgp/ui-admin/auditoria') },
-  { path: 'saude',         loadChildren: () => import('@sgp/ui-admin/saude') },
-  { path: 'convenio',      loadChildren: () => import('@sgp/ui-admin/convenio') },
-  { path: 'admin',         loadChildren: () => import('@sgp/ui-admin/admin') },
+  { path: "gestao", loadChildren: () => import("@sgp/ui-admin/gestao") },
+  { path: "rh", loadChildren: () => import("@sgp/ui-admin/rh") },
+  { path: "folha", loadChildren: () => import("@sgp/ui-admin/folha") },
+  { path: "avaliacao", loadChildren: () => import("@sgp/ui-admin/avaliacao") },
+  {
+    path: "recrutamento",
+    loadChildren: () => import("@sgp/ui-admin/recrutamento"),
+  },
+  { path: "consultas", loadChildren: () => import("@sgp/ui-admin/consultas") },
+  {
+    path: "relatorios",
+    loadChildren: () => import("@sgp/ui-admin/relatorios"),
+  },
+  {
+    path: "previdenciario",
+    loadChildren: () => import("@sgp/ui-admin/previdenciario"),
+  },
+  { path: "auditoria", loadChildren: () => import("@sgp/ui-admin/auditoria") },
+  { path: "saude", loadChildren: () => import("@sgp/ui-admin/saude") },
+  { path: "convenio", loadChildren: () => import("@sgp/ui-admin/convenio") },
+  { path: "admin", loadChildren: () => import("@sgp/ui-admin/admin") },
 ];
 ```
 
 **Features por domínio em `libs/ui-admin/`:**
 
-| Lib | Principais componentes Angular | API Service |
-|---|---|---|
-| `@sgp/ui-admin/gestao` | `PlanoCargosList`, `ReferenciaSalarialForm`, `EnumCatalogoAdmin` | `GestaoApiService` |
-| `@sgp/ui-admin/rh` | `FuncionarioList`, `FuncionarioForm`, `PosseWizard`, `FichaFuncional`, `DossiePanel`, `AfastamentoTimeline`, `TransferenciaForm` | `RhApiService` |
-| `@sgp/ui-admin/folha` | `CompetenciaDashboard`, `FolhaList`, `LancamentoForm`, `CalculoProgress`, `ContrachequeViewer`, `RelatorioFinanceiro`, `ImportacaoWizard` | `FolhaApiService` |
-| `@sgp/ui-admin/avaliacao` | `AvaliacaoForm`, `ProgressaoList`, `SimuladorNivelSalarial` | `AvaliacaoApiService` |
-| `@sgp/ui-admin/recrutamento` | `RequisicaoKanban`, `CandidatoAnalise`, `BancoTalentosSearch`, `EstagioPrograma`, `EstagioList` | `RecrutamentoApiService` |
-| `@sgp/ui-admin/consultas` | `QuadroServidoresChart`, `DistribuicaoTree`, `FichaFinanceiraTable`, `ConsultaPersonalizada` | `ConsultasApiService` |
-| `@sgp/ui-admin/relatorios` | `RelatorioSolicitacaoForm`, `RelatorioQueue`, `DownloadButton` | `RelatoriosApiService` |
-| `@sgp/ui-admin/previdenciario` | `AposentadoriaForm`, `SimulacaoAposentadoria`, `PensaoForm`, `RecadastramentoCampanha`, `BeneficiarioList`, `CertidaoForm` | `PrevidenciarioApiService` |
-| `@sgp/ui-admin/auditoria` | `AuditLogTable`, `AuditDiffViewer`, `AuditExportForm` | `AuditoriaApiService` |
-| `@sgp/ui-admin/saude` | `AgendaMedicaCalendar`, `AgendamentoForm`, `ProntuarioForm`, `LaudoViewer`, `LicencaForm`, `AcidenteTrabalhoForm` | `SaudeApiService` |
-| `@sgp/ui-admin/convenio` | `ConvenioList`, `ConvenioForm`, `BeneficiarioConvenioTable` | `ConvenioApiService` |
-| `@sgp/ui-admin/admin` | `UsuarioAdmin`, `PerfilAdmin`, `TenantParametros`, `FeatureFlagAdmin` | `AdminApiService` |
+| Lib                            | Principais componentes Angular                                                                                                            | API Service                |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `@sgp/ui-admin/gestao`         | `PlanoCargosList`, `ReferenciaSalarialForm`, `EnumCatalogoAdmin`                                                                          | `GestaoApiService`         |
+| `@sgp/ui-admin/rh`             | `FuncionarioList`, `FuncionarioForm`, `PosseWizard`, `FichaFuncional`, `DossiePanel`, `AfastamentoTimeline`, `TransferenciaForm`          | `RhApiService`             |
+| `@sgp/ui-admin/folha`          | `CompetenciaDashboard`, `FolhaList`, `LancamentoForm`, `CalculoProgress`, `ContrachequeViewer`, `RelatorioFinanceiro`, `ImportacaoWizard` | `FolhaApiService`          |
+| `@sgp/ui-admin/avaliacao`      | `AvaliacaoForm`, `ProgressaoList`, `SimuladorNivelSalarial`                                                                               | `AvaliacaoApiService`      |
+| `@sgp/ui-admin/recrutamento`   | `RequisicaoKanban`, `CandidatoAnalise`, `BancoTalentosSearch`, `EstagioPrograma`, `EstagioList`                                           | `RecrutamentoApiService`   |
+| `@sgp/ui-admin/consultas`      | `QuadroServidoresChart`, `DistribuicaoTree`, `FichaFinanceiraTable`, `ConsultaPersonalizada`                                              | `ConsultasApiService`      |
+| `@sgp/ui-admin/relatorios`     | `RelatorioSolicitacaoForm`, `RelatorioQueue`, `DownloadButton`                                                                            | `RelatoriosApiService`     |
+| `@sgp/ui-admin/previdenciario` | `AposentadoriaForm`, `SimulacaoAposentadoria`, `PensaoForm`, `RecadastramentoCampanha`, `BeneficiarioList`, `CertidaoForm`                | `PrevidenciarioApiService` |
+| `@sgp/ui-admin/auditoria`      | `AuditLogTable`, `AuditDiffViewer`, `AuditExportForm`                                                                                     | `AuditoriaApiService`      |
+| `@sgp/ui-admin/saude`          | `AgendaMedicaCalendar`, `AgendamentoForm`, `ProntuarioForm`, `LaudoViewer`, `LicencaForm`, `AcidenteTrabalhoForm`                         | `SaudeApiService`          |
+| `@sgp/ui-admin/convenio`       | `ConvenioList`, `ConvenioForm`, `BeneficiarioConvenioTable`                                                                               | `ConvenioApiService`       |
+| `@sgp/ui-admin/admin`          | `UsuarioAdmin`, `PerfilAdmin`, `TenantParametros`, `FeatureFlagAdmin`                                                                     | `AdminApiService`          |
 
 **State Management:** NgRx Signal Store por feature lib; stores locais sem estado global compartilhado entre libs; comunicação entre features via eventos de roteamento ou parâmetros de rota.
 
 **Conventions Angular:**
+
 - Standalone components em todos os novos componentes.
 - Control flow `@if` / `@for` (sem `*ngIf` / `*ngFor`).
 - Signals para estado reativo local.
@@ -1148,27 +1181,39 @@ export const routes: Routes = [
 
 **Features disponíveis no portal:**
 
-| Lib | Funcionalidade | Usuário |
-|---|---|---|
-| `@sgp/ui-portal/contracheque` | Consulta e download de contracheques históricos; última competência destacada | Servidor, Pensionista |
-| `@sgp/ui-portal/recadastramento` | Formulário de recadastramento digital; upload de documentos; emissão de comprovante | Aposentado, Pensionista |
-| `@sgp/ui-portal/solicitacoes` | Abertura e acompanhamento de solicitações (férias, afastamentos, etc.) | Servidor |
-| `@sgp/ui-portal/pericia-agendada` | Visualização de agendamento de perícia; confirmação de presença | Servidor |
-| `@sgp/ui-portal/curriculo` | Cadastro e atualização de banco de talentos/currículo | Candidato, Servidor |
-| `@sgp/ui-portal/termos` | Visualização e aceite de termos e políticas do tenant | Todos |
+| Lib                               | Funcionalidade                                                                      | Usuário                 |
+| --------------------------------- | ----------------------------------------------------------------------------------- | ----------------------- |
+| `@sgp/ui-portal/contracheque`     | Consulta e download de contracheques históricos; última competência destacada       | Servidor, Pensionista   |
+| `@sgp/ui-portal/recadastramento`  | Formulário de recadastramento digital; upload de documentos; emissão de comprovante | Aposentado, Pensionista |
+| `@sgp/ui-portal/solicitacoes`     | Abertura e acompanhamento de solicitações (férias, afastamentos, etc.)              | Servidor                |
+| `@sgp/ui-portal/pericia-agendada` | Visualização de agendamento de perícia; confirmação de presença                     | Servidor                |
+| `@sgp/ui-portal/curriculo`        | Cadastro e atualização de banco de talentos/currículo                               | Candidato, Servidor     |
+| `@sgp/ui-portal/termos`           | Visualização e aceite de termos e políticas do tenant                               | Todos                   |
 
 **Roteamento do portal:**
 
 ```typescript
 // app.routes.ts (sgp-portal)
 export const routes: Routes = [
-  { path: 'contracheque',   loadChildren: () => import('@sgp/ui-portal/contracheque') },
-  { path: 'recadastramento',loadChildren: () => import('@sgp/ui-portal/recadastramento') },
-  { path: 'solicitacoes',   loadChildren: () => import('@sgp/ui-portal/solicitacoes') },
-  { path: 'pericia',        loadChildren: () => import('@sgp/ui-portal/pericia-agendada') },
-  { path: 'curriculo',      loadChildren: () => import('@sgp/ui-portal/curriculo') },
-  { path: 'termos',         loadChildren: () => import('@sgp/ui-portal/termos') },
-  { path: '',               redirectTo: 'contracheque', pathMatch: 'full' },
+  {
+    path: "contracheque",
+    loadChildren: () => import("@sgp/ui-portal/contracheque"),
+  },
+  {
+    path: "recadastramento",
+    loadChildren: () => import("@sgp/ui-portal/recadastramento"),
+  },
+  {
+    path: "solicitacoes",
+    loadChildren: () => import("@sgp/ui-portal/solicitacoes"),
+  },
+  {
+    path: "pericia",
+    loadChildren: () => import("@sgp/ui-portal/pericia-agendada"),
+  },
+  { path: "curriculo", loadChildren: () => import("@sgp/ui-portal/curriculo") },
+  { path: "termos", loadChildren: () => import("@sgp/ui-portal/termos") },
+  { path: "", redirectTo: "contracheque", pathMatch: "full" },
 ];
 ```
 
@@ -1180,38 +1225,38 @@ export const routes: Routes = [
 
 A tabela abaixo descreve as dependências entre módulos (contexto consumidor → contexto provedor), com o mecanismo e motivo.
 
-| Módulo A (consumidor) | Módulo B (provedor) | Mecanismo | Motivo |
-|---|---|---|---|
-| `rh` | `pessoa` | Evento `pessoa.atualizada` / leitura direta | Dados pessoais do funcionário derivam de `pessoa` |
-| `rh` | `organizacao` | Leitura direta (mesmo app) | Cargo, lotação, filial, centro de custo do vínculo |
-| `rh` | `gestao` | Leitura direta (mesmo app) | Referências salariais, motivos de afastamento |
-| `folha` (core) | `rh` | Evento `rh.funcionario.situacao.alterada` | Massa de funcionários elegíveis para a folha |
-| `folha` (core) | `organizacao` | Leitura direta | Filiais e tipos de processamento |
-| `folha` (core) | `convenio` | Evento `convenio.desconto.calculado` | Descontos de convênio incluídos na folha |
-| `folha` (core) | `sgp-payroll-engine` | HTTP REST + SNS/SQS | Disparo e recebimento de cálculos |
-| `sgp-payroll-engine` | `pessoa` | Read replica (SQL direto) | CPF, nome, dados pessoais para o contracheque |
-| `sgp-payroll-engine` | `rh` | Read replica (SQL direto) | Vínculo, cargo, salário base, elegibilidade de verbas |
-| `sgp-payroll-engine` | `organizacao` | Read replica (SQL direto) | Filial, lotação para agrupamentos de folha |
-| `sgp-payroll-engine` | `gestao` | Read replica (SQL direto) | Alíquotas, referências salariais, plano de cargos |
-| `avaliacao` | `rh` | Leitura direta | Funcionário e vínculo para progressão |
-| `avaliacao` | `gestao` | Leitura direta | Plano cargos e carreira, referências salariais |
-| `recrutamento` | `pessoa` | Leitura direta | Dados pessoais de candidatos/estagiários |
-| `recrutamento` | `organizacao` | Leitura direta | Filial e lotação para alocação de estagiário |
-| `recrutamento` | `notificacoes` | Evento `recrutamento.requisicao.concluida` | E-mail ao solicitante |
-| `previdenciario` | `pessoa` | Evento `recadastramento.concluido` + leitura | Retroalimentação e dados do beneficiário |
-| `previdenciario` | `rh` | Evento `rh.funcionario.desligado` | Abertura de processo de aposentadoria |
-| `previdenciario` | `folha` | Leitura direta | Pensionistas na folha |
-| `saude` | `rh` | Leitura + Evento `saude.licenca.concedida` | Servidor deve estar ATIVO; afastamento automático |
-| `saude` | `organizacao` | Leitura direta | Filiais do médico |
-| `saude` | `notificacoes` | Evento `saude.pericia.agendada` | Alerta ao servidor |
-| `convenio` | `pessoa` | Leitura direta | Beneficiário do convênio |
-| `convenio` | `rh` | Evento `rh.funcionario.desligado` | Encerrar benefícios ativos |
-| `auditoria` | todos os módulos sensíveis | Evento `audit.evento.criado` | Registro passivo de ações auditáveis |
-| `relatorios` | todos os módulos | Leitura direta (read replica) | Dados para composição de relatórios |
-| `consultas` | `rh`, `folha`, `organizacao`, `previdenciario` | Leitura direta (read replica) | Consultas analíticas |
-| `notificacoes` | nenhum | Receptor de eventos | Envio ativo de notificações |
-| `arquivos` | nenhum | Chamada direta por outros módulos | Abstração S3 usada por qualquer módulo |
-| `parametros` | nenhum | Injetado como provider transversal | Parâmetros e feature flags |
+| Módulo A (consumidor) | Módulo B (provedor)                            | Mecanismo                                    | Motivo                                                |
+| --------------------- | ---------------------------------------------- | -------------------------------------------- | ----------------------------------------------------- |
+| `rh`                  | `pessoa`                                       | Evento `pessoa.atualizada` / leitura direta  | Dados pessoais do funcionário derivam de `pessoa`     |
+| `rh`                  | `organizacao`                                  | Leitura direta (mesmo app)                   | Cargo, lotação, filial, centro de custo do vínculo    |
+| `rh`                  | `gestao`                                       | Leitura direta (mesmo app)                   | Referências salariais, motivos de afastamento         |
+| `folha` (core)        | `rh`                                           | Evento `rh.funcionario.situacao.alterada`    | Massa de funcionários elegíveis para a folha          |
+| `folha` (core)        | `organizacao`                                  | Leitura direta                               | Filiais e tipos de processamento                      |
+| `folha` (core)        | `convenio`                                     | Evento `convenio.desconto.calculado`         | Descontos de convênio incluídos na folha              |
+| `folha` (core)        | `sgp-payroll-engine`                           | HTTP REST + SNS/SQS                          | Disparo e recebimento de cálculos                     |
+| `sgp-payroll-engine`  | `pessoa`                                       | Read replica (SQL direto)                    | CPF, nome, dados pessoais para o contracheque         |
+| `sgp-payroll-engine`  | `rh`                                           | Read replica (SQL direto)                    | Vínculo, cargo, salário base, elegibilidade de verbas |
+| `sgp-payroll-engine`  | `organizacao`                                  | Read replica (SQL direto)                    | Filial, lotação para agrupamentos de folha            |
+| `sgp-payroll-engine`  | `gestao`                                       | Read replica (SQL direto)                    | Alíquotas, referências salariais, plano de cargos     |
+| `avaliacao`           | `rh`                                           | Leitura direta                               | Funcionário e vínculo para progressão                 |
+| `avaliacao`           | `gestao`                                       | Leitura direta                               | Plano cargos e carreira, referências salariais        |
+| `recrutamento`        | `pessoa`                                       | Leitura direta                               | Dados pessoais de candidatos/estagiários              |
+| `recrutamento`        | `organizacao`                                  | Leitura direta                               | Filial e lotação para alocação de estagiário          |
+| `recrutamento`        | `notificacoes`                                 | Evento `recrutamento.requisicao.concluida`   | E-mail ao solicitante                                 |
+| `previdenciario`      | `pessoa`                                       | Evento `recadastramento.concluido` + leitura | Retroalimentação e dados do beneficiário              |
+| `previdenciario`      | `rh`                                           | Evento `rh.funcionario.desligado`            | Abertura de processo de aposentadoria                 |
+| `previdenciario`      | `folha`                                        | Leitura direta                               | Pensionistas na folha                                 |
+| `saude`               | `rh`                                           | Leitura + Evento `saude.licenca.concedida`   | Servidor deve estar ATIVO; afastamento automático     |
+| `saude`               | `organizacao`                                  | Leitura direta                               | Filiais do médico                                     |
+| `saude`               | `notificacoes`                                 | Evento `saude.pericia.agendada`              | Alerta ao servidor                                    |
+| `convenio`            | `pessoa`                                       | Leitura direta                               | Beneficiário do convênio                              |
+| `convenio`            | `rh`                                           | Evento `rh.funcionario.desligado`            | Encerrar benefícios ativos                            |
+| `auditoria`           | todos os módulos sensíveis                     | Evento `audit.evento.criado`                 | Registro passivo de ações auditáveis                  |
+| `relatorios`          | todos os módulos                               | Leitura direta (read replica)                | Dados para composição de relatórios                   |
+| `consultas`           | `rh`, `folha`, `organizacao`, `previdenciario` | Leitura direta (read replica)                | Consultas analíticas                                  |
+| `notificacoes`        | nenhum                                         | Receptor de eventos                          | Envio ativo de notificações                           |
+| `arquivos`            | nenhum                                         | Chamada direta por outros módulos            | Abstração S3 usada por qualquer módulo                |
+| `parametros`          | nenhum                                         | Injetado como provider transversal           | Parâmetros e feature flags                            |
 
 ---
 
@@ -1261,18 +1306,19 @@ libs/shared-kernel/src/
 
 ### 8.2 O que fica privado (por módulo)
 
-| Artefato | Onde fica | Justificativa |
-|---|---|---|
-| Entidades TypeORM/Prisma (`@Entity`, `@Column`) | `libs/domain/<contexto>/entities/` | Acoplamento ao ORM é detalhe de implementação |
-| Repositórios e queries SQL | `libs/domain/<contexto>/repositories/` | Otimizações e índices são privados do contexto |
-| Serviços de domínio com lógica de negócio | `libs/domain/<contexto>/services/` | Protege invariantes do domínio |
-| Regras de validação específicas | `libs/domain/<contexto>/` | Evita vazamento de regras entre contextos |
-| Schema SQL (`payroll.*`) | `sgp-payroll-engine` | Fronteira de dados do microsserviço |
-| Templates de relatório (Handlebars) | `sgp-report-service/templates/` | Responsabilidade única do serviço de relatórios |
+| Artefato                                        | Onde fica                              | Justificativa                                   |
+| ----------------------------------------------- | -------------------------------------- | ----------------------------------------------- |
+| Entidades TypeORM/Prisma (`@Entity`, `@Column`) | `libs/domain/<contexto>/entities/`     | Acoplamento ao ORM é detalhe de implementação   |
+| Repositórios e queries SQL                      | `libs/domain/<contexto>/repositories/` | Otimizações e índices são privados do contexto  |
+| Serviços de domínio com lógica de negócio       | `libs/domain/<contexto>/services/`     | Protege invariantes do domínio                  |
+| Regras de validação específicas                 | `libs/domain/<contexto>/`              | Evita vazamento de regras entre contextos       |
+| Schema SQL (`payroll.*`)                        | `sgp-payroll-engine`                   | Fronteira de dados do microsserviço             |
+| Templates de relatório (Handlebars)             | `sgp-report-service/templates/`        | Responsabilidade única do serviço de relatórios |
 
 ### 8.3 O que vai via HTTP (cross-context)
 
 Comunicação síncrona via HTTP REST é reservada para:
+
 - **`sgp-core-api` → `sgp-payroll-engine`:** cálculo pontual de contracheque (síncrono, resposta imediata).
 - **`sgp-core-api` → `sgp-report-service`:** consulta de status de relatório em andamento (polling).
 - **API Externa → `sgp-core-api`:** integrações de terceiros (Prefeitura Pública, sistemas externos) via `/api/external/v1/`.
@@ -1282,6 +1328,7 @@ Em todos os casos, o payload trafega como **DTO tipado** definido no `shared-ker
 ### 8.4 O que vai via Evento
 
 Comunicação assíncrona via eventos (SNS/EventBridge + SQS) é usada para:
+
 - **Notificações de estado:** `rh.funcionario.desligado`, `folha.competencia.fechada` — outros contextos reagem sem precisar consultar.
 - **Disparo de trabalho:** `folha.calculo.solicitada`, `contracheque.gerar.pdf`, `report.gerar.<tipo>` — enfileiram trabalho para workers.
 - **Auditoria:** `audit.evento.criado` — desacopla o produtor do registro de auditoria.
@@ -1291,13 +1338,13 @@ Comunicação assíncrona via eventos (SNS/EventBridge + SQS) é usada para:
 
 ```typescript
 interface SgpDomainEvent<T> {
-  eventId: string;          // UUID único do evento
-  eventType: string;        // ex.: 'rh.funcionario.desligado'
-  eventVersion: string;     // '1.0'
+  eventId: string; // UUID único do evento
+  eventType: string; // ex.: 'rh.funcionario.desligado'
+  eventVersion: string; // '1.0'
   tenantId: string;
-  timestamp: string;        // ISO 8601
-  source: string;           // 'sgp-core-api' | 'sgp-payroll-engine' | ...
-  correlationId?: string;   // para rastreamento
+  timestamp: string; // ISO 8601
+  source: string; // 'sgp-core-api' | 'sgp-payroll-engine' | ...
+  correlationId?: string; // para rastreamento
   payload: T;
 }
 ```
@@ -1308,18 +1355,18 @@ interface SgpDomainEvent<T> {
 
 ### 9.1 Unidades Deployáveis Independentes
 
-| App / Lib | Deployável independente | Observação |
-|---|---|---|
-| `sgp-core-api` | Sim | Deploy mais frequente; cobre maioria dos módulos de negócio |
-| `sgp-payroll-engine` | Sim | Deploy independente; evolução do compilador SQL separada |
-| `sgp-esocial-worker` | Sim | Deploy quando leiaute eSocial é atualizado ou há mudança de certificado |
-| `sgp-integrations-worker` | Sim | Deploy quando novos bancos CNAB são suportados |
-| `sgp-report-service` | Sim | Deploy quando templates de relatório são alterados |
-| `sgp-admin` | Sim | Deploy via CDN/CloudFront; versionamento de assets |
-| `sgp-portal` | Sim | Idem `sgp-admin`; deploy separado |
-| `libs/shared-kernel` | Não (lib) | Quebra de contrato exige deploy coordenado dos consumidores |
-| `libs/domain/*` | Não (lib) | Compiladas junto com as apps que as importam |
-| `libs/integrations/*` | Não (lib) | Compiladas junto com os workers |
+| App / Lib                 | Deployável independente | Observação                                                              |
+| ------------------------- | ----------------------- | ----------------------------------------------------------------------- |
+| `sgp-core-api`            | Sim                     | Deploy mais frequente; cobre maioria dos módulos de negócio             |
+| `sgp-payroll-engine`      | Sim                     | Deploy independente; evolução do compilador SQL separada                |
+| `sgp-esocial-worker`      | Sim                     | Deploy quando leiaute eSocial é atualizado ou há mudança de certificado |
+| `sgp-integrations-worker` | Sim                     | Deploy quando novos bancos CNAB são suportados                          |
+| `sgp-report-service`      | Sim                     | Deploy quando templates de relatório são alterados                      |
+| `sgp-admin`               | Sim                     | Deploy via CDN/CloudFront; versionamento de assets                      |
+| `sgp-portal`              | Sim                     | Idem `sgp-admin`; deploy separado                                       |
+| `libs/shared-kernel`      | Não (lib)               | Quebra de contrato exige deploy coordenado dos consumidores             |
+| `libs/domain/*`           | Não (lib)               | Compiladas junto com as apps que as importam                            |
+| `libs/integrations/*`     | Não (lib)               | Compiladas junto com os workers                                         |
 
 ### 9.2 Pipeline de CI com `nx affected`
 
@@ -1349,6 +1396,7 @@ graph TD
 ```
 
 **Regras de lint cross-boundary:**
+
 - `scope:folha` não pode importar `scope:rh` diretamente (apenas via shared-kernel).
 - `scope:ui-portal` não pode importar `scope:ui-admin`.
 - `type:lib, scope:shared` (shared-kernel) não pode importar nenhuma lib de domínio específico.
@@ -1365,15 +1413,15 @@ graph TD
 
 Cada app possui seu conjunto de variáveis de ambiente gerenciadas no **AWS Secrets Manager** e injetadas via ECS Task Definition:
 
-| Variável | Apps | Descrição |
-|---|---|---|
-| `DATABASE_URL` | sgp-core-api, payroll-engine | Connection string RDS primário |
-| `DATABASE_READ_URL` | payroll-engine, report-service | Connection string read replica |
-| `SQS_*_URL` | workers | URLs das filas SQS |
-| `SNS_*_ARN` | sgp-core-api | ARNs dos tópicos SNS |
-| `AWS_COGNITO_USER_POOL_ID` | sgp-core-api | Pool ID do Cognito |
-| `STEP_FUNCTIONS_*_ARN` | payroll-engine, esocial-worker | ARNs das State Machines |
-| `S3_BUCKET_*` | todos com arquivos | Buckets por tenant/tipo |
+| Variável                   | Apps                           | Descrição                      |
+| -------------------------- | ------------------------------ | ------------------------------ |
+| `DATABASE_URL`             | sgp-core-api, payroll-engine   | Connection string RDS primário |
+| `DATABASE_READ_URL`        | payroll-engine, report-service | Connection string read replica |
+| `SQS_*_URL`                | workers                        | URLs das filas SQS             |
+| `SNS_*_ARN`                | sgp-core-api                   | ARNs dos tópicos SNS           |
+| `AWS_COGNITO_USER_POOL_ID` | sgp-core-api                   | Pool ID do Cognito             |
+| `STEP_FUNCTIONS_*_ARN`     | payroll-engine, esocial-worker | ARNs das State Machines        |
+| `S3_BUCKET_*`              | todos com arquivos             | Buckets por tenant/tipo        |
 
 ---
 
@@ -1443,26 +1491,27 @@ graph TD
 
 ### 10.2 Responsabilidades por Squad
 
-| Squad | Responsabilidade principal | Módulos NestJS | Libs Frontend | Apps/Workers |
-|---|---|---|---|---|
-| **Core (Plataforma)** | Infraestrutura de acesso, identidade, arquivos, observabilidade, CI/CD, shared-kernel, design system | `auth`, `tenant`, `pessoa`, `organizacao`, `parametros`, `notificacoes`, `arquivos`, `auditoria`, `consultas`, `relatorios` (infra) | `@sgp/ds`, shells admin/portal, `ui-admin/auditoria`, `ui-portal/termos` | `sgp-core-api` (infra), pipeline CI |
-| **Folha** | Ciclo completo de folha de pagamento, motor de cálculo, contracheques, relatórios financeiros | `folha` (core-api), fórmulas, verbas | `@sgp/ui-admin/folha`, `@sgp/ui-portal/contracheque` | `sgp-payroll-engine`, `sgp-report-service` (templates folha) |
-| **Saúde** | Perícia médica, licenças, agenda, SST, acidente de trabalho | `saude` | `@sgp/ui-admin/saude`, `@sgp/ui-portal/pericia-agendada` | — |
-| **RH** | Vida funcional, cadastro de funcionários, gestão de parametrizações, avaliação, progressão, convênios | `rh`, `gestao`, `avaliacao`, `convenio` | `@sgp/ui-admin/rh`, `@sgp/ui-admin/gestao`, `@sgp/ui-admin/avaliacao`, `@sgp/ui-admin/convenio` | — |
-| **Recrutamento** | Requisições de pessoal, banco de talentos, estágio | `recrutamento` | `@sgp/ui-admin/recrutamento`, `@sgp/ui-portal/curriculo` | — |
+| Squad                 | Responsabilidade principal                                                                            | Módulos NestJS                                                                                                                      | Libs Frontend                                                                                   | Apps/Workers                                                 |
+| --------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| **Core (Plataforma)** | Infraestrutura de acesso, identidade, arquivos, observabilidade, CI/CD, shared-kernel, design system  | `auth`, `tenant`, `pessoa`, `organizacao`, `parametros`, `notificacoes`, `arquivos`, `auditoria`, `consultas`, `relatorios` (infra) | `@sgp/ds`, shells admin/portal, `ui-admin/auditoria`, `ui-portal/termos`                        | `sgp-core-api` (infra), pipeline CI                          |
+| **Folha**             | Ciclo completo de folha de pagamento, motor de cálculo, contracheques, relatórios financeiros         | `folha` (core-api), fórmulas, verbas                                                                                                | `@sgp/ui-admin/folha`, `@sgp/ui-portal/contracheque`                                            | `sgp-payroll-engine`, `sgp-report-service` (templates folha) |
+| **Saúde**             | Perícia médica, licenças, agenda, SST, acidente de trabalho                                           | `saude`                                                                                                                             | `@sgp/ui-admin/saude`, `@sgp/ui-portal/pericia-agendada`                                        | —                                                            |
+| **RH**                | Vida funcional, cadastro de funcionários, gestão de parametrizações, avaliação, progressão, convênios | `rh`, `gestao`, `avaliacao`, `convenio`                                                                                             | `@sgp/ui-admin/rh`, `@sgp/ui-admin/gestao`, `@sgp/ui-admin/avaliacao`, `@sgp/ui-admin/convenio` | —                                                            |
+| **Recrutamento**      | Requisições de pessoal, banco de talentos, estágio                                                    | `recrutamento`                                                                                                                      | `@sgp/ui-admin/recrutamento`, `@sgp/ui-portal/curriculo`                                        | —                                                            |
 
 ### 10.3 Interfaces Entre Squads
 
-| Interface | Squads envolvidos | Tipo de contrato |
-|---|---|---|
-| Evento `rh.funcionario.situacao.alterada` | RH → Folha | `DomainEvent<FuncionarioSituacaoPayload>` no shared-kernel |
-| Evento `folha.competencia.fechada` | Folha → Previdenciário, Integrações | `DomainEvent<CompetenciaFechadaPayload>` |
-| Evento `saude.licenca.concedida` | Saúde → RH | `DomainEvent<LicencaConcedidaPayload>` |
-| Evento `previdenciario.aposentadoria.concedida` | Previdenciário → RH, Folha | `DomainEvent<AposentadoriaConcedidaPayload>` |
-| Pact contract: `sgp-payroll-engine` consome `pessoa` | Core → Folha | Contrato Pact versionado |
-| API `GET /api/v1/rh/funcionarios` | RH → todos (leitura) | OpenAPI versionado |
+| Interface                                            | Squads envolvidos                   | Tipo de contrato                                           |
+| ---------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------- |
+| Evento `rh.funcionario.situacao.alterada`            | RH → Folha                          | `DomainEvent<FuncionarioSituacaoPayload>` no shared-kernel |
+| Evento `folha.competencia.fechada`                   | Folha → Previdenciário, Integrações | `DomainEvent<CompetenciaFechadaPayload>`                   |
+| Evento `saude.licenca.concedida`                     | Saúde → RH                          | `DomainEvent<LicencaConcedidaPayload>`                     |
+| Evento `previdenciario.aposentadoria.concedida`      | Previdenciário → RH, Folha          | `DomainEvent<AposentadoriaConcedidaPayload>`               |
+| Pact contract: `sgp-payroll-engine` consome `pessoa` | Core → Folha                        | Contrato Pact versionado                                   |
+| API `GET /api/v1/rh/funcionarios`                    | RH → todos (leitura)                | OpenAPI versionado                                         |
 
 **Processo de evolução de contrato:**
+
 1. Squad produtor propõe mudança em ADR.
 2. Pact Broker verifica se consumidores são afetados.
 3. Se contrato quebra: todos os consumidores afetados devem ser atualizados no mesmo PR ou em PRs sequenciados.
@@ -1481,19 +1530,20 @@ graph TD
 
 Os levantamentos em `docs/legacy-reverse/data-archaeology/` e `docs/legacy-reverse/modules/` são evidência de descoberta. A divisão modular canônica para o SGP Moderno é a tabela abaixo; o legado não cria novos bounded contexts nem reabre escopo postergado.
 
-| Evidência reversa | Contexto canônico | Decisão de arquitetura |
-|---|---|---|
-| `modules/funcionario/*` | `pessoa`, `rh`, `organizacao`, `gestao`, `arquivos` | Pessoa civil fica separada do vínculo funcional. Posse, lotação, transferência, situação funcional, dossiê, observações e verbas vinculadas ao servidor pertencem ao `rh`; cadastros estruturantes ficam em `organizacao`/`gestao`; anexos usam `arquivos`/S3. |
-| `modules/folha/*` | `folha`, `sgp-payroll-engine`, `sgp-integrations-worker`, `sgp-report-service` | O `sgp-core-api` orquestra competência, folha, população pagável, lançamentos, importações e leitura de contracheques. O cálculo e a ordem de fórmulas ficam no `sgp-payroll-engine`; remessas, retornos, DIRF/SIPREV/CNAB ficam nos workers; PDFs/XLSX ficam no report service. |
-| `modules/pericias/*` | `saude`, `rh`, `arquivos` | Regulação de agenda e atendimento clínico são subdomínios do `saude`. Laudos/licenças publicam eventos para `rh` atualizar afastamentos/situação funcional; anexos e documentos clínicos usam o módulo `arquivos`. |
-| `modules/recadastramento/*` | `previdenciario`, `pessoa`, `arquivos`, `sgp-portal` | Campanha/carteira, atendimento, histórico de ligações, comprovantes e API pública de prova de vida pertencem ao `previdenciario`. Endereço/contato confirmado retroalimenta `pessoa`; comprovantes e anexos usam `arquivos`; autoatendimento fica no portal. |
-| `modules/recrutamento/*` | `recrutamento`, `pessoa`, `organizacao`, `arquivos`, `notificacoes` | Demanda de pessoal e pipeline de seleção são camadas internas do mesmo bounded context. Banco de talentos, currículo, análise curricular e estágio consomem pessoa/organização e usam arquivos/notificações por contrato. |
-| `data-archaeology/*` | `63-guia-migracao-legado.md`, `50-arvore-menus.md`, `64-*` a `68-*` | Dumps SQL Server, superfícies provadas e achados operacionais são insumos de migração/alinhamento. Nenhum nome físico legado se torna contrato runtime. |
+| Evidência reversa           | Contexto canônico                                                              | Decisão de arquitetura                                                                                                                                                                                                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modules/funcionario/*`     | `pessoa`, `rh`, `organizacao`, `gestao`, `arquivos`                            | Pessoa civil fica separada do vínculo funcional. Posse, lotação, transferência, situação funcional, dossiê, observações e verbas vinculadas ao servidor pertencem ao `rh`; cadastros estruturantes ficam em `organizacao`/`gestao`; anexos usam `arquivos`/S3.                   |
+| `modules/folha/*`           | `folha`, `sgp-payroll-engine`, `sgp-integrations-worker`, `sgp-report-service` | O `sgp-core-api` orquestra competência, folha, população pagável, lançamentos, importações e leitura de contracheques. O cálculo e a ordem de fórmulas ficam no `sgp-payroll-engine`; remessas, retornos, DIRF/SIPREV/CNAB ficam nos workers; PDFs/XLSX ficam no report service. |
+| `modules/pericias/*`        | `saude`, `rh`, `arquivos`                                                      | Regulação de agenda e atendimento clínico são subdomínios do `saude`. Laudos/licenças publicam eventos para `rh` atualizar afastamentos/situação funcional; anexos e documentos clínicos usam o módulo `arquivos`.                                                               |
+| `modules/recadastramento/*` | `previdenciario`, `pessoa`, `arquivos`, `sgp-portal`                           | Campanha/carteira, atendimento, histórico de ligações, comprovantes e API pública de prova de vida pertencem ao `previdenciario`. Endereço/contato confirmado retroalimenta `pessoa`; comprovantes e anexos usam `arquivos`; autoatendimento fica no portal.                     |
+| `modules/recrutamento/*`    | `recrutamento`, `pessoa`, `organizacao`, `arquivos`, `notificacoes`            | Demanda de pessoal e pipeline de seleção são camadas internas do mesmo bounded context. Banco de talentos, currículo, análise curricular e estágio consomem pessoa/organização e usam arquivos/notificações por contrato.                                                        |
+| `data-archaeology/*`        | `63-guia-migracao-legado.md`, `50-arvore-menus.md`, `64-*` a `68-*`            | Dumps SQL Server, superfícies provadas e achados operacionais são insumos de migração/alinhamento. Nenhum nome físico legado se torna contrato runtime.                                                                                                                          |
 
 ### 11.1 Regras de fronteira confirmadas
 
 - A nomenclatura legada `funcionario` continua sendo termo de negócio, mas o modelo físico separa `pessoa` de `funcionario/vinculo`.
 - `rh.employees.vinculos` é a superfície HR-02 para reenquadramento de regime jurídico: o backend expõe `POST /api/v1/funcionarios/:id/vinculos`, usa `hr.employment_link` como registro tenant-scoped do regime e mantém a vigência em `hr.employment_contract`; a UI dedicada fica em `source/frontend/src/app/features/rh/funcionarios/vinculos/`.
+- `rh.vacation` é a superfície HR-03 para saldo e programação de férias: o backend expõe `GET /api/v1/ferias/saldo/:employee_id` e `POST /api/v1/ferias/programacao`, persiste em `hr.vacation_record`, calcula saldo em `hr.f_calculate_vacation_balance`, atende o portal em `source/frontend/portal/src/app/pages/ferias/` e a fila administrativa em `source/frontend/src/app/features/rh/ferias/`.
 - Fórmulas de folha, dependências entre verbas e atributos calculáveis são responsabilidade do engine; telas e APIs de folha apenas solicitam cálculo e leem resultados.
 - Recadastramento permanece em `previdenciario`, mesmo quando a jornada atualiza dados civis ou usa canal público.
 - Perícia médica não grava situação funcional diretamente; ela publica decisão homologada/licença para o `rh`.
@@ -1502,4 +1552,4 @@ Os levantamentos em `docs/legacy-reverse/data-archaeology/` e `docs/legacy-rever
 
 ---
 
-*Documento gerado em 2026-04-21. Referências: BRIEF.md, docs legados `/Users/aarusso/Downloads/interno-rh/docs/` (especialmente `06-modulos-prioritarios-detalhados.md`, `52-folha-verbas-formulas-atributos.md`, `34-rotinas-operacionais-jobs-e-integracoes.md`).*
+_Documento gerado em 2026-04-21. Referências: BRIEF.md, docs legados `/Users/aarusso/Downloads/interno-rh/docs/` (especialmente `06-modulos-prioritarios-detalhados.md`, `52-folha-verbas-formulas-atributos.md`, `34-rotinas-operacionais-jobs-e-integracoes.md`)._

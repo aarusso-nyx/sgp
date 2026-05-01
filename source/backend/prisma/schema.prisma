@@ -12,6 +12,7 @@ enum RecordStatus {
   ACTIVE
   INACTIVE
   ARCHIVED
+
   @@schema("public")
 }
 
@@ -19,6 +20,7 @@ enum UserStatus {
   ACTIVE
   INACTIVE
   LOCKED
+
   @@schema("public")
 }
 
@@ -36,6 +38,7 @@ enum AuditAction {
   APPROVE
   REJECT
   DOWNLOAD
+
   @@schema("public")
 }
 
@@ -44,6 +47,7 @@ enum BranchType {
   BRANCH
   DEPARTMENT
   EXTERNAL
+
   @@schema("public")
 }
 
@@ -52,6 +56,7 @@ enum PersonGender {
   MALE
   OTHER
   UNDECLARED
+
   @@schema("public")
 }
 
@@ -62,6 +67,7 @@ enum EmployeeLifecycleStatus {
   TERMINATED
   RETIRED
   INTERN
+
   @@schema("public")
 }
 
@@ -75,6 +81,7 @@ enum PayrollRunStatus {
   CANCELED
   FAILED
   CLOSED
+
   @@schema("public")
 }
 
@@ -83,6 +90,7 @@ enum PayrollEntryKind {
   DEDUCTION
   INFORMATION
   BASE
+
   @@schema("public")
 }
 
@@ -91,6 +99,7 @@ enum PayrollEntrySource {
   IMPORTED
   CALCULATED
   ADJUSTMENT
+
   @@schema("public")
 }
 
@@ -101,6 +110,7 @@ enum PaymentRemittanceStatus {
   PAID
   REJECTED
   CANCELED
+
   @@schema("public")
 }
 
@@ -110,6 +120,7 @@ enum AdvanceRequestStatus {
   REJECTED
   PROCESSED
   CANCELED
+
   @@schema("public")
 }
 
@@ -118,6 +129,7 @@ enum AdvancePaymentStatus {
   GENERATED
   PAID
   CANCELED
+
   @@schema("public")
 }
 
@@ -127,6 +139,7 @@ enum ReportRequestStatus {
   COMPLETED
   FAILED
   EXPIRED
+
   @@schema("public")
 }
 
@@ -134,6 +147,7 @@ enum DocumentStorageKind {
   LOCAL
   S3
   EXTERNAL
+
   @@schema("public")
 }
 
@@ -142,6 +156,7 @@ enum DocumentUploadStatus {
   REGISTERED
   EXPIRED
   ABORTED
+
   @@schema("public")
 }
 
@@ -151,6 +166,7 @@ enum AgreementStatus {
   SUSPENDED
   EXPIRED
   TERMINATED
+
   @@schema("public")
 }
 
@@ -159,6 +175,7 @@ enum RecruitmentRequestStatus {
   IN_PROGRESS
   COMPLETED
   CANCELED
+
   @@schema("public")
 }
 
@@ -166,6 +183,7 @@ enum RecruitmentCandidateStatus {
   PENDING
   APPROVED
   REJECTED
+
   @@schema("public")
 }
 
@@ -174,6 +192,7 @@ enum RecruitmentHiringType {
   COMMISSIONED
   CONTRACTOR
   INTERN
+
   @@schema("public")
 }
 
@@ -182,6 +201,7 @@ enum MedicalAppointmentStatus {
   ATTENDED
   NO_SHOW
   CANCELED
+
   @@schema("public")
 }
 
@@ -189,6 +209,7 @@ enum MedicalReportStatus {
   PENDING_SUBMISSION
   APPROVED
   REJECTED
+
   @@schema("public")
 }
 
@@ -203,6 +224,7 @@ enum ESocialEventStatus {
   ERRO_TECNICO_RETENTAVEL
   ERRO_DEFINITIVO
   EXCLUIDO
+
   @@schema("public")
 }
 
@@ -211,6 +233,7 @@ enum PerformanceEvaluationStatus {
   SUBMITTED
   APPROVED
   REJECTED
+
   @@schema("public")
 }
 
@@ -219,6 +242,7 @@ enum ProgressionKind {
   TITLE
   JUDICIAL
   CORRECTION
+
   @@schema("public")
 }
 
@@ -228,6 +252,7 @@ enum PensionCompensationStatus {
   APPROVED
   REJECTED
   SETTLED
+
   @@schema("public")
 }
 
@@ -235,6 +260,7 @@ enum RecertificationBeneficiaryType {
   RETIREE
   PENSIONER
   UNIVERSITY_PENSIONER
+
   @@schema("public")
 }
 
@@ -244,6 +270,7 @@ enum RecertificationStatus {
   NEAR_DUE
   OVERDUE
   BLOCKED
+
   @@schema("public")
 }
 
@@ -251,6 +278,7 @@ enum ExternalLifeProofChannel {
   PORTAL_COLABORADOR
   PREFEITURA_PUBLICA
   GOV_BR
+
   @@schema("public")
 }
 
@@ -264,8 +292,8 @@ model Tenant {
   updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([status])
-  @@schema("public")
   @@map("tenant")
+  @@schema("public")
 }
 
 model UserAccount {
@@ -301,8 +329,8 @@ model UserAccount {
   @@unique([tenantId, email])
   @@index([status])
   @@index([tenantId, status])
-  @@schema("public")
   @@map("user_account")
+  @@schema("public")
 }
 
 model AccessProfile {
@@ -321,8 +349,8 @@ model AccessProfile {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("public")
   @@map("access_profile")
+  @@schema("public")
 }
 
 model ProfileAssignment {
@@ -340,8 +368,8 @@ model ProfileAssignment {
   @@unique([userId, profileId, startsAt])
   @@index([profileId])
   @@index([endsAt])
-  @@schema("public")
   @@map("profile_assignment")
+  @@schema("public")
 }
 
 model Permission {
@@ -360,8 +388,8 @@ model Permission {
   @@unique([moduleKey, resourceKey, actionKey])
   @@index([moduleKey])
   @@index([resourceKey])
-  @@schema("public")
   @@map("permission")
+  @@schema("public")
 }
 
 model ProfilePermission {
@@ -376,8 +404,8 @@ model ProfilePermission {
 
   @@unique([profileId, permissionId])
   @@index([permissionId])
-  @@schema("public")
   @@map("profile_permission")
+  @@schema("public")
 }
 
 model UserGroupSnapshot {
@@ -394,8 +422,8 @@ model UserGroupSnapshot {
 
   @@index([userId, capturedAt])
   @@index([groupKey])
-  @@schema("public")
   @@map("user_group_snapshot")
+  @@schema("public")
 }
 
 model MenuItem {
@@ -420,8 +448,8 @@ model MenuItem {
   @@index([parentId])
   @@index([moduleKey, status])
   @@index([profileId])
-  @@schema("public")
   @@map("menu_item")
+  @@schema("public")
 }
 
 model AuditEvent {
@@ -448,8 +476,8 @@ model AuditEvent {
   @@index([actorLogin])
   @@index([resourceType, resourceId])
   @@index([requestId])
-  @@schema("public")
   @@map("audit_event")
+  @@schema("public")
 }
 
 model Company {
@@ -471,8 +499,8 @@ model Company {
   @@unique([tenantId, cnpj])
   @@index([status])
   @@index([legalNatureId])
-  @@schema("hr")
   @@map("company")
+  @@schema("hr")
 }
 
 model Branch {
@@ -488,30 +516,30 @@ model Branch {
   createdAt  DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  company           Company                  @relation(fields: [companyId], references: [id])
-  employees         Employee[]
-  workLocations     WorkLocation[]
-  costCenters       CostCenter[]
-  legalResponsibles LegalResponsible[]
-  payrollRuns       PayrollRun[]
-  remittanceFiles   PaymentRemittanceFile[]
-  financialRecords  PayrollFinancialRecord[]
-  blockedPayments   BlockedPayment[]
-  accountingAccounts PayrollAccountingAccount[]
-  fromTransfers     EmployeeTransfer[]       @relation("TransferFromBranch")
-  toTransfers       EmployeeTransfer[]       @relation("TransferToBranch")
-  exerciseRecords   EmployeeExercise[]       @relation("ExerciseBranch")
-  processFunctions  AdministrativeProcessFunction[] @relation("ProcessFunctionBranch")
-  reports           ReportRequest[]
-  recruitmentRequests RecruitmentRequest[]
+  company                Company                         @relation(fields: [companyId], references: [id])
+  employees              Employee[]
+  workLocations          WorkLocation[]
+  costCenters            CostCenter[]
+  legalResponsibles      LegalResponsible[]
+  payrollRuns            PayrollRun[]
+  remittanceFiles        PaymentRemittanceFile[]
+  financialRecords       PayrollFinancialRecord[]
+  blockedPayments        BlockedPayment[]
+  accountingAccounts     PayrollAccountingAccount[]
+  fromTransfers          EmployeeTransfer[]              @relation("TransferFromBranch")
+  toTransfers            EmployeeTransfer[]              @relation("TransferToBranch")
+  exerciseRecords        EmployeeExercise[]              @relation("ExerciseBranch")
+  processFunctions       AdministrativeProcessFunction[] @relation("ProcessFunctionBranch")
+  reports                ReportRequest[]
+  recruitmentRequests    RecruitmentRequest[]
   performanceEvaluations PerformanceEvaluation[]
 
   @@unique([tenantId, code])
   @@unique([tenantId, cnpj])
   @@index([companyId])
   @@index([status])
-  @@schema("hr")
   @@map("branch")
+  @@schema("hr")
 }
 
 model WorkLocation {
@@ -528,26 +556,26 @@ model WorkLocation {
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  branch              Branch?                      @relation(fields: [branchId], references: [id])
-  parent              WorkLocation?                @relation("WorkLocationHierarchy", fields: [parentId], references: [id])
-  children            WorkLocation[]               @relation("WorkLocationHierarchy")
-  employees           Employee[]
-  transfers           EmployeeTransfer[]
-  exerciseRecords     EmployeeExercise[]
-  processFunctions    AdministrativeProcessFunction[]
-  financialRecords    PayrollFinancialRecord[]
-  payrollRunRollups   PayrollRunWorkLocation[]
+  branch                 Branch?                                @relation(fields: [branchId], references: [id])
+  parent                 WorkLocation?                          @relation("WorkLocationHierarchy", fields: [parentId], references: [id])
+  children               WorkLocation[]                         @relation("WorkLocationHierarchy")
+  employees              Employee[]
+  transfers              EmployeeTransfer[]
+  exerciseRecords        EmployeeExercise[]
+  processFunctions       AdministrativeProcessFunction[]
+  financialRecords       PayrollFinancialRecord[]
+  payrollRunRollups      PayrollRunWorkLocation[]
   accountingAccountLinks PayrollAccountingAccountWorkLocation[]
-  recruitmentRequests RecruitmentRequest[]
+  recruitmentRequests    RecruitmentRequest[]
   performanceEvaluations PerformanceEvaluation[]
-  structureAssignments WorkLocationStructureAssignment[]
+  structureAssignments   WorkLocationStructureAssignment[]
 
   @@unique([tenantId, code])
   @@index([branchId])
   @@index([parentId])
   @@index([status])
-  @@schema("hr")
   @@map("work_location")
+  @@schema("hr")
 }
 
 model CostCenter {
@@ -560,15 +588,15 @@ model CostCenter {
   createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  branch    Branch?    @relation(fields: [branchId], references: [id])
-  employees Employee[]
+  branch             Branch?                    @relation(fields: [branchId], references: [id])
+  employees          Employee[]
   accountingAccounts PayrollAccountingAccount[]
 
   @@unique([tenantId, code])
   @@index([branchId])
   @@index([status])
-  @@schema("hr")
   @@map("cost_center")
+  @@schema("hr")
 }
 
 model LegalResponsible {
@@ -588,34 +616,34 @@ model LegalResponsible {
 
   @@index([branchId, status])
   @@index([cpf])
-  @@schema("hr")
   @@map("legal_responsible")
+  @@schema("hr")
 }
 
 model JobPosition {
-  id          String       @id @default(uuid()) @db.Uuid
-  tenantId    String       @map("tenant_id") @db.Uuid
-  code        String
-  name        String
-  description String       @default("")
-  vacanciesTotal  Int      @default(0) @map("vacancies_total")
-  vacanciesFilled Int      @default(0) @map("vacancies_filled")
-  vacanciesOpen   Int      @default(0) @map("vacancies_open")
-  status      RecordStatus @default(ACTIVE)
-  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id              String       @id @default(uuid()) @db.Uuid
+  tenantId        String       @map("tenant_id") @db.Uuid
+  code            String
+  name            String
+  description     String       @default("")
+  vacanciesTotal  Int          @default(0) @map("vacancies_total")
+  vacanciesFilled Int          @default(0) @map("vacancies_filled")
+  vacanciesOpen   Int          @default(0) @map("vacancies_open")
+  status          RecordStatus @default(ACTIVE)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employees    Employee[]
-  earningLinks JobPositionEarning[]
-  performanceEvaluations PerformanceEvaluation[]
-  referenceLinks JobStructureReferenceLink[]
-  employmentLinks JobStructureEmploymentLink[]
+  employees               Employee[]
+  earningLinks            JobPositionEarning[]
+  performanceEvaluations  PerformanceEvaluation[]
+  referenceLinks          JobStructureReferenceLink[]
+  employmentLinks         JobStructureEmploymentLink[]
   workLocationAssignments WorkLocationStructureAssignment[]
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("job_position")
+  @@schema("hr")
 }
 
 model JobFunction {
@@ -629,22 +657,22 @@ model JobFunction {
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  nature    FunctionNature? @relation(fields: [natureId], references: [id])
-  employees Employee[]
-  exerciseRecords EmployeeExercise[]
-  processFunctions AdministrativeProcessFunction[]
-  requisitionFunctions RecruitmentRequestFunction[]
-  performanceEvaluations PerformanceEvaluation[]
-  referenceLinks JobStructureReferenceLink[]
-  employmentLinks JobStructureEmploymentLink[]
+  nature                  FunctionNature?                   @relation(fields: [natureId], references: [id])
+  employees               Employee[]
+  exerciseRecords         EmployeeExercise[]
+  processFunctions        AdministrativeProcessFunction[]
+  requisitionFunctions    RecruitmentRequestFunction[]
+  performanceEvaluations  PerformanceEvaluation[]
+  referenceLinks          JobStructureReferenceLink[]
+  employmentLinks         JobStructureEmploymentLink[]
   workLocationAssignments WorkLocationStructureAssignment[]
-  functionEarningLinks JobFunctionEarning[]
+  functionEarningLinks    JobFunctionEarning[]
 
   @@unique([tenantId, code])
   @@index([natureId])
   @@index([status])
-  @@schema("hr")
   @@map("job_function")
+  @@schema("hr")
 }
 
 model FunctionNature {
@@ -660,8 +688,8 @@ model FunctionNature {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("function_nature")
+  @@schema("hr")
 }
 
 model SalaryRange {
@@ -681,8 +709,8 @@ model SalaryRange {
   @@unique([tenantId, code])
   @@index([groupCode, classCode])
   @@index([status])
-  @@schema("hr")
   @@map("salary_range")
+  @@schema("hr")
 }
 
 model SalaryReference {
@@ -696,18 +724,18 @@ model SalaryReference {
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  range        SalaryRange?         @relation(fields: [rangeId], references: [id])
-  employees    Employee[]
-  salaryLevels SalaryLevelHistory[]
-  rangeLevels  SalaryRangeLevel[]
-  sourceMeritProgressions MeritProgression[] @relation("MeritProgressionSourceSalaryReference")
-  targetMeritProgressions MeritProgression[] @relation("MeritProgressionTargetSalaryReference")
+  range                   SalaryRange?         @relation(fields: [rangeId], references: [id])
+  employees               Employee[]
+  salaryLevels            SalaryLevelHistory[]
+  rangeLevels             SalaryRangeLevel[]
+  sourceMeritProgressions MeritProgression[]   @relation("MeritProgressionSourceSalaryReference")
+  targetMeritProgressions MeritProgression[]   @relation("MeritProgressionTargetSalaryReference")
 
   @@unique([tenantId, code])
   @@index([rangeId])
   @@index([status])
-  @@schema("hr")
   @@map("salary_reference")
+  @@schema("hr")
 }
 
 model FunctionalStatus {
@@ -731,23 +759,23 @@ model FunctionalStatus {
   @@unique([tenantId, code])
   @@index([entersPayroll])
   @@index([status])
-  @@schema("hr")
   @@map("functional_status")
+  @@schema("hr")
 }
 
 model EmploymentLink {
-  id                 String       @id @default(uuid()) @db.Uuid
-  tenantId           String       @map("tenant_id") @db.Uuid
-  code               String
-  name               String
-  contractType       String       @default("statutory") @map("contract_type")
-  endDate            DateTime?    @map("end_date") @db.Date
-  commissionPositionId String?    @map("commission_position_id") @db.Uuid
-  regimeLawReference String       @default("Lei 8.112/90") @map("regime_law_reference")
-  functionalStatusId String?      @map("functional_status_id") @db.Uuid
-  status             RecordStatus @default(ACTIVE)
-  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                   String       @id @default(uuid()) @db.Uuid
+  tenantId             String       @map("tenant_id") @db.Uuid
+  code                 String
+  name                 String
+  contractType         String       @default("statutory") @map("contract_type")
+  endDate              DateTime?    @map("end_date") @db.Date
+  commissionPositionId String?      @map("commission_position_id") @db.Uuid
+  regimeLawReference   String       @default("Lei 8.112/90") @map("regime_law_reference")
+  functionalStatusId   String?      @map("functional_status_id") @db.Uuid
+  status               RecordStatus @default(ACTIVE)
+  createdAt            DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employees       Employee[]
   contracts       EmploymentContract[]
@@ -760,8 +788,8 @@ model EmploymentLink {
   @@index([commissionPositionId])
   @@index([functionalStatusId])
   @@index([status])
-  @@schema("hr")
   @@map("employment_link")
+  @@schema("hr")
 }
 
 model ContractType {
@@ -778,8 +806,8 @@ model ContractType {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("contract_type")
+  @@schema("hr")
 }
 
 model PayrollType {
@@ -797,8 +825,8 @@ model PayrollType {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("payroll")
   @@map("payroll_type")
+  @@schema("payroll")
 }
 
 model ProcessingType {
@@ -822,8 +850,8 @@ model ProcessingType {
   @@index([payrollTypeId])
   @@index([employmentLinkId])
   @@index([status])
-  @@schema("payroll")
   @@map("processing_type")
+  @@schema("payroll")
 }
 
 model Reason {
@@ -844,8 +872,8 @@ model Reason {
 
   @@unique([tenantId, code])
   @@index([kind, status])
-  @@schema("hr")
   @@map("reason")
+  @@schema("hr")
 }
 
 model AbsenceReason {
@@ -862,8 +890,8 @@ model AbsenceReason {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("absence_reason")
+  @@schema("hr")
 }
 
 model TerminationReason {
@@ -879,8 +907,8 @@ model TerminationReason {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("termination_reason")
+  @@schema("hr")
 }
 
 model DocumentType {
@@ -896,8 +924,8 @@ model DocumentType {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("public")
   @@map("document_type")
+  @@schema("public")
 }
 
 model VacationType {
@@ -913,8 +941,8 @@ model VacationType {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("vacation_type")
+  @@schema("hr")
 }
 
 model Shift {
@@ -933,8 +961,8 @@ model Shift {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("shift")
+  @@schema("hr")
 }
 
 model ShiftDayOff {
@@ -951,8 +979,8 @@ model ShiftDayOff {
   @@unique([tenantId, shiftId, weekday])
   @@index([shiftId])
   @@index([status])
-  @@schema("hr")
   @@map("shift_day_off")
+  @@schema("hr")
 }
 
 model UnionEntity {
@@ -965,14 +993,14 @@ model UnionEntity {
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employees            Employee[]
-  unionContributions   EmployeeUnionContribution[]
+  employees          Employee[]
+  unionContributions EmployeeUnionContribution[]
 
   @@unique([tenantId, code])
   @@unique([tenantId, cnpj])
   @@index([status])
-  @@schema("hr")
   @@map("union_entity")
+  @@schema("hr")
 }
 
 model Bank {
@@ -991,8 +1019,8 @@ model Bank {
   @@unique([tenantId, code])
   @@index([blocked])
   @@index([status])
-  @@schema("hr")
   @@map("bank")
+  @@schema("hr")
 }
 
 model LegalNature {
@@ -1009,8 +1037,8 @@ model LegalNature {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("legal_nature")
+  @@schema("hr")
 }
 
 model Legislation {
@@ -1029,8 +1057,8 @@ model Legislation {
   @@unique([tenantId, code])
   @@index([normYear])
   @@index([normType])
-  @@schema("hr")
   @@map("legislation")
+  @@schema("hr")
 }
 
 model JobFunctionLegislationHistory {
@@ -1051,8 +1079,8 @@ model JobFunctionLegislationHistory {
   @@index([jobFunctionId])
   @@index([legislationId])
   @@index([status])
-  @@schema("hr")
   @@map("job_function_legislation_history")
+  @@schema("hr")
 }
 
 model ActClassification {
@@ -1066,8 +1094,8 @@ model ActClassification {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("act_classification")
+  @@schema("hr")
 }
 
 model TransitBenefit {
@@ -1084,8 +1112,8 @@ model TransitBenefit {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("hr")
   @@map("transit_benefit")
+  @@schema("hr")
 }
 
 model ReferenceCatalogEntry {
@@ -1100,15 +1128,15 @@ model ReferenceCatalogEntry {
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  structureLinks JobStructureReferenceLink[]
+  structureLinks         JobStructureReferenceLink[]
   providerAgreementLinks HealthProviderAgreementLink[] @relation("HealthProviderReference")
   examProviderLinks      HealthExamProviderExamLink[]  @relation("HealthExamProviderReference")
   providedExamLinks      HealthExamProviderExamLink[]  @relation("HealthExamReference")
 
   @@unique([tenantId, catalogKey, code])
   @@index([tenantId, catalogKey, status])
-  @@schema("hr")
   @@map("reference_catalog_entry")
+  @@schema("hr")
 }
 
 model JobStructureReferenceLink {
@@ -1135,8 +1163,8 @@ model JobStructureReferenceLink {
   @@index([jobFunctionId, referenceCatalogKey])
   @@index([referenceEntryId])
   @@index([status])
-  @@schema("hr")
   @@map("job_structure_reference_link")
+  @@schema("hr")
 }
 
 model JobStructureEmploymentLink {
@@ -1152,8 +1180,8 @@ model JobStructureEmploymentLink {
   createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  jobPosition    JobPosition?    @relation(fields: [jobPositionId], references: [id])
-  jobFunction    JobFunction?    @relation(fields: [jobFunctionId], references: [id])
+  jobPosition    JobPosition?   @relation(fields: [jobPositionId], references: [id])
+  jobFunction    JobFunction?   @relation(fields: [jobFunctionId], references: [id])
   employmentLink EmploymentLink @relation(fields: [employmentLinkId], references: [id])
 
   @@unique([tenantId, jobPositionId, employmentLinkId])
@@ -1162,8 +1190,8 @@ model JobStructureEmploymentLink {
   @@index([jobFunctionId])
   @@index([employmentLinkId])
   @@index([status])
-  @@schema("hr")
   @@map("job_structure_employment_link")
+  @@schema("hr")
 }
 
 model WorkLocationStructureAssignment {
@@ -1189,8 +1217,8 @@ model WorkLocationStructureAssignment {
   @@index([jobPositionId])
   @@index([jobFunctionId])
   @@index([status])
-  @@schema("hr")
   @@map("work_location_structure_assignment")
+  @@schema("hr")
 }
 
 model SystemParameter {
@@ -1209,8 +1237,8 @@ model SystemParameter {
   @@unique([tenantId, key])
   @@index([moduleKey])
   @@index([updatedByUserId])
-  @@schema("public")
   @@map("system_parameter")
+  @@schema("public")
 }
 
 model Employee {
@@ -1253,57 +1281,57 @@ model Employee {
   createdAt           DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt           DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  branch                  Branch?                  @relation(fields: [branchId], references: [id])
-  workLocation            WorkLocation?            @relation(fields: [workLocationId], references: [id])
-  costCenter              CostCenter?              @relation(fields: [costCenterId], references: [id])
-  jobPosition             JobPosition?             @relation(fields: [jobPositionId], references: [id])
-  jobFunction             JobFunction?             @relation(fields: [jobFunctionId], references: [id])
-  salaryReference         SalaryReference?         @relation(fields: [salaryReferenceId], references: [id])
-  functionalStatus        FunctionalStatus?        @relation(fields: [functionalStatusId], references: [id])
-  employmentLink          EmploymentLink?          @relation(fields: [employmentLinkId], references: [id])
-  contractType            ContractType?            @relation(fields: [contractTypeId], references: [id])
-  shift                   Shift?                   @relation(fields: [shiftId], references: [id])
-  union                   UnionEntity?             @relation(fields: [unionId], references: [id])
-  bank                    Bank?                    @relation(fields: [bankId], references: [id])
-  terminationReason       TerminationReason?       @relation(fields: [terminationReasonId], references: [id])
-  dependents              EmployeeDependent[]
-  statusHistory           EmployeeStatusHistory[]
-  professionalExperiences ProfessionalExperience[]
-  transfers               EmployeeTransfer[]
-  frequencies             EmployeeFrequency[]
-  serviceTimes            ServiceTimeRecord[]
-  vacations               VacationRecord[]
-  leaves                  LeaveRecord[]
-  benefitDependents       EmployeeBenefitDependent[]
-  unionContributions      EmployeeUnionContribution[]
-  exercises               EmployeeExercise[]
-  alimonies               EmployeeAlimony[]
-  transitBenefits         EmployeeTransitBenefit[]
-  complementData          EmployeeComplementData?
-  contracts               EmploymentContract[]
-  salaryHistory           SalaryLevelHistory[]
-  payrollItems            EmployeePayrollItem[]
-  financialRecords        PayrollFinancialRecord[]
-  advanceRequests         AdvanceRequest[]
-  advancePayments         AdvancePayment[]
-  blockedPayments         BlockedPayment[]
-  internshipRecords       InternshipRecord[]
-  medicalAppointments     MedicalAppointment[]
-  medicalRecords          MedicalRecord[]
-  medicalLeaves           MedicalLeave[]
-  workAccidents           WorkAccident[]
-  performanceEvaluations  PerformanceEvaluation[]
-  meritProgressions       MeritProgression[]
-  salarySimulations       SalarySimulation[]
-  careerPlans             CareerPlan[]
-  retirementSimulations   RetirementSimulation[]
-  retirementGrants        RetirementGrant[]
-  institutedPensions      PensionGrant[]
+  branch                       Branch?                       @relation(fields: [branchId], references: [id])
+  workLocation                 WorkLocation?                 @relation(fields: [workLocationId], references: [id])
+  costCenter                   CostCenter?                   @relation(fields: [costCenterId], references: [id])
+  jobPosition                  JobPosition?                  @relation(fields: [jobPositionId], references: [id])
+  jobFunction                  JobFunction?                  @relation(fields: [jobFunctionId], references: [id])
+  salaryReference              SalaryReference?              @relation(fields: [salaryReferenceId], references: [id])
+  functionalStatus             FunctionalStatus?             @relation(fields: [functionalStatusId], references: [id])
+  employmentLink               EmploymentLink?               @relation(fields: [employmentLinkId], references: [id])
+  contractType                 ContractType?                 @relation(fields: [contractTypeId], references: [id])
+  shift                        Shift?                        @relation(fields: [shiftId], references: [id])
+  union                        UnionEntity?                  @relation(fields: [unionId], references: [id])
+  bank                         Bank?                         @relation(fields: [bankId], references: [id])
+  terminationReason            TerminationReason?            @relation(fields: [terminationReasonId], references: [id])
+  dependents                   EmployeeDependent[]
+  statusHistory                EmployeeStatusHistory[]
+  professionalExperiences      ProfessionalExperience[]
+  transfers                    EmployeeTransfer[]
+  frequencies                  EmployeeFrequency[]
+  serviceTimes                 ServiceTimeRecord[]
+  vacations                    VacationRecord[]
+  leaves                       LeaveRecord[]
+  benefitDependents            EmployeeBenefitDependent[]
+  unionContributions           EmployeeUnionContribution[]
+  exercises                    EmployeeExercise[]
+  alimonies                    EmployeeAlimony[]
+  transitBenefits              EmployeeTransitBenefit[]
+  complementData               EmployeeComplementData?
+  contracts                    EmploymentContract[]
+  salaryHistory                SalaryLevelHistory[]
+  payrollItems                 EmployeePayrollItem[]
+  financialRecords             PayrollFinancialRecord[]
+  advanceRequests              AdvanceRequest[]
+  advancePayments              AdvancePayment[]
+  blockedPayments              BlockedPayment[]
+  internshipRecords            InternshipRecord[]
+  medicalAppointments          MedicalAppointment[]
+  medicalRecords               MedicalRecord[]
+  medicalLeaves                MedicalLeave[]
+  workAccidents                WorkAccident[]
+  performanceEvaluations       PerformanceEvaluation[]
+  meritProgressions            MeritProgression[]
+  salarySimulations            SalarySimulation[]
+  careerPlans                  CareerPlan[]
+  retirementSimulations        RetirementSimulation[]
+  retirementGrants             RetirementGrant[]
+  institutedPensions           PensionGrant[]
   contributionTimeCertificates ContributionTimeCertificate[]
-  previdentiaryDeclarations PrevidentiaryDeclaration[]
-  pensionCompensations    PensionCompensation[]
-  probationEvaluations    ProbationEvaluation[]
-  recertificationBeneficiary RecertificationBeneficiary?
+  previdentiaryDeclarations    PrevidentiaryDeclaration[]
+  pensionCompensations         PensionCompensation[]
+  probationEvaluations         ProbationEvaluation[]
+  recertificationBeneficiary   RecertificationBeneficiary?
 
   @@unique([tenantId, registration])
   @@unique([tenantId, cpf])
@@ -1322,8 +1350,8 @@ model Employee {
   @@index([bankId])
   @@index([terminationReasonId])
   @@index([lifecycleStatus])
-  @@schema("hr")
   @@map("employee")
+  @@schema("hr")
 }
 
 model EmploymentContract {
@@ -1349,8 +1377,8 @@ model EmploymentContract {
   @@index([tenantId, employeeId, startsOn])
   @@index([employmentLinkId])
   @@index([contractTypeId])
-  @@schema("hr")
   @@map("employment_contract")
+  @@schema("hr")
 }
 
 model EmployeeDependent {
@@ -1365,13 +1393,13 @@ model EmployeeDependent {
   createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee            Employee                   @relation(fields: [employeeId], references: [id])
-  benefitAssignments  EmployeeBenefitDependent[]
+  employee           Employee                   @relation(fields: [employeeId], references: [id])
+  benefitAssignments EmployeeBenefitDependent[]
 
   @@index([employeeId])
   @@index([cpf])
-  @@schema("hr")
   @@map("employee_dependent")
+  @@schema("hr")
 }
 
 model EmployeeStatusHistory {
@@ -1392,8 +1420,8 @@ model EmployeeStatusHistory {
   @@index([employeeId, startsOn])
   @@index([functionalStatusId])
   @@index([reasonId])
-  @@schema("hr")
   @@map("employee_status_history")
+  @@schema("hr")
 }
 
 model ProfessionalExperience {
@@ -1411,8 +1439,8 @@ model ProfessionalExperience {
   employee Employee @relation(fields: [employeeId], references: [id])
 
   @@index([employeeId])
-  @@schema("hr")
   @@map("professional_experience")
+  @@schema("hr")
 }
 
 model EmployeeTransfer {
@@ -1438,8 +1466,8 @@ model EmployeeTransfer {
   @@index([toBranchId])
   @@index([toWorkLocationId])
   @@index([reasonId])
-  @@schema("hr")
   @@map("employee_transfer")
+  @@schema("hr")
 }
 
 model EmployeeFrequency {
@@ -1458,8 +1486,8 @@ model EmployeeFrequency {
 
   @@unique([tenantId, employeeId, year, month])
   @@index([year, month])
-  @@schema("hr")
   @@map("employee_frequency")
+  @@schema("hr")
 }
 
 model ServiceTimeRecord {
@@ -1477,8 +1505,8 @@ model ServiceTimeRecord {
   employee Employee @relation(fields: [employeeId], references: [id])
 
   @@index([employeeId, startsOn])
-  @@schema("hr")
   @@map("service_time_record")
+  @@schema("hr")
 }
 
 model ProbationEvaluation {
@@ -1498,23 +1526,27 @@ model ProbationEvaluation {
 
   @@index([tenantId, employeeId, periodEnd])
   @@index([decision])
-  @@schema("hr")
   @@map("probation_evaluation")
+  @@schema("hr")
 }
 
 model VacationRecord {
-  id             String       @id @default(uuid()) @db.Uuid
-  tenantId       String       @map("tenant_id") @db.Uuid
-  employeeId     String       @map("employee_id") @db.Uuid
-  vacationTypeId String?      @map("vacation_type_id") @db.Uuid
-  accrualStartOn DateTime?    @map("accrual_start_on") @db.Date
-  accrualEndOn   DateTime?    @map("accrual_end_on") @db.Date
-  startsOn       DateTime     @map("starts_on") @db.Date
-  endsOn         DateTime     @map("ends_on") @db.Date
-  days           Int
-  status         RecordStatus @default(ACTIVE)
-  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                 String    @id @default(uuid()) @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  employeeId         String    @map("employee_id") @db.Uuid
+  vacationTypeId     String?   @map("vacation_type_id") @db.Uuid
+  accrualStartOn     DateTime? @map("accrual_start_on") @db.Date
+  accrualEndOn       DateTime? @map("accrual_end_on") @db.Date
+  accrualPeriodStart DateTime? @map("accrual_period_start") @db.Date
+  accrualPeriodEnd   DateTime? @map("accrual_period_end") @db.Date
+  installmentNumber  Int       @default(1) @map("installment_number")
+  pecuniaryBonusDays Int       @default(0) @map("pecuniary_bonus_days")
+  startsOn           DateTime  @map("starts_on") @db.Date
+  endsOn             DateTime  @map("ends_on") @db.Date
+  days               Int
+  status             String    @default("programado")
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee     Employee      @relation(fields: [employeeId], references: [id])
   vacationType VacationType? @relation(fields: [vacationTypeId], references: [id])
@@ -1522,8 +1554,8 @@ model VacationRecord {
   @@index([employeeId, startsOn])
   @@index([vacationTypeId])
   @@index([status])
-  @@schema("hr")
   @@map("vacation_record")
+  @@schema("hr")
 }
 
 model LeaveRecord {
@@ -1545,34 +1577,34 @@ model LeaveRecord {
   @@index([employeeId, startsOn])
   @@index([absenceReasonId])
   @@index([status])
-  @@schema("hr")
   @@map("leave_record")
+  @@schema("hr")
 }
 
 model EmployeeBenefitDependent {
-  id              String       @id @default(uuid()) @db.Uuid
-  tenantId        String       @map("tenant_id") @db.Uuid
-  employeeId      String       @map("employee_id") @db.Uuid
-  dependentId     String?      @map("dependent_id") @db.Uuid
-  dependentName   String       @map("dependent_name")
-  dependentCpf    String?      @map("dependent_cpf")
-  relationship    String       @default("")
-  benefitCode     String       @map("benefit_code")
-  startsOn        DateTime     @map("starts_on") @db.Date
-  endsOn          DateTime?    @map("ends_on") @db.Date
-  notes           String       @default("")
-  status          RecordStatus @default(ACTIVE)
-  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  employeeId    String       @map("employee_id") @db.Uuid
+  dependentId   String?      @map("dependent_id") @db.Uuid
+  dependentName String       @map("dependent_name")
+  dependentCpf  String?      @map("dependent_cpf")
+  relationship  String       @default("")
+  benefitCode   String       @map("benefit_code")
+  startsOn      DateTime     @map("starts_on") @db.Date
+  endsOn        DateTime?    @map("ends_on") @db.Date
+  notes         String       @default("")
+  status        RecordStatus @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee   Employee          @relation(fields: [employeeId], references: [id])
-  dependent  EmployeeDependent? @relation(fields: [dependentId], references: [id])
+  employee  Employee           @relation(fields: [employeeId], references: [id])
+  dependent EmployeeDependent? @relation(fields: [dependentId], references: [id])
 
   @@index([employeeId, startsOn])
   @@index([dependentId])
   @@index([status])
-  @@schema("hr")
   @@map("employee_benefit_dependent")
+  @@schema("hr")
 }
 
 model EmployeeUnionContribution {
@@ -1589,14 +1621,14 @@ model EmployeeUnionContribution {
   createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee Employee    @relation(fields: [employeeId], references: [id])
+  employee Employee     @relation(fields: [employeeId], references: [id])
   union    UnionEntity? @relation(fields: [unionId], references: [id])
 
   @@index([employeeId, startsOn])
   @@index([unionId])
   @@index([status])
-  @@schema("hr")
   @@map("employee_union_contribution")
+  @@schema("hr")
 }
 
 model EmployeeExercise {
@@ -1623,8 +1655,8 @@ model EmployeeExercise {
   @@index([workLocationId])
   @@index([jobFunctionId])
   @@index([status])
-  @@schema("hr")
   @@map("employee_exercise")
+  @@schema("hr")
 }
 
 model EmployeeAlimony {
@@ -1646,8 +1678,8 @@ model EmployeeAlimony {
 
   @@index([employeeId, startsOn])
   @@index([status])
-  @@schema("hr")
   @@map("employee_alimony")
+  @@schema("hr")
 }
 
 model EmployeeTransitBenefit {
@@ -1669,8 +1701,8 @@ model EmployeeTransitBenefit {
   @@index([employeeId, startsOn])
   @@index([transitBenefitId])
   @@index([status])
-  @@schema("hr")
   @@map("employee_transit_benefit")
+  @@schema("hr")
 }
 
 model AdministrativeProcess {
@@ -1690,8 +1722,8 @@ model AdministrativeProcess {
   @@unique([tenantId, processNumber])
   @@index([filedOn])
   @@index([status])
-  @@schema("hr")
   @@map("administrative_process")
+  @@schema("hr")
 }
 
 model AdministrativeProcessFunction {
@@ -1718,8 +1750,8 @@ model AdministrativeProcessFunction {
   @@index([branchId])
   @@index([workLocationId])
   @@index([status])
-  @@schema("hr")
   @@map("administrative_process_function")
+  @@schema("hr")
 }
 
 model MedicalAppointment {
@@ -1738,35 +1770,35 @@ model MedicalAppointment {
   createdAt            DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee Employee       @relation(fields: [employeeId], references: [id])
-  records   MedicalRecord[]
+  employee Employee        @relation(fields: [employeeId], references: [id])
+  records  MedicalRecord[]
 
   @@unique([tenantId, slotRef])
   @@index([employeeId, scheduledOn])
   @@index([status])
-  @@schema("hr")
   @@map("medical_appointment")
+  @@schema("hr")
 }
 
 model MedicalRecord {
-  id                   String              @id @default(uuid()) @db.Uuid
-  tenantId             String              @map("tenant_id") @db.Uuid
-  appointmentId        String              @map("appointment_id") @db.Uuid
-  employeeId           String              @map("employee_id") @db.Uuid
-  physicianRef         String              @map("physician_ref")
-  reason               String
-  currentIllnessStory  String              @default("") @map("current_illness_story")
-  physicalExam         String              @default("") @map("physical_exam")
-  diagnosis            String              @default("")
-  expertAction         String              @default("") @map("expert_action")
-  reportType           String              @default("") @map("report_type")
-  reportStatus         MedicalReportStatus @default(PENDING_SUBMISSION) @map("report_status")
-  primaryIcdRef        String?             @map("primary_icd_ref")
-  multidisciplinaryTeam Json              @default("[]") @map("multidisciplinary_team")
-  approvedByRef        String?             @map("approved_by_ref")
-  approvedAt           DateTime?           @map("approved_at") @db.Timestamptz(6)
-  createdAt            DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt            DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                    String              @id @default(uuid()) @db.Uuid
+  tenantId              String              @map("tenant_id") @db.Uuid
+  appointmentId         String              @map("appointment_id") @db.Uuid
+  employeeId            String              @map("employee_id") @db.Uuid
+  physicianRef          String              @map("physician_ref")
+  reason                String
+  currentIllnessStory   String              @default("") @map("current_illness_story")
+  physicalExam          String              @default("") @map("physical_exam")
+  diagnosis             String              @default("")
+  expertAction          String              @default("") @map("expert_action")
+  reportType            String              @default("") @map("report_type")
+  reportStatus          MedicalReportStatus @default(PENDING_SUBMISSION) @map("report_status")
+  primaryIcdRef         String?             @map("primary_icd_ref")
+  multidisciplinaryTeam Json                @default("[]") @map("multidisciplinary_team")
+  approvedByRef         String?             @map("approved_by_ref")
+  approvedAt            DateTime?           @map("approved_at") @db.Timestamptz(6)
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   appointment MedicalAppointment @relation(fields: [appointmentId], references: [id])
   employee    Employee           @relation(fields: [employeeId], references: [id])
@@ -1775,8 +1807,8 @@ model MedicalRecord {
   @@index([appointmentId])
   @@index([employeeId, createdAt])
   @@index([reportStatus])
-  @@schema("hr")
   @@map("medical_record")
+  @@schema("hr")
 }
 
 model MedicalLeave {
@@ -1795,17 +1827,17 @@ model MedicalLeave {
   createdAt             DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt             DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  medicalRecord  MedicalRecord   @relation(fields: [medicalRecordId], references: [id])
-  employee       Employee        @relation(fields: [employeeId], references: [id])
-  absenceReason  AbsenceReason?  @relation(fields: [absenceReasonId], references: [id])
-  workAccidents  WorkAccident[]
+  medicalRecord MedicalRecord  @relation(fields: [medicalRecordId], references: [id])
+  employee      Employee       @relation(fields: [employeeId], references: [id])
+  absenceReason AbsenceReason? @relation(fields: [absenceReasonId], references: [id])
+  workAccidents WorkAccident[]
 
   @@index([medicalRecordId])
   @@index([employeeId, startsOn])
   @@index([absenceReasonId])
   @@index([status])
-  @@schema("hr")
   @@map("medical_leave")
+  @@schema("hr")
 }
 
 model WorkAccident {
@@ -1820,13 +1852,13 @@ model WorkAccident {
   createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee    Employee      @relation(fields: [employeeId], references: [id])
+  employee     Employee      @relation(fields: [employeeId], references: [id])
   medicalLeave MedicalLeave? @relation(fields: [medicalLeaveId], references: [id])
 
   @@index([employeeId, occurredOn])
   @@index([medicalLeaveId])
-  @@schema("hr")
   @@map("work_accident")
+  @@schema("hr")
 }
 
 model EmployeeComplementData {
@@ -1843,8 +1875,9 @@ model EmployeeComplementData {
   updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee Employee @relation(fields: [employeeId], references: [id])
-  @@schema("hr")
+
   @@map("employee_complement_data")
+  @@schema("hr")
 }
 
 model SalaryLevelHistory {
@@ -1863,8 +1896,8 @@ model SalaryLevelHistory {
 
   @@index([employeeId, effectiveOn])
   @@index([salaryReferenceId])
-  @@schema("hr")
   @@map("salary_level_history")
+  @@schema("hr")
 }
 
 model SalaryRangeLevel {
@@ -1887,8 +1920,8 @@ model SalaryRangeLevel {
   @@unique([tenantId, salaryRangeId, code])
   @@index([salaryReferenceId])
   @@index([status])
-  @@schema("hr")
   @@map("salary_range_level")
+  @@schema("hr")
 }
 
 model PayrollRun {
@@ -1909,26 +1942,26 @@ model PayrollRun {
   updatedAt        DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   closedAt         DateTime?        @map("closed_at") @db.Timestamptz(6)
 
-  branch           Branch?                   @relation(fields: [branchId], references: [id])
-  payrollType      PayrollType               @relation(fields: [payrollTypeId], references: [id])
-  processingType   ProcessingType            @relation(fields: [processingTypeId], references: [id])
-  createdBy        UserAccount?              @relation("PayrollCreatedBy", fields: [createdByUserId], references: [id])
-  statusHistory    PayrollRunStatusHistory[]
-  payrollItems     EmployeePayrollItem[]
-  financialRecords PayrollFinancialRecord[]
+  branch              Branch?                   @relation(fields: [branchId], references: [id])
+  payrollType         PayrollType               @relation(fields: [payrollTypeId], references: [id])
+  processingType      ProcessingType            @relation(fields: [processingTypeId], references: [id])
+  createdBy           UserAccount?              @relation("PayrollCreatedBy", fields: [createdByUserId], references: [id])
+  statusHistory       PayrollRunStatusHistory[]
+  payrollItems        EmployeePayrollItem[]
+  financialRecords    PayrollFinancialRecord[]
   workLocationRollups PayrollRunWorkLocation[]
-  advanceRequests  AdvanceRequest[]
-  advancePayments  AdvancePayment[]
-  remittanceFiles  PaymentRemittanceFile[]
-  blockedPayments  BlockedPayment[]
-  reportRequests   ReportRequest[]
+  advanceRequests     AdvanceRequest[]
+  advancePayments     AdvancePayment[]
+  remittanceFiles     PaymentRemittanceFile[]
+  blockedPayments     BlockedPayment[]
+  reportRequests      ReportRequest[]
 
   @@unique([tenantId, competenceYear, competenceMonth, branchId, payrollTypeId, processingTypeId])
   @@index([competenceYear, competenceMonth])
   @@index([branchId])
   @@index([status])
-  @@schema("payroll")
   @@map("payroll_run")
+  @@schema("payroll")
 }
 
 model PayrollRunStatusHistory {
@@ -1947,8 +1980,8 @@ model PayrollRunStatusHistory {
   @@index([payrollRunId, changedAt])
   @@index([status])
   @@index([changedByUserId])
-  @@schema("payroll")
   @@map("payroll_run_status_history")
+  @@schema("payroll")
 }
 
 model PayrollEarningDeduction {
@@ -1969,11 +2002,11 @@ model PayrollEarningDeduction {
   createdAt           DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt           DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employeeItems    EmployeePayrollItem[]
-  jobPositionLinks JobPositionEarning[]
-  jobFunctionLinks JobFunctionEarning[]
-  employmentLinks  EmploymentLinkEarning[]
-  payrollTypeLinks PayrollTypeEarning[]
+  employeeItems      EmployeePayrollItem[]
+  jobPositionLinks   JobPositionEarning[]
+  jobFunctionLinks   JobFunctionEarning[]
+  employmentLinks    EmploymentLinkEarning[]
+  payrollTypeLinks   PayrollTypeEarning[]
   accountingAccounts PayrollAccountingAccount[]
 
   @@unique([tenantId, code])
@@ -1983,8 +2016,8 @@ model PayrollEarningDeduction {
   @@index([active])
   @@index([formulaAlias])
   @@index([formulaReady])
-  @@schema("payroll")
   @@map("payroll_earning_deduction")
+  @@schema("payroll")
 }
 
 model FormulaAttribute {
@@ -2001,8 +2034,8 @@ model FormulaAttribute {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("payroll")
   @@map("formula_attribute")
+  @@schema("payroll")
 }
 
 model JobPositionEarning {
@@ -2018,15 +2051,15 @@ model JobPositionEarning {
   createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  jobPosition       JobPosition             @relation(fields: [jobPositionId], references: [id])
-  earningDeduction  PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
+  jobPosition      JobPosition             @relation(fields: [jobPositionId], references: [id])
+  earningDeduction PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
 
   @@unique([tenantId, jobPositionId, earningDeductionId])
   @@index([status])
   @@index([jobPositionId])
   @@index([earningDeductionId])
-  @@schema("payroll")
   @@map("job_position_earning")
+  @@schema("payroll")
 }
 
 model EmploymentLinkEarning {
@@ -2042,15 +2075,15 @@ model EmploymentLinkEarning {
   createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employmentLink    EmploymentLink          @relation(fields: [employmentLinkId], references: [id])
-  earningDeduction  PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
+  employmentLink   EmploymentLink          @relation(fields: [employmentLinkId], references: [id])
+  earningDeduction PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
 
   @@unique([tenantId, employmentLinkId, earningDeductionId])
   @@index([status])
   @@index([employmentLinkId])
   @@index([earningDeductionId])
-  @@schema("payroll")
   @@map("employment_link_earning")
+  @@schema("payroll")
 }
 
 model PayrollTypeEarning {
@@ -2066,15 +2099,15 @@ model PayrollTypeEarning {
   createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  payrollType       PayrollType              @relation(fields: [payrollTypeId], references: [id])
-  earningDeduction  PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
+  payrollType      PayrollType             @relation(fields: [payrollTypeId], references: [id])
+  earningDeduction PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
 
   @@unique([tenantId, payrollTypeId, earningDeductionId])
   @@index([status])
   @@index([payrollTypeId])
   @@index([earningDeductionId])
-  @@schema("payroll")
   @@map("payroll_type_earning")
+  @@schema("payroll")
 }
 
 model JobFunctionEarning {
@@ -2093,15 +2126,15 @@ model JobFunctionEarning {
   createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  jobFunction      JobFunction              @relation(fields: [jobFunctionId], references: [id])
-  earningDeduction PayrollEarningDeduction  @relation(fields: [earningDeductionId], references: [id])
+  jobFunction      JobFunction             @relation(fields: [jobFunctionId], references: [id])
+  earningDeduction PayrollEarningDeduction @relation(fields: [earningDeductionId], references: [id])
 
   @@unique([tenantId, jobFunctionId, earningDeductionId])
   @@index([status])
   @@index([jobFunctionId])
   @@index([earningDeductionId])
-  @@schema("payroll")
   @@map("job_function_earning")
+  @@schema("payroll")
 }
 
 model ProfessionalCategoryEarning {
@@ -2124,8 +2157,8 @@ model ProfessionalCategoryEarning {
   @@index([status])
   @@index([categoryEntryId])
   @@index([earningDeductionId])
-  @@schema("payroll")
   @@map("professional_category_earning")
+  @@schema("payroll")
 }
 
 model EmployeePayrollItem {
@@ -2151,8 +2184,8 @@ model EmployeePayrollItem {
   @@index([employeeId, competenceYear, competenceMonth])
   @@index([payrollRunId])
   @@index([earningDeductionId])
-  @@schema("payroll")
   @@map("employee_payroll_item")
+  @@schema("payroll")
 }
 
 model PayrollFinancialRecord {
@@ -2183,8 +2216,8 @@ model PayrollFinancialRecord {
   @@index([payrollRunId])
   @@index([workLocationId])
   @@index([functionalStatusId])
-  @@schema("payroll")
   @@map("payroll_financial_record")
+  @@schema("payroll")
 }
 
 model PayrollRunWorkLocation {
@@ -2199,13 +2232,13 @@ model PayrollRunWorkLocation {
   generatedAt     DateTime @default(now()) @map("generated_at") @db.Timestamptz(6)
   metadata        Json     @default("{}")
 
-  payrollRun    PayrollRun    @relation(fields: [payrollRunId], references: [id])
-  workLocation  WorkLocation? @relation(fields: [workLocationId], references: [id])
+  payrollRun   PayrollRun    @relation(fields: [payrollRunId], references: [id])
+  workLocation WorkLocation? @relation(fields: [workLocationId], references: [id])
 
   @@unique([payrollRunId, workLocationId])
   @@index([workLocationId])
-  @@schema("payroll")
   @@map("payroll_run_work_location")
+  @@schema("payroll")
 }
 
 model AdvanceRequest {
@@ -2222,29 +2255,29 @@ model AdvanceRequest {
   createdAt       DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee  Employee       @relation(fields: [employeeId], references: [id])
-  payrollRun PayrollRun?   @relation(fields: [payrollRunId], references: [id])
+  employee   Employee         @relation(fields: [employeeId], references: [id])
+  payrollRun PayrollRun?      @relation(fields: [payrollRunId], references: [id])
   payments   AdvancePayment[]
 
   @@index([employeeId, requestedOn])
   @@index([payrollRunId])
   @@index([status])
-  @@schema("payroll")
   @@map("advance_request")
+  @@schema("payroll")
 }
 
 model AdvancePayment {
-  id              String               @id @default(uuid()) @db.Uuid
-  tenantId        String               @map("tenant_id") @db.Uuid
-  requestId       String?              @map("request_id") @db.Uuid
-  employeeId      String               @map("employee_id") @db.Uuid
-  payrollRunId    String?              @map("payroll_run_id") @db.Uuid
-  amount          Decimal              @db.Decimal(14, 2)
-  paymentDate     DateTime?            @map("payment_date") @db.Date
-  status          AdvancePaymentStatus @default(PENDING)
-  notes           String               @default("")
-  createdAt       DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id           String               @id @default(uuid()) @db.Uuid
+  tenantId     String               @map("tenant_id") @db.Uuid
+  requestId    String?              @map("request_id") @db.Uuid
+  employeeId   String               @map("employee_id") @db.Uuid
+  payrollRunId String?              @map("payroll_run_id") @db.Uuid
+  amount       Decimal              @db.Decimal(14, 2)
+  paymentDate  DateTime?            @map("payment_date") @db.Date
+  status       AdvancePaymentStatus @default(PENDING)
+  notes        String               @default("")
+  createdAt    DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   request    AdvanceRequest? @relation(fields: [requestId], references: [id])
   employee   Employee        @relation(fields: [employeeId], references: [id])
@@ -2254,8 +2287,8 @@ model AdvancePayment {
   @@index([employeeId, paymentDate])
   @@index([payrollRunId])
   @@index([status])
-  @@schema("payroll")
   @@map("advance_payment")
+  @@schema("payroll")
 }
 
 model GpsPaymentCode {
@@ -2269,8 +2302,8 @@ model GpsPaymentCode {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("payroll")
   @@map("gps_payment_code")
+  @@schema("payroll")
 }
 
 model SefipCode {
@@ -2285,8 +2318,8 @@ model SefipCode {
 
   @@unique([tenantId, code, type])
   @@index([status])
-  @@schema("payroll")
   @@map("sefip_code")
+  @@schema("payroll")
 }
 
 model AccountingHistory {
@@ -2302,8 +2335,8 @@ model AccountingHistory {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("payroll")
   @@map("accounting_history")
+  @@schema("payroll")
 }
 
 model SimpleAccountingAccount {
@@ -2319,8 +2352,8 @@ model SimpleAccountingAccount {
 
   @@unique([tenantId, code])
   @@index([status])
-  @@schema("payroll")
   @@map("simple_account")
+  @@schema("payroll")
 }
 
 model PayrollAccountingAccount {
@@ -2340,11 +2373,11 @@ model PayrollAccountingAccount {
   createdAt              DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt              DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  branch            Branch?                  @relation(fields: [branchId], references: [id])
-  costCenter        CostCenter?              @relation(fields: [costCenterId], references: [id])
-  earningDeduction  PayrollEarningDeduction? @relation(fields: [earningDeductionId], references: [id])
-  accountingHistory AccountingHistory?       @relation(fields: [accountingHistoryId], references: [id])
-  simpleAccount     SimpleAccountingAccount? @relation(fields: [simpleAccountingId], references: [id])
+  branch            Branch?                                @relation(fields: [branchId], references: [id])
+  costCenter        CostCenter?                            @relation(fields: [costCenterId], references: [id])
+  earningDeduction  PayrollEarningDeduction?               @relation(fields: [earningDeductionId], references: [id])
+  accountingHistory AccountingHistory?                     @relation(fields: [accountingHistoryId], references: [id])
+  simpleAccount     SimpleAccountingAccount?               @relation(fields: [simpleAccountingId], references: [id])
   workLocations     PayrollAccountingAccountWorkLocation[]
 
   @@index([branchId])
@@ -2353,8 +2386,8 @@ model PayrollAccountingAccount {
   @@index([accountingHistoryId])
   @@index([simpleAccountingId])
   @@index([status])
-  @@schema("payroll")
   @@map("accounting_account")
+  @@schema("payroll")
 }
 
 model PayrollAccountingAccountWorkLocation {
@@ -2367,8 +2400,8 @@ model PayrollAccountingAccountWorkLocation {
 
   @@id([accountingAccountId, workLocationId])
   @@index([workLocationId])
-  @@schema("payroll")
   @@map("accounting_account_work_location")
+  @@schema("payroll")
 }
 
 model PaymentRemittanceFile {
@@ -2401,8 +2434,8 @@ model PaymentRemittanceFile {
   @@index([payrollRunId])
   @@index([processingTypeId])
   @@index([reasonId])
-  @@schema("payroll")
   @@map("payment_remittance_file")
+  @@schema("payroll")
 }
 
 model BlockedPayment {
@@ -2432,8 +2465,8 @@ model BlockedPayment {
   @@index([functionalStatusId])
   @@index([reasonId])
   @@index([releasedAt])
-  @@schema("payroll")
   @@map("blocked_payment")
+  @@schema("payroll")
 }
 
 model DocumentAttachment {
@@ -2460,8 +2493,8 @@ model DocumentAttachment {
   @@index([ownerType, ownerId])
   @@index([documentTypeId])
   @@index([storageKind])
-  @@schema("public")
   @@map("document_attachment")
+  @@schema("public")
 }
 
 model DocumentUploadSession {
@@ -2490,8 +2523,8 @@ model DocumentUploadSession {
   @@index([status, expiresAt])
   @@index([requestedBySub, createdAt])
   @@index([ownerType, ownerId])
-  @@schema("public")
   @@map("document_upload_session")
+  @@schema("public")
 }
 
 model ESocialEvent {
@@ -2516,8 +2549,8 @@ model ESocialEvent {
 
   @@index([eventType, competence])
   @@index([status, createdAt])
-  @@schema("public")
   @@map("esocial_event")
+  @@schema("public")
 }
 
 model ReportDefinition {
@@ -2535,8 +2568,8 @@ model ReportDefinition {
 
   @@unique([tenantId, code])
   @@index([moduleKey, status])
-  @@schema("public")
   @@map("report_definition")
+  @@schema("public")
 }
 
 model ReportRequest {
@@ -2569,8 +2602,8 @@ model ReportRequest {
   @@index([processingTypeId])
   @@index([status])
   @@index([competenceYear, competenceMonth])
-  @@schema("public")
   @@map("report_request")
+  @@schema("public")
 }
 
 model GeneratedReportFile {
@@ -2586,8 +2619,8 @@ model GeneratedReportFile {
 
   @@index([reportRequestId])
   @@index([attachmentId])
-  @@schema("public")
   @@map("generated_report_file")
+  @@schema("public")
 }
 
 model DocumentDownloadAudit {
@@ -2604,8 +2637,8 @@ model DocumentDownloadAudit {
 
   @@index([attachmentId, downloadedAt])
   @@index([userId, downloadedAt])
-  @@schema("public")
   @@map("document_download_audit")
+  @@schema("public")
 }
 
 model EducationInstitution {
@@ -2625,8 +2658,8 @@ model EducationInstitution {
   @@unique([tenantId, code])
   @@unique([tenantId, cnpj])
   @@index([status])
-  @@schema("hr")
   @@map("education_institution")
+  @@schema("hr")
 }
 
 model InternshipProgram {
@@ -2649,8 +2682,8 @@ model InternshipProgram {
   @@unique([tenantId, code])
   @@index([institutionId])
   @@index([status])
-  @@schema("hr")
   @@map("internship_program")
+  @@schema("hr")
 }
 
 model Agreement {
@@ -2666,17 +2699,17 @@ model Agreement {
   createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  institution EducationInstitution? @relation(fields: [institutionId], references: [id])
-  program     InternshipProgram?    @relation(fields: [programId], references: [id])
-  internships InternshipRecord[]
+  institution         EducationInstitution?         @relation(fields: [institutionId], references: [id])
+  program             InternshipProgram?            @relation(fields: [programId], references: [id])
+  internships         InternshipRecord[]
   healthProviderLinks HealthProviderAgreementLink[]
 
   @@unique([tenantId, code])
   @@index([institutionId])
   @@index([programId])
   @@index([status])
-  @@schema("hr")
   @@map("agreement")
+  @@schema("hr")
 }
 
 model HealthProviderAgreementLink {
@@ -2697,8 +2730,8 @@ model HealthProviderAgreementLink {
   @@unique([tenantId, providerEntryId, agreementId])
   @@index([agreementId])
   @@index([status])
-  @@schema("hr")
   @@map("health_provider_agreement_link")
+  @@schema("hr")
 }
 
 model HealthExamProviderExamLink {
@@ -2719,8 +2752,8 @@ model HealthExamProviderExamLink {
   @@unique([tenantId, examProviderEntryId, examEntryId])
   @@index([examEntryId])
   @@index([status])
-  @@schema("hr")
   @@map("health_exam_provider_exam_link")
+  @@schema("hr")
 }
 
 model InternshipRecord {
@@ -2748,8 +2781,8 @@ model InternshipRecord {
   @@index([employeeId])
   @@index([internCpf])
   @@index([status])
-  @@schema("hr")
   @@map("internship_record")
+  @@schema("hr")
 }
 
 model RecruitmentRequest {
@@ -2775,8 +2808,8 @@ model RecruitmentRequest {
   @@index([tenantId, status])
   @@index([branchId])
   @@index([workLocationId])
-  @@schema("hr")
   @@map("recruitment_request")
+  @@schema("hr")
 }
 
 model RecruitmentRequestFunction {
@@ -2798,8 +2831,8 @@ model RecruitmentRequestFunction {
   @@index([tenantId, requestId])
   @@index([jobFunctionId])
   @@index([shiftId])
-  @@schema("hr")
   @@map("recruitment_request_function")
+  @@schema("hr")
 }
 
 model RecruitmentCandidate {
@@ -2818,8 +2851,8 @@ model RecruitmentCandidate {
   @@unique([requestId, personRef])
   @@index([tenantId, requestId])
   @@index([status])
-  @@schema("hr")
   @@map("recruitment_candidate")
+  @@schema("hr")
 }
 
 model TrainingSuggestion {
@@ -2843,8 +2876,8 @@ model TrainingSuggestion {
   @@unique([tenantId, code])
   @@index([courseEntryId])
   @@index([status])
-  @@schema("hr")
   @@map("training_suggestion")
+  @@schema("hr")
 }
 
 model TrainingSuggestionComplement {
@@ -2866,8 +2899,8 @@ model TrainingSuggestionComplement {
   @@index([suggestionId])
   @@index([cityEntryId])
   @@index([status])
-  @@schema("hr")
   @@map("training_suggestion_complement")
+  @@schema("hr")
 }
 
 model TrainingSuggestionEmployee {
@@ -2886,8 +2919,8 @@ model TrainingSuggestionEmployee {
   @@index([suggestionId])
   @@index([employeeId])
   @@index([status])
-  @@schema("hr")
   @@map("training_suggestion_employee")
+  @@schema("hr")
 }
 
 model TrainingSuggestionCost {
@@ -2907,8 +2940,8 @@ model TrainingSuggestionCost {
   @@unique([tenantId, suggestionId, code])
   @@index([suggestionId])
   @@index([status])
-  @@schema("hr")
   @@map("training_suggestion_cost")
+  @@schema("hr")
 }
 
 model PerformanceEvaluation {
@@ -2929,11 +2962,11 @@ model PerformanceEvaluation {
   createdAt      DateTime                    @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime                    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee     Employee      @relation(fields: [employeeId], references: [id])
-  branch       Branch?       @relation(fields: [branchId], references: [id])
-  workLocation WorkLocation? @relation(fields: [workLocationId], references: [id])
-  jobPosition  JobPosition?  @relation(fields: [jobPositionId], references: [id])
-  jobFunction  JobFunction?  @relation(fields: [jobFunctionId], references: [id])
+  employee     Employee           @relation(fields: [employeeId], references: [id])
+  branch       Branch?            @relation(fields: [branchId], references: [id])
+  workLocation WorkLocation?      @relation(fields: [workLocationId], references: [id])
+  jobPosition  JobPosition?       @relation(fields: [jobPositionId], references: [id])
+  jobFunction  JobFunction?       @relation(fields: [jobFunctionId], references: [id])
   progressions MeritProgression[]
 
   @@index([tenantId, employeeId])
@@ -2942,24 +2975,24 @@ model PerformanceEvaluation {
   @@index([jobPositionId])
   @@index([jobFunctionId])
   @@index([status])
-  @@schema("hr")
   @@map("performance_evaluation")
+  @@schema("hr")
 }
 
 model MeritProgression {
-  id                    String          @id @default(uuid()) @db.Uuid
-  tenantId              String          @map("tenant_id") @db.Uuid
-  employeeId            String          @map("employee_id") @db.Uuid
-  performanceEvaluationId String?       @map("performance_evaluation_id") @db.Uuid
-  sourceSalaryReferenceId String?       @map("source_salary_reference_id") @db.Uuid
-  targetSalaryReferenceId String?       @map("target_salary_reference_id") @db.Uuid
-  effectiveOn           DateTime        @map("effective_on") @db.Date
-  appointmentAct        String          @default("") @map("appointment_act")
-  kind                  ProgressionKind @default(MERIT)
-  justification         String          @default("")
-  approvedByRef         String?         @map("approved_by_ref")
-  createdAt             DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt             DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                      String          @id @default(uuid()) @db.Uuid
+  tenantId                String          @map("tenant_id") @db.Uuid
+  employeeId              String          @map("employee_id") @db.Uuid
+  performanceEvaluationId String?         @map("performance_evaluation_id") @db.Uuid
+  sourceSalaryReferenceId String?         @map("source_salary_reference_id") @db.Uuid
+  targetSalaryReferenceId String?         @map("target_salary_reference_id") @db.Uuid
+  effectiveOn             DateTime        @map("effective_on") @db.Date
+  appointmentAct          String          @default("") @map("appointment_act")
+  kind                    ProgressionKind @default(MERIT)
+  justification           String          @default("")
+  approvedByRef           String?         @map("approved_by_ref")
+  createdAt               DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee              Employee               @relation(fields: [employeeId], references: [id])
   evaluation            PerformanceEvaluation? @relation(fields: [performanceEvaluationId], references: [id])
@@ -2971,26 +3004,26 @@ model MeritProgression {
   @@index([sourceSalaryReferenceId])
   @@index([targetSalaryReferenceId])
   @@index([kind])
-  @@schema("hr")
   @@map("merit_progression")
+  @@schema("hr")
 }
 
 model SalarySimulation {
-  id             String   @id @default(uuid()) @db.Uuid
-  tenantId       String   @map("tenant_id") @db.Uuid
-  employeeId     String   @map("employee_id") @db.Uuid
-  scenario       String
-  resultJson     Json     @default("{}") @map("result_json")
-  createdByRef   String?  @map("created_by_ref")
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  employeeId   String   @map("employee_id") @db.Uuid
+  scenario     String
+  resultJson   Json     @default("{}") @map("result_json")
+  createdByRef String?  @map("created_by_ref")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  employee    Employee                   @relation(fields: [employeeId], references: [id])
+  employee    Employee                     @relation(fields: [employeeId], references: [id])
   adjustments SalarySimulationAdjustment[]
 
   @@index([tenantId, employeeId])
-  @@schema("hr")
   @@map("salary_simulation")
+  @@schema("hr")
 }
 
 model CareerPlan {
@@ -3010,8 +3043,8 @@ model CareerPlan {
 
   @@index([tenantId, active, effectiveOn])
   @@index([employeeId])
-  @@schema("hr")
   @@map("career_plan")
+  @@schema("hr")
 }
 
 model SalarySimulationAdjustment {
@@ -3027,48 +3060,48 @@ model SalarySimulationAdjustment {
   simulation SalarySimulation @relation(fields: [simulationId], references: [id])
 
   @@index([tenantId, simulationId])
-  @@schema("hr")
   @@map("salary_simulation_adjustment")
+  @@schema("hr")
 }
 
 model RetirementRule {
-  id                          String       @id @default(uuid()) @db.Uuid
-  tenantId                    String       @map("tenant_id") @db.Uuid
-  name                        String
-  legalBasis                  String       @map("legal_basis")
-  ageCriteria                 Json         @default("{}") @map("age_criteria")
-  contributionTimeCriteria    Json         @default("{}") @map("contribution_time_criteria")
-  gracePeriodCriteria         Json         @default("{}") @map("grace_period_criteria")
-  applicableEmploymentLink    String?      @map("applicable_employment_link")
-  active                      Boolean      @default(true)
-  createdAt                   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt                   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                       String   @id @default(uuid()) @db.Uuid
+  tenantId                 String   @map("tenant_id") @db.Uuid
+  name                     String
+  legalBasis               String   @map("legal_basis")
+  ageCriteria              Json     @default("{}") @map("age_criteria")
+  contributionTimeCriteria Json     @default("{}") @map("contribution_time_criteria")
+  gracePeriodCriteria      Json     @default("{}") @map("grace_period_criteria")
+  applicableEmploymentLink String?  @map("applicable_employment_link")
+  active                   Boolean  @default(true)
+  createdAt                DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   simulations RetirementSimulation[]
   grants      RetirementGrant[]
 
   @@index([tenantId, active])
-  @@schema("hr")
   @@map("retirement_rule")
+  @@schema("hr")
 }
 
 model RetirementSimulation {
-  id            String   @id @default(uuid()) @db.Uuid
-  tenantId      String   @map("tenant_id") @db.Uuid
-  employeeId    String   @map("employee_id") @db.Uuid
-  ruleId        String   @map("rule_id") @db.Uuid
-  result        Json     @default("{}")
-  detailsJson   Json     @default("{}") @map("details_json")
-  simulatedOn   DateTime @default(now()) @map("simulated_on") @db.Timestamptz(6)
-  createdByRef  String?  @map("created_by_ref")
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  employeeId   String   @map("employee_id") @db.Uuid
+  ruleId       String   @map("rule_id") @db.Uuid
+  result       Json     @default("{}")
+  detailsJson  Json     @default("{}") @map("details_json")
+  simulatedOn  DateTime @default(now()) @map("simulated_on") @db.Timestamptz(6)
+  createdByRef String?  @map("created_by_ref")
 
   employee Employee       @relation(fields: [employeeId], references: [id])
   rule     RetirementRule @relation(fields: [ruleId], references: [id])
 
   @@index([tenantId, employeeId])
   @@index([ruleId])
-  @@schema("hr")
   @@map("retirement_simulation")
+  @@schema("hr")
 }
 
 model RetirementGrant {
@@ -3090,36 +3123,36 @@ model RetirementGrant {
 
   @@index([tenantId, employeeId, grantedOn])
   @@index([ruleId])
-  @@schema("hr")
   @@map("retirement_grant")
+  @@schema("hr")
 }
 
 model PensionGrant {
-  id                   String   @id @default(uuid()) @db.Uuid
-  tenantId             String   @map("tenant_id") @db.Uuid
-  institutingEmployeeId String? @map("instituting_employee_id") @db.Uuid
-  beneficiaryName      String   @map("beneficiary_name")
-  beneficiaryCpf       String?  @map("beneficiary_cpf")
-  kinship              String?
-  benefitType          String   @map("benefit_type")
-  apportionmentType    String   @map("apportionment_type")
-  sharePercent         Decimal  @map("share_percent") @db.Decimal(18, 6)
-  adjustmentMode       String   @map("adjustment_mode")
-  nature               String
-  grantedOn            DateTime @map("granted_on") @db.Date
-  ceasedOn             DateTime? @map("ceased_on") @db.Date
-  legalBasis           String   @map("legal_basis")
-  notes                String   @default("")
-  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt            DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                    String    @id @default(uuid()) @db.Uuid
+  tenantId              String    @map("tenant_id") @db.Uuid
+  institutingEmployeeId String?   @map("instituting_employee_id") @db.Uuid
+  beneficiaryName       String    @map("beneficiary_name")
+  beneficiaryCpf        String?   @map("beneficiary_cpf")
+  kinship               String?
+  benefitType           String    @map("benefit_type")
+  apportionmentType     String    @map("apportionment_type")
+  sharePercent          Decimal   @map("share_percent") @db.Decimal(18, 6)
+  adjustmentMode        String    @map("adjustment_mode")
+  nature                String
+  grantedOn             DateTime  @map("granted_on") @db.Date
+  ceasedOn              DateTime? @map("ceased_on") @db.Date
+  legalBasis            String    @map("legal_basis")
+  notes                 String    @default("")
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   institutingEmployee Employee? @relation(fields: [institutingEmployeeId], references: [id])
 
   @@index([tenantId, grantedOn])
   @@index([institutingEmployeeId])
   @@index([benefitType])
-  @@schema("hr")
   @@map("pension_grant")
+  @@schema("hr")
 }
 
 model ContributionTimeCertificate {
@@ -3139,8 +3172,8 @@ model ContributionTimeCertificate {
   employee Employee @relation(fields: [employeeId], references: [id])
 
   @@index([tenantId, employeeId, issuedAt])
-  @@schema("hr")
   @@map("contribution_time_certificate")
+  @@schema("hr")
 }
 
 model PrevidentiaryDeclaration {
@@ -3157,104 +3190,104 @@ model PrevidentiaryDeclaration {
   employee Employee @relation(fields: [employeeId], references: [id])
 
   @@index([tenantId, employeeId, type])
-  @@schema("hr")
   @@map("previdentiary_declaration")
+  @@schema("hr")
 }
 
 model PensionCompensation {
-  id             String                     @id @default(uuid()) @db.Uuid
-  tenantId       String                     @map("tenant_id") @db.Uuid
-  employeeId     String?                    @map("employee_id") @db.Uuid
-  certificateRef String?                    @map("certificate_ref")
-  originRegime   String                     @map("origin_regime")
-  amount         Decimal                    @db.Decimal(14, 2)
-  status         PensionCompensationStatus  @default(DRAFT)
-  notes          String                     @default("")
-  createdAt      DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime                   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id             String                    @id @default(uuid()) @db.Uuid
+  tenantId       String                    @map("tenant_id") @db.Uuid
+  employeeId     String?                   @map("employee_id") @db.Uuid
+  certificateRef String?                   @map("certificate_ref")
+  originRegime   String                    @map("origin_regime")
+  amount         Decimal                   @db.Decimal(14, 2)
+  status         PensionCompensationStatus @default(DRAFT)
+  notes          String                    @default("")
+  createdAt      DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime                  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employee Employee? @relation(fields: [employeeId], references: [id])
 
   @@index([tenantId, status])
   @@index([employeeId])
-  @@schema("hr")
   @@map("pension_compensation")
+  @@schema("hr")
 }
 
 model RecertificationCampaign {
-  id         String                        @id @default(uuid()) @db.Uuid
-  tenantId   String                        @map("tenant_id") @db.Uuid
+  id         String                         @id @default(uuid()) @db.Uuid
+  tenantId   String                         @map("tenant_id") @db.Uuid
   type       RecertificationBeneficiaryType
-  cycleStart DateTime                      @map("cycle_start") @db.Date
-  cycleEnd   DateTime                      @map("cycle_end") @db.Date
-  filterJson Json                          @default("{}") @map("filter_json")
-  active     Boolean                       @default(true)
-  createdAt  DateTime                      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt  DateTime                      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  cycleStart DateTime                       @map("cycle_start") @db.Date
+  cycleEnd   DateTime                       @map("cycle_end") @db.Date
+  filterJson Json                           @default("{}") @map("filter_json")
+  active     Boolean                        @default(true)
+  createdAt  DateTime                       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime                       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   beneficiaries RecertificationBeneficiary[]
 
   @@index([tenantId, type, active])
-  @@schema("hr")
   @@map("recertification_campaign")
+  @@schema("hr")
 }
 
 model RecertificationBeneficiary {
-  id               String                        @id @default(uuid()) @db.Uuid
-  tenantId         String                        @map("tenant_id") @db.Uuid
-  employeeId       String                        @unique @map("employee_id") @db.Uuid
-  campaignId       String?                       @map("campaign_id") @db.Uuid
-  type             RecertificationBeneficiaryType
-  nextDueDate      DateTime                      @map("next_due_date") @db.Date
-  status           RecertificationStatus         @default(PENDING)
-  updatedAt        DateTime                      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  createdAt        DateTime                      @default(now()) @map("created_at") @db.Timestamptz(6)
+  id          String                         @id @default(uuid()) @db.Uuid
+  tenantId    String                         @map("tenant_id") @db.Uuid
+  employeeId  String                         @unique @map("employee_id") @db.Uuid
+  campaignId  String?                        @map("campaign_id") @db.Uuid
+  type        RecertificationBeneficiaryType
+  nextDueDate DateTime                       @map("next_due_date") @db.Date
+  status      RecertificationStatus          @default(PENDING)
+  updatedAt   DateTime                       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt   DateTime                       @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  employee    Employee                @relation(fields: [employeeId], references: [id])
-  campaign    RecertificationCampaign? @relation(fields: [campaignId], references: [id])
-  records     RecertificationRecord[]
-  lifeProofs  ExternalLifeProof[]
+  employee       Employee                    @relation(fields: [employeeId], references: [id])
+  campaign       RecertificationCampaign?    @relation(fields: [campaignId], references: [id])
+  records        RecertificationRecord[]
+  lifeProofs     ExternalLifeProof[]
   contactHistory BeneficiaryContactHistory[]
 
   @@index([tenantId, status, nextDueDate])
   @@index([campaignId])
-  @@schema("hr")
   @@map("recertification_beneficiary")
+  @@schema("hr")
 }
 
 model RecertificationRecord {
-  id               String   @id @default(uuid()) @db.Uuid
-  tenantId         String   @map("tenant_id") @db.Uuid
-  beneficiaryId    String   @map("beneficiary_id") @db.Uuid
-  recertifiedOn    DateTime @map("recertified_on") @db.Date
-  operatorRef      String   @map("operator_ref")
-  snapshotJson     Json     @default("{}") @map("snapshot_json")
-  receiptStorageKey String? @map("receipt_storage_key")
-  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  beneficiaryId     String   @map("beneficiary_id") @db.Uuid
+  recertifiedOn     DateTime @map("recertified_on") @db.Date
+  operatorRef       String   @map("operator_ref")
+  snapshotJson      Json     @default("{}") @map("snapshot_json")
+  receiptStorageKey String?  @map("receipt_storage_key")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   beneficiary RecertificationBeneficiary @relation(fields: [beneficiaryId], references: [id])
 
   @@index([tenantId, beneficiaryId, recertifiedOn])
-  @@schema("hr")
   @@map("recertification_record")
+  @@schema("hr")
 }
 
 model ExternalLifeProof {
-  id                String                   @id @default(uuid()) @db.Uuid
-  tenantId          String                   @map("tenant_id") @db.Uuid
-  beneficiaryId     String                   @map("beneficiary_id") @db.Uuid
-  channel           ExternalLifeProofChannel
-  authenticationJson Json                    @default("{}") @map("authentication_json")
-  provenAt          DateTime                 @map("proven_at") @db.Timestamptz(6)
-  createdAt         DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
+  id                 String                   @id @default(uuid()) @db.Uuid
+  tenantId           String                   @map("tenant_id") @db.Uuid
+  beneficiaryId      String                   @map("beneficiary_id") @db.Uuid
+  channel            ExternalLifeProofChannel
+  authenticationJson Json                     @default("{}") @map("authentication_json")
+  provenAt           DateTime                 @map("proven_at") @db.Timestamptz(6)
+  createdAt          DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
 
   beneficiary RecertificationBeneficiary @relation(fields: [beneficiaryId], references: [id])
 
   @@index([tenantId, beneficiaryId, provenAt])
   @@index([channel])
-  @@schema("hr")
   @@map("external_life_proof")
+  @@schema("hr")
 }
 
 model BeneficiaryContactHistory {
@@ -3269,8 +3302,8 @@ model BeneficiaryContactHistory {
   beneficiary RecertificationBeneficiary @relation(fields: [beneficiaryId], references: [id])
 
   @@index([tenantId, beneficiaryId, contactedOn])
-  @@schema("hr")
   @@map("beneficiary_contact_history")
+  @@schema("hr")
 }
 
 model Notification {
@@ -3288,8 +3321,8 @@ model Notification {
 
   @@index([userId, readAt])
   @@index([moduleKey])
-  @@schema("public")
   @@map("notification")
+  @@schema("public")
 }
 
 model BusinessDay {
@@ -3307,8 +3340,8 @@ model BusinessDay {
   @@unique([tenantId, code])
   @@index([businessDate])
   @@index([status])
-  @@schema("hr")
   @@map("business_day")
+  @@schema("hr")
 }
 
 model ConsignmentEntity {
@@ -3327,8 +3360,8 @@ model ConsignmentEntity {
   @@unique([tenantId, code])
   @@index([bankCode])
   @@index([status])
-  @@schema("hr")
   @@map("consignment_entity")
+  @@schema("hr")
 }
 
 model ServiceProvider {
@@ -3358,8 +3391,8 @@ model ServiceProvider {
   @@index([cboEntryId])
   @@index([earningDeductionId])
   @@index([status])
-  @@schema("hr")
   @@map("service_provider")
+  @@schema("hr")
 }
 
 model ServiceTaker {
@@ -3382,8 +3415,8 @@ model ServiceTaker {
   @@index([gpsPaymentCodeId])
   @@index([sefipCodeId])
   @@index([status])
-  @@schema("hr")
   @@map("service_taker")
+  @@schema("hr")
 }
 
 model FileExportJob {
@@ -3401,8 +3434,8 @@ model FileExportJob {
   @@unique([tenantId, code])
   @@index([targetRoute])
   @@index([status])
-  @@schema("hr")
   @@map("file_export_job")
+  @@schema("hr")
 }
 
 model ConsignmentImportJob {
@@ -3419,8 +3452,8 @@ model ConsignmentImportJob {
   @@unique([tenantId, code])
   @@index([sourceFileName])
   @@index([status])
-  @@schema("hr")
   @@map("consignment_import_job")
+  @@schema("hr")
 }
 
 model EmployeePayrollItemImportJob {
@@ -3439,8 +3472,8 @@ model EmployeePayrollItemImportJob {
   @@unique([tenantId, code])
   @@index([competenceYear, competenceMonth])
   @@index([status])
-  @@schema("hr")
   @@map("employee_payroll_item_import_job")
+  @@schema("hr")
 }
 
 model CompetencePeriod {
@@ -3458,8 +3491,8 @@ model CompetencePeriod {
   @@unique([tenantId, competenceYear, competenceMonth])
   @@index([competenceYear, competenceMonth])
   @@index([status])
-  @@schema("hr")
   @@map("competence_period")
+  @@schema("hr")
 }
 
 model TaxRate {
@@ -3479,6 +3512,6 @@ model TaxRate {
   @@unique([tenantId, code])
   @@index([scope, referenceYear])
   @@index([status])
-  @@schema("public")
   @@map("tax_rate")
+  @@schema("public")
 }

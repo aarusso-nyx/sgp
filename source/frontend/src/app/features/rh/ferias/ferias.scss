@@ -1,0 +1,78 @@
+.rh-ferias {
+  display: grid;
+  gap: 1rem;
+}
+
+.rh-ferias__header,
+.rh-ferias__layout,
+.rh-ferias__actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.rh-ferias__header {
+  justify-content: space-between;
+}
+
+.rh-ferias__header p,
+.rh-ferias__header h1 {
+  margin: 0;
+}
+
+.rh-ferias__layout {
+  align-items: flex-start;
+}
+
+.rh-ferias__panel {
+  flex: 1;
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid #d6dde3;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #ffffff;
+}
+
+.rh-ferias table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rh-ferias th,
+.rh-ferias td {
+  border-bottom: 1px solid #d6dde3;
+  padding: 0.65rem;
+  text-align: left;
+}
+
+.rh-ferias__row--selected {
+  background: #eef6f5;
+}
+
+.rh-ferias form,
+.rh-ferias label {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.rh-ferias input {
+  border: 1px solid #aeb8c2;
+  border-radius: 6px;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.5rem;
+}
+
+.rh-ferias__message {
+  color: #0f5132;
+}
+
+.rh-ferias__error {
+  color: #842029;
+}
+
+@media (max-width: 900px) {
+  .rh-ferias__layout {
+    display: grid;
+  }
+}

@@ -905,6 +905,154 @@ $$;
   );
   console.log('[db-smoke] validated HR-08 immutable history, career view, and probation RLS');
 
+  await runSqlSnippet(
+    '99-hr03-vacation.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  employee_a uuid;
+  contract_id uuid;
+  link_id uuid;
+  v_contract_type_id uuid;
+  vacation_id uuid := gen_random_uuid();
+  balance_available integer;
+  visible_count integer;
+  audit_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT SELECT ON hr.employee, hr.employment_link, hr.employment_contract, hr.v_vacation_balance TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.vacation_record TO sgp_smoke_rls;
+  GRANT SELECT ON hr.vacation_type TO sgp_smoke_rls;
+  GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
+
+  SELECT employee.id, employee.employment_link_id, employee.contract_type_id
+  INTO employee_a, link_id, v_contract_type_id
+  FROM hr.employee employee
+  WHERE employee.tenant_id = tenant_a
+  LIMIT 1;
+
+  IF employee_a IS NULL THEN
+    RAISE EXCEPTION 'HR-03 smoke requires at least one seeded tenant A employee';
+  END IF;
+
+  SELECT id INTO contract_id
+  FROM hr.employment_contract
+  WHERE tenant_id = tenant_a
+    AND employee_id = employee_a
+    AND status = 'ACTIVE'::"RecordStatus"
+  ORDER BY starts_on DESC
+  LIMIT 1;
+
+  IF contract_id IS NULL THEN
+    INSERT INTO hr.employment_contract (
+      tenant_id,
+      employee_id,
+      employment_link_id,
+      contract_type_id,
+      exercise_on,
+      starts_on,
+      legal_basis
+    )
+    VALUES (
+      tenant_a,
+      employee_a,
+      link_id,
+      v_contract_type_id,
+      DATE '2024-01-01',
+      DATE '2024-01-01',
+      'HR-03 smoke'
+    )
+    RETURNING id INTO contract_id;
+  ELSE
+    UPDATE hr.employment_contract
+    SET exercise_on = DATE '2024-01-01',
+        starts_on = LEAST(starts_on, DATE '2024-01-01')
+    WHERE id = contract_id;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.vacation.approve', true);
+  DELETE FROM hr.vacation_record
+  WHERE tenant_id = tenant_a
+    AND employee_id = employee_a
+    AND accrual_period_start = DATE '2024-01-01'
+    AND accrual_period_end = DATE '2024-12-31'
+    AND starts_on = DATE '2025-02-01'
+    AND ends_on = DATE '2025-02-20';
+
+  SELECT available_days INTO balance_available
+  FROM hr.f_calculate_vacation_balance(employee_a, DATE '2025-01-02')
+  WHERE accrual_period_start = DATE '2024-01-01'
+    AND accrual_period_end = DATE '2024-12-31';
+
+  IF balance_available <> 30 THEN
+    RAISE EXCEPTION 'Expected 30 vacation balance days after 12 complete months, found %', balance_available;
+  END IF;
+
+  PERFORM set_config('app.current_permissions', 'rh.vacation.request', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO hr.vacation_record (
+    id,
+    tenant_id,
+    employee_id,
+    accrual_start_on,
+    accrual_end_on,
+    accrual_period_start,
+    accrual_period_end,
+    installment_number,
+    pecuniary_bonus_days,
+    starts_on,
+    ends_on,
+    days,
+    status
+  )
+  VALUES (
+    vacation_id,
+    tenant_a,
+    employee_a,
+    DATE '2024-01-01',
+    DATE '2024-12-31',
+    DATE '2024-01-01',
+    DATE '2024-12-31',
+    1,
+    10,
+    DATE '2025-02-01',
+    DATE '2025-02-20',
+    20,
+    'programado'
+  );
+  RESET ROLE;
+
+  UPDATE hr.vacation_record SET status = 'aprovado' WHERE id = vacation_id;
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE resource_type = 'hr.vacation_record'
+    AND resource_id = vacation_id::text;
+  IF audit_count = 0 THEN
+    RAISE EXCEPTION 'Expected approved vacation_record to append audit_event';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.vacation.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.vacation_record
+  WHERE id = vacation_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 vacation_record rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated HR-03 vacation balance, audit, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

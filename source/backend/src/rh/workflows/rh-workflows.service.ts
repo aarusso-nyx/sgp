@@ -177,7 +177,7 @@ const WORKFLOWS: WorkflowDefinition[] = [
     search:
       "lower(concat_ws(' ', e.registration, e.name, e.cpf, vt.description, v.status::text))",
     orderBy: 'e.registration ASC, v.starts_on DESC',
-    activeDelete: 'status = \'INACTIVE\'::"RecordStatus", updated_at = now()',
+    activeDelete: "status = 'cancelado', updated_at = now()",
   }),
   workflow({
     key: 'leaves',
@@ -715,7 +715,7 @@ export class RhWorkflowsService {
         this.require(input.startsOn, 'startsOn');
         this.require(input.endsOn, 'endsOn');
         await this.databaseService.query(
-          `INSERT INTO hr.vacation_record (employee_id, vacation_type_id, accrual_start_on, accrual_end_on, starts_on, ends_on, days, status) VALUES ($1::uuid, NULLIF($2, '')::uuid, NULLIF($3, '')::date, NULLIF($4, '')::date, $5::date, $6::date, $7, 'ACTIVE'::"RecordStatus")`,
+          `INSERT INTO hr.vacation_record (tenant_id, employee_id, vacation_type_id, accrual_start_on, accrual_end_on, accrual_period_start, accrual_period_end, starts_on, ends_on, days, status) VALUES (public.sgp_current_tenant_uuid(), $1::uuid, NULLIF($2, '')::uuid, NULLIF($3, '')::date, NULLIF($4, '')::date, NULLIF($3, '')::date, NULLIF($4, '')::date, $5::date, $6::date, $7, 'programado')`,
           [
             employeeId,
             input.vacationTypeId ?? '',
