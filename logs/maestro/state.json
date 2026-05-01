@@ -162,6 +162,20 @@
       "retries": 0,
       "agent": "019de4ab-3b0c-7942-ae3e-7dc5517a59f4",
       "recovery": "maestro added executable FOL-03 smoke coverage and performance_evaluation RLS alignment during gate rerun"
+    },
+    "16-fol-06-movimentacao-transferencia": {
+      "status": "completed",
+      "effort": "medium",
+      "branch": "slice/16-fol-06-movimentacao-transferencia",
+      "commit": "eee7f901ffc45f5bfe3c78e2d200b45149f87f1a",
+      "started_at": "2026-05-01T15:17:20-03:00",
+      "retry_started_at": "2026-05-01T15:26:52-03:00",
+      "completed_at": "2026-05-01T15:59:37-03:00",
+      "retries": 1,
+      "agent": "019de4cb-5594-78c1-96f5-bc60b47189d0",
+      "previous_failure": "logs/maestro/16-fol-06-movimentacao-transferencia.failure.md",
+      "recovery": "manual smoke fixture hardening after retry failed in HR-03 vacation smoke",
+      "failure_log": "logs/maestro/16-fol-06-movimentacao-transferencia.failure.md"
     }
   },
   "current_wave": 9,

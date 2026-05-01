@@ -25,3 +25,5 @@ W08 ✓ 13-fol-04 (1 slice, medium, gates passed, commit 7c6ed9e) — completene
 W08 ✗ 14-fol-05 (medium → high retry failed: lint no-unsafe-call/no-unsafe-return in salary-history.service.spec.ts) — see logs/maestro/14-fol-05-bases-salariais-historicas.failure.md
 W08 ✓ 14-fol-05 (1 slice, medium→high recovery, gates passed, commit 75db340) — completeness 26.2% → 26.2%
 W08 ✓ 15-fol-03 (1 slice, medium + maestro smoke/RLS hardening, gates passed, commit f9a255e) — completeness 26.2% → 26.2%; Wave 8 complete
+W09 ✗ 16-fol-06 (low → medium retry failed: db:smoke failed in 99-hr03-vacation.sql after FOL-06 migration applied) — see logs/maestro/16-fol-06-movimentacao-transferencia.failure.md
+W09 ✓ 16-fol-06 (1 slice, low→medium recovery + smoke fixture hardening, gates passed, commit eee7f90) — completeness 26.2% → 26.2%
