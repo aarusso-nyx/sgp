@@ -842,11 +842,11 @@ stateDiagram-v2
 
 #### `parametros` — Parâmetros e Feature Flags
 
-**Responsabilidades:** leitura e escrita de `ParametroSistema` por tenant; `ParametroGlobal` de escopo plataforma; feature flags com avaliação contextual; cache de parâmetros.
+**Responsabilidades:** leitura e escrita de `ParametroSistema` por tenant; `ParametroGlobal` de escopo plataforma; feature flags com avaliação contextual; cache de parâmetros; manutenção de tabelas legais progressivas em `system-parameters.tax-rate`, incluindo IRRF por vigência de competência.
 
-**Entidades:** `parametro_sistema`, `parametro_global`, `feature_flag`.
+**Entidades:** `parametro_sistema`, `parametro_global`, `feature_flag`, `tax_rate`.
 
-**Serviços:** `ParametroSistemaService`, `ParametroGlobalService`, `FeatureFlagService`.
+**Serviços:** `ParametroSistemaService`, `ParametroGlobalService`, `FeatureFlagService`, `TaxRateService`.
 
 **Controladores:**
 
@@ -855,6 +855,8 @@ stateDiagram-v2
 - `GET /api/admin/v1/parametros/globais`
 - `GET /api/admin/v1/feature-flags`
 - `PUT /api/admin/v1/feature-flags/:flag`
+- `GET /api/v1/admin/parametros/tax-rate/irrf`
+- `PUT /api/v1/admin/parametros/tax-rate/irrf`
 
 ---
 

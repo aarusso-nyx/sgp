@@ -3640,21 +3640,30 @@ model CompetencePeriod {
 }
 
 model TaxRate {
-  id            String       @id @default(uuid()) @db.Uuid
-  tenantId      String       @map("tenant_id") @db.Uuid
-  code          String
-  name          String
-  description   String       @default("")
-  scope         String
-  referenceYear Int          @map("reference_year")
-  ratePercent   Decimal      @map("rate_percent") @db.Decimal(18, 6)
-  metadata      Json         @default("{}")
-  status        RecordStatus @default(ACTIVE)
-  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                 String       @id @default(uuid()) @db.Uuid
+  tenantId           String       @map("tenant_id") @db.Uuid
+  code               String
+  name               String
+  description        String       @default("")
+  scope              String
+  referenceYear      Int          @map("reference_year")
+  ratePercent        Decimal      @map("rate_percent") @db.Decimal(18, 6)
+  kind               String       @default("GENERIC")
+  competenceStart    DateTime?    @map("competence_start") @db.Date
+  competenceEnd      DateTime?    @map("competence_end") @db.Date
+  bracketMin         Decimal?     @map("bracket_min") @db.Decimal(14, 2)
+  bracketMax         Decimal?     @map("bracket_max") @db.Decimal(14, 2)
+  rate               Decimal      @default(0) @db.Decimal(18, 6)
+  deductionAmount    Decimal      @default(0) @map("deduction_amount") @db.Decimal(14, 2)
+  dependentDeduction Decimal      @default(0) @map("dependent_deduction") @db.Decimal(14, 2)
+  metadata           Json         @default("{}")
+  status             RecordStatus @default(ACTIVE)
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@unique([tenantId, code])
   @@index([scope, referenceYear])
+  @@index([kind, competenceStart])
   @@index([status])
   @@map("tax_rate")
   @@schema("public")

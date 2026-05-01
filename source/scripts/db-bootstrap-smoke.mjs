@@ -2635,6 +2635,81 @@ $$;
   );
   console.log('[db-smoke] validated FOL-01 rubricas formulas, preview, audit, and RLS');
 
+  await runSqlSnippet(
+    '99-calc02-irrf.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  v_rate_id uuid := gen_random_uuid();
+  visible_count integer;
+  affected_count integer;
+  irrf_amount numeric(14, 2);
+BEGIN
+  GRANT USAGE ON SCHEMA public, payroll_calc TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON public.tax_rate TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'system.tax-rate.read' || chr(10) || 'system.tax-rate.write', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  DELETE FROM public.tax_rate
+  WHERE tenant_id = tenant_a
+    AND code LIKE 'CALC02-SMOKE-%';
+
+  INSERT INTO public.tax_rate (
+    id, tenant_id, code, name, description, scope, reference_year, rate_percent,
+    kind, competence_start, bracket_min, bracket_max, rate, deduction_amount,
+    dependent_deduction, status
+  )
+  VALUES (
+    v_rate_id, tenant_a, 'CALC02-SMOKE-' || left(suffix, 8), 'CALC-02 smoke',
+    'CALC-02 smoke tax-rate RLS row', 'IRRF_SMOKE', 2025, 7.500000, 'IRRF_SMOKE',
+    DATE '2025-01-01', 2259.21, 2826.65, 7.500000, 169.44, 189.59,
+    'ACTIVE'::"RecordStatus"
+  );
+
+  SELECT payroll_calc.compute_irrf(tenant_a, 2500.00, 0, DATE '2025-05-01')
+  INTO irrf_amount;
+  RESET ROLE;
+
+  IF irrf_amount <> 18.06 THEN
+    RAISE EXCEPTION 'Expected CALC-02 IRRF smoke amount 18.06, found %', irrf_amount;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'system.tax-rate.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM public.tax_rate
+  WHERE id = v_rate_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 tax_rate rows from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'system.tax-rate.write', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  UPDATE public.tax_rate
+  SET tenant_id = tenant_b
+  WHERE id = v_rate_id;
+  GET DIAGNOSTICS affected_count = ROW_COUNT;
+  RESET ROLE;
+  IF affected_count <> 0 THEN
+    RAISE EXCEPTION 'Expected cross-tenant tax_rate rewrite to affect 0 rows, affected %', affected_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated CALC-02 IRRF compute function and tax_rate RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

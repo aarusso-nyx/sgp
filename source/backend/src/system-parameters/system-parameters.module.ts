@@ -11,6 +11,8 @@ import {
   SystemParametersController,
 } from './system-parameters.controller';
 import { SystemParametersService } from './system-parameters.service';
+import { TaxRateController } from './tax-rate/tax-rate.controller';
+import { TaxRateService } from './tax-rate/tax-rate.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule],
@@ -19,7 +21,13 @@ import { SystemParametersService } from './system-parameters.service';
     FeatureFlagsController,
     AdminMenusController,
     AdminPlatformController,
+    TaxRateController,
   ],
-  providers: [SystemParametersService, AdminMenusService, AdminPlatformService],
+  providers: [
+    SystemParametersService,
+    AdminMenusService,
+    AdminPlatformService,
+    TaxRateService,
+  ],
 })
 export class SystemParametersModule {}

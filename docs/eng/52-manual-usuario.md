@@ -1803,6 +1803,11 @@ R: Não. O cadastro de vínculo funcional depende de cargos, funções, lotaçõ
 **P: Como confiro a disponibilidade de vagas de um cargo?**
 R: Na lista de cargos, confira o total de vagas e as vagas providas. O sistema exige que o total seja igual à soma de vagas providas e vagas abertas.
 
+### Gestão — Parâmetros de IRRF
+
+**P: Como atualizo a tabela progressiva mensal de IRRF?**
+R: Acesse **Gestão > Parâmetros > Tabela IRRF**, informe a vigência inicial, a vigência final quando existir e importe o CSV com cinco linhas no formato `mínimo;máximo;alíquota;dedução;dedução_dependente`. A última faixa deve ficar sem valor máximo. Ao salvar, o sistema valida a continuidade centavo a centavo das faixas, grava a nova tabela em `public.tax_rate`, registra auditoria e passa a usar a vigência informada no cálculo da rubrica `IRRF`.
+
 ### Previdenciário e recadastramento
 
 **P: O beneficiário fez a prova de vida, mas o status ainda aparece como "Perto do Vencimento".**

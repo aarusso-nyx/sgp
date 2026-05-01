@@ -292,6 +292,22 @@
       "description": "Preview compiled payroll rubric values for an employee and competence."
     },
     {
+      "key": "system.tax-rate.read",
+      "moduleKey": "system",
+      "resourceKey": "tax_rate",
+      "actionKey": "read",
+      "routePattern": "#!/gestao/parametros/irrf",
+      "description": "Read progressive tax-rate tables such as IRRF."
+    },
+    {
+      "key": "system.tax-rate.write",
+      "moduleKey": "system",
+      "resourceKey": "tax_rate",
+      "actionKey": "write",
+      "routePattern": "#!/gestao/parametros/irrf",
+      "description": "Mutate progressive tax-rate tables such as IRRF."
+    },
+    {
       "key": "payroll.formula.read",
       "moduleKey": "payroll",
       "resourceKey": "formula",

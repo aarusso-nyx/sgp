@@ -14,6 +14,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/funcionario/**', 'rh.employee.read'],
   ['#!/gestao/**', 'gestao.read'],
   ['#!/gestao/**', 'gestao.write'],
+  ['#!/gestao/parametros/irrf', 'system.tax-rate.read'],
+  ['#!/gestao/parametros/irrf', 'system.tax-rate.write'],
   ['#!/previdenciario/**', 'previdenciario.read'],
   ['#!/previdenciario/**', 'previdenciario.write'],
   ['#!/recrutamento/**', 'recrutamento.read'],

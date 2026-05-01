@@ -12,8 +12,7 @@ BEGIN
     'user_group_snapshot',
     'menu_item',
     'system_parameter',
-    'document_type',
-    'tax_rate'
+    'document_type'
   ]
   LOOP
     EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', table_name);
@@ -60,6 +59,41 @@ BEGIN
   END LOOP;
 END
 $$;
+
+ALTER TABLE public.tax_rate ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tax_rate FORCE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tax_rate_select ON public.tax_rate;
+DROP POLICY IF EXISTS tax_rate_write ON public.tax_rate;
+CREATE POLICY tax_rate_select ON public.tax_rate
+  FOR SELECT
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY[
+        'gestao.read',
+        'gestao.write',
+        'system.tax-rate.read',
+        'system.tax-rate.write'
+      ])
+    )
+  );
+CREATE POLICY tax_rate_write ON public.tax_rate
+  FOR ALL
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['system.tax-rate.write'])
+    )
+  )
+  WITH CHECK (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['system.tax-rate.write'])
+    )
+  );
 
 ALTER TABLE IF EXISTS public.esocial_event ENABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS public.esocial_event FORCE ROW LEVEL SECURITY;

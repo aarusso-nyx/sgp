@@ -67,6 +67,8 @@ export const PERMISSIONS = [
   'saude.opinion.write',
   'saude.read',
   'saude.write',
+  'system.tax-rate.read',
+  'system.tax-rate.write',
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
