@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 
 import { MasterData, JobPositionRecord } from '../../gestao/services/master-data';
 import {
@@ -16,7 +16,7 @@ import {
   templateUrl: './rubricas.html',
   styleUrl: './rubricas.scss',
 })
-export class Rubricas implements OnInit {
+export class Rubricas implements OnDestroy, OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly rubricasService = inject(RubricasService);
   private readonly masterData = inject(MasterData);
@@ -29,7 +29,17 @@ export class Rubricas implements OnInit {
   error = '';
   message = '';
   previewAmount = '';
+  formulaLintMessages: string[] = [];
   readonly today = '2026-05-01';
+  private readonly subscription = new Subscription();
+  private readonly canonicalAttributes = new Set([
+    'SALARIO_BASE',
+    'CARGA_HORARIA',
+    'DEPENDENTES',
+    'BASE_RPPS',
+    'BASE_IRRF',
+    'TEMPO_SERVICO_ANOS',
+  ]);
 
   readonly form = this.fb.nonNullable.group({
     code: ['', Validators.required],
@@ -45,10 +55,7 @@ export class Rubricas implements OnInit {
     startsOn: [this.today, Validators.required],
     endsOn: [''],
     formulaAlias: [''],
-    formulaExpression: [
-      'base_salary(p_employee_id, make_date(p_year, p_month, 1))',
-      Validators.required,
-    ],
+    formulaExpression: ['SALARIO_BASE', Validators.required],
     esocialCode: [''],
     officialRubricCode: [''],
   });
@@ -74,7 +81,14 @@ export class Rubricas implements OnInit {
   });
 
   ngOnInit(): void {
+    this.subscription.add(
+      this.form.controls.formulaExpression.valueChanges.subscribe(() => this.lintFormula()),
+    );
     this.load();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   load(): void {
@@ -120,6 +134,7 @@ export class Rubricas implements OnInit {
       esocialCode: '',
       officialRubricCode: '',
     });
+    this.lintFormula();
   }
 
   newRubrica(): void {
@@ -136,8 +151,9 @@ export class Rubricas implements OnInit {
       rpps: false,
       employerContribution: false,
       startsOn: this.today,
-      formulaExpression: 'base_salary(p_employee_id, make_date(p_year, p_month, 1))',
+      formulaExpression: 'SALARIO_BASE',
     });
+    this.lintFormula();
   }
 
   addAttribute(): void {
@@ -170,6 +186,20 @@ export class Rubricas implements OnInit {
       },
       error: () => {
         this.error = 'Nao foi possivel validar a formula.';
+      },
+    });
+  }
+
+  recompileNow(): void {
+    if (!this.selected) return;
+    this.rubricasService.recompile(this.selected.id).subscribe({
+      next: (rubrica) => {
+        this.message = 'Formula recompilada.';
+        this.selected = rubrica;
+        this.load();
+      },
+      error: () => {
+        this.error = 'Nao foi possivel recompilar a formula.';
       },
     });
   }
@@ -269,5 +299,22 @@ export class Rubricas implements OnInit {
       officialRubricCode: value.officialRubricCode || null,
       attributes: this.attributes,
     };
+  }
+
+  private lintFormula(): void {
+    const expression = this.form.controls.formulaExpression.value ?? '';
+    const known = new Set([
+      ...this.canonicalAttributes,
+      ...this.attributes.map((attribute) => attribute.name.toUpperCase()),
+      'IF',
+      'MAX',
+      'MIN',
+    ]);
+    const tokens = expression.match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? [];
+    const unknown = tokens
+      .filter((token) => !known.has(token.toUpperCase()))
+      .filter((token) => !['p_employee_id', 'p_year', 'p_month'].includes(token))
+      .filter((token, index, all) => all.indexOf(token) === index);
+    this.formulaLintMessages = unknown.map((token) => `Atributo desconhecido: ${token}`);
   }
 }

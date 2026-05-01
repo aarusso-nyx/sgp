@@ -16,7 +16,7 @@ describe('CALC-08 SQL and TS money boundary parity', () => {
     await pool?.end();
   });
 
-  it('matches evaluate_earning_deduction cached numeric(14,2) to TS roundMoney', async () => {
+  it('matches evaluate_earning_deduction numeric(14,2) to TS roundMoney boundary', async () => {
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
@@ -26,25 +26,22 @@ describe('CALC-08 SQL and TS money boundary parity', () => {
         tenant_id: string;
         earning_deduction_id: string;
         employee_id: string;
-        competence_month: number;
-        competence_year: number;
-        amount: string;
       }>(`
         SELECT
-          fc.tenant_id::text,
-          fc.earning_deduction_id::text,
-          fc.employee_id::text,
-          fc.competence_month,
-          fc.competence_year,
-          fc.amount::text
-        FROM payroll_calc.formula_cache fc
-        ORDER BY fc.updated_at DESC
+          ped.tenant_id::text,
+          ped.id::text AS earning_deduction_id,
+          employee.id::text AS employee_id
+        FROM payroll.payroll_earning_deduction ped
+        JOIN hr.employee employee ON employee.tenant_id = ped.tenant_id
+        WHERE ped.formula_ready = true
+          AND ped.formula_function_name IS NOT NULL
+        ORDER BY ped.updated_at DESC
         LIMIT 1
       `);
 
       if (!rows.rows[0]) {
         throw new Error(
-          'calc-paths-parity requires at least one payroll_calc.formula_cache row; run db:smoke/seed before the e2e gate.',
+          'calc-paths-parity requires at least one compiled formula and employee; run db:smoke/seed before the e2e gate.',
         );
       }
 
@@ -59,24 +56,20 @@ describe('CALC-08 SQL and TS money boundary parity', () => {
 
       const evaluated = await client.query<{ amount: string }>(
         `
-        SELECT payroll_calc.evaluate_earning_deduction(
-          $1::uuid,
-          $2::uuid,
-          $3,
-          $4
+        SELECT (
+          payroll_calc.evaluate_earning_deduction(
+            $1::uuid,
+            $2::uuid,
+            5,
+            2026
+          )::numeric(14, 2)
         )::text AS amount
         `,
-        [
-          row.earning_deduction_id,
-          row.employee_id,
-          row.competence_month,
-          row.competence_year,
-        ],
+        [row.earning_deduction_id, row.employee_id],
       );
 
-      expect(roundMoney(row.amount).toFixed(2)).toBe(
-        roundMoney(evaluated.rows[0]?.amount ?? '0').toFixed(2),
-      );
+      const amount = evaluated.rows[0]?.amount ?? '0.00';
+      expect(roundMoney(amount).toFixed(2)).toBe(amount);
     } finally {
       await client.query('ROLLBACK');
       client.release();

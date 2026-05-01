@@ -26,11 +26,23 @@
 
 .rubricas__actions,
 .rubricas__checks,
-.rubricas__chips {
+.rubricas__chips,
+.rubricas__formula-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   align-items: center;
+}
+
+.rubricas__formula {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.rubricas__lint {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #b45309;
 }
 
 .rubricas__list {

@@ -2113,6 +2113,7 @@ model PayrollEarningDeduction {
   formulaExpression   String?          @map("formula_expression")
   formulaFunctionDdl  String?          @map("formula_function_ddl")
   formulaDependencies String[]         @default([]) @map("formula_dependencies")
+  formulaVersion      Int              @default(1) @map("formula_version")
   formulaReady        Boolean          @default(false) @map("formula_ready")
   formulaError        String?          @map("formula_error")
   createdAt           DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)

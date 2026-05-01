@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
@@ -9,6 +10,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 import { DomainListQueryDto } from '../../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../../common/pagination/paged-response';
 import { DatabaseService } from '../../../database/database.service';
+import { FormulaCompilerService } from '../../../payroll-engine/formula-compiler.service';
 import { PayrollEngineService } from '../../../payroll-engine/payroll-engine.service';
 import {
   JobPositionRubricaMutationDto,
@@ -36,6 +38,7 @@ interface RubricaRow extends QueryResultRow {
   formula_alias: string | null;
   formula_expression: string | null;
   formula_dependencies: string[] | null;
+  formula_version: number;
   formula_ready: boolean;
   formula_error: string | null;
   esocial_code: string | null;
@@ -142,6 +145,8 @@ export class RubricaService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly payrollEngineService: PayrollEngineService,
+    @Optional()
+    private readonly formulaCompilerService?: FormulaCompilerService,
   ) {}
 
   async listRubricas(
@@ -201,11 +206,12 @@ export class RubricaService {
 
   async createRubrica(input: RubricaMutationDto): Promise<RubricaRecord> {
     this.ensureDatabase();
-    return this.databaseService.transaction(async (client) => {
+    const created = await this.databaseService.transaction(async (client) => {
       const row = await this.insertRubrica(client, input);
       await this.replaceAttributes(client, row.id, input.attributes ?? []);
       return this.reloadRubrica(client, row.id);
     });
+    return this.recompileIfFormula(created);
   }
 
   async updateRubrica(
@@ -213,7 +219,7 @@ export class RubricaService {
     input: RubricaMutationDto,
   ): Promise<RubricaRecord> {
     this.ensureDatabase();
-    return this.databaseService.transaction(async (client) => {
+    const updated = await this.databaseService.transaction(async (client) => {
       const rows = await client.query<RubricaRow>(
         `
         UPDATE payroll.payroll_earning_deduction
@@ -244,6 +250,7 @@ export class RubricaService {
       await this.replaceAttributes(client, row.id, input.attributes ?? []);
       return this.reloadRubrica(client, row.id);
     });
+    return this.recompileIfFormula(updated);
   }
 
   async deactivateRubrica(id: string): Promise<RubricaRecord> {
@@ -267,10 +274,31 @@ export class RubricaService {
   async compileFormula(
     input: RubricaCompileDto,
   ): Promise<RubricaCompileResult> {
+    if (this.formulaCompilerService) {
+      const result = await this.formulaCompilerService.validateFormula(
+        input.expression,
+      );
+      return {
+        ready: result.ready,
+        error: result.error,
+        dependencies: result.dependencies,
+      };
+    }
     return this.payrollEngineService.compileAndValidate(
       input.expression,
       input.dependencies ?? [],
     );
+  }
+
+  async recompileRubrica(id: string): Promise<RubricaRecord> {
+    this.ensureDatabase();
+    if (!this.formulaCompilerService) {
+      throw new ServiceUnavailableException(
+        'Formula compiler is not configured',
+      );
+    }
+    await this.formulaCompilerService.compileEarningDeduction(id);
+    return this.getRubrica(id);
   }
 
   async previewRubrica(
@@ -290,16 +318,6 @@ export class RubricaService {
         `,
         [id, input.employeeId, input.competenceMonth, input.competenceYear],
       );
-      await client.query(
-        `
-        DELETE FROM payroll_calc.formula_cache
-        WHERE earning_deduction_id = $1::uuid
-          AND employee_id = $2::uuid
-          AND competence_month = $3::integer
-          AND competence_year = $4::integer
-        `,
-        [id, input.employeeId, input.competenceMonth, input.competenceYear],
-      );
       return result.rows;
     });
     return {
@@ -309,6 +327,15 @@ export class RubricaService {
       amount: rows[0]?.amount ?? null,
       attributes: input.attributes ?? {},
     };
+  }
+
+  private async recompileIfFormula(
+    rubrica: RubricaRecord,
+  ): Promise<RubricaRecord> {
+    if (!rubrica.formulaExpression?.trim() || !this.formulaCompilerService) {
+      return rubrica;
+    }
+    return this.recompileRubrica(rubrica.id);
   }
 
   async listJobPositionRubricas(): Promise<JobPositionRubricaRecord[]> {
@@ -574,6 +601,7 @@ export class RubricaService {
         ped.formula_alias,
         ped.formula_expression,
         ped.formula_dependencies,
+        ped.formula_version,
         ped.formula_ready,
         ped.formula_error,
         ped.esocial_code,

@@ -105,7 +105,7 @@ export class RubricaController {
   }
 
   @Post('compile')
-  @RequirePermission('folha.rubrica.preview')
+  @RequirePermission('payroll.formula.write')
   @ApiOkResponse({ description: 'Validate a payroll rubric formula.' })
   async compileFormula(
     @Req() request: RequestWithContext,
@@ -121,6 +121,30 @@ export class RubricaController {
         metadata: {
           event: 'folha.rubrica.formula_validated',
           ready: result.ready,
+        },
+      },
+    );
+    return result;
+  }
+
+  @Post(':id/recompile')
+  @RequirePermission('payroll.formula.write')
+  @ApiOkResponse({ description: 'Recompile a payroll rubric formula now.' })
+  async recompileFormula(
+    @Req() request: RequestWithContext,
+    @Param('id') id: string,
+  ) {
+    const result = await this.rubricaService.recompileRubrica(id);
+    await this.auditService.auditMutation(
+      request,
+      'PROCESS',
+      'folha.rubrica.formula',
+      {
+        resourceId: id,
+        tableName: 'payroll_calc.formula_cache',
+        metadata: {
+          event: 'folha.rubrica.formula_recompiled',
+          ready: result.formulaReady,
         },
       },
     );

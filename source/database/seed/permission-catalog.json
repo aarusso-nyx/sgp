@@ -292,6 +292,22 @@
       "description": "Preview compiled payroll rubric values for an employee and competence."
     },
     {
+      "key": "payroll.formula.read",
+      "moduleKey": "payroll",
+      "resourceKey": "formula",
+      "actionKey": "read",
+      "routePattern": "/api/v1/payroll-engine/formulas/**",
+      "description": "Read compiled payroll formula definitions and cache metadata."
+    },
+    {
+      "key": "payroll.formula.write",
+      "moduleKey": "payroll",
+      "resourceKey": "formula",
+      "actionKey": "write",
+      "routePattern": "/api/v1/payroll-engine/formulas/**",
+      "description": "Compile, invalidate, and maintain payroll formula definitions."
+    },
+    {
       "key": "avaliacao.read",
       "moduleKey": "avaliacao",
       "resourceKey": "performance",
@@ -608,6 +624,11 @@
       "avaliacao.salary_history.write",
       "folha.read",
       "folha.write",
+      "folha.rubrica.read",
+      "folha.rubrica.write",
+      "folha.rubrica.preview",
+      "payroll.formula.read",
+      "payroll.formula.write",
       "relatorio.generate"
     ],
     "AUDITOR": [
@@ -622,6 +643,8 @@
       "avaliacao.progressao.read",
       "avaliacao.salary_history.read",
       "folha.read",
+      "folha.rubrica.read",
+      "payroll.formula.read",
       "relatorio.read",
       "relatorio.generate",
       "auditoria.read"

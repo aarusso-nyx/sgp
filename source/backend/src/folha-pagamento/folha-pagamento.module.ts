@@ -16,6 +16,8 @@ import {
 import { PayrollOperationsService } from './operations/payroll-operations.service';
 import { PayrollController } from './payroll/payroll.controller';
 import { PayrollService } from './payroll/payroll.service';
+import { FormulaCacheService } from '../payroll-engine/formula-cache.service';
+import { FormulaCompilerService } from '../payroll-engine/formula-compiler.service';
 import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
 
 @Module({
@@ -35,6 +37,8 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
     PayrollOperationsService,
     ESocialService,
     PayrollEngineService,
+    FormulaCompilerService,
+    FormulaCacheService,
   ],
 })
 export class FolhaPagamentoModule {}

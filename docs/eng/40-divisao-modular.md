@@ -959,11 +959,11 @@ DSL (texto_dsl)          → Lexer → Parser → AST → SQLBuilder → SQL (te
 
 **Etapas:**
 
-1. **Lexer:** tokeniza a expressão DSL (operadores aritméticos, funções nativas como `SE()`, `SOMA()`, `REFERENCIA_SALARIAL()`, identificadores de atributos).
+1. **Lexer:** tokeniza a expressão DSL (operadores aritméticos, funções nativas como `IF()`, `MAX()`, `MIN()`, identificadores de atributos e referências a outra rubrica por alias).
 2. **Parser:** produz AST validado (erros de sintaxe com posição).
-3. **Validador semântico:** verifica que todos os atributos referenciados existem na tabela `atributo_formula` e que os tipos são compatíveis.
-4. **SQLBuilder:** percorre o AST e emite SQL parametrizado, substituindo atributos pelo `path_semantico` (ex.: `f.salario_base`, `a.valor_desconto_inss`) e funções DSL por equivalentes SQL.
-5. **Persistência:** `texto_sql_compilado` salvo em `formula.texto_sql_compilado` com versionamento; compilação ocorre apenas em mudança da DSL ou atualização de atributos.
+3. **Validador semântico:** verifica que todos os atributos referenciados existem em `payroll.formula_attribute`, incluindo os canônicos `SALARIO_BASE`, `CARGA_HORARIA`, `DEPENDENTES`, `BASE_RPPS`, `BASE_IRRF` e `TEMPO_SERVICO_ANOS`.
+4. **SQLBuilder:** percorre o AST e emite SQL parametrizado para função `payroll_calc.f_<alias>(p_employee_id, p_month, p_year)`, substituindo atributos por helpers SQL estáveis em `payroll_calc`.
+5. **Persistência:** o SQL compilado é salvo em `payroll_calc.formula_cache(tenant_id, earning_deduction_id, version, compiled_sql, compiled_at)`; alterações de fórmula invalidam a versão anterior e registram `audit_event`.
 
 **Cache de Plano de Cálculo:**
 

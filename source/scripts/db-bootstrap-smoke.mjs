@@ -646,14 +646,12 @@ BEGIN
   INSERT INTO payroll_calc.formula_cache (
     tenant_id,
     earning_deduction_id,
-    employee_id,
-    competence_month,
-    competence_year,
-    amount
+    version,
+    compiled_sql
   )
-  VALUES (tenant_a, earning_a, employee_a, 1, 2026, 10.00)
-  ON CONFLICT (earning_deduction_id, employee_id, competence_month, competence_year)
-  DO UPDATE SET tenant_id = EXCLUDED.tenant_id, amount = EXCLUDED.amount, updated_at = now();
+  VALUES (tenant_a, earning_a, 1, 'SELECT 10.00::numeric')
+  ON CONFLICT (tenant_id, earning_deduction_id, version)
+  DO UPDATE SET compiled_sql = EXCLUDED.compiled_sql, compiled_at = now();
 
   PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
   PERFORM set_config('app.current_permissions', 'rh.read', true);
@@ -666,7 +664,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
-  PERFORM set_config('app.current_permissions', 'folha.read', true);
+  PERFORM set_config('app.current_permissions', 'payroll.formula.read', true);
   SET LOCAL ROLE sgp_smoke_rls;
   SELECT count(*) INTO visible_count FROM payroll_calc.formula_cache WHERE earning_deduction_id = earning_a;
   RESET ROLE;
@@ -719,7 +717,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
-  PERFORM set_config('app.current_permissions', 'folha.read', true);
+  PERFORM set_config('app.current_permissions', 'payroll.formula.read', true);
   BEGIN
     SET LOCAL ROLE sgp_smoke_rls;
     PERFORM payroll_calc.evaluate_earning_deduction(earning_a, employee_a, 1, 2026);
@@ -2327,6 +2325,9 @@ DECLARE
   invalid_ready boolean;
   invalid_error text;
   compile_result jsonb;
+  previous_version integer;
+  stale_cache_count integer;
+  invalidation_audit_count integer;
 BEGIN
   GRANT USAGE ON SCHEMA hr, payroll, payroll_calc, public TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON payroll.payroll_earning_deduction TO sgp_smoke_rls;
@@ -2407,6 +2408,8 @@ BEGIN
     'folha.rubrica.read' || chr(10) ||
     'folha.rubrica.write' || chr(10) ||
     'folha.rubrica.preview' || chr(10) ||
+    'payroll.formula.read' || chr(10) ||
+    'payroll.formula.write' || chr(10) ||
     'folha.read' || chr(10) ||
     'folha.write' || chr(10) ||
     'avaliacao.salary_history.read' || chr(10) ||
@@ -2503,6 +2506,27 @@ BEGIN
   SELECT payroll_calc.evaluate_earning_deduction(rubrica_id, v_employee_id, 5, 2026)
   INTO preview_amount;
 
+  SELECT formula_version INTO previous_version
+  FROM payroll.payroll_earning_deduction
+  WHERE id = rubrica_id;
+
+  UPDATE payroll.payroll_earning_deduction
+  SET formula_expression = 'base_salary(p_employee_id, make_date(p_year, p_month, 1)) + 1'
+  WHERE id = rubrica_id;
+
+  SELECT count(*) INTO stale_cache_count
+  FROM payroll_calc.formula_cache
+  WHERE tenant_id = tenant_a
+    AND earning_deduction_id = rubrica_id
+    AND version = previous_version;
+
+  SELECT count(*) INTO invalidation_audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND resource_type = 'payroll.formula'
+    AND resource_id = rubrica_id::text
+    AND metadata->>'event' = 'payroll.formula.cache_invalidated';
+
   INSERT INTO payroll.payroll_earning_deduction (
     id,
     tenant_id,
@@ -2567,6 +2591,12 @@ BEGIN
   END IF;
   IF compile_result->>'ready' <> 'false' OR compile_result->>'error' IS NULL THEN
     RAISE EXCEPTION 'Expected compile_formula invalid expression result, found %', compile_result;
+  END IF;
+  IF stale_cache_count <> 0 THEN
+    RAISE EXCEPTION 'Expected edited formula to invalidate previous formula_cache version, found % stale rows', stale_cache_count;
+  END IF;
+  IF invalidation_audit_count = 0 THEN
+    RAISE EXCEPTION 'Expected edited formula to append payroll.formula cache invalidation audit_event';
   END IF;
   IF audit_count <> 1 THEN
     RAISE EXCEPTION 'Expected folha.rubrica.created audit_event, found %', audit_count;

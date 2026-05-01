@@ -68,6 +68,21 @@
         <mat-label>Formula</mat-label>
         <textarea matInput rows="5" formControlName="formulaExpression"></textarea>
       </mat-form-field>
+      <section class="rubricas__formula rubricas__wide" aria-label="Formula">
+        <div class="rubricas__formula-actions">
+          <button mat-stroked-button type="button" (click)="validateFormula()">
+            <mat-icon>rule</mat-icon>
+            Validar
+          </button>
+          <button mat-stroked-button type="button" (click)="recompileNow()" [disabled]="!selected">
+            <mat-icon>sync</mat-icon>
+            Recompilar agora
+          </button>
+        </div>
+        <ul class="rubricas__lint" *ngIf="formulaLintMessages.length > 0">
+          <li *ngFor="let lint of formulaLintMessages">{{ lint }}</li>
+        </ul>
+      </section>
       <mat-form-field appearance="outline">
         <mat-label>Codigo eSocial</mat-label>
         <input matInput formControlName="esocialCode" />

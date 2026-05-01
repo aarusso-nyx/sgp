@@ -94,6 +94,13 @@ export class RubricasService {
     return this.api.post('v1/folha/rubrica/compile', { expression });
   }
 
+  recompile(id: string): Observable<RubricaRecord> {
+    return this.api.post<RubricaRecord, Record<string, never>>(
+      `v1/folha/rubrica/${id}/recompile`,
+      {},
+    );
+  }
+
   preview(
     id: string,
     body: {

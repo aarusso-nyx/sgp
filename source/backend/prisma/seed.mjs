@@ -118,6 +118,69 @@ async function upsertProfilePermissions(client, payload, profileIdByCode, permis
   }
 }
 
+async function upsertCanonicalFormulaAttributes(client) {
+  const attributes = [
+    ['SALARIO_BASE', 'Salario base vigente do servidor', 'decimal', '0'],
+    ['CARGA_HORARIA', 'Carga horaria diaria do turno do servidor', 'decimal', '0'],
+    ['DEPENDENTES', 'Quantidade de dependentes de IRRF ativos', 'int', '0'],
+    ['BASE_RPPS', 'Base previdenciaria RPPS da competencia', 'decimal', '0'],
+    ['BASE_IRRF', 'Base de IRRF da competencia', 'decimal', '0'],
+    ['TEMPO_SERVICO_ANOS', 'Tempo de servico em anos completos', 'int', '0'],
+  ];
+
+  for (const [code, description, valueType, defaultValue] of attributes) {
+    await client.query(
+      `
+      INSERT INTO payroll.formula_attribute (
+        tenant_id,
+        code,
+        description,
+        name,
+        data_type,
+        value_type,
+        default_value,
+        required,
+        source_scope,
+        expression_hint,
+        status
+      )
+      SELECT
+        public.sgp_current_tenant_uuid(),
+        payload.code,
+        payload.description,
+        payload.code,
+        payload.value_type,
+        payload.value_type::payroll.formula_attribute_value_type,
+        payload.default_value,
+        true,
+        'canonical',
+        payload.code,
+        'ACTIVE'::"RecordStatus"
+      FROM (
+        SELECT
+          $1::text AS code,
+          $2::text AS description,
+          $3::text AS value_type,
+          $4::text AS default_value
+      ) AS payload
+      ON CONFLICT (tenant_id, code) DO UPDATE
+      SET
+        description = EXCLUDED.description,
+        name = EXCLUDED.name,
+        data_type = EXCLUDED.data_type,
+        value_type = EXCLUDED.value_type,
+        default_value = EXCLUDED.default_value,
+        required = EXCLUDED.required,
+        source_scope = EXCLUDED.source_scope,
+        expression_hint = EXCLUDED.expression_hint,
+        status = EXCLUDED.status,
+        updated_at = now()
+      `,
+      [code, description, valueType, defaultValue],
+    );
+  }
+}
+
 async function upsertMasterData(client, payload) {
   const md = payload.masterData ?? {};
 
@@ -532,6 +595,7 @@ async function main() {
     const profileIdByCode = await upsertAccessProfiles(client, permissions);
     const permissionIdByKey = await upsertPermissions(client, permissions);
     await upsertProfilePermissions(client, permissions, profileIdByCode, permissionIdByKey);
+    await upsertCanonicalFormulaAttributes(client);
     await upsertMasterData(client, masterData);
     await upsertFixtureScenarios(client, fixtures, profileIdByCode);
     await client.query('COMMIT');

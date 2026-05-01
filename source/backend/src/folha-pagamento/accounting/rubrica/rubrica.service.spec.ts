@@ -113,12 +113,9 @@ describe('RubricaService', () => {
     expect(created.attributes[0].name).toBe('percentual');
   });
 
-  it('previews through evaluate_earning_deduction and clears cache', async () => {
+  it('previews through evaluate_earning_deduction', async () => {
     const client = {
-      query: jest
-        .fn()
-        .mockResolvedValueOnce({ rows: [{ amount: '1234.56' }] })
-        .mockResolvedValueOnce({ rows: [] }),
+      query: jest.fn().mockResolvedValueOnce({ rows: [{ amount: '1234.56' }] }),
     };
     const transaction = jest.fn(
       async <T>(callback: (clientArg: typeof client) => Promise<T>) =>
@@ -148,11 +145,6 @@ describe('RubricaService', () => {
         5,
         2026,
       ],
-    );
-    expect(client.query).toHaveBeenNthCalledWith(
-      2,
-      expect.stringContaining('DELETE FROM payroll_calc.formula_cache'),
-      expect.any(Array),
     );
     expect(preview.amount).toBe('1234.56');
   });

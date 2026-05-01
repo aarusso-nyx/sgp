@@ -81,6 +81,17 @@ BEGIN
     ALTER TABLE payroll.payroll_earning_deduction
       ADD COLUMN formula_error text;
   END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'payroll'
+      AND table_name = 'payroll_earning_deduction'
+      AND column_name = 'formula_version'
+  ) THEN
+    ALTER TABLE payroll.payroll_earning_deduction
+      ADD COLUMN formula_version integer NOT NULL DEFAULT 1;
+  END IF;
 END;
 $$;
 
@@ -92,23 +103,81 @@ CREATE UNIQUE INDEX IF NOT EXISTS payroll_earning_deduction_formula_function_nam
   ON payroll.payroll_earning_deduction (tenant_id, formula_function_name)
   WHERE formula_function_name IS NOT NULL;
 
-CREATE TABLE IF NOT EXISTS payroll_calc.formula_cache (
-  tenant_id uuid NOT NULL DEFAULT public.sgp_current_tenant_uuid() REFERENCES public.tenant(id) ON DELETE RESTRICT,
+DO $$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY[
+    'payroll_earning_deduction',
+    'formula_attribute',
+    'job_position_earning'
+  ]
+  LOOP
+    EXECUTE format('ALTER TABLE payroll.%I ENABLE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('ALTER TABLE payroll.%I FORCE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', 'fol01_' || table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', 'fol01_' || table_name || '_write', table_name);
+    EXECUTE format(
+      'CREATE POLICY %I ON payroll.%I FOR SELECT USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''folha.rubrica.read'', ''folha.rubrica.write'', ''folha.rubrica.preview'', ''payroll.formula.read'', ''payroll.formula.write''])))',
+      'fol01_' || table_name || '_select',
+      table_name
+    );
+    EXECUTE format(
+      'CREATE POLICY %I ON payroll.%I FOR ALL USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''folha.rubrica.write'', ''payroll.formula.write'']))) WITH CHECK (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''folha.rubrica.write'', ''payroll.formula.write''])))',
+      'fol01_' || table_name || '_write',
+      table_name
+    );
+  END LOOP;
+END
+$$;
+
+DROP TABLE IF EXISTS payroll_calc.formula_cache CASCADE;
+CREATE TABLE payroll_calc.formula_cache (
+  tenant_id uuid NOT NULL REFERENCES public.tenant(id) ON DELETE RESTRICT,
   earning_deduction_id uuid NOT NULL REFERENCES payroll.payroll_earning_deduction(id) ON DELETE CASCADE,
-  employee_id uuid NOT NULL REFERENCES hr.employee(id) ON DELETE CASCADE,
-  competence_month integer NOT NULL CHECK (competence_month BETWEEN 1 AND 12),
-  competence_year integer NOT NULL,
-  amount numeric(14, 2) NOT NULL,
-  signal smallint NOT NULL DEFAULT 0 CHECK (signal IN (-1, 0, 1)),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  PRIMARY KEY (earning_deduction_id, employee_id, competence_month, competence_year)
+  version integer NOT NULL CHECK (version > 0),
+  compiled_sql text NOT NULL,
+  compiled_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (tenant_id, earning_deduction_id, version)
 );
 
 CREATE INDEX IF NOT EXISTS formula_cache_updated_at_idx
-  ON payroll_calc.formula_cache (updated_at DESC);
+  ON payroll_calc.formula_cache (compiled_at DESC);
 
 CREATE INDEX IF NOT EXISTS formula_cache_tenant_updated_at_idx
-  ON payroll_calc.formula_cache (tenant_id, updated_at DESC);
+  ON payroll_calc.formula_cache (tenant_id, compiled_at DESC);
+
+ALTER TABLE payroll_calc.formula_cache ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payroll_calc.formula_cache FORCE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS p_formula_cache_rw ON payroll_calc.formula_cache;
+DROP POLICY IF EXISTS calc01_formula_cache_select ON payroll_calc.formula_cache;
+DROP POLICY IF EXISTS calc01_formula_cache_write ON payroll_calc.formula_cache;
+CREATE POLICY calc01_formula_cache_select ON payroll_calc.formula_cache
+  FOR SELECT
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['payroll.formula.read', 'payroll.formula.write'])
+    )
+  );
+CREATE POLICY calc01_formula_cache_write ON payroll_calc.formula_cache
+  FOR ALL
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['payroll.formula.write'])
+    )
+  )
+  WITH CHECK (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['payroll.formula.write'])
+    )
+  );
 
 CREATE OR REPLACE FUNCTION payroll_calc.base_salary(
   p_employee_id uuid
@@ -121,6 +190,60 @@ AS $$
   FROM hr.employee e
   LEFT JOIN hr.salary_reference sr ON sr.id = e.salary_reference_id
   WHERE e.id = p_employee_id;
+$$;
+
+DROP FUNCTION IF EXISTS payroll_calc.base_salary(uuid, date);
+CREATE OR REPLACE FUNCTION payroll_calc.base_salary(
+  p_employee_id uuid,
+  p_competence date
+)
+RETURNS numeric
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT payroll_calc.base_salary(p_employee_id);
+$$;
+
+CREATE OR REPLACE FUNCTION payroll_calc.workload_hours(
+  p_employee_id uuid
+)
+RETURNS numeric
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT COALESCE(shift.daily_hours, 0)
+  FROM hr.employee employee
+  LEFT JOIN hr.shift shift ON shift.id = employee.shift_id
+  WHERE employee.id = p_employee_id;
+$$;
+
+CREATE OR REPLACE FUNCTION payroll_calc.dependent_count(
+  p_employee_id uuid
+)
+RETURNS numeric
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT count(*)::numeric
+  FROM hr.employee_dependent dependent
+  WHERE dependent.employee_id = p_employee_id
+    AND dependent.income_tax_dependent = true;
+$$;
+
+CREATE OR REPLACE FUNCTION payroll_calc.service_years(
+  p_employee_id uuid,
+  p_competence date
+)
+RETURNS numeric
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT COALESCE(
+    floor(EXTRACT(YEAR FROM age(p_competence, employee.hired_on))),
+    0
+  )
+  FROM hr.employee employee
+  WHERE employee.id = p_employee_id;
 $$;
 
 CREATE OR REPLACE FUNCTION payroll_calc.days_in_month(
@@ -186,53 +309,6 @@ AS $$
   END;
 $$;
 
-CREATE OR REPLACE FUNCTION payroll_calc.on_formula_cache_upsert()
-RETURNS trigger
-LANGUAGE plpgsql
-AS $$
-BEGIN
-  NEW.updated_at := now();
-
-  SELECT
-    COALESCE(NEW.tenant_id, ped.tenant_id),
-    CASE
-      WHEN ped.kind::text = 'EARNING' THEN 1
-      WHEN ped.kind::text = 'DEDUCTION' THEN -1
-      ELSE 0
-    END
-  INTO NEW.tenant_id, NEW.signal
-  FROM payroll.payroll_earning_deduction ped
-  WHERE ped.id = NEW.earning_deduction_id;
-
-  IF NEW.tenant_id IS NULL THEN
-    RAISE EXCEPTION 'formula_cache tenant_id could not be derived for earning_deduction_id %', NEW.earning_deduction_id
-      USING ERRCODE = '23502';
-  END IF;
-
-  IF EXISTS (
-    SELECT 1
-    FROM hr.employee employee
-    WHERE employee.id = NEW.employee_id
-      AND employee.tenant_id <> NEW.tenant_id
-  ) THEN
-    RAISE EXCEPTION 'formula_cache tenant mismatch for employee_id %', NEW.employee_id
-      USING ERRCODE = '42501';
-  END IF;
-
-  IF NEW.signal IS NULL THEN
-    NEW.signal := 0;
-  END IF;
-
-  RETURN NEW;
-END;
-$$;
-
-DROP TRIGGER IF EXISTS trg_formula_cache_upsert ON payroll_calc.formula_cache;
-CREATE TRIGGER trg_formula_cache_upsert
-BEFORE INSERT OR UPDATE ON payroll_calc.formula_cache
-FOR EACH ROW
-EXECUTE FUNCTION payroll_calc.on_formula_cache_upsert();
-
 CREATE OR REPLACE FUNCTION payroll_calc.compile_formula_expression()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -252,7 +328,7 @@ DECLARE
   v_ddl text;
   v_smoke numeric;
   v_builtin_fns text[] := ARRAY['abs', 'ceil', 'floor', 'sqrt', 'round', 'make_date'];
-  v_core_fns text[] := ARRAY['base_salary', 'days_in_month', 'worked_days', 'absence_days', 'proportional_ratio'];
+  v_core_fns text[] := ARRAY['base_salary', 'workload_hours', 'dependent_count', 'service_years', 'days_in_month', 'worked_days', 'absence_days', 'proportional_ratio'];
 BEGIN
   -- Keep metadata deterministic for rows without formula expressions.
   IF NEW.formula_expression IS NULL OR btrim(NEW.formula_expression) = '' THEN
@@ -285,6 +361,16 @@ BEGIN
   NEW.formula_alias := lower(regexp_replace(NEW.formula_alias, '[^a-zA-Z0-9_]+', '_', 'g'));
   v_function_name := format('f_%s', NEW.formula_alias);
   NEW.formula_function_name := v_function_name;
+  IF TG_OP = 'UPDATE'
+    AND (
+      OLD.formula_expression IS DISTINCT FROM NEW.formula_expression
+      OR OLD.formula_alias IS DISTINCT FROM NEW.formula_alias
+    )
+  THEN
+    NEW.formula_version := COALESCE(OLD.formula_version, 0) + 1;
+  ELSIF NEW.formula_version IS NULL OR NEW.formula_version < 1 THEN
+    NEW.formula_version := 1;
+  END IF;
 
   SELECT array_agg(ped.formula_alias)
   INTO v_aliases
@@ -374,39 +460,11 @@ BEGIN
     DECLARE
       v_result numeric;
     BEGIN
-      SELECT fc.amount
-      INTO v_result
-      FROM %I.formula_cache fc
-      WHERE fc.earning_deduction_id = %L::uuid
-        AND fc.tenant_id = public.sgp_current_tenant_uuid()
-        AND fc.employee_id = p_employee_id
-        AND fc.competence_month = p_month
-        AND fc.competence_year = p_year;
-
-      IF FOUND THEN
-        RETURN v_result;
-      END IF;
-
       v_result := %s;
-
-      INSERT INTO %I.formula_cache (
-        tenant_id,
-        earning_deduction_id,
-        employee_id,
-        competence_month,
-        competence_year,
-        amount
-      )
-      SELECT ped.tenant_id, ped.id, p_employee_id, p_month, p_year, v_result
-      FROM payroll.payroll_earning_deduction ped
-      WHERE ped.id = %L::uuid
-      ON CONFLICT (earning_deduction_id, employee_id, competence_month, competence_year)
-      DO UPDATE SET amount = EXCLUDED.amount, updated_at = now();
-
       RETURN v_result;
     END;
     $fn$;
-  $ddl$, v_schema, v_function_name, v_schema, NEW.id, v_expression_compiled, v_schema, NEW.id);
+  $ddl$, v_schema, v_function_name, v_expression_compiled);
 
   BEGIN
     EXECUTE v_ddl;
@@ -446,7 +504,7 @@ DECLARE
   v_aliases text[] := ARRAY[]::text[];
   v_invalid_tokens text[] := ARRAY[]::text[];
   v_builtin_fns text[] := ARRAY['abs', 'ceil', 'floor', 'sqrt', 'round', 'make_date'];
-  v_core_fns text[] := ARRAY['base_salary', 'days_in_month', 'worked_days', 'absence_days', 'proportional_ratio'];
+  v_core_fns text[] := ARRAY['base_salary', 'workload_hours', 'dependent_count', 'service_years', 'days_in_month', 'worked_days', 'absence_days', 'proportional_ratio'];
 BEGIN
   IF p_expression IS NULL OR btrim(p_expression) = '' THEN
     RETURN jsonb_build_object(
@@ -509,6 +567,89 @@ ON payroll.payroll_earning_deduction
 FOR EACH ROW
 WHEN (NEW.formula_expression IS NOT NULL AND btrim(NEW.formula_expression) <> '')
 EXECUTE FUNCTION payroll_calc.compile_formula_expression();
+
+CREATE OR REPLACE FUNCTION payroll_calc.on_earning_formula_cache_materialize()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = payroll_calc, payroll, public, pg_catalog
+AS $$
+BEGIN
+  IF NEW.formula_ready = true AND NEW.formula_function_ddl IS NOT NULL THEN
+    INSERT INTO payroll_calc.formula_cache (
+      tenant_id,
+      earning_deduction_id,
+      version,
+      compiled_sql,
+      compiled_at
+    )
+    VALUES (
+      NEW.tenant_id,
+      NEW.id,
+      NEW.formula_version,
+      NEW.formula_function_ddl,
+      now()
+    )
+    ON CONFLICT (tenant_id, earning_deduction_id, version) DO UPDATE
+    SET compiled_sql = EXCLUDED.compiled_sql,
+        compiled_at = EXCLUDED.compiled_at;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_earning_formula_cache_materialize ON payroll.payroll_earning_deduction;
+CREATE TRIGGER trg_earning_formula_cache_materialize
+AFTER INSERT OR UPDATE
+ON payroll.payroll_earning_deduction
+FOR EACH ROW
+EXECUTE FUNCTION payroll_calc.on_earning_formula_cache_materialize();
+
+CREATE OR REPLACE FUNCTION payroll_calc.on_earning_formula_cache_invalidate()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = payroll_calc, payroll, public, pg_catalog
+AS $$
+BEGIN
+  IF OLD.formula_expression IS DISTINCT FROM NEW.formula_expression
+    OR OLD.formula_alias IS DISTINCT FROM NEW.formula_alias
+  THEN
+    DELETE FROM payroll_calc.formula_cache
+    WHERE tenant_id = OLD.tenant_id
+      AND earning_deduction_id = OLD.id
+      AND version = OLD.formula_version;
+
+    PERFORM public.sgp_append_audit_event(
+      'UPDATE',
+      'payroll.formula',
+      OLD.id::text,
+      NULL::uuid,
+      NULLIF(current_setting('app.current_user_sub', true), ''),
+      NULLIF(current_setting('app.current_login', true), ''),
+      'payroll_calc.formula_cache',
+      NULLIF(current_setting('app.request_id', true), ''),
+      jsonb_build_object(
+        'event', 'payroll.formula.cache_invalidated',
+        'earningDeductionId', OLD.id::text,
+        'previousVersion', OLD.formula_version,
+        'currentVersion', NEW.formula_version
+      ),
+      NULL::text,
+      NULL::text,
+      NULL::text
+    );
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_earning_formula_cache_invalidate ON payroll.payroll_earning_deduction;
+CREATE TRIGGER trg_earning_formula_cache_invalidate
+AFTER UPDATE
+ON payroll.payroll_earning_deduction
+FOR EACH ROW
+EXECUTE FUNCTION payroll_calc.on_earning_formula_cache_invalidate();
 
 CREATE OR REPLACE FUNCTION payroll_calc.on_earning_before_delete()
 RETURNS trigger
@@ -604,19 +745,6 @@ DECLARE
   v_function_name text;
   v_amount numeric;
 BEGIN
-  SELECT fc.amount
-  INTO v_amount
-  FROM payroll_calc.formula_cache fc
-  WHERE fc.earning_deduction_id = p_earning_deduction_id
-    AND fc.tenant_id = public.sgp_current_tenant_uuid()
-    AND fc.employee_id = p_employee_id
-    AND fc.competence_month = p_month
-    AND fc.competence_year = p_year;
-
-  IF FOUND THEN
-    RETURN v_amount;
-  END IF;
-
   SELECT ped.formula_function_name
   INTO v_function_name
   FROM payroll.payroll_earning_deduction ped

@@ -31,6 +31,8 @@ export const PERMISSIONS = [
   'gestao.read',
   'gestao.write',
   'iam.read',
+  'payroll.formula.read',
+  'payroll.formula.write',
   'portal.profile.read',
   'portal.profile.write',
   'previdenciario.read',

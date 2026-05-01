@@ -11,6 +11,8 @@ import { StandardExceptionFilter } from '../common/errors/standard-exception.fil
 import { RequestIdMiddleware } from '../common/request-id/request-id.middleware';
 import { validateEnvironment } from '../config/environment';
 import { DatabaseModule } from '../database/database.module';
+import { FormulaCacheService } from './formula-cache.service';
+import { FormulaCompilerService } from './formula-compiler.service';
 import { PayrollEngineController } from './payroll-engine.controller';
 import { PayrollEngineService } from './payroll-engine.service';
 
@@ -22,6 +24,8 @@ import { PayrollEngineService } from './payroll-engine.service';
   controllers: [PayrollEngineController],
   providers: [
     PayrollEngineService,
+    FormulaCompilerService,
+    FormulaCacheService,
     {
       provide: APP_PIPE,
       useFactory: () =>
