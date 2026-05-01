@@ -219,7 +219,35 @@ export class PortalService {
   }
 
   async getMyCareer(actor: AuthenticatedActor | undefined) {
-    return this.careerPlanService.trailForActor(actor);
+    const employee = await this.loadEmployee(actor);
+    const trail = (await this.careerPlanService.trailForActor(actor)) as Record<
+      string,
+      unknown
+    >;
+    const history = await this.databaseService.query<QueryResultRow>(
+      `
+      WITH current_level AS (
+        SELECT srl.id
+        FROM hr.employee e
+        JOIN hr.job_position jp ON jp.id = e.job_position_id
+        JOIN hr.salary_range_level srl ON srl.salary_range_id = jp.salary_range_id
+        WHERE e.id = $1::uuid
+        ORDER BY srl.class_number, srl.level_number_fol02
+        LIMIT 1
+      )
+      SELECT
+        history.vigencia_inicio AS "vigenciaInicio",
+        history.vigencia_fim AS "vigenciaFim",
+        history.vencimento_basico::text AS "vencimentoBasico",
+        history.motivo,
+        history.lei_referencia AS "leiReferencia"
+      FROM hr.salary_level_history history
+      JOIN current_level ON current_level.id = history.salary_range_level_id
+      ORDER BY history.vigencia_inicio DESC
+      `,
+      [employee.id],
+    );
+    return { ...trail, salaryHistory: history };
   }
 
   async requestProfileChange(

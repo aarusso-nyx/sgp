@@ -107,7 +107,6 @@ BEGIN
     'job_function',
     'function_nature',
     'salary_range',
-    'salary_reference',
     'functional_status',
     'employment_link',
     'contract_type',
@@ -199,6 +198,32 @@ BEGIN
           )
       $sql$,
       table_name || '_write',
+      table_name
+    );
+  END LOOP;
+END
+$$;
+
+DO $$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY['salary_reference', 'salary_level_history']
+  LOOP
+    EXECUTE format('ALTER TABLE hr.%I ENABLE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('ALTER TABLE hr.%I FORCE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', table_name || '_write', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', 'fol05_' || table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON hr.%I', 'fol05_' || table_name || '_write', table_name);
+    EXECUTE format(
+      'CREATE POLICY %I ON hr.%I FOR SELECT USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''avaliacao.salary_history.read'', ''avaliacao.salary_history.write''])))',
+      'fol05_' || table_name || '_select',
+      table_name
+    );
+    EXECUTE format(
+      'CREATE POLICY %I ON hr.%I FOR ALL USING (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''avaliacao.salary_history.write'']))) WITH CHECK (public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY[''avaliacao.salary_history.write''])))',
+      'fol05_' || table_name || '_write',
       table_name
     );
   END LOOP;
@@ -450,8 +475,7 @@ BEGIN
     'employee_transit_benefit',
     'administrative_process',
     'administrative_process_function',
-    'employee_complement_data',
-    'salary_level_history'
+    'employee_complement_data'
   ]
   LOOP
     EXECUTE format('ALTER TABLE hr.%I ENABLE ROW LEVEL SECURITY', table_name);

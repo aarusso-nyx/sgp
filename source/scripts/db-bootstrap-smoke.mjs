@@ -1638,6 +1638,215 @@ $$;
   );
   console.log('[db-smoke] validated FOL-04 PCCS links, trail data, and RLS');
 
+  await runSqlSnippet(
+    '99-fol05-bases-historicas.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  salary_range_id uuid := gen_random_uuid();
+  salary_level_id uuid := gen_random_uuid();
+  history_id uuid := gen_random_uuid();
+  visible_count integer;
+  audit_count integer;
+  march_salary numeric(14,2);
+  july_salary numeric(14,2);
+  next_salary numeric(14,2);
+BEGIN
+  GRANT USAGE ON SCHEMA avaliacao, hr, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range_level TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_level_history TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_reference TO sgp_smoke_rls;
+  GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'avaliacao.salary_history.write' || chr(10) ||
+    'avaliacao.salary_history.read' || chr(10) ||
+    'gestao.cargo.write' || chr(10) ||
+    'gestao.cargo.read' || chr(10) ||
+    'auditoria.read',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+  PERFORM set_config('app.request_id', 'fol05-smoke-' || suffix, true);
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO hr.salary_range (id, tenant_id, code, name, starts_on)
+  VALUES (
+    salary_range_id,
+    tenant_a,
+    'FOL05-SR-' || left(suffix, 8),
+    'FOL-05 smoke salary range',
+    DATE '2025-01-01'
+  );
+
+  INSERT INTO hr.salary_range_level (
+    id,
+    tenant_id,
+    salary_range_id,
+    code,
+    name,
+    level_number,
+    class_number,
+    level_number_fol02,
+    base_salary,
+    amount_override
+  )
+  VALUES (
+    salary_level_id,
+    tenant_a,
+    salary_range_id,
+    'FOL05-LVL-' || left(suffix, 8),
+    'FOL-05 smoke salary level',
+    1,
+    1,
+    1,
+    1000.00,
+    1000.00
+  );
+
+  INSERT INTO hr.salary_level_history (
+    id,
+    tenant_id,
+    employee_id,
+    salary_range_level_id,
+    adjustment_amount,
+    effective_on,
+    vigencia_inicio,
+    vigencia_fim,
+    vencimento_basico,
+    motivo,
+    lei_referencia
+  )
+  VALUES (
+    history_id,
+    tenant_a,
+    NULL,
+    salary_level_id,
+    0,
+    DATE '2025-01-01',
+    DATE '2025-01-01',
+    DATE '2025-06-30',
+    1000.00,
+    'reajuste_data_base',
+    'Lei smoke 2025'
+  );
+
+  INSERT INTO hr.salary_level_history (
+    tenant_id,
+    employee_id,
+    salary_range_level_id,
+    adjustment_amount,
+    effective_on,
+    vigencia_inicio,
+    vigencia_fim,
+    vencimento_basico,
+    motivo,
+    lei_referencia
+  )
+  VALUES (
+    tenant_a,
+    NULL,
+    salary_level_id,
+    100.00,
+    DATE '2025-07-01',
+    DATE '2025-07-01',
+    NULL,
+    1100.00,
+    'reajuste_data_base',
+    'Lei smoke 2025/2'
+  );
+
+  SELECT avaliacao.fn_get_vencimento_vigente(salary_level_id, DATE '2025-03-01') INTO march_salary;
+  SELECT avaliacao.fn_get_vencimento_vigente(salary_level_id, DATE '2025-07-01') INTO july_salary;
+  SELECT avaliacao.fn_get_vencimento_vigente(salary_level_id, DATE '2026-01-01') INTO next_salary;
+
+  BEGIN
+    INSERT INTO hr.salary_level_history (
+      tenant_id,
+      employee_id,
+      salary_range_level_id,
+      adjustment_amount,
+      effective_on,
+      vigencia_inicio,
+      vigencia_fim,
+      vencimento_basico,
+      motivo,
+      lei_referencia
+    )
+    VALUES (
+      tenant_a,
+      NULL,
+      salary_level_id,
+      50.00,
+      DATE '2025-03-01',
+      DATE '2025-03-01',
+      DATE '2025-12-31',
+      1050.00,
+      'correcao',
+      'Lei smoke overlap'
+    );
+    RAISE EXCEPTION 'Expected overlapping salary history insert to fail';
+  EXCEPTION WHEN exclusion_violation THEN
+    NULL;
+  END;
+
+  PERFORM public.sgp_append_audit_event(
+    'UPDATE',
+    'avaliacao.salary_history',
+    history_id::text,
+    NULL::uuid,
+    NULLIF(current_setting('app.current_user_sub', true), ''),
+    NULLIF(current_setting('app.current_login', true), ''),
+    'hr.salary_level_history',
+    NULLIF(current_setting('app.request_id', true), ''),
+    jsonb_build_object('event', 'avaliacao.salary_history.mass_adjustment', 'salaryRangeLevelId', salary_level_id),
+    NULL::text,
+    NULL::text,
+    NULL::text
+  );
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND resource_type = 'avaliacao.salary_history'
+    AND resource_id = history_id::text;
+  RESET ROLE;
+
+  IF march_salary <> 1000.00 THEN
+    RAISE EXCEPTION 'Expected March salary 1000.00, found %', march_salary;
+  END IF;
+  IF july_salary <> 1100.00 OR next_salary <> 1100.00 THEN
+    RAISE EXCEPTION 'Expected active salary 1100.00, found July % and next %', july_salary, next_salary;
+  END IF;
+  IF audit_count <> 1 THEN
+    RAISE EXCEPTION 'Expected salary history audit_event, found %', audit_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'avaliacao.salary_history.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM hr.salary_level_history
+  WHERE salary_range_level_id = salary_level_id;
+  RESET ROLE;
+
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 salary history rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated FOL-05 salary history lookup, overlap, audit, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

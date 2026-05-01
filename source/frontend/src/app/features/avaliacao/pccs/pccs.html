@@ -66,4 +66,39 @@
       </button>
     </section>
   </div>
+
+  <section class="pccs__adjustment" aria-labelledby="salary-adjustment-title">
+    <header>
+      <h2 id="salary-adjustment-title">Reajuste em Massa</h2>
+    </header>
+    <form [formGroup]="adjustmentForm" (ngSubmit)="applyAdjustment()" class="pccs__form">
+      <label>
+        <span>Percentual</span>
+        <input formControlName="percentual" />
+      </label>
+      <label>
+        <span>Vigencia inicial</span>
+        <input type="date" formControlName="vigenciaInicio" />
+      </label>
+      <label>
+        <span>Lei referencia</span>
+        <input formControlName="leiReferencia" />
+      </label>
+      <label>
+        <span>Faixa salarial</span>
+        <input formControlName="salaryRangeId" />
+      </label>
+      <button mat-stroked-button color="primary" type="submit">
+        <mat-icon>percent</mat-icon>
+        Aplicar
+      </button>
+    </form>
+
+    <ol class="pccs__history" *ngIf="adjustment">
+      <li *ngFor="let level of adjustment.affectedLevels">
+        <span>{{ level.salaryRangeLevelId }}</span>
+        <strong>{{ level.baseSalary }}</strong>
+      </li>
+    </ol>
+  </section>
 </section>

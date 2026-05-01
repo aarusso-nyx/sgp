@@ -6,6 +6,8 @@ export const PERMISSIONS = [
   'avaliacao.pccs.write',
   'avaliacao.probation.write',
   'avaliacao.read',
+  'avaliacao.salary_history.read',
+  'avaliacao.salary_history.write',
   'avaliacao.write',
   'consultas.read',
   'convenio.read',

@@ -276,6 +276,22 @@
       "description": "Mutate PCCS career plans and job-position links."
     },
     {
+      "key": "avaliacao.salary_history.read",
+      "moduleKey": "avaliacao",
+      "resourceKey": "salary_history",
+      "actionKey": "read",
+      "routePattern": "/api/v1/avaliacao/salary-history/**",
+      "description": "Read historical salary bases."
+    },
+    {
+      "key": "avaliacao.salary_history.write",
+      "moduleKey": "avaliacao",
+      "resourceKey": "salary_history",
+      "actionKey": "write",
+      "routePattern": "/api/v1/avaliacao/salary-history/**",
+      "description": "Apply mass salary-base adjustments."
+    },
+    {
       "key": "consultas.read",
       "moduleKey": "consultas",
       "resourceKey": "managerial",
@@ -476,6 +492,8 @@
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",
+      "avaliacao.salary_history.read",
+      "avaliacao.salary_history.write",
       "avaliacao.probation.write",
       "relatorio.generate"
     ],
@@ -488,6 +506,8 @@
       "rh.employee.read",
       "rh.dependent.read",
       "avaliacao.pccs.read",
+      "avaliacao.salary_history.read",
+      "avaliacao.salary_history.write",
       "folha.read",
       "folha.write",
       "relatorio.generate"
@@ -501,6 +521,7 @@
       "rh.employee.read",
       "rh.history.read",
       "avaliacao.pccs.read",
+      "avaliacao.salary_history.read",
       "folha.read",
       "relatorio.read",
       "relatorio.generate",

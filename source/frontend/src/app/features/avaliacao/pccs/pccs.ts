@@ -17,6 +17,11 @@ interface CareerPlan {
   jobPositionIds: string[];
 }
 
+interface SalaryAdjustmentResult {
+  affectedCount: number;
+  affectedLevels: { salaryRangeLevelId: string; baseSalary: string }[];
+}
+
 @Component({
   selector: 'app-avaliacao-pccs',
   standalone: true,
@@ -40,9 +45,16 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
     jobPositionIds: [''],
     salaryRangeId: [''],
   });
+  readonly adjustmentForm = this.formBuilder.group({
+    percentual: ['', [Validators.required]],
+    vigenciaInicio: ['', [Validators.required]],
+    leiReferencia: ['', [Validators.required]],
+    salaryRangeId: ['', [Validators.required]],
+  });
 
   plans: CareerPlan[] = [];
   selected?: CareerPlan;
+  adjustment?: SalaryAdjustmentResult;
   error = '';
   message = '';
 
@@ -112,5 +124,32 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
         this.error = 'Nao foi possivel salvar o PCCS.';
       },
     });
+  }
+
+  applyAdjustment(): void {
+    if (this.adjustmentForm.invalid) {
+      this.adjustmentForm.markAllAsTouched();
+      return;
+    }
+    const value = this.adjustmentForm.getRawValue();
+    const payload = {
+      percentual: String(value.percentual),
+      vigenciaInicio: value.vigenciaInicio,
+      leiReferencia: value.leiReferencia,
+      escopo: { salaryRangeId: value.salaryRangeId },
+    };
+    this.http
+      .post<SalaryAdjustmentResult>('/api/v1/avaliacao/salary-history/reajuste-massa', payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (result) => {
+          this.adjustment = result;
+          this.message = 'Reajuste aplicado.';
+          this.load();
+        },
+        error: () => {
+          this.error = 'Nao foi possivel aplicar o reajuste.';
+        },
+      });
   }
 }

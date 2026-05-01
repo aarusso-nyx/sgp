@@ -210,9 +210,17 @@ Parâmetros de camada `ParametroGlobal` (escopo: tenant). Controlam a comunicaç
 | `esocial_ignorados` | json | tenant | `[]` | `GESTAO.PARAMETRO.ATUALIZAR` | Lista de códigos de eventos que este tenant não envia (ex.: `["S-1080","S-1070"]`) | `PARAMETRO_GLOBAL.UPDATE` | JSON array de strings; cada item deve ser código de evento eSocial válido no leiaute S-1.2 |
 | `esocial_leiaute_versao` | string | sistema | `S-1.2` | `GESTAO.PARAMETRO.ATUALIZAR` (superadmin) | Versão do leiaute eSocial em uso por toda a instância | `PARAMETRO_SISTEMA.UPDATE` | Não vazio; controlado pelo operador SaaS |
 
+### 2.4 Folha — reajustes salariais
+
+Parâmetro de camada `ParametroGlobal` (escopo: tenant). Controla o dia/mês padrão de aplicação de reajustes anuais e mantém referência auditável ao último reajuste de tabela aplicado.
+
+| Chave | Tipo | Escopo | Default | Papel alterador | Efeito | Evento de auditoria | Validação |
+|---|---|---|---|---|---|---|---|
+| `reajuste.data_base_padrao` | json | tenant | `{ "month": 1, "day": 1, "lastAdjustmentId": null }` | `avaliacao.salary_history.write` | Define a data-base padrão para reajuste em massa e aponta para o último registro em `hr.salary_level_history` criado pela API de reajuste. | `avaliacao.salary_history.mass_adjustment` | `month` entre 1 e 12; `day` entre 1 e 31; `lastAdjustmentId` nulo ou UUID de histórico. |
+
 ---
 
-### 2.4 Previdenciário
+### 2.5 Previdenciário
 
 Parâmetros de camada `ParametroGlobal` e `ParametroNegocio` (escopo: tenant e tenant+domínio).
 

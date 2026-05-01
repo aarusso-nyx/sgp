@@ -22,4 +22,15 @@
       <small>{{ step.baseSalary }}</small>
     </li>
   </ol>
+
+  <section class="career__history" aria-labelledby="salary-history-title">
+    <h2 id="salary-history-title">Historico de vencimentos</h2>
+    <ol>
+      <li *ngFor="let item of trail?.salaryHistory">
+        <span>{{ item.vigenciaInicio | date: 'yyyy-MM-dd' }}</span>
+        <strong>{{ item.vencimentoBasico }}</strong>
+        <small>{{ item.leiReferencia }}</small>
+      </li>
+    </ol>
+  </section>
 </section>

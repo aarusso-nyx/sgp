@@ -15,6 +15,13 @@ interface CareerTrail {
   name: string | null;
   current: CareerTrailStep | null;
   steps: CareerTrailStep[];
+  salaryHistory: {
+    vigenciaInicio: string;
+    vigenciaFim: string | null;
+    vencimentoBasico: string;
+    motivo: string;
+    leiReferencia: string;
+  }[];
 }
 
 @Component({

@@ -27,6 +27,15 @@ enum JobPositionCategory {
   @@schema("hr")
 }
 
+enum SalaryHistoryReason {
+  reajuste_data_base
+  correcao
+  reestruturacao
+
+  @@map("salary_history_reason")
+  @@schema("hr")
+}
+
 enum UserStatus {
   ACTIVE
   INACTIVE
@@ -741,6 +750,10 @@ model SalaryReference {
   code        String
   description String
   amount      Decimal      @default(0) @db.Decimal(14, 2)
+  vigenciaInicio DateTime  @default(dbgenerated("'1900-01-01'::date")) @map("vigencia_inicio") @db.Date
+  vigenciaFim    DateTime? @map("vigencia_fim") @db.Date
+  motivo      SalaryHistoryReason @default(reajuste_data_base)
+  leiReferencia String     @default("") @map("lei_referencia")
   status      RecordStatus @default(ACTIVE)
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -1921,19 +1934,27 @@ model EmployeeComplementData {
 model SalaryLevelHistory {
   id                String   @id @default(uuid()) @db.Uuid
   tenantId          String   @map("tenant_id") @db.Uuid
-  employeeId        String   @map("employee_id") @db.Uuid
+  employeeId        String?  @map("employee_id") @db.Uuid
   salaryReferenceId String?  @map("salary_reference_id") @db.Uuid
+  salaryRangeLevelId String? @map("salary_range_level_id") @db.Uuid
   levelCode         String?  @map("level_code")
   levelDescription  String?  @map("level_description")
   adjustmentAmount  Decimal  @default(0) @map("adjustment_amount") @db.Decimal(14, 2)
   effectiveOn       DateTime @map("effective_on") @db.Date
+  vigenciaInicio    DateTime @map("vigencia_inicio") @db.Date
+  vigenciaFim       DateTime? @map("vigencia_fim") @db.Date
+  vencimentoBasico  Decimal  @map("vencimento_basico") @db.Decimal(14, 2)
+  motivo            SalaryHistoryReason @default(reajuste_data_base)
+  leiReferencia     String   @default("") @map("lei_referencia")
   createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  employee        Employee         @relation(fields: [employeeId], references: [id])
+  employee        Employee?        @relation(fields: [employeeId], references: [id])
   salaryReference SalaryReference? @relation(fields: [salaryReferenceId], references: [id])
+  salaryRangeLevel SalaryRangeLevel? @relation(fields: [salaryRangeLevelId], references: [id])
 
   @@index([employeeId, effectiveOn])
   @@index([salaryReferenceId])
+  @@index([tenantId, salaryRangeLevelId, vigenciaInicio])
   @@map("salary_level_history")
   @@schema("hr")
 }
@@ -1957,6 +1978,7 @@ model SalaryRangeLevel {
 
   salaryRange     SalaryRange      @relation(fields: [salaryRangeId], references: [id])
   salaryReference SalaryReference? @relation(fields: [salaryReferenceId], references: [id])
+  salaryHistory   SalaryLevelHistory[]
 
   @@unique([tenantId, salaryRangeId, code])
   @@unique([tenantId, salaryRangeId, classNumber, fol02LevelNumber])

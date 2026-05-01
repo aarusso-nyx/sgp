@@ -59,6 +59,35 @@
   text-align: left;
 }
 
+.pccs__adjustment {
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid #d6dbe4;
+  padding-top: 16px;
+}
+
+.pccs__adjustment h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.pccs__history {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pccs__history li {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  border: 1px solid #d6dbe4;
+  border-radius: 6px;
+  padding: 10px;
+}
+
 .pccs__node--active {
   outline: 2px solid #2563eb;
 }
