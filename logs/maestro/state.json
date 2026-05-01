@@ -75,6 +75,15 @@
       "started_at": "2026-05-01T00:20:01-03:00",
       "completed_at": "2026-05-01T00:36:23-03:00",
       "retries": 0
+    },
+    "08-hr-08-estagio-probatorio-historico": {
+      "status": "completed",
+      "effort": "low",
+      "branch": "slice/08-hr-08-estagio-probatorio-historico",
+      "commit": "9bf203aa400018b74a91b821069dea574d3cccd1",
+      "started_at": "2026-05-01T11:22:24-03:00",
+      "completed_at": "2026-05-01T11:38:04-03:00",
+      "retries": 0
     }
   },
   "current_wave": 6,
