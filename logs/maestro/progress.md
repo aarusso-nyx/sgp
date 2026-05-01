@@ -44,3 +44,5 @@ W12 ✗ 24-calc-04 (medium → high retry failed: permission catalog drift and e
 W12 ✓ 24-calc-04 (1 slice, medium→high + manual recovery, gates passed, commit 829d028) — completeness 26.2% → 26.2%
 W12 ✗ 25-calc-05 (medium → high retry failed: db:smoke vacation_record audit tenant context) — recovered manually
 W12 ✓ 25-calc-05 (1 slice, medium→high + manual recovery, gates passed, commit 3f82a6f) — completeness 26.2% → 26.2%; Wave 12 complete
+W13 ✗ 26-calc-09 (high → xhigh retry failed: lint unused recalculated after migration immutability repair) — recovered manually
+W13 ✓ 26-calc-09 (1 slice, high→xhigh + manual recovery, gates passed, commit 0b9430a) — completeness 26.2% → 26.2%

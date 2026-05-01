@@ -306,6 +306,21 @@
       "previous_failure": "logs/maestro/25-calc-05-ferias-folha.failure.md",
       "failure_log": "logs/maestro/25-calc-05-ferias-folha.failure.md",
       "recovery": "manual smoke audit tenant context repair after high retry failure"
+    },
+    "26-calc-09-reprocessamento-idempotencia": {
+      "status": "completed",
+      "effort": "xhigh",
+      "branch": "slice/26-calc-09-reprocessamento-idempotencia",
+      "commit": "0b9430a",
+      "started_at": "2026-05-01T19:27:09-03:00",
+      "retry_started_at": "2026-05-01T19:40:07-03:00",
+      "completed_at": "2026-05-01T19:57:36-03:00",
+      "retries": 1,
+      "agent": "019de5b3-3ef8-71e3-8d15-85a6cc22b9ba",
+      "previous_agent": "019de5a7-59ff-7be3-8b9d-0cb24bdf33c7",
+      "previous_failure": "logs/maestro/26-calc-09-reprocessamento-idempotencia.failure.md",
+      "failure_log": "logs/maestro/26-calc-09-reprocessamento-idempotencia.failure.md",
+      "recovery": "manual migration deduplication, vacation job reprocessing, active-view security invoker, and test alignment after xhigh retry failure"
     }
   },
   "current_wave": 13,
