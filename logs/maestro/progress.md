@@ -36,3 +36,5 @@ W11 ✗ 20-calc-02 (medium → high retry failed: db:smoke P2002 unique constrai
 W11 ✓ 20-calc-02 (1 slice, medium→high + manual recovery, gates passed, commit 2c0cd24) — completeness 26.2% → 26.2%
 W11 ✗ 21-calc-03 (medium → high retry failed: e2e RPPS returned 0.00 under RLS and bypass audit did not increase) — recovered manually
 W11 ✓ 21-calc-03 (1 slice, medium→high + manual recovery, gates passed, commit 07491d4) — completeness 26.2% → 26.2%
+W11 ✗ 22-calc-06 (medium → high retry failed: admin catalog count stale after Teto Remuneratório route) — recovered manually
+W11 ✓ 22-calc-06 (1 slice, medium→high + manual recovery, gates passed, commit 75d0deb) — completeness 26.2% → 26.2%

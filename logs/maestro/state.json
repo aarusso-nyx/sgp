@@ -246,6 +246,21 @@
       "previous_failure": "logs/maestro/21-calc-03-rpps-progressivo.failure.md",
       "failure_log": "logs/maestro/21-calc-03-rpps-progressivo.failure.md",
       "recovery": "manual security-definer RPPS function, effective-table lookup, and smoke permission repair after high retry failure"
+    },
+    "22-calc-06-teto-remuneratorio": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/22-calc-06-teto-remuneratorio",
+      "commit": "75d0debb04e99ff7eaf83e4cff54038fdba7066b",
+      "started_at": "2026-05-01T18:12:34-03:00",
+      "retry_started_at": "2026-05-01T18:21:48-03:00",
+      "completed_at": "2026-05-01T18:26:39-03:00",
+      "retries": 1,
+      "agent": "019de56b-338b-78c2-a149-a9f10c0bfa92",
+      "previous_agent": "019de562-c876-7111-8032-356930157433",
+      "previous_failure": "logs/maestro/22-calc-06-teto-remuneratorio.failure.md",
+      "failure_log": "logs/maestro/22-calc-06-teto-remuneratorio.failure.md",
+      "recovery": "manual admin catalog assertion and CALC-08 parity fixture repair after high retry failure"
     }
   },
   "current_wave": 11,
