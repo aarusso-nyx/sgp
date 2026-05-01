@@ -321,6 +321,21 @@
       "previous_failure": "logs/maestro/26-calc-09-reprocessamento-idempotencia.failure.md",
       "failure_log": "logs/maestro/26-calc-09-reprocessamento-idempotencia.failure.md",
       "recovery": "manual migration deduplication, vacation job reprocessing, active-view security invoker, and test alignment after xhigh retry failure"
+    },
+    "27-calc-10-simulacao-dry-run": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/27-calc-10-simulacao-dry-run",
+      "commit": "0f6074901f51c17466f9d4d596dc847b9cde0b45",
+      "started_at": "2026-05-01T19:58:56-03:00",
+      "retry_started_at": "2026-05-01T20:11:06-03:00",
+      "completed_at": "2026-05-01T20:23:38-03:00",
+      "retries": 1,
+      "agent": "019de5cf-ac53-7e82-9a27-bfbede179f34",
+      "previous_agent": "019de5c4-a6f1-7d41-a548-dd32bc44d0e5",
+      "previous_failure": "logs/maestro/27-calc-10-simulacao-dry-run.failure.md",
+      "failure_log": "logs/maestro/27-calc-10-simulacao-dry-run.failure.md",
+      "recovery": "manual simulation override migration repair, IRRF compatibility restore, audit coverage, and tenant-scoped dry-run persistence guard after high retry failure"
     }
   },
   "current_wave": 13,
