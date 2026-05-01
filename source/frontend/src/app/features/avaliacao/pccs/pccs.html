@@ -1,0 +1,69 @@
+<section class="pccs" aria-labelledby="pccs-title">
+  <header class="pccs__header">
+    <div>
+      <p>Avaliacao</p>
+      <h1 id="pccs-title">PCCS</h1>
+    </div>
+    <button mat-flat-button color="primary" type="button" (click)="save()">
+      <mat-icon>save</mat-icon>
+      Salvar
+    </button>
+  </header>
+
+  <p class="pccs__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="pccs__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="pccs__layout">
+    <form [formGroup]="form" (ngSubmit)="save()" class="pccs__form">
+      <label>
+        <span>Nome</span>
+        <input formControlName="name" />
+      </label>
+      <label>
+        <span>Lei instituidora</span>
+        <input formControlName="institutingLaw" />
+      </label>
+      <label>
+        <span>Vigencia inicial</span>
+        <input type="date" formControlName="startsOn" />
+      </label>
+      <label>
+        <span>Vigencia final</span>
+        <input type="date" formControlName="endsOn" />
+      </label>
+      <label>
+        <span>Classes</span>
+        <input type="number" min="1" formControlName="classCount" />
+      </label>
+      <label>
+        <span>Referencias</span>
+        <input type="number" min="1" formControlName="referenceCount" />
+      </label>
+      <label>
+        <span>Cargos vinculados</span>
+        <input formControlName="jobPositionIds" />
+      </label>
+      <label>
+        <span>Faixa salarial</span>
+        <input formControlName="salaryRangeId" />
+      </label>
+      <label class="pccs__wide">
+        <span>Regra de progressao</span>
+        <textarea rows="8" formControlName="progressionRule"></textarea>
+      </label>
+    </form>
+
+    <section class="pccs__tree" aria-label="Arvore PCCS">
+      <button
+        mat-button
+        type="button"
+        *ngFor="let plan of plans"
+        (click)="select(plan)"
+        [class.pccs__node--active]="plan.id === selected?.id"
+      >
+        <strong>{{ plan.name }}</strong>
+        <span>{{ plan.classCount }} classes · {{ plan.referenceCount }} referencias</span>
+      </button>
+    </section>
+  </div>
+</section>

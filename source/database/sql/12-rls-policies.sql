@@ -229,6 +229,63 @@ BEGIN
 END
 $$;
 
+CREATE SCHEMA IF NOT EXISTS avaliacao;
+
+DO $$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY['career_plan', 'career_plan_job_position']
+  LOOP
+    IF to_regclass(format('avaliacao.%I', table_name)) IS NULL THEN
+      CONTINUE;
+    END IF;
+
+    EXECUTE format('ALTER TABLE avaliacao.%I ENABLE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('ALTER TABLE avaliacao.%I FORCE ROW LEVEL SECURITY', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON avaliacao.%I', table_name || '_select', table_name);
+    EXECUTE format(
+      $sql$
+        CREATE POLICY %I ON avaliacao.%I
+          FOR SELECT
+          USING (
+            public.sgp_bypass_rls()
+            OR (
+              public.sgp_tenant_matches(tenant_id)
+              AND public.sgp_has_any_permission(ARRAY['avaliacao.pccs.read', 'avaliacao.pccs.write'])
+            )
+          )
+      $sql$,
+      table_name || '_select',
+      table_name
+    );
+    EXECUTE format('DROP POLICY IF EXISTS %I ON avaliacao.%I', table_name || '_write', table_name);
+    EXECUTE format(
+      $sql$
+        CREATE POLICY %I ON avaliacao.%I
+          FOR ALL
+          USING (
+            public.sgp_bypass_rls()
+            OR (
+              public.sgp_tenant_matches(tenant_id)
+              AND public.sgp_has_any_permission(ARRAY['avaliacao.pccs.write'])
+            )
+          )
+          WITH CHECK (
+            public.sgp_bypass_rls()
+            OR (
+              public.sgp_tenant_matches(tenant_id)
+              AND public.sgp_has_any_permission(ARRAY['avaliacao.pccs.write'])
+            )
+          )
+      $sql$,
+      table_name || '_write',
+      table_name
+    );
+  END LOOP;
+END
+$$;
+
 DROP POLICY IF EXISTS vacation_type_select ON hr.vacation_type;
 DROP POLICY IF EXISTS vacation_type_write ON hr.vacation_type;
 DROP POLICY IF EXISTS p_vacation_type_select ON hr.vacation_type;

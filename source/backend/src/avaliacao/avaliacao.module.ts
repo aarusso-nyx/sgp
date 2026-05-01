@@ -5,12 +5,15 @@ import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
 import { AvaliacaoController } from './avaliacao.controller';
 import { AvaliacaoService } from './avaliacao.service';
+import { CareerPlanController } from './career-plan/career-plan.controller';
+import { CareerPlanService } from './career-plan/career-plan.service';
 import { ProbationController } from './probation.controller';
 import { ProbationService } from './probation.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
-  controllers: [AvaliacaoController, ProbationController],
-  providers: [AvaliacaoService, ProbationService],
+  controllers: [AvaliacaoController, CareerPlanController, ProbationController],
+  providers: [AvaliacaoService, CareerPlanService, ProbationService],
+  exports: [CareerPlanService],
 })
 export class AvaliacaoModule {}

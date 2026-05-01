@@ -1496,6 +1496,148 @@ $$;
   );
   console.log('[db-smoke] validated FOL-02 cargos, salary matrix, audit, and RLS');
 
+  await runSqlSnippet(
+    '99-fol04-plano-carreira.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  career_plan_id uuid := gen_random_uuid();
+  salary_range_id uuid := gen_random_uuid();
+  salary_level_id uuid := gen_random_uuid();
+  job_position_id uuid := gen_random_uuid();
+  visible_count integer;
+  dangling_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA avaliacao, hr, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON avaliacao.career_plan TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON avaliacao.career_plan_job_position TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.salary_range_level TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.job_position TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'avaliacao.pccs.write' || chr(10) || 'avaliacao.pccs.read' || chr(10) || 'gestao.cargo.write',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO avaliacao.career_plan (
+    id,
+    tenant_id,
+    name,
+    instituting_law,
+    starts_on,
+    class_count,
+    reference_count,
+    progression_rule
+  )
+  VALUES (
+    career_plan_id,
+    tenant_a,
+    'FOL-04 smoke PCCS ' || left(suffix, 8),
+    'Lei smoke 2026',
+    DATE '2026-01-01',
+    2,
+    3,
+    '# Regra de progressao'
+  );
+
+  INSERT INTO hr.salary_range (id, tenant_id, code, name, starts_on, career_plan_id)
+  VALUES (
+    salary_range_id,
+    tenant_a,
+    'FOL04-SR-' || left(suffix, 8),
+    'FOL-04 smoke salary range',
+    DATE '2026-01-01',
+    career_plan_id
+  );
+
+  INSERT INTO hr.salary_range_level (
+    id,
+    tenant_id,
+    salary_range_id,
+    code,
+    name,
+    level_number,
+    class_number,
+    level_number_fol02,
+    base_salary,
+    amount_override
+  )
+  VALUES (
+    salary_level_id,
+    tenant_a,
+    salary_range_id,
+    'FOL04-LVL-' || left(suffix, 8),
+    'FOL-04 smoke salary level',
+    1,
+    1,
+    1,
+    2345.67,
+    2345.67
+  );
+
+  INSERT INTO hr.job_position (
+    id,
+    tenant_id,
+    code,
+    name,
+    category,
+    legal_regime,
+    creation_law,
+    vacancies_count,
+    salary_range_id
+  )
+  VALUES (
+    job_position_id,
+    tenant_a,
+    'FOL04-JOB-' || left(suffix, 8),
+    'FOL-04 smoke job position',
+    'efetivo',
+    'estatutario',
+    'Lei smoke 2026',
+    1,
+    salary_range_id
+  );
+
+  INSERT INTO avaliacao.career_plan_job_position (career_plan_id, job_position_id, tenant_id)
+  VALUES (career_plan_id, job_position_id, tenant_a);
+
+  SELECT count(*) INTO dangling_count
+  FROM avaliacao.career_plan_job_position cpj
+  JOIN hr.salary_range sr ON sr.career_plan_id = cpj.career_plan_id
+  WHERE sr.id IS NULL;
+  RESET ROLE;
+
+  IF dangling_count <> 0 THEN
+    RAISE EXCEPTION 'Expected 0 dangling PCCS salary-range links, found %', dangling_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'avaliacao.pccs.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM avaliacao.career_plan
+  WHERE id = career_plan_id;
+  RESET ROLE;
+
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 career_plan rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated FOL-04 PCCS links, trail data, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

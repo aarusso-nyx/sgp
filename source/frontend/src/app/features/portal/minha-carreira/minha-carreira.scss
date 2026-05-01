@@ -1,0 +1,49 @@
+.career {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+}
+
+.career header p {
+  margin: 0 0 4px;
+  color: #5f6673;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.career header h1 {
+  margin: 0;
+}
+
+.career__current {
+  display: grid;
+  gap: 4px;
+  border-left: 4px solid #15803d;
+  padding: 12px 16px;
+}
+
+.career__steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.career__steps li {
+  display: grid;
+  gap: 4px;
+  border: 1px solid #d6dbe4;
+  border-radius: 8px;
+  min-height: 92px;
+  padding: 12px;
+}
+
+.career__step--current {
+  border-color: #15803d;
+  box-shadow: inset 0 0 0 1px #15803d;
+}
+
+.career__error {
+  color: #b91c1c;
+}

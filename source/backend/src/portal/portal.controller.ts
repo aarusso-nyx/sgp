@@ -77,6 +77,15 @@ export class PortalController {
     return this.portalService.getMyJob(actor);
   }
 
+  @Get('v1/portal/minha-carreira')
+  @RequirePermission('portal.profile.read')
+  @ApiOkResponse({
+    description: 'Authenticated employee PCCS career progression trail.',
+  })
+  minhaCarreira(@CurrentActor() actor: AuthenticatedActor | undefined) {
+    return this.portalService.getMyCareer(actor);
+  }
+
   @Put('v1/portal/meus-dados/:section')
   @RequirePermission('portal.profile.write')
   @AuditMutation({

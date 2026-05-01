@@ -1,0 +1,25 @@
+<section class="career" aria-labelledby="career-title">
+  <header>
+    <p>Portal do servidor</p>
+    <h1 id="career-title">Minha Carreira</h1>
+  </header>
+
+  <p class="career__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="career__current" *ngIf="trail?.current">
+    <span>{{ trail?.name }}</span>
+    <strong
+      >Classe {{ trail?.current?.classNumber }} · Referencia
+      {{ trail?.current?.referenceNumber }}</strong
+    >
+    <small>{{ trail?.current?.jobPositionName }} · {{ trail?.current?.baseSalary }}</small>
+  </div>
+
+  <ol class="career__steps" aria-label="Trilha de progressao">
+    <li *ngFor="let step of trail?.steps" [class.career__step--current]="step.current">
+      <span>Classe {{ step.classNumber }}</span>
+      <strong>Referencia {{ step.referenceNumber }}</strong>
+      <small>{{ step.baseSalary }}</small>
+    </li>
+  </ol>
+</section>

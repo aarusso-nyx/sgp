@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
+import { CareerPlanService } from '../avaliacao/career-plan/career-plan.service';
 import { AuthenticatedActor } from '../auth/auth.types';
 import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../common/pagination/paged-response';
@@ -81,7 +82,10 @@ interface IdRow extends QueryResultRow {
 
 @Injectable()
 export class PortalService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly careerPlanService: CareerPlanService,
+  ) {}
 
   currentSession(actor: AuthenticatedActor | undefined) {
     return {
@@ -212,6 +216,10 @@ export class PortalService {
       nivel: row?.level_number ?? null,
       vencimentoBasico: row?.base_salary ?? null,
     };
+  }
+
+  async getMyCareer(actor: AuthenticatedActor | undefined) {
+    return this.careerPlanService.trailForActor(actor);
   }
 
   async requestProfileChange(

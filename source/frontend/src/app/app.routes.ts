@@ -51,6 +51,17 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'avaliacao/pccs',
+        loadComponent: () => import('./features/avaliacao/pccs/pccs').then((m) => m.AvaliacaoPccs),
+      },
+      {
+        path: 'portal/minha-carreira',
+        loadComponent: () =>
+          import('./features/portal/minha-carreira/minha-carreira').then(
+            (m) => m.PortalMinhaCarreira,
+          ),
+      },
+      {
         path: 'saude/pericia',
         loadComponent: () => import('./features/saude/pericia/pericia').then((m) => m.SaudePericia),
       },

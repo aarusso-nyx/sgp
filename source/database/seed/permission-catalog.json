@@ -260,6 +260,22 @@
       "description": "Create statutory probation evaluations."
     },
     {
+      "key": "avaliacao.pccs.read",
+      "moduleKey": "avaliacao",
+      "resourceKey": "pccs",
+      "actionKey": "read",
+      "routePattern": "/api/v1/avaliacao/career-plan/**",
+      "description": "Read PCCS career plans and progression trails."
+    },
+    {
+      "key": "avaliacao.pccs.write",
+      "moduleKey": "avaliacao",
+      "resourceKey": "pccs",
+      "actionKey": "write",
+      "routePattern": "/api/v1/avaliacao/career-plan/**",
+      "description": "Mutate PCCS career plans and job-position links."
+    },
+    {
       "key": "consultas.read",
       "moduleKey": "consultas",
       "resourceKey": "managerial",
@@ -458,6 +474,8 @@
       "saude.appointment.write",
       "saude.opinion.write",
       "avaliacao.read",
+      "avaliacao.pccs.read",
+      "avaliacao.pccs.write",
       "avaliacao.probation.write",
       "relatorio.generate"
     ],
@@ -469,6 +487,7 @@
       "rh.read",
       "rh.employee.read",
       "rh.dependent.read",
+      "avaliacao.pccs.read",
       "folha.read",
       "folha.write",
       "relatorio.generate"
@@ -481,6 +500,7 @@
       "rh.read",
       "rh.employee.read",
       "rh.history.read",
+      "avaliacao.pccs.read",
       "folha.read",
       "relatorio.read",
       "relatorio.generate",
