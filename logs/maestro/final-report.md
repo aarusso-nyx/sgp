@@ -1,11 +1,11 @@
 # Maestro Final Report
 
-Completed at: 2026-05-02T10:20:00Z
+Last updated at: 2026-05-02T10:35:00Z
 
 ## Scope
 
 - Resume directive scope: slices 43..84.
-- State file coverage: 85/85 prompt files marked completed.
+- State file coverage after verification: 82/85 prompt files completed; 3 prompt rows pending.
 - Active subagents: none.
 - Parked slices: none.
 - Pushed: no.
@@ -15,7 +15,13 @@ Completed at: 2026-05-02T10:20:00Z
 - Slices 43..84 were advanced and committed on `integration/phase-6-9-12`.
 - Final slice commit: `0e7a3f9` (`slice(ponto-10-reconhecimento-facial): close facial recognition`).
 - Final bookkeeping commit before this report: `5eb1950` (`chore(maestro): record final slice closure`).
-- Pre-resume rows `38-es-09-retorno-parser-status-sync`, `41-bank-02-cnab240-retorno`, and `42-bank-04-pensao-alimenticia` had no matching `slice(...)` commit in local git history; they were recorded as completed only from the explicit resume directive that slices 00..42 were already merged.
+- Pre-resume rows `38-es-09-retorno-parser-status-sync`, `41-bank-02-cnab240-retorno`, and `42-bank-04-pensao-alimenticia` had no matching `slice(...)` commit in local git history. A follow-up verification against prompt deliverables, repository artifacts, and live database objects found they are not complete; state was corrected back to `pending`.
+
+## Pending After Verification
+
+- `38-es-09-retorno-parser-status-sync`: no ES-09 migration, `response_classification` / `event_retry_schedule` tables, retorno parser/sync services, frontend retornos UI, ES-09 tests, or docs were found.
+- `41-bank-02-cnab240-retorno`: no BANK-02 migration, `payment_return_file` / `payment_return_detail` tables, CNAB240 return parser/process services, retorno UI, BANK-02 tests, or docs were found.
+- `42-bank-04-pensao-alimenticia`: only the older/basic `hr.employee_alimony` model exists; no BANK-04 migration extensions/history, alimony deduction service, CNAB alimony segment builder, dedicated frontend, BANK-04 tests, or docs were found.
 
 ## Gates
 
@@ -30,5 +36,5 @@ Final maestro defense gate passed against `DATABASE_URL=postgresql://aarusso@loc
 ## Completeness
 
 - Frozen audit baseline in `audit/05-metrics.md`: 26.2%.
-- Implementation-plan completion after this run: 85/85 prompts completed in `logs/maestro/state.json`.
+- Implementation-plan completion after verification: 82/85 prompts completed in `logs/maestro/state.json`.
 - No new audit maturity recalculation was performed; `audit/` and `docs/work/prompts/` remain untracked as requested.

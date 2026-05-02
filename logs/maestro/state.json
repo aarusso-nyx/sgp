@@ -2408,34 +2408,40 @@
       "summary": "logs/maestro/84-ponto-10-reconhecimento-facial.summary.md"
     },
     "38-es-09-retorno-parser-status-sync": {
-      "status": "completed",
+      "status": "pending",
       "effort": "high",
       "branch": "slice/38-es-09-retorno-parser-status-sync",
       "commit": null,
       "started_at": null,
-      "completed_at": "2026-05-02T10:20:00Z",
+      "completed_at": null,
       "retries": 0,
-      "source": "resume directive: slices 00..42 are merged; no matching slice commit found in git log"
+      "source": "live double-check against prompt deliverables and repository/database artifacts",
+      "verified_at": "2026-05-02T10:35:00Z",
+      "verification_result": "Verification failed: no ES-09 migration, response_classification/event_retry_schedule tables, retorno parser/sync services, frontend retornos UI, ES-09 tests, or docs found."
     },
     "41-bank-02-cnab240-retorno": {
-      "status": "completed",
+      "status": "pending",
       "effort": "medium",
       "branch": "slice/41-bank-02-cnab240-retorno",
       "commit": null,
       "started_at": null,
-      "completed_at": "2026-05-02T10:20:00Z",
+      "completed_at": null,
       "retries": 0,
-      "source": "resume directive: slices 00..42 are merged; no matching slice commit found in git log"
+      "source": "live double-check against prompt deliverables and repository/database artifacts",
+      "verified_at": "2026-05-02T10:35:00Z",
+      "verification_result": "Verification failed: no BANK-02 migration, payment_return_file/payment_return_detail tables, CNAB240 return parser/process services, retorno UI, BANK-02 tests, or docs found."
     },
     "42-bank-04-pensao-alimenticia": {
-      "status": "completed",
+      "status": "pending",
       "effort": "medium",
       "branch": "slice/42-bank-04-pensao-alimenticia",
       "commit": null,
       "started_at": null,
-      "completed_at": "2026-05-02T10:20:00Z",
+      "completed_at": null,
       "retries": 0,
-      "source": "resume directive: slices 00..42 are merged; no matching slice commit found in git log"
+      "source": "live double-check against prompt deliverables and repository/database artifacts",
+      "verified_at": "2026-05-02T10:35:00Z",
+      "verification_result": "Verification failed: only legacy/basic hr.employee_alimony exists; no BANK-04 migration extensions/history, alimony deduction service, CNAB alimony segment builder, dedicated frontend, BANK-04 tests, or docs found."
     }
   },
   "current_wave": 36,
