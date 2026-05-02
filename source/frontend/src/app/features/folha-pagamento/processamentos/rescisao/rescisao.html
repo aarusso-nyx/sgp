@@ -1,0 +1,80 @@
+<section class="termination-payroll">
+  <header>
+    <h1>Rescisao</h1>
+  </header>
+
+  <form [formGroup]="form" class="toolbar" (ngSubmit)="run()">
+    <mat-form-field appearance="outline" class="link-field">
+      <mat-label>Vinculo</mat-label>
+      <input matInput formControlName="employmentLinkId" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Desligamento</mat-label>
+      <input matInput type="date" formControlName="terminationDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Causa</mat-label>
+      <mat-select formControlName="cause">
+        <mat-option *ngFor="let cause of causes" [value]="cause.code">
+          {{ cause.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+      <mat-icon>calculate</mat-icon>
+      Calcular
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section *ngIf="result as payroll" class="summary" aria-live="polite">
+    <div>
+      <span>Run</span>
+      <strong>{{ payroll.payrollRunId }}</strong>
+    </div>
+    <div>
+      <span>Status</span>
+      <strong>{{ payroll.status }}</strong>
+    </div>
+    <div>
+      <span>Proventos</span>
+      <strong>{{ payroll.totalEarnings | moneyBr }}</strong>
+    </div>
+    <div>
+      <span>Descontos</span>
+      <strong>{{ payroll.totalDeductions | moneyBr }}</strong>
+    </div>
+    <div>
+      <span>Liquido</span>
+      <strong>{{ payroll.totalNet | moneyBr }}</strong>
+    </div>
+  </section>
+
+  <section *ngIf="result as payroll" class="components">
+    <h2>Composicao</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Origem</th>
+          <th>Tipo</th>
+          <th>Quantidade</th>
+          <th>Referencia</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of payroll.components">
+          <td>{{ row.code }}</td>
+          <td>{{ row.kind }}</td>
+          <td>{{ row.quantity }}</td>
+          <td>{{ row.referenceValue | moneyBr }}</td>
+          <td>{{ row.amount | moneyBr }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

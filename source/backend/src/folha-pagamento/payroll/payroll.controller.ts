@@ -33,6 +33,8 @@ import { DecimoTerceiroService } from './decimo-terceiro.service';
 import { FeriasPayrollService } from './ferias-payroll.service';
 import { FolhaMensalService } from './folha-mensal.service';
 import { PayrollService } from './payroll.service';
+import { RunRescisaoDto } from '../rescisao/rescisao.dto';
+import { RescisaoService } from '../rescisao/rescisao.service';
 
 @ApiTags('folha-pagamento')
 @ApiBearerAuth()
@@ -43,6 +45,7 @@ export class PayrollController {
     private readonly decimoTerceiroService: DecimoTerceiroService,
     private readonly feriasPayrollService: FeriasPayrollService,
     private readonly folhaMensalService: FolhaMensalService,
+    private readonly rescisaoService: RescisaoService,
     private readonly auditService: AuditService,
   ) {}
 
@@ -224,6 +227,32 @@ export class PayrollController {
       metadata: {
         operation: 'ferias',
         vacationRecordId: body.vacationRecordId,
+        employeeCount: created.employeeCount,
+      },
+    });
+    return created;
+  }
+
+  @Post('rescisao/calcular')
+  @RequirePermission(['payroll.run.execute', 'rh.employee.terminate'])
+  @ApiCreatedResponse({ description: 'Generate a termination payroll run.' })
+  async runRescisaoPayroll(
+    @Req() request: RequestWithContext,
+    @Body() body: RunRescisaoDto,
+  ) {
+    const created = await this.rescisaoService.run(
+      body.employmentLinkId,
+      body.terminationDate,
+      body.cause,
+    );
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: created.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'rescisao',
+        employmentLinkId: body.employmentLinkId,
+        terminationDate: body.terminationDate,
+        cause: body.cause,
         employeeCount: created.employeeCount,
       },
     });

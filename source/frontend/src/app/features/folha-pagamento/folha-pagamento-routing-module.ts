@@ -5,6 +5,7 @@ import { permissionGuard } from '../../core/auth/permission-guard';
 import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups';
 import { FolhaMensal } from './competencia/folha-mensal';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
+import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { Rubricas } from './rubricas/rubricas';
 import { SimulacaoFolha } from './simulacao/simulacao';
 
@@ -18,6 +19,16 @@ import { SimulacaoFolha } from './simulacao/simulacao';
         data: {
           moduleKey: 'folha',
           permissions: ['payroll.run.execute'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
+      {
+        path: 'processamentos/rescisao',
+        component: RescisaoFolha,
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['payroll.run.execute', 'rh.employee.terminate'],
           moduleLabel: 'Folha de Pgt',
         },
       },

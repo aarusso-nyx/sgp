@@ -40,6 +40,18 @@ interface VacationPayslipRow extends QueryResultRow {
   total_net: string;
 }
 
+interface TerminationTermRow extends QueryResultRow {
+  payroll_run_id: string;
+  competence_year: number;
+  competence_month: number;
+  status: string;
+  termination_date: Date | string | null;
+  total_earnings: string;
+  total_deductions: string;
+  total_net: string;
+  components: PortalPaystubLine[];
+}
+
 export interface PortalPaystubLine {
   code: string;
   description: string;
@@ -349,6 +361,81 @@ export class PortalService {
       totalEarnings: row.total_earnings,
       totalDeductions: row.total_deductions,
       totalNet: row.total_net,
+    }));
+  }
+
+  async terminationTerms(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    const rows = await this.databaseService.query<TerminationTermRow>(
+      `
+      SELECT
+        run.id::text AS payroll_run_id,
+        run.competence_year,
+        run.competence_month,
+        run.status::text,
+        employee.terminated_on AS termination_date,
+        financial.total_earnings::text,
+        financial.total_deductions::text,
+        financial.net_amount::text AS total_net,
+        coalesce(
+          jsonb_agg(
+            jsonb_build_object(
+              'code', earning.code,
+              'description', earning.description,
+              'kind', earning.kind::text,
+              'quantity', item.quantity,
+              'referenceValue', item.reference_value,
+              'amount', item.amount,
+              'notes', item.notes
+            )
+            ORDER BY earning.kind::text, earning.code
+          ) FILTER (WHERE item.id IS NOT NULL),
+          '[]'::jsonb
+        ) AS components
+      FROM payroll.payroll_run run
+      JOIN payroll.processing_type processing_type
+        ON processing_type.id = run.processing_type_id
+      JOIN payroll.payroll_financial_record financial
+        ON financial.tenant_id = run.tenant_id
+       AND financial.payroll_run_id = run.id
+      JOIN hr.employee employee
+        ON employee.tenant_id = run.tenant_id
+       AND employee.id = financial.employee_id
+      LEFT JOIN payroll.v_payroll_run_line_active item
+        ON item.tenant_id = run.tenant_id
+       AND item.payroll_run_id = run.id
+       AND item.employee_id = employee.id
+      LEFT JOIN payroll.payroll_earning_deduction earning
+        ON earning.id = item.earning_deduction_id
+      WHERE employee.id = $1::uuid
+        AND processing_type.code = 'RESCISAO'
+        AND run.status IN ('GENERATED'::"PayrollRunStatus", 'CLOSED'::"PayrollRunStatus")
+      GROUP BY
+        run.id,
+        run.competence_year,
+        run.competence_month,
+        run.status,
+        employee.terminated_on,
+        financial.total_earnings,
+        financial.total_deductions,
+        financial.net_amount
+      ORDER BY run.competence_year DESC, run.competence_month DESC, run.updated_at DESC
+      `,
+      [employee.id],
+    );
+
+    return rows.map((row) => ({
+      payrollRunId: row.payroll_run_id,
+      competenceYear: row.competence_year,
+      competenceMonth: row.competence_month,
+      status: row.status,
+      terminationDate: row.termination_date
+        ? this.toDate(row.termination_date)
+        : null,
+      totalEarnings: row.total_earnings,
+      totalDeductions: row.total_deductions,
+      totalNet: row.total_net,
+      components: Array.isArray(row.components) ? row.components : [],
     }));
   }
 

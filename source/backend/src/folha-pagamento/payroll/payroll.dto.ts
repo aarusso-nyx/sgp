@@ -111,7 +111,6 @@ export class RunFeriasPayrollDto {
   @IsNotEmpty()
   vacationRecordId!: string;
 }
-
 export class FolhaMensalCompetenceDto {
   @ApiProperty({ minimum: 2000, maximum: 2100 })
   @IsInt()

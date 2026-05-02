@@ -54,4 +54,15 @@
       </li>
     </ol>
   </section>
+
+  <section class="career__history" aria-labelledby="termination-terms-title">
+    <h2 id="termination-terms-title">Termos de rescisao</h2>
+    <ol>
+      <li *ngFor="let item of terminationTerms">
+        <span>{{ item.terminationDate || item.competenceYear + '-' + item.competenceMonth }}</span>
+        <strong>{{ item.totalNet }}</strong>
+        <small>{{ item.status }}</small>
+      </li>
+    </ol>
+  </section>
 </section>

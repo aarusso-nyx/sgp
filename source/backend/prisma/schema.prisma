@@ -836,6 +836,7 @@ model EmploymentLink {
   commissionPositionId String?      @map("commission_position_id") @db.Uuid
   regimeLawReference   String       @default("Lei 8.112/90") @map("regime_law_reference")
   functionalStatusId   String?      @map("functional_status_id") @db.Uuid
+  terminationPayrollRunId String?   @map("termination_payroll_run_id") @db.Uuid
   status               RecordStatus @default(ACTIVE)
   createdAt            DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -850,6 +851,7 @@ model EmploymentLink {
   @@index([contractType])
   @@index([commissionPositionId])
   @@index([functionalStatusId])
+  @@index([terminationPayrollRunId])
   @@index([status])
   @@map("employment_link")
   @@schema("hr")

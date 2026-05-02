@@ -95,6 +95,15 @@ export class PortalController {
     return this.portalService.vacationPayslips(actor);
   }
 
+  @Get('v1/portal/termos-rescisao')
+  @RequirePermission('portal.paystub.read')
+  @ApiOkResponse({
+    description: 'Authenticated employee generated termination terms.',
+  })
+  termosRescisao(@CurrentActor() actor: AuthenticatedActor | undefined) {
+    return this.portalService.terminationTerms(actor);
+  }
+
   @Get('v1/portal/contracheque/:competence')
   @RequirePermission('portal.paystub.read')
   @ApiOkResponse({

@@ -44,6 +44,17 @@ interface VacationPayslip {
   totalNet: string;
 }
 
+interface TerminationTerm {
+  payrollRunId: string;
+  competenceYear: number;
+  competenceMonth: number;
+  status: string;
+  terminationDate: string | null;
+  totalEarnings: string;
+  totalDeductions: string;
+  totalNet: string;
+}
+
 @Component({
   selector: 'app-portal-minha-carreira',
   standalone: true,
@@ -57,6 +68,7 @@ export class PortalMinhaCarreira implements OnInit, OnDestroy {
 
   trail?: CareerTrail;
   vacationPayslips: VacationPayslip[] = [];
+  terminationTerms: TerminationTerm[] = [];
   error = '';
 
   ngOnInit(): void {
@@ -80,6 +92,17 @@ export class PortalMinhaCarreira implements OnInit, OnDestroy {
         },
         error: () => {
           this.vacationPayslips = [];
+        },
+      });
+    this.http
+      .get<TerminationTerm[]>('/api/v1/portal/termos-rescisao')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (terms) => {
+          this.terminationTerms = terms;
+        },
+        error: () => {
+          this.terminationTerms = [];
         },
       });
   }

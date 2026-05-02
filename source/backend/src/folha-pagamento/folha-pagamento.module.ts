@@ -19,6 +19,7 @@ import { DecimoTerceiroService } from './payroll/decimo-terceiro.service';
 import { FeriasPayrollService } from './payroll/ferias-payroll.service';
 import { FolhaMensalService } from './payroll/folha-mensal.service';
 import { PayrollService } from './payroll/payroll.service';
+import { RescisaoService } from './rescisao/rescisao.service';
 import { SimulacaoController } from './simulacao/simulacao.controller';
 import { SimulacaoService } from './simulacao/simulacao.service';
 import { FormulaCacheService } from '../payroll-engine/formula-cache.service';
@@ -38,6 +39,7 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
   ],
   providers: [
     PayrollService,
+    RescisaoService,
     DecimoTerceiroService,
     FeriasPayrollService,
     FolhaMensalService,

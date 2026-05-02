@@ -35,6 +35,12 @@ A folha mensal é processada em **Folha de Pagamento > Competência > Folha mens
 
 Depois da ação **Gerar**, a competência passa para `GENERATED` e o Portal do Servidor libera **Contracheques** para a competência publicada. Antes desse estado, o servidor não visualiza o contracheque mensal, mesmo que o cálculo já tenha sido concluído internamente. Ao fechar a competência, a folha fica em `CLOSED` e os contracheques continuam disponíveis somente para o próprio servidor autenticado no tenant correto.
 
+### Folha de rescisão
+
+A folha de rescisão é processada em **Folha de Pagamento > Processamentos > Rescisão** depois do desligamento administrativo do servidor. O operador informa o vínculo, a data de desligamento e a causa, revisa a composição calculada e confirma a execução. A rotina grava uma `payroll_run` do tipo `RESCISAO`, calcula saldo de salário, 13º proporcional, férias proporcionais com 1/3, férias vencidas com 1/3, descontos legais e, para celetistas sem justa causa, aviso prévio indenizado e multa de 40% do FGTS.
+
+O vínculo recebe `end_date` e referência à folha rescisória gerada. Reprocessar a mesma rescisão reaproveita a folha da competência e substitui apenas as linhas calculadas daquele servidor, preservando as linhas antigas com exclusão lógica para auditoria. No Portal do Servidor, a seção **Termos de rescisão** fica disponível somente após a folha rescisória atingir `GENERATED`; o envio do eSocial S-2299 permanece no fluxo próprio de eSocial.
+
 ## Licença Saúde / Perícia
 
 A licença para tratamento de saúde inicia no **Portal do Servidor > Licença Saúde > Solicitar**, onde o servidor informa a janela desejada para a perícia oficial. A equipe de saúde acompanha a agenda em **Saúde > Licença de saúde e perícia**, registra o comparecimento e lança o parecer médico com decisão, CID-10, período e dias concedidos.
