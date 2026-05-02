@@ -1110,7 +1110,7 @@
       "failure_log": "logs/maestro/56-fisc-01-dctfweb-totalizadores.failure.md"
     },
     "57-fisc-02-dirf-anual": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/57-fisc-02-dirf-anual",
       "retries": 0,
@@ -1148,7 +1148,11 @@
       "theme": "FISC",
       "zero_retry": false,
       "agent": "019de7a0-2c61-7c90-a6bc-5d2195c803e3",
-      "started_at": "2026-05-02T07:38:32.846Z"
+      "started_at": "2026-05-02T07:38:32.846Z",
+      "completed_at": "2026-05-02T07:56:44Z",
+      "commit": "eff877e2afcf12886a68977523ba7d6908084e7e",
+      "recovery": "maestro recovered concurrent AFD lint failure and added DIRF auditMutation coverage after combined defense suite passed",
+      "failure_log": "logs/maestro/57-fisc-02-dirf-anual.failure.md"
     },
     "58-fisc-03-comprovante-rendimentos": {
       "status": "pending",
@@ -1285,7 +1289,7 @@
       "failure_log": "logs/maestro/60-ponto-02-rep-p-rep-a-rep-c-ingestao.failure.md"
     },
     "61-ponto-03-afd-geracao-importacao": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/61-ponto-03-afd-geracao-importacao",
       "retries": 0,
@@ -1321,7 +1325,11 @@
       "theme": "PONTO",
       "zero_retry": true,
       "agent": "019de7a0-2c45-7162-8432-fd35ec14b97c",
-      "started_at": "2026-05-02T07:38:32.846Z"
+      "started_at": "2026-05-02T07:38:32.846Z",
+      "completed_at": "2026-05-02T07:56:44Z",
+      "commit": "7dfce09e53c375337abe60b866b0a8a042408c3d",
+      "recovery": "maestro recovered concurrent DIRF audit coverage failure after combined defense suite passed",
+      "failure_log": "logs/maestro/61-ponto-03-afd-geracao-importacao.failure.md"
     },
     "62-ponto-04-escalas-plantoes": {
       "status": "pending",
@@ -2053,7 +2061,7 @@
       "zero_retry": false
     },
     "79-rec-07-biometria-candidato": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/79-rec-07-biometria-candidato",
       "retries": 0,
@@ -2093,7 +2101,11 @@
       "theme": "REC",
       "zero_retry": false,
       "agent": "019de7a0-2ccd-7371-87ed-57053bd409b9",
-      "started_at": "2026-05-02T07:38:32.846Z"
+      "started_at": "2026-05-02T07:38:32.846Z",
+      "completed_at": "2026-05-02T07:56:44Z",
+      "commit": "57381688326130fbd3640a0fee9b0add01595c49",
+      "recovery": "maestro recovered concurrent AFD lint failure and current-schema permission migration drift after combined defense suite passed",
+      "failure_log": "logs/maestro/79-rec-07-biometria-candidato.failure.md"
     },
     "80-rec-08-prova-online-proctored": {
       "status": "pending",
@@ -2314,27 +2326,8 @@
       "zero_retry": true
     }
   },
-  "current_wave": 34,
-  "active_subagents": [
-    {
-      "slice": "61-ponto-03-afd-geracao-importacao",
-      "agent": "019de7a0-2c45-7162-8432-fd35ec14b97c",
-      "effort": "high",
-      "started_at": "2026-05-02T07:38:32.846Z"
-    },
-    {
-      "slice": "57-fisc-02-dirf-anual",
-      "agent": "019de7a0-2c61-7c90-a6bc-5d2195c803e3",
-      "effort": "medium",
-      "started_at": "2026-05-02T07:38:32.846Z"
-    },
-    {
-      "slice": "79-rec-07-biometria-candidato",
-      "agent": "019de7a0-2ccd-7371-87ed-57053bd409b9",
-      "effort": "medium",
-      "started_at": "2026-05-02T07:38:32.846Z"
-    }
-  ],
+  "current_wave": 35,
+  "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }

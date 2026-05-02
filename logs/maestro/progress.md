@@ -98,3 +98,6 @@ W28 ✓ 55-rec-06 (medium, transient concurrent DCTFWeb typecheck failure recove
 W28 ✓ 60-ponto-02 (high, zero-tier, transient concurrent DCTFWeb typecheck failure recovered by maestro defense, commit e2bd0fb) — REP-P/REP-A/REP-C ingestion
 W29 ✓ 56-fisc-01 (high, lint and current-schema migration drift fixed by maestro defense, commit 79bb8fc) — DCTFWeb totalizers
 2026-05-02T07:38:32.846Z frontier launch 61-ponto-03, 57-fisc-02, 79-rec-07 — agents 019de7a0-2c45, 019de7a0-2c61, 019de7a0-2ccd
+W28 ✓ 61-ponto-03 (high, zero-tier, transient concurrent DIRF audit failure recovered by maestro defense, commit 7dfce09) — AFD generation/import
+W30 ✓ 57-fisc-02 (medium, transient concurrent AFD lint failure recovered by maestro defense, commit eff877e) — DIRF annual file
+W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migration drift fixed by maestro defense, commit 5738168) — candidate biometrics
