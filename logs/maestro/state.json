@@ -417,6 +417,21 @@
       "agent": "019de684-1a8b-7641-ab6e-b826ddd42a22",
       "failure_log": "logs/maestro/33-es-03-afastamentos-s2230-ferias.failure.md",
       "recovery": "manual db:smoke fixture-context repair after HR-04 smoke lacked ES-03 S-2230 queue privileges"
+    },
+    "36-es-06-exclusao-s3000": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/36-es-06-exclusao-s3000",
+      "commit": "a7e52dcf088c372cbe3ca51fbbb554fe74011274",
+      "started_at": "2026-05-01T23:44:30-03:00",
+      "retry_started_at": "2026-05-01T23:58:30-03:00",
+      "completed_at": "2026-05-02T00:05:07-03:00",
+      "retries": 1,
+      "agent": "019de6a1-99f7-7a73-b4d9-5a967a0ad6cc",
+      "previous_agent": "019de693-38ca-7ce0-a672-00330d1d728e",
+      "previous_failure": "logs/maestro/36-es-06-exclusao-s3000.failure.md",
+      "failure_log": "logs/maestro/36-es-06-exclusao-s3000.failure.md",
+      "recovery": "high retry added auditMutation coverage to S-3000 accept route and all gates passed"
     }
   },
   "current_wave": 15,

@@ -59,3 +59,6 @@ W15 ✗ 32-es-02 (medium → high retry failed: lint unsafe return/call in es-02
 W15 ✓ 32-es-02 (1 slice, medium→high + manual recovery, gates passed, commit b4d9941) — completeness 26.2% → 26.2%
 W15 ✗ 33-es-03 (medium db:smoke failed: HR-04 smoke lacked S-2230 queue privileges after ES-03 trigger) — recovered manually
 W15 ✓ 33-es-03 (1 slice, medium + manual recovery, gates passed, commit 375230e) — completeness 26.2% → 26.2%; Wave 15 complete
+W16 ⏸ 34-es-04 / 35-es-05 skipped for now — prompt-authoritative ES-04 predecessor BANK-01 is not completed
+W16 ✗ 36-es-06 (medium → high retry failed first e2e audit coverage on S-3000 accept route) — recovered by high retry
+W16 ✓ 36-es-06 (1 slice, medium→high, gates passed, commit a7e52dc) — completeness 26.2% → 26.2%
