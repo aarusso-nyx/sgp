@@ -1034,7 +1034,8 @@ sequenceDiagram
 **Módulos internos:**
 
 - `evento-consumer`: deserializa mensagem SQS, valida schema, roteia por tipo de evento.
-- `xml-builder`: invoca `libs/integrations/esocial-s12` para construção dos XML S-1.000, S-1.005, S-1.010, S-1.020, S-1.030, S-1.035, S-1.040, S-1.050, S-1.060, S-1.070, S-1.080, S-2.xxx, S-3.xxx.
+- `builders`: `source/backend/src/esocial-worker/builders/` contém os builders ES-01 para S-1000, S-1005, S-1010, S-1020, S-1050 e S-1070. Eles leem empresa/estabelecimento, rubricas, lotações, jornadas e processos via `DatabaseService`, passam obrigatoriamente pelo hub ES-07 e usam `esocial.s1xxx_dispatch_state` para idempotência por hash.
+- `xml-builder`: invoca `libs/integrations/esocial-s12` para construção dos demais XML S-2.xxx e S-3.xxx ainda fora de ES-01.
 - `xsd`: mantém o bundle oficial S-1.3 local, verifica hash de arquivos críticos e rejeita mutações antes da fila.
 - `signature`: assina XML eSocial com XML-DSig enveloped via `xml-crypto` e material ICP-Brasil lido de PKCS#12 via `node-forge`, sem shell-out para OpenSSL.
 - `certificate-store`: lista, cadastra, rotaciona e revoga certificados A1/A3 por tenant, com alerta de rotação 30 dias antes da expiração.

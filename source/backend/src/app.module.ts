@@ -20,6 +20,7 @@ import { ConsultasModule } from './consultas/consultas.module';
 import { DatabaseModule } from './database/database.module';
 import { DocumentsModule } from './documents/documents.module';
 import { ExternalModule } from './external/external.module';
+import { ESocialWorkerModule } from './esocial-worker/esocial-worker.module';
 import { FolhaPagamentoModule } from './folha-pagamento/folha-pagamento.module';
 import { GestaoModule } from './gestao/gestao.module';
 import { HealthModule } from './health/health.module';
@@ -53,6 +54,7 @@ import { AppService } from './app.service';
     DocumentsModule,
     PortalModule,
     ExternalModule,
+    ESocialWorkerModule,
     PublicoModule,
     ReportsModule,
     GestaoModule,

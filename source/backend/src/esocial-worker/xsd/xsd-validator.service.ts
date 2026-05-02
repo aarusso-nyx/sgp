@@ -29,6 +29,7 @@ const XSD_BY_EVENT_KIND: Record<string, string> = {
   'S-1005': 'evtTabEstab.xsd',
   'S-1010': 'evtTabRubrica.xsd',
   'S-1020': 'evtTabLotacao.xsd',
+  'S-1050': 'evtTabJornada.xsd',
   'S-1070': 'evtTabProcesso.xsd',
   'S-1200': 'evtRemun.xsd',
   'S-1202': 'evtRmnRPPS.xsd',

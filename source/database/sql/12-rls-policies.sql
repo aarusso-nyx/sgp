@@ -104,9 +104,7 @@ CREATE POLICY esocial_event_select ON public.esocial_event
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(
-        ARRAY['folha.read', 'folha.write', 'gestao.read', 'gestao.write']
-      )
+      AND public.sgp_has_any_permission(ARRAY['esocial.event.read', 'esocial.event.write'])
     )
   );
 DROP POLICY IF EXISTS esocial_event_write ON public.esocial_event;
@@ -116,16 +114,96 @@ CREATE POLICY esocial_event_write ON public.esocial_event
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['folha.write', 'gestao.write'])
+      AND public.sgp_has_any_permission(ARRAY['esocial.event.write'])
     )
   )
   WITH CHECK (
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['folha.write', 'gestao.write'])
+      AND public.sgp_has_any_permission(ARRAY['esocial.event.write'])
     )
   );
+
+ALTER TABLE IF EXISTS esocial.s1xxx_dispatch_state ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS esocial.s1xxx_dispatch_state FORCE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS s1xxx_dispatch_state_select ON esocial.s1xxx_dispatch_state;
+CREATE POLICY s1xxx_dispatch_state_select ON esocial.s1xxx_dispatch_state
+  FOR SELECT
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['esocial.event.read', 'esocial.event.write'])
+    )
+  );
+DROP POLICY IF EXISTS s1xxx_dispatch_state_write ON esocial.s1xxx_dispatch_state;
+CREATE POLICY s1xxx_dispatch_state_write ON esocial.s1xxx_dispatch_state
+  FOR ALL
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['esocial.event.write'])
+    )
+  )
+  WITH CHECK (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['esocial.event.write'])
+    )
+  );
+
+CREATE OR REPLACE FUNCTION esocial.audit_s1xxx_dispatch_state_mutation()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  row_after esocial.s1xxx_dispatch_state;
+  row_before esocial.s1xxx_dispatch_state;
+  audit_action text;
+BEGIN
+  row_after := NEW;
+  row_before := OLD;
+  audit_action := CASE TG_OP
+    WHEN 'INSERT' THEN 'CREATE'
+    WHEN 'UPDATE' THEN 'UPDATE'
+    ELSE 'DELETE'
+  END;
+
+  PERFORM set_config(
+    'app.current_tenant_id',
+    COALESCE(row_after.tenant_id, row_before.tenant_id)::text,
+    true
+  );
+
+  PERFORM public.sgp_append_audit_event(
+    audit_action,
+    'esocial.s1xxx_dispatch_state',
+    COALESCE(row_after.source_entity_id, row_before.source_entity_id),
+    NULL::uuid,
+    NULL::text,
+    NULL::text,
+    'esocial.s1xxx_dispatch_state',
+    NULL::text,
+    jsonb_build_object(
+      'eventKind', COALESCE(row_after.event_kind, row_before.event_kind)::text,
+      'lastPayloadHash', COALESCE(row_after.last_payload_hash, row_before.last_payload_hash)
+    ),
+    NULL::text,
+    NULL::text,
+    NULL::text
+  );
+
+  RETURN COALESCE(NEW, OLD);
+END
+$$;
+
+DROP TRIGGER IF EXISTS trg_s1xxx_dispatch_state_audit ON esocial.s1xxx_dispatch_state;
+CREATE TRIGGER trg_s1xxx_dispatch_state_audit
+  AFTER INSERT OR UPDATE OR DELETE ON esocial.s1xxx_dispatch_state
+  FOR EACH ROW EXECUTE FUNCTION esocial.audit_s1xxx_dispatch_state_mutation();
 
 DO $$
 DECLARE

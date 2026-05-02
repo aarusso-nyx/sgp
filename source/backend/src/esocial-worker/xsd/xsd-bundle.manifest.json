@@ -8,6 +8,7 @@
   "files": {
     "evtInfoEmpregador.xsd": "80ca0aaf6980aaf7b549bcb0201fc49b7b094a50619962618f6768534c0cf26a",
     "tipos.xsd": "283c83693ceca569279938c63b0947996ff557dc9af6c661940469d8af027467",
-    "xmldsig-core-schema.xsd": "66393d90addacbbcbc717e6c3a88162a5a0c504e4ab863f16d01814496772b79"
+    "xmldsig-core-schema.xsd": "66393d90addacbbcbc717e6c3a88162a5a0c504e4ab863f16d01814496772b79",
+    "evtTabJornada.xsd": "d3ce15b52d212ab6a56bfa6aa460a001853bb50474a5254614b581980da6bf70"
   }
 }

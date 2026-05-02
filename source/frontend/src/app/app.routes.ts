@@ -79,6 +79,11 @@ export const routes: Routes = [
         path: 'saude/pericia',
         loadComponent: () => import('./features/saude/pericia/pericia').then((m) => m.SaudePericia),
       },
+      {
+        path: 'esocial/tabelas',
+        loadComponent: () =>
+          import('./features/esocial/tabelas/esocial-tabelas').then((m) => m.ESocialTabelas),
+      },
       ...adminFeatureRoutes,
     ],
   },

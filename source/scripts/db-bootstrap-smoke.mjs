@@ -294,6 +294,77 @@ $$;
   console.log('[db-smoke] validated ES-07 tenant certificate RLS');
 
   await runSqlSnippet(
+    '99-es01-tabelas-s1xxx.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  visible_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA esocial, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.s1xxx_dispatch_state TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON public.esocial_event TO sgp_smoke_rls;
+
+  INSERT INTO esocial.s1xxx_dispatch_state (
+    tenant_id,
+    event_kind,
+    source_entity_id,
+    last_emitted_at,
+    last_payload_hash
+  )
+  VALUES (
+    tenant_a,
+    'S-1000'::esocial.s1xxx_event_kind,
+    'smoke-source',
+    now(),
+    repeat('a', 64)
+  )
+  ON CONFLICT (tenant_id, event_kind, source_entity_id) DO UPDATE
+  SET last_emitted_at = EXCLUDED.last_emitted_at,
+      last_payload_hash = EXCLUDED.last_payload_hash;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.event.read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM esocial.s1xxx_dispatch_state
+  WHERE source_entity_id = 'smoke-source';
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 S-1xxx dispatch states from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.event.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM esocial.s1xxx_dispatch_state
+  WHERE source_entity_id = 'smoke-source';
+  RESET ROLE;
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected tenant A to see its S-1xxx dispatch state, found %', visible_count;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'esocial_event'
+      AND policyname = 'esocial_event_write'
+      AND with_check LIKE '%esocial.event.write%'
+      AND with_check LIKE '%sgp_tenant_matches(tenant_id)%'
+  ) THEN
+    RAISE EXCEPTION 'Expected public.esocial_event write policy to require tenant and esocial.event.write';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated ES-01 S-1xxx event RLS');
+
+  await runSqlSnippet(
     '99-hr01-employee-lifecycle.sql',
     `
 DO $$

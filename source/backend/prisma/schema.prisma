@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["public", "hr", "payroll", "portal"]
+  schemas  = ["public", "hr", "payroll", "payroll_calc", "portal", "esocial"]
 }
 
 enum RecordStatus {
@@ -257,6 +257,18 @@ enum ESocialEventStatus {
   EXCLUIDO
 
   @@schema("public")
+}
+
+enum S1xxxEventKind {
+  S_1000 @map("S-1000")
+  S_1005 @map("S-1005")
+  S_1010 @map("S-1010")
+  S_1020 @map("S-1020")
+  S_1050 @map("S-1050")
+  S_1070 @map("S-1070")
+
+  @@map("s1xxx_event_kind")
+  @@schema("esocial")
 }
 
 enum PerformanceEvaluationStatus {
@@ -2672,10 +2684,15 @@ model ESocialEvent {
   id               String             @id @default(uuid()) @db.Uuid
   tenantId         String             @map("tenant_id") @db.Uuid
   eventType        String             @map("event_type")
+  eventKind        S1xxxEventKind?    @map("event_kind")
+  sourceEntityKind String?            @map("source_entity_kind")
+  sourceEntityId   String?            @map("source_entity_id")
   reference        String
   competence       String
   payload          Json               @default("{}")
   xmlPayload       String?            @map("xml_payload")
+  xmlSigned        Bytes?             @map("xml_signed")
+  xmlHash          String?            @map("xml_hash") @db.Char(64)
   schemaVersion    String             @default("S-1.2") @map("schema_version")
   status           ESocialEventStatus @default(PENDENTE)
   receiptNumber    String?            @map("receipt_number")
@@ -2689,9 +2706,24 @@ model ESocialEvent {
   updatedAt        DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([eventType, competence])
+  @@index([tenantId, eventKind, sourceEntityKind, sourceEntityId])
   @@index([status, createdAt])
   @@map("esocial_event")
   @@schema("public")
+}
+
+model S1xxxDispatchState {
+  tenantId        String         @map("tenant_id") @db.Uuid
+  eventKind       S1xxxEventKind @map("event_kind")
+  sourceEntityId  String         @map("source_entity_id")
+  lastEmittedAt   DateTime?      @map("last_emitted_at") @db.Timestamptz(6)
+  lastPayloadHash String?        @map("last_payload_hash") @db.Char(64)
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, eventKind, sourceEntityId])
+  @@map("s1xxx_dispatch_state")
+  @@schema("esocial")
 }
 
 model ReportDefinition {

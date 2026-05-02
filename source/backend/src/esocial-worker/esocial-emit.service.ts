@@ -3,6 +3,7 @@ import {
   Injectable,
   ServiceUnavailableException,
 } from '@nestjs/common';
+import { createHash } from 'node:crypto';
 import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
@@ -29,6 +30,9 @@ export interface EmitESocialInput {
   xml: string;
   reference?: string;
   competence?: string;
+  sourceEntityKind?: string;
+  sourceEntityId?: string;
+  xmlHash?: string;
   payload?: Record<string, unknown>;
 }
 
@@ -103,6 +107,11 @@ export class ESocialEmitService {
         competence,
         payload,
         xml_payload,
+        event_kind,
+        source_entity_kind,
+        source_entity_id,
+        xml_signed,
+        xml_hash,
         schema_version,
         status,
         generated_at
@@ -114,6 +123,11 @@ export class ESocialEmitService {
         $4,
         $5::jsonb,
         $6,
+        $2,
+        $7,
+        $8,
+        convert_to($6, 'UTF8'),
+        $9,
         'S-1.3',
         'PENDENTE'::"ESocialEventStatus",
         now()
@@ -141,6 +155,9 @@ export class ESocialEmitService {
           },
         }),
         signed.xml,
+        input.sourceEntityKind ?? null,
+        input.sourceEntityId ?? null,
+        input.xmlHash ?? this.sha256(input.xml),
       ],
     );
 
@@ -214,6 +231,10 @@ export class ESocialEmitService {
 
   private competenceFromXml(xml: string): string {
     return xml.match(/<iniValid>(\d{4}-\d{2})<\/iniValid>/)?.[1] ?? '2026-01';
+  }
+
+  private sha256(value: string): string {
+    return createHash('sha256').update(value, 'utf8').digest('hex');
   }
 
   private ensureDatabase(): void {
