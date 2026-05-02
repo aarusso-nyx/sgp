@@ -1460,7 +1460,7 @@
       "completed_at": "2026-05-02T08:56:52.150Z"
     },
     "65-ponto-07-folha-integration-tz": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/65-ponto-07-folha-integration-tz",
       "retries": 0,
@@ -1507,7 +1507,12 @@
       "theme": "PONTO",
       "zero_retry": false,
       "agent": "019de7e8-36e8-79e2-bb3e-d8975e52e66d",
-      "started_at": "2026-05-02T08:57:40.605Z"
+      "started_at": "2026-05-02T08:57:40.605Z",
+      "commit": "c8fef8a",
+      "completed_at": "2026-05-02T09:22:18Z",
+      "recovery": "maestro defense fixed night-minute fixture, audit metadata, and current db smoke drift after agent failure",
+      "failure_log": "logs/maestro/65-ponto-07-folha-integration-tz.failure.md",
+      "summary": "logs/maestro/65-ponto-07-folha-integration-tz.summary.md"
     },
     "66-sst-01-aso-exames": {
       "status": "completed",
@@ -1869,7 +1874,7 @@
       "completed_at": "2026-05-02T08:56:52.150Z"
     },
     "74-tce-04-submission-queue-retry-admin": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/74-tce-04-submission-queue-retry-admin",
       "retries": 0,
@@ -1909,7 +1914,12 @@
       "theme": "TCE",
       "zero_retry": false,
       "agent": "019de7e8-3707-7fe3-bada-6d4e1d436af0",
-      "started_at": "2026-05-02T08:57:40.605Z"
+      "started_at": "2026-05-02T08:57:40.605Z",
+      "commit": "013fd02",
+      "completed_at": "2026-05-02T09:22:18Z",
+      "recovery": "maestro defense fixed lint, fake queue row mapping, and queue RLS policy smoke drift after agent failure",
+      "failure_log": "logs/maestro/74-tce-04-submission-queue-retry-admin.failure.md",
+      "summary": "logs/maestro/74-tce-04-submission-queue-retry-admin.summary.md"
     },
     "75-bank-05-sifge-fgts-deposito-caixa": {
       "status": "completed",
@@ -2048,7 +2058,7 @@
       "zero_retry": true
     },
     "78-es-11-alteracao-contratual-tsv-s2306": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/78-es-11-alteracao-contratual-tsv-s2306",
       "retries": 0,
@@ -2091,7 +2101,12 @@
       "theme": "ES",
       "zero_retry": false,
       "agent": "019de7e8-377a-7112-8380-ce40c4565c35",
-      "started_at": "2026-05-02T08:57:40.605Z"
+      "started_at": "2026-05-02T08:57:40.605Z",
+      "commit": "1c58f62",
+      "completed_at": "2026-05-02T09:22:18Z",
+      "recovery": "maestro defense fixed current employment_link fixture, schema-aware cleanup, and audit trigger signature drift after agent failure",
+      "failure_log": "logs/maestro/78-es-11-alteracao-contratual-tsv-s2306.failure.md",
+      "summary": "logs/maestro/78-es-11-alteracao-contratual-tsv-s2306.summary.md"
     },
     "79-rec-07-biometria-candidato": {
       "status": "completed",
@@ -2360,26 +2375,7 @@
     }
   },
   "current_wave": 35,
-  "active_subagents": [
-    {
-      "slice": "65-ponto-07-folha-integration-tz",
-      "agent": "019de7e8-36e8-79e2-bb3e-d8975e52e66d",
-      "effort": "high",
-      "started_at": "2026-05-02T08:57:40.605Z"
-    },
-    {
-      "slice": "74-tce-04-submission-queue-retry-admin",
-      "agent": "019de7e8-3707-7fe3-bada-6d4e1d436af0",
-      "effort": "medium",
-      "started_at": "2026-05-02T08:57:40.605Z"
-    },
-    {
-      "slice": "78-es-11-alteracao-contratual-tsv-s2306",
-      "agent": "019de7e8-377a-7112-8380-ce40c4565c35",
-      "effort": "medium",
-      "started_at": "2026-05-02T08:57:40.605Z"
-    }
-  ],
+  "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }

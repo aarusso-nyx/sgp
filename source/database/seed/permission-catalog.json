@@ -164,6 +164,22 @@
       "description": "Create and revalidate employee bank accounts for payroll credit."
     },
     {
+      "key": "hr.employment.read",
+      "moduleKey": "hr",
+      "resourceKey": "employment",
+      "actionKey": "read",
+      "routePattern": "/api/v1/admin/hr/tsv-contracts/**",
+      "description": "Read TS-V employment contracts and contractual changes."
+    },
+    {
+      "key": "hr.employment.write",
+      "moduleKey": "hr",
+      "resourceKey": "employment",
+      "actionKey": "write",
+      "routePattern": "/api/v1/admin/hr/tsv-contracts/**",
+      "description": "Mutate TS-V employment contracts and contractual changes."
+    },
+    {
       "key": "payment.remittance.read",
       "moduleKey": "payment",
       "resourceKey": "remittance",
@@ -656,16 +672,16 @@
       "moduleKey": "tce",
       "resourceKey": "submission",
       "actionKey": "read",
-      "routePattern": "/api/v1/tce/audesp-sp/submissions/**",
-      "description": "Read AUDESP/SP TCE submissions."
+      "routePattern": "/api/v1/tce/**",
+      "description": "Read TCE submissions, queues, attempts, and circuit diagnostics."
     },
     {
       "key": "tce.submission.manage",
       "moduleKey": "tce",
       "resourceKey": "submission",
       "actionKey": "manage",
-      "routePattern": "/api/v1/tce/audesp-sp/submissions/**",
-      "description": "Create, validate, serialize, and submit AUDESP/SP TCE submissions in stub mode."
+      "routePattern": "#!/tce/queue",
+      "description": "Manage TCE submissions, replay queue jobs, and reset adapter circuits."
     },
     {
       "key": "avaliacao.read",
@@ -1132,6 +1148,22 @@
       "description": "Approve or reject absence justifications."
     },
     {
+      "key": "ponto.payroll.read",
+      "moduleKey": "ponto",
+      "resourceKey": "payroll",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/folha/**",
+      "description": "Preview payroll bridge aggregates and generated payroll lines."
+    },
+    {
+      "key": "ponto.payroll.write",
+      "moduleKey": "ponto",
+      "resourceKey": "payroll",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/folha/**",
+      "description": "Apply closed timesheet periods to payroll runs idempotently."
+    },
+    {
       "key": "rh.medical_leave.read",
       "moduleKey": "rh",
       "resourceKey": "medical_leave",
@@ -1280,6 +1312,8 @@
       "recrutamento.posse.write",
       "hr.bank_account.read",
       "hr.bank_account.write",
+      "hr.employment.read",
+      "hr.employment.write",
       "rh.employment_link.write",
       "rh.history.read",
       "rh.dependent.read",

@@ -192,6 +192,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'portal/ponto/espelho',
+        loadComponent: () =>
+          import('./features/portal/ponto/espelho/portal-espelho-ponto').then(
+            (m) => m.PortalEspelhoPonto,
+          ),
+      },
+      {
         path: 'saude/exames',
         loadComponent: () => import('./features/saude/exames/exames').then((m) => m.SaudeExames),
       },
@@ -260,6 +267,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'ponto/folha',
+        loadComponent: () =>
+          import('./features/ponto/folha/ponto-folha').then((m) => m.PontoFolha),
+      },
+      {
         path: 'fiscal/dctfweb',
         loadComponent: () =>
           import('./features/fiscal/dctfweb/dctfweb').then((m) => m.FiscalDctfweb),
@@ -315,6 +327,16 @@ export const routes: Routes = [
       {
         path: 'tce/audesp-sp',
         loadComponent: () => import('./features/tce/audesp-sp/audesp-sp').then((m) => m.AudespSp),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'tce',
+          permissions: ['tce.submission.read'],
+          moduleLabel: 'TCE',
+        },
+      },
+      {
+        path: 'tce/queue',
+        loadComponent: () => import('./features/tce/queue/tce-queue').then((m) => m.TceQueue),
         canActivate: [permissionGuard],
         data: {
           moduleKey: 'tce',

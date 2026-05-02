@@ -45,8 +45,13 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/ponto/banco-horas/**', 'ponto.hourbank.write'],
   ['#!/ponto/escalas/**', 'ponto.roster.read'],
   ['#!/ponto/escalas/**', 'ponto.roster.write'],
+  ['#!/ponto/folha/**', 'ponto.payroll.read'],
+  ['#!/ponto/folha/**', 'ponto.payroll.write'],
   ['#!/ponto/jornadas/**', 'ponto.schedule.read'],
   ['#!/ponto/jornadas/**', 'ponto.schedule.write'],
+  ['#!/ponto/justificativas/**', 'ponto.justification.read'],
+  ['#!/ponto/justificativas/**', 'ponto.justification.write'],
+  ['#!/ponto/justificativas/**', 'ponto.justification.approve'],
   ['#!/ponto/rep/**', 'ponto.rep.read'],
   ['#!/ponto/rep/**', 'ponto.rep.write'],
   ['#!/portal/comprovante-rendimentos', 'portal.yearly_income.read'],
@@ -68,7 +73,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/saude/programas/**', 'saude.program.write'],
   ['#!/tce/adapters', 'tce.adapter.manage'],
   ['#!/tce/catalog', 'tce.catalog.manage'],
-  ['#!/tce/audesp-sp', 'tce.submission.manage'],
+  ['#!/tce/queue', 'tce.submission.manage'],
 ] as const;
 
 export function permissionsForRoutePath(routePath: string): string[] {
