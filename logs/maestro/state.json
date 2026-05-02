@@ -2455,7 +2455,7 @@
       "status": "completed",
       "effort": "medium",
       "branch": "slice/42-bank-04-pensao-alimenticia",
-      "commit": "TBD",
+      "commit": "7c47108",
       "started_at": "2026-05-02T14:21:00Z",
       "completed_at": "2026-05-02T14:36:57Z",
       "retries": 0,
