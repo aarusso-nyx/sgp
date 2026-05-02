@@ -2357,7 +2357,7 @@
       "summary": "logs/maestro/83-ponto-09-geofencing-mobile-clock-in.summary.md"
     },
     "84-ponto-10-reconhecimento-facial": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "high",
       "branch": "slice/84-ponto-10-reconhecimento-facial",
       "retries": 0,
@@ -2400,11 +2400,19 @@
       ],
       "wave": 36,
       "theme": "PONTO",
-      "zero_retry": true
+      "zero_retry": true,
+      "started_at": "2026-05-02T10:02:30Z"
     }
   },
   "current_wave": 36,
-  "active_subagents": [],
+  "active_subagents": [
+    {
+      "slice": "84-ponto-10-reconhecimento-facial",
+      "agent": "pending-spawn",
+      "effort": "high",
+      "started_at": "2026-05-02T10:02:30Z"
+    }
+  ],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }
