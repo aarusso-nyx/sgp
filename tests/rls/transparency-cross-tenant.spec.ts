@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 describe('transparency RLS canonical SQL', () => {
   it('keeps public snapshot reads tenant-scoped', () => {
     const canonicalSchema = readFileSync(
-      resolve(__dirname, '../../database/sql/10-canonical-schema.sql'),
+      resolve(__dirname, '../../database/sql/80-rls-public_data.sql'),
       'utf8',
     );
 

@@ -478,7 +478,7 @@
       "legacy_object": "dbo.flyway_schema_history",
       "status": "canonicalized",
       "phase": "post_phase_1",
-      "canonical_object": "database/sql/10-canonical-schema.sql",
+      "canonical_object": "database/sql/",
       "note": "Canonicalized to the v0.0.1 SQL bootstrap; the fresh implementation does not carry Flyway or Prisma migration ledger tables."
     },
     {

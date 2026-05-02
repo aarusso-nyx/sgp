@@ -26,7 +26,7 @@ Concluir a retirada da fatia transicional de tabelas operacionais e manter apena
 
 ## Evidência
 
-- SQL canônico: `database/sql/10-canonical-schema.sql`
+- SQL canônico: `database/sql/`
 - Matriz atualizada: `docs/eng/64-database-alignment-matrix.json`
 
 ## Regras preservadas

@@ -3,10 +3,9 @@ import { resolve } from 'node:path';
 
 describe('environmental exposure RLS canonical SQL', () => {
   it('uses tenant and SST-05/eSocial permissions on exposure, EPI, PPP, and S-2240 tables', () => {
-    const sql = readFileSync(
-      resolve(__dirname, '../../database/sql/10-canonical-schema.sql'),
-      'utf8',
-    );
+    const sql = ['../../database/sql/80-rls-saude.sql', '../../database/sql/80-rls-esocial.sql']
+      .map((file) => readFileSync(resolve(__dirname, file), 'utf8'))
+      .join('\n');
 
     expect(sql).toContain('ALTER TABLE saude.environmental_exposure FORCE ROW LEVEL SECURITY');
     expect(sql).toContain('ALTER TABLE saude.epi_inventory FORCE ROW LEVEL SECURITY');

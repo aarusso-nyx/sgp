@@ -26,8 +26,8 @@ O relatório de 2026-04-22 marcava a fase 4 como encerrada, mas a linha de base 
 ## Evidências técnicas
 
 - Gate: `scripts/check-db-alignment.mjs`
-- SQL canônico: `database/sql/10-canonical-schema.sql`
-- Grants runtime: `database/sql/20-runtime-grants.sql`
+- SQL canônico: `database/sql/`
+- Grants runtime: `database/sql/90-runtime-grants.sql`
 - Smoke: `scripts/db-bootstrap-smoke.mjs`
 - Matriz vigente: `docs/eng/64-database-alignment-matrix.json`
 
@@ -44,7 +44,7 @@ A matriz vigente removeu as 15 exclusões in-scope restantes por dois caminhos:
 1. Objetos com dono canônico já existente foram mapeados sem criar shims legados:
    - `dbo.empresa_filial_lotacao` -> `hr.work_location`
    - `dbo.etapa` -> `hr.reference_catalog_entry`
-   - `dbo.flyway_schema_history` -> `database/sql/10-canonical-schema.sql`
+   - `dbo.flyway_schema_history` -> `database/sql/`
    - `dbo.menu` -> `public.menu_item`
    - `dbo.papel` -> `public.permission`
    - `dbo.tipo_averbacao` -> `hr.reference_catalog_entry`
@@ -61,6 +61,6 @@ A matriz vigente removeu as 15 exclusões in-scope restantes por dois caminhos:
 
 Evidência:
 
-- SQL canônico: `database/sql/10-canonical-schema.sql`
+- SQL canônico: `database/sql/`
 - Matriz: `docs/eng/64-database-alignment-matrix.json`
 - Gate: `cd . # repository root && node scripts/check-db-alignment.mjs --json`

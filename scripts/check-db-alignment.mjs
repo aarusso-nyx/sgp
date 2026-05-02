@@ -1,16 +1,13 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 
 const cwd = process.cwd();
 const matrixPath = resolve(cwd, 'docs/eng/64-database-alignment-matrix.json');
 const prismaSchemaPath = resolve(cwd, 'backend/prisma/schema.prisma');
-const canonicalSchemaPath = resolve(cwd, 'database/sql/10-canonical-schema.sql');
-const rlsPoliciesPath = canonicalSchemaPath;
-const rlsContextPath = canonicalSchemaPath;
-const portalProjectionPath = canonicalSchemaPath;
+const sqlSupportPath = resolve(cwd, 'database/sql');
 const authJwtServicePath = resolve(cwd, 'backend/src/auth/cognito-jwt.service.ts');
 const databaseServicePath = resolve(cwd, 'backend/src/database/database.service.ts');
 const portalServicePath = resolve(cwd, 'backend/src/portal/portal.service.ts');
@@ -19,7 +16,7 @@ const publicTransparencyServicePath = resolve(
   'backend/src/publico/public-transparency.service.ts',
 );
 const backendSrcPath = resolve(cwd, 'backend/src');
-const sqlSupportPath = resolve(cwd, 'database/sql');
+const optionalSqlFiles = new Set(['40-seed-loader.sql']);
 
 const argv = process.argv.slice(2);
 const asJson = argv.includes('--json');
@@ -195,6 +192,15 @@ function loadJson(path) {
 
 function includesAny(haystack, needles) {
   return needles.some((needle) => haystack.includes(needle));
+}
+
+function readCanonicalSql() {
+  return readdirSync(sqlSupportPath)
+    .filter((name) => name.endsWith('.sql'))
+    .filter((name) => !optionalSqlFiles.has(name))
+    .sort((a, b) => a.localeCompare(b))
+    .map((name) => readFileSync(resolve(sqlSupportPath, name), 'utf8'))
+    .join('\n');
 }
 
 function canonicalTableHasTenantColumn(content, schema, table) {
@@ -393,16 +399,16 @@ function main() {
   }
 
   const prismaSchema = readFileSync(prismaSchemaPath, 'utf8');
-  const canonicalSchema = readFileSync(canonicalSchemaPath, 'utf8');
+  const canonicalSchema = readCanonicalSql();
   if (includesAny(prismaSchema, ['model NotificationCounter', '@@map("notification_counter")'])) {
     fail('Prisma schema still contains retired notification_counter contract.');
   } else {
     ok('Prisma schema does not contain retired notification_counter model.');
   }
 
-  const rlsPolicies = readFileSync(rlsPoliciesPath, 'utf8');
-  const rlsContext = readFileSync(rlsContextPath, 'utf8');
-  const portalProjectionSql = readFileSync(portalProjectionPath, 'utf8');
+  const rlsPolicies = canonicalSchema;
+  const rlsContext = canonicalSchema;
+  const portalProjectionSql = canonicalSchema;
   const authJwtService = readFileSync(authJwtServicePath, 'utf8');
   const databaseService = readFileSync(databaseServicePath, 'utf8');
   const portalService = readFileSync(portalServicePath, 'utf8');

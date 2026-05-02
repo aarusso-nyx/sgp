@@ -25,16 +25,33 @@ function requireDatabaseUrl() {
   }
 }
 
-function runPsqlFile(filePath) {
-  const result = spawnSync('psql', [databaseUrl, '-v', 'ON_ERROR_STOP=1', '-f', filePath], {
+function quotePsqlPath(filePath) {
+  return `'${filePath.replaceAll("'", "''")}'`;
+}
+
+function runPsqlFiles(fileNames) {
+  const script = fileNames
+    .map((fileName) => {
+      const filePath = resolve(sqlDir, fileName);
+      return [
+        `\\echo [db:migrate] applying ${fileName}`,
+        `\\i ${quotePsqlPath(filePath)}`,
+        `\\echo [db:migrate] applied ${fileName}`,
+      ].join('\n');
+    })
+    .join('\n');
+
+  const result = spawnSync('psql', [databaseUrl, '-v', 'ON_ERROR_STOP=1'], {
     cwd,
-    stdio: 'inherit',
+    input: script,
+    stdio: ['pipe', 'inherit', 'inherit'],
     env: process.env,
+    encoding: 'utf8',
     shell: process.platform === 'win32',
   });
 
   if (result.status !== 0) {
-    throw new Error(`psql failed for ${filePath} with exit code ${result.status ?? 1}`);
+    throw new Error(`psql failed with exit code ${result.status ?? 1}`);
   }
 }
 
@@ -50,11 +67,7 @@ async function main() {
     throw new Error('No canonical SQL files found.');
   }
 
-  for (const fileName of sqlFiles) {
-    const filePath = resolve(sqlDir, fileName);
-    runPsqlFile(filePath);
-    console.log(`[db:migrate] applied ${fileName}`);
-  }
+  runPsqlFiles(sqlFiles);
 }
 
 main().catch((error) => {

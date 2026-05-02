@@ -38,7 +38,10 @@ describe('TransparencyPublishService', () => {
 
   it('keeps the approved-run guard in SQL', () => {
     const canonicalSchema = readFileSync(
-      resolve(__dirname, '../../../../database/sql/10-canonical-schema.sql'),
+      resolve(
+        __dirname,
+        '../../../../database/sql/40-functions-public_data.sql',
+      ),
       'utf8',
     );
 

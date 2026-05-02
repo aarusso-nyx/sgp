@@ -1,11 +1,3 @@
---
--- PostgreSQL database dump
---
-
-
--- Dumped from database version 18.1 (Postgres.app)
--- Dumped by pg_dump version 18.1 (Postgres.app)
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -17,10 +9,6 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
---
--- Data for Name: response_classification; Type: TABLE DATA; Schema: esocial; Owner: -
---
 
 INSERT INTO esocial.response_classification VALUES
 	('101', 'RECOVERABLE', 'Lote Aguardando Processamento.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
@@ -44,11 +32,6 @@ INSERT INTO esocial.response_classification VALUES
 	('504', 'DEFINITIVE', 'Solicitacao de Consulta Incorreta - Erro Certificado.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
 	('505', 'DEFINITIVE', 'Solicitacao de Consulta Incorreta - Consulta nula ou vazia.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03');
 
-
---
--- Data for Name: s2205_trigger_field; Type: TABLE DATA; Schema: esocial; Owner: -
---
-
 INSERT INTO esocial.s2205_trigger_field VALUES
 	('address.zip', '2026-05-01 23:04:30.910522-03'),
 	('address.street', '2026-05-01 23:04:30.910522-03'),
@@ -58,32 +41,15 @@ INSERT INTO esocial.s2205_trigger_field VALUES
 	('education_level', '2026-05-01 23:04:30.910522-03'),
 	('dependent.*', '2026-05-01 23:04:30.910522-03');
 
-
---
--- Data for Name: gps_payment_code; Type: TABLE DATA; Schema: fiscal; Owner: -
---
-
 INSERT INTO fiscal.gps_payment_code VALUES
 	('4ae3aaa7-5f66-4164-9ec8-e10746c90a20', '2100', 'Empresas em geral - CNPJ - recolhimento RGPS residual', 'BOTH', true, '1999-01-01', NULL, '2026-05-02 05:30:09.951875-03', '2026-05-02 05:30:09.951875-03'),
 	('724b2a82-f48b-42b7-a3a8-82eb9f1440f3', '2402', 'Orgaos do poder publico - CNPJ - recolhimento RGPS residual', 'BOTH', true, '1999-01-01', NULL, '2026-05-02 05:30:09.951875-03', '2026-05-02 05:30:09.951875-03'),
 	('4a7e9cdf-eeb0-4640-8e30-db2798ea097f', '2003', 'Empresas optantes pelo Simples - CNPJ - recolhimento residual', 'EMPLOYER', true, '1999-01-01', NULL, '2026-05-02 05:30:09.951875-03', '2026-05-02 05:30:09.951875-03'),
 	('1ddbfb91-c026-4f9c-ac55-76e63746c775', '2909', 'Reclamatoria trabalhista - CNPJ - recolhimento previdenciario', 'BOTH', true, '1999-01-01', NULL, '2026-05-02 05:30:09.951875-03', '2026-05-02 05:30:09.951875-03');
 
-
---
-
---
--- Data for TCE static catalog placeholders. These rows load before tenant seed, so
--- user audit triggers are disabled to avoid creating tenant-scoped audit events
--- for immutable bootstrap reference data.
---
-
 ALTER TABLE tce.state DISABLE TRIGGER USER;
 ALTER TABLE tce.layout_version DISABLE TRIGGER USER;
 ALTER TABLE tce.layout_field DISABLE TRIGGER USER;
-
--- Data for Name: state; Type: TABLE DATA; Schema: tce; Owner: -
---
 
 INSERT INTO tce.state VALUES
 	('c3463c4b-7776-4681-b9a3-0ccda11da6da', 'AC', 'Acre', 'STATE', NULL, 'TCE', 'Tribunal de Contas do Estado do Acre', 'https://www.tceac.tc.br/', '2026-05-02 05:30:09.976336-03', '2026-05-02 05:30:09.976336-03'),
@@ -119,21 +85,11 @@ INSERT INTO tce.state VALUES
 	('15663fae-5d7b-4f77-bd54-992dab8a6fab', 'PM', 'Para - Municipios', 'MUNICIPAL', 'PA', 'TCM', 'Tribunal de Contas dos Municipios do Estado do Para', 'https://www.tcm.pa.gov.br/', '2026-05-02 05:30:09.976336-03', '2026-05-02 05:30:09.976336-03'),
 	('cef3200e-8060-47c0-b683-9384a1795270', 'GM', 'Goias - Municipios', 'MUNICIPAL', 'GO', 'TCM', 'Tribunal de Contas dos Municipios do Estado de Goias', 'https://www.tcmgo.tc.br/', '2026-05-02 05:30:09.976336-03', '2026-05-02 05:30:09.976336-03');
 
-
---
--- Data for Name: layout_version; Type: TABLE DATA; Schema: tce; Owner: -
---
-
 INSERT INTO tce.layout_version VALUES
 	('abad5cf4-217e-420e-bdbf-dd1b6d446a90', '9a2fca89-f738-4392-b24c-aa57e4041a70', 'SIM-AM', '0.0.1', '2026-01-01', NULL, 'DRAFT', 'https://www.tce.pr.gov.br/fiscalizado/portal-e-contas-parana/', 'Placeholder publico: Sistema de Informacoes Municipais - Acompanhamento Mensal. Campos nao embarcados.', '2026-05-02 05:30:09.976336-03', '2026-05-02 05:30:09.976336-03'),
 	('dc31270e-ae4b-4ce7-8e11-832107e9ba03', '0d47997d-d830-441e-917e-6facabbd01d2', 'AUDESP', '0.0.1', '2026-01-01', NULL, 'DRAFT', 'https://www.tce.sp.gov.br/audesp', 'Placeholder publico: Auditoria Eletronica de Orgaos Publicos. Campos nao embarcados.', '2026-05-02 05:30:09.976336-03', '2026-05-02 05:30:09.976336-03'),
 	('ed44a795-199c-48f7-a9aa-e214a17eb706', '7ce324a6-2af7-4be7-be05-0ecce52873b5', 'SAGRES', '0.0.1', '2026-01-01', NULL, 'DRAFT', 'https://tce.pb.gov.br/sagres-cidadao/', 'Placeholder publico: SAGRES. Campos nao embarcados.', '2026-05-02 05:30:09.976336-03', '2026-05-02 05:30:09.976336-03'),
 	('19693682-856d-4193-adb3-1f7b12463d31', '812730e6-ccef-4437-a9b3-c1ea14293006', 'SIAP', '0.0.1', '2026-01-01', NULL, 'DRAFT', 'https://www.tce.ce.gov.br/', 'Placeholder publico: sistema estadual indicado para catalogacao inicial. Campos nao embarcados.', '2026-05-02 05:30:09.976336-03', '2026-05-02 05:30:09.976336-03');
-
-
---
--- Data for Name: layout_field; Type: TABLE DATA; Schema: tce; Owner: -
---
 
 INSERT INTO tce.layout_field VALUES
 	('ed19740e-c50b-4320-9066-9bf02ae42c09', 'dc31270e-ae4b-4ce7-8e11-832107e9ba03', 'AudespFolha', 'XML_NODE', true, NULL, NULL, NULL, 'root', 'AUDESP folha de pagamento placeholder publico', 10, '2026-05-02 05:48:27.32024-03', '2026-05-02 05:48:27.32024-03'),
@@ -150,14 +106,6 @@ INSERT INTO tce.layout_field VALUES
 	('7c4a28b2-bd91-4fe2-a87f-d040d34d1f1e', 'dc31270e-ae4b-4ce7-8e11-832107e9ba03', 'AudespFolha.Servidores.Servidor.Descontos', 'DECIMAL', true, NULL, 14, 2, 'sum deductions', 'total de descontos', 120, '2026-05-02 05:48:27.32024-03', '2026-05-02 05:48:27.32024-03'),
 	('00bfb59c-201d-41af-ab8c-a191a9ceadf7', 'dc31270e-ae4b-4ce7-8e11-832107e9ba03', 'AudespFolha.Servidores.Servidor.Liquido', 'DECIMAL', true, NULL, 14, 2, 'earnings - deductions', 'valor liquido', 130, '2026-05-02 05:48:27.32024-03', '2026-05-02 05:48:27.32024-03');
 
-
---
-
 ALTER TABLE tce.layout_field ENABLE TRIGGER USER;
 ALTER TABLE tce.layout_version ENABLE TRIGGER USER;
 ALTER TABLE tce.state ENABLE TRIGGER USER;
-
---
--- PostgreSQL database dump complete
---
-

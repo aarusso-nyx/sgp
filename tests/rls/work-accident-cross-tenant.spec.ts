@@ -3,10 +3,9 @@ import { resolve } from 'node:path';
 
 describe('work accident CAT RLS canonical SQL', () => {
   it('uses tenant and CAT/eSocial permissions on SST-03 tables', () => {
-    const sql = readFileSync(
-      resolve(__dirname, '../../database/sql/10-canonical-schema.sql'),
-      'utf8',
-    );
+    const sql = ['../../database/sql/80-rls-saude.sql', '../../database/sql/80-rls-esocial.sql']
+      .map((file) => readFileSync(resolve(__dirname, file), 'utf8'))
+      .join('\n');
 
     expect(sql).toContain('ALTER TABLE saude.work_accident FORCE ROW LEVEL SECURITY');
     expect(sql).toContain('ALTER TABLE saude.cat_emission FORCE ROW LEVEL SECURITY');

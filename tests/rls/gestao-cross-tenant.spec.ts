@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 describe('HR-06 gestao RLS policy', () => {
   it('uses tenant match plus gestao master-data permissions for work locations', () => {
     const canonicalSchema = readFileSync(
-      resolve(process.cwd(), 'database/sql/10-canonical-schema.sql'),
+      resolve(process.cwd(), 'database/sql/80-rls-hr.sql'),
       'utf8',
     );
 

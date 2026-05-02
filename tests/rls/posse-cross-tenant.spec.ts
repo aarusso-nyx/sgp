@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 describe('REC-06 posse RLS policy', () => {
   it('uses tenant matching and recruitment/RH write permissions', () => {
     const canonicalSchema = readFileSync(
-      resolve(__dirname, '../../database/sql/10-canonical-schema.sql'),
+      resolve(__dirname, '../../database/sql/80-rls-recrutamento.sql'),
       'utf8',
     );
 
