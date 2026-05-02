@@ -34,6 +34,7 @@ export interface EmployeeSummary {
   abonoPermanenciaAtivo: boolean;
   abonoPermanenciaInicio: string | null;
   abonoPermanenciaFundamento: string | null;
+  recruitmentOrigin: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -52,6 +53,7 @@ interface EmployeeListRow extends QueryResultRow {
   abono_permanencia_ativo?: boolean;
   abono_permanencia_inicio?: Date | string | null;
   abono_permanencia_fundamento?: string | null;
+  recruitment_origin?: string | null;
   created_at: Date | string;
   updated_at: Date | string;
 }
@@ -227,10 +229,18 @@ export class EmployeesService {
         e.updated_at,
         e.abono_permanencia_ativo,
         e.abono_permanencia_inicio,
-        e.abono_permanencia_fundamento
+        e.abono_permanencia_fundamento,
+        CASE
+          WHEN concurso.code IS NOT NULL THEN 'concurso ' || concurso.code
+          WHEN e.recruitment_concurso_id IS NOT NULL THEN 'concurso ' || e.recruitment_concurso_id::text
+          ELSE NULL
+        END AS recruitment_origin
       FROM hr.employee e
       LEFT JOIN hr.functional_status fs ON fs.id = e.functional_status_id
       LEFT JOIN hr.branch b ON b.id = e.branch_id
+      LEFT JOIN recrutamento.concurso concurso
+        ON concurso.tenant_id = e.tenant_id
+       AND concurso.id = e.recruitment_concurso_id
       WHERE ($1 = '%%')
          OR lower(concat_ws(' ',
               e.registration,
@@ -1651,6 +1661,7 @@ export class EmployeesService {
         ? this.toIso(row.abono_permanencia_inicio).slice(0, 10)
         : null,
       abonoPermanenciaFundamento: row.abono_permanencia_fundamento ?? null,
+      recruitmentOrigin: row.recruitment_origin ?? null,
       createdAt: this.toIso(row.created_at),
       updatedAt: this.toIso(row.updated_at),
     };

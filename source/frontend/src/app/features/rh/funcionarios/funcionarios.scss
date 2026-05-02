@@ -110,6 +110,16 @@ tbody tr {
   color: #8a1f1f;
 }
 
+.funcionarios__badge {
+  display: inline-block;
+  border: 1px solid #8aa4c2;
+  border-radius: 6px;
+  padding: 4px 8px;
+  background: #eef4fb;
+  color: #1d3f60;
+  font-size: 0.85rem;
+}
+
 dl {
   display: grid;
   gap: 0.45rem 0.8rem;

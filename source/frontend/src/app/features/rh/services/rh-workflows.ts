@@ -40,6 +40,7 @@ export interface RhEmployeeRecord {
   abonoPermanenciaAtivo: boolean;
   abonoPermanenciaInicio: string | null;
   abonoPermanenciaFundamento: string | null;
+  recruitmentOrigin: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -244,8 +245,8 @@ export class RhWorkflows {
       cpf: value['cpf'] ? String(value['cpf']) : null,
       email: value['email'] ? String(value['email']) : null,
       lifecycleStatus: status,
-      functionalStatus: null,
-      branch: null,
+      functionalStatus: value['functionalStatus'] ? String(value['functionalStatus']) : null,
+      branch: value['branch'] ? String(value['branch']) : null,
       active: status !== 'INACTIVE' && status !== 'LOCKED' && status !== 'TERMINATED',
       abonoPermanenciaAtivo: Boolean(value['abonoPermanenciaAtivo'] ?? false),
       abonoPermanenciaInicio: value['abonoPermanenciaInicio']
@@ -254,6 +255,7 @@ export class RhWorkflows {
       abonoPermanenciaFundamento: value['abonoPermanenciaFundamento']
         ? String(value['abonoPermanenciaFundamento'])
         : null,
+      recruitmentOrigin: value['recruitmentOrigin'] ? String(value['recruitmentOrigin']) : null,
       createdAt: String(value['createdAt'] ?? now),
       updatedAt: String(value['updatedAt'] ?? now),
     };

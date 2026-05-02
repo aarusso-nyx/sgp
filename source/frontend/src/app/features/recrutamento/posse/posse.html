@@ -1,0 +1,56 @@
+<section class="posse-workspace">
+  <header class="posse-toolbar">
+    <div>
+      <h1>Posse e exercicio</h1>
+      <p>Agenda administrativa de candidatos nomeados</p>
+    </div>
+    <label>
+      Nomeacao
+      <input name="nomeacaoId" [(ngModel)]="nomeacaoId" placeholder="UUID da nomeacao" />
+    </label>
+    <label>
+      Posse
+      <input name="posseAt" type="datetime-local" [(ngModel)]="posseAt" />
+    </label>
+    <label>
+      Lotacao
+      <input name="lotacaoId" [(ngModel)]="lotacaoId" placeholder="UUID da lotacao" />
+    </label>
+    <button type="button" (click)="schedule()">Agendar</button>
+  </header>
+
+  <label class="posse-reason">
+    Motivo de cancelamento
+    <input name="reason" [(ngModel)]="reason" />
+  </label>
+
+  <table aria-label="Agenda de posses">
+    <thead>
+      <tr>
+        <th>Candidato</th>
+        <th>Posse</th>
+        <th>Exercicio ate</th>
+        <th>Lotacao</th>
+        <th>Status</th>
+        <th>Servidor</th>
+        <th>Acoes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of agenda">
+        <td>{{ item.candidateName }}</td>
+        <td>{{ item.posseAt }}</td>
+        <td>{{ item.exercicioDueAt }}</td>
+        <td>{{ item.lotacao }}</td>
+        <td>{{ item.status }}</td>
+        <td>{{ item.employeeRegistration || '-' }}</td>
+        <td class="posse-actions">
+          <button type="button" (click)="markPossession(item)">Posse</button>
+          <button type="button" (click)="startExercise(item)">Exercicio</button>
+          <button type="button" (click)="prorogue(item)">Prorrogar</button>
+          <button type="button" (click)="cancel(item)">Cancelar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

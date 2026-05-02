@@ -43,6 +43,31 @@
 
 Permissões: leitura exige `rh.employee.read`; admissão exige `rh.employee.admit`; desligamento exige `rh.employee.terminate`.
 
+## 0.1.1. Nomeação, posse e exercício REC-05/REC-06
+
+`recrutamento.nomeacao` controla a chamada do candidato aprovado e `recrutamento.posse` registra a agenda de posse, o prazo de exercício de 15 dias úteis e a lotação inicial. O servidor ativo só nasce na transição para exercício: `recrutamento.efetivar_posse(posse_id)` cria `hr.employee`, `hr.employment_link`, `hr.employment_contract` e a linha de `hr.employee_status_history`, atualiza a nomeação para `EXERCICIO` e dispara a trilha de auditoria. Em seguida a API publica o S-2200 pelo fluxo ES-02.
+
+| Estado                    | Descrição                                                        |
+| ------------------------- | ---------------------------------------------------------------- |
+| `NOMEADO`                 | Candidato chamado por ato administrativo                         |
+| `CONVOCADO`               | Convocação registrada com evidência oficial, postal ou e-mail    |
+| `POSSE_EM_ANDAMENTO`      | Posse agendada, aguardando comparecimento                        |
+| `POSSE`                   | Posse realizada; exercício ainda não iniciado                    |
+| `EXERCICIO`               | Servidor ativo criado e S-2200 enfileirado                       |
+| `DESISTENTE`              | Candidato desistiu antes da posse                                |
+| `EXONERADO_POR_NAO_POSSE` | Prazo de comparecimento expirado sem posse                       |
+
+| Transição | De                            | Evento               | Guarda                                               | Ação                                                                                 | Para                    |
+| --------- | ----------------------------- | -------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------- |
+| REC06-T1  | `CONVOCADO`/`POSSE_EM_ANDAMENTO` | `AGENDAR_POSSE`      | lotação válida; prazo de posse informado             | cria ou atualiza `recrutamento.posse` com prazo de exercício de 15 dias úteis         | `POSSE_EM_ANDAMENTO`   |
+| REC06-T2  | `CONVOCADO`/`POSSE_EM_ANDAMENTO` | `REALIZAR_POSSE`     | nomeação ainda aguardando posse                      | marca `posse.status = POSSE_REALIZADA` e `nomeacao.status = POSSE`                  | `POSSE`                |
+| REC06-T3  | `POSSE`                       | `INICIAR_EXERCICIO`  | posse sem `employee_id`                              | executa `efetivar_posse`, cria servidor ativo e publica `recrutamento.posse.exercicio` | `EXERCICIO`            |
+| REC06-T4  | `POSSE_EM_ANDAMENTO`/`POSSE`  | `PRORROGAR_EXERCICIO` | servidor ainda não criado                            | acrescenta 15 dias úteis ao prazo de exercício                                       | `POSSE_EM_ANDAMENTO`   |
+| REC06-T5  | antes de `EXERCICIO`          | `CANCELAR_POSSE`     | motivo obrigatório                                   | marca `posse.status = CANCELADA`                                                     | `DESISTENTE`/encerrado |
+| REC06-T6  | após prazo de comparecimento  | `EXPIRAR_PRAZO`      | `comparecimento_until < CURRENT_DATE`                | marca `nomeacao.status = EXONERADO_POR_NAO_POSSE`                                   | `EXONERADO_POR_NAO_POSSE` |
+
+Cancelamento depois de criado `hr.employee` é bloqueado no REC-06 e exige desligamento/rescisão pelo fluxo CALC-12. Permissões: leitura exige `recrutamento.posse.read`; mutações exigem `recrutamento.posse.write` e `rh.employee.write`.
+
 ## 0.2. Vínculo e regime jurídico HR-02
 
 `hr.employment_link` registra a classificação física do vínculo por regime jurídico e `hr.employment_contract` registra a vigência contratual do servidor. A alteração de regime fecha o contrato ativo, abre novo vínculo/contrato, insere uma linha em `hr.employee_status_history` e grava evento imutável em `public.audit_event` via `sgp_append_audit_event`.

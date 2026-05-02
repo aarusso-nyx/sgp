@@ -9,6 +9,7 @@ import { ClassificacaoModule } from './classificacao/classificacao.module';
 import { ConcursoModule } from './concurso/concurso.module';
 import { InscricaoModule } from './inscricao/inscricao.module';
 import { NomeacaoModule } from './nomeacao/nomeacao.module';
+import { PosseModule } from './posse/posse.module';
 import { RecrutamentoAvaliacaoModule } from './avaliacao/avaliacao.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { RecrutamentoAvaliacaoModule } from './avaliacao/avaliacao.module';
     RecrutamentoAvaliacaoModule,
     ClassificacaoModule,
     NomeacaoModule,
+    PosseModule,
   ],
   controllers: [RecruitmentController],
   providers: [RecruitmentService],
