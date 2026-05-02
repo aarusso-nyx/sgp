@@ -39,6 +39,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'publico/concursos/minhas-notas',
+    loadComponent: () =>
+      import('./features/portal-publico/concursos/minhas-notas/minhas-notas').then(
+        (m) => m.PortalPublicoMinhasNotas,
+      ),
+  },
+  {
     path: 'auth/callback',
     component: AuthCallback,
   },
@@ -74,6 +81,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/recrutamento/concursos/concursos').then(
             (m) => m.RecrutamentoConcursos,
+          ),
+      },
+      {
+        path: 'recrutamento/avaliacao',
+        loadComponent: () =>
+          import('./features/recrutamento/avaliacao/avaliacao').then(
+            (m) => m.RecrutamentoAvaliacao,
           ),
       },
       {

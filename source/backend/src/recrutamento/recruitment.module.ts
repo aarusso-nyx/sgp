@@ -7,6 +7,7 @@ import { RecruitmentController } from './recruitment.controller';
 import { RecruitmentService } from './recruitment.service';
 import { ConcursoModule } from './concurso/concurso.module';
 import { InscricaoModule } from './inscricao/inscricao.module';
+import { RecrutamentoAvaliacaoModule } from './avaliacao/avaliacao.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { InscricaoModule } from './inscricao/inscricao.module';
     AuditModule,
     ConcursoModule,
     InscricaoModule,
+    RecrutamentoAvaliacaoModule,
   ],
   controllers: [RecruitmentController],
   providers: [RecruitmentService],

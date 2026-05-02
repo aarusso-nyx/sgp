@@ -1,0 +1,54 @@
+<section class="avaliacao-workspace">
+  <header>
+    <h1>Provas e resultados</h1>
+    <nav aria-label="Fluxo de avaliacao">
+      <button type="button" [class.active]="mode === 'provas'" (click)="mode = 'provas'">Provas</button>
+      <button type="button" [class.active]="mode === 'gabarito'" (click)="mode = 'gabarito'">Gabarito</button>
+      <button type="button" [class.active]="mode === 'recursos'" (click)="mode = 'recursos'">Recursos</button>
+    </nav>
+  </header>
+
+  <form *ngIf="mode === 'provas'" class="panel">
+    <label>Concurso <input name="concursoId" [(ngModel)]="prova.concursoId" /></label>
+    <label>
+      Tipo
+      <select name="kind" [(ngModel)]="prova.kind">
+        <option value="OBJETIVA">Objetiva</option>
+        <option value="DISCURSIVA">Discursiva</option>
+        <option value="PRATICA">Pratica</option>
+        <option value="TITULOS">Titulos</option>
+      </select>
+    </label>
+    <label>Aplicacao <input name="appliedAt" type="datetime-local" [(ngModel)]="prova.appliedAt" /></label>
+    <label>Peso <input name="weight" [(ngModel)]="prova.weight" /></label>
+
+    <div class="question-row" *ngFor="let question of questions; index as i">
+      <label>Numero <input [name]="'number' + i" type="number" [(ngModel)]="question.number" /></label>
+      <label>Enunciado <textarea [name]="'statement' + i" [(ngModel)]="question.statement"></textarea></label>
+      <label>Resposta <input [name]="'answer' + i" [(ngModel)]="question.answer" /></label>
+    </div>
+    <button type="button" (click)="addQuestion()">Adicionar questao</button>
+  </form>
+
+  <section *ngIf="mode === 'gabarito'" class="panel">
+    <label>Status
+      <select>
+        <option>PRELIMINARY</option>
+        <option>FINAL</option>
+      </select>
+    </label>
+    <pre>{{ answersPreview() }}</pre>
+  </section>
+
+  <form *ngIf="mode === 'recursos'" class="panel">
+    <label>Recurso <input name="recursoId" [(ngModel)]="recurso.id" /></label>
+    <label>
+      Decisao
+      <select name="status" [(ngModel)]="recurso.status">
+        <option value="UPHELD">Deferido</option>
+        <option value="REJECTED">Indeferido</option>
+      </select>
+    </label>
+    <label>Parecer <textarea name="parecer" [(ngModel)]="recurso.parecer"></textarea></label>
+  </form>
+</section>

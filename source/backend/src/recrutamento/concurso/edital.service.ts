@@ -18,6 +18,7 @@ export interface EditalSummary {
   administrativeActDate: string;
   publishedAt: string | null;
   publicUrl: string | null;
+  resourceDeadlineAt: string | null;
 }
 
 interface EditalRow extends QueryResultRow {
@@ -28,6 +29,7 @@ interface EditalRow extends QueryResultRow {
   administrative_act_date: Date | string;
   published_at: Date | string | null;
   public_url: string | null;
+  resource_deadline_at: Date | string | null;
 }
 
 @Injectable()
@@ -47,7 +49,7 @@ export class EditalService {
       const result = await client.query<EditalRow>(
         `
         INSERT INTO recrutamento.edital (
-          tenant_id, concurso_id, version, document_ref, administrative_act, administrative_act_date
+          tenant_id, concurso_id, version, document_ref, administrative_act, administrative_act_date, resource_deadline_at
         )
         SELECT
           concurso.tenant_id,
@@ -55,16 +57,18 @@ export class EditalService {
           COALESCE((SELECT max(version) + 1 FROM recrutamento.edital WHERE concurso_id = concurso.id), 1),
           $2,
           $3,
-          $4::date
+          $4::date,
+          NULLIF($5, '')::timestamptz
         FROM recrutamento.concurso concurso
         WHERE concurso.id = $1::uuid
-        RETURNING concurso_id::text, version, document_ref, administrative_act, administrative_act_date, published_at, public_url
+        RETURNING concurso_id::text, version, document_ref, administrative_act, administrative_act_date, published_at, public_url, resource_deadline_at
         `,
         [
           concursoId,
           input.documentRef.trim(),
           input.administrativeAct.trim(),
           input.administrativeActDate,
+          input.resourceDeadlineAt ?? '',
         ],
       );
       if (!result.rows[0]) throw new NotFoundException('Concurso not found');
@@ -80,7 +84,7 @@ export class EditalService {
     return this.database.transaction(async (client) => {
       const latest = await client.query<EditalRow>(
         `
-        SELECT concurso_id::text, version, document_ref, administrative_act, administrative_act_date, published_at, public_url
+        SELECT concurso_id::text, version, document_ref, administrative_act, administrative_act_date, published_at, public_url, resource_deadline_at
         FROM recrutamento.edital
         WHERE concurso_id = $1::uuid
         ORDER BY version DESC
@@ -110,7 +114,7 @@ export class EditalService {
           WHERE id = $1::uuid
           RETURNING id
         )
-        SELECT concurso_id::text, version, document_ref, administrative_act, administrative_act_date, published_at, public_url
+        SELECT concurso_id::text, version, document_ref, administrative_act, administrative_act_date, published_at, public_url, resource_deadline_at
         FROM updated_edital
         `,
         [
@@ -152,6 +156,12 @@ export class EditalService {
             ? String(row.published_at)
             : null,
       publicUrl: row.public_url,
+      resourceDeadlineAt:
+        row.resource_deadline_at instanceof Date
+          ? row.resource_deadline_at.toISOString()
+          : row.resource_deadline_at
+            ? String(row.resource_deadline_at)
+            : null,
     };
   }
 

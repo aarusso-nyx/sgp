@@ -73,6 +73,10 @@ export class CreateEditalDto {
 
   @IsDateString()
   administrativeActDate!: string;
+
+  @IsOptional()
+  @IsDateString()
+  resourceDeadlineAt?: string;
 }
 
 export class PublishEditalDto {

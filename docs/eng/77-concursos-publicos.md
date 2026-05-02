@@ -2,13 +2,13 @@
 
 ## Escopo
 
-O modulo `recrutamento/concurso` administra a abertura de concursos publicos do SGP v0.0.1. Ele cobre cadastro do certame, vagas por cargo, reservas legais, versionamento de edital, publicacao do edital no Portal Transparencia e inscricao publica de candidatos. Provas, classificacao, nomeacao, posse e exercicio ficam nos slices REC-03 a REC-06.
+O modulo `recrutamento/concurso` administra a abertura de concursos publicos do SGP v0.0.1. Ele cobre cadastro do certame, vagas por cargo, reservas legais, versionamento de edital, publicacao do edital no Portal Transparencia, inscricao publica de candidatos e a etapa de avaliacao. Classificacao, nomeacao, posse e exercicio ficam nos slices REC-04 a REC-06.
 
 ## Modelo operacional
 
 Cada concurso nasce em `DRAFT` com codigo publico, nome, validade e criador. As vagas sao registradas por cargo (`hr.job_position`) com total de vagas, reserva PCD, reserva racial, reserva indigena/quilombola quando aplicavel, requisitos em JSON e salario-base em `numeric(14,2)`.
 
-O edital e versionado em `recrutamento.edital`. Cada versao guarda referencia documental, ato administrativo e data do ato. A publicacao exige uma versao existente do edital, ato administrativo, data do ato e URL publica. Ao publicar, o edital recebe `published_at`, `public_url` e o concurso passa para `PUBLISHED`; concursos publicados ficam disponiveis sem autenticacao em `/api/v1/publico/concursos/:slug`.
+O edital e versionado em `recrutamento.edital`. Cada versao guarda referencia documental, ato administrativo, data do ato e prazo para recursos de prova quando houver etapa avaliativa. A publicacao exige uma versao existente do edital, ato administrativo, data do ato e URL publica. Ao publicar, o edital recebe `published_at`, `public_url` e o concurso passa para `PUBLISHED`; concursos publicados ficam disponiveis sem autenticacao em `/api/v1/publico/concursos/:slug`.
 
 ## Inscricao publica
 
@@ -16,10 +16,20 @@ O endpoint `POST /api/v1/publico/concursos/:slug/inscricoes` recebe inscricoes s
 
 A validacao do cargo usa o `requirement` JSON da vaga para idade minima, escolaridade e registro profissional. Autodeclaracoes de cota sao aceitas apenas de forma explicita para PCD, racial ou indigena. As regras federais de isencao cobrem CadUnico pelo Decreto 6.593/2008 e doadores de medula pela Lei 13.656/2018; inscricoes isentas ficam `EXEMPT` e nao geram cobranca.
 
+## Provas, gabaritos e notas
+
+As provas ficam em `recrutamento.prova` e podem ser objetivas, discursivas, praticas ou de titulos. Questoes ficam numeradas em `recrutamento.questao`; respostas dos candidatos ficam em `recrutamento.resposta_candidato`. O gabarito e versionado em `recrutamento.gabarito` como preliminar, final ou superseded. Um gabarito `FINAL` nao pode ser alterado in-place: correcao posterior cria nova versao e supersede a versao anterior.
+
+A funcao `recrutamento.recompute_notas(prova_id, gabarito_version)` reaplica o gabarito vigente, recalcula `recrutamento.nota` e gera auditoria por candidato cuja nota mudou. A consulta publica `/api/v1/publico/inscricoes/:id/notas?token=...` mostra nota e espelho apenas para o token da inscricao.
+
+## Recursos de prova
+
+Recursos ficam em `recrutamento.recurso` e so podem ser abertos enquanto `recrutamento.edital.resource_deadline_at` estiver vigente. A banca registra parecer e decisao administrativa, observando a publicidade e a impessoalidade do art. 37 da Constituicao Federal. A revisao judicial do gabarito segue a tese do STF no RE 632.853: nao ha substituicao ordinaria da banca pelo Judiciario, ressalvadas ilegalidades e erro grosseiro.
+
 ## Reservas legais
 
 A validacao de backend bloqueia vagas com reserva superior ao total. Para cargos com cinco ou mais vagas, a reserva PCD minima e 5%, em alinhamento com CF art. 37 VIII, LBI 13.146/2015 e Decreto 9.508/2018. Para cargos com tres ou mais vagas, a reserva racial minima e 20%, conforme Lei 12.990/2014. Cotas locais para indigenas e quilombolas sao registradas em campo proprio e devem observar a norma municipal aplicavel.
 
 ## Seguranca e auditoria
 
-As tabelas `recrutamento.concurso`, `recrutamento.edital`, `recrutamento.vaga`, `recrutamento.candidato`, `recrutamento.inscricao` e `recrutamento.payment_charge` sao tenant-scoped e usam RLS com `sgp_tenant_matches(tenant_id)`. Toda mutacao dispara trigger com `sgp_append_audit_event(...)`. A API administrativa exige `@RequirePermission`; a leitura publica usa funcao `SECURITY DEFINER` limitada a concursos `PUBLISHED` ou `OPEN` com edital publicado, e o acompanhamento de inscricao publica e protegido por token de consulta.
+As tabelas `recrutamento.concurso`, `recrutamento.edital`, `recrutamento.vaga`, `recrutamento.candidato`, `recrutamento.inscricao`, `recrutamento.payment_charge`, `recrutamento.prova`, `recrutamento.questao`, `recrutamento.gabarito`, `recrutamento.resposta_candidato`, `recrutamento.recurso` e `recrutamento.nota` sao tenant-scoped e usam RLS com `sgp_tenant_matches(tenant_id)`. Toda mutacao dispara trigger com `sgp_append_audit_event(...)`. A API administrativa exige `@RequirePermission`; a leitura publica usa funcao `SECURITY DEFINER` limitada a concursos `PUBLISHED` ou `OPEN` com edital publicado, e o acompanhamento de inscricao publica e protegido por token de consulta.
