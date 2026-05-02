@@ -458,6 +458,19 @@
       "agent": "019de6c8-d4d6-7c01-a7da-be9f8f0f6570",
       "failure_log": "logs/maestro/39-bank-03-dados-bancarios-validacao.failure.md",
       "recovery": "manual payroll operation fixture update, auditMutation coverage, and orphaned eSocial submission batch selector hardening after low-effort gate failure"
+    },
+    "40-bank-01-cnab240-remessa": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/40-bank-01-cnab240-remessa",
+      "commit": "1b53305e9dd7651183dadd55ba746a3ed5e2eb93",
+      "started_at": "2026-05-02T00:58:00-03:00",
+      "failed_at": "2026-05-02T01:14:34-03:00",
+      "completed_at": "2026-05-02T01:19:41-03:00",
+      "retries": 0,
+      "agent": "019de6d6-445c-7e23-803d-a1e6374d7ae8",
+      "failure_log": "logs/maestro/40-bank-01-cnab240-remessa.failure.md",
+      "recovery": "manual lint repair for retired legacy CNAB builder after zero-retry worker failure; all gates and direct BANK-01 RLS/hash/record-size checks passed"
     }
   },
   "current_wave": 18,

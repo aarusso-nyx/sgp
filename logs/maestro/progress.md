@@ -65,3 +65,5 @@ W16 ✓ 36-es-06 (1 slice, medium→high, gates passed, commit a7e52dc) — comp
 W17 ✗ 37-es-08 (xhigh blocking failure: lint no-base-to-string/no-unsafe-assignment in submission SOAP services) — see logs/maestro/37-es-08-submission-soap-ws-security.failure.md
 W17 ✓ 37-es-08 (1 slice, xhigh + manual recovery, gates passed, commit d36cd30) — completeness 26.2% → 26.2%
 W18 ✓ 39-bank-03 (1 slice, low + manual recovery, gates passed, commit d2934ba) — completeness 26.2% → 26.2%
+W18 ✗ 40-bank-01 (high blocking failure: lint no-unused-vars _input in integrations-worker/builders/cnab-remittance.builder.ts) — see logs/maestro/40-bank-01-cnab240-remessa.failure.md
+W18 ✓ 40-bank-01 (1 slice, high + manual recovery, gates passed, commit 1b53305) — completeness 26.2% → 26.2%; Wave 18 complete
