@@ -1,0 +1,62 @@
+<section class="portal-justificativa" aria-labelledby="portal-justificativa-title">
+  <header>
+    <p>Portal do servidor</p>
+    <h1 id="portal-justificativa-title">Justificativa de ausencia</h1>
+  </header>
+
+  <p class="portal-justificativa__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="portal-justificativa__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="portal-justificativa__panel">
+    <label>
+      <span>Servidor</span>
+      <input formControlName="employeeId" />
+    </label>
+    <label>
+      <span>Usuario solicitante</span>
+      <input formControlName="requestedByUserId" />
+    </label>
+    <label>
+      <span>Tipo</span>
+      <select formControlName="kind">
+        <option value="MEDICAL">Atestado medico</option>
+        <option value="BEREAVEMENT">Luto</option>
+        <option value="MARRIAGE">Casamento</option>
+        <option value="BLOOD_DONATION">Doacao de sangue</option>
+        <option value="LEGAL_DUTY">Obrigacao legal</option>
+        <option value="OTHER">Outro</option>
+      </select>
+    </label>
+    <label>
+      <span>Inicio</span>
+      <input type="datetime-local" formControlName="absenceStart" />
+    </label>
+    <label>
+      <span>Fim</span>
+      <input type="datetime-local" formControlName="absenceEnd" />
+    </label>
+    <label>
+      <span>Anexo</span>
+      <input formControlName="attachmentId" />
+    </label>
+    <label class="portal-justificativa__wide">
+      <span>Justificativa</span>
+      <textarea formControlName="reason" rows="4"></textarea>
+    </label>
+    <button type="submit" [disabled]="saving">Enviar</button>
+  </form>
+
+  <section class="portal-justificativa__panel">
+    <h2>Minhas solicitacoes</h2>
+    <ol>
+      <li *ngFor="let request of requests">
+        <strong>{{ request.kind }}</strong>
+        <span>{{ request.status }}</span>
+        <span
+          >{{ request.absenceStart | date: 'short' }} -
+          {{ request.absenceEnd | date: 'short' }}</span
+        >
+      </li>
+    </ol>
+  </section>
+</section>

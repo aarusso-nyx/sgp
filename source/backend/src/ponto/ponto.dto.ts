@@ -218,6 +218,61 @@ export class SettleHourBankDto {
   competenceYear?: number;
 }
 
+export class CreateAbsenceJustificationDto {
+  @IsUUID()
+  employeeId!: string;
+
+  @IsIn([
+    'MEDICAL',
+    'MARRIAGE',
+    'BEREAVEMENT',
+    'BLOOD_DONATION',
+    'MILITARY',
+    'VOTING',
+    'PATERNITY',
+    'MATERNITY',
+    'LEGAL_DUTY',
+    'UNION',
+    'TRAINING',
+    'OTHER',
+  ])
+  kind!: string;
+
+  @IsDateString()
+  absenceStart!: string;
+
+  @IsDateString()
+  absenceEnd!: string;
+
+  @IsString()
+  @Length(5, 2000)
+  reason!: string;
+
+  @IsOptional()
+  @IsUUID()
+  attachmentId?: string;
+
+  @IsUUID()
+  requestedByUserId!: string;
+
+  @IsOptional()
+  @IsIn(['PAID', 'UNPAID', 'HOUR_BANK_NEUTRAL'])
+  payrollTreatment?: string;
+}
+
+export class DecideAbsenceJustificationDto {
+  @IsIn(['APPROVED', 'REJECTED'])
+  decision!: string;
+
+  @IsUUID()
+  approverUserId!: string;
+
+  @IsOptional()
+  @IsString()
+  @Length(0, 2000)
+  reason?: string;
+}
+
 export class CreateRepDeviceDto {
   @IsIn(['REP_P', 'REP_A', 'REP_C'])
   kind!: string;

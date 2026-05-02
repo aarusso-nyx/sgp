@@ -30,6 +30,10 @@ import { HourBankCompensationService } from './hour-bank/hour-bank-compensation.
 import { HourBankController } from './hour-bank/hour-bank.controller';
 import { HourBankService } from './hour-bank/hour-bank.service';
 import { HourBankSettlementService } from './hour-bank/hour-bank-settlement.service';
+import { JustificationController } from './justification/justification.controller';
+import { JustificationPayrollBridgeService } from './justification/justification-payroll-bridge.service';
+import { JustificationService } from './justification/justification.service';
+import { JustificationWorkflowService } from './justification/justification-workflow.service';
 import { ShiftPatternController } from './shift-pattern/shift-pattern.controller';
 import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
 
@@ -46,6 +50,7 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     ShiftPatternController,
     DutyRosterController,
     HourBankController,
+    JustificationController,
   ],
   providers: [
     WorkScheduleService,
@@ -67,6 +72,9 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     HourBankAccrualService,
     HourBankCompensationService,
     HourBankSettlementService,
+    JustificationService,
+    JustificationWorkflowService,
+    JustificationPayrollBridgeService,
   ],
   exports: [
     WorkScheduleService,
@@ -84,6 +92,9 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     HourBankAccrualService,
     HourBankCompensationService,
     HourBankSettlementService,
+    JustificationService,
+    JustificationWorkflowService,
+    JustificationPayrollBridgeService,
   ],
 })
 export class PontoModule {}

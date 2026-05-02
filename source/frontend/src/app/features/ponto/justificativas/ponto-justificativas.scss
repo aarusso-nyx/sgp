@@ -1,0 +1,60 @@
+.ponto-justificativas {
+  display: grid;
+  gap: 1rem;
+}
+
+.ponto-justificativas header,
+.ponto-justificativas__decision,
+.ponto-justificativas__panel {
+  background: #fff;
+  border: 1px solid #d7dde5;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.ponto-justificativas header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ponto-justificativas h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.ponto-justificativas p {
+  margin: 0;
+}
+
+.ponto-justificativas__actions,
+.ponto-justificativas__decision {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.ponto-justificativas__decision label {
+  display: grid;
+  flex: 1;
+  gap: 0.25rem;
+}
+
+.ponto-justificativas table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.ponto-justificativas th,
+.ponto-justificativas td {
+  border-bottom: 1px solid #e3e7ed;
+  padding: 0.625rem;
+  text-align: left;
+}
+
+.ponto-justificativas__error {
+  color: #b42318;
+}
+
+.ponto-justificativas__message {
+  color: #067647;
+}
