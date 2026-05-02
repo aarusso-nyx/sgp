@@ -44,6 +44,7 @@ Os bounded contexts identificados são:
 | FGTS CLT                    | `FOLHA_PAGAMENTO`       | `folha-pagamento/fgts`; `folha-pagamento/operations/sifge` |
 | Avaliação e Progressão      | `MODULO_AVALIACAO`      | `avaliacao`                                                |
 | Recrutamento e Seleção      | `RECRUTAMENTO_SELECAO`  | `recrutamento`                                             |
+| Prova Online com Proctoring | `RECRUTAMENTO_SELECAO`  | `recrutamento/prova-online`                                |
 | Consultas Gerenciais        | `CONSULTAS_GERENCIAIS`  | `consultas`                                                |
 | Relatórios                  | `RELATORIO`             | `relatorios`                                               |
 | Previdenciário              | `MODULO_PREVIDENCIARIO` | `previdenciario`                                           |
@@ -778,11 +779,11 @@ stateDiagram-v2
 
 #### `ponto` — Ponto Eletrônico e Jornada
 
-**Responsabilidades:** cadastro de jornadas contratadas, turnos e horários diários; vigência de atribuição de jornada ao servidor; registro imutável de marcações de ponto com encadeamento criptográfico; abertura de períodos de apuração para posterior integração com folha.
+**Responsabilidades:** cadastro de jornadas contratadas, turnos e horários diários; vigência de atribuição de jornada ao servidor; registro imutável de marcações de ponto com encadeamento criptográfico; abertura de períodos de apuração para posterior integração com folha; cadastro e conferência de biometria digital e palmar como identificador adicional dos REPs.
 
-**Entidades:** `work_schedule`, `work_shift`, `day_schedule`, `employee_schedule_assignment`, `time_record`, `timesheet_period`.
+**Entidades:** `work_schedule`, `work_shift`, `day_schedule`, `employee_schedule_assignment`, `time_record`, `timesheet_period`, `employee_biometric_template`, `biometric_consent`, `biometric_match`.
 
-**Serviços:** `WorkScheduleService`, `AssignmentService`, `TimeRecordHashService`, `TimesheetPeriodService`.
+**Serviços:** `WorkScheduleService`, `AssignmentService`, `TimeRecordHashService`, `TimesheetPeriodService`, `TemplateEnrollmentService`, `PontoBiometricConsentService`, `PontoBiometricMatcherService`.
 
 **Controladores:**
 
@@ -793,12 +794,17 @@ stateDiagram-v2
 - `GET /api/v1/ponto/marcacoes/:employeeId`
 - `POST /api/v1/ponto/marcacoes`
 - `POST /api/v1/ponto/periodos`
+- `GET /api/v1/ponto/biometria/templates`
+- `POST /api/v1/ponto/biometria/consents`
+- `DELETE /api/v1/ponto/biometria/employees/:employeeId/consent`
+- `POST /api/v1/ponto/biometria/templates`
+- `POST /api/v1/ponto/biometria/matches`
 
 **Eventos publicados:** nenhum evento de domínio neste corte; mutações registram `public.audit_event` via `sgp_append_audit_event(...)`.
 
 **Eventos consumidos:** nenhum.
 
-**Dependências cross-module:** `rh` para validar servidor existente; `folha` consumirá `timesheet_period` em PONTO-07 por contrato explícito, sem import direto neste corte.
+**Dependências cross-module:** `rh` para validar servidor existente; `folha` consome `timesheet_period` em PONTO-07 por contrato explícito, sem import direto; `auditoria` recebe mutações de templates, consentimentos e matches sem persistir template em claro.
 
 ---
 
@@ -819,6 +825,27 @@ stateDiagram-v2
 **Eventos consumidos:** nenhum.
 
 **Dependências cross-module:** `rh.employment_link` para o vínculo TS-V; `hr.work_location` para lotação; `esocial-worker/s2306` para XML e transmissão; auditoria imutável via `sgp_append_audit_event(...)`.
+
+---
+
+#### `folha-pagamento/operations/reintegration` — Reintegração S-2298
+
+**Responsabilidades:** registrar ordem judicial, anulação administrativa ou anistia para vínculo desligado; aplicar a transição `TERMINATED -> ACTIVE` no histórico funcional; reabrir o vínculo; reprocessar competências retroativas com `payroll_calc.evaluate_earning_deduction(...)` e causa `REINSTATEMENT_RETRO`.
+
+**Entidades:** `hr.reintegration_order`, `hr.employee_status_history`, `payroll.payroll_run`, `payroll.employee_payroll_item`, `payroll.payroll_financial_record`.
+
+**Serviços:** `ReintegrationOrderService`.
+
+**Controladores:**
+
+- `POST /api/v1/admin/hr/reintegrations`
+- `POST /api/v1/admin/hr/reintegrations/:id/apply`
+
+**Eventos publicados:** nenhum evento de domínio separado neste corte; a ordem aplicada habilita emissão S-2298 pelo `esocial-worker/s2298`.
+
+**Eventos consumidos:** recibo e rastreabilidade do S-2299 original em `public.esocial_event`.
+
+**Dependências cross-module:** `rh.employment_link` e `hr.employee` para vínculo e servidor; `payroll_calc` para cálculo retroativo idempotente; `esocial-worker/s2298` para XML e transmissão; auditoria imutável via `sgp_append_audit_event(...)`.
 
 ---
 
@@ -1106,6 +1133,8 @@ stateDiagram-v2
 **Gate ES-07:** toda emissão real deve passar pelo hub `source/backend/src/esocial-worker/esocial-emit.service.ts` antes de entrar em `public.esocial_event`. O hub valida o XML contra o bundle oficial XSD S-1.3 commitado em `source/backend/src/esocial-worker/xsd/`, assina com XML-DSig enveloped em `source/backend/src/esocial-worker/signature/` usando certificado ICP-Brasil A1/A3 do tenant, registra falhas em `esocial.xsd_validation_failure` e só então persiste o XML assinado na fila. O cadastro e rotação de certificados ficam em `source/backend/src/esocial-worker/certificate-store/`, com blobs PKCS#12 cifrados em repouso e RLS por tenant.
 
 **Submódulo ES-11:** `source/backend/src/esocial-worker/s2306` gera e transmite S-2306 para alteração contratual de TS-V a partir de `hr.tsv_contract_change`. O builder inclui apenas os grupos correspondentes aos campos presentes em `fields_changed`, valida contra `evtTSVAltContr.xsd` pelo bundle S-1.3 e persiste a rastreabilidade em `esocial.s2306_event`.
+
+**Submódulo ES-10:** `source/backend/src/esocial-worker/s2298` gera e transmite S-2298 para reintegração a partir de `hr.reintegration_order`. O builder referencia o recibo S-2299 original mantido em `esocial.s2298_event`, mapeia `tpReint`, `nrProcJud`, `dtEfetRetorno` e `dtEfeito`, valida contra `evtReintegr.xsd` pelo bundle S-1.3 e persiste rastreabilidade em `esocial.s2298_event`.
 
 **Fluxo de processamento:**
 

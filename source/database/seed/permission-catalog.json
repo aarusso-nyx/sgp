@@ -892,6 +892,30 @@
       "description": "Capture, match, expire, and revoke candidate biometrics."
     },
     {
+      "key": "recrutamento.exam.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "online_exam",
+      "actionKey": "read",
+      "routePattern": "/api/v1/recrutamento/prova-online/**",
+      "description": "Read online exam sessions, proctoring flags, and artifacts."
+    },
+    {
+      "key": "recrutamento.exam.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "online_exam",
+      "actionKey": "write",
+      "routePattern": "/api/v1/recrutamento/prova-online/**",
+      "description": "Start, ingest, flag, submit, and erase online proctored exam records."
+    },
+    {
+      "key": "recrutamento.exam.review",
+      "moduleKey": "recrutamento",
+      "resourceKey": "online_exam",
+      "actionKey": "review",
+      "routePattern": "/api/v1/recrutamento/prova-online/review/**",
+      "description": "Review proctoring flags, accept sessions, void suspicious sessions, and reschedule."
+    },
+    {
       "key": "recrutamento.read",
       "moduleKey": "recrutamento",
       "resourceKey": "recruitment",
@@ -1074,6 +1098,22 @@
       "actionKey": "write",
       "routePattern": "#!/ponto/rep/**",
       "description": "Create REP devices and ingest REP-P, REP-A, and REP-C batches."
+    },
+    {
+      "key": "ponto.biometric.read",
+      "moduleKey": "ponto",
+      "resourceKey": "biometric",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/biometria/**",
+      "description": "Read employee biometric consent, template metadata, and match decisions."
+    },
+    {
+      "key": "ponto.biometric.write",
+      "moduleKey": "ponto",
+      "resourceKey": "biometric",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/biometria/**",
+      "description": "Enroll, match, revoke, and crypto-shred employee biometrics for REP clock-in."
     },
     {
       "key": "ponto.afd.read",
@@ -1349,6 +1389,8 @@
       "ponto.timerecord.write",
       "ponto.rep.read",
       "ponto.rep.write",
+      "ponto.biometric.read",
+      "ponto.biometric.write",
       "ponto.afd.read",
       "ponto.afd.write",
       "ponto.roster.read",

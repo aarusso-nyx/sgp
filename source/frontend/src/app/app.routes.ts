@@ -61,6 +61,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'publico/concursos/:slug/prova-online',
+    loadComponent: () =>
+      import('./features/portal-publico/concursos/prova-online/prova-online').then(
+        (m) => m.PortalPublicoProvaOnline,
+      ),
+  },
+  {
     path: 'auth/callback',
     component: AuthCallback,
   },
@@ -130,6 +137,19 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'recrutamento/prova-online-review',
+        loadComponent: () =>
+          import('./features/recrutamento/prova-online-review/prova-online-review').then(
+            (m) => m.RecrutamentoProvaOnlineReview,
+          ),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'recrutamento',
+          permissions: ['recrutamento.exam.review'],
+          moduleLabel: 'Recrutamento e Seleção',
+        },
+      },
+      {
         path: 'avaliacao/estagio-probatorio',
         loadComponent: () =>
           import('./features/avaliacao/estagio-probatorio/estagio-probatorio').then(
@@ -196,6 +216,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/portal/ponto/espelho/portal-espelho-ponto').then(
             (m) => m.PortalEspelhoPonto,
+          ),
+      },
+      {
+        path: 'portal/meus-dados/biometria',
+        loadComponent: () =>
+          import('./features/portal-empregado/meus-dados/biometria/portal-biometria').then(
+            (m) => m.PortalBiometria,
           ),
       },
       {
@@ -268,8 +295,12 @@ export const routes: Routes = [
       },
       {
         path: 'ponto/folha',
+        loadComponent: () => import('./features/ponto/folha/ponto-folha').then((m) => m.PontoFolha),
+      },
+      {
+        path: 'ponto/biometria',
         loadComponent: () =>
-          import('./features/ponto/folha/ponto-folha').then((m) => m.PontoFolha),
+          import('./features/ponto/biometria/ponto-biometria').then((m) => m.PontoBiometria),
       },
       {
         path: 'fiscal/dctfweb',

@@ -2011,7 +2011,7 @@
       "completed_at": "2026-05-02T08:34:48.021Z"
     },
     "77-es-10-reintegracao-s2298": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/77-es-10-reintegracao-s2298",
       "retries": 0,
@@ -2057,7 +2057,10 @@
       "theme": "ES",
       "zero_retry": true,
       "started_at": "2026-05-02T09:24:00Z",
-      "agent": "019de800-a6ae-71d0-939c-a1b3f9c84aa5"
+      "agent": "019de800-a6ae-71d0-939c-a1b3f9c84aa5",
+      "commit": "493de02",
+      "completed_at": "2026-05-02T09:43:40Z",
+      "summary": "logs/maestro/77-es-10-reintegracao-s2298.summary.md"
     },
     "78-es-11-alteracao-contratual-tsv-s2306": {
       "status": "completed",
@@ -2158,7 +2161,7 @@
       "failure_log": "logs/maestro/79-rec-07-biometria-candidato.failure.md"
     },
     "80-rec-08-prova-online-proctored": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/80-rec-08-prova-online-proctored",
       "retries": 0,
@@ -2199,7 +2202,12 @@
       "theme": "REC",
       "zero_retry": true,
       "started_at": "2026-05-02T09:24:00Z",
-      "agent": "019de800-a730-7a61-a714-3a0f27534688"
+      "agent": "019de800-a730-7a61-a714-3a0f27534688",
+      "commit": "e5bccac",
+      "completed_at": "2026-05-02T09:43:40Z",
+      "recovery": "maestro defense fixed concurrent ES-10 schema drift and Supertest typing after agent failure",
+      "failure_log": "logs/maestro/80-rec-08-prova-online-proctored.failure.md",
+      "summary": "logs/maestro/80-rec-08-prova-online-proctored.summary.md"
     },
     "81-rec-09-certificacao-digital-banca": {
       "status": "pending",
@@ -2247,7 +2255,7 @@
       "zero_retry": false
     },
     "82-ponto-08-biometrico-digital-palm": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/82-ponto-08-biometrico-digital-palm",
       "retries": 0,
@@ -2287,7 +2295,12 @@
       "theme": "PONTO",
       "zero_retry": false,
       "started_at": "2026-05-02T09:24:00Z",
-      "agent": "019de800-a73b-76f2-8583-d4934e0cc03e"
+      "agent": "019de800-a73b-76f2-8583-d4934e0cc03e",
+      "commit": "6454d46",
+      "completed_at": "2026-05-02T09:43:40Z",
+      "recovery": "maestro defense fixed unsafe unit-test call and concurrent cross-slice lint drift after agent failure",
+      "failure_log": "logs/maestro/82-ponto-08-biometrico-digital-palm.failure.md",
+      "summary": "logs/maestro/82-ponto-08-biometrico-digital-palm.summary.md"
     },
     "83-ponto-09-geofencing-mobile-clock-in": {
       "status": "pending",
@@ -2380,27 +2393,8 @@
       "zero_retry": true
     }
   },
-  "current_wave": 34,
-  "active_subagents": [
-    {
-      "slice": "77-es-10-reintegracao-s2298",
-      "agent": "019de800-a6ae-71d0-939c-a1b3f9c84aa5",
-      "effort": "high",
-      "started_at": "2026-05-02T09:24:00Z"
-    },
-    {
-      "slice": "82-ponto-08-biometrico-digital-palm",
-      "agent": "019de800-a73b-76f2-8583-d4934e0cc03e",
-      "effort": "medium",
-      "started_at": "2026-05-02T09:24:00Z"
-    },
-    {
-      "slice": "80-rec-08-prova-online-proctored",
-      "agent": "019de800-a730-7a61-a714-3a0f27534688",
-      "effort": "high",
-      "started_at": "2026-05-02T09:24:00Z"
-    }
-  ],
+  "current_wave": 35,
+  "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }

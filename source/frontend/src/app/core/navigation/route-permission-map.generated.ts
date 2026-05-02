@@ -43,6 +43,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/ponto/afd/**', 'ponto.afd.write'],
   ['#!/ponto/banco-horas/**', 'ponto.hourbank.read'],
   ['#!/ponto/banco-horas/**', 'ponto.hourbank.write'],
+  ['#!/ponto/biometria/**', 'ponto.biometric.read'],
+  ['#!/ponto/biometria/**', 'ponto.biometric.write'],
   ['#!/ponto/escalas/**', 'ponto.roster.read'],
   ['#!/ponto/escalas/**', 'ponto.roster.write'],
   ['#!/ponto/folha/**', 'ponto.payroll.read'],

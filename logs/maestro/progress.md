@@ -118,3 +118,6 @@ W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migrati
 2026-05-02T09:22:18Z W34 ✓ 74-tce-04 (medium, queue fake and RLS smoke fixed by maestro defense, commit 013fd02) — submission queue retry/admin
 2026-05-02T09:22:18Z W34 ✓ 78-es-11 (medium, current-schema fixture and audit signature fixed by maestro defense, commit 1c58f62) — TS-V S-2306 alteration
 2026-05-02T09:24:00Z frontier launch 77-es-10, 82-ponto-08, 80-rec-08 — agents 019de800-a6ae, 019de800-a73b, 019de800-a730
+2026-05-02T09:43:40Z W34 ✓ 77-es-10 (high zero-tier, gates passed, commit 493de02) — reintegracao S-2298 retroactive payroll
+2026-05-02T09:43:40Z W34 ✓ 80-rec-08 (high zero-tier, concurrent ES-10 schema drift fixed by maestro defense, commit e5bccac) — online proctored exam
+2026-05-02T09:43:40Z W34 ✓ 82-ponto-08 (medium, lint drift fixed by maestro defense, commit 6454d46) — fingerprint and palm biometrics
