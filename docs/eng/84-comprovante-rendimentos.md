@@ -29,4 +29,4 @@ A geração do PDF valida que `taxable_total + exempt_total` coincide com o tota
 
 ## Saída Oficial
 
-O PDF é produzido por `source/backend/src/report-service/yearly-income/` com a mesma biblioteca real de XCUT-01 (`pdf-lib` via `PdfABuilderService`), metadados PDF/A-1b, armazenamento S3-compatible e hash SHA-256 em `public.generated_report_file.file_hash`. A chave lógica é `{tenant}/outputs/yearly-income/{ano_base}/{employee_id}.pdf`, com retenção de 10 anos.
+O PDF é produzido por `backend/src/report-service/yearly-income/` com a mesma biblioteca real de XCUT-01 (`pdf-lib` via `PdfABuilderService`), metadados PDF/A-1b, armazenamento S3-compatible e hash SHA-256 em `public.generated_report_file.file_hash`. A chave lógica é `{tenant}/outputs/yearly-income/{ano_base}/{employee_id}.pdf`, com retenção de 10 anos.

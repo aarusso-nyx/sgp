@@ -5,7 +5,7 @@
 
 ## Decisao
 
-O `sgp-esocial-worker` deixa de usar adapter sandbox para submissao e passa a operar pelo submodulo `source/backend/src/esocial-worker/submission/`. O fluxo oficial agrupa eventos `public.esocial_event` ja validados e assinados pelo ES-07, cria uma linha em `esocial.submission_batch`, monta o lote `EnviarLoteEventos`, assina o envelope SOAP com WS-Security e transmite por mTLS usando o PKCS#12 ativo do tenant em `esocial.tenant_certificate`.
+O `sgp-esocial-worker` deixa de usar adapter sandbox para submissao e passa a operar pelo submodulo `backend/src/esocial-worker/submission/`. O fluxo oficial agrupa eventos `public.esocial_event` ja validados e assinados pelo ES-07, cria uma linha em `esocial.submission_batch`, monta o lote `EnviarLoteEventos`, assina o envelope SOAP com WS-Security e transmite por mTLS usando o PKCS#12 ativo do tenant em `esocial.tenant_certificate`.
 
 ## Endpoints
 
@@ -25,7 +25,7 @@ Falhas de timeout, HTTP 429/5xx e faults transitorios de processamento entram em
 
 ## Testes
 
-Os testes usam WSDL stub commitado em `source/backend/src/esocial-worker/submission/__fixtures__/ws-enviar-lote-eventos.wsdl` e servidor local. O cliente bloqueia endpoints `gov.br` quando executado em Jest, garantindo que CI nao faca chamada real ao Ambiente Nacional.
+Os testes usam WSDL stub commitado em `backend/src/esocial-worker/submission/__fixtures__/ws-enviar-lote-eventos.wsdl` e servidor local. O cliente bloqueia endpoints `gov.br` quando executado em Jest, garantindo que CI nao faca chamada real ao Ambiente Nacional.
 
 ## Apendice ES-09: classificacao de retorno
 

@@ -1,0 +1,63 @@
+<section class="epi-page">
+  <header>
+    <p>Saude ocupacional</p>
+    <h1>EPI</h1>
+  </header>
+
+  <div class="grid">
+    <form [formGroup]="inventoryForm" (ngSubmit)="createInventory()" class="panel">
+      <h2>Inventario</h2>
+      <label><span>CA</span><input formControlName="caNumber" /></label>
+      <label><span>Nome</span><input formControlName="name" /></label>
+      <label><span>Descricao</span><textarea formControlName="description"></textarea></label>
+      <label
+        ><span>Validade em meses</span><input type="number" formControlName="validityMonths"
+      /></label>
+      <button type="submit" [disabled]="saving">Salvar EPI</button>
+    </form>
+
+    <form [formGroup]="deliveryForm" (ngSubmit)="registerDelivery()" class="panel">
+      <h2>Entrega assinada</h2>
+      <label><span>Servidor</span><input formControlName="employeeId" /></label>
+      <label><span>EPI</span><input formControlName="epiInventoryId" /></label>
+      <label
+        ><span>Entrega</span><input type="datetime-local" formControlName="deliveredAt"
+      /></label>
+      <label><span>Quantidade</span><input type="number" formControlName="quantity" /></label>
+      <label>
+        <span>Assinatura</span>
+        <select formControlName="signatureMethod">
+          <option value="FISICA">Fisica</option>
+          <option value="DIGITAL">Digital</option>
+          <option value="GOVBR">GovBR</option>
+        </select>
+      </label>
+      <label><span>Evidencia</span><input formControlName="signatureEvidenceUri" /></label>
+      <label><span>Treinamento</span><input type="date" formControlName="trainingDoneAt" /></label>
+      <button type="submit" [disabled]="saving">Registrar entrega</button>
+    </form>
+  </div>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Servidor</th>
+        <th>EPI</th>
+        <th>Entrega</th>
+        <th>Assinatura</th>
+        <th>Evidencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of deliveries">
+        <td>{{ row.employeeName || row.employeeId }}</td>
+        <td>{{ row.epiName || row.caNumber || '-' }}</td>
+        <td>{{ row.deliveredAt }}</td>
+        <td>{{ row.signatureMethod }}</td>
+        <td>{{ row.signatureEvidenceUri || '-' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

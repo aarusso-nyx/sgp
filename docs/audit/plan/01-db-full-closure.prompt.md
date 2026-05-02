@@ -17,8 +17,8 @@ The current audit snapshot reports `151` legacy objects with `canonicalized=50`,
 - `docs/eng/68-alinhamento-banco-relatorio-fechamento.md`
 - `docs/audit/inv/database-alignment-inventory.json`
 - `docs/audit/diag/db-full-closure.md`
-- `source/database/README.md`
-- `source/backend/prisma/schema.prisma`
+- `database/README.md`
+- `backend/prisma/schema.prisma`
 
 ## Current In-Scope Explicit Exclusions
 
@@ -55,7 +55,7 @@ The current audit snapshot reports `151` legacy objects with `canonicalized=50`,
 Run from the repository root unless noted:
 
 ```bash
-cd source
+cd . # repository root
 node scripts/check-db-alignment.mjs --json
 npm run db:smoke
 ```

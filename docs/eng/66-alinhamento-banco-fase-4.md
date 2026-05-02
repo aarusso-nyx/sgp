@@ -9,21 +9,21 @@ Endurecer o gate automatizado para refletir o contrato multi-tenant real do SGP 
 ## Entregas
 
 1. Script de validação determinística revisado:
-   - `source/scripts/check-db-alignment.mjs`
+   - `scripts/check-db-alignment.mjs`
 2. Cobertura de tenant/RLS verificada em artefatos runtime:
    - migration `20260425090000_tenant_rls_hardening`
    - migration `20260425113000_tenant_scope_completion`
-   - `source/database/sql/11-rls-context.sql`
-   - `source/database/sql/12-rls-policies.sql`
-   - `source/database/sql/20-sgp-core.sql`
+   - `database/sql/11-rls-context.sql`
+   - `database/sql/12-rls-policies.sql`
+   - `database/sql/20-sgp-core.sql`
 3. Script exposto no workspace:
-   - `npm --prefix source run db:alignment:check`
+   - `npm run db:alignment:check`
 4. Check local disponivel em `commit:check` do workspace `source`.
 5. Workflow CI de alinhamento tratado como opcional/postergado:
-   - `source/.github/workflows/db-alignment.yml`
+   - `.github/workflows/db-alignment.yml`
 6. Smoke test de bootstrap de banco:
-   - `npm --prefix source run db:smoke`
-   - `source/scripts/db-bootstrap-smoke.mjs`
+   - `npm run db:smoke`
+   - `scripts/db-bootstrap-smoke.mjs`
 
 ## Regras validadas pelo gate
 

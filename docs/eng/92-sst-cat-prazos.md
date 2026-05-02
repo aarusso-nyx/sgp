@@ -5,7 +5,7 @@
 
 ## Decisao
 
-O SGP registra acidentes de trabalho em `saude.work_accident` e emite CATs em `saude.cat_emission`. Cada emissao gera automaticamente uma pendencia `esocial.s2210_pending`, consumida pelo builder `source/backend/src/esocial-worker/builders/s2210.builder.ts` e enviada ao hub ES-07 por `ESocialEmitService.emit(...)`.
+O SGP registra acidentes de trabalho em `saude.work_accident` e emite CATs em `saude.cat_emission`. Cada emissao gera automaticamente uma pendencia `esocial.s2210_pending`, consumida pelo builder `backend/src/esocial-worker/builders/s2210.builder.ts` e enviada ao hub ES-07 por `ESocialEmitService.emit(...)`.
 
 ## Prazos
 

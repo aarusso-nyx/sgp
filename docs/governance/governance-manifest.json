@@ -20,7 +20,7 @@
     {
       "id": "runtime.no-compat-shim",
       "status": "implemented",
-      "evidence": "source/database/README.md"
+      "evidence": "database/README.md"
     },
     {
       "id": "archive.legacy-reverse.non-authoritative",
@@ -40,12 +40,12 @@
     {
       "id": "tooling.node24-npm-workspace",
       "status": "implemented",
-      "evidence": "source/package.json"
+      "evidence": "package.json"
     },
     {
       "id": "tooling.single-source-lockfile",
       "status": "implemented",
-      "evidence": "source/package-lock.json"
+      "evidence": "package-lock.json"
     },
     {
       "id": "ci.source-baseline",

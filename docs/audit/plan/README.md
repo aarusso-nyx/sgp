@@ -5,7 +5,7 @@ They are retained as planning history, not as current implementation evidence.
 
 The derived evidence snapshots that originally lived under `docs/audit/inv/` and
 `docs/audit/diag/` were removed after becoming stale. Current implementation
-status is tracked in `source/docs/implementation-status.md` and should be
+status is tracked in `docs/implementation-status.md` and should be
 verified from live commands.
 
 ## Source Boundaries
@@ -13,7 +13,7 @@ verified from live commands.
 - `docs/eng/` remains authoritative for v0.0.1 architecture, domain scope, contracts, and acceptance.
 - `docs/sql-reference/` remains the legacy database coverage baseline.
 - `docs/legacy-reverse/` remains evidence only and must not override `docs/eng/`.
-- `source/docs/implementation-status.md` is the current status document.
+- `docs/implementation-status.md` is the current status document.
 - `docs/audit/plan/` is historical planning material only.
 
 ## Sprint Boundary
@@ -27,7 +27,7 @@ Scope decisions added on 2026-04-26:
 - Admin frontend tree, backend admin routes, and identity/OAuth/Cognito/Gov.br paths remain postponed under `ADMIN_INSTALL_LATER` and `IDENTITY_INSTALL_LATER`.
 - eSocial remains a stub/sandbox external provider for the current package.
 - Tests may use Docker MiniIO when S3 is not configured.
-- `./infra` implementation strategy and release-grade governance gates are postponed until a later owner decision. The source workspace now has a baseline CI/governance gate in `.github/workflows/source-ci.yml`.
+- `infra` implementation strategy and release-grade governance gates are postponed until a later owner decision. The root workspace now has a baseline CI/governance gate in `.github/workflows/source-ci.yml`.
 
 ## Executed Prompt Sequence
 

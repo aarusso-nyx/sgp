@@ -12,14 +12,14 @@ Sem camadas de compatibilidade (`shim`, `dual-write`, `schema legado`).
 
 ## Artefatos Implementados
 
-1. Prisma multi-schema em `source/backend/prisma/schema.prisma` com mapeamento explícito por modelo.
-2. Migration de split físico: `source/backend/prisma/migrations/20260421110000_phase1_schema_split/migration.sql`.
+1. Prisma multi-schema em `backend/prisma/schema.prisma` com mapeamento explícito por modelo.
+2. Migration de split físico: `backend/prisma/migrations/20260421110000_phase1_schema_split/migration.sql`.
 3. SQL de suporte atualizado para objetos em `hr`/`payroll`.
 4. Projeções do portal convertidas para materialized views em `portal`:
    - `portal.mv_employee_directory`
    - `portal.mv_payroll_run_summary`
 5. Script transitório removido:
-   - `source/database/sql/60-legacy-operational-tables.sql`
+   - `database/sql/60-legacy-operational-tables.sql`
 
 ## Matriz de Alinhamento
 

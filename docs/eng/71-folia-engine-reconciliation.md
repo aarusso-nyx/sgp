@@ -32,8 +32,8 @@ Any high-impact difference between the folia engine behavior and these legacy ou
 
 ## Port target inside SGP
 
-- Runtime SQL implementation: `source/database/sql/25-payroll-formula-engine.sql`
-- Runtime notes: `source/database/formula-engine.md`
+- Runtime SQL implementation: `database/sql/25-payroll-formula-engine.sql`
+- Runtime notes: `database/formula-engine.md`
 - Money/rounding boundary: `docs/eng/72-money-decimal-policy.md`
 
 ## FOL-01 contract with CALC-01

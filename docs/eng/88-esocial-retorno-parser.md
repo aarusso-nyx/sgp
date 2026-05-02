@@ -5,7 +5,7 @@
 
 ## Decisao
 
-O parser de retorno usa `source/backend/src/esocial-worker/parsers/` para ler as mensagens oficiais `RetornoEnvioLoteEventos` e `RetornoProcessamentoLoteEventos`. A tabela canonical de eventos permanece `public.esocial_event`; nao ha schema de compatibilidade. Os campos de sincronizacao sao fisicamente em ingles: `receipt_number`, `protocol_number`, `response_code`, `response_description`, `response_errors` e `last_response_at`.
+O parser de retorno usa `backend/src/esocial-worker/parsers/` para ler as mensagens oficiais `RetornoEnvioLoteEventos` e `RetornoProcessamentoLoteEventos`. A tabela canonical de eventos permanece `public.esocial_event`; nao ha schema de compatibilidade. Os campos de sincronizacao sao fisicamente em ingles: `receipt_number`, `protocol_number`, `response_code`, `response_description`, `response_errors` e `last_response_at`.
 
 ## Fluxo
 
@@ -17,7 +17,7 @@ O parser de retorno usa `source/backend/src/esocial-worker/parsers/` para ler as
 
 ## UI Administrativa
 
-`source/frontend/src/app/features/esocial/retornos/` mostra a fila de retornos definitivos e recuperaveis a partir de `esocial.v_event_failures`. Erros definitivos exibem `cdResposta` traduzido e o botao "Tratado" para uso apos a correcao do dado de origem. Erros recuperaveis mostram a proxima tentativa e permitem retry imediato. Nao ha pagina portal neste fluxo.
+`frontend/src/app/features/esocial/retornos/` mostra a fila de retornos definitivos e recuperaveis a partir de `esocial.v_event_failures`. Erros definitivos exibem `cdResposta` traduzido e o botao "Tratado" para uso apos a correcao do dado de origem. Erros recuperaveis mostram a proxima tentativa e permitem retry imediato. Nao ha pagina portal neste fluxo.
 
 ## Seguranca
 

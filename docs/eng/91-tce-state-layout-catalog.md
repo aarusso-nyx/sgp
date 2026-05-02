@@ -18,4 +18,4 @@ As versões seguem o fluxo `DRAFT -> ACTIVE -> SUPERSEDED -> RETIRED`. Uma vers�
 
 As três tabelas forçam RLS. Leitura exige `tce.catalog.read` ou `tce.catalog.manage`; mutação exige `tce.catalog.manage`. Como o catálogo é global, as políticas não usam `tenant_id`, mas todas as mutações disparam trigger de auditoria via `public.sgp_append_audit_event(...)`.
 
-Os endpoints administrativos ficam em `source/backend/src/tce/catalog/` e usam `@RequirePermission`. A tela administrativa fica em `source/frontend/src/app/features/tce/catalog/`, com navegação UF -> sistemas -> versões -> campos. Operadores veem o catálogo em modo leitura; ações de ativar ou superar versão são protegidas no backend por `tce.catalog.manage`.
+Os endpoints administrativos ficam em `backend/src/tce/catalog/` e usam `@RequirePermission`. A tela administrativa fica em `frontend/src/app/features/tce/catalog/`, com navegação UF -> sistemas -> versões -> campos. Operadores veem o catálogo em modo leitura; ações de ativar ou superar versão são protegidas no backend por `tce.catalog.manage`.

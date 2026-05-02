@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "project": "sgp",
   "version": "0.0.1",
-  "sourceRoot": "source",
+  "sourceRoot": ".",
   "authority": {
     "productAndEngineering": "docs/eng",
     "payrollEngine": "folia-first",
@@ -22,37 +22,37 @@
   "generatedSurfaces": [
     "docs/eng/69-api-route-alignment.json",
     "docs/eng/64-database-alignment-matrix.json",
-    "source/runtime/topology.json",
+    "runtime/topology.json",
     "docs/governance/governance-manifest.json"
   ],
   "hardFailGates": [
     {
       "id": "lint-check",
-      "command": "npm --prefix source run lint:check"
+      "command": "npm run lint:check"
     },
     {
       "id": "format-check",
-      "command": "npm --prefix source run format:check"
+      "command": "npm run format:check"
     },
     {
       "id": "typecheck",
-      "command": "npm --prefix source run typecheck"
+      "command": "npm run typecheck"
     },
     {
       "id": "api-alignment",
-      "command": "npm --prefix source run api:alignment:check -- --json"
+      "command": "npm run api:alignment:check -- --json"
     },
     {
       "id": "db-alignment",
-      "command": "npm --prefix source run db:alignment:check -- --json"
+      "command": "npm run db:alignment:check -- --json"
     },
     {
       "id": "health-json",
-      "command": "npm --prefix source run health:json"
+      "command": "npm run health:json"
     },
     {
       "id": "governance-check",
-      "command": "npm --prefix source run governance:check"
+      "command": "npm run governance:check"
     }
   ],
   "deferredOwnerDecisions": [

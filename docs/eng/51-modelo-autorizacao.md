@@ -270,7 +270,7 @@ RESET app.current_tenant_id;
 
 ### 4.0 Catálogo canônico XCUT-05
 
-O catálogo canônico de permissões é `source/database/seed/permission-catalog.json`; o arquivo TypeScript consumido pelo backend é gerado por `source/backend/scripts/gen-permissions.ts` e não é editado manualmente. As chaves usam formato `dominio.acao`, sem catálogo paralelo em TS.
+O catálogo canônico de permissões é `database/seed/permission-catalog.json`; o arquivo TypeScript consumido pelo backend é gerado por `backend/scripts/gen-permissions.ts` e não é editado manualmente. As chaves usam formato `dominio.acao`, sem catálogo paralelo em TS.
 
 | Permissão | Uso |
 |---|---|

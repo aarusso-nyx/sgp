@@ -9,7 +9,7 @@ Esta política é obrigatória para cálculo de folha, rubricas, rescisão, cach
 - Valores monetários unitários usam `numeric(14,2)` no PostgreSQL e `Decimal @db.Decimal(14, 2)` no Prisma.
 - Agregados de folha usam `numeric(16,2)` / `Decimal(16, 2)`.
 - Alíquotas, percentuais legais e fatores usam `numeric(18,6)` / `Decimal(18, 6)`.
-- Código TypeScript de cálculo deve usar `Decimal` por meio de `source/backend/src/common/money/money.ts`; valores monetários não podem ser calculados com `Float`, `Int`, `number` como representação persistente, nem `Math.round`.
+- Código TypeScript de cálculo deve usar `Decimal` por meio de `backend/src/common/money/money.ts`; valores monetários não podem ser calculados com `Float`, `Int`, `number` como representação persistente, nem `Math.round`.
 
 ## Arredondamento
 
@@ -19,7 +19,7 @@ Alíquotas e fatores usam escala 6 com a mesma regra de desempate. O helper `rou
 
 ## Reconciliação SQL e TS
 
-O caminho SQL oficial de rubricas é `payroll_calc.evaluate_earning_deduction(...)`, definido em `source/database/sql/25-payroll-formula-engine.sql`, com retorno `numeric(14,2)`. O compilador em `source/backend/src/payroll-engine/formula-compiler.service.ts` emite funções `payroll_calc.f_<alias>(uuid, int, int)` que retornam nesse mesmo contorno decimal. Caminhos TypeScript remanescentes, como rescisão, devem chamar `roundMoney(...)` somente na fronteira da rubrica para manter paridade centavo-a-centavo com o SQL.
+O caminho SQL oficial de rubricas é `payroll_calc.evaluate_earning_deduction(...)`, definido em `database/sql/25-payroll-formula-engine.sql`, com retorno `numeric(14,2)`. O compilador em `backend/src/payroll-engine/formula-compiler.service.ts` emite funções `payroll_calc.f_<alias>(uuid, int, int)` que retornam nesse mesmo contorno decimal. Caminhos TypeScript remanescentes, como rescisão, devem chamar `roundMoney(...)` somente na fronteira da rubrica para manter paridade centavo-a-centavo com o SQL.
 
 O ESLint local `sgp/no-math-round-money` falha qualquer uso de `Math.round` e `Number(...).toFixed(...)` em `src/folha-pagamento/**`, `src/payroll-engine/**` e `src/common/money/**`.
 

@@ -4,7 +4,7 @@ BANK-03 define que contas para crédito de folha só ficam elegíveis quando a v
 
 ## Bancos suportados
 
-As regras iniciais cobrem BB `001`, Santander `033`, Banrisul `041`, Caixa `104`, Bradesco `237`, Itaú `341`, Sicredi `748` e Sicoob `756`. Cada regra declara comprimento de agência, comprimento de conta, necessidade de DV de agência e pesos de DV de conta. A implementação vive em `source/backend/src/folha-pagamento/operations/bank-account/`.
+As regras iniciais cobrem BB `001`, Santander `033`, Banrisul `041`, Caixa `104`, Bradesco `237`, Itaú `341`, Sicredi `748` e Sicoob `756`. Cada regra declara comprimento de agência, comprimento de conta, necessidade de DV de agência e pesos de DV de conta. A implementação vive em `backend/src/folha-pagamento/operations/bank-account/`.
 
 ## Códigos de erro
 

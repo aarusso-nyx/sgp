@@ -5,7 +5,7 @@
 
 ## Decisão
 
-O contracheque oficial passa a ser gerado em `source/backend/src/report-service/payslip/` com `pdf-lib`. A biblioteca foi escolhida para este slice porque evita o footprint operacional de navegador headless, tem licença MIT, roda no runtime NestJS existente e produz um PDF binário real com metadados estáveis suficientes para a validação PDF/A-1b do pipeline interno.
+O contracheque oficial passa a ser gerado em `backend/src/report-service/payslip/` com `pdf-lib`. A biblioteca foi escolhida para este slice porque evita o footprint operacional de navegador headless, tem licença MIT, roda no runtime NestJS existente e produz um PDF binário real com metadados estáveis suficientes para a validação PDF/A-1b do pipeline interno.
 
 ## Consequências
 

@@ -5,7 +5,7 @@
 
 ## Decisão
 
-O SGP v0.0.1 usa um contrato pluggável para Tribunais de Contas em `source/backend/src/tce/`. O core não conhece leiautes estaduais, municipais ou federais específicos; ele descobre providers NestJS anotados com `@TceAdapter({ id, state_code, organ_kind })`, valida que implementam `TceAdapter` e registra o catálogo global em `tce.adapter_registry`.
+O SGP v0.0.1 usa um contrato pluggável para Tribunais de Contas em `backend/src/tce/`. O core não conhece leiautes estaduais, municipais ou federais específicos; ele descobre providers NestJS anotados com `@TceAdapter({ id, state_code, organ_kind })`, valida que implementam `TceAdapter` e registra o catálogo global em `tce.adapter_registry`.
 
 ## Contrato
 
@@ -38,7 +38,7 @@ O adapter `noop` é o stub determinístico de contrato. Ele suporta o leiaute `N
 
 ## Frontend
 
-A tela admin fica em `source/frontend/src/app/features/tce/adapters/` e consome o catálogo registrado. Ela lista UF, órgão, versão, status, health e lifecycle, e expõe ações de habilitar/desabilitar para operadores com permissão `tce.adapter.read` na rota e `tce.adapter.manage` no backend.
+A tela admin fica em `frontend/src/app/features/tce/adapters/` e consome o catálogo registrado. Ela lista UF, órgão, versão, status, health e lifecycle, e expõe ações de habilitar/desabilitar para operadores com permissão `tce.adapter.read` na rota e `tce.adapter.manage` no backend.
 
 ## Fora do Escopo
 

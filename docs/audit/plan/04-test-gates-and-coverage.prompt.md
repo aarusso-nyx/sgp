@@ -18,10 +18,10 @@ Make verification gates truthful for the current sprint:
 - `docs/audit/diag/raw-db-smoke.log`
 - `docs/audit/diag/raw-backend-coverage.log`
 - `docs/audit/inv/verification-inventory.json`
-- `source/backend/test`
-- `source/backend/jest.config*`
-- `source/package.json`
-- `source/backend/package.json`
+- `backend/test`
+- `backend/jest.config*`
+- `package.json`
+- `backend/package.json`
 
 ## Work Items
 
@@ -38,7 +38,7 @@ Make verification gates truthful for the current sprint:
 ## Acceptance Gates
 
 ```bash
-cd source
+cd . # repository root
 npm --workspace backend run test:e2e -- --runInBand
 npm run db:smoke
 npm --workspace backend run test:cov -- --runInBand

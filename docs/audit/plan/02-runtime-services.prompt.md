@@ -21,13 +21,13 @@ Replace scaffolded runtime entrypoints with implemented runtime services for:
 - `docs/eng/71-folia-engine-reconciliation.md`
 - `docs/audit/inv/runtime-topology-inventory.json`
 - `docs/audit/diag/runtime-and-worker-gap.md`
-- `source/runtime/topology.json`
-- `source/scripts/start-runtime-stub.mjs`
+- `runtime/topology.json`
+- `scripts/start-runtime-stub.mjs`
 
 ## Work Items
 
 1. Inspect the current runtime topology and package scripts before editing.
-2. Replace `source/scripts/start-runtime-stub.mjs` usage for the three scaffolded runtimes with actual service entrypoints or concrete local executable adapters.
+2. Replace `scripts/start-runtime-stub.mjs` usage for the three scaffolded runtimes with actual service entrypoints or concrete local executable adapters.
 3. Implement `sgp-payroll-engine` as a folia-first runtime boundary:
    - expose health/status and calculation request entrypoints;
    - preserve the SQL formula-engine contract;
@@ -47,7 +47,7 @@ Replace scaffolded runtime entrypoints with implemented runtime services for:
 ## Acceptance Gates
 
 ```bash
-cd source
+cd . # repository root
 npm run health:json
 npm --workspace backend test -- --runInBand
 ```

@@ -18,10 +18,10 @@ Fix frontend and contract drift identified by the reassessment:
 - `docs/audit/diag/compatibility-surface.md`
 - `docs/audit/diag/raw-portal-build.log`
 - `docs/audit/diag/raw-test-portal.log`
-- `source/frontend/package.json`
-- `source/frontend/portal/src/app`
-- `source/frontend/src/app/core/api/api-client.ts`
-- `source/backend/src/system-parameters/system-parameters.dto.ts`
+- `frontend/package.json`
+- `frontend/portal/src/app`
+- `frontend/src/app/core/api/api-client.ts`
+- `backend/src/system-parameters/system-parameters.dto.ts`
 
 ## Work Items
 
@@ -40,7 +40,7 @@ Fix frontend and contract drift identified by the reassessment:
 ## Acceptance Gates
 
 ```bash
-cd source
+cd . # repository root
 npm --workspace frontend run build:portal
 npm run test:portal
 npm --workspace backend test -- --runInBand

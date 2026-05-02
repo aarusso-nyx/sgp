@@ -17,8 +17,8 @@ This repository enforces governance for a fresh SGP implementation with clear so
 
 ## Scope
 
-- Backend API (`source/backend`)
-- Database schema and SQL operations (`source/database`)
+- Backend API (`backend`)
+- Database schema and SQL operations (`database`)
 - Engineering docs and governance (`docs/eng`, `docs/governance`)
 
 ## Policy status markers

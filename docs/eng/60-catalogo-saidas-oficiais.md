@@ -21,7 +21,7 @@ Este catálogo registra todas as saídas oficiais produzidas pelo SGP Moderno (d
 | SS | Self-signed (hash + metadados internos, sem ICP) |
 | — | Sem assinatura digital obrigatória |
 
-**Engine de geração de PDFs:** `sgp-report-service` usando **Carbone** (templates DOCX/ODS compilados para PDF via LibreOffice headless) ou biblioteca PDF dedicada para layouts programáticos de baixa complexidade. Contracheque oficial usa `pdf-lib` em `source/backend/src/report-service/payslip/` com metadados PDF/A-1b, hash SHA-256 e retenção registrada em `public.generated_report_file`. Arquivos TXT/XML gerados por builders TypeScript tipados em `sgp-integrations-worker`.
+**Engine de geração de PDFs:** `sgp-report-service` usando **Carbone** (templates DOCX/ODS compilados para PDF via LibreOffice headless) ou biblioteca PDF dedicada para layouts programáticos de baixa complexidade. Contracheque oficial usa `pdf-lib` em `backend/src/report-service/payslip/` com metadados PDF/A-1b, hash SHA-256 e retenção registrada em `public.generated_report_file`. Arquivos TXT/XML gerados por builders TypeScript tipados em `sgp-integrations-worker`.
 
 **Chave S3 padrão:**
 ```
@@ -45,7 +45,7 @@ s3://<bucket-tenant>/{dominio}/{ano}/{mes}/{tipo}/{uuid}.{ext}
 | **Formato** | PDF/A-1b |
 | **Gatilho** | `[M]` individual ou `[E]` geração em massa pós-cálculo lote |
 | **Dados de entrada** | `payroll_run_id`, `employee_id`, competência (`DATE`), itens ativos de `payroll.v_payroll_run_line_active` e totais de `payroll.payroll_financial_record` |
-| **Template** | `source/backend/src/report-service/payslip/payslip-template.ts`; engine **pdf-lib** conforme ADR `92-payslip-pdf-decision.md` |
+| **Template** | `backend/src/report-service/payslip/payslip-template.ts`; engine **pdf-lib** conforme ADR `92-payslip-pdf-decision.md` |
 | **Variáveis expostas** | `servidor.*`, `vinculo`, `competencia`, `rubricas[]` (codigo, descricao, referencia, proventos, descontos), `totaisProventos`, `totaisDescontos`, `liquido`, bases IRRF/INSS, FGTS depósito, banco/agencia/conta, fundamento legal |
 | **Base legal** | Lei n.º 8.112/1990 art. 45; legislação municipal/estadual vigente; IN RFB para IRRF |
 | **Assinatura digital** | SS (hash SHA-256 + metadados gravados em `audit_log`); ICP opcional por tenant |
@@ -63,7 +63,7 @@ s3://<bucket-tenant>/{dominio}/{ano}/{mes}/{tipo}/{uuid}.{ext}
 | **Formato** | PDF/A-1b |
 | **Gatilho** | `[M]` geração em lote no admin por ano-base; download self-service no Portal do Servidor |
 | **Dados de entrada** | `fiscal.yearly_income_aggregate`, recomputado por `fiscal.recompute_yearly_income(tenant_id, employee_id, year_base)` a partir de `payroll_run` fechados e itens ativos de folha mensal, 13.º, férias e rescisão |
-| **Template** | `source/backend/src/report-service/yearly-income/yearly-income-template.ts`; engine **pdf-lib** via `PdfABuilderService` |
+| **Template** | `backend/src/report-service/yearly-income/yearly-income-template.ts`; engine **pdf-lib** via `PdfABuilderService` |
 | **Variáveis expostas** | Fonte pagadora, CNPJ, servidor, CPF, matrícula, vínculo, ano-calendário, rendimentos tributáveis, 13.º, férias, verbas rescisórias, rendimentos isentos, previdência oficial/RPPS, IRRF retido e dependentes |
 | **Base legal** | IN RFB n.º 2.060/2021 art. 16 e Anexo I; Lei n.º 9.250/1995 art. 7.º |
 | **Assinatura digital** | SS (hash SHA-256 + metadados em `public.generated_report_file`); ICP opcional por tenant |
@@ -243,7 +243,7 @@ s3://<bucket-tenant>/{dominio}/{ano}/{mes}/{tipo}/{uuid}.{ext}
 | **Formato** | Binário posicional CNAB 240, registros de 240 bytes sem quebra de linha |
 | **Gatilho** | `[M]` após aprovação/fechamento de folha |
 | **Dados de entrada** | `payroll_run_id`, `bank_id`/código bancário, `payment_date`, `numero_remessa` |
-| **Template** | `Cnab240BuilderService` em `source/backend/src/integrations-worker/cnab240/`; estratégias por banco em `cnab240/banks/` |
+| **Template** | `Cnab240BuilderService` em `backend/src/integrations-worker/cnab240/`; estratégias por banco em `cnab240/banks/` |
 | **Variáveis expostas** | Header de arquivo, header de lote, segmentos A/B por servidor, trailer de lote com soma/contagem, trailer de arquivo |
 | **Base legal** | Padrão FEBRABAN CNAB 240/400; convênio banco–órgão |
 | **Assinatura digital** | — (autenticação via credencial SFTP/portal banco) |

@@ -16,7 +16,7 @@ Refresh the audit package after prompts 01-04 and classify the final state again
 - `docs/audit/inv/`
 - `docs/audit/diag/`
 - `docs/eng/`
-- `source/scripts`
+- `scripts`
 
 ## Work Items
 
@@ -39,7 +39,7 @@ Refresh the audit package after prompts 01-04 and classify the final state again
 Use live repository scripts where available. At minimum, rerun:
 
 ```bash
-cd source
+cd . # repository root
 node scripts/check-api-route-alignment.mjs --json
 node scripts/check-db-alignment.mjs --json
 npm run health:json

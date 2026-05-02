@@ -2,7 +2,7 @@
 
 ## Escopo
 
-O submodulo `source/backend/src/tce/queue/` instala a infraestrutura operacional das submissoes TCE. Ele usa fila Postgres em `tce.submission_queue`, historico em `tce.submission_attempt` e circuit breaker global em `tce.adapter_circuit_state`. O envio real a governo continua fora do v0.0.1: em CI e desenvolvimento o adapter AUDESP/SP opera somente contra o stub local.
+O submodulo `backend/src/tce/queue/` instala a infraestrutura operacional das submissoes TCE. Ele usa fila Postgres em `tce.submission_queue`, historico em `tce.submission_attempt` e circuit breaker global em `tce.adapter_circuit_state`. O envio real a governo continua fora do v0.0.1: em CI e desenvolvimento o adapter AUDESP/SP opera somente contra o stub local.
 
 ## Modelo operacional
 
@@ -26,4 +26,4 @@ Leitura exige `tce.submission.read`; mutacao exige `tce.submission.manage`.
 
 ## UI
 
-A tela `source/frontend/src/app/features/tce/queue/` fica em `#!/tce/queue`. Ela mostra filtros por UF/adapter/status/competencia, lista jobs com tentativas, proximo retry e ultimo erro, abre drilldown com historico e payload, e exibe circuitos com acao de reset.
+A tela `frontend/src/app/features/tce/queue/` fica em `#!/tce/queue`. Ela mostra filtros por UF/adapter/status/competencia, lista jobs com tentativas, proximo retry e ultimo erro, abre drilldown com historico e payload, e exibe circuitos com acao de reset.

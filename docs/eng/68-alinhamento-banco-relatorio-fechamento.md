@@ -25,14 +25,14 @@ O relatório de 2026-04-22 marcava a fase 4 como encerrada, mas a linha de base 
 
 ## Evidências técnicas
 
-- Gate: `source/scripts/check-db-alignment.mjs`
+- Gate: `scripts/check-db-alignment.mjs`
 - Migrations:
-  - `source/backend/prisma/migrations/20260425090000_tenant_rls_hardening/migration.sql`
-  - `source/backend/prisma/migrations/20260425113000_tenant_scope_completion/migration.sql`
-- Context helpers: `source/database/sql/11-rls-context.sql`
-- Policies: `source/database/sql/12-rls-policies.sql`
-- Projeções: `source/database/sql/20-sgp-core.sql`
-- Smoke: `source/scripts/db-bootstrap-smoke.mjs`
+  - `backend/prisma/migrations/20260425090000_tenant_rls_hardening/migration.sql`
+  - `backend/prisma/migrations/20260425113000_tenant_scope_completion/migration.sql`
+- Context helpers: `database/sql/11-rls-context.sql`
+- Policies: `database/sql/12-rls-policies.sql`
+- Projeções: `database/sql/20-sgp-core.sql`
+- Smoke: `scripts/db-bootstrap-smoke.mjs`
 - Matriz vigente: `docs/eng/64-database-alignment-matrix.json`
 
 ## Situação atual
@@ -65,6 +65,6 @@ A matriz vigente removeu as 15 exclusões in-scope restantes por dois caminhos:
 
 Evidência:
 
-- Migração: `source/backend/prisma/migrations/20260426123000_db_full_closure_residuals/migration.sql`
+- Migração: `backend/prisma/migrations/20260426123000_db_full_closure_residuals/migration.sql`
 - Matriz: `docs/eng/64-database-alignment-matrix.json`
-- Gate: `cd source && node scripts/check-db-alignment.mjs --json`
+- Gate: `cd . # repository root && node scripts/check-db-alignment.mjs --json`

@@ -1,0 +1,144 @@
+# Testing
+
+This workspace has two layers of tests:
+
+- Workspace tests in `frontend/` and `backend/`, run by `npm run test`.
+- Black-box QA smoke/e2e tests in `tests/`, run by the `test:qa:*` scripts below.
+
+## Commands
+
+Run all QA harness tests:
+
+```bash
+npm run test:qa
+```
+
+Bootstrap local live services and run all QA smoke tests:
+
+```bash
+DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap
+```
+
+Prepare a fresh local database before bootstrapping:
+
+```bash
+DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap -- --prepare-db
+```
+
+Run the full evidence gate against bootstrapped local services:
+
+```bash
+DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap -- --evidence
+```
+
+Run only backend API smoke/e2e tests:
+
+```bash
+npm run test:qa:api
+```
+
+Run only frontend e2e skeleton tests:
+
+```bash
+npm run test:qa:frontend
+```
+
+Run the existing backend in-process Nest e2e suite:
+
+```bash
+npm run test:e2e
+```
+
+## Environment
+
+The QA harness is black-box by default and does not store credentials. Set only base URLs and explicit test-mode flags in your shell.
+
+- `QA_API_BASE_URL`: Nest backend base URL, for example `http://localhost:3000`.
+- `API_BASE_URL`: fallback backend base URL if `QA_API_BASE_URL` is not set.
+- `QA_ADMIN_FRONTEND_BASE_URL`: sgp-admin base URL, for example `http://localhost:4200`.
+- `QA_FRONTEND_BASE_URL`: legacy alias for sgp-admin QA URL.
+- `FRONTEND_BASE_URL`: fallback sgp-admin base URL if `QA_ADMIN_FRONTEND_BASE_URL` is not set.
+- `QA_PORTAL_FRONTEND_BASE_URL`: sgp-portal base URL, for example `http://localhost:4300`.
+- `PORTAL_FRONTEND_BASE_URL`: fallback sgp-portal base URL.
+- `AUTH_ALLOW_UNSIGNED_TEST_TOKENS`: backend runtime flag used only for local/CI QA e2e tests with generated unsigned tokens.
+
+Do not put real passwords, Cognito tokens, database URLs, or app credentials into test files, docs, snapshots, or logs. If reverse-documentation automation needs legacy credentials, keep using environment placeholders such as `${APP_LOGIN}` and `${APP_PASSWORD}` outside the QA harness.
+
+## Backend QA Flow
+
+The preferred local path is the one-command bootstrap:
+
+```bash
+cd . # repository root
+DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap
+```
+
+It starts the core API, portal API, sgp-admin, and sgp-portal, waits for the live
+base URLs, exports the QA smoke URL variables for child processes, and stops the
+services when the smoke run completes. Use `--keep-alive` to keep services
+running for manual checks:
+
+```bash
+cd . # repository root
+DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap -- --keep-alive
+```
+
+For manual two-terminal runs, start the backend in one terminal:
+
+```bash
+cd . # repository root
+DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test \
+AUTH_ALLOW_UNSIGNED_TEST_TOKENS=true \
+npm run start:core-api
+```
+
+Run smoke/e2e tests in another terminal:
+
+```bash
+cd . # repository root
+QA_API_BASE_URL=http://localhost:3000 npm run test:qa:api
+```
+
+Coverage in `tests/backend/` currently verifies:
+
+- root metadata and `/api/v1/health`
+- readiness shape without secret disclosure
+- request id propagation
+- protected endpoint unauthorized shape
+- generated unsigned Cognito-group test token behavior
+- permission denial on a protected domain resource
+- representative paged domain read
+- validation failure details for pagination
+- Gestao master-data create, update, and deactivate mutation flow
+
+## Frontend QA Flow
+
+Start the sgp-admin dev server in one terminal:
+
+```bash
+cd . # repository root
+npm run start:admin
+```
+
+Run the sgp-admin smoke tests in another terminal:
+
+```bash
+cd . # repository root
+QA_ADMIN_FRONTEND_BASE_URL=http://localhost:4200 npm run test:qa:frontend
+```
+
+Coverage in `tests/frontend/` currently verifies:
+
+- the sgp-admin HTML shell is served
+- a modern routed admin URL returns the sgp-admin shell
+- the sgp-portal HTML shell is served
+- a documented portal URL returns the sgp-portal shell
+
+To validate both SPAs locally, start the portal app in another terminal:
+
+```bash
+cd . # repository root
+npm run start:portal
+```
+
+This is intentionally lean. Add browser automation later only when the frontend auth flow has stable local Cognito/test-auth behavior.

@@ -15,7 +15,7 @@ A DCTFWeb do SGP é gerada no `integrations-worker/dctfweb` a partir de totaliza
 
 ## Fluxo
 
-1. O operador informa ano, mês e tipo de declaração no admin em `source/frontend/src/app/features/fiscal/dctfweb/`.
+1. O operador informa ano, mês e tipo de declaração no admin em `frontend/src/app/features/fiscal/dctfweb/`.
 2. `POST /api/v1/admin/fiscal/dctfweb/gerar` cria o XML e os itens fiscais com valores `numeric(14,2)`.
 3. `POST /api/v1/admin/fiscal/dctfweb/:id/assinar` assina o XML com o certificado ativo reutilizando o material ICP-Brasil do ES-07.
 4. `POST /api/v1/admin/fiscal/dctfweb/:id/transmitir` envia o XML assinado ao endpoint RFB configurado por `DCTFWEB_RFB_ENDPOINT_URL`; sem endpoint, usa sandbox local.

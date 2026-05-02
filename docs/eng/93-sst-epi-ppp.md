@@ -9,7 +9,7 @@ O SGP v0.0.1 registra exposicoes ambientais em `saude.environmental_exposure`, s
 
 ## S-2240
 
-Cada insercao de exposicao cria pendencia `START` em `esocial.s2240_pending`. Alteracoes de agente, intensidade, periodo ou mitigacoes criam `CHANGE`; preenchimento de `exposure_end` cria `END`. O builder `source/backend/src/esocial-worker/builders/s2240.builder.ts` gera `evtExpRisco` S-1.3 e envia pelo hub ES-07, sem escrita direta em `public.esocial_event`.
+Cada insercao de exposicao cria pendencia `START` em `esocial.s2240_pending`. Alteracoes de agente, intensidade, periodo ou mitigacoes criam `CHANGE`; preenchimento de `exposure_end` cria `END`. O builder `backend/src/esocial-worker/builders/s2240.builder.ts` gera `evtExpRisco` S-1.3 e envia pelo hub ES-07, sem escrita direta em `public.esocial_event`.
 
 ## EPI
 

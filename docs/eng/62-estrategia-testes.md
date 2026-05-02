@@ -26,7 +26,7 @@
 - Paridade de `sgp-admin`, rotas administrativas e fluxos OAuth/Cognito/Gov.br não bloqueia o pacote atual; esses itens são classificados como `ADMIN_INSTALL_LATER` ou `IDENTITY_INSTALL_LATER` nos artefatos de alinhamento.
 - O gate `api:alignment:check` passa a validar também paridade de domínio, workflow e menu: todos os 11 domínios devem ter evidência backend corrente; os menus do portal devem estar cobertos; a árvore do admin é registrada como postergada.
 - Em testes sem `S3_DOCUMENTS_BUCKET`/`S3_REGION`, o runtime pode usar MiniIO em Docker como substituto S3-compatible. Produção e homologação continuam exigindo S3 real.
-- GitHub Actions passa a ter gate baseline de `source/` com Node 24, npm, PostgreSQL 16, lint/format não mutantes, typecheck, alinhamento de rotas, alinhamento de banco, health JSON, testes, build e cobertura.
+- GitHub Actions passa a ter gate baseline da raiz do repositório com Node 24, npm, PostgreSQL 16, lint/format não mutantes, typecheck, alinhamento de rotas, alinhamento de banco, health JSON, testes, build e cobertura.
 - Pact broker/provider, scanners, observabilidade produtiva e gates de release/homologação continuam postergados. Devem continuar documentados como alvo de release, mas não são bloqueadores de reavaliação do código atual.
 
 ---
@@ -96,9 +96,9 @@ graph TD
 
 No pacote NestJS, `npm run test` permanece restrito aos specs unitários em `src/**/*.spec.ts`. O gate `npm run test:cov` também executa `test/*.e2e-spec.ts` com `test/test-env.ts`, aplica limiares globais de 85 % para linhas, branches e funções, e coleta cobertura de runtime em `src/**/*.ts`. DTOs, controllers, modules, bootstrap/config e artefatos de metadados Nest/Swagger ficam fora do gate global de branches porque são verificados por contrato/e2e e geram branches instrumentados sem decisão de negócio.
 
-O enforcement corrente é o configurado em `source/backend/package.json`: o script `test:cov` executa Jest com `--rootDir .`, inclui specs unitários e `test/*.e2e-spec.ts`, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer corte por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
+O enforcement corrente é o configurado em `backend/package.json`: o script `test:cov` executa Jest com `--rootDir .`, inclui specs unitários e `test/*.e2e-spec.ts`, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer corte por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
 
-O gate agregado corrente é `npm run evidence:check` no workspace `source/`. Ele executa alinhamento de rotas, alinhamento de banco, health JSON, geração do cliente OpenAPI, build, lint, testes Angular admin/portal, testes unitários backend, e2e backend, smoke DB, cobertura backend e smoke QA. Os passos `backend-e2e`, `db-smoke` e `backend-coverage` exigem `DATABASE_URL`. O smoke QA exige URLs vivos e falha como evidência bloqueada quando as variáveis de base URL não estão configuradas.
+O gate agregado corrente é `npm run evidence:check` no workspace root. Ele executa alinhamento de rotas, alinhamento de banco, health JSON, geração do cliente OpenAPI, build, lint, testes Angular admin/portal, testes unitários backend, e2e backend, smoke DB, cobertura backend e smoke QA. Os passos `backend-e2e`, `db-smoke` e `backend-coverage` exigem `DATABASE_URL`. O smoke QA exige URLs vivos e falha como evidência bloqueada quando as variáveis de base URL não estão configuradas.
 
 #### O que testar unitariamente
 
@@ -1719,7 +1719,7 @@ flowchart TD
 
 #### Workflow baseline atual (`source-ci.yml`)
 
-O workflow corrente roda a partir da raiz do repositório, mas todos os comandos de aplicação usam `working-directory: source`. Ele usa `actions/setup-node@v4` com Node 24, cache npm em `source/package-lock.json`, um único lockfile de workspace e serviço PostgreSQL 16 para os gates com banco real.
+O workflow corrente roda a partir da raiz do repositório e executa os comandos de aplicação diretamente nesse workspace. Ele usa `actions/setup-node@v4` com Node 24, cache npm em `package-lock.json`, um único lockfile de workspace e serviço PostgreSQL 16 para os gates com banco real.
 
 Etapas obrigatórias:
 

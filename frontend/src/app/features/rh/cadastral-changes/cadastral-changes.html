@@ -1,0 +1,50 @@
+<section class="cadastral">
+  <header>
+    <p>Recursos Humanos</p>
+    <h1>Atualizacoes cadastrais</h1>
+  </header>
+
+  <p *ngIf="message" class="message" role="status">{{ message }}</p>
+  <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+  <p *ngIf="loading">Carregando...</p>
+
+  <table aria-label="Pendencias cadastrais">
+    <thead>
+      <tr>
+        <th>Servidor</th>
+        <th>Secao</th>
+        <th>Solicitado em</th>
+        <th>Payload</th>
+        <th>Acoes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let change of changes">
+        <td>{{ change.registration }} - {{ change.employeeName }}</td>
+        <td>{{ change.section }}</td>
+        <td>{{ change.requestedAt }}</td>
+        <td>
+          <pre>{{ payload(change) }}</pre>
+        </td>
+        <td>
+          <button
+            type="button"
+            mat-stroked-button
+            (click)="approve(change)"
+            [disabled]="savingId === change.id"
+          >
+            Aprovar
+          </button>
+          <button
+            type="button"
+            mat-stroked-button
+            (click)="reject(change)"
+            [disabled]="savingId === change.id"
+          >
+            Rejeitar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

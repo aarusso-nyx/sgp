@@ -8,24 +8,24 @@ Run this checklist before applying migrations or releasing API changes.
    - `S3_REGION`
    - `S3_DOCUMENTS_BUCKET`
 2. Validate DB alignment matrix/runtime governance gate:
-   - `npm --prefix source run db:alignment:check`
-   - Optional CI/automation output: `npm --prefix source run db:alignment:check -- --json`
+   - `npm run db:alignment:check`
+   - Optional CI/automation output: `npm run db:alignment:check -- --json`
    - Current default phase gate: `full_closure` (override with `SGP_DB_ALIGNMENT_PHASE` if needed).
 3. Run source workspace non-mutating gates:
-   - `npm --prefix source run lint:check`
-   - `npm --prefix source run format:check`
-   - `npm --prefix source run typecheck`
-   - `npm --prefix source run api:alignment:check -- --json`
-   - `npm --prefix source run health:json`
-   - `npm --prefix source run governance:check`
+   - `npm run lint:check`
+   - `npm run format:check`
+   - `npm run typecheck`
+   - `npm run api:alignment:check -- --json`
+   - `npm run health:json`
+   - `npm run governance:check`
 4. Run DB bootstrap smoke in clean database:
-   - `DATABASE_URL=postgresql://<user>@localhost:5432/<dbtest> npm --prefix source run db:smoke`
-5. Apply Prisma migrations in `source/backend`.
-6. Apply SQL support files in lexical order from `source/database/sql`.
+   - `DATABASE_URL=postgresql://<user>@localhost:5432/<dbtest> npm run db:smoke`
+5. Apply Prisma migrations in `backend`.
+6. Apply SQL support files in lexical order from `database/sql`.
 7. Run deterministic seed:
-   - `npm run db:seed` (in `source/backend`)
+   - `npm run db:seed` (in `backend`)
 8. Run tests:
-   - `npm --prefix source run test:unit`
-   - `npm --prefix source run test:e2e`
+   - `npm run test:unit`
+   - `npm run test:e2e`
 9. Verify docs endpoint:
    - `/docs` loads and reflects protected document routes.

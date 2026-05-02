@@ -4,7 +4,7 @@ This directory contains a full-fidelity PostgreSQL migration reference generated
 
 Status: reference archive for analysis and migration traceability.
 
-It is not the runtime schema source for SGP v0.0.1. Runtime schema lives under `source/database/` and Prisma migrations.
+It is not the runtime schema source for SGP v0.0.1. Runtime schema lives under `database/` and Prisma migrations.
 
 ## Layout
 

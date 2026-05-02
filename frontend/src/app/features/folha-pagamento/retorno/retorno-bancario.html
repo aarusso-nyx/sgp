@@ -1,0 +1,46 @@
+<section class="return-page">
+  <header>
+    <h1>Retorno bancario CNAB 240</h1>
+  </header>
+
+  <form [formGroup]="form" class="return-form">
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Remessa original</mat-label>
+      <input matInput formControlName="remittanceFileId" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Hash da remessa</mat-label>
+      <input matInput formControlName="remittanceFileHash" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Arquivo retorno</mat-label>
+      <textarea matInput rows="10" formControlName="content"></textarea>
+    </mat-form-field>
+    <div class="actions">
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="process()"
+        [disabled]="loading"
+      >
+        <mat-icon>upload_file</mat-icon>
+        Processar retorno
+      </button>
+    </div>
+  </form>
+
+  <form [formGroup]="form" class="reprocess-form">
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Retorno processado</mat-label>
+      <input matInput formControlName="returnFileId" />
+    </mat-form-field>
+    <button mat-stroked-button type="button" (click)="reprocessRejected()" [disabled]="loading">
+      <mat-icon>redo</mat-icon>
+      Reprocessar rejeitados
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  <p *ngIf="infoMessage" class="info">{{ infoMessage }}</p>
+</section>

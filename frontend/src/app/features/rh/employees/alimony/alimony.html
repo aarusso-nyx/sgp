@@ -1,0 +1,115 @@
+<section class="alimony-page">
+  <header>
+    <div>
+      <p>Recursos Humanos</p>
+      <h1>Pensao alimenticia</h1>
+    </div>
+    <label>
+      <span>Servidor</span>
+      <input [(ngModel)]="employeeId" />
+    </label>
+    <label>
+      <span>Status</span>
+      <select [(ngModel)]="status">
+        <option value="ACTIVE">Ativa</option>
+        <option value="SUSPENDED">Suspensa</option>
+        <option value="TERMINATED">Encerrada</option>
+      </select>
+    </label>
+    <button type="button" mat-stroked-button (click)="load()">Carregar</button>
+  </header>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+  <p *ngIf="loading">Carregando...</p>
+
+  <form class="alimony-form">
+    <label>
+      <span>Ordem judicial</span>
+      <input [(ngModel)]="form.courtOrderNumber" name="courtOrderNumber" />
+    </label>
+    <label>
+      <span>Beneficiario</span>
+      <input [(ngModel)]="form.beneficiaryName" name="beneficiaryName" />
+    </label>
+    <label>
+      <span>CPF beneficiario</span>
+      <input [(ngModel)]="form.beneficiaryCpf" name="beneficiaryCpf" />
+    </label>
+    <label>
+      <span>Banco judicial</span>
+      <input type="number" [(ngModel)]="form.beneficiaryBankCode" name="beneficiaryBankCode" />
+    </label>
+    <label>
+      <span>Agencia judicial</span>
+      <input [(ngModel)]="form.beneficiaryBranch" name="beneficiaryBranch" />
+    </label>
+    <label>
+      <span>Conta judicial</span>
+      <input [(ngModel)]="form.beneficiaryAccount" name="beneficiaryAccount" />
+    </label>
+    <label>
+      <span>Base</span>
+      <select [(ngModel)]="form.calculationBasis" name="calculationBasis">
+        <option value="GROSS">Bruta</option>
+        <option value="NET">Liquida</option>
+        <option value="BASE_SPECIFIC">Especifica</option>
+      </select>
+    </label>
+    <label>
+      <span>Percentual</span>
+      <input [(ngModel)]="form.rate" name="rate" />
+    </label>
+    <label>
+      <span>Valor fixo</span>
+      <input [(ngModel)]="form.fixedAmount" name="fixedAmount" />
+    </label>
+    <label>
+      <span>Inicio</span>
+      <input type="date" [(ngModel)]="form.validFrom" name="validFrom" />
+    </label>
+    <label>
+      <span>Fim</span>
+      <input type="date" [(ngModel)]="form.validTo" name="validTo" />
+    </label>
+    <label>
+      <span>Prioridade</span>
+      <input type="number" [(ngModel)]="form.priority" name="priority" />
+    </label>
+    <button type="button" mat-flat-button color="primary" (click)="create()">Cadastrar</button>
+  </form>
+
+  <table aria-label="Ordens de pensao alimenticia">
+    <thead>
+      <tr>
+        <th>Ordem</th>
+        <th>Beneficiario</th>
+        <th>Conta judicial</th>
+        <th>Base</th>
+        <th>Valor</th>
+        <th>Vigencia</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows">
+        <td>{{ row.courtOrderNumber }}</td>
+        <td>{{ row.beneficiaryName }}</td>
+        <td>
+          {{ row.beneficiaryBankCode }} {{ row.beneficiaryBranch }} {{ row.beneficiaryAccount }}
+        </td>
+        <td>{{ row.calculationBasis }}</td>
+        <td>{{ row.fixedAmount || row.rate }}</td>
+        <td>{{ row.validFrom }} - {{ row.validTo || 'sem fim' }}</td>
+        <td>{{ row.status }}</td>
+        <td>
+          <button type="button" mat-stroked-button (click)="suspend(row)">Suspender</button>
+        </td>
+      </tr>
+      <tr *ngIf="rows.length === 0">
+        <td colspan="8" class="empty">Nenhuma ordem encontrada.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

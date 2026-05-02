@@ -21,7 +21,7 @@ Promover para cobertura canônica os objetos legados que já possuem comportamen
 ## Governança de fase
 
 1. Gate default passou para `SGP_DB_ALIGNMENT_PHASE=phase_3_core`.
-2. `source/scripts/check-db-alignment.mjs` valida:
+2. `scripts/check-db-alignment.mjs` valida:
    - estrutura da matriz (`status`, `phase`, duplicidade),
    - completude do phase target,
    - ausência de regressão de objetos retirados,

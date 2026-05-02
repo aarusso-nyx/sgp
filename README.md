@@ -19,8 +19,8 @@ When sources conflict on payroll engine behavior, folia takes precedence. For un
 
 ## Active implementation areas
 
-- APIs: `source/backend` (`sgp-core-api` and `sgp-portal-api` entrypoints)
-- Frontends: `source/frontend` (`sgp-admin` and `sgp-portal` Angular projects)
-- Runtime topology: `source/runtime/topology.json`
-- Database: `source/database`
+- APIs: `backend` (`sgp-core-api` and `sgp-portal-api` entrypoints)
+- Frontends: `frontend` (`sgp-admin` and `sgp-portal` Angular projects)
+- Runtime topology: `runtime/topology.json`
+- Database: `database`
 - Governance docs: `GOVERNANCE.md`, `docs/governance/`

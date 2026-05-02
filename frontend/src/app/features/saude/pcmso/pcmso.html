@@ -1,0 +1,52 @@
+<section class="program-page">
+  <header>
+    <p>Saude ocupacional</p>
+    <h1>PCMSO</h1>
+  </header>
+
+  <div class="grid">
+    <form [formGroup]="form" (ngSubmit)="create()" class="panel">
+      <h2>Programa</h2>
+      <label><span>Estabelecimento</span><input formControlName="workLocationId" /></label>
+      <label><span>Inicio</span><input type="date" formControlName="validFrom" /></label>
+      <label><span>Fim</span><input type="date" formControlName="validUntil" /></label>
+      <label><span>CRM</span><input formControlName="responsibleDoctorCrm" /></label>
+      <label
+        ><span>Medico responsavel</span><input formControlName="responsibleDoctorName"
+      /></label>
+      <button type="submit" [disabled]="saving">Salvar rascunho</button>
+    </form>
+
+    <form [formGroup]="examForm" (ngSubmit)="addExam()" class="panel">
+      <h2>Exames obrigatorios</h2>
+      <label><span>PCMSO</span><input formControlName="healthProgramId" /></label>
+      <label><span>Exame</span><input formControlName="medicalExamId" /></label>
+      <label><span>Cargo</span><input formControlName="appliesToRoleId" /></label>
+      <label
+        ><span>Periodicidade</span><input type="number" formControlName="periodicityMonthsOverride"
+      /></label>
+      <button type="submit">Vincular exame</button>
+    </form>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Estabelecimento</th>
+        <th>Vigencia</th>
+        <th>Responsavel</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let program of programs">
+        <td>{{ program.workLocationName || program.id }}</td>
+        <td>{{ program.validFrom }} - {{ program.validUntil }}</td>
+        <td>{{ program.responsibleDoctorName }}</td>
+        <td>{{ program.status }}</td>
+        <td><button type="button" (click)="activate(program)">Ativar</button></td>
+      </tr>
+    </tbody>
+  </table>
+</section>

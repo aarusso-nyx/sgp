@@ -40,7 +40,7 @@ Mutacoes disparam trigger que chama `public.sgp_append_audit_event(...)`; os end
 
 Backend:
 
-- `source/backend/src/tce/adapters/audesp-sp/audesp-sp.adapter.ts`
+- `backend/src/tce/adapters/audesp-sp/audesp-sp.adapter.ts`
 - `mapping/payroll-to-audesp.mapper.ts`
 - `serializer/audesp-xml.serializer.ts`
 - `validator/audesp-validator.service.ts`
@@ -49,11 +49,11 @@ Backend:
 
 Frontend:
 
-- `source/frontend/src/app/features/tce/audesp-sp/`
+- `frontend/src/app/features/tce/audesp-sp/`
 - rota admin `tce/audesp-sp`
 
 Testes:
 
 - Mapper, serializer com fixture XML, validator, stub e fail-safe do adapter.
-- E2E `source/backend/test/tce-03-audesp-sp.e2e-spec.ts`.
-- Probe RLS `source/tests/rls/tce-submission-cross-tenant.spec.ts`.
+- E2E `backend/test/tce-03-audesp-sp.e2e-spec.ts`.
+- Probe RLS `tests/rls/tce-submission-cross-tenant.spec.ts`.

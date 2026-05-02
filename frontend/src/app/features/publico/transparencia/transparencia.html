@@ -1,0 +1,87 @@
+<main class="transparencia" aria-labelledby="transparencia-title">
+  <header class="transparencia__header">
+    <div>
+      <p class="transparencia__eyebrow">Portal da Transparencia</p>
+      <h1 id="transparencia-title">Remuneracao de servidores</h1>
+      <p>
+        Publicacao ativa conforme Lei 12.527/2011, Decreto 7.724/2012 e STF Tema 483. Dados pessoais
+        sensiveis, CPF, dependentes, endereco e conta bancaria nao sao publicados.
+      </p>
+      <a href="/lgpd/titular">Fluxo LGPD do titular</a>
+    </div>
+  </header>
+
+  <form class="transparencia__filters" (ngSubmit)="submit()" aria-label="Filtros de transparencia">
+    <label>
+      Tenant
+      <input name="tenantId" [(ngModel)]="filters.tenantId" required />
+    </label>
+    <label>
+      Competencia
+      <input name="competence" type="date" [(ngModel)]="filters.competence" />
+    </label>
+    <label>
+      Orgao
+      <input name="organizationalUnit" [(ngModel)]="filters.organizationalUnit" />
+    </label>
+    <label>
+      Cargo
+      <input name="position" [(ngModel)]="filters.position" />
+    </label>
+    <label>
+      Nome
+      <input name="search" [(ngModel)]="filters.search" />
+    </label>
+    <button type="submit">Filtrar</button>
+    <a class="transparencia__csv" [href]="csvUrl">Exportar CSV</a>
+  </form>
+
+  <p *ngIf="error" class="transparencia__error" role="alert">{{ error }}</p>
+  <p *ngIf="loading" class="transparencia__loading">Carregando...</p>
+
+  <div class="transparencia__table-wrap">
+    <table>
+      <caption>
+        Snapshot mensal congelado por competencia aprovada
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Competencia</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Matricula</th>
+          <th scope="col">Cargo</th>
+          <th scope="col">Orgao</th>
+          <th scope="col">Proventos</th>
+          <th scope="col">Descontos</th>
+          <th scope="col">Liquido</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rows">
+          <td>{{ row.competence }}</td>
+          <td>{{ row.fullName }}</td>
+          <td>{{ row.registrationNumber }}</td>
+          <td>{{ row.positionName }}</td>
+          <td>{{ row.organizationalUnit }}</td>
+          <td>{{ row.grossTotal }}</td>
+          <td>{{ row.deductionsTotal }}</td>
+          <td>{{ row.netTotal }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav class="transparencia__pager" aria-label="Paginacao">
+    <button type="button" (click)="previousPage()" [disabled]="(filters.page ?? 1) <= 1">
+      Anterior
+    </button>
+    <span>Pagina {{ filters.page }} de {{ totalPages }}</span>
+    <button
+      type="button"
+      (click)="nextPage()"
+      [disabled]="(filters.page ?? 1) >= totalPages || (filters.page ?? 1) >= 50"
+    >
+      Proxima
+    </button>
+  </nav>
+</main>

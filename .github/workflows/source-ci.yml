@@ -1,14 +1,27 @@
-name: Source CI
+name: Workspace CI
 
 on:
   pull_request:
     paths:
       - '.github/workflows/source-ci.yml'
       - 'devai.config.json'
+      - '.gitignore'
+      - '.node-version'
+      - '.nvmrc'
+      - '.prettierrc.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'backend/**'
+      - 'database/**'
       - 'docs/eng/**'
       - 'docs/governance/**'
       - 'docs/legacy-reverse/deprecation-status.md'
-      - 'source/**'
+      - 'frontend/**'
+      - 'infra/**'
+      - 'runtime/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'tests-e2e/**'
   push:
     branches:
       - main
@@ -16,14 +29,27 @@ on:
     paths:
       - '.github/workflows/source-ci.yml'
       - 'devai.config.json'
+      - '.gitignore'
+      - '.node-version'
+      - '.nvmrc'
+      - '.prettierrc.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'backend/**'
+      - 'database/**'
       - 'docs/eng/**'
       - 'docs/governance/**'
       - 'docs/legacy-reverse/deprecation-status.md'
-      - 'source/**'
+      - 'frontend/**'
+      - 'infra/**'
+      - 'runtime/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'tests-e2e/**'
 
 jobs:
   source-gates:
-    name: Source workspace gates
+    name: Workspace gates
     runs-on: ubuntu-latest
     timeout-minutes: 35
     services:
@@ -40,9 +66,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
-    defaults:
-      run:
-        working-directory: source
     env:
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/sgp_ci
       SGP_DB_ALIGNMENT_PHASE: full_closure
@@ -56,9 +79,9 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-          cache-dependency-path: source/package-lock.json
+          cache-dependency-path: package-lock.json
 
-      - name: Install source workspace dependencies
+      - name: Install workspace dependencies
         run: npm ci
 
       - name: Lint check
@@ -102,5 +125,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: backend-coverage
-          path: source/backend/coverage
+          path: backend/coverage
           if-no-files-found: ignore

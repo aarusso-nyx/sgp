@@ -1,0 +1,33 @@
+<section class="biometric-review">
+  <header>
+    <h1>Conferencia biometrica</h1>
+    <strong
+      [class.accept]="result.decision === 'ACCEPT'"
+      [class.reject]="result.decision === 'REJECT'"
+    >
+      {{ result.decision }}
+    </strong>
+  </header>
+
+  <form>
+    <label>Candidato <input name="candidatoId" [(ngModel)]="search.candidatoId" /></label>
+    <label>Sessao de prova <input name="examSessionId" [(ngModel)]="search.examSessionId" /></label>
+    <label>Leitor <input name="deviceRef" [(ngModel)]="search.deviceRef" /></label>
+    <button type="button" (click)="runMatch()">Conferir digital</button>
+  </form>
+
+  <dl>
+    <div>
+      <dt>Score</dt>
+      <dd>{{ result.score }}</dd>
+    </div>
+    <div>
+      <dt>Threshold</dt>
+      <dd>{{ result.threshold }}</dd>
+    </div>
+    <div>
+      <dt>Template</dt>
+      <dd>Oculto</dd>
+    </div>
+  </dl>
+</section>
