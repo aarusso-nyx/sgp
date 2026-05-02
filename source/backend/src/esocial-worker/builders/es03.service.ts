@@ -8,27 +8,31 @@ import {
   ESocialEmitService,
 } from '../esocial-emit.service';
 import { S2230Builder } from './s2230.builder';
+import { S2220Builder } from './s2220.builder';
 import { S2299Builder } from './s2299.builder';
 import { sha256 } from './s22xx-common';
 
 export interface ES03DispatchResult {
-  eventKind: 'S-2230' | 'S-2299';
+  eventKind: 'S-2220' | 'S-2230' | 'S-2299';
   pendingId: string;
   sourceEntityId: string;
   xmlHash: string;
   emitted: boolean;
   event?: EmittedESocialEvent;
+  lastError?: string;
 }
 
 interface PendingStatusRow extends QueryResultRow {
   id: string;
-  event_kind: 'S-2230' | 'S-2299';
+  event_kind: 'S-2220' | 'S-2230' | 'S-2299';
   source_id: string;
   employee_name: string;
   status: string;
   enqueued_at: Date | string;
   receipt: string | null;
   blocked_reason: string | null;
+  last_error: string | null;
+  aso_record_id: string | null;
 }
 
 @Injectable()
@@ -37,24 +41,45 @@ export class ES03Service {
     private readonly databaseService: DatabaseService,
     private readonly emitService: ESocialEmitService,
     private readonly s2230Builder: S2230Builder,
+    private readonly s2220Builder: S2220Builder,
     private readonly s2299Builder: S2299Builder,
   ) {}
 
   async listStatus(): Promise<
     Array<{
       id: string;
-      eventKind: 'S-2230' | 'S-2299';
+      eventKind: 'S-2220' | 'S-2230' | 'S-2299';
       sourceId: string;
       employeeName: string;
       status: string;
       enqueuedAt: string;
       receipt: string | null;
       blockedReason: string | null;
+      lastError: string | null;
+      asoRecordId: string | null;
     }>
   > {
     const tenantId = this.currentTenantId();
-    const rows = await this.databaseService.query<PendingStatusRow>(
-      `
+    const rows = await this.withSstPermissions(() =>
+      this.databaseService.query<PendingStatusRow>(
+        `
+      SELECT
+        pending.aso_record_id::text AS id,
+        'S-2220'::text AS event_kind,
+        pending.aso_record_id::text AS source_id,
+        employee.name AS employee_name,
+        CASE WHEN aso.s2220_event_id IS NULL THEN 'PENDING' ELSE event.status::text END AS status,
+        pending.enqueued_at,
+        event.reference AS receipt,
+        NULL::text AS blocked_reason,
+        pending.last_error,
+        pending.aso_record_id::text
+      FROM esocial.s2220_pending pending
+      JOIN saude.aso_record aso ON aso.id = pending.aso_record_id
+      JOIN hr.employee employee ON employee.id = aso.employee_id
+      LEFT JOIN public.esocial_event event ON event.id = aso.s2220_event_id
+      WHERE pending.tenant_id = $1::uuid
+      UNION ALL
       SELECT
         pending.id::text,
         'S-2230'::text AS event_kind,
@@ -63,7 +88,9 @@ export class ES03Service {
         pending.status::text,
         pending.enqueued_at,
         event.reference AS receipt,
-        NULL::text AS blocked_reason
+        NULL::text AS blocked_reason,
+        NULL::text AS last_error,
+        NULL::text AS aso_record_id
       FROM esocial.s2230_pending pending
       LEFT JOIN hr.leave_record leave_record
         ON pending.kind = 'LEAVE'
@@ -84,7 +111,9 @@ export class ES03Service {
         pending.status::text,
         pending.ready_at AS enqueued_at,
         event.reference AS receipt,
-        CASE WHEN run.status <> 'GENERATED'::"PayrollRunStatus" THEN 'payroll_run_not_generated' ELSE NULL END
+        CASE WHEN run.status <> 'GENERATED'::"PayrollRunStatus" THEN 'payroll_run_not_generated' ELSE NULL END,
+        NULL::text AS last_error,
+        NULL::text AS aso_record_id
       FROM esocial.s2299_pending pending
       JOIN hr.employee employee ON employee.id = pending.employee_id
       JOIN payroll.payroll_run run ON run.id = pending.calc_run_id
@@ -92,7 +121,8 @@ export class ES03Service {
       WHERE pending.tenant_id = $1::uuid
       ORDER BY enqueued_at DESC
       `,
-      [tenantId],
+        [tenantId],
+      ),
     );
     return rows.map((row) => ({
       id: row.id,
@@ -103,7 +133,79 @@ export class ES03Service {
       enqueuedAt: new Date(row.enqueued_at).toISOString(),
       receipt: row.receipt,
       blockedReason: row.blocked_reason,
+      lastError: row.last_error,
+      asoRecordId: row.aso_record_id,
     }));
+  }
+
+  async emitS2220(asoRecordId: string): Promise<ES03DispatchResult> {
+    const tenantId = this.currentTenantId();
+    return this.withSstPermissions(async () => {
+      const record = await this.s2220Builder.buildPending(
+        tenantId,
+        asoRecordId,
+      );
+      const xmlHash = sha256(record.xml);
+      try {
+        const event = await this.emitService.emit({
+          tenantId,
+          eventKind: 'S-2220',
+          xml: record.xml,
+          reference: record.reference,
+          competence: record.competence,
+          sourceEntityKind: 'saude.aso_record',
+          sourceEntityId: record.asoRecordId,
+          xmlHash,
+          payload: record.payload,
+        });
+        await this.databaseService.query(
+          `
+          UPDATE saude.aso_record
+          SET s2220_event_id = $3::uuid
+          WHERE tenant_id = $1::uuid
+            AND id = $2::uuid
+          `,
+          [tenantId, record.asoRecordId, event.id],
+        );
+        await this.databaseService.query(
+          `
+          DELETE FROM esocial.s2220_pending
+          WHERE tenant_id = $1::uuid
+            AND aso_record_id = $2::uuid
+          `,
+          [tenantId, record.asoRecordId],
+        );
+        return {
+          eventKind: 'S-2220',
+          pendingId: record.pendingId,
+          sourceEntityId: record.asoRecordId,
+          xmlHash,
+          emitted: true,
+          event,
+        };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        await this.databaseService.query(
+          `
+          UPDATE esocial.s2220_pending
+          SET attempts = attempts + 1,
+              last_error = $3,
+              updated_at = now()
+          WHERE tenant_id = $1::uuid
+            AND aso_record_id = $2::uuid
+          `,
+          [tenantId, record.asoRecordId, message.slice(0, 1000)],
+        );
+        return {
+          eventKind: 'S-2220',
+          pendingId: record.pendingId,
+          sourceEntityId: record.asoRecordId,
+          xmlHash,
+          emitted: false,
+          lastError: message,
+        };
+      }
+    });
   }
 
   async emitS2230(pendingId: string): Promise<ES03DispatchResult> {
@@ -185,5 +287,30 @@ export class ES03Service {
       throw new Error('Tenant context is required for ES-03 dispatch');
     }
     return tenantId;
+  }
+
+  private withSstPermissions<T>(callback: () => Promise<T>): Promise<T> {
+    const context = RequestContextStore.get();
+    const permissions = new Set([
+      ...(context?.actor?.permissions ?? context?.permissions ?? []),
+      'esocial.event.read',
+      'esocial.event.write',
+      'saude.aso.read',
+      'saude.aso.write',
+    ]);
+    return RequestContextStore.run(
+      {
+        ...context,
+        actor: context?.actor
+          ? { ...context.actor, permissions: [...permissions] }
+          : undefined,
+        tenantId:
+          context?.actor?.tenantId ??
+          context?.tenantId ??
+          this.currentTenantId(),
+        permissions: [...permissions],
+      },
+      callback,
+    );
   }
 }

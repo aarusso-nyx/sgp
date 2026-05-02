@@ -90,10 +90,20 @@ button:disabled {
   text-align: center;
 }
 
+.warning {
+  background: #fffbeb;
+}
+
+.error-cell {
+  max-width: 22rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .tabs {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
 }
 
 .tabs section {

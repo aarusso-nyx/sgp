@@ -2,7 +2,7 @@
   <header class="page-header">
     <div>
       <h1>Cadastro eSocial</h1>
-      <p>Eventos S-2200, S-2205, S-2230 e S-2299 por servidor.</p>
+      <p>Eventos S-2200, S-2205, S-2220, S-2230 e S-2299 por servidor.</p>
     </div>
     <button type="button" class="secondary" (click)="load()" [disabled]="loading">Atualizar</button>
   </header>
@@ -28,11 +28,17 @@
           <td>{{ row.registration }}</td>
           <td>{{ row.name }}</td>
           <td>
-            <span class="status" [class.done]="row.s2200Receipt">{{ row.s2200Receipt || 'Pendente' }}</span>
+            <span class="status" [class.done]="row.s2200Receipt">{{
+              row.s2200Receipt || 'Pendente'
+            }}</span>
           </td>
           <td>{{ row.pendingS2205 }}</td>
           <td class="actions">
-            <button type="button" (click)="reemitS2200(row)" [disabled]="emitting === row.employeeId">
+            <button
+              type="button"
+              (click)="reemitS2200(row)"
+              [disabled]="emitting === row.employeeId"
+            >
               Forcar reemissao
             </button>
             <button
@@ -53,6 +59,49 @@
   </div>
 
   <div class="tabs">
+    <section>
+      <h2>Monitoramento Saúde (S-2220)</h2>
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th>Servidor</th>
+              <th>ASO</th>
+              <th>Status</th>
+              <th>Erro</th>
+              <th>Acoes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let row of eventRows"
+              [class.warning]="row.eventKind === 'S-2220' && !row.receipt"
+            >
+              <ng-container *ngIf="row.eventKind === 'S-2220'">
+                <td>{{ row.employeeName }}</td>
+                <td>
+                  <a [href]="'/saude/aso/' + (row.asoRecordId || row.sourceId)">{{
+                    row.asoRecordId || row.sourceId
+                  }}</a>
+                </td>
+                <td>{{ row.receipt || row.status }}</td>
+                <td class="error-cell">{{ row.lastError || 'Sem erro' }}</td>
+                <td class="actions">
+                  <button
+                    type="button"
+                    (click)="emitWorkerEvent(row)"
+                    [disabled]="emitting === row.id"
+                  >
+                    Reenviar
+                  </button>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section>
       <h2>Afastamentos</h2>
       <div class="table-shell">
@@ -110,7 +159,9 @@
                     type="button"
                     class="secondary"
                     (click)="emitWorkerEvent(row)"
-                    [disabled]="row.status !== 'PENDING' || !!row.blockedReason || emitting === row.id"
+                    [disabled]="
+                      row.status !== 'PENDING' || !!row.blockedReason || emitting === row.id
+                    "
                   >
                     Emitir S-2299
                   </button>

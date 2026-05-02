@@ -12,24 +12,27 @@ export interface ESocialWorkerStatus {
 }
 
 export interface ESocialWorkerDispatchResult {
-  eventKind: 'S-2200' | 'S-2205' | 'S-2230' | 'S-2299';
+  eventKind: 'S-2200' | 'S-2205' | 'S-2220' | 'S-2230' | 'S-2299';
   employeeId?: string;
   pendingId?: string;
   sourceEntityId?: string;
   xmlHash: string;
   emitted: boolean;
   blockedReason?: string;
+  lastError?: string;
 }
 
 export interface ESocialWorkerEventQueue {
   id: string;
-  eventKind: 'S-2230' | 'S-2299';
+  eventKind: 'S-2220' | 'S-2230' | 'S-2299';
   sourceId: string;
   employeeName: string;
   status: string;
   enqueuedAt: string;
   receipt: string | null;
   blockedReason: string | null;
+  lastError: string | null;
+  asoRecordId: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -61,6 +64,13 @@ export class ESocialTrabalhadoresService {
   emitS2230(pendingId: string): Observable<ESocialWorkerDispatchResult> {
     return this.http.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/eventos-trabalhador/s2230/${pendingId}/emitir`,
+      {},
+    );
+  }
+
+  retryS2220(asoRecordId: string): Observable<ESocialWorkerDispatchResult> {
+    return this.http.post<ESocialWorkerDispatchResult>(
+      `/api/v1/esocial/eventos-trabalhador/s2220/${asoRecordId}/retry`,
       {},
     );
   }

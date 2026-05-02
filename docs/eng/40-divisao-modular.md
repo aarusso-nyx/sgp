@@ -41,6 +41,7 @@ Os bounded contexts identificados são:
 | Parametrizações e Estrutura | `GESTAO`                | `gestao`                                 |
 | Vida Funcional (RH)         | `MODULO_RH`             | `rh`                                     |
 | Folha de Pagamento          | `FOLHA_PAGAMENTO`       | `folha` (cliente) + `sgp-payroll-engine` |
+| FGTS CLT                    | `FOLHA_PAGAMENTO`       | `folha-pagamento/fgts`                  |
 | Avaliação e Progressão      | `MODULO_AVALIACAO`      | `avaliacao`                              |
 | Recrutamento e Seleção      | `RECRUTAMENTO_SELECAO`  | `recrutamento`                           |
 | Consultas Gerenciais        | `CONSULTAS_GERENCIAIS`  | `consultas`                              |

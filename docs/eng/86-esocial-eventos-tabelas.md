@@ -1,7 +1,7 @@
 # Eventos de Tabelas e Cadastro eSocial
 
 **Versao:** 1.0 | **Data:** 2026-05-02 | **Status:** Implementado
-**Escopo:** ES-01, ES-02, ES-03, ES-04, ES-05 e ES-06, eventos S-1xxx iniciais, S-1200/S-1210, S-1299, totalizadores S-5xxx, S-2200/S-2205, S-2230, S-2299 e S-3000
+**Escopo:** ES-01, ES-02, ES-03, ES-04, ES-05, ES-06 e SST-04, eventos S-1xxx iniciais, S-1200/S-1210, S-1299, totalizadores S-5xxx, S-2200/S-2205, S-2220, S-2230, S-2299 e S-3000
 
 ## Decisao
 
@@ -16,6 +16,8 @@ O ES-04 cobre a folha periodica. S-1200 e gerado por trabalhador a partir de `pa
 O ES-05 implementa o fechamento S-1299 da competencia. O builder consulta `esocial.v_competence_periodics_pending` antes de montar o XML e bloqueia a emissao se houver trabalhador com S-1200 ou S-1210 sem recibo. O estado fica em `esocial.s1299_emission_state`, por tenant e competencia mensal, com `recibo`, `emitted_at`, `accepted_at` e status `PENDING`, `EMITTED`, `ACCEPTED` ou `REJECTED`. Os totalizadores S-5001, S-5002, S-5003, S-5011, S-5012 e S-5013 sao apenas consumidos do retorno gov.br; o parser identifica o tipo pelo evento XML, extrai a competencia e o recibo de origem, e persiste o payload bruto em `esocial.esocial_totalizer`.
 
 O ES-06 implementa exclusao de eventos por S-3000. O usuario com permissao `esocial.event.exclude` solicita a retratacao de um `public.esocial_event` aceito, informa justificativa minima de 30 caracteres e gera uma linha auditada em `esocial.s3000_request`. O builder `s3000.builder.ts` monta `evtExclusao` referenciando `nrRecEvt` do evento original e envia pelo hub ES-07. Ao receber aceite do S-3000, o worker marca a solicitacao como `ACCEPTED` e muda o evento original para `EXCLUIDO`.
+
+O SST-04 implementa o monitoramento da saude S-2220 a partir de `saude.aso_record`. Quando um ASO muda para `ARCHIVED`, o trigger `esocial.sgp_enqueue_s2220_from_aso()` insere `esocial.s2220_pending`. O builder `s2220.builder.ts` monta `evtMonit` com tipo do ASO, data, conclusao, exames complementares em ordem e medico emitente, valida pelo XSD S-1.3 via ES-07 e grava `saude.aso_record.s2220_event_id` em caso de sucesso. Falha XSD incrementa `attempts`, persiste `last_error` e mantem a entrada para retentativa manual.
 
 ## Mapa Entidade para Evento
 
@@ -32,6 +34,7 @@ O ES-06 implementa exclusao de eventos por S-3000. O usuario com permissao `esoc
 | S-1299 | `esocial.s1299_emission_state` + guarda de periodicos da competencia          | `s1299.builder.ts` |
 | S-2200 | `hr.employee` + `hr.employment_contract` + dependentes                        | `s2200.builder.ts` |
 | S-2205 | `esocial.s2205_pending_alteration` + cadastro atual                           | `s2205.builder.ts` |
+| S-2220 | `esocial.s2220_pending` + `saude.aso_record`/`saude.aso_exam_item`            | `s2220.builder.ts` |
 | S-2230 | `esocial.s2230_pending` + `hr.leave_record`/`hr.vacation_record`              | `s2230.builder.ts` |
 | S-2299 | `esocial.s2299_pending` + `hr.employment_link` + `payroll.payroll_run` gerado | `s2299.builder.ts` |
 | S-3000 | `esocial.s3000_request` + `public.esocial_event` alvo                         | `s3000.builder.ts` |
@@ -42,7 +45,7 @@ O painel administrativo fica em `source/frontend/src/app/features/esocial/tabela
 
 O painel de trabalhadores fica em `source/frontend/src/app/features/esocial/trabalhadores/` e lista matricula, servidor, recibo S-2200 e pendencias S-2205. As rotas `/api/v1/esocial/trabalhadores` usam `esocial.event.read`; as emissoes manuais de S-2200 e S-2205 usam `esocial.event.write`.
 
-As filas de afastamentos e desligamentos ficam em `/api/v1/esocial/eventos-trabalhador` e aparecem nas abas "Afastamentos" e "Desligamentos" do mesmo painel administrativo. A emissao manual de S-2299 bloqueia explicitamente se a folha de rescisao CALC-12 ainda nao estiver `GENERATED`.
+As filas de monitoramento de saude, afastamentos e desligamentos ficam em `/api/v1/esocial/eventos-trabalhador` e aparecem nas abas "Monitoramento Saúde (S-2220)", "Afastamentos" e "Desligamentos" do mesmo painel administrativo. A retentativa manual de S-2220 usa `POST /api/v1/esocial/eventos-trabalhador/s2220/:asoRecordId/retry` e mantem `last_error` quando a validacao XSD rejeita o XML. A emissao manual de S-2299 bloqueia explicitamente se a folha de rescisao CALC-12 ainda nao estiver `GENERATED`.
 
 O painel de folha periodica fica em `source/frontend/src/app/features/esocial/folha-periodica/` e consulta `/api/v1/esocial/folha-periodica?year=AAAA&month=MM`. Ele exibe trabalhadores do run, status S-1200, status S-1210, recibos e a acao "Reemitir trabalhador". A emissao manual de S-1200 usa `/runs/:payrollRunId/s1200/emitir`; S-1210 usa `/payments/:paymentBatchId/s1210/emitir`. Consultas exigem `esocial.event.read`; emissoes exigem `esocial.event.write`.
 
@@ -52,4 +55,4 @@ O painel de exclusao fica em `source/frontend/src/app/features/esocial/exclusao/
 
 ## Auditoria e RLS
 
-`public.esocial_event`, `esocial.s1xxx_dispatch_state`, `esocial.s1200_emission_state`, `esocial.s1210_emission_state`, `esocial.s2200_emission_state`, `esocial.s2205_pending_alteration`, `esocial.s2230_pending`, `esocial.s2299_pending`, `esocial.s1299_emission_state`, `esocial.esocial_totalizer` e `esocial.s3000_request` usam RLS forçado por tenant com `sgp_tenant_matches(tenant_id)`. Leitura usa `esocial.event.read`; emissoes usam `esocial.event.write`; retratacoes S-3000 usam `esocial.event.exclude`. A emissao grava `public.esocial_event` e `public.audit_event`; a atualizacao de estado tambem usa `sgp_append_audit_event(...)` por trigger ou servico, incluindo `requested_by_user_id` e `justification` da retratacao.
+`public.esocial_event`, `esocial.s1xxx_dispatch_state`, `esocial.s1200_emission_state`, `esocial.s1210_emission_state`, `esocial.s2200_emission_state`, `esocial.s2205_pending_alteration`, `esocial.s2220_pending`, `esocial.s2230_pending`, `esocial.s2299_pending`, `esocial.s1299_emission_state`, `esocial.esocial_totalizer` e `esocial.s3000_request` usam RLS forçado por tenant com `sgp_tenant_matches(tenant_id)`. Leitura usa `esocial.event.read`; emissoes usam `esocial.event.write`; retratacoes S-3000 usam `esocial.event.exclude`. A emissao grava `public.esocial_event` e `public.audit_event`; a atualizacao de estado tambem usa `sgp_append_audit_event(...)` por trigger ou servico, incluindo `requested_by_user_id` e `justification` da retratacao.

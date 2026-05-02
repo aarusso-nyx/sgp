@@ -22,6 +22,28 @@ export class ES03Controller {
     return this.service.listStatus();
   }
 
+  @Post('s2220/:asoRecordId/retry')
+  @RequirePermission('esocial.event.write')
+  @ApiOkResponse({
+    description: 'Retry a pending S-2220 ASO monitoring event.',
+  })
+  async retryS2220(
+    @Req() request: RequestWithContext,
+    @Param('asoRecordId') asoRecordId: string,
+  ) {
+    const result = await this.service.emitS2220(asoRecordId);
+    await this.auditService.auditMutation(request, 'PROCESS', 'esocial.s2220', {
+      resourceId: asoRecordId,
+      tableName: 'esocial.s2220_pending',
+      metadata: {
+        emitted: result.emitted,
+        xmlHash: result.xmlHash,
+        lastError: result.lastError,
+      },
+    });
+    return result;
+  }
+
   @Post('s2230/:pendingId/emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({ description: 'Emit a pending S-2230 event.' })

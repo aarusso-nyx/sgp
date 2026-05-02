@@ -3714,6 +3714,137 @@ $$;
   );
   console.log('[db-smoke] validated SST-02 PCMSO/PGR constraints, revisions, derived exams, and RLS');
 
+  await runSqlSnippet(
+    '99-sst04-s2220.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  employee_a uuid;
+  aso_id uuid := gen_random_uuid();
+  pending_count integer;
+  visible_count integer;
+  audit_count integer;
+  policy_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA esocial, hr, public, saude TO sgp_smoke_rls;
+  GRANT SELECT ON hr.employee TO sgp_smoke_rls;
+  GRANT SELECT ON public.user_account TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON saude.aso_record TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.s2220_pending TO sgp_smoke_rls;
+  GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
+
+  SELECT employee.id INTO employee_a
+  FROM hr.employee employee
+  WHERE employee.tenant_id = tenant_a
+  LIMIT 1;
+
+  IF employee_a IS NULL THEN
+    RAISE EXCEPTION 'SST-04 smoke requires at least one seeded tenant A employee';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config(
+    'app.current_permissions',
+    'saude.aso.write' || chr(10) || 'saude.aso.read' || chr(10) || 'esocial.event.write',
+    true
+  );
+  PERFORM set_config('app.authenticated', 'true', true);
+
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO saude.aso_record (
+    id,
+    tenant_id,
+    employee_id,
+    aso_kind,
+    scheduled_at,
+    performed_at,
+    doctor_crm,
+    doctor_name,
+    conclusion,
+    status
+  )
+  VALUES (
+    aso_id,
+    tenant_a,
+    employee_a,
+    'ADMISSIONAL'::saude.aso_kind,
+    DATE '2026-05-01',
+    DATE '2026-05-02',
+    'CRM-SP 12345',
+    'Dra SST04',
+    'APTO'::saude.aso_conclusion,
+    'PERFORMED'::saude.aso_status
+  );
+  UPDATE saude.aso_record
+  SET status = 'ARCHIVED'::saude.aso_status
+  WHERE id = aso_id;
+  SELECT count(*) INTO pending_count
+  FROM esocial.s2220_pending
+  WHERE tenant_id = tenant_a
+    AND aso_record_id = aso_id
+    AND attempts = 0
+    AND last_error IS NULL;
+  RESET ROLE;
+
+  IF pending_count <> 1 THEN
+    RAISE EXCEPTION 'Expected archived ASO to enqueue one S-2220 pending row, found %', pending_count;
+  END IF;
+
+  UPDATE esocial.s2220_pending
+  SET attempts = attempts + 1,
+      last_error = 'xsd crm missing'
+  WHERE tenant_id = tenant_a
+    AND aso_record_id = aso_id;
+  SELECT count(*) INTO pending_count
+  FROM esocial.s2220_pending
+  WHERE tenant_id = tenant_a
+    AND aso_record_id = aso_id
+    AND attempts = 1
+    AND last_error = 'xsd crm missing';
+  IF pending_count <> 1 THEN
+    RAISE EXCEPTION 'Expected failed S-2220 retry to keep pending row with last_error';
+  END IF;
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE resource_type = 'esocial.s2220_pending'
+    AND resource_id = aso_id::text;
+  IF audit_count = 0 THEN
+    RAISE EXCEPTION 'Expected S-2220 pending mutation to append audit_event';
+  END IF;
+
+  SELECT count(*) INTO policy_count
+  FROM pg_policies
+  WHERE schemaname = 'esocial'
+    AND tablename = 's2220_pending'
+    AND policyname IN ('s2220_pending_select', 's2220_pending_write')
+    AND qual LIKE '%sgp_tenant_matches%'
+    AND qual LIKE '%esocial.event%';
+  IF policy_count <> 2 THEN
+    RAISE EXCEPTION 'Expected S-2220 pending RLS policies to require tenant and esocial event permissions';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.event.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM esocial.s2220_pending
+  WHERE aso_record_id = aso_id;
+  RESET ROLE;
+
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 S-2220 pending rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated SST-04 S-2220 enqueue, retry diagnostics, audit, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 
