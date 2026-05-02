@@ -2401,14 +2401,15 @@
       "wave": 36,
       "theme": "PONTO",
       "zero_retry": true,
-      "started_at": "2026-05-02T10:02:30Z"
+      "started_at": "2026-05-02T10:02:30Z",
+      "agent": "019de821-b487-79b1-b6fc-9b5d269ba173"
     }
   },
   "current_wave": 36,
   "active_subagents": [
     {
       "slice": "84-ponto-10-reconhecimento-facial",
-      "agent": "pending-spawn",
+      "agent": "019de821-b487-79b1-b6fc-9b5d269ba173",
       "effort": "high",
       "started_at": "2026-05-02T10:02:30Z"
     }
