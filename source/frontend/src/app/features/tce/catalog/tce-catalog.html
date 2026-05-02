@@ -1,0 +1,101 @@
+<section class="tce-catalog">
+  <header class="page-header">
+    <div>
+      <h1>Catálogo TCE</h1>
+      <p>UF, sistemas, versões e campos públicos para adapters TCE.</p>
+    </div>
+    <button mat-stroked-button type="button" (click)="loadStates()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon>
+      Atualizar
+    </button>
+  </header>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <div class="layout">
+    <nav class="states" aria-label="Unidades federativas">
+      <button
+        *ngFor="let state of states"
+        type="button"
+        class="state-button"
+        [class.selected]="selectedState?.id === state.id"
+        (click)="selectState(state)"
+      >
+        <strong>{{ state.code }}</strong>
+        <span>{{ state.organKind }}</span>
+      </button>
+    </nav>
+
+    <section class="versions">
+      <table>
+        <thead>
+          <tr>
+            <th>Sistema</th>
+            <th>Versão</th>
+            <th>Vigência</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let layout of layouts"
+            [class.selected]="selectedLayout?.id === layout.id"
+            (click)="selectLayout(layout)"
+          >
+            <td>{{ layout.systemName }}</td>
+            <td>{{ layout.version }}</td>
+            <td>{{ layout.effectiveFrom }} - {{ layout.effectiveTo || 'aberta' }}</td>
+            <td>{{ layout.status }}</td>
+            <td class="actions">
+              <button
+                mat-icon-button
+                type="button"
+                title="Marcar ativa"
+                [disabled]="busyLayoutId === layout.id || layout.status !== 'DRAFT'"
+                (click)="activate(layout); $event.stopPropagation()"
+              >
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                type="button"
+                title="Marcar superada"
+                [disabled]="busyLayoutId === layout.id || layout.status !== 'ACTIVE'"
+                (click)="supersede(layout); $event.stopPropagation()"
+              >
+                <mat-icon>archive</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <aside class="fields">
+      <h2>Campos</h2>
+      <p *ngIf="!selectedLayout">Selecione uma versão.</p>
+      <p *ngIf="selectedLayout && fields.length === 0">
+        Nenhum campo publicado para este placeholder.
+      </p>
+      <table *ngIf="fields.length > 0">
+        <thead>
+          <tr>
+            <th>Ordem</th>
+            <th>Caminho</th>
+            <th>Tipo</th>
+            <th>Obrigatório</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let field of fields">
+            <td>{{ field.ordering }}</td>
+            <td>{{ field.fieldPath }}</td>
+            <td>{{ field.dataType }}</td>
+            <td>{{ field.required ? 'Sim' : 'Não' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </aside>
+  </div>
+</section>
