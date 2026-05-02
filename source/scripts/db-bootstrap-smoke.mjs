@@ -538,7 +538,7 @@ BEGIN
       updated_at = now();
 
   INSERT INTO esocial.s1299_emission_state (tenant_id, competence, status, accepted_at)
-  VALUES (tenant_a, '2026-05', 'ACCEPTED', now())
+  VALUES (tenant_a, DATE '2026-05-01', 'ACCEPTED', now())
   ON CONFLICT (tenant_id, competence) DO UPDATE
   SET status = EXCLUDED.status,
       accepted_at = EXCLUDED.accepted_at;

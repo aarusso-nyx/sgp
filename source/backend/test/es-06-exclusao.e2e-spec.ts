@@ -233,7 +233,7 @@ async function seed(database: DatabaseService): Promise<void> {
     await database.query(
       `
       INSERT INTO esocial.s1299_emission_state (tenant_id, competence, status, accepted_at)
-      VALUES ($1::uuid, '2026-05', 'ACCEPTED', now())
+      VALUES ($1::uuid, '2026-05-01'::date, 'ACCEPTED', now())
       ON CONFLICT (tenant_id, competence) DO UPDATE
       SET status = EXCLUDED.status,
           accepted_at = EXCLUDED.accepted_at,

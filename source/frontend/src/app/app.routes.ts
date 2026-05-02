@@ -99,6 +99,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'esocial/fechamento',
+        loadComponent: () =>
+          import('./features/esocial/fechamento/esocial-fechamento').then(
+            (m) => m.ESocialFechamento,
+          ),
+      },
+      {
         path: 'esocial/exclusao',
         loadComponent: () =>
           import('./features/esocial/exclusao/esocial-exclusao').then((m) => m.ESocialExclusao),

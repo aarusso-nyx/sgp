@@ -269,6 +269,7 @@ enum S1xxxEventKind {
   S_1070 @map("S-1070")
   S_1200 @map("S-1200")
   S_1210 @map("S-1210")
+  S_1299 @map("S-1299")
   S_2200 @map("S-2200")
   S_2205 @map("S-2205")
   S_2230 @map("S-2230")
@@ -276,6 +277,28 @@ enum S1xxxEventKind {
   S_3000 @map("S-3000")
 
   @@map("s1xxx_event_kind")
+  @@schema("esocial")
+}
+
+enum S1299EmissionStatus {
+  PENDING
+  EMITTED
+  ACCEPTED
+  REJECTED
+
+  @@map("s1299_emission_status")
+  @@schema("esocial")
+}
+
+enum ESocialTotalizerKind {
+  S_5001 @map("S-5001")
+  S_5002 @map("S-5002")
+  S_5003 @map("S-5003")
+  S_5011 @map("S-5011")
+  S_5012 @map("S-5012")
+  S_5013 @map("S-5013")
+
+  @@map("esocial_totalizer_kind")
   @@schema("esocial")
 }
 
@@ -2844,16 +2867,34 @@ model S2205PendingAlteration {
 }
 
 model S1299EmissionState {
-  tenantId       String    @map("tenant_id") @db.Uuid
-  competence     String
-  status         String
-  emittedEventId String?   @map("emitted_event_id") @db.Uuid
-  acceptedAt     DateTime? @map("accepted_at") @db.Timestamptz(6)
-  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  tenantId       String              @map("tenant_id") @db.Uuid
+  competence     DateTime            @db.Date
+  recibo         String?
+  emittedAt      DateTime?           @map("emitted_at") @db.Timestamptz(6)
+  status         S1299EmissionStatus @default(PENDING)
+  emittedEventId String?             @map("emitted_event_id") @db.Uuid
+  acceptedAt     DateTime?           @map("accepted_at") @db.Timestamptz(6)
+  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@id([tenantId, competence])
   @@map("s1299_emission_state")
+  @@schema("esocial")
+}
+
+model ESocialTotalizer {
+  tenantId          String               @map("tenant_id") @db.Uuid
+  competence        DateTime             @db.Date
+  kind              ESocialTotalizerKind
+  sourceEventRecibo String               @map("source_event_recibo")
+  payload           Json
+  receivedAt        DateTime             @default(now()) @map("received_at") @db.Timestamptz(6)
+  createdAt         DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, competence, kind, sourceEventRecibo])
+  @@index([tenantId, competence, kind])
+  @@map("esocial_totalizer")
   @@schema("esocial")
 }
 

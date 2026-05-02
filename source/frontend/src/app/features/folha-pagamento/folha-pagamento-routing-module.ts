@@ -108,6 +108,17 @@ import { SimulacaoFolha } from './simulacao/simulacao';
           moduleLabel: 'Folha de Pgt',
         },
       },
+      {
+        path: 'esocial/fechamento',
+        loadComponent: () =>
+          import('../esocial/fechamento/esocial-fechamento').then((m) => m.ESocialFechamento),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['esocial.event.read'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
       ...buildModuleRouteGroup('folha', FolhaPagamentoHome, {
         moduleLabel: 'Folha de Pgt',
       }),

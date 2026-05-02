@@ -11,6 +11,8 @@ import { ES03Controller } from './builders/es03.controller';
 import { ES03Service } from './builders/es03.service';
 import { ES04Controller } from './builders/es04.controller';
 import { ES04Service } from './builders/es04.service';
+import { ES05Controller } from './builders/es05.controller';
+import { ES05Service } from './builders/es05.service';
 import { S1000Builder } from './builders/s1000.builder';
 import { S1005Builder } from './builders/s1005.builder';
 import { S1010Builder } from './builders/s1010.builder';
@@ -19,6 +21,7 @@ import { S1050Builder } from './builders/s1050.builder';
 import { S1070Builder } from './builders/s1070.builder';
 import { S1200Builder } from './builders/s1200.builder';
 import { S1210Builder } from './builders/s1210.builder';
+import { S1299Builder } from './builders/s1299.builder';
 import { S1xxxController } from './builders/s1xxx.controller';
 import { S1xxxDispatchService } from './builders/s1xxx-common';
 import { S1xxxService } from './builders/s1xxx.service';
@@ -34,6 +37,7 @@ import { ESocialEmitService } from './esocial-emit.service';
 import { ESocialWorkerService } from './esocial-worker.service';
 import { S3000Controller } from './exclusion/s3000.controller';
 import { S3000Service } from './exclusion/s3000.service';
+import { TotalizerParser } from './parsers/totalizer.parser';
 import { IcpSignerService } from './signature/icp-signer.service';
 import { BatchBuilderService } from './submission/batch-builder.service';
 import { CircuitBreakerService } from './submission/circuit-breaker.service';
@@ -54,6 +58,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     CertificateStoreController,
     ES03Controller,
     ES04Controller,
+    ES05Controller,
     S3000Controller,
     S1xxxController,
     S22xxController,
@@ -66,6 +71,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     IcpSignerService,
     ES03Service,
     ES04Service,
+    ES05Service,
     S1000Builder,
     S1005Builder,
     S1010Builder,
@@ -74,6 +80,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S1070Builder,
     S1200Builder,
     S1210Builder,
+    S1299Builder,
     S1xxxDispatchService,
     S1xxxService,
     S2200Builder,
@@ -89,6 +96,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     RetryStrategyService,
     SoapClientService,
     SubmissionService,
+    TotalizerParser,
     XsdValidatorService,
   ],
   exports: [
@@ -97,6 +105,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     ESocialWorkerService,
     ES03Service,
     ES04Service,
+    ES05Service,
     IcpSignerService,
     S1xxxService,
     S3000Service,
