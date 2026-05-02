@@ -18,6 +18,7 @@
       <button type="button" [class.active]="step === 'position'">Cargo</button>
       <button type="button" [class.active]="step === 'quota'">Cota</button>
       <button type="button" [class.active]="step === 'exemption'">Isencao</button>
+      <button type="button" [class.active]="step === 'biometrics'">Biometria</button>
       <button type="button" [class.active]="step === 'confirm'">Confirmacao</button>
       <button type="button" [class.active]="step === 'payment'">Pagamento</button>
     </nav>
@@ -73,6 +74,22 @@
       <label
         >Comprovante <input name="exemptionEvidence" [(ngModel)]="form.exemptionEvidence"
       /></label>
+    </fieldset>
+
+    <fieldset *ngIf="step === 'biometrics'">
+      <label>
+        <input name="biometricConsent" type="checkbox" [(ngModel)]="form.biometricConsent" />
+        Confirmo consentimento especifico LGPD art. 11 versao {{ biometricConsentVersion }}
+      </label>
+      <label>Qualidade digital <meter min="0" max="1" [value]="form.fingerprintQuality"></meter></label>
+      <label>Qualidade face <meter min="0" max="1" [value]="form.faceQuality"></meter></label>
+      <button type="button" (click)="acceptBiometricConsent()">Aceitar termo biometrico</button>
+      <button type="button" (click)="captureFingerprint()" [disabled]="!form.biometricConsent">
+        Capturar digital
+      </button>
+      <button type="button" (click)="captureFace()" [disabled]="!form.biometricConsent">
+        Capturar face
+      </button>
     </fieldset>
 
     <fieldset *ngIf="step === 'confirm'">

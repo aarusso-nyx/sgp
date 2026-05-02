@@ -588,11 +588,11 @@ stateDiagram-v2
 
 #### `recrutamento` — Recrutamento, Seleção e Estágio
 
-**Responsabilidades:** fluxo completo de requisição de pessoal (rascunho → aprovação → análise de candidatos → conclusão); cadastro administrativo de concurso publico com edital, vagas por cargo, reservas legais e publicacao no Portal Transparencia; banco de talentos; gestão de estagiários (programa, prorrogação, recesso, desligamento automático).
+**Responsabilidades:** fluxo completo de requisição de pessoal (rascunho → aprovação → análise de candidatos → conclusão); cadastro administrativo de concurso publico com edital, vagas por cargo, reservas legais e publicacao no Portal Transparencia; inscrição pública com consentimento LGPD; `recrutamento/biometria` para captura de template digital/facial, consentimento específico art. 11, retenção limitada e conferência presencial no dia da prova; banco de talentos; gestão de estagiários (programa, prorrogação, recesso, desligamento automático).
 
-**Entidades:** `requisicao_pessoal`, `funcao_requisitada`, `candidato_requisicao`, `concurso`, `edital`, `vaga`, `banco_talentos`, `programa_estagio`, `estagiario`, `prorrogacao_estagio`, `recesso_estagio`, `instituicao_ensino`, `curso`.
+**Entidades:** `requisicao_pessoal`, `funcao_requisitada`, `candidato_requisicao`, `concurso`, `edital`, `vaga`, `candidato`, `inscricao`, `biometric_consent`, `candidate_biometric`, `biometric_match_attempt`, `banco_talentos`, `programa_estagio`, `estagiario`, `prorrogacao_estagio`, `recesso_estagio`, `instituicao_ensino`, `curso`.
 
-**Serviços:** `RequisicaoService`, `CandidatoService`, `ConcursoService`, `EditalService`, `PublishService`, `BancoTalentosService`, `ProgramaEstagioService`, `EstagiarioService`, `ProrrogacaoEstagioService`, `RecessoEstagioService`.
+**Serviços:** `RequisicaoService`, `CandidatoService`, `ConcursoService`, `EditalService`, `PublishService`, `BiometricConsentService`, `BiometricCaptureService`, `BiometricMatcherService`, `BiometricRetentionScheduler`, `BancoTalentosService`, `ProgramaEstagioService`, `EstagiarioService`, `ProrrogacaoEstagioService`, `RecessoEstagioService`.
 
 **Controladores:**
 
@@ -606,6 +606,10 @@ stateDiagram-v2
 - `POST /api/v1/recrutamento/concursos`
 - `POST /api/v1/recrutamento/concursos/:id/editais`
 - `POST /api/v1/recrutamento/concursos/:id/editais/publish`
+- `POST /api/v1/recrutamento/biometria/consentimentos`
+- `POST /api/v1/recrutamento/biometria/capturas`
+- `POST /api/v1/recrutamento/biometria/matching`
+- `DELETE /api/v1/recrutamento/biometria/candidatos/:candidatoId`
 - `GET /api/v1/publico/concursos/:slug`
 - `GET /api/v1/recrutamento/banco-talentos`
 - `POST /api/v1/recrutamento/banco-talentos`

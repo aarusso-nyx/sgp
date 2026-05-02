@@ -2,7 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-type Step = 'personal' | 'position' | 'quota' | 'exemption' | 'confirm' | 'payment';
+type Step =
+  | 'personal'
+  | 'position'
+  | 'quota'
+  | 'exemption'
+  | 'biometrics'
+  | 'confirm'
+  | 'payment';
 
 @Component({
   selector: 'app-portal-publico-inscricao',
@@ -13,9 +20,10 @@ type Step = 'personal' | 'position' | 'quota' | 'exemption' | 'confirm' | 'payme
 })
 export class PortalPublicoInscricao {
   step: Step = 'personal';
-  steps: Step[] = ['personal', 'position', 'quota', 'exemption', 'confirm', 'payment'];
+  steps: Step[] = ['personal', 'position', 'quota', 'exemption', 'biometrics', 'confirm', 'payment'];
   consentOpen = true;
   lgpdConsentVersion = 'rec-02-v1';
+  biometricConsentVersion = 'rec-07-art11-v1';
   payment = {
     pixQrCode: '',
     boletoBarcode: '',
@@ -39,11 +47,26 @@ export class PortalPublicoInscricao {
     nis: '',
     donorRegistry: '',
     lgpdConsent: false,
+    biometricConsent: false,
+    fingerprintQuality: 0,
+    faceQuality: 0,
   };
 
   acceptConsent(): void {
     this.form.lgpdConsent = true;
     this.consentOpen = false;
+  }
+
+  acceptBiometricConsent(): void {
+    this.form.biometricConsent = true;
+  }
+
+  captureFingerprint(): void {
+    this.form.fingerprintQuality = 0.91;
+  }
+
+  captureFace(): void {
+    this.form.faceQuality = 0.87;
   }
 
   previous(): void {

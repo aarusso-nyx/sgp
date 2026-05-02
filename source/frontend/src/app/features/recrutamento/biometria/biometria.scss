@@ -1,0 +1,46 @@
+.biometric-review {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+header,
+form,
+dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+header {
+  align-items: center;
+  justify-content: space-between;
+}
+
+strong {
+  border: 1px solid #aeb7c2;
+  border-radius: 4px;
+  padding: 0.4rem 0.65rem;
+}
+
+strong.accept {
+  border-color: #16794c;
+}
+
+strong.reject {
+  border-color: #b42318;
+}
+
+label,
+dl div {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 12rem;
+}
+
+input {
+  border: 1px solid #aeb7c2;
+  border-radius: 4px;
+  min-height: 2.25rem;
+  padding: 0.4rem 0.55rem;
+}
