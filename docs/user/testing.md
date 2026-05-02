@@ -16,19 +16,19 @@ npm run test:qa
 Bootstrap local live services and run all QA smoke tests:
 
 ```bash
-DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap
+DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run qa:bootstrap
 ```
 
 Prepare a fresh local database before bootstrapping:
 
 ```bash
-DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap -- --prepare-db
+DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run qa:bootstrap -- --prepare-db
 ```
 
 Run the full evidence gate against bootstrapped local services:
 
 ```bash
-DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap -- --evidence
+DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run qa:bootstrap -- --evidence
 ```
 
 Run only backend API smoke/e2e tests:
@@ -70,7 +70,7 @@ The preferred local path is the one-command bootstrap:
 
 ```bash
 cd . # repository root
-DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap
+DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run qa:bootstrap
 ```
 
 It starts the core API, portal API, sgp-admin, and sgp-portal, waits for the live
@@ -80,14 +80,14 @@ running for manual checks:
 
 ```bash
 cd . # repository root
-DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test npm run qa:bootstrap -- --keep-alive
+DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run qa:bootstrap -- --keep-alive
 ```
 
 For manual two-terminal runs, start the backend in one terminal:
 
 ```bash
 cd . # repository root
-DATABASE_URL=postgresql://$USER@localhost:5432/pecam-test \
+DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test \
 AUTH_ALLOW_UNSIGNED_TEST_TOKENS=true \
 npm run start:core-api
 ```

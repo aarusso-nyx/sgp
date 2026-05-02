@@ -25,6 +25,17 @@ function requireDatabaseUrl() {
   }
 }
 
+function isLocalTestDatabase() {
+  try {
+    const parsed = new URL(databaseUrl);
+    return (
+      parsed.pathname === '/sgp_test' && ['localhost', '127.0.0.1', '::1'].includes(parsed.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 function runCommand(command, args, workdir = cwd) {
   const result = spawnSync(command, args, {
     cwd: workdir,
@@ -50,6 +61,33 @@ async function runSqlSnippet(fileName, sql) {
 
 async function main() {
   requireDatabaseUrl();
+
+  if (isLocalTestDatabase()) {
+    await runSqlSnippet(
+      '00-reset-local-test-db.sql',
+      `
+DROP SCHEMA IF EXISTS public CASCADE;
+DROP SCHEMA IF EXISTS postgis CASCADE;
+DROP SCHEMA IF EXISTS avaliacao CASCADE;
+DROP SCHEMA IF EXISTS esocial CASCADE;
+DROP SCHEMA IF EXISTS fiscal CASCADE;
+DROP SCHEMA IF EXISTS hr CASCADE;
+DROP SCHEMA IF EXISTS payment CASCADE;
+DROP SCHEMA IF EXISTS payroll CASCADE;
+DROP SCHEMA IF EXISTS payroll_calc CASCADE;
+DROP SCHEMA IF EXISTS ponto CASCADE;
+DROP SCHEMA IF EXISTS portal CASCADE;
+DROP SCHEMA IF EXISTS public_data CASCADE;
+DROP SCHEMA IF EXISTS recrutamento CASCADE;
+DROP SCHEMA IF EXISTS saude CASCADE;
+DROP SCHEMA IF EXISTS tce CASCADE;
+CREATE SCHEMA public;
+GRANT USAGE ON SCHEMA public TO PUBLIC;
+GRANT CREATE ON SCHEMA public TO PUBLIC;
+      `,
+    );
+    console.log('[db-smoke] reset local disposable sgp_test database');
+  }
 
   await runSqlSnippet(
     '00-create-portal-role.sql',

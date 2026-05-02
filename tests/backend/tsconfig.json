@@ -3,6 +3,9 @@
   "compilerOptions": {
     "baseUrl": "../..",
     "declaration": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolvePackageJsonExports": false,
     "noEmit": true,
     "rootDir": "../..",
     "paths": {

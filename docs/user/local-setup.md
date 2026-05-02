@@ -72,7 +72,7 @@ These commands execute Prisma through the backend workspace.
 Canonical PostgreSQL SQL lives under `database/sql` and is applied with:
 
 ```bash
-DATABASE_URL=postgresql://<user>@localhost:5432/<database> npm run db:migrate
+DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run db:migrate
 ```
 
 Generate Prisma Client after schema metadata changes:

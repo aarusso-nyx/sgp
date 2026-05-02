@@ -39,7 +39,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage --rootDir .. --testRegex \"(backend/src/.*\\\\.spec\\\\.ts|tests/backend/.*\\\\.e2e-spec\\\\.ts)$\" --setupFiles \"<rootDir>/tests/backend/test-env.ts\" --collectCoverageFrom \"backend/src/**/*.ts\" --collectCoverageFrom \"!backend/src/**/*.spec.ts\" --collectCoverageFrom \"!backend/src/main*.ts\" --collectCoverageFrom \"!backend/src/**/*.controller.ts\" --collectCoverageFrom \"!backend/src/**/*.dto.ts\" --collectCoverageFrom \"!backend/src/**/*.module.ts\" --collectCoverageFrom \"!backend/src/config/environment.ts\" --collectCoverageFrom \"!backend/src/common/pagination/paged-response.ts\" --collectCoverageFrom \"!backend/src/common/errors/standard-exception.filter.ts\" --coverageDirectory backend/coverage",
+    "test:cov": "jest --config ../tests/backend/jest-coverage.json",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ../tests/backend/jest-e2e.json",
     "db:seed": "node prisma/seed.mjs"

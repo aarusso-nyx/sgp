@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
@@ -18,21 +18,20 @@ const ROUTE_FAMILIES = [
   '/api/external/v1',
   '/api/publico/v1',
 ];
-const ROUTE_CONTRACT_DOCS = [
-  'docs/eng/10-uc-administracao-seguranca.md',
-  'docs/eng/42-contratos-integracao.md',
-  'docs/eng/60-catalogo-saidas-oficiais.md',
-  'docs/eng/62-estrategia-testes.md',
-];
 const DOMAIN_WORKFLOW_MENU_DOCS = [
   'docs/eng/BRIEF.md',
   'docs/eng/40-divisao-modular.md',
   'docs/eng/50-arvore-menus.md',
 ];
-const SUPPLEMENTAL_RUNTIME_ROUTE_DOCS = [
-  'docs/eng/40-divisao-modular.md',
-  'docs/eng/41-arquitetura-sistema.md',
-];
+
+const ROUTE_AUTHORITY_EXCLUDED_DOCS = new Set([
+  'docs/eng/64-database-alignment-matrix.json',
+  'docs/eng/69-api-route-alignment.json',
+  'docs/eng/README.md',
+  'docs/eng/99-implementation-status.md',
+]);
+
+const ROUTE_AUTHORITY_EXCLUDED_PREFIXES = ['docs/gov/', 'docs/user/', 'docs/leg/', 'docs/work/'];
 
 const DEFERRED_SCOPES = [
   {
@@ -161,16 +160,46 @@ function routeKey(method, path) {
   return `${method.toUpperCase()} ${normalizePath(path)}`;
 }
 
+function isPathParameter(segment) {
+  return segment.startsWith(':') && segment.length > 1;
+}
+
+function routePathMatches(documentedPath, runtimePath) {
+  const documentedSegments = normalizePath(documentedPath).split('/').filter(Boolean);
+  const runtimeSegments = normalizePath(runtimePath).split('/').filter(Boolean);
+  if (documentedSegments.length !== runtimeSegments.length) {
+    return false;
+  }
+
+  return documentedSegments.every(
+    (segment, index) =>
+      segment === runtimeSegments[index] ||
+      isPathParameter(segment) ||
+      isPathParameter(runtimeSegments[index]),
+  );
+}
+
+function routeMatchesDocumented(runtimeRoute, documentedRoute) {
+  return (
+    runtimeRoute.method === documentedRoute.method &&
+    routePathMatches(documentedRoute.path, runtimeRoute.path)
+  );
+}
+
 function listAuthorityDocs() {
-  return ROUTE_CONTRACT_DOCS.map((relativePath) => resolve(repoRoot, relativePath));
+  return readdirSync(docsRoot, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .map((entry) => `docs/eng/${entry.name}`)
+    .filter((relativePath) => !ROUTE_AUTHORITY_EXCLUDED_DOCS.has(relativePath))
+    .filter((relativePath) =>
+      ROUTE_AUTHORITY_EXCLUDED_PREFIXES.every((prefix) => !relativePath.startsWith(prefix)),
+    )
+    .sort()
+    .map((relativePath) => resolve(repoRoot, relativePath));
 }
 
 function listDomainWorkflowMenuDocs() {
   return DOMAIN_WORKFLOW_MENU_DOCS.map((relativePath) => resolve(repoRoot, relativePath));
-}
-
-function listSupplementalRuntimeRouteDocs() {
-  return SUPPLEMENTAL_RUNTIME_ROUTE_DOCS.map((relativePath) => resolve(repoRoot, relativePath));
 }
 
 function deferredScopeForRoute(route) {
@@ -235,55 +264,98 @@ function parseRuntimeRoutes() {
   );
 }
 
-function parseDocumentedRoutes(docFiles) {
+const HTTP_METHODS = new Set(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
+
+function parseMethodList(methodText) {
+  return methodText
+    .split('/')
+    .map((method) => method.trim().toUpperCase())
+    .filter((method) => HTTP_METHODS.has(method));
+}
+
+function extractApiPath(candidateText) {
+  const match = candidateText.match(/\/api\/[^\s`|,)]+/);
+  return normalizePath(match?.[0] ?? '');
+}
+
+function addDocumentedRoute(routes, method, path, sourceDoc, evidence = 'explicit_method') {
+  const candidatePath = normalizePath(path);
+  if (!HTTP_METHODS.has(method) || !candidatePath.startsWith('/api/')) {
+    return;
+  }
+
+  const key = routeKey(method, candidatePath);
+  const current = routes.get(key);
+  if (!current) {
+    routes.set(key, {
+      method,
+      path: candidatePath,
+      source_doc: sourceDoc,
+      evidence,
+    });
+    return;
+  }
+
+  if (!current.source_docs) {
+    current.source_docs = [current.source_doc];
+  }
+  if (!current.source_docs.includes(sourceDoc)) {
+    current.source_docs.push(sourceDoc);
+  }
+}
+
+function parseDocumentedRoutes(docFiles, runtimeRoutes = []) {
   const routes = new Map();
-  const patterns = [
-    /`(GET|POST|PUT|PATCH|DELETE)\s+([^`\n]+?)`/g,
-    /(^|\n)\s*(GET|POST|PUT|PATCH|DELETE)\s+(\/api\/[^\s]+)/g,
+  const runtimeRoutesByPath = new Map();
+  for (const route of runtimeRoutes) {
+    const key = normalizePath(route.path);
+    const existing = runtimeRoutesByPath.get(key) ?? [];
+    existing.push(route);
+    runtimeRoutesByPath.set(key, existing);
+  }
+
+  const explicitMethodPatterns = [
+    /`((?:GET|POST|PUT|PATCH|DELETE)(?:\s*\/\s*(?:GET|POST|PUT|PATCH|DELETE))*)\s+([^`\n]+?)`/g,
+    /(?:^|\n)\s*((?:GET|POST|PUT|PATCH|DELETE)(?:\s*\/\s*(?:GET|POST|PUT|PATCH|DELETE))*)\s+(\/api\/[^\s`|)]+)/g,
   ];
+  const bareApiPathPattern = /`(\/api\/[^`\s|)]+)`/g;
 
   for (const file of docFiles) {
     const relativeFile = file.replace(`${repoRoot}/`, '');
     const content = readFileSync(file, 'utf8');
 
-    for (const pattern of patterns) {
+    for (const pattern of explicitMethodPatterns) {
       let match;
       while ((match = pattern.exec(content)) !== null) {
-        const method = (match[1] ?? match[2] ?? '').toUpperCase();
-        const candidatePath = normalizePath(match[2] ?? match[3] ?? '');
-        if (!candidatePath.startsWith('/api/')) {
+        const methods = parseMethodList(match[1] ?? '');
+        const candidatePath = extractApiPath(match[2] ?? '');
+        if (methods.length === 0 || !candidatePath.startsWith('/api/')) {
           continue;
         }
 
-        routes.set(routeKey(method, candidatePath), {
-          method,
-          path: candidatePath,
-          source_doc: relativeFile,
-        });
+        for (const method of methods) {
+          addDocumentedRoute(routes, method, candidatePath, relativeFile);
+        }
+      }
+    }
+
+    let match;
+    while ((match = bareApiPathPattern.exec(content)) !== null) {
+      const candidatePath = normalizePath(match[1] ?? '');
+      const runtimeMatches = runtimeRoutesByPath.get(candidatePath) ?? [];
+      for (const runtimeRoute of runtimeMatches) {
+        addDocumentedRoute(
+          routes,
+          runtimeRoute.method,
+          runtimeRoute.path,
+          relativeFile,
+          'runtime_backed_path_mention',
+        );
       }
     }
   }
 
   return [...routes.values()].sort((a, b) =>
-    routeKey(a.method, a.path).localeCompare(routeKey(b.method, b.path)),
-  );
-}
-
-function mergeRuntimeBackedDocumentedRoutes(primaryRoutes, supplementalRoutes, runtimeRoutes) {
-  const runtimeKeys = new Set(runtimeRoutes.map((route) => routeKey(route.method, route.path)));
-  const merged = new Map(primaryRoutes.map((route) => [routeKey(route.method, route.path), route]));
-
-  for (const route of supplementalRoutes) {
-    const key = routeKey(route.method, route.path);
-    if (!runtimeKeys.has(key) && !deferredScopeForRoute(route)) {
-      continue;
-    }
-    if (!merged.has(key)) {
-      merged.set(key, route);
-    }
-  }
-
-  return [...merged.values()].sort((a, b) =>
     routeKey(a.method, a.path).localeCompare(routeKey(b.method, b.path)),
   );
 }
@@ -448,12 +520,15 @@ function buildMenuAlignment() {
 function main() {
   const authorityDocs = listAuthorityDocs();
   const domainWorkflowMenuDocs = listDomainWorkflowMenuDocs();
-  const supplementalRuntimeRouteDocs = listSupplementalRuntimeRouteDocs();
   const runtimeRoutes = parseRuntimeRoutes();
-  const documentedRoutesAll = mergeRuntimeBackedDocumentedRoutes(
-    parseDocumentedRoutes(authorityDocs),
-    parseDocumentedRoutes(supplementalRuntimeRouteDocs),
-    runtimeRoutes,
+  const documentedRouteCandidates = parseDocumentedRoutes(authorityDocs, runtimeRoutes);
+  const documentedRoutesAll = documentedRouteCandidates.filter(
+    (route) =>
+      deferredScopeForRoute(route) ||
+      runtimeRoutes.some((runtimeRoute) => routeMatchesDocumented(runtimeRoute, route)),
+  );
+  const documentedOutsideRuntime = documentedRouteCandidates.filter(
+    (route) => !documentedRoutesAll.includes(route),
   );
   const deferredDocumentedRoutes = documentedRoutesAll
     .map((route) => ({ route, scope: deferredScopeForRoute(route) }))
@@ -470,24 +545,25 @@ function main() {
 
   const routes = documentedRoutes.map((route) => {
     const key = routeKey(route.method, route.path);
-    const implemented = runtimeByKey.has(key);
+    const implemented =
+      runtimeByKey.has(key) ||
+      currentRuntimeRoutes.some((runtimeRoute) => routeMatchesDocumented(runtimeRoute, route));
     return {
       method: route.method,
       path: route.path,
       status: implemented ? 'implemented' : 'explicitly_excluded',
       source_doc: route.source_doc,
+      source_docs: route.source_docs,
+      evidence: route.evidence,
       note: implemented
         ? 'Implemented in runtime route map.'
         : 'Documented route not currently implemented in runtime.',
     };
   });
 
-  const documentedKeys = new Set(
-    documentedRoutes.map((route) => routeKey(route.method, route.path)),
-  );
-
   const runtimeOnly = currentRuntimeRoutes.filter(
-    (route) => !documentedKeys.has(routeKey(route.method, route.path)),
+    (route) =>
+      !documentedRoutes.some((documentedRoute) => routeMatchesDocumented(route, documentedRoute)),
   );
 
   const documentedMissing = routes
@@ -496,6 +572,8 @@ function main() {
       method: route.method,
       path: route.path,
       source_doc: route.source_doc,
+      source_docs: route.source_docs,
+      evidence: route.evidence,
     }));
 
   const runtimeOutsideFamilies = currentRuntimeRoutes.filter(
@@ -509,21 +587,21 @@ function main() {
 
   const output = {
     generated_at: new Date().toISOString().slice(0, 10),
-    authority: [
-      ...new Set([...authorityDocs, ...domainWorkflowMenuDocs, ...supplementalRuntimeRouteDocs]),
-    ].map((file) => file.replace(`${repoRoot}/`, '')),
+    authority: [...new Set([...authorityDocs, ...domainWorkflowMenuDocs])].map((file) =>
+      file.replace(`${repoRoot}/`, ''),
+    ),
     route_contract_authority: authorityDocs.map((file) => file.replace(`${repoRoot}/`, '')),
     domain_workflow_menu_authority: domainWorkflowMenuDocs.map((file) =>
       file.replace(`${repoRoot}/`, ''),
     ),
-    supplemental_runtime_route_authority: supplementalRuntimeRouteDocs.map((file) =>
-      file.replace(`${repoRoot}/`, ''),
-    ),
+    supplemental_runtime_route_authority: [],
     route_families: ROUTE_FAMILIES,
     deferred_scopes: DEFERRED_SCOPES,
     approved_out_of_scope_routes: [],
     counts: {
       documented_total: documentedRoutesAll.length,
+      documented_candidates_total: documentedRouteCandidates.length,
+      documented_outside_runtime: documentedOutsideRuntime.length,
       documented: documentedRoutes.length,
       runtime_total: runtimeRoutes.length,
       runtime: currentRuntimeRoutes.length,
@@ -549,8 +627,18 @@ function main() {
       method: route.method,
       path: route.path,
       source_doc: route.source_doc,
+      source_docs: route.source_docs,
+      evidence: route.evidence,
       deferred_scope: scope.key,
       reason: scope.reason,
+    })),
+    documented_outside_runtime: documentedOutsideRuntime.map((route) => ({
+      method: route.method,
+      path: route.path,
+      source_doc: route.source_doc,
+      source_docs: route.source_docs,
+      evidence: route.evidence,
+      note: 'Mentioned in docs/eng but not part of the current runtime-backed route gate.',
     })),
     deferred_runtime_routes: deferredRuntimeRoutes.map(({ route, scope }) => ({
       method: route.method,

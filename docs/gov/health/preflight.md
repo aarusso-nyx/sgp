@@ -19,9 +19,9 @@ Run this checklist before applying canonical SQL or releasing API changes.
    - `npm run health:json`
    - `npm run governance:check`
 4. Run DB bootstrap smoke in clean database:
-   - `DATABASE_URL=postgresql://<user>@localhost:5432/<dbtest> npm run db:smoke`
+   - `DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run db:smoke`
 5. Apply canonical SQL from `database/sql`:
-   - `DATABASE_URL=postgresql://<user>@localhost:5432/<dbtest> npm run db:migrate`
+   - `DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run db:migrate`
 6. Regenerate Prisma Client if schema metadata changed:
    - `npm run db:generate`
 7. Run deterministic seed:

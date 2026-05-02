@@ -43,7 +43,7 @@ The current status is based on these gates:
 
 - `npm run qa:bootstrap -- --evidence`
   - OK.
-  - Ran with `DATABASE_URL=postgresql://aarusso@localhost:5432/pecam-test`.
+  - Ran with `DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test`.
   - Started local API, admin frontend, and portal frontend for live QA smoke.
   - Completed all evidence steps: route sync/check, DB alignment, health, lint,
     OpenAPI client generation, full build, frontend tests, backend tests, DB

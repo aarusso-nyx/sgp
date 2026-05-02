@@ -3,10 +3,14 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { evidenceSteps } from './lib/workspace-commands.mjs';
+import { evidenceSteps, localTestDatabaseUrl } from './lib/workspace-commands.mjs';
 
 const cwd = process.cwd();
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+const evidenceEnv = {
+  ...process.env,
+  DATABASE_URL: process.env.DATABASE_URL || localTestDatabaseUrl,
+};
 
 function resolveCommand(command) {
   if (command === 'npm') return npm;
@@ -15,7 +19,7 @@ function resolveCommand(command) {
 }
 
 function hasRequiredEnvironment(step) {
-  const missing = (step.requiredEnv ?? []).filter((name) => !process.env[name]);
+  const missing = (step.requiredEnv ?? []).filter((name) => !evidenceEnv[name]);
   return {
     ok: missing.length === 0,
     missing,
@@ -36,7 +40,7 @@ function runStep(step) {
   console.log(`[evidence] RUN ${step.name}`);
   const result = spawnSync(resolveCommand(step.command), step.args, {
     cwd,
-    env: process.env,
+    env: evidenceEnv,
     encoding: 'utf8',
     stdio: step.capturesOutput ? 'pipe' : 'inherit',
     shell: false,

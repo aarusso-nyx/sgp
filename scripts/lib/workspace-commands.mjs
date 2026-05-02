@@ -1,3 +1,11 @@
+import { userInfo } from 'node:os';
+
+function currentUserName() {
+  return process.env.USER || process.env.LOGNAME || userInfo().username;
+}
+
+export const localTestDatabaseUrl = `postgresql://${currentUserName()}@localhost:5432/sgp_test`;
+
 export const workspaceCommandDescriptions = {
   help: 'Show workspace orchestration help.',
   build: 'Build sgp-admin, sgp-portal, and the Nest API runtime.',

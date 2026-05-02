@@ -84,4 +84,101 @@ describe('AFD layout', () => {
       'AFD trailer hash is invalid',
     );
   });
+
+  it('parses complete files and rejects malformed line/trailer variants', () => {
+    const header = encodeType1({
+      nsr: 0,
+      employerTaxId: '12.345.678/0001-99',
+      employerName: 'Prefeitura Municipal',
+      generatedAt: '2026-05-02T12:00:00.000Z',
+      periodStart: '2026-05-01',
+      periodEnd: '2026-05-31',
+    });
+    const punch = encodeType4({
+      nsr: 1,
+      employeeIdentifier: '00000000-0000-4000-8000-000000000101',
+      recordedAt: '2026-05-02T11:00:00.000Z',
+      source: 'REP_C',
+      repDeviceId: '00000000-0000-4000-8000-000000000060',
+    });
+    const bodyLines = [header, punch];
+    const trailer = encodeType9({
+      nsr: 2,
+      periodStart: '2026-05-01',
+      periodEnd: '2026-05-31',
+      lineCount: 3,
+      trailerHash: trailerHashForLines(bodyLines),
+    });
+
+    expect(parseAfd(serializeAfd([...bodyLines, trailer]))).toMatchObject({
+      records: [{ type: '1' }, { type: '4' }, { type: '9' }],
+      bodyLines,
+    });
+    expect(() =>
+      encodeType1({
+        nsr: 0,
+        employerTaxId: '12345678000199',
+        employerName: 'Prefeitura Municipal',
+        generatedAt: 'bad-date',
+        periodStart: '2026-05-01',
+        periodEnd: '2026-05-31',
+      }),
+    ).toThrow('Invalid AFD timestamp: bad-date');
+    expect(decodeLine(punch).fields['recordHash']).toBe('');
+    expect(() => decodeLine('short')).toThrow('AFD line 1 must have');
+    expect(() =>
+      decodeLine(`${'x'.repeat(9)}0${' '.repeat(AFD_LINE_WIDTH - 10)}`),
+    ).toThrow('AFD line 1 has invalid NSR or type');
+    expect(() => parseAfd(header)).toThrow(
+      'AFD content must contain header and trailer',
+    );
+    expect(() => parseAfd(serializeAfd([header, punch]))).toThrow(
+      'AFD trailer type 9 is required',
+    );
+    const badCountTrailer = encodeType9({
+      nsr: 2,
+      periodStart: '2026-05-01',
+      periodEnd: '2026-05-31',
+      lineCount: 2,
+      trailerHash: trailerHashForLines(bodyLines),
+    });
+    expect(() =>
+      parseAfd(serializeAfd([...bodyLines, badCountTrailer])),
+    ).toThrow('AFD trailer line count is invalid');
+  });
+
+  it('normalizes CRLF input, Date values, and non-digit identifiers', () => {
+    const header = encodeType1({
+      nsr: 0,
+      employerTaxId: 'not-a-cnpj',
+      employerName: 'Prefeitura Municipal',
+      generatedAt: new Date('2026-05-02T12:00:00.000Z'),
+      periodStart: new Date('2026-05-01T00:00:00.000Z'),
+      periodEnd: new Date('2026-05-31T00:00:00.000Z'),
+    });
+    const generic = encodeGenericRecord('8', 1, 'payload');
+    const bodyLines = [header, generic];
+    const trailer = encodeType9({
+      nsr: 2,
+      periodStart: new Date('2026-05-01T00:00:00.000Z'),
+      periodEnd: new Date('2026-05-31T00:00:00.000Z'),
+      lineCount: 3,
+      trailerHash: trailerHashForLines(bodyLines),
+    });
+    const content = [...bodyLines, trailer].join('\r\n');
+
+    expect(decodeLine(header).fields['employerTaxId']).toBe('00000000000000');
+    expect(parseAfd(content)).toMatchObject({
+      records: [{ type: '1' }, { type: '8' }, { type: '9' }],
+    });
+    expect(() =>
+      encodeType9({
+        nsr: 2,
+        periodStart: 'bad-date',
+        periodEnd: '2026-05-31',
+        lineCount: 3,
+        trailerHash: trailerHashForLines(bodyLines),
+      }),
+    ).toThrow('Invalid AFD date: bad-date');
+  });
 });

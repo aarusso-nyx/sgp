@@ -5,6 +5,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import {
   evidenceSteps,
+  localTestDatabaseUrl,
   workspaceCommandDescriptions,
   workspaceFormatTargets,
 } from './lib/workspace-commands.mjs';
@@ -74,6 +75,13 @@ function runCommand(commandName, commandArgs, options = {}) {
   }
 
   return 1;
+}
+
+function localTestDatabaseEnv() {
+  return {
+    ...process.env,
+    DATABASE_URL: process.env.DATABASE_URL || localTestDatabaseUrl,
+  };
 }
 
 function runNpm(argsToRun, options = {}) {
@@ -272,9 +280,18 @@ function handleTest() {
     admin: () => runWorkspaceScript('frontend', 'test:admin', args.slice(1)),
     portal: () => runWorkspaceScript('frontend', 'test:portal', args.slice(1)),
     backend: () => runWorkspaceScript('backend', 'test', args.slice(1)),
-    db: () => runCommand(process.execPath, ['scripts/db-bootstrap-smoke.mjs']),
-    e2e: () => runWorkspaceScript('backend', 'test:e2e', args.slice(1)),
-    coverage: () => runWorkspaceScript('backend', 'test:cov', args.slice(1)),
+    db: () =>
+      runCommand(process.execPath, ['scripts/db-bootstrap-smoke.mjs'], {
+        env: localTestDatabaseEnv(),
+      }),
+    e2e: () =>
+      runWorkspaceScript('backend', 'test:e2e', args.slice(1), {
+        env: localTestDatabaseEnv(),
+      }),
+    coverage: () =>
+      runWorkspaceScript('backend', 'test:cov', args.slice(1), {
+        env: localTestDatabaseEnv(),
+      }),
     qa: () => runSequence([() => handleTestQaApi(), () => handleTestQaFrontend()]),
     'qa-api': handleTestQaApi,
     'qa-frontend': handleTestQaFrontend,
@@ -312,7 +329,10 @@ function handleDb() {
     generate: () => runWorkspaceExec('backend', ['prisma', 'generate']),
     migrate: () => runCommand(process.execPath, ['scripts/db-apply-sql.mjs']),
     seed: () => runWorkspaceScript('backend', 'db:seed'),
-    smoke: () => runCommand(process.execPath, ['scripts/db-bootstrap-smoke.mjs']),
+    smoke: () =>
+      runCommand(process.execPath, ['scripts/db-bootstrap-smoke.mjs'], {
+        env: localTestDatabaseEnv(),
+      }),
     studio: () => runWorkspaceExec('backend', ['prisma', 'studio']),
   };
 
