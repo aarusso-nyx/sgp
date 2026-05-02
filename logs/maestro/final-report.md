@@ -17,7 +17,7 @@ Last updated at: 2026-05-02T14:20:02Z
 - Final bookkeeping commit before this report: `5eb1950` (`chore(maestro): record final slice closure`).
 - Pre-resume rows `38-es-09-retorno-parser-status-sync`, `41-bank-02-cnab240-retorno`, and `42-bank-04-pensao-alimenticia` had no matching `slice(...)` commit in local git history. A follow-up verification against prompt deliverables, repository artifacts, and live database objects found they were not complete; state was corrected back to `pending`.
 - `38-es-09-retorno-parser-status-sync` was rerun and completed with migration, parsers, sync services, retry schedule, UI, tests, docs, and maestro defense gates. Commit: `e0e8b43`.
-- `41-bank-02-cnab240-retorno` was rerun and completed with payroll return tables, CNAB return parser/process services, rejected reprocess workflow, UI, tests, docs, and maestro defense gates. Commit: `TBD`.
+- `41-bank-02-cnab240-retorno` was rerun and completed with payroll return tables, CNAB return parser/process services, rejected reprocess workflow, UI, tests, docs, and maestro defense gates. Commit: `650c26a`.
 
 ## Pending After Verification
 
