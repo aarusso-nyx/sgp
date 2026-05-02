@@ -1416,7 +1416,7 @@
       "completed_at": "2026-05-02T08:34:48.021Z"
     },
     "64-ponto-06-justificativa-abono": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "low",
       "branch": "slice/64-ponto-06-justificativa-abono",
       "retries": 0,
@@ -1454,7 +1454,9 @@
       ],
       "wave": 31,
       "theme": "PONTO",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de7d4-0676-7c43-938f-f0297cdde379",
+      "started_at": "2026-05-02T08:35:37.788Z"
     },
     "65-ponto-07-folha-integration-tz": {
       "status": "pending",
@@ -1819,7 +1821,7 @@
       "completed_at": "2026-05-02T08:34:48.021Z"
     },
     "73-tce-03-stub-adapter-audesp-sp": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "medium",
       "branch": "slice/73-tce-03-stub-adapter-audesp-sp",
       "retries": 0,
@@ -1858,7 +1860,9 @@
       ],
       "wave": 32,
       "theme": "TCE",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de7d4-06f9-7712-80c7-5fafd3ae0a86",
+      "started_at": "2026-05-02T08:35:37.788Z"
     },
     "74-tce-04-submission-queue-retry-admin": {
       "status": "pending",
@@ -1902,7 +1906,7 @@
       "zero_retry": false
     },
     "75-bank-05-sifge-fgts-deposito-caixa": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "high",
       "branch": "slice/75-bank-05-sifge-fgts-deposito-caixa",
       "retries": 0,
@@ -1940,7 +1944,9 @@
       ],
       "wave": 33,
       "theme": "BANK",
-      "zero_retry": true
+      "zero_retry": true,
+      "agent": "019de7d4-0724-7001-b23a-4e2dea5ab140",
+      "started_at": "2026-05-02T08:35:37.788Z"
     },
     "76-fisc-04-gps-inss-residuais-clt": {
       "status": "completed",
@@ -2345,7 +2351,26 @@
     }
   },
   "current_wave": 35,
-  "active_subagents": [],
+  "active_subagents": [
+    {
+      "slice": "64-ponto-06-justificativa-abono",
+      "agent": "019de7d4-0676-7c43-938f-f0297cdde379",
+      "effort": "low",
+      "started_at": "2026-05-02T08:35:37.788Z"
+    },
+    {
+      "slice": "73-tce-03-stub-adapter-audesp-sp",
+      "agent": "019de7d4-06f9-7712-80c7-5fafd3ae0a86",
+      "effort": "medium",
+      "started_at": "2026-05-02T08:35:37.788Z"
+    },
+    {
+      "slice": "75-bank-05-sifge-fgts-deposito-caixa",
+      "agent": "019de7d4-0724-7001-b23a-4e2dea5ab140",
+      "effort": "high",
+      "started_at": "2026-05-02T08:35:37.788Z"
+    }
+  ],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }
