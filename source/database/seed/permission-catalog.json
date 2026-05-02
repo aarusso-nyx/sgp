@@ -620,6 +620,22 @@
       "description": "Mutate previdenciario records and reports."
     },
     {
+      "key": "recrutamento.concurso.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "concurso",
+      "actionKey": "read",
+      "routePattern": "/api/v1/recrutamento/concursos/**",
+      "description": "Read public contest records and edital versions."
+    },
+    {
+      "key": "recrutamento.concurso.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "concurso",
+      "actionKey": "write",
+      "routePattern": "/api/v1/recrutamento/concursos/**",
+      "description": "Mutate public contest records, seats, edital versions, and publication."
+    },
+    {
       "key": "recrutamento.read",
       "moduleKey": "recrutamento",
       "resourceKey": "recruitment",
@@ -666,6 +682,30 @@
       "actionKey": "write",
       "routePattern": "/api/v1/pericia/**",
       "description": "Record official medical pericia opinions."
+    },
+    {
+      "key": "saude.aso.read",
+      "moduleKey": "saude",
+      "resourceKey": "aso",
+      "actionKey": "read",
+      "routePattern": "/api/v1/saude/aso/**",
+      "description": "Read occupational ASO records and clinical summaries."
+    },
+    {
+      "key": "saude.aso.write",
+      "moduleKey": "saude",
+      "resourceKey": "aso",
+      "actionKey": "write",
+      "routePattern": "/api/v1/saude/aso/**",
+      "description": "Create, perform, attach, and archive occupational ASO records."
+    },
+    {
+      "key": "saude.aso.self_read",
+      "moduleKey": "saude",
+      "resourceKey": "aso",
+      "actionKey": "self_read",
+      "routePattern": "/api/v1/portal/aso/**",
+      "description": "Read own occupational ASO dates, conclusions, and due dates."
     },
     {
       "key": "rh.medical_leave.read",
@@ -824,6 +864,9 @@
       "rh.medical_leave.read",
       "saude.appointment.write",
       "saude.opinion.write",
+      "saude.aso.read",
+      "saude.aso.write",
+      "saude.aso.self_read",
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",

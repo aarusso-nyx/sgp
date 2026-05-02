@@ -5,6 +5,9 @@ import { validateEnvironment } from '../config/environment';
 import { DatabaseModule } from '../database/database.module';
 import { DocumentsModule } from '../documents/documents.module';
 import { Cnab240EmitService } from './cnab240/cnab240-emit.service';
+import { PortabilityController } from './consignment-portability/portability.controller';
+import { PortabilityParserService } from './consignment-portability/portability-parser.service';
+import { PortabilityProcessService } from './consignment-portability/portability-process.service';
 import { IntegrationsWorkerService } from './integrations-worker.service';
 
 @Module({
@@ -13,7 +16,13 @@ import { IntegrationsWorkerService } from './integrations-worker.service';
     DatabaseModule,
     DocumentsModule,
   ],
-  providers: [IntegrationsWorkerService, Cnab240EmitService],
+  controllers: [PortabilityController],
+  providers: [
+    IntegrationsWorkerService,
+    Cnab240EmitService,
+    PortabilityParserService,
+    PortabilityProcessService,
+  ],
   exports: [IntegrationsWorkerService],
 })
 export class IntegrationsWorkerModule {}

@@ -26,6 +26,7 @@ import { GestaoModule } from './gestao/gestao.module';
 import { HealthModule } from './health/health.module';
 import { IamModule } from './iam/iam.module';
 import { PermissionGuard } from './iam/guards/permission.guard';
+import { IntegrationsWorkerModule } from './integrations-worker/integrations-worker.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { PortalModule } from './portal/portal.module';
 import { PrevidenciarioModule } from './previdenciario/previdenciario.module';
@@ -55,6 +56,7 @@ import { AppService } from './app.service';
     PortalModule,
     ExternalModule,
     ESocialWorkerModule,
+    IntegrationsWorkerModule,
     PublicoModule,
     ReportsModule,
     GestaoModule,

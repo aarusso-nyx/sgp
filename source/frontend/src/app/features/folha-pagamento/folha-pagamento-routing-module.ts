@@ -6,6 +6,7 @@ import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups
 import { Contracheques } from './contracheques/contracheques';
 import { FolhaMensal } from './competencia/folha-mensal';
 import { Consignados } from './consignados/consignados';
+import { ConsignadoPortabilidade } from './consignados/portabilidade/portabilidade';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
@@ -22,6 +23,16 @@ import { SimulacaoFolha } from './simulacao/simulacao';
         data: {
           moduleKey: 'folha',
           permissions: ['payment.consignment.read'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
+      {
+        path: 'consignados/portabilidade',
+        component: ConsignadoPortabilidade,
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['payment.consignment.write'],
           moduleLabel: 'Folha de Pgt',
         },
       },

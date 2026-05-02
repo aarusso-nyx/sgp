@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
@@ -191,6 +191,8 @@ export class IntegrationsWorkerService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly documentsStorageService: DocumentsStorageService,
+    @Optional()
+    @Inject(Cnab240EmitService)
     cnab240EmitService?: Cnab240Emitter,
   ) {
     this.cnab240EmitService =

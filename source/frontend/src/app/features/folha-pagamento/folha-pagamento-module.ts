@@ -12,6 +12,7 @@ import { FolhaPagamentoRoutingModule } from './folha-pagamento-routing-module';
 import { Contracheques } from './contracheques/contracheques';
 import { FolhaMensal } from './competencia/folha-mensal';
 import { Consignados } from './consignados/consignados';
+import { ConsignadoPortabilidade } from './consignados/portabilidade/portabilidade';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
@@ -25,6 +26,7 @@ import { MoneyBrPipe } from '../../shared/money-br.pipe';
     FolhaMensal,
     Contracheques,
     Consignados,
+    ConsignadoPortabilidade,
     Rubricas,
     SimulacaoFolha,
     RescisaoFolha,

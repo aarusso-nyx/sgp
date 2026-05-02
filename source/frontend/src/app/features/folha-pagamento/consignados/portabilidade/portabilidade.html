@@ -1,0 +1,89 @@
+<section class="portability-page">
+  <header>
+    <h1>Portabilidade de consignados</h1>
+  </header>
+
+  <form [formGroup]="form" class="portability-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Consignante origem</mat-label>
+      <input matInput formControlName="sourceConsignmentEntityId" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Consignante destino</mat-label>
+      <input matInput formControlName="targetConsignmentEntityId" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Layout</mat-label>
+      <mat-select formControlName="layout">
+        <mat-option value="CANONICAL_CSV">Canonico CSV</mat-option>
+        <mat-option value="BANK_X">Banco X</mat-option>
+        <mat-option value="BANK_Y">Banco Y</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Arquivo</mat-label>
+      <input matInput formControlName="fileName" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="content">
+      <mat-label>Conteudo</mat-label>
+      <textarea matInput rows="10" formControlName="content"></textarea>
+    </mat-form-field>
+    <div class="actions">
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="upload()"
+        [disabled]="uploading"
+      >
+        <mat-icon>upload_file</mat-icon>
+        Importar
+      </button>
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="process()"
+        [disabled]="processing || !uploadResult"
+      >
+        <mat-icon>sync</mat-icon>
+        Processar
+      </button>
+    </div>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section class="result-grid" *ngIf="uploadResult">
+    <article>
+      <span>Arquivo</span>
+      <strong>{{ uploadResult.fileId }}</strong>
+    </article>
+    <article>
+      <span>Status</span>
+      <strong>{{ uploadResult.status }}</strong>
+    </article>
+    <article>
+      <span>Linhas</span>
+      <strong>{{ uploadResult.detailCount }}</strong>
+    </article>
+    <article>
+      <span>Hash</span>
+      <strong>{{ uploadResult.fileHash }}</strong>
+    </article>
+  </section>
+
+  <section class="result-grid" *ngIf="processResult">
+    <article>
+      <span>Processadas</span>
+      <strong>{{ processResult.processed }}</strong>
+    </article>
+    <article>
+      <span>Match</span>
+      <strong>{{ processResult.matched }}</strong>
+    </article>
+    <article>
+      <span>Nao conciliadas</span>
+      <strong>{{ processResult.unmatched }}</strong>
+    </article>
+  </section>
+</section>
