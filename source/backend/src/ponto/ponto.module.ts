@@ -19,6 +19,9 @@ import { AftParserService } from './rep-ingestion/parsers/aft-parser.service';
 import { RepPStreamService } from './rep-ingestion/parsers/rep-p-stream.service';
 import { RepIngestionController } from './rep-ingestion/rep-ingestion.controller';
 import { RepIngestionService } from './rep-ingestion/rep-ingestion.service';
+import { AfdController } from './afd/afd.controller';
+import { AfdGeneratorService } from './afd/afd-generator.service';
+import { AfdImporterService } from './afd/afd-importer.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
@@ -29,6 +32,7 @@ import { RepIngestionService } from './rep-ingestion/rep-ingestion.service';
     TimesheetPeriodController,
     RepDeviceController,
     RepIngestionController,
+    AfdController,
   ],
   providers: [
     WorkScheduleService,
@@ -41,6 +45,8 @@ import { RepIngestionService } from './rep-ingestion/rep-ingestion.service';
     DedupService,
     ApplyToTimeRecordService,
     RepIngestionService,
+    AfdGeneratorService,
+    AfdImporterService,
   ],
   exports: [
     WorkScheduleService,
@@ -49,6 +55,8 @@ import { RepIngestionService } from './rep-ingestion/rep-ingestion.service';
     TimesheetPeriodService,
     RepDeviceService,
     RepIngestionService,
+    AfdGeneratorService,
+    AfdImporterService,
   ],
 })
 export class PontoModule {}

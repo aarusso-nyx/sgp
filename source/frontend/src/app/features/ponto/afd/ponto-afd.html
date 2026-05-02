@@ -1,0 +1,106 @@
+<section class="ponto-afd" aria-labelledby="ponto-afd-title">
+  <header class="ponto-afd__header">
+    <div>
+      <p>Ponto eletronico</p>
+      <h1 id="ponto-afd-title">AFD</h1>
+    </div>
+  </header>
+
+  <p class="ponto-afd__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="ponto-afd__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <form [formGroup]="exportForm" (ngSubmit)="generate()" class="ponto-afd__panel">
+    <h2>Geracao</h2>
+    <div class="ponto-afd__fields">
+      <label>
+        <span>Equipamento REP</span>
+        <input formControlName="repDeviceId" />
+      </label>
+      <label>
+        <span>Inicio</span>
+        <input type="datetime-local" formControlName="periodStart" />
+      </label>
+      <label>
+        <span>Fim</span>
+        <input type="datetime-local" formControlName="periodEnd" />
+      </label>
+    </div>
+    <button type="submit" [disabled]="saving">Gerar AFD</button>
+  </form>
+
+  <form [formGroup]="importForm" (ngSubmit)="importAfd()" class="ponto-afd__panel">
+    <h2>Importacao</h2>
+    <div class="ponto-afd__fields">
+      <label>
+        <span>Equipamento REP</span>
+        <input formControlName="repDeviceId" />
+      </label>
+      <label>
+        <span>Arquivo</span>
+        <input formControlName="fileName" />
+      </label>
+      <label>
+        <span>Upload</span>
+        <input type="file" accept=".txt,.afd,text/plain" (change)="readFile($event)" />
+      </label>
+    </div>
+    <label class="ponto-afd__textarea">
+      <span>Conteudo</span>
+      <textarea formControlName="content" rows="8"></textarea>
+    </label>
+    <button type="submit" [disabled]="saving">Importar AFD</button>
+  </form>
+
+  <section class="ponto-afd__panel">
+    <h2>Exports</h2>
+    <p *ngIf="loading">Carregando...</p>
+    <table aria-label="Exports AFD">
+      <thead>
+        <tr>
+          <th>Gerado em</th>
+          <th>Status</th>
+          <th>Linhas</th>
+          <th>SHA-256</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of exports">
+          <td>{{ entry.generatedAt | date: 'short' }}</td>
+          <td>{{ entry.status }}</td>
+          <td>{{ entry.lineCount }}</td>
+          <td class="ponto-afd__hash">{{ entry.fileSha256 || '-' }}</td>
+          <td>
+            <a *ngIf="entry.status === 'READY'" [href]="downloadUrl(entry.afdExportId)">Baixar</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="ponto-afd__panel">
+    <h2>Imports</h2>
+    <table aria-label="Imports AFD">
+      <thead>
+        <tr>
+          <th>Arquivo</th>
+          <th>Status</th>
+          <th>Aceitas</th>
+          <th>Rejeitadas</th>
+          <th>SHA-256</th>
+          <th>Erro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of imports">
+          <td>{{ entry.fileName }}</td>
+          <td>{{ entry.status }}</td>
+          <td>{{ entry.acceptedLines }}</td>
+          <td>{{ entry.rejectedLines }}</td>
+          <td class="ponto-afd__hash">{{ entry.fileSha256 }}</td>
+          <td>{{ errorMessage(entry) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

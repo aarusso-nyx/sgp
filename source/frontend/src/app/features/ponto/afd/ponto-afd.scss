@@ -1,0 +1,80 @@
+.ponto-afd {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.ponto-afd__header {
+  align-items: end;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ponto-afd__header p,
+.ponto-afd__header h1,
+.ponto-afd__panel h2 {
+  margin: 0;
+}
+
+.ponto-afd__panel {
+  border: 1px solid #d7dce2;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.ponto-afd__fields {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.ponto-afd__fields label,
+.ponto-afd__textarea {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ponto-afd__fields input,
+.ponto-afd__textarea textarea {
+  min-height: 2.25rem;
+}
+
+.ponto-afd__textarea textarea,
+.ponto-afd__hash {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.ponto-afd__textarea textarea {
+  resize: vertical;
+}
+
+.ponto-afd__hash {
+  max-width: 28rem;
+  overflow-wrap: anywhere;
+}
+
+.ponto-afd__message {
+  color: #176f42;
+  margin: 0;
+}
+
+.ponto-afd__error {
+  color: #b42318;
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}

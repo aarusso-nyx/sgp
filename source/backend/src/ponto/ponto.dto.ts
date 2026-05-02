@@ -214,3 +214,27 @@ export class CreateRepIngestionBatchDto {
   @IsString()
   signature?: string;
 }
+
+export class CreateAfdExportDto {
+  @IsUUID()
+  repDeviceId!: string;
+
+  @IsDateString()
+  periodStart!: string;
+
+  @IsDateString()
+  periodEnd!: string;
+}
+
+export class CreateAfdImportDto {
+  @IsUUID()
+  repDeviceId!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  fileName!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  content!: string;
+}

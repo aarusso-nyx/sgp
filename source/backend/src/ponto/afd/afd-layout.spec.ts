@@ -1,0 +1,87 @@
+import {
+  AFD_LINE_WIDTH,
+  decodeLine,
+  encodeGenericRecord,
+  encodeType1,
+  encodeType4,
+  encodeType9,
+  parseAfd,
+  serializeAfd,
+  trailerHashForLines,
+} from './afd-layout';
+
+describe('AFD layout', () => {
+  it('encodes and decodes all AFD record types with fixed width', () => {
+    const bodyLines = [
+      encodeType1({
+        nsr: 0,
+        employerTaxId: '12345678000199',
+        employerName: 'Prefeitura Municipal',
+        generatedAt: '2026-05-02T12:00:00.000Z',
+        periodStart: '2026-05-01T00:00:00.000Z',
+        periodEnd: '2026-05-31T23:59:59.000Z',
+      }),
+      encodeGenericRecord('2', 1, 'REP-C identificacao fiscal'),
+      encodeGenericRecord('3', 2, 'Ajuste fiscal'),
+      encodeType4({
+        nsr: 3,
+        employeeIdentifier: '00000000-0000-4000-8000-000000000101',
+        employeeName: 'Servidor Um',
+        recordedAt: '2026-05-02T11:00:00.000Z',
+        source: 'REP_C',
+        repDeviceId: '00000000-0000-4000-8000-000000000060',
+        recordHash: 'a'.repeat(64),
+      }),
+      encodeGenericRecord('5', 4, 'Alteracao de empregado'),
+      encodeGenericRecord('6', 5, 'Evento sensivel'),
+      encodeGenericRecord('7', 6, 'Hash ICP-Brasil'),
+      encodeGenericRecord('8', 7, 'Reservado Portaria'),
+    ];
+    const trailer = encodeType9({
+      nsr: 8,
+      periodStart: '2026-05-01T00:00:00.000Z',
+      periodEnd: '2026-05-31T23:59:59.000Z',
+      lineCount: bodyLines.length + 1,
+      trailerHash: trailerHashForLines(bodyLines),
+    });
+    const lines = [...bodyLines, trailer];
+
+    expect(lines.every((line) => line.length === AFD_LINE_WIDTH)).toBe(true);
+    expect(lines.map((line) => decodeLine(line).type)).toEqual([
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+    ]);
+    expect(decodeLine(bodyLines[3]).fields['employeeIdentifier']).toBe(
+      '00000000-0000-4000-8000-000000000101',
+    );
+  });
+
+  it('rejects an invalid type 9 hash', () => {
+    const header = encodeType1({
+      nsr: 0,
+      employerTaxId: '12345678000199',
+      employerName: 'Prefeitura Municipal',
+      generatedAt: '2026-05-02T12:00:00.000Z',
+      periodStart: '2026-05-01T00:00:00.000Z',
+      periodEnd: '2026-05-31T23:59:59.000Z',
+    });
+    const trailer = encodeType9({
+      nsr: 1,
+      periodStart: '2026-05-01T00:00:00.000Z',
+      periodEnd: '2026-05-31T23:59:59.000Z',
+      lineCount: 2,
+      trailerHash: '0'.repeat(64),
+    });
+
+    expect(() => parseAfd(serializeAfd([header, trailer]))).toThrow(
+      'AFD trailer hash is invalid',
+    );
+  });
+});
