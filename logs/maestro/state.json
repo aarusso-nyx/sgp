@@ -375,6 +375,21 @@
       "completed_at": "2026-05-01T22:24:46-03:00",
       "retries": 0,
       "agent": "019de634-cd74-7c12-8347-5555e96fd1f0"
+    },
+    "31-es-01-tabelas-s1xxx": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/31-es-01-tabelas-s1xxx",
+      "commit": "a951cca86e1a113223d258cce101fe5d7d61be9d",
+      "started_at": "2026-05-01T22:25:42-03:00",
+      "retry_started_at": "2026-05-01T22:45:30-03:00",
+      "completed_at": "2026-05-01T22:51:25-03:00",
+      "retries": 1,
+      "agent": "019de65c-f889-7e83-bcc2-59a859234bb7",
+      "previous_agent": "019de64a-ded9-7de2-896e-2bb9659c89a6",
+      "previous_failure": "logs/maestro/31-es-01-tabelas-s1xxx.failure.md",
+      "failure_log": "logs/maestro/31-es-01-tabelas-s1xxx.failure.md",
+      "recovery": "high retry fixed s1xxx dispatch-state audit tenant context for db:smoke"
     }
   },
   "current_wave": 15,

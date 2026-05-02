@@ -53,3 +53,5 @@ W13 ✓ 28-calc-11 (1 slice, xhigh + manual recovery, gates passed, commit d62bf
 W13 ✗ 29-calc-12 (high → xhigh retry failed: payroll controller fixture missing rescisao/audit dependency after migration tenant-context repair) — recovered manually
 W13 ✓ 29-calc-12 (1 slice, high→xhigh + manual recovery, gates passed, commit 370c3dc) — completeness 26.2% → 26.2%; Wave 13 complete; CALC waves complete
 W14 ✓ 30-es-07 (1 slice, high, gates passed, commit 1f296a2) — completeness 26.2% → 26.2%; Wave 14 complete
+W15 ✗ 31-es-01 (medium → high retry failed first db:smoke audit tenant context) — recovered by high retry
+W15 ✓ 31-es-01 (1 slice, medium→high, gates passed, commit a951cca) — completeness 26.2% → 26.2%
