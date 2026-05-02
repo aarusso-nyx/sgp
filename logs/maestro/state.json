@@ -1056,7 +1056,7 @@
       "wave": 28,
       "theme": "REC",
       "zero_retry": false,
-      "agent": "pending-agent-55",
+      "agent": "019de78b-a4d8-7572-90fa-eeb7053f1ee6",
       "started_at": "2026-05-02T07:16:06.375Z"
     },
     "56-fisc-01-dctfweb-totalizadores": {
@@ -1098,7 +1098,7 @@
       "wave": 29,
       "theme": "FISC",
       "zero_retry": false,
-      "agent": "pending-agent-56",
+      "agent": "019de78b-a55f-7692-a172-ba92e939b64e",
       "started_at": "2026-05-02T07:16:06.375Z"
     },
     "57-fisc-02-dirf-anual": {
@@ -1267,7 +1267,7 @@
       "wave": 28,
       "theme": "PONTO",
       "zero_retry": true,
-      "agent": "pending-agent-60",
+      "agent": "019de78b-a503-7701-bbc1-de4b3112fc07",
       "started_at": "2026-05-02T07:16:06.375Z"
     },
     "61-ponto-03-afd-geracao-importacao": {
@@ -2300,19 +2300,19 @@
   "active_subagents": [
     {
       "slice": "55-rec-06-posse-exercicio",
-      "agent": "pending-agent-55",
+      "agent": "019de78b-a4d8-7572-90fa-eeb7053f1ee6",
       "effort": "medium",
       "started_at": "2026-05-02T07:16:06.375Z"
     },
     {
       "slice": "60-ponto-02-rep-p-rep-a-rep-c-ingestao",
-      "agent": "pending-agent-60",
+      "agent": "019de78b-a503-7701-bbc1-de4b3112fc07",
       "effort": "high",
       "started_at": "2026-05-02T07:16:06.375Z"
     },
     {
       "slice": "56-fisc-01-dctfweb-totalizadores",
-      "agent": "pending-agent-56",
+      "agent": "019de78b-a55f-7692-a172-ba92e939b64e",
       "effort": "high",
       "started_at": "2026-05-02T07:16:06.375Z"
     }

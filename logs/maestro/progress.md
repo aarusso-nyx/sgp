@@ -93,4 +93,4 @@ W26 ✓ 68-sst-03 (high, zero-tier, gates passed, commit ddafec7) — CAT S-2210
 W27 ✓ 49-clt-03 (medium, gates passed, commit 5230c60) — PIS/PASEP annual base and eSocial recompute hooks
 W27 ✓ 54-rec-05 (medium, transient concurrent lint failure recovered by maestro defense, commit b086ddd) — nomeacao and convocacao deadlines
 W27 ✓ 70-sst-05 (high, gates passed, commit e270f41) — S-2240 environmental exposure, EPI, and PPP
-2026-05-02T07:16:06.375Z frontier launch 55-rec-06, 60-ponto-02, 56-fisc-01 — agents pending
+2026-05-02T07:16:06.375Z frontier launch 55-rec-06, 60-ponto-02, 56-fisc-01 — agents 019de78b-a4d8, 019de78b-a503, 019de78b-a55f
