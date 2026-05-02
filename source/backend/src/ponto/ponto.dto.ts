@@ -141,6 +141,83 @@ export class OpenTimesheetPeriodDto {
   periodEnd!: string;
 }
 
+export class CreateHourBankDto {
+  @IsUUID()
+  employeeId!: string;
+
+  @IsIn(['CLT_INDIVIDUAL', 'CLT_COLETIVO', 'ESTATUTARIO'])
+  regime!: string;
+
+  @IsDateString()
+  openedAt!: string;
+
+  @IsDateString()
+  expiresAt!: string;
+}
+
+export class AccrueHourBankDayDto {
+  @IsUUID()
+  employeeId!: string;
+
+  @IsDateString()
+  workDate!: string;
+
+  @IsInt()
+  @Min(0)
+  workedMinutes!: number;
+
+  @IsInt()
+  @Min(0)
+  expectedMinutes!: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsUUID(undefined, { each: true })
+  sourceTimeRecordIds?: string[];
+}
+
+export class CompensateHourBankDto {
+  @IsUUID()
+  hourBankId!: string;
+
+  @IsDateString()
+  workDate!: string;
+
+  @IsInt()
+  @Min(1)
+  minutes!: number;
+}
+
+export class ManualHourBankAdjustmentDto {
+  @IsUUID()
+  hourBankId!: string;
+
+  @IsDateString()
+  workDate!: string;
+
+  @IsInt()
+  minutes!: number;
+}
+
+export class SettleHourBankDto {
+  @IsUUID()
+  payrollRunId!: string;
+
+  @IsOptional()
+  @IsUUID()
+  overtimeEarningDeductionId?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  competenceMonth?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(2000)
+  competenceYear?: number;
+}
+
 export class CreateRepDeviceDto {
   @IsIn(['REP_P', 'REP_A', 'REP_C'])
   kind!: string;

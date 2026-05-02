@@ -1,0 +1,69 @@
+.ponto-banco-horas {
+  display: grid;
+  gap: 1rem;
+}
+
+.ponto-banco-horas__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ponto-banco-horas__header p,
+.ponto-banco-horas__header h1 {
+  margin: 0;
+}
+
+.ponto-banco-horas__panel {
+  border: 1px solid #d7dee8;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.ponto-banco-horas__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+}
+
+.ponto-banco-horas table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.ponto-banco-horas th,
+.ponto-banco-horas td {
+  border-bottom: 1px solid #e5eaf0;
+  padding: 0.6rem;
+  text-align: left;
+}
+
+.ponto-banco-horas tr.is-selected {
+  background: #edf4ff;
+}
+
+.ponto-banco-horas label {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.ponto-banco-horas input {
+  border: 1px solid #bac4d0;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.ponto-banco-horas__message {
+  color: #0f6b35;
+}
+
+.ponto-banco-horas__error {
+  color: #9f1d1d;
+}
+
+@media (max-width: 800px) {
+  .ponto-banco-horas__grid {
+    grid-template-columns: 1fr;
+  }
+}

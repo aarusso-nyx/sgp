@@ -25,6 +25,11 @@ import { AfdImporterService } from './afd/afd-importer.service';
 import { DutyRosterController } from './duty-roster/duty-roster.controller';
 import { DutyRosterService } from './duty-roster/duty-roster.service';
 import { RosterProjectorService } from './duty-roster/roster-projector.service';
+import { HourBankAccrualService } from './hour-bank/hour-bank-accrual.service';
+import { HourBankCompensationService } from './hour-bank/hour-bank-compensation.service';
+import { HourBankController } from './hour-bank/hour-bank.controller';
+import { HourBankService } from './hour-bank/hour-bank.service';
+import { HourBankSettlementService } from './hour-bank/hour-bank-settlement.service';
 import { ShiftPatternController } from './shift-pattern/shift-pattern.controller';
 import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
 
@@ -40,6 +45,7 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     AfdController,
     ShiftPatternController,
     DutyRosterController,
+    HourBankController,
   ],
   providers: [
     WorkScheduleService,
@@ -57,6 +63,10 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     ShiftPatternService,
     RosterProjectorService,
     DutyRosterService,
+    HourBankService,
+    HourBankAccrualService,
+    HourBankCompensationService,
+    HourBankSettlementService,
   ],
   exports: [
     WorkScheduleService,
@@ -70,6 +80,10 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     ShiftPatternService,
     RosterProjectorService,
     DutyRosterService,
+    HourBankService,
+    HourBankAccrualService,
+    HourBankCompensationService,
+    HourBankSettlementService,
   ],
 })
 export class PontoModule {}

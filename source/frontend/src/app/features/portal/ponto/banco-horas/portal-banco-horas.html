@@ -1,0 +1,34 @@
+<section class="portal-banco-horas" aria-labelledby="portal-banco-horas-title">
+  <header>
+    <p>Portal do servidor</p>
+    <h1 id="portal-banco-horas-title">Banco de horas</h1>
+  </header>
+
+  <p class="portal-banco-horas__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <section class="portal-banco-horas__summary" *ngIf="bank">
+    <article>
+      <span>Saldo atual</span>
+      <strong>{{ bank.balanceMinutes }}min</strong>
+    </article>
+    <article>
+      <span>Prazo de zeragem</span>
+      <strong>{{ bank.expiresAt }}</strong>
+    </article>
+    <article>
+      <span>Status</span>
+      <strong>{{ bank.status }}</strong>
+    </article>
+  </section>
+
+  <section class="portal-banco-horas__extract">
+    <h2>Ultimos 90 movimentos</h2>
+    <ol>
+      <li *ngFor="let movement of movements">
+        <strong>{{ movement.workDate }}</strong>
+        <span>{{ movement.kind }}</span>
+        <span>{{ movement.minutes }}min</span>
+      </li>
+    </ol>
+  </section>
+</section>

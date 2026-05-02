@@ -1,0 +1,47 @@
+.portal-banco-horas {
+  display: grid;
+  gap: 1rem;
+}
+
+.portal-banco-horas header p,
+.portal-banco-horas header h1 {
+  margin: 0;
+}
+
+.portal-banco-horas__summary {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.portal-banco-horas__summary article,
+.portal-banco-horas__extract {
+  border: 1px solid #d7dee8;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.portal-banco-horas__summary span,
+.portal-banco-horas__summary strong {
+  display: block;
+}
+
+.portal-banco-horas__extract li {
+  align-items: center;
+  border-bottom: 1px solid #e5eaf0;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 8rem 1fr 6rem;
+  padding: 0.5rem 0;
+}
+
+.portal-banco-horas__error {
+  color: #9f1d1d;
+}
+
+@media (max-width: 800px) {
+  .portal-banco-horas__summary,
+  .portal-banco-horas__extract li {
+    grid-template-columns: 1fr;
+  }
+}
