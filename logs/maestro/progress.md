@@ -55,3 +55,5 @@ W13 ✓ 29-calc-12 (1 slice, high→xhigh + manual recovery, gates passed, commi
 W14 ✓ 30-es-07 (1 slice, high, gates passed, commit 1f296a2) — completeness 26.2% → 26.2%; Wave 14 complete
 W15 ✗ 31-es-01 (medium → high retry failed first db:smoke audit tenant context) — recovered by high retry
 W15 ✓ 31-es-01 (1 slice, medium→high, gates passed, commit a951cca) — completeness 26.2% → 26.2%
+W15 ✗ 32-es-02 (medium → high retry failed: lint unsafe return/call in es-02-cadastro.e2e-spec.ts query helper) — see logs/maestro/32-es-02-cadastro-s2200-s2205.failure.md
+W15 ✓ 32-es-02 (1 slice, medium→high + manual recovery, gates passed, commit b4d9941) — completeness 26.2% → 26.2%
