@@ -89,3 +89,18 @@ button:disabled {
   color: #6b7280;
   text-align: center;
 }
+
+.tabs {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.tabs section {
+  min-width: 0;
+}
+
+.tabs h2 {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}

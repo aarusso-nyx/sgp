@@ -1367,12 +1367,13 @@ DECLARE
   absence_count integer;
   consolidated_days integer;
 BEGIN
-  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT USAGE ON SCHEMA esocial, hr, public TO sgp_smoke_rls;
   GRANT SELECT, UPDATE ON hr.employee TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.medical_appointment TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.medical_record TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.medical_leave TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.leave_record TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.s2230_pending TO sgp_smoke_rls;
   GRANT SELECT ON hr.absence_reason TO sgp_smoke_rls;
   GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
 
@@ -1393,7 +1394,8 @@ BEGIN
     'saude.opinion.write' || chr(10) ||
     'rh.write' || chr(10) ||
     'rh.employee.write' || chr(10) ||
-    'rh.medical_leave.read',
+    'rh.medical_leave.read' || chr(10) ||
+    'esocial.event.write',
     true
   );
   PERFORM set_config('app.authenticated', 'true', true);
@@ -1509,9 +1511,10 @@ DECLARE
   audit_count integer;
   history_count integer;
 BEGIN
-  GRANT USAGE ON SCHEMA hr, public TO sgp_smoke_rls;
+  GRANT USAGE ON SCHEMA esocial, hr, public TO sgp_smoke_rls;
   GRANT SELECT ON hr.employee, hr.absence_reason, hr.service_time_record TO sgp_smoke_rls;
   GRANT SELECT, INSERT, UPDATE, DELETE ON hr.leave_record TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.s2230_pending TO sgp_smoke_rls;
   GRANT SELECT, INSERT ON hr.employee_status_history TO sgp_smoke_rls;
   GRANT SELECT ON public.audit_event TO sgp_smoke_rls;
 
@@ -1539,7 +1542,7 @@ BEGIN
 
   PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
   PERFORM set_config('app.current_tenant', tenant_a::text, true);
-  PERFORM set_config('app.current_permissions', 'rh.leave.request' || chr(10) || 'rh.leave.approve' || chr(10) || 'rh.leave.read' || chr(10) || 'rh.read' || chr(10) || 'auditoria.read', true);
+  PERFORM set_config('app.current_permissions', 'rh.leave.request' || chr(10) || 'rh.leave.approve' || chr(10) || 'rh.leave.read' || chr(10) || 'rh.read' || chr(10) || 'auditoria.read' || chr(10) || 'esocial.event.write', true);
   PERFORM set_config('app.authenticated', 'true', true);
 
   SET LOCAL ROLE sgp_smoke_rls;

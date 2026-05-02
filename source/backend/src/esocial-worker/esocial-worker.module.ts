@@ -7,6 +7,8 @@ import { DatabaseModule } from '../database/database.module';
 import { DocumentsModule } from '../documents/documents.module';
 import { CertificateStoreController } from './certificate-store/certificate-store.controller';
 import { CertificateStoreService } from './certificate-store/certificate-store.service';
+import { ES03Controller } from './builders/es03.controller';
+import { ES03Service } from './builders/es03.service';
 import { S1000Builder } from './builders/s1000.builder';
 import { S1005Builder } from './builders/s1005.builder';
 import { S1010Builder } from './builders/s1010.builder';
@@ -18,6 +20,8 @@ import { S1xxxDispatchService } from './builders/s1xxx-common';
 import { S1xxxService } from './builders/s1xxx.service';
 import { S2200Builder } from './builders/s2200.builder';
 import { S2205Builder } from './builders/s2205.builder';
+import { S2230Builder } from './builders/s2230.builder';
+import { S2299Builder } from './builders/s2299.builder';
 import { S22xxController } from './builders/s22xx.controller';
 import { S22xxDispatchService } from './builders/s22xx-common';
 import { S22xxService } from './builders/s22xx.service';
@@ -34,13 +38,19 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     DatabaseModule,
     DocumentsModule,
   ],
-  controllers: [CertificateStoreController, S1xxxController, S22xxController],
+  controllers: [
+    CertificateStoreController,
+    ES03Controller,
+    S1xxxController,
+    S22xxController,
+  ],
   providers: [
     CertificateStoreService,
     ESocialDispatchAdapter,
     ESocialEmitService,
     ESocialWorkerService,
     IcpSignerService,
+    ES03Service,
     S1000Builder,
     S1005Builder,
     S1010Builder,
@@ -51,6 +61,8 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S1xxxService,
     S2200Builder,
     S2205Builder,
+    S2230Builder,
+    S2299Builder,
     S22xxDispatchService,
     S22xxService,
     XsdValidatorService,
@@ -59,6 +71,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     CertificateStoreService,
     ESocialEmitService,
     ESocialWorkerService,
+    ES03Service,
     IcpSignerService,
     S1xxxService,
     S22xxService,

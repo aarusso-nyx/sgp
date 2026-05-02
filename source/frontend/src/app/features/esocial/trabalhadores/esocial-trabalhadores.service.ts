@@ -12,11 +12,24 @@ export interface ESocialWorkerStatus {
 }
 
 export interface ESocialWorkerDispatchResult {
-  eventKind: 'S-2200' | 'S-2205';
-  employeeId: string;
+  eventKind: 'S-2200' | 'S-2205' | 'S-2230' | 'S-2299';
+  employeeId?: string;
+  pendingId?: string;
+  sourceEntityId?: string;
   xmlHash: string;
   emitted: boolean;
   blockedReason?: string;
+}
+
+export interface ESocialWorkerEventQueue {
+  id: string;
+  eventKind: 'S-2230' | 'S-2299';
+  sourceId: string;
+  employeeName: string;
+  status: string;
+  enqueuedAt: string;
+  receipt: string | null;
+  blockedReason: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -37,6 +50,24 @@ export class ESocialTrabalhadoresService {
   emitS2205(employeeId: string): Observable<ESocialWorkerDispatchResult> {
     return this.http.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/trabalhadores/${employeeId}/s2205/emitir`,
+      {},
+    );
+  }
+
+  eventQueue(): Observable<ESocialWorkerEventQueue[]> {
+    return this.http.get<ESocialWorkerEventQueue[]>('/api/v1/esocial/eventos-trabalhador');
+  }
+
+  emitS2230(pendingId: string): Observable<ESocialWorkerDispatchResult> {
+    return this.http.post<ESocialWorkerDispatchResult>(
+      `/api/v1/esocial/eventos-trabalhador/s2230/${pendingId}/emitir`,
+      {},
+    );
+  }
+
+  emitS2299(pendingId: string): Observable<ESocialWorkerDispatchResult> {
+    return this.http.post<ESocialWorkerDispatchResult>(
+      `/api/v1/esocial/eventos-trabalhador/s2299/${pendingId}/emitir`,
       {},
     );
   }

@@ -2,7 +2,7 @@
   <header class="page-header">
     <div>
       <h1>Cadastro eSocial</h1>
-      <p>Eventos S-2200 e S-2205 por servidor.</p>
+      <p>Eventos S-2200, S-2205, S-2230 e S-2299 por servidor.</p>
     </div>
     <button type="button" class="secondary" (click)="load()" [disabled]="loading">Atualizar</button>
   </header>
@@ -50,5 +50,76 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="tabs">
+    <section>
+      <h2>Afastamentos</h2>
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th>Servidor</th>
+              <th>Status</th>
+              <th>Recibo</th>
+              <th>Acoes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of eventRows">
+              <ng-container *ngIf="row.eventKind === 'S-2230'">
+                <td>{{ row.employeeName }}</td>
+                <td>{{ row.status }}</td>
+                <td>{{ row.receipt || 'Pendente' }}</td>
+                <td class="actions">
+                  <button
+                    type="button"
+                    (click)="emitWorkerEvent(row)"
+                    [disabled]="row.status !== 'PENDING' || emitting === row.id"
+                  >
+                    Emitir S-2230
+                  </button>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Desligamentos</h2>
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th>Servidor</th>
+              <th>Status</th>
+              <th>Bloqueio</th>
+              <th>Acoes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of eventRows">
+              <ng-container *ngIf="row.eventKind === 'S-2299'">
+                <td>{{ row.employeeName }}</td>
+                <td>{{ row.receipt || row.status }}</td>
+                <td>{{ row.blockedReason || 'Liberado' }}</td>
+                <td class="actions">
+                  <button
+                    type="button"
+                    class="secondary"
+                    (click)="emitWorkerEvent(row)"
+                    [disabled]="row.status !== 'PENDING' || !!row.blockedReason || emitting === row.id"
+                  >
+                    Emitir S-2299
+                  </button>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 </section>

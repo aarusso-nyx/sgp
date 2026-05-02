@@ -4,6 +4,7 @@ import { Subject, finalize, takeUntil } from 'rxjs';
 
 import {
   ESocialTrabalhadoresService,
+  ESocialWorkerEventQueue,
   ESocialWorkerDispatchResult,
   ESocialWorkerStatus,
 } from './esocial-trabalhadores.service';
@@ -19,6 +20,7 @@ export class ESocialTrabalhadores implements OnInit, OnDestroy {
   private readonly service = inject(ESocialTrabalhadoresService);
   private readonly destroy$ = new Subject<void>();
   rows: ESocialWorkerStatus[] = [];
+  eventRows: ESocialWorkerEventQueue[] = [];
   lastResult: ESocialWorkerDispatchResult | null = null;
   loading = false;
   emitting = '';
@@ -46,6 +48,13 @@ export class ESocialTrabalhadores implements OnInit, OnDestroy {
         next: (rows) => (this.rows = rows),
         error: () => (this.error = 'Nao foi possivel carregar o cadastro eSocial.'),
       });
+    this.service
+      .eventQueue()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (rows) => (this.eventRows = rows),
+        error: () => (this.error = 'Nao foi possivel carregar os eventos de trabalhador.'),
+      });
   }
 
   reemitS2200(row: ESocialWorkerStatus): void {
@@ -53,6 +62,21 @@ export class ESocialTrabalhadores implements OnInit, OnDestroy {
     this.error = '';
     this.service
       .reemitS2200(row.employeeId)
+      .pipe(
+        finalize(() => (this.emitting = '')),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(this.resultObserver());
+  }
+
+  emitWorkerEvent(row: ESocialWorkerEventQueue): void {
+    this.emitting = row.id;
+    this.error = '';
+    const request =
+      row.eventKind === 'S-2230'
+        ? this.service.emitS2230(row.id)
+        : this.service.emitS2299(row.id);
+    request
       .pipe(
         finalize(() => (this.emitting = '')),
         takeUntil(this.destroy$),
