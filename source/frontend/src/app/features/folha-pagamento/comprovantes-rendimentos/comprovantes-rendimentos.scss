@@ -1,0 +1,61 @@
+.yearly-income-admin {
+  display: grid;
+  gap: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.error {
+  color: #b00020;
+}
+
+.result {
+  display: grid;
+  gap: 1rem;
+}
+
+.result h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.result dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(8rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.result dt {
+  color: #5f6368;
+  font-size: 0.8rem;
+}
+
+.result dd {
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+}
+
+.result table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result th,
+.result td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid #d7dce2;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .result dl {
+    grid-template-columns: 1fr;
+  }
+}

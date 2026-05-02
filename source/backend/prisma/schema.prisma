@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["public", "hr", "payroll", "payroll_calc", "portal", "esocial", "payment", "saude", "ponto"]
+  schemas  = ["public", "hr", "payroll", "payroll_calc", "portal", "esocial", "payment", "fiscal", "saude", "ponto"]
 }
 
 enum RecordStatus {
@@ -234,6 +234,7 @@ enum ReportRequestStatus {
 
 enum ReportKind {
   PAYSLIP
+  YEARLY_INCOME_REPORT
 
   @@schema("public")
 }

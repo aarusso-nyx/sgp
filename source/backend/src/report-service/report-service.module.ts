@@ -15,6 +15,9 @@ import { IntegrationsWorkerModule } from '../integrations-worker/integrations-wo
 import { PdfABuilderService } from './payslip/pdf-a-builder.service';
 import { PayslipController } from './payslip/payslip.controller';
 import { PayslipRenderService } from './payslip/payslip-render.service';
+import { YearlyIncomeBatchService } from './yearly-income/yearly-income-batch.service';
+import { YearlyIncomeController } from './yearly-income/yearly-income.controller';
+import { YearlyIncomeRenderService } from './yearly-income/yearly-income-render.service';
 import { ReportServiceController } from './report-service.controller';
 import { ReportRuntimeService } from './report-service.service';
 
@@ -24,11 +27,17 @@ import { ReportRuntimeService } from './report-service.service';
     DatabaseModule,
     IntegrationsWorkerModule,
   ],
-  controllers: [ReportServiceController, PayslipController],
+  controllers: [
+    ReportServiceController,
+    PayslipController,
+    YearlyIncomeController,
+  ],
   providers: [
     ReportRuntimeService,
     PdfABuilderService,
     PayslipRenderService,
+    YearlyIncomeRenderService,
+    YearlyIncomeBatchService,
     {
       provide: APP_PIPE,
       useFactory: () =>

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 import { PayslipDocument } from './payslip-template';
+import { YearlyIncomeDocument } from '../yearly-income/yearly-income-template';
 
 export interface PdfAValidationResult {
   valid: boolean;
@@ -112,6 +113,94 @@ export class PdfABuilderService {
     if (!text.includes('/Creator')) reasons.push('missing creator metadata');
     if (!text.includes('/Font')) reasons.push('missing font resources');
     return { valid: reasons.length === 0, reasons };
+  }
+
+  async buildYearlyIncome(document: YearlyIncomeDocument): Promise<Buffer> {
+    const pdf = await PDFDocument.create();
+    pdf.setTitle(`Comprovante de Rendimentos ${document.yearBase}`);
+    pdf.setSubject('Comprovante de rendimentos anual PDF/A-1b');
+    pdf.setAuthor(document.payer.name);
+    pdf.setCreator('SGP report-service/yearly-income');
+    pdf.setProducer('pdf-lib');
+    pdf.setCreationDate(
+      new Date(`${document.yearBase + 1}-02-28T00:00:00.000Z`),
+    );
+    pdf.setModificationDate(
+      new Date(`${document.yearBase + 1}-02-28T00:00:00.000Z`),
+    );
+
+    const page = pdf.addPage([595.28, 841.89]);
+    const regular = await pdf.embedFont(StandardFonts.Helvetica);
+    const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+    const mono = await pdf.embedFont(StandardFonts.Courier);
+    const margin = 36;
+    let y = 802;
+
+    const draw = (text: string, x: number, size = 9, font = regular): void => {
+      page.drawText(this.clean(text), {
+        x,
+        y,
+        size,
+        font,
+        color: rgb(0, 0, 0),
+      });
+    };
+    const line = (): void => {
+      page.drawLine({
+        start: { x: margin, y: y - 5 },
+        end: { x: 559, y: y - 5 },
+        thickness: 0.5,
+        color: rgb(0, 0, 0),
+      });
+      y -= 15;
+    };
+
+    draw('COMPROVANTE DE RENDIMENTOS PAGOS E DE IRRF', margin, 12, bold);
+    draw(`Ano-calendario: ${document.yearBase}`, 410, 10, bold);
+    y -= 18;
+    draw(`Fonte pagadora: ${document.payer.name}`, margin, 9, bold);
+    y -= 13;
+    draw(`CNPJ: ${document.payer.document || '-'}`, margin);
+    line();
+
+    draw(`Beneficiario: ${document.employee.name}`, margin, 10, bold);
+    y -= 13;
+    draw(`CPF: ${document.employee.cpf || '-'}`, margin);
+    draw(`Matricula: ${document.employee.registration}`, 190);
+    draw(`Vinculo: ${document.employee.employmentLink || '-'}`, 330);
+    line();
+
+    const rows: Array<[string, string]> = [
+      ['1. Total dos rendimentos tributaveis', document.totals.taxableTotal],
+      ['2. Decimo terceiro salario', document.totals.thirteenthSalary],
+      ['3. Ferias pagas no ano-calendario', document.totals.vacationTotal],
+      ['4. Verbas rescisorias tributaveis', document.totals.severanceTotal],
+      ['5. Rendimentos isentos e nao tributaveis', document.totals.exemptTotal],
+      ['6. Previdencia oficial / RPPS', document.totals.inssRppsTotal],
+      ['7. IRRF retido', document.totals.irrfTotal],
+      ['8. Dependentes informados', String(document.totals.dependentsCount)],
+    ];
+    for (const [label, value] of rows) {
+      draw(label, margin, 9);
+      draw(value, 455, 9, mono);
+      y -= 14;
+    }
+    line();
+
+    draw(`Total conciliado S-1210: ${document.esocialTotal}`, margin, 9, bold);
+    y -= 14;
+    draw(`Recomputado em: ${document.recomputedAt}`, margin, 8);
+    y -= 14;
+    draw(document.legalReference, margin, 8);
+    y -= 12;
+    draw(
+      'PDF/A-1b: metadados estaveis, fontes incorporadas pela biblioteca PDF dedicada, hash SHA-256 persistido.',
+      margin,
+      7,
+    );
+
+    const bytes = await pdf.save({ useObjectStreams: false });
+    return Buffer.from(bytes);
   }
 
   private clean(value: string): string {

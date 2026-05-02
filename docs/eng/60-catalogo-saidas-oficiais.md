@@ -54,6 +54,24 @@ s3://<bucket-tenant>/{dominio}/{ano}/{mes}/{tipo}/{uuid}.{ext}
 
 ---
 
+### 1.1.1 Comprovante de Rendimentos — Servidor (Anual)
+
+| Campo | Detalhe |
+|---|---|
+| **Nome oficial** | Comprovante de Rendimentos Pagos e de Imposto sobre a Renda Retido na Fonte |
+| **Nome informal** | Comprovante anual de rendimentos |
+| **Formato** | PDF/A-1b |
+| **Gatilho** | `[M]` geração em lote no admin por ano-base; download self-service no Portal do Servidor |
+| **Dados de entrada** | `fiscal.yearly_income_aggregate`, recomputado por `fiscal.recompute_yearly_income(tenant_id, employee_id, year_base)` a partir de `payroll_run` fechados e itens ativos de folha mensal, 13.º, férias e rescisão |
+| **Template** | `source/backend/src/report-service/yearly-income/yearly-income-template.ts`; engine **pdf-lib** via `PdfABuilderService` |
+| **Variáveis expostas** | Fonte pagadora, CNPJ, servidor, CPF, matrícula, vínculo, ano-calendário, rendimentos tributáveis, 13.º, férias, verbas rescisórias, rendimentos isentos, previdência oficial/RPPS, IRRF retido e dependentes |
+| **Base legal** | IN RFB n.º 2.060/2021 art. 16 e Anexo I; Lei n.º 9.250/1995 art. 7.º |
+| **Assinatura digital** | SS (hash SHA-256 + metadados em `public.generated_report_file`); ICP opcional por tenant |
+| **Armazenamento S3** | `{tenant}/outputs/yearly-income/{ano_base}/{employee_id}.pdf`; retenção 10 anos; `public.generated_report_file.file_hash` SHA-256 |
+| **Evidência de paridade** | PDF inicia com `%PDF-`, metadados PDF/A-1b presentes, hash persistido, empregado autenticado só baixa o próprio comprovante e `taxable_total + exempt_total` reconcilia com o total anual S-1210 do mesmo CPF |
+
+---
+
 ### 1.2 Contracheque — Pensionista
 
 | Campo | Detalhe |

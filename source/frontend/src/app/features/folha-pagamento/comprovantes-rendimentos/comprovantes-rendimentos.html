@@ -1,0 +1,57 @@
+<section class="yearly-income-admin">
+  <header class="page-header">
+    <div>
+      <h1>Comprovantes de rendimentos</h1>
+      <p>Geracao anual por ano-base com PDFs e hash de integridade.</p>
+    </div>
+  </header>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Ano-base</mat-label>
+      <input matInput type="number" formControlName="yearBase" />
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="button" (click)="generate()" [disabled]="loading">
+      <mat-icon>picture_as_pdf</mat-icon>
+      Gerar lote
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section class="result" *ngIf="result">
+    <h2>Resultado</h2>
+    <dl>
+      <div>
+        <dt>Status</dt>
+        <dd>{{ result.status }}</dd>
+      </div>
+      <div>
+        <dt>Arquivos</dt>
+        <dd>{{ result.fileCount }}</dd>
+      </div>
+      <div>
+        <dt>Erros</dt>
+        <dd>{{ result.errorCount }}</dd>
+      </div>
+    </dl>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Servidor</th>
+          <th>Arquivo</th>
+          <th>Hash</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let file of result.files">
+          <td>{{ file.employeeId }}</td>
+          <td>{{ file.fileId }}</td>
+          <td>{{ file.fileHash }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>
