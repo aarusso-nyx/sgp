@@ -45,6 +45,7 @@ Os bounded contexts identificados são:
 | Avaliação e Progressão      | `MODULO_AVALIACAO`      | `avaliacao`                                                |
 | Recrutamento e Seleção      | `RECRUTAMENTO_SELECAO`  | `recrutamento`                                             |
 | Prova Online com Proctoring | `RECRUTAMENTO_SELECAO`  | `recrutamento/prova-online`                                |
+| Certificação da Banca       | `RECRUTAMENTO_SELECAO`  | `recrutamento/banca`                                       |
 | Consultas Gerenciais        | `CONSULTAS_GERENCIAIS`  | `consultas`                                                |
 | Relatórios                  | `RELATORIO`             | `relatorios`                                               |
 | Previdenciário              | `MODULO_PREVIDENCIARIO` | `previdenciario`                                           |
@@ -590,11 +591,11 @@ stateDiagram-v2
 
 #### `recrutamento` — Recrutamento, Seleção e Estágio
 
-**Responsabilidades:** fluxo completo de requisição de pessoal (rascunho → aprovação → análise de candidatos → conclusão); cadastro administrativo de concurso publico com edital, vagas por cargo, reservas legais e publicacao no Portal Transparencia; inscrição pública com consentimento LGPD; `recrutamento/biometria` para captura de template digital/facial, consentimento específico art. 11, retenção limitada e conferência presencial no dia da prova; banco de talentos; gestão de estagiários (programa, prorrogação, recesso, desligamento automático).
+**Responsabilidades:** fluxo completo de requisição de pessoal (rascunho → aprovação → análise de candidatos → conclusão); cadastro administrativo de concurso publico com edital, vagas por cargo, reservas legais e publicacao no Portal Transparencia; inscrição pública com consentimento LGPD; `recrutamento/biometria` para captura de template digital/facial, consentimento específico art. 11, retenção limitada e conferência presencial no dia da prova; `recrutamento/banca` para membros de banca examinadora, assinatura sequencial XAdES/PAdES de gabarito final, ata e lista de aprovados, e verificação pública por token; banco de talentos; gestão de estagiários (programa, prorrogação, recesso, desligamento automático).
 
-**Entidades:** `requisicao_pessoal`, `funcao_requisitada`, `candidato_requisicao`, `concurso`, `edital`, `vaga`, `candidato`, `inscricao`, `biometric_consent`, `candidate_biometric`, `biometric_match_attempt`, `banco_talentos`, `programa_estagio`, `estagiario`, `prorrogacao_estagio`, `recesso_estagio`, `instituicao_ensino`, `curso`.
+**Entidades:** `requisicao_pessoal`, `funcao_requisitada`, `candidato_requisicao`, `concurso`, `edital`, `vaga`, `candidato`, `inscricao`, `biometric_consent`, `candidate_biometric`, `biometric_match_attempt`, `banca_membro`, `signed_document`, `document_signature`, `banco_talentos`, `programa_estagio`, `estagiario`, `prorrogacao_estagio`, `recesso_estagio`, `instituicao_ensino`, `curso`.
 
-**Serviços:** `RequisicaoService`, `CandidatoService`, `ConcursoService`, `EditalService`, `PublishService`, `BiometricConsentService`, `BiometricCaptureService`, `BiometricMatcherService`, `BiometricRetentionScheduler`, `BancoTalentosService`, `ProgramaEstagioService`, `EstagiarioService`, `ProrrogacaoEstagioService`, `RecessoEstagioService`.
+**Serviços:** `RequisicaoService`, `CandidatoService`, `ConcursoService`, `EditalService`, `PublishService`, `BiometricConsentService`, `BiometricCaptureService`, `BiometricMatcherService`, `BiometricRetentionScheduler`, `BancaService`, `DocumentSigningService`, `BancoTalentosService`, `ProgramaEstagioService`, `EstagiarioService`, `ProrrogacaoEstagioService`, `RecessoEstagioService`.
 
 **Controladores:**
 
@@ -612,6 +613,12 @@ stateDiagram-v2
 - `POST /api/v1/recrutamento/biometria/capturas`
 - `POST /api/v1/recrutamento/biometria/matching`
 - `DELETE /api/v1/recrutamento/biometria/candidatos/:candidatoId`
+- `GET /api/v1/recrutamento/banca/concursos/:concursoId/membros`
+- `POST /api/v1/recrutamento/banca/membros`
+- `POST /api/v1/recrutamento/banca/documentos`
+- `POST /api/v1/recrutamento/banca/documentos/:id/signatures`
+- `POST /api/v1/recrutamento/banca/documentos/:id/publicacao`
+- `GET /api/v1/publico/banca/verify/:token`
 - `GET /api/v1/publico/concursos/:slug`
 - `GET /api/v1/recrutamento/banco-talentos`
 - `POST /api/v1/recrutamento/banco-talentos`
@@ -1688,6 +1695,7 @@ Os levantamentos em `docs/legacy-reverse/data-archaeology/` e `docs/legacy-rever
 - `rh.employees.vinculos` é a superfície HR-02 para reenquadramento de regime jurídico: o backend expõe `POST /api/v1/funcionarios/:id/vinculos`, usa `hr.employment_link` como registro tenant-scoped do regime e mantém a vigência em `hr.employment_contract`; a UI dedicada fica em `source/frontend/src/app/features/rh/funcionarios/vinculos/`.
 - `rh.vacation` é a superfície HR-03 para saldo e programação de férias: o backend expõe `GET /api/v1/ferias/saldo/:employee_id` e `POST /api/v1/ferias/programacao`, persiste em `hr.vacation_record`, calcula saldo em `hr.f_calculate_vacation_balance`, atende o portal em `source/frontend/portal/src/app/pages/ferias/` e a fila administrativa em `source/frontend/src/app/features/rh/ferias/`.
 - `rh.workflows.leaves` é a superfície HR-05 para licenças não médicas: o backend expõe `POST /api/v1/licencas`, `GET /api/v1/licencas/:employee_id`, aprovação e cancelamento; persiste em `hr.leave_record` com motivo em `hr.absence_reason`, valida elegibilidade em `hr.f_validate_leave_eligibility`, atende o portal em `source/frontend/portal/src/app/pages/licencas/` e a fila administrativa em `source/frontend/src/app/features/rh/licencas/`.
+- `ponto/mobile` é a superfície PONTO-09 para batida móvel georreferenciada: o backend expõe `POST /api/v1/ponto/mobile/clock`, registra dispositivos e consentimento LGPD, valida `hr.work_location.geofence_polygon` com PostGIS e persiste tentativas em `ponto.mobile_clock_in_attempt`; a UI do empregado fica em `source/frontend/src/app/features/portal-empregado/ponto-mobile/` e a administração de polígonos em `source/frontend/src/app/features/ponto/geofence-admin/`.
 - Fórmulas de folha, dependências entre verbas e atributos calculáveis são responsabilidade do engine; telas e APIs de folha apenas solicitam cálculo e leem resultados.
 - Recadastramento permanece em `previdenciario`, mesmo quando a jornada atualiza dados civis ou usa canal público.
 - Perícia médica não grava situação funcional diretamente; ela publica decisão homologada/licença para o `rh`.

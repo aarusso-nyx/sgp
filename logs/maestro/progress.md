@@ -122,3 +122,5 @@ W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migrati
 2026-05-02T09:43:40Z W34 ✓ 80-rec-08 (high zero-tier, concurrent ES-10 schema drift fixed by maestro defense, commit e5bccac) — online proctored exam
 2026-05-02T09:43:40Z W34 ✓ 82-ponto-08 (medium, lint drift fixed by maestro defense, commit 6454d46) — fingerprint and palm biometrics
 2026-05-02T09:47:00Z frontier launch 81-rec-09, 83-ponto-09 — agents 019de814-4429, 019de814-4444
+2026-05-02T10:01:20Z W35 ✓ 81-rec-09 (medium, gates passed, commit 4f3d7aa) — banca digital signatures
+2026-05-02T10:01:20Z W35 ✓ 83-ponto-09 (medium, gates passed, commit 423ba9f) — mobile geofenced clock-in

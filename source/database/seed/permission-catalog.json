@@ -844,6 +844,22 @@
       "description": "Generate and publish public contest classification snapshots."
     },
     {
+      "key": "recrutamento.banca.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "banca",
+      "actionKey": "read",
+      "routePattern": "/api/v1/recrutamento/banca/**",
+      "description": "Read examination board members, signed official documents, and public verification state."
+    },
+    {
+      "key": "recrutamento.banca.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "banca",
+      "actionKey": "write",
+      "routePattern": "/api/v1/recrutamento/banca/**",
+      "description": "Maintain examination board members and execute sequential ICP-Brasil document signatures."
+    },
+    {
       "key": "recrutamento.nomeacao.read",
       "moduleKey": "recrutamento",
       "resourceKey": "nomeacao",
@@ -1114,6 +1130,22 @@
       "actionKey": "write",
       "routePattern": "#!/ponto/biometria/**",
       "description": "Enroll, match, revoke, and crypto-shred employee biometrics for REP clock-in."
+    },
+    {
+      "key": "ponto.mobile.read",
+      "moduleKey": "ponto",
+      "resourceKey": "mobile",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/mobile/**",
+      "description": "Read mobile clock-in attempts, devices, and geofencing consent."
+    },
+    {
+      "key": "ponto.mobile.write",
+      "moduleKey": "ponto",
+      "resourceKey": "mobile",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/mobile/**",
+      "description": "Register devices, consent, and mobile geofenced clock-in attempts."
     },
     {
       "key": "ponto.afd.read",
@@ -1391,6 +1423,8 @@
       "ponto.rep.write",
       "ponto.biometric.read",
       "ponto.biometric.write",
+      "ponto.mobile.read",
+      "ponto.mobile.write",
       "ponto.afd.read",
       "ponto.afd.write",
       "ponto.roster.read",
@@ -1486,6 +1520,7 @@
       "saude.epi.read",
       "ponto.schedule.read",
       "ponto.timerecord.read",
+      "ponto.mobile.read",
       "ponto.afd.read",
       "ponto.roster.read",
       "ponto.hourbank.read",

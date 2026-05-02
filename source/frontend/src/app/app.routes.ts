@@ -68,6 +68,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'publico/banca/verify/:token',
+    loadComponent: () =>
+      import('./features/portal-publico/banca-verify/banca-verify').then(
+        (m) => m.PortalBancaVerify,
+      ),
+  },
+  {
     path: 'auth/callback',
     component: AuthCallback,
   },
@@ -150,6 +157,17 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'recrutamento/banca',
+        loadComponent: () =>
+          import('./features/recrutamento/banca/banca').then((m) => m.RecrutamentoBanca),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'recrutamento',
+          permissions: ['recrutamento.banca.read'],
+          moduleLabel: 'Recrutamento e Seleção',
+        },
+      },
+      {
         path: 'avaliacao/estagio-probatorio',
         loadComponent: () =>
           import('./features/avaliacao/estagio-probatorio/estagio-probatorio').then(
@@ -216,6 +234,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/portal/ponto/espelho/portal-espelho-ponto').then(
             (m) => m.PortalEspelhoPonto,
+          ),
+      },
+      {
+        path: 'portal/ponto/mobile',
+        loadComponent: () =>
+          import('./features/portal-empregado/ponto-mobile/ponto-mobile').then(
+            (m) => m.PontoMobile,
           ),
       },
       {
@@ -373,6 +398,17 @@ export const routes: Routes = [
           moduleKey: 'tce',
           permissions: ['tce.submission.read'],
           moduleLabel: 'TCE',
+        },
+      },
+      {
+        path: 'ponto/geofences',
+        loadComponent: () =>
+          import('./features/ponto/geofence-admin/geofence-admin').then((m) => m.GeofenceAdmin),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'ponto',
+          permissions: ['ponto.mobile.write'],
+          moduleLabel: 'Ponto',
         },
       },
       {

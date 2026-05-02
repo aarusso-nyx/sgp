@@ -54,6 +54,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/ponto/justificativas/**', 'ponto.justification.read'],
   ['#!/ponto/justificativas/**', 'ponto.justification.write'],
   ['#!/ponto/justificativas/**', 'ponto.justification.approve'],
+  ['#!/ponto/mobile/**', 'ponto.mobile.read'],
+  ['#!/ponto/mobile/**', 'ponto.mobile.write'],
   ['#!/ponto/rep/**', 'ponto.rep.read'],
   ['#!/ponto/rep/**', 'ponto.rep.write'],
   ['#!/portal/comprovante-rendimentos', 'portal.yearly_income.read'],

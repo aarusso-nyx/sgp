@@ -2210,7 +2210,7 @@
       "summary": "logs/maestro/80-rec-08-prova-online-proctored.summary.md"
     },
     "81-rec-09-certificacao-digital-banca": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/81-rec-09-certificacao-digital-banca",
       "retries": 0,
@@ -2254,7 +2254,10 @@
       "theme": "REC",
       "zero_retry": false,
       "started_at": "2026-05-02T09:47:00Z",
-      "agent": "019de814-4429-7f13-81b8-d6d55cc997e0"
+      "agent": "019de814-4429-7f13-81b8-d6d55cc997e0",
+      "commit": "4f3d7aa",
+      "completed_at": "2026-05-02T10:01:20Z",
+      "summary": "logs/maestro/81-rec-09-certificacao-digital-banca.summary.md"
     },
     "82-ponto-08-biometrico-digital-palm": {
       "status": "completed",
@@ -2305,7 +2308,7 @@
       "summary": "logs/maestro/82-ponto-08-biometrico-digital-palm.summary.md"
     },
     "83-ponto-09-geofencing-mobile-clock-in": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/83-ponto-09-geofencing-mobile-clock-in",
       "retries": 0,
@@ -2348,7 +2351,10 @@
       "theme": "PONTO",
       "zero_retry": false,
       "started_at": "2026-05-02T09:47:00Z",
-      "agent": "019de814-4444-79a0-a439-8f51414c494f"
+      "agent": "019de814-4444-79a0-a439-8f51414c494f",
+      "commit": "423ba9f",
+      "completed_at": "2026-05-02T10:01:20Z",
+      "summary": "logs/maestro/83-ponto-09-geofencing-mobile-clock-in.summary.md"
     },
     "84-ponto-10-reconhecimento-facial": {
       "status": "pending",
@@ -2397,21 +2403,8 @@
       "zero_retry": true
     }
   },
-  "current_wave": 35,
-  "active_subagents": [
-    {
-      "slice": "81-rec-09-certificacao-digital-banca",
-      "agent": "019de814-4429-7f13-81b8-d6d55cc997e0",
-      "effort": "medium",
-      "started_at": "2026-05-02T09:47:00Z"
-    },
-    {
-      "slice": "83-ponto-09-geofencing-mobile-clock-in",
-      "agent": "019de814-4444-79a0-a439-8f51414c494f",
-      "effort": "medium",
-      "started_at": "2026-05-02T09:47:00Z"
-    }
-  ],
+  "current_wave": 36,
+  "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }
