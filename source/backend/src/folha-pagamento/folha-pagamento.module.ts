@@ -33,9 +33,16 @@ import { SimulacaoService } from './simulacao/simulacao.service';
 import { FormulaCacheService } from '../payroll-engine/formula-cache.service';
 import { FormulaCompilerService } from '../payroll-engine/formula-compiler.service';
 import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
+import { FgtsModule } from './fgts/fgts.module';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule, ESocialWorkerModule],
+  imports: [
+    AuthModule,
+    DatabaseModule,
+    AuditModule,
+    ESocialWorkerModule,
+    FgtsModule,
+  ],
   controllers: [
     PayrollController,
     PayrollAccountingController,

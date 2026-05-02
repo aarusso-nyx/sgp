@@ -54,6 +54,22 @@
     </div>
   </section>
 
+  <section *ngIf="fgtsFine as fgts" class="fgts-block">
+    <h2>FGTS</h2>
+    <div>
+      <span>Base</span>
+      <strong>{{ fgts.referenceValue | moneyBr }}</strong>
+    </div>
+    <div>
+      <span>Aliquota</span>
+      <strong>{{ fgts.quantity }}</strong>
+    </div>
+    <div>
+      <span>Multa</span>
+      <strong>{{ fgts.amount | moneyBr }}</strong>
+    </div>
+  </section>
+
   <section *ngIf="result as payroll" class="components">
     <h2>Composicao</h2>
     <table>

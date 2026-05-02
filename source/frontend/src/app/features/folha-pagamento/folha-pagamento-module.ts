@@ -13,6 +13,7 @@ import { Contracheques } from './contracheques/contracheques';
 import { FolhaMensal } from './competencia/folha-mensal';
 import { Consignados } from './consignados/consignados';
 import { ConsignadoPortabilidade } from './consignados/portabilidade/portabilidade';
+import { Fgts } from './fgts/fgts';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
@@ -27,6 +28,7 @@ import { MoneyBrPipe } from '../../shared/money-br.pipe';
     Contracheques,
     Consignados,
     ConsignadoPortabilidade,
+    Fgts,
     Rubricas,
     SimulacaoFolha,
     RescisaoFolha,

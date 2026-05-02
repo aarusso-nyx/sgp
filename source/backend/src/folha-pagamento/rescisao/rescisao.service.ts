@@ -2,11 +2,13 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { FgtsService } from '../fgts/fgts.service';
 
 interface CatalogRow extends QueryResultRow {
   payroll_type_id: string;
@@ -21,6 +23,7 @@ interface PayrollRunRow extends QueryResultRow {
 interface TerminationContextRow extends QueryResultRow {
   employee_id: string;
   employment_link_id: string;
+  contract_type: string | null;
   branch_id: string | null;
   functional_status_id: string | null;
   work_location_id: string | null;
@@ -67,7 +70,11 @@ export interface RescisaoRunResult {
 
 @Injectable()
 export class RescisaoService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @Optional()
+    private readonly fgtsService?: FgtsService,
+  ) {}
 
   async run(
     employmentLinkId: string,
@@ -115,7 +122,11 @@ export class RescisaoService {
           [employmentLinkId, terminationDate, cause],
         );
 
-        for (const item of computed.rows) {
+        const components = computed.rows.filter(
+          (item) => item.item_code !== 'RESC_MULTA_FGTS_40',
+        );
+
+        for (const item of components) {
           await this.insertItem(client, {
             employeeId: context.employee_id,
             payrollRunId: run.id,
@@ -123,6 +134,24 @@ export class RescisaoService {
             month,
             item,
           });
+        }
+
+        const fgtsFine = await this.computeFgtsFine(
+          client,
+          run.id,
+          employmentLinkId,
+          cause,
+          context,
+        );
+        for (const item of fgtsFine) {
+          await this.insertItem(client, {
+            employeeId: context.employee_id,
+            payrollRunId: run.id,
+            year,
+            month,
+            item,
+          });
+          components.push(item);
         }
 
         const totals = await this.refreshAggregates(client, run.id);
@@ -153,7 +182,7 @@ export class RescisaoService {
           totalEarnings: totals.total_earnings,
           totalDeductions: totals.total_deductions,
           totalNet: totals.total_net,
-          components: computed.rows.map((item) => ({
+          components: components.map((item) => ({
             code: item.item_code,
             kind: item.item_kind,
             amount: item.amount,
@@ -182,10 +211,14 @@ export class RescisaoService {
       SELECT
         employee.id::text AS employee_id,
         employee.employment_link_id::text,
+        employment_link.contract_type::text,
         employee.branch_id::text AS branch_id,
         employee.functional_status_id::text AS functional_status_id,
         employee.work_location_id::text AS work_location_id
       FROM hr.employee employee
+      JOIN hr.employment_link employment_link
+        ON employment_link.id = employee.employment_link_id
+       AND employment_link.tenant_id = employee.tenant_id
       WHERE employee.tenant_id = public.sgp_current_tenant_uuid()
         AND employee.employment_link_id = $1::uuid
       ORDER BY employee.updated_at DESC
@@ -194,6 +227,52 @@ export class RescisaoService {
       [employmentLinkId],
     );
     return result.rows[0] ?? null;
+  }
+
+  private async computeFgtsFine(
+    client: PoolClient,
+    payrollRunId: string,
+    employmentLinkId: string,
+    cause: string,
+    context: TerminationContextRow,
+  ): Promise<ComputedItemRow[]> {
+    if (!this.fgtsService || !this.isCltWithoutCause(context, cause)) {
+      return [];
+    }
+    const [fine] = await this.fgtsService.computeTerminationFine(
+      payrollRunId,
+      employmentLinkId,
+      cause,
+      client,
+    );
+    if (!fine) return [];
+    return [
+      {
+        item_code: 'RESC_MULTA_FGTS_40',
+        item_kind: 'EARNING',
+        amount: fine.amount,
+        reference_value: fine.baseAmount,
+        quantity: '0.4000',
+        metadata: {
+          origin: 'fgts_fine_40',
+          fgtsAccountId: fine.accountId,
+          fgtsMovementId: fine.movementId,
+          cause,
+        },
+      } as ComputedItemRow,
+    ];
+  }
+
+  private isCltWithoutCause(
+    context: TerminationContextRow,
+    cause: string,
+  ): boolean {
+    const contractType = (context.contract_type ?? '').toLowerCase();
+    const normalizedCause = cause.toUpperCase();
+    return (
+      ['celetista', 'clt'].includes(contractType) &&
+      ['WITHOUT_CAUSE', 'SEM_JUSTA_CAUSA'].includes(normalizedCause)
+    );
   }
 
   private async ensureCatalog(client: PoolClient): Promise<CatalogRow> {

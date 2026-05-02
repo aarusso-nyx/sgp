@@ -348,6 +348,22 @@
       "description": "Execute payroll processing runs such as 13th salary generation."
     },
     {
+      "key": "payroll.fgts.read",
+      "moduleKey": "payroll",
+      "resourceKey": "fgts",
+      "actionKey": "read",
+      "routePattern": "#!/folha/fgts/**",
+      "description": "Read FGTS accounts, balances, and movements."
+    },
+    {
+      "key": "payroll.fgts.write",
+      "moduleKey": "payroll",
+      "resourceKey": "fgts",
+      "actionKey": "write",
+      "routePattern": "#!/folha/fgts/**",
+      "description": "Accrue monthly FGTS deposits and termination fines."
+    },
+    {
       "key": "payroll.simulation.execute",
       "moduleKey": "payroll",
       "resourceKey": "simulation",
@@ -634,6 +650,22 @@
       "actionKey": "write",
       "routePattern": "/api/v1/recrutamento/concursos/**",
       "description": "Mutate public contest records, seats, edital versions, and publication."
+    },
+    {
+      "key": "recrutamento.avaliacao.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "avaliacao",
+      "actionKey": "read",
+      "routePattern": "/api/v1/recrutamento/avaliacao/**",
+      "description": "Read public contest exams, answer keys, resources, and scores."
+    },
+    {
+      "key": "recrutamento.avaliacao.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "avaliacao",
+      "actionKey": "write",
+      "routePattern": "/api/v1/recrutamento/avaliacao/**",
+      "description": "Mutate public contest exams, answer keys, resources, and score recalculation."
     },
     {
       "key": "recrutamento.read",
@@ -950,6 +982,8 @@
       "avaliacao.salary_history.write",
       "folha.read",
       "folha.write",
+      "payroll.fgts.read",
+      "payroll.fgts.write",
       "payroll.run.execute",
       "payroll.simulation.execute",
       "folha.rubrica.read",
@@ -986,6 +1020,7 @@
       "avaliacao.progressao.read",
       "avaliacao.salary_history.read",
       "folha.read",
+      "payroll.fgts.read",
       "folha.rubrica.read",
       "payroll.formula.read",
       "esocial.certificate.read",

@@ -30,6 +30,10 @@ export class RescisaoFolha {
   errorMessage = '';
   loading = false;
 
+  get fgtsFine() {
+    return this.result?.components.find((row) => row.code === 'RESC_MULTA_FGTS_40') ?? null;
+  }
+
   run(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();

@@ -1,0 +1,76 @@
+<section class="fgts">
+  <header>
+    <h1>FGTS</h1>
+  </header>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Servidor</mat-label>
+      <input matInput formControlName="employeeId" />
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="button" (click)="load()" [disabled]="loading">
+      <mat-icon>search</mat-icon>
+      Consultar
+    </button>
+
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Folha mensal</mat-label>
+      <input matInput formControlName="payrollRunId" />
+    </mat-form-field>
+
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="reprocess()"
+      [disabled]="reprocessing || loading"
+    >
+      <mat-icon>refresh</mat-icon>
+      Reprocessar
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section *ngFor="let account of accounts" class="account">
+    <div class="summary">
+      <div>
+        <span>Conta</span>
+        <strong>{{ account.accountId }}</strong>
+      </div>
+      <div>
+        <span>Status</span>
+        <strong>{{ account.status }}</strong>
+      </div>
+      <div>
+        <span>Saldo base</span>
+        <strong>{{ account.depositBalance | moneyBr }}</strong>
+      </div>
+      <div>
+        <span>Multas</span>
+        <strong>{{ account.rescissionFineTotal | moneyBr }}</strong>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Competencia</th>
+          <th>Origem</th>
+          <th>Base</th>
+          <th>Aliquota</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let movement of account.movements">
+          <td>{{ movement.competence }}</td>
+          <td>{{ movement.kind }}</td>
+          <td>{{ movement.baseAmount | moneyBr }}</td>
+          <td>{{ movement.rate }}</td>
+          <td>{{ movement.amount | moneyBr }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

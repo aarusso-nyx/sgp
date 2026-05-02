@@ -1,11 +1,10 @@
-.termination-payroll {
+.fgts {
   display: grid;
   gap: 24px;
   padding: 24px;
 }
 
 h1,
-h2,
 p {
   margin: 0;
 }
@@ -17,16 +16,20 @@ p {
   gap: 12px;
 }
 
-.link-field {
-  min-width: 320px;
+.wide {
+  width: min(100%, 360px);
 }
 
 button mat-icon {
   margin-right: 6px;
 }
 
-.summary,
-.fgts-block {
+.account {
+  display: grid;
+  gap: 16px;
+}
+
+.summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 12px;
@@ -35,31 +38,14 @@ button mat-icon {
   padding: 16px;
 }
 
-.fgts-block h2 {
-  grid-column: 1 / -1;
-}
-
-.summary div,
-.fgts-block div {
+.summary div {
   display: grid;
   gap: 4px;
-  min-width: 0;
 }
 
-.summary span,
-.fgts-block span {
+.summary span {
   color: #586270;
   font-size: 0.85rem;
-}
-
-.summary strong,
-.fgts-block strong {
-  overflow-wrap: anywhere;
-}
-
-.components {
-  display: grid;
-  gap: 12px;
 }
 
 table {

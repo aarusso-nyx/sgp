@@ -5,10 +5,12 @@ import {
   Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
+import Decimal from 'decimal.js';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { FgtsService } from '../fgts/fgts.service';
 import { ConsignmentDeductionService } from '../operations/consignment/consignment-deduction.service';
 import { FolhaMensalCompetenceDto } from './payroll.dto';
 
@@ -101,6 +103,8 @@ export class FolhaMensalService {
     private readonly databaseService: DatabaseService,
     @Optional()
     private readonly consignmentDeductionService?: ConsignmentDeductionService,
+    @Optional()
+    private readonly fgtsService?: FgtsService,
   ) {}
 
   async openCompetence(
@@ -265,6 +269,7 @@ export class FolhaMensalService {
       const context = await this.loadContext(client, input);
       this.assertCompetenceStatus(context.competence.status, ['GENERATED']);
       const validation = await this.validateRun(client, context.run.id);
+      const fgts = await this.accrueFgts(client, context.run.id);
       await this.updateCompetenceStatus(
         client,
         context.competence.id,
@@ -276,10 +281,11 @@ export class FolhaMensalService {
         context.run.id,
         'CLOSED',
         'Monthly competence closed',
-        { event: 'monthly.closed', validation },
+        { event: 'monthly.closed', validation, fgts },
       );
       await this.appendAuditEvent(client, context.run.id, 'monthly.closed', {
         validation,
+        fgts,
       });
       return this.buildResult(
         client,
@@ -828,6 +834,27 @@ export class FolhaMensalService {
       competenceYear: input.year,
       competenceMonth: input.month,
     });
+  }
+
+  private async accrueFgts(
+    client: PoolClient,
+    payrollRunId: string,
+  ): Promise<{ movementCount: number; totalAmount: string }> {
+    if (!this.fgtsService) {
+      return { movementCount: 0, totalAmount: '0.00' };
+    }
+    const movements = await this.fgtsService.accrueMonthly(
+      payrollRunId,
+      client,
+    );
+    const total = movements.reduce(
+      (sum, movement) => sum.plus(movement.amount),
+      new Decimal(0),
+    );
+    return {
+      movementCount: movements.length,
+      totalAmount: total.toFixed(2),
+    };
   }
 
   private async refreshFinancialRecords(

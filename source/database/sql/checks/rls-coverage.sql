@@ -6,7 +6,7 @@ WITH tenant_scoped_tables AS (
     table_name
   FROM information_schema.columns
   WHERE column_name = 'tenant_id'
-    AND table_schema IN ('public', 'hr', 'payroll', 'payroll_calc', 'esocial', 'saude', 'ponto')
+    AND table_schema IN ('public', 'hr', 'payroll', 'payroll_calc', 'payment', 'esocial', 'saude', 'ponto')
   GROUP BY table_schema, table_name
 ),
 missing_rls AS (
@@ -33,7 +33,7 @@ BEGIN
       table_name
     FROM information_schema.columns
     WHERE column_name = 'tenant_id'
-      AND table_schema IN ('public', 'hr', 'payroll', 'payroll_calc', 'esocial', 'saude', 'ponto')
+      AND table_schema IN ('public', 'hr', 'payroll', 'payroll_calc', 'payment', 'esocial', 'saude', 'ponto')
     GROUP BY table_schema, table_name
   ),
   missing_rls AS (
