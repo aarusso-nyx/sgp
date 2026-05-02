@@ -3845,6 +3845,43 @@ $$;
   );
   console.log('[db-smoke] validated SST-04 S-2220 enqueue, retry diagnostics, audit, and RLS');
 
+  await runSqlSnippet(
+    '99-clt03-pis-pasep.sql',
+    `
+DO $$
+DECLARE
+  policy_count integer;
+BEGIN
+  IF to_regclass('payment.pis_pasep_base_year') IS NULL THEN
+    RAISE EXCEPTION 'Expected payment.pis_pasep_base_year to exist after CLT-03';
+  END IF;
+
+  IF to_regprocedure('payment.recompute_pis_pasep_base(uuid, uuid, integer)') IS NULL THEN
+    RAISE EXCEPTION 'Expected payment.recompute_pis_pasep_base(uuid, uuid, integer) to exist after CLT-03';
+  END IF;
+
+  IF to_regclass('payment.v_pis_pasep_year') IS NULL THEN
+    RAISE EXCEPTION 'Expected payment.v_pis_pasep_year to exist after CLT-03';
+  END IF;
+
+  SELECT count(*) INTO policy_count
+  FROM pg_policies
+  WHERE schemaname = 'payment'
+    AND tablename = 'pis_pasep_base_year'
+    AND policyname IN ('pis_pasep_base_year_select', 'pis_pasep_base_year_write')
+    AND qual LIKE '%sgp_tenant_matches%'
+    AND qual LIKE '%payroll.payroll.read%'
+    AND qual LIKE '%payroll.payroll.write%';
+
+  IF policy_count <> 2 THEN
+    RAISE EXCEPTION 'Expected PIS/PASEP base RLS policies to require tenant and payroll.payroll read/write permissions';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated CLT-03 PIS/PASEP schema, function, view, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

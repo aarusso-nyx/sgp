@@ -42,6 +42,7 @@ describe('ES-06 S-3000 exclusion flow (e2e)', () => {
       databaseService,
       emitService as never,
       new S3000Builder(databaseService),
+      { handleS3000Applied: jest.fn() } as never,
     );
 
     await runAsTenant(async () => {
@@ -86,6 +87,7 @@ describe('ES-06 S-3000 exclusion flow (e2e)', () => {
       databaseService,
       emitService as never,
       new S3000Builder(databaseService),
+      { handleS3000Applied: jest.fn() } as never,
     );
 
     await runAsTenant(async () => {

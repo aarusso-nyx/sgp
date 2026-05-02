@@ -1,0 +1,63 @@
+.pis-pasep {
+  display: grid;
+  gap: 24px;
+  padding: 24px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.wide {
+  width: min(100%, 360px);
+}
+
+button mat-icon {
+  margin-right: 6px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.summary div {
+  display: grid;
+  gap: 4px;
+}
+
+.summary span {
+  color: #586270;
+  font-size: 0.85rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.14);
+  padding: 10px 8px;
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+}
+
+.error {
+  color: #b00020;
+}

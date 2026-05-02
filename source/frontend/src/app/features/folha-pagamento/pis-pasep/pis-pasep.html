@@ -1,0 +1,58 @@
+<section class="pis-pasep">
+  <header>
+    <h1>PIS/PASEP</h1>
+  </header>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Servidor</mat-label>
+      <input matInput formControlName="employeeId" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ano-base</mat-label>
+      <input matInput type="number" min="2000" max="2100" formControlName="year" />
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="button" (click)="load()" [disabled]="loading">
+      <mat-icon>search</mat-icon>
+      Consultar
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section *ngIf="result as base" class="summary" aria-live="polite">
+    <div>
+      <span>Servidor</span>
+      <strong>{{ base.registration }} - {{ base.employeeName }}</strong>
+    </div>
+    <div>
+      <span>Programa</span>
+      <strong>{{ base.program }}</strong>
+    </div>
+    <div>
+      <span>Total anual</span>
+      <strong>{{ base.totalBase | moneyBr }}</strong>
+    </div>
+    <div>
+      <span>Atualizado</span>
+      <strong>{{ base.updatedAt | date: 'short' }}</strong>
+    </div>
+  </section>
+
+  <table *ngIf="result as base">
+    <thead>
+      <tr>
+        <th>Mes</th>
+        <th>Base</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let month of monthKeys">
+        <td>{{ month }}</td>
+        <td>{{ base.monthlyBase[month] | moneyBr }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

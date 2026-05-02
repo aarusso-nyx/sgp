@@ -12,6 +12,7 @@ import { AuditMutationContextStore } from '../../common/audit/audit-mutation-con
 import { DatabaseService } from '../../database/database.service';
 import { FgtsService } from '../fgts/fgts.service';
 import { ConsignmentDeductionService } from '../operations/consignment/consignment-deduction.service';
+import { PisPasepService } from '../pis-pasep/pis-pasep.service';
 import { FolhaMensalCompetenceDto } from './payroll.dto';
 
 type CompetenceStatus =
@@ -105,6 +106,8 @@ export class FolhaMensalService {
     private readonly consignmentDeductionService?: ConsignmentDeductionService,
     @Optional()
     private readonly fgtsService?: FgtsService,
+    @Optional()
+    private readonly pisPasepService?: PisPasepService,
   ) {}
 
   async openCompetence(
@@ -265,7 +268,7 @@ export class FolhaMensalService {
 
   async close(input: FolhaMensalCompetenceDto): Promise<FolhaMensalResult> {
     this.ensureDatabase();
-    return this.databaseService.transaction(async (client) => {
+    const result = await this.databaseService.transaction(async (client) => {
       const context = await this.loadContext(client, input);
       this.assertCompetenceStatus(context.competence.status, ['GENERATED']);
       const validation = await this.validateRun(client, context.run.id);
@@ -294,6 +297,8 @@ export class FolhaMensalService {
         validation,
       );
     });
+    await this.pisPasepService?.handlePayrollRunClosed(result.payrollRunId);
+    return result;
   }
 
   async review(input: FolhaMensalCompetenceDto): Promise<FolhaMensalResult> {

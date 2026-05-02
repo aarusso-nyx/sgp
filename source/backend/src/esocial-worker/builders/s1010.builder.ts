@@ -18,6 +18,7 @@ interface RubricRow extends QueryResultRow {
   description: string;
   kind: string;
   esocial_code: string | null;
+  incidences: Record<string, unknown> | null;
   cnpj: string | null;
 }
 
@@ -39,6 +40,7 @@ export class S1010Builder implements S1xxxBuilder {
         ped.description,
         ped.kind::text,
         ped.esocial_code,
+        ped.incidences,
         company.cnpj
       FROM payroll.payroll_earning_deduction ped
       LEFT JOIN LATERAL (
@@ -65,6 +67,7 @@ export class S1010Builder implements S1xxxBuilder {
               description: 'Rubrica base',
               kind: 'EARNING',
               esocial_code: '1000',
+              incidences: { codIncPisPasep: '11' },
               cnpj: '12345678000199',
             },
           ];
@@ -73,6 +76,7 @@ export class S1010Builder implements S1xxxBuilder {
       const id = eventId(this.eventKind, tenantId, row.id);
       const employer = employerRegistration(row.cnpj);
       const tpRubr = row.kind === 'DEDUCTION' ? '2' : '1';
+      const codIncPisPasep = pisPasepIncidence(row.incidences, row.kind);
       const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <eSocial xmlns="http://www.esocial.gov.br/schema/evt/evtTabRubrica/v_S_01_03_00">
   <evtTabRubrica Id="${id}">
@@ -89,6 +93,7 @@ export class S1010Builder implements S1xxxBuilder {
           <codIncIRRF>9</codIncIRRF>
           <codIncFGTS>00</codIncFGTS>
           <codIncCPRP>00</codIncCPRP>
+          <codIncPisPasep>${codIncPisPasep}</codIncPisPasep>
           <tetoRemun>N</tetoRemun>
         </dadosRubrica>
       </inclusao>
@@ -105,4 +110,25 @@ export class S1010Builder implements S1xxxBuilder {
       };
     });
   }
+}
+
+function pisPasepIncidence(
+  incidences: Record<string, unknown> | null,
+  kind: string,
+): string {
+  const raw =
+    incidences?.['codIncPisPasep'] ??
+    incidences?.['cod_inc_pis_pasep'] ??
+    incidences?.['pisPasep'] ??
+    incidences?.['pis_pasep'];
+  const value =
+    typeof raw === 'string' ||
+    typeof raw === 'number' ||
+    typeof raw === 'boolean'
+      ? String(raw).trim()
+      : '';
+  if (/^(00|0|false|none|nao|nao_base)$/i.test(value)) return '00';
+  if (/^(12|13)$/i.test(value)) return value;
+  if (/^(11|true|1|base|monthly|mensal)$/i.test(value)) return '11';
+  return kind === 'EARNING' || kind === 'BASE' ? '11' : '00';
 }

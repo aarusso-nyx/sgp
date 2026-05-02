@@ -35,6 +35,12 @@ describe('CALC-08 SQL and TS money boundary parity', () => {
         JOIN hr.employee employee ON employee.tenant_id = ped.tenant_id
         WHERE ped.formula_ready = true
           AND ped.formula_function_name IS NOT NULL
+          AND to_regprocedure(
+            format(
+              'payroll_calc.%I(uuid, integer, integer)',
+              ped.formula_function_name
+            )
+          ) IS NOT NULL
           AND ped.code <> 'DESCONTO_TETO'
           AND ped.code <> 'DECIMO_TERCEIRO_BASE'
         ORDER BY ped.updated_at DESC

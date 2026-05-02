@@ -14,6 +14,7 @@ import { FolhaMensal } from './competencia/folha-mensal';
 import { Consignados } from './consignados/consignados';
 import { ConsignadoPortabilidade } from './consignados/portabilidade/portabilidade';
 import { Fgts } from './fgts/fgts';
+import { PisPasep } from './pis-pasep/pis-pasep';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
@@ -29,6 +30,7 @@ import { MoneyBrPipe } from '../../shared/money-br.pipe';
     Consignados,
     ConsignadoPortabilidade,
     Fgts,
+    PisPasep,
     Rubricas,
     SimulacaoFolha,
     RescisaoFolha,

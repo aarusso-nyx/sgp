@@ -3,6 +3,7 @@ import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { PisPasepService } from '../../folha-pagamento/pis-pasep/pis-pasep.service';
 import {
   EmittedESocialEvent,
   ESocialEmitService,
@@ -72,6 +73,7 @@ export class S3000Service {
     private readonly databaseService: DatabaseService,
     private readonly emitService: ESocialEmitService,
     private readonly builder: S3000Builder,
+    private readonly pisPasepService: PisPasepService,
   ) {}
 
   async eligibleEvents(): Promise<S3000EligibleEvent[]> {
@@ -302,6 +304,7 @@ export class S3000Service {
     });
     const row = rows[0];
     if (!row) throw new BadRequestException('S-3000 request is not emitted');
+    await this.pisPasepService.handleS3000Applied(row.target_event_id);
     return mapRequestRow(row);
   }
 

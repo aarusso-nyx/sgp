@@ -36,6 +36,7 @@ import { FormulaCacheService } from '../payroll-engine/formula-cache.service';
 import { FormulaCompilerService } from '../payroll-engine/formula-compiler.service';
 import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
 import { FgtsModule } from './fgts/fgts.module';
+import { PisPasepModule } from './pis-pasep/pis-pasep.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { FgtsModule } from './fgts/fgts.module';
     AuditModule,
     ESocialWorkerModule,
     FgtsModule,
+    PisPasepModule,
   ],
   controllers: [
     PayrollController,

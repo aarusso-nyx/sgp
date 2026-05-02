@@ -8,6 +8,7 @@ import { FolhaMensal } from './competencia/folha-mensal';
 import { Consignados } from './consignados/consignados';
 import { ConsignadoPortabilidade } from './consignados/portabilidade/portabilidade';
 import { Fgts } from './fgts/fgts';
+import { PisPasep } from './pis-pasep/pis-pasep';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
@@ -44,6 +45,16 @@ import { SimulacaoFolha } from './simulacao/simulacao';
         data: {
           moduleKey: 'folha',
           permissions: ['payroll.fgts.read'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
+      {
+        path: 'pis-pasep',
+        component: PisPasep,
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['payroll.payroll.read'],
           moduleLabel: 'Folha de Pgt',
         },
       },

@@ -3,6 +3,7 @@ import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { PisPasepService } from '../../folha-pagamento/pis-pasep/pis-pasep.service';
 import {
   ESocialEmitService,
   EmittedESocialEvent,
@@ -47,6 +48,7 @@ export class ES04Service {
     private readonly emitService: ESocialEmitService,
     private readonly s1200Builder: S1200Builder,
     private readonly s1210Builder: S1210Builder,
+    private readonly pisPasepService: PisPasepService,
   ) {}
 
   async listStatus(
@@ -225,6 +227,10 @@ export class ES04Service {
           event.reference,
           xmlHash,
         ],
+      );
+      await this.pisPasepService.recomputeYear(
+        record.employeeId,
+        Number(record.competence.slice(0, 4)),
       );
 
       results.push({
