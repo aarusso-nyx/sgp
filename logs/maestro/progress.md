@@ -68,3 +68,4 @@ W18 ✓ 39-bank-03 (1 slice, low + manual recovery, gates passed, commit d2934ba
 W18 ✗ 40-bank-01 (high blocking failure: lint no-unused-vars _input in integrations-worker/builders/cnab-remittance.builder.ts) — see logs/maestro/40-bank-01-cnab240-remessa.failure.md
 W18 ✓ 40-bank-01 (1 slice, high + manual recovery, gates passed, commit 1b53305) — completeness 26.2% → 26.2%; Wave 18 complete
 W16 ✓ 34-es-04 (1 slice, high, gates passed, commit 0b9027f) — completeness 26.2% → 26.2%
+W16 ✓ 35-es-05 (1 slice, high + manual recovery, gates passed, commit 6c0891c) — completeness 26.2% → 26.2%; Wave 16 complete
