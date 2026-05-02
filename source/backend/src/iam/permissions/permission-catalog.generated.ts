@@ -55,6 +55,8 @@ export const PERMISSIONS = [
   'payment.consignment.write',
   'payment.remittance.read',
   'payment.remittance.write',
+  'payment.return.read',
+  'payment.return.write',
   'payroll.ats.read',
   'payroll.ats.write',
   'payroll.fgts.read',

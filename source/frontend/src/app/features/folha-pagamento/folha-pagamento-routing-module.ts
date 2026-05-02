@@ -13,6 +13,7 @@ import { PisPasep } from './pis-pasep/pis-pasep';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
+import { RetornoBancario } from './retorno/retorno-bancario';
 import { Rubricas } from './rubricas/rubricas';
 import { SimulacaoFolha } from './simulacao/simulacao';
 
@@ -116,6 +117,16 @@ import { SimulacaoFolha } from './simulacao/simulacao';
         data: {
           moduleKey: 'folha',
           permissions: ['payment.remittance.read'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
+      {
+        path: 'retorno-bancario/gestao',
+        component: RetornoBancario,
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['payment.return.write'],
           moduleLabel: 'Folha de Pgt',
         },
       },

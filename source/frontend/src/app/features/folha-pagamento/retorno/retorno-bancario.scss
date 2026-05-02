@@ -1,0 +1,42 @@
+.return-page {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.return-form,
+.reprocess-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.wide {
+  width: min(460px, 100%);
+}
+
+.full {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  width: 100%;
+}
+
+.error {
+  color: #b42318;
+  margin: 0;
+}
+
+.info {
+  color: #166534;
+  margin: 0;
+}

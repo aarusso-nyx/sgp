@@ -203,6 +203,14 @@ enum PaymentRemittanceStatus {
   @@schema("public")
 }
 
+enum PaymentReturnFileStatus {
+  PROCESSING
+  PROCESSED
+  FAILED
+
+  @@schema("public")
+}
+
 enum AdvanceRequestStatus {
   REQUESTED
   APPROVED
@@ -2465,6 +2473,7 @@ model EmployeePayrollItem {
   deletedAt          DateTime?          @map("deleted_at") @db.Timestamptz(6)
   deletedReason      String?            @map("deleted_reason")
   idempotencyKey     String?            @map("idempotency_key")
+  paymentStatus      String?            @map("payment_status")
   createdAt          DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -2747,6 +2756,9 @@ model PaymentRemittanceDetail {
   branch         String
   account        String
   occurrenceCode String?  @map("occurrence_code")
+  lastOccurrenceCode String?  @map("last_occurrence_code")
+  lastInternalStatus String?  @map("last_internal_status")
+  lastSettledAt      DateTime? @map("last_settled_at") @db.Timestamptz(6)
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   file     PaymentRemittanceFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
@@ -2755,6 +2767,47 @@ model PaymentRemittanceDetail {
   @@unique([tenantId, fileId, sequence])
   @@index([tenantId, employeeId, createdAt])
   @@map("payment_remittance_detail")
+  @@schema("payroll")
+}
+
+model PaymentReturnFile {
+  returnFileId     String                  @id @default(uuid()) @map("return_file_id") @db.Uuid
+  tenantId         String                  @map("tenant_id") @db.Uuid
+  remittanceFileId String                  @map("remittance_file_id") @db.Uuid
+  bankCode         Int                     @map("bank_code") @db.SmallInt
+  fileHash         String                  @map("file_hash")
+  processedAt      DateTime                @default(now()) @map("processed_at") @db.Timestamptz(6)
+  processedBy      String?                 @map("processed_by") @db.Uuid
+  status           PaymentReturnFileStatus @default(PROCESSING)
+  message          String?
+  createdAt        DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  details PaymentReturnDetail[]
+
+  @@index([tenantId, remittanceFileId, processedAt])
+  @@map("payment_return_file")
+  @@schema("payroll")
+}
+
+model PaymentReturnDetail {
+  returnDetailId     String   @id @default(uuid()) @map("return_detail_id") @db.Uuid
+  tenantId           String   @map("tenant_id") @db.Uuid
+  returnFileId       String   @map("return_file_id") @db.Uuid
+  sequence           Int
+  remittanceDetailId String   @map("remittance_detail_id") @db.Uuid
+  occurrenceCode     String   @map("occurrence_code")
+  internalStatus     String   @map("internal_status")
+  message            String   @default("")
+  employeeId         String   @map("employee_id") @db.Uuid
+  amount             Decimal  @db.Decimal(14, 2)
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  file PaymentReturnFile @relation(fields: [returnFileId], references: [returnFileId], onDelete: Cascade)
+
+  @@unique([tenantId, returnFileId, sequence])
+  @@index([tenantId, employeeId, createdAt])
+  @@map("payment_return_detail")
   @@schema("payroll")
 }
 

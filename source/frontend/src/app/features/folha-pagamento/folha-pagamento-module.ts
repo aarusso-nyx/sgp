@@ -19,6 +19,7 @@ import { PisPasep } from './pis-pasep/pis-pasep';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
+import { RetornoBancario } from './retorno/retorno-bancario';
 import { Rubricas } from './rubricas/rubricas';
 import { SimulacaoFolha } from './simulacao/simulacao';
 import { MoneyBrPipe } from '../../shared/money-br.pipe';
@@ -37,6 +38,7 @@ import { MoneyBrPipe } from '../../shared/money-br.pipe';
     SimulacaoFolha,
     RescisaoFolha,
     RemessaBancaria,
+    RetornoBancario,
     MoneyBrPipe,
   ],
   imports: [

@@ -196,6 +196,22 @@
       "description": "Generate payroll CNAB remittance files."
     },
     {
+      "key": "payment.return.read",
+      "moduleKey": "payment",
+      "resourceKey": "return",
+      "actionKey": "read",
+      "routePattern": "#!/folha/retorno-bancario/**",
+      "description": "Read processed payroll CNAB return files and details."
+    },
+    {
+      "key": "payment.return.write",
+      "moduleKey": "payment",
+      "resourceKey": "return",
+      "actionKey": "write",
+      "routePattern": "#!/folha/retorno-bancario/**",
+      "description": "Process payroll CNAB return files and reprocess rejected payments."
+    },
+    {
       "key": "payment.consignment.read",
       "moduleKey": "payment",
       "resourceKey": "consignment",
@@ -1503,6 +1519,8 @@
       "folha.rubrica.preview",
       "payroll.formula.read",
       "payroll.formula.write",
+      "payment.return.read",
+      "payment.return.write",
       "payroll.ats.read",
       "payroll.ats.write",
       "esocial.certificate.read",

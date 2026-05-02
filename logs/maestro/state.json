@@ -2429,16 +2429,27 @@
       "verification_result": "Completed on rerun: ES-09 migration, response_classification/event_retry_schedule tables, retorno parser/sync services, frontend retornos UI, ES-09 tests, docs, and maestro defense gates passed."
     },
     "41-bank-02-cnab240-retorno": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/41-bank-02-cnab240-retorno",
-      "commit": null,
-      "started_at": null,
-      "completed_at": null,
+      "commit": "TBD",
+      "started_at": "2026-05-02T14:09:00Z",
+      "completed_at": "2026-05-02T14:20:02Z",
       "retries": 0,
+      "agent": "019de904-5a0d-71b2-97a2-fb8c9b8900b3",
+      "summary": "logs/maestro/41-bank-02-cnab240-retorno.summary.md",
+      "failure_log": "logs/maestro/41-bank-02-cnab240-retorno.failure.md",
+      "recovery": "maestro repaired controller metadata typing and IntegrationsWorkerModule AuditModule import after sub-agent typecheck failure",
+      "gates": [
+        "npm run lint",
+        "npm run typecheck",
+        "npm run test",
+        "DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run test:e2e",
+        "DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run db:smoke"
+      ],
       "source": "live double-check against prompt deliverables and repository/database artifacts",
       "verified_at": "2026-05-02T10:35:00Z",
-      "verification_result": "Verification failed: no BANK-02 migration, payment_return_file/payment_return_detail tables, CNAB240 return parser/process services, retorno UI, BANK-02 tests, or docs found."
+      "verification_result": "Completed on rerun: BANK-02 migration, payroll.payment_return_file/payment_return_detail tables, CNAB240 return parser/process services, retorno UI, BANK-02 tests, docs, and maestro defense gates passed."
     },
     "42-bank-04-pensao-alimenticia": {
       "status": "pending",

@@ -28,6 +28,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/folha/pis-pasep/**', 'payroll.payroll.write'],
   ['#!/folha/remessa-bancaria/**', 'payment.remittance.read'],
   ['#!/folha/remessa-bancaria/**', 'payment.remittance.write'],
+  ['#!/folha/retorno-bancario/**', 'payment.return.read'],
+  ['#!/folha/retorno-bancario/**', 'payment.return.write'],
   ['#!/folha/simulacao', 'payroll.simulation.execute'],
   ['#!/folhaPagamento/**', 'folha.read'],
   ['#!/folhaPagamento/**', 'folha.write'],
