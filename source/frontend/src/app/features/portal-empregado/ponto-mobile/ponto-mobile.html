@@ -1,0 +1,46 @@
+<section class="ponto-mobile">
+  <header>
+    <h1>Ponto mobile</h1>
+    <button type="button" (click)="clock()" [disabled]="clocking">Bater ponto</button>
+  </header>
+
+  <form [formGroup]="form">
+    <label>
+      Servidor
+      <input formControlName="employeeId" placeholder="UUID do empregado" />
+    </label>
+    <label>
+      Dispositivo
+      <input formControlName="deviceId" />
+    </label>
+    <label>
+      Plataforma
+      <select formControlName="platform">
+        <option value="ANDROID">Android</option>
+        <option value="IOS">iOS</option>
+      </select>
+    </label>
+    <label>
+      Chave publica
+      <textarea formControlName="publicKey" rows="3"></textarea>
+    </label>
+    <label>
+      Termo
+      <input formControlName="consentVersion" />
+    </label>
+    <div class="actions">
+      <button type="button" (click)="registerDevice()" [disabled]="saving">
+        Registrar aparelho
+      </button>
+      <button type="button" (click)="createConsent()" [disabled]="saving">
+        Consentir geolocalizacao
+      </button>
+    </div>
+  </form>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+  <p class="message" *ngIf="distanceM !== null">
+    Distancia ao centro: {{ distanceM | number: '1.0-0' }} m
+  </p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+</section>

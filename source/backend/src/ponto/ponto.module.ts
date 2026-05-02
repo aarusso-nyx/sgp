@@ -44,6 +44,11 @@ import { PontoBiometriaController } from './biometria/biometria.controller';
 import { PontoBiometricMatcherService } from './biometria/biometric-matcher.service';
 import { PontoBiometricConsentService } from './biometria/consent.service';
 import { TemplateEnrollmentService } from './biometria/template-enrollment.service';
+import { GeofenceValidatorService } from './mobile/geofence-validator.service';
+import { MobileClockController } from './mobile/mobile-clock.controller';
+import { MobileClockService } from './mobile/mobile-clock.service';
+import { MockLocationDetector } from './mobile/mock-location.detector';
+import { MobileClockPlausibilityService } from './mobile/plausibility.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
@@ -61,6 +66,7 @@ import { TemplateEnrollmentService } from './biometria/template-enrollment.servi
     JustificationController,
     PayrollBridgeController,
     PontoBiometriaController,
+    MobileClockController,
   ],
   providers: [
     WorkScheduleService,
@@ -91,6 +97,10 @@ import { TemplateEnrollmentService } from './biometria/template-enrollment.servi
     PontoBiometricConsentService,
     TemplateEnrollmentService,
     PontoBiometricMatcherService,
+    GeofenceValidatorService,
+    MobileClockPlausibilityService,
+    MockLocationDetector,
+    MobileClockService,
   ],
   exports: [
     WorkScheduleService,
@@ -117,6 +127,10 @@ import { TemplateEnrollmentService } from './biometria/template-enrollment.servi
     PontoBiometricConsentService,
     TemplateEnrollmentService,
     PontoBiometricMatcherService,
+    GeofenceValidatorService,
+    MobileClockPlausibilityService,
+    MockLocationDetector,
+    MobileClockService,
   ],
 })
 export class PontoModule {}

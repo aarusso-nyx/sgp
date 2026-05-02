@@ -1,0 +1,22 @@
+<section class="geofence-admin">
+  <header>
+    <h1>Geofence de lotacao</h1>
+    <button type="button" (click)="preview()">Validar</button>
+  </header>
+
+  <form [formGroup]="form">
+    <label>
+      Lotacao
+      <input formControlName="workLocationId" placeholder="UUID da lotacao" />
+    </label>
+    <label>
+      Poligono
+      <textarea formControlName="polygonText" rows="8"></textarea>
+    </label>
+  </form>
+
+  <div class="preview" [class.invalid]="!valid()">
+    <div class="point" *ngFor="let point of points()">{{ point.lat }}, {{ point.lon }}</div>
+  </div>
+  <p>{{ message }}</p>
+</section>
