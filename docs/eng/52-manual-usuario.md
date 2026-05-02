@@ -29,6 +29,12 @@ Quando uma programação aprovada chega à janela de adiantamento de 30 dias ant
 
 Ao concluir, o sistema vincula `vacation_record.payroll_run_id` e muda a programação para `paid`. Reprocessar a mesma programação reaproveita a mesma folha vinculada e substitui os itens calculados daquela programação, sem duplicar lançamentos. No Portal do Servidor, a seção **Contracheques de ferias** exibe a folha de férias gerada depois da aprovação do processamento.
 
+### Folha mensal
+
+A folha mensal é processada em **Folha de Pagamento > Competência > Folha mensal**. O operador informa ano e mês, abre a competência, aciona o cálculo, revisa a tabela por servidor e só então aprova e gera os contracheques. A revisão mostra proventos, descontos e líquido por matrícula; o sistema bloqueia a aprovação quando algum líquido fica negativo sem autorização do parâmetro `ALLOW_NEGATIVE_NET` ou quando a soma dos líquidos não fecha com o total da folha.
+
+Depois da ação **Gerar**, a competência passa para `GENERATED` e o Portal do Servidor libera **Contracheques** para a competência publicada. Antes desse estado, o servidor não visualiza o contracheque mensal, mesmo que o cálculo já tenha sido concluído internamente. Ao fechar a competência, a folha fica em `CLOSED` e os contracheques continuam disponíveis somente para o próprio servidor autenticado no tenant correto.
+
 ## Licença Saúde / Perícia
 
 A licença para tratamento de saúde inicia no **Portal do Servidor > Licença Saúde > Solicitar**, onde o servidor informa a janela desejada para a perícia oficial. A equipe de saúde acompanha a agenda em **Saúde > Licença de saúde e perícia**, registra o comparecimento e lança o parecer médico com decisão, CID-10, período e dias concedidos.
@@ -1883,7 +1889,7 @@ R: Acesse **Módulo RH > Licenças**, selecione o servidor, filtre por motivo se
 R: Verifique se o portal está habilitado (`PORTAL_SERVIDOR_ENABLED`). Caso esteja, confirme seu e-mail e senha com o setor de RH.
 
 **P: Meu contracheque não aparece no portal para determinado mês.**
-R: O contracheque só fica disponível no portal após o fechamento da competência. Meses com competência ainda aberta não exibem contracheque.
+R: O contracheque mensal só fica disponível no portal depois que a folha da competência é gerada pela equipe de folha. Competências em abertura, cálculo, revisão ou aprovação ainda não publicam contracheques; depois do fechamento, o documento continua disponível como histórico.
 
 **P: Atualizei meu endereço no portal, mas o RH não viu a alteração.**
 R: As alterações feitas em **Portal do Servidor > Meus Dados** geram uma solicitação de alteração cadastral com comparação entre dados atuais e dados propostos. O cadastro base só é atualizado depois da aprovação do RH em **Recursos Humanos > Atualizações cadastrais**; se a solicitação não aparecer, o Administrador do Tenant deve verificar a fila `hr.cadastral_change_request` e os eventos de auditoria.

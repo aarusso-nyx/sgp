@@ -1,0 +1,101 @@
+.contracheque {
+  display: grid;
+  gap: 1rem;
+}
+
+.contracheque header p {
+  margin: 0;
+  color: #5c6670;
+  font-size: 0.85rem;
+}
+
+.contracheque header h1 {
+  margin: 0.25rem 0 0;
+  font-size: 1.75rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.contracheque label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.contracheque input {
+  border: 1px solid #aeb8c2;
+  border-radius: 6px;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.5rem;
+}
+
+.contracheque button {
+  border: 1px solid #9aa7b2;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1c2b36;
+  min-height: 2.35rem;
+  padding: 0.55rem 0.8rem;
+}
+
+.contracheque button[type='submit'] {
+  background: #134e4a;
+  border-color: #134e4a;
+  color: #ffffff;
+}
+
+.contracheque button:disabled {
+  opacity: 0.55;
+}
+
+.paystub {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid #d6dde3;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #ffffff;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.summary div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.summary span {
+  color: #5c6670;
+  font-size: 0.85rem;
+}
+
+.contracheque table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.contracheque th,
+.contracheque td {
+  border-bottom: 1px solid #d6dde3;
+  padding: 0.65rem;
+  text-align: left;
+}
+
+.paystub footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.error {
+  color: #842029;
+}

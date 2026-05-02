@@ -8,13 +8,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 import { FolhaPagamentoRoutingModule } from './folha-pagamento-routing-module';
+import { FolhaMensal } from './competencia/folha-mensal';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { Rubricas } from './rubricas/rubricas';
 import { SimulacaoFolha } from './simulacao/simulacao';
 import { MoneyBrPipe } from '../../shared/money-br.pipe';
 
 @NgModule({
-  declarations: [FolhaPagamentoHome, Rubricas, SimulacaoFolha, MoneyBrPipe],
+  declarations: [FolhaPagamentoHome, FolhaMensal, Rubricas, SimulacaoFolha, MoneyBrPipe],
   imports: [
     CommonModule,
     ReactiveFormsModule,

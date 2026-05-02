@@ -22,6 +22,7 @@ import type { RequestWithContext } from '../../common/request-id/request-with-co
 import {
   CalculatePayrollRunDto,
   CreateAdvancePaymentDto,
+  FolhaMensalCompetenceDto,
   CreatePayrollRunDto,
   RunFeriasPayrollDto,
   PopulatePayrollRunDto,
@@ -30,6 +31,7 @@ import {
 } from './payroll.dto';
 import { DecimoTerceiroService } from './decimo-terceiro.service';
 import { FeriasPayrollService } from './ferias-payroll.service';
+import { FolhaMensalService } from './folha-mensal.service';
 import { PayrollService } from './payroll.service';
 
 @ApiTags('folha-pagamento')
@@ -40,6 +42,7 @@ export class PayrollController {
     private readonly payrollService: PayrollService,
     private readonly decimoTerceiroService: DecimoTerceiroService,
     private readonly feriasPayrollService: FeriasPayrollService,
+    private readonly folhaMensalService: FolhaMensalService,
     private readonly auditService: AuditService,
   ) {}
 
@@ -225,5 +228,112 @@ export class PayrollController {
       },
     });
     return created;
+  }
+
+  @Post('mensal/abrir')
+  @RequirePermission(['payroll.run.execute', 'folha.write'])
+  @ApiCreatedResponse({ description: 'Open a monthly payroll competence.' })
+  async openMonthlyCompetence(
+    @Req() request: RequestWithContext,
+    @Body() body: FolhaMensalCompetenceDto,
+  ) {
+    const result = await this.folhaMensalService.openCompetence(body);
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: result.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'monthly.opened',
+        year: body.year,
+        month: body.month,
+      },
+    });
+    return result;
+  }
+
+  @Post('mensal/calcular')
+  @RequirePermission(['payroll.run.execute', 'folha.write'])
+  @ApiOkResponse({ description: 'Calculate a monthly payroll competence.' })
+  async calculateMonthlyCompetence(
+    @Req() request: RequestWithContext,
+    @Body() body: FolhaMensalCompetenceDto,
+  ) {
+    const result = await this.folhaMensalService.calculate(body);
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: result.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'monthly.calculated',
+        year: body.year,
+        month: body.month,
+      },
+    });
+    return result;
+  }
+
+  @Post('mensal/aprovar')
+  @RequirePermission(['payroll.run.execute', 'folha.write'])
+  @ApiOkResponse({ description: 'Approve a monthly payroll competence.' })
+  async approveMonthlyCompetence(
+    @Req() request: RequestWithContext,
+    @Body() body: FolhaMensalCompetenceDto,
+  ) {
+    const result = await this.folhaMensalService.approve(body);
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: result.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'monthly.approved',
+        year: body.year,
+        month: body.month,
+      },
+    });
+    return result;
+  }
+
+  @Post('mensal/gerar')
+  @RequirePermission(['payroll.run.execute', 'folha.write'])
+  @ApiOkResponse({ description: 'Generate monthly employee paystubs.' })
+  async generateMonthlyPaystubs(
+    @Req() request: RequestWithContext,
+    @Body() body: FolhaMensalCompetenceDto,
+  ) {
+    const result = await this.folhaMensalService.generate(body);
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: result.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'monthly.generated',
+        year: body.year,
+        month: body.month,
+      },
+    });
+    return result;
+  }
+
+  @Post('mensal/fechar')
+  @RequirePermission(['payroll.run.execute', 'folha.write'])
+  @ApiOkResponse({ description: 'Close a monthly payroll competence.' })
+  async closeMonthlyCompetence(
+    @Req() request: RequestWithContext,
+    @Body() body: FolhaMensalCompetenceDto,
+  ) {
+    const result = await this.folhaMensalService.close(body);
+    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
+      resourceId: result.payrollRunId,
+      tableName: 'payroll_run',
+      metadata: {
+        operation: 'monthly.closed',
+        year: body.year,
+        month: body.month,
+      },
+    });
+    return result;
+  }
+
+  @Get('mensal/revisao')
+  @RequirePermission(['payroll.run.execute', 'folha.read'])
+  @ApiOkResponse({ description: 'Review monthly payroll totals by employee.' })
+  reviewMonthlyCompetence(@Query() query: FolhaMensalCompetenceDto) {
+    return this.folhaMensalService.review(query);
   }
 }

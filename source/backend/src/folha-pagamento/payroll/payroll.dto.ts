@@ -111,3 +111,17 @@ export class RunFeriasPayrollDto {
   @IsNotEmpty()
   vacationRecordId!: string;
 }
+
+export class FolhaMensalCompetenceDto {
+  @ApiProperty({ minimum: 2000, maximum: 2100 })
+  @IsInt()
+  @Min(2000)
+  @Max(2100)
+  year!: number;
+
+  @ApiProperty({ minimum: 1, maximum: 12 })
+  @IsInt()
+  @Min(1)
+  @Max(12)
+  month!: number;
+}

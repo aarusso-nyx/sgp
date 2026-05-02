@@ -97,12 +97,12 @@ Permissões: leitura usa `avaliacao.read`; registro de avaliação exige `avalia
 | `applied`   | Progressão aplicada ao nível salarial vigente do servidor         |
 | `revoked`   | Registro não retroativo sinalizado para tratamento administrativo |
 
-| Transição | De          | Evento                 | Guarda                                                     | Ação                                                                                               | Para        |
-| --------- | ----------- | ---------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
-| FOL03-T1  | _(início)_  | `AVALIAR_ELEGIBILIDADE`| interstício de 18 meses; avaliação de desempenho aprovada  | identifica nível atual e próximo nível via PCCS                                                    | `eligible`  |
-| FOL03-T2  | `eligible`  | `SIMULAR_PROGRESSAO`   | nível destino existente                                    | usa `avaliacao.fn_get_vencimento_vigente(...)` e chama `payroll_calc.evaluate_earning_deduction(...)`; grava simulação | `simulated` |
-| FOL03-T3  | `simulated` | `APLICAR_PROGRESSAO`   | registro ainda não aplicado                                | trigger grava histórico salarial, atualiza servidor e emite auditoria `avaliacao.progressao.applied` | `applied`   |
-| FOL03-T4  | `eligible` ou `simulated` | `REVOGAR_PROGRESSAO` | decisão administrativa explícita                           | marca revogação sem recálculo retroativo                                                           | `revoked`   |
+| Transição | De                        | Evento                  | Guarda                                                    | Ação                                                                                                                   | Para        |
+| --------- | ------------------------- | ----------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------- |
+| FOL03-T1  | _(início)_                | `AVALIAR_ELEGIBILIDADE` | interstício de 18 meses; avaliação de desempenho aprovada | identifica nível atual e próximo nível via PCCS                                                                        | `eligible`  |
+| FOL03-T2  | `eligible`                | `SIMULAR_PROGRESSAO`    | nível destino existente                                   | usa `avaliacao.fn_get_vencimento_vigente(...)` e chama `payroll_calc.evaluate_earning_deduction(...)`; grava simulação | `simulated` |
+| FOL03-T3  | `simulated`               | `APLICAR_PROGRESSAO`    | registro ainda não aplicado                               | trigger grava histórico salarial, atualiza servidor e emite auditoria `avaliacao.progressao.applied`                   | `applied`   |
+| FOL03-T4  | `eligible` ou `simulated` | `REVOGAR_PROGRESSAO`    | decisão administrativa explícita                          | marca revogação sem recálculo retroativo                                                                               | `revoked`   |
 
 Permissões: leitura exige `avaliacao.progressao.read`; simulação exige `avaliacao.progressao.simulate`; aplicação exige `avaliacao.progressao.apply`; revogação exige `avaliacao.progressao.revoke`.
 
@@ -118,13 +118,13 @@ Permissões: leitura exige `avaliacao.progressao.read`; simulação exige `avali
 | `gozado`     | Período de férias realizado e preservado no histórico funcional   |
 | `cancelado`  | Programação cancelada antes do gozo                               |
 
-| Transição | De                         | Evento             | Guarda                                                                                                                        | Ação                                      | Para         |
-| --------- | -------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------ |
-| HR03-T1   | _(início)_                 | `SOLICITAR_FERIAS` | período aquisitivo com 12 meses completos; até 3 parcelas; abono até 10 dias; celetista com uma parcela de pelo menos 14 dias | insere `vacation_record`; emite auditoria | `programado` |
-| HR03-T2   | `programado`               | `APROVAR_FERIAS`   | permissão `rh.vacation.approve`                                                                                               | atualiza `status`; emite auditoria        | `aprovado`   |
-| CALC05-T1 | `aprovado`                 | `CALCULAR_FOLHA_FERIAS` | permissões `payroll.run.execute` e `rh.vacation.payout`; início do gozo na janela de 30 dias                                  | cria/reusa `payroll_run` `FERIAS`, calcula rubricas e grava `payroll_run_id` | `paid` |
-| HR03-T3   | `aprovado`                 | `REGISTRAR_GOZO`   | período concluído administrativamente                                                                                         | atualiza `status`; preserva histórico     | `gozado`     |
-| HR03-T4   | `programado` ou `aprovado` | `CANCELAR_FERIAS`  | justificativa administrativa registrada                                                                                       | atualiza `status`; emite auditoria        | `cancelado`  |
+| Transição | De                         | Evento                  | Guarda                                                                                                                        | Ação                                                                         | Para         |
+| --------- | -------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------ |
+| HR03-T1   | _(início)_                 | `SOLICITAR_FERIAS`      | período aquisitivo com 12 meses completos; até 3 parcelas; abono até 10 dias; celetista com uma parcela de pelo menos 14 dias | insere `vacation_record`; emite auditoria                                    | `programado` |
+| HR03-T2   | `programado`               | `APROVAR_FERIAS`        | permissão `rh.vacation.approve`                                                                                               | atualiza `status`; emite auditoria                                           | `aprovado`   |
+| CALC05-T1 | `aprovado`                 | `CALCULAR_FOLHA_FERIAS` | permissões `payroll.run.execute` e `rh.vacation.payout`; início do gozo na janela de 30 dias                                  | cria/reusa `payroll_run` `FERIAS`, calcula rubricas e grava `payroll_run_id` | `paid`       |
+| HR03-T3   | `aprovado`                 | `REGISTRAR_GOZO`        | período concluído administrativamente                                                                                         | atualiza `status`; preserva histórico                                        | `gozado`     |
+| HR03-T4   | `programado` ou `aprovado` | `CANCELAR_FERIAS`       | justificativa administrativa registrada                                                                                       | atualiza `status`; emite auditoria                                           | `cancelado`  |
 
 Permissões: saldo e histórico exigem `rh.vacation.read`; solicitação exige `rh.vacation.request`; aprovação e cancelamento exigem `rh.vacation.approve`; cálculo de folha de férias exige `payroll.run.execute` e `rh.vacation.payout`.
 
@@ -132,18 +132,18 @@ Permissões: saldo e histórico exigem `rh.vacation.read`; solicitação exige `
 
 `hr.medical_appointment` registra a agenda da perícia, `hr.medical_record` guarda o parecer oficial e `hr.medical_leave` registra a licença funcional resultante. Quando o parecer é concluído com decisão `granted`, o banco cria automaticamente a licença médica e o `hr.leave_record` correspondente, preservando auditoria imutável via `sgp_append_audit_event`.
 
-| Estado     | Descrição                                                   |
-| ---------- | ----------------------------------------------------------- |
-| `agendado` | Perícia solicitada e horário reservado                      |
-| `realizado`| Servidor compareceu e o atendimento pericial foi iniciado   |
-| `laudado`  | Parecer oficial registrado pelo médico/perito               |
-| `licenca`  | Licença saúde gerada e refletida no histórico funcional     |
+| Estado      | Descrição                                                 |
+| ----------- | --------------------------------------------------------- |
+| `agendado`  | Perícia solicitada e horário reservado                    |
+| `realizado` | Servidor compareceu e o atendimento pericial foi iniciado |
+| `laudado`   | Parecer oficial registrado pelo médico/perito             |
+| `licenca`   | Licença saúde gerada e refletida no histórico funcional   |
 
-| Transição | De          | Evento               | Guarda                                                | Ação                                                          | Para        |
-| --------- | ----------- | -------------------- | ----------------------------------------------------- | ------------------------------------------------------------- | ----------- |
-| HR04-T1   | _(início)_  | `AGENDAR_PERICIA`    | servidor existente; janela única por tenant           | insere `medical_appointment`; emite auditoria                 | `agendado`  |
-| HR04-T2   | `agendado`  | `REGISTRAR_PARECER`  | permissão `saude.opinion.write`; CID e período válidos quando concedido | insere `medical_record`; trigger gera `medical_leave` e `leave_record` se `granted` | `laudado`   |
-| HR04-T3   | `laudado`   | `CONSOLIDAR_LICENCA` | decisão `granted`                                     | soma dias por `f_consolidated_medical_days`; mantém auditoria | `licenca`   |
+| Transição | De         | Evento               | Guarda                                                                  | Ação                                                                                | Para       |
+| --------- | ---------- | -------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------- |
+| HR04-T1   | _(início)_ | `AGENDAR_PERICIA`    | servidor existente; janela única por tenant                             | insere `medical_appointment`; emite auditoria                                       | `agendado` |
+| HR04-T2   | `agendado` | `REGISTRAR_PARECER`  | permissão `saude.opinion.write`; CID e período válidos quando concedido | insere `medical_record`; trigger gera `medical_leave` e `leave_record` se `granted` | `laudado`  |
+| HR04-T3   | `laudado`  | `CONSOLIDAR_LICENCA` | decisão `granted`                                                       | soma dias por `f_consolidated_medical_days`; mantém auditoria                       | `licenca`  |
 
 Permissões: agendamento exige `saude.appointment.write`; parecer exige `saude.opinion.write`; consulta de licenças exige `rh.medical_leave.read`.
 
@@ -253,6 +253,39 @@ stateDiagram-v2
 | 05/02/2026 02:00 | Reprocessamento concluído                           | `refechada`          |
 | 01/03/2027       | GF arquiva após 12 meses                            | `arquivada`          |
 
+### 1.8 Fluxo físico CALC-11 — folha mensal completa
+
+No runtime v0.0.1, a competência mensal de folha é materializada em `hr.competence_period` com os estados físicos `OPEN`, `CALCULATING`, `CALCULATED`, `APPROVED`, `GENERATED` e `CLOSED`. O orquestrador de folha mensal cria ou reaproveita uma `payroll.payroll_run` do tipo/processamento `MENSAL`, grava cada transição em `payroll.payroll_run_status_history` e registra auditoria via `public.sgp_append_audit_event(...)`.
+
+| Estado        | Descrição operacional                                                               |
+| ------------- | ----------------------------------------------------------------------------------- |
+| `OPEN`        | Competência aberta para cálculo mensal; ainda sem contracheque publicado no portal  |
+| `CALCULATING` | Cálculo em andamento, com linhas calculadas sendo substituídas de forma idempotente |
+| `CALCULATED`  | Cálculo concluído e validado; revisão por servidor disponível para conferência      |
+| `APPROVED`    | Revisão aprovada pela folha; ainda sem publicação no portal                         |
+| `GENERATED`   | Folha mensal gerada e contracheques liberados em `portal.v_employee_paystub`        |
+| `CLOSED`      | Competência encerrada; contracheques seguem disponíveis para consulta histórica     |
+
+| Transição | De           | Evento mensal        | Guarda                                                                  | Efeito                                                                                                 | Para         |
+| --------- | ------------ | -------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------ |
+| CALC11-T1 | _(início)_   | `ABRIR_MENSAL`       | mês/ano válido por tenant                                               | cria `competence_period`, cria/reusa `payroll_run` `MENSAL`, audita abertura                           | `OPEN`       |
+| CALC11-T2 | `OPEN`       | `CALCULAR_MENSAL`    | servidores elegíveis com situação funcional que entra em folha          | recalcula rubricas via `payroll_calc.evaluate_earning_deduction(...)`, gera financeiros, valida totais | `CALCULATED` |
+| CALC11-T3 | `CALCULATED` | `APROVAR_MENSAL`     | `payroll_calc.validate_payroll_run(...)` sem divergência                | muda competência e run para aprovado, preservando relatório de revisão                                 | `APPROVED`   |
+| CALC11-T4 | `APPROVED`   | `GERAR_CONTRACHEQUE` | validação sem líquido negativo não autorizado e sem divergência de soma | muda competência e run para `GENERATED`; portal passa a listar contracheques                           | `GENERATED`  |
+| CALC11-T5 | `GENERATED`  | `FECHAR_MENSAL`      | validação final da run                                                  | muda competência e run para fechado e preenche `closed_at`                                             | `CLOSED`     |
+
+Invariantes: para cada servidor, `total_earnings - total_deductions = net_amount`; a soma dos líquidos de `payroll.payroll_financial_record` deve ser igual a `payroll_run.total_net`; líquido negativo é bloqueado salvo parâmetro tenant `ALLOW_NEGATIVE_NET=true`. A view `portal.v_employee_paystub` só retorna linhas quando a competência está `GENERATED` ou `CLOSED`, a run está `GENERATED` ou `CLOSED`, o tenant coincide e o ator possui `portal.paystub.read`.
+
+```mermaid
+stateDiagram-v2
+    [*] --> OPEN : ABRIR_MENSAL
+    OPEN --> CALCULATING : CALCULAR_MENSAL
+    CALCULATING --> CALCULATED : validacao_ok
+    CALCULATED --> APPROVED : APROVAR_MENSAL
+    APPROVED --> GENERATED : GERAR_CONTRACHEQUE
+    GENERATED --> CLOSED : FECHAR_MENSAL
+```
+
 ---
 
 ## 2. Folha de Pagamento
@@ -280,32 +313,32 @@ stateDiagram-v2
 
 ### 2.1.1 Tipos de processamento de folha
 
-| Código físico | Uso | Regra de cálculo |
-| --- | --- | --- |
-| `DECIMO_TERCEIRO_ADIANTAMENTO` | 1ª parcela do 13º salário, competência de novembro | Calcula 50% da base de novembro, proporcional aos avos do ano corrente; mês com fração de 15 dias ou mais conta como avo. |
-| `DECIMO_TERCEIRO_FECHAMENTO` | 2ª parcela do 13º salário, competência de dezembro | Calcula o total anual proporcional, desconta exatamente a 1ª parcela já paga e aplica IRRF exclusivo sobre o valor total do 13º. |
+| Código físico                  | Uso                                                | Regra de cálculo                                                                                                                 |
+| ------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `DECIMO_TERCEIRO_ADIANTAMENTO` | 1ª parcela do 13º salário, competência de novembro | Calcula 50% da base de novembro, proporcional aos avos do ano corrente; mês com fração de 15 dias ou mais conta como avo.        |
+| `DECIMO_TERCEIRO_FECHAMENTO`   | 2ª parcela do 13º salário, competência de dezembro | Calcula o total anual proporcional, desconta exatamente a 1ª parcela já paga e aplica IRRF exclusivo sobre o valor total do 13º. |
 
 Os dois tipos são executados como `payroll_run` separados e exigem a permissão `payroll.run.execute`. A apuração de avos usa `hr.employee_status_history` e considera somente situações funcionais que entram em folha.
 
 ### 2.2 Transições
 
-| #   | De                                      | Evento                                      | Guarda                                            | Efeito                                                               | Para            |
-| --- | --------------------------------------- | ------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------- | --------------- |
-| T1  | _(início)_                              | `CRIAR_FOLHA`                               | competência `aberta`; (filial × tipo) inexistente | cria registro `PENDENTE/DESBLOQUEADO`; emite `folha.criada`          | `rascunho`      |
-| T2  | `rascunho`                              | `CALCULAR_LOTE`                             | folha `DESBLOQUEADO`; ≥1 contracheque             | enfileira `folha.calculo.solicitada`                                 | `em_calculo`    |
-| T3  | `rascunho`                              | `INCLUIR_SERVIDOR`                          | folha `DESBLOQUEADO`; servidor elegível           | adiciona contracheque; enfileira cálculo individual                  | `rascunho`      |
-| T4  | `em_calculo`                            | `folha.calculo.concluida` _(SIS)_           | todos contracheques `CONCLUIDO`                   | emite `folha.calculada`                                              | `calculada`     |
-| T5  | `em_calculo`                            | `folha.calculo.erro` _(SIS)_                | ≥1 contracheque `ERRO` sem retry                  | emite `folha.erro`; notifica GF                                      | `erro`          |
-| T6  | `calculada`                             | `CONFERIR`                                  | GF/AF                                             | marca `data_conferencia`; emite `folha.conferida`                    | `conferida`     |
-| T7  | `conferida`                             | `APROVAR`                                   | GF                                                | emite `folha.aprovada`                                               | `aprovada`      |
-| T8  | `aprovada`                              | `GERAR_REMESSA`                             | GF; integração bancária configurada               | enfileira `remessa.gerar`; emite `folha.remessa_gerada`              | `paga`          |
-| T9  | `paga`                                  | `CONTABILIZAR`                              | GF                                                | emite `folha.contabilizada`                                          | `contabilizada` |
-| T10 | `contabilizada` OU `paga` OU `aprovada` | `BLOQUEAR` _(SIS: competência fechou)_      | competência `fechada`                             | emite `folha.bloqueada`                                              | `bloqueada`     |
+| #   | De                                      | Evento                                      | Guarda                                            | Efeito                                                                                                                                              | Para            |
+| --- | --------------------------------------- | ------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| T1  | _(início)_                              | `CRIAR_FOLHA`                               | competência `aberta`; (filial × tipo) inexistente | cria registro `PENDENTE/DESBLOQUEADO`; emite `folha.criada`                                                                                         | `rascunho`      |
+| T2  | `rascunho`                              | `CALCULAR_LOTE`                             | folha `DESBLOQUEADO`; ≥1 contracheque             | enfileira `folha.calculo.solicitada`                                                                                                                | `em_calculo`    |
+| T3  | `rascunho`                              | `INCLUIR_SERVIDOR`                          | folha `DESBLOQUEADO`; servidor elegível           | adiciona contracheque; enfileira cálculo individual                                                                                                 | `rascunho`      |
+| T4  | `em_calculo`                            | `folha.calculo.concluida` _(SIS)_           | todos contracheques `CONCLUIDO`                   | emite `folha.calculada`                                                                                                                             | `calculada`     |
+| T5  | `em_calculo`                            | `folha.calculo.erro` _(SIS)_                | ≥1 contracheque `ERRO` sem retry                  | emite `folha.erro`; notifica GF                                                                                                                     | `erro`          |
+| T6  | `calculada`                             | `CONFERIR`                                  | GF/AF                                             | marca `data_conferencia`; emite `folha.conferida`                                                                                                   | `conferida`     |
+| T7  | `conferida`                             | `APROVAR`                                   | GF                                                | emite `folha.aprovada`                                                                                                                              | `aprovada`      |
+| T8  | `aprovada`                              | `GERAR_REMESSA`                             | GF; integração bancária configurada               | enfileira `remessa.gerar`; emite `folha.remessa_gerada`                                                                                             | `paga`          |
+| T9  | `paga`                                  | `CONTABILIZAR`                              | GF                                                | emite `folha.contabilizada`                                                                                                                         | `contabilizada` |
+| T10 | `contabilizada` OU `paga` OU `aprovada` | `BLOQUEAR` _(SIS: competência fechou)_      | competência `fechada`                             | emite `folha.bloqueada`                                                                                                                             | `bloqueada`     |
 | T11 | `calculada`                             | `REPROCESSAR_TOTAL`                         | GF; folha `DESBLOQUEADO`                          | marca lançamentos calculados ativos com `deleted_at` e `deleted_reason`; cria nova execução idempotente; grava histórico `RECALCULATED` e auditoria | `em_calculo`    |
-| T12 | `calculada` OU `erro`                   | `REPROCESSAR_PENDENTES`                     | GF                                                | reenfileira somente contracheques `PENDENTE/ERRO`                    | `em_calculo`    |
-| T13 | `bloqueada`                             | `DESBLOQUEAR` _(SIS: competência reaberta)_ | competência `reaberta`                            | emite `folha.desbloqueada`                                           | `rascunho`      |
-| T14 | `rascunho`                              | `EXCLUIR_FOLHA`                             | GF; competência `aberta`; status `DESBLOQUEADO`   | deleta contracheques; emite `folha.excluindo`                        | `excluindo`     |
-| T15 | `excluindo`                             | `folha.exclusao_concluida` _(SIS)_          | —                                                 | registro removido                                                    | _(fim)_         |
+| T12 | `calculada` OU `erro`                   | `REPROCESSAR_PENDENTES`                     | GF                                                | reenfileira somente contracheques `PENDENTE/ERRO`                                                                                                   | `em_calculo`    |
+| T13 | `bloqueada`                             | `DESBLOQUEAR` _(SIS: competência reaberta)_ | competência `reaberta`                            | emite `folha.desbloqueada`                                                                                                                          | `rascunho`      |
+| T14 | `rascunho`                              | `EXCLUIR_FOLHA`                             | GF; competência `aberta`; status `DESBLOQUEADO`   | deleta contracheques; emite `folha.excluindo`                                                                                                       | `excluindo`     |
+| T15 | `excluindo`                             | `folha.exclusao_concluida` _(SIS)_          | —                                                 | registro removido                                                                                                                                   | _(fim)_         |
 
 ### 2.3 Invariantes por estado
 
@@ -397,17 +430,17 @@ stateDiagram-v2
 
 ### 3.2 Transições
 
-| #   | De                                   | Evento                      | Guarda                                             | Efeito                                                                      | Para                     |
-| --- | ------------------------------------ | --------------------------- | -------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------ |
-| T1  | _(criação pela folha)_               | `CONTRACHEQUE_CRIADO`       | —                                                  | —                                                                           | `draft`                  |
-| T2  | `draft`                              | `CALCULAR` _(SIS)_          | folha `DESBLOQUEADO`                               | `sgp-payroll-engine` executa fórmulas SQL                                   | `em_calculo`             |
-| T3  | `em_calculo`                         | `calculo_concluido` _(SIS)_ | todos os lançamentos ok                            | persiste lançamentos, incluindo `DESCONTO_TETO` quando o subteto remuneratório é excedido; emite `contracheque.calculado` | `gerado`                 |
-| T4  | `em_calculo`                         | `calculo_erro` _(SIS)_      | falha de fórmula ou teto remuneratório obrigatório sem valor | persiste `memoria_calculo` com stack do erro                                | `erro_calculo`           |
-| T5  | `erro_calculo`                       | `RECALCULAR`                | GF; folha `DESBLOQUEADO`                           | reenfileira cálculo                                                         | `em_calculo`             |
-| T6  | `gerado`                             | `DISPONIBILIZAR_PORTAL`     | folha `aprovada`; `PORTAL_SERVIDOR_ENABLED = true` | emite `contracheque.disponibilizado`; notifica servidor                     | `disponibilizado_portal` |
-| T7  | `gerado` OU `disponibilizado_portal` | `IMPRIMIR`                  | GF/AF                                              | gera PDF sem marca d'água; persiste `s3_key`; emite `contracheque.impresso` | `impresso`               |
-| T8  | `impresso`                           | `REPUBLICAR`                | GF; justificativa obrigatória                      | regera PDF; incrementa `versao`; emite `contracheque.republicado`           | `republicado`            |
-| T9  | `gerado` _(preview)_                 | `IMPRIMIR_RASCUNHO`         | AF                                                 | gera PDF com marca d'água; não altera estado                                | `gerado`                 |
+| #   | De                                   | Evento                      | Guarda                                                       | Efeito                                                                                                                    | Para                     |
+| --- | ------------------------------------ | --------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| T1  | _(criação pela folha)_               | `CONTRACHEQUE_CRIADO`       | —                                                            | —                                                                                                                         | `draft`                  |
+| T2  | `draft`                              | `CALCULAR` _(SIS)_          | folha `DESBLOQUEADO`                                         | `sgp-payroll-engine` executa fórmulas SQL                                                                                 | `em_calculo`             |
+| T3  | `em_calculo`                         | `calculo_concluido` _(SIS)_ | todos os lançamentos ok                                      | persiste lançamentos, incluindo `DESCONTO_TETO` quando o subteto remuneratório é excedido; emite `contracheque.calculado` | `gerado`                 |
+| T4  | `em_calculo`                         | `calculo_erro` _(SIS)_      | falha de fórmula ou teto remuneratório obrigatório sem valor | persiste `memoria_calculo` com stack do erro                                                                              | `erro_calculo`           |
+| T5  | `erro_calculo`                       | `RECALCULAR`                | GF; folha `DESBLOQUEADO`                                     | reenfileira cálculo                                                                                                       | `em_calculo`             |
+| T6  | `gerado`                             | `DISPONIBILIZAR_PORTAL`     | folha `aprovada`; `PORTAL_SERVIDOR_ENABLED = true`           | emite `contracheque.disponibilizado`; notifica servidor                                                                   | `disponibilizado_portal` |
+| T7  | `gerado` OU `disponibilizado_portal` | `IMPRIMIR`                  | GF/AF                                                        | gera PDF sem marca d'água; persiste `s3_key`; emite `contracheque.impresso`                                               | `impresso`               |
+| T8  | `impresso`                           | `REPUBLICAR`                | GF; justificativa obrigatória                                | regera PDF; incrementa `versao`; emite `contracheque.republicado`                                                         | `republicado`            |
+| T9  | `gerado` _(preview)_                 | `IMPRIMIR_RASCUNHO`         | AF                                                           | gera PDF com marca d'água; não altera estado                                                                              | `gerado`                 |
 
 ### 3.3 Invariantes
 

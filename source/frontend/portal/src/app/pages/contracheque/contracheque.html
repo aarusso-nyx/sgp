@@ -1,0 +1,63 @@
+<section class="contracheque">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Contracheque</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="load()" class="toolbar">
+    <label>
+      <span>Competencia</span>
+      <input formControlName="competence" placeholder="2026-05" />
+    </label>
+    <button type="submit" [disabled]="loading">Atualizar</button>
+    <button type="button" (click)="downloadHtml()" [disabled]="!paystub">HTML</button>
+  </form>
+
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <section *ngIf="paystub as item" class="paystub" aria-live="polite">
+    <div class="summary">
+      <div>
+        <span>Servidor</span>
+        <strong>{{ item.employee.name }}</strong>
+      </div>
+      <div>
+        <span>Matricula</span>
+        <strong>{{ item.employee.registration }}</strong>
+      </div>
+      <div>
+        <span>Status</span>
+        <strong>{{ item.status }}</strong>
+      </div>
+      <div>
+        <span>Liquido</span>
+        <strong>{{ item.totals.net }}</strong>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Rubrica</th>
+          <th>Tipo</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of item.lines">
+          <td>{{ line.code }}</td>
+          <td>{{ line.description }}</td>
+          <td>{{ line.kind }}</td>
+          <td>{{ line.amount }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <footer>
+      <span>Proventos {{ item.totals.earnings }}</span>
+      <span>Descontos {{ item.totals.deductions }}</span>
+      <strong>Liquido {{ item.totals.net }}</strong>
+    </footer>
+  </section>
+</section>

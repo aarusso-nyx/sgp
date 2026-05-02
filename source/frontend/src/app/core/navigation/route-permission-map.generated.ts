@@ -4,6 +4,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/avaliacao/**', 'avaliacao.read'],
   ['#!/avaliacao/**', 'avaliacao.write'],
   ['#!/consultas/**', 'consultas.read'],
+  ['#!/contracheques/**', 'portal.paystub.read'],
   ['#!/convenios/**', 'convenio.read'],
   ['#!/convenios/**', 'convenio.write'],
   ['#!/documentos/**', 'documents.upload'],

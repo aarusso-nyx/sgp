@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -93,6 +93,18 @@ export class PortalController {
   })
   feriasContracheques(@CurrentActor() actor: AuthenticatedActor | undefined) {
     return this.portalService.vacationPayslips(actor);
+  }
+
+  @Get('v1/portal/contracheque/:competence')
+  @RequirePermission('portal.paystub.read')
+  @ApiOkResponse({
+    description: 'Authenticated employee monthly paystub by competence.',
+  })
+  contracheque(
+    @CurrentActor() actor: AuthenticatedActor | undefined,
+    @Param('competence') competence: string,
+  ) {
+    return this.portalService.getPaystub(actor, competence);
   }
 
   @Put('v1/portal/meus-dados/:section')

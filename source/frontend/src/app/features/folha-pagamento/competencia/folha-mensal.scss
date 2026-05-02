@@ -1,0 +1,74 @@
+.monthly-payroll {
+  display: grid;
+  gap: 24px;
+  padding: 24px;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+mat-form-field {
+  width: 120px;
+}
+
+button mat-icon {
+  margin-right: 6px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.summary div {
+  display: grid;
+  gap: 4px;
+}
+
+.summary span {
+  color: #586270;
+  font-size: 0.85rem;
+}
+
+.summary strong {
+  font-size: 1rem;
+}
+
+.review {
+  display: grid;
+  gap: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.14);
+  padding: 10px 8px;
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+}
+
+.error {
+  color: #b00020;
+}

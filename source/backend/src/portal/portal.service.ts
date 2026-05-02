@@ -40,6 +40,51 @@ interface VacationPayslipRow extends QueryResultRow {
   total_net: string;
 }
 
+export interface PortalPaystubLine {
+  code: string;
+  description: string;
+  kind: string;
+  quantity: string | number | null;
+  referenceValue: string | number | null;
+  amount: string | number;
+  notes: string;
+}
+
+interface PaystubRow extends QueryResultRow {
+  payroll_run_id: string;
+  competence_year: number;
+  competence_month: number;
+  payroll_status: string;
+  competence_status: string;
+  registration: string;
+  employee_name: string;
+  total_earnings: string;
+  total_deductions: string;
+  net_amount: string;
+  generated_at: Date | string;
+  lines: PortalPaystubLine[];
+}
+
+export interface PortalPaystub {
+  payrollRunId: string;
+  competence: string;
+  status: string;
+  competenceStatus: string;
+  employee: {
+    id: string;
+    registration: string;
+    name: string;
+  };
+  totals: {
+    earnings: string;
+    deductions: string;
+    net: string;
+  };
+  lines: PortalPaystubLine[];
+  generatedAt: string;
+  html: string;
+}
+
 interface CountRow extends QueryResultRow {
   total: string;
 }
@@ -307,6 +352,64 @@ export class PortalService {
     }));
   }
 
+  async getPaystub(
+    actor: AuthenticatedActor | undefined,
+    competence: string,
+  ): Promise<PortalPaystub> {
+    const employee = await this.loadEmployee(actor);
+    const parsed = this.parseCompetence(competence);
+    const rows = await this.databaseService.query<PaystubRow>(
+      `
+      SELECT
+        payroll_run_id::text,
+        competence_year,
+        competence_month,
+        payroll_status,
+        competence_status,
+        registration,
+        employee_name,
+        total_earnings::text,
+        total_deductions::text,
+        net_amount::text,
+        generated_at,
+        lines
+      FROM portal.v_employee_paystub
+      WHERE employee_id = $1::uuid
+        AND competence_year = $2
+        AND competence_month = $3
+      ORDER BY generated_at DESC
+      LIMIT 1
+      `,
+      [employee.id, parsed.year, parsed.month],
+    );
+    const row = rows[0];
+    if (!row) {
+      throw new NotFoundException(
+        'Paystub is not available for this competence',
+      );
+    }
+    const lines = Array.isArray(row.lines) ? row.lines : [];
+    return {
+      payrollRunId: row.payroll_run_id,
+      competence: `${row.competence_year}-${String(row.competence_month).padStart(2, '0')}`,
+      status: row.payroll_status,
+      competenceStatus: row.competence_status,
+      employee: {
+        id: employee.id,
+        registration: row.registration,
+        name: row.employee_name,
+      },
+      totals: {
+        earnings: row.total_earnings,
+        deductions: row.total_deductions,
+        net: row.net_amount,
+      },
+      lines,
+      generatedAt: this.toIso(row.generated_at),
+      html: this.buildPaystubHtml(row, lines),
+    };
+  }
+
   async requestProfileChange(
     actor: AuthenticatedActor | undefined,
     section: string,
@@ -533,5 +636,50 @@ export class PortalService {
 
   private toDate(value: Date | string): string {
     return this.toIso(value).slice(0, 10);
+  }
+
+  private parseCompetence(competence: string): { year: number; month: number } {
+    const match = /^(\d{4})-(\d{2})$/.exec(competence);
+    if (!match) {
+      throw new NotFoundException('Paystub competence must use YYYY-MM');
+    }
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    if (year < 2000 || year > 2100 || month < 1 || month > 12) {
+      throw new NotFoundException('Paystub competence is invalid');
+    }
+    return { year, month };
+  }
+
+  private buildPaystubHtml(
+    row: PaystubRow,
+    lines: PortalPaystubLine[],
+  ): string {
+    const lineRows = lines
+      .map(
+        (line) =>
+          `<tr><td>${this.escapeHtml(line.code)}</td><td>${this.escapeHtml(line.description)}</td><td>${this.escapeHtml(line.kind)}</td><td>${this.escapeHtml(String(line.amount))}</td></tr>`,
+      )
+      .join('');
+    return [
+      '<!doctype html><html lang="pt-BR"><meta charset="utf-8">',
+      `<title>Contracheque ${row.competence_year}-${String(row.competence_month).padStart(2, '0')}</title>`,
+      '<body>',
+      `<h1>Contracheque ${this.escapeHtml(row.employee_name)}</h1>`,
+      `<p>Matricula ${this.escapeHtml(row.registration)} - competencia ${row.competence_year}-${String(row.competence_month).padStart(2, '0')}</p>`,
+      '<table><thead><tr><th>Codigo</th><th>Rubrica</th><th>Tipo</th><th>Valor</th></tr></thead>',
+      `<tbody>${lineRows}</tbody></table>`,
+      `<p>Proventos ${this.escapeHtml(row.total_earnings)} | Descontos ${this.escapeHtml(row.total_deductions)} | Liquido ${this.escapeHtml(row.net_amount)}</p>`,
+      '</body></html>',
+    ].join('');
+  }
+
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 }

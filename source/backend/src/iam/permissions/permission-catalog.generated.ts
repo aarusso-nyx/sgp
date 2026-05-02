@@ -37,6 +37,7 @@ export const PERMISSIONS = [
   'payroll.formula.write',
   'payroll.run.execute',
   'payroll.simulation.execute',
+  'portal.paystub.read',
   'portal.profile.read',
   'portal.profile.write',
   'previdenciario.read',

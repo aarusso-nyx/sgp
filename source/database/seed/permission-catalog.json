@@ -636,6 +636,14 @@
       "description": "Download document attachments."
     },
     {
+      "key": "portal.paystub.read",
+      "moduleKey": "portal",
+      "resourceKey": "paystub",
+      "actionKey": "read",
+      "routePattern": "#!/contracheques/**",
+      "description": "Read the authenticated employee monthly paystub after payroll generation."
+    },
+    {
       "key": "auditoria.read",
       "moduleKey": "auditoria",
       "resourceKey": "audit",
@@ -687,6 +695,7 @@
       "avaliacao.salary_history.read",
       "avaliacao.salary_history.write",
       "avaliacao.probation.write",
+      "portal.paystub.read",
       "relatorio.generate"
     ],
     "FOLHA_OPERADOR": [
@@ -714,6 +723,7 @@
       "payroll.formula.write",
       "payroll.ats.read",
       "payroll.ats.write",
+      "portal.paystub.read",
       "relatorio.generate"
     ],
     "AUDITOR": [
@@ -730,6 +740,7 @@
       "folha.read",
       "folha.rubrica.read",
       "payroll.formula.read",
+      "portal.paystub.read",
       "relatorio.read",
       "relatorio.generate",
       "auditoria.read"

@@ -17,6 +17,7 @@ import { PayrollOperationsService } from './operations/payroll-operations.servic
 import { PayrollController } from './payroll/payroll.controller';
 import { DecimoTerceiroService } from './payroll/decimo-terceiro.service';
 import { FeriasPayrollService } from './payroll/ferias-payroll.service';
+import { FolhaMensalService } from './payroll/folha-mensal.service';
 import { PayrollService } from './payroll/payroll.service';
 import { SimulacaoController } from './simulacao/simulacao.controller';
 import { SimulacaoService } from './simulacao/simulacao.service';
@@ -39,6 +40,7 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
     PayrollService,
     DecimoTerceiroService,
     FeriasPayrollService,
+    FolhaMensalService,
     SimulacaoService,
     PayrollAccountingService,
     RubricaService,

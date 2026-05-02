@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { PORTAL_FEATURE_CATALOG } from './core/portal/portal-feature-catalog';
+import { Contracheque } from './pages/contracheque/contracheque';
 import { Ferias } from './pages/ferias/ferias';
 import { Licencas } from './pages/licencas/licencas';
 import { LicencasSaude } from './pages/licencas/saude/saude';
@@ -33,6 +34,22 @@ export const routes: Routes = [
       {
         path: '',
         component: PortalHome,
+      },
+      {
+        path: 'contracheque',
+        component: Contracheque,
+      },
+      {
+        path: 'contracheque/:competence',
+        component: Contracheque,
+      },
+      {
+        path: 'contracheques/:section',
+        component: Contracheque,
+      },
+      {
+        path: 'contracheques/:section/:detail',
+        component: Contracheque,
       },
       {
         path: 'meus-dados/:section',
