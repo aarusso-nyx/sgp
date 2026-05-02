@@ -405,6 +405,18 @@
       "previous_failure": "logs/maestro/32-es-02-cadastro-s2200-s2205.failure.md",
       "failure_log": "logs/maestro/32-es-02-cadastro-s2200-s2205.failure.md",
       "recovery": "manual e2e seed typing, mock event persistence, and ES-02 smoke permission alignment after high retry lint failure"
+    },
+    "33-es-03-afastamentos-s2230-ferias": {
+      "status": "completed",
+      "effort": "medium",
+      "branch": "slice/33-es-03-afastamentos-s2230-ferias",
+      "commit": "375230e751c3884b931dada48896018970c95436",
+      "started_at": "2026-05-01T23:25:00-03:00",
+      "completed_at": "2026-05-01T23:43:56-03:00",
+      "retries": 0,
+      "agent": "019de684-1a8b-7641-ab6e-b826ddd42a22",
+      "failure_log": "logs/maestro/33-es-03-afastamentos-s2230-ferias.failure.md",
+      "recovery": "manual db:smoke fixture-context repair after HR-04 smoke lacked ES-03 S-2230 queue privileges"
     }
   },
   "current_wave": 15,
