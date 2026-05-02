@@ -754,7 +754,7 @@
       "completed_at": "2026-05-02T06:47:53.537Z"
     },
     "49-clt-03-pis-pasep-base-anual": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/49-clt-03-pis-pasep-base-anual",
       "retries": 0,
@@ -794,7 +794,11 @@
       ],
       "wave": 27,
       "theme": "CLT",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de772-5673-74e1-860a-723329fe4b56",
+      "started_at": "2026-05-02T06:48:54.364Z",
+      "commit": "5230c6032b38239633982a59a1453735e6182dea",
+      "completed_at": "2026-05-02T07:14:59Z"
     },
     "50-rec-01-concurso-edital-publicacao": {
       "status": "completed",
@@ -969,7 +973,7 @@
       "failure_log": "logs/maestro/53-rec-04-classificacao-criterios-desempate.failure.md"
     },
     "54-rec-05-nomeacao-convocacao": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/54-rec-05-nomeacao-convocacao",
       "retries": 0,
@@ -1002,7 +1006,13 @@
       ],
       "wave": 27,
       "theme": "REC",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de772-5690-7971-8a26-b4a3ef5799f8",
+      "started_at": "2026-05-02T06:48:54.364Z",
+      "commit": "b086ddde7ebfa17e742fcf893f68d2c34dbaf932",
+      "completed_at": "2026-05-02T07:14:59Z",
+      "recovery": "maestro recovered transient concurrent eSocial lint failure after full defense suite passed",
+      "failure_log": "logs/maestro/54-rec-05-nomeacao-convocacao.failure.md"
     },
     "55-rec-06-posse-exercicio": {
       "status": "pending",
@@ -1640,7 +1650,7 @@
       "completed_at": "2026-05-02T06:28:24.418Z"
     },
     "70-sst-05-riscos-ambientais-s2240-epi": {
-      "status": "pending",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/70-sst-05-riscos-ambientais-s2240-epi",
       "retries": 0,
@@ -1686,7 +1696,11 @@
       ],
       "wave": 27,
       "theme": "SST",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de772-56d0-7fb0-a4b4-ba15cf29a410",
+      "started_at": "2026-05-02T06:48:54.364Z",
+      "commit": "e270f411e5e3511754bb01d59cc4db32081cf87d",
+      "completed_at": "2026-05-02T07:14:59Z"
     },
     "71-tce-01-pluggable-adapter-contract": {
       "status": "pending",
@@ -2276,7 +2290,7 @@
       "zero_retry": true
     }
   },
-  "current_wave": 27,
+  "current_wave": 28,
   "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"

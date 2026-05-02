@@ -89,3 +89,7 @@ W25 ✓ 69-sst-04 (medium, gates passed, commit 3424242) — S-2220 monitoring e
 W26 ✓ 48-clt-02 (medium, gates passed, commit 62f98d7) — aviso previo reflexes
 W26 ✓ 53-rec-04 (high, transient concurrent S-2210 fixture failure recovered by maestro defense, commit 1ffff66) — classificacao/cotas
 W26 ✓ 68-sst-03 (high, zero-tier, gates passed, commit ddafec7) — CAT S-2210
+2026-05-02T03:48:54-03:00 frontier launch 49-clt-03, 54-rec-05, 70-sst-05 — agents 019de772-5673, 019de772-5690, 019de772-56d0
+W27 ✓ 49-clt-03 (medium, gates passed, commit 5230c60) — PIS/PASEP annual base and eSocial recompute hooks
+W27 ✓ 54-rec-05 (medium, transient concurrent lint failure recovered by maestro defense, commit b086ddd) — nomeacao and convocacao deadlines
+W27 ✓ 70-sst-05 (high, gates passed, commit e270f41) — S-2240 environmental exposure, EPI, and PPP
