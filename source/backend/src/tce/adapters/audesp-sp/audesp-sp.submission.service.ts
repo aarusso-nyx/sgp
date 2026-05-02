@@ -18,6 +18,7 @@ import {
 import { AudespSpAdapter } from './audesp-sp.adapter';
 import { PayrollToAudespMapper } from './mapping/payroll-to-audesp.mapper';
 import { AudespValidatorService } from './validator/audesp-validator.service';
+import { TceQueueEnqueueService } from '../../queue/enqueue.service';
 
 interface LayoutRow extends QueryResultRow {
   id: string;
@@ -40,6 +41,7 @@ export class AudespSpSubmissionService {
     private readonly mapper: PayrollToAudespMapper,
     private readonly validator: AudespValidatorService,
     private readonly adapter: AudespSpAdapter,
+    private readonly queue: TceQueueEnqueueService,
   ) {}
 
   async list(year?: number, month?: number): Promise<AudespSubmissionDto[]> {
@@ -134,7 +136,7 @@ export class AudespSpSubmissionService {
     return toAudespSubmissionDto(rows[0]);
   }
 
-  async submit(id: string): Promise<AudespSubmissionDto> {
+  async submit(id: string, enqueue = true): Promise<AudespSubmissionDto> {
     const submission = await this.validate(id);
     if (submission.validationErrors.length) {
       throw new UnprocessableEntityException(
@@ -175,7 +177,11 @@ export class AudespSpSubmissionService {
         receipt.submittedAt,
       ],
     );
-    return toAudespSubmissionDto(rows[0]);
+    const dto = toAudespSubmissionDto(rows[0]);
+    if (enqueue) {
+      await this.queue.enqueueSubmission(dto.id, 'stub://audesp-sp');
+    }
+    return dto;
   }
 
   async envelopeXml(id: string): Promise<string> {

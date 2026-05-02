@@ -16,6 +16,11 @@ import { LayoutFieldService } from './catalog/layout-field.service';
 import { LayoutVersionService } from './catalog/layout-version.service';
 import { StateService } from './catalog/state.service';
 import { LifecycleEmitterService } from './lifecycle/lifecycle-emitter.service';
+import { TceCircuitBreakerService } from './queue/circuit-breaker.service';
+import { TceQueueEnqueueService } from './queue/enqueue.service';
+import { TceRetryStrategyService } from './queue/retry-strategy.service';
+import { TceQueueController } from './queue/tce-queue.controller';
+import { TceWorkerService } from './queue/tce-worker.service';
 import { AdapterLoaderService } from './registry/adapter-loader.service';
 import { AdapterRegistryService } from './registry/adapter-registry.service';
 import { TceController } from './tce.controller';
@@ -33,7 +38,12 @@ export class TceModule {
     return {
       module: TceModule,
       imports: [AuditModule, DatabaseModule, DiscoveryModule],
-      controllers: [TceController, CatalogController, AudespSpController],
+      controllers: [
+        TceController,
+        CatalogController,
+        AudespSpController,
+        TceQueueController,
+      ],
       providers: [
         AdapterRegistryService,
         AdapterLoaderService,
@@ -46,12 +56,18 @@ export class TceModule {
         AudespXmlSerializer,
         AudespStubServerService,
         AudespValidatorService,
+        TceQueueEnqueueService,
+        TceRetryStrategyService,
+        TceCircuitBreakerService,
+        TceWorkerService,
         ...adapterProviders,
       ],
       exports: [
         AdapterRegistryService,
         AdapterLoaderService,
         LifecycleEmitterService,
+        TceQueueEnqueueService,
+        TceWorkerService,
       ],
     };
   }

@@ -92,6 +92,26 @@ class FakeAudespDatabase {
     submitted_at: null,
     response_at: null,
   };
+  private queue = {
+    id: '00000000-0000-4000-8000-00000000a004',
+    tenant_id: tenantId(),
+    submission_id: '00000000-0000-4000-8000-00000000a003',
+    adapter_id: 'audesp-sp',
+    endpoint_url: 'stub://audesp-sp',
+    state_code: 'SP',
+    competence_year: 2026,
+    competence_month: 4,
+    status: 'PENDING',
+    attempts: 0,
+    max_attempts: 5,
+    next_attempt_at: '2026-05-02T00:00:00.000Z',
+    locked_by: null,
+    locked_at: null,
+    last_error_kind: null,
+    last_error_payload: null,
+    created_at: '2026-05-02T00:00:00.000Z',
+    updated_at: '2026-05-02T00:00:00.000Z',
+  };
 
   async query<T>(sql: string, values: readonly unknown[] = []): Promise<T[]> {
     if (sql.includes('INSERT INTO tce.adapter_registry')) {
@@ -132,13 +152,6 @@ class FakeAudespDatabase {
     if (sql.includes('FROM payroll.v_payroll_run_line_active item')) {
       return payrollItems() as T[];
     }
-    if (sql.includes('INSERT INTO tce.submission')) {
-      this.submission = { ...this.submission, status: 'DRAFT' };
-      return [this.submission] as T[];
-    }
-    if (sql.includes('FROM tce.submission')) {
-      return [this.submission] as T[];
-    }
     if (sql.includes('FROM tce.layout_field')) {
       return audespLayoutFields().map((field) => ({
         field_path: field.fieldPath,
@@ -172,6 +185,26 @@ class FakeAudespDatabase {
         submitted_at: String(values[7]),
         response_at: String(values[7]),
       };
+      return [this.submission] as T[];
+    }
+    if (sql.includes('INSERT INTO tce.submission_queue')) {
+      this.queue = {
+        ...this.queue,
+        tenant_id: String(values[0]),
+        submission_id: String(values[1]),
+        adapter_id: String(values[2]),
+        endpoint_url: values[3] === null ? null : String(values[3]),
+      };
+      return [{ id: this.queue.id }] as T[];
+    }
+    if (sql.includes('tce.submission_queue')) {
+      return [this.queue] as T[];
+    }
+    if (sql.includes('INSERT INTO tce.submission')) {
+      this.submission = { ...this.submission, status: 'DRAFT' };
+      return [this.submission] as T[];
+    }
+    if (sql.includes('FROM tce.submission')) {
       return [this.submission] as T[];
     }
     return [] as T[];

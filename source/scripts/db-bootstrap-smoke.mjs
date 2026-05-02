@@ -4043,6 +4043,60 @@ $$;
   );
   console.log('[db-smoke] validated TCE-03 AUDESP/SP submission schema, fields, and RLS');
 
+  await runSqlSnippet(
+    '99-tce04-submission-queue.sql',
+    `
+DO $$
+DECLARE
+  policy_count integer;
+  circuit_policy_count integer;
+BEGIN
+  IF to_regclass('tce.submission_queue') IS NULL THEN
+    RAISE EXCEPTION 'Expected tce.submission_queue to exist after TCE-04';
+  END IF;
+  IF to_regclass('tce.submission_attempt') IS NULL THEN
+    RAISE EXCEPTION 'Expected tce.submission_attempt to exist after TCE-04';
+  END IF;
+  IF to_regclass('tce.adapter_circuit_state') IS NULL THEN
+    RAISE EXCEPTION 'Expected tce.adapter_circuit_state to exist after TCE-04';
+  END IF;
+
+  SELECT count(*) INTO policy_count
+  FROM pg_policies
+  WHERE schemaname = 'tce'
+    AND tablename IN ('submission_queue', 'submission_attempt')
+    AND policyname IN (
+      'submission_queue_select',
+      'submission_queue_write',
+      'submission_attempt_select',
+      'submission_attempt_write'
+    )
+    AND qual LIKE '%sgp_tenant_matches%'
+    AND qual LIKE '%tce.submission.read%'
+    AND qual LIKE '%tce.submission.manage%';
+
+  IF policy_count <> 4 THEN
+    RAISE EXCEPTION 'Expected TCE queue and attempt RLS policies to require tenant and submission permissions, found %', policy_count;
+  END IF;
+
+  SELECT count(*) INTO circuit_policy_count
+  FROM pg_policies
+  WHERE schemaname = 'tce'
+    AND tablename = 'adapter_circuit_state'
+    AND (
+      (policyname = 'adapter_circuit_state_select' AND qual LIKE '%tce.submission.read%')
+      OR (policyname = 'adapter_circuit_state_worker_write' AND qual LIKE '%sgp_bypass_rls%')
+    );
+
+  IF circuit_policy_count <> 2 THEN
+    RAISE EXCEPTION 'Expected TCE circuit state read and worker-write policies, found %', circuit_policy_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated TCE-04 queue, attempt, circuit schema, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 
