@@ -69,3 +69,7 @@ W18 ✗ 40-bank-01 (high blocking failure: lint no-unused-vars _input in integra
 W18 ✓ 40-bank-01 (1 slice, high + manual recovery, gates passed, commit 1b53305) — completeness 26.2% → 26.2%; Wave 18 complete
 W16 ✓ 34-es-04 (1 slice, high, gates passed, commit 0b9027f) — completeness 26.2% → 26.2%
 W16 ✓ 35-es-05 (1 slice, high + manual recovery, gates passed, commit 6c0891c) — completeness 26.2% → 26.2%; Wave 16 complete
+2026-05-02T02:04:18-03:00 W22 launch 45-xcut-01, 46-xcut-02, 43-cons-01 — agents 019de712-3438, 019de712-34bc, 019de712-34d1
+W22 ✓ 45-xcut-01 (medium, gates passed, commit 55eac61) — payslip PDF/A + portal/admin batch
+W22 ✓ 46-xcut-02 (low, gates passed, commit 22e787f) — public transparency snapshot + CSV
+W22 ✓ 43-cons-01 (medium, gates passed, commit aa10f9a) — consignment margin + loan enforcement; Wave 22 complete
