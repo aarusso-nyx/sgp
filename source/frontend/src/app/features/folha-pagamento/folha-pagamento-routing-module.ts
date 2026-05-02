@@ -62,6 +62,17 @@ import { SimulacaoFolha } from './simulacao/simulacao';
           moduleLabel: 'Folha de Pgt',
         },
       },
+      {
+        path: 'esocial/certificados',
+        loadComponent: () =>
+          import('../esocial/certificados/esocial-certificados').then((m) => m.ESocialCertificados),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['esocial.certificate.read'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
       ...buildModuleRouteGroup('folha', FolhaPagamentoHome, {
         moduleLabel: 'Folha de Pgt',
       }),

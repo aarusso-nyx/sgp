@@ -1,17 +1,14 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
+import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { ESocialEmitService } from '../../esocial-worker/esocial-emit.service';
 import { CreateESocialEventDto } from './esocial.dto';
-
-interface ESocialEventRow extends QueryResultRow {
-  id: string;
-  event_type: string;
-  reference: string;
-  competence: string;
-  status: string;
-  created_at: Date | string;
-}
 
 interface DefinitionRow extends QueryResultRow {
   id: string;
@@ -28,7 +25,10 @@ export interface ESocialEventSummary {
 
 @Injectable()
 export class ESocialService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly emitService: ESocialEmitService,
+  ) {}
 
   async createEvent(
     input: CreateESocialEventDto,
@@ -36,33 +36,14 @@ export class ESocialService {
     this.ensureDatabase();
     const definitionId = await this.ensureDefinition();
     const { year, month } = this.parseCompetence(input.competencia);
-
-    const eventRows = await this.databaseService.query<ESocialEventRow>(
-      `
-      INSERT INTO public.esocial_event (
-        event_type,
-        reference,
-        competence,
-        payload
-      )
-      VALUES ($1, $2, $3, $4::jsonb)
-      RETURNING
-        id::text,
-        event_type,
-        reference,
-        competence,
-        status::text,
-        created_at
-      `,
-      [
-        input.tipo.trim(),
-        input.referencia.trim(),
-        input.competencia,
-        JSON.stringify(input.dados ?? {}),
-      ],
-    );
-
-    const event = eventRows[0];
+    const emitted = await this.emitService.emit({
+      tenantId: this.currentTenantId(),
+      eventKind: input.tipo,
+      xml: this.eventXml(input),
+      reference: input.referencia.trim(),
+      competence: input.competencia,
+      payload: input.dados ?? {},
+    });
 
     await this.databaseService.query(
       `
@@ -79,21 +60,21 @@ export class ESocialService {
         year,
         month,
         JSON.stringify({
-          eventId: event.id,
-          eventType: event.event_type,
-          competence: event.competence,
+          eventId: emitted.id,
+          eventType: emitted.eventKind,
+          competence: emitted.competence,
           format: 'XML',
         }),
       ],
     );
 
     return {
-      id: event.id,
-      tipo: event.event_type,
-      referencia: event.reference,
-      competencia: event.competence,
-      status: this.toApiStatus(event.status),
-      createdAt: this.toIso(event.created_at),
+      id: emitted.id,
+      tipo: emitted.eventKind,
+      referencia: emitted.reference,
+      competencia: emitted.competence,
+      status: this.toApiStatus(emitted.status),
+      createdAt: emitted.createdAt,
     };
   }
 
@@ -135,17 +116,28 @@ export class ESocialService {
     return status === 'PENDENTE' ? 'PENDENTE_ENVIO' : status;
   }
 
-  private toIso(value: Date | string): string {
-    return value instanceof Date
-      ? value.toISOString()
-      : new Date(value).toISOString();
-  }
-
   private ensureDatabase(): void {
     if (!this.databaseService.configured) {
       throw new ServiceUnavailableException(
         'DATABASE_URL is required for eSocial operations',
       );
     }
+  }
+
+  private eventXml(input: CreateESocialEventDto): string {
+    const xml = input.dados?.['xml'];
+    if (typeof xml === 'string' && xml.trim()) return xml;
+    throw new BadRequestException(
+      'eSocial emission requires dados.xml with a complete S-1.3 event XML payload',
+    );
+  }
+
+  private currentTenantId(): string {
+    const context = RequestContextStore.get();
+    const tenantId = context?.actor?.tenantId ?? context?.tenantId;
+    if (!tenantId) {
+      throw new BadRequestException('Tenant context is required');
+    }
+    return tenantId;
   }
 }

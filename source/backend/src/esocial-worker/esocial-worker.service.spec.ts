@@ -167,7 +167,7 @@ describe('ESocialWorkerService', () => {
       },
       {
         schema_version: 'S-1.1',
-        message: 'Only eSocial schema S-1.2 is supported',
+        message: 'Only eSocial schema S-1.2 and S-1.3 are supported',
       },
       { payload: [] as never, message: 'eSocial payload must be an object' },
     ]) {

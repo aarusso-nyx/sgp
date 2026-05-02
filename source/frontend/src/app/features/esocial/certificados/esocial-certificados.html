@@ -1,0 +1,96 @@
+<section class="certificates" aria-labelledby="esocial-certificates-title">
+  <header class="certificates__header">
+    <div>
+      <p class="certificates__eyebrow">eSocial</p>
+      <h1 id="esocial-certificates-title">Certificados ICP-Brasil</h1>
+      <p>Certificados A1/A3 usados pelo hub de validação XSD e XML-DSig.</p>
+    </div>
+  </header>
+
+  <p class="certificates__error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="certificates__loading" *ngIf="loading">Carregando...</p>
+
+  <div class="certificates__layout">
+    <section class="certificates__panel">
+      <h2>{{ rotatingCertificateId ? 'Rotacionar certificado' : 'Novo certificado' }}</h2>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="certificates__form">
+        <label>
+          Alias
+          <input type="text" formControlName="alias" autocomplete="off" />
+        </label>
+
+        <label>
+          Tipo
+          <select formControlName="kind">
+            <option value="A1">A1</option>
+            <option value="A3">A3</option>
+          </select>
+        </label>
+
+        <label>
+          Senha PKCS#12
+          <input type="password" formControlName="password" autocomplete="off" />
+        </label>
+
+        <label>
+          Arquivo .p12/.pfx
+          <input
+            type="file"
+            accept=".p12,.pfx,application/x-pkcs12"
+            (change)="selectFile($event)"
+          />
+        </label>
+
+        <div class="certificates__actions">
+          <button type="submit" [disabled]="saving">
+            {{ rotatingCertificateId ? 'Rotacionar' : 'Enviar' }}
+          </button>
+          <button type="button" *ngIf="rotatingCertificateId" (click)="cancelRotation()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="certificates__panel certificates__panel--wide">
+      <h2>Validade e rotação</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Alias</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Valido ate</th>
+            <th>Rotacao</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let certificate of certificates"
+            [class.certificates__row--warning]="certificate.expiresSoon"
+          >
+            <td>{{ certificate.alias }}</td>
+            <td>{{ certificate.kind }}</td>
+            <td>{{ certificate.status }}</td>
+            <td>{{ certificate.validTo | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <span *ngIf="certificate.expiresSoon"
+                >expira em {{ certificate.expiresInDays }} dias</span
+              >
+              <span *ngIf="!certificate.expiresSoon">{{
+                certificate.rotationDueAt | date: 'dd/MM/yyyy'
+              }}</span>
+            </td>
+            <td>
+              <button type="button" (click)="startRotation(certificate)">Rotacionar</button>
+            </td>
+          </tr>
+          <tr *ngIf="!certificates.length && !loading">
+            <td colspan="6">Nenhum certificado cadastrado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</section>

@@ -213,6 +213,87 @@ $$;
   );
 
   await runSqlSnippet(
+    '99-es07-xsd-signature.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  visible_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA esocial, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.tenant_certificate TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON esocial.xsd_validation_failure TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  INSERT INTO esocial.tenant_certificate (
+    tenant_id,
+    certificate_id,
+    alias,
+    kind,
+    pkcs12_blob,
+    blob_kms_key_id,
+    valid_from,
+    valid_to,
+    rotation_due_at,
+    status
+  )
+  VALUES (
+    tenant_a,
+    '00000000-0000-4000-8000-000000000907',
+    'ES07 Smoke',
+    'A1'::esocial.certificate_kind,
+    decode('00', 'hex'),
+    'smoke',
+    now() - interval '1 day',
+    now() + interval '90 days',
+    now() + interval '60 days',
+    'ACTIVE'::esocial.certificate_status
+  )
+  ON CONFLICT (tenant_id, certificate_id) DO UPDATE
+  SET valid_to = EXCLUDED.valid_to,
+      rotation_due_at = EXCLUDED.rotation_due_at,
+      status = EXCLUDED.status;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.certificate.read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count FROM esocial.tenant_certificate
+  WHERE certificate_id = '00000000-0000-4000-8000-000000000907';
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 eSocial certificates from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.certificate.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count FROM esocial.tenant_certificate
+  WHERE certificate_id = '00000000-0000-4000-8000-000000000907';
+  RESET ROLE;
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected tenant A to see its eSocial certificate, found %', visible_count;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_policies
+    WHERE schemaname = 'esocial'
+      AND tablename = 'tenant_certificate'
+      AND policyname = 'tenant_certificate_write'
+      AND with_check LIKE '%esocial.certificate.write%'
+      AND with_check LIKE '%sgp_tenant_matches(tenant_id)%'
+  ) THEN
+    RAISE EXCEPTION 'Expected esocial.tenant_certificate write policy to require tenant and certificate write permission';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated ES-07 tenant certificate RLS');
+
+  await runSqlSnippet(
     '99-hr01-employee-lifecycle.sql',
     `
 DO $$

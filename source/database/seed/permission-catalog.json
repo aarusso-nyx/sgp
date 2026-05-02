@@ -388,6 +388,30 @@
       "description": "Mutate ATS and service-time payroll parameters."
     },
     {
+      "key": "esocial.certificate.read",
+      "moduleKey": "esocial",
+      "resourceKey": "certificate",
+      "actionKey": "read",
+      "routePattern": "/api/v1/esocial/certificados/**",
+      "description": "Read current-tenant ICP-Brasil certificate metadata for eSocial."
+    },
+    {
+      "key": "esocial.certificate.write",
+      "moduleKey": "esocial",
+      "resourceKey": "certificate",
+      "actionKey": "write",
+      "routePattern": "/api/v1/esocial/certificados/**",
+      "description": "Upload, rotate, and revoke current-tenant ICP-Brasil certificates for eSocial."
+    },
+    {
+      "key": "esocial.event.write",
+      "moduleKey": "esocial",
+      "resourceKey": "event",
+      "actionKey": "write",
+      "routePattern": "/api/v1/esocial/eventos",
+      "description": "Emit eSocial XML events after XSD validation and XML-DSig signature."
+    },
+    {
       "key": "avaliacao.read",
       "moduleKey": "avaliacao",
       "resourceKey": "performance",
@@ -723,6 +747,9 @@
       "payroll.formula.write",
       "payroll.ats.read",
       "payroll.ats.write",
+      "esocial.certificate.read",
+      "esocial.certificate.write",
+      "esocial.event.write",
       "portal.paystub.read",
       "relatorio.generate"
     ],
@@ -740,6 +767,7 @@
       "folha.read",
       "folha.rubrica.read",
       "payroll.formula.read",
+      "esocial.certificate.read",
       "portal.paystub.read",
       "relatorio.read",
       "relatorio.generate",

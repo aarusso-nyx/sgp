@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AuditModule } from '../audit/audit.module';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
+import { ESocialWorkerModule } from '../esocial-worker/esocial-worker.module';
 import { PayrollAccountingController } from './accounting/payroll-accounting.controller';
 import { PayrollAccountingService } from './accounting/payroll-accounting.service';
 import { RubricaController } from './accounting/rubrica/rubrica.controller';
@@ -27,7 +28,7 @@ import { FormulaCompilerService } from '../payroll-engine/formula-compiler.servi
 import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule],
+  imports: [AuthModule, DatabaseModule, AuditModule, ESocialWorkerModule],
   controllers: [
     PayrollController,
     PayrollAccountingController,

@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
@@ -10,6 +11,7 @@ import { DatabaseService } from '../database/database.service';
 import { DocumentsStorageService } from '../documents/documents-storage.service';
 import { buildESocialEventXml } from '../integrations-worker/builders/esocial-event.builder';
 import { ESocialDispatchAdapter } from './esocial-dispatch.adapter';
+import { XsdValidatorService } from './xsd/xsd-validator.service';
 
 interface PendingESocialEventRow extends QueryResultRow {
   id: string;
@@ -20,6 +22,7 @@ interface PendingESocialEventRow extends QueryResultRow {
   payload: Record<string, unknown> | null;
   schema_version: string;
   retry_count: number;
+  xml_payload: string | null;
 }
 
 interface IdRow extends QueryResultRow {
@@ -53,6 +56,8 @@ export class ESocialWorkerService {
     private readonly databaseService: DatabaseService,
     private readonly documentsStorageService: DocumentsStorageService,
     private readonly dispatchAdapter: ESocialDispatchAdapter,
+    @Optional()
+    private readonly xsdValidator?: XsdValidatorService,
   ) {}
 
   health() {
@@ -61,7 +66,7 @@ export class ESocialWorkerService {
       service: 'sgp-esocial-worker',
       status: 'implemented',
       databaseConfigured: this.databaseService.configured,
-      schemaVersion: 'S-1.2',
+      schemaVersion: 'S-1.2/S-1.3',
       dispatchAdapter: 'sandbox',
       timestamp: new Date().toISOString(),
     };
@@ -151,7 +156,8 @@ export class ESocialWorkerService {
           competence,
           payload,
           schema_version,
-          retry_count
+          retry_count,
+          xml_payload
         FROM public.esocial_event
         WHERE status IN (
           'PENDENTE'::"ESocialEventStatus",
@@ -187,14 +193,24 @@ export class ESocialWorkerService {
 
   private async processEvent(event: PendingESocialEventRow): Promise<void> {
     this.validateEvent(event);
-    const artifact = buildESocialEventXml({
-      eventId: event.id,
-      eventType: event.event_type,
-      competence: event.competence,
-      reference: event.reference,
-      payload: event.payload ?? {},
-      schemaVersion: event.schema_version,
-    });
+    const artifact = event.xml_payload
+      ? {
+          fileName: `esocial-${this.sanitize(event.event_type)}-${this.sanitize(event.id)}.xml`,
+          contentType: 'application/xml',
+          content: event.xml_payload,
+        }
+      : buildESocialEventXml({
+          eventId: event.id,
+          eventType: event.event_type,
+          competence: event.competence,
+          reference: event.reference,
+          payload: event.payload ?? {},
+          schemaVersion: event.schema_version,
+        });
+    const xmlContent = artifact.content.toString();
+    if (event.schema_version === 'S-1.3' && this.xsdValidator) {
+      this.xsdValidator.assertValid(event.event_type, xmlContent);
+    }
     const [year, month] = event.competence.split('-');
     const storageKey = [
       event.tenant_id,
@@ -214,7 +230,7 @@ export class ESocialWorkerService {
       eventId: event.id,
       eventType: event.event_type,
       schemaVersion: event.schema_version,
-      xml: artifact.content.toString(),
+      xml: xmlContent,
     });
 
     await this.databaseService.query(
@@ -247,7 +263,7 @@ export class ESocialWorkerService {
       `,
       [
         event.id,
-        artifact.content.toString(),
+        xmlContent,
         dispatch.receiptNumber,
         dispatch.protocolNumber,
         dispatch.mode,
@@ -300,8 +316,10 @@ export class ESocialWorkerService {
         'eSocial competence must use YYYY-MM format',
       );
     }
-    if (event.schema_version !== 'S-1.2') {
-      throw new BadRequestException('Only eSocial schema S-1.2 is supported');
+    if (!['S-1.2', 'S-1.3'].includes(event.schema_version)) {
+      throw new BadRequestException(
+        'Only eSocial schema S-1.2 and S-1.3 are supported',
+      );
     }
     if (
       event.payload !== null &&
@@ -309,6 +327,10 @@ export class ESocialWorkerService {
     ) {
       throw new BadRequestException('eSocial payload must be an object');
     }
+  }
+
+  private sanitize(value: string): string {
+    return value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   }
 
   private normalizeLimit(limit: number): number {

@@ -1001,7 +1001,9 @@ stateDiagram-v2
 
 ### 5.1 `sgp-esocial-worker`
 
-**Tecnologia:** NestJS standalone (sem HTTP server); consome fila SQS `esocial.evento.pendente`; orquestra envio via AWS Step Functions `esocial-envio`.
+**Tecnologia:** NestJS standalone para o worker e serviços compartilhados importados pelo `sgp-core-api`; consome fila SQS `esocial.evento.pendente`; orquestra envio via AWS Step Functions `esocial-envio`.
+
+**Gate ES-07:** toda emissão real deve passar pelo hub `source/backend/src/esocial-worker/esocial-emit.service.ts` antes de entrar em `public.esocial_event`. O hub valida o XML contra o bundle oficial XSD S-1.3 commitado em `source/backend/src/esocial-worker/xsd/`, assina com XML-DSig enveloped em `source/backend/src/esocial-worker/signature/` usando certificado ICP-Brasil A1/A3 do tenant, registra falhas em `esocial.xsd_validation_failure` e só então persiste o XML assinado na fila. O cadastro e rotação de certificados ficam em `source/backend/src/esocial-worker/certificate-store/`, com blobs PKCS#12 cifrados em repouso e RLS por tenant.
 
 **Fluxo de processamento:**
 
@@ -1033,7 +1035,10 @@ sequenceDiagram
 
 - `evento-consumer`: deserializa mensagem SQS, valida schema, roteia por tipo de evento.
 - `xml-builder`: invoca `libs/integrations/esocial-s12` para construção dos XML S-1.000, S-1.005, S-1.010, S-1.020, S-1.030, S-1.035, S-1.040, S-1.050, S-1.060, S-1.070, S-1.080, S-2.xxx, S-3.xxx.
-- `assinatura`: integra com AWS KMS ou certificado A1 armazenado criptografado no S3 + Secrets Manager.
+- `xsd`: mantém o bundle oficial S-1.3 local, verifica hash de arquivos críticos e rejeita mutações antes da fila.
+- `signature`: assina XML eSocial com XML-DSig enveloped via `xml-crypto` e material ICP-Brasil lido de PKCS#12 via `node-forge`, sem shell-out para OpenSSL.
+- `certificate-store`: lista, cadastra, rotaciona e revoga certificados A1/A3 por tenant, com alerta de rotação 30 dias antes da expiração.
+- `assinatura`: legado conceitual substituído pelo par `signature` + `certificate-store`; futuras integrações KMS devem preservar o contrato do hub ES-07.
 - `envio`: client SOAP com retry e circuit breaker.
 - `recibo`: persiste protocolo e recibo em `esocial_envio` e `esocial_recibo` no schema do core.
 
