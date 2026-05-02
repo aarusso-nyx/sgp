@@ -21,6 +21,7 @@ export const PERMISSIONS = [
   'documents.upload',
   'esocial.certificate.read',
   'esocial.certificate.write',
+  'esocial.event.exclude',
   'esocial.event.read',
   'esocial.event.write',
   'folha.read',

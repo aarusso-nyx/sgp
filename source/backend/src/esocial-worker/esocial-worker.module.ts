@@ -22,12 +22,15 @@ import { S2200Builder } from './builders/s2200.builder';
 import { S2205Builder } from './builders/s2205.builder';
 import { S2230Builder } from './builders/s2230.builder';
 import { S2299Builder } from './builders/s2299.builder';
+import { S3000Builder } from './builders/s3000.builder';
 import { S22xxController } from './builders/s22xx.controller';
 import { S22xxDispatchService } from './builders/s22xx-common';
 import { S22xxService } from './builders/s22xx.service';
 import { ESocialEmitService } from './esocial-emit.service';
 import { ESocialDispatchAdapter } from './esocial-dispatch.adapter';
 import { ESocialWorkerService } from './esocial-worker.service';
+import { S3000Controller } from './exclusion/s3000.controller';
+import { S3000Service } from './exclusion/s3000.service';
 import { IcpSignerService } from './signature/icp-signer.service';
 import { XsdValidatorService } from './xsd/xsd-validator.service';
 
@@ -41,6 +44,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
   controllers: [
     CertificateStoreController,
     ES03Controller,
+    S3000Controller,
     S1xxxController,
     S22xxController,
   ],
@@ -63,6 +67,8 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S2205Builder,
     S2230Builder,
     S2299Builder,
+    S3000Builder,
+    S3000Service,
     S22xxDispatchService,
     S22xxService,
     XsdValidatorService,
@@ -74,6 +80,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     ES03Service,
     IcpSignerService,
     S1xxxService,
+    S3000Service,
     S22xxService,
     XsdValidatorService,
   ],

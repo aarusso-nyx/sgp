@@ -91,6 +91,11 @@ export const routes: Routes = [
             (m) => m.ESocialTrabalhadores,
           ),
       },
+      {
+        path: 'esocial/exclusao',
+        loadComponent: () =>
+          import('./features/esocial/exclusao/esocial-exclusao').then((m) => m.ESocialExclusao),
+      },
       ...adminFeatureRoutes,
     ],
   },

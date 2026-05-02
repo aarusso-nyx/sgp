@@ -501,6 +501,127 @@ $$;
   console.log('[db-smoke] validated ES-02 S-2200/S-2205 trigger whitelist and RLS');
 
   await runSqlSnippet(
+    '99-es06-s3000.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  event_id constant uuid := '00000000-0000-4000-8000-000000063000';
+  periodic_event_id constant uuid := '00000000-0000-4000-8000-000000063001';
+  visible_count integer;
+  blocked_reason text;
+  audit_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA esocial, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.s3000_request TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.s1299_emission_state TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON public.esocial_event TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  INSERT INTO public.esocial_event (
+    id, tenant_id, event_type, reference, competence, payload, xml_payload,
+    schema_version, status, receipt_number, processed_at
+  )
+  VALUES
+    (
+      event_id, tenant_a, 'S-2200', 'IDS3000SMOKE2200', '2026-05', '{}'::jsonb, '<xml/>',
+      'S-1.3', 'PROCESSADO_COM_SUCESSO'::"ESocialEventStatus", '1.1.0000000000000063000', now()
+    ),
+    (
+      periodic_event_id, tenant_a, 'S-1200', 'IDS3000SMOKE1200', '2026-05', '{}'::jsonb, '<xml/>',
+      'S-1.3', 'PROCESSADO_COM_SUCESSO'::"ESocialEventStatus", '1.1.0000000000000063001', now()
+    )
+  ON CONFLICT (id) DO UPDATE
+  SET status = EXCLUDED.status,
+      receipt_number = EXCLUDED.receipt_number,
+      updated_at = now();
+
+  INSERT INTO esocial.s1299_emission_state (tenant_id, competence, status, accepted_at)
+  VALUES (tenant_a, '2026-05', 'ACCEPTED', now())
+  ON CONFLICT (tenant_id, competence) DO UPDATE
+  SET status = EXCLUDED.status,
+      accepted_at = EXCLUDED.accepted_at;
+
+  DELETE FROM esocial.s3000_request
+  WHERE tenant_id = tenant_a
+    AND target_event_id IN (event_id, periodic_event_id);
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.event.read
+esocial.event.exclude', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO esocial.s3000_request (
+    tenant_id, target_event_id, target_recibo, target_event_kind, justification
+  )
+  VALUES (
+    tenant_a,
+    event_id,
+    '1.1.0000000000000063000',
+    'S-2200',
+    'Justificativa auditada para smoke test S-3000'
+  );
+
+  INSERT INTO esocial.s3000_request (
+    tenant_id, target_event_id, target_recibo, target_event_kind, justification
+  )
+  VALUES (
+    tenant_a,
+    periodic_event_id,
+    '1.1.0000000000000063001',
+    'S-1200',
+    'Justificativa auditada para bloqueio S-3000'
+  );
+  RESET ROLE;
+
+  SELECT block_reason INTO blocked_reason
+  FROM esocial.s3000_request
+  WHERE tenant_id = tenant_a
+    AND target_event_id = periodic_event_id;
+  IF blocked_reason <> 'periodic_competence_closed_by_s1299' THEN
+    RAISE EXCEPTION 'Expected periodic S-3000 request to be blocked after accepted S-1299, found %', blocked_reason;
+  END IF;
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND table_name = 'esocial.s3000_request'
+    AND metadata->>'justification' LIKE 'Justificativa auditada%';
+  IF audit_count = 0 THEN
+    RAISE EXCEPTION 'Expected S-3000 request audit_event with justification';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.event.read
+esocial.event.exclude', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM esocial.s3000_request
+  WHERE target_event_id = event_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 S-3000 requests from tenant A, found %', visible_count;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_policies
+    WHERE schemaname = 'esocial'
+      AND tablename = 's3000_request'
+      AND policyname = 's3000_request_write'
+      AND with_check LIKE '%esocial.event.exclude%'
+      AND with_check LIKE '%sgp_tenant_matches(tenant_id)%'
+  ) THEN
+    RAISE EXCEPTION 'Expected S-3000 request write policy to require tenant and esocial.event.exclude';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated ES-06 S-3000 request RLS, audit, and S-1299 block');
+
+  await runSqlSnippet(
     '99-hr01-employee-lifecycle.sql',
     `
 DO $$

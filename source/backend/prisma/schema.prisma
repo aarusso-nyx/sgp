@@ -270,6 +270,7 @@ enum S1xxxEventKind {
   S_2205 @map("S-2205")
   S_2230 @map("S-2230")
   S_2299 @map("S-2299")
+  S_3000 @map("S-3000")
 
   @@map("s1xxx_event_kind")
   @@schema("esocial")
@@ -843,19 +844,19 @@ model FunctionalStatus {
 }
 
 model EmploymentLink {
-  id                   String       @id @default(uuid()) @db.Uuid
-  tenantId             String       @map("tenant_id") @db.Uuid
-  code                 String
-  name                 String
-  contractType         String       @default("statutory") @map("contract_type")
-  endDate              DateTime?    @map("end_date") @db.Date
-  commissionPositionId String?      @map("commission_position_id") @db.Uuid
-  regimeLawReference   String       @default("Lei 8.112/90") @map("regime_law_reference")
-  functionalStatusId   String?      @map("functional_status_id") @db.Uuid
-  terminationPayrollRunId String?   @map("termination_payroll_run_id") @db.Uuid
-  status               RecordStatus @default(ACTIVE)
-  createdAt            DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt            DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                      String       @id @default(uuid()) @db.Uuid
+  tenantId                String       @map("tenant_id") @db.Uuid
+  code                    String
+  name                    String
+  contractType            String       @default("statutory") @map("contract_type")
+  endDate                 DateTime?    @map("end_date") @db.Date
+  commissionPositionId    String?      @map("commission_position_id") @db.Uuid
+  regimeLawReference      String       @default("Lei 8.112/90") @map("regime_law_reference")
+  functionalStatusId      String?      @map("functional_status_id") @db.Uuid
+  terminationPayrollRunId String?      @map("termination_payroll_run_id") @db.Uuid
+  status                  RecordStatus @default(ACTIVE)
+  createdAt               DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   employees       Employee[]
   contracts       EmploymentContract[]
@@ -2773,6 +2774,42 @@ model S2205PendingAlteration {
   @@schema("esocial")
 }
 
+model S1299EmissionState {
+  tenantId       String    @map("tenant_id") @db.Uuid
+  competence     String
+  status         String
+  emittedEventId String?   @map("emitted_event_id") @db.Uuid
+  acceptedAt     DateTime? @map("accepted_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, competence])
+  @@map("s1299_emission_state")
+  @@schema("esocial")
+}
+
+model S3000Request {
+  tenantId          String    @map("tenant_id") @db.Uuid
+  requestId         String    @default(uuid()) @map("request_id") @db.Uuid
+  targetEventId     String    @map("target_event_id") @db.Uuid
+  targetRecibo      String    @map("target_recibo")
+  targetEventKind   String    @map("target_event_kind")
+  requestedByUserId String?   @map("requested_by_user_id") @db.Uuid
+  justification     String
+  requestedAt       DateTime  @default(now()) @map("requested_at") @db.Timestamptz(6)
+  status            String    @default("PENDING")
+  blockReason       String?   @map("block_reason")
+  emittedEventId    String?   @map("emitted_event_id") @db.Uuid
+  acceptedReceipt   String?   @map("accepted_receipt")
+  acceptedAt        DateTime? @map("accepted_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, requestId])
+  @@index([tenantId, status, requestedAt])
+  @@map("s3000_request")
+  @@schema("esocial")
+}
+
 model ReportDefinition {
   id          String       @id @default(uuid()) @db.Uuid
   tenantId    String       @map("tenant_id") @db.Uuid
@@ -3713,18 +3750,18 @@ model EmployeePayrollItemImportJob {
 }
 
 model CompetencePeriod {
-  id              String       @id @default(uuid()) @db.Uuid
-  tenantId        String       @map("tenant_id") @db.Uuid
-  competenceYear  Int          @map("competence_year")
-  competenceMonth Int?         @map("competence_month")
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  competenceYear  Int       @map("competence_year")
+  competenceMonth Int?      @map("competence_month")
   code            String
   name            String
-  description     String       @default("")
-  status          String       @default("OPEN")
-  openedAt        DateTime?    @map("opened_at") @db.Timestamptz(6)
-  closedAt        DateTime?    @map("closed_at") @db.Timestamptz(6)
-  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  description     String    @default("")
+  status          String    @default("OPEN")
+  openedAt        DateTime? @map("opened_at") @db.Timestamptz(6)
+  closedAt        DateTime? @map("closed_at") @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@unique([tenantId, code])
   @@unique([tenantId, competenceYear, competenceMonth])

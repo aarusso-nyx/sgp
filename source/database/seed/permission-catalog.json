@@ -408,7 +408,7 @@
       "moduleKey": "esocial",
       "resourceKey": "event",
       "actionKey": "read",
-      "routePattern": "/api/v1/esocial/**",
+      "routePattern": "#!/esocial/**",
       "description": "Read eSocial event queue and table/worker dispatch status."
     },
     {
@@ -416,8 +416,16 @@
       "moduleKey": "esocial",
       "resourceKey": "event",
       "actionKey": "write",
-      "routePattern": "/api/v1/esocial/**",
+      "routePattern": "#!/esocial/**",
       "description": "Emit eSocial XML events after XSD validation and XML-DSig signature."
+    },
+    {
+      "key": "esocial.event.exclude",
+      "moduleKey": "esocial",
+      "resourceKey": "event",
+      "actionKey": "exclude",
+      "routePattern": "#!/esocial/**",
+      "description": "Request, emit, and track S-3000 eSocial event exclusions."
     },
     {
       "key": "avaliacao.read",
@@ -759,6 +767,7 @@
       "esocial.event.read",
       "esocial.certificate.write",
       "esocial.event.write",
+      "esocial.event.exclude",
       "portal.paystub.read",
       "relatorio.generate"
     ],

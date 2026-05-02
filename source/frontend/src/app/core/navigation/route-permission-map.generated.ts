@@ -12,6 +12,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/documentos/**', 'documents.download'],
   ['#!/esocial/**', 'esocial.event.read'],
   ['#!/esocial/**', 'esocial.event.write'],
+  ['#!/esocial/**', 'esocial.event.exclude'],
   ['#!/folha/simulacao', 'payroll.simulation.execute'],
   ['#!/folhaPagamento/**', 'folha.read'],
   ['#!/folhaPagamento/**', 'folha.write'],

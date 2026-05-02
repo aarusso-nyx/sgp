@@ -1,0 +1,90 @@
+<section class="esocial-exclusao">
+  <header class="page-header">
+    <div>
+      <h1>Exclusao eSocial S-3000</h1>
+      <p>Retratacao de eventos aceitos com justificativa auditada.</p>
+    </div>
+    <button type="button" class="secondary" (click)="load()" [disabled]="loading">Atualizar</button>
+  </header>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <div class="table-shell">
+    <table>
+      <thead>
+        <tr>
+          <th>Evento</th>
+          <th>Competencia</th>
+          <th>Recibo</th>
+          <th>Origem</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of events">
+          <td>{{ row.eventKind }}</td>
+          <td>{{ row.competence }}</td>
+          <td>{{ row.receipt }}</td>
+          <td>{{ row.sourceEntityKind || 'Evento' }}</td>
+          <td class="actions">
+            <button type="button" (click)="open(row)">Retratar</button>
+          </td>
+        </tr>
+        <tr *ngIf="!loading && events.length === 0">
+          <td colspan="5" class="empty">Nenhum evento aceito elegivel.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <section>
+    <h2>Acompanhamento</h2>
+    <div class="table-shell">
+      <table>
+        <thead>
+          <tr>
+            <th>Alvo</th>
+            <th>Status</th>
+            <th>Bloqueio</th>
+            <th>Solicitado em</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of requests">
+            <td>{{ row.targetEventKind }} {{ row.targetRecibo }}</td>
+            <td>
+              <span class="status" [class.done]="row.status === 'ACCEPTED'">{{ row.status }}</span>
+            </td>
+            <td>{{ row.blockReason || 'Liberado' }}</td>
+            <td>{{ row.requestedAt | date: 'short' }}</td>
+          </tr>
+          <tr *ngIf="requests.length === 0">
+            <td colspan="4" class="empty">Nenhuma solicitacao registrada.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" *ngIf="selected">
+    <form class="modal" (ngSubmit)="submit()">
+      <h2>Retratar {{ selected.eventKind }}</h2>
+      <p>{{ selected.receipt }}</p>
+      <label for="justification">Justificativa</label>
+      <textarea
+        id="justification"
+        name="justification"
+        [(ngModel)]="justification"
+        minlength="30"
+        required
+        rows="5"
+      ></textarea>
+      <div class="modal-actions">
+        <button type="button" class="secondary" (click)="close()">Cancelar</button>
+        <button type="submit" [disabled]="justification.trim().length < 30 || submitting">
+          Solicitar exclusao
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

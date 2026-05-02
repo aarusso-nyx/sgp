@@ -23,6 +23,8 @@ interface PendingESocialEventRow extends QueryResultRow {
   schema_version: string;
   retry_count: number;
   xml_payload: string | null;
+  source_entity_kind: string | null;
+  source_entity_id: string | null;
 }
 
 interface IdRow extends QueryResultRow {
@@ -44,6 +46,9 @@ export interface ESocialWorkerRunSummary {
 const ESOCIAL_EVENT_TYPE_PATTERN = /^S-\d{4}$/;
 const COMPETENCE_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
 const ESOCIAL_WORKER_PERMISSIONS = [
+  'esocial.event.read',
+  'esocial.event.write',
+  'esocial.event.exclude',
   'folha.read',
   'folha.write',
   'relatorio.generate',
@@ -157,7 +162,9 @@ export class ESocialWorkerService {
           payload,
           schema_version,
           retry_count,
-          xml_payload
+          xml_payload,
+          source_entity_kind,
+          source_entity_id
         FROM public.esocial_event
         WHERE status IN (
           'PENDENTE'::"ESocialEventStatus",
@@ -273,6 +280,50 @@ export class ESocialWorkerService {
         stored.sizeBytes,
         JSON.stringify(dispatch.responsePayload),
       ],
+    );
+
+    if (
+      event.event_type === 'S-3000' &&
+      event.source_entity_kind === 'esocial.s3000_request' &&
+      event.source_entity_id
+    ) {
+      await this.applyAcceptedS3000(event, dispatch.receiptNumber);
+    }
+  }
+
+  private async applyAcceptedS3000(
+    event: PendingESocialEventRow,
+    receiptNumber: string,
+  ): Promise<void> {
+    await this.databaseService.query(
+      `
+      WITH accepted AS (
+        UPDATE esocial.s3000_request
+        SET status = 'ACCEPTED',
+            accepted_receipt = $3,
+            accepted_at = now(),
+            updated_at = now()
+        WHERE tenant_id = $1::uuid
+          AND request_id = $2::uuid
+          AND status IN ('PENDING', 'EMITTED')
+        RETURNING target_event_id
+      )
+      UPDATE public.esocial_event target
+      SET status = 'EXCLUIDO'::"ESocialEventStatus",
+          updated_at = now(),
+          payload = coalesce(target.payload, '{}'::jsonb) || jsonb_build_object(
+            's3000Exclusion',
+            jsonb_build_object(
+              'requestId', $2::text,
+              'receipt', $3::text,
+              'acceptedAt', to_jsonb(now())
+            )
+          )
+      FROM accepted
+      WHERE target.tenant_id = $1::uuid
+        AND target.id = accepted.target_event_id
+      `,
+      [event.tenant_id, event.source_entity_id, receiptNumber],
     );
   }
 
