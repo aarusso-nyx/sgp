@@ -11,6 +11,7 @@ import { PortabilityParserService } from './consignment-portability/portability-
 import { PortabilityProcessService } from './consignment-portability/portability-process.service';
 import { DctfwebModule } from './dctfweb/dctfweb.module';
 import { DirfModule } from './dirf/dirf.module';
+import { GpsModule } from './gps/gps.module';
 import { IntegrationsWorkerService } from './integrations-worker.service';
 
 @Module({
@@ -20,6 +21,7 @@ import { IntegrationsWorkerService } from './integrations-worker.service';
     DocumentsModule,
     DctfwebModule,
     DirfModule,
+    GpsModule,
   ],
   controllers: [PortabilityController],
   providers: [

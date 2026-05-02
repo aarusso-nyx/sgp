@@ -1,0 +1,149 @@
+<section class="gps-residual">
+  <header class="page-header">
+    <div>
+      <h1>GPS residual</h1>
+      <p>Safety-net para recolhimentos RGPS fora da cobertura DCTFWeb.</p>
+    </div>
+  </header>
+
+  <div class="warning">
+    <mat-icon>warning</mat-icon>
+    <span
+      >GPS residual — verifique se a competência já não foi recolhida via DCTFWeb (FISC-01)</span
+    >
+  </div>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Competência</mat-label>
+      <input matInput type="date" formControlName="competence" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="code">
+      <mat-label>Código</mat-label>
+      <mat-select formControlName="paymentCodeId">
+        <mat-option *ngFor="let code of paymentCodes" [value]="code.id">
+          {{ code.code }} — {{ code.description }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Motivo</mat-label>
+      <mat-select formControlName="reason">
+        <mat-option value="TRANSITION">Transição</mat-option>
+        <mat-option value="RETROACTIVE">Retroativo</mat-option>
+        <mat-option value="MALHA_FINA">Malha fina</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="detail">
+      <mat-label>Detalhe</mat-label>
+      <input matInput formControlName="reasonDetail" />
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="button" (click)="generate()" [disabled]="busy">
+      <mat-icon>add</mat-icon>
+      Gerar
+    </button>
+  </form>
+
+  <form [formGroup]="filter" class="filters">
+    <mat-form-field appearance="outline">
+      <mat-label>Motivo</mat-label>
+      <mat-select formControlName="reason">
+        <mat-option value="">Todos</mat-option>
+        <mat-option value="TRANSITION">Transição</mat-option>
+        <mat-option value="RETROACTIVE">Retroativo</mat-option>
+        <mat-option value="MALHA_FINA">Malha fina</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="">Todos</mat-option>
+        <mat-option value="DRAFT">Rascunho</mat-option>
+        <mat-option value="GENERATED">Gerado</mat-option>
+        <mat-option value="PAID">Pago</mat-option>
+        <mat-option value="CANCELLED">Cancelado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
+      <mat-icon>search</mat-icon>
+      Consultar
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <div class="layout">
+    <section class="remittances">
+      <table>
+        <thead>
+          <tr>
+            <th>Competência</th>
+            <th>Código</th>
+            <th>Motivo</th>
+            <th>Status</th>
+            <th>Principal</th>
+            <th>Total</th>
+            <th>TXT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of remittances"
+            [class.selected]="selected?.id === item.id"
+            (click)="select(item)"
+          >
+            <td>{{ item.competence }}</td>
+            <td>{{ item.paymentCode }}</td>
+            <td>{{ item.reason }}</td>
+            <td>
+              <span class="status">{{ item.status }}</span>
+            </td>
+            <td>{{ money(item.amount) }}</td>
+            <td>{{ money(item.totalAmount) }}</td>
+            <td>
+              <a mat-icon-button [href]="downloadUrl(item)" target="_blank" title="Baixar TXT">
+                <mat-icon>download</mat-icon>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <aside class="details" *ngIf="selected">
+      <h2>Integridade</h2>
+      <dl>
+        <div>
+          <dt>Remessa</dt>
+          <dd>{{ selected.id }}</dd>
+        </div>
+        <div>
+          <dt>Código</dt>
+          <dd>{{ selected.paymentCodeDescription }}</dd>
+        </div>
+        <div>
+          <dt>Base</dt>
+          <dd>{{ money(selected.baseAmount) }}</dd>
+        </div>
+        <div>
+          <dt>Juros e multa</dt>
+          <dd>{{ money(selected.interestAmount) }} / {{ money(selected.fineAmount) }}</dd>
+        </div>
+        <div>
+          <dt>Hash TXT</dt>
+          <dd>{{ selected.txtHash }}</dd>
+        </div>
+        <div>
+          <dt>Arquivo</dt>
+          <dd>{{ selected.fileUri || '-' }}</dd>
+        </div>
+      </dl>
+    </aside>
+  </div>
+</section>
