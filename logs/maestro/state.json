@@ -432,8 +432,21 @@
       "previous_failure": "logs/maestro/36-es-06-exclusao-s3000.failure.md",
       "failure_log": "logs/maestro/36-es-06-exclusao-s3000.failure.md",
       "recovery": "high retry added auditMutation coverage to S-3000 accept route and all gates passed"
+    },
+    "37-es-08-submission-soap-ws-security": {
+      "status": "completed",
+      "effort": "xhigh",
+      "branch": "slice/37-es-08-submission-soap-ws-security",
+      "commit": "d36cd307836f461cb73bdc4464c2b43f0715b5a7",
+      "started_at": "2026-05-02T00:06:00-03:00",
+      "failed_at": "2026-05-02T00:32:50-03:00",
+      "completed_at": "2026-05-02T00:41:42-03:00",
+      "retries": 0,
+      "agent": "019de6a6-9b0a-7900-982f-338e971ed1bd",
+      "failure_log": "logs/maestro/37-es-08-submission-soap-ws-security.failure.md",
+      "recovery": "manual lint hardening for SOAP unknown error formatting and typed soap async response boundary after blocking failure"
     }
   },
-  "current_wave": 15,
+  "current_wave": 17,
   "active_subagents": []
 }

@@ -62,3 +62,5 @@ W15 ✓ 33-es-03 (1 slice, medium + manual recovery, gates passed, commit 375230
 W16 ⏸ 34-es-04 / 35-es-05 skipped for now — prompt-authoritative ES-04 predecessor BANK-01 is not completed
 W16 ✗ 36-es-06 (medium → high retry failed first e2e audit coverage on S-3000 accept route) — recovered by high retry
 W16 ✓ 36-es-06 (1 slice, medium→high, gates passed, commit a7e52dc) — completeness 26.2% → 26.2%
+W17 ✗ 37-es-08 (xhigh blocking failure: lint no-base-to-string/no-unsafe-assignment in submission SOAP services) — see logs/maestro/37-es-08-submission-soap-ws-security.failure.md
+W17 ✓ 37-es-08 (1 slice, xhigh + manual recovery, gates passed, commit d36cd30) — completeness 26.2% → 26.2%
