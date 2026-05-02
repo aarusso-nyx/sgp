@@ -1,0 +1,108 @@
+<section class="tce-adapters">
+  <header class="page-header">
+    <div>
+      <h1>Adapters TCE</h1>
+      <p>Catálogo operacional de adapters TCE, TCM e TCU registrados no core.</p>
+    </div>
+    <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon>
+      Atualizar
+    </button>
+  </header>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <div class="layout">
+    <section class="registry">
+      <table>
+        <thead>
+          <tr>
+            <th>Adapter</th>
+            <th>UF</th>
+            <th>Órgão</th>
+            <th>Versão</th>
+            <th>Status</th>
+            <th>Saúde</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let adapter of adapters"
+            [class.selected]="selected?.adapterId === adapter.adapterId"
+            (click)="select(adapter)"
+          >
+            <td>{{ adapter.adapterId }}</td>
+            <td>{{ adapter.stateCode }}</td>
+            <td>{{ adapter.organKind }}</td>
+            <td>{{ adapter.version }}</td>
+            <td>
+              <span class="status">{{ adapter.status }}</span>
+            </td>
+            <td>{{ adapter.lastHealthStatus || '-' }}</td>
+            <td class="actions">
+              <button
+                mat-icon-button
+                type="button"
+                title="Habilitar"
+                (click)="enable(adapter); $event.stopPropagation()"
+                [disabled]="isBusy(adapter) || adapter.status === 'ENABLED'"
+              >
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                type="button"
+                title="Desabilitar"
+                (click)="disable(adapter); $event.stopPropagation()"
+                [disabled]="isBusy(adapter) || adapter.status === 'DISABLED'"
+              >
+                <mat-icon>pause</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <aside class="details" *ngIf="selected">
+      <h2>Contrato</h2>
+      <dl>
+        <div>
+          <dt>Identificador</dt>
+          <dd>{{ selected.adapterId }}</dd>
+        </div>
+        <div>
+          <dt>Leiautes</dt>
+          <dd>{{ layoutSummary(selected) }}</dd>
+        </div>
+        <div>
+          <dt>Registro</dt>
+          <dd>{{ selected.registeredAt }}</dd>
+        </div>
+        <div>
+          <dt>Último health check</dt>
+          <dd>{{ selected.lastHealthCheckAt || '-' }}</dd>
+        </div>
+      </dl>
+
+      <h2>Lifecycle</h2>
+      <table class="events">
+        <thead>
+          <tr>
+            <th>Evento</th>
+            <th>Data</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let event of selected.lifecycleEvents">
+            <td>{{ event.event }}</td>
+            <td>{{ event.occurredAt }}</td>
+            <td>{{ payloadSummary(event.payload) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </aside>
+  </div>
+</section>

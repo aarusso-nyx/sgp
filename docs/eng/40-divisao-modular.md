@@ -55,6 +55,7 @@ Os bounded contexts identificados são:
 | Arquivos                    | `ARQUIVOS`              | `arquivos`                               |
 | Parâmetros e Feature Flags  | `PARAMETROS`            | `parametros`                             |
 | Integrações Externas        | `INTEGRACOES`           | `integracoes`                            |
+| Tribunais de Contas         | `COMPLIANCE_TCE`         | `tce`                                    |
 | Portal Publico              | `PUBLICO`               | `publico/transparency`                   |
 
 ### 1.2 Módulos NestJS por Contexto
@@ -908,7 +909,7 @@ stateDiagram-v2
 
 #### `integracoes` — Integrações Externas (Facade)
 
-**Responsabilidades:** facade de configuração e status das integrações externas (eSocial, SIPREV, DIRF, CNAB, Neoconsig, Gov.br, Prefeitura Pública); endpoints para disparo manual de remessas; monitoramento de status de envio; configuração de credenciais por tenant.
+**Responsabilidades:** facade de configuração e status das integrações externas (eSocial, SIPREV, DIRF, CNAB, Neoconsig, Gov.br, Prefeitura Pública); endpoints para disparo manual de remessas; monitoramento de status de envio; configuração de credenciais por tenant. O contrato pluggável de Tribunais de Contas vive no módulo `tce/` para evitar que layouts estaduais/municipais contaminem o core de submissão.
 
 **Serviços:** `EsocialFacadeService`, `SiprevFacadeService`, `CnabFacadeService`, `NeoconsigFacadeService`, `GovBrFacadeService`, `PrefeituraPublicaFacadeService`, `integrations-worker/cnab240/Cnab240BuilderService`, `integrations-worker/cnab240/Cnab240EmitService`, `integrations-worker/consignment-portability/PortabilityProcessService` e `integrations-worker/dctfweb/*`.
 
@@ -917,6 +918,12 @@ stateDiagram-v2
 `integrations-worker/consignment-portability` importa arquivos canonicos ou adaptados por consignante para portabilidade de consignados. O processamento concilia por CPF, contrato antigo e consignante origem, marca a averbação antiga como `TRANSFERRED`, cria a nova em `payment.consignment_loan` com referências cruzadas e mantém detalhe `MATCHED` ou `UNMATCHED` reprocessável por arquivo.
 
 `integrations-worker/dctfweb` gera a DCTFWeb a partir dos totalizadores eSocial S-5011, S-5012 e S-5013 aceitos para a competência, persiste a declaração em `fiscal.dctfweb_declaration`, grava os débitos em `fiscal.dctfweb_item`, assina o XML com o certificado ICP-Brasil ativo do tenant e transmite ao endpoint RFB configurado ou ao emissor sandbox local. Retificadoras são obrigadas a referenciar explicitamente a declaração original e o recibo guarda o hash do XML transmitido para conferir integridade com o XML assinado.
+
+#### `tce` — Tribunais de Contas
+
+**Responsabilidades:** declarar o contrato `TceAdapter`, descobrir adapters via metadata NestJS, registrar o catálogo global de adapters em `tce.adapter_registry`, emitir eventos de lifecycle em `tce.adapter_lifecycle_event` e expor administração read/manage para habilitar ou desabilitar adapters. O catálogo é global, não tenant-scoped, e só aceita mutações pelo caminho controlado do backend/worker com auditoria via `sgp_append_audit_event`.
+
+**Serviços:** `AdapterLoaderService`, `AdapterRegistryService`, `LifecycleEmitterService` e adapters concretos anotados com `@TceAdapter`. O adapter `noop` (`state_code = XX`) é o stub determinístico de contrato para validar registration, validation, serialization, submission, response parsing e health check sem chamadas externas reais.
 
 **Controladores:**
 
@@ -930,6 +937,10 @@ stateDiagram-v2
 - `POST /api/v1/admin/fiscal/dctfweb/gerar` — gerar original ou retificadora
 - `POST /api/v1/admin/fiscal/dctfweb/:id/assinar` — assinar com ICP-Brasil
 - `POST /api/v1/admin/fiscal/dctfweb/:id/transmitir` — transmitir e registrar recibo
+- `GET /api/v1/tce/adapters` — listar adapters TCE/TCM/TCU registrados
+- `GET /api/v1/tce/adapters/:id/events` — consultar histórico de lifecycle
+- `POST /api/v1/tce/adapters/:id/enable` — habilitar adapter
+- `POST /api/v1/tce/adapters/:id/disable` — desabilitar adapter
 - `GET /api/external/v1/prefeitura/autenticacao` — endpoint prefeitura pública
 - `GET /api/external/v1/prefeitura/dependentes`
 - `GET /api/external/v1/dicionario/entidades`
@@ -1564,6 +1575,7 @@ graph TD
 | **Saúde**             | Perícia médica, licenças, agenda, SST, acidente de trabalho                                           | `saude`                                                                                                                             | `@sgp/ui-admin/saude`, `@sgp/ui-portal/pericia-agendada`                                        | —                                                            |
 | **RH**                | Vida funcional, cadastro de funcionários, gestão de parametrizações, avaliação, progressão, convênios | `rh`, `gestao`, `avaliacao`, `convenio`                                                                                             | `@sgp/ui-admin/rh`, `@sgp/ui-admin/gestao`, `@sgp/ui-admin/avaliacao`, `@sgp/ui-admin/convenio` | —                                                            |
 | **Recrutamento**      | Requisições de pessoal, banco de talentos, estágio                                                    | `recrutamento`                                                                                                                      | `@sgp/ui-admin/recrutamento`, `@sgp/ui-portal/curriculo`                                        | —                                                            |
+| **Integrações**       | Obrigações fiscais, eSocial, bancos, TCE/TCM/TCU e adapters externos                                  | `integracoes`, `tce`                                                                                                                 | `@sgp/ui-admin/fiscal`, `@sgp/ui-admin/tce`                                                     | `sgp-esocial-worker`, `sgp-integrations-worker`              |
 
 ### 10.3 Interfaces Entre Squads
 

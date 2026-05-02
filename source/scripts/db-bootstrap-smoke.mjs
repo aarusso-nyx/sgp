@@ -3882,6 +3882,108 @@ $$;
   );
   console.log('[db-smoke] validated CLT-03 PIS/PASEP schema, function, view, and RLS');
 
+  await runSqlSnippet(
+    '99-tce01-adapter-contract.sql',
+    `
+DO $$
+DECLARE
+  visible_count integer;
+  blocked boolean := false;
+  audit_count integer;
+  policy_count integer;
+  tenant_a uuid := '00000000-0000-0000-0000-000000000100';
+  updated_count integer := 0;
+BEGIN
+  GRANT USAGE ON SCHEMA tce, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON tce.adapter_registry TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON tce.adapter_lifecycle_event TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+
+  INSERT INTO tce.adapter_registry (
+    adapter_id,
+    state_code,
+    organ_kind,
+    version,
+    status,
+    capabilities
+  )
+  VALUES (
+    'smoke-tce-noop',
+    'XX',
+    'TCE'::tce.organ_kind,
+    '0.0.1',
+    'REGISTERED'::tce.adapter_status,
+    '{"layouts":[{"code":"NOOP","version":"0.0.1"}]}'::jsonb
+  )
+  ON CONFLICT (adapter_id) DO UPDATE
+  SET capabilities = EXCLUDED.capabilities,
+      status = 'REGISTERED'::tce.adapter_status;
+
+  INSERT INTO tce.adapter_lifecycle_event (adapter_id, event, payload)
+  VALUES (
+    'smoke-tce-noop',
+    'REGISTERED'::tce.adapter_lifecycle_event_kind,
+    '{"source":"db-smoke"}'::jsonb
+  );
+
+  PERFORM set_config('app.current_permissions', 'tce.adapter.read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM tce.adapter_registry
+  WHERE adapter_id = 'smoke-tce-noop';
+  RESET ROLE;
+
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected tce.adapter.read to see global adapter registry rows, found %', visible_count;
+  END IF;
+
+	BEGIN
+	    PERFORM set_config('app.current_permissions', 'tce.adapter.read', true);
+	    SET LOCAL ROLE sgp_smoke_rls;
+	    UPDATE tce.adapter_registry
+	    SET status = 'ENABLED'::tce.adapter_status
+	    WHERE adapter_id = 'smoke-tce-noop';
+	    GET DIAGNOSTICS updated_count = ROW_COUNT;
+	    IF updated_count = 0 THEN
+	      blocked := true;
+	    END IF;
+	    RESET ROLE;
+	  EXCEPTION WHEN insufficient_privilege THEN
+	    blocked := true;
+    RESET ROLE;
+  END;
+
+  IF NOT blocked THEN
+    RAISE EXCEPTION 'Expected regular users to be blocked from mutating tce.adapter_registry';
+  END IF;
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE resource_type IN ('tce.adapter_registry', 'tce.adapter_lifecycle_event')
+    AND resource_id = 'smoke-tce-noop';
+  IF audit_count < 2 THEN
+    RAISE EXCEPTION 'Expected TCE adapter mutations to append audit_event rows, found %', audit_count;
+  END IF;
+
+  SELECT count(*) INTO policy_count
+  FROM pg_policies
+  WHERE schemaname = 'tce'
+    AND tablename IN ('adapter_registry', 'adapter_lifecycle_event')
+    AND policyname LIKE '%worker_write%'
+    AND qual LIKE '%sgp_bypass_rls%';
+  IF policy_count <> 2 THEN
+    RAISE EXCEPTION 'Expected TCE adapter write policies to require worker bypass RLS';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated TCE-01 global adapter RLS, user read, worker mutation, and audit');
+
   console.log('[db-smoke] PASSED');
 }
 

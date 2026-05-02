@@ -1,0 +1,122 @@
+.tce-adapters {
+  display: grid;
+  gap: 24px;
+  padding: 24px;
+}
+
+.page-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+h1,
+h2,
+p,
+dl {
+  margin: 0;
+}
+
+.page-header p {
+  color: #586270;
+}
+
+button mat-icon {
+  margin-right: 6px;
+}
+
+.layout {
+  align-items: start;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 460px);
+}
+
+.registry,
+.details {
+  min-width: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.14);
+  padding: 10px 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  color: #334155;
+  font-weight: 600;
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+tbody tr.selected {
+  background: rgba(14, 116, 144, 0.08);
+}
+
+.status {
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  border-radius: 6px;
+  display: inline-block;
+  min-width: 104px;
+  padding: 4px 8px;
+  text-align: center;
+}
+
+.actions {
+  white-space: nowrap;
+}
+
+.details {
+  border-left: 1px solid rgba(15, 23, 42, 0.14);
+  display: grid;
+  gap: 18px;
+  padding-left: 24px;
+}
+
+dl {
+  display: grid;
+  gap: 12px;
+}
+
+dl div {
+  display: grid;
+  gap: 4px;
+}
+
+dt {
+  color: #586270;
+  font-size: 0.85rem;
+}
+
+dd,
+.events td:last-child {
+  overflow-wrap: anywhere;
+}
+
+.error {
+  color: #b00020;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .details {
+    border-left: 0;
+    border-top: 1px solid rgba(15, 23, 42, 0.14);
+    padding-left: 0;
+    padding-top: 20px;
+  }
+}

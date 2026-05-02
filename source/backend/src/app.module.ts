@@ -39,6 +39,7 @@ import { ReportsModule } from './reports/reports.module';
 import { RhModule } from './rh/rh.module';
 import { SaudeModule } from './saude/saude.module';
 import { SystemParametersModule } from './system-parameters/system-parameters.module';
+import { TceModule } from './tce/tce.module';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -72,6 +73,7 @@ import { AppService } from './app.service';
     RecruitmentModule,
     RelatorioModule,
     AuditoriaModule,
+    TceModule.register(),
     DatabaseModule,
     HealthModule,
   ],
