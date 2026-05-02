@@ -125,3 +125,4 @@ W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migrati
 2026-05-02T10:01:20Z W35 ✓ 81-rec-09 (medium, gates passed, commit 4f3d7aa) — banca digital signatures
 2026-05-02T10:01:20Z W35 ✓ 83-ponto-09 (medium, gates passed, commit 423ba9f) — mobile geofenced clock-in
 2026-05-02T10:02:30Z frontier launch 84-ponto-10 — agent 019de821-b487
+2026-05-02T10:17:35Z W36 ✓ 84-ponto-10 (high zero-tier, gates passed, commit 0e7a3f9) — facial recognition and liveness

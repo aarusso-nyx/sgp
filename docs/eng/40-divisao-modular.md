@@ -786,11 +786,11 @@ stateDiagram-v2
 
 #### `ponto` — Ponto Eletrônico e Jornada
 
-**Responsabilidades:** cadastro de jornadas contratadas, turnos e horários diários; vigência de atribuição de jornada ao servidor; registro imutável de marcações de ponto com encadeamento criptográfico; abertura de períodos de apuração para posterior integração com folha; cadastro e conferência de biometria digital e palmar como identificador adicional dos REPs.
+**Responsabilidades:** cadastro de jornadas contratadas, turnos e horários diários; vigência de atribuição de jornada ao servidor; registro imutável de marcações de ponto com encadeamento criptográfico; abertura de períodos de apuração para posterior integração com folha; cadastro e conferência de biometria digital, palmar e facial como identificador adicional dos REPs, com reconhecimento facial executado localmente, liveness obrigatório e consentimento LGPD específico.
 
-**Entidades:** `work_schedule`, `work_shift`, `day_schedule`, `employee_schedule_assignment`, `time_record`, `timesheet_period`, `employee_biometric_template`, `biometric_consent`, `biometric_match`.
+**Entidades:** `work_schedule`, `work_shift`, `day_schedule`, `employee_schedule_assignment`, `time_record`, `timesheet_period`, `employee_biometric_template`, `biometric_consent`, `biometric_match`, `employee_face_template`, `face_match`, `face_threshold_config`, `face_consent`.
 
-**Serviços:** `WorkScheduleService`, `AssignmentService`, `TimeRecordHashService`, `TimesheetPeriodService`, `TemplateEnrollmentService`, `PontoBiometricConsentService`, `PontoBiometricMatcherService`.
+**Serviços:** `WorkScheduleService`, `AssignmentService`, `TimeRecordHashService`, `TimesheetPeriodService`, `TemplateEnrollmentService`, `PontoBiometricConsentService`, `PontoBiometricMatcherService`, `FaceEnrollmentService`, `FaceMatcherService`, `FaceLivenessService`, `FaceConsentService`, `FaceThresholdAdminService`.
 
 **Controladores:**
 
@@ -806,6 +806,15 @@ stateDiagram-v2
 - `DELETE /api/v1/ponto/biometria/employees/:employeeId/consent`
 - `POST /api/v1/ponto/biometria/templates`
 - `POST /api/v1/ponto/biometria/matches`
+- `GET /api/v1/ponto/face/templates`
+- `POST /api/v1/ponto/face/consents`
+- `DELETE /api/v1/ponto/face/employees/:employeeId/consent`
+- `GET /api/v1/ponto/face/employees/:employeeId/status`
+- `POST /api/v1/ponto/face/templates`
+- `POST /api/v1/ponto/face/matches`
+- `POST /api/v1/ponto/face/clock`
+- `GET /api/v1/ponto/face/threshold`
+- `PUT /api/v1/ponto/face/threshold`
 
 **Eventos publicados:** nenhum evento de domínio neste corte; mutações registram `public.audit_event` via `sgp_append_audit_event(...)`.
 
@@ -1696,6 +1705,7 @@ Os levantamentos em `docs/legacy-reverse/data-archaeology/` e `docs/legacy-rever
 - `rh.vacation` é a superfície HR-03 para saldo e programação de férias: o backend expõe `GET /api/v1/ferias/saldo/:employee_id` e `POST /api/v1/ferias/programacao`, persiste em `hr.vacation_record`, calcula saldo em `hr.f_calculate_vacation_balance`, atende o portal em `source/frontend/portal/src/app/pages/ferias/` e a fila administrativa em `source/frontend/src/app/features/rh/ferias/`.
 - `rh.workflows.leaves` é a superfície HR-05 para licenças não médicas: o backend expõe `POST /api/v1/licencas`, `GET /api/v1/licencas/:employee_id`, aprovação e cancelamento; persiste em `hr.leave_record` com motivo em `hr.absence_reason`, valida elegibilidade em `hr.f_validate_leave_eligibility`, atende o portal em `source/frontend/portal/src/app/pages/licencas/` e a fila administrativa em `source/frontend/src/app/features/rh/licencas/`.
 - `ponto/mobile` é a superfície PONTO-09 para batida móvel georreferenciada: o backend expõe `POST /api/v1/ponto/mobile/clock`, registra dispositivos e consentimento LGPD, valida `hr.work_location.geofence_polygon` com PostGIS e persiste tentativas em `ponto.mobile_clock_in_attempt`; a UI do empregado fica em `source/frontend/src/app/features/portal-empregado/ponto-mobile/` e a administração de polígonos em `source/frontend/src/app/features/ponto/geofence-admin/`.
+- `ponto/face` é a superfície PONTO-10 para reconhecimento facial no ponto eletrônico: o backend expõe cadastro, consentimento, matching, batida `POST /api/v1/ponto/face/clock`, threshold por tenant e exclusão LGPD; persiste embeddings cifrados em `ponto.employee_face_template`, decisões em `ponto.face_match`, configuração em `ponto.face_threshold_config` e consentimento em `ponto.face_consent`; a UI administrativa fica em `source/frontend/src/app/features/ponto/face-admin/` e o portal `/meus-dados` em `source/frontend/src/app/features/portal-empregado/meus-dados/face/`.
 - Fórmulas de folha, dependências entre verbas e atributos calculáveis são responsabilidade do engine; telas e APIs de folha apenas solicitam cálculo e leem resultados.
 - Recadastramento permanece em `previdenciario`, mesmo quando a jornada atualiza dados civis ou usa canal público.
 - Perícia médica não grava situação funcional diretamente; ela publica decisão homologada/licença para o `rh`.

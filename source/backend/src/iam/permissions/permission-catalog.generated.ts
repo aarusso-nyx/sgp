@@ -70,6 +70,8 @@ export const PERMISSIONS = [
   'ponto.afd.write',
   'ponto.biometric.read',
   'ponto.biometric.write',
+  'ponto.face.read',
+  'ponto.face.write',
   'ponto.hourbank.read',
   'ponto.hourbank.write',
   'ponto.justification.approve',

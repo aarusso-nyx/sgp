@@ -47,6 +47,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/ponto/biometria/**', 'ponto.biometric.write'],
   ['#!/ponto/escalas/**', 'ponto.roster.read'],
   ['#!/ponto/escalas/**', 'ponto.roster.write'],
+  ['#!/ponto/face/**', 'ponto.face.read'],
+  ['#!/ponto/face/**', 'ponto.face.write'],
   ['#!/ponto/folha/**', 'ponto.payroll.read'],
   ['#!/ponto/folha/**', 'ponto.payroll.write'],
   ['#!/ponto/jornadas/**', 'ponto.schedule.read'],

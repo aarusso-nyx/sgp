@@ -251,6 +251,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'portal/meus-dados/face',
+        loadComponent: () =>
+          import('./features/portal-empregado/meus-dados/face/portal-face').then(
+            (m) => m.PortalFace,
+          ),
+      },
+      {
         path: 'saude/exames',
         loadComponent: () => import('./features/saude/exames/exames').then((m) => m.SaudeExames),
       },
@@ -326,6 +333,17 @@ export const routes: Routes = [
         path: 'ponto/biometria',
         loadComponent: () =>
           import('./features/ponto/biometria/ponto-biometria').then((m) => m.PontoBiometria),
+      },
+      {
+        path: 'ponto/face',
+        loadComponent: () =>
+          import('./features/ponto/face-admin/face-admin').then((m) => m.FaceAdmin),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'ponto',
+          permissions: ['ponto.face.read'],
+          moduleLabel: 'Ponto',
+        },
       },
       {
         path: 'fiscal/dctfweb',

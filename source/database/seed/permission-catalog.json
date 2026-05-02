@@ -1132,6 +1132,22 @@
       "description": "Enroll, match, revoke, and crypto-shred employee biometrics for REP clock-in."
     },
     {
+      "key": "ponto.face.read",
+      "moduleKey": "ponto",
+      "resourceKey": "face",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/face/**",
+      "description": "Read facial recognition consent, template metadata, threshold, and match decisions."
+    },
+    {
+      "key": "ponto.face.write",
+      "moduleKey": "ponto",
+      "resourceKey": "face",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/face/**",
+      "description": "Enroll, match, configure threshold, revoke, and crypto-shred facial recognition data."
+    },
+    {
       "key": "ponto.mobile.read",
       "moduleKey": "ponto",
       "resourceKey": "mobile",
@@ -1423,6 +1439,8 @@
       "ponto.rep.write",
       "ponto.biometric.read",
       "ponto.biometric.write",
+      "ponto.face.read",
+      "ponto.face.write",
       "ponto.mobile.read",
       "ponto.mobile.write",
       "ponto.afd.read",
@@ -1520,6 +1538,7 @@
       "saude.epi.read",
       "ponto.schedule.read",
       "ponto.timerecord.read",
+      "ponto.face.read",
       "ponto.mobile.read",
       "ponto.afd.read",
       "ponto.roster.read",
