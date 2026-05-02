@@ -1195,7 +1195,7 @@
       "wave": 30,
       "theme": "FISC",
       "zero_retry": false,
-      "agent": "pending-agent-58",
+      "agent": "019de7b1-9e12-7a11-81a9-ad5c1f45b5a1",
       "started_at": "2026-05-02T07:57:35.658Z"
     },
     "59-ponto-01-portaria-671-base": {
@@ -1369,7 +1369,7 @@
       "wave": 29,
       "theme": "PONTO",
       "zero_retry": false,
-      "agent": "pending-agent-62",
+      "agent": "019de7b1-9da3-7042-b570-e58436a2ae58",
       "started_at": "2026-05-02T07:57:35.658Z"
     },
     "63-ponto-05-banco-de-horas": {
@@ -1773,7 +1773,7 @@
       "wave": 29,
       "theme": "TCE",
       "zero_retry": true,
-      "agent": "pending-agent-71",
+      "agent": "019de7b1-9dcc-73e2-8e40-16ba3e2fd0fd",
       "started_at": "2026-05-02T07:57:35.658Z"
     },
     "72-tce-02-state-catalog-layout-registry": {
@@ -2336,19 +2336,19 @@
   "active_subagents": [
     {
       "slice": "62-ponto-04-escalas-plantoes",
-      "agent": "pending-agent-62",
+      "agent": "019de7b1-9da3-7042-b570-e58436a2ae58",
       "effort": "medium",
       "started_at": "2026-05-02T07:57:35.658Z"
     },
     {
       "slice": "71-tce-01-pluggable-adapter-contract",
-      "agent": "pending-agent-71",
+      "agent": "019de7b1-9dcc-73e2-8e40-16ba3e2fd0fd",
       "effort": "high",
       "started_at": "2026-05-02T07:57:35.658Z"
     },
     {
       "slice": "58-fisc-03-comprovante-rendimentos",
-      "agent": "pending-agent-58",
+      "agent": "019de7b1-9e12-7a11-81a9-ad5c1f45b5a1",
       "effort": "medium",
       "started_at": "2026-05-02T07:57:35.658Z"
     }
