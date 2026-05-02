@@ -1,0 +1,12 @@
+<section class="portal-biometria">
+  <h1>Biometria</h1>
+  <form [formGroup]="form" (ngSubmit)="revoke()">
+    <label>
+      Servidor
+      <input formControlName="employeeId" placeholder="UUID do empregado" />
+    </label>
+    <button type="submit" [disabled]="saving">Revogar consentimento</button>
+  </form>
+  <p class="message" *ngIf="message">{{ message }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+</section>

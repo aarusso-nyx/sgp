@@ -1,0 +1,61 @@
+<section class="ponto-biometria">
+  <header>
+    <h1>Biometria de ponto</h1>
+    <button type="button" (click)="load()" [disabled]="loading">Atualizar</button>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="enroll()">
+    <label>
+      Servidor
+      <input formControlName="employeeId" placeholder="UUID do empregado" />
+    </label>
+    <label>
+      Tipo
+      <select formControlName="kind">
+        <option value="FINGERPRINT">Digital</option>
+        <option value="PALM_VEIN">Palmar</option>
+      </select>
+    </label>
+    <label>
+      Amostra do leitor
+      <textarea formControlName="sampleBase64" rows="4"></textarea>
+    </label>
+    <label>
+      KMS key
+      <input formControlName="templateKmsKeyId" />
+    </label>
+    <label>
+      Qualidade minima
+      <input formControlName="minimumQuality" type="number" min="0" max="1" step="0.01" />
+    </label>
+    <label>
+      Termo
+      <input formControlName="consentVersion" />
+    </label>
+    <button type="submit" [disabled]="saving">Cadastrar</button>
+  </form>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Servidor</th>
+        <th>Tipo</th>
+        <th>Qualidade</th>
+        <th>Status</th>
+        <th>Captura</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let template of templates">
+        <td>{{ template.employeeId }}</td>
+        <td>{{ template.kind }}</td>
+        <td>{{ template.qualityScore }}</td>
+        <td>{{ template.status }}</td>
+        <td>{{ template.capturedAt | date: 'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

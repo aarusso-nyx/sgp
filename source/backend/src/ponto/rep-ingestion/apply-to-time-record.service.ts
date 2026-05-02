@@ -1,7 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
-import { TimeRecordHashService } from '../time-record/time-record-hash.service';
+import {
+  TimeRecordHashService,
+  TimeRecordSummary,
+} from '../time-record/time-record-hash.service';
 import { ParsedRepLine } from './rep-ingestion.types';
 
 interface EmployeeRow extends QueryResultRow {
@@ -17,9 +20,9 @@ export class ApplyToTimeRecordService {
     source: 'REP_P' | 'REP_A' | 'REP_C',
     line: ParsedRepLine,
     repDeviceId: string,
-  ): Promise<string> {
+  ): Promise<TimeRecordSummary> {
     const employeeId = await this.resolveEmployeeId(client, line);
-    const summary = await this.timeRecordHashService.createWithClient(client, {
+    return this.timeRecordHashService.createWithClient(client, {
       employeeId,
       recordedAt: line.recordedAt,
       source,
@@ -30,7 +33,6 @@ export class ApplyToTimeRecordService {
         lineNo: line.lineNo,
       },
     });
-    return summary.timeRecordId;
   }
 
   private async resolveEmployeeId(

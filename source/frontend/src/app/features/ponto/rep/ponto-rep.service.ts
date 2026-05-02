@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface RepDeviceSummary {
   repDeviceId: string;
-  kind: 'REP_P' | 'REP_A' | 'REP_C';
+  kind: 'REP_P' | 'REP_A' | 'REP_C' | 'FINGERPRINT' | 'PALM_VEIN';
   serialNumber: string | null;
   employerTaxId: string;
   manufacturer: string | null;
@@ -17,7 +17,7 @@ export interface RepDeviceSummary {
 export interface RepBatchSummary {
   batchId: string;
   repDeviceId: string;
-  kind: 'REP_P' | 'REP_A' | 'REP_C';
+  kind: 'REP_P' | 'REP_A' | 'REP_C' | 'FINGERPRINT' | 'PALM_VEIN';
   fileName: string | null;
   fileSha256: string;
   receivedAt: string;

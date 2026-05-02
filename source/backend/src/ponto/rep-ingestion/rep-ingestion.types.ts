@@ -7,11 +7,16 @@ export interface ParsedRepLine {
   employeeCpf?: string;
   recordedAt: string;
   payload: Record<string, unknown>;
+  biometric?: {
+    kind: 'FINGERPRINT' | 'PALM_VEIN';
+    sampleBase64: string;
+    threshold?: number;
+  };
 }
 
 export interface RepDeviceSummary {
   repDeviceId: string;
-  kind: 'REP_P' | 'REP_A' | 'REP_C';
+  kind: 'REP_P' | 'REP_A' | 'REP_C' | 'FINGERPRINT' | 'PALM_VEIN';
   serialNumber: string | null;
   employerTaxId: string;
   manufacturer: string | null;
@@ -24,7 +29,7 @@ export interface RepDeviceSummary {
 export interface RepIngestionBatchSummary {
   batchId: string;
   repDeviceId: string;
-  kind: 'REP_P' | 'REP_A' | 'REP_C';
+  kind: 'REP_P' | 'REP_A' | 'REP_C' | 'FINGERPRINT' | 'PALM_VEIN';
   fileName: string | null;
   fileSha256: string;
   receivedAt: string;

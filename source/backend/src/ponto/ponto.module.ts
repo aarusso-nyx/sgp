@@ -40,6 +40,10 @@ import { PayrollLineBuilderService } from './payroll-bridge/payroll-line-builder
 import { TimesheetAggregatorService } from './payroll-bridge/timesheet-aggregator.service';
 import { ShiftPatternController } from './shift-pattern/shift-pattern.controller';
 import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
+import { PontoBiometriaController } from './biometria/biometria.controller';
+import { PontoBiometricMatcherService } from './biometria/biometric-matcher.service';
+import { PontoBiometricConsentService } from './biometria/consent.service';
+import { TemplateEnrollmentService } from './biometria/template-enrollment.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
@@ -56,6 +60,7 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     HourBankController,
     JustificationController,
     PayrollBridgeController,
+    PontoBiometriaController,
   ],
   providers: [
     WorkScheduleService,
@@ -83,6 +88,9 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     TimesheetAggregatorService,
     PayrollLineBuilderService,
     PayrollBridgeService,
+    PontoBiometricConsentService,
+    TemplateEnrollmentService,
+    PontoBiometricMatcherService,
   ],
   exports: [
     WorkScheduleService,
@@ -106,6 +114,9 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     TimesheetAggregatorService,
     PayrollLineBuilderService,
     PayrollBridgeService,
+    PontoBiometricConsentService,
+    TemplateEnrollmentService,
+    PontoBiometricMatcherService,
   ],
 })
 export class PontoModule {}

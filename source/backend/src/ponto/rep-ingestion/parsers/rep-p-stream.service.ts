@@ -33,8 +33,10 @@ export class RepPStreamService {
       employeeRegistration: record.employeeRegistration,
       employeeCpf: record.employeeCpf,
       recordedAt: formatInstantIso(record.recordedAt),
+      biometric: record.biometric,
       payload: {
         ...(record.payload ?? {}),
+        biometricKind: record.biometric?.kind,
         layout: 'REP_P_JSON',
       },
     }));

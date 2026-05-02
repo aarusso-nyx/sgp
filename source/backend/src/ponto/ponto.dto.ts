@@ -282,7 +282,7 @@ export class DecideAbsenceJustificationDto {
 }
 
 export class CreateRepDeviceDto {
-  @IsIn(['REP_P', 'REP_A', 'REP_C'])
+  @IsIn(['REP_P', 'REP_A', 'REP_C', 'FINGERPRINT', 'PALM_VEIN'])
   kind!: string;
 
   @IsOptional()
@@ -311,6 +311,21 @@ export class CreateRepDeviceDto {
   status?: string;
 }
 
+export class RepBiometricPayloadDto {
+  @IsIn(['FINGERPRINT', 'PALM_VEIN'])
+  kind!: 'FINGERPRINT' | 'PALM_VEIN';
+
+  @IsString()
+  @IsNotEmpty()
+  sampleBase64!: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(1)
+  threshold?: number;
+}
+
 export class RepPStreamRecordDto {
   @IsInt()
   @Min(1)
@@ -334,6 +349,11 @@ export class RepPStreamRecordDto {
   @IsOptional()
   @IsObject()
   payload?: Record<string, unknown>;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => RepBiometricPayloadDto)
+  biometric?: RepBiometricPayloadDto;
 }
 
 export class CreateRepIngestionBatchDto {

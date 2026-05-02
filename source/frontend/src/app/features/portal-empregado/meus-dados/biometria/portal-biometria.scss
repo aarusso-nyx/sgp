@@ -1,0 +1,33 @@
+.portal-biometria {
+  display: grid;
+  gap: 16px;
+  max-width: 640px;
+  padding: 24px;
+}
+
+form,
+label {
+  display: grid;
+  gap: 8px;
+}
+
+input,
+button {
+  border: 1px solid #c8ced8;
+  border-radius: 6px;
+  font: inherit;
+  padding: 8px 10px;
+}
+
+button {
+  background: #184f90;
+  color: #fff;
+}
+
+.message {
+  color: #17643a;
+}
+
+.error {
+  color: #9b1c1c;
+}

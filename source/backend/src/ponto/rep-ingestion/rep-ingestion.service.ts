@@ -10,6 +10,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { PontoBiometricMatcherService } from '../biometria/biometric-matcher.service';
 import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { CreateRepIngestionBatchDto } from '../ponto.dto';
 import { ApplyToTimeRecordService } from './apply-to-time-record.service';
@@ -20,7 +21,7 @@ import { ParsedRepLine, RepIngestionBatchSummary } from './rep-ingestion.types';
 
 interface RepDeviceRow extends QueryResultRow {
   rep_device_id: string;
-  kind: 'REP_P' | 'REP_A' | 'REP_C';
+  kind: 'REP_P' | 'REP_A' | 'REP_C' | 'FINGERPRINT' | 'PALM_VEIN';
   program_hash: string | null;
   status: string;
 }
@@ -28,7 +29,7 @@ interface RepDeviceRow extends QueryResultRow {
 interface BatchRow extends QueryResultRow {
   batch_id: string;
   rep_device_id: string;
-  kind: 'REP_P' | 'REP_A' | 'REP_C';
+  kind: 'REP_P' | 'REP_A' | 'REP_C' | 'FINGERPRINT' | 'PALM_VEIN';
   file_name: string | null;
   file_sha256: string;
   received_at: Date | string;
@@ -48,6 +49,7 @@ export class RepIngestionService {
     private readonly repPStream: RepPStreamService,
     private readonly dedupService: DedupService,
     private readonly applyService: ApplyToTimeRecordService,
+    private readonly biometricMatcher: PontoBiometricMatcherService,
   ) {}
 
   async ingest(
@@ -79,18 +81,28 @@ export class RepIngestionService {
 
         for (const line of lines) {
           if (dedup.duplicateNsrs.has(line.nsr)) continue;
-          const timeRecordId = await this.applyService.apply(
+          const timeRecord = await this.applyService.apply(
             client,
-            device.kind,
+            this.timeRecordSource(device.kind),
             line,
             repDeviceId,
           );
+          if (line.biometric) {
+            await this.biometricMatcher.matchDuringIngestion(client, {
+              employeeId: timeRecord.employeeId,
+              timeRecordId: timeRecord.timeRecordId,
+              kind: line.biometric.kind,
+              sampleBase64: line.biometric.sampleBase64,
+              deviceId: repDeviceId,
+              threshold: line.biometric.threshold,
+            });
+          }
           await this.insertLine(
             client,
             batchId,
             repDeviceId,
             line,
-            timeRecordId,
+            timeRecord.timeRecordId,
           );
           createdTimeRecords += 1;
         }
@@ -201,6 +213,12 @@ export class RepIngestionService {
     }
     if (input.content?.trim()) return input.content;
     throw new BadRequestException('REP ingestion content is required');
+  }
+
+  private timeRecordSource(
+    kind: RepDeviceRow['kind'],
+  ): 'REP_P' | 'REP_A' | 'REP_C' {
+    return kind === 'FINGERPRINT' || kind === 'PALM_VEIN' ? 'REP_A' : kind;
   }
 
   private async createBatch(

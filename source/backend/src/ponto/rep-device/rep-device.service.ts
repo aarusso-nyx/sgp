@@ -14,7 +14,7 @@ import { RepDeviceSummary } from '../rep-ingestion/rep-ingestion.types';
 
 interface RepDeviceRow extends QueryResultRow {
   rep_device_id: string;
-  kind: 'REP_P' | 'REP_A' | 'REP_C';
+  kind: 'REP_P' | 'REP_A' | 'REP_C' | 'FINGERPRINT' | 'PALM_VEIN';
   serial_number: string | null;
   employer_tax_id: string;
   manufacturer: string | null;
