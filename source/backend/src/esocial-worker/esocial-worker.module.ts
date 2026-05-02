@@ -27,11 +27,16 @@ import { S22xxController } from './builders/s22xx.controller';
 import { S22xxDispatchService } from './builders/s22xx-common';
 import { S22xxService } from './builders/s22xx.service';
 import { ESocialEmitService } from './esocial-emit.service';
-import { ESocialDispatchAdapter } from './esocial-dispatch.adapter';
 import { ESocialWorkerService } from './esocial-worker.service';
 import { S3000Controller } from './exclusion/s3000.controller';
 import { S3000Service } from './exclusion/s3000.service';
 import { IcpSignerService } from './signature/icp-signer.service';
+import { BatchBuilderService } from './submission/batch-builder.service';
+import { CircuitBreakerService } from './submission/circuit-breaker.service';
+import { RetryStrategyService } from './submission/retry-strategy.service';
+import { SoapClientService } from './submission/soap-client.service';
+import { SubmissionController } from './submission/submission.controller';
+import { SubmissionService } from './submission/submission.service';
 import { XsdValidatorService } from './xsd/xsd-validator.service';
 
 @Module({
@@ -47,10 +52,10 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S3000Controller,
     S1xxxController,
     S22xxController,
+    SubmissionController,
   ],
   providers: [
     CertificateStoreService,
-    ESocialDispatchAdapter,
     ESocialEmitService,
     ESocialWorkerService,
     IcpSignerService,
@@ -71,6 +76,11 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S3000Service,
     S22xxDispatchService,
     S22xxService,
+    BatchBuilderService,
+    CircuitBreakerService,
+    RetryStrategyService,
+    SoapClientService,
+    SubmissionService,
     XsdValidatorService,
   ],
   exports: [
@@ -82,6 +92,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S1xxxService,
     S3000Service,
     S22xxService,
+    SubmissionService,
     XsdValidatorService,
   ],
 })

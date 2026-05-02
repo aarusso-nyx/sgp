@@ -1039,8 +1039,9 @@ sequenceDiagram
 - `xsd`: mantém o bundle oficial S-1.3 local, verifica hash de arquivos críticos e rejeita mutações antes da fila.
 - `signature`: assina XML eSocial com XML-DSig enveloped via `xml-crypto` e material ICP-Brasil lido de PKCS#12 via `node-forge`, sem shell-out para OpenSSL.
 - `certificate-store`: lista, cadastra, rotaciona e revoga certificados A1/A3 por tenant, com alerta de rotação 30 dias antes da expiração.
+- `submission`: agrupa eventos assinados em `esocial.submission_batch`, monta o lote oficial `EnviarLoteEventos`, assina o envelope SOAP com WS-Security, usa mTLS com o PKCS#12 ativo do tenant, registra hash de request/response e controla retry/circuit breaker por endpoint. O envio real usa somente endpoints configurados por `ESOCIAL_ENDPOINT_ENVIO`; testes e CI usam WSDL stub local sem chamada a `gov.br`.
 - `assinatura`: legado conceitual substituído pelo par `signature` + `certificate-store`; futuras integrações KMS devem preservar o contrato do hub ES-07.
-- `envio`: client SOAP com retry e circuit breaker.
+- `envio`: substituído pelo submódulo `submission` para envio SOAP real em lote.
 - `recibo`: persiste protocolo e recibo em `esocial_envio` e `esocial_recibo` no schema do core.
 
 **Políticas de retry:** máximo 3 tentativas com backoff exponencial (1s, 4s, 16s); mensagem move para DLQ `esocial.evento.pendente.dlq` após falha.

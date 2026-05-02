@@ -428,6 +428,22 @@
       "description": "Request, emit, and track S-3000 eSocial event exclusions."
     },
     {
+      "key": "esocial.submission.read",
+      "moduleKey": "esocial",
+      "resourceKey": "submission",
+      "actionKey": "read",
+      "routePattern": "#!/esocial/**",
+      "description": "Read eSocial SOAP submission batches, attempts, and circuit state."
+    },
+    {
+      "key": "esocial.submission.retry",
+      "moduleKey": "esocial",
+      "resourceKey": "submission",
+      "actionKey": "retry",
+      "routePattern": "#!/esocial/**",
+      "description": "Force retry for eSocial SOAP submission batches."
+    },
+    {
       "key": "avaliacao.read",
       "moduleKey": "avaliacao",
       "resourceKey": "performance",
@@ -768,6 +784,8 @@
       "esocial.certificate.write",
       "esocial.event.write",
       "esocial.event.exclude",
+      "esocial.submission.read",
+      "esocial.submission.retry",
       "portal.paystub.read",
       "relatorio.generate"
     ],
@@ -787,6 +805,7 @@
       "payroll.formula.read",
       "esocial.certificate.read",
       "esocial.event.read",
+      "esocial.submission.read",
       "portal.paystub.read",
       "relatorio.read",
       "relatorio.generate",

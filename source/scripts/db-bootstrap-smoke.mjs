@@ -622,6 +622,146 @@ $$;
   console.log('[db-smoke] validated ES-06 S-3000 request RLS, audit, and S-1299 block');
 
   await runSqlSnippet(
+    '99-es08-submission.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  v_batch_id constant uuid := '00000000-0000-4000-8000-000000080800';
+  v_event_id constant uuid := '00000000-0000-4000-8000-000000080801';
+  visible_count integer;
+  audit_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA esocial, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.submission_batch TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.endpoint_circuit_state TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  INSERT INTO esocial.submission_batch (
+    tenant_id,
+    batch_id,
+    environment,
+    endpoint_url,
+    event_ids,
+    soap_request_hash,
+    status,
+    attempts
+  )
+  VALUES (
+    tenant_a,
+    v_batch_id,
+    'QUALIFICATION'::esocial.submission_environment,
+    'http://127.0.0.1/esocial-smoke',
+    ARRAY[v_event_id]::uuid[],
+    repeat('a', 64),
+    'PENDING'::esocial.submission_batch_status,
+    0
+  )
+  ON CONFLICT (tenant_id, batch_id) DO UPDATE
+  SET status = EXCLUDED.status,
+      attempts = EXCLUDED.attempts,
+      updated_at = now();
+
+  INSERT INTO esocial.endpoint_circuit_state (
+    endpoint_url,
+    opened_at,
+    last_failure_at,
+    failure_count,
+    state
+  )
+  VALUES (
+    'http://127.0.0.1/esocial-smoke',
+    now(),
+    now(),
+    3,
+    'OPEN'::esocial.endpoint_circuit_state_status
+  )
+  ON CONFLICT (endpoint_url) DO UPDATE
+  SET opened_at = EXCLUDED.opened_at,
+      last_failure_at = EXCLUDED.last_failure_at,
+      failure_count = EXCLUDED.failure_count,
+      state = EXCLUDED.state,
+      updated_at = now();
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.submission.read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM esocial.submission_batch
+  WHERE submission_batch.batch_id = v_batch_id;
+  RESET ROLE;
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected tenant A to see its ES-08 submission batch, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.submission.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM esocial.submission_batch
+  WHERE submission_batch.batch_id = v_batch_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 ES-08 submission batches from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.submission.retry', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  UPDATE esocial.submission_batch
+  SET status = 'RETRY'::esocial.submission_batch_status,
+      next_attempt_at = now(),
+      updated_at = now()
+  WHERE submission_batch.batch_id = v_batch_id;
+
+  SELECT count(*) INTO visible_count
+  FROM esocial.endpoint_circuit_state
+  WHERE endpoint_url = 'http://127.0.0.1/esocial-smoke';
+  RESET ROLE;
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected users with esocial.submission.retry to read endpoint circuit state, found %', visible_count;
+  END IF;
+
+  SELECT count(*) INTO audit_count
+  FROM public.audit_event
+  WHERE tenant_id = tenant_a
+    AND table_name = 'esocial.submission_batch'
+    AND resource_id = v_batch_id::text;
+  IF audit_count = 0 THEN
+    RAISE EXCEPTION 'Expected ES-08 submission batch audit_event';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_policies
+    WHERE schemaname = 'esocial'
+      AND tablename = 'submission_batch'
+      AND policyname = 'submission_batch_write'
+      AND with_check LIKE '%esocial.submission.retry%'
+      AND with_check LIKE '%sgp_tenant_matches(tenant_id)%'
+  ) THEN
+    RAISE EXCEPTION 'Expected ES-08 submission batch write policy to require tenant and retry permission';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_policies
+    WHERE schemaname = 'esocial'
+      AND tablename = 'endpoint_circuit_state'
+      AND policyname = 'endpoint_circuit_state_worker_write'
+      AND with_check LIKE '%sgp_bypass_rls%'
+  ) THEN
+    RAISE EXCEPTION 'Expected ES-08 endpoint circuit state mutation policy to be worker-only';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated ES-08 submission batch RLS, retry permission, audit, and circuit read-only policy');
+
+  await runSqlSnippet(
     '99-hr01-employee-lifecycle.sql',
     `
 DO $$

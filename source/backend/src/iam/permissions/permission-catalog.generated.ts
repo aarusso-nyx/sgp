@@ -24,6 +24,8 @@ export const PERMISSIONS = [
   'esocial.event.exclude',
   'esocial.event.read',
   'esocial.event.write',
+  'esocial.submission.read',
+  'esocial.submission.retry',
   'folha.read',
   'folha.rubrica.preview',
   'folha.rubrica.read',
