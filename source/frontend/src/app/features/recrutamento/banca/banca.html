@@ -1,0 +1,55 @@
+<section class="banca-workspace">
+  <header>
+    <h1>Banca examinadora</h1>
+    <nav aria-label="Fluxo da banca">
+      <button type="button" [class.active]="view === 'members'" (click)="setView('members')">
+        Membros
+      </button>
+      <button type="button" [class.active]="view === 'signing'" (click)="setView('signing')">
+        Assinatura
+      </button>
+      <button type="button" [class.active]="view === 'publish'" (click)="setView('publish')">
+        Publicacao
+      </button>
+    </nav>
+  </header>
+
+  <form *ngIf="view === 'members'" class="panel">
+    <label>Nome <input name="fullName" [(ngModel)]="member.fullName" /></label>
+    <label
+      >CPF <input name="cpf" inputmode="numeric" maxlength="11" [(ngModel)]="member.cpf"
+    /></label>
+    <label>
+      Funcao
+      <select name="role" [(ngModel)]="member.role">
+        <option value="PRESIDENTE">Presidente</option>
+        <option value="MEMBRO">Membro</option>
+        <option value="SECRETARIO">Secretario</option>
+      </select>
+    </label>
+    <label>
+      Certificado
+      <select name="certKind" [(ngModel)]="member.certKind">
+        <option value="ICP_A1">ICP-Brasil A1</option>
+        <option value="ICP_A3">ICP-Brasil A3</option>
+        <option value="GOVBR_OURO">GovBR ouro</option>
+        <option value="GOVBR_PRATA">GovBR prata</option>
+      </select>
+    </label>
+  </form>
+
+  <div *ngIf="view === 'signing'" class="panel">
+    <article *ngFor="let document of pendingDocuments">
+      <strong>{{ document.kind }}</strong>
+      <span>{{ document.sourceRef }}</span>
+      <progress [value]="document.signed" [max]="document.required"></progress>
+      <button type="button">Assinar proximo</button>
+    </article>
+  </div>
+
+  <div *ngIf="view === 'publish'" class="panel">
+    <label>Link publico <input value="/publico/banca/verify/token" readonly /></label>
+    <div class="qr" aria-label="QR de verificacao publica"></div>
+    <button type="button">Publicar documento assinado</button>
+  </div>
+</section>

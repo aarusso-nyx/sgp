@@ -1,0 +1,31 @@
+<main class="verify-page">
+  <h1>Verificacao de assinatura</h1>
+  <section>
+    <dl>
+      <div>
+        <dt>Documento</dt>
+        <dd>{{ verification.kind }}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd>{{ verification.status }}</dd>
+      </div>
+      <div>
+        <dt>Integridade</dt>
+        <dd>{{ verification.valid ? 'Valida' : 'Invalidada' }}</dd>
+      </div>
+      <div>
+        <dt>Hash</dt>
+        <dd>{{ verification.contentHash }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Signatarios</h2>
+    <article *ngFor="let signer of verification.signers">
+      <strong>{{ signer.name }}</strong>
+      <span>{{ signer.role }} · {{ signer.certKind }} · {{ signer.chainStatus }}</span>
+    </article>
+  </section>
+</main>
