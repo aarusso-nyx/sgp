@@ -6,9 +6,16 @@ import { DatabaseModule } from '../database/database.module';
 import { RecruitmentController } from './recruitment.controller';
 import { RecruitmentService } from './recruitment.service';
 import { ConcursoModule } from './concurso/concurso.module';
+import { InscricaoModule } from './inscricao/inscricao.module';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule, ConcursoModule],
+  imports: [
+    AuthModule,
+    DatabaseModule,
+    AuditModule,
+    ConcursoModule,
+    InscricaoModule,
+  ],
   controllers: [RecruitmentController],
   providers: [RecruitmentService],
 })

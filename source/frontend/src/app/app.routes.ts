@@ -32,6 +32,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'publico/concursos/:slug/inscricao',
+    loadComponent: () =>
+      import('./features/portal-publico/concursos/inscricao/inscricao').then(
+        (m) => m.PortalPublicoInscricao,
+      ),
+  },
+  {
     path: 'auth/callback',
     component: AuthCallback,
   },
@@ -119,8 +126,21 @@ export const routes: Routes = [
         loadComponent: () => import('./features/saude/aso/aso').then((m) => m.SaudeAso),
       },
       {
+        path: 'saude/pcmso',
+        loadComponent: () => import('./features/saude/pcmso/pcmso').then((m) => m.SaudePcmso),
+      },
+      {
+        path: 'saude/pgr',
+        loadComponent: () => import('./features/saude/pgr/pgr').then((m) => m.SaudePgr),
+      },
+      {
         path: 'saude/pericia',
         loadComponent: () => import('./features/saude/pericia/pericia').then((m) => m.SaudePericia),
+      },
+      {
+        path: 'ponto/jornadas',
+        loadComponent: () =>
+          import('./features/ponto/jornadas/ponto-jornadas').then((m) => m.PontoJornadas),
       },
       {
         path: 'esocial/tabelas',
