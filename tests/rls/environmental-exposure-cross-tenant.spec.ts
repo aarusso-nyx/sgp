@@ -1,13 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-describe('environmental exposure RLS migration', () => {
+describe('environmental exposure RLS canonical SQL', () => {
   it('uses tenant and SST-05/eSocial permissions on exposure, EPI, PPP, and S-2240 tables', () => {
     const sql = readFileSync(
-      resolve(
-        __dirname,
-        '../../backend/prisma/migrations/20260502121000_sst_05_s2240_epi/migration.sql',
-      ),
+      resolve(__dirname, '../../database/sql/10-canonical-schema.sql'),
       'utf8',
     );
 

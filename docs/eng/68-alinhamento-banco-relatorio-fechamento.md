@@ -18,7 +18,7 @@ O relatório de 2026-04-22 marcava a fase 4 como encerrada, mas a linha de base 
 
 1. Tenant claim passou a ser obrigatório no auth runtime (`custom:tenant_id`, com fallback controlado para `tenant_id`).
 2. O backend agora injeta `app.current_tenant_id` e `app.current_tenant` em toda query.
-3. Migrations novas adicionam `public.tenant`, completam `tenant_id` nas tabelas runtime omitidas no primeiro corte e rebalanceiam unicidade de chaves de negócio para escopo por tenant.
+3. O SQL canônico adiciona `public.tenant`, completa `tenant_id` nas tabelas runtime omitidas no primeiro corte e rebalanceia unicidade de chaves de negócio para escopo por tenant.
 4. Helpers/policies SQL passaram a exigir `public.sgp_tenant_matches(tenant_id)`.
 5. Projeções `portal.mv_*` agora carregam `tenant_id` e `tenant_slug`.
 6. O gate de alinhamento ganhou verificação explícita de cobertura tenant/RLS e suporte a `full_closure`.
@@ -26,12 +26,8 @@ O relatório de 2026-04-22 marcava a fase 4 como encerrada, mas a linha de base 
 ## Evidências técnicas
 
 - Gate: `scripts/check-db-alignment.mjs`
-- Migrations:
-  - `backend/prisma/migrations/20260425090000_tenant_rls_hardening/migration.sql`
-  - `backend/prisma/migrations/20260425113000_tenant_scope_completion/migration.sql`
-- Context helpers: `database/sql/11-rls-context.sql`
-- Policies: `database/sql/12-rls-policies.sql`
-- Projeções: `database/sql/20-sgp-core.sql`
+- SQL canônico: `database/sql/10-canonical-schema.sql`
+- Grants runtime: `database/sql/20-runtime-grants.sql`
 - Smoke: `scripts/db-bootstrap-smoke.mjs`
 - Matriz vigente: `docs/eng/64-database-alignment-matrix.json`
 
@@ -48,7 +44,7 @@ A matriz vigente removeu as 15 exclusões in-scope restantes por dois caminhos:
 1. Objetos com dono canônico já existente foram mapeados sem criar shims legados:
    - `dbo.empresa_filial_lotacao` -> `hr.work_location`
    - `dbo.etapa` -> `hr.reference_catalog_entry`
-   - `dbo.flyway_schema_history` -> `public._prisma_migrations`
+   - `dbo.flyway_schema_history` -> `database/sql/10-canonical-schema.sql`
    - `dbo.menu` -> `public.menu_item`
    - `dbo.papel` -> `public.permission`
    - `dbo.tipo_averbacao` -> `hr.reference_catalog_entry`
@@ -65,6 +61,6 @@ A matriz vigente removeu as 15 exclusões in-scope restantes por dois caminhos:
 
 Evidência:
 
-- Migração: `backend/prisma/migrations/20260426123000_db_full_closure_residuals/migration.sql`
+- SQL canônico: `database/sql/10-canonical-schema.sql`
 - Matriz: `docs/eng/64-database-alignment-matrix.json`
 - Gate: `cd . # repository root && node scripts/check-db-alignment.mjs --json`

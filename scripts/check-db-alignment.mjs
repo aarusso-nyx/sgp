@@ -7,26 +7,10 @@ import { execSync } from 'node:child_process';
 const cwd = process.cwd();
 const matrixPath = resolve(cwd, 'docs/eng/64-database-alignment-matrix.json');
 const prismaSchemaPath = resolve(cwd, 'backend/prisma/schema.prisma');
-const tenantMigrationPaths = [
-  resolve(cwd, 'backend/prisma/migrations/20260425090000_tenant_rls_hardening/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260425113000_tenant_scope_completion/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260425170000_recruitment_module/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260425193000_saude_pericia_module/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260425233000_gestao_reference_catalogs/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260426003000_rh_correlates_module/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260426013000_folha_core_module/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260426030000_folha_accounting_catalogs/migration.sql'),
-  resolve(
-    cwd,
-    'backend/prisma/migrations/20260426043000_avaliacao_consultas_previdenciario_module/migration.sql',
-  ),
-  resolve(cwd, 'backend/prisma/migrations/20260426070000_gestao_structure_links/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260426100000_residue_cluster_support/migration.sql'),
-  resolve(cwd, 'backend/prisma/migrations/20260426123000_db_full_closure_residuals/migration.sql'),
-];
-const rlsPoliciesPath = resolve(cwd, 'database/sql/12-rls-policies.sql');
-const rlsContextPath = resolve(cwd, 'database/sql/11-rls-context.sql');
-const portalProjectionPath = resolve(cwd, 'database/sql/20-sgp-core.sql');
+const canonicalSchemaPath = resolve(cwd, 'database/sql/10-canonical-schema.sql');
+const rlsPoliciesPath = canonicalSchemaPath;
+const rlsContextPath = canonicalSchemaPath;
+const portalProjectionPath = canonicalSchemaPath;
 const authJwtServicePath = resolve(cwd, 'backend/src/auth/cognito-jwt.service.ts');
 const databaseServicePath = resolve(cwd, 'backend/src/database/database.service.ts');
 const portalServicePath = resolve(cwd, 'backend/src/portal/portal.service.ts');
@@ -213,11 +197,22 @@ function includesAny(haystack, needles) {
   return needles.some((needle) => haystack.includes(needle));
 }
 
-function migrationMentionsTenantTable(content, schema, table) {
+function canonicalTableHasTenantColumn(content, schema, table) {
   const escapedSchema = schema.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const escapedTable = table.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const pattern = new RegExp(`\\('${escapedSchema}', '${escapedTable}'(?:,|\\))`);
-  return pattern.test(content);
+  const pattern = new RegExp(
+    `CREATE TABLE ${escapedSchema}\\.${escapedTable} \\([\\s\\S]*?\\n\\);`,
+  );
+  const match = content.match(pattern);
+  return Boolean(match?.[0].includes('tenant_id uuid'));
+}
+
+function canonicalTableHasRlsPolicy(content, schema, table) {
+  const escapedSchema = schema.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const escapedTable = table.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`CREATE POLICY [\\s\\S]* ON ${escapedSchema}\\.${escapedTable}\\b`).test(
+    content,
+  );
 }
 
 function auditForbiddenPublicRefs(path, content, forbiddenRuntimeTables) {
@@ -398,7 +393,7 @@ function main() {
   }
 
   const prismaSchema = readFileSync(prismaSchemaPath, 'utf8');
-  const tenantMigration = tenantMigrationPaths.map((path) => readFileSync(path, 'utf8')).join('\n');
+  const canonicalSchema = readFileSync(canonicalSchemaPath, 'utf8');
   if (includesAny(prismaSchema, ['model NotificationCounter', '@@map("notification_counter")'])) {
     fail('Prisma schema still contains retired notification_counter contract.');
   } else {
@@ -471,7 +466,8 @@ function main() {
 
   const tenantCoverageGaps = TENANT_SCOPED_TABLES.filter(([schema, table]) => {
     return (
-      !migrationMentionsTenantTable(tenantMigration, schema, table) || !rlsPolicies.includes(table)
+      !canonicalTableHasTenantColumn(canonicalSchema, schema, table) ||
+      !canonicalTableHasRlsPolicy(rlsPolicies, schema, table)
     );
   });
   if (tenantCoverageGaps.length > 0) {

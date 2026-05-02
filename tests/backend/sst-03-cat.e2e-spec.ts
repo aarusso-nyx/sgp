@@ -62,12 +62,9 @@ describe('SST-03 CAT S-2210 flow (e2e)', () => {
     }
   });
 
-  it('keeps state machine and fatal close guards in the migration', () => {
+  it('keeps state machine and fatal close guards in canonical SQL', () => {
     const sql = readFileSync(
-      resolve(
-        __dirname,
-        '../../backend/prisma/migrations/20260502115000_sst_03_cat_s2210/migration.sql',
-      ),
+      resolve(__dirname, '../../database/sql/10-canonical-schema.sql'),
       'utf8',
     );
 
@@ -75,8 +72,12 @@ describe('SST-03 CAT S-2210 flow (e2e)', () => {
     expect(sql).toContain(
       'fatal work_accident requires OBITO CAT before closing',
     );
-    expect(sql).toContain("OLD.status = 'REGISTRADO'");
-    expect(sql).toContain("NEW.status = 'COMUNICADO'");
+    expect(sql).toContain(
+      "OLD.status = 'REGISTRADO'::saude.work_accident_status",
+    );
+    expect(sql).toContain(
+      "NEW.status = 'COMUNICADO'::saude.work_accident_status",
+    );
   });
 });
 

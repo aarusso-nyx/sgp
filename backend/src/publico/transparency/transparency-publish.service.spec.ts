@@ -37,15 +37,12 @@ describe('TransparencyPublishService', () => {
   });
 
   it('keeps the approved-run guard in SQL', () => {
-    const migration = readFileSync(
-      resolve(
-        __dirname,
-        '../../../prisma/migrations/20260502060000_xcut_02_transparency/migration.sql',
-      ),
+    const canonicalSchema = readFileSync(
+      resolve(__dirname, '../../../../database/sql/10-canonical-schema.sql'),
       'utf8',
     );
 
-    expect(migration).toContain("run.status = 'APPROVED'");
-    expect(migration).toContain('tenant.transparency_enabled = true');
+    expect(canonicalSchema).toContain("run.status = 'APPROVED'");
+    expect(canonicalSchema).toContain('tenant.transparency_enabled = true');
   });
 });

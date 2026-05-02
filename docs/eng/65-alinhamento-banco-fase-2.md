@@ -6,7 +6,7 @@ Concluir a retirada da fatia transicional de tabelas operacionais e manter apena
 
 ## Implementação
 
-1. Tabelas operacionais antes transicionais foram migradas para migração Prisma canônica em `hr`:
+1. Tabelas operacionais antes transicionais foram consolidadas no SQL canônico v0.0.1 em `hr`:
    - `hr.business_day`
    - `hr.file_export_job`
    - `hr.consignment_import_job`
@@ -26,11 +26,7 @@ Concluir a retirada da fatia transicional de tabelas operacionais e manter apena
 
 ## Evidência
 
-- Migração: `backend/prisma/migrations/20260422013000_phase2_operational_tables/migration.sql`
-- Migração FOL-02: `backend/prisma/migrations/20260501140000_fol02_cargos_estrutura/migration.sql`
-- Migração FOL-04: `backend/prisma/migrations/20260501170000_fol04_plano_carreira/migration.sql`
-- Migração FOL-05: `backend/prisma/migrations/20260501183000_fol05_bases_historicas/migration.sql`
-- Migração FOL-01: `backend/prisma/migrations/20260501210000_fol01_rubricas/migration.sql`
+- SQL canônico: `database/sql/10-canonical-schema.sql`
 - Matriz atualizada: `docs/eng/64-database-alignment-matrix.json`
 
 ## Regras preservadas

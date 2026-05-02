@@ -26,11 +26,16 @@
     "payrollTypes": [
       { "code": "NORMAL", "description": "Folha normal" },
       { "code": "DECIMO_TERCEIRO", "description": "13º salário" },
-      { "code": "FERIAS", "description": "Férias" }
+      { "code": "FERIAS", "description": "Férias" },
+      { "code": "RESCISAO", "description": "Folha de rescisão" }
     ],
     "processingTypes": [
       { "code": "MENSAL", "description": "Processamento mensal", "payrollTypeCode": "NORMAL" },
-      { "code": "SUPLEMENTAR", "description": "Processamento suplementar", "payrollTypeCode": "NORMAL" }
+      { "code": "SUPLEMENTAR", "description": "Processamento suplementar", "payrollTypeCode": "NORMAL" },
+      { "code": "FERIAS", "description": "Processamento de férias", "payrollTypeCode": "FERIAS" },
+      { "code": "DECIMO_TERCEIRO_ADIANTAMENTO", "description": "13º salário - primeira parcela", "payrollTypeCode": "DECIMO_TERCEIRO" },
+      { "code": "DECIMO_TERCEIRO_FECHAMENTO", "description": "13º salário - fechamento", "payrollTypeCode": "DECIMO_TERCEIRO" },
+      { "code": "RESCISAO", "description": "Folha de rescisão", "payrollTypeCode": "RESCISAO" }
     ],
     "earningDeductions": [
       { "code": "100", "description": "Vencimento base", "kind": "EARNING", "taxable": true },

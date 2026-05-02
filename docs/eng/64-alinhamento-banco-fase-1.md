@@ -12,9 +12,9 @@ Sem camadas de compatibilidade (`shim`, `dual-write`, `schema legado`).
 
 ## Artefatos Implementados
 
-1. Prisma multi-schema em `backend/prisma/schema.prisma` com mapeamento explícito por modelo.
-2. Migration de split físico: `backend/prisma/migrations/20260421110000_phase1_schema_split/migration.sql`.
-3. SQL de suporte atualizado para objetos em `hr`/`payroll`.
+1. Prisma multi-schema em `backend/prisma/schema.prisma` com mapeamento explícito por modelo para geração de cliente.
+2. SQL canônico de split físico e schema runtime: `database/sql/10-canonical-schema.sql`.
+3. SQL de suporte consolidado nos artefatos canônicos em `database/sql`.
 4. Projeções do portal convertidas para materialized views em `portal`:
    - `portal.mv_employee_directory`
    - `portal.mv_payroll_run_summary`

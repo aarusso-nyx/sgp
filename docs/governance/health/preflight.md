@@ -1,6 +1,6 @@
 # Preflight Checks
 
-Run this checklist before applying migrations or releasing API changes.
+Run this checklist before applying canonical SQL or releasing API changes.
 
 1. Validate backend env:
    - `DATABASE_URL`
@@ -20,8 +20,10 @@ Run this checklist before applying migrations or releasing API changes.
    - `npm run governance:check`
 4. Run DB bootstrap smoke in clean database:
    - `DATABASE_URL=postgresql://<user>@localhost:5432/<dbtest> npm run db:smoke`
-5. Apply Prisma migrations in `backend`.
-6. Apply SQL support files in lexical order from `database/sql`.
+5. Apply canonical SQL from `database/sql`:
+   - `DATABASE_URL=postgresql://<user>@localhost:5432/<dbtest> npm run db:migrate`
+6. Regenerate Prisma Client if schema metadata changed:
+   - `npm run db:generate`
 7. Run deterministic seed:
    - `npm run db:seed` (in `backend`)
 8. Run tests:

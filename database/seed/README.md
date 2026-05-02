@@ -10,7 +10,7 @@ Seed files are deterministic fixtures for local development, API tests, and perm
 
 ## Loading Policy
 
-- Apply Prisma migrations first.
+- Apply canonical SQL first with `npm run db:migrate`.
 - Load seed files with `npm run db -- seed` (or `npm run db:seed`) or a controlled SQL loader.
 - Use stable business codes from these files for idempotent upserts.
 - Never store real `APP_LOGIN`, passwords, Cognito tokens, or production CPF/CNPJ values here.

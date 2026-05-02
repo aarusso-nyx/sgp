@@ -1,3 +1,7 @@
--- PostgreSQL extensions expected by Prisma migrations and support SQL.
+-- PostgreSQL extensions required by the canonical SGP v0.0.1 schema.
+CREATE SCHEMA IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS citext;
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;

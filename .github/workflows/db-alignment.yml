@@ -139,7 +139,7 @@ jobs:
     needs: alignment-gate
     services:
       postgres:
-        image: postgres:16
+        image: postgis/postgis:16-3.5
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres

@@ -77,9 +77,7 @@ if (process.exitCode) {
   process.exit();
 }
 
-const paths = [
-  ...new Set([...selectedGroups].flatMap((group) => targetGroups[group])),
-];
+const paths = [...new Set([...selectedGroups].flatMap((group) => targetGroups[group]))];
 
 for (const path of paths) {
   const absolutePath = resolve(workspaceRoot, path);

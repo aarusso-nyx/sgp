@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
@@ -9,8 +9,6 @@ const cwd = process.cwd();
 const databaseUrl = process.env.DATABASE_URL;
 const sqlDir = resolve(cwd, 'database/sql');
 const backendDir = resolve(cwd, 'backend');
-const prismaSchemaPath = resolve(cwd, 'backend/prisma/schema.prisma');
-const optionalSqlFiles = new Set(['40-seed-loader.sql']);
 
 class ConfigurationBlockedError extends Error {
   constructor(message) {
@@ -39,47 +37,19 @@ function runCommand(command, args, workdir = cwd) {
   }
 }
 
-function runPrismaDbExecute(filePath) {
-  runCommand('npm', ['exec', '--', 'prisma', 'db', 'execute', '--file', filePath], backendDir);
-}
-
 async function runSqlSnippet(fileName, sql) {
   const tempDir = await mkdtemp(resolve(tmpdir(), 'sgp-db-smoke-'));
   const filePath = resolve(tempDir, fileName);
   await writeFile(filePath, sql, 'utf8');
   try {
-    runPrismaDbExecute(filePath);
+    runCommand('psql', [databaseUrl, '-v', 'ON_ERROR_STOP=1', '-f', filePath]);
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
 }
 
-async function applySupportSql() {
-  const sqlFiles = (await readdir(sqlDir))
-    .filter((name) => name.endsWith('.sql'))
-    .filter((name) => !optionalSqlFiles.has(name))
-    .sort((a, b) => a.localeCompare(b));
-
-  if (sqlFiles.length === 0) {
-    throw new Error('No SQL support files found for bootstrap smoke validation.');
-  }
-
-  for (const fileName of sqlFiles) {
-    const filePath = resolve(sqlDir, fileName);
-    runPrismaDbExecute(filePath);
-    console.log(`[db-smoke] applied ${fileName}`);
-  }
-}
-
 async function main() {
   requireDatabaseUrl();
-
-  console.log('[db-smoke] running prisma migrations');
-  runCommand(
-    'npm',
-    ['exec', '--', 'prisma', 'migrate', 'deploy', '--schema', prismaSchemaPath],
-    backendDir,
-  );
 
   await runSqlSnippet(
     '00-create-portal-role.sql',
@@ -101,10 +71,17 @@ $$;
   );
   console.log('[db-smoke] ensured smoke roles exist');
 
-  await applySupportSql();
+  console.log('[db-smoke] applying canonical SQL');
+  runCommand('node', ['scripts/db-apply-sql.mjs']);
 
   console.log('[db-smoke] checking forced RLS coverage');
-  runPrismaDbExecute(resolve(sqlDir, 'checks/rls-coverage.sql'));
+  runCommand('psql', [
+    databaseUrl,
+    '-v',
+    'ON_ERROR_STOP=1',
+    '-f',
+    resolve(sqlDir, 'checks/rls-coverage.sql'),
+  ]);
 
   console.log('[db-smoke] running deterministic seed');
   runCommand('npm', ['run', 'db:seed'], backendDir);
@@ -3221,7 +3198,7 @@ BEGIN
   )
   VALUES (
     v_rate_id, tenant_a, 'CALC02-SMOKE-' || left(suffix, 8), 'CALC-02 smoke',
-    'CALC-02 smoke tax-rate RLS row', 'IRRF_SMOKE', 2025, 7.500000, 'IRRF_SMOKE',
+    'CALC-02 smoke tax-rate RLS row', 'IRRF_SMOKE', 2025, 7.500000, 'IRRF',
     DATE '2025-01-01', 2259.21, 2826.65, 7.500000, 169.44, 189.59,
     'ACTIVE'::"RecordStatus"
   );

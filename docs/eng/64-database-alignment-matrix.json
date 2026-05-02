@@ -5,12 +5,7 @@
     "docs/sql-reference/00_inventory/raw/tables.json",
     "inventories/database-model.json"
   ],
-  "status_values": [
-    "implemented",
-    "canonicalized",
-    "deferred",
-    "explicitly_excluded"
-  ],
+  "status_values": ["implemented", "canonicalized", "deferred", "explicitly_excluded"],
   "phase_1_target_set": {
     "schemas": ["hr", "payroll", "portal"],
     "core_only": true,
@@ -372,7 +367,7 @@
       "status": "implemented",
       "phase": "phase_2_core",
       "canonical_object": "hr.business_day",
-      "note": "Implemented in canonical hr schema via Prisma migration."
+      "note": "Implemented in the canonical v0.0.1 SQL bootstrap."
     },
     {
       "legacy_object": "dbo.empresa_filial",
@@ -483,8 +478,8 @@
       "legacy_object": "dbo.flyway_schema_history",
       "status": "canonicalized",
       "phase": "post_phase_1",
-      "canonical_object": "public._prisma_migrations",
-      "note": "Canonicalized to Prisma Migrate metadata; v0.0.1 uses Prisma as the migration ledger instead of carrying a Flyway compatibility table."
+      "canonical_object": "database/sql/10-canonical-schema.sql",
+      "note": "Canonicalized to the v0.0.1 SQL bootstrap; the fresh implementation does not carry Flyway or Prisma migration ledger tables."
     },
     {
       "legacy_object": "dbo.folha_competencia",

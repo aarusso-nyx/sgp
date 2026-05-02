@@ -13,7 +13,7 @@ describe('AudespXmlSerializer', () => {
         readFileSync(
           join(
             __dirname,
-            '../../../../../test/fixtures/tce/audesp-sp/folha-pagamento.golden.xml',
+            '../../../../../../tests/backend/fixtures/tce/audesp-sp/folha-pagamento.golden.xml',
           ),
           'utf8',
         ),

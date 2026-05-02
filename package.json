@@ -70,7 +70,7 @@
     "db": "node scripts/run.mjs db",
     "db:help": "node scripts/run.mjs db help",
     "db:generate": "npm --workspace backend exec -- prisma generate",
-    "db:migrate": "npm --workspace backend exec -- prisma migrate dev",
+    "db:migrate": "node scripts/db-apply-sql.mjs",
     "db:seed": "npm --workspace backend run db:seed",
     "db:smoke": "node scripts/db-bootstrap-smoke.mjs",
     "db:studio": "npm --workspace backend exec -- prisma studio",

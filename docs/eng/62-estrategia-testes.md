@@ -118,7 +118,7 @@ O gate agregado corrente é `npm run evidence:check` no workspace root. Ele exec
 | `@testcontainers/postgresql`       | 10.x        | Banco PostgreSQL 16 isolado por suite       |
 | `@testcontainers/localstack`       | 3.x         | SQS, SNS, EventBridge, Secrets Manager      |
 | MiniIO em Docker                   | RELEASE.x   | S3-compatible para documentos quando S3 real não estiver configurado em testes |
-| `prisma migrate deploy` (test env) | —           | Migrations reais + seeds de catálogo        |
+| `npm run db:migrate` (test env)    | —           | SQL canônico v0.0.1 + seeds de catálogo     |
 | `supertest`                        | 6.x         | Chamadas HTTP integradas ao NestJS test app |
 | `@nestjs/testing`                  | LTS         | Módulo de teste do NestJS                   |
 
@@ -129,7 +129,7 @@ O gate agregado corrente é `npm run evidence:check` no workspace root. Ele exec
 - Filas SQS: publicar evento `folha.calculo.solicitada`, consumir no worker e confirmar resultado no banco.
 - Upload/download S3-compatible: `sgp-arquivos` contra S3 real configurado ou MiniIO em Docker nos testes locais/CI sem S3.
 - Contagem de registros paginados com `pg_trgm`.
-- Migrations: rodar `prisma migrate deploy` e validar schema esperado.
+- Banco: rodar `npm run db:migrate` e validar schema esperado.
 
 #### Padrão de setup
 
@@ -2129,9 +2129,8 @@ aws ecs update-service \
   --service sgp-core-api \
   --task-definition sgp-core-api:${PREVIOUS_REVISION}
 
-# 2. Se migration foi aplicada — verificar se é reversível
-# (Flyway ou Prisma: todas as migrations devem ter script de down ou ser aditivas)
-# Migrations destrutivas requerem aprovação manual antes de release
+# 2. Se SQL canônico foi aplicado — restaurar snapshot/backup do banco anterior
+# Alterações destrutivas no SQL canônico requerem aprovação manual antes de release
 
 # 3. Notificar tenants afetados via SNS tópico de incidentes
 aws sns publish \

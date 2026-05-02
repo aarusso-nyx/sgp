@@ -1,13 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-describe('work accident CAT RLS migration', () => {
+describe('work accident CAT RLS canonical SQL', () => {
   it('uses tenant and CAT/eSocial permissions on SST-03 tables', () => {
     const sql = readFileSync(
-      resolve(
-        __dirname,
-        '../../backend/prisma/migrations/20260502115000_sst_03_cat_s2210/migration.sql',
-      ),
+      resolve(__dirname, '../../database/sql/10-canonical-schema.sql'),
       'utf8',
     );
 
