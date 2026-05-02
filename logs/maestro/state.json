@@ -365,8 +365,18 @@
       "previous_failure": "logs/maestro/29-calc-12-folha-rescisao.failure.md",
       "failure_log": "logs/maestro/29-calc-12-folha-rescisao.failure.md",
       "recovery": "manual controller spec dependency repair and e2e immutable fixture cleanup after xhigh retry repaired migration tenant context"
+    },
+    "30-es-07-xsd-assinatura-icp-brasil": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/30-es-07-xsd-assinatura-icp-brasil",
+      "commit": "1f296a21f1d1c7f7099f6ead3ab6854599988bb1",
+      "started_at": "2026-05-01T22:01:25-03:00",
+      "completed_at": "2026-05-01T22:24:46-03:00",
+      "retries": 0,
+      "agent": "019de634-cd74-7c12-8347-5555e96fd1f0"
     }
   },
-  "current_wave": 14,
+  "current_wave": 15,
   "active_subagents": []
 }

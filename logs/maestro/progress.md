@@ -52,3 +52,4 @@ W13 ✗ 28-calc-11 (xhigh blocking failure: typecheck TS2345 in frontend folha-m
 W13 ✓ 28-calc-11 (1 slice, xhigh + manual recovery, gates passed, commit d62bfb7) — completeness 26.2% → 26.2%
 W13 ✗ 29-calc-12 (high → xhigh retry failed: payroll controller fixture missing rescisao/audit dependency after migration tenant-context repair) — recovered manually
 W13 ✓ 29-calc-12 (1 slice, high→xhigh + manual recovery, gates passed, commit 370c3dc) — completeness 26.2% → 26.2%; Wave 13 complete; CALC waves complete
+W14 ✓ 30-es-07 (1 slice, high, gates passed, commit 1f296a2) — completeness 26.2% → 26.2%; Wave 14 complete
