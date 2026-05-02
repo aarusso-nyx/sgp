@@ -1,0 +1,71 @@
+.appointment-workspace {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.toolbar,
+.call-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.toolbar {
+  align-items: end;
+  justify-content: space-between;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 14rem;
+}
+
+.toggle {
+  align-items: center;
+  display: flex;
+  min-height: 2.25rem;
+  min-width: 9rem;
+}
+
+input,
+button {
+  min-height: 2.25rem;
+}
+
+.call-grid article {
+  border: 1px solid #d0d7de;
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 0.35rem;
+  min-width: 15rem;
+  padding: 0.75rem;
+}
+
+.call-grid span {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.call-grid em {
+  color: #047857;
+  font-style: normal;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #d0d7de;
+  padding: 0.65rem;
+  text-align: left;
+}

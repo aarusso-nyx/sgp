@@ -4,6 +4,7 @@ import { QueryResultRow } from 'pg';
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
 import { DocumentsStorageService } from '../documents/documents-storage.service';
+import { NomeacaoService } from '../recrutamento/nomeacao/nomeacao.service';
 import type { GeneratedArtifact } from './builders/cnab-remittance.builder';
 import { buildCnabReturnReport } from './builders/cnab-return.builder';
 import { buildSimplePdfReport } from './builders/document-report.builder';
@@ -192,6 +193,8 @@ export class IntegrationsWorkerService {
     private readonly databaseService: DatabaseService,
     private readonly documentsStorageService: DocumentsStorageService,
     @Optional()
+    private readonly nomeacaoService?: NomeacaoService,
+    @Optional()
     @Inject(Cnab240EmitService)
     cnab240EmitService?: Cnab240Emitter,
   ) {
@@ -207,6 +210,7 @@ export class IntegrationsWorkerService {
     limit = 10,
     definitions: readonly string[] = SUPPORTED_DEFINITIONS,
   ): Promise<WorkerRunSummary> {
+    await this.expireNomeacaoDeadlines();
     const jobs = await this.runBypassingRls(() =>
       this.databaseService.query<PendingJobRow>(
         `
@@ -267,6 +271,11 @@ export class IntegrationsWorkerService {
     }
 
     return summary;
+  }
+
+  private async expireNomeacaoDeadlines(): Promise<void> {
+    if (!this.nomeacaoService) return;
+    await this.runBypassingRls(() => this.nomeacaoService!.expireOverdue());
   }
 
   private async claim(job: PendingJobRow): Promise<PendingJobRow | null> {

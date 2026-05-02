@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { validateEnvironment } from '../config/environment';
 import { DatabaseModule } from '../database/database.module';
 import { DocumentsModule } from '../documents/documents.module';
+import { NomeacaoService } from '../recrutamento/nomeacao/nomeacao.service';
 import { Cnab240EmitService } from './cnab240/cnab240-emit.service';
 import { PortabilityController } from './consignment-portability/portability.controller';
 import { PortabilityParserService } from './consignment-portability/portability-parser.service';
@@ -20,6 +21,7 @@ import { IntegrationsWorkerService } from './integrations-worker.service';
   providers: [
     IntegrationsWorkerService,
     Cnab240EmitService,
+    NomeacaoService,
     PortabilityParserService,
     PortabilityProcessService,
   ],

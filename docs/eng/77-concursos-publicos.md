@@ -2,7 +2,7 @@
 
 ## Escopo
 
-O modulo `recrutamento/concurso` administra a abertura de concursos publicos do SGP v0.0.1. Ele cobre cadastro do certame, vagas por cargo, reservas legais, versionamento de edital, publicacao do edital no Portal Transparencia, inscricao publica de candidatos, etapa de avaliacao e classificacao final. Nomeacao, posse e exercicio ficam nos slices REC-05 e REC-06.
+O modulo `recrutamento/concurso` administra a abertura de concursos publicos do SGP v0.0.1. Ele cobre cadastro do certame, vagas por cargo, reservas legais, versionamento de edital, publicacao do edital no Portal Transparencia, inscricao publica de candidatos, etapa de avaliacao, classificacao final, nomeacao e convocacao. Posse e exercicio ficam em REC-06.
 
 ## Modelo operacional
 
@@ -28,6 +28,12 @@ A classificacao REC-04 consolida as notas em `recrutamento.classificacao_snapsho
 
 O ranking por vaga ordena por nota total ponderada decrescente, aplica prioridade do idoso em empates conforme Lei 10.741/2003 art. 27 paragrafo unico, depois maior idade e, por fim, identificador da inscricao para estabilidade reprodutivel. Provas podem marcar `required_for_classification`, `minimum_raw_score` e `minimum_weighted_score`; ausente em prova obrigatoria ou nota inferior ao minimo gera `eliminated_reason` e remove o candidato da lista geral aprovada.
 
+## Nomeacao e convocacao
+
+A nomeacao REC-05 consome a classificacao publicada sem recalcular ranking. A funcao `recrutamento.proxima_chamada(concurso_id, vaga_id)` retorna a proxima inscricao elegivel pela ordem de chamada ja publicada, respeitando a alternancia de cotas registrada em `allocation_bucket` e ignorando candidatos ja nomeados. A API administrativa `POST /api/v1/admin/nomeacoes` cria `recrutamento.nomeacao` com ato administrativo, data de publicacao e prazo de comparecimento de 30 dias corridos; o backend rejeita nomeacao apos `recrutamento.concurso.valid_until`.
+
+Convocacoes ficam em `recrutamento.convocacao` por canal `PUBLICACAO_OFICIAL`, `EMAIL` ou `POSTAL`. A publicacao oficial e o postal exigem referencia manual de evidencia. O canal `EMAIL` registra `evidence_ref` contendo `messageId` do provedor; em ambiente local o provedor deterministico usa prefixo `email:messageId=local-...`. Desistencia manual muda a nomeacao para `DESISTENTE`. A expiracao de prazo muda `NOMEADO` ou `CONVOCADO` vencido para `EXONERADO_POR_NAO_POSSE`; a operacao e idempotente para permitir reexecucao segura pelo worker.
+
 ## Recursos de prova
 
 Recursos ficam em `recrutamento.recurso` e so podem ser abertos enquanto `recrutamento.edital.resource_deadline_at` estiver vigente. A banca registra parecer e decisao administrativa, observando a publicidade e a impessoalidade do art. 37 da Constituicao Federal. A revisao judicial do gabarito segue a tese do STF no RE 632.853: nao ha substituicao ordinaria da banca pelo Judiciario, ressalvadas ilegalidades e erro grosseiro.
@@ -38,4 +44,4 @@ A validacao de backend bloqueia vagas com reserva superior ao total. Para cargos
 
 ## Seguranca e auditoria
 
-As tabelas `recrutamento.concurso`, `recrutamento.edital`, `recrutamento.vaga`, `recrutamento.candidato`, `recrutamento.inscricao`, `recrutamento.payment_charge`, `recrutamento.prova`, `recrutamento.questao`, `recrutamento.gabarito`, `recrutamento.resposta_candidato`, `recrutamento.recurso`, `recrutamento.nota`, `recrutamento.classificacao_snapshot` e `recrutamento.classificacao_item` sao tenant-scoped e usam RLS com `sgp_tenant_matches(tenant_id)`. Toda mutacao dispara trigger com `sgp_append_audit_event(...)`. A API administrativa exige `@RequirePermission`; a leitura publica usa funcao `SECURITY DEFINER` limitada a concursos `PUBLISHED` ou `OPEN` com edital publicado, e o acompanhamento de inscricao publica e protegido por token de consulta.
+As tabelas `recrutamento.concurso`, `recrutamento.edital`, `recrutamento.vaga`, `recrutamento.candidato`, `recrutamento.inscricao`, `recrutamento.payment_charge`, `recrutamento.prova`, `recrutamento.questao`, `recrutamento.gabarito`, `recrutamento.resposta_candidato`, `recrutamento.recurso`, `recrutamento.nota`, `recrutamento.classificacao_snapshot`, `recrutamento.classificacao_item`, `recrutamento.nomeacao` e `recrutamento.convocacao` sao tenant-scoped e usam RLS com `sgp_tenant_matches(tenant_id)`. Toda mutacao dispara trigger com `sgp_append_audit_event(...)`. A API administrativa exige `@RequirePermission`; a leitura publica usa funcao `SECURITY DEFINER` limitada a concursos `PUBLISHED` ou `OPEN` com edital publicado, e o acompanhamento de inscricao publica e protegido por token de consulta.
