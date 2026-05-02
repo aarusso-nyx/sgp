@@ -1015,7 +1015,7 @@
       "failure_log": "logs/maestro/54-rec-05-nomeacao-convocacao.failure.md"
     },
     "55-rec-06-posse-exercicio": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "medium",
       "branch": "slice/55-rec-06-posse-exercicio",
       "retries": 0,
@@ -1055,10 +1055,12 @@
       ],
       "wave": 28,
       "theme": "REC",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "pending-agent-55",
+      "started_at": "2026-05-02T07:16:06.375Z"
     },
     "56-fisc-01-dctfweb-totalizadores": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "high",
       "branch": "slice/56-fisc-01-dctfweb-totalizadores",
       "retries": 0,
@@ -1095,7 +1097,9 @@
       ],
       "wave": 29,
       "theme": "FISC",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "pending-agent-56",
+      "started_at": "2026-05-02T07:16:06.375Z"
     },
     "57-fisc-02-dirf-anual": {
       "status": "pending",
@@ -1227,7 +1231,7 @@
       "completed_at": "2026-05-02T06:05:28.085Z"
     },
     "60-ponto-02-rep-p-rep-a-rep-c-ingestao": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "high",
       "branch": "slice/60-ponto-02-rep-p-rep-a-rep-c-ingestao",
       "retries": 0,
@@ -1262,7 +1266,9 @@
       ],
       "wave": 28,
       "theme": "PONTO",
-      "zero_retry": true
+      "zero_retry": true,
+      "agent": "pending-agent-60",
+      "started_at": "2026-05-02T07:16:06.375Z"
     },
     "61-ponto-03-afd-geracao-importacao": {
       "status": "pending",
@@ -2290,8 +2296,27 @@
       "zero_retry": true
     }
   },
-  "current_wave": 28,
-  "active_subagents": [],
+  "current_wave": 29,
+  "active_subagents": [
+    {
+      "slice": "55-rec-06-posse-exercicio",
+      "agent": "pending-agent-55",
+      "effort": "medium",
+      "started_at": "2026-05-02T07:16:06.375Z"
+    },
+    {
+      "slice": "60-ponto-02-rep-p-rep-a-rep-c-ingestao",
+      "agent": "pending-agent-60",
+      "effort": "high",
+      "started_at": "2026-05-02T07:16:06.375Z"
+    },
+    {
+      "slice": "56-fisc-01-dctfweb-totalizadores",
+      "agent": "pending-agent-56",
+      "effort": "high",
+      "started_at": "2026-05-02T07:16:06.375Z"
+    }
+  ],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }
