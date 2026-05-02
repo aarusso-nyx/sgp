@@ -380,6 +380,22 @@
       "description": "Accrue monthly FGTS deposits and termination fines."
     },
     {
+      "key": "payroll.payroll.read",
+      "moduleKey": "payroll",
+      "resourceKey": "pis-pasep",
+      "actionKey": "read",
+      "routePattern": "#!/folha/pis-pasep/**",
+      "description": "Read annual PIS/PASEP payroll bases."
+    },
+    {
+      "key": "payroll.payroll.write",
+      "moduleKey": "payroll",
+      "resourceKey": "pis-pasep",
+      "actionKey": "write",
+      "routePattern": "#!/folha/pis-pasep/**",
+      "description": "Recompute annual PIS/PASEP payroll bases."
+    },
+    {
       "key": "payroll.simulation.execute",
       "moduleKey": "payroll",
       "resourceKey": "simulation",
@@ -700,6 +716,22 @@
       "description": "Generate and publish public contest classification snapshots."
     },
     {
+      "key": "recrutamento.nomeacao.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "nomeacao",
+      "actionKey": "read",
+      "routePattern": "/api/v1/**/nomeacoes/**",
+      "description": "Read public contest appointment and notice records."
+    },
+    {
+      "key": "recrutamento.nomeacao.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "nomeacao",
+      "actionKey": "write",
+      "routePattern": "/api/v1/admin/nomeacoes/**",
+      "description": "Mutate public contest appointments, notices, withdrawals, and deadline expiration."
+    },
+    {
       "key": "recrutamento.read",
       "moduleKey": "recrutamento",
       "resourceKey": "recruitment",
@@ -802,6 +834,38 @@
       "actionKey": "write",
       "routePattern": "#!/saude/programas/**",
       "description": "Create, revise, activate, archive, and attach PCMSO and PGR program records."
+    },
+    {
+      "key": "saude.exposure.read",
+      "moduleKey": "saude",
+      "resourceKey": "exposure",
+      "actionKey": "read",
+      "routePattern": "#!/saude/exposicoes/**",
+      "description": "Read environmental exposure, PPP, and S-2240 source records."
+    },
+    {
+      "key": "saude.exposure.write",
+      "moduleKey": "saude",
+      "resourceKey": "exposure",
+      "actionKey": "write",
+      "routePattern": "#!/saude/exposicoes/**",
+      "description": "Create and update environmental exposure records and PPP snapshots."
+    },
+    {
+      "key": "saude.epi.read",
+      "moduleKey": "saude",
+      "resourceKey": "epi",
+      "actionKey": "read",
+      "routePattern": "#!/saude/epi/**",
+      "description": "Read EPI inventory and delivery records."
+    },
+    {
+      "key": "saude.epi.write",
+      "moduleKey": "saude",
+      "resourceKey": "epi",
+      "actionKey": "write",
+      "routePattern": "#!/saude/epi/**",
+      "description": "Create EPI inventory and signed delivery records."
     },
     {
       "key": "ponto.schedule.read",
@@ -999,6 +1063,10 @@
       "saude.cat.write",
       "saude.program.read",
       "saude.program.write",
+      "saude.exposure.read",
+      "saude.exposure.write",
+      "saude.epi.read",
+      "saude.epi.write",
       "ponto.schedule.read",
       "ponto.schedule.write",
       "ponto.timerecord.read",
@@ -1034,6 +1102,8 @@
       "folha.write",
       "payroll.fgts.read",
       "payroll.fgts.write",
+      "payroll.payroll.read",
+      "payroll.payroll.write",
       "payroll.run.read",
       "payroll.run.write",
       "payroll.run.execute",
@@ -1067,6 +1137,8 @@
       "rh.history.read",
       "saude.cat.read",
       "saude.program.read",
+      "saude.exposure.read",
+      "saude.epi.read",
       "ponto.schedule.read",
       "ponto.timerecord.read",
       "avaliacao.pccs.read",
@@ -1074,6 +1146,7 @@
       "avaliacao.salary_history.read",
       "folha.read",
       "payroll.fgts.read",
+      "payroll.payroll.read",
       "folha.rubrica.read",
       "payroll.formula.read",
       "esocial.certificate.read",

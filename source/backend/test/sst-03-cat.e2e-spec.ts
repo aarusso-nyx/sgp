@@ -42,6 +42,7 @@ describe('SST-03 CAT S-2210 flow (e2e)', () => {
         {} as never,
         {} as never,
         {} as never,
+        {} as never,
       );
 
       const result = await withTenant(() =>

@@ -46,6 +46,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'publico/concursos/minhas-nomeacoes',
+    loadComponent: () =>
+      import('./features/portal-publico/concursos/minhas-nomeacoes/minhas-nomeacoes').then(
+        (m) => m.PortalPublicoMinhasNomeacoes,
+      ),
+  },
+  {
     path: 'publico/concursos/:slug/classificacao',
     loadComponent: () =>
       import('./features/portal-publico/concursos/classificacao/classificacao').then(
@@ -103,6 +110,11 @@ export const routes: Routes = [
           import('./features/recrutamento/classificacao/classificacao').then(
             (m) => m.RecrutamentoClassificacao,
           ),
+      },
+      {
+        path: 'recrutamento/nomeacao',
+        loadComponent: () =>
+          import('./features/recrutamento/nomeacao/nomeacao').then((m) => m.RecrutamentoNomeacao),
       },
       {
         path: 'avaliacao/estagio-probatorio',
@@ -165,6 +177,19 @@ export const routes: Routes = [
       {
         path: 'saude/pgr',
         loadComponent: () => import('./features/saude/pgr/pgr').then((m) => m.SaudePgr),
+      },
+      {
+        path: 'saude/exposicoes',
+        loadComponent: () =>
+          import('./features/saude/exposicoes/exposicoes').then((m) => m.SaudeExposicoes),
+      },
+      {
+        path: 'saude/epi',
+        loadComponent: () => import('./features/saude/epi/epi').then((m) => m.SaudeEpi),
+      },
+      {
+        path: 'saude/ppp',
+        loadComponent: () => import('./features/saude/ppp/ppp').then((m) => m.SaudePpp),
       },
       {
         path: 'saude/pericia',

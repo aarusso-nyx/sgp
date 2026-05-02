@@ -12,7 +12,7 @@ export interface ESocialWorkerStatus {
 }
 
 export interface ESocialWorkerDispatchResult {
-  eventKind: 'S-2200' | 'S-2205' | 'S-2210' | 'S-2220' | 'S-2230' | 'S-2299';
+  eventKind: 'S-2200' | 'S-2205' | 'S-2210' | 'S-2220' | 'S-2230' | 'S-2240' | 'S-2299';
   employeeId?: string;
   pendingId?: string;
   sourceEntityId?: string;
@@ -24,7 +24,7 @@ export interface ESocialWorkerDispatchResult {
 
 export interface ESocialWorkerEventQueue {
   id: string;
-  eventKind: 'S-2210' | 'S-2220' | 'S-2230' | 'S-2299';
+  eventKind: 'S-2210' | 'S-2220' | 'S-2230' | 'S-2240' | 'S-2299';
   sourceId: string;
   employeeName: string;
   status: string;
@@ -35,6 +35,8 @@ export interface ESocialWorkerEventQueue {
   asoRecordId: string | null;
   catEmissionId: string | null;
   catKind: string | null;
+  environmentalExposureId: string | null;
+  triggerEvent: 'START' | 'END' | 'CHANGE' | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -74,6 +76,16 @@ export class ESocialTrabalhadoresService {
     return this.http.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/eventos-trabalhador/s2230/${pendingId}/emitir`,
       {},
+    );
+  }
+
+  emitS2240(
+    environmentalExposureId: string,
+    triggerEvent: 'START' | 'END' | 'CHANGE',
+  ): Observable<ESocialWorkerDispatchResult> {
+    return this.http.post<ESocialWorkerDispatchResult>(
+      `/api/v1/esocial/eventos-trabalhador/s2240/${environmentalExposureId}/emitir`,
+      { triggerEvent },
     );
   }
 

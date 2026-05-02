@@ -37,6 +37,7 @@ describe('SST-04 S-2220 flow (e2e)', () => {
       {} as never,
       new S2220Builder(database as never),
       {} as never,
+      {} as never,
     );
 
     const result = await withTenant(() => service.emitS2220(asoRecordId));
@@ -72,6 +73,7 @@ describe('SST-04 S-2220 flow (e2e)', () => {
       {} as never,
       new S2220Builder(database as never),
       {} as never,
+      {} as never,
     );
 
     const result = await withTenant(() => service.emitS2220(asoRecordId));
@@ -101,6 +103,7 @@ describe('SST-04 S-2220 flow (e2e)', () => {
     ]);
     const service = new ES03Service(
       database as never,
+      {} as never,
       {} as never,
       {} as never,
       {} as never,

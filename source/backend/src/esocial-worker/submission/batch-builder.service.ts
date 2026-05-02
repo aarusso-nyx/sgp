@@ -289,10 +289,10 @@ export class BatchBuilderService {
   private extractEmployer(xml: string): EmployerIdentity {
     const document = libxml.parseXml(xml);
     const typeNode = document.get(
-      "//*[local-name(.)='ideEmpregador']/*[local-name(.)='tpInsc']",
+      "//*[local-name()='ideEmpregador']/*[local-name()='tpInsc']",
     ) as { text(): string } | null;
     const registrationNode = document.get(
-      "//*[local-name(.)='ideEmpregador']/*[local-name(.)='nrInsc']",
+      "//*[local-name()='ideEmpregador']/*[local-name()='nrInsc']",
     ) as { text(): string } | null;
     const type = typeNode?.text().trim();
     const registration = registrationNode?.text().trim();

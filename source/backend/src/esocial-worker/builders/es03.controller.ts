@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
@@ -63,6 +63,34 @@ export class ES03Controller {
         emitted: result.emitted,
         xmlHash: result.xmlHash,
         lastError: result.lastError,
+      },
+    });
+    return result;
+  }
+
+  @Post('s2240/:environmentalExposureId/emitir')
+  @RequirePermission('esocial.event.write')
+  @ApiOkResponse({
+    description: 'Emit a pending S-2240 environmental exposure event.',
+  })
+  async emitS2240(
+    @Req() request: RequestWithContext,
+    @Param('environmentalExposureId') environmentalExposureId: string,
+    @Body() body: { triggerEvent?: 'START' | 'END' | 'CHANGE' },
+  ) {
+    const triggerEvent = body.triggerEvent ?? 'START';
+    const result = await this.service.emitS2240(
+      environmentalExposureId,
+      triggerEvent,
+    );
+    await this.auditService.auditMutation(request, 'PROCESS', 'esocial.s2240', {
+      resourceId: environmentalExposureId,
+      tableName: 'esocial.s2240_pending',
+      metadata: {
+        emitted: result.emitted,
+        xmlHash: result.xmlHash,
+        lastError: result.lastError,
+        triggerEvent,
       },
     });
     return result;

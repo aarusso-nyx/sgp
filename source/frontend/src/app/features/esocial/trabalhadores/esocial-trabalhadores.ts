@@ -77,9 +77,14 @@ export class ESocialTrabalhadores implements OnInit, OnDestroy {
         ? this.service.emitS2210(row.catEmissionId ?? row.sourceId)
         : row.eventKind === 'S-2220'
           ? this.service.retryS2220(row.asoRecordId ?? row.sourceId)
-          : row.eventKind === 'S-2230'
-            ? this.service.emitS2230(row.id)
-            : this.service.emitS2299(row.id);
+          : row.eventKind === 'S-2240'
+            ? this.service.emitS2240(
+                row.environmentalExposureId ?? row.sourceId,
+                row.triggerEvent ?? 'START',
+              )
+            : row.eventKind === 'S-2230'
+              ? this.service.emitS2230(row.id)
+              : this.service.emitS2299(row.id);
     request
       .pipe(
         finalize(() => (this.emitting = '')),

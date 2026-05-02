@@ -1,0 +1,36 @@
+<section class="ppp-page">
+  <header>
+    <p>Saude ocupacional</p>
+    <h1>PPP</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="generate()" class="panel">
+    <h2>Geracao</h2>
+    <label><span>Servidor</span><input formControlName="employeeId" /></label>
+    <label><span>Inicio</span><input type="date" formControlName="periodStart" /></label>
+    <label><span>Fim</span><input type="date" formControlName="periodEnd" /></label>
+    <button type="submit" [disabled]="saving">Gerar PPP</button>
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Servidor</th>
+        <th>Periodo</th>
+        <th>Exposicoes</th>
+        <th>EPIs</th>
+        <th>Gerado em</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows">
+        <td>{{ row.employeeId }}</td>
+        <td>{{ row.periodStart }} - {{ row.periodEnd }}</td>
+        <td>{{ row.snapshotJson.environmentalExposures?.length || 0 }}</td>
+        <td>{{ row.snapshotJson.epiDeliveries?.length || 0 }}</td>
+        <td>{{ row.generatedAt }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

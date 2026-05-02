@@ -212,9 +212,8 @@ async function seed(
       `
       DELETE FROM esocial.submission_batch
       WHERE tenant_id = $1::uuid
-        AND $2::uuid = ANY(event_ids)
       `,
-      [tenantId, eventId],
+      [tenantId],
     );
     await database.query(
       `
@@ -238,7 +237,8 @@ async function seed(
         xml_hash,
         schema_version,
         status,
-        generated_at
+        generated_at,
+        created_at
       )
       VALUES (
         $1::uuid,
@@ -249,14 +249,15 @@ async function seed(
         '2026-05',
         '{}'::jsonb,
         $3,
-        convert_to($3, 'UTF8'),
+        convert_to($4, 'UTF8'),
         repeat('b', 64),
         'S-1.3',
         'PENDENTE'::public."ESocialEventStatus",
-        now()
+        now(),
+        TIMESTAMPTZ '1970-01-01 00:00:00+00'
       )
       `,
-      [eventId, tenantId, signed.xml],
+      [eventId, tenantId, S1000_VALID_XML, signed.xml],
     );
   });
 }

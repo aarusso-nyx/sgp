@@ -1,0 +1,47 @@
+.ppp-page,
+.panel {
+  display: grid;
+  gap: 1rem;
+}
+
+header p,
+header h1,
+h2 {
+  margin: 0;
+}
+
+header p {
+  color: #52616b;
+}
+
+.panel {
+  border: 1px solid #d7dee5;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+input,
+button {
+  min-height: 2.25rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e4e9ee;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.error {
+  color: #b42318;
+}
