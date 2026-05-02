@@ -85,3 +85,7 @@ W24 ✓ 59-ponto-01 (medium, gates passed, commit b8eb28d) — Portaria 671 base
 W25 ✓ 47-clt-01 (high, zero-tier, gates passed, commit 9400ac0) — FGTS deposits and termination fine
 W25 ✓ 52-rec-03 (high, gates passed, commit 88372df) — exams, answer keys, resources, notes
 W25 ✓ 69-sst-04 (medium, gates passed, commit 3424242) — S-2220 monitoring events
+2026-05-02T03:29:08-03:00 frontier launch 48-clt-02, 53-rec-04, 68-sst-03 — agents 019de760-3ce1, 019de760-3cf7, 019de760-3d64
+W26 ✓ 48-clt-02 (medium, gates passed, commit 62f98d7) — aviso previo reflexes
+W26 ✓ 53-rec-04 (high, transient concurrent S-2210 fixture failure recovered by maestro defense, commit 1ffff66) — classificacao/cotas
+W26 ✓ 68-sst-03 (high, zero-tier, gates passed, commit ddafec7) — CAT S-2210

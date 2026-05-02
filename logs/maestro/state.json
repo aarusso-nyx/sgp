@@ -708,7 +708,7 @@
       "completed_at": "2026-05-02T06:28:24.418Z"
     },
     "48-clt-02-aviso-previo-reflexos": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/48-clt-02-aviso-previo-reflexos",
       "retries": 0,
@@ -747,7 +747,11 @@
       ],
       "wave": 26,
       "theme": "CLT",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de760-3ce1-7341-9ac0-fece0e14ec56",
+      "started_at": "2026-05-02T06:29:08.974Z",
+      "commit": "62f98d7",
+      "completed_at": "2026-05-02T06:47:53.537Z"
     },
     "49-clt-03-pis-pasep-base-anual": {
       "status": "pending",
@@ -925,7 +929,7 @@
       "completed_at": "2026-05-02T06:28:24.418Z"
     },
     "53-rec-04-classificacao-criterios-desempate": {
-      "status": "pending",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/53-rec-04-classificacao-criterios-desempate",
       "retries": 0,
@@ -956,7 +960,13 @@
       ],
       "wave": 26,
       "theme": "REC",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de760-3cf7-7861-9e59-a84ce8ed9870",
+      "started_at": "2026-05-02T06:29:08.974Z",
+      "commit": "1ffff66",
+      "completed_at": "2026-05-02T06:47:53.537Z",
+      "recovery": "maestro defense suite passed after transient failure from concurrent SST-03 S-2210 fixtures",
+      "failure_log": "logs/maestro/53-rec-04-classificacao-criterios-desempate.failure.md"
     },
     "54-rec-05-nomeacao-convocacao": {
       "status": "pending",
@@ -1539,7 +1549,7 @@
       "completed_at": "2026-05-02T06:05:28.085Z"
     },
     "68-sst-03-cat-s2210": {
-      "status": "pending",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/68-sst-03-cat-s2210",
       "retries": 0,
@@ -1579,7 +1589,11 @@
       ],
       "wave": 26,
       "theme": "SST",
-      "zero_retry": true
+      "zero_retry": true,
+      "agent": "019de760-3d64-73f1-aa05-9b5cdb1ba349",
+      "started_at": "2026-05-02T06:29:08.974Z",
+      "commit": "ddafec7",
+      "completed_at": "2026-05-02T06:47:53.537Z"
     },
     "69-sst-04-monitoramento-saude-s2220": {
       "status": "completed",
@@ -2262,7 +2276,7 @@
       "zero_retry": true
     }
   },
-  "current_wave": 26,
+  "current_wave": 27,
   "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
