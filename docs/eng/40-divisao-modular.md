@@ -55,7 +55,7 @@ Os bounded contexts identificados são:
 | Arquivos                    | `ARQUIVOS`              | `arquivos`                               |
 | Parâmetros e Feature Flags  | `PARAMETROS`            | `parametros`                             |
 | Integrações Externas        | `INTEGRACOES`           | `integracoes`                            |
-| Tribunais de Contas         | `COMPLIANCE_TCE`         | `tce`                                    |
+| Tribunais de Contas         | `COMPLIANCE_TCE`        | `tce`                                    |
 | Portal Publico              | `PUBLICO`               | `publico/transparency`                   |
 
 ### 1.2 Módulos NestJS por Contexto
@@ -909,9 +909,9 @@ stateDiagram-v2
 
 #### `integracoes` — Integrações Externas (Facade)
 
-**Responsabilidades:** facade de configuração e status das integrações externas (eSocial, SIPREV, DIRF, CNAB, Neoconsig, Gov.br, Prefeitura Pública); endpoints para disparo manual de remessas; monitoramento de status de envio; configuração de credenciais por tenant. O contrato pluggável de Tribunais de Contas vive no módulo `tce/` para evitar que layouts estaduais/municipais contaminem o core de submissão.
+**Responsabilidades:** facade de configuração e status das integrações externas (eSocial, SIPREV, DIRF, GPS residual, CNAB, Neoconsig, Gov.br, Prefeitura Pública); endpoints para disparo manual de remessas; monitoramento de status de envio; configuração de credenciais por tenant. O contrato pluggável de Tribunais de Contas vive no módulo `tce/` para evitar que layouts estaduais/municipais contaminem o core de submissão.
 
-**Serviços:** `EsocialFacadeService`, `SiprevFacadeService`, `CnabFacadeService`, `NeoconsigFacadeService`, `GovBrFacadeService`, `PrefeituraPublicaFacadeService`, `integrations-worker/cnab240/Cnab240BuilderService`, `integrations-worker/cnab240/Cnab240EmitService`, `integrations-worker/consignment-portability/PortabilityProcessService` e `integrations-worker/dctfweb/*`.
+**Serviços:** `EsocialFacadeService`, `SiprevFacadeService`, `CnabFacadeService`, `NeoconsigFacadeService`, `GovBrFacadeService`, `PrefeituraPublicaFacadeService`, `integrations-worker/cnab240/Cnab240BuilderService`, `integrations-worker/cnab240/Cnab240EmitService`, `integrations-worker/consignment-portability/PortabilityProcessService`, `integrations-worker/dctfweb/*` e `integrations-worker/gps/*`.
 
 `integrations-worker/cnab240` gera remessa CNAB 240 de crédito em conta para BB, Caixa, Itaú, Bradesco e Santander. A emissão consome uma `payroll.payroll_run` aprovada, filtra somente contas `hr.employee_bank_account.validation_status = 'VALID'`, grava metadados e SHA-256 em `payroll.payment_remittance_file` e persiste o vínculo linha-servidor em `payroll.payment_remittance_detail`.
 
@@ -919,11 +919,13 @@ stateDiagram-v2
 
 `integrations-worker/dctfweb` gera a DCTFWeb a partir dos totalizadores eSocial S-5011, S-5012 e S-5013 aceitos para a competência, persiste a declaração em `fiscal.dctfweb_declaration`, grava os débitos em `fiscal.dctfweb_item`, assina o XML com o certificado ICP-Brasil ativo do tenant e transmite ao endpoint RFB configurado ou ao emissor sandbox local. Retificadoras são obrigadas a referenciar explicitamente a declaração original e o recibo guarda o hash do XML transmitido para conferir integridade com o XML assinado.
 
+`integrations-worker/gps` gera GPS residual RGPS somente quando explicitamente solicitado e quando `fiscal.assert_no_dctfweb_for_competence(...)` confirma que não existe DCTFWeb transmitida ou aceita para a competência. O módulo usa `fiscal.gps_payment_code`, grava `fiscal.gps_remittance`, emite TXT de transição IN 925/2009 e mantém FISC-01/DCTFWeb como fluxo principal.
+
 #### `tce` — Tribunais de Contas
 
-**Responsabilidades:** declarar o contrato `TceAdapter`, descobrir adapters via metadata NestJS, registrar o catálogo global de adapters em `tce.adapter_registry`, emitir eventos de lifecycle em `tce.adapter_lifecycle_event` e expor administração read/manage para habilitar ou desabilitar adapters. O catálogo é global, não tenant-scoped, e só aceita mutações pelo caminho controlado do backend/worker com auditoria via `sgp_append_audit_event`.
+**Responsabilidades:** declarar o contrato `TceAdapter`, descobrir adapters via metadata NestJS, registrar o catálogo global de adapters em `tce.adapter_registry`, emitir eventos de lifecycle em `tce.adapter_lifecycle_event` e expor administração read/manage para habilitar ou desabilitar adapters. O submódulo `tce/catalog` mantém o catálogo público de UFs, TCU, TCMs e versões de leiaute em `tce.state`, `tce.layout_version` e `tce.layout_field`, com vigência temporal, transições controladas e placeholders sem leiautes proprietários. O catálogo é global, não tenant-scoped, e mutações são auditadas via `sgp_append_audit_event`.
 
-**Serviços:** `AdapterLoaderService`, `AdapterRegistryService`, `LifecycleEmitterService` e adapters concretos anotados com `@TceAdapter`. O adapter `noop` (`state_code = XX`) é o stub determinístico de contrato para validar registration, validation, serialization, submission, response parsing e health check sem chamadas externas reais.
+**Serviços:** `AdapterLoaderService`, `AdapterRegistryService`, `LifecycleEmitterService`, `StateService`, `LayoutVersionService`, `LayoutFieldService` e adapters concretos anotados com `@TceAdapter`. O adapter `noop` (`state_code = XX`) é o stub determinístico de contrato para validar registration, validation, serialization, submission, response parsing e health check sem chamadas externas reais.
 
 **Controladores:**
 
@@ -941,6 +943,12 @@ stateDiagram-v2
 - `GET /api/v1/tce/adapters/:id/events` — consultar histórico de lifecycle
 - `POST /api/v1/tce/adapters/:id/enable` — habilitar adapter
 - `POST /api/v1/tce/adapters/:id/disable` — desabilitar adapter
+- `GET /api/v1/tce/states` — listar UFs, TCU e TCMs catalogados
+- `GET /api/v1/tce/states/:code/layouts` — listar versões de leiaute por UF/sistema
+- `GET /api/v1/tce/layouts/:id/fields` — listar metadados de campos de uma versão
+- `POST /api/v1/tce/layouts` — criar versão `DRAFT`
+- `PATCH /api/v1/tce/layouts/:id/status` — transicionar `DRAFT -> ACTIVE -> SUPERSEDED -> RETIRED`
+- `POST /api/v1/tce/layout-fields` e `DELETE /api/v1/tce/layout-fields/:id` — administrar metadados de campos
 - `GET /api/external/v1/prefeitura/autenticacao` — endpoint prefeitura pública
 - `GET /api/external/v1/prefeitura/dependentes`
 - `GET /api/external/v1/dicionario/entidades`
@@ -1125,6 +1133,7 @@ sequenceDiagram
 | `cnab-retorno`            | `retorno.processar`                  | Processa arquivo de retorno bancário; atualiza status de pagamentos; gera relatório de retorno    |
 | `siprev`                  | `siprev.gerar`                       | Gera XML SIPREV no leiaute MPS vigente; persiste em S3; notifica gestor para upload manual        |
 | `dirf`                    | `dirf.gerar`                         | Gera arquivo TXT DIRF no leiaute RFB anual; persiste em S3; atualiza status                       |
+| `gps`                     | `gps.gerar`                          | Gera GPS residual RGPS quando DCTFWeb não cobre a competência; persiste TXT IN 925/2009           |
 | `consignment-portability` | `consignado.portabilidade.processar` | Importa arquivo de portabilidade, concilia contratos, transfere averbações e audita linha a linha |
 
 ---
@@ -1575,7 +1584,7 @@ graph TD
 | **Saúde**             | Perícia médica, licenças, agenda, SST, acidente de trabalho                                           | `saude`                                                                                                                             | `@sgp/ui-admin/saude`, `@sgp/ui-portal/pericia-agendada`                                        | —                                                            |
 | **RH**                | Vida funcional, cadastro de funcionários, gestão de parametrizações, avaliação, progressão, convênios | `rh`, `gestao`, `avaliacao`, `convenio`                                                                                             | `@sgp/ui-admin/rh`, `@sgp/ui-admin/gestao`, `@sgp/ui-admin/avaliacao`, `@sgp/ui-admin/convenio` | —                                                            |
 | **Recrutamento**      | Requisições de pessoal, banco de talentos, estágio                                                    | `recrutamento`                                                                                                                      | `@sgp/ui-admin/recrutamento`, `@sgp/ui-portal/curriculo`                                        | —                                                            |
-| **Integrações**       | Obrigações fiscais, eSocial, bancos, TCE/TCM/TCU e adapters externos                                  | `integracoes`, `tce`                                                                                                                 | `@sgp/ui-admin/fiscal`, `@sgp/ui-admin/tce`                                                     | `sgp-esocial-worker`, `sgp-integrations-worker`              |
+| **Integrações**       | Obrigações fiscais, eSocial, bancos, TCE/TCM/TCU e adapters externos                                  | `integracoes`, `tce`                                                                                                                | `@sgp/ui-admin/fiscal`, `@sgp/ui-admin/tce`                                                     | `sgp-esocial-worker`, `sgp-integrations-worker`              |
 
 ### 10.3 Interfaces Entre Squads
 

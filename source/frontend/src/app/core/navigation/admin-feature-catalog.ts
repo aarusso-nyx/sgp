@@ -224,6 +224,7 @@ Ponto Eletrônico|Jornadas|Jornadas e Atribuições|/ponto/jornadas|PONTO.JORNAD
 Ponto Eletrônico|REP|Equipamentos e Ingestão|/ponto/rep|PONTO.REP||ponto|REP-P, REP-A e REP-C: cadastro, AFDT e lotes
 Ponto Eletrônico|AFD|Geração e Importação|/ponto/afd|PONTO.AFD||ponto|Arquivo Fonte de Dados: geração, importação, selo e histórico
 Ponto Eletrônico|Escalas|Escalas e Plantões|/ponto/escalas|PONTO.ESCALAS||ponto|Ciclos 12x36, 6x1, plantões, rosters e flags noturnas/insalubres
+Ponto Eletrônico|Banco de Horas|Banco de Horas|/ponto/banco-horas|PONTO.BANCO_HORAS||ponto|Saldo, prazo, extrato e ajuste auditado
 Área de Saúde / Junta Médica|SST|EPC|/saude/epc/gestao|EPC.GESTAO||saude|Equipamento de Proteção Coletiva
 Convênio||Convênios|/convenio/convenio/gestao|CONVENIO.GESTAO||convenio|Vigência, banco de cobrança
 Convênio||Convênio — novo|/convenio/convenio/formulario|CONVENIO.CADASTRAR||convenio|
@@ -231,6 +232,7 @@ Convênio||Convênio — editar|/convenio/convenio/formulario/:id|CONVENIO.ATUAL
 Convênio||Beneficiários|/convenio/beneficiario/gestao|CONVENIO_BENEFICIARIO.GESTAO||convenio|Valor mensal, início, fim
 Convênio||Descontos em Folha|/convenio/desconto-folha/gestao|CONVENIO_DESCONTO_FOLHA.GESTAO||convenio|Por competência; lançado na folha
 Fiscal|Obrigações|DCTFWeb|/fiscal/dctfweb|DCTFWEB.GESTAO||fiscal|Geração, assinatura e transmissão da DCTFWeb
+Fiscal|Obrigações|GPS residual|/fiscal/gps-residual|GPS.GESTAO||fiscal|Safety-net de recolhimentos RGPS fora da DCTFWeb
 `;
 
 export const ADMIN_MODULES: ReadonlyArray<{

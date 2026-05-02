@@ -30,6 +30,8 @@ export const PERMISSIONS = [
   'fiscal.dctfweb.write',
   'fiscal.dirf.read',
   'fiscal.dirf.write',
+  'fiscal.gps.read',
+  'fiscal.gps.write',
   'fiscal.yearly_income.read',
   'fiscal.yearly_income.write',
   'folha.read',
@@ -64,6 +66,8 @@ export const PERMISSIONS = [
   'payroll.simulation.execute',
   'ponto.afd.read',
   'ponto.afd.write',
+  'ponto.hourbank.read',
+  'ponto.hourbank.write',
   'ponto.rep.read',
   'ponto.rep.write',
   'ponto.roster.read',
@@ -142,6 +146,8 @@ export const PERMISSIONS = [
   'system.tax-rate.write',
   'tce.adapter.manage',
   'tce.adapter.read',
+  'tce.catalog.manage',
+  'tce.catalog.read',
   'transparency.publish',
 ] as const;
 

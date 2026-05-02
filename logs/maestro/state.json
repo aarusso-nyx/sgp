@@ -1375,7 +1375,7 @@
       "completed_at": "2026-05-02T08:20:38.805Z"
     },
     "63-ponto-05-banco-de-horas": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/63-ponto-05-banco-de-horas",
       "retries": 0,
@@ -1411,8 +1411,9 @@
       "wave": 30,
       "theme": "PONTO",
       "zero_retry": false,
-      "agent": "019de7c7-2485-7910-b474-14e589230575",
-      "started_at": "2026-05-02T08:21:33.974Z"
+      "started_at": "2026-05-02T08:21:33.974Z",
+      "commit": "ca2e179",
+      "completed_at": "2026-05-02T08:34:48.021Z"
     },
     "64-ponto-06-justificativa-abono": {
       "status": "pending",
@@ -1782,7 +1783,7 @@
       "completed_at": "2026-05-02T08:20:38.805Z"
     },
     "72-tce-02-state-catalog-layout-registry": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "low",
       "branch": "slice/72-tce-02-state-catalog-layout-registry",
       "retries": 0,
@@ -1813,8 +1814,9 @@
       "wave": 31,
       "theme": "TCE",
       "zero_retry": false,
-      "agent": "019de7c7-24c6-7622-b61e-fdbd8862deda",
-      "started_at": "2026-05-02T08:21:33.974Z"
+      "started_at": "2026-05-02T08:21:33.974Z",
+      "commit": "749f7b4",
+      "completed_at": "2026-05-02T08:34:48.021Z"
     },
     "73-tce-03-stub-adapter-audesp-sp": {
       "status": "pending",
@@ -1941,7 +1943,7 @@
       "zero_retry": true
     },
     "76-fisc-04-gps-inss-residuais-clt": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/76-fisc-04-gps-inss-residuais-clt",
       "retries": 0,
@@ -1981,8 +1983,9 @@
       "wave": 32,
       "theme": "FISC",
       "zero_retry": false,
-      "agent": "019de7c7-2515-7903-9a42-be87c24834e5",
-      "started_at": "2026-05-02T08:21:33.974Z"
+      "started_at": "2026-05-02T08:21:33.974Z",
+      "commit": "5a22944",
+      "completed_at": "2026-05-02T08:34:48.021Z"
     },
     "77-es-10-reintegracao-s2298": {
       "status": "pending",
@@ -2342,26 +2345,7 @@
     }
   },
   "current_wave": 35,
-  "active_subagents": [
-    {
-      "slice": "63-ponto-05-banco-de-horas",
-      "agent": "019de7c7-2485-7910-b474-14e589230575",
-      "effort": "medium",
-      "started_at": "2026-05-02T08:21:33.974Z"
-    },
-    {
-      "slice": "72-tce-02-state-catalog-layout-registry",
-      "agent": "019de7c7-24c6-7622-b61e-fdbd8862deda",
-      "effort": "low",
-      "started_at": "2026-05-02T08:21:33.974Z"
-    },
-    {
-      "slice": "76-fisc-04-gps-inss-residuais-clt",
-      "agent": "019de7c7-2515-7903-9a42-be87c24834e5",
-      "effort": "medium",
-      "started_at": "2026-05-02T08:21:33.974Z"
-    }
-  ],
+  "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }

@@ -17,6 +17,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/esocial/**', 'esocial.submission.retry'],
   ['#!/fiscal/dctfweb', 'fiscal.dctfweb.write'],
   ['#!/fiscal/dirf', 'fiscal.dirf.write'],
+  ['#!/fiscal/gps-residual', 'fiscal.gps.write'],
   ['#!/folha/comprovantes-rendimentos', 'fiscal.yearly_income.write'],
   ['#!/folha/contracheques/**', 'report.payslip.read'],
   ['#!/folha/contracheques/**', 'report.payslip.write'],
@@ -40,6 +41,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/gestao/parametros/teto-remuneratorio', 'system.parameter.write'],
   ['#!/ponto/afd/**', 'ponto.afd.read'],
   ['#!/ponto/afd/**', 'ponto.afd.write'],
+  ['#!/ponto/banco-horas/**', 'ponto.hourbank.read'],
+  ['#!/ponto/banco-horas/**', 'ponto.hourbank.write'],
   ['#!/ponto/escalas/**', 'ponto.roster.read'],
   ['#!/ponto/escalas/**', 'ponto.roster.write'],
   ['#!/ponto/jornadas/**', 'ponto.schedule.read'],
@@ -64,6 +67,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/saude/programas/**', 'saude.program.read'],
   ['#!/saude/programas/**', 'saude.program.write'],
   ['#!/tce/adapters', 'tce.adapter.manage'],
+  ['#!/tce/catalog', 'tce.catalog.manage'],
 ] as const;
 
 export function permissionsForRoutePath(routePath: string): string[] {

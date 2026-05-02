@@ -178,6 +178,13 @@ export const routes: Routes = [
         loadComponent: () => import('./features/portal/aso/aso').then((m) => m.PortalAso),
       },
       {
+        path: 'portal/ponto/banco-horas',
+        loadComponent: () =>
+          import('./features/portal/ponto/banco-horas/portal-banco-horas').then(
+            (m) => m.PortalBancoHoras,
+          ),
+      },
+      {
         path: 'saude/exames',
         loadComponent: () => import('./features/saude/exames/exames').then((m) => m.SaudeExames),
       },
@@ -234,6 +241,11 @@ export const routes: Routes = [
           import('./features/ponto/escalas/ponto-escalas').then((m) => m.PontoEscalas),
       },
       {
+        path: 'ponto/banco-horas',
+        loadComponent: () =>
+          import('./features/ponto/banco-horas/ponto-banco-horas').then((m) => m.PontoBancoHoras),
+      },
+      {
         path: 'fiscal/dctfweb',
         loadComponent: () =>
           import('./features/fiscal/dctfweb/dctfweb').then((m) => m.FiscalDctfweb),
@@ -255,6 +267,17 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'fiscal/gps-residual',
+        loadComponent: () =>
+          import('./features/fiscal/gps-residual/gps-residual').then((m) => m.FiscalGpsResidual),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'fiscal',
+          permissions: ['fiscal.gps.read'],
+          moduleLabel: 'Fiscal',
+        },
+      },
+      {
         path: 'tce/adapters',
         loadComponent: () =>
           import('./features/tce/adapters/tce-adapters').then((m) => m.TceAdapters),
@@ -262,6 +285,16 @@ export const routes: Routes = [
         data: {
           moduleKey: 'tce',
           permissions: ['tce.adapter.read'],
+          moduleLabel: 'TCE',
+        },
+      },
+      {
+        path: 'tce/catalog',
+        loadComponent: () => import('./features/tce/catalog/tce-catalog').then((m) => m.TceCatalog),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'tce',
+          permissions: ['tce.catalog.read'],
           moduleLabel: 'TCE',
         },
       },

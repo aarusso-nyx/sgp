@@ -588,6 +588,22 @@
       "description": "Generate annual DIRF original and retificadora files for third-party payments."
     },
     {
+      "key": "fiscal.gps.read",
+      "moduleKey": "fiscal",
+      "resourceKey": "gps",
+      "actionKey": "read",
+      "routePattern": "/api/v1/admin/fiscal/gps/**",
+      "description": "Read residual GPS remittances and RFB payment code catalog."
+    },
+    {
+      "key": "fiscal.gps.write",
+      "moduleKey": "fiscal",
+      "resourceKey": "gps",
+      "actionKey": "write",
+      "routePattern": "#!/fiscal/gps-residual",
+      "description": "Generate residual GPS remittances only when DCTFWeb does not cover the competence."
+    },
+    {
       "key": "fiscal.yearly_income.read",
       "moduleKey": "fiscal",
       "resourceKey": "yearly_income",
@@ -618,6 +634,22 @@
       "actionKey": "manage",
       "routePattern": "#!/tce/adapters",
       "description": "Enable and disable Court of Accounts adapters through the registry."
+    },
+    {
+      "key": "tce.catalog.read",
+      "moduleKey": "tce",
+      "resourceKey": "catalog",
+      "actionKey": "read",
+      "routePattern": "/api/v1/tce/**",
+      "description": "Read Court of Accounts state and layout catalog metadata."
+    },
+    {
+      "key": "tce.catalog.manage",
+      "moduleKey": "tce",
+      "resourceKey": "catalog",
+      "actionKey": "manage",
+      "routePattern": "#!/tce/catalog",
+      "description": "Manage Court of Accounts layout versions and field metadata."
     },
     {
       "key": "avaliacao.read",
@@ -1044,6 +1076,22 @@
       "description": "Create, publish, and lock shift patterns, assignments, and duty rosters."
     },
     {
+      "key": "ponto.hourbank.read",
+      "moduleKey": "ponto",
+      "resourceKey": "hour_bank",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/banco-horas/**",
+      "description": "Read hour-bank balances, deadlines, statuses, and movement ledgers."
+    },
+    {
+      "key": "ponto.hourbank.write",
+      "moduleKey": "ponto",
+      "resourceKey": "hour_bank",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/banco-horas/**",
+      "description": "Open, accrue, compensate, settle, and manually adjust hour banks."
+    },
+    {
       "key": "rh.medical_leave.read",
       "moduleKey": "rh",
       "resourceKey": "medical_leave",
@@ -1231,6 +1279,8 @@
       "ponto.afd.write",
       "ponto.roster.read",
       "ponto.roster.write",
+      "ponto.hourbank.read",
+      "ponto.hourbank.write",
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",
@@ -1287,10 +1337,14 @@
       "fiscal.dctfweb.write",
       "fiscal.dirf.read",
       "fiscal.dirf.write",
+      "fiscal.gps.read",
+      "fiscal.gps.write",
       "fiscal.yearly_income.read",
       "fiscal.yearly_income.write",
       "tce.adapter.read",
       "tce.adapter.manage",
+      "tce.catalog.read",
+      "tce.catalog.manage",
       "portal.paystub.read",
       "portal.yearly_income.read",
       "report.payslip.read",
@@ -1313,6 +1367,7 @@
       "ponto.timerecord.read",
       "ponto.afd.read",
       "ponto.roster.read",
+      "ponto.hourbank.read",
       "avaliacao.pccs.read",
       "avaliacao.progressao.read",
       "avaliacao.salary_history.read",
@@ -1326,8 +1381,10 @@
       "esocial.submission.read",
       "fiscal.dctfweb.read",
       "fiscal.dirf.read",
+      "fiscal.gps.read",
       "fiscal.yearly_income.read",
       "tce.adapter.read",
+      "tce.catalog.read",
       "portal.paystub.read",
       "portal.yearly_income.read",
       "report.payslip.read",
