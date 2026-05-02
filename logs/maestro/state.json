@@ -1147,7 +1147,7 @@
       "wave": 30,
       "theme": "FISC",
       "zero_retry": false,
-      "agent": "pending-agent-57",
+      "agent": "019de7a0-2c61-7c90-a6bc-5d2195c803e3",
       "started_at": "2026-05-02T07:38:32.846Z"
     },
     "58-fisc-03-comprovante-rendimentos": {
@@ -1320,7 +1320,7 @@
       "wave": 28,
       "theme": "PONTO",
       "zero_retry": true,
-      "agent": "pending-agent-61",
+      "agent": "019de7a0-2c45-7162-8432-fd35ec14b97c",
       "started_at": "2026-05-02T07:38:32.846Z"
     },
     "62-ponto-04-escalas-plantoes": {
@@ -2092,7 +2092,7 @@
       "wave": 33,
       "theme": "REC",
       "zero_retry": false,
-      "agent": "pending-agent-79",
+      "agent": "019de7a0-2ccd-7371-87ed-57053bd409b9",
       "started_at": "2026-05-02T07:38:32.846Z"
     },
     "80-rec-08-prova-online-proctored": {
@@ -2318,19 +2318,19 @@
   "active_subagents": [
     {
       "slice": "61-ponto-03-afd-geracao-importacao",
-      "agent": "pending-agent-61",
+      "agent": "019de7a0-2c45-7162-8432-fd35ec14b97c",
       "effort": "high",
       "started_at": "2026-05-02T07:38:32.846Z"
     },
     {
       "slice": "57-fisc-02-dirf-anual",
-      "agent": "pending-agent-57",
+      "agent": "019de7a0-2c61-7c90-a6bc-5d2195c803e3",
       "effort": "medium",
       "started_at": "2026-05-02T07:38:32.846Z"
     },
     {
       "slice": "79-rec-07-biometria-candidato",
-      "agent": "pending-agent-79",
+      "agent": "019de7a0-2ccd-7371-87ed-57053bd409b9",
       "effort": "medium",
       "started_at": "2026-05-02T07:38:32.846Z"
     }

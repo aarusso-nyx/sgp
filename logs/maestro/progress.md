@@ -97,4 +97,4 @@ W27 ✓ 70-sst-05 (high, gates passed, commit e270f41) — S-2240 environmental 
 W28 ✓ 55-rec-06 (medium, transient concurrent DCTFWeb typecheck failure recovered by maestro defense, commit eed6dfb) — posse/exercicio and S-2200 handoff
 W28 ✓ 60-ponto-02 (high, zero-tier, transient concurrent DCTFWeb typecheck failure recovered by maestro defense, commit e2bd0fb) — REP-P/REP-A/REP-C ingestion
 W29 ✓ 56-fisc-01 (high, lint and current-schema migration drift fixed by maestro defense, commit 79bb8fc) — DCTFWeb totalizers
-2026-05-02T07:38:32.846Z frontier launch 61-ponto-03, 57-fisc-02, 79-rec-07 — agents pending
+2026-05-02T07:38:32.846Z frontier launch 61-ponto-03, 57-fisc-02, 79-rec-07 — agents 019de7a0-2c45, 019de7a0-2c61, 019de7a0-2ccd
