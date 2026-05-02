@@ -575,6 +575,23 @@ export class EmployeesService {
               'ACTIVE'::"RecordStatus"
             FROM created_employee
             RETURNING id
+          ),
+          created_admission_aso AS (
+            INSERT INTO saude.aso_record (
+              tenant_id,
+              employee_id,
+              aso_kind,
+              scheduled_at,
+              status
+            )
+            SELECT
+              tenant_id,
+              id,
+              'ADMISSIONAL'::saude.aso_kind,
+              COALESCE(NULLIF($21, '')::date, $14::date)::timestamptz,
+              'SCHEDULED'::saude.aso_status
+            FROM created_employee
+            RETURNING id
           )
           SELECT
             e.id::text,

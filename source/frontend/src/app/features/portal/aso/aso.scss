@@ -1,0 +1,36 @@
+.portal-aso {
+  display: grid;
+  gap: 1rem;
+}
+
+header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+header p,
+header h1 {
+  margin: 0;
+}
+
+header p {
+  color: #52616b;
+}
+
+button {
+  min-height: 2.25rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e4e9ee;
+  padding: 0.5rem;
+  text-align: left;
+}

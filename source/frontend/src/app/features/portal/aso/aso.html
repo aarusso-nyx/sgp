@@ -1,0 +1,29 @@
+<section class="portal-aso">
+  <header>
+    <p>Portal do servidor</p>
+    <h1>Meus ASOs</h1>
+    <button type="button" (click)="load()">Atualizar</button>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Realizacao</th>
+        <th>Conclusao</th>
+        <th>Proximo exame</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of records">
+        <td>{{ record.asoKind }}</td>
+        <td>{{ record.performedAt || record.scheduledAt }}</td>
+        <td>{{ record.conclusion || '-' }}</td>
+        <td>{{ record.nextExamDueAt || '-' }}</td>
+      </tr>
+      <tr *ngIf="!records.length">
+        <td colspan="4">Nenhum ASO disponivel.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
