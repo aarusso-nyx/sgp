@@ -98,52 +98,63 @@ export class TimeRecordHashService {
 
   async createManual(input: CreateTimeRecordDto): Promise<TimeRecordSummary> {
     return this.databaseService.transaction(async (client) => {
-      const last = await this.findLastRecord(client, input.employeeId);
-      const expectedPrevHash = last?.record_hash ?? null;
-      const providedPrevHash = input.prevHash
-        ? Buffer.from(input.prevHash, 'hex')
-        : null;
-      if (!this.equalBuffers(providedPrevHash, expectedPrevHash)) {
-        throw new BadRequestException(
-          'prev_hash does not match the last employee time record',
-        );
-      }
-      if (last && BigInt(input.nsr) <= BigInt(last.nsr)) {
-        throw new BadRequestException(
-          'nsr must be greater than the last employee time record',
-        );
-      }
-
-      const rawPayload = input.rawPayload ?? {};
-      const canonicalRecord = this.recordForHash({
-        employeeId: input.employeeId,
-        recordedAt: input.recordedAt,
-        source: input.source,
-        nsr: input.nsr,
-        rawPayload,
-      });
-      const recordHash = this.calculateHash(expectedPrevHash, canonicalRecord);
-      const rows = await client.query<TimeRecordRow>(
-        `
-        INSERT INTO ponto.time_record (
-          employee_id, recorded_at, source, nsr, prev_hash, record_hash, raw_payload
-        )
-        VALUES ($1::uuid, $2::timestamptz, $3::ponto.time_record_source, $4::bigint, $5::bytea, $6::bytea, $7::jsonb)
-        RETURNING time_record_id::text, employee_id::text, recorded_at, source::text, nsr::text,
-                  prev_hash, record_hash, raw_payload
-        `,
-        [
-          input.employeeId,
-          input.recordedAt,
-          input.source,
-          input.nsr,
-          expectedPrevHash,
-          recordHash,
-          JSON.stringify(rawPayload),
-        ],
-      );
-      return this.toSummary(rows.rows[0]);
+      return this.createWithClient(client, input, true);
     });
+  }
+
+  async createWithClient(
+    client: PoolClient,
+    input: CreateTimeRecordDto,
+    requireProvidedPrevHash = false,
+  ): Promise<TimeRecordSummary> {
+    const last = await this.findLastRecord(client, input.employeeId);
+    const expectedPrevHash = last?.record_hash ?? null;
+    const providedPrevHash = input.prevHash
+      ? Buffer.from(input.prevHash, 'hex')
+      : null;
+    if (
+      requireProvidedPrevHash &&
+      !this.equalBuffers(providedPrevHash, expectedPrevHash)
+    ) {
+      throw new BadRequestException(
+        'prev_hash does not match the last employee time record',
+      );
+    }
+    if (last && BigInt(input.nsr) <= BigInt(last.nsr)) {
+      throw new BadRequestException(
+        'nsr must be greater than the last employee time record',
+      );
+    }
+
+    const rawPayload = input.rawPayload ?? {};
+    const canonicalRecord = this.recordForHash({
+      employeeId: input.employeeId,
+      recordedAt: input.recordedAt,
+      source: input.source,
+      nsr: input.nsr,
+      rawPayload,
+    });
+    const recordHash = this.calculateHash(expectedPrevHash, canonicalRecord);
+    const rows = await client.query<TimeRecordRow>(
+      `
+      INSERT INTO ponto.time_record (
+        employee_id, recorded_at, source, nsr, prev_hash, record_hash, raw_payload
+      )
+      VALUES ($1::uuid, $2::timestamptz, $3::ponto.time_record_source, $4::bigint, $5::bytea, $6::bytea, $7::jsonb)
+      RETURNING time_record_id::text, employee_id::text, recorded_at, source::text, nsr::text,
+                prev_hash, record_hash, raw_payload
+      `,
+      [
+        input.employeeId,
+        input.recordedAt,
+        input.source,
+        input.nsr,
+        expectedPrevHash,
+        recordHash,
+        JSON.stringify(rawPayload),
+      ],
+    );
+    return this.toSummary(rows.rows[0]);
   }
 
   async list(employeeId: string, limit = 50): Promise<TimeRecordSummary[]> {

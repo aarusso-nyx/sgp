@@ -11,6 +11,14 @@ import { TimesheetPeriodController } from './timesheet-period/timesheet-period.c
 import { TimesheetPeriodService } from './timesheet-period/timesheet-period.service';
 import { WorkScheduleController } from './work-schedule/work-schedule.controller';
 import { WorkScheduleService } from './work-schedule/work-schedule.service';
+import { RepDeviceController } from './rep-device/rep-device.controller';
+import { RepDeviceService } from './rep-device/rep-device.service';
+import { ApplyToTimeRecordService } from './rep-ingestion/apply-to-time-record.service';
+import { DedupService } from './rep-ingestion/dedup.service';
+import { AftParserService } from './rep-ingestion/parsers/aft-parser.service';
+import { RepPStreamService } from './rep-ingestion/parsers/rep-p-stream.service';
+import { RepIngestionController } from './rep-ingestion/rep-ingestion.controller';
+import { RepIngestionService } from './rep-ingestion/rep-ingestion.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
@@ -19,18 +27,28 @@ import { WorkScheduleService } from './work-schedule/work-schedule.service';
     AssignmentController,
     TimeRecordController,
     TimesheetPeriodController,
+    RepDeviceController,
+    RepIngestionController,
   ],
   providers: [
     WorkScheduleService,
     AssignmentService,
     TimeRecordHashService,
     TimesheetPeriodService,
+    RepDeviceService,
+    AftParserService,
+    RepPStreamService,
+    DedupService,
+    ApplyToTimeRecordService,
+    RepIngestionService,
   ],
   exports: [
     WorkScheduleService,
     AssignmentService,
     TimeRecordHashService,
     TimesheetPeriodService,
+    RepDeviceService,
+    RepIngestionService,
   ],
 })
 export class PontoModule {}

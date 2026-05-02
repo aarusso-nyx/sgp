@@ -11,6 +11,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  Length,
   Max,
   Min,
   ValidateNested,
@@ -137,4 +138,79 @@ export class OpenTimesheetPeriodDto {
 
   @IsDateString()
   periodEnd!: string;
+}
+
+export class CreateRepDeviceDto {
+  @IsIn(['REP_P', 'REP_A', 'REP_C'])
+  kind!: string;
+
+  @IsOptional()
+  @IsString()
+  serialNumber?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  employerTaxId!: string;
+
+  @IsOptional()
+  @IsString()
+  manufacturer?: string;
+
+  @IsOptional()
+  @IsString()
+  model?: string;
+
+  @IsOptional()
+  @IsString()
+  @Length(64, 128)
+  programHash?: string;
+
+  @IsOptional()
+  @IsIn(['ACTIVE', 'INACTIVE', 'DECOMMISSIONED'])
+  status?: string;
+}
+
+export class RepPStreamRecordDto {
+  @IsInt()
+  @Min(1)
+  nsr!: number;
+
+  @IsOptional()
+  @IsUUID()
+  employeeId?: string;
+
+  @IsOptional()
+  @IsString()
+  employeeRegistration?: string;
+
+  @IsOptional()
+  @IsString()
+  employeeCpf?: string;
+
+  @IsDateString()
+  recordedAt!: string;
+
+  @IsOptional()
+  @IsObject()
+  payload?: Record<string, unknown>;
+}
+
+export class CreateRepIngestionBatchDto {
+  @IsOptional()
+  @IsString()
+  fileName?: string;
+
+  @IsOptional()
+  @IsString()
+  content?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => RepPStreamRecordDto)
+  records?: RepPStreamRecordDto[];
+
+  @IsOptional()
+  @IsString()
+  signature?: string;
 }

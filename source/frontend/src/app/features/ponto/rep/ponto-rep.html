@@ -1,0 +1,116 @@
+<section class="ponto-rep" aria-labelledby="ponto-rep-title">
+  <header class="ponto-rep__header">
+    <div>
+      <p>Ponto eletronico</p>
+      <h1 id="ponto-rep-title">REP</h1>
+    </div>
+  </header>
+
+  <p class="ponto-rep__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="ponto-rep__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <form [formGroup]="deviceForm" (ngSubmit)="createDevice()" class="ponto-rep__panel">
+    <h2>Equipamento</h2>
+    <div class="ponto-rep__fields">
+      <label>
+        <span>Tipo</span>
+        <select formControlName="kind">
+          <option value="REP_C">REP-C</option>
+          <option value="REP_A">REP-A</option>
+          <option value="REP_P">REP-P</option>
+        </select>
+      </label>
+      <label>
+        <span>Numero de fabricacao</span>
+        <input formControlName="serialNumber" />
+      </label>
+      <label>
+        <span>CNPJ/CPF empregador</span>
+        <input formControlName="employerTaxId" />
+      </label>
+      <label>
+        <span>Fabricante</span>
+        <input formControlName="manufacturer" />
+      </label>
+      <label>
+        <span>Modelo</span>
+        <input formControlName="model" />
+      </label>
+      <label>
+        <span>Hash do programa</span>
+        <input formControlName="programHash" />
+      </label>
+    </div>
+    <button type="submit" [disabled]="saving">Cadastrar</button>
+  </form>
+
+  <form [formGroup]="batchForm" (ngSubmit)="uploadBatch()" class="ponto-rep__panel">
+    <h2>Ingestao AFDT</h2>
+    <div class="ponto-rep__fields">
+      <label>
+        <span>Equipamento</span>
+        <select formControlName="repDeviceId">
+          <option *ngFor="let device of devices" [value]="device.repDeviceId">
+            {{ device.kind }} - {{ device.serialNumber || device.repDeviceId }}
+          </option>
+        </select>
+      </label>
+      <label>
+        <span>Arquivo</span>
+        <input formControlName="fileName" />
+      </label>
+    </div>
+    <label class="ponto-rep__textarea">
+      <span>Conteudo</span>
+      <textarea formControlName="content" rows="8"></textarea>
+    </label>
+    <button type="submit" [disabled]="saving">Processar lote</button>
+  </form>
+
+  <section class="ponto-rep__panel">
+    <h2>Equipamentos cadastrados</h2>
+    <p *ngIf="loading">Carregando...</p>
+    <table aria-label="Equipamentos REP">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Identificacao</th>
+          <th>Empregador</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let device of devices">
+          <td>{{ device.kind }}</td>
+          <td>{{ device.serialNumber || device.programHash || device.repDeviceId }}</td>
+          <td>{{ device.employerTaxId }}</td>
+          <td>{{ device.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="ponto-rep__panel">
+    <h2>Lotes</h2>
+    <table aria-label="Lotes REP">
+      <thead>
+        <tr>
+          <th>Arquivo</th>
+          <th>Status</th>
+          <th>Criadas</th>
+          <th>Duplicadas</th>
+          <th>Original</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let batch of batches">
+          <td>{{ batch.fileName || batch.batchId }}</td>
+          <td>{{ batch.status }}</td>
+          <td>{{ batch.createdTimeRecords }}</td>
+          <td>{{ batch.duplicateLines }}</td>
+          <td><a [href]="originalUrl(batch.batchId)">Baixar</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

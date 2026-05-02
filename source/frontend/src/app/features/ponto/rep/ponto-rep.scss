@@ -1,0 +1,70 @@
+.ponto-rep {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.ponto-rep__header {
+  align-items: end;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ponto-rep__header p,
+.ponto-rep__header h1,
+.ponto-rep__panel h2 {
+  margin: 0;
+}
+
+.ponto-rep__panel {
+  border: 1px solid #d7dce2;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.ponto-rep__fields {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.ponto-rep__fields label,
+.ponto-rep__textarea {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ponto-rep__fields input,
+.ponto-rep__fields select,
+.ponto-rep__textarea textarea {
+  min-height: 2.25rem;
+}
+
+.ponto-rep__textarea textarea {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  resize: vertical;
+}
+
+.ponto-rep__message {
+  color: #176f42;
+  margin: 0;
+}
+
+.ponto-rep__error {
+  color: #b42318;
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  text-align: left;
+}
