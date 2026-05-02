@@ -19,6 +19,7 @@ describe('legacy navigation manifest', () => {
       'previdenciario',
       'auditoria',
       'saude',
+      'ponto',
       'convenio',
     ]);
   });

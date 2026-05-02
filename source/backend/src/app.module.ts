@@ -29,6 +29,7 @@ import { PermissionGuard } from './iam/guards/permission.guard';
 import { IntegrationsWorkerModule } from './integrations-worker/integrations-worker.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { PortalModule } from './portal/portal.module';
+import { PontoModule } from './ponto/ponto.module';
 import { PrevidenciarioModule } from './previdenciario/previdenciario.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { PublicoModule } from './publico/publico.module';
@@ -54,6 +55,7 @@ import { AppService } from './app.service';
     NotificationsModule,
     DocumentsModule,
     PortalModule,
+    PontoModule,
     ExternalModule,
     ESocialWorkerModule,
     IntegrationsWorkerModule,

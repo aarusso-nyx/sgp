@@ -1,0 +1,64 @@
+.ponto-jornadas {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.ponto-jornadas__header {
+  align-items: end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.ponto-jornadas__header p,
+.ponto-jornadas__header h1,
+.ponto-jornadas__panel h2 {
+  margin: 0;
+}
+
+.ponto-jornadas__panel {
+  border: 1px solid #d7dce2;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.ponto-jornadas__fields {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.ponto-jornadas__fields label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ponto-jornadas__fields input,
+.ponto-jornadas__fields select {
+  min-height: 2.25rem;
+}
+
+.ponto-jornadas__message {
+  color: #176f42;
+  margin: 0;
+}
+
+.ponto-jornadas__error {
+  color: #b42318;
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  text-align: left;
+}

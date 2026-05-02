@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["public", "hr", "payroll", "payroll_calc", "portal", "esocial", "payment", "saude"]
+  schemas  = ["public", "hr", "payroll", "payroll_calc", "portal", "esocial", "payment", "saude", "ponto"]
 }
 
 enum RecordStatus {

@@ -1,0 +1,5 @@
+-- Exercised by npm run db:smoke and the PONTO-01 migration.
+--
+-- ponto.time_record is append-only: UPDATE and DELETE are blocked by
+-- ponto.ponto01_time_record_append_only(), while INSERT appends an audit event
+-- through sgp_append_audit_event(...).

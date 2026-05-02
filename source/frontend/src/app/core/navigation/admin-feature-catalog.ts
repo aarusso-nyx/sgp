@@ -11,6 +11,7 @@ export type AdminModuleKey =
   | 'previdenciario'
   | 'auditoria'
   | 'saude'
+  | 'ponto'
   | 'convenio';
 
 export type AdminFeatureMode = 'management' | 'form' | 'details' | 'dashboard';
@@ -218,6 +219,7 @@ Auditoria||Filtros por Período|/auditoria/periodo/gestao|AUDITORIA.GESTAO||audi
 Área de Saúde / Junta Médica|SST|Subcategoria de Doenças|/saude/subcategoria-doenca/gestao|SUBCATEGORIA_DOENCA.GESTAO||saude|
 Área de Saúde / Junta Médica|SST|Agente Nocivo|/saude/agente-nocivo/gestao|AGENTE_NOCIVO.GESTAO||saude|Classificação legal
 Área de Saúde / Junta Médica|SST|EPI|/saude/epi/gestao|EPI.GESTAO||saude|Equipamento de Proteção Individual
+Ponto Eletrônico|Jornadas|Jornadas e Atribuições|/ponto/jornadas|PONTO.JORNADAS||ponto|Portaria MTP 671/2021: jornada contratada, turnos e vigências
 Área de Saúde / Junta Médica|SST|EPC|/saude/epc/gestao|EPC.GESTAO||saude|Equipamento de Proteção Coletiva
 Convênio||Convênios|/convenio/convenio/gestao|CONVENIO.GESTAO||convenio|Vigência, banco de cobrança
 Convênio||Convênio — novo|/convenio/convenio/formulario|CONVENIO.CADASTRAR||convenio|
@@ -241,6 +243,7 @@ export const ADMIN_MODULES: ReadonlyArray<{
   { key: 'previdenciario', label: 'Módulo Previdenciário', routePath: '/previdenciario' },
   { key: 'auditoria', label: 'Auditoria', routePath: '/auditoria' },
   { key: 'saude', label: 'Área de Saúde', routePath: '/saude' },
+  { key: 'ponto', label: 'Ponto Eletrônico', routePath: '/ponto' },
   { key: 'convenio', label: 'Convênio', routePath: '/convenio' },
 ];
 
