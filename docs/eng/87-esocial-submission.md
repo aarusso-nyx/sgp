@@ -9,7 +9,7 @@ O `sgp-esocial-worker` deixa de usar adapter sandbox para submissao e passa a op
 
 ## Endpoints
 
-O ambiente e controlado por `ESOCIAL_ENV=QUALIFICATION|PRODUCTION`. `ESOCIAL_ENDPOINT_ENVIO` aponta para o WSDL/endpoint de envio de lotes e `ESOCIAL_ENDPOINT_CONSULTA` fica reservado para ES-09. O repositorio commita somente valores de qualificacao em `.env.example`; endpoints ou credenciais de producao devem vir de secret manager/runtime.
+O ambiente e controlado por `ESOCIAL_ENV=QUALIFICATION|PRODUCTION`. `ESOCIAL_ENDPOINT_ENVIO` aponta para o WSDL/endpoint de envio de lotes e `ESOCIAL_ENDPOINT_CONSULTA` fica reservado para ES-09. O repositorio commita somente valores de qualificacao em `backend/.env.example`; endpoints ou credenciais de producao devem vir de secret manager/runtime.
 
 ## Seguranca SOAP
 

@@ -18,7 +18,7 @@ Make verification gates truthful for the current sprint:
 - `docs/audit/diag/raw-db-smoke.log`
 - `docs/audit/diag/raw-backend-coverage.log`
 - `docs/audit/inv/verification-inventory.json`
-- `backend/test`
+- `tests/backend`
 - `backend/jest.config*`
 - `package.json`
 - `backend/package.json`

@@ -22,7 +22,7 @@ const COMMANDS = {
 };
 
 function loadRuntimeTopology() {
-  const path = join(cwd, 'runtime', 'topology.json');
+  const path = join(cwd, 'docs', 'governance', 'runtime-topology.json');
   const content = readFileSync(path, 'utf8');
   return JSON.parse(content);
 }
@@ -112,7 +112,7 @@ function handleHealth() {
     'backend/src/main-payroll-engine.ts',
     'backend/src/main-esocial-worker.ts',
     'backend/src/main-report-service.ts',
-    'runtime/topology.json',
+    'docs/governance/runtime-topology.json',
   ];
 
   const checks = requiredPaths.map((relativePath) => ({
@@ -133,7 +133,7 @@ function handleHealth() {
   const ok = checks.every((item) => item.ok) && runtimeChecks.every((runtime) => runtime.ok);
   const status = {
     ok,
-    workspace: 'sgp-modernization-source',
+    workspace: 'sgp',
     node: process.version,
     checks,
     runtimes: runtimeChecks,

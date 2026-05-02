@@ -1,16 +1,10 @@
 # Environment Variables
 
-This file documents workspace-level variables used by `sgp-admin`, `sgp-portal`, the Nest APIs, and orchestration scripts.
+This file documents variables used by `sgp-admin`, `sgp-portal`, the Nest APIs, tests, and deployment planning. Placeholder examples are split by consumer:
 
-## Reverse-Documentation Runtime Inputs
-
-Used by exploration/inventory tooling in the parent project:
-
-- `APP_BASE_URL`: base URL for the observed legacy application.
-- `APP_LOGIN`: login username for inspection automation.
-- `APP_PASSWORD`: login password for inspection automation.
-
-Never print these values into logs, markdown, screenshots, or committed files.
+- `backend/.env.example`: Nest API, workers, Cognito, database, S3, and eSocial submission variables.
+- `tests/.env.example`: QA smoke/e2e base URLs and local test storage variables.
+- `infra/aws/.env.example`: deployment planning variables.
 
 ## Auth (Cognito)
 
@@ -55,6 +49,6 @@ Never print these values into logs, markdown, screenshots, or committed files.
 
 ## Conventions
 
-- Use `.env.example` for placeholders only.
+- Use `*.env.example` files for placeholders only.
 - Use environment-specific secret stores in CI/CD.
 - Keep values explicit and environment-scoped (`stage` vs `prod`).

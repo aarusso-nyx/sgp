@@ -9,8 +9,11 @@ on:
       - '.node-version'
       - '.nvmrc'
       - '.prettierrc.json'
+      - '.editorconfig'
+      - 'eslint.config.mjs'
       - 'package.json'
       - 'package-lock.json'
+      - 'tsconfig.json'
       - 'backend/**'
       - 'database/**'
       - 'docs/eng/**'
@@ -18,10 +21,8 @@ on:
       - 'docs/legacy-reverse/deprecation-status.md'
       - 'frontend/**'
       - 'infra/**'
-      - 'runtime/**'
       - 'scripts/**'
       - 'tests/**'
-      - 'tests-e2e/**'
   push:
     branches:
       - main
@@ -33,8 +34,11 @@ on:
       - '.node-version'
       - '.nvmrc'
       - '.prettierrc.json'
+      - '.editorconfig'
+      - 'eslint.config.mjs'
       - 'package.json'
       - 'package-lock.json'
+      - 'tsconfig.json'
       - 'backend/**'
       - 'database/**'
       - 'docs/eng/**'
@@ -42,10 +46,8 @@ on:
       - 'docs/legacy-reverse/deprecation-status.md'
       - 'frontend/**'
       - 'infra/**'
-      - 'runtime/**'
       - 'scripts/**'
       - 'tests/**'
-      - 'tests-e2e/**'
 
 jobs:
   source-gates:

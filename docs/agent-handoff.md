@@ -208,9 +208,9 @@ Observed results:
 - E2E: passed
   - 18 tests
 - Prisma validate: passed
-- Secret scan over `backend/src`, `frontend/src`, `docs`, and `backend/test`: clean
+- Secret scan over `backend/src`, `frontend/src`, `docs`, and `tests/backend`: clean
 
-Secret scan was run over `backend/src`, `frontend/src`, `docs`, and `backend/test`. Future agents should run an equivalent scan for credential-looking assignments, bearer tokens, JWTs, and real APP credential values before handing off or committing.
+Secret scan was run over `backend/src`, `frontend/src`, `docs`, and `tests/backend`. Future agents should run an equivalent scan for credential-looking assignments, bearer tokens, JWTs, and real APP credential values before handing off or committing.
 
 Generated build/cache output was removed after validation:
 

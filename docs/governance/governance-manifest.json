@@ -56,6 +56,11 @@
       "id": "governance.devai-config",
       "status": "implemented",
       "evidence": "devai.config.json"
+    },
+    {
+      "id": "governance.runtime-topology",
+      "status": "implemented",
+      "evidence": "docs/governance/runtime-topology.json"
     }
   ]
 }

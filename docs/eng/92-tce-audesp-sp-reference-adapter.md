@@ -55,5 +55,5 @@ Frontend:
 Testes:
 
 - Mapper, serializer com fixture XML, validator, stub e fail-safe do adapter.
-- E2E `backend/test/tce-03-audesp-sp.e2e-spec.ts`.
+- E2E `tests/backend/tce-03-audesp-sp.e2e-spec.ts`.
 - Probe RLS `tests/rls/tce-submission-cross-tenant.spec.ts`.

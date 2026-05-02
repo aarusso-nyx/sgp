@@ -19,10 +19,12 @@ npm install
 
 ## 3. Configure Environment
 
-Copy `.env.example` to `.env` and fill values for your machine.
+Copy the environment example for the surface you are running and fill values for your machine.
 
 ```bash
-cp .env.example .env
+cp backend/.env.example backend/.env
+cp tests/.env.example tests/.env
+cp infra/aws/.env.example infra/aws/.env
 ```
 
 Never commit `.env`.
@@ -71,10 +73,10 @@ These commands execute Prisma through the backend workspace.
 
 ## 7. Runtime Topology
 
-The documented runtime split is tracked in `runtime/topology.json`. Run:
+The documented runtime split is tracked in `docs/governance/runtime-topology.json`. Run:
 
 ```bash
-npm run runtime:topology
+npm run governance:runtime-topology
 ```
 
 to inspect the current deployable/runtime inventory and scaffold status.

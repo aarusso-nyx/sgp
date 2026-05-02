@@ -22,7 +22,7 @@
   "generatedSurfaces": [
     "docs/eng/69-api-route-alignment.json",
     "docs/eng/64-database-alignment-matrix.json",
-    "runtime/topology.json",
+    "docs/governance/runtime-topology.json",
     "docs/governance/governance-manifest.json"
   ],
   "hardFailGates": [
