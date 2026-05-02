@@ -3,7 +3,9 @@ import { RouterModule } from '@angular/router';
 
 import { permissionGuard } from '../../core/auth/permission-guard';
 import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups';
+import { Contracheques } from './contracheques/contracheques';
 import { FolhaMensal } from './competencia/folha-mensal';
+import { Consignados } from './consignados/consignados';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
@@ -13,6 +15,26 @@ import { SimulacaoFolha } from './simulacao/simulacao';
 @NgModule({
   imports: [
     RouterModule.forChild([
+      {
+        path: 'consignados',
+        component: Consignados,
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['payment.consignment.read'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
+      {
+        path: 'contracheques',
+        component: Contracheques,
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['report.payslip.write'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
       {
         path: 'competencia/mensal',
         component: FolhaMensal,

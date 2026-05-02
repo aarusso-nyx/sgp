@@ -112,6 +112,10 @@ export class DatabaseService implements OnModuleDestroy {
       tenantId,
     ]);
     await client.query('SELECT set_config($1, $2, true)', [
+      'app.current_employee_id',
+      this.claimText(actor?.claims?.employee_id),
+    ]);
+    await client.query('SELECT set_config($1, $2, true)', [
       'app.current_permissions',
       permissions.join('\n'),
     ]);
@@ -160,5 +164,9 @@ export class DatabaseService implements OnModuleDestroy {
       idleTimeoutMillis: 30_000,
     });
     return this.pool;
+  }
+
+  private claimText(value: unknown): string {
+    return typeof value === 'string' ? value : '';
   }
 }

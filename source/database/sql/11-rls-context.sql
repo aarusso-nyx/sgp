@@ -102,6 +102,31 @@ AS $$
     AND row_tenant_id = public.sgp_current_tenant_uuid();
 $$;
 
+CREATE OR REPLACE FUNCTION public.sgp_current_employee_id()
+RETURNS uuid
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT COALESCE(
+    CASE
+      WHEN public.sgp_current_setting_text('app.current_employee_id') ~*
+        '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+        THEN public.sgp_current_setting_text('app.current_employee_id')::uuid
+      ELSE NULL
+    END,
+    (
+      SELECT employee.id
+      FROM public.user_account account
+      JOIN hr.employee employee
+        ON employee.tenant_id = account.tenant_id
+       AND employee.cpf = account.cpf
+      WHERE account.tenant_id = public.sgp_current_tenant_uuid()
+        AND account.cognito_sub = public.sgp_current_user_sub()
+      LIMIT 1
+    )
+  );
+$$;
+
 CREATE OR REPLACE FUNCTION public.sgp_bypass_rls()
 RETURNS boolean
 LANGUAGE sql

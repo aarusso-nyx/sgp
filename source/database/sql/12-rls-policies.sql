@@ -1453,8 +1453,21 @@ CREATE POLICY generated_report_file_select ON public.generated_report_file
     OR (
       public.sgp_tenant_matches(tenant_id)
       AND public.sgp_has_any_permission(
-        ARRAY['relatorio.read', 'relatorio.generate', 'auditoria.read', 'documents.download']
+        ARRAY[
+          'relatorio.read',
+          'relatorio.generate',
+          'auditoria.read',
+          'documents.download',
+          'report.payslip.read',
+          'report.payslip.write'
+        ]
       )
+    )
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND report_kind = 'PAYSLIP'
+      AND employee_id = public.sgp_current_employee_id()
+      AND public.sgp_has_any_permission(ARRAY['portal.paystub.read'])
     )
   );
 DROP POLICY IF EXISTS generated_report_file_write ON public.generated_report_file;
@@ -1464,14 +1477,46 @@ CREATE POLICY generated_report_file_write ON public.generated_report_file
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio.generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.generate', 'report.payslip.write'])
     )
   )
   WITH CHECK (
     public.sgp_bypass_rls()
     OR (
       public.sgp_tenant_matches(tenant_id)
-      AND public.sgp_has_any_permission(ARRAY['relatorio.generate'])
+      AND public.sgp_has_any_permission(ARRAY['relatorio.generate', 'report.payslip.write'])
+    )
+  );
+
+ALTER TABLE IF EXISTS public.payslip_batch ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.payslip_batch FORCE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS payslip_batch_select ON public.payslip_batch;
+CREATE POLICY payslip_batch_select ON public.payslip_batch
+  FOR SELECT
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(
+        ARRAY['report.payslip.read', 'report.payslip.write', 'relatorio.read', 'relatorio.generate']
+      )
+    )
+  );
+DROP POLICY IF EXISTS payslip_batch_write ON public.payslip_batch;
+CREATE POLICY payslip_batch_write ON public.payslip_batch
+  FOR ALL
+  USING (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['report.payslip.write', 'relatorio.generate'])
+    )
+  )
+  WITH CHECK (
+    public.sgp_bypass_rls()
+    OR (
+      public.sgp_tenant_matches(tenant_id)
+      AND public.sgp_has_any_permission(ARRAY['report.payslip.write', 'relatorio.generate'])
     )
   );
 

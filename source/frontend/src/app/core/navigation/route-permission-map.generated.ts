@@ -15,6 +15,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/esocial/**', 'esocial.event.exclude'],
   ['#!/esocial/**', 'esocial.submission.read'],
   ['#!/esocial/**', 'esocial.submission.retry'],
+  ['#!/folha/contracheques/**', 'report.payslip.read'],
+  ['#!/folha/contracheques/**', 'report.payslip.write'],
   ['#!/folha/remessa-bancaria/**', 'payment.remittance.read'],
   ['#!/folha/remessa-bancaria/**', 'payment.remittance.write'],
   ['#!/folha/simulacao', 'payroll.simulation.execute'],

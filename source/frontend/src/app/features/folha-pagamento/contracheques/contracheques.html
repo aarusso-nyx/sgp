@@ -1,0 +1,28 @@
+<section class="payslip-admin">
+  <header>
+    <h1>Contracheques oficiais</h1>
+  </header>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Competencia</mat-label>
+      <input matInput type="date" formControlName="competence" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Folha</mat-label>
+      <input matInput formControlName="payrollRunId" />
+    </mat-form-field>
+    <button mat-flat-button color="primary" type="button" (click)="generate()" [disabled]="loading">
+      <mat-icon>picture_as_pdf</mat-icon>
+      Gerar lote
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section *ngIf="result" class="batch-result">
+    <span>{{ result.status }}</span>
+    <strong>{{ result.fileCount }} arquivos</strong>
+    <small>{{ result.errorCount }} erros · {{ result.batchId }}</small>
+  </section>
+</section>

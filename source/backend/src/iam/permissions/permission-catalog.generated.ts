@@ -40,6 +40,8 @@ export const PERMISSIONS = [
   'hr.bank_account.read',
   'hr.bank_account.write',
   'iam.read',
+  'payment.consignment.read',
+  'payment.consignment.write',
   'payment.remittance.read',
   'payment.remittance.write',
   'payroll.ats.read',
@@ -53,10 +55,13 @@ export const PERMISSIONS = [
   'portal.profile.write',
   'previdenciario.read',
   'previdenciario.write',
+  'public.read',
   'recrutamento.read',
   'recrutamento.write',
   'relatorio.generate',
   'relatorio.read',
+  'report.payslip.read',
+  'report.payslip.write',
   'rh.cadastral_change.approve',
   'rh.dependent.read',
   'rh.dependent.write',
@@ -89,6 +94,7 @@ export const PERMISSIONS = [
   'system.parameter.write',
   'system.tax-rate.read',
   'system.tax-rate.write',
+  'transparency.publish',
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];

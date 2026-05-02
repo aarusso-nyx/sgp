@@ -180,6 +180,22 @@
       "description": "Generate payroll CNAB remittance files."
     },
     {
+      "key": "payment.consignment.read",
+      "moduleKey": "payment",
+      "resourceKey": "consignment",
+      "actionKey": "read",
+      "routePattern": "/api/v1/employees/*/consignment-*",
+      "description": "Read employee consignment margin and loans."
+    },
+    {
+      "key": "payment.consignment.write",
+      "moduleKey": "payment",
+      "resourceKey": "consignment",
+      "actionKey": "write",
+      "routePattern": "/api/v1/employees/*/consignment-loans",
+      "description": "Create and maintain employee consignment loans."
+    },
+    {
       "key": "rh.employment_link.write",
       "moduleKey": "rh",
       "resourceKey": "employment_link",
@@ -306,6 +322,22 @@
       "actionKey": "write",
       "routePattern": "#!/folhaPagamento/**",
       "description": "Mutate payroll records, accounting catalogs, eSocial payroll surfaces, and calculations."
+    },
+    {
+      "key": "public.read",
+      "moduleKey": "publico",
+      "resourceKey": "transparency",
+      "actionKey": "read",
+      "routePattern": "/api/v1/public/transparency/**",
+      "description": "Read public transparency snapshots without exposing protected personal data."
+    },
+    {
+      "key": "transparency.publish",
+      "moduleKey": "publico",
+      "resourceKey": "transparency",
+      "actionKey": "publish",
+      "routePattern": "/api/v1/public/transparency/**",
+      "description": "Publish approved payroll runs to the public transparency snapshot."
     },
     {
       "key": "payroll.run.execute",
@@ -700,6 +732,22 @@
       "description": "Generate or queue reports."
     },
     {
+      "key": "report.payslip.read",
+      "moduleKey": "relatorio",
+      "resourceKey": "payslip",
+      "actionKey": "read",
+      "routePattern": "#!/folha/contracheques/**",
+      "description": "Read official payslip PDF batches and generated file metadata."
+    },
+    {
+      "key": "report.payslip.write",
+      "moduleKey": "relatorio",
+      "resourceKey": "payslip",
+      "actionKey": "write",
+      "routePattern": "#!/folha/contracheques/**",
+      "description": "Generate official payslip PDF batches."
+    },
+    {
       "key": "documents.upload",
       "moduleKey": "documents",
       "resourceKey": "attachment",
@@ -822,6 +870,8 @@
       "esocial.submission.read",
       "esocial.submission.retry",
       "portal.paystub.read",
+      "report.payslip.read",
+      "report.payslip.write",
       "relatorio.generate"
     ],
     "AUDITOR": [
@@ -842,6 +892,7 @@
       "esocial.event.read",
       "esocial.submission.read",
       "portal.paystub.read",
+      "report.payslip.read",
       "relatorio.read",
       "relatorio.generate",
       "auditoria.read"

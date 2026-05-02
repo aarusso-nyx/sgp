@@ -12,6 +12,9 @@ import { RequestIdMiddleware } from '../common/request-id/request-id.middleware'
 import { validateEnvironment } from '../config/environment';
 import { DatabaseModule } from '../database/database.module';
 import { IntegrationsWorkerModule } from '../integrations-worker/integrations-worker.module';
+import { PdfABuilderService } from './payslip/pdf-a-builder.service';
+import { PayslipController } from './payslip/payslip.controller';
+import { PayslipRenderService } from './payslip/payslip-render.service';
 import { ReportServiceController } from './report-service.controller';
 import { ReportRuntimeService } from './report-service.service';
 
@@ -21,9 +24,11 @@ import { ReportRuntimeService } from './report-service.service';
     DatabaseModule,
     IntegrationsWorkerModule,
   ],
-  controllers: [ReportServiceController],
+  controllers: [ReportServiceController, PayslipController],
   providers: [
     ReportRuntimeService,
+    PdfABuilderService,
+    PayslipRenderService,
     {
       provide: APP_PIPE,
       useFactory: () =>

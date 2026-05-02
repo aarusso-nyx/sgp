@@ -21,7 +21,7 @@ Este catálogo registra todas as saídas oficiais produzidas pelo SGP Moderno (d
 | SS | Self-signed (hash + metadados internos, sem ICP) |
 | — | Sem assinatura digital obrigatória |
 
-**Engine de geração de PDFs:** `sgp-report-service` usando **Carbone** (templates DOCX/ODS compilados para PDF via LibreOffice headless) ou **PDFKit** para layouts programáticos de baixa complexidade. Arquivos TXT/XML gerados por builders TypeScript tipados em `sgp-integrations-worker`.
+**Engine de geração de PDFs:** `sgp-report-service` usando **Carbone** (templates DOCX/ODS compilados para PDF via LibreOffice headless) ou biblioteca PDF dedicada para layouts programáticos de baixa complexidade. Contracheque oficial usa `pdf-lib` em `source/backend/src/report-service/payslip/` com metadados PDF/A-1b, hash SHA-256 e retenção registrada em `public.generated_report_file`. Arquivos TXT/XML gerados por builders TypeScript tipados em `sgp-integrations-worker`.
 
 **Chave S3 padrão:**
 ```
@@ -44,13 +44,13 @@ s3://<bucket-tenant>/{dominio}/{ano}/{mes}/{tipo}/{uuid}.{ext}
 | **Nome informal** | Contracheque do servidor |
 | **Formato** | PDF/A-1b |
 | **Gatilho** | `[M]` individual ou `[E]` geração em massa pós-cálculo lote |
-| **Dados de entrada** | `competencia_id`, `funcionario_id`, `tipo_processamento` (MENSAL \| DECIMO_TERCEIRO_INTEGRACAO \| DECIMO_TERCEIRO_ADIANTAMENTO \| FERIAS \| RESCISAO) |
-| **Template** | `contracheque-servidor.carbone.docx`; engine **Carbone v3** |
-| **Variáveis expostas** | `servidor.*`, `lotacao.*`, `competencia.*`, `lancamentos[]`, `totaisProventos`, `totaisDescontos`, `liquido`, `marcaDaguaFlag`, `logoUrl`, `frase_inicial` |
+| **Dados de entrada** | `payroll_run_id`, `employee_id`, competência (`DATE`), itens ativos de `payroll.v_payroll_run_line_active` e totais de `payroll.payroll_financial_record` |
+| **Template** | `source/backend/src/report-service/payslip/payslip-template.ts`; engine **pdf-lib** conforme ADR `92-payslip-pdf-decision.md` |
+| **Variáveis expostas** | `servidor.*`, `vinculo`, `competencia`, `rubricas[]` (codigo, descricao, referencia, proventos, descontos), `totaisProventos`, `totaisDescontos`, `liquido`, bases IRRF/INSS, FGTS depósito, banco/agencia/conta, fundamento legal |
 | **Base legal** | Lei n.º 8.112/1990 art. 45; legislação municipal/estadual vigente; IN RFB para IRRF |
 | **Assinatura digital** | SS (hash SHA-256 + metadados gravados em `audit_log`); ICP opcional por tenant |
-| **Armazenamento S3** | `folha/{ano}/{mes}/contracheque/servidor/{uuid}.pdf`; retenção 10 anos; Object Lock |
-| **Evidência de paridade** | Comparar: matrícula, competência, todos os códigos de verba, valores brutos, descontos, líquido, total de proventos, total de descontos; tolerância zero em valores; tolerância ≤ 1 caractere em campos textuais de nomenclatura de verba |
+| **Armazenamento S3** | `{tenant}/outputs/payslip/{ano}/{mes}/{employee_id}.pdf`; retenção 10 anos; `public.generated_report_file.file_hash` SHA-256; Object Lock quando storage S3 estiver ativo |
+| **Evidência de paridade** | Arquivo binário inicia com `%PDF-`, metadados PDF/A-1b presentes, `file_hash` SHA-256 persistido, comparação de matrícula, competência, códigos de verba, valores brutos, descontos, líquido, total de proventos e total de descontos com tolerância zero em valores |
 
 ---
 

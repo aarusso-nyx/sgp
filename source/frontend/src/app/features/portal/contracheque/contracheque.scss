@@ -1,0 +1,47 @@
+.paystub {
+  display: grid;
+  gap: 1rem;
+}
+
+.paystub header p,
+.paystub h1 {
+  margin: 0;
+}
+
+.paystub h1 {
+  font-size: 1.6rem;
+}
+
+.paystub__error {
+  color: #b3261e;
+}
+
+.paystub__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.paystub__list li {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.paystub__list strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.paystub__list button {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: white;
+  padding: 0.45rem 0.7rem;
+}

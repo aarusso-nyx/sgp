@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["public", "hr", "payroll", "payroll_calc", "portal", "esocial"]
+  schemas  = ["public", "hr", "payroll", "payroll_calc", "portal", "esocial", "payment"]
 }
 
 enum RecordStatus {
@@ -60,6 +60,44 @@ enum AuditAction {
   DOWNLOAD
 
   @@schema("public")
+}
+
+enum ConsignmentEntityKind {
+  BANK
+  COOPERATIVE
+  UNION
+  ASSOCIATION
+
+  @@map("consignment_entity_kind")
+  @@schema("payment")
+}
+
+enum ConsignmentStatus {
+  ACTIVE
+  SUSPENDED
+  TERMINATED
+
+  @@map("consignment_status")
+  @@schema("payment")
+}
+
+enum ConsignmentLoanKind {
+  PAYROLL_LOAN
+  CARD
+  OTHER
+
+  @@map("consignment_loan_kind")
+  @@schema("payment")
+}
+
+enum ConsignmentLoanStatus {
+  ACTIVE
+  SUSPENDED
+  TERMINATED
+  TRANSFERRED
+
+  @@map("consignment_loan_status")
+  @@schema("payment")
 }
 
 enum BranchType {
@@ -171,6 +209,38 @@ enum ReportRequestStatus {
   COMPLETED
   FAILED
   EXPIRED
+
+  @@schema("public")
+}
+
+enum ReportKind {
+  PAYSLIP
+
+  @@schema("public")
+}
+
+enum PdfACompliance {
+  PDF_A_1B
+  PDF_A_2B
+  NONE
+
+  @@schema("public")
+}
+
+enum SignatureKind {
+  NONE
+  ICP_BRASIL_A1
+  ICP_BRASIL_A3
+  GOV_BR
+
+  @@schema("public")
+}
+
+enum PayslipBatchStatus {
+  QUEUED
+  RUNNING
+  DONE
+  FAILED
 
   @@schema("public")
 }
@@ -2974,19 +3044,55 @@ model ReportRequest {
 }
 
 model GeneratedReportFile {
-  id              String   @id @default(uuid()) @db.Uuid
-  tenantId        String   @map("tenant_id") @db.Uuid
-  reportRequestId String   @map("report_request_id") @db.Uuid
-  attachmentId    String   @map("attachment_id") @db.Uuid
+  id              String          @id @default(uuid()) @db.Uuid
+  tenantId        String          @map("tenant_id") @db.Uuid
+  reportRequestId String          @map("report_request_id") @db.Uuid
+  attachmentId    String          @map("attachment_id") @db.Uuid
   format          String
-  generatedAt     DateTime @default(now()) @map("generated_at") @db.Timestamptz(6)
+  reportKind      ReportKind?     @map("report_kind")
+  competence      DateTime?       @db.Date
+  employeeId      String?         @map("employee_id") @db.Uuid
+  payrollRunId    String?         @map("payroll_run_id") @db.Uuid
+  pdfACompliance  PdfACompliance  @default(NONE) @map("pdf_a_compliance")
+  signatureKind   SignatureKind   @default(NONE) @map("signature_kind")
+  signedAt        DateTime?       @map("signed_at") @db.Timestamptz(6)
+  retentionUntil  DateTime?       @map("retention_until") @db.Date
+  fileHash        String?         @map("file_hash")
+  generatedAt     DateTime        @default(now()) @map("generated_at") @db.Timestamptz(6)
 
   reportRequest ReportRequest      @relation(fields: [reportRequestId], references: [id])
   attachment    DocumentAttachment @relation(fields: [attachmentId], references: [id])
+  employee      Employee?          @relation(fields: [employeeId], references: [id])
+  payrollRun    PayrollRun?        @relation(fields: [payrollRunId], references: [id])
 
   @@index([reportRequestId])
   @@index([attachmentId])
+  @@index([tenantId, employeeId, competence])
+  @@index([tenantId, payrollRunId])
+  @@index([fileHash])
   @@map("generated_report_file")
+  @@schema("public")
+}
+
+model PayslipBatch {
+  batchId      String             @id @default(uuid()) @map("batch_id") @db.Uuid
+  tenantId     String             @map("tenant_id") @db.Uuid
+  competence   DateTime           @db.Date
+  payrollRunId String             @map("payroll_run_id") @db.Uuid
+  requestedAt  DateTime           @default(now()) @map("requested_at") @db.Timestamptz(6)
+  requestedBy  String?            @map("requested_by") @db.Uuid
+  status       PayslipBatchStatus @default(QUEUED)
+  fileCount    Int                @default(0) @map("file_count")
+  errorCount   Int                @default(0) @map("error_count")
+  errorMessage String?            @map("error_message")
+  updatedAt    DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  payrollRun PayrollRun   @relation(fields: [payrollRunId], references: [id])
+  requester  UserAccount? @relation("PayslipBatchRequestedBy", fields: [requestedBy], references: [id])
+
+  @@index([tenantId, competence, requestedAt])
+  @@index([payrollRunId])
+  @@map("payslip_batch")
   @@schema("public")
 }
 
@@ -3745,6 +3851,55 @@ model ConsignmentEntity {
   @@index([status])
   @@map("consignment_entity")
   @@schema("hr")
+}
+
+model PaymentConsignmentEntity {
+  tenantId              String                 @map("tenant_id") @db.Uuid
+  consignmentEntityId   String                 @default(uuid()) @map("consignment_entity_id") @db.Uuid
+  code                  String
+  name                  String
+  cnpj                  String?
+  kind                  ConsignmentEntityKind
+  agreementNumber       String?                @map("agreement_number")
+  validFrom             DateTime               @map("valid_from") @db.Date
+  validTo               DateTime?              @map("valid_to") @db.Date
+  status                ConsignmentStatus      @default(ACTIVE)
+  createdAt             DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime               @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  loans                 PaymentConsignmentLoan[]
+
+  @@id([tenantId, consignmentEntityId])
+  @@unique([tenantId, code])
+  @@index([tenantId, status])
+  @@map("consignment_entity")
+  @@schema("payment")
+}
+
+model PaymentConsignmentLoan {
+  tenantId              String                    @map("tenant_id") @db.Uuid
+  loanId                String                    @default(uuid()) @map("loan_id") @db.Uuid
+  employeeId            String                    @map("employee_id") @db.Uuid
+  consignmentEntityId   String                    @map("consignment_entity_id") @db.Uuid
+  contractNumber        String                    @map("contract_number")
+  kind                  ConsignmentLoanKind
+  monthlyAmount         Decimal                   @map("monthly_amount") @db.Decimal(14, 2)
+  installmentsTotal     Int                       @map("installments_total")
+  installmentsPaid      Int                       @default(0) @map("installments_paid")
+  rate                  Decimal                   @default(0) @db.Decimal(18, 6)
+  validFrom             DateTime                  @map("valid_from") @db.Date
+  validTo               DateTime                  @map("valid_to") @db.Date
+  status                ConsignmentLoanStatus     @default(ACTIVE)
+  createdAt             DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime                  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  entity PaymentConsignmentEntity @relation(fields: [tenantId, consignmentEntityId], references: [tenantId, consignmentEntityId])
+
+  @@id([tenantId, loanId])
+  @@unique([tenantId, employeeId, contractNumber])
+  @@index([tenantId, employeeId, status, validFrom, validTo])
+  @@index([tenantId, consignmentEntityId])
+  @@map("consignment_loan")
+  @@schema("payment")
 }
 
 model ServiceProvider {

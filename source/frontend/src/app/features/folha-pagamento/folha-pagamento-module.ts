@@ -9,7 +9,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import { FolhaPagamentoRoutingModule } from './folha-pagamento-routing-module';
+import { Contracheques } from './contracheques/contracheques';
 import { FolhaMensal } from './competencia/folha-mensal';
+import { Consignados } from './consignados/consignados';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
 import { RemessaBancaria } from './remessa/remessa-bancaria';
@@ -21,6 +23,8 @@ import { MoneyBrPipe } from '../../shared/money-br.pipe';
   declarations: [
     FolhaPagamentoHome,
     FolhaMensal,
+    Contracheques,
+    Consignados,
     Rubricas,
     SimulacaoFolha,
     RescisaoFolha,

@@ -20,6 +20,11 @@ const adminFeatureRoutes = ADMIN_MODULES.filter(
 
 export const routes: Routes = [
   {
+    path: 'transparencia',
+    loadComponent: () =>
+      import('./features/publico/transparencia/transparencia').then((m) => m.PublicoTransparencia),
+  },
+  {
     path: 'auth/callback',
     component: AuthCallback,
   },
@@ -69,11 +74,23 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'portal/meus-dados/consignados',
+        loadComponent: () =>
+          import('./features/portal/meus-dados/consignados/portal-consignados').then(
+            (m) => m.PortalConsignados,
+          ),
+      },
+      {
         path: 'portal/minha-carreira',
         loadComponent: () =>
           import('./features/portal/minha-carreira/minha-carreira').then(
             (m) => m.PortalMinhaCarreira,
           ),
+      },
+      {
+        path: 'portal/contracheque',
+        loadComponent: () =>
+          import('./features/portal/contracheque/contracheque').then((m) => m.PortalContracheque),
       },
       {
         path: 'saude/pericia',
