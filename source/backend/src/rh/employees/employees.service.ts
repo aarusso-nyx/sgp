@@ -592,6 +592,62 @@ export class EmployeesService {
               'SCHEDULED'::saude.aso_status
             FROM created_employee
             RETURNING id
+          ),
+          created_periodic_aso AS (
+            INSERT INTO saude.aso_record (
+              tenant_id,
+              employee_id,
+              aso_kind,
+              scheduled_at,
+              next_exam_due_at,
+              status
+            )
+            SELECT
+              e.tenant_id,
+              e.id,
+              'PERIODICO'::saude.aso_kind,
+              COALESCE(NULLIF($21, '')::date, $14::date)::timestamptz,
+              (
+                COALESCE(NULLIF($21, '')::date, $14::date)
+                + make_interval(months => max(COALESCE(pre.periodicity_months_override, me.periodicity_months, 12)))
+              )::timestamptz,
+              'SCHEDULED'::saude.aso_status
+            FROM created_employee e
+            JOIN saude.health_program hp
+              ON hp.tenant_id = e.tenant_id
+             AND hp.work_location_id = e.work_location_id
+             AND hp.kind = 'PCMSO'::saude.health_program_kind
+             AND hp.status = 'ACTIVE'::saude.program_status
+            JOIN saude.pcmso_required_exam pre
+              ON pre.health_program_id = hp.id
+             AND pre.tenant_id = e.tenant_id
+             AND (pre.applies_to_role_id IS NULL OR pre.applies_to_role_id = e.job_position_id)
+            JOIN saude.medical_exam me ON me.id = pre.medical_exam_id
+            GROUP BY e.tenant_id, e.id
+            RETURNING id
+          ),
+          created_periodic_items AS (
+            INSERT INTO saude.aso_exam_item (
+              tenant_id,
+              aso_record_id,
+              medical_exam_id
+            )
+            SELECT
+              e.tenant_id,
+              periodic.id,
+              pre.medical_exam_id
+            FROM created_employee e
+            JOIN created_periodic_aso periodic ON true
+            JOIN saude.health_program hp
+              ON hp.tenant_id = e.tenant_id
+             AND hp.work_location_id = e.work_location_id
+             AND hp.kind = 'PCMSO'::saude.health_program_kind
+             AND hp.status = 'ACTIVE'::saude.program_status
+            JOIN saude.pcmso_required_exam pre
+              ON pre.health_program_id = hp.id
+             AND pre.tenant_id = e.tenant_id
+             AND (pre.applies_to_role_id IS NULL OR pre.applies_to_role_id = e.job_position_id)
+            RETURNING id
           )
           SELECT
             e.id::text,

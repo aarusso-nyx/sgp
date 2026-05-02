@@ -9,10 +9,26 @@ import { AsoPortalController } from './aso/aso-portal.controller';
 import { AsoService } from './aso/aso.service';
 import { PericiaController } from './pericia.controller';
 import { PericiaService } from './pericia.service';
+import { HealthProgramService } from './program/health-program.service';
+import { ProgramController } from './program/program.controller';
+import { ProgramRevisionService } from './program/program-revision.service';
+import { RiskManagementProgramService } from './program/risk-management-program.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
-  controllers: [PericiaController, AsoController, AsoPortalController],
-  providers: [PericiaService, AsoService, AsoAttachmentService],
+  controllers: [
+    PericiaController,
+    AsoController,
+    AsoPortalController,
+    ProgramController,
+  ],
+  providers: [
+    PericiaService,
+    AsoService,
+    AsoAttachmentService,
+    HealthProgramService,
+    RiskManagementProgramService,
+    ProgramRevisionService,
+  ],
 })
 export class SaudeModule {}

@@ -3576,6 +3576,144 @@ $$;
   );
   console.log('[db-smoke] validated CALC-09 payroll line soft-delete, idempotency, and RLS');
 
+  await runSqlSnippet(
+    '99-sst-02-pcmso-pgr.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  suffix text := replace(gen_random_uuid()::text, '-', '');
+  location_id uuid;
+  exam_id uuid;
+  pcmso_id uuid;
+  pcmso_second_id uuid;
+  pgr_id uuid;
+  sst02_employee_id uuid;
+  active_count integer;
+  revision_count integer;
+  periodic_count integer;
+  visible_count integer;
+BEGIN
+  GRANT USAGE ON SCHEMA hr, saude TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON saude.health_program TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON saude.risk_management_program TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON saude.program_revision TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON saude.pcmso_required_exam TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON saude.medical_exam TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON saude.aso_record TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON saude.aso_exam_item TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON hr.work_location, hr.employee TO sgp_smoke_rls;
+
+  INSERT INTO hr.work_location (tenant_id, code, name, status)
+  VALUES (tenant_a, 'SST02-LOC-' || left(suffix, 8), 'SST-02 Smoke', 'ACTIVE'::"RecordStatus")
+  RETURNING id INTO location_id;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'saude.program.write' || chr(10) || 'saude.program.read' || chr(10) || 'saude.aso.write', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  INSERT INTO saude.medical_exam (tenant_id, code, name, exam_type, is_mandatory_periodic, periodicity_months)
+  VALUES (tenant_a, 'SST02-EXAM-' || left(suffix, 8), 'SST-02 exam', 'CLINICO'::saude.medical_exam_type, true, 12)
+  RETURNING id INTO exam_id;
+  INSERT INTO saude.risk_management_program (tenant_id, work_location_id, valid_from, valid_until)
+  VALUES (tenant_a, location_id, DATE '2026-01-01', DATE '2026-12-31')
+  RETURNING id INTO pgr_id;
+  UPDATE saude.risk_management_program
+  SET status = 'ACTIVE'::saude.program_status
+  WHERE id = pgr_id;
+  INSERT INTO saude.program_revision (tenant_id, parent_program_id, parent_program_kind, revision_number, revision_reason, snapshot_json)
+  VALUES (tenant_a, pgr_id, 'PGR'::saude.program_parent_kind, 1, 'ACTIVATION', jsonb_build_object('programId', pgr_id::text));
+  INSERT INTO saude.health_program (
+    tenant_id, work_location_id, valid_from, valid_until,
+    responsible_doctor_crm, responsible_doctor_name
+  )
+  VALUES (tenant_a, location_id, DATE '2026-01-01', DATE '2026-12-31', 'CRM-SST02', 'Dra SST02')
+  RETURNING id INTO pcmso_id;
+  UPDATE saude.health_program
+  SET status = 'ACTIVE'::saude.program_status
+  WHERE id = pcmso_id;
+  INSERT INTO saude.program_revision (tenant_id, parent_program_id, parent_program_kind, revision_number, revision_reason, snapshot_json)
+  VALUES (tenant_a, pcmso_id, 'PCMSO'::saude.program_parent_kind, 1, 'ACTIVATION', jsonb_build_object('programId', pcmso_id::text));
+  INSERT INTO saude.pcmso_required_exam (tenant_id, health_program_id, medical_exam_id, periodicity_months_override)
+  VALUES (tenant_a, pcmso_id, exam_id, 12);
+  RESET ROLE;
+
+  BEGIN
+    INSERT INTO saude.health_program (
+      tenant_id, work_location_id, valid_from, valid_until,
+      responsible_doctor_crm, responsible_doctor_name, status
+    )
+    VALUES (tenant_a, location_id, DATE '2026-06-01', DATE '2027-05-31', 'CRM-SST02B', 'Dra SST02B', 'ACTIVE'::saude.program_status)
+    RETURNING id INTO pcmso_second_id;
+    RAISE EXCEPTION 'Expected second active PCMSO constraint to fail';
+  EXCEPTION WHEN unique_violation THEN
+    NULL;
+  END;
+
+  BEGIN
+    UPDATE saude.program_revision SET revision_reason = 'MUTATED' WHERE parent_program_id = pcmso_id;
+    RAISE EXCEPTION 'Expected program_revision UPDATE to fail';
+  EXCEPTION WHEN raise_exception THEN
+    NULL;
+  END;
+
+  INSERT INTO saude.program_revision (tenant_id, parent_program_id, parent_program_kind, revision_number, revision_reason, snapshot_json)
+  VALUES (
+    tenant_a, pcmso_id, 'PCMSO'::saude.program_parent_kind, 2, 'ANNUAL',
+    jsonb_build_object('programId', pcmso_id::text, 'previousRevision', 1)
+  );
+  SELECT count(*) INTO revision_count
+  FROM saude.program_revision
+  WHERE parent_program_id = pcmso_id;
+  IF revision_count <> 2 THEN
+    RAISE EXCEPTION 'Expected annual PCMSO revision to append second snapshot, found %', revision_count;
+  END IF;
+
+  INSERT INTO hr.employee (
+    tenant_id, registration, name, work_location_id, hired_on, lifecycle_status
+  )
+  VALUES (tenant_a, 'SST02-EMP-' || left(suffix, 8), 'SST-02 Employee', location_id, DATE '2026-05-01', 'ACTIVE'::"EmployeeLifecycleStatus")
+  RETURNING id INTO sst02_employee_id;
+  INSERT INTO saude.aso_record (tenant_id, employee_id, aso_kind, scheduled_at, next_exam_due_at, status)
+  SELECT
+    tenant_a,
+    sst02_employee_id,
+    'PERIODICO'::saude.aso_kind,
+    DATE '2026-05-01',
+    DATE '2027-05-01',
+    'SCHEDULED'::saude.aso_status
+  WHERE EXISTS (
+    SELECT 1
+    FROM saude.health_program hp
+    JOIN saude.pcmso_required_exam pre ON pre.health_program_id = hp.id
+    WHERE hp.work_location_id = location_id
+      AND hp.status = 'ACTIVE'::saude.program_status
+  );
+  SELECT count(*) INTO periodic_count
+  FROM saude.aso_record
+  WHERE saude.aso_record.employee_id = sst02_employee_id
+    AND aso_kind = 'PERIODICO'::saude.aso_kind;
+  IF periodic_count < 1 THEN
+    RAISE EXCEPTION 'Expected employee under active PCMSO to receive periodic exam schedule';
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'saude.program.read', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count FROM saude.health_program WHERE id = pcmso_id;
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 SST-02 program rows from tenant A, found %', visible_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated SST-02 PCMSO/PGR constraints, revisions, derived exams, and RLS');
+
   console.log('[db-smoke] PASSED');
 }
 

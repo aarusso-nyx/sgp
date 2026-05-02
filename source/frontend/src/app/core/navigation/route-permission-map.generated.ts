@@ -31,6 +31,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/gestao/parametros/irrf', 'system.tax-rate.write'],
   ['#!/gestao/parametros/teto-remuneratorio', 'system.parameter.read'],
   ['#!/gestao/parametros/teto-remuneratorio', 'system.parameter.write'],
+  ['#!/ponto/jornadas/**', 'ponto.schedule.read'],
+  ['#!/ponto/jornadas/**', 'ponto.schedule.write'],
   ['#!/previdenciario/**', 'previdenciario.read'],
   ['#!/previdenciario/**', 'previdenciario.write'],
   ['#!/recrutamento/**', 'recrutamento.read'],
@@ -39,6 +41,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/relatorio/**', 'relatorio.generate'],
   ['#!/saude/**', 'saude.read'],
   ['#!/saude/**', 'saude.write'],
+  ['#!/saude/programas/**', 'saude.program.read'],
+  ['#!/saude/programas/**', 'saude.program.write'],
 ] as const;
 
 export function permissionsForRoutePath(routePath: string): string[] {

@@ -48,6 +48,7 @@ Os bounded contexts identificados são:
 | Previdenciário              | `MODULO_PREVIDENCIARIO` | `previdenciario`                         |
 | Auditoria                   | `AUDITORIA`             | `auditoria`                              |
 | Saúde Ocupacional           | `JUNTA_MEDICA`          | `saude`                                  |
+| Ponto Eletrônico            | `PONTO_ELETRONICO`      | `ponto`                                  |
 | Convênios                   | `CONVENIO`              | `convenio`                               |
 | Notificações                | `NOTIFICACOES`          | `notificacoes`                           |
 | Arquivos                    | `ARQUIVOS`              | `arquivos`                               |
@@ -766,6 +767,32 @@ stateDiagram-v2
 **Eventos consumidos:** nenhum.
 
 **Dependências cross-module:** `rh` (funcionário deve estar ATIVO), `organizacao` (filiais do médico), `notificacoes` (alertas de agendamento), `arquivos` (laudos S3).
+
+---
+
+#### `ponto` — Ponto Eletrônico e Jornada
+
+**Responsabilidades:** cadastro de jornadas contratadas, turnos e horários diários; vigência de atribuição de jornada ao servidor; registro imutável de marcações de ponto com encadeamento criptográfico; abertura de períodos de apuração para posterior integração com folha.
+
+**Entidades:** `work_schedule`, `work_shift`, `day_schedule`, `employee_schedule_assignment`, `time_record`, `timesheet_period`.
+
+**Serviços:** `WorkScheduleService`, `AssignmentService`, `TimeRecordHashService`, `TimesheetPeriodService`.
+
+**Controladores:**
+
+- `GET /api/v1/ponto/jornadas`
+- `POST /api/v1/ponto/jornadas`
+- `GET /api/v1/ponto/atribuicoes`
+- `POST /api/v1/ponto/atribuicoes`
+- `GET /api/v1/ponto/marcacoes/:employeeId`
+- `POST /api/v1/ponto/marcacoes`
+- `POST /api/v1/ponto/periodos`
+
+**Eventos publicados:** nenhum evento de domínio neste corte; mutações registram `public.audit_event` via `sgp_append_audit_event(...)`.
+
+**Eventos consumidos:** nenhum.
+
+**Dependências cross-module:** `rh` para validar servidor existente; `folha` consumirá `timesheet_period` em PONTO-07 por contrato explícito, sem import direto neste corte.
 
 ---
 

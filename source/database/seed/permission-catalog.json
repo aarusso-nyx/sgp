@@ -708,6 +708,54 @@
       "description": "Read own occupational ASO dates, conclusions, and due dates."
     },
     {
+      "key": "saude.program.read",
+      "moduleKey": "saude",
+      "resourceKey": "program",
+      "actionKey": "read",
+      "routePattern": "#!/saude/programas/**",
+      "description": "Read PCMSO and PGR programs, required exams, and immutable revisions."
+    },
+    {
+      "key": "saude.program.write",
+      "moduleKey": "saude",
+      "resourceKey": "program",
+      "actionKey": "write",
+      "routePattern": "#!/saude/programas/**",
+      "description": "Create, revise, activate, archive, and attach PCMSO and PGR program records."
+    },
+    {
+      "key": "ponto.schedule.read",
+      "moduleKey": "ponto",
+      "resourceKey": "schedule",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/jornadas/**",
+      "description": "Read work schedules, shifts, day schedules, and employee assignments."
+    },
+    {
+      "key": "ponto.schedule.write",
+      "moduleKey": "ponto",
+      "resourceKey": "schedule",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/jornadas/**",
+      "description": "Create and maintain work schedules, shifts, day schedules, and employee assignments."
+    },
+    {
+      "key": "ponto.timerecord.read",
+      "moduleKey": "ponto",
+      "resourceKey": "time_record",
+      "actionKey": "read",
+      "routePattern": "/api/v1/ponto/marcacoes/**",
+      "description": "Read chained time records."
+    },
+    {
+      "key": "ponto.timerecord.write",
+      "moduleKey": "ponto",
+      "resourceKey": "time_record",
+      "actionKey": "write",
+      "routePattern": "/api/v1/ponto/marcacoes/**",
+      "description": "Create append-only chained time records."
+    },
+    {
       "key": "rh.medical_leave.read",
       "moduleKey": "rh",
       "resourceKey": "medical_leave",
@@ -867,6 +915,12 @@
       "saude.aso.read",
       "saude.aso.write",
       "saude.aso.self_read",
+      "saude.program.read",
+      "saude.program.write",
+      "ponto.schedule.read",
+      "ponto.schedule.write",
+      "ponto.timerecord.read",
+      "ponto.timerecord.write",
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",
@@ -925,6 +979,9 @@
       "rh.read",
       "rh.employee.read",
       "rh.history.read",
+      "saude.program.read",
+      "ponto.schedule.read",
+      "ponto.timerecord.read",
       "avaliacao.pccs.read",
       "avaliacao.progressao.read",
       "avaliacao.salary_history.read",
