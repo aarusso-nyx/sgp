@@ -13,6 +13,7 @@ import { RhLicencas } from './licencas/licencas';
 import { RhEmployeeTransfer } from './employee-transfer/employee-transfer';
 import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-employee-transfer';
 import { RhEmployeeBankAccounts } from './employees/bank-accounts/bank-accounts';
+import { RhTsvContratos } from './tsv-contratos/tsv-contratos';
 
 @NgModule({
   imports: [
@@ -60,6 +61,10 @@ import { RhEmployeeBankAccounts } from './employees/bank-accounts/bank-accounts'
       {
         path: 'portal/transferencias',
         component: RhPortalEmployeeTransfer,
+      },
+      {
+        path: 'tsv-contratos',
+        component: RhTsvContratos,
       },
       {
         path: '',

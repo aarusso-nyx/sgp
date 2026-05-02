@@ -38,6 +38,8 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
 import { FgtsModule } from './fgts/fgts.module';
 import { PisPasepModule } from './pis-pasep/pis-pasep.module';
 import { SifgeModule } from './operations/sifge/sifge.module';
+import { TsvContractController } from './operations/tsv/tsv-contract.controller';
+import { TsvContractService } from './operations/tsv/tsv-contract.service';
 
 @Module({
   imports: [
@@ -60,6 +62,7 @@ import { SifgeModule } from './operations/sifge/sifge.module';
     ConsignmentController,
     SimulacaoController,
     PriorNoticeController,
+    TsvContractController,
   ],
   providers: [
     PayrollService,
@@ -78,6 +81,7 @@ import { SifgeModule } from './operations/sifge/sifge.module';
     ConsignmentLoanService,
     ConsignmentDeductionService,
     ESocialService,
+    TsvContractService,
     PayrollEngineService,
     FormulaCompilerService,
     FormulaCacheService,

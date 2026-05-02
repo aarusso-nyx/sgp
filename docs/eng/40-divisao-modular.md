@@ -802,6 +802,26 @@ stateDiagram-v2
 
 ---
 
+#### `folha-pagamento/operations/tsv` — Contratos TS-V
+
+**Responsabilidades:** manter contratos de trabalhadores sem vínculo de emprego/estatutário, incluindo estagiários da Lei 11.788/2008, conselheiros tutelares, agentes políticos e demais categorias TS-V 7XX/9XX aceitas pelo MOS eSocial; registrar alterações contratuais por data efetiva; calcular diff real entre o snapshot atual e o patch administrativo; persistir `fields_changed`, `previous_values` e `new_values` somente com os campos efetivamente alterados.
+
+**Entidades:** `hr.tsv_contract`, `hr.tsv_contract_change`.
+
+**Serviços:** `TsvContractService`.
+
+**Controladores:**
+
+- `PATCH /api/v1/admin/hr/tsv-contracts/:id`
+
+**Eventos publicados:** nenhum evento de domínio separado neste corte; a alteração registrada habilita emissão S-2306 pelo `esocial-worker/s2306`.
+
+**Eventos consumidos:** nenhum.
+
+**Dependências cross-module:** `rh.employment_link` para o vínculo TS-V; `hr.work_location` para lotação; `esocial-worker/s2306` para XML e transmissão; auditoria imutável via `sgp_append_audit_event(...)`.
+
+---
+
 #### `convenio` — Convênios e Descontos
 
 **Responsabilidades:** gestão de convênios (farmácia, plano de saúde, cooperativas); vínculo de beneficiários; integração de descontos na folha de pagamento por competência.
@@ -923,7 +943,7 @@ stateDiagram-v2
 
 #### `tce` — Tribunais de Contas
 
-**Responsabilidades:** declarar o contrato `TceAdapter`, descobrir adapters via metadata NestJS, registrar o catálogo global de adapters em `tce.adapter_registry`, emitir eventos de lifecycle em `tce.adapter_lifecycle_event` e expor administração read/manage para habilitar ou desabilitar adapters. O submódulo `tce/catalog` mantém o catálogo público de UFs, TCU, TCMs e versões de leiaute em `tce.state`, `tce.layout_version` e `tce.layout_field`, com vigência temporal, transições controladas e placeholders sem leiautes proprietários. O submódulo `tce/adapters/audesp-sp` implementa o adapter de referência AUDESP/SP para Folha de Pagamento em modo stub, persistindo submissões tenant-scoped em `tce.submission`. O catálogo é global, não tenant-scoped; submissões são tenant-scoped; mutações são auditadas via `sgp_append_audit_event`.
+**Responsabilidades:** declarar o contrato `TceAdapter`, descobrir adapters via metadata NestJS, registrar o catálogo global de adapters em `tce.adapter_registry`, emitir eventos de lifecycle em `tce.adapter_lifecycle_event` e expor administração read/manage para habilitar ou desabilitar adapters. O submódulo `tce/catalog` mantém o catálogo público de UFs, TCU, TCMs e versões de leiaute em `tce.state`, `tce.layout_version` e `tce.layout_field`, com vigência temporal, transições controladas e placeholders sem leiautes proprietários. O submódulo `tce/adapters/audesp-sp` implementa o adapter de referência AUDESP/SP para Folha de Pagamento em modo stub, persistindo submissões tenant-scoped em `tce.submission`. O submódulo `tce/queue` executa a fila Postgres de submissão, retry exponencial, circuit breaker por adapter+endpoint e a tela administrativa de replay/reset. O catálogo é global, não tenant-scoped; submissões e filas são tenant-scoped; circuitos são globais; mutações são auditadas via `sgp_append_audit_event`.
 
 **Serviços:** `AdapterLoaderService`, `AdapterRegistryService`, `LifecycleEmitterService`, `StateService`, `LayoutVersionService`, `LayoutFieldService`, `AudespSpSubmissionService`, `PayrollToAudespMapper`, `AudespXmlSerializer`, `AudespValidatorService`, `AudespStubServerService` e adapters concretos anotados com `@TceAdapter`. O adapter `noop` (`state_code = XX`) é o stub determinístico de contrato para validar registration, validation, serialization, submission, response parsing e health check sem chamadas externas reais. O adapter `audesp-sp` (`state_code = SP`) serializa XML AUDESP/SP localmente, valida campos publicos do placeholder e simula aceite/rejeicao sem chamada de rede.
 
@@ -1084,6 +1104,8 @@ stateDiagram-v2
 **Tecnologia:** NestJS standalone para o worker e serviços compartilhados importados pelo `sgp-core-api`; consome fila SQS `esocial.evento.pendente`; orquestra envio via AWS Step Functions `esocial-envio`.
 
 **Gate ES-07:** toda emissão real deve passar pelo hub `source/backend/src/esocial-worker/esocial-emit.service.ts` antes de entrar em `public.esocial_event`. O hub valida o XML contra o bundle oficial XSD S-1.3 commitado em `source/backend/src/esocial-worker/xsd/`, assina com XML-DSig enveloped em `source/backend/src/esocial-worker/signature/` usando certificado ICP-Brasil A1/A3 do tenant, registra falhas em `esocial.xsd_validation_failure` e só então persiste o XML assinado na fila. O cadastro e rotação de certificados ficam em `source/backend/src/esocial-worker/certificate-store/`, com blobs PKCS#12 cifrados em repouso e RLS por tenant.
+
+**Submódulo ES-11:** `source/backend/src/esocial-worker/s2306` gera e transmite S-2306 para alteração contratual de TS-V a partir de `hr.tsv_contract_change`. O builder inclui apenas os grupos correspondentes aos campos presentes em `fields_changed`, valida contra `evtTSVAltContr.xsd` pelo bundle S-1.3 e persiste a rastreabilidade em `esocial.s2306_event`.
 
 **Fluxo de processamento:**
 

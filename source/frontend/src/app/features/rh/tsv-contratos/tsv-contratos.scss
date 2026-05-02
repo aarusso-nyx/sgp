@@ -1,0 +1,51 @@
+.tsv-contracts {
+  display: grid;
+  gap: 24px;
+  padding: 24px;
+}
+
+header h1,
+header p {
+  margin: 0;
+}
+
+.change-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.change-form button {
+  min-height: 56px;
+}
+
+.diff-preview,
+.history {
+  display: grid;
+  gap: 12px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #d6dae1;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  width: 220px;
+}
+
+.error {
+  color: #b3261e;
+}
+
+.status {
+  color: #146c2e;
+}

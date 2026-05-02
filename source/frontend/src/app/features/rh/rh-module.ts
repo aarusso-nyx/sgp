@@ -21,6 +21,7 @@ import { RhLicencas } from './licencas/licencas';
 import { RhEmployeeTransfer } from './employee-transfer/employee-transfer';
 import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-employee-transfer';
 import { RhEmployeeBankAccounts } from './employees/bank-accounts/bank-accounts';
+import { RhTsvContratos } from './tsv-contratos/tsv-contratos';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { RhEmployeeBankAccounts } from './employees/bank-accounts/bank-accounts'
     RhEmployeeTransfer,
     RhPortalEmployeeTransfer,
     RhEmployeeBankAccounts,
+    RhTsvContratos,
   ],
   imports: [
     CommonModule,

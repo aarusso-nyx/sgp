@@ -42,6 +42,10 @@ import { ESocialWorkerService } from './esocial-worker.service';
 import { S3000Controller } from './exclusion/s3000.controller';
 import { S3000Service } from './exclusion/s3000.service';
 import { TotalizerParser } from './parsers/totalizer.parser';
+import { S2306Builder } from './s2306/s2306.builder';
+import { S2306Controller } from './s2306/s2306.controller';
+import { S2306Service } from './s2306/s2306.service';
+import { S2306Transmitter } from './s2306/s2306.transmitter';
 import { IcpSignerService } from './signature/icp-signer.service';
 import { BatchBuilderService } from './submission/batch-builder.service';
 import { CircuitBreakerService } from './submission/circuit-breaker.service';
@@ -67,6 +71,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S3000Controller,
     S1xxxController,
     S22xxController,
+    S2306Controller,
     SubmissionController,
   ],
   providers: [
@@ -96,6 +101,9 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S2230Builder,
     S2299Builder,
     S3000Builder,
+    S2306Builder,
+    S2306Service,
+    S2306Transmitter,
     S3000Service,
     S22xxDispatchService,
     S22xxService,
@@ -117,6 +125,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     IcpSignerService,
     S1xxxService,
     S3000Service,
+    S2306Service,
     S22xxService,
     SubmissionService,
     XsdValidatorService,
