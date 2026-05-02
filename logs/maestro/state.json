@@ -471,8 +471,18 @@
       "agent": "019de6d6-445c-7e23-803d-a1e6374d7ae8",
       "failure_log": "logs/maestro/40-bank-01-cnab240-remessa.failure.md",
       "recovery": "manual lint repair for retired legacy CNAB builder after zero-retry worker failure; all gates and direct BANK-01 RLS/hash/record-size checks passed"
+    },
+    "34-es-04-folha-periodica-s1200-s1210": {
+      "status": "completed",
+      "effort": "high",
+      "branch": "slice/34-es-04-folha-periodica-s1200-s1210",
+      "commit": "0b9027f1306285b60474226cc68c95c387a13b99",
+      "started_at": "2026-05-02T01:20:00-03:00",
+      "completed_at": "2026-05-02T01:38:27-03:00",
+      "retries": 0,
+      "agent": "019de6ea-9724-7263-a008-f719d85f7dd7"
     }
   },
-  "current_wave": 18,
+  "current_wave": 16,
   "active_subagents": []
 }
