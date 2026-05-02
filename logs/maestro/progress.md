@@ -117,4 +117,4 @@ W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migrati
 2026-05-02T09:22:18Z W34 ✓ 65-ponto-07 (high, night-minute fixture and audit metadata fixed by maestro defense, commit c8fef8a) — folha bridge and timezone policy
 2026-05-02T09:22:18Z W34 ✓ 74-tce-04 (medium, queue fake and RLS smoke fixed by maestro defense, commit 013fd02) — submission queue retry/admin
 2026-05-02T09:22:18Z W34 ✓ 78-es-11 (medium, current-schema fixture and audit signature fixed by maestro defense, commit 1c58f62) — TS-V S-2306 alteration
-2026-05-02T09:24:00Z frontier launch 77-es-10, 82-ponto-08, 80-rec-08 — agents pending-spawn
+2026-05-02T09:24:00Z frontier launch 77-es-10, 82-ponto-08, 80-rec-08 — agents 019de800-a6ae, 019de800-a73b, 019de800-a730

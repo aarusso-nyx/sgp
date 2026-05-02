@@ -2056,7 +2056,8 @@
       "wave": 34,
       "theme": "ES",
       "zero_retry": true,
-      "started_at": "2026-05-02T09:24:00Z"
+      "started_at": "2026-05-02T09:24:00Z",
+      "agent": "019de800-a6ae-71d0-939c-a1b3f9c84aa5"
     },
     "78-es-11-alteracao-contratual-tsv-s2306": {
       "status": "completed",
@@ -2197,7 +2198,8 @@
       "wave": 34,
       "theme": "REC",
       "zero_retry": true,
-      "started_at": "2026-05-02T09:24:00Z"
+      "started_at": "2026-05-02T09:24:00Z",
+      "agent": "019de800-a730-7a61-a714-3a0f27534688"
     },
     "81-rec-09-certificacao-digital-banca": {
       "status": "pending",
@@ -2284,7 +2286,8 @@
       "wave": 34,
       "theme": "PONTO",
       "zero_retry": false,
-      "started_at": "2026-05-02T09:24:00Z"
+      "started_at": "2026-05-02T09:24:00Z",
+      "agent": "019de800-a73b-76f2-8583-d4934e0cc03e"
     },
     "83-ponto-09-geofencing-mobile-clock-in": {
       "status": "pending",
@@ -2381,19 +2384,19 @@
   "active_subagents": [
     {
       "slice": "77-es-10-reintegracao-s2298",
-      "agent": "pending-spawn",
+      "agent": "019de800-a6ae-71d0-939c-a1b3f9c84aa5",
       "effort": "high",
       "started_at": "2026-05-02T09:24:00Z"
     },
     {
       "slice": "82-ponto-08-biometrico-digital-palm",
-      "agent": "pending-spawn",
+      "agent": "019de800-a73b-76f2-8583-d4934e0cc03e",
       "effort": "medium",
       "started_at": "2026-05-02T09:24:00Z"
     },
     {
       "slice": "80-rec-08-prova-online-proctored",
-      "agent": "pending-spawn",
+      "agent": "019de800-a730-7a61-a714-3a0f27534688",
       "effort": "high",
       "started_at": "2026-05-02T09:24:00Z"
     }
