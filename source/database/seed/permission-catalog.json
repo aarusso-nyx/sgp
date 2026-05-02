@@ -340,6 +340,22 @@
       "description": "Publish approved payroll runs to the public transparency snapshot."
     },
     {
+      "key": "payroll.run.read",
+      "moduleKey": "payroll",
+      "resourceKey": "run",
+      "actionKey": "read",
+      "routePattern": "/api/v1/folha/pagamentos/**",
+      "description": "Read payroll processing run metadata and calculated components."
+    },
+    {
+      "key": "payroll.run.write",
+      "moduleKey": "payroll",
+      "resourceKey": "run",
+      "actionKey": "write",
+      "routePattern": "/api/v1/folha/pagamentos/**",
+      "description": "Create or mutate payroll processing run state and related calculation inputs."
+    },
+    {
       "key": "payroll.run.execute",
       "moduleKey": "payroll",
       "resourceKey": "run",
@@ -668,6 +684,22 @@
       "description": "Mutate public contest exams, answer keys, resources, and score recalculation."
     },
     {
+      "key": "recrutamento.classificacao.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "classificacao",
+      "actionKey": "read",
+      "routePattern": "/api/v1/**/concursos/*/classificacao",
+      "description": "Read public contest classification snapshots."
+    },
+    {
+      "key": "recrutamento.classificacao.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "classificacao",
+      "actionKey": "write",
+      "routePattern": "/api/v1/admin/concursos/*/classificacao",
+      "description": "Generate and publish public contest classification snapshots."
+    },
+    {
       "key": "recrutamento.read",
       "moduleKey": "recrutamento",
       "resourceKey": "recruitment",
@@ -738,6 +770,22 @@
       "actionKey": "self_read",
       "routePattern": "/api/v1/portal/aso/**",
       "description": "Read own occupational ASO dates, conclusions, and due dates."
+    },
+    {
+      "key": "saude.cat.read",
+      "moduleKey": "saude",
+      "resourceKey": "cat",
+      "actionKey": "read",
+      "routePattern": "#!/saude/acidentes/**",
+      "description": "Read work accident, CAT deadlines, and S-2210 emission state."
+    },
+    {
+      "key": "saude.cat.write",
+      "moduleKey": "saude",
+      "resourceKey": "cat",
+      "actionKey": "write",
+      "routePattern": "#!/saude/acidentes/**",
+      "description": "Register work accidents and emit initial, reopening, and death CAT records."
     },
     {
       "key": "saude.program.read",
@@ -947,6 +995,8 @@
       "saude.aso.read",
       "saude.aso.write",
       "saude.aso.self_read",
+      "saude.cat.read",
+      "saude.cat.write",
       "saude.program.read",
       "saude.program.write",
       "ponto.schedule.read",
@@ -984,6 +1034,8 @@
       "folha.write",
       "payroll.fgts.read",
       "payroll.fgts.write",
+      "payroll.run.read",
+      "payroll.run.write",
       "payroll.run.execute",
       "payroll.simulation.execute",
       "folha.rubrica.read",
@@ -1013,6 +1065,7 @@
       "rh.read",
       "rh.employee.read",
       "rh.history.read",
+      "saude.cat.read",
       "saude.program.read",
       "ponto.schedule.read",
       "ponto.timerecord.read",

@@ -25,6 +25,7 @@ import { S1299Builder } from './builders/s1299.builder';
 import { S1xxxController } from './builders/s1xxx.controller';
 import { S1xxxDispatchService } from './builders/s1xxx-common';
 import { S1xxxService } from './builders/s1xxx.service';
+import { S2210Builder } from './builders/s2210.builder';
 import { S2200Builder } from './builders/s2200.builder';
 import { S2205Builder } from './builders/s2205.builder';
 import { S2220Builder } from './builders/s2220.builder';
@@ -84,6 +85,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S1299Builder,
     S1xxxDispatchService,
     S1xxxService,
+    S2210Builder,
     S2200Builder,
     S2205Builder,
     S2220Builder,

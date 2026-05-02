@@ -17,9 +17,33 @@ export class ES03Controller {
 
   @Get()
   @RequirePermission('esocial.event.read')
-  @ApiOkResponse({ description: 'List S-2230/S-2299 worker event queues.' })
+  @ApiOkResponse({
+    description: 'List S-2210/S-2220/S-2230/S-2299 worker event queues.',
+  })
   status() {
     return this.service.listStatus();
+  }
+
+  @Post('s2210/:catEmissionId/emitir')
+  @RequirePermission('esocial.event.write')
+  @ApiOkResponse({
+    description: 'Emit a pending S-2210 CAT worker event.',
+  })
+  async emitS2210(
+    @Req() request: RequestWithContext,
+    @Param('catEmissionId') catEmissionId: string,
+  ) {
+    const result = await this.service.emitS2210(catEmissionId);
+    await this.auditService.auditMutation(request, 'PROCESS', 'esocial.s2210', {
+      resourceId: catEmissionId,
+      tableName: 'esocial.s2210_pending',
+      metadata: {
+        emitted: result.emitted,
+        xmlHash: result.xmlHash,
+        lastError: result.lastError,
+      },
+    });
+    return result;
   }
 
   @Post('s2220/:asoRecordId/retry')

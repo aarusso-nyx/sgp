@@ -43,6 +43,8 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/relatorio/**', 'relatorio.generate'],
   ['#!/saude/**', 'saude.read'],
   ['#!/saude/**', 'saude.write'],
+  ['#!/saude/acidentes/**', 'saude.cat.read'],
+  ['#!/saude/acidentes/**', 'saude.cat.write'],
   ['#!/saude/programas/**', 'saude.program.read'],
   ['#!/saude/programas/**', 'saude.program.write'],
 ] as const;

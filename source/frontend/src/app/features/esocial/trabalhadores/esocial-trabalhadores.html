@@ -60,6 +60,45 @@
 
   <div class="tabs">
     <section>
+      <h2>CAT (S-2210)</h2>
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th>Servidor</th>
+              <th>CAT</th>
+              <th>Status</th>
+              <th>Erro</th>
+              <th>Acoes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let row of eventRows"
+              [class.warning]="row.eventKind === 'S-2210' && !row.receipt"
+            >
+              <ng-container *ngIf="row.eventKind === 'S-2210'">
+                <td>{{ row.employeeName }}</td>
+                <td>{{ row.catKind || row.catEmissionId || row.sourceId }}</td>
+                <td>{{ row.receipt || row.status }}</td>
+                <td class="error-cell">{{ row.lastError || row.blockedReason || 'Sem erro' }}</td>
+                <td class="actions">
+                  <button
+                    type="button"
+                    (click)="emitWorkerEvent(row)"
+                    [disabled]="emitting === row.id"
+                  >
+                    Emitir S-2210
+                  </button>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
       <h2>Monitoramento Saúde (S-2220)</h2>
       <div class="table-shell">
         <table>

@@ -34,6 +34,7 @@ describe('SST-04 S-2220 flow (e2e)', () => {
       database as never,
       emitService as never,
       {} as never,
+      {} as never,
       new S2220Builder(database as never),
       {} as never,
     );
@@ -68,6 +69,7 @@ describe('SST-04 S-2220 flow (e2e)', () => {
       database as never,
       emitService as never,
       {} as never,
+      {} as never,
       new S2220Builder(database as never),
       {} as never,
     );
@@ -99,6 +101,7 @@ describe('SST-04 S-2220 flow (e2e)', () => {
     ]);
     const service = new ES03Service(
       database as never,
+      {} as never,
       {} as never,
       {} as never,
       {} as never,
