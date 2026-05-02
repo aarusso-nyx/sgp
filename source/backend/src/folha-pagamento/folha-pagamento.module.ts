@@ -37,6 +37,8 @@ import { FormulaCompilerService } from '../payroll-engine/formula-compiler.servi
 import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
 import { FgtsModule } from './fgts/fgts.module';
 import { PisPasepModule } from './pis-pasep/pis-pasep.module';
+import { ReintegrationOrderController } from './operations/reintegration/reintegration-order.controller';
+import { ReintegrationOrderService } from './operations/reintegration/reintegration-order.service';
 import { SifgeModule } from './operations/sifge/sifge.module';
 import { TsvContractController } from './operations/tsv/tsv-contract.controller';
 import { TsvContractService } from './operations/tsv/tsv-contract.service';
@@ -62,6 +64,7 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     ConsignmentController,
     SimulacaoController,
     PriorNoticeController,
+    ReintegrationOrderController,
     TsvContractController,
   ],
   providers: [
@@ -81,6 +84,7 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     ConsignmentLoanService,
     ConsignmentDeductionService,
     ESocialService,
+    ReintegrationOrderService,
     TsvContractService,
     PayrollEngineService,
     FormulaCompilerService,

@@ -1,0 +1,109 @@
+<section class="reintegracao">
+  <header>
+    <h1>Reintegracao S-2298</h1>
+    <p>Registro da ordem, reprocessamento retroativo e transmissao eSocial.</p>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="order-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Vinculo desligado</mat-label>
+      <input matInput formControlName="employmentLinkId" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Evento S-2299 original</mat-label>
+      <input matInput formControlName="originalTerminationEventId" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Recibo S-2299</mat-label>
+      <input matInput formControlName="originalS2299Receipt" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data do desligamento</mat-label>
+      <input matInput type="date" formControlName="terminationDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data de reintegracao</mat-label>
+      <input matInput type="date" formControlName="reinstatementDate" />
+    </mat-form-field>
+
+    <label class="select-field">
+      <span>Tipo</span>
+      <select formControlName="kind">
+        <option value="JUDICIAL">Judicial</option>
+        <option value="ADMINISTRATIVE_ANNULMENT">Anulacao administrativa</option>
+        <option value="AMNESTY">Anistia</option>
+      </select>
+    </label>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Numero do processo</mat-label>
+      <input matInput formControlName="processNumber" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Orgao judicial</mat-label>
+      <input matInput formControlName="court" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data da decisao</mat-label>
+      <input matInput type="date" formControlName="decisionDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Anexo digitalizado</mat-label>
+      <input matInput formControlName="attachmentUri" />
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="saving || clientSideInvalid">
+      Registrar ordem
+    </button>
+  </form>
+
+  <p class="error" *ngIf="clientSideInvalid">
+    Data de reintegracao nao pode ser futura nem anterior ao desligamento.
+  </p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <section class="detail" *ngIf="savedOrder">
+    <h2>Ordem registrada</h2>
+    <dl>
+      <div>
+        <dt>Status</dt>
+        <dd>{{ savedOrder.status }}</dd>
+      </div>
+      <div>
+        <dt>Data</dt>
+        <dd>{{ savedOrder.reinstatementDate }}</dd>
+      </div>
+      <div>
+        <dt>Recibo S-2299</dt>
+        <dd>{{ savedOrder.originalS2299Receipt }}</dd>
+      </div>
+    </dl>
+    <button mat-stroked-button type="button" (click)="apply()" [disabled]="applying">
+      Aplicar reintegracao
+    </button>
+    <button mat-stroked-button type="button" (click)="transmit()" [disabled]="transmitting">
+      Transmitir S-2298
+    </button>
+  </section>
+
+  <section class="detail" *ngIf="appliedOrder">
+    <h2>Reprocessamento</h2>
+    <p>Saldo total: {{ appliedOrder.totalPayable }}</p>
+    <ul>
+      <li *ngFor="let competence of appliedOrder.reprocessedCompetencies">{{ competence }}</li>
+    </ul>
+  </section>
+
+  <section class="xml-preview">
+    <h2>XML S-2298</h2>
+    <pre>{{ transmission?.['xml'] || xmlPreview }}</pre>
+    <p class="status" *ngIf="transmission">S-2298 transmitido.</p>
+  </section>
+</section>

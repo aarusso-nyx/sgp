@@ -1,0 +1,80 @@
+.reintegracao {
+  display: grid;
+  gap: 24px;
+  padding: 24px;
+}
+
+header h1,
+header p {
+  margin: 0;
+}
+
+.order-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.order-form button {
+  min-height: 56px;
+}
+
+.select-field {
+  display: grid;
+  gap: 6px;
+  min-height: 56px;
+}
+
+.select-field span {
+  color: #49515c;
+  font-size: 12px;
+}
+
+.select-field select {
+  min-height: 40px;
+  border: 1px solid #72777f;
+  border-radius: 4px;
+  padding: 0 12px;
+  background: #fff;
+}
+
+.detail,
+.xml-preview {
+  display: grid;
+  gap: 12px;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+dt {
+  color: #5d6672;
+  font-size: 12px;
+}
+
+dd {
+  margin: 0;
+}
+
+pre {
+  overflow: auto;
+  max-height: 320px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid #d6dae1;
+  border-radius: 4px;
+  background: #f7f9fb;
+}
+
+.error {
+  color: #b3261e;
+}
+
+.status {
+  color: #146c2e;
+}
