@@ -5,6 +5,7 @@ import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
 import { RecruitmentController } from './recruitment.controller';
 import { RecruitmentService } from './recruitment.service';
+import { ClassificacaoModule } from './classificacao/classificacao.module';
 import { ConcursoModule } from './concurso/concurso.module';
 import { InscricaoModule } from './inscricao/inscricao.module';
 import { RecrutamentoAvaliacaoModule } from './avaliacao/avaliacao.module';
@@ -17,6 +18,7 @@ import { RecrutamentoAvaliacaoModule } from './avaliacao/avaliacao.module';
     ConcursoModule,
     InscricaoModule,
     RecrutamentoAvaliacaoModule,
+    ClassificacaoModule,
   ],
   controllers: [RecruitmentController],
   providers: [RecruitmentService],

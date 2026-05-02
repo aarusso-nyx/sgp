@@ -46,6 +46,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'publico/concursos/:slug/classificacao',
+    loadComponent: () =>
+      import('./features/portal-publico/concursos/classificacao/classificacao').then(
+        (m) => m.PortalPublicoClassificacao,
+      ),
+  },
+  {
     path: 'auth/callback',
     component: AuthCallback,
   },
@@ -88,6 +95,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/recrutamento/avaliacao/avaliacao').then(
             (m) => m.RecrutamentoAvaliacao,
+          ),
+      },
+      {
+        path: 'recrutamento/classificacao',
+        loadComponent: () =>
+          import('./features/recrutamento/classificacao/classificacao').then(
+            (m) => m.RecrutamentoClassificacao,
           ),
       },
       {
@@ -138,6 +152,11 @@ export const routes: Routes = [
       {
         path: 'saude/aso',
         loadComponent: () => import('./features/saude/aso/aso').then((m) => m.SaudeAso),
+      },
+      {
+        path: 'saude/acidentes',
+        loadComponent: () =>
+          import('./features/saude/acidentes/acidentes').then((m) => m.SaudeAcidentes),
       },
       {
         path: 'saude/pcmso',

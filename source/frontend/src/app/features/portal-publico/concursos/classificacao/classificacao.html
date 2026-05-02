@@ -1,0 +1,18 @@
+<section class="public-classification">
+  <header>
+    <h1>Classificacao</h1>
+    <label>
+      Concurso
+      <input name="slug" [(ngModel)]="slug" placeholder="codigo-do-concurso" />
+    </label>
+  </header>
+
+  <ol>
+    <li *ngFor="let row of rows">
+      <span>{{ row.callOrder ?? row.rankGeneral }}</span>
+      <strong>{{ row.candidateName }}</strong>
+      <small>{{ row.totalScore }}</small>
+      <em>{{ row.bucket }}</em>
+    </li>
+  </ol>
+</section>

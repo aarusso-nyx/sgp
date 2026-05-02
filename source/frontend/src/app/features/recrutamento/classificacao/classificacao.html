@@ -1,0 +1,64 @@
+<section class="classification-workspace">
+  <header class="toolbar">
+    <div>
+      <h1>Classificacao final</h1>
+      <p>Snapshots, desempates e cotas por vaga</p>
+    </div>
+    <label>
+      Concurso
+      <input name="concursoId" [(ngModel)]="concursoId" placeholder="UUID do concurso" />
+    </label>
+    <button type="button" (click)="generate()">Gerar</button>
+  </header>
+
+  <section class="version-strip" aria-label="Versoes de classificacao">
+    <article *ngFor="let version of versions" [class.published]="version.published">
+      <strong>{{ version.status }}</strong>
+      <span>{{ version.generatedAt }}</span>
+      <span>{{ version.totalCandidates }} candidatos</span>
+      <button type="button" [disabled]="version.published" (click)="publish(version)">
+        Publicar
+      </button>
+    </article>
+  </section>
+
+  <section class="compare-grid">
+    <label>
+      Versao anterior
+      <select name="selectedLeft" [(ngModel)]="selectedLeft">
+        <option *ngFor="let version of versions" [value]="version.id">{{ version.id }}</option>
+      </select>
+    </label>
+    <label>
+      Versao atual
+      <select name="selectedRight" [(ngModel)]="selectedRight">
+        <option *ngFor="let version of versions" [value]="version.id">{{ version.id }}</option>
+      </select>
+    </label>
+  </section>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Chamada</th>
+        <th>Geral</th>
+        <th>Candidato</th>
+        <th>Nota</th>
+        <th>Vaga</th>
+        <th>Cota</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows">
+        <td>{{ row.callOrder ?? '-' }}</td>
+        <td>{{ row.rankGeneral }}</td>
+        <td>{{ row.candidateName }}</td>
+        <td>{{ row.totalScore }}</td>
+        <td>{{ row.vaga }}</td>
+        <td>
+          <span class="bucket" [class.quota]="row.bucket !== 'GENERAL'">{{ row.bucket }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
