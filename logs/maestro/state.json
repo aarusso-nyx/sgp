@@ -833,7 +833,7 @@
       "completed_at": "2026-05-02T05:42:44.650Z"
     },
     "51-rec-02-inscricao-portal": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/51-rec-02-inscricao-portal",
       "retries": 0,
@@ -871,7 +871,13 @@
       ],
       "wave": 24,
       "theme": "REC",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de736-95c3-7051-ac29-e32a08e3285a",
+      "started_at": "2026-05-02T05:43:38.560Z",
+      "commit": "476f28e",
+      "completed_at": "2026-05-02T06:05:28.085Z",
+      "recovery": "maestro defense suite passed after transient lint failure from concurrent partial SST/PONTO files",
+      "failure_log": "logs/maestro/51-rec-02-inscricao-portal.failure.md"
     },
     "52-rec-03-prova-avaliacao-resultados": {
       "status": "pending",
@@ -1145,7 +1151,7 @@
       "zero_retry": false
     },
     "59-ponto-01-portaria-671-base": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/59-ponto-01-portaria-671-base",
       "retries": 0,
@@ -1186,7 +1192,11 @@
       ],
       "wave": 24,
       "theme": "PONTO",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de736-9627-77e2-91b0-00bf9e7ce01c",
+      "started_at": "2026-05-02T05:43:38.560Z",
+      "commit": "b8eb28d",
+      "completed_at": "2026-05-02T06:05:28.085Z"
     },
     "60-ponto-02-rep-p-rep-a-rep-c-ingestao": {
       "status": "pending",
@@ -1477,7 +1487,7 @@
       "completed_at": "2026-05-02T05:42:44.650Z"
     },
     "67-sst-02-pcmso-pgr-programas": {
-      "status": "pending",
+      "status": "completed",
       "effort": "low",
       "branch": "slice/67-sst-02-pcmso-pgr-programas",
       "retries": 0,
@@ -1514,7 +1524,11 @@
       ],
       "wave": 23,
       "theme": "SST",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de736-9596-7b61-a899-7b7bb47d03d2",
+      "started_at": "2026-05-02T05:43:38.560Z",
+      "commit": "98c6806",
+      "completed_at": "2026-05-02T06:05:28.085Z"
     },
     "68-sst-03-cat-s2210": {
       "status": "pending",
@@ -2236,7 +2250,7 @@
       "zero_retry": true
     }
   },
-  "current_wave": 24,
+  "current_wave": 25,
   "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"

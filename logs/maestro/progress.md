@@ -77,3 +77,7 @@ W22 ✓ 43-cons-01 (medium, gates passed, commit aa10f9a) — consignment margin
 W23 ✓ 44-cons-02 (medium, gates passed, commit 3ec3e6a) — consignment portability import/process
 W23 ✓ 50-rec-01 (low, gates passed, commit f4950a8) — concursos edital/publicacao
 W24 ✓ 66-sst-01 (medium, gates passed, commit 841b684) — ASO and occupational exams
+2026-05-02T02:43:38-03:00 frontier launch 67-sst-02, 51-rec-02, 59-ponto-01 — agents 019de736-9596, 019de736-95c3, 019de736-9627
+W24 ✓ 51-rec-02 (medium, transient concurrent lint failure recovered by maestro defense, commit 476f28e) — public candidate registration
+W23 ✓ 67-sst-02 (low, gates passed, commit 98c6806) — PCMSO/PGR programs
+W24 ✓ 59-ponto-01 (medium, gates passed, commit b8eb28d) — Portaria 671 base
