@@ -28,6 +28,8 @@ import { FeriasPayrollService } from './payroll/ferias-payroll.service';
 import { FolhaMensalService } from './payroll/folha-mensal.service';
 import { PayrollService } from './payroll/payroll.service';
 import { RescisaoService } from './rescisao/rescisao.service';
+import { PriorNoticeController } from './rescisao/prior-notice/prior-notice.controller';
+import { PriorNoticeService } from './rescisao/prior-notice/prior-notice.service';
 import { SimulacaoController } from './simulacao/simulacao.controller';
 import { SimulacaoService } from './simulacao/simulacao.service';
 import { FormulaCacheService } from '../payroll-engine/formula-cache.service';
@@ -53,9 +55,11 @@ import { FgtsModule } from './fgts/fgts.module';
     BankAccountController,
     ConsignmentController,
     SimulacaoController,
+    PriorNoticeController,
   ],
   providers: [
     PayrollService,
+    PriorNoticeService,
     RescisaoService,
     DecimoTerceiroService,
     FeriasPayrollService,

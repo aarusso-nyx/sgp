@@ -244,6 +244,8 @@ export class PayrollController {
       body.employmentLinkId,
       body.terminationDate,
       body.cause,
+      body.priorNoticeKind,
+      body.priorNoticeReductionMode ?? 'NONE',
     );
     await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
       resourceId: created.payrollRunId,

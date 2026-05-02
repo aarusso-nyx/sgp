@@ -9,6 +9,11 @@ import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
 import { FgtsService } from '../fgts/fgts.service';
+import {
+  PriorNoticeKind,
+  PriorNoticeReductionMode,
+  PriorNoticeService,
+} from './prior-notice/prior-notice.service';
 
 interface CatalogRow extends QueryResultRow {
   payroll_type_id: string;
@@ -73,6 +78,8 @@ export class RescisaoService {
   constructor(
     private readonly databaseService: DatabaseService,
     @Optional()
+    private readonly priorNoticeService?: PriorNoticeService,
+    @Optional()
     private readonly fgtsService?: FgtsService,
   ) {}
 
@@ -80,10 +87,21 @@ export class RescisaoService {
     employmentLinkId: string,
     terminationDate: string,
     cause: string,
+    priorNoticeKind?: PriorNoticeKind,
+    priorNoticeReductionMode: PriorNoticeReductionMode = 'NONE',
   ): Promise<RescisaoRunResult> {
     if (!this.databaseService.configured) {
       throw new ServiceUnavailableException(
         'DATABASE_URL is required for termination payroll processing',
+      );
+    }
+
+    if (priorNoticeKind && this.priorNoticeService) {
+      await this.priorNoticeService.resolve(
+        employmentLinkId,
+        terminationDate,
+        priorNoticeKind,
+        priorNoticeReductionMode,
       );
     }
 
@@ -341,6 +359,7 @@ export class RescisaoService {
         (public.sgp_current_tenant_uuid(), 'RESC_FERIAS_PROP', 'Ferias proporcionais de rescisao', 'EARNING'::"PayrollEntryKind", true, true, '{"termination":true,"vacation":true,"income_tax":true}', DATE '2025-01-01', NULL, NULL, ARRAY[]::text[], false),
         (public.sgp_current_tenant_uuid(), 'RESC_FERIAS_TERCO', 'Terco de ferias proporcionais de rescisao', 'EARNING'::"PayrollEntryKind", true, true, '{"termination":true,"vacation":true,"income_tax":true}', DATE '2025-01-01', NULL, NULL, ARRAY[]::text[], false),
         (public.sgp_current_tenant_uuid(), 'RESC_AVISO_PREVIO', 'Aviso previo indenizado de rescisao', 'EARNING'::"PayrollEntryKind", true, true, '{"termination":true,"clt":true,"income_tax":true}', DATE '2025-01-01', NULL, NULL, ARRAY[]::text[], false),
+        (public.sgp_current_tenant_uuid(), 'RESC_AVISO_PREVIO_DESCONTO', 'Desconto de aviso previo nao cumprido', 'DEDUCTION'::"PayrollEntryKind", true, true, '{"termination":true,"clt":true,"notice":true}', DATE '2025-01-01', NULL, NULL, ARRAY[]::text[], false),
         (public.sgp_current_tenant_uuid(), 'RESC_MULTA_FGTS_40', 'Multa de 40 por cento do FGTS', 'EARNING'::"PayrollEntryKind", false, true, '{"termination":true,"clt":true,"fgts":true,"indemnity":true}', DATE '2025-01-01', NULL, NULL, ARRAY[]::text[], false),
         (public.sgp_current_tenant_uuid(), 'IRRF_RESCISAO', 'IRRF exclusivo sobre rescisao', 'DEDUCTION'::"PayrollEntryKind", false, true, '{"termination":true,"income_tax":true,"income_tax_exclusive":true}', DATE '2025-01-01', NULL, NULL, ARRAY[]::text[], false),
         (public.sgp_current_tenant_uuid(), 'RPPS', 'Contribuicao previdenciaria RPPS', 'DEDUCTION'::"PayrollEntryKind", false, true, '{"rpps":true}', DATE '2025-01-01', NULL, NULL, ARRAY[]::text[], false)

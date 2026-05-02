@@ -9,6 +9,7 @@ export interface RescisaoComponentLine {
   amount: string;
   referenceValue: string;
   quantity: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface RescisaoResult {
@@ -29,6 +30,8 @@ export interface RescisaoRequest {
   employmentLinkId: string;
   terminationDate: string;
   cause: string;
+  priorNoticeKind?: string;
+  priorNoticeReductionMode?: string;
 }
 
 @Injectable({ providedIn: 'root' })

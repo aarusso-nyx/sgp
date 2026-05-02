@@ -20,10 +20,24 @@ export class RescisaoFolha {
     { code: 'OUTRA', label: 'Outra' },
   ];
 
+  readonly priorNoticeKinds = [
+    { code: 'NONE', label: 'Sem aviso' },
+    { code: 'WORKED', label: 'Trabalhado' },
+    { code: 'INDEMNIFIED', label: 'Indenizado' },
+  ];
+
+  readonly reductionModes = [
+    { code: 'NONE', label: 'Sem reducao' },
+    { code: 'TWO_HOURS_DAY', label: 'Duas horas por dia' },
+    { code: 'SEVEN_FINAL_DAYS', label: 'Sete dias finais' },
+  ];
+
   readonly form = this.fb.nonNullable.group({
     employmentLinkId: ['', Validators.required],
     terminationDate: ['', Validators.required],
     cause: ['SEM_JUSTA_CAUSA', Validators.required],
+    priorNoticeKind: ['NONE', Validators.required],
+    priorNoticeReductionMode: ['NONE', Validators.required],
   });
 
   result: RescisaoResult | null = null;
@@ -32,6 +46,14 @@ export class RescisaoFolha {
 
   get fgtsFine() {
     return this.result?.components.find((row) => row.code === 'RESC_MULTA_FGTS_40') ?? null;
+  }
+
+  get priorNotice() {
+    return (
+      this.result?.components.find((row) =>
+        ['RESC_AVISO_PREVIO', 'RESC_AVISO_PREVIO_DESCONTO'].includes(row.code),
+      ) ?? null
+    );
   }
 
   run(): void {

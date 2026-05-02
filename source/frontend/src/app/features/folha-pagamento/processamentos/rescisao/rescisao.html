@@ -23,6 +23,24 @@
       </mat-select>
     </mat-form-field>
 
+    <mat-form-field appearance="outline">
+      <mat-label>Aviso previo</mat-label>
+      <mat-select formControlName="priorNoticeKind">
+        <mat-option *ngFor="let kind of priorNoticeKinds" [value]="kind.code">
+          {{ kind.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Reducao</mat-label>
+      <mat-select formControlName="priorNoticeReductionMode">
+        <mat-option *ngFor="let mode of reductionModes" [value]="mode.code">
+          {{ mode.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <button mat-flat-button color="primary" type="submit" [disabled]="loading">
       <mat-icon>calculate</mat-icon>
       Calcular
@@ -51,6 +69,22 @@
     <div>
       <span>Liquido</span>
       <strong>{{ payroll.totalNet | moneyBr }}</strong>
+    </div>
+  </section>
+
+  <section *ngIf="priorNotice as notice" class="fgts-block">
+    <h2>Aviso previo {{ notice.code === 'RESC_AVISO_PREVIO' ? 'indenizado' : 'trabalhado' }}</h2>
+    <div>
+      <span>Dias</span>
+      <strong>{{ notice.quantity }}</strong>
+    </div>
+    <div>
+      <span>Base</span>
+      <strong>{{ notice.referenceValue | moneyBr }}</strong>
+    </div>
+    <div>
+      <span>Valor</span>
+      <strong>{{ notice.amount | moneyBr }}</strong>
     </div>
   </section>
 

@@ -1,19 +1,20 @@
 import Decimal from 'decimal.js';
 import { Pool, PoolClient, QueryResultRow } from 'pg';
 
-const tenantId = '00000000-0000-0000-0000-000000000129';
+const tenantId = '00000000-0000-0000-0000-000000000148';
 
 interface RescisaoRow extends QueryResultRow {
   item_code: string;
   amount: string;
+  quantity: string;
 }
 
-describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
+describe('CLT-02 prior notice reflexes in termination payroll (e2e)', () => {
   let pool: Pool;
 
   beforeAll(async () => {
     if (!process.env.DATABASE_URL) {
-      throw new Error('DATABASE_URL is required for calc-rescisao');
+      throw new Error('DATABASE_URL is required for calc-rescisao-aviso');
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     const client = await pool.connect();
@@ -23,7 +24,7 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
       await client.query(
         `
         INSERT INTO public.tenant (id, slug, code, name, status)
-        VALUES ($1::uuid, 'calc12-e2e', 'CALC12', 'CALC-12 E2E', 'ACTIVE'::"RecordStatus")
+        VALUES ($1::uuid, 'clt02-aviso-e2e', 'CLT02', 'CLT-02 Aviso E2E', 'ACTIVE'::"RecordStatus")
         ON CONFLICT (id) DO UPDATE
         SET slug = EXCLUDED.slug,
             code = EXCLUDED.code,
@@ -32,7 +33,6 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
         `,
         [tenantId],
       );
-      await seedRppsTable(client);
     } finally {
       client.release();
     }
@@ -50,74 +50,115 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
     }
   });
 
-  it('calculates CLT without cause with current 8 avos and vested vacation without implicit notice', async () => {
+  it('projects indemnified notice for one complete CLT year into 13th and vacation avos', async () => {
     const linkId = await createEmployee(
-      'CLT-SJC',
+      'CLT-1Y',
       'celetista',
       '3000.00',
-      '2024-01-01',
+      '2025-01-20',
     );
-    const rows = await compute(linkId, '2025-08-20', 'SEM_JUSTA_CAUSA');
+    await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
 
-    expectAmount(rows, 'RESC_SALDO', '2000.00');
-    expectAmount(rows, 'RESC_13_PROP', '2000.00');
-    expectAmount(rows, 'RESC_FERIAS_VENCIDAS', '3000.00');
-    expectAmount(rows, 'RESC_FERIAS_VENCIDAS_TERCO', '1000.00');
-    expectAmount(rows, 'RESC_FERIAS_PROP', '2000.00');
-    expectAmount(rows, 'RESC_FERIAS_TERCO', '666.67');
-    expectNoAmount(rows, 'RESC_AVISO_PREVIO');
-    expectNoAmount(rows, 'RESC_MULTA_FGTS_40');
+    const rows = await compute(linkId, '2026-01-20', 'SEM_JUSTA_CAUSA');
+
+    expectQuantity(rows, 'RESC_AVISO_PREVIO', '33.0000');
+    expectAmount(rows, 'RESC_AVISO_PREVIO', '3300.00');
+    expectQuantity(rows, 'RESC_13_PROP', '2.0000');
+    expectQuantity(rows, 'RESC_FERIAS_PROP', '2.0000');
   });
 
-  it('calculates CLT resignation without FGTS fine or indemnified notice', async () => {
+  it('calculates 60 notice days for ten complete CLT years', async () => {
+    const linkId = await createEmployee(
+      'CLT-10Y',
+      'celetista',
+      '3000.00',
+      '2016-01-01',
+    );
+    await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
+
+    const rows = await compute(linkId, '2026-01-20', 'SEM_JUSTA_CAUSA');
+
+    expectQuantity(rows, 'RESC_AVISO_PREVIO', '60.0000');
+    expectAmount(rows, 'RESC_AVISO_PREVIO', '6000.00');
+  });
+
+  it('caps proportional notice at 90 days for long CLT service', async () => {
+    const linkId = await createEmployee(
+      'CLT-25Y',
+      'celetista',
+      '3000.00',
+      '2001-01-01',
+    );
+    await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
+
+    const rows = await compute(linkId, '2026-01-20', 'SEM_JUSTA_CAUSA');
+
+    expectQuantity(rows, 'RESC_AVISO_PREVIO', '90.0000');
+    expectAmount(rows, 'RESC_AVISO_PREVIO', '9000.00');
+  });
+
+  it('discounts unworked notice on CLT resignation', async () => {
     const linkId = await createEmployee(
       'CLT-PED',
       'celetista',
       '3000.00',
       '2025-01-01',
     );
-    const rows = await compute(linkId, '2025-08-20', 'PEDIDO_DEMISSAO');
+    await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
 
-    expectAmount(rows, 'RESC_SALDO', '2000.00');
-    expectAmount(rows, 'RESC_13_PROP', '2000.00');
-    expectAmount(rows, 'RESC_FERIAS_PROP', '2000.00');
-    expectAmount(rows, 'RESC_FERIAS_TERCO', '666.67');
+    const rows = await compute(linkId, '2026-01-20', 'PEDIDO_DEMISSAO');
+
+    expectQuantity(rows, 'RESC_AVISO_PREVIO_DESCONTO', '33.0000');
+    expectAmount(rows, 'RESC_AVISO_PREVIO_DESCONTO', '3300.00');
     expectNoAmount(rows, 'RESC_AVISO_PREVIO');
-    expectNoAmount(rows, 'RESC_MULTA_FGTS_40');
   });
 
-  it('calculates statutory retirement with proportional thirteenth and no FGTS fine', async () => {
+  it('does not create prior notice for statutory employment links', async () => {
     const linkId = await createEmployee(
-      'STAT-APOS',
+      'STAT',
       'statutory',
-      '6000.00',
+      '3000.00',
       '2025-01-01',
     );
-    const rows = await compute(linkId, '2025-09-20', 'APOSENTADORIA');
+    await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
 
-    expectAmount(rows, 'RESC_SALDO', '4000.00');
-    expectAmount(rows, 'RESC_13_PROP', '4500.00');
-    expectAmount(rows, 'RPPS', '1190.00');
-    expectNoAmount(rows, 'RESC_MULTA_FGTS_40');
-  });
-
-  it('calculates statutory vested and proportional vacations', async () => {
-    const linkId = await createEmployee(
-      'STAT-FERIAS',
-      'statutory',
-      '3600.00',
-      '2024-01-01',
+    const count = await pool.query<{ count: string }>(
+      `
+      SELECT count(*)::text
+      FROM payment.prior_notice
+      WHERE tenant_id = $1::uuid
+        AND employment_link_id = $2::uuid
+      `,
+      [tenantId, linkId],
     );
-    const rows = await compute(linkId, '2026-03-20', 'OUTRA');
 
-    expectAmount(rows, 'RESC_SALDO', '2400.00');
-    expectAmount(rows, 'RESC_13_PROP', '900.00');
-    expectAmount(rows, 'RESC_FERIAS_VENCIDAS', '7200.00');
-    expectAmount(rows, 'RESC_FERIAS_VENCIDAS_TERCO', '2400.00');
-    expectAmount(rows, 'RESC_FERIAS_PROP', '900.00');
-    expectAmount(rows, 'RESC_FERIAS_TERCO', '300.00');
-    expectAmount(rows, 'RPPS', '462.00');
+    expect(count.rows[0]?.count).toBe('0');
   });
+
+  async function resolveNotice(
+    employmentLinkId: string,
+    terminationDate: string,
+    kind: string,
+  ): Promise<void> {
+    const client = await pool.connect();
+    try {
+      await setBypassContext(client);
+      await client.query(
+        `
+        SELECT *
+        FROM payment.compute_prior_notice(
+          $1::uuid,
+          $2::date,
+          $3::payment.prior_notice_kind,
+          'NONE'::payment.prior_notice_reduction_mode
+        )
+        `,
+        [employmentLinkId, terminationDate, kind],
+      );
+    } finally {
+      client.release();
+    }
+  }
 
   async function compute(
     employmentLinkId: string,
@@ -126,7 +167,7 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
   ): Promise<RescisaoRow[]> {
     const result = await pool.query<RescisaoRow>(
       `
-      SELECT item_code, amount::text
+      SELECT item_code, amount::text, quantity::text
       FROM payroll_calc.compute_rescisao($1::uuid, $2::uuid, $3::date, $4)
       ORDER BY item_code
       `,
@@ -144,7 +185,7 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
     const client = await pool.connect();
     try {
       await setBypassContext(client);
-      const suffix = `${code}-${Date.now().toString(36)}`;
+      const suffix = `${code}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
       const link = await client.query<{ id: string }>(
         `
         INSERT INTO hr.employment_link (
@@ -155,8 +196,8 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
         `,
         [
           tenantId,
-          `CALC12-LINK-${suffix}`,
-          `CALC-12 ${code}`,
+          `CLT02-LINK-${suffix}`,
+          `CLT-02 ${code}`,
           contractType,
           contractType === 'celetista' ? 'CLT' : 'Lei 8.112/90',
         ],
@@ -166,10 +207,10 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
         INSERT INTO hr.functional_status (
           tenant_id, code, description, enters_payroll, lifecycle_status, status
         )
-        VALUES ($1::uuid, $2, 'CALC-12 active', true, 'ACTIVE'::"EmployeeLifecycleStatus", 'ACTIVE'::"RecordStatus")
+        VALUES ($1::uuid, $2, 'CLT-02 active', true, 'ACTIVE'::"EmployeeLifecycleStatus", 'ACTIVE'::"RecordStatus")
         RETURNING id::text
         `,
-        [tenantId, `CALC12-FS-${suffix}`],
+        [tenantId, `CLT02-FS-${suffix}`],
       );
       const contractTypeRow = await client.query<{ id: string }>(
         `
@@ -177,15 +218,15 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
         VALUES ($1::uuid, $2, $3, 'ACTIVE'::"RecordStatus")
         RETURNING id::text
         `,
-        [tenantId, `CALC12-CT-${suffix}`, contractType],
+        [tenantId, `CLT02-CT-${suffix}`, contractType],
       );
       const salary = await client.query<{ id: string }>(
         `
         INSERT INTO hr.salary_reference (tenant_id, code, description, amount, vigencia_inicio)
-        VALUES ($1::uuid, $2, 'CALC-12 salary', $3::numeric, DATE '2024-01-01')
+        VALUES ($1::uuid, $2, 'CLT-02 salary', $3::numeric, DATE '2024-01-01')
         RETURNING id::text
         `,
-        [tenantId, `CALC12-SAL-${suffix}`, salaryAmount],
+        [tenantId, `CLT02-SAL-${suffix}`, salaryAmount],
       );
       const employee = await client.query<{ id: string }>(
         `
@@ -201,8 +242,8 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
         `,
         [
           tenantId,
-          `CALC12-${suffix}`,
-          `CALC-12 ${code}`,
+          `CLT02-${suffix}`,
+          `CLT-02 ${code}`,
           link.rows[0].id,
           functionalStatus.rows[0].id,
           contractTypeRow.rows[0].id,
@@ -235,57 +276,18 @@ function expectAmount(
   expect(new Decimal(found?.amount ?? '0').toFixed(2)).toBe(expected);
 }
 
+function expectQuantity(
+  rows: RescisaoRow[],
+  code: string,
+  expected: string,
+): void {
+  const found = rows.find((row) => row.item_code === code);
+  expect(new Decimal(found?.quantity ?? '0').toFixed(4)).toBe(expected);
+}
+
 function expectNoAmount(rows: RescisaoRow[], code: string): void {
   const found = rows.find((row) => row.item_code === code);
   expect(found).toBeUndefined();
-}
-
-async function seedRppsTable(client: PoolClient): Promise<void> {
-  await client.query(
-    `
-    INSERT INTO public.tax_rate (
-      tenant_id,
-      code,
-      name,
-      scope,
-      reference_year,
-      rate_percent,
-      kind,
-      competence_start,
-      bracket_min,
-      bracket_max,
-      rate,
-      deduction_amount,
-      dependent_deduction,
-      status
-    )
-    VALUES (
-      $1::uuid,
-      'CALC12-RPPS',
-      'CALC-12 RPPS',
-      'payroll',
-      2025,
-      14.000000,
-      'RPPS',
-      DATE '2024-01-01',
-      0.00,
-      NULL,
-      14.000000,
-      0.00,
-      0.00,
-      'ACTIVE'::"RecordStatus"
-    )
-    ON CONFLICT (tenant_id, code) DO UPDATE
-    SET rate_percent = EXCLUDED.rate_percent,
-        rate = EXCLUDED.rate,
-        kind = EXCLUDED.kind,
-        competence_start = EXCLUDED.competence_start,
-        bracket_min = EXCLUDED.bracket_min,
-        bracket_max = EXCLUDED.bracket_max,
-        status = EXCLUDED.status
-    `,
-    [tenantId],
-  );
 }
 
 async function cleanupTenant(client: PoolClient): Promise<void> {
@@ -295,43 +297,7 @@ async function cleanupTenant(client: PoolClient): Promise<void> {
     tenantParams,
   );
   await client.query(
-    'DELETE FROM payroll.employee_payroll_item WHERE tenant_id = $1::uuid',
-    tenantParams,
-  );
-  await client.query(
-    'DELETE FROM payroll.payroll_financial_record WHERE tenant_id = $1::uuid',
-    tenantParams,
-  );
-  await client.query(
-    'DELETE FROM payroll.payroll_run_status_history WHERE tenant_id = $1::uuid',
-    tenantParams,
-  );
-  await client.query(
     'DELETE FROM hr.employment_contract WHERE tenant_id = $1::uuid',
-    tenantParams,
-  );
-  await client.query(
-    `
-    UPDATE hr.employment_link
-    SET termination_payroll_run_id = NULL
-    WHERE tenant_id = $1::uuid
-    `,
-    tenantParams,
-  );
-  await client.query(
-    'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
-    tenantParams,
-  );
-  await client.query(
-    'DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid',
-    tenantParams,
-  );
-  await client.query(
-    'DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid',
-    tenantParams,
-  );
-  await client.query(
-    'DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid',
     tenantParams,
   );
   await deleteEmployeeStatusHistory(client, tenantParams);
@@ -353,10 +319,6 @@ async function cleanupTenant(client: PoolClient): Promise<void> {
   );
   await client.query(
     'DELETE FROM hr.employment_link WHERE tenant_id = $1::uuid',
-    tenantParams,
-  );
-  await client.query(
-    'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid',
     tenantParams,
   );
 }
