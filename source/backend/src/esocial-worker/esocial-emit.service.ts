@@ -32,6 +32,8 @@ export interface EmitESocialInput {
   competence?: string;
   sourceEntityKind?: string;
   sourceEntityId?: string;
+  payrollRunId?: string;
+  paymentBatchId?: string;
   xmlHash?: string;
   payload?: Record<string, unknown>;
 }
@@ -110,6 +112,8 @@ export class ESocialEmitService {
         event_kind,
         source_entity_kind,
         source_entity_id,
+        payroll_run_id,
+        payment_batch_id,
         xml_signed,
         xml_hash,
         schema_version,
@@ -126,8 +130,10 @@ export class ESocialEmitService {
         $2,
         $7,
         $8,
+        NULLIF($9, '')::uuid,
+        NULLIF($10, '')::uuid,
         convert_to($6, 'UTF8'),
-        $9,
+        $11,
         'S-1.3',
         'PENDENTE'::"ESocialEventStatus",
         now()
@@ -157,6 +163,8 @@ export class ESocialEmitService {
         signed.xml,
         input.sourceEntityKind ?? null,
         input.sourceEntityId ?? null,
+        input.payrollRunId ?? '',
+        input.paymentBatchId ?? '',
         input.xmlHash ?? this.sha256(input.xml),
       ],
     );

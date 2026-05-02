@@ -95,6 +95,19 @@ import { SimulacaoFolha } from './simulacao/simulacao';
           moduleLabel: 'Folha de Pgt',
         },
       },
+      {
+        path: 'esocial/folha-periodica',
+        loadComponent: () =>
+          import('../esocial/folha-periodica/esocial-folha-periodica').then(
+            (m) => m.ESocialFolhaPeriodica,
+          ),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['esocial.event.read'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
       ...buildModuleRouteGroup('folha', FolhaPagamentoHome, {
         moduleLabel: 'Folha de Pgt',
       }),

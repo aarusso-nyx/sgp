@@ -1,0 +1,113 @@
+.periodic-payroll-page {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.toolbar {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.filters {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+label {
+  color: #334155;
+  display: grid;
+  font-size: 0.875rem;
+  gap: 4px;
+}
+
+input {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  min-height: 36px;
+  padding: 6px 8px;
+  width: 96px;
+}
+
+button {
+  background: #1f2937;
+  border: 0;
+  border-radius: 6px;
+  color: #fff;
+  min-height: 36px;
+  padding: 0 12px;
+}
+
+button:disabled {
+  background: #94a3b8;
+}
+
+.result {
+  color: #475569;
+  font-family: monospace;
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+.error {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #991b1b;
+  margin: 0;
+  padding: 10px 12px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 960px;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f8fafc;
+  color: #334155;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+}
+
+.done {
+  color: #166534;
+  font-weight: 600;
+}
+
+.receipt {
+  display: grid;
+  font-family: monospace;
+  font-size: 0.8125rem;
+  gap: 4px;
+  max-width: 260px;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.empty {
+  color: #64748b;
+  text-align: center;
+}

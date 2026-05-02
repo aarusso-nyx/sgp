@@ -9,12 +9,16 @@ import { CertificateStoreController } from './certificate-store/certificate-stor
 import { CertificateStoreService } from './certificate-store/certificate-store.service';
 import { ES03Controller } from './builders/es03.controller';
 import { ES03Service } from './builders/es03.service';
+import { ES04Controller } from './builders/es04.controller';
+import { ES04Service } from './builders/es04.service';
 import { S1000Builder } from './builders/s1000.builder';
 import { S1005Builder } from './builders/s1005.builder';
 import { S1010Builder } from './builders/s1010.builder';
 import { S1020Builder } from './builders/s1020.builder';
 import { S1050Builder } from './builders/s1050.builder';
 import { S1070Builder } from './builders/s1070.builder';
+import { S1200Builder } from './builders/s1200.builder';
+import { S1210Builder } from './builders/s1210.builder';
 import { S1xxxController } from './builders/s1xxx.controller';
 import { S1xxxDispatchService } from './builders/s1xxx-common';
 import { S1xxxService } from './builders/s1xxx.service';
@@ -49,6 +53,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
   controllers: [
     CertificateStoreController,
     ES03Controller,
+    ES04Controller,
     S3000Controller,
     S1xxxController,
     S22xxController,
@@ -60,12 +65,15 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     ESocialWorkerService,
     IcpSignerService,
     ES03Service,
+    ES04Service,
     S1000Builder,
     S1005Builder,
     S1010Builder,
     S1020Builder,
     S1050Builder,
     S1070Builder,
+    S1200Builder,
+    S1210Builder,
     S1xxxDispatchService,
     S1xxxService,
     S2200Builder,
@@ -88,6 +96,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     ESocialEmitService,
     ESocialWorkerService,
     ES03Service,
+    ES04Service,
     IcpSignerService,
     S1xxxService,
     S3000Service,

@@ -1,0 +1,79 @@
+<section class="periodic-payroll-page">
+  <header class="toolbar">
+    <div class="filters">
+      <label>
+        Ano
+        <input type="number" [(ngModel)]="year" min="2000" max="2099" />
+      </label>
+      <label>
+        Mes
+        <input type="number" [(ngModel)]="month" min="1" max="12" />
+      </label>
+      <button type="button" (click)="load()" [disabled]="loading">Atualizar</button>
+    </div>
+    <p *ngIf="lastResult.length" class="result">
+      {{ lastResult.length }} evento(s), {{ lastResult[0].xmlHash }}
+    </p>
+  </header>
+
+  <p *ngIf="error" class="error">{{ error }}</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Matricula</th>
+          <th>Servidor</th>
+          <th>Run</th>
+          <th>S-1200</th>
+          <th>S-1210</th>
+          <th>Recibo</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rows">
+          <td>{{ row.registration }}</td>
+          <td>{{ row.name }}</td>
+          <td>{{ row.payrollStatus }}</td>
+          <td>
+            <span [class.done]="row.s1200Receipt">{{
+              row.s1200Receipt ? 'Emitido' : 'Pendente'
+            }}</span>
+          </td>
+          <td>
+            <span [class.done]="row.s1210Receipt">{{
+              row.s1210Receipt ? 'Emitido' : row.paymentStatus || '-'
+            }}</span>
+          </td>
+          <td class="receipt">
+            <span>{{ row.s1200Receipt || '-' }}</span>
+            <span>{{ row.s1210Receipt || '-' }}</span>
+          </td>
+          <td class="actions">
+            <button type="button" (click)="emitS1200(row)" [disabled]="emitting === row.employeeId">
+              S-1200
+            </button>
+            <button
+              type="button"
+              (click)="emitS1210(row)"
+              [disabled]="!row.paymentBatchId || emitting === row.employeeId"
+            >
+              S-1210
+            </button>
+            <button
+              type="button"
+              (click)="reemitWorker(row)"
+              [disabled]="emitting === row.employeeId"
+            >
+              Reemitir trabalhador
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="rows.length === 0 && !loading">
+          <td colspan="7" class="empty">Sem trabalhadores para a competencia.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

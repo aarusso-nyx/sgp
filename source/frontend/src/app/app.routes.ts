@@ -92,6 +92,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'esocial/folha-periodica',
+        loadComponent: () =>
+          import('./features/esocial/folha-periodica/esocial-folha-periodica').then(
+            (m) => m.ESocialFolhaPeriodica,
+          ),
+      },
+      {
         path: 'esocial/exclusao',
         loadComponent: () =>
           import('./features/esocial/exclusao/esocial-exclusao').then((m) => m.ESocialExclusao),
@@ -99,9 +106,7 @@ export const routes: Routes = [
       {
         path: 'esocial/submissao',
         loadComponent: () =>
-          import('./features/esocial/submissao/esocial-submissao').then(
-            (m) => m.ESocialSubmissao,
-          ),
+          import('./features/esocial/submissao/esocial-submissao').then((m) => m.ESocialSubmissao),
       },
       ...adminFeatureRoutes,
     ],

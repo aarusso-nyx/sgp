@@ -267,6 +267,8 @@ enum S1xxxEventKind {
   S_1020 @map("S-1020")
   S_1050 @map("S-1050")
   S_1070 @map("S-1070")
+  S_1200 @map("S-1200")
+  S_1210 @map("S-1210")
   S_2200 @map("S-2200")
   S_2205 @map("S-2205")
   S_2230 @map("S-2230")
@@ -2589,11 +2591,11 @@ model PaymentRemittanceFile {
   createdAt        DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  payrollRun     PayrollRun?     @relation(fields: [payrollRunId], references: [id])
-  branch         Branch?         @relation(fields: [branchId], references: [id])
-  processingType ProcessingType? @relation(fields: [processingTypeId], references: [id])
-  reason         Reason?         @relation(fields: [reasonId], references: [id])
-  createdBy      UserAccount?    @relation("RemittanceCreatedBy", fields: [createdByUserId], references: [id])
+  payrollRun     PayrollRun?               @relation(fields: [payrollRunId], references: [id])
+  branch         Branch?                   @relation(fields: [branchId], references: [id])
+  processingType ProcessingType?           @relation(fields: [processingTypeId], references: [id])
+  reason         Reason?                   @relation(fields: [reasonId], references: [id])
+  createdBy      UserAccount?              @relation("RemittanceCreatedBy", fields: [createdByUserId], references: [id])
   details        PaymentRemittanceDetail[]
 
   @@index([competenceYear, competenceMonth])
@@ -2608,20 +2610,20 @@ model PaymentRemittanceFile {
 }
 
 model PaymentRemittanceDetail {
-  id             String                @id @default(uuid()) @db.Uuid
-  tenantId       String                @map("tenant_id") @db.Uuid
-  fileId         String                @map("file_id") @db.Uuid
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  fileId         String   @map("file_id") @db.Uuid
   sequence       Int
-  employeeId     String                @map("employee_id") @db.Uuid
-  amount         Decimal               @db.Decimal(14, 2)
-  bankCode       Int                   @map("bank_code") @db.SmallInt
+  employeeId     String   @map("employee_id") @db.Uuid
+  amount         Decimal  @db.Decimal(14, 2)
+  bankCode       Int      @map("bank_code") @db.SmallInt
   branch         String
   account        String
-  occurrenceCode String?               @map("occurrence_code")
-  createdAt      DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  occurrenceCode String?  @map("occurrence_code")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   file     PaymentRemittanceFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
-  employee Employee               @relation(fields: [employeeId], references: [id])
+  employee Employee              @relation(fields: [employeeId], references: [id])
 
   @@unique([tenantId, fileId, sequence])
   @@index([tenantId, employeeId, createdAt])
@@ -2725,6 +2727,8 @@ model ESocialEvent {
   eventKind        S1xxxEventKind?    @map("event_kind")
   sourceEntityKind String?            @map("source_entity_kind")
   sourceEntityId   String?            @map("source_entity_id")
+  payrollRunId     String?            @map("payroll_run_id") @db.Uuid
+  paymentBatchId   String?            @map("payment_batch_id") @db.Uuid
   reference        String
   competence       String
   payload          Json               @default("{}")
@@ -2745,6 +2749,8 @@ model ESocialEvent {
 
   @@index([eventType, competence])
   @@index([tenantId, eventKind, sourceEntityKind, sourceEntityId])
+  @@index([tenantId, payrollRunId])
+  @@index([tenantId, paymentBatchId])
   @@index([status, createdAt])
   @@map("esocial_event")
   @@schema("public")
@@ -2775,6 +2781,38 @@ model S2200EmissionState {
 
   @@id([tenantId, employeeId])
   @@map("s2200_emission_state")
+  @@schema("esocial")
+}
+
+model S1200EmissionState {
+  tenantId     String   @map("tenant_id") @db.Uuid
+  payrollRunId String   @map("payroll_run_id") @db.Uuid
+  employeeId   String   @map("employee_id") @db.Uuid
+  recibo       String?
+  payloadHash  String   @map("payload_hash") @db.Char(64)
+  emittedAt    DateTime @default(now()) @map("emitted_at") @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, payrollRunId, employeeId])
+  @@index([tenantId, employeeId, emittedAt])
+  @@map("s1200_emission_state")
+  @@schema("esocial")
+}
+
+model S1210EmissionState {
+  tenantId       String   @map("tenant_id") @db.Uuid
+  paymentBatchId String   @map("payment_batch_id") @db.Uuid
+  employeeId     String   @map("employee_id") @db.Uuid
+  recibo         String?
+  payloadHash    String   @map("payload_hash") @db.Char(64)
+  emittedAt      DateTime @default(now()) @map("emitted_at") @db.Timestamptz(6)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, paymentBatchId, employeeId])
+  @@index([tenantId, employeeId, emittedAt])
+  @@map("s1210_emission_state")
   @@schema("esocial")
 }
 
