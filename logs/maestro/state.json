@@ -1155,7 +1155,7 @@
       "failure_log": "logs/maestro/57-fisc-02-dirf-anual.failure.md"
     },
     "58-fisc-03-comprovante-rendimentos": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "medium",
       "branch": "slice/58-fisc-03-comprovante-rendimentos",
       "retries": 0,
@@ -1194,7 +1194,9 @@
       ],
       "wave": 30,
       "theme": "FISC",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "pending-agent-58",
+      "started_at": "2026-05-02T07:57:35.658Z"
     },
     "59-ponto-01-portaria-671-base": {
       "status": "completed",
@@ -1332,7 +1334,7 @@
       "failure_log": "logs/maestro/61-ponto-03-afd-geracao-importacao.failure.md"
     },
     "62-ponto-04-escalas-plantoes": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "medium",
       "branch": "slice/62-ponto-04-escalas-plantoes",
       "retries": 0,
@@ -1366,7 +1368,9 @@
       ],
       "wave": 29,
       "theme": "PONTO",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "pending-agent-62",
+      "started_at": "2026-05-02T07:57:35.658Z"
     },
     "63-ponto-05-banco-de-horas": {
       "status": "pending",
@@ -1733,7 +1737,7 @@
       "completed_at": "2026-05-02T07:14:59Z"
     },
     "71-tce-01-pluggable-adapter-contract": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "high",
       "branch": "slice/71-tce-01-pluggable-adapter-contract",
       "retries": 0,
@@ -1768,7 +1772,9 @@
       ],
       "wave": 29,
       "theme": "TCE",
-      "zero_retry": true
+      "zero_retry": true,
+      "agent": "pending-agent-71",
+      "started_at": "2026-05-02T07:57:35.658Z"
     },
     "72-tce-02-state-catalog-layout-registry": {
       "status": "pending",
@@ -2327,7 +2333,26 @@
     }
   },
   "current_wave": 35,
-  "active_subagents": [],
+  "active_subagents": [
+    {
+      "slice": "62-ponto-04-escalas-plantoes",
+      "agent": "pending-agent-62",
+      "effort": "medium",
+      "started_at": "2026-05-02T07:57:35.658Z"
+    },
+    {
+      "slice": "71-tce-01-pluggable-adapter-contract",
+      "agent": "pending-agent-71",
+      "effort": "high",
+      "started_at": "2026-05-02T07:57:35.658Z"
+    },
+    {
+      "slice": "58-fisc-03-comprovante-rendimentos",
+      "agent": "pending-agent-58",
+      "effort": "medium",
+      "started_at": "2026-05-02T07:57:35.658Z"
+    }
+  ],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }
