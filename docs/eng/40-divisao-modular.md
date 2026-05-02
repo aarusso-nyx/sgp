@@ -586,11 +586,11 @@ stateDiagram-v2
 
 #### `recrutamento` — Recrutamento, Seleção e Estágio
 
-**Responsabilidades:** fluxo completo de requisição de pessoal (rascunho → aprovação → análise de candidatos → conclusão); banco de talentos; gestão de estagiários (programa, prorrogação, recesso, desligamento automático).
+**Responsabilidades:** fluxo completo de requisição de pessoal (rascunho → aprovação → análise de candidatos → conclusão); cadastro administrativo de concurso publico com edital, vagas por cargo, reservas legais e publicacao no Portal Transparencia; banco de talentos; gestão de estagiários (programa, prorrogação, recesso, desligamento automático).
 
-**Entidades:** `requisicao_pessoal`, `funcao_requisitada`, `candidato_requisicao`, `banco_talentos`, `programa_estagio`, `estagiario`, `prorrogacao_estagio`, `recesso_estagio`, `instituicao_ensino`, `curso`.
+**Entidades:** `requisicao_pessoal`, `funcao_requisitada`, `candidato_requisicao`, `concurso`, `edital`, `vaga`, `banco_talentos`, `programa_estagio`, `estagiario`, `prorrogacao_estagio`, `recesso_estagio`, `instituicao_ensino`, `curso`.
 
-**Serviços:** `RequisicaoService`, `CandidatoService`, `BancoTalentosService`, `ProgramaEstagioService`, `EstagiarioService`, `ProrrogacaoEstagioService`, `RecessoEstagioService`.
+**Serviços:** `RequisicaoService`, `CandidatoService`, `ConcursoService`, `EditalService`, `PublishService`, `BancoTalentosService`, `ProgramaEstagioService`, `EstagiarioService`, `ProrrogacaoEstagioService`, `RecessoEstagioService`.
 
 **Controladores:**
 
@@ -600,6 +600,11 @@ stateDiagram-v2
 - `PUT /api/v1/recrutamento/requisicoes/:id/aprovar`
 - `POST /api/v1/recrutamento/requisicoes/:id/candidatos`
 - `PUT /api/v1/recrutamento/candidatos/:id/situacao`
+- `GET /api/v1/recrutamento/concursos`
+- `POST /api/v1/recrutamento/concursos`
+- `POST /api/v1/recrutamento/concursos/:id/editais`
+- `POST /api/v1/recrutamento/concursos/:id/editais/publish`
+- `GET /api/v1/publico/concursos/:slug`
 - `GET /api/v1/recrutamento/banco-talentos`
 - `POST /api/v1/recrutamento/banco-talentos`
 - `GET /api/v1/recrutamento/estagios/programas`
@@ -873,9 +878,11 @@ stateDiagram-v2
 
 **Responsabilidades:** facade de configuração e status das integrações externas (eSocial, SIPREV, DIRF, CNAB, Neoconsig, Gov.br, Prefeitura Pública); endpoints para disparo manual de remessas; monitoramento de status de envio; configuração de credenciais por tenant.
 
-**Serviços:** `EsocialFacadeService`, `SiprevFacadeService`, `CnabFacadeService`, `NeoconsigFacadeService`, `GovBrFacadeService`, `PrefeituraPublicaFacadeService`, `integrations-worker/cnab240/Cnab240BuilderService` e `integrations-worker/cnab240/Cnab240EmitService`.
+**Serviços:** `EsocialFacadeService`, `SiprevFacadeService`, `CnabFacadeService`, `NeoconsigFacadeService`, `GovBrFacadeService`, `PrefeituraPublicaFacadeService`, `integrations-worker/cnab240/Cnab240BuilderService`, `integrations-worker/cnab240/Cnab240EmitService` e `integrations-worker/consignment-portability/PortabilityProcessService`.
 
 `integrations-worker/cnab240` gera remessa CNAB 240 de crédito em conta para BB, Caixa, Itaú, Bradesco e Santander. A emissão consome uma `payroll.payroll_run` aprovada, filtra somente contas `hr.employee_bank_account.validation_status = 'VALID'`, grava metadados e SHA-256 em `payroll.payment_remittance_file` e persiste o vínculo linha-servidor em `payroll.payment_remittance_detail`.
+
+`integrations-worker/consignment-portability` importa arquivos canonicos ou adaptados por consignante para portabilidade de consignados. O processamento concilia por CPF, contrato antigo e consignante origem, marca a averbação antiga como `TRANSFERRED`, cria a nova em `payment.consignment_loan` com referências cruzadas e mantém detalhe `MATCHED` ou `UNMATCHED` reprocessável por arquivo.
 
 **Controladores:**
 
@@ -1069,6 +1076,7 @@ sequenceDiagram
 | `cnab-retorno` | `retorno.processar` | Processa arquivo de retorno bancário; atualiza status de pagamentos; gera relatório de retorno |
 | `siprev`       | `siprev.gerar`      | Gera XML SIPREV no leiaute MPS vigente; persiste em S3; notifica gestor para upload manual     |
 | `dirf`         | `dirf.gerar`        | Gera arquivo TXT DIRF no leiaute RFB anual; persiste em S3; atualiza status                    |
+| `consignment-portability` | `consignado.portabilidade.processar` | Importa arquivo de portabilidade, concilia contratos, transfere averbações e audita linha a linha |
 
 ---
 

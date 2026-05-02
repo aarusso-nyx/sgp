@@ -1,0 +1,13 @@
+<section class="portal-concursos">
+  <h1>Concursos publicos</h1>
+  <article *ngFor="let concurso of concursos">
+    <h2>{{ concurso.name }}</h2>
+    <dl>
+      <dt>Codigo</dt>
+      <dd>{{ concurso.code }}</dd>
+      <dt>Inscricoes ate</dt>
+      <dd>{{ concurso.validUntil }}</dd>
+    </dl>
+    <a [href]="concurso.publicUrl">Baixar edital</a>
+  </article>
+</section>

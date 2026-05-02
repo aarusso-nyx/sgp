@@ -1,0 +1,19 @@
+.portal-concursos {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+article {
+  border-bottom: 1px solid #d0d7de;
+  display: grid;
+  gap: 0.75rem;
+  padding-block: 1rem;
+}
+
+dl {
+  display: grid;
+  gap: 0.25rem 1rem;
+  grid-template-columns: max-content 1fr;
+  margin: 0;
+}

@@ -25,6 +25,13 @@ export const routes: Routes = [
       import('./features/publico/transparencia/transparencia').then((m) => m.PublicoTransparencia),
   },
   {
+    path: 'transparencia/concursos',
+    loadComponent: () =>
+      import('./features/portal-transparencia/concursos/concursos').then(
+        (m) => m.PortalTransparenciaConcursos,
+      ),
+  },
+  {
     path: 'auth/callback',
     component: AuthCallback,
   },
@@ -54,6 +61,13 @@ export const routes: Routes = [
       {
         path: 'rh',
         loadChildren: () => import('./features/rh/rh-module').then((m) => m.RhModule),
+      },
+      {
+        path: 'recrutamento/concursos',
+        loadComponent: () =>
+          import('./features/recrutamento/concursos/concursos').then(
+            (m) => m.RecrutamentoConcursos,
+          ),
       },
       {
         path: 'avaliacao/estagio-probatorio',
@@ -91,6 +105,18 @@ export const routes: Routes = [
         path: 'portal/contracheque',
         loadComponent: () =>
           import('./features/portal/contracheque/contracheque').then((m) => m.PortalContracheque),
+      },
+      {
+        path: 'portal/aso',
+        loadComponent: () => import('./features/portal/aso/aso').then((m) => m.PortalAso),
+      },
+      {
+        path: 'saude/exames',
+        loadComponent: () => import('./features/saude/exames/exames').then((m) => m.SaudeExames),
+      },
+      {
+        path: 'saude/aso',
+        loadComponent: () => import('./features/saude/aso/aso').then((m) => m.SaudeAso),
       },
       {
         path: 'saude/pericia',
