@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 
 describe('work accident CAT RLS canonical SQL', () => {
   it('uses tenant and CAT/eSocial permissions on SST-03 tables', () => {
-    const sql = ['../../database/sql/80-rls-saude.sql', '../../database/sql/80-rls-esocial.sql']
+    const sql = ['../../database/sql/70-saude-final.sql', '../../database/sql/70-esocial-final.sql']
       .map((file) => readFileSync(resolve(__dirname, file), 'utf8'))
       .join('\n');
 

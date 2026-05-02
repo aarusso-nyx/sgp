@@ -7,14 +7,10 @@ PostgreSQL is the target database engine. v0.0.1 uses canonical SQL under `datab
 - `sql/00-extensions.sql`: required PostgreSQL extensions.
 - `sql/01-settings.sql`: session settings used while applying canonical SQL.
 - `sql/02-schemas.sql`: canonical runtime schemas.
-- `sql/10-types-*.sql`: enum/domain types by schema.
-- `sql/15-functions-*.sql`: helper functions required by table defaults and generated columns.
-- `sql/20-tables-*.sql`: table DDL by schema.
-- `sql/40-functions-*.sql`: remaining functions by schema.
-- `sql/45-*.sql`: views and materialized views by schema.
-- `sql/46-comments-*.sql`: intentional object comments.
-- `sql/50-constraints-*.sql`, `55-indexes-*.sql`, `60-triggers-*.sql`, `70-fks-*.sql`: integrity and dependency layers by schema.
-- `sql/80-rls-*.sql`: row-level security enablement and policies by schema.
+- `sql/03-public-prelude.sql`: early public enum and helper-function prelude used by later table defaults.
+- `sql/10-NN-*-ddl.sql`: ordered per-schema DDL pack with enum/domain types, helper functions required by table defaults or generated columns, tables, and primary/unique/check constraints.
+- `sql/40-*-functions.sql`: per-schema business functions.
+- `sql/70-*-final.sql`: per-schema late DDL pack with views, materialized views, indexes, triggers, foreign keys, RLS policies, and intentional object comments.
 - `sql/90-runtime-grants.sql`: conditional grants for externally provisioned runtime roles.
 - `sql/91-reference-data.sql`: deterministic reference rows needed before application seed.
 - `sql/40-seed-loader.sql`: optional psql helper for JSON seed payloads.

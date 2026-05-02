@@ -40,7 +40,7 @@ describe('TransparencyPublishService', () => {
     const canonicalSchema = readFileSync(
       resolve(
         __dirname,
-        '../../../../database/sql/40-functions-public_data.sql',
+        '../../../../database/sql/40-public_data-functions.sql',
       ),
       'utf8',
     );

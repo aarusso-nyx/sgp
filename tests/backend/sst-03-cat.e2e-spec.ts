@@ -64,7 +64,7 @@ describe('SST-03 CAT S-2210 flow (e2e)', () => {
 
   it('keeps state machine and fatal close guards in canonical SQL', () => {
     const sql = readFileSync(
-      resolve(__dirname, '../../database/sql/40-functions-saude.sql'),
+      resolve(__dirname, '../../database/sql/40-saude-functions.sql'),
       'utf8',
     );
 
