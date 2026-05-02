@@ -94,11 +94,11 @@ graph TD
 }
 ```
 
-No pacote NestJS, `npm run test` permanece restrito aos specs unitários em `src/**/*.spec.ts`. O gate `npm run test:cov` também executa `test/*.e2e-spec.ts` com `test/test-env.ts`, aplica limiares globais de 85 % para linhas, branches e funções, e coleta cobertura de runtime em `src/**/*.ts`. DTOs, controllers, modules, bootstrap/config e artefatos de metadados Nest/Swagger ficam fora do gate global de branches porque são verificados por contrato/e2e e geram branches instrumentados sem decisão de negócio.
+No pacote backend, `npm run test:backend` permanece restrito aos specs unitários em `src/**/*.spec.ts`. O gate canônico de cobertura do workspace é `npm run test:coverage`; ele delega para o `test:cov` do backend, executa os specs unitários e e2e cobertos, aplica limiares globais de 85 % para linhas, branches e funções, e coleta cobertura de runtime em `src/**/*.ts`. DTOs, controllers, modules, bootstrap/config e artefatos de metadados Nest/Swagger ficam fora do gate global de branches porque são verificados por contrato/e2e e geram branches instrumentados sem decisão de negócio.
 
-O enforcement corrente é o configurado em `backend/package.json`: o script `test:cov` executa Jest com `--rootDir .`, inclui specs unitários e `test/*.e2e-spec.ts`, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer corte por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
+O enforcement corrente é orquestrado pelo `scripts/run.mjs` a partir da raiz do workspace. O script backend `test:cov` executa Jest, inclui specs unitários e e2e cobertos, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer corte por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
 
-O gate agregado corrente é `npm run evidence:check` no workspace root. Ele executa alinhamento de rotas, alinhamento de banco, health JSON, geração do cliente OpenAPI, build, lint, testes Angular admin/portal, testes unitários backend, e2e backend, smoke DB, cobertura backend e smoke QA. Os passos `backend-e2e`, `db-smoke` e `backend-coverage` exigem `DATABASE_URL`. O smoke QA exige URLs vivos e falha como evidência bloqueada quando as variáveis de base URL não estão configuradas.
+O gate agregado corrente é `npm run evidence:check` no workspace root. Ele executa alinhamento de rotas, alinhamento de banco, health JSON, geração do cliente OpenAPI, build, lint, testes Angular admin/portal, testes unitários backend, e2e backend, smoke DB, cobertura backend e smoke QA. Os passos `backend-e2e`, `db-smoke` e `backend-coverage` exigem `DATABASE_URL`. O smoke QA exige URLs vivos e falha como evidência bloqueada quando as variáveis de base URL não estão configuradas. A ordem e os requisitos do gate vivem no registro compartilhado em `scripts/lib/`.
 
 #### O que testar unitariamente
 
@@ -1715,8 +1715,8 @@ Etapas obrigatórias:
 5. `npm run api:alignment:check -- --json`
 6. `npm run db:alignment:check -- --json`
 7. `npm run health:json`
-8. `npm run test:unit`
-9. `npm run test:int`
+8. `npm run test`
+9. `npm run test:db`
 10. `npm run test:e2e`
 11. `npm run build`
 12. `npm run test:coverage`
@@ -1797,8 +1797,8 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v4
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm nx run-many --target=test:integration --all
+      - run: npm ci
+      - run: npm run test:db
         env:
           DATABASE_URL: postgresql://postgres:sgp@localhost:5432/sgp_test
           LOCALSTACK_ENDPOINT: http://localhost:4566

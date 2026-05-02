@@ -27,7 +27,8 @@ Run this checklist before applying canonical SQL or releasing API changes.
 7. Run deterministic seed:
    - `npm run db:seed` (in `backend`)
 8. Run tests:
-   - `npm run test:unit`
+   - `npm run test`
+   - `npm run test:db`
    - `npm run test:e2e`
 9. Verify docs endpoint:
    - `/docs` loads and reflects protected document routes.

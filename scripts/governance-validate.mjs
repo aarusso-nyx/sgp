@@ -3,6 +3,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hardFailGateCommands } from './lib/workspace-commands.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = resolve(scriptDir, '..');
@@ -108,17 +109,49 @@ function validateDevaiConfig() {
   }
 
   const hardFailCommands = new Set(config.hardFailGates?.map((gate) => gate.command) ?? []);
-  const requiredCommands = [
-    'npm run lint:check',
-    'npm run format:check',
-    'npm run typecheck',
-    'npm run api:alignment:check -- --json',
-    'npm run db:alignment:check -- --json',
-    'npm run health:json',
-  ];
-
-  for (const command of requiredCommands) {
+  for (const command of hardFailGateCommands) {
     record(`devai-hard-fail:${command}`, hardFailCommands.has(command), command);
+  }
+}
+
+function validateCanonicalRootScripts() {
+  const packageJson = readJson('package.json');
+  const scripts = packageJson.scripts ?? {};
+  const removedScripts = [
+    ['start', 'dev'],
+    ['start', 'frontend'],
+    ['start', 'backend'],
+    ['build', 'workspaces'],
+    ['build', 'frontend'],
+    ['lint', 'workspaces'],
+    ['format', 'workspaces'],
+    ['test', 'workspaces'],
+    ['test', 'unit'],
+    ['test', 'int'],
+    ['commit', 'check'],
+    ['governance', 'runtime-topology'],
+  ].map((parts) => parts.join(':'));
+
+  for (const scriptName of removedScripts) {
+    record(`root-script:removed:${scriptName}`, !(scriptName in scripts), scriptName);
+  }
+
+  for (const scriptName of [
+    'build',
+    'start',
+    'lint',
+    'lint:check',
+    'format',
+    'format:check',
+    'typecheck',
+    'test',
+    'test:db',
+    'test:e2e',
+    'test:coverage',
+    'evidence:check',
+    'governance:check',
+  ]) {
+    record(`root-script:canonical:${scriptName}`, scriptName in scripts, scriptName);
   }
 }
 
@@ -128,6 +161,7 @@ function main() {
   validateGovernanceManifest();
   validateReverseSuccession();
   validateDevaiConfig();
+  validateCanonicalRootScripts();
 
   const failures = checks.filter((check) => !check.ok);
   for (const check of checks) {

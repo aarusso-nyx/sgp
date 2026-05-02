@@ -105,19 +105,19 @@ jobs:
         run: npm run health:json
 
       - name: Unit tests
-        run: npm run test:unit
+        run: npm run test
 
       - name: Integration smoke
-        run: npm run test:int
+        run: npm run test:db
 
       - name: Backend e2e
-        run: npm --workspace backend run test:e2e -- --runInBand
+        run: npm run test:e2e -- --runInBand
 
       - name: Build
         run: npm run build
 
       - name: Backend coverage
-        run: npm --workspace backend run test:cov -- --runInBand
+        run: npm run test:coverage -- --runInBand
 
       - name: Governance validation
         run: npm run governance:check

@@ -586,6 +586,13 @@ function main() {
 
   mkdirSync(dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`, 'utf8');
+  execSync(
+    'npm --workspace backend exec -- prettier --write --ignore-unknown ../docs/eng/69-api-route-alignment.json',
+    {
+      cwd: sourceRoot,
+      stdio: 'inherit',
+    },
+  );
 
   console.log(
     `[api-alignment] wrote ${outputPath} (documented=${output.counts.documented}, runtime=${output.counts.runtime}, missing=${output.counts.documented_missing}, runtime_only=${output.counts.runtime_only})`,

@@ -77,6 +77,27 @@ export class OpenApiClient {
     );
   }
 
+  deleteApiV1EmployeesAlimoniesByIdAndAlimonyId(params: {
+    id: string;
+    alimonyId: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/employees/${encodeURIComponent(params.id)}/alimonies/${encodeURIComponent(params.alimonyId)}`,
+    );
+  }
+
+  deleteApiV1EsocialCertificadosByCertificateId(params: {
+    certificateId: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/esocial/certificados/${encodeURIComponent(params.certificateId)}`,
+    );
+  }
+
+  deleteApiV1FolhaRubricaById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/folha/rubrica/${encodeURIComponent(params.id)}`);
+  }
+
   deleteApiV1FolhasCatalogosByResourceAndId(params: {
     resource: string;
     id: string;
@@ -99,6 +120,38 @@ export class OpenApiClient {
     );
   }
 
+  deleteApiV1PontoBiometriaEmployeesConsentByEmployeeId(params: {
+    employeeId: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/ponto/biometria/employees/${encodeURIComponent(params.employeeId)}/consent`,
+    );
+  }
+
+  deleteApiV1PontoFaceEmployeesConsentByEmployeeId(params: {
+    employeeId: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/ponto/face/employees/${encodeURIComponent(params.employeeId)}/consent`,
+    );
+  }
+
+  deleteApiV1RecrutamentoBiometriaCandidatosByCandidatoId(params: {
+    candidatoId: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/recrutamento/biometria/candidatos/${encodeURIComponent(params.candidatoId)}`,
+    );
+  }
+
+  deleteApiV1RecrutamentoProvaOnlineSessionsArtifactsById(params: {
+    id: string;
+  }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/recrutamento/prova-online/sessions/${encodeURIComponent(params.id)}/artifacts`,
+    );
+  }
+
   deleteApiV1RhAfastamentosById(params: { id: string }): Observable<unknown> {
     return this.api.delete<unknown>(`/v1/rh/afastamentos/${encodeURIComponent(params.id)}`);
   }
@@ -109,6 +162,10 @@ export class OpenApiClient {
 
   deleteApiV1RhProcessosById(params: { id: string }): Observable<unknown> {
     return this.api.delete<unknown>(`/v1/rh/processos/${encodeURIComponent(params.id)}`);
+  }
+
+  deleteApiV1TceLayoutFieldsById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/tce/layout-fields/${encodeURIComponent(params.id)}`);
   }
 
   getApiAdminV1TenantsImportacaoProgressoByIdAndJobId(params: {
@@ -150,8 +207,58 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1');
   }
 
+  getApiV1AdminFgtsAccountsByEmployeeId(params: { employeeId: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/admin/fgts/accounts/${encodeURIComponent(params.employeeId)}`,
+    );
+  }
+
+  getApiV1AdminFgtsRemittancesById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/admin/fgts/remittances/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1AdminFiscalDctfweb(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/fiscal/dctfweb', query);
+  }
+
+  getApiV1AdminFiscalDctfwebById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/admin/fiscal/dctfweb/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1AdminFiscalDirf(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/fiscal/dirf', query);
+  }
+
+  getApiV1AdminFiscalDirfById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/admin/fiscal/dirf/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1AdminFiscalDirfTxtById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/admin/fiscal/dirf/${encodeURIComponent(params.id)}/txt`);
+  }
+
+  getApiV1AdminFiscalGps(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/fiscal/gps', query);
+  }
+
+  getApiV1AdminFiscalGpsById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/admin/fiscal/gps/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1AdminFiscalGpsTxtById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/admin/fiscal/gps/${encodeURIComponent(params.id)}/txt`);
+  }
+
+  getApiV1AdminFiscalGpsPaymentCodes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/fiscal/gps/payment-codes');
+  }
+
   getApiV1AdminMenus(): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/menus');
+  }
+
+  getApiV1AdminParametrosAts(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/parametros/ats');
   }
 
   getApiV1AdminParametrosGlobais(): Observable<unknown> {
@@ -162,12 +269,34 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/admin/parametros/sistema');
   }
 
+  getApiV1AdminParametrosTaxRateIrrf(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/parametros/tax-rate/irrf', query);
+  }
+
+  getApiV1AdminParametrosTaxRateRpps(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/parametros/tax-rate/rpps', query);
+  }
+
+  getApiV1AdminParametrosTetoRemuneratorio(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/parametros/teto-remuneratorio');
+  }
+
   getApiV1AdminPerfis(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/perfis', query);
   }
 
   getApiV1AdminPerfisById(params: { id: string }): Observable<unknown> {
     return this.api.get<unknown>(`/v1/admin/perfis/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1AdminPisPasepByEmployeeId(
+    params: { employeeId: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/admin/pis-pasep/${encodeURIComponent(params.employeeId)}`,
+      query,
+    );
   }
 
   getApiV1AdminUsuarios(query: ApiQuery = {}): Observable<unknown> {
@@ -202,20 +331,58 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/auth/menus');
   }
 
+  getApiV1AvaliacaoCareerPlan(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/career-plan');
+  }
+
+  getApiV1AvaliacaoCareerPlanTrilhaById(
+    params: { id: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/avaliacao/career-plan/${encodeURIComponent(params.id)}/trilha`,
+      query,
+    );
+  }
+
   getApiV1AvaliacaoDesempenhos(): Observable<unknown> {
     return this.api.get<unknown>('/v1/avaliacao/desempenhos');
+  }
+
+  getApiV1AvaliacaoEstagioProbatorioAVencer(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/estagio-probatorio/a-vencer', query);
   }
 
   getApiV1AvaliacaoPlanosCargos(): Observable<unknown> {
     return this.api.get<unknown>('/v1/avaliacao/planos-cargos');
   }
 
+  getApiV1AvaliacaoProgression(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/progression', query);
+  }
+
+  getApiV1AvaliacaoProgressionEligibility(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/progression/eligibility', query);
+  }
+
   getApiV1AvaliacaoProgressoes(): Observable<unknown> {
     return this.api.get<unknown>('/v1/avaliacao/progressoes');
   }
 
+  getApiV1AvaliacaoSalaryHistoryTimelineBySalaryRangeLevelId(params: {
+    salaryRangeLevelId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/avaliacao/salary-history/${encodeURIComponent(params.salaryRangeLevelId)}/timeline`,
+    );
+  }
+
   getApiV1AvaliacaoSimulacoes(): Observable<unknown> {
     return this.api.get<unknown>('/v1/avaliacao/simulacoes');
+  }
+
+  getApiV1Cargos(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/cargos', query);
   }
 
   getApiV1ConsultasDashboards(): Observable<unknown> {
@@ -296,12 +463,119 @@ export class OpenApiClient {
     );
   }
 
+  getApiV1EmployeesAlimoniesById(
+    params: { id: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/employees/${encodeURIComponent(params.id)}/alimonies`, query);
+  }
+
+  getApiV1EmployeesBankAccountsById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/employees/${encodeURIComponent(params.id)}/bank-accounts`);
+  }
+
+  getApiV1EmployeesConsignmentLoansById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/employees/${encodeURIComponent(params.id)}/consignment-loans`,
+    );
+  }
+
+  getApiV1EmployeesConsignmentMarginById(
+    params: { id: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/employees/${encodeURIComponent(params.id)}/consignment-margin`,
+      query,
+    );
+  }
+
+  getApiV1EsocialCertificados(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/certificados');
+  }
+
+  getApiV1EsocialEventosTrabalhador(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/eventos-trabalhador');
+  }
+
+  getApiV1EsocialEventsExcludable(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/events/excludable');
+  }
+
+  getApiV1EsocialExclusions(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/exclusions');
+  }
+
+  getApiV1EsocialFechamento(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/fechamento', query);
+  }
+
+  getApiV1EsocialFolhaPeriodica(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/folha-periodica', query);
+  }
+
+  getApiV1EsocialRetornosEventosByEventId(params: { eventId: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/esocial/retornos/eventos/${encodeURIComponent(params.eventId)}`,
+    );
+  }
+
+  getApiV1EsocialRetornosFalhas(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/retornos/falhas', query);
+  }
+
+  getApiV1EsocialSubmissoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/submissoes');
+  }
+
+  getApiV1EsocialSubmissoesCircuitos(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/submissoes/circuitos');
+  }
+
+  getApiV1EsocialTabelasIniciais(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/tabelas-iniciais');
+  }
+
+  getApiV1EsocialTrabalhadores(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/esocial/trabalhadores');
+  }
+
+  getApiV1FeriasSaldoByEmployeeId(
+    params: { employee_id: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/ferias/saldo/${encodeURIComponent(params.employee_id)}`,
+      query,
+    );
+  }
+
   getApiV1FolhaRemessaById(params: { id: string }, query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>(`/v1/folha/${encodeURIComponent(params.id)}/remessa`, query);
   }
 
+  getApiV1FolhaRemessa(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/folha/remessa', query);
+  }
+
+  getApiV1FolhaRubrica(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/folha/rubrica');
+  }
+
+  getApiV1FolhaRubricaById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/folha/rubrica/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1FolhaRubricaLinksJobPositions(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/folha/rubrica/links/job-positions');
+  }
+
   getApiV1Folhas(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/folhas', query);
+  }
+
+  getApiV1FolhasHistoricoByFolhaId(params: { folha_id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/folhas/${encodeURIComponent(params.folha_id)}/historico`);
   }
 
   getApiV1FolhasCatalogos(): Observable<unknown> {
@@ -322,6 +596,20 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/folhas/contabilidade', query);
   }
 
+  getApiV1FolhasMensalRevisao(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/folhas/mensal/revisao', query);
+  }
+
+  getApiV1Funcionarios(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/funcionarios', query);
+  }
+
+  getApiV1FuncionariosAbonoPermanenciaById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/funcionarios/${encodeURIComponent(params.id)}/abono-permanencia`,
+    );
+  }
+
   getApiV1FuncionariosDossieById(params: { id: string }): Observable<unknown> {
     return this.api.get<unknown>(`/v1/funcionarios/${encodeURIComponent(params.id)}/dossie`);
   }
@@ -336,12 +624,34 @@ export class OpenApiClient {
     );
   }
 
-  getApiV1Funcionarios(query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>('/v1/funcionarios', query);
+  getApiV1FuncionariosTempoServicoById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/funcionarios/${encodeURIComponent(params.id)}/tempo-servico`);
   }
 
-  getApiV1AvaliacaoEstagioProbatorioAVencer(query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>('/v1/avaliacao/estagio-probatorio/a-vencer', query);
+  getApiV1FuncionariosCadastralChanges(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/funcionarios/cadastral-changes');
+  }
+
+  getApiV1GestaoCargos(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/gestao/cargos', query);
+  }
+
+  getApiV1GestaoCargosTabelaSalarialById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/gestao/cargos/${encodeURIComponent(params.id)}/tabela-salarial`,
+    );
+  }
+
+  getApiV1GestaoFaixasSalariais(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/gestao/faixas-salariais');
+  }
+
+  getApiV1GestaoFaixasSalariaisNiveisBySalaryRangeId(params: {
+    salaryRangeId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/gestao/faixas-salariais/${encodeURIComponent(params.salaryRangeId)}/niveis`,
+    );
   }
 
   getApiV1Health(): Observable<unknown> {
@@ -354,6 +664,14 @@ export class OpenApiClient {
 
   getApiV1IamPermissions(): Observable<unknown> {
     return this.api.get<unknown>('/v1/iam/permissions');
+  }
+
+  getApiV1LicencasByEmployeeId(params: { employee_id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/licencas/${encodeURIComponent(params.employee_id)}`);
+  }
+
+  getApiV1LicencasSaudeByEmployeeId(params: { employee_id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/licencas/saude/${encodeURIComponent(params.employee_id)}`);
   }
 
   getApiV1MasterData(query: ApiQuery = {}): Observable<unknown> {
@@ -383,6 +701,180 @@ export class OpenApiClient {
     return this.api.get<unknown>(
       `/v1/pericia/prontuarios/${encodeURIComponent(params.id)}/laudo/pdf`,
     );
+  }
+
+  getApiV1PontoAfdExports(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/afd/exports');
+  }
+
+  getApiV1PontoAfdExportsDownloadByAfdExportId(params: {
+    afdExportId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/ponto/afd/exports/${encodeURIComponent(params.afdExportId)}/download`,
+    );
+  }
+
+  getApiV1PontoAfdImports(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/afd/imports');
+  }
+
+  getApiV1PontoAtribuicoes(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/atribuicoes', query);
+  }
+
+  getApiV1PontoBancoHoras(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/banco-horas');
+  }
+
+  getApiV1PontoBancoHorasMovimentosByHourBankId(params: {
+    hourBankId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/ponto/banco-horas/${encodeURIComponent(params.hourBankId)}/movimentos`,
+    );
+  }
+
+  getApiV1PontoBiometriaTemplates(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/biometria/templates', query);
+  }
+
+  getApiV1PontoEscalasAtribuicoes(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/escalas/atribuicoes', query);
+  }
+
+  getApiV1PontoEscalasPadroes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/escalas/padroes');
+  }
+
+  getApiV1PontoEscalasProximas(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/escalas/proximas', query);
+  }
+
+  getApiV1PontoEscalasRosters(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/escalas/rosters');
+  }
+
+  getApiV1PontoEscalasRostersProjetar(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/escalas/rosters/projetar', query);
+  }
+
+  getApiV1PontoFaceEmployeesStatusByEmployeeId(params: {
+    employeeId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/ponto/face/employees/${encodeURIComponent(params.employeeId)}/status`,
+    );
+  }
+
+  getApiV1PontoFaceTemplates(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/face/templates', query);
+  }
+
+  getApiV1PontoFaceThreshold(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/face/threshold');
+  }
+
+  getApiV1PontoJornadas(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/jornadas');
+  }
+
+  getApiV1PontoJustifications(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/justifications', query);
+  }
+
+  getApiV1PontoMarcacoesByEmployeeId(
+    params: { employeeId: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/ponto/marcacoes/${encodeURIComponent(params.employeeId)}`,
+      query,
+    );
+  }
+
+  getApiV1PontoRep(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/rep');
+  }
+
+  getApiV1PontoRepByRepDeviceId(params: { repDeviceId: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/ponto/rep/${encodeURIComponent(params.repDeviceId)}`);
+  }
+
+  getApiV1PontoRepBatches(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/ponto/rep/batches');
+  }
+
+  getApiV1PontoRepBatchesOriginalByBatchId(params: { batchId: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/ponto/rep/batches/${encodeURIComponent(params.batchId)}/original`,
+    );
+  }
+
+  getApiV1PortalAso(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/aso');
+  }
+
+  getApiV1PortalAsoProximo(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/aso/proximo');
+  }
+
+  getApiV1PortalContrachequeByCompetence(params: { competence: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/portal/contracheque/${encodeURIComponent(params.competence)}`,
+    );
+  }
+
+  getApiV1PortalContrachequesFerias(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/contracheques/ferias');
+  }
+
+  getApiV1PortalMeusDadosCadastro(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/cadastro');
+  }
+
+  getApiV1PortalMeusDadosCargo(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/cargo');
+  }
+
+  getApiV1PortalMeusDadosContato(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/contato');
+  }
+
+  getApiV1PortalMeusDadosDependentes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/dependentes');
+  }
+
+  getApiV1PortalMeusDadosDocumentos(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/documentos');
+  }
+
+  getApiV1PortalMeusDadosEndereco(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/endereco');
+  }
+
+  getApiV1PortalMinhaCarreira(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/minha-carreira');
+  }
+
+  getApiV1PortalPayslips(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/payslips');
+  }
+
+  getApiV1PortalPayslipsPdfById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/portal/payslips/${encodeURIComponent(params.id)}/pdf`);
+  }
+
+  getApiV1PortalTermosRescisao(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/termos-rescisao');
+  }
+
+  getApiV1PortalYearlyIncome(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/yearly-income');
+  }
+
+  getApiV1PortalYearlyIncomePdfByYear(params: { year: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/portal/yearly-income/${encodeURIComponent(params.year)}/pdf`);
   }
 
   getApiV1PrevidenciarioAposentadorias(): Observable<unknown> {
@@ -429,11 +921,97 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/previdenciario/simulacoes');
   }
 
+  getApiV1PublicTransparencyPayrollByTenantId(params: { tenantId: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/public/transparency/${encodeURIComponent(params.tenantId)}/payroll`,
+    );
+  }
+
+  getApiV1PublicTransparencyPayrollCsvByTenantId(params: {
+    tenantId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/public/transparency/${encodeURIComponent(params.tenantId)}/payroll.csv`,
+    );
+  }
+
+  getApiV1PublicoBancaVerifyByToken(params: { token: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/publico/banca/verify/${encodeURIComponent(params.token)}`);
+  }
+
+  getApiV1PublicoConcursosBySlug(params: { slug: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/publico/concursos/${encodeURIComponent(params.slug)}`);
+  }
+
+  getApiV1PublicoConcursosClassificacaoBySlug(params: { slug: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/publico/concursos/${encodeURIComponent(params.slug)}/classificacao`,
+    );
+  }
+
+  getApiV1PublicoInscricoesById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/publico/inscricoes/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1PublicoInscricoesNotasById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/publico/inscricoes/${encodeURIComponent(params.id)}/notas`);
+  }
+
   getApiV1RecadastramentoComprovanteByRecadastramentoId(params: {
     recadastramento_id: string;
   }): Observable<unknown> {
     return this.api.get<unknown>(
       `/v1/recadastramento/${encodeURIComponent(params.recadastramento_id)}/comprovante`,
+    );
+  }
+
+  getApiV1RecrutamentoAvaliacaoNotasInscricoesByInscricaoId(params: {
+    inscricaoId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/recrutamento/avaliacao/notas/inscricoes/${encodeURIComponent(params.inscricaoId)}`,
+    );
+  }
+
+  getApiV1RecrutamentoAvaliacaoProvasGabaritosByProvaId(params: {
+    provaId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/recrutamento/avaliacao/provas/${encodeURIComponent(params.provaId)}/gabaritos`,
+    );
+  }
+
+  getApiV1RecrutamentoAvaliacaoProvasConcursosByConcursoId(params: {
+    concursoId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/recrutamento/avaliacao/provas/concursos/${encodeURIComponent(params.concursoId)}`,
+    );
+  }
+
+  getApiV1RecrutamentoAvaliacaoRecursosProvasByProvaId(params: {
+    provaId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/recrutamento/avaliacao/recursos/provas/${encodeURIComponent(params.provaId)}`,
+    );
+  }
+
+  getApiV1RecrutamentoBancaConcursosMembrosByConcursoId(params: {
+    concursoId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/recrutamento/banca/concursos/${encodeURIComponent(params.concursoId)}/membros`,
+    );
+  }
+
+  getApiV1RecrutamentoConcursos(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/recrutamento/concursos');
+  }
+
+  getApiV1RecrutamentoProvaOnlineReviewSessionsById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/recrutamento/prova-online/review/sessions/${encodeURIComponent(params.id)}`,
     );
   }
 
@@ -445,12 +1023,114 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/rh/afastamentos', query);
   }
 
+  getApiV1RhEmployeeTransfer(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/rh/employee-transfer', query);
+  }
+
+  getApiV1RhEmployeeTransferEmployeeByEmployeeId(params: {
+    employeeId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/rh/employee-transfer/employee/${encodeURIComponent(params.employeeId)}`,
+    );
+  }
+
   getApiV1RhProcessos(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/rh/processos', query);
   }
 
   getApiV1RhProcessosFuncao(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/rh/processos-funcao', query);
+  }
+
+  getApiV1SaudeAcidentes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/acidentes');
+  }
+
+  getApiV1SaudeAcidentesPrazos(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/acidentes/prazos');
+  }
+
+  getApiV1SaudeAso(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/aso');
+  }
+
+  getApiV1SaudeAsoPainelVencimentos(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/aso/painel/vencimentos');
+  }
+
+  getApiV1SaudeEpiEntregas(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/epi/entregas');
+  }
+
+  getApiV1SaudeEpiInventario(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/epi/inventario');
+  }
+
+  getApiV1SaudeExames(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/exames');
+  }
+
+  getApiV1SaudeExposicoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/exposicoes');
+  }
+
+  getApiV1SaudeExposicoesFolha(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/exposicoes/folha', query);
+  }
+
+  getApiV1SaudePpp(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/ppp');
+  }
+
+  getApiV1SaudeProgramasPcmso(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/programas/pcmso');
+  }
+
+  getApiV1SaudeProgramasPgr(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/programas/pgr');
+  }
+
+  getApiV1TceAdapters(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/tce/adapters');
+  }
+
+  getApiV1TceAdaptersEventsById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/tce/adapters/${encodeURIComponent(params.id)}/events`);
+  }
+
+  getApiV1TceAudespSpSubmissions(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/tce/audesp-sp/submissions', query);
+  }
+
+  getApiV1TceAudespSpSubmissionsEnvelopeXmlById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/tce/audesp-sp/submissions/${encodeURIComponent(params.id)}/envelope.xml`,
+    );
+  }
+
+  getApiV1TceCircuits(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/tce/circuits');
+  }
+
+  getApiV1TceLayoutsFieldsById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/tce/layouts/${encodeURIComponent(params.id)}/fields`);
+  }
+
+  getApiV1TceQueue(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/tce/queue', query);
+  }
+
+  getApiV1TceQueueById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/tce/queue/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1TceStates(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/tce/states');
+  }
+
+  getApiV1TceStatesLayoutsByCode(params: { code: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/tce/states/${encodeURIComponent(params.code)}/layouts`);
   }
 
   getApiV1UsuariosMePreferenciasNotificacao(): Observable<unknown> {
@@ -484,6 +1164,76 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1AdminHrTsvContractsById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/hr/tsv-contracts/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1AdminNomeacoesDesistenciaById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/nomeacoes/${encodeURIComponent(params.id)}/desistencia`,
+      body,
+    );
+  }
+
+  patchApiV1AdminNomeacoesExpirarPrazoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/nomeacoes/${encodeURIComponent(params.id)}/expirar-prazo`,
+      body,
+    );
+  }
+
+  patchApiV1AdminPossesCancelarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/posses/${encodeURIComponent(params.id)}/cancelar`,
+      body,
+    );
+  }
+
+  patchApiV1AdminPossesIniciarExercicioById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/posses/${encodeURIComponent(params.id)}/iniciar-exercicio`,
+      body,
+    );
+  }
+
+  patchApiV1AdminPossesProrrogarExercicioById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/posses/${encodeURIComponent(params.id)}/prorrogar-exercicio`,
+      body,
+    );
+  }
+
+  patchApiV1AdminPossesRealizarPosseById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/posses/${encodeURIComponent(params.id)}/realizar-posse`,
+      body,
+    );
+  }
+
   patchApiV1AdminUsuariosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/admin/usuarios/${encodeURIComponent(params.id)}`,
@@ -497,6 +1247,16 @@ export class OpenApiClient {
   ): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/arquivos/${encodeURIComponent(params.anexo_id)}/confirmar`,
+      body,
+    );
+  }
+
+  patchApiV1AvaliacaoCareerPlanById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/avaliacao/career-plan/${encodeURIComponent(params.id)}`,
       body,
     );
   }
@@ -571,6 +1331,23 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1EmployeesAlimoniesByIdAndAlimonyId(
+    params: { id: string; alimonyId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.id)}/alimonies/${encodeURIComponent(params.alimonyId)}`,
+      body,
+    );
+  }
+
+  patchApiV1FolhaRubricaById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/folha/rubrica/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
   patchApiV1FolhasStatusByFolhaId(
     params: { folha_id: string },
     body: ApiBody = {},
@@ -597,6 +1374,13 @@ export class OpenApiClient {
   ): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/folhas/contabilidade/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1GestaoCargosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/gestao/cargos/${encodeURIComponent(params.id)}`,
       body,
     );
   }
@@ -638,6 +1422,16 @@ export class OpenApiClient {
   ): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/pericia/prontuarios/${encodeURIComponent(params.prontuario_id)}/validar`,
+      body,
+    );
+  }
+
+  patchApiV1PontoEscalasAtribuicoesByShiftAssignmentId(
+    params: { shiftAssignmentId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/ponto/escalas/atribuicoes/${encodeURIComponent(params.shiftAssignmentId)}`,
       body,
     );
   }
@@ -713,6 +1507,87 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1SaudeAcidentesComunicarObitoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/acidentes/${encodeURIComponent(params.id)}/comunicar-obito`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeAcidentesEncerrarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/acidentes/${encodeURIComponent(params.id)}/encerrar`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeAcidentesReabrirById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/acidentes/${encodeURIComponent(params.id)}/reabrir`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeAsoArquivarById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/aso/${encodeURIComponent(params.id)}/arquivar`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeAsoRealizacaoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/aso/${encodeURIComponent(params.id)}/realizacao`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeExposicoesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/exposicoes/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeProgramasPcmsoAtivarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/programas/pcmso/${encodeURIComponent(params.id)}/ativar`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeProgramasPgrAtivarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/programas/pgr/${encodeURIComponent(params.id)}/ativar`,
+      body,
+    );
+  }
+
+  patchApiV1TceLayoutsStatusById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/tce/layouts/${encodeURIComponent(params.id)}/status`,
+      body,
+    );
+  }
+
   postApiAdminV1EsocialEventosReprocessarById(
     params: { id: string },
     body: ApiBody = {},
@@ -737,12 +1612,138 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1AdminConcursosClassificacaoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/concursos/${encodeURIComponent(params.id)}/classificacao`,
+      body,
+    );
+  }
+
+  postApiV1AdminConcursosClassificacaoPublicacaoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/concursos/${encodeURIComponent(params.id)}/classificacao/publicacao`,
+      body,
+    );
+  }
+
+  postApiV1AdminEsocialS2298ByOrderId(
+    params: { orderId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/esocial/s2298/${encodeURIComponent(params.orderId)}`,
+      body,
+    );
+  }
+
+  postApiV1AdminEsocialS2306ByChangeId(
+    params: { changeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/esocial/s2306/${encodeURIComponent(params.changeId)}`,
+      body,
+    );
+  }
+
+  postApiV1AdminFgtsRemittances(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/fgts/remittances', body);
+  }
+
+  postApiV1AdminFgtsReprocessar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/fgts/reprocessar', body);
+  }
+
+  postApiV1AdminFiscalDctfwebAssinarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/fiscal/dctfweb/${encodeURIComponent(params.id)}/assinar`,
+      body,
+    );
+  }
+
+  postApiV1AdminFiscalDctfwebTransmitirById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/fiscal/dctfweb/${encodeURIComponent(params.id)}/transmitir`,
+      body,
+    );
+  }
+
+  postApiV1AdminFiscalDctfwebGerar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/dctfweb/gerar', body);
+  }
+
+  postApiV1AdminFiscalDirfGerar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/dirf/gerar', body);
+  }
+
+  postApiV1AdminFiscalGps(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/gps', body);
+  }
+
+  postApiV1AdminHrReintegrations(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/hr/reintegrations', body);
+  }
+
+  postApiV1AdminHrReintegrationsApplyById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/hr/reintegrations/${encodeURIComponent(params.id)}/apply`,
+      body,
+    );
+  }
+
   postApiV1AdminMenus(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/menus', body);
   }
 
+  postApiV1AdminNomeacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/nomeacoes', body);
+  }
+
+  postApiV1AdminNomeacoesConvocacoesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/nomeacoes/${encodeURIComponent(params.id)}/convocacoes`,
+      body,
+    );
+  }
+
+  postApiV1AdminPayslipBatches(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/payslip-batches', body);
+  }
+
   postApiV1AdminPerfis(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/perfis', body);
+  }
+
+  postApiV1AdminPosses(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/posses', body);
+  }
+
+  postApiV1AdminTerminationsPriorNoticeById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/terminations/${encodeURIComponent(params.id)}/prior-notice`,
+      body,
+    );
   }
 
   postApiV1AdminUsuarios(body: ApiBody = {}): Observable<unknown> {
@@ -751,6 +1752,10 @@ export class OpenApiClient {
 
   postApiV1AdminUsuariosConvite(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/usuarios/convite', body);
+  }
+
+  postApiV1AdminYearlyIncomeBatches(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/yearly-income-batches', body);
   }
 
   postApiV1ArquivosPresignedUpload(body: ApiBody = {}): Observable<unknown> {
@@ -773,6 +1778,10 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/auth/recuperar-senha', body);
   }
 
+  postApiV1AvaliacaoCareerPlan(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/career-plan', body);
+  }
+
   postApiV1AvaliacaoCiclosRelatorioByPeriodo(
     params: { periodo: string },
     body: ApiBody = {},
@@ -787,10 +1796,6 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/desempenhos', body);
   }
 
-  postApiV1AvaliacaoEstagioProbatorio(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/avaliacao/estagio-probatorio', body);
-  }
-
   postApiV1AvaliacaoDesempenhosFichaById(
     params: { id: string },
     body: ApiBody = {},
@@ -801,16 +1806,42 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1AvaliacaoEstagioProbatorio(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/estagio-probatorio', body);
+  }
+
   postApiV1AvaliacaoPlanosCargos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/planos-cargos', body);
+  }
+
+  postApiV1AvaliacaoProgressionApplyById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/avaliacao/progression/${encodeURIComponent(params.id)}/apply`,
+      body,
+    );
+  }
+
+  postApiV1AvaliacaoProgressionSimulate(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/progression/simulate', body);
   }
 
   postApiV1AvaliacaoProgressoes(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/progressoes', body);
   }
 
+  postApiV1AvaliacaoSalaryHistoryReajusteMassa(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/salary-history/reajuste-massa', body);
+  }
+
   postApiV1AvaliacaoSimulacoes(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/simulacoes', body);
+  }
+
+  postApiV1Cargos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/cargos', body);
   }
 
   postApiV1ConvitesAceitarByToken(
@@ -873,8 +1904,239 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1EmployeesAlimoniesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.id)}/alimonies`,
+      body,
+    );
+  }
+
+  postApiV1EmployeesBankAccountsById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.id)}/bank-accounts`,
+      body,
+    );
+  }
+
+  postApiV1EmployeesBankAccountsRevalidateByIdAndAccountId(
+    params: { id: string; accountId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.id)}/bank-accounts/${encodeURIComponent(params.accountId)}/revalidate`,
+      body,
+    );
+  }
+
+  postApiV1EmployeesConsignmentLoansById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/employees/${encodeURIComponent(params.id)}/consignment-loans`,
+      body,
+    );
+  }
+
+  postApiV1EsocialCertificados(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/esocial/certificados', body);
+  }
+
   postApiV1EsocialEventos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/esocial/eventos', body);
+  }
+
+  postApiV1EsocialEventosTrabalhadorS2210EmitirByCatEmissionId(
+    params: { catEmissionId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/eventos-trabalhador/s2210/${encodeURIComponent(params.catEmissionId)}/emitir`,
+      body,
+    );
+  }
+
+  postApiV1EsocialEventosTrabalhadorS2220RetryByAsoRecordId(
+    params: { asoRecordId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/eventos-trabalhador/s2220/${encodeURIComponent(params.asoRecordId)}/retry`,
+      body,
+    );
+  }
+
+  postApiV1EsocialEventosTrabalhadorS2230EmitirByPendingId(
+    params: { pendingId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/eventos-trabalhador/s2230/${encodeURIComponent(params.pendingId)}/emitir`,
+      body,
+    );
+  }
+
+  postApiV1EsocialEventosTrabalhadorS2240EmitirByEnvironmentalExposureId(
+    params: { environmentalExposureId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/eventos-trabalhador/s2240/${encodeURIComponent(params.environmentalExposureId)}/emitir`,
+      body,
+    );
+  }
+
+  postApiV1EsocialEventosTrabalhadorS2299EmitirByPendingId(
+    params: { pendingId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/eventos-trabalhador/s2299/${encodeURIComponent(params.pendingId)}/emitir`,
+      body,
+    );
+  }
+
+  postApiV1EsocialEventsExcludeById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/events/${encodeURIComponent(params.id)}/exclude`,
+      body,
+    );
+  }
+
+  postApiV1EsocialExclusionsAcceptByRequestId(
+    params: { requestId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/exclusions/${encodeURIComponent(params.requestId)}/accept`,
+      body,
+    );
+  }
+
+  postApiV1EsocialFechamentoFechar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/esocial/fechamento/fechar', body);
+  }
+
+  postApiV1EsocialFechamentoReabrir(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/esocial/fechamento/reabrir', body);
+  }
+
+  postApiV1EsocialFechamentoTotalizadores(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/esocial/fechamento/totalizadores', body);
+  }
+
+  postApiV1EsocialFolhaPeriodicaPaymentsS1210EmitirByPaymentBatchId(
+    params: { paymentBatchId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/folha-periodica/payments/${encodeURIComponent(params.paymentBatchId)}/s1210/emitir`,
+      body,
+    );
+  }
+
+  postApiV1EsocialFolhaPeriodicaRunsS1200EmitirByPayrollRunId(
+    params: { payrollRunId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/folha-periodica/runs/${encodeURIComponent(params.payrollRunId)}/s1200/emitir`,
+      body,
+    );
+  }
+
+  postApiV1EsocialRetornosEventosRetryByEventId(
+    params: { eventId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/retornos/eventos/${encodeURIComponent(params.eventId)}/retry`,
+      body,
+    );
+  }
+
+  postApiV1EsocialRetornosEventosTratadoByEventId(
+    params: { eventId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/retornos/eventos/${encodeURIComponent(params.eventId)}/tratado`,
+      body,
+    );
+  }
+
+  postApiV1EsocialSubmissoesRetryByBatchId(
+    params: { batchId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/submissoes/${encodeURIComponent(params.batchId)}/retry`,
+      body,
+    );
+  }
+
+  postApiV1EsocialTabelasIniciaisEmitirByEventKind(
+    params: { eventKind: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/tabelas-iniciais/${encodeURIComponent(params.eventKind)}/emitir`,
+      body,
+    );
+  }
+
+  postApiV1EsocialTabelasIniciaisEmitir(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/esocial/tabelas-iniciais/emitir', body);
+  }
+
+  postApiV1EsocialTrabalhadoresS2200EmitirByEmployeeId(
+    params: { employeeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/trabalhadores/${encodeURIComponent(params.employeeId)}/s2200/emitir`,
+      body,
+    );
+  }
+
+  postApiV1EsocialTrabalhadoresS2205EmitirByEmployeeId(
+    params: { employeeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/trabalhadores/${encodeURIComponent(params.employeeId)}/s2205/emitir`,
+      body,
+    );
+  }
+
+  postApiV1FeriasProgramacao(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ferias/programacao', body);
+  }
+
+  postApiV1FeriasProgramacaoAprovarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/ferias/programacao/${encodeURIComponent(params.id)}/aprovar`,
+      body,
+    );
+  }
+
+  postApiV1FeriasProgramacaoCancelarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/ferias/programacao/${encodeURIComponent(params.id)}/cancelar`,
+      body,
+    );
   }
 
   postApiV1FolhaRemessaById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
@@ -889,6 +2151,42 @@ export class OpenApiClient {
       `/v1/folha/${encodeURIComponent(params.id)}/retorno`,
       body,
     );
+  }
+
+  postApiV1FolhaRubrica(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folha/rubrica', body);
+  }
+
+  postApiV1FolhaRubricaPreviewById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folha/rubrica/${encodeURIComponent(params.id)}/preview`,
+      body,
+    );
+  }
+
+  postApiV1FolhaRubricaRecompileById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folha/rubrica/${encodeURIComponent(params.id)}/recompile`,
+      body,
+    );
+  }
+
+  postApiV1FolhaRubricaCompile(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folha/rubrica/compile', body);
+  }
+
+  postApiV1FolhaRubricaLinksJobPositions(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folha/rubrica/links/job-positions', body);
+  }
+
+  postApiV1FolhaSimulacao(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folha/simulacao', body);
   }
 
   postApiV1Folhas(body: ApiBody = {}): Observable<unknown> {
@@ -939,12 +2237,72 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/folhas/contabilidade', body);
   }
 
+  postApiV1FolhasDecimoTerceiroAdiantamento(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/decimo-terceiro/adiantamento', body);
+  }
+
+  postApiV1FolhasDecimoTerceiroFechamento(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/decimo-terceiro/fechamento', body);
+  }
+
+  postApiV1FolhasFeriasCalcular(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/ferias/calcular', body);
+  }
+
+  postApiV1FolhasMensalAbrir(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/mensal/abrir', body);
+  }
+
+  postApiV1FolhasMensalAprovar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/mensal/aprovar', body);
+  }
+
+  postApiV1FolhasMensalCalcular(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/mensal/calcular', body);
+  }
+
+  postApiV1FolhasMensalFechar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/mensal/fechar', body);
+  }
+
+  postApiV1FolhasMensalGerar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/mensal/gerar', body);
+  }
+
+  postApiV1FolhasRescisaoCalcular(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/folhas/rescisao/calcular', body);
+  }
+
+  postApiV1Funcionarios(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/funcionarios', body);
+  }
+
   postApiV1FuncionariosDesligamentoByFuncRescisao(
     params: { func_rescisao: string },
     body: ApiBody = {},
   ): Observable<unknown> {
     return this.api.post<unknown, ApiBody>(
       `/v1/funcionarios/${encodeURIComponent(params.func_rescisao)}/desligamento`,
+      body,
+    );
+  }
+
+  postApiV1FuncionariosAbonoPermanenciaById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/funcionarios/${encodeURIComponent(params.id)}/abono-permanencia`,
+      body,
+    );
+  }
+
+  postApiV1FuncionariosTempoServicoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/funcionarios/${encodeURIComponent(params.id)}/tempo-servico`,
       body,
     );
   }
@@ -959,12 +2317,68 @@ export class OpenApiClient {
     );
   }
 
-  postApiV1Funcionarios(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/funcionarios', body);
+  postApiV1FuncionariosCadastralChangesApproveById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/funcionarios/cadastral-changes/${encodeURIComponent(params.id)}/approve`,
+      body,
+    );
+  }
+
+  postApiV1FuncionariosCadastralChangesRejectById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/funcionarios/cadastral-changes/${encodeURIComponent(params.id)}/reject`,
+      body,
+    );
+  }
+
+  postApiV1GestaoCargos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/gestao/cargos', body);
+  }
+
+  postApiV1GestaoFaixasSalariais(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/gestao/faixas-salariais', body);
+  }
+
+  postApiV1GestaoFaixasSalariaisNiveisBySalaryRangeId(
+    params: { salaryRangeId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/gestao/faixas-salariais/${encodeURIComponent(params.salaryRangeId)}/niveis`,
+      body,
+    );
   }
 
   postApiV1GfipGerar(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/gfip/gerar', body);
+  }
+
+  postApiV1Licencas(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/licencas', body);
+  }
+
+  postApiV1LicencasAprovarById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/licencas/${encodeURIComponent(params.id)}/aprovar`,
+      body,
+    );
+  }
+
+  postApiV1LicencasCancelarById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/licencas/${encodeURIComponent(params.id)}/cancelar`,
+      body,
+    );
+  }
+
+  postApiV1LicencasSaudeAgendamento(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/licencas/saude/agendamento', body);
   }
 
   postApiV1MasterDataByResource(
@@ -977,8 +2391,46 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1PaymentConsignmentPortability(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/payment/consignment-portability', body);
+  }
+
+  postApiV1PaymentConsignmentPortabilityProcessById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/payment/consignment-portability/${encodeURIComponent(params.id)}/process`,
+      body,
+    );
+  }
+
+  postApiV1PaymentReturnFiles(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/payment/return-files', body);
+  }
+
+  postApiV1PaymentReturnFilesReprocessRejectedById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/payment/return-files/${encodeURIComponent(params.id)}/reprocess-rejected`,
+      body,
+    );
+  }
+
   postApiV1PericiaAgendamentos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/pericia/agendamentos', body);
+  }
+
+  postApiV1PericiaAgendamentosParecerByAgendamentoId(
+    params: { agendamento_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/pericia/agendamentos/${encodeURIComponent(params.agendamento_id)}/parecer`,
+      body,
+    );
   }
 
   postApiV1PericiaProntuarios(body: ApiBody = {}): Observable<unknown> {
@@ -991,6 +2443,172 @@ export class OpenApiClient {
   ): Observable<unknown> {
     return this.api.post<unknown, ApiBody>(
       `/v1/pericia/prontuarios/${encodeURIComponent(params.prontuario_id)}/replicar`,
+      body,
+    );
+  }
+
+  postApiV1PontoAfdExports(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/afd/exports', body);
+  }
+
+  postApiV1PontoAfdImports(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/afd/imports', body);
+  }
+
+  postApiV1PontoAtribuicoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/atribuicoes', body);
+  }
+
+  postApiV1PontoBancoHoras(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/banco-horas', body);
+  }
+
+  postApiV1PontoBancoHorasAcumularDia(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/banco-horas/acumular-dia', body);
+  }
+
+  postApiV1PontoBancoHorasAjusteManual(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/banco-horas/ajuste-manual', body);
+  }
+
+  postApiV1PontoBancoHorasCompensar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/banco-horas/compensar', body);
+  }
+
+  postApiV1PontoBancoHorasZerarVencidos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/banco-horas/zerar-vencidos', body);
+  }
+
+  postApiV1PontoBiometriaConsents(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/biometria/consents', body);
+  }
+
+  postApiV1PontoBiometriaMatches(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/biometria/matches', body);
+  }
+
+  postApiV1PontoBiometriaTemplates(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/biometria/templates', body);
+  }
+
+  postApiV1PontoEscalasAtribuicoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/escalas/atribuicoes', body);
+  }
+
+  postApiV1PontoEscalasPadroes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/escalas/padroes', body);
+  }
+
+  postApiV1PontoEscalasRosters(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/escalas/rosters', body);
+  }
+
+  postApiV1PontoEscalasRostersPublicarByDutyRosterId(
+    params: { dutyRosterId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/ponto/escalas/rosters/${encodeURIComponent(params.dutyRosterId)}/publicar`,
+      body,
+    );
+  }
+
+  postApiV1PontoEscalasRostersTravarByDutyRosterId(
+    params: { dutyRosterId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/ponto/escalas/rosters/${encodeURIComponent(params.dutyRosterId)}/travar`,
+      body,
+    );
+  }
+
+  postApiV1PontoFaceClock(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/face/clock', body);
+  }
+
+  postApiV1PontoFaceConsents(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/face/consents', body);
+  }
+
+  postApiV1PontoFaceMatches(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/face/matches', body);
+  }
+
+  postApiV1PontoFaceTemplates(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/face/templates', body);
+  }
+
+  postApiV1PontoFolhaApply(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/folha/apply', body);
+  }
+
+  postApiV1PontoFolhaPreview(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/folha/preview', body);
+  }
+
+  postApiV1PontoJornadas(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/jornadas', body);
+  }
+
+  postApiV1PontoJustifications(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/justifications', body);
+  }
+
+  postApiV1PontoJustificationsCancelById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/ponto/justifications/${encodeURIComponent(params.id)}/cancel`,
+      body,
+    );
+  }
+
+  postApiV1PontoJustificationsDecideById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/ponto/justifications/${encodeURIComponent(params.id)}/decide`,
+      body,
+    );
+  }
+
+  postApiV1PontoMarcacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/marcacoes', body);
+  }
+
+  postApiV1PontoMobileClock(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/mobile/clock', body);
+  }
+
+  postApiV1PontoMobileConsents(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/mobile/consents', body);
+  }
+
+  postApiV1PontoMobileDevices(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/mobile/devices', body);
+  }
+
+  postApiV1PontoMobileGeofences(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/mobile/geofences', body);
+  }
+
+  postApiV1PontoPeriodos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/periodos', body);
+  }
+
+  postApiV1PontoRep(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/rep', body);
+  }
+
+  postApiV1PontoRepBatchesByRepDeviceId(
+    params: { repDeviceId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/ponto/rep/${encodeURIComponent(params.repDeviceId)}/batches`,
       body,
     );
   }
@@ -1081,6 +2699,218 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1PublicTransparencyPublishByTenantId(
+    params: { tenantId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/public/transparency/${encodeURIComponent(params.tenantId)}/publish`,
+      body,
+    );
+  }
+
+  postApiV1PublicoConcursosInscricoesBySlug(
+    params: { slug: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/publico/concursos/${encodeURIComponent(params.slug)}/inscricoes`,
+      body,
+    );
+  }
+
+  postApiV1PublicoInscricoesRecursosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/publico/inscricoes/${encodeURIComponent(params.id)}/recursos`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoAvaliacaoProvas(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/avaliacao/provas', body);
+  }
+
+  postApiV1RecrutamentoAvaliacaoProvasGabaritosByProvaId(
+    params: { provaId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/avaliacao/provas/${encodeURIComponent(params.provaId)}/gabaritos`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoAvaliacaoProvasQuestoesByProvaId(
+    params: { provaId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/avaliacao/provas/${encodeURIComponent(params.provaId)}/questoes`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoAvaliacaoProvasRespostasByProvaId(
+    params: { provaId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/avaliacao/provas/${encodeURIComponent(params.provaId)}/respostas`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoAvaliacaoRecursosDecisaoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/avaliacao/recursos/${encodeURIComponent(params.id)}/decisao`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoBancaDocumentos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/banca/documentos', body);
+  }
+
+  postApiV1RecrutamentoBancaDocumentosPublicacaoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/banca/documentos/${encodeURIComponent(params.id)}/publicacao`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoBancaDocumentosSignaturesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/banca/documentos/${encodeURIComponent(params.id)}/signatures`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoBancaMembros(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/banca/membros', body);
+  }
+
+  postApiV1RecrutamentoBiometriaCapturas(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/biometria/capturas', body);
+  }
+
+  postApiV1RecrutamentoBiometriaConsentimentos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/biometria/consentimentos', body);
+  }
+
+  postApiV1RecrutamentoBiometriaMatching(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/biometria/matching', body);
+  }
+
+  postApiV1RecrutamentoConcursos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/concursos', body);
+  }
+
+  postApiV1RecrutamentoConcursosEditaisByConcursoId(
+    params: { concursoId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/concursos/${encodeURIComponent(params.concursoId)}/editais`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoConcursosEditaisPublishByConcursoId(
+    params: { concursoId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/concursos/${encodeURIComponent(params.concursoId)}/editais/publish`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoProvaOnlineReviewSessionsAcceptById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/prova-online/review/sessions/${encodeURIComponent(params.id)}/accept`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoProvaOnlineReviewSessionsVoidById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/prova-online/review/sessions/${encodeURIComponent(params.id)}/void`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoProvaOnlineSessions(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/prova-online/sessions', body);
+  }
+
+  postApiV1RecrutamentoProvaOnlineSessionsAiAudioById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/prova-online/sessions/${encodeURIComponent(params.id)}/ai/audio`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoProvaOnlineSessionsAiFrameById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/prova-online/sessions/${encodeURIComponent(params.id)}/ai/frame`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoProvaOnlineSessionsArtifactsById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/prova-online/sessions/${encodeURIComponent(params.id)}/artifacts`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoProvaOnlineSessionsEventsById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/prova-online/sessions/${encodeURIComponent(params.id)}/events`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoProvaOnlineSessionsSubmitById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/prova-online/sessions/${encodeURIComponent(params.id)}/submit`,
+      body,
+    );
+  }
+
   postApiV1RecrutamentoRequisicoes(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/recrutamento/requisicoes', body);
   }
@@ -1099,6 +2929,40 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/rh/afastamentos', body);
   }
 
+  postApiV1RhEmployeeTransfer(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/rh/employee-transfer', body);
+  }
+
+  postApiV1RhEmployeeTransferAprovarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/rh/employee-transfer/${encodeURIComponent(params.id)}/aprovar`,
+      body,
+    );
+  }
+
+  postApiV1RhEmployeeTransferCancelarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/rh/employee-transfer/${encodeURIComponent(params.id)}/cancelar`,
+      body,
+    );
+  }
+
+  postApiV1RhEmployeeTransferEfetivarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/rh/employee-transfer/${encodeURIComponent(params.id)}/efetivar`,
+      body,
+    );
+  }
+
   postApiV1RhProcessos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/rh/processos', body);
   }
@@ -1107,12 +2971,159 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/rh/processos-funcao', body);
   }
 
+  postApiV1SaudeAcidentes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/acidentes', body);
+  }
+
+  postApiV1SaudeAcidentesCatById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/acidentes/${encodeURIComponent(params.id)}/cat`,
+      body,
+    );
+  }
+
+  postApiV1SaudeAso(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/aso', body);
+  }
+
+  postApiV1SaudeAsoAnexosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/aso/${encodeURIComponent(params.id)}/anexos`,
+      body,
+    );
+  }
+
+  postApiV1SaudeEpiEntregas(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/epi/entregas', body);
+  }
+
+  postApiV1SaudeEpiInventario(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/epi/inventario', body);
+  }
+
+  postApiV1SaudeExames(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/exames', body);
+  }
+
+  postApiV1SaudeExposicoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/exposicoes', body);
+  }
+
+  postApiV1SaudePppGerar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/ppp/gerar', body);
+  }
+
+  postApiV1SaudeProgramasPcmso(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/programas/pcmso', body);
+  }
+
+  postApiV1SaudeProgramasPcmsoExamesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/pcmso/${encodeURIComponent(params.id)}/exames`,
+      body,
+    );
+  }
+
+  postApiV1SaudeProgramasPcmsoRevisoesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/pcmso/${encodeURIComponent(params.id)}/revisoes`,
+      body,
+    );
+  }
+
+  postApiV1SaudeProgramasPgr(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/programas/pgr', body);
+  }
+
+  postApiV1SaudeProgramasPgrRevisoesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/pgr/${encodeURIComponent(params.id)}/revisoes`,
+      body,
+    );
+  }
+
+  postApiV1TceAdaptersDisableById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/tce/adapters/${encodeURIComponent(params.id)}/disable`,
+      body,
+    );
+  }
+
+  postApiV1TceAdaptersEnableById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/tce/adapters/${encodeURIComponent(params.id)}/enable`,
+      body,
+    );
+  }
+
+  postApiV1TceAudespSpSubmissions(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/tce/audesp-sp/submissions', body);
+  }
+
+  postApiV1TceAudespSpSubmissionsSubmitById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/tce/audesp-sp/submissions/${encodeURIComponent(params.id)}/submit`,
+      body,
+    );
+  }
+
+  postApiV1TceAudespSpSubmissionsValidateById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/tce/audesp-sp/submissions/${encodeURIComponent(params.id)}/validate`,
+      body,
+    );
+  }
+
+  postApiV1TceCircuitsResetByAdapterIdAndEndpoint(
+    params: { adapter_id: string; endpoint: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/tce/circuits/${encodeURIComponent(params.adapter_id)}/${encodeURIComponent(params.endpoint)}/reset`,
+      body,
+    );
+  }
+
+  postApiV1TceLayoutFields(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/tce/layout-fields', body);
+  }
+
+  postApiV1TceLayouts(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/tce/layouts', body);
+  }
+
+  postApiV1TceQueueReplayById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/tce/queue/${encodeURIComponent(params.id)}/replay`,
+      body,
+    );
+  }
+
   putApiAdminV1EsocialCertificado(body: ApiBody = {}): Observable<unknown> {
     return this.api.put<unknown, ApiBody>('/admin/v1/esocial/certificado', body);
   }
 
   putApiV1AdminMenusById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.put<unknown, ApiBody>(`/v1/admin/menus/${encodeURIComponent(params.id)}`, body);
+  }
+
+  putApiV1AdminParametrosAts(body: ApiBody = {}): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>('/v1/admin/parametros/ats', body);
   }
 
   putApiV1AdminParametrosGlobaisByChave(
@@ -1127,6 +3138,18 @@ export class OpenApiClient {
 
   putApiV1AdminParametrosSistema(body: ApiBody = {}): Observable<unknown> {
     return this.api.put<unknown, ApiBody>('/v1/admin/parametros/sistema', body);
+  }
+
+  putApiV1AdminParametrosTaxRateIrrf(body: ApiBody = {}): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>('/v1/admin/parametros/tax-rate/irrf', body);
+  }
+
+  putApiV1AdminParametrosTaxRateRpps(body: ApiBody = {}): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>('/v1/admin/parametros/tax-rate/rpps', body);
+  }
+
+  putApiV1AdminParametrosTetoRemuneratorio(body: ApiBody = {}): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>('/v1/admin/parametros/teto-remuneratorio', body);
   }
 
   putApiV1AdminPerfisById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
@@ -1162,6 +3185,30 @@ export class OpenApiClient {
 
   putApiV1AuthAlterarSenha(body: ApiBody = {}): Observable<unknown> {
     return this.api.put<unknown, ApiBody>('/v1/auth/alterar-senha', body);
+  }
+
+  putApiV1EsocialCertificadosRotacaoByCertificateId(
+    params: { certificateId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>(
+      `/v1/esocial/certificados/${encodeURIComponent(params.certificateId)}/rotacao`,
+      body,
+    );
+  }
+
+  putApiV1PontoFaceThreshold(body: ApiBody = {}): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>('/v1/ponto/face/threshold', body);
+  }
+
+  putApiV1PortalMeusDadosBySection(
+    params: { section: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>(
+      `/v1/portal/meus-dados/${encodeURIComponent(params.section)}`,
+      body,
+    );
   }
 
   putApiV1UsuariosMePreferenciasNotificacao(body: ApiBody = {}): Observable<unknown> {

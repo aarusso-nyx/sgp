@@ -3,109 +3,16 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { evidenceSteps } from './lib/workspace-commands.mjs';
 
 const cwd = process.cwd();
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-const node = process.execPath;
 
-const steps = [
-  {
-    name: 'api-alignment-sync',
-    command: npm,
-    args: ['run', 'api:alignment:sync'],
-  },
-  {
-    name: 'api-alignment-check',
-    command: npm,
-    args: ['run', 'api:alignment:check', '--', '--json'],
-  },
-  {
-    name: 'db-alignment-check',
-    command: npm,
-    args: ['run', 'db:alignment:check', '--', '--json'],
-  },
-  {
-    name: 'runtime-health',
-    command: npm,
-    args: ['run', 'health:json'],
-  },
-  {
-    name: 'lint-check',
-    command: npm,
-    args: ['run', 'lint:check'],
-  },
-  {
-    name: 'format-check',
-    command: npm,
-    args: ['run', 'format:check'],
-  },
-  {
-    name: 'typecheck',
-    command: npm,
-    args: ['run', 'typecheck'],
-  },
-  {
-    name: 'openapi-client-generate',
-    command: npm,
-    args: ['run', 'api:client:generate'],
-  },
-  {
-    name: 'build-all',
-    command: npm,
-    args: ['run', 'build'],
-  },
-  {
-    name: 'frontend-admin-tests',
-    command: npm,
-    args: ['run', 'test:frontend'],
-  },
-  {
-    name: 'frontend-portal-tests',
-    command: npm,
-    args: ['run', 'test:portal'],
-  },
-  {
-    name: 'backend-unit-tests',
-    command: npm,
-    args: ['run', 'test:backend'],
-  },
-  {
-    name: 'backend-e2e',
-    command: npm,
-    args: ['run', 'test:e2e'],
-    requiredEnv: ['DATABASE_URL'],
-  },
-  {
-    name: 'db-smoke',
-    command: npm,
-    args: ['run', 'db:smoke'],
-    requiredEnv: ['DATABASE_URL'],
-  },
-  {
-    name: 'backend-coverage',
-    command: npm,
-    args: ['--workspace', 'backend', 'run', 'test:cov'],
-    requiredEnv: ['DATABASE_URL'],
-  },
-  {
-    name: 'governance-check',
-    command: npm,
-    args: ['run', 'governance:check'],
-  },
-  {
-    name: 'qa-smoke-url-config',
-    command: node,
-    args: ['scripts/qa-smoke-required-urls.mjs', '--check'],
-    capturesOutput: true,
-  },
-  {
-    name: 'qa-smoke-live',
-    command: npm,
-    args: ['run', 'test:qa'],
-    capturesOutput: true,
-    blockedPattern: /\[qa-smoke]\s+BLOCKED/,
-  },
-];
+function resolveCommand(command) {
+  if (command === 'npm') return npm;
+  if (command === 'node') return process.execPath;
+  return command;
+}
 
 function hasRequiredEnvironment(step) {
   const missing = (step.requiredEnv ?? []).filter((name) => !process.env[name]);
@@ -127,7 +34,7 @@ function runStep(step) {
   }
 
   console.log(`[evidence] RUN ${step.name}`);
-  const result = spawnSync(step.command, step.args, {
+  const result = spawnSync(resolveCommand(step.command), step.args, {
     cwd,
     env: process.env,
     encoding: 'utf8',
@@ -164,11 +71,11 @@ function runStep(step) {
 }
 
 if (!existsSync(resolve(cwd, 'package.json'))) {
-  console.error('[evidence] Run this script from the source workspace root.');
+  console.error('[evidence] Run this script from the workspace root.');
   process.exit(1);
 }
 
-const results = steps.map(runStep);
+const results = evidenceSteps.map(runStep);
 const failures = results.filter((result) => result.status !== 'ok');
 
 console.log('[evidence] summary');

@@ -221,7 +221,7 @@ if (hasFlag('prepare-db')) {
   }
 }
 
-const serviceProcess = spawn(npm, ['run', 'start:dev'], {
+const serviceProcess = spawn(npm, ['run', 'start'], {
   cwd,
   env,
   stdio: 'inherit',

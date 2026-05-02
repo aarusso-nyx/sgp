@@ -18,7 +18,7 @@ Endurecer o gate automatizado para refletir o contrato multi-tenant real do SGP 
    - `database/sql/20-sgp-core.sql`
 3. Script exposto no workspace:
    - `npm run db:alignment:check`
-4. Check local disponivel em `commit:check` do workspace `source`.
+4. Check local disponivel em `npm run evidence:check` no workspace raiz.
 5. Workflow CI de alinhamento tratado como opcional/postergado:
    - `.github/workflows/db-alignment.yml`
 6. Smoke test de bootstrap de banco:

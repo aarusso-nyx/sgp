@@ -24,12 +24,74 @@ export class OpenApiClient {
     return this.api.get<unknown>('/portal/v1/auth/me');
   }
 
+  getApiV1AuditoriaExportacoesByJobId(params: { job_id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/auditoria/exportacoes/${encodeURIComponent(params.job_id)}`);
+  }
+
+  getApiV1AuditoriaLogs(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/auditoria/logs', query);
+  }
+
+  getApiV1AuditoriaLogsById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/auditoria/logs/${encodeURIComponent(params.id)}`);
+  }
+
   getApiV1AuthMe(): Observable<unknown> {
     return this.api.get<unknown>('/v1/auth/me');
   }
 
   getApiV1AuthMenus(): Observable<unknown> {
     return this.api.get<unknown>('/v1/auth/menus');
+  }
+
+  getApiV1AvaliacaoCareerPlan(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/career-plan');
+  }
+
+  getApiV1AvaliacaoCareerPlanTrilhaById(
+    params: { id: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/avaliacao/career-plan/${encodeURIComponent(params.id)}/trilha`,
+      query,
+    );
+  }
+
+  getApiV1AvaliacaoDesempenhos(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/desempenhos');
+  }
+
+  getApiV1AvaliacaoEstagioProbatorioAVencer(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/estagio-probatorio/a-vencer', query);
+  }
+
+  getApiV1AvaliacaoPlanosCargos(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/planos-cargos');
+  }
+
+  getApiV1AvaliacaoProgression(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/progression', query);
+  }
+
+  getApiV1AvaliacaoProgressionEligibility(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/progression/eligibility', query);
+  }
+
+  getApiV1AvaliacaoProgressoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/progressoes');
+  }
+
+  getApiV1AvaliacaoSalaryHistoryTimelineBySalaryRangeLevelId(params: {
+    salaryRangeLevelId: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/avaliacao/salary-history/${encodeURIComponent(params.salaryRangeLevelId)}/timeline`,
+    );
+  }
+
+  getApiV1AvaliacaoSimulacoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/avaliacao/simulacoes');
   }
 
   getApiV1Health(): Observable<unknown> {
@@ -44,6 +106,106 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/iam/permissions');
   }
 
+  getApiV1PortalContrachequeByCompetence(params: { competence: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/portal/contracheque/${encodeURIComponent(params.competence)}`,
+    );
+  }
+
+  getApiV1PortalContrachequesFerias(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/contracheques/ferias');
+  }
+
+  getApiV1PortalMeusDadosCadastro(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/cadastro');
+  }
+
+  getApiV1PortalMeusDadosCargo(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/cargo');
+  }
+
+  getApiV1PortalMeusDadosContato(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/contato');
+  }
+
+  getApiV1PortalMeusDadosDependentes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/dependentes');
+  }
+
+  getApiV1PortalMeusDadosDocumentos(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/documentos');
+  }
+
+  getApiV1PortalMeusDadosEndereco(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/meus-dados/endereco');
+  }
+
+  getApiV1PortalMinhaCarreira(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/minha-carreira');
+  }
+
+  getApiV1PortalPayslips(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/payslips');
+  }
+
+  getApiV1PortalPayslipsPdfById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/portal/payslips/${encodeURIComponent(params.id)}/pdf`);
+  }
+
+  getApiV1PortalTermosRescisao(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/termos-rescisao');
+  }
+
+  getApiV1PortalYearlyIncome(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/yearly-income');
+  }
+
+  getApiV1PortalYearlyIncomePdfByYear(params: { year: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/portal/yearly-income/${encodeURIComponent(params.year)}/pdf`);
+  }
+
+  patchApiV1AvaliacaoCareerPlanById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/avaliacao/career-plan/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1AvaliacaoDesempenhosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/avaliacao/desempenhos/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1AvaliacaoPlanosCargosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/avaliacao/planos-cargos/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  postApiV1AdminPayslipBatches(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/payslip-batches', body);
+  }
+
+  postApiV1AdminYearlyIncomeBatches(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/yearly-income-batches', body);
+  }
+
+  postApiV1AuditoriaExportacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/auditoria/exportacoes', body);
+  }
+
   postApiV1AuthConfirmarNovaSenha(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/auth/confirmar-nova-senha', body);
   }
@@ -56,7 +218,79 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/auth/recuperar-senha', body);
   }
 
+  postApiV1AvaliacaoCareerPlan(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/career-plan', body);
+  }
+
+  postApiV1AvaliacaoCiclosRelatorioByPeriodo(
+    params: { periodo: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/avaliacao/ciclos/${encodeURIComponent(params.periodo)}/relatorio`,
+      body,
+    );
+  }
+
+  postApiV1AvaliacaoDesempenhos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/desempenhos', body);
+  }
+
+  postApiV1AvaliacaoDesempenhosFichaById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/avaliacao/desempenhos/${encodeURIComponent(params.id)}/ficha`,
+      body,
+    );
+  }
+
+  postApiV1AvaliacaoEstagioProbatorio(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/estagio-probatorio', body);
+  }
+
+  postApiV1AvaliacaoPlanosCargos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/planos-cargos', body);
+  }
+
+  postApiV1AvaliacaoProgressionApplyById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/avaliacao/progression/${encodeURIComponent(params.id)}/apply`,
+      body,
+    );
+  }
+
+  postApiV1AvaliacaoProgressionSimulate(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/progression/simulate', body);
+  }
+
+  postApiV1AvaliacaoProgressoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/progressoes', body);
+  }
+
+  postApiV1AvaliacaoSalaryHistoryReajusteMassa(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/salary-history/reajuste-massa', body);
+  }
+
+  postApiV1AvaliacaoSimulacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/avaliacao/simulacoes', body);
+  }
+
   putApiV1AuthAlterarSenha(body: ApiBody = {}): Observable<unknown> {
     return this.api.put<unknown, ApiBody>('/v1/auth/alterar-senha', body);
+  }
+
+  putApiV1PortalMeusDadosBySection(
+    params: { section: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.put<unknown, ApiBody>(
+      `/v1/portal/meus-dados/${encodeURIComponent(params.section)}`,
+      body,
+    );
   }
 }

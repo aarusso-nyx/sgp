@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-26",
+  "generated_at": "2026-05-02",
   "authority": [
     "docs/eng/10-uc-administracao-seguranca.md",
     "docs/eng/42-contratos-integracao.md",
@@ -54,16 +54,16 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 212,
-    "documented": 153,
-    "runtime_total": 191,
-    "runtime": 153,
-    "deferred_documented": 59,
-    "deferred_runtime": 38,
-    "implemented": 153,
+    "documented_total": 292,
+    "documented": 223,
+    "runtime_total": 532,
+    "runtime": 448,
+    "deferred_documented": 69,
+    "deferred_runtime": 84,
+    "implemented": 223,
     "explicitly_excluded": 0,
     "documented_missing": 0,
-    "runtime_only": 0,
+    "runtime_only": 225,
     "runtime_outside_families": 0,
     "domain_modules": 11,
     "domain_modules_implemented": 11,
@@ -196,6 +196,13 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/fiscal/dctfweb",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/menus",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -212,6 +219,13 @@
       "method": "GET",
       "path": "/api/v1/admin/parametros/sistema",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/parametros/tax-rate/irrf",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -268,6 +282,13 @@
       "method": "PATCH",
       "path": "/api/v1/admin/feature-flags/:chave",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/hr/tsv-contracts/:id",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -343,8 +364,50 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/admin/fiscal/dctfweb/:id/assinar",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/dctfweb/:id/transmitir",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/dctfweb/gerar",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/hr/reintegrations",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/hr/reintegrations/:id/apply",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/admin/menus",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/payslip-batches",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -455,6 +518,13 @@
     },
     {
       "method": "PUT",
+      "path": "/api/v1/admin/parametros/tax-rate/irrf",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
       "path": "/api/v1/admin/perfis/:id",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -534,8 +604,92 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/fgts/accounts/:employeeId",
+      "source_file": "backend/src/folha-pagamento/fgts/fgts.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fgts/remittances/:id",
+      "source_file": "backend/src/folha-pagamento/operations/sifge/sifge.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/dctfweb",
+      "source_file": "backend/src/integrations-worker/dctfweb/dctfweb.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/dctfweb/:id",
+      "source_file": "backend/src/integrations-worker/dctfweb/dctfweb.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/dirf",
+      "source_file": "backend/src/integrations-worker/dirf/dirf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/dirf/:id",
+      "source_file": "backend/src/integrations-worker/dirf/dirf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/dirf/:id/txt",
+      "source_file": "backend/src/integrations-worker/dirf/dirf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/gps",
+      "source_file": "backend/src/integrations-worker/gps/gps.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/gps/:id",
+      "source_file": "backend/src/integrations-worker/gps/gps.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/gps/:id/txt",
+      "source_file": "backend/src/integrations-worker/gps/gps.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/gps/payment-codes",
+      "source_file": "backend/src/integrations-worker/gps/gps.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/menus",
       "source_file": "backend/src/system-parameters/admin-menus.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/parametros/ats",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -555,6 +709,27 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/parametros/tax-rate/irrf",
+      "source_file": "backend/src/system-parameters/tax-rate/tax-rate.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/parametros/tax-rate/rpps",
+      "source_file": "backend/src/system-parameters/tax-rate/tax-rate.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/parametros/teto-remuneratorio",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/perfis",
       "source_file": "backend/src/profiles/profiles.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -564,6 +739,13 @@
       "method": "GET",
       "path": "/api/v1/admin/perfis/:id",
       "source_file": "backend/src/profiles/profiles.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/pis-pasep/:employeeId",
+      "source_file": "backend/src/folha-pagamento/pis-pasep/pis-pasep.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -618,6 +800,55 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/admin/hr/tsv-contracts/:id",
+      "source_file": "backend/src/folha-pagamento/operations/tsv/tsv-contract.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/nomeacoes/:id/desistencia",
+      "source_file": "backend/src/recrutamento/nomeacao/nomeacao.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/nomeacoes/:id/expirar-prazo",
+      "source_file": "backend/src/recrutamento/nomeacao/nomeacao.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/posses/:id/cancelar",
+      "source_file": "backend/src/recrutamento/posse/posse.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/posses/:id/iniciar-exercicio",
+      "source_file": "backend/src/recrutamento/posse/posse.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/posses/:id/prorrogar-exercicio",
+      "source_file": "backend/src/recrutamento/posse/posse.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/posses/:id/realizar-posse",
+      "source_file": "backend/src/recrutamento/posse/posse.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/admin/usuarios/:id",
       "source_file": "backend/src/users/users.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -646,6 +877,97 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/admin/concursos/:id/classificacao",
+      "source_file": "backend/src/recrutamento/classificacao/classificacao.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/concursos/:id/classificacao/publicacao",
+      "source_file": "backend/src/recrutamento/classificacao/classificacao.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/esocial/s2298/:orderId",
+      "source_file": "backend/src/esocial-worker/s2298/s2298.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/esocial/s2306/:changeId",
+      "source_file": "backend/src/esocial-worker/s2306/s2306.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fgts/remittances",
+      "source_file": "backend/src/folha-pagamento/operations/sifge/sifge.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fgts/reprocessar",
+      "source_file": "backend/src/folha-pagamento/fgts/fgts.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/dctfweb/:id/assinar",
+      "source_file": "backend/src/integrations-worker/dctfweb/dctfweb.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/dctfweb/:id/transmitir",
+      "source_file": "backend/src/integrations-worker/dctfweb/dctfweb.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/dctfweb/gerar",
+      "source_file": "backend/src/integrations-worker/dctfweb/dctfweb.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/dirf/gerar",
+      "source_file": "backend/src/integrations-worker/dirf/dirf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/gps",
+      "source_file": "backend/src/integrations-worker/gps/gps.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/hr/reintegrations",
+      "source_file": "backend/src/folha-pagamento/operations/reintegration/reintegration-order.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/hr/reintegrations/:id/apply",
+      "source_file": "backend/src/folha-pagamento/operations/reintegration/reintegration-order.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/admin/menus",
       "source_file": "backend/src/system-parameters/admin-menus.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -653,8 +975,43 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/admin/nomeacoes",
+      "source_file": "backend/src/recrutamento/nomeacao/nomeacao.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/nomeacoes/:id/convocacoes",
+      "source_file": "backend/src/recrutamento/nomeacao/nomeacao.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/payslip-batches",
+      "source_file": "backend/src/report-service/payslip/payslip.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/admin/perfis",
       "source_file": "backend/src/profiles/profiles.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/posses",
+      "source_file": "backend/src/recrutamento/posse/posse.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/terminations/:id/prior-notice",
+      "source_file": "backend/src/folha-pagamento/rescisao/prior-notice/prior-notice.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -669,6 +1026,13 @@
       "method": "POST",
       "path": "/api/v1/admin/usuarios/convite",
       "source_file": "backend/src/users/invites.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/yearly-income-batches",
+      "source_file": "backend/src/report-service/yearly-income/yearly-income.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -709,6 +1073,13 @@
     },
     {
       "method": "PUT",
+      "path": "/api/v1/admin/parametros/ats",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
       "path": "/api/v1/admin/parametros/globais/:chave",
       "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -717,6 +1088,27 @@
     {
       "method": "PUT",
       "path": "/api/v1/admin/parametros/sistema",
+      "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/parametros/tax-rate/irrf",
+      "source_file": "backend/src/system-parameters/tax-rate/tax-rate.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/parametros/tax-rate/rpps",
+      "source_file": "backend/src/system-parameters/tax-rate/tax-rate.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/parametros/teto-remuneratorio",
       "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
@@ -758,7 +1150,1133 @@
     }
   ],
   "documented_missing": [],
-  "runtime_only": [],
+  "runtime_only": [
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employees/:id/alimonies/:alimonyId",
+      "source_file": "backend/src/folha-pagamento/operations/alimony/alimony.controller.ts"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/esocial/certificados/:certificateId",
+      "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/folha/rubrica/:id",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/artifacts",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/career-plan",
+      "source_file": "backend/src/avaliacao/career-plan/career-plan.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/career-plan/:id/trilha",
+      "source_file": "backend/src/avaliacao/career-plan/career-plan.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/estagio-probatorio/a-vencer",
+      "source_file": "backend/src/avaliacao/probation.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/progression",
+      "source_file": "backend/src/avaliacao/progression/progression.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/progression/eligibility",
+      "source_file": "backend/src/avaliacao/progression/progression.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/avaliacao/salary-history/:salaryRangeLevelId/timeline",
+      "source_file": "backend/src/avaliacao/salary-history/salary-history.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cargos",
+      "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/:id/bank-accounts",
+      "source_file": "backend/src/folha-pagamento/operations/bank-account/bank-account.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/certificados",
+      "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/eventos-trabalhador",
+      "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/events/excludable",
+      "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/exclusions",
+      "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/fechamento",
+      "source_file": "backend/src/esocial-worker/builders/es05.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/folha-periodica",
+      "source_file": "backend/src/esocial-worker/builders/es04.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/retornos/eventos/:eventId",
+      "source_file": "backend/src/esocial-worker/sync/retorno.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/retornos/falhas",
+      "source_file": "backend/src/esocial-worker/sync/retorno.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/submissoes",
+      "source_file": "backend/src/esocial-worker/submission/submission.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/submissoes/circuitos",
+      "source_file": "backend/src/esocial-worker/submission/submission.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/tabelas-iniciais",
+      "source_file": "backend/src/esocial-worker/builders/s1xxx.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/esocial/trabalhadores",
+      "source_file": "backend/src/esocial-worker/builders/s22xx.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folha/remessa",
+      "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folha/rubrica",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folha/rubrica/:id",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folha/rubrica/links/job-positions",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folhas/:folha_id/historico",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/folhas/mensal/revisao",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id/abono-permanencia",
+      "source_file": "backend/src/rh/employees/employees.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id/historico",
+      "source_file": "backend/src/rh/employees/employees.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id/tempo-servico",
+      "source_file": "backend/src/rh/employees/employees.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/funcionarios/cadastral-changes",
+      "source_file": "backend/src/rh/employees/employees.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/gestao/cargos",
+      "source_file": "backend/src/gestao/master-data/job-position.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/gestao/cargos/:id/tabela-salarial",
+      "source_file": "backend/src/gestao/master-data/job-position.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/gestao/faixas-salariais",
+      "source_file": "backend/src/gestao/master-data/job-position.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/gestao/faixas-salariais/:salaryRangeId/niveis",
+      "source_file": "backend/src/gestao/master-data/job-position.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/licencas/saude/:employee_id",
+      "source_file": "backend/src/rh/workflows/medical-leave/medical-leave.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/afd/exports",
+      "source_file": "backend/src/ponto/afd/afd.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/afd/exports/:afdExportId/download",
+      "source_file": "backend/src/ponto/afd/afd.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/afd/imports",
+      "source_file": "backend/src/ponto/afd/afd.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/banco-horas",
+      "source_file": "backend/src/ponto/hour-bank/hour-bank.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/banco-horas/:hourBankId/movimentos",
+      "source_file": "backend/src/ponto/hour-bank/hour-bank.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/atribuicoes",
+      "source_file": "backend/src/ponto/shift-pattern/shift-pattern.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/padroes",
+      "source_file": "backend/src/ponto/shift-pattern/shift-pattern.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/proximas",
+      "source_file": "backend/src/ponto/duty-roster/duty-roster.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/rosters",
+      "source_file": "backend/src/ponto/duty-roster/duty-roster.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/rosters/projetar",
+      "source_file": "backend/src/ponto/duty-roster/duty-roster.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/justifications",
+      "source_file": "backend/src/ponto/justification/justification.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/rep",
+      "source_file": "backend/src/ponto/rep-device/rep-device.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/rep/:repDeviceId",
+      "source_file": "backend/src/ponto/rep-device/rep-device.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/rep/batches",
+      "source_file": "backend/src/ponto/rep-ingestion/rep-ingestion.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/rep/batches/:batchId/original",
+      "source_file": "backend/src/ponto/rep-ingestion/rep-ingestion.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/aso",
+      "source_file": "backend/src/saude/aso/aso-portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/aso/proximo",
+      "source_file": "backend/src/saude/aso/aso-portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/contracheque/:competence",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/contracheques/ferias",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/cadastro",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/cargo",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/contato",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/dependentes",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/documentos",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/endereco",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/minha-carreira",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/termos-rescisao",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/yearly-income",
+      "source_file": "backend/src/report-service/yearly-income/yearly-income.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/yearly-income/:year/pdf",
+      "source_file": "backend/src/report-service/yearly-income/yearly-income.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/public/transparency/:tenantId/payroll",
+      "source_file": "backend/src/publico/transparency/transparency.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/public/transparency/:tenantId/payroll.csv",
+      "source_file": "backend/src/publico/transparency/transparency.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/publico/concursos/:slug/classificacao",
+      "source_file": "backend/src/recrutamento/classificacao/classificacao.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/publico/inscricoes/:id",
+      "source_file": "backend/src/recrutamento/inscricao/inscricao.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/publico/inscricoes/:id/notas",
+      "source_file": "backend/src/recrutamento/avaliacao/nota.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/avaliacao/notas/inscricoes/:inscricaoId",
+      "source_file": "backend/src/recrutamento/avaliacao/nota.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/gabaritos",
+      "source_file": "backend/src/recrutamento/avaliacao/gabarito.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/avaliacao/provas/concursos/:concursoId",
+      "source_file": "backend/src/recrutamento/avaliacao/prova.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/avaliacao/recursos/provas/:provaId",
+      "source_file": "backend/src/recrutamento/avaliacao/recurso.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/prova-online/review/sessions/:id",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/employee-transfer",
+      "source_file": "backend/src/rh/employee-transfer/employee-transfer.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/employee-transfer/employee/:employeeId",
+      "source_file": "backend/src/rh/employee-transfer/employee-transfer.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/acidentes",
+      "source_file": "backend/src/saude/cat/work-accident.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/acidentes/prazos",
+      "source_file": "backend/src/saude/cat/work-accident.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/aso",
+      "source_file": "backend/src/saude/aso/aso.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/aso/painel/vencimentos",
+      "source_file": "backend/src/saude/aso/aso.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/epi/entregas",
+      "source_file": "backend/src/saude/epi/epi.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/epi/inventario",
+      "source_file": "backend/src/saude/epi/epi.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/exames",
+      "source_file": "backend/src/saude/aso/aso.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/exposicoes",
+      "source_file": "backend/src/saude/exposure/environmental-exposure.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/exposicoes/folha",
+      "source_file": "backend/src/saude/exposure/environmental-exposure.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/ppp",
+      "source_file": "backend/src/saude/ppp/ppp.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/programas/pcmso",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/programas/pgr",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/circuits",
+      "source_file": "backend/src/tce/queue/tce-queue.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/queue",
+      "source_file": "backend/src/tce/queue/tce-queue.controller.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/queue/:id",
+      "source_file": "backend/src/tce/queue/tce-queue.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/avaliacao/career-plan/:id",
+      "source_file": "backend/src/avaliacao/career-plan/career-plan.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/folha/rubrica/:id",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/gestao/cargos/:id",
+      "source_file": "backend/src/gestao/master-data/job-position.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/ponto/escalas/atribuicoes/:shiftAssignmentId",
+      "source_file": "backend/src/ponto/shift-pattern/shift-pattern.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/acidentes/:id/comunicar-obito",
+      "source_file": "backend/src/saude/cat/work-accident.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/acidentes/:id/encerrar",
+      "source_file": "backend/src/saude/cat/work-accident.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/acidentes/:id/reabrir",
+      "source_file": "backend/src/saude/cat/work-accident.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/aso/:id/arquivar",
+      "source_file": "backend/src/saude/aso/aso.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/aso/:id/realizacao",
+      "source_file": "backend/src/saude/aso/aso.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/exposicoes/:id",
+      "source_file": "backend/src/saude/exposure/environmental-exposure.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/programas/pcmso/:id/ativar",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/programas/pgr/:id/ativar",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/career-plan",
+      "source_file": "backend/src/avaliacao/career-plan/career-plan.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/estagio-probatorio",
+      "source_file": "backend/src/avaliacao/probation.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/progression/:id/apply",
+      "source_file": "backend/src/avaliacao/progression/progression.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/progression/simulate",
+      "source_file": "backend/src/avaliacao/progression/progression.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/avaliacao/salary-history/reajuste-massa",
+      "source_file": "backend/src/avaliacao/salary-history/salary-history.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/:id/bank-accounts",
+      "source_file": "backend/src/folha-pagamento/operations/bank-account/bank-account.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/:id/bank-accounts/:accountId/revalidate",
+      "source_file": "backend/src/folha-pagamento/operations/bank-account/bank-account.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/certificados",
+      "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2210/:catEmissionId/emitir",
+      "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2220/:asoRecordId/retry",
+      "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2230/:pendingId/emitir",
+      "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2240/:environmentalExposureId/emitir",
+      "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2299/:pendingId/emitir",
+      "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/events/:id/exclude",
+      "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/exclusions/:requestId/accept",
+      "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/fechamento/fechar",
+      "source_file": "backend/src/esocial-worker/builders/es05.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/fechamento/reabrir",
+      "source_file": "backend/src/esocial-worker/builders/es05.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/fechamento/totalizadores",
+      "source_file": "backend/src/esocial-worker/builders/es05.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/folha-periodica/payments/:paymentBatchId/s1210/emitir",
+      "source_file": "backend/src/esocial-worker/builders/es04.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/folha-periodica/runs/:payrollRunId/s1200/emitir",
+      "source_file": "backend/src/esocial-worker/builders/es04.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/retornos/eventos/:eventId/retry",
+      "source_file": "backend/src/esocial-worker/sync/retorno.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/retornos/eventos/:eventId/tratado",
+      "source_file": "backend/src/esocial-worker/sync/retorno.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/submissoes/:batchId/retry",
+      "source_file": "backend/src/esocial-worker/submission/submission.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/tabelas-iniciais/:eventKind/emitir",
+      "source_file": "backend/src/esocial-worker/builders/s1xxx.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/tabelas-iniciais/emitir",
+      "source_file": "backend/src/esocial-worker/builders/s1xxx.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/trabalhadores/:employeeId/s2200/emitir",
+      "source_file": "backend/src/esocial-worker/builders/s22xx.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/trabalhadores/:employeeId/s2205/emitir",
+      "source_file": "backend/src/esocial-worker/builders/s22xx.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica/:id/preview",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica/:id/recompile",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica/compile",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica/links/job-positions",
+      "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folha/simulacao",
+      "source_file": "backend/src/folha-pagamento/simulacao/simulacao.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/decimo-terceiro/adiantamento",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/decimo-terceiro/fechamento",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/ferias/calcular",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/abrir",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/aprovar",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/calcular",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/fechar",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/gerar",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/rescisao/calcular",
+      "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/funcionarios/:id/abono-permanencia",
+      "source_file": "backend/src/rh/employees/employees.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/funcionarios/:id/tempo-servico",
+      "source_file": "backend/src/rh/employees/employees.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/funcionarios/cadastral-changes/:id/approve",
+      "source_file": "backend/src/rh/employees/employees.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/funcionarios/cadastral-changes/:id/reject",
+      "source_file": "backend/src/rh/employees/employees.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/gestao/cargos",
+      "source_file": "backend/src/gestao/master-data/job-position.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/gestao/faixas-salariais",
+      "source_file": "backend/src/gestao/master-data/job-position.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/gestao/faixas-salariais/:salaryRangeId/niveis",
+      "source_file": "backend/src/gestao/master-data/job-position.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/licencas/:id/aprovar",
+      "source_file": "backend/src/rh/workflows/leaves/leaves.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/licencas/:id/cancelar",
+      "source_file": "backend/src/rh/workflows/leaves/leaves.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/licencas/saude/agendamento",
+      "source_file": "backend/src/rh/workflows/medical-leave/medical-leave.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/payment/consignment-portability",
+      "source_file": "backend/src/integrations-worker/consignment-portability/portability.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/payment/consignment-portability/:id/process",
+      "source_file": "backend/src/integrations-worker/consignment-portability/portability.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/payment/return-files",
+      "source_file": "backend/src/integrations-worker/cnab240/return/cnab240-return.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/payment/return-files/:id/reprocess-rejected",
+      "source_file": "backend/src/integrations-worker/cnab240/return/cnab240-return.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/pericia/agendamentos/:agendamento_id/parecer",
+      "source_file": "backend/src/saude/pericia.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/afd/exports",
+      "source_file": "backend/src/ponto/afd/afd.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/afd/imports",
+      "source_file": "backend/src/ponto/afd/afd.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas",
+      "source_file": "backend/src/ponto/hour-bank/hour-bank.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas/acumular-dia",
+      "source_file": "backend/src/ponto/hour-bank/hour-bank.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas/ajuste-manual",
+      "source_file": "backend/src/ponto/hour-bank/hour-bank.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas/compensar",
+      "source_file": "backend/src/ponto/hour-bank/hour-bank.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas/zerar-vencidos",
+      "source_file": "backend/src/ponto/hour-bank/hour-bank.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/atribuicoes",
+      "source_file": "backend/src/ponto/shift-pattern/shift-pattern.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/padroes",
+      "source_file": "backend/src/ponto/shift-pattern/shift-pattern.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/rosters",
+      "source_file": "backend/src/ponto/duty-roster/duty-roster.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/rosters/:dutyRosterId/publicar",
+      "source_file": "backend/src/ponto/duty-roster/duty-roster.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/rosters/:dutyRosterId/travar",
+      "source_file": "backend/src/ponto/duty-roster/duty-roster.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/folha/apply",
+      "source_file": "backend/src/ponto/payroll-bridge/payroll-bridge.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/folha/preview",
+      "source_file": "backend/src/ponto/payroll-bridge/payroll-bridge.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/justifications",
+      "source_file": "backend/src/ponto/justification/justification.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/justifications/:id/cancel",
+      "source_file": "backend/src/ponto/justification/justification.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/justifications/:id/decide",
+      "source_file": "backend/src/ponto/justification/justification.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/mobile/consents",
+      "source_file": "backend/src/ponto/mobile/mobile-clock.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/mobile/devices",
+      "source_file": "backend/src/ponto/mobile/mobile-clock.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/mobile/geofences",
+      "source_file": "backend/src/ponto/mobile/mobile-clock.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/rep",
+      "source_file": "backend/src/ponto/rep-device/rep-device.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/rep/:repDeviceId/batches",
+      "source_file": "backend/src/ponto/rep-ingestion/rep-ingestion.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/public/transparency/:tenantId/publish",
+      "source_file": "backend/src/publico/transparency/transparency.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/publico/concursos/:slug/inscricoes",
+      "source_file": "backend/src/recrutamento/inscricao/inscricao.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/publico/inscricoes/:id/recursos",
+      "source_file": "backend/src/recrutamento/avaliacao/recurso.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/provas",
+      "source_file": "backend/src/recrutamento/avaliacao/prova.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/gabaritos",
+      "source_file": "backend/src/recrutamento/avaliacao/gabarito.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/questoes",
+      "source_file": "backend/src/recrutamento/avaliacao/prova.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/respostas",
+      "source_file": "backend/src/recrutamento/avaliacao/prova.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/recursos/:id/decisao",
+      "source_file": "backend/src/recrutamento/avaliacao/recurso.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/concursos/:concursoId/editais",
+      "source_file": "backend/src/recrutamento/concurso/edital.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/concursos/:concursoId/editais/publish",
+      "source_file": "backend/src/recrutamento/concurso/edital.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/review/sessions/:id/accept",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/review/sessions/:id/void",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/ai/audio",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/ai/frame",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/artifacts",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/events",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/submit",
+      "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/employee-transfer",
+      "source_file": "backend/src/rh/employee-transfer/employee-transfer.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/employee-transfer/:id/aprovar",
+      "source_file": "backend/src/rh/employee-transfer/employee-transfer.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/employee-transfer/:id/cancelar",
+      "source_file": "backend/src/rh/employee-transfer/employee-transfer.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/employee-transfer/:id/efetivar",
+      "source_file": "backend/src/rh/employee-transfer/employee-transfer.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/acidentes/:id/cat",
+      "source_file": "backend/src/saude/cat/work-accident.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/aso",
+      "source_file": "backend/src/saude/aso/aso.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/aso/:id/anexos",
+      "source_file": "backend/src/saude/aso/aso.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/epi/entregas",
+      "source_file": "backend/src/saude/epi/epi.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/epi/inventario",
+      "source_file": "backend/src/saude/epi/epi.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/exames",
+      "source_file": "backend/src/saude/aso/aso.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/exposicoes",
+      "source_file": "backend/src/saude/exposure/environmental-exposure.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/ppp/gerar",
+      "source_file": "backend/src/saude/ppp/ppp.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pcmso",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pcmso/:id/exames",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pcmso/:id/revisoes",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pgr",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pgr/:id/revisoes",
+      "source_file": "backend/src/saude/program/program.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/circuits/:adapter_id/:endpoint/reset",
+      "source_file": "backend/src/tce/queue/tce-queue.controller.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/queue/:id/replay",
+      "source_file": "backend/src/tce/queue/tce-queue.controller.ts"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/esocial/certificados/:certificateId/rotacao",
+      "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/portal/meus-dados/:section",
+      "source_file": "backend/src/portal/portal.controller.ts"
+    }
+  ],
   "runtime_outside_families": [],
   "domain_alignment": [
     {
@@ -772,7 +2290,7 @@
       "route_evidence": [
         {
           "method": "DELETE",
-          "path": "/api/v1/master-data/:resource:id",
+          "path": "/api/v1/master-data/:resource/:id",
           "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
         },
         {
@@ -787,7 +2305,7 @@
         },
         {
           "method": "PATCH",
-          "path": "/api/v1/master-data/:resource:id",
+          "path": "/api/v1/master-data/:resource/:id",
           "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
         },
         {
@@ -796,7 +2314,10 @@
           "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
         }
       ],
-      "source_evidence": ["backend/src/gestao/master-data/master-data.controller.ts"],
+      "source_evidence": [
+        "backend/src/gestao/master-data/master-data.controller.ts",
+        "backend/src/gestao/master-data/job-position.controller.ts"
+      ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -827,28 +2348,28 @@
         },
         {
           "method": "GET",
+          "path": "/api/v1/funcionarios",
+          "source_file": "backend/src/rh/employees/employees.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/funcionarios/:id/abono-permanencia",
+          "source_file": "backend/src/rh/employees/employees.controller.ts"
+        },
+        {
+          "method": "GET",
           "path": "/api/v1/funcionarios/:id/dossie",
           "source_file": "backend/src/rh/employees/employees.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/rh/afastamentos",
-          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          "path": "/api/v1/funcionarios/:id/historico",
+          "source_file": "backend/src/rh/employees/employees.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/rh/processos",
-          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/rh/processos-funcao",
-          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
-        },
-        {
-          "method": "PATCH",
-          "path": "/api/v1/rh/afastamentos/:id",
-          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          "path": "/api/v1/funcionarios/:id/tempo-servico",
+          "source_file": "backend/src/rh/employees/employees.controller.ts"
         }
       ],
       "source_evidence": ["backend/src/rh/workflows/rh-workflows.controller.ts"],
@@ -867,7 +2388,17 @@
       "route_evidence": [
         {
           "method": "DELETE",
-          "path": "/api/v1/folhas/catalogos/:resource:id",
+          "path": "/api/v1/esocial/certificados/:certificateId",
+          "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/folha/rubrica/:id",
+          "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/folhas/catalogos/:resource/:id",
           "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
         },
         {
@@ -877,40 +2408,31 @@
         },
         {
           "method": "GET",
-          "path": "/api/v1/folha/:id/remessa",
-          "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
+          "path": "/api/v1/esocial/certificados",
+          "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/folhas",
-          "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+          "path": "/api/v1/esocial/eventos-trabalhador",
+          "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/folhas/catalogos",
-          "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+          "path": "/api/v1/esocial/events/excludable",
+          "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/folhas/catalogos/:resource",
-          "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/folhas/contabilidade",
-          "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/payroll-engine/health",
-          "source_file": "backend/src/payroll-engine/payroll-engine.controller.ts"
+          "path": "/api/v1/esocial/exclusions",
+          "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
         }
       ],
       "source_evidence": [
+        "backend/src/folha-pagamento/operations/alimony/alimony.controller.ts",
+        "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts",
         "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts",
-        "backend/src/folha-pagamento/operations/payroll-operations.controller.ts",
-        "backend/src/folha-pagamento/payroll/payroll.controller.ts",
-        "backend/src/payroll-engine/payroll-engine.controller.ts"
+        "backend/src/folha-pagamento/operations/bank-account/bank-account.controller.ts",
+        "backend/src/folha-pagamento/operations/consignment/consignment.controller.ts"
       ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
@@ -927,8 +2449,23 @@
       "route_evidence": [
         {
           "method": "GET",
+          "path": "/api/v1/avaliacao/career-plan",
+          "source_file": "backend/src/avaliacao/career-plan/career-plan.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/avaliacao/career-plan/:id/trilha",
+          "source_file": "backend/src/avaliacao/career-plan/career-plan.controller.ts"
+        },
+        {
+          "method": "GET",
           "path": "/api/v1/avaliacao/desempenhos",
           "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/avaliacao/estagio-probatorio/a-vencer",
+          "source_file": "backend/src/avaliacao/probation.controller.ts"
         },
         {
           "method": "GET",
@@ -937,36 +2474,26 @@
         },
         {
           "method": "GET",
-          "path": "/api/v1/avaliacao/progressoes",
-          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          "path": "/api/v1/avaliacao/progression",
+          "source_file": "backend/src/avaliacao/progression/progression.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/avaliacao/simulacoes",
-          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          "path": "/api/v1/avaliacao/progression/eligibility",
+          "source_file": "backend/src/avaliacao/progression/progression.controller.ts"
         },
         {
-          "method": "PATCH",
-          "path": "/api/v1/avaliacao/desempenhos/:id",
-          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
-        },
-        {
-          "method": "PATCH",
-          "path": "/api/v1/avaliacao/planos-cargos/:id",
-          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
-        },
-        {
-          "method": "POST",
-          "path": "/api/v1/avaliacao/ciclos/:periodo/relatorio",
-          "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
-        },
-        {
-          "method": "POST",
-          "path": "/api/v1/avaliacao/desempenhos",
+          "method": "GET",
+          "path": "/api/v1/avaliacao/progressoes",
           "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
         }
       ],
-      "source_evidence": ["backend/src/avaliacao/avaliacao.controller.ts"],
+      "source_evidence": [
+        "backend/src/avaliacao/career-plan/career-plan.controller.ts",
+        "backend/src/avaliacao/avaliacao.controller.ts",
+        "backend/src/avaliacao/probation.controller.ts",
+        "backend/src/avaliacao/progression/progression.controller.ts"
+      ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -981,32 +2508,55 @@
       "status": "implemented",
       "route_evidence": [
         {
-          "method": "PATCH",
-          "path": "/api/v1/recrutamento/candidatos/:candidato_id",
-          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          "method": "DELETE",
+          "path": "/api/v1/recrutamento/biometria/candidatos/:candidatoId",
+          "source_file": "backend/src/recrutamento/biometria/biometria.controller.ts"
         },
         {
-          "method": "PATCH",
-          "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/concluir",
-          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          "method": "DELETE",
+          "path": "/api/v1/recrutamento/prova-online/sessions/:id/artifacts",
+          "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
         },
         {
-          "method": "PATCH",
-          "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/encaminhar",
-          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          "method": "GET",
+          "path": "/api/v1/recrutamento/avaliacao/notas/inscricoes/:inscricaoId",
+          "source_file": "backend/src/recrutamento/avaliacao/nota.controller.ts"
         },
         {
-          "method": "POST",
-          "path": "/api/v1/recrutamento/requisicoes",
-          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          "method": "GET",
+          "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/gabaritos",
+          "source_file": "backend/src/recrutamento/avaliacao/gabarito.controller.ts"
         },
         {
-          "method": "POST",
-          "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/candidatos",
-          "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+          "method": "GET",
+          "path": "/api/v1/recrutamento/avaliacao/provas/concursos/:concursoId",
+          "source_file": "backend/src/recrutamento/avaliacao/prova.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/recrutamento/avaliacao/recursos/provas/:provaId",
+          "source_file": "backend/src/recrutamento/avaliacao/recurso.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/recrutamento/banca/concursos/:concursoId/membros",
+          "source_file": "backend/src/recrutamento/banca/banca.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/recrutamento/concursos",
+          "source_file": "backend/src/recrutamento/concurso/concurso.controller.ts"
         }
       ],
-      "source_evidence": ["backend/src/recrutamento/recruitment.controller.ts"],
+      "source_evidence": [
+        "backend/src/recrutamento/biometria/biometria.controller.ts",
+        "backend/src/recrutamento/prova-online/online-exam.controller.ts",
+        "backend/src/recrutamento/banca/banca.controller.ts",
+        "backend/src/recrutamento/concurso/concurso.controller.ts",
+        "backend/src/recrutamento/classificacao/classificacao.controller.ts",
+        "backend/src/recrutamento/inscricao/inscricao.controller.ts",
+        "backend/src/recrutamento/avaliacao/nota.controller.ts"
+      ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1092,6 +2642,8 @@
         }
       ],
       "source_evidence": [
+        "backend/src/report-service/payslip/payslip.controller.ts",
+        "backend/src/report-service/yearly-income/yearly-income.controller.ts",
         "backend/src/relatorio/report-catalog/report-catalog.controller.ts",
         "backend/src/report-service/report-service.controller.ts"
       ],
@@ -1220,6 +2772,11 @@
         },
         {
           "method": "POST",
+          "path": "/api/v1/pericia/agendamentos/:agendamento_id/parecer",
+          "source_file": "backend/src/saude/pericia.controller.ts"
+        },
+        {
+          "method": "POST",
           "path": "/api/v1/pericia/prontuarios",
           "source_file": "backend/src/saude/pericia.controller.ts"
         },
@@ -1229,7 +2786,12 @@
           "source_file": "backend/src/saude/pericia.controller.ts"
         }
       ],
-      "source_evidence": ["backend/src/saude/pericia.controller.ts"],
+      "source_evidence": [
+        "backend/src/saude/aso/aso-portal.controller.ts",
+        "backend/src/saude/cat/work-accident.controller.ts",
+        "backend/src/saude/aso/aso.controller.ts",
+        "backend/src/saude/epi/epi.controller.ts"
+      ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1269,7 +2831,7 @@
         "route_evidence": [
           {
             "method": "DELETE",
-            "path": "/api/v1/master-data/:resource:id",
+            "path": "/api/v1/master-data/:resource/:id",
             "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
           },
           {
@@ -1284,7 +2846,7 @@
           },
           {
             "method": "PATCH",
-            "path": "/api/v1/master-data/:resource:id",
+            "path": "/api/v1/master-data/:resource/:id",
             "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
           },
           {
@@ -1293,7 +2855,10 @@
             "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
           }
         ],
-        "source_evidence": ["backend/src/gestao/master-data/master-data.controller.ts"],
+        "source_evidence": [
+          "backend/src/gestao/master-data/master-data.controller.ts",
+          "backend/src/gestao/master-data/job-position.controller.ts"
+        ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1324,28 +2889,28 @@
           },
           {
             "method": "GET",
+            "path": "/api/v1/funcionarios",
+            "source_file": "backend/src/rh/employees/employees.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/funcionarios/:id/abono-permanencia",
+            "source_file": "backend/src/rh/employees/employees.controller.ts"
+          },
+          {
+            "method": "GET",
             "path": "/api/v1/funcionarios/:id/dossie",
             "source_file": "backend/src/rh/employees/employees.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/rh/afastamentos",
-            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+            "path": "/api/v1/funcionarios/:id/historico",
+            "source_file": "backend/src/rh/employees/employees.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/rh/processos",
-            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
-          },
-          {
-            "method": "GET",
-            "path": "/api/v1/rh/processos-funcao",
-            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
-          },
-          {
-            "method": "PATCH",
-            "path": "/api/v1/rh/afastamentos/:id",
-            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+            "path": "/api/v1/funcionarios/:id/tempo-servico",
+            "source_file": "backend/src/rh/employees/employees.controller.ts"
           }
         ],
         "source_evidence": ["backend/src/rh/workflows/rh-workflows.controller.ts"],
@@ -1364,7 +2929,17 @@
         "route_evidence": [
           {
             "method": "DELETE",
-            "path": "/api/v1/folhas/catalogos/:resource:id",
+            "path": "/api/v1/esocial/certificados/:certificateId",
+            "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/v1/folha/rubrica/:id",
+            "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/v1/folhas/catalogos/:resource/:id",
             "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
           },
           {
@@ -1374,40 +2949,31 @@
           },
           {
             "method": "GET",
-            "path": "/api/v1/folha/:id/remessa",
-            "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
+            "path": "/api/v1/esocial/certificados",
+            "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/folhas",
-            "source_file": "backend/src/folha-pagamento/payroll/payroll.controller.ts"
+            "path": "/api/v1/esocial/eventos-trabalhador",
+            "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/folhas/catalogos",
-            "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
+            "path": "/api/v1/esocial/events/excludable",
+            "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/folhas/catalogos/:resource",
-            "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
-          },
-          {
-            "method": "GET",
-            "path": "/api/v1/folhas/contabilidade",
-            "source_file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts"
-          },
-          {
-            "method": "GET",
-            "path": "/api/v1/payroll-engine/health",
-            "source_file": "backend/src/payroll-engine/payroll-engine.controller.ts"
+            "path": "/api/v1/esocial/exclusions",
+            "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
           }
         ],
         "source_evidence": [
+          "backend/src/folha-pagamento/operations/alimony/alimony.controller.ts",
+          "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts",
           "backend/src/folha-pagamento/accounting/payroll-accounting.controller.ts",
-          "backend/src/folha-pagamento/operations/payroll-operations.controller.ts",
-          "backend/src/folha-pagamento/payroll/payroll.controller.ts",
-          "backend/src/payroll-engine/payroll-engine.controller.ts"
+          "backend/src/folha-pagamento/operations/bank-account/bank-account.controller.ts",
+          "backend/src/folha-pagamento/operations/consignment/consignment.controller.ts"
         ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
@@ -1424,8 +2990,23 @@
         "route_evidence": [
           {
             "method": "GET",
+            "path": "/api/v1/avaliacao/career-plan",
+            "source_file": "backend/src/avaliacao/career-plan/career-plan.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/avaliacao/career-plan/:id/trilha",
+            "source_file": "backend/src/avaliacao/career-plan/career-plan.controller.ts"
+          },
+          {
+            "method": "GET",
             "path": "/api/v1/avaliacao/desempenhos",
             "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/avaliacao/estagio-probatorio/a-vencer",
+            "source_file": "backend/src/avaliacao/probation.controller.ts"
           },
           {
             "method": "GET",
@@ -1434,36 +3015,26 @@
           },
           {
             "method": "GET",
-            "path": "/api/v1/avaliacao/progressoes",
-            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+            "path": "/api/v1/avaliacao/progression",
+            "source_file": "backend/src/avaliacao/progression/progression.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/avaliacao/simulacoes",
-            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
+            "path": "/api/v1/avaliacao/progression/eligibility",
+            "source_file": "backend/src/avaliacao/progression/progression.controller.ts"
           },
           {
-            "method": "PATCH",
-            "path": "/api/v1/avaliacao/desempenhos/:id",
-            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
-          },
-          {
-            "method": "PATCH",
-            "path": "/api/v1/avaliacao/planos-cargos/:id",
-            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
-          },
-          {
-            "method": "POST",
-            "path": "/api/v1/avaliacao/ciclos/:periodo/relatorio",
-            "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
-          },
-          {
-            "method": "POST",
-            "path": "/api/v1/avaliacao/desempenhos",
+            "method": "GET",
+            "path": "/api/v1/avaliacao/progressoes",
             "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
           }
         ],
-        "source_evidence": ["backend/src/avaliacao/avaliacao.controller.ts"],
+        "source_evidence": [
+          "backend/src/avaliacao/career-plan/career-plan.controller.ts",
+          "backend/src/avaliacao/avaliacao.controller.ts",
+          "backend/src/avaliacao/probation.controller.ts",
+          "backend/src/avaliacao/progression/progression.controller.ts"
+        ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1478,32 +3049,55 @@
         "status": "implemented",
         "route_evidence": [
           {
-            "method": "PATCH",
-            "path": "/api/v1/recrutamento/candidatos/:candidato_id",
-            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+            "method": "DELETE",
+            "path": "/api/v1/recrutamento/biometria/candidatos/:candidatoId",
+            "source_file": "backend/src/recrutamento/biometria/biometria.controller.ts"
           },
           {
-            "method": "PATCH",
-            "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/concluir",
-            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+            "method": "DELETE",
+            "path": "/api/v1/recrutamento/prova-online/sessions/:id/artifacts",
+            "source_file": "backend/src/recrutamento/prova-online/online-exam.controller.ts"
           },
           {
-            "method": "PATCH",
-            "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/encaminhar",
-            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+            "method": "GET",
+            "path": "/api/v1/recrutamento/avaliacao/notas/inscricoes/:inscricaoId",
+            "source_file": "backend/src/recrutamento/avaliacao/nota.controller.ts"
           },
           {
-            "method": "POST",
-            "path": "/api/v1/recrutamento/requisicoes",
-            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+            "method": "GET",
+            "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/gabaritos",
+            "source_file": "backend/src/recrutamento/avaliacao/gabarito.controller.ts"
           },
           {
-            "method": "POST",
-            "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/candidatos",
-            "source_file": "backend/src/recrutamento/recruitment.controller.ts"
+            "method": "GET",
+            "path": "/api/v1/recrutamento/avaliacao/provas/concursos/:concursoId",
+            "source_file": "backend/src/recrutamento/avaliacao/prova.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/recrutamento/avaliacao/recursos/provas/:provaId",
+            "source_file": "backend/src/recrutamento/avaliacao/recurso.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/recrutamento/banca/concursos/:concursoId/membros",
+            "source_file": "backend/src/recrutamento/banca/banca.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/recrutamento/concursos",
+            "source_file": "backend/src/recrutamento/concurso/concurso.controller.ts"
           }
         ],
-        "source_evidence": ["backend/src/recrutamento/recruitment.controller.ts"],
+        "source_evidence": [
+          "backend/src/recrutamento/biometria/biometria.controller.ts",
+          "backend/src/recrutamento/prova-online/online-exam.controller.ts",
+          "backend/src/recrutamento/banca/banca.controller.ts",
+          "backend/src/recrutamento/concurso/concurso.controller.ts",
+          "backend/src/recrutamento/classificacao/classificacao.controller.ts",
+          "backend/src/recrutamento/inscricao/inscricao.controller.ts",
+          "backend/src/recrutamento/avaliacao/nota.controller.ts"
+        ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1589,6 +3183,8 @@
           }
         ],
         "source_evidence": [
+          "backend/src/report-service/payslip/payslip.controller.ts",
+          "backend/src/report-service/yearly-income/yearly-income.controller.ts",
           "backend/src/relatorio/report-catalog/report-catalog.controller.ts",
           "backend/src/report-service/report-service.controller.ts"
         ],
@@ -1717,6 +3313,11 @@
           },
           {
             "method": "POST",
+            "path": "/api/v1/pericia/agendamentos/:agendamento_id/parecer",
+            "source_file": "backend/src/saude/pericia.controller.ts"
+          },
+          {
+            "method": "POST",
             "path": "/api/v1/pericia/prontuarios",
             "source_file": "backend/src/saude/pericia.controller.ts"
           },
@@ -1726,7 +3327,12 @@
             "source_file": "backend/src/saude/pericia.controller.ts"
           }
         ],
-        "source_evidence": ["backend/src/saude/pericia.controller.ts"],
+        "source_evidence": [
+          "backend/src/saude/aso/aso-portal.controller.ts",
+          "backend/src/saude/cat/work-accident.controller.ts",
+          "backend/src/saude/aso/aso.controller.ts",
+          "backend/src/saude/epi/epi.controller.ts"
+        ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -3516,7 +5122,7 @@
     },
     {
       "method": "DELETE",
-      "path": "/api/v1/folhas/catalogos/:resource:id",
+      "path": "/api/v1/folhas/catalogos/:resource/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
       "note": "Implemented in runtime route map."
@@ -3530,9 +5136,30 @@
     },
     {
       "method": "DELETE",
-      "path": "/api/v1/master-data/:resource:id",
+      "path": "/api/v1/master-data/:resource/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/ponto/biometria/employees/:employeeId/consent",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/ponto/face/employees/:employeeId/consent",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/recrutamento/biometria/candidatos/:candidatoId",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -3554,6 +5181,13 @@
       "path": "/api/v1/rh/processos/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/tce/layout-fields/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -3733,6 +5367,34 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/employees/:id/alimonies",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/:id/consignment-loans",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/:id/consignment-margin",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ferias/saldo/:employee_id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/folha/:id/remessa",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
@@ -3768,6 +5430,13 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/funcionarios",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/funcionarios/:id/dossie",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
@@ -3785,6 +5454,13 @@
       "path": "/api/v1/health/ready",
       "status": "implemented",
       "source_doc": "docs/eng/41-arquitetura-sistema.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/licencas/:employee_id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -3841,6 +5517,69 @@
       "path": "/api/v1/pericia/prontuarios/:id/laudo/pdf",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/atribuicoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/biometria/templates",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/face/employees/:employeeId/status",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/face/templates",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/face/threshold",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/jornadas",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ponto/marcacoes/:employeeId",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/payslips",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/payslips/:id/pdf",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -3922,9 +5661,37 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/publico/banca/verify/:token",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/publico/concursos/:slug",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/recadastramento/:recadastramento_id/comprovante",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/banca/concursos/:concursoId/membros",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/concursos",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -3967,6 +5734,55 @@
       "path": "/api/v1/rh/processos-funcao",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/adapters",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/adapters/:id/events",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/audesp-sp/submissions",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/audesp-sp/submissions/:id/envelope.xml",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/layouts/:id/fields",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/states",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tce/states/:code/layouts",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -4041,6 +5857,13 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/employees/:id/alimonies/:alimonyId",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/folhas/:folha_id/status",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
@@ -4048,7 +5871,7 @@
     },
     {
       "method": "PATCH",
-      "path": "/api/v1/folhas/catalogos/:resource:id",
+      "path": "/api/v1/folhas/catalogos/:resource/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
       "note": "Implemented in runtime route map."
@@ -4062,7 +5885,7 @@
     },
     {
       "method": "PATCH",
-      "path": "/api/v1/master-data/:resource:id",
+      "path": "/api/v1/master-data/:resource/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
       "note": "Implemented in runtime route map."
@@ -4152,6 +5975,13 @@
       "note": "Implemented in runtime route map."
     },
     {
+      "method": "PATCH",
+      "path": "/api/v1/tce/layouts/:id/status",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
       "method": "POST",
       "path": "/api/v1/arquivos/presigned-upload",
       "status": "implemented",
@@ -4209,6 +6039,13 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/cargos",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/convites/:token/aceitar",
       "status": "implemented",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
@@ -4251,9 +6088,44 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/employees/:id/alimonies",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/:id/consignment-loans",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/esocial/eventos",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ferias/programacao",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ferias/programacao/:id/aprovar",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ferias/programacao/:id/cancelar",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -4321,6 +6193,13 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/funcionarios",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/funcionarios/:func_rescisao/desligamento",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
@@ -4328,9 +6207,23 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/funcionarios/:id/vinculos",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/gfip/gerar",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/licencas",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -4366,6 +6259,90 @@
       "path": "/api/v1/pericia/prontuarios/:prontuario_id/replicar",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/atribuicoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/biometria/consents",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/biometria/matches",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/biometria/templates",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/face/clock",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/face/consents",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/face/matches",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/face/templates",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/jornadas",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/marcacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/mobile/clock",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/periodos",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {
@@ -4489,6 +6466,62 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/recrutamento/banca/documentos",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/banca/documentos/:id/publicacao",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/banca/documentos/:id/signatures",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/banca/membros",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/biometria/capturas",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/biometria/consentimentos",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/biometria/matching",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/concursos",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/recrutamento/requisicoes",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
@@ -4534,6 +6567,69 @@
       "path": "/api/v1/rh/processos-funcao",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/acidentes",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/adapters/:id/disable",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/adapters/:id/enable",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/audesp-sp/submissions",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/audesp-sp/submissions/:id/submit",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/audesp-sp/submissions/:id/validate",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/layout-fields",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tce/layouts",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/ponto/face/threshold",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "note": "Implemented in runtime route map."
     },
     {

@@ -38,18 +38,16 @@ npm run health
 Use JSON output if needed:
 
 ```bash
-node scripts/run.mjs health --json
+npm run health:json
 ```
 
 ## 5. Common Workspace Commands
 
-- Start sgp-admin + sgp-portal + core API + portal API dev servers: `npm run start:dev`
+- Start sgp-admin + sgp-portal + core API + portal API dev servers: `npm run start`
 - Start only `sgp-admin`: `npm run start:admin`
 - Start only `sgp-portal`: `npm run start:portal`
 - Start only the core API: `npm run start:core-api`
 - Start only the portal API: `npm run start:portal-api`
-- Start only the backend (core API alias): `npm run start:backend`
-- Start only the frontend: `npm run start:frontend`
 - Start split service/worker runtimes:
   - `npm run start:payroll-engine`
   - `npm run start:esocial-worker`
@@ -91,10 +89,8 @@ npm run db:seed
 
 ## 7. Runtime Topology
 
-The documented runtime split is tracked in `docs/gov/runtime-topology.json`. Run:
+The documented runtime split is tracked in `docs/gov/runtime-topology.json`. Use the health gate to inspect the current deployable/runtime inventory and scaffold status:
 
 ```bash
-npm run governance:runtime-topology
+npm run health:json
 ```
-
-to inspect the current deployable/runtime inventory and scaffold status.

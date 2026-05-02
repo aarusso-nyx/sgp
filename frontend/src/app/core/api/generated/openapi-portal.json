@@ -110,6 +110,243 @@
         "tags": ["iam"]
       }
     },
+    "/api/v1/auditoria/logs": {
+      "get": {
+        "operationId": "AuditController_events",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "required": false,
+            "in": "query",
+            "description": "Inclusive event start date/time.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateTo",
+            "required": false,
+            "in": "query",
+            "description": "Inclusive event end date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "actor",
+            "required": false,
+            "in": "query",
+            "description": "Actor login or Cognito subject.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CREATE",
+                "READ",
+                "UPDATE",
+                "DELETE",
+                "LOGIN",
+                "LOGOUT",
+                "IMPORT",
+                "EXPORT",
+                "GENERATE",
+                "PROCESS",
+                "APPROVE",
+                "REJECT",
+                "DOWNLOAD"
+              ]
+            }
+          },
+          {
+            "name": "tableName",
+            "required": false,
+            "in": "query",
+            "description": "Database table name.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resourceType",
+            "required": false,
+            "in": "query",
+            "description": "Domain resource type.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resourceId",
+            "required": false,
+            "in": "query",
+            "description": "Domain resource identifier.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "requestId",
+            "required": false,
+            "in": "query",
+            "description": "Request correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "statusCode",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 100,
+              "maximum": 599,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paged audit events."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["audit"]
+      }
+    },
+    "/api/v1/auditoria/logs/{id}": {
+      "get": {
+        "operationId": "AuditController_eventById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch audit event detail by id."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["audit"]
+      }
+    },
+    "/api/v1/auditoria/exportacoes": {
+      "post": {
+        "operationId": "AuditController_createReportRequest",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuditReportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an audit trail report request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["audit"]
+      }
+    },
+    "/api/v1/auditoria/exportacoes/{job_id}": {
+      "get": {
+        "operationId": "AuditController_reportRequestStatus",
+        "parameters": [
+          {
+            "name": "job_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch audit export request status."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["audit"]
+      }
+    },
     "/api/portal/v1/auth/me": {
       "get": {
         "operationId": "PortalController_authMe",
@@ -142,6 +379,997 @@
           }
         ],
         "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/meus-dados/cadastro": {
+      "get": {
+        "operationId": "PortalController_cadastro",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee personal profile."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/meus-dados/endereco": {
+      "get": {
+        "operationId": "PortalController_endereco",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee address."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/meus-dados/contato": {
+      "get": {
+        "operationId": "PortalController_contato",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee contact data."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/meus-dados/dependentes": {
+      "get": {
+        "operationId": "PortalController_dependentes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee dependents."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/meus-dados/documentos": {
+      "get": {
+        "operationId": "PortalController_documentos",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee documents."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/meus-dados/cargo": {
+      "get": {
+        "operationId": "PortalController_cargo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee current job and salary level."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/minha-carreira": {
+      "get": {
+        "operationId": "PortalController_minhaCarreira",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee PCCS career progression trail."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/contracheques/ferias": {
+      "get": {
+        "operationId": "PortalController_feriasContracheques",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee vacation payroll payslips."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/termos-rescisao": {
+      "get": {
+        "operationId": "PortalController_termosRescisao",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee generated termination terms."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/contracheque/{competence}": {
+      "get": {
+        "operationId": "PortalController_contracheque",
+        "parameters": [
+          {
+            "name": "competence",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee monthly paystub by competence."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/meus-dados/{section}": {
+      "put": {
+        "operationId": "PortalController_requestChange",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CadastralChangeRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a cadastral change request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/payslips": {
+      "get": {
+        "operationId": "PayslipController_listPortal",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List authenticated employee payslip PDF files."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["payslips"]
+      }
+    },
+    "/api/v1/portal/payslips/{id}/pdf": {
+      "get": {
+        "operationId": "PayslipController_portalDownload",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Download authenticated employee payslip PDF."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["payslips"]
+      }
+    },
+    "/api/v1/admin/payslip-batches": {
+      "post": {
+        "operationId": "PayslipController_createBatch",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayslipBatchRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate official payslip PDFs for a competence."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["payslips"]
+      }
+    },
+    "/api/v1/portal/yearly-income": {
+      "get": {
+        "operationId": "YearlyIncomeController_listPortal",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List authenticated employee yearly income reports."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["yearly-income"]
+      }
+    },
+    "/api/v1/portal/yearly-income/{year}/pdf": {
+      "get": {
+        "operationId": "YearlyIncomeController_portalDownload",
+        "parameters": [
+          {
+            "name": "year",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Download authenticated employee yearly income PDF."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["yearly-income"]
+      }
+    },
+    "/api/v1/admin/yearly-income-batches": {
+      "post": {
+        "operationId": "YearlyIncomeController_createBatch",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/YearlyIncomeBatchRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate yearly income PDFs for a year-base."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["yearly-income"]
+      }
+    },
+    "/api/v1/avaliacao/desempenhos": {
+      "get": {
+        "operationId": "AvaliacaoController_listPerformanceEvaluations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List performance evaluations."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      },
+      "post": {
+        "operationId": "AvaliacaoController_createPerformanceEvaluation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePerformanceEvaluationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a performance evaluation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/desempenhos/{id}": {
+      "patch": {
+        "operationId": "AvaliacaoController_updatePerformanceEvaluation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePerformanceEvaluationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a performance evaluation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/progressoes": {
+      "get": {
+        "operationId": "AvaliacaoController_listProgressions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List career progressions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      },
+      "post": {
+        "operationId": "AvaliacaoController_createProgression",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMeritProgressionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a career progression."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/simulacoes": {
+      "get": {
+        "operationId": "AvaliacaoController_listSimulations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List salary simulations."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      },
+      "post": {
+        "operationId": "AvaliacaoController_createSimulation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSalarySimulationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a salary simulation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/planos-cargos": {
+      "get": {
+        "operationId": "AvaliacaoController_listCareerPlans",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List career plans."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      },
+      "post": {
+        "operationId": "AvaliacaoController_createCareerPlan",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCareerPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a career plan."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/planos-cargos/{id}": {
+      "patch": {
+        "operationId": "AvaliacaoController_updateCareerPlan",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCareerPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a career plan."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/desempenhos/{id}/ficha": {
+      "post": {
+        "operationId": "AvaliacaoController_requestEvaluationSheet",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateAvaliacaoReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a performance evaluation sheet."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/ciclos/{periodo}/relatorio": {
+      "post": {
+        "operationId": "AvaliacaoController_requestCycleReport",
+        "parameters": [
+          {
+            "name": "periodo",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateAvaliacaoReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a cycle evaluation report."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/career-plan": {
+      "get": {
+        "operationId": "CareerPlanController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List PCCS career plans."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      },
+      "post": {
+        "operationId": "CareerPlanController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CareerPlanMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a PCCS career plan."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/career-plan/{id}": {
+      "patch": {
+        "operationId": "CareerPlanController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CareerPlanMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a PCCS career plan."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/career-plan/{id}/trilha": {
+      "get": {
+        "operationId": "CareerPlanController_trail",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "employeeId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the PCCS progression trail."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/estagio-probatorio/a-vencer": {
+      "get": {
+        "operationId": "ProbationController_listDue",
+        "parameters": [
+          {
+            "name": "referenceDate",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List statutory employees close to 36 probation months."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/estagio-probatorio": {
+      "post": {
+        "operationId": "ProbationController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProbationEvaluationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Register a probation evaluation."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/progression": {
+      "get": {
+        "operationId": "ProgressionController_list",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["eligible", "simulated", "applied", "revoked"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List functional progressions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/progression/eligibility": {
+      "get": {
+        "operationId": "ProgressionController_eligibility",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "effectDate",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check employee progression eligibility."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/progression/simulate": {
+      "post": {
+        "operationId": "ProgressionController_simulate",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProgressionSimulationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate functional progression impact."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/progression/{id}/apply": {
+      "post": {
+        "operationId": "ProgressionController_apply",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Apply simulated functional progression."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/salary-history/{salaryRangeLevelId}/timeline": {
+      "get": {
+        "operationId": "SalaryHistoryController_timeline",
+        "parameters": [
+          {
+            "name": "salaryRangeLevelId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List salary base history for one level."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/avaliacao/salary-history/reajuste-massa": {
+      "post": {
+        "operationId": "SalaryHistoryController_massAdjustment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MassAdjustmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Apply mass salary-base adjustment."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": ["avaliacao"]
       }
     },
     "/api/v1/health": {
@@ -185,6 +1413,443 @@
         "type": "http"
       }
     },
-    "schemas": {}
+    "schemas": {
+      "Object": {
+        "type": "object",
+        "properties": {}
+      },
+      "AuditReportRequestDto": {
+        "type": "object",
+        "properties": {
+          "dateFrom": {
+            "type": "string"
+          },
+          "dateTo": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "CREATE",
+              "READ",
+              "UPDATE",
+              "DELETE",
+              "LOGIN",
+              "LOGOUT",
+              "IMPORT",
+              "EXPORT",
+              "GENERATE",
+              "PROCESS",
+              "APPROVE",
+              "REJECT",
+              "DOWNLOAD"
+            ]
+          },
+          "tableName": {
+            "type": "string"
+          },
+          "resourceType": {
+            "type": "string"
+          },
+          "search": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          }
+        }
+      },
+      "CadastralChangeRequestDto": {
+        "type": "object",
+        "properties": {
+          "section": {
+            "type": "string",
+            "enum": ["cadastro", "endereco", "contato", "dependentes", "documentos"]
+          },
+          "payload": {
+            "type": "object"
+          },
+          "previousPayload": {
+            "type": "object"
+          }
+        },
+        "required": ["section", "payload"]
+      },
+      "PayslipBatchRequestDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "YearlyIncomeBatchRequestDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "EvaluationCriteriaDto": {
+        "type": "object",
+        "properties": {
+          "criterio": {
+            "type": "string"
+          },
+          "nota": {
+            "type": "number"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": ["criterio", "nota"]
+      },
+      "CreatePerformanceEvaluationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "periodo": {
+            "type": "string"
+          },
+          "nota": {
+            "type": "number"
+          },
+          "criterios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EvaluationCriteriaDto"
+            }
+          },
+          "avaliadorId": {
+            "type": "string"
+          },
+          "dataAvaliacao": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["RASCUNHO", "SUBMETIDA", "APROVADA", "REPROVADA"]
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "funcionarioId",
+          "periodo",
+          "nota",
+          "criterios",
+          "avaliadorId",
+          "dataAvaliacao"
+        ]
+      },
+      "UpdatePerformanceEvaluationDto": {
+        "type": "object",
+        "properties": {
+          "nota": {
+            "type": "number"
+          },
+          "criterios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EvaluationCriteriaDto"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["RASCUNHO", "SUBMETIDA", "APROVADA", "REPROVADA"]
+          },
+          "dataAvaliacao": {
+            "type": "string",
+            "format": "date"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateMeritProgressionDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "avaliacaoId": {
+            "type": "string"
+          },
+          "referenciaOrigemId": {
+            "type": "string"
+          },
+          "referenciaDestinoId": {
+            "type": "string"
+          },
+          "dataVigencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "atoNomeacao": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": ["MERITO", "TITULARIDADE", "JUDICIAL", "CORRECAO"],
+            "default": "MERITO"
+          },
+          "justificativa": {
+            "type": "string"
+          },
+          "aprovadoPorId": {
+            "type": "string"
+          }
+        },
+        "required": ["funcionarioId", "referenciaDestinoId", "dataVigencia", "tipo"]
+      },
+      "SalarySimulationAdjustmentDto": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "percentual": {
+            "type": "string"
+          },
+          "valorFixo": {
+            "type": "string"
+          }
+        },
+        "required": ["descricao"]
+      },
+      "CreateSalarySimulationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "cenario": {
+            "type": "string"
+          },
+          "ajustes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SalarySimulationAdjustmentDto"
+            }
+          },
+          "contexto": {
+            "type": "object"
+          }
+        },
+        "required": ["funcionarioId", "cenario"]
+      },
+      "CreateCareerPlanDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "string"
+          },
+          "dataVigencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "niveis": {
+            "type": "object"
+          },
+          "referencias": {
+            "type": "object"
+          },
+          "ativo": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": ["nome", "versao", "dataVigencia"]
+      },
+      "UpdateCareerPlanDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "string"
+          },
+          "dataVigencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "niveis": {
+            "type": "object"
+          },
+          "referencias": {
+            "type": "object"
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GenerateAvaliacaoReportDto": {
+        "type": "object",
+        "properties": {
+          "formato": {
+            "type": "string",
+            "example": "PDF"
+          },
+          "lotacaoId": {
+            "type": "string"
+          }
+        }
+      },
+      "CareerPlanMutationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "institutingLaw": {
+            "type": "string"
+          },
+          "startsOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "endsOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "classCount": {
+            "type": "number"
+          },
+          "referenceCount": {
+            "type": "number"
+          },
+          "progressionRule": {
+            "type": "string"
+          },
+          "jobPositionIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "salaryRangeId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "institutingLaw",
+          "startsOn",
+          "classCount",
+          "referenceCount",
+          "progressionRule"
+        ]
+      },
+      "CreateProbationEvaluationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "periodoInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "periodoFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "nota": {
+            "type": "number"
+          },
+          "decisao": {
+            "type": "string",
+            "enum": ["pending", "approved", "rejected", "extended"]
+          },
+          "avaliadorId": {
+            "type": "string"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": ["funcionarioId", "periodoInicio", "periodoFim", "nota", "decisao"]
+      },
+      "ProgressionSimulationDto": {
+        "type": "object",
+        "properties": {
+          "employeeId": {
+            "type": "string"
+          },
+          "effectDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "progressionType": {
+            "type": "string",
+            "enum": ["merit_horizontal", "vertical_promotion"]
+          },
+          "targetSalaryRangeLevelId": {
+            "type": "string"
+          },
+          "performanceEvaluationId": {
+            "type": "string"
+          },
+          "administrativeProcessId": {
+            "type": "string"
+          },
+          "earningDeductionId": {
+            "type": "string"
+          },
+          "appointmentAct": {
+            "type": "string"
+          },
+          "justification": {
+            "type": "string"
+          }
+        },
+        "required": ["employeeId", "effectDate"]
+      },
+      "MassAdjustmentScopeDto": {
+        "type": "object",
+        "properties": {
+          "careerPlanId": {
+            "type": "string"
+          },
+          "salaryRangeId": {
+            "type": "string"
+          }
+        }
+      },
+      "MassAdjustmentDto": {
+        "type": "object",
+        "properties": {
+          "percentual": {
+            "type": "string",
+            "description": "Percent adjustment rate, for example 5.25 for 5.25%."
+          },
+          "vigenciaInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "leiReferencia": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string",
+            "enum": ["reajuste_data_base", "correcao", "reestruturacao"]
+          },
+          "escopo": {
+            "$ref": "#/components/schemas/MassAdjustmentScopeDto"
+          }
+        },
+        "required": ["percentual", "vigenciaInicio", "leiReferencia", "escopo"]
+      }
+    }
   }
 }
