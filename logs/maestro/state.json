@@ -1015,7 +1015,7 @@
       "failure_log": "logs/maestro/54-rec-05-nomeacao-convocacao.failure.md"
     },
     "55-rec-06-posse-exercicio": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/55-rec-06-posse-exercicio",
       "retries": 0,
@@ -1057,10 +1057,14 @@
       "theme": "REC",
       "zero_retry": false,
       "agent": "019de78b-a4d8-7572-90fa-eeb7053f1ee6",
-      "started_at": "2026-05-02T07:16:06.375Z"
+      "started_at": "2026-05-02T07:16:06.375Z",
+      "completed_at": "2026-05-02T07:37:34Z",
+      "commit": "eed6dfbd3b731f0466b952f789bfef0d379b2723",
+      "recovery": "maestro recovered concurrent DCTFWeb typecheck failure after full defense suite passed",
+      "failure_log": "logs/maestro/55-rec-06-posse-exercicio.failure.md"
     },
     "56-fisc-01-dctfweb-totalizadores": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/56-fisc-01-dctfweb-totalizadores",
       "retries": 0,
@@ -1099,7 +1103,11 @@
       "theme": "FISC",
       "zero_retry": false,
       "agent": "019de78b-a55f-7692-a172-ba92e939b64e",
-      "started_at": "2026-05-02T07:16:06.375Z"
+      "started_at": "2026-05-02T07:16:06.375Z",
+      "completed_at": "2026-05-02T07:37:34Z",
+      "commit": "79bb8fc521bc142b635b298f28312dd0fb2684aa",
+      "recovery": "maestro fixed lint and current-schema profile_permission migration drift after worker failure",
+      "failure_log": "logs/maestro/56-fisc-01-dctfweb-totalizadores.failure.md"
     },
     "57-fisc-02-dirf-anual": {
       "status": "pending",
@@ -1231,7 +1239,7 @@
       "completed_at": "2026-05-02T06:05:28.085Z"
     },
     "60-ponto-02-rep-p-rep-a-rep-c-ingestao": {
-      "status": "in_progress",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/60-ponto-02-rep-p-rep-a-rep-c-ingestao",
       "retries": 0,
@@ -1268,7 +1276,11 @@
       "theme": "PONTO",
       "zero_retry": true,
       "agent": "019de78b-a503-7701-bbc1-de4b3112fc07",
-      "started_at": "2026-05-02T07:16:06.375Z"
+      "started_at": "2026-05-02T07:16:06.375Z",
+      "completed_at": "2026-05-02T07:37:34Z",
+      "commit": "e2bd0fbd88e6c0836d652bd23b7c15d892518c6f",
+      "recovery": "maestro recovered concurrent DCTFWeb typecheck failure after full defense suite passed",
+      "failure_log": "logs/maestro/60-ponto-02-rep-p-rep-a-rep-c-ingestao.failure.md"
     },
     "61-ponto-03-afd-geracao-importacao": {
       "status": "pending",
@@ -2296,27 +2308,8 @@
       "zero_retry": true
     }
   },
-  "current_wave": 29,
-  "active_subagents": [
-    {
-      "slice": "55-rec-06-posse-exercicio",
-      "agent": "019de78b-a4d8-7572-90fa-eeb7053f1ee6",
-      "effort": "medium",
-      "started_at": "2026-05-02T07:16:06.375Z"
-    },
-    {
-      "slice": "60-ponto-02-rep-p-rep-a-rep-c-ingestao",
-      "agent": "019de78b-a503-7701-bbc1-de4b3112fc07",
-      "effort": "high",
-      "started_at": "2026-05-02T07:16:06.375Z"
-    },
-    {
-      "slice": "56-fisc-01-dctfweb-totalizadores",
-      "agent": "019de78b-a55f-7692-a172-ba92e939b64e",
-      "effort": "high",
-      "started_at": "2026-05-02T07:16:06.375Z"
-    }
-  ],
+  "current_wave": 30,
+  "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }

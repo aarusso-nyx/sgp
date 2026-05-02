@@ -94,3 +94,6 @@ W27 ✓ 49-clt-03 (medium, gates passed, commit 5230c60) — PIS/PASEP annual ba
 W27 ✓ 54-rec-05 (medium, transient concurrent lint failure recovered by maestro defense, commit b086ddd) — nomeacao and convocacao deadlines
 W27 ✓ 70-sst-05 (high, gates passed, commit e270f41) — S-2240 environmental exposure, EPI, and PPP
 2026-05-02T07:16:06.375Z frontier launch 55-rec-06, 60-ponto-02, 56-fisc-01 — agents 019de78b-a4d8, 019de78b-a503, 019de78b-a55f
+W28 ✓ 55-rec-06 (medium, transient concurrent DCTFWeb typecheck failure recovered by maestro defense, commit eed6dfb) — posse/exercicio and S-2200 handoff
+W28 ✓ 60-ponto-02 (high, zero-tier, transient concurrent DCTFWeb typecheck failure recovered by maestro defense, commit e2bd0fb) — REP-P/REP-A/REP-C ingestion
+W29 ✓ 56-fisc-01 (high, lint and current-schema migration drift fixed by maestro defense, commit 79bb8fc) — DCTFWeb totalizers
