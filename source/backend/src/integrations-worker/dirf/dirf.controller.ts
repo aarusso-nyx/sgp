@@ -1,0 +1,81 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
+import { AuditService } from '../../audit/audit.service';
+import type { RequestWithContext } from '../../common/request-id/request-with-context';
+import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
+import { DirfBuilderService } from './dirf-builder.service';
+import { GenerateDirfDto } from './dirf.dto';
+
+@ApiTags('fiscal-dirf')
+@ApiBearerAuth()
+@Controller('v1/admin/fiscal/dirf')
+export class DirfController {
+  constructor(
+    private readonly builder: DirfBuilderService,
+    private readonly auditService: AuditService,
+  ) {}
+
+  @Get()
+  @RequirePermission('fiscal.dirf.read')
+  @ApiOkResponse({ description: 'List DIRF annual files.' })
+  list(
+    @Query('yearBase', new ParseIntPipe({ optional: true })) yearBase?: number,
+  ) {
+    return this.builder.list(yearBase);
+  }
+
+  @Get(':id')
+  @RequirePermission('fiscal.dirf.read')
+  @ApiOkResponse({ description: 'Get a DIRF annual file with beneficiaries.' })
+  find(@Param('id') id: string) {
+    return this.builder.find(id);
+  }
+
+  @Get(':id/txt')
+  @Header('Content-Type', 'text/plain; charset=utf-8')
+  @RequirePermission('fiscal.dirf.read')
+  @ApiOkResponse({ description: 'Download generated DIRF TXT content.' })
+  async txt(@Param('id') id: string) {
+    const result = await this.builder.find(id);
+    return result.txtContent;
+  }
+
+  @Post('gerar')
+  @RequirePermission('fiscal.dirf.write')
+  @ApiCreatedResponse({ description: 'Generate annual DIRF TXT.' })
+  async generate(
+    @Req() request: RequestWithContext,
+    @Body() body: GenerateDirfDto,
+  ) {
+    const result = await this.builder.generate(body);
+    await this.auditService.auditMutation(request, 'GENERATE', 'fiscal.dirf', {
+      resourceId: result.id,
+      tableName: 'fiscal.dirf_arquivo',
+      metadata: {
+        yearBase: result.yearBase,
+        kind: result.kind,
+        layoutVersion: result.layoutVersion,
+        txtHash: result.txtHash,
+        totalAmount: result.totalAmount,
+        totalIrrf: result.totalIrrf,
+      },
+    });
+    return result;
+  }
+}

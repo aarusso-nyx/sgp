@@ -29,6 +29,10 @@ Declarações `RETIFICADORA` devem preencher `original_declaration_id`. A regra 
 
 `fiscal.dctfweb_declaration` e `fiscal.dctfweb_item` usam RLS forçado por `tenant_id` com `sgp_tenant_matches(tenant_id)` e `sgp_has_any_permission(...)`. Toda mutação dispara trigger com `public.sgp_append_audit_event(...)`, e os controladores também registram evento de aplicação para geração, assinatura e transmissão.
 
+## Referência cruzada: DIRF
+
+A DIRF anual transicional esta documentada em `docs/eng/83-dirf.md`. Ela nao substitui a DCTFWeb: FISC-02 cobre apenas rendimentos de terceiros ainda nao integralmente cobertos pelo S-1210/eSocial, enquanto FISC-01 permanece baseado nos totalizadores S-5011/S-5012/S-5013 aceitos e na declaracao DCTFWeb por competencia.
+
 ## Referências oficiais
 
 - IN RFB 2.005/2021 — apresentação da DCTFWeb.

@@ -1,0 +1,105 @@
+<section class="dirf">
+  <header class="page-header">
+    <div>
+      <h1>DIRF</h1>
+      <p>Arquivo anual de rendimentos de terceiros em transição com eSocial.</p>
+    </div>
+  </header>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Ano-base</mat-label>
+      <input matInput type="number" formControlName="yearBase" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="kind">
+        <mat-option value="ORIGINAL">Original</mat-option>
+        <mat-option value="RETIFICADORA">Retificadora</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Arquivo original</mat-label>
+      <input matInput formControlName="originalArquivoId" />
+    </mat-form-field>
+
+    <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
+      <mat-icon>search</mat-icon>
+      Consultar
+    </button>
+
+    <button mat-flat-button color="primary" type="button" (click)="generate()" [disabled]="busy">
+      <mat-icon>add</mat-icon>
+      Gerar
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <div class="layout">
+    <section class="arquivos">
+      <table>
+        <thead>
+          <tr>
+            <th>Ano-base</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Beneficiários</th>
+            <th>Total</th>
+            <th>IRRF</th>
+            <th>TXT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of arquivos"
+            [class.selected]="selected?.id === item.id"
+            (click)="select(item)"
+          >
+            <td>{{ item.yearBase }}</td>
+            <td>{{ item.kind }}</td>
+            <td>
+              <span class="status">{{ item.status }}</span>
+            </td>
+            <td>{{ item.beneficiaryCount }}</td>
+            <td>{{ money(item.totalAmount) }}</td>
+            <td>{{ money(item.totalIrrf) }}</td>
+            <td>
+              <a mat-icon-button [href]="downloadUrl(item)" target="_blank" title="Baixar TXT">
+                <mat-icon>download</mat-icon>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <aside class="details" *ngIf="selected">
+      <h2>Integridade</h2>
+      <dl>
+        <div>
+          <dt>Arquivo</dt>
+          <dd>{{ selected.id }}</dd>
+        </div>
+        <div>
+          <dt>Leiaute</dt>
+          <dd>{{ selected.layoutVersion }}</dd>
+        </div>
+        <div>
+          <dt>Hash TXT</dt>
+          <dd>{{ selected.txtHash }}</dd>
+        </div>
+        <div>
+          <dt>Referência</dt>
+          <dd>{{ selected.txtRef }}</dd>
+        </div>
+        <div>
+          <dt>Original</dt>
+          <dd>{{ selected.originalArquivoId || '-' }}</dd>
+        </div>
+      </dl>
+    </aside>
+  </div>
+</section>

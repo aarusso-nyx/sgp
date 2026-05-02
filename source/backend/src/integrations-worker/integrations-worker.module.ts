@@ -10,6 +10,7 @@ import { PortabilityController } from './consignment-portability/portability.con
 import { PortabilityParserService } from './consignment-portability/portability-parser.service';
 import { PortabilityProcessService } from './consignment-portability/portability-process.service';
 import { DctfwebModule } from './dctfweb/dctfweb.module';
+import { DirfModule } from './dirf/dirf.module';
 import { IntegrationsWorkerService } from './integrations-worker.service';
 
 @Module({
@@ -18,6 +19,7 @@ import { IntegrationsWorkerService } from './integrations-worker.service';
     DatabaseModule,
     DocumentsModule,
     DctfwebModule,
+    DirfModule,
   ],
   controllers: [PortabilityController],
   providers: [
