@@ -1,1 +1,0 @@
-Implemented FISC-04 residual GPS for CLT INSS safety-net payments with GPS schema, late-charge and TXT serialization logic, backend controller/service/module wiring, fiscal UI, RLS coverage, focused GPS tests, and engineering documentation; the initial catalog-count failure was resolved in the integrated navigation update and the full defense gate passed.

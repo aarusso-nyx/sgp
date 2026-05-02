@@ -1,3 +1,0 @@
-Acceptance gate failed: `cd source && DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run test`.
-
-Diagnostic output: frontend admin tests failed in `src/app/core/navigation/admin-feature-catalog.spec.ts` at the catalog coverage assertion. The test expected `ADMIN_FEATURES.length` to be `190`, but the current catalog resolves to `192` after the active workspace route/catalog additions. The failing assertion was `expect(ADMIN_FEATURES.length).toBe(190);`; test summary: `1 failed | 34 passed`, `64 passed | 1 failed`. Earlier gates completed before this failure: `npm run lint` passed, `npm run typecheck` passed, focused GPS unit tests passed, focused GPS e2e test passed, and `grep -R "Math.round" source/backend/src/integrations-worker/gps` returned empty output.

@@ -1,1 +1,0 @@
-Implemented PONTO-04 shift patterns and duty rosters with backend CRUD/projection services, portal upcoming-roster exposure, admin scheduling UI, RLS tests, permissions, and db-smoke coverage; the slice gates passed after shared FISC/TCE migration drift was repaired in the integration workspace.

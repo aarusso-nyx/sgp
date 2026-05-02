@@ -1,1 +1,0 @@
-Implemented BANK-05 SIFGE/FGTS Caixa remittance support with GRF/GRRF schema, SIFGE adapter contract plus Caixa v4/mock adapters, backend service/controller/module wiring, Folha UI, FGTS policy documentation, RLS coverage, SIFGE unit tests, and GRRF e2e coverage; the zero-tier slice passed after integration fixes for concurrent TCE smoke and append-only HR history cleanup.

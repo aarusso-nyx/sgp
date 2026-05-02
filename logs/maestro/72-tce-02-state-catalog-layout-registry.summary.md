@@ -1,1 +1,0 @@
-Implemented TCE-02 state and layout catalog registry with seeded TCE/TCM/TCU catalog rows, catalog services/controllers, TCE module wiring, Angular catalog screen, RLS coverage, official nomenclature documentation, and live catalog verification; the initial frontend catalog-count failure was resolved in the integrated navigation update and all gates passed.
