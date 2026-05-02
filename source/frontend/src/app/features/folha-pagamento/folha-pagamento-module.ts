@@ -12,6 +12,7 @@ import { FolhaPagamentoRoutingModule } from './folha-pagamento-routing-module';
 import { FolhaMensal } from './competencia/folha-mensal';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
+import { RemessaBancaria } from './remessa/remessa-bancaria';
 import { Rubricas } from './rubricas/rubricas';
 import { SimulacaoFolha } from './simulacao/simulacao';
 import { MoneyBrPipe } from '../../shared/money-br.pipe';
@@ -23,6 +24,7 @@ import { MoneyBrPipe } from '../../shared/money-br.pipe';
     Rubricas,
     SimulacaoFolha,
     RescisaoFolha,
+    RemessaBancaria,
     MoneyBrPipe,
   ],
   imports: [

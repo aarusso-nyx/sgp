@@ -1177,6 +1177,7 @@ BEGIN
     'advance_request',
     'advance_payment',
     'payment_remittance_file',
+    'payment_remittance_detail',
     'blocked_payment'
   ]
   LOOP
@@ -1221,6 +1222,49 @@ BEGIN
           )
       $sql$,
       table_name || '_write',
+      table_name
+    );
+  END LOOP;
+END
+$$;
+
+DO $$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY[
+    'payment_remittance_file',
+    'payment_remittance_detail'
+  ]
+  LOOP
+    IF to_regclass(format('payroll.%I', table_name)) IS NULL THEN
+      CONTINUE;
+    END IF;
+
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', table_name || '_select', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', table_name || '_write', table_name);
+    EXECUTE format('DROP POLICY IF EXISTS %I ON payroll.%I', table_name || '_rw', table_name);
+    EXECUTE format(
+      $sql$
+        CREATE POLICY %I ON payroll.%I
+          USING (
+            public.sgp_bypass_rls()
+            OR (
+              public.sgp_tenant_matches(tenant_id)
+              AND public.sgp_has_any_permission(
+                ARRAY['payment.remittance.read', 'payment.remittance.write']
+              )
+            )
+          )
+          WITH CHECK (
+            public.sgp_bypass_rls()
+            OR (
+              public.sgp_tenant_matches(tenant_id)
+              AND public.sgp_has_any_permission(ARRAY['payment.remittance.write'])
+            )
+          )
+      $sql$,
+      table_name || '_rw',
       table_name
     );
   END LOOP;

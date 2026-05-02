@@ -6,6 +6,7 @@ import { buildModuleRouteGroup } from '../../core/navigation/module-route-groups
 import { FolhaMensal } from './competencia/folha-mensal';
 import { FolhaPagamentoHome } from './pages/folha-pagamento-home/folha-pagamento-home';
 import { RescisaoFolha } from './processamentos/rescisao/rescisao';
+import { RemessaBancaria } from './remessa/remessa-bancaria';
 import { Rubricas } from './rubricas/rubricas';
 import { SimulacaoFolha } from './simulacao/simulacao';
 
@@ -39,6 +40,16 @@ import { SimulacaoFolha } from './simulacao/simulacao';
         data: {
           moduleKey: 'folha',
           permissions: ['payroll.simulation.execute'],
+          moduleLabel: 'Folha de Pgt',
+        },
+      },
+      {
+        path: 'remessa-bancaria/gestao',
+        component: RemessaBancaria,
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['payment.remittance.read'],
           moduleLabel: 'Folha de Pgt',
         },
       },

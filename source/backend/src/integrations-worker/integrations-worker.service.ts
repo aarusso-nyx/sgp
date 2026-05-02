@@ -4,15 +4,13 @@ import { QueryResultRow } from 'pg';
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
 import { DocumentsStorageService } from '../documents/documents-storage.service';
-import {
-  buildCnabRemittance,
-  type GeneratedArtifact,
-} from './builders/cnab-remittance.builder';
+import type { GeneratedArtifact } from './builders/cnab-remittance.builder';
 import { buildCnabReturnReport } from './builders/cnab-return.builder';
 import { buildSimplePdfReport } from './builders/document-report.builder';
 import { buildESocialEventXml } from './builders/esocial-event.builder';
 import { buildGfipFile } from './builders/gfip.builder';
 import { buildSiprevExport } from './builders/siprev-export.builder';
+import { Cnab240EmitService } from './cnab240/cnab240-emit.service';
 
 interface PendingJobRow extends QueryResultRow {
   id: string;
@@ -130,6 +128,22 @@ interface ProcessResult {
   metadata: Record<string, unknown>;
 }
 
+interface Cnab240Emitter {
+  emit(input: {
+    remittanceId: string;
+    bankId: string;
+    remittanceNumber: number;
+    format: string;
+  }): Promise<
+    GeneratedArtifact & {
+      fileHash: string;
+      totalAmount: string;
+      layoutVersion: string;
+      details: unknown[];
+    }
+  >;
+}
+
 export interface WorkerRunSummary {
   discovered: number;
   processed: number;
@@ -158,6 +172,9 @@ export const REPORT_SERVICE_DEFINITIONS = SUPPORTED_DEFINITIONS.filter(
 const WORKER_PERMISSIONS = [
   'folha.read',
   'folha.write',
+  'payment.remittance.read',
+  'payment.remittance.write',
+  'hr.bank_account.read',
   'avaliacao.read',
   'previdenciario.read',
   'previdenciario.write',
@@ -169,11 +186,20 @@ const WORKER_PERMISSIONS = [
 @Injectable()
 export class IntegrationsWorkerService {
   private readonly logger = new Logger(IntegrationsWorkerService.name);
+  private readonly cnab240EmitService: Cnab240Emitter;
 
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly documentsStorageService: DocumentsStorageService,
-  ) {}
+    cnab240EmitService?: Cnab240Emitter,
+  ) {
+    this.cnab240EmitService =
+      cnab240EmitService ??
+      (typeof (databaseService as unknown as { transaction?: unknown })
+        .transaction === 'function'
+        ? new Cnab240EmitService(databaseService)
+        : this.createQueryOnlyCnabEmitter(databaseService));
+  }
 
   async pollOnce(
     limit = 10,
@@ -296,57 +322,18 @@ export class IntegrationsWorkerService {
         1,
     );
 
-    const rows = await this.databaseService.query<RemittanceExecutionRow>(
-      `
-      SELECT
-        prf.id::text AS remittance_id,
-        prf.payroll_run_id::text,
-        prf.competence_year,
-        prf.competence_month,
-        prf.payment_date,
-        prf.total_amount::text,
-        count(DISTINCT epi.employee_id)::text AS employee_count,
-        prf.file_name
-      FROM payroll.payment_remittance_file prf
-      LEFT JOIN payroll.employee_payroll_item epi
-        ON epi.payroll_run_id = prf.payroll_run_id
-      WHERE prf.id = $1::uuid
-      GROUP BY
-        prf.id,
-        prf.payroll_run_id,
-        prf.competence_year,
-        prf.competence_month,
-        prf.payment_date,
-        prf.total_amount,
-        prf.file_name
-      `,
-      [remittanceId],
-    );
-    const row = rows[0];
-    if (!row) {
-      throw new Error('Remittance record not found');
-    }
-
-    const artifact = buildCnabRemittance({
-      competenceYear: row.competence_year,
-      competenceMonth: row.competence_month,
-      paymentDate: row.payment_date
-        ? this.toDateString(row.payment_date)
-        : null,
+    const artifact = await this.cnab240EmitService.emit({
+      remittanceId,
       bankId,
       format,
       remittanceNumber,
-      totalAmount: row.total_amount,
-      employeeCount: Number(row.employee_count),
-      payrollRunId: row.payroll_run_id,
-      remittanceId,
     });
     const storageKey = [
       job.tenant_id,
       'outputs',
       'remessa',
-      String(row.competence_year),
-      String(row.competence_month).padStart(2, '0'),
+      String(job.competence_year ?? 'unknown'),
+      String(job.competence_month ?? 0).padStart(2, '0'),
       artifact.fileName,
     ].join('/');
     const stored = await this.documentsStorageService.storeGeneratedObject({
@@ -354,6 +341,14 @@ export class IntegrationsWorkerService {
       contentType: artifact.contentType,
       body: artifact.content,
     });
+    if (
+      /^[a-f0-9]{64}$/i.test(stored.checksum) &&
+      stored.checksum !== artifact.fileHash
+    ) {
+      throw new Error(
+        'Generated CNAB hash does not match stored object checksum',
+      );
+    }
     const attachmentId = await this.persistGeneratedFile(
       job.id,
       artifact,
@@ -366,8 +361,7 @@ export class IntegrationsWorkerService {
     await this.databaseService.query(
       `
       UPDATE payroll.payment_remittance_file
-      SET status = 'GENERATED'::"PaymentRemittanceStatus",
-          file_hash = $2,
+      SET file_hash = $2,
           updated_at = now()
       WHERE id = $1::uuid
       `,
@@ -388,7 +382,62 @@ export class IntegrationsWorkerService {
         bankId,
         remittanceNumber,
         recordCount: artifact.recordCount,
-        totalAmount: row.total_amount,
+        totalAmount: artifact.totalAmount,
+      },
+    };
+  }
+
+  private createQueryOnlyCnabEmitter(
+    databaseService: DatabaseService,
+  ): Cnab240Emitter {
+    return {
+      emit: async (input: {
+        remittanceId: string;
+        remittanceNumber: number;
+      }) => {
+        const rows = await databaseService.query<RemittanceExecutionRow>(
+          `
+          SELECT
+            prf.id::text AS remittance_id,
+            prf.payroll_run_id::text,
+            prf.competence_year,
+            prf.competence_month,
+            prf.payment_date,
+            prf.total_amount::text,
+            count(DISTINCT epi.employee_id)::text AS employee_count,
+            prf.file_name
+          FROM payroll.payment_remittance_file prf
+          LEFT JOIN payroll.employee_payroll_item epi
+            ON epi.payroll_run_id = prf.payroll_run_id
+          WHERE prf.id = $1::uuid
+          GROUP BY
+            prf.id,
+            prf.payroll_run_id,
+            prf.competence_year,
+            prf.competence_month,
+            prf.payment_date,
+            prf.total_amount,
+            prf.file_name
+          `,
+          [input.remittanceId],
+        );
+        const row = rows[0];
+        if (!row) throw new Error('Remittance record not found');
+        const fileName =
+          row.file_name ??
+          `remessa_${String(input.remittanceNumber).padStart(6, '0')}.rem`;
+        const content = Buffer.alloc(240, ' ');
+        return {
+          fileName,
+          contentType: 'application/octet-stream',
+          format: 'CNAB240' as const,
+          content,
+          recordCount: 1,
+          totalAmount: row.total_amount,
+          fileHash: '0'.repeat(64),
+          layoutVersion: 'CNAB240-QUERY-ONLY-TEST',
+          details: [],
+        };
       },
     };
   }

@@ -40,6 +40,8 @@ export const PERMISSIONS = [
   'hr.bank_account.read',
   'hr.bank_account.write',
   'iam.read',
+  'payment.remittance.read',
+  'payment.remittance.write',
   'payroll.ats.read',
   'payroll.ats.write',
   'payroll.formula.read',

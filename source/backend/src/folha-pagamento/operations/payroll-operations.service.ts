@@ -22,6 +22,7 @@ interface PayrollRunRow extends QueryResultRow {
   id: string;
   branch_id: string | null;
   processing_type_id: string;
+  status: string;
   competence_year: number;
   competence_month: number;
   total_net: string;
@@ -38,7 +39,13 @@ interface RemittanceRow extends QueryResultRow {
   competence_month: number;
   payment_date: Date | string | null;
   file_name: string | null;
+  file_hash: string | null;
+  bank_code: number | null;
+  layout_version: string | null;
+  record_count: number | null;
   total_amount: string;
+  generated_at: Date | string | null;
+  attachment_id: string | null;
   created_at: Date | string;
   updated_at: Date | string;
 }
@@ -56,7 +63,13 @@ export interface RemittanceSummary {
   competenceMonth: number;
   paymentDate: string | null;
   fileName: string | null;
+  fileHash: string | null;
+  bankCode: number | null;
+  layoutVersion: string | null;
+  recordCount: number | null;
   totalAmount: string;
+  generatedAt: string | null;
+  attachmentId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -119,7 +132,20 @@ export class PayrollOperationsService {
         competence_month,
         payment_date,
         file_name,
+        file_hash,
+        bank_code,
+        layout_version,
+        record_count,
         total_amount::text AS total_amount,
+        generated_at,
+        (
+          SELECT grf.attachment_id::text
+          FROM public.report_request request
+          JOIN public.generated_report_file grf ON grf.report_request_id = request.id
+          WHERE request.parameters->>'remittanceId' = payroll.payment_remittance_file.id::text
+          ORDER BY grf.created_at DESC
+          LIMIT 1
+        ) AS attachment_id,
         created_at,
         updated_at
       FROM payroll.payment_remittance_file
@@ -140,13 +166,80 @@ export class PayrollOperationsService {
     };
   }
 
+  async listRemittancesByCompetence(
+    competenceYear: number,
+    competenceMonth: number,
+    query: DomainListQueryDto,
+  ): Promise<PagedResponse<RemittanceSummary>> {
+    this.ensureDatabase();
+    const page = query.page ?? 1;
+    const pageSize = query.pageSize ?? 20;
+    const offset = (page - 1) * pageSize;
+
+    const count = await this.databaseService.query<CountRow>(
+      `
+      SELECT count(*)::text AS total
+      FROM payroll.payment_remittance_file
+      WHERE competence_year = $1
+        AND competence_month = $2
+      `,
+      [competenceYear, competenceMonth],
+    );
+
+    const rows = await this.databaseService.query<RemittanceRow>(
+      `
+      SELECT
+        id::text AS id,
+        status::text AS status,
+        competence_year,
+        competence_month,
+        payment_date,
+        file_name,
+        file_hash,
+        bank_code,
+        layout_version,
+        record_count,
+        total_amount::text AS total_amount,
+        generated_at,
+        (
+          SELECT grf.attachment_id::text
+          FROM public.report_request request
+          JOIN public.generated_report_file grf ON grf.report_request_id = request.id
+          WHERE request.parameters->>'remittanceId' = payroll.payment_remittance_file.id::text
+          ORDER BY grf.created_at DESC
+          LIMIT 1
+        ) AS attachment_id,
+        created_at,
+        updated_at
+      FROM payroll.payment_remittance_file
+      WHERE competence_year = $1
+        AND competence_month = $2
+      ORDER BY created_at DESC
+      LIMIT $3 OFFSET $4
+      `,
+      [competenceYear, competenceMonth, pageSize, offset],
+    );
+
+    const total = Number(count[0]?.total ?? 0);
+    return {
+      items: rows.map((row) => this.toRemittanceSummary(row)),
+      page,
+      pageSize,
+      total,
+      totalPages: total === 0 ? 0 : Math.ceil(total / pageSize),
+    };
+  }
+
   async requestRemittance(
     payrollRunId: string,
     input: CreateRemittanceRequestDto,
   ): Promise<OperationRequestSummary> {
     this.ensureDatabase();
     const run = await this.getPayrollRun(payrollRunId);
-    await this.ensureValidBankAccountsForRemittance();
+    if (run.status !== 'APPROVED') {
+      throw new NotFoundException('Approved payroll run not found');
+    }
+    await this.ensureValidBankAccountsForRemittance(input.bankId);
     const nextNumber = await this.getNextRemittanceNumber(run);
     const fileName = `remessa_${String(nextNumber).padStart(6, '0')}.txt`;
     const paymentDate =
@@ -406,6 +499,7 @@ export class PayrollOperationsService {
         id::text,
         branch_id::text,
         processing_type_id::text,
+        status::text,
         competence_year,
         competence_month,
         total_net::text
@@ -420,13 +514,30 @@ export class PayrollOperationsService {
     return rows[0];
   }
 
-  private async ensureValidBankAccountsForRemittance(): Promise<void> {
+  private async ensureValidBankAccountsForRemittance(
+    bankIdOrCode: string,
+  ): Promise<void> {
+    const isUuid =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        bankIdOrCode,
+      );
     const rows = await this.databaseService.query<CountRow>(
-      `
-      SELECT count(*)::text AS total
-      FROM hr.employee_bank_account
-      WHERE validation_status = 'VALID'::hr.employee_bank_account_validation_status
-      `,
+      isUuid
+        ? `
+          SELECT count(*)::text AS total
+          FROM hr.employee_bank_account account
+          JOIN hr.bank bank ON bank.id = account.bank_id
+          WHERE account.validation_status = 'VALID'::hr.employee_bank_account_validation_status
+            AND bank.id = $1::uuid
+          `
+        : `
+          SELECT count(*)::text AS total
+          FROM hr.employee_bank_account account
+          JOIN hr.bank bank ON bank.id = account.bank_id
+          WHERE account.validation_status = 'VALID'::hr.employee_bank_account_validation_status
+            AND bank.code = lpad(regexp_replace($1, '\\D', '', 'g'), 3, '0')
+          `,
+      [bankIdOrCode],
     );
     if (Number(rows[0]?.total ?? 0) === 0) {
       throw new NotFoundException(
@@ -526,7 +637,13 @@ export class PayrollOperationsService {
       competenceMonth: row.competence_month,
       paymentDate: row.payment_date ? this.toIso(row.payment_date) : null,
       fileName: row.file_name,
+      fileHash: row.file_hash,
+      bankCode: row.bank_code,
+      layoutVersion: row.layout_version,
+      recordCount: row.record_count,
       totalAmount: row.total_amount,
+      generatedAt: row.generated_at ? this.toIso(row.generated_at) : null,
+      attachmentId: row.attachment_id,
       createdAt: this.toIso(row.created_at),
       updatedAt: this.toIso(row.updated_at),
     };

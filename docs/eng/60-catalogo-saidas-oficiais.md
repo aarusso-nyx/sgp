@@ -222,15 +222,15 @@ s3://<bucket-tenant>/{dominio}/{ano}/{mes}/{tipo}/{uuid}.{ext}
 |---|---|
 | **Nome oficial** | Arquivo de Remessa Bancária |
 | **Nome informal** | CNAB remessa / arquivo de pagamento |
-| **Formato** | TXT (CNAB 240 ou CNAB 400 conforme banco) |
-| **Gatilho** | `[M]` após fechamento de folha |
-| **Dados de entrada** | `folha_pagamento_id[]`, `banco_id`, `tipo_lancamento` (crédito em conta \| DOC \| TED), `numero_remessa` |
-| **Template** | Builder TypeScript `CnabRemessaBuilder` em `sgp-integrations-worker`; layouts por banco em `src/layouts/cnab/{banco_id}/` |
-| **Variáveis expostas** | Header de arquivo, header de lote, registros de detalhe (nome, CPF, agência, conta, valor líquido), trailer de lote, trailer de arquivo |
+| **Formato** | Binário posicional CNAB 240, registros de 240 bytes sem quebra de linha |
+| **Gatilho** | `[M]` após aprovação/fechamento de folha |
+| **Dados de entrada** | `payroll_run_id`, `bank_id`/código bancário, `payment_date`, `numero_remessa` |
+| **Template** | `Cnab240BuilderService` em `source/backend/src/integrations-worker/cnab240/`; estratégias por banco em `cnab240/banks/` |
+| **Variáveis expostas** | Header de arquivo, header de lote, segmentos A/B por servidor, trailer de lote com soma/contagem, trailer de arquivo |
 | **Base legal** | Padrão FEBRABAN CNAB 240/400; convênio banco–órgão |
 | **Assinatura digital** | — (autenticação via credencial SFTP/portal banco) |
-| **Armazenamento S3** | `bancario/{ano}/{mes}/remessa/{uuid}.txt`; retenção 10 anos; Object Lock |
-| **Evidência de paridade** | Comparar: número de registros, soma de valores, layout posicional por banco (campo a campo nos 10 primeiros e 10 últimos registros), número sequencial de remessa |
+| **Armazenamento S3** | `{tenant}/outputs/remessa/{ano}/{mes}/remessa_{banco}_{sequencial}.rem`; retenção 10 anos; Object Lock |
+| **Evidência de paridade** | `record_count`, `total_amount`, `file_hash` SHA-256 e linhas por servidor em `payroll.payment_remittance_detail` |
 
 ---
 

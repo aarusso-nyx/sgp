@@ -138,6 +138,7 @@ enum PaymentRemittanceStatus {
   DRAFT
   GENERATED
   SENT
+  RETURNED
   PAID
   REJECTED
   CANCELED
@@ -1400,6 +1401,7 @@ model Employee {
   contracts                    EmploymentContract[]
   salaryHistory                SalaryLevelHistory[]
   payrollItems                 EmployeePayrollItem[]
+  paymentRemittanceDetails     PaymentRemittanceDetail[]
   financialRecords             PayrollFinancialRecord[]
   advanceRequests              AdvanceRequest[]
   advancePayments              AdvancePayment[]
@@ -2578,7 +2580,12 @@ model PaymentRemittanceFile {
   paymentDate      DateTime?               @map("payment_date") @db.Date
   fileName         String?                 @map("file_name")
   fileHash         String?                 @map("file_hash")
-  totalAmount      Decimal                 @default(0) @map("total_amount") @db.Decimal(16, 2)
+  bankCode         Int?                    @map("bank_code") @db.SmallInt
+  layoutVersion    String?                 @map("layout_version")
+  recordCount      Int?                    @map("record_count")
+  totalAmount      Decimal                 @default(0) @map("total_amount") @db.Decimal(14, 2)
+  generatedAt      DateTime?               @map("generated_at") @db.Timestamptz(6)
+  generatedBy      String?                 @map("generated_by") @db.Uuid
   createdAt        DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -2587,14 +2594,38 @@ model PaymentRemittanceFile {
   processingType ProcessingType? @relation(fields: [processingTypeId], references: [id])
   reason         Reason?         @relation(fields: [reasonId], references: [id])
   createdBy      UserAccount?    @relation("RemittanceCreatedBy", fields: [createdByUserId], references: [id])
+  details        PaymentRemittanceDetail[]
 
   @@index([competenceYear, competenceMonth])
+  @@index([tenantId, bankCode, competenceYear, competenceMonth])
   @@index([status])
   @@index([branchId])
   @@index([payrollRunId])
   @@index([processingTypeId])
   @@index([reasonId])
   @@map("payment_remittance_file")
+  @@schema("payroll")
+}
+
+model PaymentRemittanceDetail {
+  id             String                @id @default(uuid()) @db.Uuid
+  tenantId       String                @map("tenant_id") @db.Uuid
+  fileId         String                @map("file_id") @db.Uuid
+  sequence       Int
+  employeeId     String                @map("employee_id") @db.Uuid
+  amount         Decimal               @db.Decimal(14, 2)
+  bankCode       Int                   @map("bank_code") @db.SmallInt
+  branch         String
+  account        String
+  occurrenceCode String?               @map("occurrence_code")
+  createdAt      DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  file     PaymentRemittanceFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  employee Employee               @relation(fields: [employeeId], references: [id])
+
+  @@unique([tenantId, fileId, sequence])
+  @@index([tenantId, employeeId, createdAt])
+  @@map("payment_remittance_detail")
   @@schema("payroll")
 }
 

@@ -1,0 +1,72 @@
+.remittance-page {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+mat-form-field {
+  width: 160px;
+}
+
+.wide {
+  width: min(460px, 100%);
+}
+
+.error {
+  color: #b42318;
+  margin: 0;
+}
+
+.info {
+  color: #166534;
+  margin: 0;
+}
+
+.table-wrap {
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid #d7dde5;
+  padding: 10px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #425466;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.hash {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  max-width: 320px;
+  overflow-wrap: anywhere;
+}
+
+.empty {
+  color: #667085;
+  text-align: center;
+}

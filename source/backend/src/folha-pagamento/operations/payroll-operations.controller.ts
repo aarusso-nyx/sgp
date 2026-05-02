@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -26,8 +35,25 @@ export class PayrollOperationsController {
     private readonly auditService: AuditService,
   ) {}
 
+  @Get('remessa')
+  @RequirePermission('payment.remittance.read')
+  @ApiOkResponse({
+    description: 'List remittance files by competence.',
+  })
+  listRemittancesByCompetence(
+    @Query('year', ParseIntPipe) year: number,
+    @Query('month', ParseIntPipe) month: number,
+    @Query() query: DomainListQueryDto,
+  ) {
+    return this.payrollOperationsService.listRemittancesByCompetence(
+      year,
+      month,
+      query,
+    );
+  }
+
   @Get(':id/remessa')
-  @RequirePermission('folha.read')
+  @RequirePermission('payment.remittance.read')
   @ApiOkResponse({
     description: 'List remittance requests for one payroll run.',
   })
@@ -39,7 +65,7 @@ export class PayrollOperationsController {
   }
 
   @Post(':id/remessa')
-  @RequirePermission('folha.write')
+  @RequirePermission('payment.remittance.write')
   @ApiCreatedResponse({
     description: 'Queue a CNAB remittance generation request.',
   })

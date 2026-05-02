@@ -164,6 +164,22 @@
       "description": "Create and revalidate employee bank accounts for payroll credit."
     },
     {
+      "key": "payment.remittance.read",
+      "moduleKey": "payment",
+      "resourceKey": "remittance",
+      "actionKey": "read",
+      "routePattern": "#!/folha/remessa-bancaria/**",
+      "description": "Read generated payroll CNAB remittance files and details."
+    },
+    {
+      "key": "payment.remittance.write",
+      "moduleKey": "payment",
+      "resourceKey": "remittance",
+      "actionKey": "write",
+      "routePattern": "#!/folha/remessa-bancaria/**",
+      "description": "Generate payroll CNAB remittance files."
+    },
+    {
       "key": "rh.employment_link.write",
       "moduleKey": "rh",
       "resourceKey": "employment_link",
