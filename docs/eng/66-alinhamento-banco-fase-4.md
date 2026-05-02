@@ -13,9 +13,11 @@ Endurecer o gate automatizado para refletir o contrato multi-tenant real do SGP 
 2. Cobertura de tenant/RLS verificada em artefatos runtime:
    - migration `20260425090000_tenant_rls_hardening`
    - migration `20260425113000_tenant_scope_completion`
-   - `database/sql/11-rls-context.sql`
-   - `database/sql/12-rls-policies.sql`
-   - `database/sql/20-sgp-core.sql`
+   - DDL canônico por schema em `database/sql/10-NN-*-ddl.sql`
+   - funções e helpers em `database/sql/40-*-functions.sql`
+   - DDL tardio, views, materialized views, índices, triggers, FKs e RLS em
+     `database/sql/70-*-final.sql`
+   - grants runtime em `database/sql/90-runtime-grants.sql`
 3. Script exposto no workspace:
    - `npm run db:alignment:check`
 4. Check local disponivel em `npm run evidence:check` no workspace raiz.

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { hardFailGateCommands } from './lib/workspace-commands.mjs';
@@ -155,6 +155,52 @@ function validateCanonicalRootScripts() {
   }
 }
 
+function listMarkdownFiles(relativeDir) {
+  const absoluteDir = resolve(repoRoot, relativeDir);
+  return readdirSync(absoluteDir, { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = `${relativeDir}/${entry.name}`;
+    if (entry.isDirectory()) {
+      return listMarkdownFiles(relativePath);
+    }
+    return entry.name.endsWith('.md') ? [relativePath] : [];
+  });
+}
+
+function validateLiveDocPaths() {
+  const liveDocFiles = ['docs/eng', 'docs/gov', 'docs/user'].flatMap(listMarkdownFiles);
+  const pathPattern =
+    /`((?:backend|frontend|database|scripts|docs|infra|\.github|tests|package\.json|devai\.config\.json|GOVERNANCE\.md)[^`\s]*)`/g;
+  const missing = [];
+
+  for (const file of liveDocFiles) {
+    const content = readFileSync(resolve(repoRoot, file), 'utf8');
+    for (const match of content.matchAll(pathPattern)) {
+      const referencedPath = match[1].replace(/[.,;:)]+$/, '');
+      if (
+        referencedPath.includes('*') ||
+        referencedPath.includes('${') ||
+        referencedPath.includes('<') ||
+        referencedPath.includes('>') ||
+        referencedPath.includes('://') ||
+        referencedPath.startsWith('docs/work') ||
+        referencedPath.startsWith('docs/leg')
+      ) {
+        continue;
+      }
+
+      if (!pathExists(referencedPath)) {
+        missing.push(`${file} -> ${referencedPath}`);
+      }
+    }
+  }
+
+  record(
+    'docs:live-backtick-paths',
+    missing.length === 0,
+    missing.length === 0 ? `${liveDocFiles.length} files` : missing.join('; '),
+  );
+}
+
 function main() {
   validatePackagePins();
   validateSingleLockfile();
@@ -162,6 +208,7 @@ function main() {
   validateReverseSuccession();
   validateDevaiConfig();
   validateCanonicalRootScripts();
+  validateLiveDocPaths();
 
   const failures = checks.filter((check) => !check.ok);
   for (const check of checks) {

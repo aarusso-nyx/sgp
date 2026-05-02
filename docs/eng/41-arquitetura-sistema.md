@@ -1,6 +1,6 @@
 # Arquitetura do Sistema — SGP
 
-**Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
+**Versão:** 1.1 | **Data:** 2026-05-02 | **Status:** Current
 **Escopo:** Arquitetura Geral (todos os bounded contexts) | **Depende de:** BRIEF.md
 
 ---
@@ -29,7 +29,7 @@
 
 O SGP — Sistema de Gestão de Pessoas é uma plataforma **SaaS multi-tenant** projetada para a administração pública brasileira. Substitui um legado Java/Spring + AngularJS com paridade funcional completa em 11 módulos de primeiro nível, abrangendo gestão de pessoas, folha de pagamento, previdência, saúde ocupacional, recrutamento e obrigações fiscais.
 
-O backend é implementado em **NestJS (TypeScript)** com aplicações separadas: API administrativa principal (`sgp-core-api`), API própria do portal (`sgp-portal-api`), implementação separada do cálculo de folha (`sgp-payroll-engine`) e workers especializados para eSocial, integrações bancárias e relatórios. O frontend é composto por duas SPAs distintas: `sgp-admin` (staff) e `sgp-portal-ui` (employee/beneficiário/candidato).
+O backend é implementado em **NestJS (TypeScript)** com aplicações separadas: API administrativa principal (`sgp-core-api`), API própria do portal (`sgp-portal-api`), implementação separada do cálculo de folha (`sgp-payroll-engine`) e workers especializados para eSocial, integrações bancárias e relatórios. O frontend é composto por duas SPAs distintas: `sgp-admin` (staff) e `sgp-portal` (employee/beneficiário/candidato).
 
 O isolamento entre clientes é implementado via **Row-Level Security (RLS)** no PostgreSQL, com `tenant_id` presente em todas as tabelas de negócio. A autenticação definitiva usa **OAuth2/OIDC** com user pools separados para core e portal, mas as rotas e telas OAuth/Cognito/Gov.br foram movidas para instalação posterior conforme decisão temporária de 2026-04-26. Processos de longa duração — principalmente cálculo em lote da folha — são executados fora do backend REST, com agendamento, requisição sob demanda e acompanhamento de progresso via canais assíncronos. A estratégia definitiva de infraestrutura (`./infra`) e pipeline será escolhida depois entre CloudFormation, Terraform, AWS SDK e scripts AWS CLI antes de release produtiva.
 
@@ -65,7 +65,7 @@ Documentos oficiais — contracheques (PDF), remessas CNAB, arquivos eSocial (XM
 
 ### 2.6 Zero-Trust entre Serviços
 
-Comunicação inter-serviço (API → payroll-engine, API → workers, workers → API) utiliza **mTLS** ou **IAM Roles** para autenticação mútua, sem segredos estáticos em variáveis de ambiente. Segredos de aplicação (strings de conexão, certificados eSocial, chaves de API externas) residem exclusivamente no **AWS Secrets Manager** e são recuperados em runtime. ECS Tasks recebem permissões mínimas via IAM task roles (princípio do menor privilégio).
+Comunicação inter-serviço produtiva (API → payroll-engine, API → workers, workers → API) deve usar **mTLS** ou **IAM Roles** para autenticação mútua, sem segredos estáticos em variáveis de ambiente. No pacote local atual, os gates verificam topology, health, tenant context, RLS e comandos de workspace; a integração final com Secrets Manager/IAM task roles fica associada à decisão de release/infra. Segredos reais não devem ser versionados; exemplos locais usam placeholders e `*.env.example`.
 
 ### 2.7 Observabilidade First-Class
 
@@ -77,7 +77,7 @@ Observabilidade produtiva continua objetivo arquitetural: cada serviço deve emi
 
 ### 2.9 Portal Isolado do Core
 
-`SGP-PORTAL` é composto por frontend e backend próprios (`sgp-portal-ui` e `sgp-portal-api`), sem compartilhamento de runtime com `SGP-CORE`. O backend do portal acessa apenas objetos read-only do banco e opera com menor privilégio possível. O domínio de identidade do portal é separado do domínio de identidade do core.
+`SGP-PORTAL` é composto por frontend e backend próprios (`sgp-portal` e `sgp-portal-api`), sem compartilhamento de runtime com `SGP-CORE`. O backend do portal acessa apenas objetos read-only do banco e opera com menor privilégio possível. O domínio de identidade do portal é separado do domínio de identidade do core.
 
 ### 2.10 Framework Corporativo Externo para Auth/Authz e Storage
 
@@ -293,7 +293,7 @@ flowchart TB
 | Container                   | Tecnologia                                              | Responsabilidade                                                                                                                                                                              |
 | --------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **sgp-admin**               | Angular SPA (última LTS), hosted em S3/CloudFront       | Interface administrativa completa para os 11 módulos de 1º nível. Lazy loading por bounded context. Comunica-se exclusivamente com `sgp-core-api` via `/api/v1/...`                           |
-| **sgp-portal-ui**           | Angular SPA (última LTS), hosted em S3/CloudFront       | Interface de autoatendimento para employee/beneficiário/candidato. Comunica-se somente com `sgp-portal-api`.                                                                                  |
+| **sgp-portal**              | Angular SPA (última LTS), hosted em S3/CloudFront       | Interface de autoatendimento para employee/beneficiário/candidato. Comunica-se somente com `sgp-portal-api`.                                                                                  |
 | **API Gateway AWS**         | AWS API Gateway (HTTP API)                              | Ponto de entrada único para todas as chamadas REST. Responsável por rate-limiting, validação de JWT (Cognito Authorizer), roteamento para `sgp-core-api`, throttling por tenant.              |
 | **sgp-core-api**            | NestJS 10+ / TypeScript, ECS Fargate                    | API REST administrativa com os bounded contexts do core. Expõe `/api/v1/...`, `/api/external/v1/...` e `/api/admin/v1/...`.                                                                   |
 | **sgp-portal-api**          | NestJS 10+ / TypeScript, ECS Fargate                    | Backend exclusivo do portal, com credenciais de banco read-only e escopo de autoatendimento. Expõe `/api/portal/v1/...`.                                                                      |
@@ -1985,13 +1985,13 @@ Os itens a seguir foram decididos formalmente e não estão mais em aberto. Cada
 
 Cada decisão pendente tem impacto direto em artefatos de documentação e código ainda não finalizados:
 
-| Decisão                  | Artefatos bloqueados                                                  | Decisão necessária até             |
-| ------------------------ | --------------------------------------------------------------------- | ---------------------------------- |
-| ORM (Prisma vs TypeORM)  | DDL físico, módulo `infrastructure/database`, convenção de migrations | Sprint 1 de implementação          |
-| State Management Angular | Arquitetura de módulo frontend, lib `@sgp/shared-state`               | Sprint 1 de implementação frontend |
-| ECS Fargate vs EKS       | `infra/modules/ecs/` vs `infra/modules/eks/`; pipeline de deploy      | Sprint 0 de infra                  |
-| Gov.br SSO               | `AuthModule`, fluxo de federação Cognito, testes de integração        | Aprovação Gov.br (externo)         |
-| Prisma Migrate vs Flyway | Pipeline CI migration step, naming conventions, rollback scripts      | Sprint 0 de infra                  |
+| Decisão                        | Artefatos bloqueados ou impactados                                               | Estado atual                                                        |
+| ------------------------------ | -------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| ORM/runtime database ownership | `backend/prisma/schema.prisma`, `database/sql`, `scripts/check-db-alignment.mjs` | PostgreSQL canônico em `database/sql`; Prisma para client/metadados |
+| State Management Angular       | Arquitetura de módulo frontend e componentes compartilhados                      | Angular local sem lib `@sgp/shared-state` dedicada                  |
+| Estratégia final de infra      | `infra/aws/templates`, pipeline de deploy, segregação por ambiente               | AWS templates locais e deploy dry-run; produção postergada          |
+| Gov.br SSO                     | Fluxo de federação Cognito/Gov.br e testes de integração                         | `IDENTITY_INSTALL_LATER`                                            |
+| Estratégia final de migrations | Bootstrap, rollback e release DB                                                 | SQL canônico em `database/sql`; gates locais ativos                 |
 
 ### 15.2 Roadmap Técnico Resumido
 

@@ -71,34 +71,21 @@ graph TD
 
 #### Configuração Jest
 
-```jsonc
-// jest.config.base.ts
-{
-  "preset": "ts-jest",
-  "testEnvironment": "node",
-  "collectCoverageFrom": [
-    "src/**/*.ts",
-    "!src/**/*.spec.ts",
-    "!src/main*.ts",
-    "!src/**/*.controller.ts",
-    "!src/**/*.dto.ts",
-    "!src/**/*.module.ts",
-    "!src/config/environment.ts",
-    "!src/common/pagination/paged-response.ts",
-    "!src/common/errors/standard-exception.filter.ts",
-  ],
-  "coverageThreshold": {
-    "global": { "lines": 85, "branches": 85, "functions": 85 },
-  },
-  "coverageReporters": ["lcov", "text-summary", "cobertura"],
-}
-```
+Os contratos Jest do backend ficam fora de `backend/package.json` para evitar
+drift de threshold ou transform:
+
+- `tests/backend/jest-unit.json`: specs unitários em `backend/src/**/*.spec.ts`.
+- `tests/backend/jest-e2e.json`: specs e2e em `tests/backend/*.e2e-spec.ts`.
+- `tests/backend/jest-coverage.json`: cobertura canônica com `coverageProvider`
+  `v8`, specs unitários e e2e cobertos, `coverageThreshold.global` de 85 %
+  para `lines`, `branches` e `functions`, e reporters `lcov`,
+  `text-summary` e `cobertura`.
 
 No pacote backend, `npm run test:backend` permanece restrito aos specs unitários em `src/**/*.spec.ts`. O gate canônico de cobertura do workspace é `npm run test:coverage`; ele delega para o `test:cov` do backend, executa os specs unitários e e2e cobertos, aplica limiares globais de 85 % para linhas, branches e funções, e coleta cobertura de runtime em `src/**/*.ts`. DTOs, controllers, modules, bootstrap/config e artefatos de metadados Nest/Swagger ficam fora do gate global de branches porque são verificados por contrato/e2e e geram branches instrumentados sem decisão de negócio.
 
 O enforcement corrente é orquestrado pelo `scripts/run.mjs` a partir da raiz do workspace. O script backend `test:cov` executa Jest, inclui specs unitários e e2e cobertos, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer corte por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
 
-O gate agregado corrente é `npm run evidence:check` no workspace root. Ele executa alinhamento de rotas, alinhamento de banco, health JSON, geração do cliente OpenAPI, build, lint, testes Angular admin/portal, testes unitários backend, e2e backend, smoke DB, cobertura backend e smoke QA. Os passos `backend-e2e`, `db-smoke` e `backend-coverage` exigem `DATABASE_URL`. O smoke QA exige URLs vivos e falha como evidência bloqueada quando as variáveis de base URL não estão configuradas. A ordem e os requisitos do gate vivem no registro compartilhado em `scripts/lib/`.
+O gate agregado corrente é `npm run evidence:check` no workspace root. Ele executa alinhamento de rotas, alinhamento de banco, health JSON, geração do cliente OpenAPI, build, lint, testes Angular admin/portal, testes unitários backend, e2e backend, smoke DB, cobertura backend e smoke QA. Os passos nomeados backend-e2e, db-smoke e backend-coverage exigem `DATABASE_URL`. O smoke QA exige URLs vivos e falha como evidência bloqueada quando as variáveis de base URL não estão configuradas. A ordem e os requisitos do gate vivem no registro compartilhado em `scripts/lib/`.
 
 #### O que testar unitariamente
 

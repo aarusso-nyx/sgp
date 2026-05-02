@@ -18,8 +18,8 @@ Sem camadas de compatibilidade (`shim`, `dual-write`, `schema legado`).
 4. Projeções do portal convertidas para materialized views em `portal`:
    - `portal.mv_employee_directory`
    - `portal.mv_payroll_run_summary`
-5. Script transitório removido:
-   - `database/sql/60-legacy-operational-tables.sql`
+5. Script transitório de tabelas operacionais legadas removido; o bootstrap
+   atual é composto apenas pelos arquivos canônicos em `database/sql`.
 
 ## SQL Canônico
 

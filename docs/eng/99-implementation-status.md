@@ -1,10 +1,11 @@
 # Implementation Status
 
 This document tracks the current implementation state for SGP v0.0.1 after the stale
-`docs/leg/audit/diag` and `docs/leg/audit/inv` evidence snapshots were removed.
+audit snapshot workflow was replaced by live command evidence.
 
-Last reassessed: 2026-04-26 by running the final reassessment gates from
-`docs/leg/audit/plan/05-final-reassessment.prompt.md`.
+Last reassessed: 2026-05-02 against the root npm workspace, current
+`docs/eng`, `docs/gov`, `docs/user`, backend, frontend, database, scripts, and
+GitHub Actions surfaces.
 
 ## Current Scope
 
@@ -39,47 +40,45 @@ The current implementation covers:
 
 ## Current Verification
 
-The current status is based on these gates:
+The current status is based on these live gates:
 
-- `npm run qa:bootstrap -- --evidence`
-  - OK.
-  - Ran with `DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test`.
-  - Started local API, admin frontend, and portal frontend for live QA smoke.
-  - Completed all evidence steps: route sync/check, DB alignment, health, lint,
-    OpenAPI client generation, full build, frontend tests, backend tests, DB
-    smoke, backend coverage, URL validation, and live QA smoke.
 - `npm run api:alignment:check -- --json`
   - OK.
-  - `153` current documented routes.
+  - `448` current documented runtime routes.
   - `0` documented missing routes.
   - `0` runtime-only routes.
   - `11/11` current SGP domain modules covered.
-  - Portal menu alignment green.
-  - Admin menu parity postponed under `ADMIN_INSTALL_LATER`.
+  - Portal menu alignment covers `31` implemented routes and `3` postponed
+    identity routes.
+  - Admin menu parity remains postponed under `ADMIN_INSTALL_LATER`.
 - `npm run db:alignment:check -- --json`
   - OK.
   - `full_closure` covers `150` in-scope objects.
   - `0` deferred full-closure objects.
   - `0` in-scope explicit exclusions.
-  - Tenant session, RLS helper, RLS policy, and portal projection checks green.
+  - Tenant session, RLS helper, RLS policy, tenant-scoped table declarations,
+    and portal projection checks are green.
 - `npm run health:json`
   - OK.
   - All declared runtimes are present and healthy.
-- `npm --workspace frontend run build:portal`
+- `npm run governance:check`
   - OK.
-- `npm run test:portal`
-  - OK: `2` files and `3` tests passed.
-- `npm --workspace backend run test:e2e -- --runInBand`
-  - OK: `1` suite and `18` tests passed.
-- `npm run db:smoke`
+  - Root script authority, runtime pins, governance manifest paths, devai hard
+    fail gates, and reverse-evidence succession are green.
+- `npm run lint:check`
   - OK.
-- `npm --workspace backend run test:cov -- --runInBand`
-  - OK: `60` suites and `201` tests passed.
-  - Coverage: statements `94.91%`, branches `85.09%`, functions `97.21%`,
-    lines `95.56%`.
-- Live QA smoke
-  - OK: backend API/auth/domain smoke passed `10` tests.
-  - OK: admin/portal frontend smoke passed `4` tests.
+- `npm run format:check`
+  - OK.
+- `npm run typecheck`
+  - OK.
+- `npm run test:coverage`
+  - OK: `289` suites and `2515` tests passed.
+  - Coverage: statements `95.46%`, branches `85.56%`, functions `98.97%`,
+    lines `95.46%`.
+
+DB-backed local tests use
+`DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test` when they need a real
+PostgreSQL database.
 
 ## Final Reassessment
 
@@ -87,16 +86,14 @@ The current status is based on these gates:
 
 - Database full closure is green for current scope: `150` full-closure objects,
   `0` deferred objects, and `0` in-scope explicit exclusions.
-- Route alignment is green for current scope: `153` documented runtime routes,
+- Route alignment is green for current scope: `448` documented runtime routes,
   `0` documented missing routes, and `0` runtime-only routes.
 - Domain/workflow/menu parity is green for current non-deferred scope:
   `11/11` current domain modules covered, portal menu alignment green, and
   admin menu parity explicitly postponed.
 - Runtime topology is green: all declared runtimes report implemented/healthy.
-- Portal build and portal tests are green.
-- Backend e2e, DB smoke, and backend coverage gates are green.
-- QA smoke is real evidence: required base URLs were bootstrapped locally and
-  live backend/frontend smoke tests passed.
+- Backend coverage, lint, format, typecheck, API alignment, DB alignment,
+  runtime health, and governance gates are green.
 - Reverse evidence coverage is no longer `not_covered` for the 2026-04-26
   artifact wave; raw formula CSVs and dump inventories remain partial evidence
   with canonical targets in `docs/eng`.
@@ -124,7 +121,7 @@ not current implementation blockers:
 - Arrecadacao Previdenciaria.
 - Real eSocial external transmission, production certificates, and homologation.
 - Final `infra` strategy choice.
-- Release/homologation gates such as Pact/scanners and production observability
+- Release/homologation gates such as Pact, scanners, and production observability
   enforcement.
 
 ## Remaining Open Work
@@ -142,8 +139,8 @@ Open work is limited to deferred product/operations decisions:
 
 ## Notes
 
-- `docs/leg/audit/diag` and `docs/leg/audit/inv` were removed because they were stale
-  derived evidence snapshots. Current verification should be produced from live
-  commands instead of relying on those archived artifacts.
+- Old audit-derived evidence snapshots were removed because they were stale.
+  Current verification should be produced from live commands instead of relying
+  on archived artifacts.
 - `docs/eng` remains the authoritative source for SGP v0.0.1 scope and
   acceptance.

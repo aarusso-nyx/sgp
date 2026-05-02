@@ -1,6 +1,6 @@
 # Divisão Modular — SGP
 
-**Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
+**Versão:** 1.1 | **Data:** 2026-05-02 | **Status:** Current
 **Escopo:** Todos os bounded contexts | **Depende de:** BRIEF.md
 
 ---
@@ -65,56 +65,65 @@ Os bounded contexts identificados são:
 Cada bounded context é implementado como um **NestJS Module** (`@Module()`). A convenção é:
 
 ```
-src/modules/<contexto>/
+backend/src/<contexto>/
 ├── <contexto>.module.ts
-├── controllers/
-│   └── <recurso>.controller.ts
-├── services/
-│   └── <recurso>.service.ts
-├── repositories/
-│   └── <recurso>.repository.ts
-├── dto/
-│   ├── create-<recurso>.dto.ts
-│   ├── update-<recurso>.dto.ts
-│   └── <recurso>.response.dto.ts
-├── entities/
-│   └── <recurso>.entity.ts
-└── events/
-    ├── <evento>.event.ts
-    └── <evento>.handler.ts
+├── <recurso>.controller.ts
+├── <recurso>.service.ts
+├── <contexto>.dto.ts
+└── <subdominio>/
+    ├── <subdominio>.controller.ts
+    ├── <subdominio>.service.ts
+    └── <subdominio>.dto.ts
 ```
 
 Os módulos NestJS **não importam diretamente** módulos de outros contextos de negócio. A comunicação ocorre:
 
-- Via injeção do `EventEmitter2` para publicar eventos de domínio internos.
-- Via publicação em tópicos SNS/EventBridge para eventos que cruzam fronteiras de deployment.
-- Via HTTP interno (chamadas REST entre `sgp-core-api` e `sgp-payroll-engine`).
+- Via serviços de aplicação explicitamente injetados quando o contrato pertence
+  ao mesmo runtime.
+- Via tabelas de fila/outbox e workers quando o contrato cruza fronteiras
+  assíncronas ou de deployment.
+- Via HTTP interno ou comandos de worker quando o contrato cruza runtimes como
+  `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`,
+  `sgp-esocial-worker`, `sgp-integrations-worker` e `sgp-report-service`.
 
-### 1.3 Monorepo Nx
+### 1.3 Monorepo npm Workspace
 
-O repositório usa **Nx** como ferramenta de monorepo. As decisões estruturais são:
+O repositório usa npm workspaces no root, com `frontend` e `backend` como
+workspaces ativos. As decisões estruturais atuais são:
 
-- **`nx affected`** determina quais apps/libs precisam ser recompiladas, testadas e deployadas em cada push.
-- **`nx graph`** gera o grafo de dependências e é parte obrigatória da revisão de PRs que cruzam fronteiras de contexto.
-- **Executors nx** padronizam build, test, lint e serve para TypeScript/Angular.
-- **Tags nx** classificam projetos: `type:app`, `type:lib`, `scope:<contexto>`. Regras em `.eslintrc` impedem libs de `scope:folha` importando diretamente libs de `scope:rh` (comunicação deve passar por contratos ou eventos).
+- O root `package.json` expõe somente comandos canônicos.
+- `scripts/run.mjs` é o ponto único de orquestração para build, start, lint,
+  format, typecheck, testes, banco, evidence, governance, health e deploy.
+- `scripts/lib/workspace-commands.mjs` mantém descrições, alvos de formatação,
+  sequência de evidence, variáveis obrigatórias e comandos hard-fail.
+- `tests/backend/jest-unit.json`, `tests/backend/jest-e2e.json` e
+  `tests/backend/jest-coverage.json` são os contratos Jest do backend; o
+  `backend/package.json` apenas referencia esses arquivos.
+- `docs/gov/runtime-topology.json` é o inventário canônico dos runtimes
+  implementados.
 
-### 1.4 Shared Kernel
+### 1.4 Código Compartilhado
 
-O `shared-kernel` é uma biblioteca nx de tipo `type:lib, scope:shared`. Contém **exclusivamente**:
+O SGP v0.0.1 não possui uma biblioteca Nx `shared-kernel`. O código
+compartilhado vive em superfícies explícitas:
 
-- Tipos TypeScript e interfaces de contratos entre contextos.
-- Enums e constantes de domínio (`VinculoTipo`, `SituacaoFuncional`, `TipoProcessamento`, etc.).
-- Classes de erro padronizadas (`SgpError`, `SgpValidationError`, `SgpNotFoundError`).
-- Utilitários genéricos sem lógica de negócio (formatação de CPF, datas, CNPJ).
-- Tipos de evento de domínio (interfaces `DomainEvent<T>`).
+- `backend/src/common`: erros, paginação, dinheiro, request context e
+  utilitários transversais do backend.
+- `frontend/src/app/shared` e `frontend/src/app/shared-platform`: componentes e
+  helpers de UI reutilizáveis.
+- `frontend/src/app/core/api/generated/openapi-client.ts`: cliente gerado a
+  partir do OpenAPI runtime.
+- `database/sql` e `database/seed`: contrato de bootstrap PostgreSQL
+  compartilhado entre runtime, smoke DB e gates.
 
-**Proibições explícitas no shared-kernel:**
+**Proibições explícitas para código compartilhado:**
 
-- Entidades Prisma/TypeORM (ficam privadas em cada módulo).
+- Entidades Prisma ou DDL de schema dentro de helpers genéricos.
 - Serviços com lógica de negócio.
-- Dependências de frameworks (NestJS, Angular).
-- Qualquer import de libs de domínio específico.
+- Imports cíclicos entre domínios de negócio.
+- Convenções paralelas às registradas em `scripts/run.mjs`,
+  `scripts/lib/workspace-commands.mjs`, `docs/gov/runtime-topology.json` e
+  `database/sql`.
 
 ### 1.5 Comunicação Inter-Contexto
 
@@ -531,7 +540,7 @@ stateDiagram-v2
 
 **Entidades (no sgp-core-api):** `competencia`, `folha_pagamento`, `tipo_processamento`, `lote_processamento`, `lancamento` (lançamentos manuais pré-cálculo), `consignado`, `importacao_consignado`, `importacao_lancamento_manual`, `relatorio_financeiro`.
 
-**Serviços:** `CompetenciaService`, `FolhaPagamentoService`, `LancamentoService`, `ConsignadoService`, `ImportacaoService`, `CalculoOrquestradorService` (dispara para payroll-engine), `ContrachequeViewService`, `RelatorioFinanceiroService`, `folha-pagamento/operations/bank-account` para validação BANK-03 de dados bancários antes da elegibilidade CNAB, `folha-pagamento/operations/alimony` para BANK-04: cadastro de ordens judiciais de pensão alimentícia, retenção prioritária em folha e repasse CNAB à conta judicial do beneficiário, `folha-pagamento/operations/consignment` para CONS-01: cadastro de consignantes, averbações, cálculo de margem geral/cartão e emissão de descontos consignados na cadeia CALC-11, e `folha-pagamento/operations/sifge` para BANK-05: geração de GRF mensal, GRRF rescisória, DAE e arquivo SIFGE 4.0 por adapter Caixa pluggável.
+**Serviços:** `CompetenciaService`, `FolhaPagamentoService`, `LancamentoService`, `ConsignadoService`, `ImportacaoService`, `CalculoOrquestradorService` (dispara para payroll-engine), `ContrachequeViewService`, `RelatorioFinanceiroService`, `folha-pagamento/operations/bank-account` para validação BANK-03 de dados bancários antes da elegibilidade CNAB, `folha-pagamento/operations/alimony` para BANK-04: cadastro de ordens judiciais de pensão alimentícia, retenção prioritária em folha e repasse CNAB à conta judicial do beneficiário, `folha-pagamento/operations/consignment` para CONS-01: cadastro de consignantes, averbações, cálculo de margem geral/cartão de crédito/cartão benefício e emissão de descontos consignados na cadeia CALC-11, e `folha-pagamento/operations/sifge` para BANK-05: geração de GRF mensal, GRRF rescisória, DAE e arquivo SIFGE 4.0 por adapter Caixa pluggável.
 
 **Controladores:**
 
@@ -546,7 +555,7 @@ stateDiagram-v2
 - `GET /api/v1/folha/contracheques/:id` — contracheque individual
 - `GET /api/v1/folha/contracheques/:id/pdf` — PDF do contracheque
 - `POST /api/v1/folha/importacoes/consignados` — importar arquivo consignado
-- `GET /api/v1/employees/:id/consignment-margin?competence=YYYY-MM` — consultar margem consignável geral/cartão
+- `GET /api/v1/employees/:id/consignment-margin?competence=YYYY-MM` — consultar margem consignável geral/cartão de crédito/cartão benefício
 - `GET /api/v1/employees/:id/consignment-loans` — listar averbações de consignado do servidor
 - `POST /api/v1/employees/:id/consignment-loans` — averbar contrato respeitando margem disponível
 - `GET /api/v1/employees/:id/alimonies?status=ACTIVE` — listar ordens judiciais de pensão alimentícia do servidor

@@ -24,6 +24,7 @@ This directory is the authoritative engineering and product specification source
 - `68-alinhamento-banco-relatorio-fechamento.md`
 - `70-adrs.md`
 - `71-folia-engine-reconciliation.md`
+- `99-implementation-status.md`
 
 ## Reverse Evidence Succession
 
