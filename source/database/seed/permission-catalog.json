@@ -556,6 +556,22 @@
       "description": "Force retry for eSocial SOAP submission batches."
     },
     {
+      "key": "fiscal.dctfweb.read",
+      "moduleKey": "fiscal",
+      "resourceKey": "dctfweb",
+      "actionKey": "read",
+      "routePattern": "/api/v1/admin/fiscal/dctfweb/**",
+      "description": "Read DCTFWeb declarations, items, transmission status, and receipts."
+    },
+    {
+      "key": "fiscal.dctfweb.write",
+      "moduleKey": "fiscal",
+      "resourceKey": "dctfweb",
+      "actionKey": "write",
+      "routePattern": "#!/fiscal/dctfweb",
+      "description": "Generate, sign, transmit, and reconcile DCTFWeb declarations."
+    },
+    {
       "key": "avaliacao.read",
       "moduleKey": "avaliacao",
       "resourceKey": "performance",
@@ -732,6 +748,22 @@
       "description": "Mutate public contest appointments, notices, withdrawals, and deadline expiration."
     },
     {
+      "key": "recrutamento.posse.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "posse",
+      "actionKey": "read",
+      "routePattern": "/api/v1/admin/posses/**",
+      "description": "Read public contest possession and exercise records."
+    },
+    {
+      "key": "recrutamento.posse.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "posse",
+      "actionKey": "write",
+      "routePattern": "/api/v1/admin/posses/**",
+      "description": "Schedule possession, confirm possession, start exercise, prorogue exercise, and cancel possession."
+    },
+    {
       "key": "recrutamento.read",
       "moduleKey": "recrutamento",
       "resourceKey": "recruitment",
@@ -900,6 +932,22 @@
       "description": "Create append-only chained time records."
     },
     {
+      "key": "ponto.rep.read",
+      "moduleKey": "ponto",
+      "resourceKey": "rep",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/rep/**",
+      "description": "Read REP devices and ingestion batches."
+    },
+    {
+      "key": "ponto.rep.write",
+      "moduleKey": "ponto",
+      "resourceKey": "rep",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/rep/**",
+      "description": "Create REP devices and ingest REP-P, REP-A, and REP-C batches."
+    },
+    {
       "key": "rh.medical_leave.read",
       "moduleKey": "rh",
       "resourceKey": "medical_leave",
@@ -1036,6 +1084,8 @@
       "rh.employee.admit",
       "rh.employee.terminate",
       "rh.employee.abono.write",
+      "recrutamento.posse.read",
+      "recrutamento.posse.write",
       "hr.bank_account.read",
       "hr.bank_account.write",
       "rh.employment_link.write",
@@ -1071,6 +1121,8 @@
       "ponto.schedule.write",
       "ponto.timerecord.read",
       "ponto.timerecord.write",
+      "ponto.rep.read",
+      "ponto.rep.write",
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",
@@ -1122,6 +1174,8 @@
       "esocial.event.exclude",
       "esocial.submission.read",
       "esocial.submission.retry",
+      "fiscal.dctfweb.read",
+      "fiscal.dctfweb.write",
       "portal.paystub.read",
       "report.payslip.read",
       "report.payslip.write",
@@ -1152,6 +1206,7 @@
       "esocial.certificate.read",
       "esocial.event.read",
       "esocial.submission.read",
+      "fiscal.dctfweb.read",
       "portal.paystub.read",
       "report.payslip.read",
       "relatorio.read",

@@ -41,7 +41,7 @@ Os bounded contexts identificados são:
 | Parametrizações e Estrutura | `GESTAO`                | `gestao`                                 |
 | Vida Funcional (RH)         | `MODULO_RH`             | `rh`                                     |
 | Folha de Pagamento          | `FOLHA_PAGAMENTO`       | `folha` (cliente) + `sgp-payroll-engine` |
-| FGTS CLT                    | `FOLHA_PAGAMENTO`       | `folha-pagamento/fgts`                  |
+| FGTS CLT                    | `FOLHA_PAGAMENTO`       | `folha-pagamento/fgts`                   |
 | Avaliação e Progressão      | `MODULO_AVALIACAO`      | `avaliacao`                              |
 | Recrutamento e Seleção      | `RECRUTAMENTO_SELECAO`  | `recrutamento`                           |
 | Consultas Gerenciais        | `CONSULTAS_GERENCIAIS`  | `consultas`                              |
@@ -906,11 +906,13 @@ stateDiagram-v2
 
 **Responsabilidades:** facade de configuração e status das integrações externas (eSocial, SIPREV, DIRF, CNAB, Neoconsig, Gov.br, Prefeitura Pública); endpoints para disparo manual de remessas; monitoramento de status de envio; configuração de credenciais por tenant.
 
-**Serviços:** `EsocialFacadeService`, `SiprevFacadeService`, `CnabFacadeService`, `NeoconsigFacadeService`, `GovBrFacadeService`, `PrefeituraPublicaFacadeService`, `integrations-worker/cnab240/Cnab240BuilderService`, `integrations-worker/cnab240/Cnab240EmitService` e `integrations-worker/consignment-portability/PortabilityProcessService`.
+**Serviços:** `EsocialFacadeService`, `SiprevFacadeService`, `CnabFacadeService`, `NeoconsigFacadeService`, `GovBrFacadeService`, `PrefeituraPublicaFacadeService`, `integrations-worker/cnab240/Cnab240BuilderService`, `integrations-worker/cnab240/Cnab240EmitService`, `integrations-worker/consignment-portability/PortabilityProcessService` e `integrations-worker/dctfweb/*`.
 
 `integrations-worker/cnab240` gera remessa CNAB 240 de crédito em conta para BB, Caixa, Itaú, Bradesco e Santander. A emissão consome uma `payroll.payroll_run` aprovada, filtra somente contas `hr.employee_bank_account.validation_status = 'VALID'`, grava metadados e SHA-256 em `payroll.payment_remittance_file` e persiste o vínculo linha-servidor em `payroll.payment_remittance_detail`.
 
 `integrations-worker/consignment-portability` importa arquivos canonicos ou adaptados por consignante para portabilidade de consignados. O processamento concilia por CPF, contrato antigo e consignante origem, marca a averbação antiga como `TRANSFERRED`, cria a nova em `payment.consignment_loan` com referências cruzadas e mantém detalhe `MATCHED` ou `UNMATCHED` reprocessável por arquivo.
+
+`integrations-worker/dctfweb` gera a DCTFWeb a partir dos totalizadores eSocial S-5011, S-5012 e S-5013 aceitos para a competência, persiste a declaração em `fiscal.dctfweb_declaration`, grava os débitos em `fiscal.dctfweb_item`, assina o XML com o certificado ICP-Brasil ativo do tenant e transmite ao endpoint RFB configurado ou ao emissor sandbox local. Retificadoras são obrigadas a referenciar explicitamente a declaração original e o recibo guarda o hash do XML transmitido para conferir integridade com o XML assinado.
 
 **Controladores:**
 
@@ -920,6 +922,10 @@ stateDiagram-v2
 - `POST /api/admin/v1/integracoes/cnab/gerar`
 - `POST /api/admin/v1/integracoes/siprev/gerar`
 - `POST /api/admin/v1/integracoes/dirf/gerar`
+- `GET /api/v1/admin/fiscal/dctfweb` — listar declarações por competência
+- `POST /api/v1/admin/fiscal/dctfweb/gerar` — gerar original ou retificadora
+- `POST /api/v1/admin/fiscal/dctfweb/:id/assinar` — assinar com ICP-Brasil
+- `POST /api/v1/admin/fiscal/dctfweb/:id/transmitir` — transmitir e registrar recibo
 - `GET /api/external/v1/prefeitura/autenticacao` — endpoint prefeitura pública
 - `GET /api/external/v1/prefeitura/dependentes`
 - `GET /api/external/v1/dicionario/entidades`
@@ -1098,12 +1104,12 @@ sequenceDiagram
 
 **Sub-módulos:**
 
-| Módulo         | Fila                | Responsabilidade                                                                               |
-| -------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
-| `cnab-remessa` | `remessa.gerar`     | Gera arquivo CNAB 240/400 por banco; persiste em S3; notifica banco (SFTP ou portal)           |
-| `cnab-retorno` | `retorno.processar` | Processa arquivo de retorno bancário; atualiza status de pagamentos; gera relatório de retorno |
-| `siprev`       | `siprev.gerar`      | Gera XML SIPREV no leiaute MPS vigente; persiste em S3; notifica gestor para upload manual     |
-| `dirf`         | `dirf.gerar`        | Gera arquivo TXT DIRF no leiaute RFB anual; persiste em S3; atualiza status                    |
+| Módulo                    | Fila                                 | Responsabilidade                                                                                  |
+| ------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `cnab-remessa`            | `remessa.gerar`                      | Gera arquivo CNAB 240/400 por banco; persiste em S3; notifica banco (SFTP ou portal)              |
+| `cnab-retorno`            | `retorno.processar`                  | Processa arquivo de retorno bancário; atualiza status de pagamentos; gera relatório de retorno    |
+| `siprev`                  | `siprev.gerar`                       | Gera XML SIPREV no leiaute MPS vigente; persiste em S3; notifica gestor para upload manual        |
+| `dirf`                    | `dirf.gerar`                         | Gera arquivo TXT DIRF no leiaute RFB anual; persiste em S3; atualiza status                       |
 | `consignment-portability` | `consignado.portabilidade.processar` | Importa arquivo de portabilidade, concilia contratos, transfere averbações e audita linha a linha |
 
 ---

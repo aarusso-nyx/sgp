@@ -12,7 +12,8 @@ export type AdminModuleKey =
   | 'auditoria'
   | 'saude'
   | 'ponto'
-  | 'convenio';
+  | 'convenio'
+  | 'fiscal';
 
 export type AdminFeatureMode = 'management' | 'form' | 'details' | 'dashboard';
 
@@ -220,12 +221,14 @@ Auditoria||Filtros por Período|/auditoria/periodo/gestao|AUDITORIA.GESTAO||audi
 Área de Saúde / Junta Médica|SST|Agente Nocivo|/saude/agente-nocivo/gestao|AGENTE_NOCIVO.GESTAO||saude|Classificação legal
 Área de Saúde / Junta Médica|SST|EPI|/saude/epi/gestao|EPI.GESTAO||saude|Equipamento de Proteção Individual
 Ponto Eletrônico|Jornadas|Jornadas e Atribuições|/ponto/jornadas|PONTO.JORNADAS||ponto|Portaria MTP 671/2021: jornada contratada, turnos e vigências
+Ponto Eletrônico|REP|Equipamentos e Ingestão|/ponto/rep|PONTO.REP||ponto|REP-P, REP-A e REP-C: cadastro, AFDT e lotes
 Área de Saúde / Junta Médica|SST|EPC|/saude/epc/gestao|EPC.GESTAO||saude|Equipamento de Proteção Coletiva
 Convênio||Convênios|/convenio/convenio/gestao|CONVENIO.GESTAO||convenio|Vigência, banco de cobrança
 Convênio||Convênio — novo|/convenio/convenio/formulario|CONVENIO.CADASTRAR||convenio|
 Convênio||Convênio — editar|/convenio/convenio/formulario/:id|CONVENIO.ATUALIZAR||convenio|
 Convênio||Beneficiários|/convenio/beneficiario/gestao|CONVENIO_BENEFICIARIO.GESTAO||convenio|Valor mensal, início, fim
 Convênio||Descontos em Folha|/convenio/desconto-folha/gestao|CONVENIO_DESCONTO_FOLHA.GESTAO||convenio|Por competência; lançado na folha
+Fiscal|Obrigações|DCTFWeb|/fiscal/dctfweb|DCTFWEB.GESTAO||fiscal|Geração, assinatura e transmissão da DCTFWeb
 `;
 
 export const ADMIN_MODULES: ReadonlyArray<{
@@ -245,6 +248,7 @@ export const ADMIN_MODULES: ReadonlyArray<{
   { key: 'saude', label: 'Área de Saúde', routePath: '/saude' },
   { key: 'ponto', label: 'Ponto Eletrônico', routePath: '/ponto' },
   { key: 'convenio', label: 'Convênio', routePath: '/convenio' },
+  { key: 'fiscal', label: 'Fiscal', routePath: '/fiscal' },
 ];
 
 export const ADMIN_FEATURES: AdminFeature[] = RAW_ADMIN_FEATURES.trim()

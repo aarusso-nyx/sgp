@@ -9,6 +9,7 @@ import { Cnab240EmitService } from './cnab240/cnab240-emit.service';
 import { PortabilityController } from './consignment-portability/portability.controller';
 import { PortabilityParserService } from './consignment-portability/portability-parser.service';
 import { PortabilityProcessService } from './consignment-portability/portability-process.service';
+import { DctfwebModule } from './dctfweb/dctfweb.module';
 import { IntegrationsWorkerService } from './integrations-worker.service';
 
 @Module({
@@ -16,6 +17,7 @@ import { IntegrationsWorkerService } from './integrations-worker.service';
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     DatabaseModule,
     DocumentsModule,
+    DctfwebModule,
   ],
   controllers: [PortabilityController],
   providers: [

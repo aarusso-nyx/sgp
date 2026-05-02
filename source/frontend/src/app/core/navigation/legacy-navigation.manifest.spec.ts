@@ -21,6 +21,7 @@ describe('legacy navigation manifest', () => {
       'saude',
       'ponto',
       'convenio',
+      'fiscal',
     ]);
   });
 

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/auth/auth-guard';
+import { permissionGuard } from './core/auth/permission-guard';
 import { ADMIN_MODULES } from './core/navigation/admin-feature-catalog';
 import { buildModuleRouteGroup } from './core/navigation/module-route-groups';
 import type { LegacyModuleKey } from './core/navigation/legacy-navigation.types';
@@ -117,6 +118,11 @@ export const routes: Routes = [
           import('./features/recrutamento/nomeacao/nomeacao').then((m) => m.RecrutamentoNomeacao),
       },
       {
+        path: 'recrutamento/posse',
+        loadComponent: () =>
+          import('./features/recrutamento/posse/posse').then((m) => m.RecrutamentoPosse),
+      },
+      {
         path: 'avaliacao/estagio-probatorio',
         loadComponent: () =>
           import('./features/avaliacao/estagio-probatorio/estagio-probatorio').then(
@@ -199,6 +205,21 @@ export const routes: Routes = [
         path: 'ponto/jornadas',
         loadComponent: () =>
           import('./features/ponto/jornadas/ponto-jornadas').then((m) => m.PontoJornadas),
+      },
+      {
+        path: 'ponto/rep',
+        loadComponent: () => import('./features/ponto/rep/ponto-rep').then((m) => m.PontoRep),
+      },
+      {
+        path: 'fiscal/dctfweb',
+        loadComponent: () =>
+          import('./features/fiscal/dctfweb/dctfweb').then((m) => m.FiscalDctfweb),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'fiscal',
+          permissions: ['fiscal.dctfweb.read'],
+          moduleLabel: 'Fiscal',
+        },
       },
       {
         path: 'esocial/tabelas',
