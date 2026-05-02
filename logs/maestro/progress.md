@@ -73,3 +73,7 @@ W16 ✓ 35-es-05 (1 slice, high + manual recovery, gates passed, commit 6c0891c)
 W22 ✓ 45-xcut-01 (medium, gates passed, commit 55eac61) — payslip PDF/A + portal/admin batch
 W22 ✓ 46-xcut-02 (low, gates passed, commit 22e787f) — public transparency snapshot + CSV
 W22 ✓ 43-cons-01 (medium, gates passed, commit aa10f9a) — consignment margin + loan enforcement; Wave 22 complete
+2026-05-02T02:27:00-03:00 frontier launch 44-cons-02, 50-rec-01, 66-sst-01 — agents 019de727-57a7, 019de727-57c9, 019de727-582a
+W23 ✓ 44-cons-02 (medium, gates passed, commit 3ec3e6a) — consignment portability import/process
+W23 ✓ 50-rec-01 (low, gates passed, commit f4950a8) — concursos edital/publicacao
+W24 ✓ 66-sst-01 (medium, gates passed, commit 841b684) — ASO and occupational exams

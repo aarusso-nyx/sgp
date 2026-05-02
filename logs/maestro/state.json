@@ -538,7 +538,7 @@
       "completed_at": "2026-05-02T05:25:32.076Z"
     },
     "44-cons-02-portabilidade-importacao": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/44-cons-02-portabilidade-importacao",
       "retries": 0,
@@ -570,7 +570,11 @@
       ],
       "wave": 23,
       "theme": "CONS",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de727-57a7-74c0-bacc-12e427ab6fbf",
+      "started_at": "2026-05-02T05:27:00.321Z",
+      "commit": "3ec3e6a",
+      "completed_at": "2026-05-02T05:42:44.650Z"
     },
     "45-xcut-01-contracheque-pdf-oficial": {
       "status": "completed",
@@ -785,7 +789,7 @@
       "zero_retry": false
     },
     "50-rec-01-concurso-edital-publicacao": {
-      "status": "pending",
+      "status": "completed",
       "effort": "low",
       "branch": "slice/50-rec-01-concurso-edital-publicacao",
       "retries": 0,
@@ -822,7 +826,11 @@
       ],
       "wave": 23,
       "theme": "REC",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de727-57c9-7a20-944e-2fc949dc6daa",
+      "started_at": "2026-05-02T05:27:00.321Z",
+      "commit": "f4950a8",
+      "completed_at": "2026-05-02T05:42:44.650Z"
     },
     "51-rec-02-inscricao-portal": {
       "status": "pending",
@@ -1420,7 +1428,7 @@
       "zero_retry": false
     },
     "66-sst-01-aso-exames": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/66-sst-01-aso-exames",
       "retries": 0,
@@ -1462,7 +1470,11 @@
       ],
       "wave": 24,
       "theme": "SST",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de727-582a-7fa3-9e64-ced86a197db6",
+      "started_at": "2026-05-02T05:27:00.321Z",
+      "commit": "841b684",
+      "completed_at": "2026-05-02T05:42:44.650Z"
     },
     "67-sst-02-pcmso-pgr-programas": {
       "status": "pending",
@@ -2224,7 +2236,7 @@
       "zero_retry": true
     }
   },
-  "current_wave": 23,
+  "current_wave": 24,
   "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
