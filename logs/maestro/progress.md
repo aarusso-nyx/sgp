@@ -130,3 +130,4 @@ W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migrati
 2026-05-02T10:35:00Z verification ✗ 38-es-09, 41-bank-02, 42-bank-04 are not complete by prompt deliverables; state corrected to pending
 2026-05-02T14:06:06Z W17 ✓ 38-es-09 (high, rerun gates passed, commit e0e8b43) — retorno parser and status sync; completion 82/85 → 83/85
 2026-05-02T14:20:02Z W18 ✓ 41-bank-02 (medium, typecheck/module recovery, commit 650c26a) — CNAB return reconciliation; completion 83/85 → 84/85
+2026-05-02T14:36:57Z W19 ✓ 42-bank-04 (medium, rerun gates passed, commit TBD) — pensao alimenticia folha and CNAB; completion 84/85 → 85/85

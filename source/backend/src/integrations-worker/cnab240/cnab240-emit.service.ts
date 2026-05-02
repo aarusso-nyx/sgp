@@ -11,6 +11,7 @@ import {
   Cnab240BuildResult,
   Cnab240PaymentInput,
 } from './cnab240-builder.service';
+import { toAlimonyPaymentInput } from './alimony-segment-builder';
 
 interface EmitInput {
   remittanceId: string;
@@ -49,6 +50,17 @@ interface PaymentRow extends QueryResultRow {
   amount: string;
 }
 
+interface AlimonyPaymentRow extends QueryResultRow {
+  alimony_id: string;
+  employee_id: string;
+  beneficiary_name: string;
+  beneficiary_cpf: string | null;
+  beneficiary_bank_code: number;
+  beneficiary_branch: string;
+  beneficiary_account: string;
+  amount: string;
+}
+
 @Injectable()
 export class Cnab240EmitService {
   private readonly builder = new Cnab240BuilderService();
@@ -76,7 +88,12 @@ export class Cnab240EmitService {
         remittance.payroll_run_id,
         bank.bank_code,
       );
-      if (payments.length === 0) {
+      const alimonyPayments = await this.getAlimonyPayments(
+        client,
+        remittance.payroll_run_id,
+      );
+      const remittancePayments = [...payments, ...alimonyPayments];
+      if (remittancePayments.length === 0) {
         throw new NotFoundException(
           'No valid employee bank account is eligible for CNAB remittance',
         );
@@ -95,7 +112,7 @@ export class Cnab240EmitService {
           ),
         generatedAt,
         remittanceNumber: input.remittanceNumber,
-        payments,
+        payments: remittancePayments,
       });
 
       await client.query(
@@ -117,6 +134,8 @@ export class Cnab240EmitService {
             bank_code,
             branch,
             account,
+            purpose_code,
+            alimony_id,
             occurrence_code
           )
           VALUES (
@@ -128,6 +147,8 @@ export class Cnab240EmitService {
             $5,
             $6,
             $7,
+            $8,
+            NULLIF($9, '')::uuid,
             NULL
           )
           `,
@@ -139,6 +160,8 @@ export class Cnab240EmitService {
             detail.bankCode,
             detail.branch,
             detail.account,
+            detail.purposeCode,
+            detail.alimonyId ?? '',
           ],
         );
       }
@@ -305,6 +328,53 @@ export class Cnab240EmitService {
       accountDigit: row.account_digit,
       amount: row.amount,
     }));
+  }
+
+  private async getAlimonyPayments(
+    client: PoolClient,
+    payrollRunId: string,
+  ): Promise<Cnab240PaymentInput[]> {
+    const rows = await client.query<AlimonyPaymentRow>(
+      `
+      SELECT
+        alimony.id::text AS alimony_id,
+        alimony.employee_id::text AS employee_id,
+        alimony.beneficiary_name,
+        alimony.beneficiary_cpf,
+        alimony.beneficiary_bank_code,
+        alimony.beneficiary_branch,
+        alimony.beneficiary_account,
+        item.amount::text AS amount
+      FROM hr.employee_alimony alimony
+      JOIN payroll.employee_payroll_item item
+        ON item.tenant_id = alimony.tenant_id
+       AND item.employee_id = alimony.employee_id
+       AND item.payroll_run_id = $1::uuid
+       AND item.idempotency_key = 'alimony:' || alimony.id::text || ':' || item.competence_year::text || '-' || lpad(item.competence_month::text, 2, '0')
+       AND item.deleted_at IS NULL
+      WHERE alimony.tenant_id = public.sgp_current_tenant_uuid()
+        AND alimony.status = 'ACTIVE'::hr.employee_alimony_status
+        AND alimony.judicial_account = true
+        AND alimony.beneficiary_bank_code IS NOT NULL
+        AND alimony.beneficiary_branch IS NOT NULL
+        AND alimony.beneficiary_account IS NOT NULL
+      ORDER BY alimony.employee_id, alimony.priority, alimony.id
+      `,
+      [payrollRunId],
+    );
+
+    return rows.rows.map((row) =>
+      toAlimonyPaymentInput({
+        alimonyId: row.alimony_id,
+        employeeId: row.employee_id,
+        beneficiaryName: row.beneficiary_name,
+        beneficiaryCpf: row.beneficiary_cpf ?? '',
+        beneficiaryBankCode: String(row.beneficiary_bank_code).padStart(3, '0'),
+        beneficiaryBranch: row.beneficiary_branch,
+        beneficiaryAccount: row.beneficiary_account,
+        amount: row.amount,
+      }),
+    );
   }
 
   private toDateString(value: Date | string | null): string | null {

@@ -18,6 +18,9 @@ import { PayrollOperationsService } from './operations/payroll-operations.servic
 import { BankAccountController } from './operations/bank-account/bank-account.controller';
 import { BankAccountService } from './operations/bank-account/bank-account.service';
 import { BankAccountValidatorService } from './operations/bank-account/bank-account-validator.service';
+import { EmployeeAlimonyController } from './operations/alimony/alimony.controller';
+import { AlimonyDeductionService } from './operations/alimony/alimony-deduction.service';
+import { EmployeeAlimonyService } from './operations/alimony/alimony.service';
 import { ConsignmentController } from './operations/consignment/consignment.controller';
 import { ConsignmentDeductionService } from './operations/consignment/consignment-deduction.service';
 import { ConsignmentLoanService } from './operations/consignment/consignment-loan.service';
@@ -61,6 +64,7 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     PayrollOperationsController,
     PayrollGfipController,
     BankAccountController,
+    EmployeeAlimonyController,
     ConsignmentController,
     SimulacaoController,
     PriorNoticeController,
@@ -80,6 +84,8 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     PayrollOperationsService,
     BankAccountService,
     BankAccountValidatorService,
+    EmployeeAlimonyService,
+    AlimonyDeductionService,
     MarginCalculatorService,
     ConsignmentLoanService,
     ConsignmentDeductionService,

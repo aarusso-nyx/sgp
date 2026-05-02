@@ -13,6 +13,7 @@ import { RhLicencas } from './licencas/licencas';
 import { RhEmployeeTransfer } from './employee-transfer/employee-transfer';
 import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-employee-transfer';
 import { RhEmployeeBankAccounts } from './employees/bank-accounts/bank-accounts';
+import { RhEmployeeAlimony } from './employees/alimony/alimony';
 import { RhReintegracao } from './reintegracao/reintegracao';
 import { RhTsvContratos } from './tsv-contratos/tsv-contratos';
 
@@ -38,6 +39,10 @@ import { RhTsvContratos } from './tsv-contratos/tsv-contratos';
       {
         path: 'funcionarios/:id/dados-bancarios',
         component: RhEmployeeBankAccounts,
+      },
+      {
+        path: 'funcionarios/:id/pensao-alimenticia',
+        component: RhEmployeeAlimony,
       },
       {
         path: 'funcionarios/vinculos',

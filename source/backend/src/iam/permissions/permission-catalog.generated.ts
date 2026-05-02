@@ -46,6 +46,8 @@ export const PERMISSIONS = [
   'gestao.master_data.write',
   'gestao.read',
   'gestao.write',
+  'hr.alimony.read',
+  'hr.alimony.write',
   'hr.bank_account.read',
   'hr.bank_account.write',
   'hr.employment.read',

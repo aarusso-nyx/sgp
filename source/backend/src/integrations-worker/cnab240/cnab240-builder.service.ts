@@ -27,6 +27,7 @@ export interface BatchHeader {
 export interface SegmentA {
   sequence: number;
   employeeId: string;
+  alimonyId?: string | null;
   beneficiaryName: string;
   bankCode: string;
   branch: string;
@@ -35,6 +36,7 @@ export interface SegmentA {
   accountDigit: string;
   amount: string;
   paymentDate: string;
+  purposeCode?: string | null;
 }
 
 export interface SegmentB {
@@ -55,6 +57,7 @@ export interface FileTrailer {
 
 export interface Cnab240PaymentInput {
   employeeId: string;
+  alimonyId?: string | null;
   employeeName: string;
   employeeDocument: string;
   bankCode: string;
@@ -63,6 +66,7 @@ export interface Cnab240PaymentInput {
   account: string;
   accountDigit: string;
   amount: string;
+  purposeCode?: string | null;
 }
 
 export interface Cnab240BuildInput {
@@ -91,6 +95,8 @@ export interface Cnab240BuildResult {
     bankCode: number;
     branch: string;
     account: string;
+    purposeCode: string | null;
+    alimonyId: string | null;
   }>;
 }
 
@@ -178,6 +184,8 @@ export class Cnab240BuilderService {
         bankCode: Number(bankCode),
         branch: payment.branch,
         account: `${payment.account}-${payment.accountDigit}`,
+        purposeCode: payment.purposeCode ?? null,
+        alimonyId: payment.alimonyId ?? null,
       })),
     };
   }
@@ -268,7 +276,7 @@ export class Cnab240BuilderService {
       [102, 'BRL'],
       [120, moneyCents(input.amount, 15)],
       [135, alpha(strategy.fields.modality, 20)],
-      [231, '00000'],
+      [231, alpha(input.purposeCode ?? '00000', 5)],
     ]);
   }
 
@@ -314,6 +322,7 @@ export class Cnab240BuilderService {
     return {
       sequence: ordinal * 2 - 1,
       employeeId: payment.employeeId,
+      alimonyId: payment.alimonyId ?? null,
       beneficiaryName: payment.employeeName,
       beneficiaryDocument: payment.employeeDocument,
       bankCode: payment.bankCode,
@@ -323,6 +332,7 @@ export class Cnab240BuilderService {
       accountDigit: payment.accountDigit,
       amount: new Decimal(payment.amount).toFixed(2),
       paymentDate,
+      purposeCode: payment.purposeCode ?? null,
     };
   }
 }

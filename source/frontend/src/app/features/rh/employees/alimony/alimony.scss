@@ -1,0 +1,60 @@
+.alimony-page {
+  display: grid;
+  gap: 16px;
+}
+
+header,
+.alimony-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+header p,
+label span {
+  display: block;
+  margin: 0 0 4px;
+  color: #5f6368;
+  font-size: 12px;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid #c8ccd2;
+  border-radius: 4px;
+  padding: 6px 8px;
+  background: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e0e3e7;
+  padding: 10px 8px;
+  text-align: left;
+}
+
+.message {
+  color: #0b6b3a;
+}
+
+.error {
+  color: #b3261e;
+}
+
+.empty {
+  color: #5f6368;
+  text-align: center;
+}

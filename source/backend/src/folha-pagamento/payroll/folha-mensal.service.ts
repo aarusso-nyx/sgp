@@ -11,6 +11,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../../database/database.service';
 import { FgtsService } from '../fgts/fgts.service';
+import { AlimonyDeductionService } from '../operations/alimony/alimony-deduction.service';
 import { ConsignmentDeductionService } from '../operations/consignment/consignment-deduction.service';
 import { PisPasepService } from '../pis-pasep/pis-pasep.service';
 import { FolhaMensalCompetenceDto } from './payroll.dto';
@@ -103,6 +104,8 @@ export class FolhaMensalService {
   constructor(
     private readonly databaseService: DatabaseService,
     @Optional()
+    private readonly alimonyDeductionService?: AlimonyDeductionService,
+    @Optional()
     private readonly consignmentDeductionService?: ConsignmentDeductionService,
     @Optional()
     private readonly fgtsService?: FgtsService,
@@ -165,6 +168,7 @@ export class FolhaMensalService {
         context.catalog.base_earning_id,
         input,
       );
+      await this.insertAlimonyDeductions(client, context.run.id, input);
       await this.insertConsignmentDeductions(
         client,
         context.run.id,
@@ -834,6 +838,32 @@ export class FolhaMensalService {
   ): Promise<number> {
     if (!this.consignmentDeductionService) return 0;
     return this.consignmentDeductionService.insertActiveLoanDeductions(client, {
+      payrollRunId,
+      earningDeductionId,
+      competenceYear: input.year,
+      competenceMonth: input.month,
+    });
+  }
+
+  private async insertAlimonyDeductions(
+    client: PoolClient,
+    payrollRunId: string,
+    input: FolhaMensalCompetenceDto,
+  ): Promise<number> {
+    if (!this.alimonyDeductionService) return 0;
+    const rows = await client.query<{ id: string }>(
+      `
+      SELECT id::text
+      FROM payroll.payroll_earning_deduction
+      WHERE tenant_id = public.sgp_current_tenant_uuid()
+        AND code = 'ALIMONY_DEDUCTION'
+        AND active = true
+      LIMIT 1
+      `,
+    );
+    const earningDeductionId = rows.rows[0]?.id;
+    if (!earningDeductionId) return 0;
+    return this.alimonyDeductionService.insertActiveOrderDeductions(client, {
       payrollRunId,
       earningDeductionId,
       competenceYear: input.year,

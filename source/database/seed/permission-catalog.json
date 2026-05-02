@@ -164,6 +164,22 @@
       "description": "Create and revalidate employee bank accounts for payroll credit."
     },
     {
+      "key": "hr.alimony.read",
+      "moduleKey": "hr",
+      "resourceKey": "alimony",
+      "actionKey": "read",
+      "routePattern": "/api/v1/employees/*/alimonies",
+      "description": "Read employee court-ordered alimony deductions and judicial beneficiary accounts."
+    },
+    {
+      "key": "hr.alimony.write",
+      "moduleKey": "hr",
+      "resourceKey": "alimony",
+      "actionKey": "write",
+      "routePattern": "/api/v1/employees/*/alimonies/**",
+      "description": "Mutate employee court-ordered alimony deductions and preserve order history."
+    },
+    {
       "key": "hr.employment.read",
       "moduleKey": "hr",
       "resourceKey": "employment",
@@ -1424,6 +1440,8 @@
       "recrutamento.posse.write",
       "hr.bank_account.read",
       "hr.bank_account.write",
+      "hr.alimony.read",
+      "hr.alimony.write",
       "hr.employment.read",
       "hr.employment.write",
       "rh.employment_link.write",
@@ -1498,6 +1516,8 @@
       "rh.employee.read",
       "rh.dependent.read",
       "hr.bank_account.read",
+      "hr.alimony.read",
+      "hr.alimony.write",
       "avaliacao.pccs.read",
       "avaliacao.progressao.read",
       "avaliacao.progressao.simulate",
@@ -1559,6 +1579,7 @@
       "rh.read",
       "rh.employee.read",
       "rh.history.read",
+      "hr.alimony.read",
       "saude.cat.read",
       "saude.program.read",
       "saude.exposure.read",

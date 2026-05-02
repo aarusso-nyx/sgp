@@ -2452,16 +2452,25 @@
       "verification_result": "Completed on rerun: BANK-02 migration, payroll.payment_return_file/payment_return_detail tables, CNAB240 return parser/process services, retorno UI, BANK-02 tests, docs, and maestro defense gates passed."
     },
     "42-bank-04-pensao-alimenticia": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/42-bank-04-pensao-alimenticia",
-      "commit": null,
-      "started_at": null,
-      "completed_at": null,
+      "commit": "TBD",
+      "started_at": "2026-05-02T14:21:00Z",
+      "completed_at": "2026-05-02T14:36:57Z",
       "retries": 0,
+      "agent": "019de910-9eea-7203-912d-11d7e2f0ef78",
+      "summary": "logs/maestro/42-bank-04-pensao-alimenticia.summary.md",
+      "gates": [
+        "npm run lint",
+        "npm run typecheck",
+        "npm run test",
+        "DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run test:e2e",
+        "DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run db:smoke"
+      ],
       "source": "live double-check against prompt deliverables and repository/database artifacts",
       "verified_at": "2026-05-02T10:35:00Z",
-      "verification_result": "Verification failed: only legacy/basic hr.employee_alimony exists; no BANK-04 migration extensions/history, alimony deduction service, CNAB alimony segment builder, dedicated frontend, BANK-04 tests, or docs found."
+      "verification_result": "Completed on rerun: canonical hr.employee_alimony extension, employee_alimony_history, alimony deduction service, CNAB alimony segment builder, frontend, BANK-04 tests, docs, and maestro defense gates passed."
     }
   },
   "current_wave": 36,
