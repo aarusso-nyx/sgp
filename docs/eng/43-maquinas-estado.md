@@ -47,24 +47,24 @@ Permissões: leitura exige `rh.employee.read`; admissão exige `rh.employee.admi
 
 `recrutamento.nomeacao` controla a chamada do candidato aprovado e `recrutamento.posse` registra a agenda de posse, o prazo de exercício de 15 dias úteis e a lotação inicial. O servidor ativo só nasce na transição para exercício: `recrutamento.efetivar_posse(posse_id)` cria `hr.employee`, `hr.employment_link`, `hr.employment_contract` e a linha de `hr.employee_status_history`, atualiza a nomeação para `EXERCICIO` e dispara a trilha de auditoria. Em seguida a API publica o S-2200 pelo fluxo ES-02.
 
-| Estado                    | Descrição                                                        |
-| ------------------------- | ---------------------------------------------------------------- |
-| `NOMEADO`                 | Candidato chamado por ato administrativo                         |
-| `CONVOCADO`               | Convocação registrada com evidência oficial, postal ou e-mail    |
-| `POSSE_EM_ANDAMENTO`      | Posse agendada, aguardando comparecimento                        |
-| `POSSE`                   | Posse realizada; exercício ainda não iniciado                    |
-| `EXERCICIO`               | Servidor ativo criado e S-2200 enfileirado                       |
-| `DESISTENTE`              | Candidato desistiu antes da posse                                |
-| `EXONERADO_POR_NAO_POSSE` | Prazo de comparecimento expirado sem posse                       |
+| Estado                    | Descrição                                                     |
+| ------------------------- | ------------------------------------------------------------- |
+| `NOMEADO`                 | Candidato chamado por ato administrativo                      |
+| `CONVOCADO`               | Convocação registrada com evidência oficial, postal ou e-mail |
+| `POSSE_EM_ANDAMENTO`      | Posse agendada, aguardando comparecimento                     |
+| `POSSE`                   | Posse realizada; exercício ainda não iniciado                 |
+| `EXERCICIO`               | Servidor ativo criado e S-2200 enfileirado                    |
+| `DESISTENTE`              | Candidato desistiu antes da posse                             |
+| `EXONERADO_POR_NAO_POSSE` | Prazo de comparecimento expirado sem posse                    |
 
-| Transição | De                            | Evento               | Guarda                                               | Ação                                                                                 | Para                    |
-| --------- | ----------------------------- | -------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------- |
-| REC06-T1  | `CONVOCADO`/`POSSE_EM_ANDAMENTO` | `AGENDAR_POSSE`      | lotação válida; prazo de posse informado             | cria ou atualiza `recrutamento.posse` com prazo de exercício de 15 dias úteis         | `POSSE_EM_ANDAMENTO`   |
-| REC06-T2  | `CONVOCADO`/`POSSE_EM_ANDAMENTO` | `REALIZAR_POSSE`     | nomeação ainda aguardando posse                      | marca `posse.status = POSSE_REALIZADA` e `nomeacao.status = POSSE`                  | `POSSE`                |
-| REC06-T3  | `POSSE`                       | `INICIAR_EXERCICIO`  | posse sem `employee_id`                              | executa `efetivar_posse`, cria servidor ativo e publica `recrutamento.posse.exercicio` | `EXERCICIO`            |
-| REC06-T4  | `POSSE_EM_ANDAMENTO`/`POSSE`  | `PRORROGAR_EXERCICIO` | servidor ainda não criado                            | acrescenta 15 dias úteis ao prazo de exercício                                       | `POSSE_EM_ANDAMENTO`   |
-| REC06-T5  | antes de `EXERCICIO`          | `CANCELAR_POSSE`     | motivo obrigatório                                   | marca `posse.status = CANCELADA`                                                     | `DESISTENTE`/encerrado |
-| REC06-T6  | após prazo de comparecimento  | `EXPIRAR_PRAZO`      | `comparecimento_until < CURRENT_DATE`                | marca `nomeacao.status = EXONERADO_POR_NAO_POSSE`                                   | `EXONERADO_POR_NAO_POSSE` |
+| Transição | De                               | Evento                | Guarda                                   | Ação                                                                                   | Para                      |
+| --------- | -------------------------------- | --------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------- |
+| REC06-T1  | `CONVOCADO`/`POSSE_EM_ANDAMENTO` | `AGENDAR_POSSE`       | lotação válida; prazo de posse informado | cria ou atualiza `recrutamento.posse` com prazo de exercício de 15 dias úteis          | `POSSE_EM_ANDAMENTO`      |
+| REC06-T2  | `CONVOCADO`/`POSSE_EM_ANDAMENTO` | `REALIZAR_POSSE`      | nomeação ainda aguardando posse          | marca `posse.status = POSSE_REALIZADA` e `nomeacao.status = POSSE`                     | `POSSE`                   |
+| REC06-T3  | `POSSE`                          | `INICIAR_EXERCICIO`   | posse sem `employee_id`                  | executa `efetivar_posse`, cria servidor ativo e publica `recrutamento.posse.exercicio` | `EXERCICIO`               |
+| REC06-T4  | `POSSE_EM_ANDAMENTO`/`POSSE`     | `PRORROGAR_EXERCICIO` | servidor ainda não criado                | acrescenta 15 dias úteis ao prazo de exercício                                         | `POSSE_EM_ANDAMENTO`      |
+| REC06-T5  | antes de `EXERCICIO`             | `CANCELAR_POSSE`      | motivo obrigatório                       | marca `posse.status = CANCELADA`                                                       | `DESISTENTE`/encerrado    |
+| REC06-T6  | após prazo de comparecimento     | `EXPIRAR_PRAZO`       | `comparecimento_until < CURRENT_DATE`    | marca `nomeacao.status = EXONERADO_POR_NAO_POSSE`                                      | `EXONERADO_POR_NAO_POSSE` |
 
 Cancelamento depois de criado `hr.employee` é bloqueado no REC-06 e exige desligamento/rescisão pelo fluxo CALC-12. Permissões: leitura exige `recrutamento.posse.read`; mutações exigem `recrutamento.posse.write` e `rh.employee.write`.
 
@@ -315,19 +315,19 @@ stateDiagram-v2
 
 O desligamento administrativo continua pertencendo ao RH (`hr.employee`, `hr.employment_contract` e `hr.employee_status_history`). A folha de rescisão materializa o cálculo financeiro em `payroll.payroll_run` com tipo/processamento `RESCISAO`, usando `payroll_calc.compute_rescisao(...)` para decompor saldo de salário, 13º proporcional, férias vencidas, férias proporcionais, aviso prévio indenizado, multa FGTS quando aplicável e descontos legais.
 
-| Estado       | Descrição operacional                                                            |
-| ------------ | -------------------------------------------------------------------------------- |
-| `DRAFT`      | Folha rescisória aberta ou reaproveitada para vínculo/data/categoria             |
-| `PROCESSING` | Linhas calculadas anteriores daquele servidor são excluídas logicamente          |
-| `GENERATED`  | Componentes e financeiro foram gerados; termo de rescisão liberado no portal     |
-| `CLOSED`     | Folha rescisória encerrada para consulta histórica                               |
+| Estado       | Descrição operacional                                                        |
+| ------------ | ---------------------------------------------------------------------------- |
+| `DRAFT`      | Folha rescisória aberta ou reaproveitada para vínculo/data/categoria         |
+| `PROCESSING` | Linhas calculadas anteriores daquele servidor são excluídas logicamente      |
+| `GENERATED`  | Componentes e financeiro foram gerados; termo de rescisão liberado no portal |
+| `CLOSED`     | Folha rescisória encerrada para consulta histórica                           |
 
-| Transição | De          | Evento rescisório      | Guarda                                                     | Efeito                                                                                                            | Para        |
-| --------- | ----------- | ---------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- |
-| CALC12-T1 | _(início)_  | `CALCULAR_RESCISAO`    | vínculo existente, data e causa informadas                 | cria/reusa `payroll_run` `RESCISAO`, chama `payroll_calc.compute_rescisao(...)`, gera linhas e financeiro          | `GENERATED` |
-| CALC12-T2 | `GENERATED` | `REPROCESSAR_RESCISAO` | run ainda não aprovada/paga/fechada                        | marca linhas calculadas ativas com `deleted_at`, recalcula e grava novo histórico `termination.recalculated`      | `GENERATED` |
-| CALC12-T3 | `GENERATED` | `PUBLICAR_TERMO`       | run gerada e tenant/servidor autenticado com permissão     | portal lista **Termos de rescisão** somente para o próprio servidor                                               | `GENERATED` |
-| CALC12-T4 | `GENERATED` | `FECHAR_RESCISAO`      | conferência final da folha                                 | mantém os componentes em leitura histórica; S-2299 continua reservado ao fluxo eSocial ES-03                      | `CLOSED`    |
+| Transição | De          | Evento rescisório      | Guarda                                                 | Efeito                                                                                                       | Para        |
+| --------- | ----------- | ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ----------- |
+| CALC12-T1 | _(início)_  | `CALCULAR_RESCISAO`    | vínculo existente, data e causa informadas             | cria/reusa `payroll_run` `RESCISAO`, chama `payroll_calc.compute_rescisao(...)`, gera linhas e financeiro    | `GENERATED` |
+| CALC12-T2 | `GENERATED` | `REPROCESSAR_RESCISAO` | run ainda não aprovada/paga/fechada                    | marca linhas calculadas ativas com `deleted_at`, recalcula e grava novo histórico `termination.recalculated` | `GENERATED` |
+| CALC12-T3 | `GENERATED` | `PUBLICAR_TERMO`       | run gerada e tenant/servidor autenticado com permissão | portal lista **Termos de rescisão** somente para o próprio servidor                                          | `GENERATED` |
+| CALC12-T4 | `GENERATED` | `FECHAR_RESCISAO`      | conferência final da folha                             | mantém os componentes em leitura histórica; S-2299 continua reservado ao fluxo eSocial ES-03                 | `CLOSED`    |
 
 Invariantes: estatutário não recebe multa FGTS; CLT sem justa causa recebe aviso prévio indenizado e multa de 40% do FGTS; valores monetários são `numeric(14,2)`/`Decimal(14,2)` e não usam `Math.round`; toda mutação operacional relevante registra `public.sgp_append_audit_event(...)`.
 

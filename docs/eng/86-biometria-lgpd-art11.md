@@ -19,12 +19,12 @@ O SGP trata template biométrico de candidato como dado pessoal sensível. A cap
 
 ## ROPA
 
-| Operação | Dado tratado | Finalidade | Base | Retenção |
-| --- | --- | --- | --- | --- |
-| Consentimento | versão, assinatura, timestamp | prova do consentimento destacado | LGPD art. 11 | ciclo do concurso e prazo legal |
-| Captura | template digital/facial cifrado, qualidade, dispositivo | prevenir substituição de candidato | LGPD art. 11 e exercício regular de direitos | `retention_until` |
-| Matching | score, threshold, decisão, sessão de prova | conferência presencial e antifraude | LGPD arts. 7, 11 e 46 | ciclo do concurso e auditoria |
-| Exclusão | retirada e revogação | direito do titular | LGPD art. 18 | revoga template ativo e destrói chave lógica |
+| Operação      | Dado tratado                                            | Finalidade                          | Base                                         | Retenção                                     |
+| ------------- | ------------------------------------------------------- | ----------------------------------- | -------------------------------------------- | -------------------------------------------- |
+| Consentimento | versão, assinatura, timestamp                           | prova do consentimento destacado    | LGPD art. 11                                 | ciclo do concurso e prazo legal              |
+| Captura       | template digital/facial cifrado, qualidade, dispositivo | prevenir substituição de candidato  | LGPD art. 11 e exercício regular de direitos | `retention_until`                            |
+| Matching      | score, threshold, decisão, sessão de prova              | conferência presencial e antifraude | LGPD arts. 7, 11 e 46                        | ciclo do concurso e auditoria                |
+| Exclusão      | retirada e revogação                                    | direito do titular                  | LGPD art. 18                                 | revoga template ativo e destrói chave lógica |
 
 ## Segurança e Auditoria
 

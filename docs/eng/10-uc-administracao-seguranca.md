@@ -1,4 +1,5 @@
 # Use Cases — Administração & Segurança (UC-ADM)
+
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
 **Escopo:** Bounded context Auth, RBAC, Usuários/Perfis/Papéis, Menus, Parametrização, Auditoria, Tenancy, Arquivos S3, Notificações, Integrações horizontais.
 **Depende de:** BRIEF.md, 01-escopo-e-decisoes.md, 40-divisao-modular.md.
@@ -11,17 +12,17 @@ O bounded context de **Administração & Segurança** é transversal a todos os 
 
 ### Responsabilidades principais
 
-| Subdomain | Responsabilidade |
-|---|---|
-| **Autenticação** | Fluxos OAuth2/OIDC com AWS Cognito (authorization code + PKCE, client-credentials, refresh, revogação, MFA, Gov.br federado). |
-| **Autorização (RBAC)** | Modelo de 4 camadas: Tenant → Perfil → Papel → Usuário. Guards NestJS validam cada requisição. |
-| **Gestão de usuários** | CRUD de usuários, convite por e-mail, desativação, associação de perfis e papéis. |
-| **Menus dinâmicos** | Sidebar carregada por conjunto de papéis do usuário; cadastro de itens e feature flags. |
-| **Parametrização** | `ParametroSistema` (identidade do tenant) e `ParametroGlobal` (tetos, índices), feature flags. |
-| **Auditoria** | Tabela `audit_log` com diff JSONB em domínios sensíveis; consulta e exportação. |
-| **Tenancy** | Provisionamento, seeds e ciclo de vida de tenants. |
-| **Arquivos (S3)** | Presigned URLs, metadados de anexos, exclusão lógica. |
-| **Notificações** | E-mail transacional (SES), notificações in-app, preferências. |
+| Subdomain              | Responsabilidade                                                                                                              |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **Autenticação**       | Fluxos OAuth2/OIDC com AWS Cognito (authorization code + PKCE, client-credentials, refresh, revogação, MFA, Gov.br federado). |
+| **Autorização (RBAC)** | Modelo de 4 camadas: Tenant → Perfil → Papel → Usuário. Guards NestJS validam cada requisição.                                |
+| **Gestão de usuários** | CRUD de usuários, convite por e-mail, desativação, associação de perfis e papéis.                                             |
+| **Menus dinâmicos**    | Sidebar carregada por conjunto de papéis do usuário; cadastro de itens e feature flags.                                       |
+| **Parametrização**     | `ParametroSistema` (identidade do tenant) e `ParametroGlobal` (tetos, índices), feature flags.                                |
+| **Auditoria**          | Tabela `audit_log` com diff JSONB em domínios sensíveis; consulta e exportação.                                               |
+| **Tenancy**            | Provisionamento, seeds e ciclo de vida de tenants.                                                                            |
+| **Arquivos (S3)**      | Presigned URLs, metadados de anexos, exclusão lógica.                                                                         |
+| **Notificações**       | E-mail transacional (SES), notificações in-app, preferências.                                                                 |
 
 ### Princípios arquiteturais aplicados
 
@@ -35,16 +36,16 @@ O bounded context de **Administração & Segurança** é transversal a todos os 
 
 ## 2. Atores
 
-| Ator | Tipo | Descrição |
-|---|---|---|
-| **Admin do Tenant** | Humano interno | Usuário com perfil administrativo pleno dentro de um tenant. Gerencia usuários, perfis, papéis, parâmetros e feature flags do próprio tenant. |
-| **Auditor** | Humano interno | Usuário com papel `ROLE_AUDITORIA_GESTAO`. Acesso somente-leitura à trilha de auditoria e exportação de relatórios. |
-| **Usuário Final** | Humano interno | Qualquer colaborador autenticado com papel funcional (RH, Folha, Previdenciário etc.). Realiza autenticação, troca de senha, logout, upload/download de arquivos próprios. |
-| **Servidor (Portal)** | Humano externo | Servidor/pensionista/candidato que acessa o `sgp-portal`. Autenticação via Cognito ou Gov.br (fase 2). |
-| **Sistema Externo** | Sistema | Aplicações externas (prefeitura, BI, integrações) que consomem a API via OAuth2 client-credentials. Representa o legado `SGP-API-KEY`. |
-| **Gov.br IdP** | Sistema externo | Provedor de identidade federado ao Cognito User Pool via OIDC. Autentica cidadãos com credenciais Gov.br. |
-| **AWS Cognito** | Sistema AWS | User Pool que centraliza identidade, emissão de tokens JWT, MFA, e federation. |
-| **AWS S3** | Sistema AWS | Armazenamento objeto para anexos, logos, relatórios e arquivos de integração. |
+| Ator                  | Tipo            | Descrição                                                                                                                                                                  |
+| --------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Admin do Tenant**   | Humano interno  | Usuário com perfil administrativo pleno dentro de um tenant. Gerencia usuários, perfis, papéis, parâmetros e feature flags do próprio tenant.                              |
+| **Auditor**           | Humano interno  | Usuário com papel `ROLE_AUDITORIA_GESTAO`. Acesso somente-leitura à trilha de auditoria e exportação de relatórios.                                                        |
+| **Usuário Final**     | Humano interno  | Qualquer colaborador autenticado com papel funcional (RH, Folha, Previdenciário etc.). Realiza autenticação, troca de senha, logout, upload/download de arquivos próprios. |
+| **Servidor (Portal)** | Humano externo  | Servidor/pensionista/candidato que acessa o `sgp-portal`. Autenticação via Cognito ou Gov.br (fase 2).                                                                     |
+| **Sistema Externo**   | Sistema         | Aplicações externas (prefeitura, BI, integrações) que consomem a API via OAuth2 client-credentials. Representa o legado `SGP-API-KEY`.                                     |
+| **Gov.br IdP**        | Sistema externo | Provedor de identidade federado ao Cognito User Pool via OIDC. Autentica cidadãos com credenciais Gov.br.                                                                  |
+| **AWS Cognito**       | Sistema AWS     | User Pool que centraliza identidade, emissão de tokens JWT, MFA, e federation.                                                                                             |
+| **AWS S3**            | Sistema AWS     | Armazenamento objeto para anexos, logos, relatórios e arquivos de integração.                                                                                              |
 
 ---
 
@@ -183,46 +184,46 @@ flowchart TD
 
 ## 4. Catálogo de Use Cases
 
-| Código | Nome | Ator Principal | Prioridade |
-|---|---|---|---|
-| UC-ADM-001 | Autenticar via Cognito (authorization code + PKCE) | Usuário Final / Servidor | Alta |
-| UC-ADM-002 | Autenticar via Gov.br (federado Cognito) | Servidor (Portal) | Alta |
-| UC-ADM-003 | Autenticar Sistema Externo (client-credentials) | Sistema Externo | Alta |
-| UC-ADM-004 | Refresh Token | Usuário Final | Alta |
-| UC-ADM-005 | Logout (revogar tokens) | Usuário Final | Alta |
-| UC-ADM-006 | MFA (TOTP ou SMS) | Usuário Final | Alta |
-| UC-ADM-007 | Recuperar senha | Usuário Final | Alta |
-| UC-ADM-008 | Alterar senha | Usuário Final | Alta |
-| UC-ADM-010 | Criar usuário | Admin do Tenant | Alta |
-| UC-ADM-011 | Convidar usuário por e-mail | Admin do Tenant | Alta |
-| UC-ADM-012 | Desativar usuário | Admin do Tenant | Alta |
-| UC-ADM-013 | Criar/editar perfil | Admin do Tenant | Alta |
-| UC-ADM-014 | Associar papéis a perfil | Admin do Tenant | Alta |
-| UC-ADM-015 | Associar perfis a usuário | Admin do Tenant | Alta |
-| UC-ADM-016 | Atribuir papel direto a usuário | Admin do Tenant | Média |
-| UC-ADM-017 | Listar usuários por filial/perfil | Admin do Tenant | Média |
-| UC-ADM-020 | Carregar sidebar dinamicamente | Usuário Final | Alta |
-| UC-ADM-021 | Verificar permissão em endpoint (guard) | Sistema (automático) | Alta |
-| UC-ADM-022 | Cadastrar novo item de menu | Admin do Tenant | Média |
-| UC-ADM-023 | Ativar/desativar menu por feature flag | Admin do Tenant | Média |
-| UC-ADM-030 | Editar ParametroSistema do tenant | Admin do Tenant | Alta |
-| UC-ADM-031 | Editar ParametroGlobal | Admin do Tenant | Alta |
-| UC-ADM-032 | Ativar/desativar feature flag | Admin do Tenant | Alta |
-| UC-ADM-033 | Configurar terminologia Funcionário/Servidor | Admin do Tenant | Média |
-| UC-ADM-040 | Consultar trilha de auditoria por entidade | Auditor | Alta |
-| UC-ADM-041 | Consultar alterações por usuário | Auditor | Alta |
-| UC-ADM-042 | Exportar relatório de auditoria (período) | Auditor | Alta |
-| UC-ADM-043 | Visualizar diff de alteração (JSONB) | Auditor | Alta |
-| UC-ADM-050 | Provisionar novo tenant | Admin do Tenant | Alta |
-| UC-ADM-051 | Importar dados iniciais de tenant (seeds + legado) | Admin do Tenant | Alta |
-| UC-ADM-052 | Desativar tenant | Admin do Tenant | Baixa |
-| UC-ADM-060 | Gerar presigned URL de upload | Usuário Final | Alta |
-| UC-ADM-061 | Gerar presigned URL de download | Usuário Final | Alta |
-| UC-ADM-062 | Listar anexos por entidade | Usuário Final | Alta |
-| UC-ADM-063 | Excluir anexo | Usuário Final | Média |
-| UC-ADM-070 | Enviar e-mail de transação (requisição, folha) | Sistema (automático) | Alta |
-| UC-ADM-071 | Notificação in-app | Sistema (automático) | Média |
-| UC-ADM-072 | Configurar preferências de notificação | Usuário Final | Baixa |
+| Código     | Nome                                               | Ator Principal           | Prioridade |
+| ---------- | -------------------------------------------------- | ------------------------ | ---------- |
+| UC-ADM-001 | Autenticar via Cognito (authorization code + PKCE) | Usuário Final / Servidor | Alta       |
+| UC-ADM-002 | Autenticar via Gov.br (federado Cognito)           | Servidor (Portal)        | Alta       |
+| UC-ADM-003 | Autenticar Sistema Externo (client-credentials)    | Sistema Externo          | Alta       |
+| UC-ADM-004 | Refresh Token                                      | Usuário Final            | Alta       |
+| UC-ADM-005 | Logout (revogar tokens)                            | Usuário Final            | Alta       |
+| UC-ADM-006 | MFA (TOTP ou SMS)                                  | Usuário Final            | Alta       |
+| UC-ADM-007 | Recuperar senha                                    | Usuário Final            | Alta       |
+| UC-ADM-008 | Alterar senha                                      | Usuário Final            | Alta       |
+| UC-ADM-010 | Criar usuário                                      | Admin do Tenant          | Alta       |
+| UC-ADM-011 | Convidar usuário por e-mail                        | Admin do Tenant          | Alta       |
+| UC-ADM-012 | Desativar usuário                                  | Admin do Tenant          | Alta       |
+| UC-ADM-013 | Criar/editar perfil                                | Admin do Tenant          | Alta       |
+| UC-ADM-014 | Associar papéis a perfil                           | Admin do Tenant          | Alta       |
+| UC-ADM-015 | Associar perfis a usuário                          | Admin do Tenant          | Alta       |
+| UC-ADM-016 | Atribuir papel direto a usuário                    | Admin do Tenant          | Média      |
+| UC-ADM-017 | Listar usuários por filial/perfil                  | Admin do Tenant          | Média      |
+| UC-ADM-020 | Carregar sidebar dinamicamente                     | Usuário Final            | Alta       |
+| UC-ADM-021 | Verificar permissão em endpoint (guard)            | Sistema (automático)     | Alta       |
+| UC-ADM-022 | Cadastrar novo item de menu                        | Admin do Tenant          | Média      |
+| UC-ADM-023 | Ativar/desativar menu por feature flag             | Admin do Tenant          | Média      |
+| UC-ADM-030 | Editar ParametroSistema do tenant                  | Admin do Tenant          | Alta       |
+| UC-ADM-031 | Editar ParametroGlobal                             | Admin do Tenant          | Alta       |
+| UC-ADM-032 | Ativar/desativar feature flag                      | Admin do Tenant          | Alta       |
+| UC-ADM-033 | Configurar terminologia Funcionário/Servidor       | Admin do Tenant          | Média      |
+| UC-ADM-040 | Consultar trilha de auditoria por entidade         | Auditor                  | Alta       |
+| UC-ADM-041 | Consultar alterações por usuário                   | Auditor                  | Alta       |
+| UC-ADM-042 | Exportar relatório de auditoria (período)          | Auditor                  | Alta       |
+| UC-ADM-043 | Visualizar diff de alteração (JSONB)               | Auditor                  | Alta       |
+| UC-ADM-050 | Provisionar novo tenant                            | Admin do Tenant          | Alta       |
+| UC-ADM-051 | Importar dados iniciais de tenant (seeds + legado) | Admin do Tenant          | Alta       |
+| UC-ADM-052 | Desativar tenant                                   | Admin do Tenant          | Baixa      |
+| UC-ADM-060 | Gerar presigned URL de upload                      | Usuário Final            | Alta       |
+| UC-ADM-061 | Gerar presigned URL de download                    | Usuário Final            | Alta       |
+| UC-ADM-062 | Listar anexos por entidade                         | Usuário Final            | Alta       |
+| UC-ADM-063 | Excluir anexo                                      | Usuário Final            | Média      |
+| UC-ADM-070 | Enviar e-mail de transação (requisição, folha)     | Sistema (automático)     | Alta       |
+| UC-ADM-071 | Notificação in-app                                 | Sistema (automático)     | Média      |
+| UC-ADM-072 | Configurar preferências de notificação             | Usuário Final            | Baixa      |
 
 ---
 
@@ -236,11 +237,13 @@ flowchart TD
 **Atores secundários:** AWS Cognito
 
 **Pré-condições:**
+
 - Usuário possui cadastro ativo no Cognito User Pool do tenant.
 - App Client Cognito configurado com `ALLOW_USER_SRP_AUTH` e `ALLOW_REFRESH_TOKEN_AUTH`.
 - SPA Angular inicializada com `cognitoUserPoolId` e `cognitoAppClientId` obtidos de `ParametroSistema`.
 
 **Fluxo principal:**
+
 1. Usuário acessa a URL raiz do SPA (`/` ou rota protegida).
 2. `AuthGuard` Angular detecta ausência de token válido e redireciona para `/login`.
 3. SPA gera `code_verifier` (aleatório 128 bytes) e `code_challenge` (SHA-256 Base64URL).
@@ -255,23 +258,27 @@ flowchart TD
 12. `AuthzService` carrega permissões; SPA redireciona para rota inicial configurada.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Credenciais inválidas:** Cognito retorna `NotAuthorizedException`; SPA exibe mensagem "Credenciais inválidas".
 - **FA-2 — Usuário bloqueado:** Cognito retorna `UserNotConfirmedException` ou `UserDisabledException`; SPA exibe mensagem e orienta contato com o administrador.
 - **FA-3 — State CSRF inválido:** SPA descarta resposta e reinicia fluxo.
 - **FA-4 — Token Cognito com `tenant_id` ausente:** backend retorna `401`; SPA redireciona para `/login`.
 
 **Pós-condições:**
+
 - Usuário autenticado com tokens válidos em memória.
 - `audit_log` registra evento `LOGIN` com `usuario_id`, `ip`, `user_agent`, `timestamp`.
 - Sidebar carregada dinamicamente (aciona UC-ADM-020).
 
 **Regras de negócio:**
+
 - RN-ADM-001: `code_verifier` nunca trafega pela URL; apenas `code_challenge` vai ao Cognito.
 - RN-ADM-002: `refresh_token` não é armazenado em `localStorage` (risco XSS).
 - RN-ADM-003: `access_token` expira em 1h; `refresh_token` expira em 30 dias.
 - RN-ADM-004: Lambda trigger `pre-token-generation` adiciona claims customizadas: `tenant_id`, `usuario_id`, `papeis`.
 
 **Requisitos não-funcionais:**
+
 - Tempo de resposta do fluxo de troca de código < 2s (p95).
 - HTTPS obrigatório; HSTS habilitado no CloudFront.
 
@@ -281,6 +288,7 @@ flowchart TD
 **Telas:** `/login` (Hosted UI Cognito, personalizável com logo do tenant via `ParametroSistema.logo_principal_s3_key`).
 
 **Endpoints REST:**
+
 - `GET /api/v1/auth/me` — retorna perfil do usuário autenticado.
 - `POST /oauth2/token` (Cognito) — troca de código por tokens.
 
@@ -292,12 +300,14 @@ flowchart TD
 **Atores secundários:** Gov.br IdP, AWS Cognito
 
 **Pré-condições:**
+
 - Feature flag `GOV_BR_SSO_ENABLED = true` para o tenant.
 - Cognito User Pool configurado com Identity Provider Gov.br (OIDC).
 - Usuário possui CPF vinculado a uma conta Gov.br ativa.
 - No SGP, existe registro `usuario` com `cpf` correspondente e `vinculo_govbr = true`.
 
 **Fluxo principal:**
+
 1. Servidor acessa sgp-portal e clica em "Entrar com Gov.br".
 2. SPA inicia fluxo PKCE idêntico ao UC-ADM-001, porém com parâmetro `identity_provider=GOVBR` na URL do Hosted UI Cognito.
 3. Cognito redireciona o browser para o endpoint OIDC do Gov.br.
@@ -308,20 +318,24 @@ flowchart TD
 8. Fluxo continua idêntico a UC-ADM-001 a partir do passo 9.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — CPF não cadastrado no SGP:** Lambda trigger retorna erro customizado; Cognito redireciona com `error_description=CPF_NAO_ENCONTRADO`; sgp-portal exibe mensagem "CPF não encontrado. Contate seu departamento de RH.".
 - **FA-2 — Feature flag desabilitada:** botão "Entrar com Gov.br" não é renderizado; rota `/auth/govbr` retorna `403`.
 - **FA-3 — Usuário Gov.br sem nível prata:** Gov.br rejeita a autenticação; Hosted UI exibe erro nativo Gov.br.
 - **FA-4 — Timeout Gov.br > 10s:** SPA exibe "Serviço Gov.br indisponível. Tente novamente mais tarde."
 
 **Pós-condições:**
+
 - Servidor autenticado com escopo restrito ao Portal.
 - `audit_log` registra `LOGIN` com `canal=GOVBR`.
 
 **Regras de negócio:**
+
 - RN-ADM-005: Conta Gov.br Nível Bronze não é aceita para operações que alteram dados (ex: prova de vida).
 - RN-ADM-006: A associação CPF → `tenant_id` é feita pelo Lambda; se o CPF existir em múltiplos tenants, o Lambda retorna o tenant com vínculo `ATIVO` mais recente.
 
 **Requisitos não-funcionais:**
+
 - SLA Gov.br é externo; o SGP deve exibir fallback em até 10s.
 - Auditoria com canal Gov.br deve ser distinguível nas consultas.
 
@@ -331,6 +345,7 @@ flowchart TD
 **Telas:** Portal `/login` com botão Gov.br visível apenas se `GOV_BR_SSO_ENABLED`.
 
 **Endpoints REST:**
+
 - `GET /api/portal/v1/auth/me`
 - `GET /api/portal/v1/auth/govbr/status` — verifica se o tenant tem Gov.br ativo.
 
@@ -342,11 +357,13 @@ flowchart TD
 **Atores secundários:** AWS Cognito
 
 **Pré-condições:**
+
 - App Client Cognito do tipo "Machine-to-Machine" provisionado para o sistema externo.
 - `client_id` e `client_secret` entregues com segurança ao sistema externo.
 - Sistema externo possui papel `ROLE_EXTERNAL_SYSTEM` no tenant.
 
 **Fluxo principal:**
+
 1. Sistema externo envia `POST /oauth2/token` ao Cognito com `grant_type=client_credentials`, `client_id`, `client_secret`, `scope=sgp/external.read sgp/external.write`.
 2. Cognito valida credenciais e retorna `access_token` (JWT sem `refresh_token`).
 3. Sistema externo inclui `Authorization: Bearer <access_token>` em cada requisição ao SGP.
@@ -356,15 +373,18 @@ flowchart TD
 7. Requisição processada normalmente.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — `client_secret` inválido:** Cognito retorna `invalid_client`; sistema externo deve renovar credenciais via processo administrativo.
 - **FA-2 — Token expirado (1h):** sistema externo repete passo 1 automaticamente.
 - **FA-3 — Papel insuficiente:** `PermissionsGuard` retorna `403 Forbidden` com body RFC 7807.
 - **FA-4 — Rate limit:** API Gateway retorna `429 Too Many Requests`; sistema externo implementa backoff.
 
 **Pós-condições:**
+
 - `audit_log` registra requisições com `usuario_id = <client_id>`, `dominio = EXTERNAL_API`.
 
 **Regras de negócio:**
+
 - RN-ADM-007: Client-credentials não geram `refresh_token`; o `access_token` tem TTL de 1h.
 - RN-ADM-008: `ROLE_EXTERNAL_SYSTEM` é obrigatório; papéis funcionais adicionais podem ser concedidos seletivamente.
 - RN-ADM-009: Endpoints `/api/external/v1/...` aceitam exclusivamente tokens de client-credentials.
@@ -375,6 +395,7 @@ flowchart TD
 **Telas:** Nenhuma (fluxo machine-to-machine).
 
 **Endpoints REST:**
+
 - `POST /oauth2/token` (Cognito)
 - `GET /api/external/v1/dados` — exemplo de endpoint externo protegido.
 - `GET /api/external/v1/dicionario/entidades`
@@ -387,10 +408,12 @@ flowchart TD
 **Atores secundários:** AWS Cognito
 
 **Pré-condições:**
+
 - `refresh_token` válido armazenado em `sessionStorage`.
 - `access_token` expirado ou prestes a expirar (janela de 60s antes do vencimento).
 
 **Fluxo principal:**
+
 1. Interceptor HTTP Angular detecta `401 Unauthorized` ou timer de pré-expiração.
 2. SPA envia `POST /oauth2/token` com `grant_type=refresh_token`, `refresh_token`, `client_id`.
 3. Cognito valida o refresh_token e retorna novos `access_token` e `id_token`.
@@ -398,12 +421,14 @@ flowchart TD
 5. Caso haja múltiplas requisições paralelas aguardando, o SPA serializa a renovação (mutex) e libera todas após renovação.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — `refresh_token` expirado:** Cognito retorna `NotAuthorizedException`; SPA remove tokens, emite evento `sessionExpired`, redireciona para `/login`.
 - **FA-2 — Usuário desativado entre renovações:** Lambda trigger bloqueia emissão de novo token; SPA exibe "Sessão encerrada pelo administrador".
 
 **Pós-condições:** `access_token` atualizado; sessão prolongada sem novo login.
 
 **Regras de negócio:**
+
 - RN-ADM-010: Apenas um refresh simultâneo por sessão (fila de espera no interceptor).
 - RN-ADM-011: `refresh_token` Cognito tem rotação habilitada; token antigo é invalidado após uso.
 
@@ -419,6 +444,7 @@ flowchart TD
 **Pré-condições:** Sessão ativa com tokens válidos.
 
 **Fluxo principal:**
+
 1. Usuário clica em "Sair" no menu de perfil.
 2. SPA chama `POST /api/v1/auth/logout` enviando `refresh_token` no body.
 3. Backend revoga o `refresh_token` via Cognito `RevokeToken` API.
@@ -429,6 +455,7 @@ flowchart TD
 8. `audit_log` registra evento `LOGOUT`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Backend indisponível:** SPA limpa tokens localmente mesmo assim; usuário redirecionado para login.
 - **FA-2 — Logout por inatividade:** Timer de 30min (configurável em `ParametroSistema`) dispara logout automático com aviso de 2min.
 
@@ -444,10 +471,12 @@ flowchart TD
 **Atores secundários:** AWS Cognito
 
 **Pré-condições:**
+
 - MFA configurado no Cognito User Pool (obrigatório ou opcional, por `ParametroSistema.mfa_obrigatorio`).
 - Usuário completou etapa de senha no Hosted UI.
 
 **Fluxo principal (TOTP):**
+
 1. Após senha válida, Cognito retorna desafio `SOFTWARE_TOKEN_MFA`.
 2. Hosted UI exibe campo para código TOTP.
 3. Usuário abre aplicativo autenticador (Google Authenticator, Authy) e digita código de 6 dígitos.
@@ -456,12 +485,14 @@ flowchart TD
 6. Cognito emite tokens; fluxo continua no passo 9 de UC-ADM-001.
 
 **Fluxo alternativo — SMS:**
+
 1. Cognito retorna desafio `SMS_MFA`.
 2. Cognito envia SMS com código de 6 dígitos para telefone cadastrado.
 3. Usuário digita código no Hosted UI.
 4. Cognito valida; fluxo continua.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Código TOTP inválido:** Cognito retorna `CodeMismatchException`; usuário tem até 3 tentativas antes de bloqueio temporário (15min).
 - **FA-2 — SMS não recebido:** Opção "Reenviar código" disponível; re-envio limitado a 3 por sessão.
 - **FA-3 — Primeiro acesso (setup TOTP):** Cognito retorna desafio `MFA_SETUP`; Hosted UI exibe QR Code para cadastro do autenticador.
@@ -469,6 +500,7 @@ flowchart TD
 **Pós-condições:** Segundo fator validado; tokens emitidos.
 
 **Regras de negócio:**
+
 - RN-ADM-012: Administrador pode exigir MFA para todos os usuários via `ParametroSistema.mfa_obrigatorio`.
 - RN-ADM-013: TOTP é o método preferido; SMS é fallback.
 
@@ -481,10 +513,12 @@ flowchart TD
 **Ator principal:** Usuário Final
 
 **Pré-condições:**
+
 - Usuário possui e-mail cadastrado no Cognito User Pool.
 - Conta não está desativada (`UserDisabledException`).
 
 **Fluxo principal:**
+
 1. Usuário clica em "Esqueci minha senha" na tela de login.
 2. SPA exibe formulário com campo e-mail.
 3. Usuário informa e-mail e confirma.
@@ -500,6 +534,7 @@ flowchart TD
 13. Backend retorna `200 OK`; SPA redireciona para `/login` com mensagem de sucesso.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — E-mail não encontrado:** backend retorna `202` de qualquer forma (anti-enumeração).
 - **FA-2 — Código expirado:** Cognito retorna `ExpiredCodeException`; SPA orienta solicitar novo código.
 - **FA-3 — Senha não atende critérios:** Cognito retorna `InvalidPasswordException`; SPA exibe requisitos de força.
@@ -507,10 +542,12 @@ flowchart TD
 **Pós-condições:** Senha atualizada no Cognito; `audit_log` registra `UPDATE` em `usuario`.
 
 **Regras de negócio:**
+
 - RN-ADM-014: Senha deve ter no mínimo 8 caracteres, 1 maiúscula, 1 minúscula, 1 número, 1 caractere especial.
 - RN-ADM-015: Limite de 3 solicitações de recuperação por hora por e-mail.
 
 **Endpoints REST:**
+
 - `POST /api/v1/auth/recuperar-senha`
 - `POST /api/v1/auth/confirmar-nova-senha`
 
@@ -523,6 +560,7 @@ flowchart TD
 **Pré-condições:** Sessão ativa com `access_token` válido.
 
 **Fluxo principal:**
+
 1. Usuário acessa "Meu Perfil" → "Alterar Senha".
 2. SPA exibe formulário: senha atual, nova senha, confirmação.
 3. Usuário preenche e submete.
@@ -533,6 +571,7 @@ flowchart TD
 8. `audit_log` registra `UPDATE` em `usuario` com campo `senha_alterada=true`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Senha atual incorreta:** Cognito retorna `NotAuthorizedException`; SPA exibe "Senha atual incorreta".
 - **FA-2 — Nova senha igual à atual:** Cognito retorna `InvalidPasswordException`; SPA exibe "A nova senha deve ser diferente da atual".
 
@@ -547,11 +586,13 @@ flowchart TD
 **Ator principal:** Admin do Tenant
 
 **Pré-condições:**
+
 - Admin autenticado com papel `ROLE_GESTAO_USUARIOS_CADASTRAR`.
 - Tenant ativo.
 - E-mail do novo usuário não existe no Cognito User Pool do tenant.
 
 **Fluxo principal:**
+
 1. Admin acessa "Administração" → "Usuários" → "Novo Usuário".
 2. SPA exibe formulário: nome completo, CPF, e-mail, filial padrão, perfis iniciais.
 3. Admin preenche e submete.
@@ -565,6 +606,7 @@ flowchart TD
 11. `audit_log` registra `CREATE` em `usuario`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — E-mail duplicado no Cognito:** backend retorna `409 Conflict`.
 - **FA-2 — CPF duplicado no tenant:** backend retorna `422 Unprocessable Entity` com detalhe.
 - **FA-3 — Filial inexistente:** validação falha com `400 Bad Request`.
@@ -572,6 +614,7 @@ flowchart TD
 **Pós-condições:** Usuário criado e ativo; senha temporária enviada por e-mail; no primeiro login, usuário será forçado a trocar a senha (Cognito `FORCE_CHANGE_PASSWORD`).
 
 **Regras de negócio:**
+
 - RN-ADM-016: CPF é único por tenant; e-mail é único no Cognito User Pool (que é por tenant).
 - RN-ADM-017: Ao criar usuário, sempre associar ao menos um perfil ou papel direto.
 
@@ -591,6 +634,7 @@ flowchart TD
 **Pré-condições:** Mesmo que UC-ADM-010.
 
 **Fluxo principal:**
+
 1. Admin acessa "Usuários" → "Convidar".
 2. Admin informa e-mail e perfis iniciais (CPF pode ser preenchido depois pelo próprio usuário).
 3. SPA envia `POST /api/v1/admin/usuarios/convite`.
@@ -606,6 +650,7 @@ flowchart TD
 13. Redireciona para `/login`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Token expirado:** backend retorna `410 Gone`; orientar novo convite.
 - **FA-2 — E-mail já cadastrado:** backend retorna `409 Conflict`.
 - **FA-3 — Admin cancela convite pendente:** `DELETE /api/v1/admin/convites/:id` → `status=CANCELADO`.
@@ -613,6 +658,7 @@ flowchart TD
 **Pós-condições:** Usuário ativo; `audit_log` `CREATE` em `usuario`.
 
 **Endpoints REST:**
+
 - `POST /api/v1/admin/usuarios/convite`
 - `POST /api/v1/convites/:token/aceitar`
 - `DELETE /api/v1/admin/convites/:id`
@@ -624,11 +670,13 @@ flowchart TD
 **Ator principal:** Admin do Tenant
 
 **Pré-condições:**
+
 - Admin com papel `ROLE_GESTAO_USUARIOS_ATUALIZAR`.
 - Usuário alvo está ativo e pertence ao mesmo tenant.
 - Usuário alvo não é o único Admin do tenant.
 
 **Fluxo principal:**
+
 1. Admin acessa lista de usuários, seleciona usuário, clica em "Desativar".
 2. SPA exibe modal de confirmação com motivo (campo livre obrigatório).
 3. Admin confirma.
@@ -640,12 +688,14 @@ flowchart TD
 9. `audit_log` registra `UPDATE` em `usuario` com diff.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Usuário é o único Admin:** backend retorna `422` com detalhe "Não é possível desativar o único administrador do tenant".
 - **FA-2 — Usuário já inativo:** backend retorna `409`.
 
 **Pós-condições:** Usuário não consegue mais autenticar; sessões ativas encerradas.
 
 **Regras de negócio:**
+
 - RN-ADM-018: Desativação é soft-delete; o registro `usuario` é preservado para auditoria histórica.
 - RN-ADM-019: Reativação segue processo inverso via `PATCH ... { "status": "ATIVO" }` + `AdminEnableUser`.
 
@@ -658,9 +708,11 @@ flowchart TD
 **Ator principal:** Admin do Tenant
 
 **Pré-condições:**
+
 - Admin com papel `ROLE_GESTAO_PERFIS_CADASTRAR` ou `ROLE_GESTAO_PERFIS_ATUALIZAR`.
 
 **Fluxo principal (Criar):**
+
 1. Admin acessa "Administração" → "Perfis" → "Novo Perfil".
 2. SPA exibe formulário: nome do perfil, descrição, papéis iniciais (multi-select com busca).
 3. Admin preenche e submete.
@@ -671,6 +723,7 @@ flowchart TD
 8. `audit_log` `CREATE` em `perfil`.
 
 **Fluxo principal (Editar):**
+
 1. Admin acessa perfil existente, clica em "Editar".
 2. SPA carrega dados atuais.
 3. Admin altera nome, descrição e/ou papéis.
@@ -680,12 +733,14 @@ flowchart TD
 7. `audit_log` `UPDATE` com diff JSONB.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Nome duplicado:** `422 Unprocessable Entity`.
 - **FA-2 — Perfil em uso (tem usuários):** edição permitida; remoção bloqueada (ver regra RN-ADM-020).
 
 **Pós-condições:** Perfil criado/atualizado; permissões dos usuários refletidas na próxima requisição.
 
 **Regras de negócio:**
+
 - RN-ADM-020: Perfil com usuários associados não pode ser excluído; apenas desativado.
 - RN-ADM-021: Perfis são de escopo tenant; nunca compartilhados entre tenants.
 
@@ -695,6 +750,7 @@ flowchart TD
 **Telas:** `sgp-admin` → `/administracao/perfis`.
 
 **Endpoints REST:**
+
 - `POST /api/v1/admin/perfis`
 - `PUT /api/v1/admin/perfis/:id`
 - `GET /api/v1/admin/perfis`
@@ -708,10 +764,12 @@ flowchart TD
 **Ator principal:** Admin do Tenant
 
 **Pré-condições:**
+
 - Perfil existente no tenant.
 - Papéis são imutáveis (definidos por seed); Admin apenas associa/desassocia.
 
 **Fluxo principal:**
+
 1. Admin acessa perfil → aba "Papéis".
 2. SPA exibe lista de papéis disponíveis (agrupados por módulo) com checkboxes.
 3. Admin marca/desmarca papéis desejados.
@@ -721,12 +779,14 @@ flowchart TD
 7. `audit_log` `UPDATE` com diff (papéis adicionados/removidos).
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Papel inexistente na lista de seeds:** `422` com detalhe.
 - **FA-2 — Tentativa de associar papel de outro tenant:** `403 Forbidden`.
 
 **Pós-condições:** Papéis atualizados; usuários do perfil terão permissões recalculadas.
 
 **Regras de negócio:**
+
 - RN-ADM-022: `ROLE_EXTERNAL_SYSTEM` não pode ser associado a perfis de usuários humanos.
 - RN-ADM-023: A operação de substituição completa é atômica (transação).
 
@@ -741,6 +801,7 @@ flowchart TD
 **Pré-condições:** Usuário e perfis pertencem ao mesmo tenant.
 
 **Fluxo principal:**
+
 1. Admin acessa usuário → aba "Perfis".
 2. SPA exibe perfis disponíveis com checkboxes; perfis já associados aparecem marcados.
 3. Admin altera seleção e confirma.
@@ -750,6 +811,7 @@ flowchart TD
 7. `audit_log` `UPDATE` em `usuario_perfil`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Perfil de outro tenant:** `403`.
 - **FA-2 — Remoção de todos os perfis:** permitido se o usuário tiver pelo menos um papel direto (UC-ADM-016); caso contrário, `422`.
 
@@ -766,6 +828,7 @@ flowchart TD
 **Pré-condições:** Mesmo que UC-ADM-015.
 
 **Fluxo principal:**
+
 1. Admin acessa usuário → aba "Papéis Diretos".
 2. SPA exibe lista de papéis disponíveis não herdados por perfil.
 3. Admin marca papéis adicionais e salva.
@@ -775,6 +838,7 @@ flowchart TD
 7. `audit_log` `UPDATE`.
 
 **Regras de negócio:**
+
 - RN-ADM-024: Papéis diretos somam-se aos herdados por perfil (union).
 - RN-ADM-025: Papéis diretos são auditados separadamente para rastreabilidade de concessões pontuais.
 
@@ -789,6 +853,7 @@ flowchart TD
 **Pré-condições:** Admin autenticado com papel `ROLE_GESTAO_USUARIOS_VISUALIZAR`.
 
 **Fluxo principal:**
+
 1. Admin acessa "Administração" → "Usuários".
 2. SPA exibe filtros: filial, perfil, status, busca por nome/CPF/e-mail.
 3. Admin define filtros e aciona busca.
@@ -798,6 +863,7 @@ flowchart TD
 7. SPA renderiza tabela com colunas: nome, CPF (mascarado), e-mail, filial, perfis, status, último acesso.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Nenhum resultado:** SPA exibe estado vazio com orientação de ajustar filtros.
 
 **Dados de saída:** Lista paginada de usuários com metadados de perfil e filial.
@@ -813,10 +879,12 @@ flowchart TD
 **Ator principal:** Usuário Final (automaticamente após login)
 
 **Pré-condições:**
+
 - Usuário autenticado com `access_token` válido.
 - Claims `papeis[]` presentes no token.
 
 **Fluxo principal:**
+
 1. Após autenticação bem-sucedida, SPA chama `GET /api/v1/auth/menus`.
 2. Backend lê `papeis[]` do JWT (sem consulta ao banco; performance).
 3. Backend carrega árvore de menus do cache Redis (chave `menus:{tenant_id}`, TTL 5min).
@@ -826,6 +894,7 @@ flowchart TD
 7. SPA renderiza sidebar com itens autorizados; itens ocultos não são enviados (segurança: não apenas `hidden`).
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Cache Redis indisponível:** backend cai para consulta direta no banco com aviso de latência.
 - **FA-2 — Nenhum menu autorizado:** SPA exibe tela de "Sem permissões atribuídas. Contate o administrador."
 - **FA-3 — Feature flag desabilitada:** itens associados à flag não retornam no response.
@@ -833,6 +902,7 @@ flowchart TD
 **Pós-condições:** Sidebar renderizada com exatamente os itens que o usuário pode acessar.
 
 **Regras de negócio:**
+
 - RN-ADM-026: A filtragem de menus ocorre no servidor; o front-end não implementa lógica de ocultação própria.
 - RN-ADM-027: Alteração de papéis/perfis invalida cache de menus do tenant (`menus:{tenant_id}`).
 
@@ -850,6 +920,7 @@ flowchart TD
 **Pré-condições:** Requisição HTTP chegando a qualquer endpoint protegido do sgp-core-api.
 
 **Fluxo principal:**
+
 1. Requisição chega ao API Gateway; passa pelo WAF e rate limiting.
 2. `AuthGuard` (NestJS) valida assinatura JWT usando JWKS Cognito (cache local 5min); extrai `tenant_id`, `usuario_id`, `papeis[]`.
 3. `TenantGuard` injeta `tenant_id` no `RequestContext`; configura `SET LOCAL app.tenant_id = '...'` para ativar RLS no Postgres da requisição.
@@ -858,6 +929,7 @@ flowchart TD
 6. Resposta retornada ao cliente.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — JWT inválido/expirado:** `AuthGuard` retorna `401 Unauthorized` (RFC 7807: `type: /erros/nao-autenticado`).
 - **FA-2 — `tenant_id` ausente ou incompatível:** `TenantGuard` retorna `403 Forbidden`.
 - **FA-3 — Papel insuficiente:** `PermissionsGuard` retorna `403 Forbidden` (RFC 7807: `type: /erros/sem-permissao`, detalhe: módulo e ação exigidos).
@@ -866,6 +938,7 @@ flowchart TD
 **Pós-condições:** Acesso concedido ou negado; falhas de autorização registradas no `audit_log` com `acao=ACCESS_DENIED`.
 
 **Regras de negócio:**
+
 - RN-ADM-028: RLS é a defesa de profundidade no banco; o guard é a defesa de aplicação. Ambas são obrigatórias.
 - RN-ADM-029: Endpoints públicos (`/api/v1/auth/recuperar-senha`, `/api/v1/convites/:token/aceitar`) são decorados com `@Public()` e ignorados pelo `AuthGuard`.
 
@@ -878,10 +951,12 @@ flowchart TD
 **Ator principal:** Admin do Tenant
 
 **Pré-condições:**
+
 - Admin com papel `ROLE_GESTAO_MENUS_CADASTRAR`.
 - Rota Angular destino já existe no SPA.
 
 **Fluxo principal:**
+
 1. Admin acessa "Administração" → "Menus" → "Novo Item".
 2. SPA exibe formulário: label, ícone (Material Icons), rota Angular, menu pai (opcional), papéis requeridos (multi-select), ordem, feature flag associada (opcional).
 3. Admin preenche e submete.
@@ -892,6 +967,7 @@ flowchart TD
 8. `audit_log` `CREATE` em `menu_item`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Rota duplicada:** `409 Conflict`.
 - **FA-2 — Menu pai inexistente:** `400 Bad Request`.
 
@@ -899,6 +975,7 @@ flowchart TD
 **Dados de saída:** `menu_item_id`, `label`, `rota`.
 
 **Endpoints REST:**
+
 - `POST /api/v1/admin/menus`
 - `GET /api/v1/admin/menus`
 - `PUT /api/v1/admin/menus/:id`
@@ -911,10 +988,12 @@ flowchart TD
 **Ator principal:** Admin do Tenant
 
 **Pré-condições:**
+
 - Menu cadastrado com `feature_flag_chave` associada.
 - Admin com papel `ROLE_GESTAO_FEATURE_FLAGS_ATUALIZAR`.
 
 **Fluxo principal:**
+
 1. Admin acessa "Administração" → "Feature Flags".
 2. SPA exibe lista de flags com toggle (ativo/inativo) e descrição.
 3. Admin alterna a flag (ex: `PORTAL_SERVIDOR_ENABLED = false → true`).
@@ -926,9 +1005,11 @@ flowchart TD
 9. `audit_log` `UPDATE` em `feature_flag`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Flag de sistema (imutável por tenant):** algumas flags são globais (ex: `AUDIT_FULL_TRACE_ENABLED`); backend retorna `403` se tenant tentar alterá-las.
 
 **Regras de negócio:**
+
 - RN-ADM-030: Flags de menu, como `PORTAL_SERVIDOR_ENABLED`, são por tenant.
 - RN-ADM-031: Alteração de feature flag é auditada com diff `{ "antes": false, "depois": true }`.
 
@@ -941,10 +1022,12 @@ flowchart TD
 **Ator principal:** Admin do Tenant
 
 **Pré-condições:**
+
 - Admin com papel `ROLE_GESTAO_PARAMETROS_ATUALIZAR`.
 - Tenant ativo.
 
 **Fluxo principal:**
+
 1. Admin acessa "Administração" → "Parâmetros do Sistema".
 2. SPA carrega `GET /api/v1/admin/parametros/sistema` e exibe formulário estruturado em abas: Identidade, Matrícula, eSocial, Cognito.
 3. Admin altera campos desejados (ex: upload de novo logo, alteração de sigla).
@@ -956,6 +1039,7 @@ flowchart TD
 9. `audit_log` `UPDATE` com diff JSONB.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Formato de logo inválido:** apenas PNG/JPG, máx. 2 MB; SPA valida antes de solicitar presigned URL.
 - **FA-2 — `matricula_formato` inválido:** backend valida regex; `422` se inválido.
 
@@ -965,6 +1049,7 @@ flowchart TD
 **Telas:** `sgp-admin` → `/administracao/parametros/sistema`.
 
 **Endpoints REST:**
+
 - `GET /api/v1/admin/parametros/sistema`
 - `PUT /api/v1/admin/parametros/sistema`
 
@@ -975,9 +1060,11 @@ flowchart TD
 **Ator principal:** Admin do Tenant
 
 **Pré-condições:**
+
 - Admin com papel `ROLE_GESTAO_PARAMETROS_ATUALIZAR`.
 
 **Fluxo principal:**
+
 1. Admin acessa "Administração" → "Parâmetros Globais".
 2. SPA exibe tabela com chave, valor atual, descrição, data de vigência.
 3. Admin clica em uma chave (ex: `SALARIO_MINIMO`) e edita o valor + data de vigência.
@@ -987,10 +1074,12 @@ flowchart TD
 7. `audit_log` `UPDATE`.
 
 **Regras de negócio:**
+
 - RN-ADM-032: Alteração de `SALARIO_MINIMO` ou `TETO_INSS` com `vigencia_inicio` futura não afeta cálculos da competência corrente até que a data seja atingida.
 - RN-ADM-033: `ParametroGlobal` é compartilhado por tenant; não existe valor global inter-tenant.
 
 **Endpoints REST:**
+
 - `GET /api/v1/admin/parametros/globais`
 - `PUT /api/v1/admin/parametros/globais/:chave`
 
@@ -1003,6 +1092,7 @@ flowchart TD
 **Pré-condições:** Admin com papel `ROLE_GESTAO_FEATURE_FLAGS_ATUALIZAR`.
 
 **Fluxo principal:**
+
 1. Admin acessa "Administração" → "Feature Flags".
 2. SPA exibe lista com chave, descrição, estado atual (toggle).
 3. Admin alterna flag desejada.
@@ -1013,6 +1103,7 @@ flowchart TD
 8. `audit_log` `UPDATE`.
 
 **Regras de negócio:**
+
 - RN-ADM-034: `esocial.enabled` só pode ser ativado se `esocial_cnpj_empregador` e `esocial_certificado_s3_key` estiverem preenchidos em `ParametroSistema`.
 - RN-ADM-035: `GOV_BR_SSO_ENABLED` só pode ser ativado se o Cognito User Pool do tenant tiver o IdP Gov.br configurado.
 
@@ -1027,6 +1118,7 @@ flowchart TD
 **Pré-condições:** Admin com papel `ROLE_GESTAO_PARAMETROS_ATUALIZAR`.
 
 **Fluxo principal:**
+
 1. Admin acessa "Administração" → "Terminologia".
 2. SPA exibe formulário com dois campos: "Termo singular" e "Termo plural" (ex: "Servidor" / "Servidores").
 3. Admin altera e salva.
@@ -1036,6 +1128,7 @@ flowchart TD
 7. `audit_log` `UPDATE`.
 
 **Regras de negócio:**
+
 - RN-ADM-036: Os termos substituem globalmente rótulos de campos, labels de tela e mensagens de validação via sistema i18n do Angular.
 - RN-ADM-037: Apenas pt-BR é suportado no MVP; a terminologia é a única "localização" permitida.
 
@@ -1048,10 +1141,12 @@ flowchart TD
 **Ator principal:** Auditor
 
 **Pré-condições:**
+
 - Auditor autenticado com papel `ROLE_AUDITORIA_GESTAO`.
 - Entidade alvo pertence a domínio auditado (ver decisão #9 do BRIEF).
 
 **Fluxo principal:**
+
 1. Auditor acessa "Auditoria" → "Trilha por Entidade".
 2. SPA exibe formulário de filtro: domínio (dropdown), entidade (ex: `usuario`, `funcionario`), `entidade_id` (UUID), período (data_inicio / data_fim).
 3. Auditor define filtros e aciona pesquisa.
@@ -1061,6 +1156,7 @@ flowchart TD
 7. Auditor pode clicar em uma entrada para ver o diff completo (UC-ADM-043).
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Entidade não auditada (domínio fora da política):** backend retorna `[]` com aviso `"Domínio não registra auditoria"`.
 - **FA-2 — Período maior que 1 ano:** `400 Bad Request` com orientação de exportação (UC-ADM-042).
 
@@ -1079,6 +1175,7 @@ flowchart TD
 **Pré-condições:** Mesmo que UC-ADM-040.
 
 **Fluxo principal:**
+
 1. Auditor acessa "Auditoria" → "Alterações por Usuário".
 2. SPA exibe campo de busca de usuário (nome/CPF/e-mail) e período.
 3. Auditor seleciona usuário e período.
@@ -1087,6 +1184,7 @@ flowchart TD
 6. SPA exibe linha do tempo visual com ações: `LOGIN`, `CREATE`, `UPDATE`, `DELETE`, `EXPORT`, `PRINT`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Usuário sem registros no período:** estado vazio com orientação.
 
 **Endpoints REST:** `GET /api/v1/auditoria/logs` (mesmo endpoint, filtro por `usuario_id`).
@@ -1100,6 +1198,7 @@ flowchart TD
 **Pré-condições:** Auditor autenticado; período ≤ 12 meses por exportação.
 
 **Fluxo principal:**
+
 1. Auditor acessa "Auditoria" → "Exportar Relatório".
 2. SPA exibe formulário: período, domínio(s), formato (CSV ou XLSX), e-mail de destino.
 3. Auditor preenche e submete.
@@ -1112,13 +1211,16 @@ flowchart TD
 10. `audit_log` registra `EXPORT` pelo Auditor.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Período > 12 meses:** `400 Bad Request`.
 - **FA-2 — Falha no worker:** job marcado como `ERRO`; auditor notificado por e-mail; possibilidade de retentar.
+
 7. Auditor pode verificar status em `GET /api/v1/auditoria/exportacoes/:job_id`.
 
 **Dados de saída:** Arquivo XLSX/CSV em S3 com colunas: timestamp, usuario, acao, dominio, entidade, entidade_id, ip, user_agent, diff_resumo.
 
 **Endpoints REST:**
+
 - `POST /api/v1/auditoria/exportacoes`
 - `GET /api/v1/auditoria/exportacoes/:job_id`
 
@@ -1131,6 +1233,7 @@ flowchart TD
 **Pré-condições:** Auditor autenticado; entrada de `audit_log` com `diff_jsonb` preenchido.
 
 **Fluxo principal:**
+
 1. Auditor clica em uma entrada da trilha de auditoria (UC-ADM-040 ou UC-ADM-041).
 2. SPA envia `GET /api/v1/auditoria/logs/:id`.
 3. Backend retorna o registro completo incluindo `diff_jsonb` (estrutura `{ "antes": {...}, "depois": {...} }`).
@@ -1138,11 +1241,13 @@ flowchart TD
 5. Campos sensíveis (CPF, conta bancária) são mascarados na exibição (`***`), mesmo para Auditores (proteção de dados).
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Ação `CREATE` sem `antes`:** apenas coluna "depois" renderizada.
 - **FA-2 — Ação `DELETE` sem `depois`:** apenas coluna "antes" renderizada.
 - **FA-3 — `diff_jsonb` muito grande (> 500KB):** exibição truncada com link de download.
 
 **Regras de negócio:**
+
 - RN-ADM-038: CPF e dados de conta bancária sempre mascarados na exibição do diff, mesmo para admins.
 - RN-ADM-039: O `diff_jsonb` e o registro físico em `public.audit_event` são imutáveis após gravação; `UPDATE` e `DELETE` disparam a função `sgp_audit_event_immutable()` e falham com `audit_event is immutable`.
 - RN-ADM-039A: Toda rota mutante (`POST`, `PUT`, `PATCH`, `DELETE`) deve registrar auditoria por `sgp_append_audit_event(...)` na mesma unidade de trabalho lógica. Em `dev` e `test`, o interceptor global `AuditRequiredInterceptor` falha a requisição com `500` se uma rota mutante termina sem chamada de auditoria ou sem declaração explícita `@AuditMutation(...)` para fallback controlado.
@@ -1159,10 +1264,12 @@ flowchart TD
 **Atores secundários:** AWS Cognito, AWS S3, PostgreSQL
 
 **Pré-condições:**
+
 - Operador com papel `ROLE_PLATFORM_ADMIN` (papel reservado ao operador da plataforma, não exposto a tenants individuais).
 - Dados do contratante disponíveis: razão social, CNPJ, e-mail do admin inicial, slug do tenant.
 
 **Fluxo principal:**
+
 1. Operador acessa painel de plataforma `/platform/admin/tenants/novo`.
 2. Preenche formulário: `slug`, `razao_social`, `cnpj`, `email_admin`, `plano`.
 3. SPA envia `POST /api/admin/v1/tenants`.
@@ -1178,6 +1285,7 @@ flowchart TD
 6. `audit_log` plataforma registra `CREATE` em `tenant`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — `slug` duplicado:** `409 Conflict`.
 - **FA-2 — CNPJ inválido:** `422`.
 - **FA-3 — Falha em etapa intermediária:** transação revertida; bucket S3 e User Pool criados são marcados para limpeza assíncrona (Step Function `tenant-rollback`).
@@ -1186,6 +1294,7 @@ flowchart TD
 **Pós-condições:** Tenant provisionado e operacional; admin inicial pode fazer primeiro login.
 
 **Regras de negócio:**
+
 - RN-ADM-040: Cada tenant tem exatamente um bucket S3 por ambiente.
 - RN-ADM-041: Seeds de papéis e feature flags são versionados; nova versão de seeds pode ser reaplicada via UC-ADM-051.
 
@@ -1198,10 +1307,12 @@ flowchart TD
 **Ator principal:** Admin do Tenant (com assistência do operador da plataforma)
 
 **Pré-condições:**
+
 - Tenant provisionado (UC-ADM-050).
 - Dump do banco legado (SQL Server) disponível e convertido para formato de importação SGP (CSV + JSON normalizado).
 
 **Fluxo principal:**
+
 1. Operador acessa "Platform Admin" → "Importação de Legado".
 2. Faz upload do arquivo de importação (zip com CSVs de cada domínio) via presigned URL (UC-ADM-060).
 3. Envia `POST /api/admin/v1/tenants/:id/importacao` com `{ "arquivo_s3_key": "...", "modo": "SEED" | "LEGADO" }`.
@@ -1216,6 +1327,7 @@ flowchart TD
 8. Ao concluir, envia e-mail de resultado com relatório de inconsistências.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Arquivo corrompido:** `400 Bad Request` com detalhe de validação de estrutura.
 - **FA-2 — Erros em registros individuais:** worker continua, acumula erros em relatório; importação parcial.
 - **FA-3 — Reexecução:** modo `SEED` é idempotente (upsert); modo `LEGADO` exige tenant vazio ou confirmação de sobrescrita.
@@ -1223,6 +1335,7 @@ flowchart TD
 **Pós-condições:** Dados históricos disponíveis no SGP; usuários legados podem fazer login.
 
 **Endpoints REST:**
+
 - `POST /api/admin/v1/tenants/:id/importacao`
 - `GET /api/admin/v1/tenants/:id/importacao/:job_id/progresso`
 
@@ -1233,11 +1346,13 @@ flowchart TD
 **Ator principal:** Admin do Tenant (operador da plataforma)
 
 **Pré-condições:**
+
 - Operador com `ROLE_PLATFORM_ADMIN`.
 - Tenant sem folhas abertas (`competencia.status != ABERTA`).
 - Confirmação escrita do representante legal do contratante.
 
 **Fluxo principal:**
+
 1. Operador acessa painel de plataforma → tenant → "Desativar".
 2. SPA exibe modal de confirmação com campo de texto livre para motivo + checkbox de confirmação.
 3. Operador confirma.
@@ -1252,10 +1367,12 @@ flowchart TD
 7. Backend retorna `200 OK`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Competências abertas:** `422 Unprocessable Entity` com lista de competências pendentes.
 - **FA-2 — Reativação:** `PATCH ... { "status": "ATIVO" }` recria acessos Cognito e cancela lifecycle S3.
 
 **Regras de negócio:**
+
 - RN-ADM-042: Dados do tenant são retidos por 90 dias após desativação (LGPD, prazo de contestação).
 - RN-ADM-043: Desativação não é exclusão; é soft-disable com auditoria completa.
 
@@ -1268,10 +1385,12 @@ flowchart TD
 **Ator principal:** Usuário Final
 
 **Pré-condições:**
+
 - Usuário autenticado com papel que permite upload no contexto (ex: `ROLE_RH_CADASTRAR` para anexos de funcionário).
 - Entidade alvo (`funcionario_id`, `agendamento_id`, etc.) existe no tenant.
 
 **Fluxo principal:**
+
 1. Frontend prepara upload: valida tipo MIME e tamanho do arquivo localmente.
 2. SPA envia `POST /api/v1/arquivos/presigned-upload` com `{ "entidade": "funcionario", "entidade_id": "uuid", "nome_arquivo": "ctps.pdf", "mime_type": "application/pdf", "tamanho_bytes": 204800 }`.
 3. Backend valida: autenticação, permissão no contexto da entidade, tipo MIME permitido, tamanho máximo (10MB default, 50MB para documentos legais).
@@ -1285,6 +1404,7 @@ flowchart TD
 11. Backend atualiza `anexo.status = ATIVO`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — MIME não permitido:** `422 Unprocessable Entity` (lista de tipos permitidos por contexto em config).
 - **FA-2 — Tamanho excede limite:** `422`.
 - **FA-3 — Upload não confirmado em 30min:** job `cleanup:anexos-pendentes` exclui registro e marca S3 key para deleção.
@@ -1293,11 +1413,13 @@ flowchart TD
 **Pós-condições:** Arquivo disponível no S3 com metadados registrados; `anexo_id` disponível para associação à entidade.
 
 **Regras de negócio:**
+
 - RN-ADM-044: Nenhum arquivo trafega pelo backend; apenas metadados e a URL assinada.
 - RN-ADM-045: A chave S3 é determinística e inclui `tenant_id` como prefixo obrigatório (bucket policy exige).
 - RN-ADM-046: Buckets com SSE-KMS (`aws:kms`); chave KMS por tenant.
 
 **Endpoints REST:**
+
 - `POST /api/v1/arquivos/presigned-upload`
 - `PATCH /api/v1/arquivos/:id/confirmar`
 
@@ -1308,10 +1430,12 @@ flowchart TD
 **Ator principal:** Usuário Final
 
 **Pré-condições:**
+
 - Usuário autenticado com permissão de visualização na entidade dona do anexo.
 - `anexo_id` com `status = ATIVO` no tenant.
 
 **Fluxo principal:**
+
 1. SPA exibe lista de anexos de uma entidade (UC-ADM-062) e usuário clica em "Baixar".
 2. SPA envia `GET /api/v1/arquivos/:id/download`.
 3. Backend valida: autenticação, propriedade do tenant, permissão funcional, `status = ATIVO`.
@@ -1321,11 +1445,13 @@ flowchart TD
 7. SPA abre URL em nova aba ou dispara download automático (`<a href download>`).
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Arquivo não encontrado no S3 (inconsistência):** `404 Not Found` com detalhe `ARQUIVO_NAO_ENCONTRADO_S3`.
 - **FA-2 — URL expirada (usuário demora a clicar):** S3 retorna `403`; SPA detecta e solicita nova URL automaticamente.
 - **FA-3 — Arquivo marcado como excluído (`status=EXCLUIDO`):** backend retorna `410 Gone`.
 
 **Regras de negócio:**
+
 - RN-ADM-047: Download de documentos sensíveis (laudo pericial, contracheque, certidão) é registrado em auditoria.
 - RN-ADM-048: Presigned URL de download é pessoal; o compartilhamento da URL com terceiros não é prevenido tecnicamente, mas é auditado.
 
@@ -1340,6 +1466,7 @@ flowchart TD
 **Pré-condições:** Usuário autenticado com permissão de visualização na entidade.
 
 **Fluxo principal:**
+
 1. SPA (ex: tela de dossiê do funcionário) carrega lista de anexos ao abrir a seção de documentos.
 2. SPA envia `GET /api/v1/arquivos?entidade=funcionario&entidade_id=uuid&page=1&limit=20`.
 3. Backend consulta `anexo` com RLS, filtra `status != EXCLUIDO`, ordena por `created_at DESC`.
@@ -1347,6 +1474,7 @@ flowchart TD
 5. SPA renderiza tabela com ações: baixar (UC-ADM-061), excluir (UC-ADM-063).
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Entidade sem anexos:** retorna `{ data: [], total: 0 }`.
 
 **Dados de saída:** Lista de anexos com metadados (sem URL de acesso; URL gerada sob demanda).
@@ -1360,10 +1488,12 @@ flowchart TD
 **Ator principal:** Usuário Final (com permissão de exclusão) ou Admin do Tenant
 
 **Pré-condições:**
+
 - Usuário com papel que permite exclusão no contexto (ex: `ROLE_RH_EXCLUIR`).
 - Anexo `status = ATIVO`, pertence ao tenant.
 
 **Fluxo principal:**
+
 1. Usuário clica em "Excluir" na lista de anexos; SPA exibe confirmação.
 2. Usuário confirma.
 3. SPA envia `DELETE /api/v1/arquivos/:id`.
@@ -1373,10 +1503,12 @@ flowchart TD
 7. Backend retorna `204 No Content`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Anexo referenciado por documento oficial (ex: laudo aprovado):** backend retorna `422 Unprocessable Entity` com `"Arquivo vinculado a laudo aprovado não pode ser excluído"`.
 - **FA-2 — Anexo já excluído:** `404 Not Found`.
 
 **Regras de negócio:**
+
 - RN-ADM-049: Exclusão é lógica; o objeto S3 é retido por 30 dias e removido pelo lifecycle S3.
 - RN-ADM-050: Anexos de laudos aprovados, contracheques oficiais e certidões são imutáveis.
 
@@ -1390,11 +1522,13 @@ flowchart TD
 **Atores secundários:** AWS SES, Usuário Final (destinatário)
 
 **Pré-condições:**
+
 - Evento de negócio publicado (ex: `usuario.convidado`, `requisicao.encaminhada`, `folha.calculada`).
 - E-mail do destinatário disponível e verificado no SES (para tenants em modo sandbox: whitelist).
 - Template de e-mail cadastrado no SES para o evento.
 
 **Fluxo principal:**
+
 1. Evento `notificacao.email.solicitada` chega à fila SQS `notificacoes-email`.
 2. Worker `sgp-notifications-worker` consome o evento.
 3. Worker valida preferências do destinatário (UC-ADM-072): se `email_habilitado = false`, descarta.
@@ -1405,6 +1539,7 @@ flowchart TD
 8. Worker persiste log em `notificacao_log` com `status=ENTREGUE`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — SES bounce (e-mail inválido):** worker registra `status=BOUNCE`; dispara alerta para Admin do Tenant.
 - **FA-2 — SES complaint (spam):** worker desabilita e-mail do destinatário automaticamente (`usuario.email_habilitado = false`).
 - **FA-3 — Falha no SES:** retentativa com backoff exponencial (3 tentativas); após falha final, `status=ERRO`.
@@ -1413,6 +1548,7 @@ flowchart TD
 **Pós-condições:** E-mail entregue ou falha registrada; rastreabilidade via `notificacao_log`.
 
 **Regras de negócio:**
+
 - RN-ADM-051: Todos os e-mails transacionais incluem rodapé com identidade do tenant (`sigla`, logo) e link de opt-out para notificações não-críticas.
 - RN-ADM-052: E-mails de segurança (recuperação de senha, convite) não possuem opt-out.
 
@@ -1429,10 +1565,12 @@ flowchart TD
 **Atores secundários:** Usuário Final (destinatário)
 
 **Pré-condições:**
+
 - Usuário destinatário autenticado ou com sessão recente.
 - Evento de negócio com flag `notificacao_inapp = true`.
 
 **Fluxo principal:**
+
 1. Evento `notificacao.inapp.solicitada` chega à fila SQS.
 2. Worker persiste em `notificacao_inapp` com `{ usuario_id, tipo, titulo, mensagem, link_acao, lida=false, created_at }`.
 3. SPA Angular mantém conexão SSE (`EventSource`) com `GET /api/v1/notificacoes/stream` (Server-Sent Events).
@@ -1444,16 +1582,19 @@ flowchart TD
 9. SPA navega para `link_acao`; chama `PATCH /api/v1/notificacoes/:id` com `{ "lida": true }`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — SSE desconectado (rede):** SPA reconecta com backoff; ao reconectar, recarrega contagem.
 - **FA-2 — Usuário não preferir in-app:** worker verifica `usuario.notificacao_inapp_habilitada`; se false, não persiste.
 
 **Pós-condições:** Notificação lida marcada; contagem atualizada.
 
 **Regras de negócio:**
+
 - RN-ADM-053: Notificações não lidas são retidas por 90 dias; lidas por 30 dias.
 - RN-ADM-054: Contagem máxima exibida no badge: 99+.
 
 **Endpoints REST:**
+
 - `GET /api/v1/notificacoes/stream` (SSE)
 - `GET /api/v1/notificacoes`
 - `PATCH /api/v1/notificacoes/:id`
@@ -1468,6 +1609,7 @@ flowchart TD
 **Pré-condições:** Usuário autenticado.
 
 **Fluxo principal:**
+
 1. Usuário acessa "Meu Perfil" → "Preferências de Notificação".
 2. SPA carrega `GET /api/v1/usuarios/me/preferencias-notificacao`.
 3. SPA exibe tabela: tipo de evento (linha) × canal (coluna: email, in-app) com checkboxes.
@@ -1477,15 +1619,18 @@ flowchart TD
 7. Backend retorna `200 OK`.
 
 **Fluxos alternativos / exceções:**
+
 - **FA-1 — Tipo de notificação crítico (ex: `CONVITE_USUARIO`):** checkbox desabilitado; tooltip explica que não pode ser desativado.
 
 **Regras de negócio:**
+
 - RN-ADM-055: Notificações de segurança (`CONVITE`, `RECUPERACAO_SENHA`, `LOGOUT_FORCADO`) são obrigatórias e não podem ser desabilitadas.
 - RN-ADM-056: Preferências de e-mail são verificadas no worker antes de cada envio (UC-ADM-070 passo 3).
 
 **Dados de entrada:** `{ preferencias: [{ tipo_evento, canal, habilitado }] }`.
 
 **Endpoints REST:**
+
 - `GET /api/v1/usuarios/me/preferencias-notificacao`
 - `PUT /api/v1/usuarios/me/preferencias-notificacao`
 
@@ -1493,154 +1638,154 @@ flowchart TD
 
 ## 6. Resumo de Regras de Negócio
 
-| Código | Descrição resumida |
-|---|---|
-| RN-ADM-001 | `code_verifier` PKCE nunca trafega pela URL. |
-| RN-ADM-002 | `refresh_token` não armazenado em `localStorage`. |
-| RN-ADM-003 | `access_token` expira em 1h; `refresh_token` em 30 dias. |
-| RN-ADM-004 | Lambda Cognito enriquece token com `tenant_id`, `usuario_id`, `papeis[]`. |
-| RN-ADM-005 | Gov.br Nível Bronze não aceito para operações que alteram dados. |
+| Código     | Descrição resumida                                                                |
+| ---------- | --------------------------------------------------------------------------------- |
+| RN-ADM-001 | `code_verifier` PKCE nunca trafega pela URL.                                      |
+| RN-ADM-002 | `refresh_token` não armazenado em `localStorage`.                                 |
+| RN-ADM-003 | `access_token` expira em 1h; `refresh_token` em 30 dias.                          |
+| RN-ADM-004 | Lambda Cognito enriquece token com `tenant_id`, `usuario_id`, `papeis[]`.         |
+| RN-ADM-005 | Gov.br Nível Bronze não aceito para operações que alteram dados.                  |
 | RN-ADM-006 | CPF em múltiplos tenants: Lambda seleciona tenant com vínculo ATIVO mais recente. |
-| RN-ADM-007 | Client-credentials não gera `refresh_token`; TTL de 1h. |
-| RN-ADM-008 | `ROLE_EXTERNAL_SYSTEM` obrigatório para APIs externas. |
-| RN-ADM-009 | Endpoints `/api/external/v1/...` aceitam apenas tokens client-credentials. |
-| RN-ADM-010 | Apenas um refresh simultâneo por sessão (mutex no interceptor). |
-| RN-ADM-011 | Cognito rotate refresh tokens; token antigo invalidado após uso. |
-| RN-ADM-012 | MFA obrigatório configurável via `ParametroSistema.mfa_obrigatorio`. |
-| RN-ADM-013 | TOTP é método preferido; SMS é fallback. |
-| RN-ADM-014 | Senha: mínimo 8 chars, 1 maiúscula, 1 minúscula, 1 número, 1 especial. |
-| RN-ADM-015 | Máximo 3 solicitações de recuperação por hora por e-mail. |
-| RN-ADM-016 | CPF único por tenant; e-mail único no Cognito User Pool. |
-| RN-ADM-017 | Usuário criado deve ter ao menos um perfil ou papel direto. |
-| RN-ADM-018 | Desativação de usuário é soft-delete. |
-| RN-ADM-019 | Reativação segue processo inverso com `AdminEnableUser`. |
-| RN-ADM-020 | Perfil com usuários não pode ser excluído; apenas desativado. |
-| RN-ADM-021 | Perfis são de escopo tenant; nunca compartilhados. |
-| RN-ADM-022 | `ROLE_EXTERNAL_SYSTEM` não pode ser associado a perfis humanos. |
-| RN-ADM-023 | Substituição de papéis de perfil é atômica. |
-| RN-ADM-024 | Papéis diretos somam-se aos herdados por perfil (union). |
-| RN-ADM-025 | Papéis diretos auditados separadamente. |
-| RN-ADM-026 | Filtragem de menus ocorre no servidor. |
-| RN-ADM-027 | Alteração de papéis/perfis invalida cache de menus do tenant. |
-| RN-ADM-028 | RLS no banco + PermissionsGuard na aplicação são ambos obrigatórios. |
-| RN-ADM-029 | Endpoints públicos decorados com `@Public()` ignoram `AuthGuard`. |
-| RN-ADM-030 | Flags de menu são por tenant; algumas flags globais são imutáveis por tenant. |
-| RN-ADM-031 | Alteração de feature flag auditada com diff. |
-| RN-ADM-032 | Parâmetros com `vigencia_inicio` futura não afetam competência corrente. |
-| RN-ADM-033 | `ParametroGlobal` é por tenant (não inter-tenant). |
-| RN-ADM-034 | `esocial.enabled` exige `esocial_cnpj_empregador` e certificado preenchidos. |
-| RN-ADM-035 | `GOV_BR_SSO_ENABLED` exige IdP Gov.br configurado no Cognito. |
-| RN-ADM-036 | Terminologia substitui globalmente via i18n Angular. |
-| RN-ADM-037 | Apenas pt-BR suportado no MVP. |
-| RN-ADM-038 | CPF e conta bancária mascarados no diff de auditoria. |
-| RN-ADM-039 | `diff_jsonb` é imutável após gravação. |
-| RN-ADM-040 | Cada tenant tem exatamente um bucket S3 por ambiente. |
-| RN-ADM-041 | Seeds são versionados e reaplicáveis de forma idempotente. |
-| RN-ADM-042 | Dados retidos 90 dias após desativação do tenant (LGPD). |
-| RN-ADM-043 | Desativação de tenant é soft-disable, não exclusão. |
-| RN-ADM-044 | Nenhum arquivo trafega pelo backend (apenas metadados e presigned URL). |
-| RN-ADM-045 | Chave S3 inclui `tenant_id` como prefixo obrigatório. |
-| RN-ADM-046 | Buckets com SSE-KMS; chave KMS por tenant. |
-| RN-ADM-047 | Download de documentos sensíveis é registrado em auditoria. |
-| RN-ADM-048 | Presigned URL de download é pessoal e auditada. |
-| RN-ADM-049 | Exclusão de anexo é lógica; objeto S3 retido 30 dias. |
-| RN-ADM-050 | Anexos de laudos aprovados, contracheques e certidões são imutáveis. |
-| RN-ADM-051 | E-mails transacionais incluem identidade do tenant e link de opt-out. |
-| RN-ADM-052 | E-mails de segurança não possuem opt-out. |
-| RN-ADM-053 | Notificações não lidas retidas 90 dias; lidas 30 dias. |
-| RN-ADM-054 | Badge de notificações exibe máximo 99+. |
-| RN-ADM-055 | Notificações de segurança são obrigatórias e não desativáveis. |
-| RN-ADM-056 | Preferências de e-mail verificadas no worker antes de cada envio. |
+| RN-ADM-007 | Client-credentials não gera `refresh_token`; TTL de 1h.                           |
+| RN-ADM-008 | `ROLE_EXTERNAL_SYSTEM` obrigatório para APIs externas.                            |
+| RN-ADM-009 | Endpoints `/api/external/v1/...` aceitam apenas tokens client-credentials.        |
+| RN-ADM-010 | Apenas um refresh simultâneo por sessão (mutex no interceptor).                   |
+| RN-ADM-011 | Cognito rotate refresh tokens; token antigo invalidado após uso.                  |
+| RN-ADM-012 | MFA obrigatório configurável via `ParametroSistema.mfa_obrigatorio`.              |
+| RN-ADM-013 | TOTP é método preferido; SMS é fallback.                                          |
+| RN-ADM-014 | Senha: mínimo 8 chars, 1 maiúscula, 1 minúscula, 1 número, 1 especial.            |
+| RN-ADM-015 | Máximo 3 solicitações de recuperação por hora por e-mail.                         |
+| RN-ADM-016 | CPF único por tenant; e-mail único no Cognito User Pool.                          |
+| RN-ADM-017 | Usuário criado deve ter ao menos um perfil ou papel direto.                       |
+| RN-ADM-018 | Desativação de usuário é soft-delete.                                             |
+| RN-ADM-019 | Reativação segue processo inverso com `AdminEnableUser`.                          |
+| RN-ADM-020 | Perfil com usuários não pode ser excluído; apenas desativado.                     |
+| RN-ADM-021 | Perfis são de escopo tenant; nunca compartilhados.                                |
+| RN-ADM-022 | `ROLE_EXTERNAL_SYSTEM` não pode ser associado a perfis humanos.                   |
+| RN-ADM-023 | Substituição de papéis de perfil é atômica.                                       |
+| RN-ADM-024 | Papéis diretos somam-se aos herdados por perfil (union).                          |
+| RN-ADM-025 | Papéis diretos auditados separadamente.                                           |
+| RN-ADM-026 | Filtragem de menus ocorre no servidor.                                            |
+| RN-ADM-027 | Alteração de papéis/perfis invalida cache de menus do tenant.                     |
+| RN-ADM-028 | RLS no banco + PermissionsGuard na aplicação são ambos obrigatórios.              |
+| RN-ADM-029 | Endpoints públicos decorados com `@Public()` ignoram `AuthGuard`.                 |
+| RN-ADM-030 | Flags de menu são por tenant; algumas flags globais são imutáveis por tenant.     |
+| RN-ADM-031 | Alteração de feature flag auditada com diff.                                      |
+| RN-ADM-032 | Parâmetros com `vigencia_inicio` futura não afetam competência corrente.          |
+| RN-ADM-033 | `ParametroGlobal` é por tenant (não inter-tenant).                                |
+| RN-ADM-034 | `esocial.enabled` exige `esocial_cnpj_empregador` e certificado preenchidos.      |
+| RN-ADM-035 | `GOV_BR_SSO_ENABLED` exige IdP Gov.br configurado no Cognito.                     |
+| RN-ADM-036 | Terminologia substitui globalmente via i18n Angular.                              |
+| RN-ADM-037 | Apenas pt-BR suportado no MVP.                                                    |
+| RN-ADM-038 | CPF e conta bancária mascarados no diff de auditoria.                             |
+| RN-ADM-039 | `diff_jsonb` é imutável após gravação.                                            |
+| RN-ADM-040 | Cada tenant tem exatamente um bucket S3 por ambiente.                             |
+| RN-ADM-041 | Seeds são versionados e reaplicáveis de forma idempotente.                        |
+| RN-ADM-042 | Dados retidos 90 dias após desativação do tenant (LGPD).                          |
+| RN-ADM-043 | Desativação de tenant é soft-disable, não exclusão.                               |
+| RN-ADM-044 | Nenhum arquivo trafega pelo backend (apenas metadados e presigned URL).           |
+| RN-ADM-045 | Chave S3 inclui `tenant_id` como prefixo obrigatório.                             |
+| RN-ADM-046 | Buckets com SSE-KMS; chave KMS por tenant.                                        |
+| RN-ADM-047 | Download de documentos sensíveis é registrado em auditoria.                       |
+| RN-ADM-048 | Presigned URL de download é pessoal e auditada.                                   |
+| RN-ADM-049 | Exclusão de anexo é lógica; objeto S3 retido 30 dias.                             |
+| RN-ADM-050 | Anexos de laudos aprovados, contracheques e certidões são imutáveis.              |
+| RN-ADM-051 | E-mails transacionais incluem identidade do tenant e link de opt-out.             |
+| RN-ADM-052 | E-mails de segurança não possuem opt-out.                                         |
+| RN-ADM-053 | Notificações não lidas retidas 90 dias; lidas 30 dias.                            |
+| RN-ADM-054 | Badge de notificações exibe máximo 99+.                                           |
+| RN-ADM-055 | Notificações de segurança são obrigatórias e não desativáveis.                    |
+| RN-ADM-056 | Preferências de e-mail verificadas no worker antes de cada envio.                 |
 
 ---
 
 ## 7. Mapa de Endpoints REST
 
-| Método | Endpoint | UC relacionado |
-|---|---|---|
-| `POST` | `/oauth2/token` (Cognito) | UC-ADM-001, UC-ADM-003, UC-ADM-004 |
-| `GET` | `/api/v1/auth/me` | UC-ADM-001, UC-ADM-002 |
-| `POST` | `/api/v1/auth/logout` | UC-ADM-005 |
-| `POST` | `/api/v1/auth/recuperar-senha` | UC-ADM-007 |
-| `POST` | `/api/v1/auth/confirmar-nova-senha` | UC-ADM-007 |
-| `PUT` | `/api/v1/auth/alterar-senha` | UC-ADM-008 |
-| `GET` | `/api/v1/auth/menus` | UC-ADM-020 |
-| `GET` | `/api/portal/v1/auth/me` | UC-ADM-002 |
-| `GET` | `/api/portal/v1/auth/govbr/status` | UC-ADM-002 |
-| `GET` | `/api/external/v1/dados` | UC-ADM-003 |
-| `GET` | `/api/external/v1/dicionario/entidades` | UC-ADM-003 |
-| `POST` | `/api/v1/admin/usuarios` | UC-ADM-010 |
-| `POST` | `/api/v1/admin/usuarios/convite` | UC-ADM-011 |
-| `POST` | `/api/v1/convites/:token/aceitar` | UC-ADM-011 |
-| `DELETE` | `/api/v1/admin/convites/:id` | UC-ADM-011 |
-| `PATCH` | `/api/v1/admin/usuarios/:id` | UC-ADM-012 |
-| `GET` | `/api/v1/admin/usuarios` | UC-ADM-017 |
-| `POST` | `/api/v1/admin/perfis` | UC-ADM-013 |
-| `PUT` | `/api/v1/admin/perfis/:id` | UC-ADM-013 |
-| `GET` | `/api/v1/admin/perfis` | UC-ADM-013 |
-| `GET` | `/api/v1/admin/perfis/:id` | UC-ADM-013 |
-| `DELETE` | `/api/v1/admin/perfis/:id` | UC-ADM-013 |
-| `PUT` | `/api/v1/admin/perfis/:id/papeis` | UC-ADM-014 |
-| `PUT` | `/api/v1/admin/usuarios/:id/perfis` | UC-ADM-015 |
-| `PUT` | `/api/v1/admin/usuarios/:id/papeis-diretos` | UC-ADM-016 |
-| `POST` | `/api/v1/admin/menus` | UC-ADM-022 |
-| `GET` | `/api/v1/admin/menus` | UC-ADM-022 |
-| `PUT` | `/api/v1/admin/menus/:id` | UC-ADM-022 |
-| `DELETE` | `/api/v1/admin/menus/:id` | UC-ADM-022 |
-| `PATCH` | `/api/v1/admin/feature-flags/:chave` | UC-ADM-023, UC-ADM-032 |
-| `GET` | `/api/v1/admin/parametros/sistema` | UC-ADM-030 |
-| `PUT` | `/api/v1/admin/parametros/sistema` | UC-ADM-030, UC-ADM-033 |
-| `GET` | `/api/v1/admin/parametros/globais` | UC-ADM-031 |
-| `PUT` | `/api/v1/admin/parametros/globais/:chave` | UC-ADM-031 |
-| `GET` | `/api/v1/auditoria/logs` | UC-ADM-040, UC-ADM-041 |
-| `GET` | `/api/v1/auditoria/logs/:id` | UC-ADM-043 |
-| `POST` | `/api/v1/auditoria/exportacoes` | UC-ADM-042 |
-| `GET` | `/api/v1/auditoria/exportacoes/:job_id` | UC-ADM-042 |
-| `POST` | `/api/admin/v1/tenants` | UC-ADM-050 |
-| `POST` | `/api/admin/v1/tenants/:id/importacao` | UC-ADM-051 |
-| `GET` | `/api/admin/v1/tenants/:id/importacao/:job_id/progresso` | UC-ADM-051 |
-| `PATCH` | `/api/admin/v1/tenants/:id` | UC-ADM-052 |
-| `POST` | `/api/v1/arquivos/presigned-upload` | UC-ADM-060 |
-| `PATCH` | `/api/v1/arquivos/:id/confirmar` | UC-ADM-060 |
-| `GET` | `/api/v1/arquivos/:id/download` | UC-ADM-061 |
-| `GET` | `/api/v1/arquivos` | UC-ADM-062 |
-| `DELETE` | `/api/v1/arquivos/:id` | UC-ADM-063 |
-| `GET` | `/api/v1/notificacoes/stream` (SSE) | UC-ADM-071 |
-| `GET` | `/api/v1/notificacoes` | UC-ADM-071 |
-| `PATCH` | `/api/v1/notificacoes/:id` | UC-ADM-071 |
-| `PATCH` | `/api/v1/notificacoes/marcar-todas-lidas` | UC-ADM-071 |
-| `GET` | `/api/v1/usuarios/me/preferencias-notificacao` | UC-ADM-072 |
-| `PUT` | `/api/v1/usuarios/me/preferencias-notificacao` | UC-ADM-072 |
+| Método   | Endpoint                                                 | UC relacionado                     |
+| -------- | -------------------------------------------------------- | ---------------------------------- |
+| `POST`   | `/oauth2/token` (Cognito)                                | UC-ADM-001, UC-ADM-003, UC-ADM-004 |
+| `GET`    | `/api/v1/auth/me`                                        | UC-ADM-001, UC-ADM-002             |
+| `POST`   | `/api/v1/auth/logout`                                    | UC-ADM-005                         |
+| `POST`   | `/api/v1/auth/recuperar-senha`                           | UC-ADM-007                         |
+| `POST`   | `/api/v1/auth/confirmar-nova-senha`                      | UC-ADM-007                         |
+| `PUT`    | `/api/v1/auth/alterar-senha`                             | UC-ADM-008                         |
+| `GET`    | `/api/v1/auth/menus`                                     | UC-ADM-020                         |
+| `GET`    | `/api/portal/v1/auth/me`                                 | UC-ADM-002                         |
+| `GET`    | `/api/portal/v1/auth/govbr/status`                       | UC-ADM-002                         |
+| `GET`    | `/api/external/v1/dados`                                 | UC-ADM-003                         |
+| `GET`    | `/api/external/v1/dicionario/entidades`                  | UC-ADM-003                         |
+| `POST`   | `/api/v1/admin/usuarios`                                 | UC-ADM-010                         |
+| `POST`   | `/api/v1/admin/usuarios/convite`                         | UC-ADM-011                         |
+| `POST`   | `/api/v1/convites/:token/aceitar`                        | UC-ADM-011                         |
+| `DELETE` | `/api/v1/admin/convites/:id`                             | UC-ADM-011                         |
+| `PATCH`  | `/api/v1/admin/usuarios/:id`                             | UC-ADM-012                         |
+| `GET`    | `/api/v1/admin/usuarios`                                 | UC-ADM-017                         |
+| `POST`   | `/api/v1/admin/perfis`                                   | UC-ADM-013                         |
+| `PUT`    | `/api/v1/admin/perfis/:id`                               | UC-ADM-013                         |
+| `GET`    | `/api/v1/admin/perfis`                                   | UC-ADM-013                         |
+| `GET`    | `/api/v1/admin/perfis/:id`                               | UC-ADM-013                         |
+| `DELETE` | `/api/v1/admin/perfis/:id`                               | UC-ADM-013                         |
+| `PUT`    | `/api/v1/admin/perfis/:id/papeis`                        | UC-ADM-014                         |
+| `PUT`    | `/api/v1/admin/usuarios/:id/perfis`                      | UC-ADM-015                         |
+| `PUT`    | `/api/v1/admin/usuarios/:id/papeis-diretos`              | UC-ADM-016                         |
+| `POST`   | `/api/v1/admin/menus`                                    | UC-ADM-022                         |
+| `GET`    | `/api/v1/admin/menus`                                    | UC-ADM-022                         |
+| `PUT`    | `/api/v1/admin/menus/:id`                                | UC-ADM-022                         |
+| `DELETE` | `/api/v1/admin/menus/:id`                                | UC-ADM-022                         |
+| `PATCH`  | `/api/v1/admin/feature-flags/:chave`                     | UC-ADM-023, UC-ADM-032             |
+| `GET`    | `/api/v1/admin/parametros/sistema`                       | UC-ADM-030                         |
+| `PUT`    | `/api/v1/admin/parametros/sistema`                       | UC-ADM-030, UC-ADM-033             |
+| `GET`    | `/api/v1/admin/parametros/globais`                       | UC-ADM-031                         |
+| `PUT`    | `/api/v1/admin/parametros/globais/:chave`                | UC-ADM-031                         |
+| `GET`    | `/api/v1/auditoria/logs`                                 | UC-ADM-040, UC-ADM-041             |
+| `GET`    | `/api/v1/auditoria/logs/:id`                             | UC-ADM-043                         |
+| `POST`   | `/api/v1/auditoria/exportacoes`                          | UC-ADM-042                         |
+| `GET`    | `/api/v1/auditoria/exportacoes/:job_id`                  | UC-ADM-042                         |
+| `POST`   | `/api/admin/v1/tenants`                                  | UC-ADM-050                         |
+| `POST`   | `/api/admin/v1/tenants/:id/importacao`                   | UC-ADM-051                         |
+| `GET`    | `/api/admin/v1/tenants/:id/importacao/:job_id/progresso` | UC-ADM-051                         |
+| `PATCH`  | `/api/admin/v1/tenants/:id`                              | UC-ADM-052                         |
+| `POST`   | `/api/v1/arquivos/presigned-upload`                      | UC-ADM-060                         |
+| `PATCH`  | `/api/v1/arquivos/:id/confirmar`                         | UC-ADM-060                         |
+| `GET`    | `/api/v1/arquivos/:id/download`                          | UC-ADM-061                         |
+| `GET`    | `/api/v1/arquivos`                                       | UC-ADM-062                         |
+| `DELETE` | `/api/v1/arquivos/:id`                                   | UC-ADM-063                         |
+| `GET`    | `/api/v1/notificacoes/stream` (SSE)                      | UC-ADM-071                         |
+| `GET`    | `/api/v1/notificacoes`                                   | UC-ADM-071                         |
+| `PATCH`  | `/api/v1/notificacoes/:id`                               | UC-ADM-071                         |
+| `PATCH`  | `/api/v1/notificacoes/marcar-todas-lidas`                | UC-ADM-071                         |
+| `GET`    | `/api/v1/usuarios/me/preferencias-notificacao`           | UC-ADM-072                         |
+| `PUT`    | `/api/v1/usuarios/me/preferencias-notificacao`           | UC-ADM-072                         |
 
 ---
 
 ## 8. Mapa de Telas Angular
 
-| Rota Angular | Aplicação | UC(s) relacionado(s) |
-|---|---|---|
-| `/login` | sgp-admin / sgp-portal | UC-ADM-001, UC-ADM-002, UC-ADM-007 |
-| `/login/mfa` | sgp-admin / sgp-portal | UC-ADM-006 |
-| `/login/recuperar-senha` | sgp-admin / sgp-portal | UC-ADM-007 |
-| `/aceitar-convite` | sgp-portal | UC-ADM-011 |
-| `/meu-perfil` | sgp-admin / sgp-portal | UC-ADM-008 |
-| `/meu-perfil/notificacoes` | sgp-admin / sgp-portal | UC-ADM-072 |
-| `/administracao/usuarios` | sgp-admin | UC-ADM-010, UC-ADM-011, UC-ADM-012, UC-ADM-017 |
-| `/administracao/usuarios/novo` | sgp-admin | UC-ADM-010 |
-| `/administracao/usuarios/:id` | sgp-admin | UC-ADM-012, UC-ADM-015, UC-ADM-016 |
-| `/administracao/perfis` | sgp-admin | UC-ADM-013, UC-ADM-014 |
-| `/administracao/perfis/novo` | sgp-admin | UC-ADM-013 |
-| `/administracao/perfis/:id` | sgp-admin | UC-ADM-013, UC-ADM-014 |
-| `/administracao/menus` | sgp-admin | UC-ADM-022 |
-| `/administracao/feature-flags` | sgp-admin | UC-ADM-023, UC-ADM-032 |
-| `/administracao/parametros/sistema` | sgp-admin | UC-ADM-030, UC-ADM-033 |
-| `/administracao/parametros/globais` | sgp-admin | UC-ADM-031 |
-| `/auditoria/entidade` | sgp-admin | UC-ADM-040, UC-ADM-043 |
-| `/auditoria/usuario` | sgp-admin | UC-ADM-041 |
-| `/auditoria/exportar` | sgp-admin | UC-ADM-042 |
-| `/platform/admin/tenants` | sgp-admin (platform) | UC-ADM-050, UC-ADM-052 |
-| `/platform/admin/tenants/novo` | sgp-admin (platform) | UC-ADM-050 |
-| `/platform/admin/tenants/:id/importacao` | sgp-admin (platform) | UC-ADM-051 |
+| Rota Angular                             | Aplicação              | UC(s) relacionado(s)                           |
+| ---------------------------------------- | ---------------------- | ---------------------------------------------- |
+| `/login`                                 | sgp-admin / sgp-portal | UC-ADM-001, UC-ADM-002, UC-ADM-007             |
+| `/login/mfa`                             | sgp-admin / sgp-portal | UC-ADM-006                                     |
+| `/login/recuperar-senha`                 | sgp-admin / sgp-portal | UC-ADM-007                                     |
+| `/aceitar-convite`                       | sgp-portal             | UC-ADM-011                                     |
+| `/meu-perfil`                            | sgp-admin / sgp-portal | UC-ADM-008                                     |
+| `/meu-perfil/notificacoes`               | sgp-admin / sgp-portal | UC-ADM-072                                     |
+| `/administracao/usuarios`                | sgp-admin              | UC-ADM-010, UC-ADM-011, UC-ADM-012, UC-ADM-017 |
+| `/administracao/usuarios/novo`           | sgp-admin              | UC-ADM-010                                     |
+| `/administracao/usuarios/:id`            | sgp-admin              | UC-ADM-012, UC-ADM-015, UC-ADM-016             |
+| `/administracao/perfis`                  | sgp-admin              | UC-ADM-013, UC-ADM-014                         |
+| `/administracao/perfis/novo`             | sgp-admin              | UC-ADM-013                                     |
+| `/administracao/perfis/:id`              | sgp-admin              | UC-ADM-013, UC-ADM-014                         |
+| `/administracao/menus`                   | sgp-admin              | UC-ADM-022                                     |
+| `/administracao/feature-flags`           | sgp-admin              | UC-ADM-023, UC-ADM-032                         |
+| `/administracao/parametros/sistema`      | sgp-admin              | UC-ADM-030, UC-ADM-033                         |
+| `/administracao/parametros/globais`      | sgp-admin              | UC-ADM-031                                     |
+| `/auditoria/entidade`                    | sgp-admin              | UC-ADM-040, UC-ADM-043                         |
+| `/auditoria/usuario`                     | sgp-admin              | UC-ADM-041                                     |
+| `/auditoria/exportar`                    | sgp-admin              | UC-ADM-042                                     |
+| `/platform/admin/tenants`                | sgp-admin (platform)   | UC-ADM-050, UC-ADM-052                         |
+| `/platform/admin/tenants/novo`           | sgp-admin (platform)   | UC-ADM-050                                     |
+| `/platform/admin/tenants/:id/importacao` | sgp-admin (platform)   | UC-ADM-051                                     |
 
 ---
 
-*Fim do documento UC-ADM — Administração & Segurança.*
+_Fim do documento UC-ADM — Administração & Segurança._

@@ -15,12 +15,12 @@ CAT inicial e de reabertura usam `deadline_at` no proximo dia util apos `acciden
 
 `saude.work_accident.status` segue a sequencia validada por trigger:
 
-| De | Para |
-| --- | --- |
-| `REGISTRADO` | `COMUNICADO` |
-| `COMUNICADO` | `REABERTO`, `COMUNICACAO_OBITO`, `ENCERRADO` |
-| `REABERTO` | `COMUNICACAO_OBITO`, `ENCERRADO` |
-| `COMUNICACAO_OBITO` | `ENCERRADO` |
+| De                  | Para                                         |
+| ------------------- | -------------------------------------------- |
+| `REGISTRADO`        | `COMUNICADO`                                 |
+| `COMUNICADO`        | `REABERTO`, `COMUNICACAO_OBITO`, `ENCERRADO` |
+| `REABERTO`          | `COMUNICACAO_OBITO`, `ENCERRADO`             |
+| `COMUNICACAO_OBITO` | `ENCERRADO`                                  |
 
 Tentativas de pular `REGISTRADO -> COMUNICACAO_OBITO` sao rejeitadas. Acidente fatal exige `death_at`; fechamento de acidente fatal exige CAT `OBITO` previamente emitida.
 

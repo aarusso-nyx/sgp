@@ -7,7 +7,7 @@ This directory is the authoritative engineering and product specification source
 - If `docs/eng` conflicts with reverse docs, `docs/eng` wins.
 - For payroll engine internals, folia-derived implementation decisions may supersede specs; unresolved conflicts must be escalated.
 - Keep file numbering and structure stable to preserve cross-references.
-- Reverse evidence from `docs/legacy-reverse` must be succeeded here before it can be treated as current product/runtime truth.
+- Reverse evidence from `docs/leg/rev-eng` must be succeeded here before it can be treated as current product/runtime truth.
 
 ## Key artifacts
 

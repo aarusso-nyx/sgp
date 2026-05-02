@@ -1,4 +1,5 @@
 # Contratos de Integração — SGP Moderno
+
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
 **Escopo:** `integracoes`, `sgp-esocial-worker`, `sgp-integrations-worker`, `sgp-payroll-engine`, `sgp-core-api`, `sgp-portal`
 **Depende de:** BRIEF.md, 34-rotinas-operacionais-jobs-e-integracoes.md, 59-integracoes-e-contratos-estaticos.md, 33-catalogo-de-saidas-oficiais-e-arquivos.md
@@ -13,21 +14,21 @@ Decisão temporária de 2026-04-26: eSocial permanece stubado/sandbox como qualq
 
 Licenças saúde geradas por perícia oficial permanecem internas no HR-04. O contrato futuro para INSS/SIASS deverá consumir `hr.medical_record` e `hr.medical_leave` após a decisão `granted`, incluindo CID-10 principal/secundário, período concedido, dias consolidados e identificador do parecer oficial; não há transmissão externa ativa neste slice.
 
-| # | Integração | Direção | Protocolo | Auth | Criticidade |
-|---|---|---|---|---|---|
-| 1 | eSocial S-1.2 | Saída / Entrada (recibo) | Stub/sandbox S-1.2 no pacote atual; SOAP/HTTPS + XML no alvo futuro | Adapter sandbox agora; mTLS/cert. A1/A3 futuro | Crítica |
-| 2 | SIPREV/Gestão | Saída | Arquivo TXT + portal HTTPS | Upload manual autenticado | Alta |
-| 3 | DIRF (RFB) | Saída | Arquivo TXT + validador PGD | Upload via PGD-DIRF | Alta |
-| 4 | Portal do RH (ente) | Entrada / Saída | REST HTTPS | OAuth2 client-credentials (substitui API-KEY) | Alta |
-| 5 | API externa de terceiros | Saída | REST HTTPS | OAuth2 client-credentials (`ROLE_EXTERNAL_SYSTEM`) | Média |
-| 6 | Gov.br OIDC federation | Entrada | OIDC/OAuth2 | Gov.br como IdP federado Cognito | Alta (fase 2) |
-| 7 | AWS Cognito UserPools | Entrada | OIDC/OAuth2 | Authorization-code + PKCE / client-credentials | Crítica |
-| 8 | Neoconsig / consignatárias | Entrada | Arquivo CSV/TXT | Upload manual / SFTP (por consignatária) | Média |
-| 9 | CNAB 240 / 400 | Saída / Entrada | Arquivo texto CNAB | SFTP bancário ou portal banco | Crítica |
-| 10 | Portal da Transparência | Saída | Arquivo JSON/CSV | Upload agendado / HTTPS sem auth ou token | Alta |
-| 11 | SEFIP / GFIP | Saída | Arquivo TXT SEFIP | Upload via SEFIP/GEFIP client | Congelado (legado) |
-| 12 | Upload/Download S3 presigned | Interno | HTTPS presigned URL | SigV4 (Cognito → API → S3) | Crítica |
-| 13 | EventBridge / SNS / SQS | Interno | AWS messaging | IAM Role + policy | Crítica |
+| #   | Integração                   | Direção                  | Protocolo                                                           | Auth                                               | Criticidade        |
+| --- | ---------------------------- | ------------------------ | ------------------------------------------------------------------- | -------------------------------------------------- | ------------------ |
+| 1   | eSocial S-1.2                | Saída / Entrada (recibo) | Stub/sandbox S-1.2 no pacote atual; SOAP/HTTPS + XML no alvo futuro | Adapter sandbox agora; mTLS/cert. A1/A3 futuro     | Crítica            |
+| 2   | SIPREV/Gestão                | Saída                    | Arquivo TXT + portal HTTPS                                          | Upload manual autenticado                          | Alta               |
+| 3   | DIRF (RFB)                   | Saída                    | Arquivo TXT + validador PGD                                         | Upload via PGD-DIRF                                | Alta               |
+| 4   | Portal do RH (ente)          | Entrada / Saída          | REST HTTPS                                                          | OAuth2 client-credentials (substitui API-KEY)      | Alta               |
+| 5   | API externa de terceiros     | Saída                    | REST HTTPS                                                          | OAuth2 client-credentials (`ROLE_EXTERNAL_SYSTEM`) | Média              |
+| 6   | Gov.br OIDC federation       | Entrada                  | OIDC/OAuth2                                                         | Gov.br como IdP federado Cognito                   | Alta (fase 2)      |
+| 7   | AWS Cognito UserPools        | Entrada                  | OIDC/OAuth2                                                         | Authorization-code + PKCE / client-credentials     | Crítica            |
+| 8   | Neoconsig / consignatárias   | Entrada                  | Arquivo CSV/TXT                                                     | Upload manual / SFTP (por consignatária)           | Média              |
+| 9   | CNAB 240 / 400               | Saída / Entrada          | Arquivo texto CNAB                                                  | SFTP bancário ou portal banco                      | Crítica            |
+| 10  | Portal da Transparência      | Saída                    | Arquivo JSON/CSV                                                    | Upload agendado / HTTPS sem auth ou token          | Alta               |
+| 11  | SEFIP / GFIP                 | Saída                    | Arquivo TXT SEFIP                                                   | Upload via SEFIP/GEFIP client                      | Congelado (legado) |
+| 12  | Upload/Download S3 presigned | Interno                  | HTTPS presigned URL                                                 | SigV4 (Cognito → API → S3)                         | Crítica            |
+| 13  | EventBridge / SNS / SQS      | Interno                  | AWS messaging                                                       | IAM Role + policy                                  | Crítica            |
 
 ---
 
@@ -43,29 +44,29 @@ Feature flag: `esocial.enabled` — quando `false`, menus e workers estão desat
 
 ### 1.2 Protocolo, autenticação e endpoints
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | HTTPS + SOAP 1.1 |
-| Binding | `ServicosEmprSREmpregador` (produção) / `ServicoSolicitarDownloadEventosPorId` (consulta) |
-| Endpoint produção | `https://webservices.esocial.gov.br/servicos/empregador/envioLoteEventos/enviarLoteEventos/v1_1_0/` |
-| Endpoint homologação | `https://webservices.esocial.gov.br/servicos/empregador/homologacao/...` |
-| Auth | mTLS: certificado e-CNPJ A1 (PKCS12) ou A3 (via PKCS11 → HSM) |
-| Assinatura | XML-DSig (RSA-SHA1 ou RSA-SHA256) em cada evento e no lote |
-| Cert armazenado em | S3 `{tenant}/certs/esocial.p12` (SSE-KMS) + Secrets Manager (senha) |
-| Parâmetros tenant | `esocial_url`, `esocial_cnpj_empregador`, `esocial_certificado_s3_key` |
+| Atributo             | Valor                                                                                               |
+| -------------------- | --------------------------------------------------------------------------------------------------- |
+| Protocolo            | HTTPS + SOAP 1.1                                                                                    |
+| Binding              | `ServicosEmprSREmpregador` (produção) / `ServicoSolicitarDownloadEventosPorId` (consulta)           |
+| Endpoint produção    | `https://webservices.esocial.gov.br/servicos/empregador/envioLoteEventos/enviarLoteEventos/v1_1_0/` |
+| Endpoint homologação | `https://webservices.esocial.gov.br/servicos/empregador/homologacao/...`                            |
+| Auth                 | mTLS: certificado e-CNPJ A1 (PKCS12) ou A3 (via PKCS11 → HSM)                                       |
+| Assinatura           | XML-DSig (RSA-SHA1 ou RSA-SHA256) em cada evento e no lote                                          |
+| Cert armazenado em   | S3 `{tenant}/certs/esocial.p12` (SSE-KMS) + Secrets Manager (senha)                                 |
+| Parâmetros tenant    | `esocial_url`, `esocial_cnpj_empregador`, `esocial_certificado_s3_key`                              |
 
 ### 1.3 Eventos cobertos
 
-| Grupo | Eventos |
-|---|---|
-| Tabelas empregador | S-1000, S-1005, S-1010, S-1020 |
-| Folha periódica | S-1200, S-1210, S-1299 |
-| Não periódicos — admissão/vínculo | S-2200, S-2205, S-2206 |
-| Não periódicos — afastamento/desligamento | S-2230, S-2299 |
-| Não periódicos — trabalhador sem vínculo | S-2300, S-2399 |
-| Benefício previdenciário | S-2400 (série) |
-| Exclusão | S-3000 |
-| Retornos (totalizadores) | S-5001, S-5002, S-5003, S-5011, S-5012 |
+| Grupo                                     | Eventos                                |
+| ----------------------------------------- | -------------------------------------- |
+| Tabelas empregador                        | S-1000, S-1005, S-1010, S-1020         |
+| Folha periódica                           | S-1200, S-1210, S-1299                 |
+| Não periódicos — admissão/vínculo         | S-2200, S-2205, S-2206                 |
+| Não periódicos — afastamento/desligamento | S-2230, S-2299                         |
+| Não periódicos — trabalhador sem vínculo  | S-2300, S-2399                         |
+| Benefício previdenciário                  | S-2400 (série)                         |
+| Exclusão                                  | S-3000                                 |
+| Retornos (totalizadores)                  | S-5001, S-5002, S-5003, S-5011, S-5012 |
 
 ### 1.4 Esquema de entrada (campos mínimos SGP → eSocial)
 
@@ -172,15 +173,15 @@ PENDENTE → GERANDO_XML → ASSINANDO → ENVIANDO → AGUARDANDO_RETORNO
 
 ### 1.6 Retorno e taxonomia de erros
 
-| Código eSocial | Significado SGP | Ação |
-|---|---|---|
-| 201 | Lote aceito/processado | Aguardar/concluir |
-| 202 | Lote em processamento | Poll continua |
-| 401 | Certificado inválido | Alerta imediato; bloqueia envios |
-| 402 | Prazo transmissão expirado | Reprocessar S-1299 corretivo |
-| 403 | Erro de schema XML | Bug SGP; registra em DLQ; notifica dev |
-| 404 | Evento não encontrado | Ignorar; log warn |
-| 501 | Erro interno eSocial | Retry exponencial |
+| Código eSocial | Significado SGP            | Ação                                   |
+| -------------- | -------------------------- | -------------------------------------- |
+| 201            | Lote aceito/processado     | Aguardar/concluir                      |
+| 202            | Lote em processamento      | Poll continua                          |
+| 401            | Certificado inválido       | Alerta imediato; bloqueia envios       |
+| 402            | Prazo transmissão expirado | Reprocessar S-1299 corretivo           |
+| 403            | Erro de schema XML         | Bug SGP; registra em DLQ; notifica dev |
+| 404            | Evento não encontrado      | Ignorar; log warn                      |
+| 501            | Erro interno eSocial       | Retry exponencial                      |
 
 ### 1.7 Idempotência
 
@@ -209,12 +210,12 @@ Exportação anual/mensal dos dados previdenciários para o sistema SIPREV (Mini
 
 ### 2.2 Protocolo e autenticação
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | Geração de arquivo TXT estruturado (layout MPS SIPREV vigente) + upload manual no portal SIPREV |
-| Portal | `https://www.previdencia.gov.br/siprev-gestao/` |
-| Auth portal | Certificado digital ICP-Brasil + credencial gov.br do gestor |
-| Direção SGP | Somente saída (geração do arquivo) |
+| Atributo    | Valor                                                                                           |
+| ----------- | ----------------------------------------------------------------------------------------------- |
+| Protocolo   | Geração de arquivo TXT estruturado (layout MPS SIPREV vigente) + upload manual no portal SIPREV |
+| Portal      | `https://www.previdencia.gov.br/siprev-gestao/`                                                 |
+| Auth portal | Certificado digital ICP-Brasil + credencial gov.br do gestor                                    |
+| Direção SGP | Somente saída (geração do arquivo)                                                              |
 
 ### 2.3 Esquema do arquivo (fragmento)
 
@@ -256,11 +257,11 @@ Usuário registra protocolo de envio em siprev_envio.protocolo
 
 ### 2.5 Taxonomia de erros
 
-| Erro | Causa | Ação |
-|---|---|---|
-| Dados incompletos (CPF sem PIS) | Falta PIS/NIT no cadastro | Relatório de inconsistências antes de gerar |
-| Competência sem folha fechada | Folha não foi fechada | Bloquear geração até `folha.status=BLOQUEADO` |
-| Timeout geração | Volume > 50k registros | Step Function com chunking por lote de 5k |
+| Erro                            | Causa                     | Ação                                          |
+| ------------------------------- | ------------------------- | --------------------------------------------- |
+| Dados incompletos (CPF sem PIS) | Falta PIS/NIT no cadastro | Relatório de inconsistências antes de gerar   |
+| Competência sem folha fechada   | Folha não foi fechada     | Bloquear geração até `folha.status=BLOQUEADO` |
+| Timeout geração                 | Volume > 50k registros    | Step Function com chunking por lote de 5k     |
 
 ### 2.6 Observabilidade
 
@@ -282,12 +283,12 @@ Declaração do Imposto de Renda Retido na Fonte — entrega anual à RFB até �
 
 ### 3.2 Protocolo e autenticação
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | Arquivo TXT leiaute RFB anual + validador PGD-DIRF |
-| Entrega | Upload no portal e-CAC ou via Receitanet |
+| Atributo    | Valor                                               |
+| ----------- | --------------------------------------------------- |
+| Protocolo   | Arquivo TXT leiaute RFB anual + validador PGD-DIRF  |
+| Entrega     | Upload no portal e-CAC ou via Receitanet            |
 | Auth portal | Certificado digital ICP-Brasil ou Gov.br nivel ouro |
-| Validador | PGD-DIRF (instalado localmente pelo contador) |
+| Validador   | PGD-DIRF (instalado localmente pelo contador)       |
 
 ### 3.3 Esquema do arquivo (fragmento)
 
@@ -309,13 +310,13 @@ FFIM
 
 Campos SGP → DIRF:
 
-| Campo DIRF | Origem SGP |
-|---|---|
-| CPF beneficiário | `pessoa.cpf` |
+| Campo DIRF              | Origem SGP                                          |
+| ----------------------- | --------------------------------------------------- |
+| CPF beneficiário        | `pessoa.cpf`                                        |
 | Rendimentos tributáveis | `lancamento` (tipo PROVENTO, incidência IRRF = sim) |
-| IRRF retido | `lancamento` (verba IRRF) |
-| Deduções dependentes | `dependente` (finalidade IR) |
-| Plano saúde | `convenio_desconto_folha` (natureza saúde) |
+| IRRF retido             | `lancamento` (verba IRRF)                           |
+| Deduções dependentes    | `dependente` (finalidade IR)                        |
+| Plano saúde             | `convenio_desconto_folha` (natureza saúde)          |
 
 ### 3.4 Fluxo de geração
 
@@ -349,14 +350,14 @@ API pública emitida pelo SGP para sistemas externos do ente (portal de autoaten
 
 ### 4.2 Protocolo e autenticação
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | REST HTTPS / JSON |
-| Base path | `/api/external/v1/portal-rh/` |
-| Auth | OAuth2 client-credentials (Cognito App Client com escopo `sgp/portal-rh`) |
-| Token | JWT HS256/RS256; exp 3600s; renovação automática pelo consumidor |
-| Rate limit | 60 req/min por client_id; 429 com `Retry-After` |
-| Versão | v1 (legado `/api/publico/prefeitura/*` mantido em `/api/legacy/v0/portal-rh/` por 12 meses) |
+| Atributo   | Valor                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------- |
+| Protocolo  | REST HTTPS / JSON                                                                           |
+| Base path  | `/api/external/v1/portal-rh/`                                                               |
+| Auth       | OAuth2 client-credentials (Cognito App Client com escopo `sgp/portal-rh`)                   |
+| Token      | JWT HS256/RS256; exp 3600s; renovação automática pelo consumidor                            |
+| Rate limit | 60 req/min por client_id; 429 com `Retry-After`                                             |
+| Versão     | v1 (legado `/api/publico/prefeitura/*` mantido em `/api/legacy/v0/portal-rh/` por 12 meses) |
 
 ### 4.3 Fluxo OAuth2 client-credentials
 
@@ -379,15 +380,15 @@ sequenceDiagram
 
 ### 4.4 Endpoints expostos
 
-| Método | Path | Descrição |
-|---|---|---|
-| GET | `/autenticacao` | Identifica CPF: APOSENTADO / PENSIONISTA / ATIVO / NAO_ENCONTRADO |
-| GET | `/dependente` | Lista dependentes de um beneficiário (CPF query param) |
-| PUT | `/endereco` | Atualiza endereço do beneficiário (prova de vida presencial) |
-| POST | `/incorretos` | Reporta dados incorretos para saneamento |
-| POST | `/imagem` | Envia foto/documento (multipart; max 10 MB; tipos: JPEG, PNG, PDF) |
-| GET | `/recadastramento/status` | Consulta status do recadastramento atual |
-| POST | `/prova-vida` | Registra prova de vida via canal PREFEITURA_PUBLICA |
+| Método | Path                      | Descrição                                                          |
+| ------ | ------------------------- | ------------------------------------------------------------------ |
+| GET    | `/autenticacao`           | Identifica CPF: APOSENTADO / PENSIONISTA / ATIVO / NAO_ENCONTRADO  |
+| GET    | `/dependente`             | Lista dependentes de um beneficiário (CPF query param)             |
+| PUT    | `/endereco`               | Atualiza endereço do beneficiário (prova de vida presencial)       |
+| POST   | `/incorretos`             | Reporta dados incorretos para saneamento                           |
+| POST   | `/imagem`                 | Envia foto/documento (multipart; max 10 MB; tipos: JPEG, PNG, PDF) |
+| GET    | `/recadastramento/status` | Consulta status do recadastramento atual                           |
+| POST   | `/prova-vida`             | Registra prova de vida via canal PREFEITURA_PUBLICA                |
 
 ### 4.5 Schema de resposta (autenticacao)
 
@@ -405,14 +406,14 @@ sequenceDiagram
 
 ### 4.6 Taxonomia de erros
 
-| HTTP | Código | Descrição |
-|---|---|---|
-| 401 | `TOKEN_INVALIDO` | JWT expirado ou inválido |
-| 403 | `SCOPE_INSUFICIENTE` | Client não tem escopo `sgp/portal-rh` |
-| 404 | `PESSOA_NAO_ENCONTRADA` | CPF não cadastrado no tenant |
-| 422 | `DADOS_INVALIDOS` | Campos obrigatórios ausentes ou inválidos |
-| 429 | `RATE_LIMIT` | Excedeu limite de requisições |
-| 503 | `SERVICO_INDISPONIVEL` | SGP em manutenção |
+| HTTP | Código                  | Descrição                                 |
+| ---- | ----------------------- | ----------------------------------------- |
+| 401  | `TOKEN_INVALIDO`        | JWT expirado ou inválido                  |
+| 403  | `SCOPE_INSUFICIENTE`    | Client não tem escopo `sgp/portal-rh`     |
+| 404  | `PESSOA_NAO_ENCONTRADA` | CPF não cadastrado no tenant              |
+| 422  | `DADOS_INVALIDOS`       | Campos obrigatórios ausentes ou inválidos |
+| 429  | `RATE_LIMIT`            | Excedeu limite de requisições             |
+| 503  | `SERVICO_INDISPONIVEL`  | SGP em manutenção                         |
 
 ### 4.7 Observabilidade
 
@@ -430,23 +431,23 @@ Expõe dados e metadados do SGP para sistemas consumidores autorizados (BI, ERPs
 
 ### 5.2 Protocolo e autenticação
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | REST HTTPS / JSON |
-| Base path | `/api/external/v1/` |
-| Auth | OAuth2 client-credentials (escopo `sgp/external-api`) |
-| Papel obrigatório | `ROLE_EXTERNAL_SYSTEM` |
-| Legado | Header `SGP-API-KEY` suportado em `/api/legacy/v0/externo/` por 12 meses |
+| Atributo          | Valor                                                                    |
+| ----------------- | ------------------------------------------------------------------------ |
+| Protocolo         | REST HTTPS / JSON                                                        |
+| Base path         | `/api/external/v1/`                                                      |
+| Auth              | OAuth2 client-credentials (escopo `sgp/external-api`)                    |
+| Papel obrigatório | `ROLE_EXTERNAL_SYSTEM`                                                   |
+| Legado            | Header `SGP-API-KEY` suportado em `/api/legacy/v0/externo/` por 12 meses |
 
 ### 5.3 Endpoints
 
-| Método | Path | Descrição |
-|---|---|---|
-| GET | `/dados` | Dados confidenciais do servidor (conforme escopo liberado) |
-| GET | `/dicionario/entidades` | Lista entidades do domínio SGP |
-| GET | `/dicionario/entidades/{nome}` | Detalhes de uma entidade (campos, tipos, constraints) |
-| GET | `/dicionario/enums` | Lista todos os enums parametrizáveis |
-| GET | `/dicionario/enums/{nome}` | Valores de um enum específico |
+| Método | Path                           | Descrição                                                  |
+| ------ | ------------------------------ | ---------------------------------------------------------- |
+| GET    | `/dados`                       | Dados confidenciais do servidor (conforme escopo liberado) |
+| GET    | `/dicionario/entidades`        | Lista entidades do domínio SGP                             |
+| GET    | `/dicionario/entidades/{nome}` | Detalhes de uma entidade (campos, tipos, constraints)      |
+| GET    | `/dicionario/enums`            | Lista todos os enums parametrizáveis                       |
+| GET    | `/dicionario/enums/{nome}`     | Valores de um enum específico                              |
 
 ### 5.4 Schema dicionário de entidades
 
@@ -462,9 +463,7 @@ Expõe dados e metadados do SGP para sistemas consumidores autorizados (BI, ERPs
       "descricao": "Matrícula única do servidor no ente"
     }
   ],
-  "relacionamentos": [
-    { "entidade": "cargo", "cardinalidade": "N:1" }
-  ]
+  "relacionamentos": [{ "entidade": "cargo", "cardinalidade": "N:1" }]
 }
 ```
 
@@ -472,9 +471,9 @@ Expõe dados e metadados do SGP para sistemas consumidores autorizados (BI, ERPs
 
 Mesma tabela da Seção 5.6, acrescentando:
 
-| HTTP | Código | Descrição |
-|---|---|---|
-| 403 | `ROLE_INSUFICIENTE` | Cliente sem `ROLE_EXTERNAL_SYSTEM` |
+| HTTP | Código              | Descrição                          |
+| ---- | ------------------- | ---------------------------------- |
+| 403  | `ROLE_INSUFICIENTE` | Cliente sem `ROLE_EXTERNAL_SYSTEM` |
 
 ### 5.6 Observabilidade
 
@@ -492,15 +491,15 @@ Login do servidor/pensionista/cidadão no Portal do Servidor (`sgp-portal`) via 
 
 ### 6.2 Protocolo e autenticação
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | OIDC 1.0 / OAuth2 authorization code + PKCE |
-| IdP | Gov.br (OIDC broker do SERPRO) |
-| Integração AWS | Gov.br configurado como **OIDC IdP externo** no Cognito User Pool |
-| Endpoint discovery | `https://sso.staging.acesso.gov.br/.well-known/openid-configuration` |
-| Client registration | Solicitação via `https://www.gov.br/governodigital/pt-br/api-conta-gov-br` |
-| Nível de autenticação | Bronze (CPF), Prata (validado), Ouro (com certificado) — mínimo: Prata |
-| Scopes requeridos | `openid profile email cpf` |
+| Atributo              | Valor                                                                      |
+| --------------------- | -------------------------------------------------------------------------- |
+| Protocolo             | OIDC 1.0 / OAuth2 authorization code + PKCE                                |
+| IdP                   | Gov.br (OIDC broker do SERPRO)                                             |
+| Integração AWS        | Gov.br configurado como **OIDC IdP externo** no Cognito User Pool          |
+| Endpoint discovery    | `https://sso.staging.acesso.gov.br/.well-known/openid-configuration`       |
+| Client registration   | Solicitação via `https://www.gov.br/governodigital/pt-br/api-conta-gov-br` |
+| Nível de autenticação | Bronze (CPF), Prata (validado), Ouro (com certificado) — mínimo: Prata     |
+| Scopes requeridos     | `openid profile email cpf`                                                 |
 
 ### 6.3 Fluxo federation
 
@@ -529,13 +528,13 @@ sequenceDiagram
 
 ### 6.4 Mapeamento de claims
 
-| Claim Gov.br | Atributo Cognito | Uso SGP |
-|---|---|---|
-| `sub` | `custom:govbr_sub` | Vinculação de conta |
-| `cpf` | `custom:cpf` | Localização de `pessoa` no tenant |
-| `name` | `name` | Exibição |
-| `email` | `email` | Notificações |
-| `amr` | `custom:govbr_amr` | Verificar nível mínimo (Prata) |
+| Claim Gov.br | Atributo Cognito   | Uso SGP                           |
+| ------------ | ------------------ | --------------------------------- |
+| `sub`        | `custom:govbr_sub` | Vinculação de conta               |
+| `cpf`        | `custom:cpf`       | Localização de `pessoa` no tenant |
+| `name`       | `name`             | Exibição                          |
+| `email`      | `email`            | Notificações                      |
+| `amr`        | `custom:govbr_amr` | Verificar nível mínimo (Prata)    |
 
 ### 6.5 Provisionamento JIT
 
@@ -560,15 +559,15 @@ IdP primário do backoffice (`sgp-admin`) e fallback do portal (`sgp-portal`). G
 
 ### 7.2 Configuração
 
-| Atributo | Valor |
-|---|---|
-| Recurso AWS | Cognito User Pool (1 por tenant ou pool compartilhado com isolamento por `custom:tenantId`) |
-| App Client admin | Fluxo authorization-code + PKCE; `sgp-admin` SPA |
-| App Client portal | Fluxo authorization-code + PKCE; `sgp-portal` SPA |
-| App Client API externa | Fluxo client-credentials; sem usuário humano |
-| Parâmetros tenant | `cognito_user_pool_id`, `cognito_app_client_id` em `ParametroSistema` |
-| Tokens | ID Token (identidade), Access Token (autorização), Refresh Token (7 dias) |
-| MFA | Opcional por tenant; suportado TOTP e SMS |
+| Atributo               | Valor                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------- |
+| Recurso AWS            | Cognito User Pool (1 por tenant ou pool compartilhado com isolamento por `custom:tenantId`) |
+| App Client admin       | Fluxo authorization-code + PKCE; `sgp-admin` SPA                                            |
+| App Client portal      | Fluxo authorization-code + PKCE; `sgp-portal` SPA                                           |
+| App Client API externa | Fluxo client-credentials; sem usuário humano                                                |
+| Parâmetros tenant      | `cognito_user_pool_id`, `cognito_app_client_id` em `ParametroSistema`                       |
+| Tokens                 | ID Token (identidade), Access Token (autorização), Refresh Token (7 dias)                   |
+| MFA                    | Opcional por tenant; suportado TOTP e SMS                                                   |
 
 ### 7.3 Fluxo authorization-code + PKCE (admin)
 
@@ -632,12 +631,12 @@ Importação de descontos em folha referentes a empréstimos consignados, convê
 
 ### 8.2 Protocolo e autenticação
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | Arquivo CSV ou TXT (leiaute Neoconsig + variações por consignatária) |
-| Transferência | Upload manual na tela "Importação Consignado" ou SFTP por consignatária (futuro) |
-| Auth SFTP (futuro) | Chave SSH por par de chaves, host key fingerprint fixado |
-| Periodicidade | Mensal por competência |
+| Atributo           | Valor                                                                            |
+| ------------------ | -------------------------------------------------------------------------------- |
+| Protocolo          | Arquivo CSV ou TXT (leiaute Neoconsig + variações por consignatária)             |
+| Transferência      | Upload manual na tela "Importação Consignado" ou SFTP por consignatária (futuro) |
+| Auth SFTP (futuro) | Chave SSH por par de chaves, host key fingerprint fixado                         |
+| Periodicidade      | Mensal por competência                                                           |
 
 ### 8.3 Leiaute CSV (Neoconsig padrão)
 
@@ -651,14 +650,14 @@ MATRICULA;CPF;NOME;CONTRATO;BANCO;AGENCIA;VALOR_PARCELA;COMPETENCIA;TIPO_DESCONT
 
 Campos consumidos pelo SGP:
 
-| Campo | Destino |
-|---|---|
-| MATRICULA | `funcionario.matricula` (lookup) |
-| CPF | Validação cruzada |
-| CONTRATO | `consignado.contrato` |
-| VALOR_PARCELA | `lancamento.valor_calculado` |
+| Campo         | Destino                                                  |
+| ------------- | -------------------------------------------------------- |
+| MATRICULA     | `funcionario.matricula` (lookup)                         |
+| CPF           | Validação cruzada                                        |
+| CONTRATO      | `consignado.contrato`                                    |
+| VALOR_PARCELA | `lancamento.valor_calculado`                             |
 | TIPO_DESCONTO | Mapeia para `verba_id` via tabela `consignado_verba_map` |
-| COMPETENCIA | Validação: deve bater com competência aberta |
+| COMPETENCIA   | Validação: deve bater com competência aberta             |
 
 ### 8.4 Fluxo de importação
 
@@ -679,12 +678,12 @@ Reimportação do mesmo arquivo em mesma competência é permitida — opera em 
 
 ### 8.6 Taxonomia de erros
 
-| Erro | Causa | Ação |
-|---|---|---|
-| Matrícula não encontrada | Servidor desligado ou erro no arquivo | Lista em relatório de rejeição |
-| Valor negativo | Dado inválido | Linha rejeitada; demais processadas |
-| Competência divergente | Arquivo de mês errado | Bloquear toda a importação; exigir confirmação |
-| Encoding inválido | Arquivo não-UTF8/ISO | Detectar automaticamente; falhar com instrução |
+| Erro                     | Causa                                 | Ação                                           |
+| ------------------------ | ------------------------------------- | ---------------------------------------------- |
+| Matrícula não encontrada | Servidor desligado ou erro no arquivo | Lista em relatório de rejeição                 |
+| Valor negativo           | Dado inválido                         | Linha rejeitada; demais processadas            |
+| Competência divergente   | Arquivo de mês errado                 | Bloquear toda a importação; exigir confirmação |
+| Encoding inválido        | Arquivo não-UTF8/ISO                  | Detectar automaticamente; falhar com instrução |
 
 ### 8.7 Observabilidade
 
@@ -700,12 +699,12 @@ Geração da remessa de crédito em conta do valor líquido da folha (CNAB 240 p
 
 ### 9.2 Protocolo e autenticação
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | Arquivo texto posicional CNAB 240 (FEBRABAN) ou CNAB 400 |
-| Transferência | SFTP bancário (credencial por banco) ou upload/download no portal do banco |
-| Auth SFTP | Usuário + senha ou chave SSH (configurável por banco em `ParametroSistema`) |
-| Periodicidade | Por evento de fechamento de folha / sob demanda |
+| Atributo      | Valor                                                                       |
+| ------------- | --------------------------------------------------------------------------- |
+| Protocolo     | Arquivo texto posicional CNAB 240 (FEBRABAN) ou CNAB 400                    |
+| Transferência | SFTP bancário (credencial por banco) ou upload/download no portal do banco  |
+| Auth SFTP     | Usuário + senha ou chave SSH (configurável por banco em `ParametroSistema`) |
+| Periodicidade | Por evento de fechamento de folha / sob demanda                             |
 
 ### 9.3 Estrutura CNAB 240 (fragmento)
 
@@ -761,12 +760,12 @@ sequenceDiagram
 
 ### 9.5 Campos críticos por banco
 
-| Banco | CNAB | Peculiaridade |
-|---|---|---|
-| Banco do Brasil (001) | 240 | Convênio obrigatório no header do lote |
-| Itaú (341) | 240 | Código de finalidade no segmento B |
-| Bradesco (237) | 240 | Código do produto no campo de uso exclusivo |
-| Caixa (104) | 240 ou 400 | CNAB 400 ainda em uso para alguns tipos de folha |
+| Banco                 | CNAB       | Peculiaridade                                    |
+| --------------------- | ---------- | ------------------------------------------------ |
+| Banco do Brasil (001) | 240        | Convênio obrigatório no header do lote           |
+| Itaú (341)            | 240        | Código de finalidade no segmento B               |
+| Bradesco (237)        | 240        | Código do produto no campo de uso exclusivo      |
+| Caixa (104)           | 240 ou 400 | CNAB 400 ainda em uso para alguns tipos de folha |
 
 Configuração por banco: `banco.cnab_versao`, `banco.convenio_codigo`, `banco.layout_arquivo`.
 
@@ -776,12 +775,12 @@ Configuração por banco: `banco.cnab_versao`, `banco.convenio_codigo`, `banco.l
 
 ### 9.7 Taxonomia de erros retorno
 
-| Ocorrência CNAB | Significado | Ação SGP |
-|---|---|---|
-| 00 | Crédito efetuado | Marcar `lancamento.status=PAGO` |
-| BD | Conta encerrada | Alertar DP; manter pendente |
-| AC | Agência/Conta incorreta | Alertar; solicitar correção cadastral |
-| TJ | Conta bloqueada judicial | Alertar; registrar ocorrência |
+| Ocorrência CNAB | Significado              | Ação SGP                              |
+| --------------- | ------------------------ | ------------------------------------- |
+| 00              | Crédito efetuado         | Marcar `lancamento.status=PAGO`       |
+| BD              | Conta encerrada          | Alertar DP; manter pendente           |
+| AC              | Agência/Conta incorreta  | Alertar; solicitar correção cadastral |
+| TJ              | Conta bloqueada judicial | Alertar; registrar ocorrência         |
 
 ### 9.8 Observabilidade
 
@@ -798,12 +797,12 @@ Publicação periódica da folha pública conforme Lei de Acesso à Informação
 
 ### 10.2 Protocolo e autenticação
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | Arquivo CSV ou JSON |
-| Entrega | Upload agendado (HTTPS POST com token) ou depósito em bucket S3 público |
-| Auth | Token estático do portal da transparência municipal (configurável) ou S3 presigned URL |
-| Periodicidade | Mensal; execução automática após fechamento de competência |
+| Atributo      | Valor                                                                                  |
+| ------------- | -------------------------------------------------------------------------------------- |
+| Protocolo     | Arquivo CSV ou JSON                                                                    |
+| Entrega       | Upload agendado (HTTPS POST com token) ou depósito em bucket S3 público                |
+| Auth          | Token estático do portal da transparência municipal (configurável) ou S3 presigned URL |
+| Periodicidade | Mensal; execução automática após fechamento de competência                             |
 
 ### 10.3 Schema do arquivo
 
@@ -816,12 +815,12 @@ Publicação periódica da folha pública conforme Lei de Acesso à Informação
     "matricula": "000123",
     "cargo": "ANALISTA ADMINISTRATIVO",
     "lotacao": "SECRETARIA DE FINANÇAS",
-    "remuneracaoBruta": 8500.00,
-    "descontos": 2100.00,
-    "remuneracaoLiquida": 6400.00,
+    "remuneracaoBruta": 8500.0,
+    "descontos": 2100.0,
+    "remuneracaoLiquida": 6400.0,
     "verbas": [
-      {"codigo": "001", "descricao": "VENCIMENTO BASE", "tipo": "P", "valor": 7000.00},
-      {"codigo": "100", "descricao": "INSS", "tipo": "D", "valor": 770.00}
+      { "codigo": "001", "descricao": "VENCIMENTO BASE", "tipo": "P", "valor": 7000.0 },
+      { "codigo": "100", "descricao": "INSS", "tipo": "D", "valor": 770.0 }
     ]
   }
 ]
@@ -857,12 +856,12 @@ SEFIP/GFIP foi descontinuado pela RFB com a implantação do eSocial (Portaria M
 
 ### 11.2 Protocolo
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | Arquivo TXT SEFIP (leiaute CAIXA) |
-| Entrega | Import no aplicativo SEFIP (instalação local, versão 8.4+) |
-| Auth | Não aplicável (arquivo local) |
-| Permissão | `ROLE_FOLHA_DE_PGT_GESTAO` |
+| Atributo  | Valor                                                      |
+| --------- | ---------------------------------------------------------- |
+| Protocolo | Arquivo TXT SEFIP (leiaute CAIXA)                          |
+| Entrega   | Import no aplicativo SEFIP (instalação local, versão 8.4+) |
+| Auth      | Não aplicável (arquivo local)                              |
+| Permissão | `ROLE_FOLHA_DE_PGT_GESTAO`                                 |
 
 ### 11.3 Restrições operacionais
 
@@ -881,15 +880,15 @@ Contrato interno entre a SPA `sgp-admin` / `sgp-portal` e `sgp-core-api` para tr
 
 ### 12.2 Protocolo
 
-| Atributo | Valor |
-|---|---|
-| Protocolo | HTTPS presigned URL (AWS SigV4) |
-| Auth upload | Cognito JWT → `sgp-core-api` gera presigned URL via SDK S3 → SPA faz PUT direto no S3 |
-| Auth download | Idem; URL com expiração configurável (padrão 15 min; laudos médicos 5 min) |
-| Tamanho máximo | 100 MB (configurável por tipo de documento) |
-| Tipos permitidos | PDF, JPEG, PNG, DOCX, XLSX, TXT, XML, ZIP |
-| Bucket | `sgp-{tenant-slug}-docs` (SSE-KMS, versionamento ligado, CORS configurado) |
-| Chave S3 | `{tenant}/uploads/{dominio}/{ano}/{mes}/{uuid}.{ext}` |
+| Atributo         | Valor                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| Protocolo        | HTTPS presigned URL (AWS SigV4)                                                       |
+| Auth upload      | Cognito JWT → `sgp-core-api` gera presigned URL via SDK S3 → SPA faz PUT direto no S3 |
+| Auth download    | Idem; URL com expiração configurável (padrão 15 min; laudos médicos 5 min)            |
+| Tamanho máximo   | 100 MB (configurável por tipo de documento)                                           |
+| Tipos permitidos | PDF, JPEG, PNG, DOCX, XLSX, TXT, XML, ZIP                                             |
+| Bucket           | `sgp-{tenant-slug}-docs` (SSE-KMS, versionamento ligado, CORS configurado)            |
+| Chave S3         | `{tenant}/uploads/{dominio}/{ano}/{mes}/{uuid}.{ext}`                                 |
 
 ### 12.3 Fluxo de upload
 
@@ -934,12 +933,12 @@ SPA solicita: GET /api/v1/arquivos/{id}/download
 
 ### 12.6 Taxonomia de erros
 
-| HTTP | Cenário | Ação |
-|---|---|---|
-| 400 | Tipo MIME não permitido | Retorna lista de tipos aceitos |
-| 403 | Permissão insuficiente | RFC 7807 com `type: PERMISSAO_INSUFICIENTE` |
-| 410 | Presigned URL expirada | SPA solicita nova URL automaticamente |
-| 413 | Arquivo acima do limite | Informar limite por tipo de documento |
+| HTTP | Cenário                 | Ação                                        |
+| ---- | ----------------------- | ------------------------------------------- |
+| 400  | Tipo MIME não permitido | Retorna lista de tipos aceitos              |
+| 403  | Permissão insuficiente  | RFC 7807 com `type: PERMISSAO_INSUFICIENTE` |
+| 410  | Presigned URL expirada  | SPA solicita nova URL automaticamente       |
+| 413  | Arquivo acima do limite | Informar limite por tipo de documento       |
 
 ### 12.7 Observabilidade
 
@@ -965,14 +964,14 @@ EventBridge Bus: sgp-{env}
   → DLQ (por fila; retenção 14 dias)
 ```
 
-| Bus / Tópico / Fila | Produtor | Consumidor | Uso |
-|---|---|---|---|
-| `sgp-folha-events` SNS | `sgp-core-api` | `sgp-payroll-engine`, `sgp-report-service`, `sgp-integrations-worker` | Eventos de ciclo de folha |
-| `sgp-esocial-queue` SQS | `sgp-core-api` | `sgp-esocial-worker` | Envio de eventos eSocial |
-| `sgp-integrações-queue` SQS | `sgp-core-api` | `sgp-integrations-worker` | Remessas, SIPREV, DIRF |
-| `sgp-relatorios-queue` SQS | `sgp-core-api`, `sgp-payroll-engine` | `sgp-report-service` | Geração de PDF/XLSX |
-| `sgp-audit-queue` SQS | `sgp-core-api`, `sgp-payroll-engine` | `sgp-core-api` (audit writer) | Trilha de auditoria assíncrona |
-| `sgp-notificacoes-queue` SQS | todos | `sgp-core-api` (notif writer) | E-mail, push, in-app |
+| Bus / Tópico / Fila          | Produtor                             | Consumidor                                                            | Uso                            |
+| ---------------------------- | ------------------------------------ | --------------------------------------------------------------------- | ------------------------------ |
+| `sgp-folha-events` SNS       | `sgp-core-api`                       | `sgp-payroll-engine`, `sgp-report-service`, `sgp-integrations-worker` | Eventos de ciclo de folha      |
+| `sgp-esocial-queue` SQS      | `sgp-core-api`                       | `sgp-esocial-worker`                                                  | Envio de eventos eSocial       |
+| `sgp-integrações-queue` SQS  | `sgp-core-api`                       | `sgp-integrations-worker`                                             | Remessas, SIPREV, DIRF         |
+| `sgp-relatorios-queue` SQS   | `sgp-core-api`, `sgp-payroll-engine` | `sgp-report-service`                                                  | Geração de PDF/XLSX            |
+| `sgp-audit-queue` SQS        | `sgp-core-api`, `sgp-payroll-engine` | `sgp-core-api` (audit writer)                                         | Trilha de auditoria assíncrona |
+| `sgp-notificacoes-queue` SQS | todos                                | `sgp-core-api` (notif writer)                                         | E-mail, push, in-app           |
 
 ### 13.3 Catálogo de eventos
 
@@ -1230,13 +1229,13 @@ EventBridge Bus: sgp-{env}
 
 ### 13.4 Política de retry / DLQ
 
-| Fila | maxReceiveCount | Retry delay | DLQ retenção |
-|---|---|---|---|
-| `sgp-esocial-queue` | 3 | exponencial 30s/60s/120s | 14 dias |
-| `sgp-integracoes-queue` | 3 | 60s fixo | 14 dias |
-| `sgp-relatorios-queue` | 5 | 30s fixo | 7 dias |
-| `sgp-audit-queue` | 10 | 10s fixo | 30 dias |
-| `sgp-notificacoes-queue` | 3 | 30s fixo | 3 dias |
+| Fila                     | maxReceiveCount | Retry delay              | DLQ retenção |
+| ------------------------ | --------------- | ------------------------ | ------------ |
+| `sgp-esocial-queue`      | 3               | exponencial 30s/60s/120s | 14 dias      |
+| `sgp-integracoes-queue`  | 3               | 60s fixo                 | 14 dias      |
+| `sgp-relatorios-queue`   | 5               | 30s fixo                 | 7 dias       |
+| `sgp-audit-queue`        | 10              | 10s fixo                 | 30 dias      |
+| `sgp-notificacoes-queue` | 3               | 30s fixo                 | 3 dias       |
 
 ### 13.5 Observabilidade de filas
 
@@ -1281,14 +1280,14 @@ graph TD
 
 ### Dependências bloqueantes por integração
 
-| Integração | Pré-requisito obrigatório | Bloqueante se ausente |
-|---|---|---|
-| eSocial periódico (S-1299) | Folha fechada + S-1200/S-1210 processados | Sim — impede fechamento de transmissão |
-| CNAB remessa | Folha calculada + contas bancárias cadastradas | Sim — sem remessa = folha não paga |
-| SIPREV | Folha fechada + PIS/NIT em todos os servidores | Não — gera com inconsistências marcadas |
-| DIRF | Todas as competências do ano fechadas | Não — geração parcial possível com alerta |
-| Gov.br federation | Cognito UserPool configurado + client_id Gov.br aprovado | Não — fallback login Cognito nativo |
-| Neoconsig import | Competência aberta + folha desbloqueada | Sim — arquivo rejeitado fora da janela |
+| Integração                 | Pré-requisito obrigatório                                | Bloqueante se ausente                     |
+| -------------------------- | -------------------------------------------------------- | ----------------------------------------- |
+| eSocial periódico (S-1299) | Folha fechada + S-1200/S-1210 processados                | Sim — impede fechamento de transmissão    |
+| CNAB remessa               | Folha calculada + contas bancárias cadastradas           | Sim — sem remessa = folha não paga        |
+| SIPREV                     | Folha fechada + PIS/NIT em todos os servidores           | Não — gera com inconsistências marcadas   |
+| DIRF                       | Todas as competências do ano fechadas                    | Não — geração parcial possível com alerta |
+| Gov.br federation          | Cognito UserPool configurado + client_id Gov.br aprovado | Não — fallback login Cognito nativo       |
+| Neoconsig import           | Competência aberta + folha desbloqueada                  | Sim — arquivo rejeitado fora da janela    |
 
 ---
 
@@ -1296,18 +1295,18 @@ graph TD
 
 Todas as integrações são controláveis por feature flags. Flags são persistidos em `feature_flag` (tabela), consultados em cache Redis (TTL 60s) e nunca hardcoded.
 
-| Feature Flag | Integração | Granularidade | Efeito quando `false` |
-|---|---|---|---|
-| `esocial.enabled` | eSocial S-1.2 | Tenant | Menus ocultos; workers não processam; aspects não publicam eventos |
-| `PORTAL_SERVIDOR_ENABLED` | Portal do Servidor (`sgp-portal`) | Tenant | Portal inacessível; retorna 503 |
-| `GOV_BR_SSO_ENABLED` | Gov.br OIDC | Tenant | Botão Gov.br oculto; somente Cognito nativo |
-| `PROVA_VIDA_PUBLIC_API_ENABLED` | Portal RH — prova de vida via API | Tenant | Endpoint `/prova-vida` retorna 404 |
-| `DIRF_AUTO_ENABLED` | DIRF — geração automática ao final do ano | Tenant | Geração apenas manual |
-| `TRANSPARENCIA_AUTO_ENABLED` | Portal da Transparência — publicação automática | Tenant | Publicação apenas manual |
-| `CNAB_SFTP_ENABLED` | CNAB — envio automático por SFTP | Tenant | Somente download manual |
-| `NEOCONSIG_SFTP_ENABLED` | Neoconsig — coleta automática SFTP | Tenant | Somente upload manual |
-| `SEFIP_HABILITADO` | SEFIP (congelado) | Global | Oculta seção SEFIP completamente |
-| `AUDIT_FULL_TRACE_ENABLED` | Auditoria detalhada | Tenant | Registra apenas ações críticas |
+| Feature Flag                    | Integração                                      | Granularidade | Efeito quando `false`                                              |
+| ------------------------------- | ----------------------------------------------- | ------------- | ------------------------------------------------------------------ |
+| `esocial.enabled`               | eSocial S-1.2                                   | Tenant        | Menus ocultos; workers não processam; aspects não publicam eventos |
+| `PORTAL_SERVIDOR_ENABLED`       | Portal do Servidor (`sgp-portal`)               | Tenant        | Portal inacessível; retorna 503                                    |
+| `GOV_BR_SSO_ENABLED`            | Gov.br OIDC                                     | Tenant        | Botão Gov.br oculto; somente Cognito nativo                        |
+| `PROVA_VIDA_PUBLIC_API_ENABLED` | Portal RH — prova de vida via API               | Tenant        | Endpoint `/prova-vida` retorna 404                                 |
+| `DIRF_AUTO_ENABLED`             | DIRF — geração automática ao final do ano       | Tenant        | Geração apenas manual                                              |
+| `TRANSPARENCIA_AUTO_ENABLED`    | Portal da Transparência — publicação automática | Tenant        | Publicação apenas manual                                           |
+| `CNAB_SFTP_ENABLED`             | CNAB — envio automático por SFTP                | Tenant        | Somente download manual                                            |
+| `NEOCONSIG_SFTP_ENABLED`        | Neoconsig — coleta automática SFTP              | Tenant        | Somente upload manual                                              |
+| `SEFIP_HABILITADO`              | SEFIP (congelado)                               | Global        | Oculta seção SEFIP completamente                                   |
+| `AUDIT_FULL_TRACE_ENABLED`      | Auditoria detalhada                             | Tenant        | Registra apenas ações críticas                                     |
 
 ### Protocolo de ativação
 
@@ -1346,4 +1345,4 @@ async listarFiliais() { ... }
 
 ---
 
-*Fim do documento — 42-contratos-integracao.md*
+_Fim do documento — 42-contratos-integracao.md_

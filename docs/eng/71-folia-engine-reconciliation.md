@@ -20,7 +20,7 @@ Define how folia payroll engine improvements are applied in SGP runtime implemen
 
 ## Reverse evidence folded in on 2026-04-26
 
-The legacy formula artifacts under `docs/legacy-reverse/modules/folha/calculo/` are evidence inputs for the SGP engine port. They do not override folia precedence, but they define the legacy behavior that the engine must reconcile during shadow mode:
+The legacy formula artifacts under `docs/leg/rev-eng/modules/folha/calculo/` are evidence inputs for the SGP engine port. They do not override folia precedence, but they define the legacy behavior that the engine must reconcile during shadow mode:
 
 - `formulas-lista-completa.csv`: raw legacy formula inventory by restored database.
 - `formulas-dependencias.csv` and `formulas-grafo.csv`: dependency graph evidence used to validate extraction and cycle detection.
@@ -32,9 +32,44 @@ Any high-impact difference between the folia engine behavior and these legacy ou
 
 ## Port target inside SGP
 
-- Runtime SQL implementation: `database/sql/25-payroll-formula-engine.sql`
-- Runtime notes: `database/formula-engine.md`
+- Runtime SQL implementation:
+  - `database/sql/10-06-payroll_calc-ddl.sql`
+  - `database/sql/10-07-payroll-ddl.sql`
+  - `database/sql/40-payroll_calc-functions.sql`
+  - `database/sql/70-payroll_calc-final.sql`
 - Money/rounding boundary: `docs/eng/72-money-decimal-policy.md`
+
+## Runtime Objects
+
+- Schema: `payroll_calc`.
+- Cache table: `payroll_calc.formula_cache`, storing
+  `(tenant_id, earning_deduction_id, version, compiled_sql, compiled_at)`.
+- Compile trigger: `trg_compile_formula_expression` on
+  `payroll.payroll_earning_deduction`.
+- Evaluator function:
+  `payroll_calc.evaluate_earning_deduction(uuid, uuid, int, int)`.
+
+`payroll.payroll_earning_deduction` carries the formula metadata fields:
+
+- `formula_alias`
+- `formula_function_name`
+- `formula_expression`
+- `formula_function_ddl`
+- `formula_dependencies`
+- `formula_version`
+- `formula_ready`
+- `formula_error`
+
+Built-in SQL helper functions:
+
+- `payroll_calc.base_salary(employee_id)`
+- `payroll_calc.workload_hours(employee_id)`
+- `payroll_calc.dependent_count(employee_id)`
+- `payroll_calc.service_years(employee_id, competence_date)`
+- `payroll_calc.days_in_month(year, month)`
+- `payroll_calc.absence_days(employee_id, month, year)`
+- `payroll_calc.worked_days(employee_id, month, year)`
+- `payroll_calc.proportional_ratio(employee_id, month, year)`
 
 ## FOL-01 contract with CALC-01
 

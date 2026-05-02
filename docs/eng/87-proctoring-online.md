@@ -1,4 +1,5 @@
 # Proctoring Online em Concursos Publicos
+
 **Versao:** 1.0 | **Data:** 2026-05-02 | **Status:** Implementado
 **Escopo:** Recrutamento e Selecao / Portal Publico | **Depende de:** REC-03, REC-07, XCUT-04
 

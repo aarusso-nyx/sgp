@@ -13,11 +13,11 @@ Make verification gates truthful for the current sprint:
 
 - `AGENTS.md`
 - `docs/eng/62-estrategia-testes.md`
-- `docs/audit/diag/backend-and-db-test-gates.md`
-- `docs/audit/diag/raw-backend-e2e.log`
-- `docs/audit/diag/raw-db-smoke.log`
-- `docs/audit/diag/raw-backend-coverage.log`
-- `docs/audit/inv/verification-inventory.json`
+- `docs/leg/audit/diag/backend-and-db-test-gates.md`
+- `docs/leg/audit/diag/raw-backend-e2e.log`
+- `docs/leg/audit/diag/raw-db-smoke.log`
+- `docs/leg/audit/diag/raw-backend-coverage.log`
+- `docs/leg/audit/inv/verification-inventory.json`
 - `tests/backend`
 - `backend/jest.config*`
 - `package.json`

@@ -3,18 +3,18 @@
 These prompts document the gap-closure sprint that was executed for SGP v0.0.1.
 They are retained as planning history, not as current implementation evidence.
 
-The derived evidence snapshots that originally lived under `docs/audit/inv/` and
-`docs/audit/diag/` were removed after becoming stale. Current implementation
-status is tracked in `docs/implementation-status.md` and should be
+The derived evidence snapshots that originally lived under `docs/leg/audit/inv/` and
+`docs/leg/audit/diag/` were removed after becoming stale. Current implementation
+status is tracked in `docs/eng/99-implementation-status.md` and should be
 verified from live commands.
 
 ## Source Boundaries
 
 - `docs/eng/` remains authoritative for v0.0.1 architecture, domain scope, contracts, and acceptance.
-- `docs/sql-reference/` remains the legacy database coverage baseline.
-- `docs/legacy-reverse/` remains evidence only and must not override `docs/eng/`.
-- `docs/implementation-status.md` is the current status document.
-- `docs/audit/plan/` is historical planning material only.
+- `docs/leg/sql-reference/` remains the legacy database coverage baseline.
+- `docs/leg/rev-eng/` remains evidence only and must not override `docs/eng/`.
+- `docs/eng/99-implementation-status.md` is the current status document.
+- `docs/leg/audit/plan/` is historical planning material only.
 
 ## Sprint Boundary
 
@@ -31,13 +31,13 @@ Scope decisions added on 2026-04-26:
 
 ## Executed Prompt Sequence
 
-| Order | Prompt | Purpose |
-|---|---|---|
-| 1 | `01-db-full-closure.prompt.md` | Close remaining database matrix exclusions, preserving only approved technical out-of-scope artifacts. |
-| 2 | `02-runtime-services.prompt.md` | Replace scaffolded payroll, eSocial, and report runtimes with implemented entrypoints. |
-| 3 | `03-portal-and-contract-cleanup.prompt.md` | Fix portal build/test gaps, frontend contract mismatch, and compatibility alias wording. |
-| 4 | `04-test-gates-and-coverage.prompt.md` | Make backend e2e, DB smoke, QA smoke semantics, and coverage gates truthful. |
-| 5 | `05-final-reassessment.prompt.md` | Reassess current gates and classify remaining gaps. |
+| Order | Prompt                                     | Purpose                                                                                                |
+| ----- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| 1     | `01-db-full-closure.prompt.md`             | Close remaining database matrix exclusions, preserving only approved technical out-of-scope artifacts. |
+| 2     | `02-runtime-services.prompt.md`            | Replace scaffolded payroll, eSocial, and report runtimes with implemented entrypoints.                 |
+| 3     | `03-portal-and-contract-cleanup.prompt.md` | Fix portal build/test gaps, frontend contract mismatch, and compatibility alias wording.               |
+| 4     | `04-test-gates-and-coverage.prompt.md`     | Make backend e2e, DB smoke, QA smoke semantics, and coverage gates truthful.                           |
+| 5     | `05-final-reassessment.prompt.md`          | Reassess current gates and classify remaining gaps.                                                    |
 
 Future Arrecadacao scope is tracked separately in `future-arrecadacao.prompt.md`.
 

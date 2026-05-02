@@ -19,15 +19,15 @@ Alíquotas e fatores usam escala 6 com a mesma regra de desempate. O helper `rou
 
 ## Reconciliação SQL e TS
 
-O caminho SQL oficial de rubricas é `payroll_calc.evaluate_earning_deduction(...)`, definido em `database/sql/25-payroll-formula-engine.sql`, com retorno `numeric(14,2)`. O compilador em `backend/src/payroll-engine/formula-compiler.service.ts` emite funções `payroll_calc.f_<alias>(uuid, int, int)` que retornam nesse mesmo contorno decimal. Caminhos TypeScript remanescentes, como rescisão, devem chamar `roundMoney(...)` somente na fronteira da rubrica para manter paridade centavo-a-centavo com o SQL.
+O caminho SQL oficial de rubricas é `payroll_calc.evaluate_earning_deduction(...)`, definido nos artefatos canônicos `database/sql/10-06-payroll_calc-ddl.sql`, `database/sql/40-payroll_calc-functions.sql` e `database/sql/70-payroll_calc-final.sql`, com retorno `numeric(14,2)`. O compilador em `backend/src/payroll-engine/formula-compiler.service.ts` emite funções `payroll_calc.f_<alias>(uuid, int, int)` que retornam nesse mesmo contorno decimal. Caminhos TypeScript remanescentes, como rescisão, devem chamar `roundMoney(...)` somente na fronteira da rubrica para manter paridade centavo-a-centavo com o SQL.
 
 O ESLint local `sgp/no-math-round-money` falha qualquer uso de `Math.round` e `Number(...).toFixed(...)` em `src/folha-pagamento/**`, `src/payroll-engine/**` e `src/common/money/**`.
 
 ## Matriz rubrica → modo
 
-| Tipo de fronteira | Modo |
-| --- | --- |
-| Rubricas de vencimento, vantagens e rescisão | `roundMoney(valor, 'half_up')` |
-| Deduções não tributárias e descontos operacionais | `roundMoney(valor, 'half_up')` |
+| Tipo de fronteira                                                     | Modo                             |
+| --------------------------------------------------------------------- | -------------------------------- |
+| Rubricas de vencimento, vantagens e rescisão                          | `roundMoney(valor, 'half_up')`   |
+| Deduções não tributárias e descontos operacionais                     | `roundMoney(valor, 'half_up')`   |
 | Impostos/contribuições quando a regra legal exigir desempate bancário | `roundMoney(valor, 'half_even')` |
-| Alíquotas e fatores legais | `roundRate(valor)` |
+| Alíquotas e fatores legais                                            | `roundRate(valor)`               |

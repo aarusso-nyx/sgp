@@ -6,8 +6,11 @@ SGP in this repository (`./sgp`) is the canonical root for a fresh implementatio
 
 - Engineering/product authority: `docs/eng/`
 - Payroll engine authority (implementation behavior): `../folia/` and reconciled engine docs under `docs/eng/`
-- SQL Server legacy reference inventory: `docs/sql-reference/`
-- Reverse-engineered evidence archive (non-authoritative): `docs/legacy-reverse/`
+- SQL Server legacy reference inventory: `docs/leg/sql-reference/`
+- Reverse-engineered evidence archive (non-authoritative): `docs/leg/rev-eng/`
+- Governance controls: `docs/gov/`
+- User/operator docs: `docs/user/`
+- Scratch work area: `docs/work/` (ignored by git)
 
 When sources conflict on payroll engine behavior, folia takes precedence. For unresolved high-impact conflicts, escalate to the product owner.
 
@@ -21,6 +24,8 @@ When sources conflict on payroll engine behavior, folia takes precedence. For un
 
 - APIs: `backend` (`sgp-core-api` and `sgp-portal-api` entrypoints)
 - Frontends: `frontend` (`sgp-admin` and `sgp-portal` Angular projects)
-- Runtime topology: `docs/governance/runtime-topology.json`
+- Runtime topology: `docs/gov/runtime-topology.json`
 - Database: `database`
-- Governance docs: `GOVERNANCE.md`, `docs/governance/`
+- Governance docs: `GOVERNANCE.md`, `docs/gov/`
+
+See `docs/README.md` for the full documentation routing rules.

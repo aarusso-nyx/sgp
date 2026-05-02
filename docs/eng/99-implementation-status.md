@@ -1,10 +1,10 @@
 # Implementation Status
 
 This document tracks the current implementation state for SGP v0.0.1 after the stale
-`docs/audit/diag` and `docs/audit/inv` evidence snapshots were removed.
+`docs/leg/audit/diag` and `docs/leg/audit/inv` evidence snapshots were removed.
 
 Last reassessed: 2026-04-26 by running the final reassessment gates from
-`docs/audit/plan/05-final-reassessment.prompt.md`.
+`docs/leg/audit/plan/05-final-reassessment.prompt.md`.
 
 ## Current Scope
 
@@ -31,7 +31,7 @@ The current implementation covers:
 - QA bootstrap support for local API/admin/portal smoke execution.
 - Reverse-engineering evidence from 2026-04-26 is canonicalized in
   `docs/eng` successor sections and tracked in
-  `docs/legacy-reverse/deprecation-status.md`.
+  `docs/leg/rev-eng/deprecation-status.md`.
 - Source workspace CI/governance baseline is installed with Node 24, npm,
   single `package-lock.json`, non-mutating lint/format/typecheck gates,
   alignment gates, health JSON, tests, build, coverage, and governance
@@ -142,7 +142,7 @@ Open work is limited to deferred product/operations decisions:
 
 ## Notes
 
-- `docs/audit/diag` and `docs/audit/inv` were removed because they were stale
+- `docs/leg/audit/diag` and `docs/leg/audit/inv` were removed because they were stale
   derived evidence snapshots. Current verification should be produced from live
   commands instead of relying on those archived artifacts.
 - `docs/eng` remains the authoritative source for SGP v0.0.1 scope and

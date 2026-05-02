@@ -6,8 +6,10 @@ This repository enforces governance for a fresh SGP implementation with clear so
 
 1. `docs/eng/` is authoritative for engineering and product behavior.
 2. Payroll engine internals are folia-first when reconciling implementation strategies.
-3. `docs/sql-reference/` is a legacy structural reference, not the runtime source.
-4. `docs/legacy-reverse/` is non-authoritative evidence archive.
+3. `docs/leg/sql-reference/` is a legacy structural reference, not the runtime source.
+4. `docs/leg/rev-eng/` and other `docs/leg/` material are non-authoritative
+   evidence archives.
+5. `docs/work/` is ignored scratch space and is never authoritative.
 
 ## Engineering conventions
 
@@ -19,7 +21,9 @@ This repository enforces governance for a fresh SGP implementation with clear so
 
 - Backend API (`backend`)
 - Database schema and SQL operations (`database`)
-- Engineering docs and governance (`docs/eng`, `docs/governance`)
+- Engineering docs and governance (`docs/eng`, `docs/gov`)
+- User/operator docs (`docs/user`)
+- Legacy evidence archive (`docs/leg`)
 
 ## Policy status markers
 

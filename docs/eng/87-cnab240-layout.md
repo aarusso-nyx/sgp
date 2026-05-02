@@ -6,13 +6,13 @@ O SGP gera remessa CNAB 240 para credito em conta de folha aprovada. A saida e u
 
 ## Bancos suportados
 
-| Banco | Codigo | Estrategia |
-|---|---:|---|
-| Banco do Brasil | 001 | `bb.strategy.ts` |
-| Caixa | 104 | `caixa.strategy.ts` |
-| Itau | 341 | `itau.strategy.ts` |
-| Bradesco | 237 | `bradesco.strategy.ts` |
-| Santander | 033 | `santander.strategy.ts` |
+| Banco           | Codigo | Estrategia              |
+| --------------- | -----: | ----------------------- |
+| Banco do Brasil |    001 | `bb.strategy.ts`        |
+| Caixa           |    104 | `caixa.strategy.ts`     |
+| Itau            |    341 | `itau.strategy.ts`      |
+| Bradesco        |    237 | `bradesco.strategy.ts`  |
+| Santander       |    033 | `santander.strategy.ts` |
 
 As estrategias isolam convenio, agencia cedente e modalidade. Campos contratuais reais de cada ente devem ser parametrizados antes da homologacao bancaria.
 
@@ -26,24 +26,24 @@ As estrategias isolam convenio, agencia cedente e modalidade. Campos contratuais
 
 ## Campos posicionais principais
 
-| Registro | Posicoes | Conteudo |
-|---|---|---|
-| Header arquivo | 001-003 | Codigo do banco |
-| Header arquivo | 004-007 | Lote `0000` |
-| Header arquivo | 008-008 | Tipo de registro `0` |
-| Header lote | 009-013 | Operacao/servico/forma de lancamento |
-| Segmento A | 009-013 | Sequencial no lote |
-| Segmento A | 014-014 | Segmento `A` |
-| Segmento A | 018-043 | Banco, agencia e conta favorecida |
-| Segmento A | 044-073 | Nome do favorecido |
-| Segmento A | 094-101 | Data de pagamento |
-| Segmento A | 120-134 | Valor em centavos |
-| Segmento B | 014-014 | Segmento `B` |
-| Segmento B | 019-032 | CPF do favorecido |
-| Trailer lote | 018-023 | Quantidade de registros no lote |
-| Trailer lote | 024-041 | Soma dos valores em centavos |
-| Trailer arquivo | 018-023 | Quantidade de lotes |
-| Trailer arquivo | 024-029 | Quantidade total de registros |
+| Registro        | Posicoes | Conteudo                             |
+| --------------- | -------- | ------------------------------------ |
+| Header arquivo  | 001-003  | Codigo do banco                      |
+| Header arquivo  | 004-007  | Lote `0000`                          |
+| Header arquivo  | 008-008  | Tipo de registro `0`                 |
+| Header lote     | 009-013  | Operacao/servico/forma de lancamento |
+| Segmento A      | 009-013  | Sequencial no lote                   |
+| Segmento A      | 014-014  | Segmento `A`                         |
+| Segmento A      | 018-043  | Banco, agencia e conta favorecida    |
+| Segmento A      | 044-073  | Nome do favorecido                   |
+| Segmento A      | 094-101  | Data de pagamento                    |
+| Segmento A      | 120-134  | Valor em centavos                    |
+| Segmento B      | 014-014  | Segmento `B`                         |
+| Segmento B      | 019-032  | CPF do favorecido                    |
+| Trailer lote    | 018-023  | Quantidade de registros no lote      |
+| Trailer lote    | 024-041  | Soma dos valores em centavos         |
+| Trailer arquivo | 018-023  | Quantidade de lotes                  |
+| Trailer arquivo | 024-029  | Quantidade total de registros        |
 
 ## Referencias
 

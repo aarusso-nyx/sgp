@@ -1,4 +1,5 @@
 # Modelo de Autenticação e Autorização
+
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
 **Escopo:** `auth`, `tenant`, cross-cutting | **Depende de:** BRIEF.md, 31-autorizacao-menu-e-capacidades-funcionais.md, 57-autorizacao-estatica-completa.md.
 
@@ -10,12 +11,12 @@
 
 O modelo de segurança do SGP é construído sobre quatro princípios inegociáveis:
 
-| Princípio | Descrição |
-|---|---|
-| **Zero Trust entre serviços** | Nenhum serviço interno confia em outro por omissão. Todo token é verificado a cada chamada; não há "rede interna segura" implícita. |
-| **Least Privilege** | Cada usuário, papel ou cliente de API recebe exclusivamente os escopos necessários para sua função. Papéis nunca são concedidos por conveniência operacional. |
-| **Defense in Depth** | A autorização é verificada em três camadas independentes: borda (API Gateway / WAF), aplicação NestJS (Guards), banco de dados (RLS). Uma falha em uma camada não expõe dados. |
-| **Auditabilidade** | Toda concessão, revogação, login, logout e falha de autorização gera registro imutável em `audit_log`. Não existem ações privilegiadas silenciosas. |
+| Princípio                     | Descrição                                                                                                                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Zero Trust entre serviços** | Nenhum serviço interno confia em outro por omissão. Todo token é verificado a cada chamada; não há "rede interna segura" implícita.                                            |
+| **Least Privilege**           | Cada usuário, papel ou cliente de API recebe exclusivamente os escopos necessários para sua função. Papéis nunca são concedidos por conveniência operacional.                  |
+| **Defense in Depth**          | A autorização é verificada em três camadas independentes: borda (API Gateway / WAF), aplicação NestJS (Guards), banco de dados (RLS). Uma falha em uma camada não expõe dados. |
+| **Auditabilidade**            | Toda concessão, revogação, login, logout e falha de autorização gera registro imutável em `audit_log`. Não existem ações privilegiadas silenciosas.                            |
 
 ### 1.2 Camadas de Segurança
 
@@ -60,19 +61,19 @@ O SGP utiliza um **UserPool Cognito por tenant** (ou um UserPool compartilhado c
 
 #### Fluxos suportados
 
-| Fluxo | Aplicação | Grant Type |
-|---|---|---|
-| Authorization Code + PKCE | `sgp-admin` SPA, `sgp-portal` SPA | `authorization_code` |
-| Client Credentials | Sistemas externos, microsserviços internos | `client_credentials` |
-| Refresh Token | Renovação silenciosa (ambos os SPAs) | `refresh_token` |
+| Fluxo                     | Aplicação                                  | Grant Type           |
+| ------------------------- | ------------------------------------------ | -------------------- |
+| Authorization Code + PKCE | `sgp-admin` SPA, `sgp-portal` SPA          | `authorization_code` |
+| Client Credentials        | Sistemas externos, microsserviços internos | `client_credentials` |
+| Refresh Token             | Renovação silenciosa (ambos os SPAs)       | `refresh_token`      |
 
 #### Tokens emitidos (OIDC)
 
-| Token | Vida útil | Uso |
-|---|---|---|
-| **ID Token** (JWT) | 1 h | Identidade do usuário; contém claims OIDC (`sub`, `email`, `name`) + claims customizadas (`custom:tenant_id`, `custom:roles`). |
-| **Access Token** (JWT) | 1 h | Apresentado no header `Authorization: Bearer` para o backend. Contém escopos OAuth2 e claim obrigatória `custom:tenant_id` (fallback aceito apenas para `tenant_id` em compatibilidade controlada). |
-| **Refresh Token** (opaco) | 30 dias | Troca por novo Access + ID Token via endpoint `/oauth2/token`. Revogável. |
+| Token                     | Vida útil | Uso                                                                                                                                                                                                 |
+| ------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **ID Token** (JWT)        | 1 h       | Identidade do usuário; contém claims OIDC (`sub`, `email`, `name`) + claims customizadas (`custom:tenant_id`, `custom:roles`).                                                                      |
+| **Access Token** (JWT)    | 1 h       | Apresentado no header `Authorization: Bearer` para o backend. Contém escopos OAuth2 e claim obrigatória `custom:tenant_id` (fallback aceito apenas para `tenant_id` em compatibilidade controlada). |
+| **Refresh Token** (opaco) | 30 dias   | Troca por novo Access + ID Token via endpoint `/oauth2/token`. Revogável.                                                                                                                           |
 
 #### Claims customizadas do Access Token
 
@@ -86,7 +87,7 @@ O SGP utiliza um **UserPool Cognito por tenant** (ou um UserPool compartilhado c
   "custom:tenant_id": "uuid-do-tenant",
   "custom:roles": "ROLE_FUNCIONARIO_VISUALIZAR,ROLE_FOLHA_DE_PGT_GESTAO",
   "exp": 1714000000,
-  "iat": 1713996400
+  "iat": 1713996400,
 }
 ```
 
@@ -94,12 +95,12 @@ O SGP utiliza um **UserPool Cognito por tenant** (ou um UserPool compartilhado c
 
 ### 2.2 MFA
 
-| Papel / Perfil | Política MFA |
-|---|---|
+| Papel / Perfil                                                | Política MFA                                                                                    |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `ROLE_ADMIN`, `ADMIN_TENANT`, `GESTOR_FOLHA`, `ADMIN_SISTEMA` | **TOTP obrigatório** (Google Authenticator, Authy). Cognito bloqueia login sem MFA configurado. |
-| Demais usuários administrativos | SMS OTP opcional (habilitado por feature flag `MFA_REQUIRED`). |
-| `SERVIDOR_PORTAL`, `PENSIONISTA_PORTAL`, `CANDIDATO_PORTAL` | MFA não obrigatório por padrão; pode ser habilitado pelo tenant. |
-| Client Credentials (sistemas externos) | MFA não aplicável. |
+| Demais usuários administrativos                               | SMS OTP opcional (habilitado por feature flag `MFA_REQUIRED`).                                  |
+| `SERVIDOR_PORTAL`, `PENSIONISTA_PORTAL`, `CANDIDATO_PORTAL`   | MFA não obrigatório por padrão; pode ser habilitado pelo tenant.                                |
+| Client Credentials (sistemas externos)                        | MFA não aplicável.                                                                              |
 
 A feature flag `MFA_REQUIRED=true` eleva a exigência para todos os usuários do tenant.
 
@@ -113,12 +114,12 @@ Usuário → SGP → Cognito → [Federated IdP: Gov.br] → redirect → Cognit
 
 Atributos Gov.br mapeados para claims Cognito:
 
-| Atributo Gov.br | Claim SGP |
-|---|---|
-| `sub` (CPF hash) | `custom:gov_br_sub` |
+| Atributo Gov.br                    | Claim SGP             |
+| ---------------------------------- | --------------------- |
+| `sub` (CPF hash)                   | `custom:gov_br_sub`   |
 | `nivel_acesso` (Bronze/Prata/Ouro) | `custom:gov_br_nivel` |
-| `name` | `name` |
-| `email` | `email` |
+| `name`                             | `name`                |
+| `email`                            | `email`               |
 
 A feature flag `GOV_BR_NIVEL_MINIMO` define o nível mínimo aceito por contexto (ex.: `PRATA` para recadastramento, `OURO` para prova de vida via `PROVA_VIDA_PUBLIC_API_ENABLED`).
 
@@ -145,13 +146,16 @@ Clientes externos usam `Authorization: Bearer <access_token>` no header HTTP. Se
 
 ```typescript
 // auth.worker.ts (Web Worker no sgp-admin)
-setInterval(async () => {
-  const resp = await fetch('/api/v1/auth/refresh', {
-    method: 'POST',
-    credentials: 'include', // envia cookie refresh_token
-  });
-  // backend gira novo access_token no cookie; não expõe ao JS
-}, 50 * 60 * 1000); // 50 minutos (antes do exp de 1h)
+setInterval(
+  async () => {
+    const resp = await fetch('/api/v1/auth/refresh', {
+      method: 'POST',
+      credentials: 'include', // envia cookie refresh_token
+    });
+    // backend gira novo access_token no cookie; não expõe ao JS
+  },
+  50 * 60 * 1000,
+); // 50 minutos (antes do exp de 1h)
 ```
 
 **Revogação:**
@@ -169,6 +173,7 @@ O backend chama `CognitoIdentityProvider.revokeToken(refreshToken)` e limpa os c
 ### 3.1 Identificação do Tenant
 
 O `tenant_id` é um UUID presente:
+
 1. Na claim `custom:tenant_id` do Access Token JWT.
 2. Em **todas** as tabelas de negócio do banco (`tenant_id UUID NOT NULL`).
 3. Na variável de sessão Postgres `app.current_tenant_id`.
@@ -207,10 +212,7 @@ export class TenantSessionInterceptor implements NestInterceptor {
     const tenantId: string = request['tenantId'];
 
     // Garante que cada request usa uma conexão com tenant_id configurado
-    await this.dataSource.query(
-      `SET app.current_tenant_id = $1`,
-      [tenantId],
-    );
+    await this.dataSource.query(`SET app.current_tenant_id = $1`, [tenantId]);
 
     return next.handle().pipe(
       finalize(async () => {
@@ -272,33 +274,33 @@ RESET app.current_tenant_id;
 
 O catálogo canônico de permissões é `database/seed/permission-catalog.json`; o arquivo TypeScript consumido pelo backend é gerado por `scripts/gen-permissions.ts` e não é editado manualmente. As chaves usam formato `dominio.acao`, sem catálogo paralelo em TS.
 
-| Permissão | Uso |
-|---|---|
-| `auth.read` | Sessão autenticada, menus e aliases de sessão do portal |
-| `iam.read` | Leitura do catálogo de permissões |
-| `gestao.read` | Leitura de administração, segurança, parâmetros, usuários, perfis e master data |
-| `gestao.write` | Mutação de administração, segurança, parâmetros, usuários, perfis e master data |
-| `rh.read` | Leitura de dossiê, cadastro e fluxos de RH |
-| `rh.write` | Mutação de dossiê, cadastro e fluxos de RH |
-| `folha.read` | Leitura de folha, cálculo, contabilidade de folha e eSocial de folha |
-| `folha.write` | Mutação de folha, cálculo, contabilidade de folha e eSocial de folha |
-| `avaliacao.read` | Leitura de avaliação e progressão |
-| `avaliacao.write` | Mutação de avaliação e progressão |
-| `consultas.read` | Consultas gerenciais |
-| `previdenciario.read` | Leitura previdenciária |
-| `previdenciario.write` | Mutação previdenciária |
-| `recrutamento.read` | Leitura de recrutamento |
-| `recrutamento.write` | Mutação de recrutamento |
-| `saude.read` | Leitura de saúde ocupacional e perícia |
-| `saude.write` | Mutação de saúde ocupacional e perícia |
-| `convenio.read` | Leitura de convênios |
-| `convenio.write` | Mutação de convênios |
-| `relatorio.read` | Catálogo e status de relatórios |
-| `relatorio.generate` | Geração e enfileiramento de relatórios |
-| `documents.upload` | Sessões de upload de documentos |
-| `documents.register` | Confirmação e registro de anexos |
-| `documents.download` | Download de anexos |
-| `auditoria.read` | Trilha de auditoria e exportações |
+| Permissão              | Uso                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| `auth.read`            | Sessão autenticada, menus e aliases de sessão do portal                         |
+| `iam.read`             | Leitura do catálogo de permissões                                               |
+| `gestao.read`          | Leitura de administração, segurança, parâmetros, usuários, perfis e master data |
+| `gestao.write`         | Mutação de administração, segurança, parâmetros, usuários, perfis e master data |
+| `rh.read`              | Leitura de dossiê, cadastro e fluxos de RH                                      |
+| `rh.write`             | Mutação de dossiê, cadastro e fluxos de RH                                      |
+| `folha.read`           | Leitura de folha, cálculo, contabilidade de folha e eSocial de folha            |
+| `folha.write`          | Mutação de folha, cálculo, contabilidade de folha e eSocial de folha            |
+| `avaliacao.read`       | Leitura de avaliação e progressão                                               |
+| `avaliacao.write`      | Mutação de avaliação e progressão                                               |
+| `consultas.read`       | Consultas gerenciais                                                            |
+| `previdenciario.read`  | Leitura previdenciária                                                          |
+| `previdenciario.write` | Mutação previdenciária                                                          |
+| `recrutamento.read`    | Leitura de recrutamento                                                         |
+| `recrutamento.write`   | Mutação de recrutamento                                                         |
+| `saude.read`           | Leitura de saúde ocupacional e perícia                                          |
+| `saude.write`          | Mutação de saúde ocupacional e perícia                                          |
+| `convenio.read`        | Leitura de convênios                                                            |
+| `convenio.write`       | Mutação de convênios                                                            |
+| `relatorio.read`       | Catálogo e status de relatórios                                                 |
+| `relatorio.generate`   | Geração e enfileiramento de relatórios                                          |
+| `documents.upload`     | Sessões de upload de documentos                                                 |
+| `documents.register`   | Confirmação e registro de anexos                                                |
+| `documents.download`   | Download de anexos                                                              |
+| `auditoria.read`       | Trilha de auditoria e exportações                                               |
 
 O backend registra `PermissionGuard` como `APP_GUARD` nos módulos `AppModule` e `AppPortalModule`. Toda rota é negada por padrão quando não possui `@RequirePermission(...)`; endpoints públicos precisam declarar `@Public()` explicitamente. O guard valida o bearer token Cognito, resolve grupos Cognito contra `public.access_profile`/`public.profile_permission`/`public.permission` com cache curto e propaga `tenant_id` e permissões ao contexto de banco usado pelas políticas RLS.
 
@@ -448,13 +450,13 @@ ROLE_<MODULO>_<ACAO>
 
 ### 5.2 Hierarquia de ações
 
-| Papel detido | Implica (frontend + backend) |
-|---|---|
-| `ROLE_<M>_GESTAO` | Todas as ações do módulo (visualizar, cadastrar, atualizar, excluir, operar processos). Substitui todos os demais. |
-| `ROLE_<M>_EXCLUIR` | Excluir + atualizar + cadastrar + visualizar. |
-| `ROLE_<M>_ATUALIZAR` | Atualizar + visualizar. |
-| `ROLE_<M>_CADASTRAR` | Cadastrar + visualizar. |
-| `ROLE_<M>_VISUALIZAR` | Somente consulta/leitura; tela abre em modo detalhe sem botões de edição. |
+| Papel detido          | Implica (frontend + backend)                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `ROLE_<M>_GESTAO`     | Todas as ações do módulo (visualizar, cadastrar, atualizar, excluir, operar processos). Substitui todos os demais. |
+| `ROLE_<M>_EXCLUIR`    | Excluir + atualizar + cadastrar + visualizar.                                                                      |
+| `ROLE_<M>_ATUALIZAR`  | Atualizar + visualizar.                                                                                            |
+| `ROLE_<M>_CADASTRAR`  | Cadastrar + visualizar.                                                                                            |
+| `ROLE_<M>_VISUALIZAR` | Somente consulta/leitura; tela abre em modo detalhe sem botões de edição.                                          |
 
 > `ROLE_ADMIN` (papel especial do tenant) implica todas as ações de todos os módulos do tenant, equivalente a `GESTAO` em tudo.
 
@@ -463,122 +465,121 @@ ROLE_<MODULO>_<ACAO>
 Os módulos a seguir não possuem granularidade CRUD; a única ação disponível é `GESTAO`:
 `FOLHA_DE_PGT`, `RECADASTRAMENTO`, `PERICIA_MEDICA`, `AGENDA_MEDICA`, `ESPECIALIDADE_MEDICA`, `MEDICO`, `ARQUIVO_REMESSA`, `ARQUIVO_EXPORTACAO_SIPREV`, `DIRF`, `RELATORIO_FOLHA_PAGAMENTO`, `RELATORIO_BATIMENTO_FOLHA`, `RELATORIO_VERBAS`, `RELATORIO_PROVENTOS_DESCONTOS`, `RELATORIO_REPASSE_FUNDO_RH`, `RELATORIO_APOSENTADO_PENSAO`, `RELATORIO_SERV_PAG_BLOQUEADO`, `RELATORIO_GERENCIAL`, `AUDITORIA`.
 
-
 ---
 
 ## 6. Módulos — Papéis Completos
 
 A tabela abaixo lista todos os módulos do SGP com os papéis disponíveis. Coluna **Tipo** indica se o módulo possui CRUD granular (`CRUD`) ou apenas gestão integral (`GESTAO`).
 
-| Módulo | Tipo | Papéis disponíveis |
-|---|---|---|
-| AUTH | CRUD | `ROLE_AUTH_VISUALIZAR`, `ROLE_AUTH_CADASTRAR`, `ROLE_AUTH_ATUALIZAR`, `ROLE_AUTH_EXCLUIR`, `ROLE_AUTH_GESTAO` |
-| TENANT | CRUD | `ROLE_TENANT_VISUALIZAR`, `ROLE_TENANT_CADASTRAR`, `ROLE_TENANT_ATUALIZAR`, `ROLE_TENANT_EXCLUIR`, `ROLE_TENANT_GESTAO` |
-| USUARIO | CRUD | `ROLE_USUARIO_VISUALIZAR`, `ROLE_USUARIO_CADASTRAR`, `ROLE_USUARIO_ATUALIZAR`, `ROLE_USUARIO_EXCLUIR`, `ROLE_USUARIO_GESTAO` |
-| PERFIL | CRUD | `ROLE_PERFIL_VISUALIZAR`, `ROLE_PERFIL_CADASTRAR`, `ROLE_PERFIL_ATUALIZAR`, `ROLE_PERFIL_EXCLUIR`, `ROLE_PERFIL_GESTAO` |
-| PAPEL | CRUD | `ROLE_PAPEL_VISUALIZAR`, `ROLE_PAPEL_CADASTRAR`, `ROLE_PAPEL_ATUALIZAR`, `ROLE_PAPEL_EXCLUIR`, `ROLE_PAPEL_GESTAO` |
-| MENU | CRUD | `ROLE_MENU_VISUALIZAR`, `ROLE_MENU_CADASTRAR`, `ROLE_MENU_ATUALIZAR`, `ROLE_MENU_EXCLUIR`, `ROLE_MENU_GESTAO` |
-| PARAMETRO_SISTEMA | CRUD | `ROLE_PARAMETRO_SISTEMA_VISUALIZAR`, `ROLE_PARAMETRO_SISTEMA_CADASTRAR`, `ROLE_PARAMETRO_SISTEMA_ATUALIZAR`, `ROLE_PARAMETRO_SISTEMA_EXCLUIR`, `ROLE_PARAMETRO_SISTEMA_GESTAO` |
-| PARAMETRO_GLOBAL | CRUD | `ROLE_PARAMETRO_GLOBAL_VISUALIZAR`, `ROLE_PARAMETRO_GLOBAL_CADASTRAR`, `ROLE_PARAMETRO_GLOBAL_ATUALIZAR`, `ROLE_PARAMETRO_GLOBAL_EXCLUIR`, `ROLE_PARAMETRO_GLOBAL_GESTAO` |
-| FEATURE_FLAG | CRUD | `ROLE_FEATURE_FLAG_VISUALIZAR`, `ROLE_FEATURE_FLAG_CADASTRAR`, `ROLE_FEATURE_FLAG_ATUALIZAR`, `ROLE_FEATURE_FLAG_EXCLUIR`, `ROLE_FEATURE_FLAG_GESTAO` |
-| AUDITORIA | GESTAO | `ROLE_AUDITORIA_GESTAO` |
-| ARQUIVO | CRUD | `ROLE_ARQUIVO_VISUALIZAR`, `ROLE_ARQUIVO_CADASTRAR`, `ROLE_ARQUIVO_ATUALIZAR`, `ROLE_ARQUIVO_EXCLUIR`, `ROLE_ARQUIVO_GESTAO` |
-| NOTIFICACAO | CRUD | `ROLE_NOTIFICACAO_VISUALIZAR`, `ROLE_NOTIFICACAO_CADASTRAR`, `ROLE_NOTIFICACAO_ATUALIZAR`, `ROLE_NOTIFICACAO_EXCLUIR`, `ROLE_NOTIFICACAO_GESTAO` |
-| FUNCIONARIO | CRUD | `ROLE_FUNCIONARIO_VISUALIZAR`, `ROLE_FUNCIONARIO_CADASTRAR`, `ROLE_FUNCIONARIO_ATUALIZAR`, `ROLE_FUNCIONARIO_EXCLUIR`, `ROLE_FUNCIONARIO_GESTAO` |
-| VINCULO | CRUD | `ROLE_VINCULO_VISUALIZAR`, `ROLE_VINCULO_CADASTRAR`, `ROLE_VINCULO_ATUALIZAR`, `ROLE_VINCULO_EXCLUIR`, `ROLE_VINCULO_GESTAO` |
-| POSSE_EFETIVO | CRUD | `ROLE_POSSE_EFETIVO_VISUALIZAR`, `ROLE_POSSE_EFETIVO_CADASTRAR`, `ROLE_POSSE_EFETIVO_ATUALIZAR`, `ROLE_POSSE_EFETIVO_EXCLUIR`, `ROLE_POSSE_EFETIVO_GESTAO` |
-| POSSE_COMISSIONADO | CRUD | `ROLE_POSSE_COMISSIONADO_VISUALIZAR`, `ROLE_POSSE_COMISSIONADO_CADASTRAR`, `ROLE_POSSE_COMISSIONADO_ATUALIZAR`, `ROLE_POSSE_COMISSIONADO_EXCLUIR`, `ROLE_POSSE_COMISSIONADO_GESTAO` |
-| POSSE_CONTRATADO | CRUD | `ROLE_POSSE_CONTRATADO_VISUALIZAR`, `ROLE_POSSE_CONTRATADO_CADASTRAR`, `ROLE_POSSE_CONTRATADO_ATUALIZAR`, `ROLE_POSSE_CONTRATADO_EXCLUIR`, `ROLE_POSSE_CONTRATADO_GESTAO` |
-| SITUACAO_FUNCIONAL | CRUD | `ROLE_SITUACAO_FUNCIONAL_VISUALIZAR`, `ROLE_SITUACAO_FUNCIONAL_CADASTRAR`, `ROLE_SITUACAO_FUNCIONAL_ATUALIZAR`, `ROLE_SITUACAO_FUNCIONAL_EXCLUIR`, `ROLE_SITUACAO_FUNCIONAL_GESTAO` |
-| TRANSFERENCIA | CRUD | `ROLE_TRANSFERENCIA_VISUALIZAR`, `ROLE_TRANSFERENCIA_CADASTRAR`, `ROLE_TRANSFERENCIA_ATUALIZAR`, `ROLE_TRANSFERENCIA_EXCLUIR`, `ROLE_TRANSFERENCIA_GESTAO` |
-| DOSSIE | CRUD | `ROLE_DOSSIE_VISUALIZAR`, `ROLE_DOSSIE_CADASTRAR`, `ROLE_DOSSIE_ATUALIZAR`, `ROLE_DOSSIE_EXCLUIR`, `ROLE_DOSSIE_GESTAO` |
-| DEPENDENTE | CRUD | `ROLE_DEPENDENTE_VISUALIZAR`, `ROLE_DEPENDENTE_CADASTRAR`, `ROLE_DEPENDENTE_ATUALIZAR`, `ROLE_DEPENDENTE_EXCLUIR`, `ROLE_DEPENDENTE_GESTAO` |
-| PENSAO_ALIMENTICIA | CRUD | `ROLE_PENSAO_ALIMENTICIA_VISUALIZAR`, `ROLE_PENSAO_ALIMENTICIA_CADASTRAR`, `ROLE_PENSAO_ALIMENTICIA_ATUALIZAR`, `ROLE_PENSAO_ALIMENTICIA_EXCLUIR`, `ROLE_PENSAO_ALIMENTICIA_GESTAO` |
-| REEMBOLSO | CRUD | `ROLE_REEMBOLSO_VISUALIZAR`, `ROLE_REEMBOLSO_CADASTRAR`, `ROLE_REEMBOLSO_ATUALIZAR`, `ROLE_REEMBOLSO_EXCLUIR`, `ROLE_REEMBOLSO_GESTAO` |
-| DECISAO_JUDICIAL | CRUD | `ROLE_DECISAO_JUDICIAL_VISUALIZAR`, `ROLE_DECISAO_JUDICIAL_CADASTRAR`, `ROLE_DECISAO_JUDICIAL_ATUALIZAR`, `ROLE_DECISAO_JUDICIAL_EXCLUIR`, `ROLE_DECISAO_JUDICIAL_GESTAO` |
-| BANCO | CRUD | `ROLE_BANCO_VISUALIZAR`, `ROLE_BANCO_CADASTRAR`, `ROLE_BANCO_ATUALIZAR`, `ROLE_BANCO_EXCLUIR`, `ROLE_BANCO_GESTAO` |
-| AGENCIA | CRUD | `ROLE_AGENCIA_VISUALIZAR`, `ROLE_AGENCIA_CADASTRAR`, `ROLE_AGENCIA_ATUALIZAR`, `ROLE_AGENCIA_EXCLUIR`, `ROLE_AGENCIA_GESTAO` |
-| FILIAL | CRUD | `ROLE_FILIAL_VISUALIZAR`, `ROLE_FILIAL_CADASTRAR`, `ROLE_FILIAL_ATUALIZAR`, `ROLE_FILIAL_EXCLUIR`, `ROLE_FILIAL_GESTAO` |
-| LOTACAO | CRUD | `ROLE_LOTACAO_VISUALIZAR`, `ROLE_LOTACAO_CADASTRAR`, `ROLE_LOTACAO_ATUALIZAR`, `ROLE_LOTACAO_EXCLUIR`, `ROLE_LOTACAO_GESTAO` |
-| CENTRO_CUSTO | CRUD | `ROLE_CENTRO_CUSTO_VISUALIZAR`, `ROLE_CENTRO_CUSTO_CADASTRAR`, `ROLE_CENTRO_CUSTO_ATUALIZAR`, `ROLE_CENTRO_CUSTO_EXCLUIR`, `ROLE_CENTRO_CUSTO_GESTAO` |
-| CARGO | CRUD | `ROLE_CARGO_VISUALIZAR`, `ROLE_CARGO_CADASTRAR`, `ROLE_CARGO_ATUALIZAR`, `ROLE_CARGO_EXCLUIR`, `ROLE_CARGO_GESTAO` |
-| FUNCAO | CRUD | `ROLE_FUNCAO_VISUALIZAR`, `ROLE_FUNCAO_CADASTRAR`, `ROLE_FUNCAO_ATUALIZAR`, `ROLE_FUNCAO_EXCLUIR`, `ROLE_FUNCAO_GESTAO` |
-| NIVEL_SALARIAL | CRUD | `ROLE_NIVEL_SALARIAL_VISUALIZAR`, `ROLE_NIVEL_SALARIAL_CADASTRAR`, `ROLE_NIVEL_SALARIAL_ATUALIZAR`, `ROLE_NIVEL_SALARIAL_EXCLUIR`, `ROLE_NIVEL_SALARIAL_GESTAO` |
-| REFERENCIA_SALARIAL | CRUD | `ROLE_REFERENCIA_SALARIAL_VISUALIZAR`, `ROLE_REFERENCIA_SALARIAL_CADASTRAR`, `ROLE_REFERENCIA_SALARIAL_ATUALIZAR`, `ROLE_REFERENCIA_SALARIAL_EXCLUIR`, `ROLE_REFERENCIA_SALARIAL_GESTAO` |
-| FAIXA_SALARIAL | CRUD | `ROLE_FAIXA_SALARIAL_VISUALIZAR`, `ROLE_FAIXA_SALARIAL_CADASTRAR`, `ROLE_FAIXA_SALARIAL_ATUALIZAR`, `ROLE_FAIXA_SALARIAL_EXCLUIR`, `ROLE_FAIXA_SALARIAL_GESTAO` |
-| GRUPO_SALARIAL | CRUD | `ROLE_GRUPO_SALARIAL_VISUALIZAR`, `ROLE_GRUPO_SALARIAL_CADASTRAR`, `ROLE_GRUPO_SALARIAL_ATUALIZAR`, `ROLE_GRUPO_SALARIAL_EXCLUIR`, `ROLE_GRUPO_SALARIAL_GESTAO` |
-| PLANO_CARGOS | CRUD | `ROLE_PLANO_CARGOS_VISUALIZAR`, `ROLE_PLANO_CARGOS_CADASTRAR`, `ROLE_PLANO_CARGOS_ATUALIZAR`, `ROLE_PLANO_CARGOS_EXCLUIR`, `ROLE_PLANO_CARGOS_GESTAO` |
-| CONVENIO | CRUD | `ROLE_CONVENIO_VISUALIZAR`, `ROLE_CONVENIO_CADASTRAR`, `ROLE_CONVENIO_ATUALIZAR`, `ROLE_CONVENIO_EXCLUIR`, `ROLE_CONVENIO_GESTAO` |
-| SINDICATO | CRUD | `ROLE_SINDICATO_VISUALIZAR`, `ROLE_SINDICATO_CADASTRAR`, `ROLE_SINDICATO_ATUALIZAR`, `ROLE_SINDICATO_EXCLUIR`, `ROLE_SINDICATO_GESTAO` |
-| TURNO | CRUD | `ROLE_TURNO_VISUALIZAR`, `ROLE_TURNO_CADASTRAR`, `ROLE_TURNO_ATUALIZAR`, `ROLE_TURNO_EXCLUIR`, `ROLE_TURNO_GESTAO` |
-| JORNADA | CRUD | `ROLE_JORNADA_VISUALIZAR`, `ROLE_JORNADA_CADASTRAR`, `ROLE_JORNADA_ATUALIZAR`, `ROLE_JORNADA_EXCLUIR`, `ROLE_JORNADA_GESTAO` |
-| COMPETENCIA | CRUD | `ROLE_COMPETENCIA_VISUALIZAR`, `ROLE_COMPETENCIA_CADASTRAR`, `ROLE_COMPETENCIA_ATUALIZAR`, `ROLE_COMPETENCIA_EXCLUIR`, `ROLE_COMPETENCIA_GESTAO` |
-| FOLHA_DE_PGT | GESTAO | `ROLE_FOLHA_DE_PGT_GESTAO` |
-| CONTRACHEQUE | CRUD | `ROLE_CONTRACHEQUE_VISUALIZAR`, `ROLE_CONTRACHEQUE_CADASTRAR`, `ROLE_CONTRACHEQUE_ATUALIZAR`, `ROLE_CONTRACHEQUE_EXCLUIR`, `ROLE_CONTRACHEQUE_GESTAO` |
-| LANCAMENTO | CRUD | `ROLE_LANCAMENTO_VISUALIZAR`, `ROLE_LANCAMENTO_CADASTRAR`, `ROLE_LANCAMENTO_ATUALIZAR`, `ROLE_LANCAMENTO_EXCLUIR`, `ROLE_LANCAMENTO_GESTAO` |
-| VERBA | CRUD | `ROLE_VERBA_VISUALIZAR`, `ROLE_VERBA_CADASTRAR`, `ROLE_VERBA_ATUALIZAR`, `ROLE_VERBA_EXCLUIR`, `ROLE_VERBA_GESTAO` |
-| FORMULA | CRUD | `ROLE_FORMULA_VISUALIZAR`, `ROLE_FORMULA_CADASTRAR`, `ROLE_FORMULA_ATUALIZAR`, `ROLE_FORMULA_EXCLUIR`, `ROLE_FORMULA_GESTAO` |
-| ALIQUOTA | CRUD | `ROLE_ALIQUOTA_VISUALIZAR`, `ROLE_ALIQUOTA_CADASTRAR`, `ROLE_ALIQUOTA_ATUALIZAR`, `ROLE_ALIQUOTA_EXCLUIR`, `ROLE_ALIQUOTA_GESTAO` |
-| FUNCIONARIO_VERBA | CRUD | `ROLE_FUNCIONARIO_VERBA_VISUALIZAR`, `ROLE_FUNCIONARIO_VERBA_CADASTRAR`, `ROLE_FUNCIONARIO_VERBA_ATUALIZAR`, `ROLE_FUNCIONARIO_VERBA_EXCLUIR`, `ROLE_FUNCIONARIO_VERBA_GESTAO` |
-| IMPORTADOR_VERBA_SERVIDOR | CRUD | `ROLE_IMPORTADOR_VERBA_SERVIDOR_VISUALIZAR`, `ROLE_IMPORTADOR_VERBA_SERVIDOR_CADASTRAR`, `ROLE_IMPORTADOR_VERBA_SERVIDOR_ATUALIZAR`, `ROLE_IMPORTADOR_VERBA_SERVIDOR_EXCLUIR`, `ROLE_IMPORTADOR_VERBA_SERVIDOR_GESTAO` |
-| IMPORTADOR_VERBA_PENSIONISTA | CRUD | `ROLE_IMPORTADOR_VERBA_PENSIONISTA_VISUALIZAR`, `ROLE_IMPORTADOR_VERBA_PENSIONISTA_CADASTRAR`, `ROLE_IMPORTADOR_VERBA_PENSIONISTA_ATUALIZAR`, `ROLE_IMPORTADOR_VERBA_PENSIONISTA_EXCLUIR`, `ROLE_IMPORTADOR_VERBA_PENSIONISTA_GESTAO` |
-| IMPORTADOR_LANCAMENTO_MANUAL | CRUD | `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_VISUALIZAR`, `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_CADASTRAR`, `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_ATUALIZAR`, `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_EXCLUIR`, `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_GESTAO` |
-| IMPORTACAO_CONSIGNADO | CRUD | `ROLE_IMPORTACAO_CONSIGNADO_VISUALIZAR`, `ROLE_IMPORTACAO_CONSIGNADO_CADASTRAR`, `ROLE_IMPORTACAO_CONSIGNADO_ATUALIZAR`, `ROLE_IMPORTACAO_CONSIGNADO_EXCLUIR`, `ROLE_IMPORTACAO_CONSIGNADO_GESTAO` |
-| CONSIGNADO | CRUD | `ROLE_CONSIGNADO_VISUALIZAR`, `ROLE_CONSIGNADO_CADASTRAR`, `ROLE_CONSIGNADO_ATUALIZAR`, `ROLE_CONSIGNADO_EXCLUIR`, `ROLE_CONSIGNADO_GESTAO` |
-| LOTE_PROCESSAMENTO | CRUD | `ROLE_LOTE_PROCESSAMENTO_VISUALIZAR`, `ROLE_LOTE_PROCESSAMENTO_CADASTRAR`, `ROLE_LOTE_PROCESSAMENTO_ATUALIZAR`, `ROLE_LOTE_PROCESSAMENTO_EXCLUIR`, `ROLE_LOTE_PROCESSAMENTO_GESTAO` |
-| RELATORIO_FINANCEIRO | CRUD | `ROLE_RELATORIO_FINANCEIRO_VISUALIZAR`, `ROLE_RELATORIO_FINANCEIRO_CADASTRAR`, `ROLE_RELATORIO_FINANCEIRO_ATUALIZAR`, `ROLE_RELATORIO_FINANCEIRO_EXCLUIR`, `ROLE_RELATORIO_FINANCEIRO_GESTAO` |
-| RELATORIO_FOLHA_PAGAMENTO | GESTAO | `ROLE_RELATORIO_FOLHA_PAGAMENTO_GESTAO` |
-| RELATORIO_BATIMENTO_FOLHA | GESTAO | `ROLE_RELATORIO_BATIMENTO_FOLHA_GESTAO` |
-| RELATORIO_VERBAS | GESTAO | `ROLE_RELATORIO_VERBAS_GESTAO` |
-| RELATORIO_PROVENTOS_DESCONTOS | GESTAO | `ROLE_RELATORIO_PROVENTOS_DESCONTOS_GESTAO` |
-| RELATORIO_REPASSE_FUNDO_RH | GESTAO | `ROLE_RELATORIO_REPASSE_FUNDO_RH_GESTAO` |
-| RELATORIO_APOSENTADO_PENSAO | GESTAO | `ROLE_RELATORIO_APOSENTADO_PENSAO_GESTAO` |
-| RELATORIO_SERV_PAG_BLOQUEADO | GESTAO | `ROLE_RELATORIO_SERV_PAG_BLOQUEADO_GESTAO` |
-| RELATORIO_GERENCIAL | GESTAO | `ROLE_RELATORIO_GERENCIAL_GESTAO` |
-| DIRF | GESTAO | `ROLE_DIRF_GESTAO` |
-| ARQUIVO_REMESSA | GESTAO | `ROLE_ARQUIVO_REMESSA_GESTAO` |
-| ARQUIVO_EXPORTACAO_SIPREV | GESTAO | `ROLE_ARQUIVO_EXPORTACAO_SIPREV_GESTAO` |
-| SEFIP | CRUD | `ROLE_SEFIP_VISUALIZAR`, `ROLE_SEFIP_CADASTRAR`, `ROLE_SEFIP_ATUALIZAR`, `ROLE_SEFIP_EXCLUIR`, `ROLE_SEFIP_GESTAO` |
-| AVALIACAO_DESEMPENHO | CRUD | `ROLE_AVALIACAO_DESEMPENHO_VISUALIZAR`, `ROLE_AVALIACAO_DESEMPENHO_CADASTRAR`, `ROLE_AVALIACAO_DESEMPENHO_ATUALIZAR`, `ROLE_AVALIACAO_DESEMPENHO_EXCLUIR`, `ROLE_AVALIACAO_DESEMPENHO_GESTAO` |
-| PROGRESSAO | CRUD | `ROLE_PROGRESSAO_VISUALIZAR`, `ROLE_PROGRESSAO_CADASTRAR`, `ROLE_PROGRESSAO_ATUALIZAR`, `ROLE_PROGRESSAO_EXCLUIR`, `ROLE_PROGRESSAO_GESTAO` |
-| REQUISICAO_DE_PESSOAL | CRUD | `ROLE_REQUISICAO_DE_PESSOAL_VISUALIZAR`, `ROLE_REQUISICAO_DE_PESSOAL_CADASTRAR`, `ROLE_REQUISICAO_DE_PESSOAL_ATUALIZAR`, `ROLE_REQUISICAO_DE_PESSOAL_EXCLUIR`, `ROLE_REQUISICAO_DE_PESSOAL_GESTAO` |
-| BANCO_TALENTOS | CRUD | `ROLE_BANCO_TALENTOS_VISUALIZAR`, `ROLE_BANCO_TALENTOS_CADASTRAR`, `ROLE_BANCO_TALENTOS_ATUALIZAR`, `ROLE_BANCO_TALENTOS_EXCLUIR`, `ROLE_BANCO_TALENTOS_GESTAO` |
-| PROGRAMA_ESTAGIO | CRUD | `ROLE_PROGRAMA_ESTAGIO_VISUALIZAR`, `ROLE_PROGRAMA_ESTAGIO_CADASTRAR`, `ROLE_PROGRAMA_ESTAGIO_ATUALIZAR`, `ROLE_PROGRAMA_ESTAGIO_EXCLUIR`, `ROLE_PROGRAMA_ESTAGIO_GESTAO` |
-| ESTAGIARIO | CRUD | `ROLE_ESTAGIARIO_VISUALIZAR`, `ROLE_ESTAGIARIO_CADASTRAR`, `ROLE_ESTAGIARIO_ATUALIZAR`, `ROLE_ESTAGIARIO_EXCLUIR`, `ROLE_ESTAGIARIO_GESTAO` |
-| REGRA_APOSENTADORIA | CRUD | `ROLE_REGRA_APOSENTADORIA_VISUALIZAR`, `ROLE_REGRA_APOSENTADORIA_CADASTRAR`, `ROLE_REGRA_APOSENTADORIA_ATUALIZAR`, `ROLE_REGRA_APOSENTADORIA_EXCLUIR`, `ROLE_REGRA_APOSENTADORIA_GESTAO` |
-| APOSENTADORIA | CRUD | `ROLE_APOSENTADORIA_VISUALIZAR`, `ROLE_APOSENTADORIA_CADASTRAR`, `ROLE_APOSENTADORIA_ATUALIZAR`, `ROLE_APOSENTADORIA_EXCLUIR`, `ROLE_APOSENTADORIA_GESTAO` |
-| PENSAO | CRUD | `ROLE_PENSAO_VISUALIZAR`, `ROLE_PENSAO_CADASTRAR`, `ROLE_PENSAO_ATUALIZAR`, `ROLE_PENSAO_EXCLUIR`, `ROLE_PENSAO_GESTAO` |
-| CERTIDAO_TEMPO_CONTRIBUICAO | CRUD | `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_VISUALIZAR`, `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_CADASTRAR`, `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_ATUALIZAR`, `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_EXCLUIR`, `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_GESTAO` |
-| COMPENSACAO_PREVIDENCIARIA | CRUD | `ROLE_COMPENSACAO_PREVIDENCIARIA_VISUALIZAR`, `ROLE_COMPENSACAO_PREVIDENCIARIA_CADASTRAR`, `ROLE_COMPENSACAO_PREVIDENCIARIA_ATUALIZAR`, `ROLE_COMPENSACAO_PREVIDENCIARIA_EXCLUIR`, `ROLE_COMPENSACAO_PREVIDENCIARIA_GESTAO` |
-| DECLARACAO_APOSENTADO | CRUD | `ROLE_DECLARACAO_APOSENTADO_VISUALIZAR`, `ROLE_DECLARACAO_APOSENTADO_CADASTRAR`, `ROLE_DECLARACAO_APOSENTADO_ATUALIZAR`, `ROLE_DECLARACAO_APOSENTADO_EXCLUIR`, `ROLE_DECLARACAO_APOSENTADO_GESTAO` |
-| RECADASTRAMENTO | GESTAO | `ROLE_RECADASTRAMENTO_GESTAO` |
-| CAMPANHA_RECADASTRAMENTO | CRUD | `ROLE_CAMPANHA_RECADASTRAMENTO_VISUALIZAR`, `ROLE_CAMPANHA_RECADASTRAMENTO_CADASTRAR`, `ROLE_CAMPANHA_RECADASTRAMENTO_ATUALIZAR`, `ROLE_CAMPANHA_RECADASTRAMENTO_EXCLUIR`, `ROLE_CAMPANHA_RECADASTRAMENTO_GESTAO` |
-| AGENDA_MEDICA | GESTAO | `ROLE_AGENDA_MEDICA_GESTAO` |
-| ESPECIALIDADE_MEDICA | GESTAO | `ROLE_ESPECIALIDADE_MEDICA_GESTAO` |
-| MEDICO | GESTAO | `ROLE_MEDICO_GESTAO` |
-| PERICIA_MEDICA | GESTAO | `ROLE_PERICIA_MEDICA_GESTAO` |
-| LICENCA_MEDICA | CRUD | `ROLE_LICENCA_MEDICA_VISUALIZAR`, `ROLE_LICENCA_MEDICA_CADASTRAR`, `ROLE_LICENCA_MEDICA_ATUALIZAR`, `ROLE_LICENCA_MEDICA_EXCLUIR`, `ROLE_LICENCA_MEDICA_GESTAO` |
-| PROFISSIONAL_SAUDE | CRUD | `ROLE_PROFISSIONAL_SAUDE_VISUALIZAR`, `ROLE_PROFISSIONAL_SAUDE_CADASTRAR`, `ROLE_PROFISSIONAL_SAUDE_ATUALIZAR`, `ROLE_PROFISSIONAL_SAUDE_EXCLUIR`, `ROLE_PROFISSIONAL_SAUDE_GESTAO` |
-| ACIDENTE_TRABALHO | CRUD | `ROLE_ACIDENTE_TRABALHO_VISUALIZAR`, `ROLE_ACIDENTE_TRABALHO_CADASTRAR`, `ROLE_ACIDENTE_TRABALHO_ATUALIZAR`, `ROLE_ACIDENTE_TRABALHO_EXCLUIR`, `ROLE_ACIDENTE_TRABALHO_GESTAO` |
-| CID | CRUD | `ROLE_CID_VISUALIZAR`, `ROLE_CID_CADASTRAR`, `ROLE_CID_ATUALIZAR`, `ROLE_CID_EXCLUIR`, `ROLE_CID_GESTAO` |
-| RESTRICAO | CRUD | `ROLE_RESTRICAO_VISUALIZAR`, `ROLE_RESTRICAO_CADASTRAR`, `ROLE_RESTRICAO_ATUALIZAR`, `ROLE_RESTRICAO_EXCLUIR`, `ROLE_RESTRICAO_GESTAO` |
-| READAPTACAO | CRUD | `ROLE_READAPTACAO_VISUALIZAR`, `ROLE_READAPTACAO_CADASTRAR`, `ROLE_READAPTACAO_ATUALIZAR`, `ROLE_READAPTACAO_EXCLUIR`, `ROLE_READAPTACAO_GESTAO` |
-| INVALIDEZ | CRUD | `ROLE_INVALIDEZ_VISUALIZAR`, `ROLE_INVALIDEZ_CADASTRAR`, `ROLE_INVALIDEZ_ATUALIZAR`, `ROLE_INVALIDEZ_EXCLUIR`, `ROLE_INVALIDEZ_GESTAO` |
-| EXAME_OCUPACIONAL | CRUD | `ROLE_EXAME_OCUPACIONAL_VISUALIZAR`, `ROLE_EXAME_OCUPACIONAL_CADASTRAR`, `ROLE_EXAME_OCUPACIONAL_ATUALIZAR`, `ROLE_EXAME_OCUPACIONAL_EXCLUIR`, `ROLE_EXAME_OCUPACIONAL_GESTAO` |
-| ENTIDADE_EXAME | CRUD | `ROLE_ENTIDADE_EXAME_VISUALIZAR`, `ROLE_ENTIDADE_EXAME_CADASTRAR`, `ROLE_ENTIDADE_EXAME_ATUALIZAR`, `ROLE_ENTIDADE_EXAME_EXCLUIR`, `ROLE_ENTIDADE_EXAME_GESTAO` |
-| EPI | CRUD | `ROLE_EPI_VISUALIZAR`, `ROLE_EPI_CADASTRAR`, `ROLE_EPI_ATUALIZAR`, `ROLE_EPI_EXCLUIR`, `ROLE_EPI_GESTAO` |
-| EPC | CRUD | `ROLE_EPC_VISUALIZAR`, `ROLE_EPC_CADASTRAR`, `ROLE_EPC_ATUALIZAR`, `ROLE_EPC_EXCLUIR`, `ROLE_EPC_GESTAO` |
-| AGENTE_NOCIVO | CRUD | `ROLE_AGENTE_NOCIVO_VISUALIZAR`, `ROLE_AGENTE_NOCIVO_CADASTRAR`, `ROLE_AGENTE_NOCIVO_ATUALIZAR`, `ROLE_AGENTE_NOCIVO_EXCLUIR`, `ROLE_AGENTE_NOCIVO_GESTAO` |
-| CATEGORIA_DOENCA | CRUD | `ROLE_CATEGORIA_DOENCA_VISUALIZAR`, `ROLE_CATEGORIA_DOENCA_CADASTRAR`, `ROLE_CATEGORIA_DOENCA_ATUALIZAR`, `ROLE_CATEGORIA_DOENCA_EXCLUIR`, `ROLE_CATEGORIA_DOENCA_GESTAO` |
-| CONVENIO_DESCONTO | CRUD | `ROLE_CONVENIO_DESCONTO_VISUALIZAR`, `ROLE_CONVENIO_DESCONTO_CADASTRAR`, `ROLE_CONVENIO_DESCONTO_ATUALIZAR`, `ROLE_CONVENIO_DESCONTO_EXCLUIR`, `ROLE_CONVENIO_DESCONTO_GESTAO` |
-| ESOCIAL | CRUD | `ROLE_ESOCIAL_VISUALIZAR`, `ROLE_ESOCIAL_CADASTRAR`, `ROLE_ESOCIAL_ATUALIZAR`, `ROLE_ESOCIAL_EXCLUIR`, `ROLE_ESOCIAL_GESTAO` |
+| Módulo                        | Tipo   | Papéis disponíveis                                                                                                                                                                                                                    |
+| ----------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AUTH                          | CRUD   | `ROLE_AUTH_VISUALIZAR`, `ROLE_AUTH_CADASTRAR`, `ROLE_AUTH_ATUALIZAR`, `ROLE_AUTH_EXCLUIR`, `ROLE_AUTH_GESTAO`                                                                                                                         |
+| TENANT                        | CRUD   | `ROLE_TENANT_VISUALIZAR`, `ROLE_TENANT_CADASTRAR`, `ROLE_TENANT_ATUALIZAR`, `ROLE_TENANT_EXCLUIR`, `ROLE_TENANT_GESTAO`                                                                                                               |
+| USUARIO                       | CRUD   | `ROLE_USUARIO_VISUALIZAR`, `ROLE_USUARIO_CADASTRAR`, `ROLE_USUARIO_ATUALIZAR`, `ROLE_USUARIO_EXCLUIR`, `ROLE_USUARIO_GESTAO`                                                                                                          |
+| PERFIL                        | CRUD   | `ROLE_PERFIL_VISUALIZAR`, `ROLE_PERFIL_CADASTRAR`, `ROLE_PERFIL_ATUALIZAR`, `ROLE_PERFIL_EXCLUIR`, `ROLE_PERFIL_GESTAO`                                                                                                               |
+| PAPEL                         | CRUD   | `ROLE_PAPEL_VISUALIZAR`, `ROLE_PAPEL_CADASTRAR`, `ROLE_PAPEL_ATUALIZAR`, `ROLE_PAPEL_EXCLUIR`, `ROLE_PAPEL_GESTAO`                                                                                                                    |
+| MENU                          | CRUD   | `ROLE_MENU_VISUALIZAR`, `ROLE_MENU_CADASTRAR`, `ROLE_MENU_ATUALIZAR`, `ROLE_MENU_EXCLUIR`, `ROLE_MENU_GESTAO`                                                                                                                         |
+| PARAMETRO_SISTEMA             | CRUD   | `ROLE_PARAMETRO_SISTEMA_VISUALIZAR`, `ROLE_PARAMETRO_SISTEMA_CADASTRAR`, `ROLE_PARAMETRO_SISTEMA_ATUALIZAR`, `ROLE_PARAMETRO_SISTEMA_EXCLUIR`, `ROLE_PARAMETRO_SISTEMA_GESTAO`                                                        |
+| PARAMETRO_GLOBAL              | CRUD   | `ROLE_PARAMETRO_GLOBAL_VISUALIZAR`, `ROLE_PARAMETRO_GLOBAL_CADASTRAR`, `ROLE_PARAMETRO_GLOBAL_ATUALIZAR`, `ROLE_PARAMETRO_GLOBAL_EXCLUIR`, `ROLE_PARAMETRO_GLOBAL_GESTAO`                                                             |
+| FEATURE_FLAG                  | CRUD   | `ROLE_FEATURE_FLAG_VISUALIZAR`, `ROLE_FEATURE_FLAG_CADASTRAR`, `ROLE_FEATURE_FLAG_ATUALIZAR`, `ROLE_FEATURE_FLAG_EXCLUIR`, `ROLE_FEATURE_FLAG_GESTAO`                                                                                 |
+| AUDITORIA                     | GESTAO | `ROLE_AUDITORIA_GESTAO`                                                                                                                                                                                                               |
+| ARQUIVO                       | CRUD   | `ROLE_ARQUIVO_VISUALIZAR`, `ROLE_ARQUIVO_CADASTRAR`, `ROLE_ARQUIVO_ATUALIZAR`, `ROLE_ARQUIVO_EXCLUIR`, `ROLE_ARQUIVO_GESTAO`                                                                                                          |
+| NOTIFICACAO                   | CRUD   | `ROLE_NOTIFICACAO_VISUALIZAR`, `ROLE_NOTIFICACAO_CADASTRAR`, `ROLE_NOTIFICACAO_ATUALIZAR`, `ROLE_NOTIFICACAO_EXCLUIR`, `ROLE_NOTIFICACAO_GESTAO`                                                                                      |
+| FUNCIONARIO                   | CRUD   | `ROLE_FUNCIONARIO_VISUALIZAR`, `ROLE_FUNCIONARIO_CADASTRAR`, `ROLE_FUNCIONARIO_ATUALIZAR`, `ROLE_FUNCIONARIO_EXCLUIR`, `ROLE_FUNCIONARIO_GESTAO`                                                                                      |
+| VINCULO                       | CRUD   | `ROLE_VINCULO_VISUALIZAR`, `ROLE_VINCULO_CADASTRAR`, `ROLE_VINCULO_ATUALIZAR`, `ROLE_VINCULO_EXCLUIR`, `ROLE_VINCULO_GESTAO`                                                                                                          |
+| POSSE_EFETIVO                 | CRUD   | `ROLE_POSSE_EFETIVO_VISUALIZAR`, `ROLE_POSSE_EFETIVO_CADASTRAR`, `ROLE_POSSE_EFETIVO_ATUALIZAR`, `ROLE_POSSE_EFETIVO_EXCLUIR`, `ROLE_POSSE_EFETIVO_GESTAO`                                                                            |
+| POSSE_COMISSIONADO            | CRUD   | `ROLE_POSSE_COMISSIONADO_VISUALIZAR`, `ROLE_POSSE_COMISSIONADO_CADASTRAR`, `ROLE_POSSE_COMISSIONADO_ATUALIZAR`, `ROLE_POSSE_COMISSIONADO_EXCLUIR`, `ROLE_POSSE_COMISSIONADO_GESTAO`                                                   |
+| POSSE_CONTRATADO              | CRUD   | `ROLE_POSSE_CONTRATADO_VISUALIZAR`, `ROLE_POSSE_CONTRATADO_CADASTRAR`, `ROLE_POSSE_CONTRATADO_ATUALIZAR`, `ROLE_POSSE_CONTRATADO_EXCLUIR`, `ROLE_POSSE_CONTRATADO_GESTAO`                                                             |
+| SITUACAO_FUNCIONAL            | CRUD   | `ROLE_SITUACAO_FUNCIONAL_VISUALIZAR`, `ROLE_SITUACAO_FUNCIONAL_CADASTRAR`, `ROLE_SITUACAO_FUNCIONAL_ATUALIZAR`, `ROLE_SITUACAO_FUNCIONAL_EXCLUIR`, `ROLE_SITUACAO_FUNCIONAL_GESTAO`                                                   |
+| TRANSFERENCIA                 | CRUD   | `ROLE_TRANSFERENCIA_VISUALIZAR`, `ROLE_TRANSFERENCIA_CADASTRAR`, `ROLE_TRANSFERENCIA_ATUALIZAR`, `ROLE_TRANSFERENCIA_EXCLUIR`, `ROLE_TRANSFERENCIA_GESTAO`                                                                            |
+| DOSSIE                        | CRUD   | `ROLE_DOSSIE_VISUALIZAR`, `ROLE_DOSSIE_CADASTRAR`, `ROLE_DOSSIE_ATUALIZAR`, `ROLE_DOSSIE_EXCLUIR`, `ROLE_DOSSIE_GESTAO`                                                                                                               |
+| DEPENDENTE                    | CRUD   | `ROLE_DEPENDENTE_VISUALIZAR`, `ROLE_DEPENDENTE_CADASTRAR`, `ROLE_DEPENDENTE_ATUALIZAR`, `ROLE_DEPENDENTE_EXCLUIR`, `ROLE_DEPENDENTE_GESTAO`                                                                                           |
+| PENSAO_ALIMENTICIA            | CRUD   | `ROLE_PENSAO_ALIMENTICIA_VISUALIZAR`, `ROLE_PENSAO_ALIMENTICIA_CADASTRAR`, `ROLE_PENSAO_ALIMENTICIA_ATUALIZAR`, `ROLE_PENSAO_ALIMENTICIA_EXCLUIR`, `ROLE_PENSAO_ALIMENTICIA_GESTAO`                                                   |
+| REEMBOLSO                     | CRUD   | `ROLE_REEMBOLSO_VISUALIZAR`, `ROLE_REEMBOLSO_CADASTRAR`, `ROLE_REEMBOLSO_ATUALIZAR`, `ROLE_REEMBOLSO_EXCLUIR`, `ROLE_REEMBOLSO_GESTAO`                                                                                                |
+| DECISAO_JUDICIAL              | CRUD   | `ROLE_DECISAO_JUDICIAL_VISUALIZAR`, `ROLE_DECISAO_JUDICIAL_CADASTRAR`, `ROLE_DECISAO_JUDICIAL_ATUALIZAR`, `ROLE_DECISAO_JUDICIAL_EXCLUIR`, `ROLE_DECISAO_JUDICIAL_GESTAO`                                                             |
+| BANCO                         | CRUD   | `ROLE_BANCO_VISUALIZAR`, `ROLE_BANCO_CADASTRAR`, `ROLE_BANCO_ATUALIZAR`, `ROLE_BANCO_EXCLUIR`, `ROLE_BANCO_GESTAO`                                                                                                                    |
+| AGENCIA                       | CRUD   | `ROLE_AGENCIA_VISUALIZAR`, `ROLE_AGENCIA_CADASTRAR`, `ROLE_AGENCIA_ATUALIZAR`, `ROLE_AGENCIA_EXCLUIR`, `ROLE_AGENCIA_GESTAO`                                                                                                          |
+| FILIAL                        | CRUD   | `ROLE_FILIAL_VISUALIZAR`, `ROLE_FILIAL_CADASTRAR`, `ROLE_FILIAL_ATUALIZAR`, `ROLE_FILIAL_EXCLUIR`, `ROLE_FILIAL_GESTAO`                                                                                                               |
+| LOTACAO                       | CRUD   | `ROLE_LOTACAO_VISUALIZAR`, `ROLE_LOTACAO_CADASTRAR`, `ROLE_LOTACAO_ATUALIZAR`, `ROLE_LOTACAO_EXCLUIR`, `ROLE_LOTACAO_GESTAO`                                                                                                          |
+| CENTRO_CUSTO                  | CRUD   | `ROLE_CENTRO_CUSTO_VISUALIZAR`, `ROLE_CENTRO_CUSTO_CADASTRAR`, `ROLE_CENTRO_CUSTO_ATUALIZAR`, `ROLE_CENTRO_CUSTO_EXCLUIR`, `ROLE_CENTRO_CUSTO_GESTAO`                                                                                 |
+| CARGO                         | CRUD   | `ROLE_CARGO_VISUALIZAR`, `ROLE_CARGO_CADASTRAR`, `ROLE_CARGO_ATUALIZAR`, `ROLE_CARGO_EXCLUIR`, `ROLE_CARGO_GESTAO`                                                                                                                    |
+| FUNCAO                        | CRUD   | `ROLE_FUNCAO_VISUALIZAR`, `ROLE_FUNCAO_CADASTRAR`, `ROLE_FUNCAO_ATUALIZAR`, `ROLE_FUNCAO_EXCLUIR`, `ROLE_FUNCAO_GESTAO`                                                                                                               |
+| NIVEL_SALARIAL                | CRUD   | `ROLE_NIVEL_SALARIAL_VISUALIZAR`, `ROLE_NIVEL_SALARIAL_CADASTRAR`, `ROLE_NIVEL_SALARIAL_ATUALIZAR`, `ROLE_NIVEL_SALARIAL_EXCLUIR`, `ROLE_NIVEL_SALARIAL_GESTAO`                                                                       |
+| REFERENCIA_SALARIAL           | CRUD   | `ROLE_REFERENCIA_SALARIAL_VISUALIZAR`, `ROLE_REFERENCIA_SALARIAL_CADASTRAR`, `ROLE_REFERENCIA_SALARIAL_ATUALIZAR`, `ROLE_REFERENCIA_SALARIAL_EXCLUIR`, `ROLE_REFERENCIA_SALARIAL_GESTAO`                                              |
+| FAIXA_SALARIAL                | CRUD   | `ROLE_FAIXA_SALARIAL_VISUALIZAR`, `ROLE_FAIXA_SALARIAL_CADASTRAR`, `ROLE_FAIXA_SALARIAL_ATUALIZAR`, `ROLE_FAIXA_SALARIAL_EXCLUIR`, `ROLE_FAIXA_SALARIAL_GESTAO`                                                                       |
+| GRUPO_SALARIAL                | CRUD   | `ROLE_GRUPO_SALARIAL_VISUALIZAR`, `ROLE_GRUPO_SALARIAL_CADASTRAR`, `ROLE_GRUPO_SALARIAL_ATUALIZAR`, `ROLE_GRUPO_SALARIAL_EXCLUIR`, `ROLE_GRUPO_SALARIAL_GESTAO`                                                                       |
+| PLANO_CARGOS                  | CRUD   | `ROLE_PLANO_CARGOS_VISUALIZAR`, `ROLE_PLANO_CARGOS_CADASTRAR`, `ROLE_PLANO_CARGOS_ATUALIZAR`, `ROLE_PLANO_CARGOS_EXCLUIR`, `ROLE_PLANO_CARGOS_GESTAO`                                                                                 |
+| CONVENIO                      | CRUD   | `ROLE_CONVENIO_VISUALIZAR`, `ROLE_CONVENIO_CADASTRAR`, `ROLE_CONVENIO_ATUALIZAR`, `ROLE_CONVENIO_EXCLUIR`, `ROLE_CONVENIO_GESTAO`                                                                                                     |
+| SINDICATO                     | CRUD   | `ROLE_SINDICATO_VISUALIZAR`, `ROLE_SINDICATO_CADASTRAR`, `ROLE_SINDICATO_ATUALIZAR`, `ROLE_SINDICATO_EXCLUIR`, `ROLE_SINDICATO_GESTAO`                                                                                                |
+| TURNO                         | CRUD   | `ROLE_TURNO_VISUALIZAR`, `ROLE_TURNO_CADASTRAR`, `ROLE_TURNO_ATUALIZAR`, `ROLE_TURNO_EXCLUIR`, `ROLE_TURNO_GESTAO`                                                                                                                    |
+| JORNADA                       | CRUD   | `ROLE_JORNADA_VISUALIZAR`, `ROLE_JORNADA_CADASTRAR`, `ROLE_JORNADA_ATUALIZAR`, `ROLE_JORNADA_EXCLUIR`, `ROLE_JORNADA_GESTAO`                                                                                                          |
+| COMPETENCIA                   | CRUD   | `ROLE_COMPETENCIA_VISUALIZAR`, `ROLE_COMPETENCIA_CADASTRAR`, `ROLE_COMPETENCIA_ATUALIZAR`, `ROLE_COMPETENCIA_EXCLUIR`, `ROLE_COMPETENCIA_GESTAO`                                                                                      |
+| FOLHA_DE_PGT                  | GESTAO | `ROLE_FOLHA_DE_PGT_GESTAO`                                                                                                                                                                                                            |
+| CONTRACHEQUE                  | CRUD   | `ROLE_CONTRACHEQUE_VISUALIZAR`, `ROLE_CONTRACHEQUE_CADASTRAR`, `ROLE_CONTRACHEQUE_ATUALIZAR`, `ROLE_CONTRACHEQUE_EXCLUIR`, `ROLE_CONTRACHEQUE_GESTAO`                                                                                 |
+| LANCAMENTO                    | CRUD   | `ROLE_LANCAMENTO_VISUALIZAR`, `ROLE_LANCAMENTO_CADASTRAR`, `ROLE_LANCAMENTO_ATUALIZAR`, `ROLE_LANCAMENTO_EXCLUIR`, `ROLE_LANCAMENTO_GESTAO`                                                                                           |
+| VERBA                         | CRUD   | `ROLE_VERBA_VISUALIZAR`, `ROLE_VERBA_CADASTRAR`, `ROLE_VERBA_ATUALIZAR`, `ROLE_VERBA_EXCLUIR`, `ROLE_VERBA_GESTAO`                                                                                                                    |
+| FORMULA                       | CRUD   | `ROLE_FORMULA_VISUALIZAR`, `ROLE_FORMULA_CADASTRAR`, `ROLE_FORMULA_ATUALIZAR`, `ROLE_FORMULA_EXCLUIR`, `ROLE_FORMULA_GESTAO`                                                                                                          |
+| ALIQUOTA                      | CRUD   | `ROLE_ALIQUOTA_VISUALIZAR`, `ROLE_ALIQUOTA_CADASTRAR`, `ROLE_ALIQUOTA_ATUALIZAR`, `ROLE_ALIQUOTA_EXCLUIR`, `ROLE_ALIQUOTA_GESTAO`                                                                                                     |
+| FUNCIONARIO_VERBA             | CRUD   | `ROLE_FUNCIONARIO_VERBA_VISUALIZAR`, `ROLE_FUNCIONARIO_VERBA_CADASTRAR`, `ROLE_FUNCIONARIO_VERBA_ATUALIZAR`, `ROLE_FUNCIONARIO_VERBA_EXCLUIR`, `ROLE_FUNCIONARIO_VERBA_GESTAO`                                                        |
+| IMPORTADOR_VERBA_SERVIDOR     | CRUD   | `ROLE_IMPORTADOR_VERBA_SERVIDOR_VISUALIZAR`, `ROLE_IMPORTADOR_VERBA_SERVIDOR_CADASTRAR`, `ROLE_IMPORTADOR_VERBA_SERVIDOR_ATUALIZAR`, `ROLE_IMPORTADOR_VERBA_SERVIDOR_EXCLUIR`, `ROLE_IMPORTADOR_VERBA_SERVIDOR_GESTAO`                |
+| IMPORTADOR_VERBA_PENSIONISTA  | CRUD   | `ROLE_IMPORTADOR_VERBA_PENSIONISTA_VISUALIZAR`, `ROLE_IMPORTADOR_VERBA_PENSIONISTA_CADASTRAR`, `ROLE_IMPORTADOR_VERBA_PENSIONISTA_ATUALIZAR`, `ROLE_IMPORTADOR_VERBA_PENSIONISTA_EXCLUIR`, `ROLE_IMPORTADOR_VERBA_PENSIONISTA_GESTAO` |
+| IMPORTADOR_LANCAMENTO_MANUAL  | CRUD   | `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_VISUALIZAR`, `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_CADASTRAR`, `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_ATUALIZAR`, `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_EXCLUIR`, `ROLE_IMPORTADOR_LANCAMENTO_MANUAL_GESTAO` |
+| IMPORTACAO_CONSIGNADO         | CRUD   | `ROLE_IMPORTACAO_CONSIGNADO_VISUALIZAR`, `ROLE_IMPORTACAO_CONSIGNADO_CADASTRAR`, `ROLE_IMPORTACAO_CONSIGNADO_ATUALIZAR`, `ROLE_IMPORTACAO_CONSIGNADO_EXCLUIR`, `ROLE_IMPORTACAO_CONSIGNADO_GESTAO`                                    |
+| CONSIGNADO                    | CRUD   | `ROLE_CONSIGNADO_VISUALIZAR`, `ROLE_CONSIGNADO_CADASTRAR`, `ROLE_CONSIGNADO_ATUALIZAR`, `ROLE_CONSIGNADO_EXCLUIR`, `ROLE_CONSIGNADO_GESTAO`                                                                                           |
+| LOTE_PROCESSAMENTO            | CRUD   | `ROLE_LOTE_PROCESSAMENTO_VISUALIZAR`, `ROLE_LOTE_PROCESSAMENTO_CADASTRAR`, `ROLE_LOTE_PROCESSAMENTO_ATUALIZAR`, `ROLE_LOTE_PROCESSAMENTO_EXCLUIR`, `ROLE_LOTE_PROCESSAMENTO_GESTAO`                                                   |
+| RELATORIO_FINANCEIRO          | CRUD   | `ROLE_RELATORIO_FINANCEIRO_VISUALIZAR`, `ROLE_RELATORIO_FINANCEIRO_CADASTRAR`, `ROLE_RELATORIO_FINANCEIRO_ATUALIZAR`, `ROLE_RELATORIO_FINANCEIRO_EXCLUIR`, `ROLE_RELATORIO_FINANCEIRO_GESTAO`                                         |
+| RELATORIO_FOLHA_PAGAMENTO     | GESTAO | `ROLE_RELATORIO_FOLHA_PAGAMENTO_GESTAO`                                                                                                                                                                                               |
+| RELATORIO_BATIMENTO_FOLHA     | GESTAO | `ROLE_RELATORIO_BATIMENTO_FOLHA_GESTAO`                                                                                                                                                                                               |
+| RELATORIO_VERBAS              | GESTAO | `ROLE_RELATORIO_VERBAS_GESTAO`                                                                                                                                                                                                        |
+| RELATORIO_PROVENTOS_DESCONTOS | GESTAO | `ROLE_RELATORIO_PROVENTOS_DESCONTOS_GESTAO`                                                                                                                                                                                           |
+| RELATORIO_REPASSE_FUNDO_RH    | GESTAO | `ROLE_RELATORIO_REPASSE_FUNDO_RH_GESTAO`                                                                                                                                                                                              |
+| RELATORIO_APOSENTADO_PENSAO   | GESTAO | `ROLE_RELATORIO_APOSENTADO_PENSAO_GESTAO`                                                                                                                                                                                             |
+| RELATORIO_SERV_PAG_BLOQUEADO  | GESTAO | `ROLE_RELATORIO_SERV_PAG_BLOQUEADO_GESTAO`                                                                                                                                                                                            |
+| RELATORIO_GERENCIAL           | GESTAO | `ROLE_RELATORIO_GERENCIAL_GESTAO`                                                                                                                                                                                                     |
+| DIRF                          | GESTAO | `ROLE_DIRF_GESTAO`                                                                                                                                                                                                                    |
+| ARQUIVO_REMESSA               | GESTAO | `ROLE_ARQUIVO_REMESSA_GESTAO`                                                                                                                                                                                                         |
+| ARQUIVO_EXPORTACAO_SIPREV     | GESTAO | `ROLE_ARQUIVO_EXPORTACAO_SIPREV_GESTAO`                                                                                                                                                                                               |
+| SEFIP                         | CRUD   | `ROLE_SEFIP_VISUALIZAR`, `ROLE_SEFIP_CADASTRAR`, `ROLE_SEFIP_ATUALIZAR`, `ROLE_SEFIP_EXCLUIR`, `ROLE_SEFIP_GESTAO`                                                                                                                    |
+| AVALIACAO_DESEMPENHO          | CRUD   | `ROLE_AVALIACAO_DESEMPENHO_VISUALIZAR`, `ROLE_AVALIACAO_DESEMPENHO_CADASTRAR`, `ROLE_AVALIACAO_DESEMPENHO_ATUALIZAR`, `ROLE_AVALIACAO_DESEMPENHO_EXCLUIR`, `ROLE_AVALIACAO_DESEMPENHO_GESTAO`                                         |
+| PROGRESSAO                    | CRUD   | `ROLE_PROGRESSAO_VISUALIZAR`, `ROLE_PROGRESSAO_CADASTRAR`, `ROLE_PROGRESSAO_ATUALIZAR`, `ROLE_PROGRESSAO_EXCLUIR`, `ROLE_PROGRESSAO_GESTAO`                                                                                           |
+| REQUISICAO_DE_PESSOAL         | CRUD   | `ROLE_REQUISICAO_DE_PESSOAL_VISUALIZAR`, `ROLE_REQUISICAO_DE_PESSOAL_CADASTRAR`, `ROLE_REQUISICAO_DE_PESSOAL_ATUALIZAR`, `ROLE_REQUISICAO_DE_PESSOAL_EXCLUIR`, `ROLE_REQUISICAO_DE_PESSOAL_GESTAO`                                    |
+| BANCO_TALENTOS                | CRUD   | `ROLE_BANCO_TALENTOS_VISUALIZAR`, `ROLE_BANCO_TALENTOS_CADASTRAR`, `ROLE_BANCO_TALENTOS_ATUALIZAR`, `ROLE_BANCO_TALENTOS_EXCLUIR`, `ROLE_BANCO_TALENTOS_GESTAO`                                                                       |
+| PROGRAMA_ESTAGIO              | CRUD   | `ROLE_PROGRAMA_ESTAGIO_VISUALIZAR`, `ROLE_PROGRAMA_ESTAGIO_CADASTRAR`, `ROLE_PROGRAMA_ESTAGIO_ATUALIZAR`, `ROLE_PROGRAMA_ESTAGIO_EXCLUIR`, `ROLE_PROGRAMA_ESTAGIO_GESTAO`                                                             |
+| ESTAGIARIO                    | CRUD   | `ROLE_ESTAGIARIO_VISUALIZAR`, `ROLE_ESTAGIARIO_CADASTRAR`, `ROLE_ESTAGIARIO_ATUALIZAR`, `ROLE_ESTAGIARIO_EXCLUIR`, `ROLE_ESTAGIARIO_GESTAO`                                                                                           |
+| REGRA_APOSENTADORIA           | CRUD   | `ROLE_REGRA_APOSENTADORIA_VISUALIZAR`, `ROLE_REGRA_APOSENTADORIA_CADASTRAR`, `ROLE_REGRA_APOSENTADORIA_ATUALIZAR`, `ROLE_REGRA_APOSENTADORIA_EXCLUIR`, `ROLE_REGRA_APOSENTADORIA_GESTAO`                                              |
+| APOSENTADORIA                 | CRUD   | `ROLE_APOSENTADORIA_VISUALIZAR`, `ROLE_APOSENTADORIA_CADASTRAR`, `ROLE_APOSENTADORIA_ATUALIZAR`, `ROLE_APOSENTADORIA_EXCLUIR`, `ROLE_APOSENTADORIA_GESTAO`                                                                            |
+| PENSAO                        | CRUD   | `ROLE_PENSAO_VISUALIZAR`, `ROLE_PENSAO_CADASTRAR`, `ROLE_PENSAO_ATUALIZAR`, `ROLE_PENSAO_EXCLUIR`, `ROLE_PENSAO_GESTAO`                                                                                                               |
+| CERTIDAO_TEMPO_CONTRIBUICAO   | CRUD   | `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_VISUALIZAR`, `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_CADASTRAR`, `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_ATUALIZAR`, `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_EXCLUIR`, `ROLE_CERTIDAO_TEMPO_CONTRIBUICAO_GESTAO`      |
+| COMPENSACAO_PREVIDENCIARIA    | CRUD   | `ROLE_COMPENSACAO_PREVIDENCIARIA_VISUALIZAR`, `ROLE_COMPENSACAO_PREVIDENCIARIA_CADASTRAR`, `ROLE_COMPENSACAO_PREVIDENCIARIA_ATUALIZAR`, `ROLE_COMPENSACAO_PREVIDENCIARIA_EXCLUIR`, `ROLE_COMPENSACAO_PREVIDENCIARIA_GESTAO`           |
+| DECLARACAO_APOSENTADO         | CRUD   | `ROLE_DECLARACAO_APOSENTADO_VISUALIZAR`, `ROLE_DECLARACAO_APOSENTADO_CADASTRAR`, `ROLE_DECLARACAO_APOSENTADO_ATUALIZAR`, `ROLE_DECLARACAO_APOSENTADO_EXCLUIR`, `ROLE_DECLARACAO_APOSENTADO_GESTAO`                                    |
+| RECADASTRAMENTO               | GESTAO | `ROLE_RECADASTRAMENTO_GESTAO`                                                                                                                                                                                                         |
+| CAMPANHA_RECADASTRAMENTO      | CRUD   | `ROLE_CAMPANHA_RECADASTRAMENTO_VISUALIZAR`, `ROLE_CAMPANHA_RECADASTRAMENTO_CADASTRAR`, `ROLE_CAMPANHA_RECADASTRAMENTO_ATUALIZAR`, `ROLE_CAMPANHA_RECADASTRAMENTO_EXCLUIR`, `ROLE_CAMPANHA_RECADASTRAMENTO_GESTAO`                     |
+| AGENDA_MEDICA                 | GESTAO | `ROLE_AGENDA_MEDICA_GESTAO`                                                                                                                                                                                                           |
+| ESPECIALIDADE_MEDICA          | GESTAO | `ROLE_ESPECIALIDADE_MEDICA_GESTAO`                                                                                                                                                                                                    |
+| MEDICO                        | GESTAO | `ROLE_MEDICO_GESTAO`                                                                                                                                                                                                                  |
+| PERICIA_MEDICA                | GESTAO | `ROLE_PERICIA_MEDICA_GESTAO`                                                                                                                                                                                                          |
+| LICENCA_MEDICA                | CRUD   | `ROLE_LICENCA_MEDICA_VISUALIZAR`, `ROLE_LICENCA_MEDICA_CADASTRAR`, `ROLE_LICENCA_MEDICA_ATUALIZAR`, `ROLE_LICENCA_MEDICA_EXCLUIR`, `ROLE_LICENCA_MEDICA_GESTAO`                                                                       |
+| PROFISSIONAL_SAUDE            | CRUD   | `ROLE_PROFISSIONAL_SAUDE_VISUALIZAR`, `ROLE_PROFISSIONAL_SAUDE_CADASTRAR`, `ROLE_PROFISSIONAL_SAUDE_ATUALIZAR`, `ROLE_PROFISSIONAL_SAUDE_EXCLUIR`, `ROLE_PROFISSIONAL_SAUDE_GESTAO`                                                   |
+| ACIDENTE_TRABALHO             | CRUD   | `ROLE_ACIDENTE_TRABALHO_VISUALIZAR`, `ROLE_ACIDENTE_TRABALHO_CADASTRAR`, `ROLE_ACIDENTE_TRABALHO_ATUALIZAR`, `ROLE_ACIDENTE_TRABALHO_EXCLUIR`, `ROLE_ACIDENTE_TRABALHO_GESTAO`                                                        |
+| CID                           | CRUD   | `ROLE_CID_VISUALIZAR`, `ROLE_CID_CADASTRAR`, `ROLE_CID_ATUALIZAR`, `ROLE_CID_EXCLUIR`, `ROLE_CID_GESTAO`                                                                                                                              |
+| RESTRICAO                     | CRUD   | `ROLE_RESTRICAO_VISUALIZAR`, `ROLE_RESTRICAO_CADASTRAR`, `ROLE_RESTRICAO_ATUALIZAR`, `ROLE_RESTRICAO_EXCLUIR`, `ROLE_RESTRICAO_GESTAO`                                                                                                |
+| READAPTACAO                   | CRUD   | `ROLE_READAPTACAO_VISUALIZAR`, `ROLE_READAPTACAO_CADASTRAR`, `ROLE_READAPTACAO_ATUALIZAR`, `ROLE_READAPTACAO_EXCLUIR`, `ROLE_READAPTACAO_GESTAO`                                                                                      |
+| INVALIDEZ                     | CRUD   | `ROLE_INVALIDEZ_VISUALIZAR`, `ROLE_INVALIDEZ_CADASTRAR`, `ROLE_INVALIDEZ_ATUALIZAR`, `ROLE_INVALIDEZ_EXCLUIR`, `ROLE_INVALIDEZ_GESTAO`                                                                                                |
+| EXAME_OCUPACIONAL             | CRUD   | `ROLE_EXAME_OCUPACIONAL_VISUALIZAR`, `ROLE_EXAME_OCUPACIONAL_CADASTRAR`, `ROLE_EXAME_OCUPACIONAL_ATUALIZAR`, `ROLE_EXAME_OCUPACIONAL_EXCLUIR`, `ROLE_EXAME_OCUPACIONAL_GESTAO`                                                        |
+| ENTIDADE_EXAME                | CRUD   | `ROLE_ENTIDADE_EXAME_VISUALIZAR`, `ROLE_ENTIDADE_EXAME_CADASTRAR`, `ROLE_ENTIDADE_EXAME_ATUALIZAR`, `ROLE_ENTIDADE_EXAME_EXCLUIR`, `ROLE_ENTIDADE_EXAME_GESTAO`                                                                       |
+| EPI                           | CRUD   | `ROLE_EPI_VISUALIZAR`, `ROLE_EPI_CADASTRAR`, `ROLE_EPI_ATUALIZAR`, `ROLE_EPI_EXCLUIR`, `ROLE_EPI_GESTAO`                                                                                                                              |
+| EPC                           | CRUD   | `ROLE_EPC_VISUALIZAR`, `ROLE_EPC_CADASTRAR`, `ROLE_EPC_ATUALIZAR`, `ROLE_EPC_EXCLUIR`, `ROLE_EPC_GESTAO`                                                                                                                              |
+| AGENTE_NOCIVO                 | CRUD   | `ROLE_AGENTE_NOCIVO_VISUALIZAR`, `ROLE_AGENTE_NOCIVO_CADASTRAR`, `ROLE_AGENTE_NOCIVO_ATUALIZAR`, `ROLE_AGENTE_NOCIVO_EXCLUIR`, `ROLE_AGENTE_NOCIVO_GESTAO`                                                                            |
+| CATEGORIA_DOENCA              | CRUD   | `ROLE_CATEGORIA_DOENCA_VISUALIZAR`, `ROLE_CATEGORIA_DOENCA_CADASTRAR`, `ROLE_CATEGORIA_DOENCA_ATUALIZAR`, `ROLE_CATEGORIA_DOENCA_EXCLUIR`, `ROLE_CATEGORIA_DOENCA_GESTAO`                                                             |
+| CONVENIO_DESCONTO             | CRUD   | `ROLE_CONVENIO_DESCONTO_VISUALIZAR`, `ROLE_CONVENIO_DESCONTO_CADASTRAR`, `ROLE_CONVENIO_DESCONTO_ATUALIZAR`, `ROLE_CONVENIO_DESCONTO_EXCLUIR`, `ROLE_CONVENIO_DESCONTO_GESTAO`                                                        |
+| ESOCIAL                       | CRUD   | `ROLE_ESOCIAL_VISUALIZAR`, `ROLE_ESOCIAL_CADASTRAR`, `ROLE_ESOCIAL_ATUALIZAR`, `ROLE_ESOCIAL_EXCLUIR`, `ROLE_ESOCIAL_GESTAO`                                                                                                          |
 
 ### Permissões v0.0.1 para atualização cadastral HR-07
 
-| Permissão | Uso |
-| --- | --- |
-| `portal.profile.read` | Leitura dos próprios dados em `/v1/portal/meus-dados/*`. |
-| `portal.profile.write` | Criação de solicitações em `hr.cadastral_change_request` pelo portal do servidor. |
-| `rh.dependent.read` | Leitura tenant-scoped de `hr.employee_dependent`, incluindo RLS para dependentes. |
-| `rh.dependent.write` | Mutação tenant-scoped de dependentes por fluxo aprovado. |
-| `rh.cadastral_change.approve` | Listar, aprovar e rejeitar solicitações cadastrais na administração de RH. |
+| Permissão                     | Uso                                                                               |
+| ----------------------------- | --------------------------------------------------------------------------------- |
+| `portal.profile.read`         | Leitura dos próprios dados em `/v1/portal/meus-dados/*`.                          |
+| `portal.profile.write`        | Criação de solicitações em `hr.cadastral_change_request` pelo portal do servidor. |
+| `rh.dependent.read`           | Leitura tenant-scoped de `hr.employee_dependent`, incluindo RLS para dependentes. |
+| `rh.dependent.write`          | Mutação tenant-scoped de dependentes por fluxo aprovado.                          |
+| `rh.cadastral_change.approve` | Listar, aprovar e rejeitar solicitações cadastrais na administração de RH.        |

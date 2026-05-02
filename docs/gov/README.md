@@ -1,4 +1,4 @@
-# Governance Artifacts
+# Governance Artifacts (`docs/gov`)
 
 This folder tracks governance controls and operational readiness for SGP v0.0.1.
 

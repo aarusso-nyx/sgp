@@ -71,9 +71,27 @@ node scripts/run.mjs health --json
 
 These commands execute Prisma through the backend workspace.
 
+Canonical PostgreSQL SQL lives under `database/sql` and is applied with:
+
+```bash
+DATABASE_URL=postgresql://<user>@localhost:5432/<database> npm run db:migrate
+```
+
+Generate Prisma Client after schema metadata changes:
+
+```bash
+npm run db:generate
+```
+
+Load deterministic, non-secret seed data with:
+
+```bash
+npm run db:seed
+```
+
 ## 7. Runtime Topology
 
-The documented runtime split is tracked in `docs/governance/runtime-topology.json`. Run:
+The documented runtime split is tracked in `docs/gov/runtime-topology.json`. Run:
 
 ```bash
 npm run governance:runtime-topology

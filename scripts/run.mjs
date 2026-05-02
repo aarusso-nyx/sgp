@@ -22,7 +22,7 @@ const COMMANDS = {
 };
 
 function loadRuntimeTopology() {
-  const path = join(cwd, 'docs', 'governance', 'runtime-topology.json');
+  const path = join(cwd, 'docs', 'gov', 'runtime-topology.json');
   const content = readFileSync(path, 'utf8');
   return JSON.parse(content);
 }
@@ -105,14 +105,15 @@ function handleHealth() {
     'frontend/src/main.ts',
     'frontend/portal/src/main.ts',
     'backend/package.json',
-    'database/README.md',
+    'database/sql/00-extensions.sql',
+    'docs/eng/64-alinhamento-banco-fase-1.md',
     'infra/README.md',
     'infra/aws/README.md',
     'scripts/run.mjs',
     'backend/src/main-payroll-engine.ts',
     'backend/src/main-esocial-worker.ts',
     'backend/src/main-report-service.ts',
-    'docs/governance/runtime-topology.json',
+    'docs/gov/runtime-topology.json',
   ];
 
   const checks = requiredPaths.map((relativePath) => ({

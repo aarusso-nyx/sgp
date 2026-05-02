@@ -20,17 +20,17 @@
     {
       "id": "runtime.no-compat-shim",
       "status": "implemented",
-      "evidence": "database/README.md"
+      "evidence": "docs/eng/64-alinhamento-banco-fase-1.md"
     },
     {
-      "id": "archive.legacy-reverse.non-authoritative",
+      "id": "archive.legacy.non-authoritative",
       "status": "implemented",
-      "evidence": "docs/legacy-reverse/README.md"
+      "evidence": "docs/leg/rev-eng/README.md"
     },
     {
       "id": "archive.deprecation.coverage-tracker",
       "status": "implemented",
-      "evidence": "docs/legacy-reverse/deprecation-status.md"
+      "evidence": "docs/leg/rev-eng/deprecation-status.md"
     },
     {
       "id": "archive.reverse-evidence-succession",
@@ -60,7 +60,7 @@
     {
       "id": "governance.runtime-topology",
       "status": "implemented",
-      "evidence": "docs/governance/runtime-topology.json"
+      "evidence": "docs/gov/runtime-topology.json"
     }
   ]
 }

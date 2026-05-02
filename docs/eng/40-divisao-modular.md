@@ -1287,27 +1287,27 @@ Localização: `libs/ui-admin/shared/` e reusada pelo portal via alias `@sgp/ds`
 ```typescript
 // app.routes.ts (sgp-admin)
 export const routes: Routes = [
-  { path: "gestao", loadChildren: () => import("@sgp/ui-admin/gestao") },
-  { path: "rh", loadChildren: () => import("@sgp/ui-admin/rh") },
-  { path: "folha", loadChildren: () => import("@sgp/ui-admin/folha") },
-  { path: "avaliacao", loadChildren: () => import("@sgp/ui-admin/avaliacao") },
+  { path: 'gestao', loadChildren: () => import('@sgp/ui-admin/gestao') },
+  { path: 'rh', loadChildren: () => import('@sgp/ui-admin/rh') },
+  { path: 'folha', loadChildren: () => import('@sgp/ui-admin/folha') },
+  { path: 'avaliacao', loadChildren: () => import('@sgp/ui-admin/avaliacao') },
   {
-    path: "recrutamento",
-    loadChildren: () => import("@sgp/ui-admin/recrutamento"),
+    path: 'recrutamento',
+    loadChildren: () => import('@sgp/ui-admin/recrutamento'),
   },
-  { path: "consultas", loadChildren: () => import("@sgp/ui-admin/consultas") },
+  { path: 'consultas', loadChildren: () => import('@sgp/ui-admin/consultas') },
   {
-    path: "relatorios",
-    loadChildren: () => import("@sgp/ui-admin/relatorios"),
+    path: 'relatorios',
+    loadChildren: () => import('@sgp/ui-admin/relatorios'),
   },
   {
-    path: "previdenciario",
-    loadChildren: () => import("@sgp/ui-admin/previdenciario"),
+    path: 'previdenciario',
+    loadChildren: () => import('@sgp/ui-admin/previdenciario'),
   },
-  { path: "auditoria", loadChildren: () => import("@sgp/ui-admin/auditoria") },
-  { path: "saude", loadChildren: () => import("@sgp/ui-admin/saude") },
-  { path: "convenio", loadChildren: () => import("@sgp/ui-admin/convenio") },
-  { path: "admin", loadChildren: () => import("@sgp/ui-admin/admin") },
+  { path: 'auditoria', loadChildren: () => import('@sgp/ui-admin/auditoria') },
+  { path: 'saude', loadChildren: () => import('@sgp/ui-admin/saude') },
+  { path: 'convenio', loadChildren: () => import('@sgp/ui-admin/convenio') },
+  { path: 'admin', loadChildren: () => import('@sgp/ui-admin/admin') },
 ];
 ```
 
@@ -1359,24 +1359,24 @@ export const routes: Routes = [
 // app.routes.ts (sgp-portal)
 export const routes: Routes = [
   {
-    path: "contracheque",
-    loadChildren: () => import("@sgp/ui-portal/contracheque"),
+    path: 'contracheque',
+    loadChildren: () => import('@sgp/ui-portal/contracheque'),
   },
   {
-    path: "recadastramento",
-    loadChildren: () => import("@sgp/ui-portal/recadastramento"),
+    path: 'recadastramento',
+    loadChildren: () => import('@sgp/ui-portal/recadastramento'),
   },
   {
-    path: "solicitacoes",
-    loadChildren: () => import("@sgp/ui-portal/solicitacoes"),
+    path: 'solicitacoes',
+    loadChildren: () => import('@sgp/ui-portal/solicitacoes'),
   },
   {
-    path: "pericia",
-    loadChildren: () => import("@sgp/ui-portal/pericia-agendada"),
+    path: 'pericia',
+    loadChildren: () => import('@sgp/ui-portal/pericia-agendada'),
   },
-  { path: "curriculo", loadChildren: () => import("@sgp/ui-portal/curriculo") },
-  { path: "termos", loadChildren: () => import("@sgp/ui-portal/termos") },
-  { path: "", redirectTo: "contracheque", pathMatch: "full" },
+  { path: 'curriculo', loadChildren: () => import('@sgp/ui-portal/curriculo') },
+  { path: 'termos', loadChildren: () => import('@sgp/ui-portal/termos') },
+  { path: '', redirectTo: 'contracheque', pathMatch: 'full' },
 ];
 ```
 
@@ -1692,7 +1692,7 @@ graph TD
 
 ## 11. Sucessão da Evidência Reversa de 2026-04-26
 
-Os levantamentos em `docs/legacy-reverse/data-archaeology/` e `docs/legacy-reverse/modules/` são evidência de descoberta. A divisão modular canônica para o SGP Moderno é a tabela abaixo; o legado não cria novos bounded contexts nem reabre escopo postergado.
+Os levantamentos em `docs/leg/rev-eng/data-archaeology/` e `docs/leg/rev-eng/modules/` são evidência de descoberta. A divisão modular canônica para o SGP Moderno é a tabela abaixo; o legado não cria novos bounded contexts nem reabre escopo postergado.
 
 | Evidência reversa           | Contexto canônico                                                              | Decisão de arquitetura                                                                                                                                                                                                                                                           |
 | --------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

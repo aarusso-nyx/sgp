@@ -15,9 +15,9 @@ The current audit snapshot reports `151` legacy objects with `canonicalized=50`,
 - `docs/eng/66-alinhamento-banco-fase-4.md`
 - `docs/eng/67-alinhamento-banco-fase-3.md`
 - `docs/eng/68-alinhamento-banco-relatorio-fechamento.md`
-- `docs/audit/inv/database-alignment-inventory.json`
-- `docs/audit/diag/db-full-closure.md`
-- `database/README.md`
+- `docs/leg/audit/inv/database-alignment-inventory.json`
+- `docs/leg/audit/diag/db-full-closure.md`
+- `docs/eng/64-alinhamento-banco-fase-1.md`
 - `backend/prisma/schema.prisma`
 
 ## Current In-Scope Explicit Exclusions
@@ -48,7 +48,7 @@ The current audit snapshot reports `151` legacy objects with `canonicalized=50`,
 5. Keep Prisma as the runtime schema owner and SQL files as support-layer artifacts.
 6. Keep tenant/RLS behavior intact. Do not remove request-scoped session context, tenant predicates, or row-security enforcement.
 7. Update `docs/eng/` whenever a domain ownership or future-version scope decision changes acceptance.
-8. Update `docs/legacy-reverse/deprecation-status.md` for any newly retired legacy evidence.
+8. Update `docs/leg/rev-eng/deprecation-status.md` for any newly retired legacy evidence.
 
 ## Acceptance Gates
 
@@ -65,4 +65,3 @@ npm run db:smoke
 The DB alignment gate is acceptable only when full closure has no in-scope explicit exclusions left. A phase-limited green result is not enough.
 
 ## Deliverable
-

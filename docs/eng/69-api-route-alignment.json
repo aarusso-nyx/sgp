@@ -37,29 +37,19 @@
       "key": "ADMIN_INSTALL_LATER",
       "status": "postponed",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers.",
-      "path_prefixes": [
-        "/api/v1/admin",
-        "/api/admin/v1"
-      ]
+      "path_prefixes": ["/api/v1/admin", "/api/admin/v1"]
     },
     {
       "key": "IDENTITY_INSTALL_LATER",
       "status": "postponed",
       "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework.",
-      "path_prefixes": [
-        "/api/v1/auth",
-        "/api/v1/iam",
-        "/api/portal/v1/auth"
-      ]
+      "path_prefixes": ["/api/v1/auth", "/api/v1/iam", "/api/portal/v1/auth"]
     },
     {
       "key": "ARRECADACAO_PREVIDENCIARIA",
       "status": "future_version",
       "reason": "Arrecadacao Previdenciaria is later-version scope and has no current v0.0.1 route, menu, DB, UI, or test blocker.",
-      "path_prefixes": [
-        "/api/v1/arrecadacao",
-        "/api/v1/arrecadacao-previdenciaria"
-      ]
+      "path_prefixes": ["/api/v1/arrecadacao", "/api/v1/arrecadacao-previdenciaria"]
     }
   ],
   "approved_out_of_scope_routes": [],
@@ -806,9 +796,7 @@
           "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/gestao/master-data/master-data.controller.ts"
-      ],
+      "source_evidence": ["backend/src/gestao/master-data/master-data.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -863,9 +851,7 @@
           "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/rh/workflows/rh-workflows.controller.ts"
-      ],
+      "source_evidence": ["backend/src/rh/workflows/rh-workflows.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -980,9 +966,7 @@
           "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/avaliacao/avaliacao.controller.ts"
-      ],
+      "source_evidence": ["backend/src/avaliacao/avaliacao.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1022,9 +1006,7 @@
           "source_file": "backend/src/recrutamento/recruitment.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/recrutamento/recruitment.controller.ts"
-      ],
+      "source_evidence": ["backend/src/recrutamento/recruitment.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1069,9 +1051,7 @@
           "source_file": "backend/src/consultas/managerial-queries.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/consultas/managerial-queries.controller.ts"
-      ],
+      "source_evidence": ["backend/src/consultas/managerial-queries.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1169,9 +1149,7 @@
           "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/previdenciario/previdenciario.controller.ts"
-      ],
+      "source_evidence": ["backend/src/previdenciario/previdenciario.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1206,9 +1184,7 @@
           "source_file": "backend/src/audit/audit.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/audit/audit.controller.ts"
-      ],
+      "source_evidence": ["backend/src/audit/audit.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1253,9 +1229,7 @@
           "source_file": "backend/src/saude/pericia.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/saude/pericia.controller.ts"
-      ],
+      "source_evidence": ["backend/src/saude/pericia.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1275,9 +1249,7 @@
           "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
         }
       ],
-      "source_evidence": [
-        "backend/src/convenio/agreements/agreements.controller.ts"
-      ],
+      "source_evidence": ["backend/src/convenio/agreements/agreements.controller.ts"],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1321,9 +1293,7 @@
             "source_file": "backend/src/gestao/master-data/master-data.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/gestao/master-data/master-data.controller.ts"
-        ],
+        "source_evidence": ["backend/src/gestao/master-data/master-data.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1378,9 +1348,7 @@
             "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/rh/workflows/rh-workflows.controller.ts"
-        ],
+        "source_evidence": ["backend/src/rh/workflows/rh-workflows.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1495,9 +1463,7 @@
             "source_file": "backend/src/avaliacao/avaliacao.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/avaliacao/avaliacao.controller.ts"
-        ],
+        "source_evidence": ["backend/src/avaliacao/avaliacao.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1537,9 +1503,7 @@
             "source_file": "backend/src/recrutamento/recruitment.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/recrutamento/recruitment.controller.ts"
-        ],
+        "source_evidence": ["backend/src/recrutamento/recruitment.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1584,9 +1548,7 @@
             "source_file": "backend/src/consultas/managerial-queries.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/consultas/managerial-queries.controller.ts"
-        ],
+        "source_evidence": ["backend/src/consultas/managerial-queries.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1684,9 +1646,7 @@
             "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/previdenciario/previdenciario.controller.ts"
-        ],
+        "source_evidence": ["backend/src/previdenciario/previdenciario.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1721,9 +1681,7 @@
             "source_file": "backend/src/audit/audit.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/audit/audit.controller.ts"
-        ],
+        "source_evidence": ["backend/src/audit/audit.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1768,9 +1726,7 @@
             "source_file": "backend/src/saude/pericia.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/saude/pericia.controller.ts"
-        ],
+        "source_evidence": ["backend/src/saude/pericia.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -1790,9 +1746,7 @@
             "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
           }
         ],
-        "source_evidence": [
-          "backend/src/convenio/agreements/agreements.controller.ts"
-        ],
+        "source_evidence": ["backend/src/convenio/agreements/agreements.controller.ts"],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."

@@ -6,14 +6,14 @@ Este documento define a ponte entre o fechamento de ponto e a folha mensal. A fo
 
 ## Mapa rubrica x agregado
 
-| Rubrica dinamica | Agregado | Tipo | Regra |
-|---|---|---|---|
-| `PONTO_HE50` | `overtime_50_minutes` | Provento | Hora extra em dia util com minimo legal de 50%. |
-| `PONTO_HE100` | `overtime_100_minutes` | Provento | Hora extra em DSR/domingo ou feriado operacional. |
-| `PONTO_NIGHT` | `night_minutes` | Provento | Adicional noturno de 20%, com hora reduzida CLT de 52min30s. |
-| `PONTO_LATE` | `late_minutes` | Desconto | Atrasos nao abonados. |
-| `PONTO_ABSENCE` | `absence_unpaid_minutes` | Desconto | Faltas/ausencias com tratamento `UNPAID`. |
-| `PONTO_HOUR_BANK` | `hour_bank_settlement_minutes` | Provento | Zeragem positiva de banco de horas para folha. |
+| Rubrica dinamica  | Agregado                       | Tipo     | Regra                                                        |
+| ----------------- | ------------------------------ | -------- | ------------------------------------------------------------ |
+| `PONTO_HE50`      | `overtime_50_minutes`          | Provento | Hora extra em dia util com minimo legal de 50%.              |
+| `PONTO_HE100`     | `overtime_100_minutes`         | Provento | Hora extra em DSR/domingo ou feriado operacional.            |
+| `PONTO_NIGHT`     | `night_minutes`                | Provento | Adicional noturno de 20%, com hora reduzida CLT de 52min30s. |
+| `PONTO_LATE`      | `late_minutes`                 | Desconto | Atrasos nao abonados.                                        |
+| `PONTO_ABSENCE`   | `absence_unpaid_minutes`       | Desconto | Faltas/ausencias com tratamento `UNPAID`.                    |
+| `PONTO_HOUR_BANK` | `hour_bank_settlement_minutes` | Provento | Zeragem positiva de banco de horas para folha.               |
 
 ## Contrato tecnico
 

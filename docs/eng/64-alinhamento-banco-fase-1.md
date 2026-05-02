@@ -21,6 +21,36 @@ Sem camadas de compatibilidade (`shim`, `dual-write`, `schema legado`).
 5. Script transitório removido:
    - `database/sql/60-legacy-operational-tables.sql`
 
+## SQL Canônico
+
+PostgreSQL é o banco-alvo. O v0.0.1 usa SQL canônico em `database/sql` para
+bootstrap de bancos novos; Prisma mantém geração de client e metadados de tipo
+por `backend/prisma/schema.prisma`, não por migrations Prisma.
+
+Ordem e responsabilidade dos artefatos:
+
+- `database/sql/00-extensions.sql`: extensões PostgreSQL requeridas.
+- `database/sql/01-settings.sql`: ajustes de sessão usados durante aplicação.
+- `database/sql/02-schemas.sql`: schemas runtime canônicos.
+- `database/sql/03-public-prelude.sql`: enums e helpers públicos exigidos cedo
+  por defaults de tabelas posteriores.
+- `database/sql/10-NN-*-ddl.sql`: DDL ordenado por schema, com tipos,
+  funções exigidas por defaults/colunas geradas, tabelas e constraints locais.
+- `database/sql/40-*-functions.sql`: funções de negócio por schema.
+- `database/sql/70-*-final.sql`: DDL tardio por schema, com views,
+  materialized views, índices, triggers, FKs, RLS e comentários intencionais.
+- `database/sql/90-runtime-grants.sql`: grants condicionais para roles runtime
+  provisionadas externamente.
+- `database/sql/91-reference-data.sql`: linhas de referência determinísticas
+  necessárias antes do seed da aplicação.
+- `database/sql/40-seed-loader.sql`: helper opcional de `psql` para payloads
+  JSON de seed.
+- `database/seed/`: fixtures JSON e documentação de seed determinístico,
+  não secreto.
+
+A implementação é fresh-start. Runtime schema paths não incluem camadas de
+compatibilidade, dual-write ou shims de nomes legados.
+
 ## Matriz de Alinhamento
 
 Crosswalk legível por máquina entre legado `dbo.*` e runtime canônico:

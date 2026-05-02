@@ -7,22 +7,22 @@ Refresh the audit package after prompts 01-04 and classify the final state again
 ## Read First
 
 - `AGENTS.md`
-- `docs/audit/plan/README.md`
-- `docs/audit/plan/01-db-full-closure.prompt.md`
-- `docs/audit/plan/02-runtime-services.prompt.md`
-- `docs/audit/plan/03-portal-and-contract-cleanup.prompt.md`
-- `docs/audit/plan/04-test-gates-and-coverage.prompt.md`
-- `docs/audit/plan/future-arrecadacao.prompt.md`
-- `docs/audit/inv/`
-- `docs/audit/diag/`
+- `docs/leg/audit/plan/README.md`
+- `docs/leg/audit/plan/01-db-full-closure.prompt.md`
+- `docs/leg/audit/plan/02-runtime-services.prompt.md`
+- `docs/leg/audit/plan/03-portal-and-contract-cleanup.prompt.md`
+- `docs/leg/audit/plan/04-test-gates-and-coverage.prompt.md`
+- `docs/leg/audit/plan/future-arrecadacao.prompt.md`
+- `docs/leg/audit/inv/`
+- `docs/leg/audit/diag/`
 - `docs/eng/`
 - `scripts`
 
 ## Work Items
 
 1. Re-run the audit inventory and diagnostic generation scripts from the live repo. Do not edit old snapshots by hand if generator scripts exist.
-2. Refresh `docs/audit/inv/` and `docs/audit/diag/` from current command output.
-3. Re-run the same gates captured in `docs/audit/inv/verification-inventory.json`, plus any new gates added during prompts 01-04.
+2. Refresh `docs/leg/audit/inv/` and `docs/leg/audit/diag/` from current command output.
+3. Re-run the same gates captured in `docs/leg/audit/inv/verification-inventory.json`, plus any new gates added during prompts 01-04.
 4. Confirm the next-sprint prompt sequence is:
    - `01-db-full-closure.prompt.md`
    - `02-runtime-services.prompt.md`

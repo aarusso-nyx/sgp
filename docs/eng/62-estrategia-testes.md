@@ -65,7 +65,7 @@ graph TD
 | `@sgp/folha`                | **≥ 85 %**       | Abertura/fechamento de competência, cálculo de lote, contracheque          |
 | `@sgp/recrutamento`         | **≥ 85 %**       | Pipeline de requisição, ciclo de estágio                                   |
 | `@sgp/gestao`               | **≥ 85 %**       | Parametrizações, feature flags                                             |
-| `@sgp/auth`                 | **≥ 85 %**       | Tenant/RBAC guards atuais; OAuth/Cognito fica como alvo posterior           |
+| `@sgp/auth`                 | **≥ 85 %**       | Tenant/RBAC guards atuais; OAuth/Cognito fica como alvo posterior          |
 | `@sgp/integracoes`          | **≥ 85 %**       | Builders eSocial, SIPREV, DIRF, CNAB                                       |
 | Demais módulos transversais | **≥ 85 %**       |                                                                            |
 
@@ -113,14 +113,14 @@ O gate agregado corrente é `npm run evidence:check` no workspace root. Ele exec
 
 #### Ferramentas
 
-| Ferramenta                         | Versão alvo | Uso                                         |
-| ---------------------------------- | ----------- | ------------------------------------------- |
-| `@testcontainers/postgresql`       | 10.x        | Banco PostgreSQL 16 isolado por suite       |
-| `@testcontainers/localstack`       | 3.x         | SQS, SNS, EventBridge, Secrets Manager      |
-| MiniIO em Docker                   | RELEASE.x   | S3-compatible para documentos quando S3 real não estiver configurado em testes |
-| `npm run db:migrate` (test env)    | —           | SQL canônico v0.0.1 + seeds de catálogo     |
-| `supertest`                        | 6.x         | Chamadas HTTP integradas ao NestJS test app |
-| `@nestjs/testing`                  | LTS         | Módulo de teste do NestJS                   |
+| Ferramenta                      | Versão alvo | Uso                                                                            |
+| ------------------------------- | ----------- | ------------------------------------------------------------------------------ |
+| `@testcontainers/postgresql`    | 10.x        | Banco PostgreSQL 16 isolado por suite                                          |
+| `@testcontainers/localstack`    | 3.x         | SQS, SNS, EventBridge, Secrets Manager                                         |
+| MiniIO em Docker                | RELEASE.x   | S3-compatible para documentos quando S3 real não estiver configurado em testes |
+| `npm run db:migrate` (test env) | —           | SQL canônico v0.0.1 + seeds de catálogo                                        |
+| `supertest`                     | 6.x         | Chamadas HTTP integradas ao NestJS test app                                    |
+| `@nestjs/testing`               | LTS         | Módulo de teste do NestJS                                                      |
 
 #### Escopo
 
@@ -135,18 +135,18 @@ O gate agregado corrente é `npm run evidence:check` no workspace root. Ele exec
 
 ```typescript
 // test/setup/testcontainer.ts
-import { PostgreSqlContainer } from "@testcontainers/postgresql";
-import { LocalstackContainer } from "@testcontainers/localstack";
+import { PostgreSqlContainer } from '@testcontainers/postgresql';
+import { LocalstackContainer } from '@testcontainers/localstack';
 
 export async function setupTestInfra() {
-  const pg = await new PostgreSqlContainer("postgres:16")
-    .withDatabase("sgp_test")
-    .withUsername("sgp")
-    .withPassword("sgp")
+  const pg = await new PostgreSqlContainer('postgres:16')
+    .withDatabase('sgp_test')
+    .withUsername('sgp')
+    .withPassword('sgp')
     .start();
 
-  const ls = await new LocalstackContainer("localstack/localstack:3")
-    .withServices(["s3", "sqs", "sns", "events", "secretsmanager"])
+  const ls = await new LocalstackContainer('localstack/localstack:3')
+    .withServices(['s3', 'sqs', 'sns', 'events', 'secretsmanager'])
     .start();
 
   return { pg, ls };
@@ -198,18 +198,18 @@ Qualquer mudança em campo obrigatório, remoção de campo, alteração de tipo
 
 ```typescript
 // playwright.config.ts
-import { defineConfig } from "@playwright/test";
+import { defineConfig } from '@playwright/test';
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: './e2e',
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 4 : undefined,
-  reporter: [["html"], ["allure-playwright"]],
+  reporter: [['html'], ['allure-playwright']],
   use: {
-    baseURL: process.env.E2E_BASE_URL ?? "http://localhost:4200",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
-    trace: "on-first-retry",
+    baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:4200',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'on-first-retry',
   },
 });
 ```
@@ -217,12 +217,12 @@ export default defineConfig({
 #### Acessibilidade (Axe)
 
 ```typescript
-import AxeBuilder from "@axe-core/playwright";
+import AxeBuilder from '@axe-core/playwright';
 
-test("tela de contracheque não tem violações WCAG 2.1 AA", async ({ page }) => {
-  await page.goto("/contracheque/123");
+test('tela de contracheque não tem violações WCAG 2.1 AA', async ({ page }) => {
+  await page.goto('/contracheque/123');
   const results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
     .analyze();
   expect(results.violations).toHaveLength(0);
 });
@@ -461,22 +461,22 @@ Os cenários A–G (ver §3) são executados como suíte separada no Playwright 
 
 ```javascript
 // k6/scenarios/folha-calculo.js
-import http from "k6/http";
-import { check, sleep } from "k6";
+import http from 'k6/http';
+import { check, sleep } from 'k6';
 
 export const options = {
   scenarios: {
     folha_lote: {
-      executor: "ramping-vus",
+      executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: "2m", target: 50 },
-        { duration: "6m", target: 50 },
-        { duration: "2m", target: 0 },
+        { duration: '2m', target: 50 },
+        { duration: '6m', target: 50 },
+        { duration: '2m', target: 0 },
       ],
       thresholds: {
-        http_req_duration: ["p(95)<8000"],
-        http_req_failed: ["rate<0.005"],
+        http_req_duration: ['p(95)<8000'],
+        http_req_failed: ['rate<0.005'],
       },
     },
   },
@@ -487,17 +487,17 @@ export default function () {
     `${__ENV.BASE_URL}/api/v1/folha/lote`,
     JSON.stringify({
       competenciaId: __ENV.COMPETENCIA_ID,
-      filiais: ["filial-uuid-1"],
-      tipoProcessamento: "MENSAL",
+      filiais: ['filial-uuid-1'],
+      tipoProcessamento: 'MENSAL',
     }),
     {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${__ENV.TOKEN}`,
       },
     },
   );
-  check(res, { "status 202": (r) => r.status === 202 });
+  check(res, { 'status 202': (r) => r.status === 202 });
   sleep(1);
 }
 ```
@@ -543,24 +543,24 @@ export default function () {
 
 ### 2.1 Matriz de tipos de teste por módulo
 
-| Módulo                 | U              | I                  | C               | E              | G        | K          | Ferramenta / observação especial                           |
-| ---------------------- | -------------- | ------------------ | --------------- | -------------- | -------- | ---------- | ---------------------------------------------------------- |
-| `@sgp/payroll-engine`  | ✅ ≥85%        | ✅ PostgreSQL real | ✅ Pact HTTP    | ✅ 3 jornadas  | ✅ B, F  | ✅ Sim     | Testes de fórmula SQL por verba; série histórica IRRF/INSS |
-| `@sgp/folha`           | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ B, F  | ✅ Sim     | Lifecycle competência; lote; remessa CNAB                  |
-| `@sgp/previdenciario`  | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ D     | —          | Simulação aposentadoria; SIPREV XML schema                 |
-| `@sgp/saude`           | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ F     | —          | Transições de status pericial; réplica multi-matrícula     |
-| `@sgp/rh`              | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ A     | —          | Lifecycle vínculo; CPF único; matrícula automática         |
-| `@sgp/recrutamento`    | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ G     | —          | Pipeline requisição; ciclo estágio                         |
-| `@sgp/gestao`          | ✅ ≥85%        | ✅                 | —               | ✅             | —        | —          | ParametroSistema; feature flags; i18n                      |
-| `@sgp/auth`            | ✅ ≥85%        | ✅                 | C JWT           | ✅ G           | ✅ G     | —          | Guards; RBAC; multi-tenant isolation                       |
-| `@sgp/integracoes`     | ✅ ≥85%        | ✅ LocalStack      | ✅ Pact SNS/SQS | ✅             | ✅ F     | ✅ eSocial | eSocial XML, SIPREV, DIRF, CNAB, Neoconsig                 |
-| `@sgp/pessoa`          | ✅ ≥85%        | ✅                 | —               | —              | ✅ A     | —          | CPF/PIS único; documentos                                  |
-| `@sgp/arquivos`        | ✅ ≥85%        | ✅ MiniIO / S3     | —               | —              | —        | —          | Presigned URL; validação de formato; path safety           |
-| `@sgp/notificacoes`    | ✅ ≥85%        | ✅ LocalStack SNS  | —               | —              | —        | —          | E-mail, push, in-app                                       |
-| `@sgp/convenio`        | ✅ ≥85%        | ✅                 | —               | —              | —        | —          | Desconto em folha; vigência                                |
-| `@sgp/auditoria`       | ✅ ≥85%        | ✅                 | —               | —              | —        | —          | diff JSONB; partição por mês                               |
-| `sgp-admin` (Angular)  | Postergado     | —                  | Postergado      | Postergado     | Postergado | —        | `ADMIN_INSTALL_LATER`; árvore admin não bloqueia o pacote atual |
-| `sgp-portal` (Angular) | ✅ Jest (unit) | —                  | C JSON Schema   | ✅ 10 jornadas | ✅ C, F  | —          | Playwright + Axe; Gov.br mock                              |
+| Módulo                 | U              | I                  | C               | E              | G          | K          | Ferramenta / observação especial                                |
+| ---------------------- | -------------- | ------------------ | --------------- | -------------- | ---------- | ---------- | --------------------------------------------------------------- |
+| `@sgp/payroll-engine`  | ✅ ≥85%        | ✅ PostgreSQL real | ✅ Pact HTTP    | ✅ 3 jornadas  | ✅ B, F    | ✅ Sim     | Testes de fórmula SQL por verba; série histórica IRRF/INSS      |
+| `@sgp/folha`           | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ B, F    | ✅ Sim     | Lifecycle competência; lote; remessa CNAB                       |
+| `@sgp/previdenciario`  | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ D       | —          | Simulação aposentadoria; SIPREV XML schema                      |
+| `@sgp/saude`           | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ F       | —          | Transições de status pericial; réplica multi-matrícula          |
+| `@sgp/rh`              | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ A       | —          | Lifecycle vínculo; CPF único; matrícula automática              |
+| `@sgp/recrutamento`    | ✅ ≥85%        | ✅                 | —               | ✅             | ✅ G       | —          | Pipeline requisição; ciclo estágio                              |
+| `@sgp/gestao`          | ✅ ≥85%        | ✅                 | —               | ✅             | —          | —          | ParametroSistema; feature flags; i18n                           |
+| `@sgp/auth`            | ✅ ≥85%        | ✅                 | C JWT           | ✅ G           | ✅ G       | —          | Guards; RBAC; multi-tenant isolation                            |
+| `@sgp/integracoes`     | ✅ ≥85%        | ✅ LocalStack      | ✅ Pact SNS/SQS | ✅             | ✅ F       | ✅ eSocial | eSocial XML, SIPREV, DIRF, CNAB, Neoconsig                      |
+| `@sgp/pessoa`          | ✅ ≥85%        | ✅                 | —               | —              | ✅ A       | —          | CPF/PIS único; documentos                                       |
+| `@sgp/arquivos`        | ✅ ≥85%        | ✅ MiniIO / S3     | —               | —              | —          | —          | Presigned URL; validação de formato; path safety                |
+| `@sgp/notificacoes`    | ✅ ≥85%        | ✅ LocalStack SNS  | —               | —              | —          | —          | E-mail, push, in-app                                            |
+| `@sgp/convenio`        | ✅ ≥85%        | ✅                 | —               | —              | —          | —          | Desconto em folha; vigência                                     |
+| `@sgp/auditoria`       | ✅ ≥85%        | ✅                 | —               | —              | —          | —          | diff JSONB; partição por mês                                    |
+| `sgp-admin` (Angular)  | Postergado     | —                  | Postergado      | Postergado     | Postergado | —          | `ADMIN_INSTALL_LATER`; árvore admin não bloqueia o pacote atual |
+| `sgp-portal` (Angular) | ✅ Jest (unit) | —                  | C JSON Schema   | ✅ 10 jornadas | ✅ C, F    | —          | Playwright + Axe; Gov.br mock                                   |
 
 ### 2.2 Métricas de qualidade de pipeline por módulo
 
@@ -1435,16 +1435,12 @@ flowchart LR
 
 ```typescript
 // folha.service.ts
-if (featureFlags.get("SHADOW_MODE_PAYROLL")) {
+if (featureFlags.get('SHADOW_MODE_PAYROLL')) {
   const [legadoResult, novoResult] = await Promise.all([
     this.legadoPayrollAdapter.calcular(payload),
     this.payrollEngineClient.calcular(payload),
   ]);
-  await this.shadowComparatorService.comparar(
-    legadoResult,
-    novoResult,
-    payload.contrachequeId,
-  );
+  await this.shadowComparatorService.comparar(legadoResult, novoResult, payload.contrachequeId);
   return legadoResult; // resultado real = legado durante shadow
 }
 ```
@@ -1518,43 +1514,32 @@ Toda divergência crítica gera um `audit_log` com `acao = "SHADOW_DIVERGENCIA"`
 
 ```typescript
 // packages/test-factories/src/pessoa.factory.ts
-import { faker } from "@faker-js/faker/locale/pt_BR";
-import { cpf as cpfGenerator } from "cpf-cnpj-validator";
+import { faker } from '@faker-js/faker/locale/pt_BR';
+import { cpf as cpfGenerator } from 'cpf-cnpj-validator';
 
 export const PessoaFactory = {
   build: (overrides: Partial<PessoaDto> = {}): PessoaDto => ({
     cpf: cpfGenerator.generate(true),
     nome: faker.person.fullName(),
     dataNascimento: faker.date
-      .birthdate({ min: 18, max: 65, mode: "age" })
+      .birthdate({ min: 18, max: 65, mode: 'age' })
       .toISOString()
-      .split("T")[0],
-    sexo: faker.helpers.arrayElement(["M", "F"]),
-    estadoCivil: faker.helpers.arrayElement([
-      "SOLTEIRO",
-      "CASADO",
-      "DIVORCIADO",
-      "VIUVO",
-    ]),
-    racaCor: faker.helpers.arrayElement([
-      "BRANCA",
-      "PARDA",
-      "PRETA",
-      "AMARELA",
-      "INDIGENA",
-    ]),
-    grauInstrucao: "SUPERIOR_COMPLETO",
-    nacionalidade: "BRASILEIRO",
+      .split('T')[0],
+    sexo: faker.helpers.arrayElement(['M', 'F']),
+    estadoCivil: faker.helpers.arrayElement(['SOLTEIRO', 'CASADO', 'DIVORCIADO', 'VIUVO']),
+    racaCor: faker.helpers.arrayElement(['BRANCA', 'PARDA', 'PRETA', 'AMARELA', 'INDIGENA']),
+    grauInstrucao: 'SUPERIOR_COMPLETO',
+    nacionalidade: 'BRASILEIRO',
     ...overrides,
   }),
 };
 
 export const FuncionarioFactory = {
   build: (overrides = {}) => ({
-    vinculoTipo: "EFETIVO",
-    tipoIngresso: "CONCURSO_PUBLICO",
+    vinculoTipo: 'EFETIVO',
+    tipoIngresso: 'CONCURSO_PUBLICO',
     cargaHoraria: 40,
-    tipoContaBanco: "CORRENTE",
+    tipoContaBanco: 'CORRENTE',
     ...overrides,
   }),
 };
@@ -1563,20 +1548,20 @@ export const FolhaFactory = {
   competenciaAberta: (mes: number, ano: number) => ({
     mes,
     ano,
-    estado: "ABERTA",
+    estado: 'ABERTA',
   }),
   competenciaFechada: (mes: number, ano: number) => ({
     mes,
     ano,
-    estado: "FECHADA",
+    estado: 'FECHADA',
   }),
   contrachequeCompleto: (funcionarioId: string, overrides = {}) => ({
     funcionarioId,
-    template: "SERVIDOR",
-    situacao: "CONCLUIDO",
+    template: 'SERVIDOR',
+    situacao: 'CONCLUIDO',
     lancamentos: [
-      { verbaId: "vrb-0001", valor: 5800.0, tipo: "CALCULADO" },
-      { verbaId: "vrb-inss", valor: -435.0, tipo: "CALCULADO" },
+      { verbaId: 'vrb-0001', valor: 5800.0, tipo: 'CALCULADO' },
+      { verbaId: 'vrb-inss', valor: -435.0, tipo: 'CALCULADO' },
     ],
     ...overrides,
   }),
@@ -1585,9 +1570,9 @@ export const FolhaFactory = {
 export const PericiaMedicaFactory = {
   agendamento: (funcionarioId: string, overrides = {}) => ({
     funcionarioId,
-    especialidadeId: "esp-clinica-medica",
-    agendaId: "agenda-med-0001",
-    status: "AGENDADO",
+    especialidadeId: 'esp-clinica-medica',
+    agendaId: 'agenda-med-0001',
+    status: 'AGENDADO',
     ...overrides,
   }),
 };
@@ -1837,7 +1822,7 @@ jobs:
         with:
           image-ref: ${{ env.ECR_REGISTRY }}/sgp-core-api:${{ github.sha }}
           severity: CRITICAL,HIGH
-          exit-code: "1"
+          exit-code: '1'
 
   deploy-qa:
     needs: build-images
@@ -1854,7 +1839,7 @@ jobs:
 name: E2E nightly — homologacao
 on:
   schedule:
-    - cron: "0 2 * * *" # 02:00 BRT
+    - cron: '0 2 * * *' # 02:00 BRT
   workflow_dispatch:
 
 jobs:
@@ -1891,7 +1876,7 @@ jobs:
 name: Load tests — weekly
 on:
   schedule:
-    - cron: "0 4 * * 0" # domingo 04:00 BRT
+    - cron: '0 4 * * 0' # domingo 04:00 BRT
   workflow_dispatch:
 
 jobs:
@@ -1937,7 +1922,7 @@ jobs:
 
 | Ambiente        | Propósito                                            | Branch / trigger     | Dados                                                     | Acesso                       |
 | --------------- | ---------------------------------------------------- | -------------------- | --------------------------------------------------------- | ---------------------------- |
-| **dev**         | Desenvolvimento local e testes unitários/integração  | Feature branch       | Testcontainers efêmeros, LocalStack local e MiniIO local   | Desenvolvedor                |
+| **dev**         | Desenvolvimento local e testes unitários/integração  | Feature branch       | Testcontainers efêmeros, LocalStack local e MiniIO local  | Desenvolvedor                |
 | **qa**          | Validação contínua pós-merge para develop            | `develop` push       | Fixtures mínimas + seed de catálogos; reset a cada deploy | Dev + QA                     |
 | **homologacao** | Golden scenarios, E2E nightly, homologação funcional | Tag RC nightly       | Dump legado anonimizado (atualizado mensalmente)          | QA + RH funcional + Negócio  |
 | **shadow**      | Shadow mode do motor de folha em paralelo ao legado  | Configuração manual  | Cópia anonimizada de produção (real sanitizado)           | Equipe de folha + Engenharia |
@@ -2014,10 +1999,10 @@ O pipeline de golden scenarios coleta métricas de negócio para rastrear regres
 ```typescript
 // Exemplo de métrica coletada no GS-A
 test.afterEach(async ({}, testInfo) => {
-  await publishMetric("golden_scenario_result", {
-    scenario: "GS-A",
+  await publishMetric('golden_scenario_result', {
+    scenario: 'GS-A',
     duration_ms: testInfo.duration,
-    passed: testInfo.status === "passed",
+    passed: testInfo.status === 'passed',
     contracheque_liquido: extractedLiquido,
     inss_calculado: extractedInss,
   });

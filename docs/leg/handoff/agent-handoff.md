@@ -99,7 +99,7 @@ Key files:
 - `backend/src/rh/workflows/rh-workflows.dto.ts`
 - `frontend/src/app/features/rh/pages/rh-home/*`
 - `frontend/src/app/features/rh/services/rh-workflows.ts`
-- `docs/rh-workflows.md`
+- `docs/eng/98-rh-workflows.md`
 
 Known RH gaps:
 
@@ -154,8 +154,8 @@ Frontend supports:
 
 Docs:
 
-- `docs/audit.md`
-- `docs/implementation-status.md`
+- `docs/eng/98-audit-implementation.md`
+- `docs/eng/99-implementation-status.md`
 
 Known audit gaps:
 
@@ -245,7 +245,7 @@ npm --workspace backend exec -- prisma validate --schema prisma/schema.prisma
 Important backend runtime variables include at least:
 
 - `DATABASE_URL`
-- Cognito variables documented in `docs/environment.md`
+- Cognito variables documented in `docs/user/environment.md`
 - S3 document variables if using document upload/download flows:
   - `S3_DOCUMENTS_BUCKET`
   - `S3_REGION`
@@ -285,11 +285,11 @@ Important backend runtime variables include at least:
 ## Reference Legacy Evidence
 
 - `docs/application-overview.md`
-- `docs/legacy-reverse/modules/auditoria.md`
-- `docs/legacy-reverse/modules/modulo-rh.md`
-- `docs/legacy-reverse/modules/folha-de-pgt.md`
-- `docs/legacy-reverse/feature-catalog.md`
-- `docs/legacy-reverse/workflows.md`
+- `docs/leg/rev-eng/modules/auditoria.md`
+- `docs/leg/rev-eng/modules/modulo-rh.md`
+- `docs/leg/rev-eng/modules/folha-de-pgt.md`
+- `docs/leg/rev-eng/feature-catalog.md`
+- `docs/leg/rev-eng/workflows.md`
 - `inventories/routes.json`
 - `inventories/menus.json`
 - `inventories/screens.json`

@@ -66,7 +66,7 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     mode: 'employees',
     employeeScoped: false,
     observedStatus: 'observed',
-    evidence: 'docs/legacy-reverse/modules/modulo-rh.md',
+    evidence: 'docs/leg/rev-eng/modules/modulo-rh.md',
     fields: [
       { key: 'registration', label: 'Matricula', type: 'text', required: true, maxLength: 40 },
       { key: 'name', label: 'Nome', type: 'text', required: true, maxLength: 180 },
@@ -633,7 +633,7 @@ function workflowConfig(
     mode: 'workflow',
     employeeScoped: fields.some((field) => field.key === 'employeeId'),
     observedStatus,
-    evidence: 'docs/legacy-reverse/modules/modulo-rh.md',
+    evidence: 'docs/leg/rev-eng/modules/modulo-rh.md',
     fields,
     columns: [
       { key: 'employeeLabel', header: 'Funcionario' },

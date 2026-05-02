@@ -135,6 +135,7 @@ flowchart TB
 ```
 
 **Legenda:**
+
 - Setas sólidas representam integrações ativas no MVP.
 - Seta tracejada representa integração prevista para fase 2 (Gov.br SSO).
 - Atores humanos interagem com SGP via navegador (HTTPS / OAuth2).
@@ -142,28 +143,28 @@ flowchart TB
 
 ### 3.1 Descrição dos Atores
 
-| Ator | Perfil | Canal de acesso |
-|---|---|---|
-| **Usuário Administrativo** | Servidor público na área de RH, Gestão de Pessoal, Financeiro ou Contabilidade. Acessa backoffice do SGP para manter cadastros, parametrizar verbas, gerar relatórios e acompanhar folha. | `sgp-admin` (Angular SPA) via browser |
-| **Operador de Folha** | Especialista responsável pelo fechamento mensal da folha de pagamento. Cria competências, aciona cálculos em lote, confere batimento e fecha folha. Papel sensível com acesso a `FOLHA_DE_PGT.GESTAO`. | `sgp-admin` (Angular SPA) via browser |
-| **Médico Perito** | Profissional de saúde vinculado à Junta Médica do ente. Gerencia agenda, realiza perícias, emite laudos e licenças médicas. Papel `PERICIA_MEDICA.GESTAO`. | `sgp-admin` (Angular SPA) via browser |
+| Ator                       | Perfil                                                                                                                                                                                                                    | Canal de acesso                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| **Usuário Administrativo** | Servidor público na área de RH, Gestão de Pessoal, Financeiro ou Contabilidade. Acessa backoffice do SGP para manter cadastros, parametrizar verbas, gerar relatórios e acompanhar folha.                                 | `sgp-admin` (Angular SPA) via browser  |
+| **Operador de Folha**      | Especialista responsável pelo fechamento mensal da folha de pagamento. Cria competências, aciona cálculos em lote, confere batimento e fecha folha. Papel sensível com acesso a `FOLHA_DE_PGT.GESTAO`.                    | `sgp-admin` (Angular SPA) via browser  |
+| **Médico Perito**          | Profissional de saúde vinculado à Junta Médica do ente. Gerencia agenda, realiza perícias, emite laudos e licenças médicas. Papel `PERICIA_MEDICA.GESTAO`.                                                                | `sgp-admin` (Angular SPA) via browser  |
 | **Servidor / Pensionista** | Beneficiário final dos serviços de RH. Acessa portal para consultar contracheque, recadastrar-se, acompanhar perícia e consultar histórico funcional. Acesso read-mostly, sem alteração de dados cadastrais de terceiros. | `sgp-portal` (Angular SPA) via browser |
-| **Candidato** | Pessoa física que se inscreveu em processo seletivo. Acessa portal para enviar currículo, acompanhar candidatura e atualizar banco de talentos. | `sgp-portal` (Angular SPA) via browser |
-| **Sistema Externo** | Sistemas de terceiros (ex.: sistema de ponto, ERP municipal, portal próprio do cliente) que consomem a API do SGP via OAuth2 client-credentials. Identificado pelo papel `ROLE_EXTERNAL_SYSTEM`. | `/api/external/v1/...` (REST + OAuth2) |
+| **Candidato**              | Pessoa física que se inscreveu em processo seletivo. Acessa portal para enviar currículo, acompanhar candidatura e atualizar banco de talentos.                                                                           | `sgp-portal` (Angular SPA) via browser |
+| **Sistema Externo**        | Sistemas de terceiros (ex.: sistema de ponto, ERP municipal, portal próprio do cliente) que consomem a API do SGP via OAuth2 client-credentials. Identificado pelo papel `ROLE_EXTERNAL_SYSTEM`.                          | `/api/external/v1/...` (REST + OAuth2) |
 
 ### 3.2 Descrição dos Sistemas Externos
 
-| Sistema | Direção | Protocolo | Frequência |
-|---|---|---|---|
-| **AWS Cognito** | Bidirecional (SGP delega autenticação) | OIDC / OAuth2 HTTPS | A cada login; refresh de token a cada hora |
-| **Gov.br** | Inbound (federation IdP) | OIDC (IdP federado no Cognito) | Fase 2; fluxo idêntico ao Cognito do usuário |
-| **eSocial / Receita Federal** | Outbound (envio eventos) + Inbound (recibos) | SOAP/HTTPS + XML S-1.2 | Mensal (periódicos) e por evento (não-periódicos) |
-| **SIPREV / MPS** | Outbound (exportação) | Arquivo XML | Mensal (geração automática) |
-| **Banco Federal (CNAB)** | Bidirecional (remessa crédito + retorno) | Arquivo CNAB 240/400 | Mensal (folha) |
-| **Neoconsig** | Inbound (importação desconto) | Arquivo CSV | Mensal (antes do cálculo) |
-| **Portal Transparência** | Outbound (publicação) | Arquivo CSV agendado | Mensal (após fechamento) |
-| **Prefeitura (API pública)** | Bidirecional (prova de vida, dependentes) | REST / JSON | Por evento (prova de vida) |
-| **Receita Federal (DIRF)** | Outbound (obrigação acessória) | Arquivo TXT (leiaute RFB) | Anual (entrega em fevereiro) |
+| Sistema                       | Direção                                      | Protocolo                      | Frequência                                        |
+| ----------------------------- | -------------------------------------------- | ------------------------------ | ------------------------------------------------- |
+| **AWS Cognito**               | Bidirecional (SGP delega autenticação)       | OIDC / OAuth2 HTTPS            | A cada login; refresh de token a cada hora        |
+| **Gov.br**                    | Inbound (federation IdP)                     | OIDC (IdP federado no Cognito) | Fase 2; fluxo idêntico ao Cognito do usuário      |
+| **eSocial / Receita Federal** | Outbound (envio eventos) + Inbound (recibos) | SOAP/HTTPS + XML S-1.2         | Mensal (periódicos) e por evento (não-periódicos) |
+| **SIPREV / MPS**              | Outbound (exportação)                        | Arquivo XML                    | Mensal (geração automática)                       |
+| **Banco Federal (CNAB)**      | Bidirecional (remessa crédito + retorno)     | Arquivo CNAB 240/400           | Mensal (folha)                                    |
+| **Neoconsig**                 | Inbound (importação desconto)                | Arquivo CSV                    | Mensal (antes do cálculo)                         |
+| **Portal Transparência**      | Outbound (publicação)                        | Arquivo CSV agendado           | Mensal (após fechamento)                          |
+| **Prefeitura (API pública)**  | Bidirecional (prova de vida, dependentes)    | REST / JSON                    | Por evento (prova de vida)                        |
+| **Receita Federal (DIRF)**    | Outbound (obrigação acessória)               | Arquivo TXT (leiaute RFB)      | Anual (entrega em fevereiro)                      |
 
 ---
 
@@ -281,6 +282,7 @@ flowchart TB
 ```
 
 **Legenda:**
+
 - Setas sólidas representam fluxo de dados principal.
 - Setas tracejadas representam fornecimento de configuração/segredos (sem dados de negócio).
 - Cada worker ECS possui DLQ (Dead-Letter Queue) associada para mensagens que falham repetidamente.
@@ -288,20 +290,20 @@ flowchart TB
 
 ### 4.1 Descrição dos Containers
 
-| Container | Tecnologia | Responsabilidade |
-|---|---|---|
-| **sgp-admin** | Angular SPA (última LTS), hosted em S3/CloudFront | Interface administrativa completa para os 11 módulos de 1º nível. Lazy loading por bounded context. Comunica-se exclusivamente com `sgp-core-api` via `/api/v1/...` |
-| **sgp-portal-ui** | Angular SPA (última LTS), hosted em S3/CloudFront | Interface de autoatendimento para employee/beneficiário/candidato. Comunica-se somente com `sgp-portal-api`. |
-| **API Gateway AWS** | AWS API Gateway (HTTP API) | Ponto de entrada único para todas as chamadas REST. Responsável por rate-limiting, validação de JWT (Cognito Authorizer), roteamento para `sgp-core-api`, throttling por tenant. |
-| **sgp-core-api** | NestJS 10+ / TypeScript, ECS Fargate | API REST administrativa com os bounded contexts do core. Expõe `/api/v1/...`, `/api/external/v1/...` e `/api/admin/v1/...`. |
-| **sgp-portal-api** | NestJS 10+ / TypeScript, ECS Fargate | Backend exclusivo do portal, com credenciais de banco read-only e escopo de autoatendimento. Expõe `/api/portal/v1/...`. |
-| **sgp-payroll-engine** | NestJS 10+ / TypeScript, ECS Fargate (ou host dedicado) | Implementação separada de cálculo de folha. Permite execução por cron e sob demanda, com acompanhamento de progresso por lote/in-lote. Camada fina sobre procedures `plpgsql` parametrizadas. |
-| **sgp-esocial-worker** | NestJS 10+ / TypeScript, ECS Fargate | Worker assíncrono para geração, assinatura e envio de eventos eSocial S-1.2. Consome fila SQS `esocial.evento.pendente`. Gerencia retry, polling de recibo e DLQ. |
-| **sgp-integrations-worker** | NestJS 10+ / TypeScript, ECS Fargate | Worker para integrações batch: remessa/retorno CNAB bancário, exportação SIPREV e geração DIRF. Consome filas SQS `remessa.gerar` e `retorno.processar`. |
-| **sgp-report-service** | NestJS + Puppeteer (Headless Chrome), ECS Fargate | Serviço dedicado à geração de PDFs e XLSX. Consome fila `contracheque.gerar.pdf`. Templates em Handlebars. Persiste arquivos finalizados no S3. |
-| **RDS PostgreSQL 16** | AWS RDS Multi-AZ + Read Replicas | Banco relacional principal. Multi-AZ para HA (failover automático). Read Replicas para leitura pesada. RLS por tenant. Particionamento por competência em tabelas de folha. |
-| **ElastiCache Redis** | AWS ElastiCache Redis 7, Cluster Mode | Cache L2 para parâmetros do sistema, enums, fórmulas compiladas. Locks distribuídos para cálculo de folha (evitar processamento duplicado). Cache de sessão se necessário. |
-| **S3 Buckets** | AWS S3 | Armazenamento de objetos por tenant. Buckets separados por propósito: `uploads` (anexos), `outputs` (documentos oficiais), `archives` (arquivos históricos), `assets` (logotipos, templates). |
+| Container                   | Tecnologia                                              | Responsabilidade                                                                                                                                                                              |
+| --------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **sgp-admin**               | Angular SPA (última LTS), hosted em S3/CloudFront       | Interface administrativa completa para os 11 módulos de 1º nível. Lazy loading por bounded context. Comunica-se exclusivamente com `sgp-core-api` via `/api/v1/...`                           |
+| **sgp-portal-ui**           | Angular SPA (última LTS), hosted em S3/CloudFront       | Interface de autoatendimento para employee/beneficiário/candidato. Comunica-se somente com `sgp-portal-api`.                                                                                  |
+| **API Gateway AWS**         | AWS API Gateway (HTTP API)                              | Ponto de entrada único para todas as chamadas REST. Responsável por rate-limiting, validação de JWT (Cognito Authorizer), roteamento para `sgp-core-api`, throttling por tenant.              |
+| **sgp-core-api**            | NestJS 10+ / TypeScript, ECS Fargate                    | API REST administrativa com os bounded contexts do core. Expõe `/api/v1/...`, `/api/external/v1/...` e `/api/admin/v1/...`.                                                                   |
+| **sgp-portal-api**          | NestJS 10+ / TypeScript, ECS Fargate                    | Backend exclusivo do portal, com credenciais de banco read-only e escopo de autoatendimento. Expõe `/api/portal/v1/...`.                                                                      |
+| **sgp-payroll-engine**      | NestJS 10+ / TypeScript, ECS Fargate (ou host dedicado) | Implementação separada de cálculo de folha. Permite execução por cron e sob demanda, com acompanhamento de progresso por lote/in-lote. Camada fina sobre procedures `plpgsql` parametrizadas. |
+| **sgp-esocial-worker**      | NestJS 10+ / TypeScript, ECS Fargate                    | Worker assíncrono para geração, assinatura e envio de eventos eSocial S-1.2. Consome fila SQS `esocial.evento.pendente`. Gerencia retry, polling de recibo e DLQ.                             |
+| **sgp-integrations-worker** | NestJS 10+ / TypeScript, ECS Fargate                    | Worker para integrações batch: remessa/retorno CNAB bancário, exportação SIPREV e geração DIRF. Consome filas SQS `remessa.gerar` e `retorno.processar`.                                      |
+| **sgp-report-service**      | NestJS + Puppeteer (Headless Chrome), ECS Fargate       | Serviço dedicado à geração de PDFs e XLSX. Consome fila `contracheque.gerar.pdf`. Templates em Handlebars. Persiste arquivos finalizados no S3.                                               |
+| **RDS PostgreSQL 16**       | AWS RDS Multi-AZ + Read Replicas                        | Banco relacional principal. Multi-AZ para HA (failover automático). Read Replicas para leitura pesada. RLS por tenant. Particionamento por competência em tabelas de folha.                   |
+| **ElastiCache Redis**       | AWS ElastiCache Redis 7, Cluster Mode                   | Cache L2 para parâmetros do sistema, enums, fórmulas compiladas. Locks distribuídos para cálculo de folha (evitar processamento duplicado). Cache de sessão se necessário.                    |
+| **S3 Buckets**              | AWS S3                                                  | Armazenamento de objetos por tenant. Buckets separados por propósito: `uploads` (anexos), `outputs` (documentos oficiais), `archives` (arquivos históricos), `assets` (logotipos, templates). |
 
 | **EventBridge** | AWS EventBridge (Custom Bus) | Bus de domínio central. Desacopla publishers de consumers. Regras de roteamento por `detail-type` para encaminhar eventos aos SNS/SQS corretos. |
 | **SNS Topics** | AWS SNS | Fan-out de eventos para múltiplos consumers. Ex.: `folha.calculo.concluida` notifica UI (via WebSocket/SSE) e serviço de relatórios simultaneamente. |
@@ -446,6 +448,7 @@ flowchart TB
 ```
 
 **Legenda:**
+
 - Os Guards são executados em cadeia obrigatória: Auth → Tenant → Permissions.
 - Os Interceptors decoram todas as rotas protegidas; o AuditInterceptor é condicional por domínio sensível.
 - Os Services nunca acessam repositórios de outros bounded contexts diretamente — comunicam via interfaces exportadas ou eventos.
@@ -614,6 +617,7 @@ flowchart TB
 ```
 
 **Legenda:**
+
 - O `FormulaCompiler` transpila as fórmulas DSL para SQL parametrizado uma única vez e armazena o resultado compilado no Redis; reutiliza o cache nas execuções subsequentes da mesma competência.
 - O `RetroactiveRecalculator` é acionado quando há competências anteriores abertas ou reaberturas, gerando lançamentos complementares na competência atual.
 - O `ResultWriter` utiliza transação explícita: contracheque + todos os lançamentos são persistidos atomicamente; em caso de erro a transação é revertida e o status é atualizado para `ERRO`.
@@ -638,6 +642,7 @@ stateDiagram-v2
 ```
 
 **Atributos de fórmula disponíveis** (`atributo_formula`):
+
 - `SALARIO_BASE` → `funcionario.nivel_salarial.valor`
 - `TEMPO_SERVICO_DIAS` → calculado via função SQL a partir de `data_posse`
 - `DEPENDENTES_IR` → `funcionario.dependentes_ir_count`
@@ -778,15 +783,15 @@ flowchart TB
 
 **Notas de Deployment:**
 
-| Aspecto | Detalhe |
-|---|---|
-| **Runtime** | ECS Fargate (sem gestão de servidor); migração para EKS avaliada em roadmap futuro se necessidade de customização avançada de scheduling |
-| **Auto-scaling** | `sgp-core-api`: CPU > 70% por 3 min → escala; `sgp-payroll-engine`: profundidade de fila SQS > 100 mensagens → escala até 50 tasks |
-| **RDS** | Multi-AZ com failover automático < 60 s; PITR habilitado (7 dias); snapshots diários retidos 30 dias; snapshots cross-region para us-east-1 |
-| **Redis** | Cluster Mode habilitado; Multi-AZ; failover automático via ElastiCache |
-| **S3** | Versionamento + lifecycle (objetos > 90 dias → Glacier IR); replicação cross-region assíncrona para DR |
-| **CI/CD** | Alvo futuro: GitHub Actions build → teste → push ECR → deploy ECS. O gate produtivo fica postergado pela decisão temporária de 2026-04-26. |
-| **DNS** | Route 53 com failover health-check; TTL baixo para switchover de DR manual ou automático |
+| Aspecto          | Detalhe                                                                                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Runtime**      | ECS Fargate (sem gestão de servidor); migração para EKS avaliada em roadmap futuro se necessidade de customização avançada de scheduling    |
+| **Auto-scaling** | `sgp-core-api`: CPU > 70% por 3 min → escala; `sgp-payroll-engine`: profundidade de fila SQS > 100 mensagens → escala até 50 tasks          |
+| **RDS**          | Multi-AZ com failover automático < 60 s; PITR habilitado (7 dias); snapshots diários retidos 30 dias; snapshots cross-region para us-east-1 |
+| **Redis**        | Cluster Mode habilitado; Multi-AZ; failover automático via ElastiCache                                                                      |
+| **S3**           | Versionamento + lifecycle (objetos > 90 dias → Glacier IR); replicação cross-region assíncrona para DR                                      |
+| **CI/CD**        | Alvo futuro: GitHub Actions build → teste → push ECR → deploy ECS. O gate produtivo fica postergado pela decisão temporária de 2026-04-26.  |
+| **DNS**          | Route 53 com failover health-check; TTL baixo para switchover de DR manual ou automático                                                    |
 
 ### 7.1 Pipeline CI/CD Completo
 
@@ -824,13 +829,13 @@ flowchart TB
 
 ### 7.2 ECS Task Definitions — Configuração de Recursos
 
-| Serviço | vCPU | Memória | Min Tasks | Max Tasks | Escala por |
-|---|---|---|---|---|---|
-| `sgp-core-api` | 1 vCPU | 2 GB | 2 | 20 | CPU > 70% por 3 min |
-| `sgp-payroll-engine` | 2 vCPU | 4 GB | 1 | 50 | SQS depth > 100 msgs |
-| `sgp-esocial-worker` | 0.5 vCPU | 1 GB | 1 | 10 | SQS depth > 20 msgs |
-| `sgp-integrations-worker` | 0.5 vCPU | 1 GB | 1 | 5 | SQS depth > 10 msgs |
-| `sgp-report-service` | 2 vCPU | 4 GB | 1 | 10 | SQS depth > 5 msgs |
+| Serviço                   | vCPU     | Memória | Min Tasks | Max Tasks | Escala por           |
+| ------------------------- | -------- | ------- | --------- | --------- | -------------------- |
+| `sgp-core-api`            | 1 vCPU   | 2 GB    | 2         | 20        | CPU > 70% por 3 min  |
+| `sgp-payroll-engine`      | 2 vCPU   | 4 GB    | 1         | 50        | SQS depth > 100 msgs |
+| `sgp-esocial-worker`      | 0.5 vCPU | 1 GB    | 1         | 10        | SQS depth > 20 msgs  |
+| `sgp-integrations-worker` | 0.5 vCPU | 1 GB    | 1         | 5         | SQS depth > 10 msgs  |
+| `sgp-report-service`      | 2 vCPU   | 4 GB    | 1         | 10        | SQS depth > 5 msgs   |
 
 Todos os containers utilizam imagens base **distroless** (sem shell, sem package manager) para reduzir superfície de ataque. Health check via `curl -f http://localhost:3000/api/v1/health || exit 1` a cada 30 s.
 
@@ -1097,15 +1102,15 @@ sequenceDiagram
 
 **Jobs agendados configurados:**
 
-| Job | Cron expression | Serviço | Função |
-|---|---|---|---|
-| `situacao-funcional-retorno` | `0 6 * * *` (06h diário) | RhService | Retorna servidores de afastamento encerrado |
-| `licenca-medica-vencida` | `0 6 * * *` (06h diário) | SaudeService | Inativa licenças médicas vencidas |
-| `ferias-programadas` | `0 7 * * *` (07h diário) | RhService | Manutenção de férias programadas |
-| `competencia-fechamento-programado` | `0 0 * * *` (meia-noite) | CompetenciaService | Executa fechamento agendado de competências |
-| `estagio-desligamento-auto` | `0 8 * * *` (08h diário) | RecrutamentoService | Desliga estagiários que atingiram data_fim |
-| `controle-anual-afastamentos` | `0 3 1 * *` (1º dia do mês) | RhService | Atualiza tabela de controle anual |
-| `prova-vida-proxima-vencer` | `0 9 * * *` (09h diário) | PrevidenciarioService | Atualiza status PERTO_VENCER |
+| Job                                 | Cron expression             | Serviço               | Função                                      |
+| ----------------------------------- | --------------------------- | --------------------- | ------------------------------------------- |
+| `situacao-funcional-retorno`        | `0 6 * * *` (06h diário)    | RhService             | Retorna servidores de afastamento encerrado |
+| `licenca-medica-vencida`            | `0 6 * * *` (06h diário)    | SaudeService          | Inativa licenças médicas vencidas           |
+| `ferias-programadas`                | `0 7 * * *` (07h diário)    | RhService             | Manutenção de férias programadas            |
+| `competencia-fechamento-programado` | `0 0 * * *` (meia-noite)    | CompetenciaService    | Executa fechamento agendado de competências |
+| `estagio-desligamento-auto`         | `0 8 * * *` (08h diário)    | RecrutamentoService   | Desliga estagiários que atingiram data_fim  |
+| `controle-anual-afastamentos`       | `0 3 1 * *` (1º dia do mês) | RhService             | Atualiza tabela de controle anual           |
+| `prova-vida-proxima-vencer`         | `0 9 * * *` (09h diário)    | PrevidenciarioService | Atualiza status PERTO_VENCER                |
 
 ---
 
@@ -1113,13 +1118,13 @@ sequenceDiagram
 
 ### 9.1 Autenticação
 
-| Fluxo | Mecanismo | Detalhes |
-|---|---|---|
-| Usuário administrativo (sgp-admin) | OAuth2 Authorization Code + PKCE | Cognito UserPool; MFA obrigatório para perfis com GESTAO; tokens RS256 |
-| Servidor / Pensionista (sgp-portal) | OAuth2 Authorization Code + PKCE | Cognito; federação Gov.br para prova de identidade (fase 2) |
-| API Externa (sistemas terceiros) | OAuth2 Client Credentials | Cognito App Client com escopo restrito; substitui `SGP-API-KEY` legado; papel `ROLE_EXTERNAL_SYSTEM` |
-| Comunicação inter-serviços | IAM Roles + mTLS | ECS Tasks com task roles mínimas; sem segredos estáticos em variáveis de ambiente |
-| Integrações SOAP/REST externas | Certificado digital A1/A3 (eSocial), API-key parametrizada (bancos), OAuth2 (Gov.br) | Credenciais no Secrets Manager, rotação automatizada |
+| Fluxo                               | Mecanismo                                                                            | Detalhes                                                                                             |
+| ----------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| Usuário administrativo (sgp-admin)  | OAuth2 Authorization Code + PKCE                                                     | Cognito UserPool; MFA obrigatório para perfis com GESTAO; tokens RS256                               |
+| Servidor / Pensionista (sgp-portal) | OAuth2 Authorization Code + PKCE                                                     | Cognito; federação Gov.br para prova de identidade (fase 2)                                          |
+| API Externa (sistemas terceiros)    | OAuth2 Client Credentials                                                            | Cognito App Client com escopo restrito; substitui `SGP-API-KEY` legado; papel `ROLE_EXTERNAL_SYSTEM` |
+| Comunicação inter-serviços          | IAM Roles + mTLS                                                                     | ECS Tasks com task roles mínimas; sem segredos estáticos em variáveis de ambiente                    |
+| Integrações SOAP/REST externas      | Certificado digital A1/A3 (eSocial), API-key parametrizada (bancos), OAuth2 (Gov.br) | Credenciais no Secrets Manager, rotação automatizada                                                 |
 
 ### 9.2 Autorização (RBAC Multi-Camadas)
 
@@ -1143,6 +1148,7 @@ flowchart LR
 - **Sigilo Guard:** Para entidades `cedido_detalhe.sigilo=true`, bloqueia visualização de dados sensíveis mesmo para usuários com `VISUALIZAR`, exceto para papéis com `GESTAO` explícito no módulo RH.
 
 **Papéis reservados:**
+
 - `ROLE_EXTERNAL_SYSTEM` — API externa (client-credentials), acesso read-only a dados públicos e exportações.
 - `ROLE_ADMIN_TENANT` — administrador do tenant; acesso a configuração de usuários e papéis.
 - `ROLE_SUPER_ADMIN` — operador da plataforma SaaS (sem acesso a dados de negócio).
@@ -1151,24 +1157,24 @@ flowchart LR
 
 A tabela abaixo lista os papéis disponíveis por módulo e os tipos de ação. Papéis marcados com `GESTAO` têm acesso integral ao módulo sem necessidade de papéis CRUD granulares.
 
-| Módulo | Papéis disponíveis | Tipo |
-|---|---|---|
-| `GESTAO` | `ROLE_GESTAO_VISUALIZAR`, `ROLE_GESTAO_CADASTRAR`, `ROLE_GESTAO_ATUALIZAR`, `ROLE_GESTAO_EXCLUIR`, `ROLE_GESTAO_GESTAO` | CRUD + GESTAO |
-| `MODULO_RH` | `ROLE_MODULO_RH_VISUALIZAR`, `..._CADASTRAR`, `..._ATUALIZAR`, `..._EXCLUIR`, `..._GESTAO` | CRUD + GESTAO |
-| `FOLHA_DE_PGT` | `ROLE_FOLHA_DE_PGT_GESTAO` | Somente GESTAO |
-| `MODULO_PREVIDENCIARIO` | `ROLE_MODULO_PREVIDENCIARIO_VISUALIZAR`, `..._CADASTRAR`, `..._ATUALIZAR`, `..._EXCLUIR`, `..._GESTAO` | CRUD + GESTAO |
-| `RECADASTRAMENTO` | `ROLE_RECADASTRAMENTO_GESTAO` | Somente GESTAO |
-| `PERICIA_MEDICA` | `ROLE_PERICIA_MEDICA_GESTAO` | Somente GESTAO |
-| `AGENDA_MEDICA` | `ROLE_AGENDA_MEDICA_GESTAO` | Somente GESTAO |
-| `AUDITORIA` | `ROLE_AUDITORIA_GESTAO` | Somente GESTAO |
-| `DIRF` | `ROLE_DIRF_GESTAO` | Somente GESTAO |
-| `ARQUIVO_REMESSA` | `ROLE_ARQUIVO_REMESSA_GESTAO` | Somente GESTAO |
-| `ARQUIVO_EXPORTACAO_SIPREV` | `ROLE_ARQUIVO_EXPORTACAO_SIPREV_GESTAO` | Somente GESTAO |
-| `RECRUTAMENTO_SELECAO` | `ROLE_RECRUTAMENTO_SELECAO_VISUALIZAR`, `..._GESTAO` | VISUALIZAR + GESTAO |
-| `CONVENIO` | `ROLE_CONVENIO_VISUALIZAR`, `..._CADASTRAR`, `..._ATUALIZAR`, `..._EXCLUIR`, `..._GESTAO` | CRUD + GESTAO |
-| `POSSE_EFETIVO` | `ROLE_POSSE_EFETIVO_GESTAO` | Somente GESTAO |
-| `POSSE_COMISSIONADO` | `ROLE_POSSE_COMISSIONADO_GESTAO` | Somente GESTAO |
-| `POSSE_CONTRATADO` | `ROLE_POSSE_CONTRATADO_GESTAO` | Somente GESTAO |
+| Módulo                      | Papéis disponíveis                                                                                                      | Tipo                |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `GESTAO`                    | `ROLE_GESTAO_VISUALIZAR`, `ROLE_GESTAO_CADASTRAR`, `ROLE_GESTAO_ATUALIZAR`, `ROLE_GESTAO_EXCLUIR`, `ROLE_GESTAO_GESTAO` | CRUD + GESTAO       |
+| `MODULO_RH`                 | `ROLE_MODULO_RH_VISUALIZAR`, `..._CADASTRAR`, `..._ATUALIZAR`, `..._EXCLUIR`, `..._GESTAO`                              | CRUD + GESTAO       |
+| `FOLHA_DE_PGT`              | `ROLE_FOLHA_DE_PGT_GESTAO`                                                                                              | Somente GESTAO      |
+| `MODULO_PREVIDENCIARIO`     | `ROLE_MODULO_PREVIDENCIARIO_VISUALIZAR`, `..._CADASTRAR`, `..._ATUALIZAR`, `..._EXCLUIR`, `..._GESTAO`                  | CRUD + GESTAO       |
+| `RECADASTRAMENTO`           | `ROLE_RECADASTRAMENTO_GESTAO`                                                                                           | Somente GESTAO      |
+| `PERICIA_MEDICA`            | `ROLE_PERICIA_MEDICA_GESTAO`                                                                                            | Somente GESTAO      |
+| `AGENDA_MEDICA`             | `ROLE_AGENDA_MEDICA_GESTAO`                                                                                             | Somente GESTAO      |
+| `AUDITORIA`                 | `ROLE_AUDITORIA_GESTAO`                                                                                                 | Somente GESTAO      |
+| `DIRF`                      | `ROLE_DIRF_GESTAO`                                                                                                      | Somente GESTAO      |
+| `ARQUIVO_REMESSA`           | `ROLE_ARQUIVO_REMESSA_GESTAO`                                                                                           | Somente GESTAO      |
+| `ARQUIVO_EXPORTACAO_SIPREV` | `ROLE_ARQUIVO_EXPORTACAO_SIPREV_GESTAO`                                                                                 | Somente GESTAO      |
+| `RECRUTAMENTO_SELECAO`      | `ROLE_RECRUTAMENTO_SELECAO_VISUALIZAR`, `..._GESTAO`                                                                    | VISUALIZAR + GESTAO |
+| `CONVENIO`                  | `ROLE_CONVENIO_VISUALIZAR`, `..._CADASTRAR`, `..._ATUALIZAR`, `..._EXCLUIR`, `..._GESTAO`                               | CRUD + GESTAO       |
+| `POSSE_EFETIVO`             | `ROLE_POSSE_EFETIVO_GESTAO`                                                                                             | Somente GESTAO      |
+| `POSSE_COMISSIONADO`        | `ROLE_POSSE_COMISSIONADO_GESTAO`                                                                                        | Somente GESTAO      |
+| `POSSE_CONTRATADO`          | `ROLE_POSSE_CONTRATADO_GESTAO`                                                                                          | Somente GESTAO      |
 
 O Frontend (`AuthzService.can(modulo, acao)`) controla a **exposição** de menus e botões baseado nos papéis do usuário logado. O servidor **revalida sempre** via `PermissionsGuard` — a UI nunca é a única barreira de autorização.
 
@@ -1213,15 +1219,15 @@ O cenário dourado G3 (autorização) verifica que um usuário do tenant-B não 
 
 ### 9.4 Criptografia
 
-| Camada | Mecanismo | Detalhes |
-|---|---|---|
-| Em trânsito (externo) | TLS 1.3 | CloudFront → ALB → ECS; certificados ACM rotacionados automaticamente |
-| Em trânsito (interno) | TLS 1.2+ (mínimo) + mTLS | Entre ECS services; API Gateway → Core API |
-| Em repouso (S3) | SSE-KMS (Customer Managed Key) | Chave por ambiente; rotação anual automática |
-| Em repouso (RDS) | Encryption at rest (KMS) | Storage encryption habilitado na criação da instância |
-| Em repouso (Redis) | Encryption at rest + in-transit | ElastiCache com TLS e encryption at rest habilitados |
-| Colunas sensíveis (opcional) | `pgcrypto` (AES-256) | CPF, dados bancários para sigilo fiscal elevado; avaliado por ADR |
-| Segredos | AWS Secrets Manager | Rotação automática de senhas RDS; segredos referenciados por ARN em task definitions |
+| Camada                       | Mecanismo                       | Detalhes                                                                             |
+| ---------------------------- | ------------------------------- | ------------------------------------------------------------------------------------ |
+| Em trânsito (externo)        | TLS 1.3                         | CloudFront → ALB → ECS; certificados ACM rotacionados automaticamente                |
+| Em trânsito (interno)        | TLS 1.2+ (mínimo) + mTLS        | Entre ECS services; API Gateway → Core API                                           |
+| Em repouso (S3)              | SSE-KMS (Customer Managed Key)  | Chave por ambiente; rotação anual automática                                         |
+| Em repouso (RDS)             | Encryption at rest (KMS)        | Storage encryption habilitado na criação da instância                                |
+| Em repouso (Redis)           | Encryption at rest + in-transit | ElastiCache com TLS e encryption at rest habilitados                                 |
+| Colunas sensíveis (opcional) | `pgcrypto` (AES-256)            | CPF, dados bancários para sigilo fiscal elevado; avaliado por ADR                    |
+| Segredos                     | AWS Secrets Manager             | Rotação automática de senhas RDS; segredos referenciados por ARN em task definitions |
 
 ### 9.5 LGPD e Privacidade
 
@@ -1250,18 +1256,18 @@ Candidatos não contratados têm seus dados anonimizados automaticamente 6 meses
 
 ### 9.6 Proteção contra OWASP Top 10
 
-| Ameaça | Controle |
-|---|---|
-| Injeção SQL | Queries parametrizadas (Prisma/TypeORM); FormulaCompiler gera SQL parametrizado (DSL nunca interpolada) |
-| Quebra de autenticação | OAuth2 PKCE; tokens de curta duração (1h access, 24h refresh); logout revoga refresh token no Cognito |
-| Exposição de dados sensíveis | TLS obrigatório; SSE-KMS; mascaramento de logs; campos `sigilo` |
-| XXE | Parser XML eSocial com XXE desabilitado (feature `FEATURE_SECURE_PROCESSING`) |
-| Controle de acesso quebrado | Guards multi-camadas; RLS no banco; testes de autorização nos golden scenarios G1/G2/G3 |
-| Misconfiguration | Terraform valida configurações; SAST no CI; WAF com regras AWS Managed Rules |
-| XSS | Angular escapa automaticamente; Content-Security-Policy via CloudFront; HttpOnly cookies |
-| CSRF | SPA usa Bearer token (não cookies); sem formulário com cookie session |
-| Componentes vulneráveis | Dependabot no repositório; `npm audit` no CI; imagens Docker base atualizadas mensalmente |
-| Logging insuficiente | Logs estruturados JSON obrigatórios; `AuditInterceptor` em domínios sensíveis; alertas em CloudWatch |
+| Ameaça                       | Controle                                                                                                |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Injeção SQL                  | Queries parametrizadas (Prisma/TypeORM); FormulaCompiler gera SQL parametrizado (DSL nunca interpolada) |
+| Quebra de autenticação       | OAuth2 PKCE; tokens de curta duração (1h access, 24h refresh); logout revoga refresh token no Cognito   |
+| Exposição de dados sensíveis | TLS obrigatório; SSE-KMS; mascaramento de logs; campos `sigilo`                                         |
+| XXE                          | Parser XML eSocial com XXE desabilitado (feature `FEATURE_SECURE_PROCESSING`)                           |
+| Controle de acesso quebrado  | Guards multi-camadas; RLS no banco; testes de autorização nos golden scenarios G1/G2/G3                 |
+| Misconfiguration             | Terraform valida configurações; SAST no CI; WAF com regras AWS Managed Rules                            |
+| XSS                          | Angular escapa automaticamente; Content-Security-Policy via CloudFront; HttpOnly cookies                |
+| CSRF                         | SPA usa Bearer token (não cookies); sem formulário com cookie session                                   |
+| Componentes vulneráveis      | Dependabot no repositório; `npm audit` no CI; imagens Docker base atualizadas mensalmente               |
+| Logging insuficiente         | Logs estruturados JSON obrigatórios; `AuditInterceptor` em domínios sensíveis; alertas em CloudWatch    |
 
 ### 9.7 Auditoria de Segurança
 
@@ -1297,13 +1303,13 @@ Retenção: 5 anos (obrigação legal para folha pública). Partições antigas 
 
 ### 10.1 Objetivos de Performance
 
-| Métrica | Meta |
-|---|---|
-| Cálculo de folha mensal (100 k servidores) | < 30 minutos end-to-end |
-| Latência p95 de API (operações CRUD) | < 500 ms |
-| Latência p95 de geração de contracheque individual (PDF) | < 5 s |
-| Throughput API em pico (abertura de competência) | > 500 req/s |
-| Disponibilidade | 99,5% (SLA contratual mensal) |
+| Métrica                                                  | Meta                          |
+| -------------------------------------------------------- | ----------------------------- |
+| Cálculo de folha mensal (100 k servidores)               | < 30 minutos end-to-end       |
+| Latência p95 de API (operações CRUD)                     | < 500 ms                      |
+| Latência p95 de geração de contracheque individual (PDF) | < 5 s                         |
+| Throughput API em pico (abertura de competência)         | > 500 req/s                   |
+| Disponibilidade                                          | 99,5% (SLA contratual mensal) |
 
 ### 10.2 Estratégias de Escalabilidade
 
@@ -1422,16 +1428,16 @@ flowchart TB
 
 **Chaves de cache Redis por domínio:**
 
-| Chave Redis | TTL | Conteúdo |
-|---|---|---|
-| `tenant:{id}:parametros-sistema` | 5 min | ParametroSistema completo do tenant |
-| `tenant:{id}:parametros-globais` | 5 min | ParametroGlobal (TETO_INSS, SALARIO_MINIMO, etc.) |
-| `global:enums-catalogo:{tipo}` | 60 min | Lista enumerada completa (versionada) |
-| `tenant:{id}:feature-flags` | 5 min | Feature flags do tenant |
-| `formula:{id}:sql-compilado:{versao}` | 24h | SQL compilado da fórmula (invalidado na edição) |
-| `usuario:{id}:papeis` | 2 min | Lista de papéis RBAC do usuário |
-| `lock:folha:{folha_id}:calculo` | 30 min | Lock de cálculo de folha (SET NX EX) |
-| `lock:cron:{job-name}` | 5 min | Lock de job agendado (evita execução duplicada) |
+| Chave Redis                           | TTL    | Conteúdo                                          |
+| ------------------------------------- | ------ | ------------------------------------------------- |
+| `tenant:{id}:parametros-sistema`      | 5 min  | ParametroSistema completo do tenant               |
+| `tenant:{id}:parametros-globais`      | 5 min  | ParametroGlobal (TETO_INSS, SALARIO_MINIMO, etc.) |
+| `global:enums-catalogo:{tipo}`        | 60 min | Lista enumerada completa (versionada)             |
+| `tenant:{id}:feature-flags`           | 5 min  | Feature flags do tenant                           |
+| `formula:{id}:sql-compilado:{versao}` | 24h    | SQL compilado da fórmula (invalidado na edição)   |
+| `usuario:{id}:papeis`                 | 2 min  | Lista de papéis RBAC do usuário                   |
+| `lock:folha:{folha_id}:calculo`       | 30 min | Lock de cálculo de folha (SET NX EX)              |
+| `lock:cron:{job-name}`                | 5 min  | Lock de job agendado (evita execução duplicada)   |
 
 ---
 
@@ -1466,6 +1472,7 @@ Dados sensíveis (CPF, conta bancária, valores salariais) são mascarados antes
 OpenTelemetry SDK é inicializado em cada serviço NestJS, com exportador para AWS X-Ray. Cada requisição recebe um `traceId` propagado via headers HTTP (`X-Amzn-Trace-Id`) e mensagens SQS (atributo de mensagem). O X-Ray Service Map exibe o grafo de dependências completo, permitindo identificar gargalos e falhas em cascata.
 
 Spans customizados são criados para operações críticas:
+
 - Compilação de fórmula DSL → SQL.
 - Execução de cálculo de verba individual.
 - Chamada SOAP ao eSocial.
@@ -1473,21 +1480,22 @@ Spans customizados são criados para operações críticas:
 
 ### 11.3 Métricas de Negócio
 
-| Métrica | Frequência | Alerta |
-|---|---|---|
-| `folhas_fechadas_mes` | Mensal | — |
-| `contracheques_gerados` | Diário | — |
-| `esocial_eventos_pendentes` | Tempo real | > 50 eventos pendentes > 1h → alerta P2 |
-| `pericias_agendadas_hoje` | Diário | — |
-| `integracao_bancaria_falha_count` | Por remessa | > 0 falhas → alerta P1 |
-| `folha_calculo_duracao_minutos` | Por lote | > 120 min → alerta P1 (folha travada) |
-| `dlq_message_count` | Tempo real | > 0 mensagens → alerta P2 |
-| `rds_connections_count` | 1 min | > 80% do max → alerta P2 |
-| `redis_evictions` | 1 min | > 0 evictions → investigar |
+| Métrica                           | Frequência  | Alerta                                  |
+| --------------------------------- | ----------- | --------------------------------------- |
+| `folhas_fechadas_mes`             | Mensal      | —                                       |
+| `contracheques_gerados`           | Diário      | —                                       |
+| `esocial_eventos_pendentes`       | Tempo real  | > 50 eventos pendentes > 1h → alerta P2 |
+| `pericias_agendadas_hoje`         | Diário      | —                                       |
+| `integracao_bancaria_falha_count` | Por remessa | > 0 falhas → alerta P1                  |
+| `folha_calculo_duracao_minutos`   | Por lote    | > 120 min → alerta P1 (folha travada)   |
+| `dlq_message_count`               | Tempo real  | > 0 mensagens → alerta P2               |
+| `rds_connections_count`           | 1 min       | > 80% do max → alerta P2                |
+| `redis_evictions`                 | 1 min       | > 0 evictions → investigar              |
 
 ### 11.4 Health Checks e Readiness Probes
 
 Cada container ECS expõe:
+
 - `GET /api/v1/health` (liveness): retorna 200 se o processo está vivo (sem verificar dependências externas); falha reinicia o container.
 - `GET /api/v1/health/ready` (readiness): verifica conectividade com RDS (query `SELECT 1`) e Redis (`PING`); falha remove o container do target group do ALB até recuperação.
 
@@ -1508,7 +1516,7 @@ Cada container ECS expõe:
   "verbaDescricao": "Adicional Noturno",
   "formulaId": "f7a8b9c0-...",
   "durationMs": 3,
-  "valorCalculado": 412.50,
+  "valorCalculado": 412.5,
   "message": "Verba calculada com sucesso"
 }
 ```
@@ -1530,12 +1538,14 @@ flowchart LR
 ```
 
 **Alarmes P1 (críticos — acordo imediato):**
+
 - Folha em cálculo há mais de 2 horas sem progresso.
 - Falha de integração bancária (remessa não enviada).
 - RDS Primary unreachable.
 - DLQ com mensagens eSocial (implica eventos fiscais não enviados).
 
 **Alarmes P2 (atenção — próximas 4 horas):**
+
 - Fila eSocial com mais de 50 eventos pendentes há mais de 1 hora.
 - Error rate da API > 1% por 5 minutos.
 - Latência p95 da API > 2 s por 5 minutos.
@@ -1543,33 +1553,33 @@ flowchart LR
 
 ### 11.5.1 Matriz de Alertas por Serviço
 
-| Serviço | Condição | Severidade | Ação |
-|---|---|---|---|
-| `sgp-core-api` | Error rate 5xx > 1% por 5 min | P2 | Investigar logs CW; se persistir, rollback deploy |
-| `sgp-core-api` | Latência p95 > 2s por 5 min | P2 | Verificar RDS slow queries; Redis hit rate |
-| `sgp-payroll-engine` | Lote em EM_CALCULO > 120 min | P1 | Runbook folha travada (seção 12.4) |
-| `sgp-payroll-engine` | Task exit code != 0 | P1 | Logs CW; restart automático ECS |
-| `sgp-esocial-worker` | DLQ depth > 0 | P1 | Eventos fiscais não enviados; acionar operador |
-| `sgp-esocial-worker` | Fila pendente > 50 msgs por > 1h | P2 | Verificar conectividade com eSocial (SOAP) |
-| `sgp-integrations-worker` | Falha remessa bancária | P1 | Acionar operador financeiro; reprocessar |
-| `RDS Primary` | Unreachable / failover em andamento | P1 | RDS Multi-AZ: failover automático ~60s; monitorar |
-| `RDS Primary` | CPU > 80% por 10 min | P2 | Verificar slow queries; avaliar scale up |
-| `RDS Primary` | Connections > 85% do max | P2 | Verificar pool de conexões; reiniciar instâncias ECS |
-| `ElastiCache Redis` | Evictions > 0 | P2 | Aumentar memória ou revisar TTLs de cache |
-| `S3 Cross-region replication` | Lag > 30 min | P2 | Verificar replication rule; alerta de risco DR |
-| `Cognito` | Error rate > 5% por 3 min | P1 | Login indisponível; verificar UserPool status |
+| Serviço                       | Condição                            | Severidade | Ação                                                 |
+| ----------------------------- | ----------------------------------- | ---------- | ---------------------------------------------------- |
+| `sgp-core-api`                | Error rate 5xx > 1% por 5 min       | P2         | Investigar logs CW; se persistir, rollback deploy    |
+| `sgp-core-api`                | Latência p95 > 2s por 5 min         | P2         | Verificar RDS slow queries; Redis hit rate           |
+| `sgp-payroll-engine`          | Lote em EM_CALCULO > 120 min        | P1         | Runbook folha travada (seção 12.4)                   |
+| `sgp-payroll-engine`          | Task exit code != 0                 | P1         | Logs CW; restart automático ECS                      |
+| `sgp-esocial-worker`          | DLQ depth > 0                       | P1         | Eventos fiscais não enviados; acionar operador       |
+| `sgp-esocial-worker`          | Fila pendente > 50 msgs por > 1h    | P2         | Verificar conectividade com eSocial (SOAP)           |
+| `sgp-integrations-worker`     | Falha remessa bancária              | P1         | Acionar operador financeiro; reprocessar             |
+| `RDS Primary`                 | Unreachable / failover em andamento | P1         | RDS Multi-AZ: failover automático ~60s; monitorar    |
+| `RDS Primary`                 | CPU > 80% por 10 min                | P2         | Verificar slow queries; avaliar scale up             |
+| `RDS Primary`                 | Connections > 85% do max            | P2         | Verificar pool de conexões; reiniciar instâncias ECS |
+| `ElastiCache Redis`           | Evictions > 0                       | P2         | Aumentar memória ou revisar TTLs de cache            |
+| `S3 Cross-region replication` | Lag > 30 min                        | P2         | Verificar replication rule; alerta de risco DR       |
+| `Cognito`                     | Error rate > 5% por 3 min           | P1         | Login indisponível; verificar UserPool status        |
 
 ### 11.6 Dashboard Operacional
 
 O CloudWatch Dashboard principal do SGP exibe os seguintes painéis em tempo real:
 
-| Painel | Métricas exibidas |
-|---|---|
-| **Visão geral da API** | Request count, error rate (4xx/5xx), latência p50/p95/p99 por endpoint |
+| Painel                 | Métricas exibidas                                                                      |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| **Visão geral da API** | Request count, error rate (4xx/5xx), latência p50/p95/p99 por endpoint                 |
 | **Folha de Pagamento** | Folhas em cálculo, lotes concluídos hoje, contracheques gerados, duração média do lote |
-| **eSocial** | Eventos pendentes, aceitos, rejeitados, na DLQ; tempo médio de processamento |
-| **Infraestrutura** | CPU/Memória por ECS service, RDS connections, Redis hit rate, SQS depth por fila |
-| **Erros** | Top 10 erros por serviço (CloudWatch Logs Insights), taxa de erro por bounded context |
+| **eSocial**            | Eventos pendentes, aceitos, rejeitados, na DLQ; tempo médio de processamento           |
+| **Infraestrutura**     | CPU/Memória por ECS service, RDS connections, Redis hit rate, SQS depth por fila       |
+| **Erros**              | Top 10 erros por serviço (CloudWatch Logs Insights), taxa de erro por bounded context  |
 
 ---
 
@@ -1577,10 +1587,10 @@ O CloudWatch Dashboard principal do SGP exibe os seguintes painéis em tempo rea
 
 ### 12.1 Objetivos de Recuperação
 
-| Objetivo | Meta |
-|---|---|
-| **RPO** (Recovery Point Objective) | 1 hora |
-| **RTO** (Recovery Time Objective) | 4 horas |
+| Objetivo                           | Meta    |
+| ---------------------------------- | ------- |
+| **RPO** (Recovery Point Objective) | 1 hora  |
+| **RTO** (Recovery Time Objective)  | 4 horas |
 
 ### 12.2 Estratégias de Resiliência
 
@@ -1608,18 +1618,19 @@ flowchart LR
 **Circuit Breakers:**
 
 Implementados via biblioteca `nestjs-opossum` ou equivalente entre:
+
 - `sgp-core-api` → `sgp-payroll-engine` (API síncrona de cálculo pontual).
 - Workers → RDS (failover para read replica em leituras em caso de falha da primária).
 - `sgp-esocial-worker` → WebService eSocial (circuit breaker com half-open probe a cada 5 min).
 
 **Retry com Backoff Exponencial:**
 
-| Integração | Tentativas | Backoff | DLQ |
-|---|---|---|---|
-| eSocial (SOAP) | 3 | Exponencial (30s, 2min, 8min) | Sim |
-| Geração PDF | 3 | Linear (10s) | Sim |
-| Remessa bancária | 2 | Manual (requer operador) | Sim |
-| Eventos EventBridge internos | 3 | Automático (EventBridge retry policy) | Não (idempotente) |
+| Integração                   | Tentativas | Backoff                               | DLQ               |
+| ---------------------------- | ---------- | ------------------------------------- | ----------------- |
+| eSocial (SOAP)               | 3          | Exponencial (30s, 2min, 8min)         | Sim               |
+| Geração PDF                  | 3          | Linear (10s)                          | Sim               |
+| Remessa bancária             | 2          | Manual (requer operador)              | Sim               |
+| Eventos EventBridge internos | 3          | Automático (EventBridge retry policy) | Não (idempotente) |
 
 **Dead-Letter Queues:**
 
@@ -1708,12 +1719,12 @@ flowchart TB
 
 ## 13. Ambientes
 
-| Ambiente | Conta AWS | Banco | Dados | Propósito |
-|---|---|---|---|---|
-| **dev** | `sgp-dev` (conta isolada) | RDS compartilhado (t3.medium) | Sintéticos (seeds automatizados) | Desenvolvimento local integrado; branch por feature usando mesma conta |
-| **staging** | `sgp-staging` (conta isolada) | RDS dedicado (r6g.large) | Anonimizados (pipeline de sanitização a partir de dump hml) | Integração contínua; testes de contrato Pact; smoke tests automáticos pós-deploy |
-| **homologação (hml)** | `sgp-hml` (conta isolada) | RDS dedicado (r6g.xlarge) | Paridade com legado (dados reais anonimizados do cliente piloto) | Validação funcional pela equipe de produto; testes de regressão golden scenarios; validação de clientes |
-| **produção (prod)** | `sgp-prod` (conta isolada) | RDS Multi-AZ (r6g.2xlarge + read replicas) | Dados reais multi-tenant | Operação; SLA 99,5%; monitoramento 24×7 |
+| Ambiente              | Conta AWS                     | Banco                                      | Dados                                                            | Propósito                                                                                               |
+| --------------------- | ----------------------------- | ------------------------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **dev**               | `sgp-dev` (conta isolada)     | RDS compartilhado (t3.medium)              | Sintéticos (seeds automatizados)                                 | Desenvolvimento local integrado; branch por feature usando mesma conta                                  |
+| **staging**           | `sgp-staging` (conta isolada) | RDS dedicado (r6g.large)                   | Anonimizados (pipeline de sanitização a partir de dump hml)      | Integração contínua; testes de contrato Pact; smoke tests automáticos pós-deploy                        |
+| **homologação (hml)** | `sgp-hml` (conta isolada)     | RDS dedicado (r6g.xlarge)                  | Paridade com legado (dados reais anonimizados do cliente piloto) | Validação funcional pela equipe de produto; testes de regressão golden scenarios; validação de clientes |
+| **produção (prod)**   | `sgp-prod` (conta isolada)    | RDS Multi-AZ (r6g.2xlarge + read replicas) | Dados reais multi-tenant                                         | Operação; SLA 99,5%; monitoramento 24×7                                                                 |
 
 **Políticas por ambiente:**
 
@@ -1892,31 +1903,31 @@ Os módulos Terraform seguem o princípio de responsabilidade única. Cada módu
 
 **Módulo `rds` — variáveis principais:**
 
-| Variável | Tipo | Descrição |
-|---|---|---|
-| `environment` | string | dev, staging, hml, prod |
-| `instance_class` | string | db.r6g.large, db.r6g.xlarge, etc. |
-| `multi_az` | bool | true em prod e hml; false em dev/staging |
-| `backup_retention_days` | number | 7 (prod), 1 (dev) |
-| `deletion_protection` | bool | true em prod |
-| `replica_count` | number | 1 em prod (read replica) |
-| `parameter_group_family` | string | postgres16 |
-| `db_name` | string | sgp |
+| Variável                 | Tipo   | Descrição                                |
+| ------------------------ | ------ | ---------------------------------------- |
+| `environment`            | string | dev, staging, hml, prod                  |
+| `instance_class`         | string | db.r6g.large, db.r6g.xlarge, etc.        |
+| `multi_az`               | bool   | true em prod e hml; false em dev/staging |
+| `backup_retention_days`  | number | 7 (prod), 1 (dev)                        |
+| `deletion_protection`    | bool   | true em prod                             |
+| `replica_count`          | number | 1 em prod (read replica)                 |
+| `parameter_group_family` | string | postgres16                               |
+| `db_name`                | string | sgp                                      |
 
 **Módulo `ecs-service` — variáveis principais:**
 
-| Variável | Tipo | Descrição |
-|---|---|---|
-| `service_name` | string | sgp-core-api, sgp-payroll-engine, etc. |
-| `container_image` | string | ECR URI com tag |
-| `cpu` | number | 256, 512, 1024, 2048 (unidades Fargate) |
-| `memory` | number | 512, 1024, 2048, 4096 MB |
-| `min_capacity` | number | Mínimo de tasks |
-| `max_capacity` | number | Máximo de tasks |
-| `scaling_metric` | string | cpu, sqs-depth |
-| `scaling_target_value` | number | 70 (CPU%), 100 (SQS msgs) |
-| `secrets_arns` | list(string) | ARNs do Secrets Manager a injetar |
-| `environment_vars` | map(string) | Variáveis não-sensíveis |
+| Variável               | Tipo         | Descrição                               |
+| ---------------------- | ------------ | --------------------------------------- |
+| `service_name`         | string       | sgp-core-api, sgp-payroll-engine, etc.  |
+| `container_image`      | string       | ECR URI com tag                         |
+| `cpu`                  | number       | 256, 512, 1024, 2048 (unidades Fargate) |
+| `memory`               | number       | 512, 1024, 2048, 4096 MB                |
+| `min_capacity`         | number       | Mínimo de tasks                         |
+| `max_capacity`         | number       | Máximo de tasks                         |
+| `scaling_metric`       | string       | cpu, sqs-depth                          |
+| `scaling_target_value` | number       | 70 (CPU%), 100 (SQS msgs)               |
+| `secrets_arns`         | list(string) | ARNs do Secrets Manager a injetar       |
+| `environment_vars`     | map(string)  | Variáveis não-sensíveis                 |
 
 **Módulo `s3-tenant-bucket` — comportamento:**
 
@@ -1938,49 +1949,49 @@ A segurança do pipeline CI/CD segue os princípios:
 
 As decisões a seguir são conhecidas e deliberadamente adiadas para fases posteriores do produto. Cada item deve ser formalizado em um ADR quando a decisão for tomada.
 
-| # | Tema | Status | Contexto |
-|---|---|---|---|
-| 1 | **Migração Cognito → Keycloak** | Em avaliação | Se vários clientes demandarem customização avançada de fluxos de autenticação, MFA hardware ou integração com AD/LDAP corporativo, Keycloak oferece maior flexibilidade. Custo operacional adicional de gestão. ADR pendente. |
-| 2 | **Multi-região ativa-ativa** | Roadmap futuro | Atualmente DR passiva (us-east-1 warm standby). Multi-região ativa-ativa com Aurora Global Database reduziria RTO para < 1 min mas eleva custo e complexidade de replicação de eventos. Avaliar quando base de clientes justificar. |
-| 3 | **ORM — Prisma vs TypeORM** | Pendente ADR | Ambos suportados no stack NestJS. Prisma oferece type-safety superior e migrations; TypeORM tem suporte maduro a herança de entidades. Decisão antes do início da implementação dos primeiros módulos. |
-| 4 | **State Management Angular — NgRx Signal Store vs Akita** | Pendente ADR | Signal Store é mais moderno e alinhado ao futuro do Angular (signals); Akita tem maior maturidade e adoção. Decisão antes da implementação do primeiro módulo frontend. |
-| 5 | **ECS Fargate vs EKS** | ECS Fargate por padrão | Fargate elimina gestão de nodes. EKS avaliado se houver necessidade de scheduling customizado (ex.: GPU para modelos de ML em análise de perícia futura), multi-tenancy de namespace, ou redução de custo em escala muito alta. |
-| 6 | **Gov.br SSO (fase 2)** | Planejado (não implementado no MVP) | Federação OIDC do Gov.br como IdP externo no Cognito. Depende de aprovação de integrador Gov.br e certificação. Feature flag `GOV_BR_SSO_ENABLED` já prevista. |
-| 7 | **Prova de Vida via API Pública** | Planejado (feature flag off) | `PROVA_VIDA_PUBLIC_API_ENABLED` — permite que prefeitura parceira envie confirmação de prova de vida via API REST sem passar pelo portal. Requer definição de contrato e autenticação OAuth2 client-credentials do parceiro. |
-| 8 | **Motor de fórmulas avançado (interpretador nativo)** | Avaliação futura | O FormulaCompiler atual compila DSL para SQL. Se fórmulas complexas exigirem lógica imperativa (loops, condicionais multi-nível), avaliar interpretador TypeScript nativo ou migração parcial para Lua/WASM. |
-| 9 | **Particionamento de tenant por schema** | Descartado para MVP | Schema-per-tenant oferece isolamento forte mas dificulta migrações e impede pooling de conexões. RLS row-level é o modelo adotado; revisar se surgirem requisitos de compliance que exijam isolamento absoluto de schema. |
-| 10 | **Módulo de BI / OLAP** | Roadmap futuro | As consultas gerenciais atuais operam sobre o OLTP. Para dashboards analíticos históricos (ex.: evolução da folha por 10 anos), avaliar DataLake S3 + Amazon Athena ou Redshift, alimentado por Change Data Capture (Debezium) a partir do RDS. |
-| 11 | **Portal Transparência — API em tempo real** | Roadmap futuro | Atualmente exportação CSV agendada. Avaliar API REST pública para consulta em tempo real de salários (Lei de Acesso à Informação) com cache CloudFront agressivo. |
-| 12 | **Certificado eSocial A3 (HSM)** | Dependente de cliente | Certificados A3 em HSM requerem integração com provider (ex.: Safenet / Thales). Para MVP, suporte apenas a A1 (PKCS#12 armazenado no Secrets Manager com rotação anual). |
+| #   | Tema                                                      | Status                              | Contexto                                                                                                                                                                                                                                        |
+| --- | --------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Migração Cognito → Keycloak**                           | Em avaliação                        | Se vários clientes demandarem customização avançada de fluxos de autenticação, MFA hardware ou integração com AD/LDAP corporativo, Keycloak oferece maior flexibilidade. Custo operacional adicional de gestão. ADR pendente.                   |
+| 2   | **Multi-região ativa-ativa**                              | Roadmap futuro                      | Atualmente DR passiva (us-east-1 warm standby). Multi-região ativa-ativa com Aurora Global Database reduziria RTO para < 1 min mas eleva custo e complexidade de replicação de eventos. Avaliar quando base de clientes justificar.             |
+| 3   | **ORM — Prisma vs TypeORM**                               | Pendente ADR                        | Ambos suportados no stack NestJS. Prisma oferece type-safety superior e migrations; TypeORM tem suporte maduro a herança de entidades. Decisão antes do início da implementação dos primeiros módulos.                                          |
+| 4   | **State Management Angular — NgRx Signal Store vs Akita** | Pendente ADR                        | Signal Store é mais moderno e alinhado ao futuro do Angular (signals); Akita tem maior maturidade e adoção. Decisão antes da implementação do primeiro módulo frontend.                                                                         |
+| 5   | **ECS Fargate vs EKS**                                    | ECS Fargate por padrão              | Fargate elimina gestão de nodes. EKS avaliado se houver necessidade de scheduling customizado (ex.: GPU para modelos de ML em análise de perícia futura), multi-tenancy de namespace, ou redução de custo em escala muito alta.                 |
+| 6   | **Gov.br SSO (fase 2)**                                   | Planejado (não implementado no MVP) | Federação OIDC do Gov.br como IdP externo no Cognito. Depende de aprovação de integrador Gov.br e certificação. Feature flag `GOV_BR_SSO_ENABLED` já prevista.                                                                                  |
+| 7   | **Prova de Vida via API Pública**                         | Planejado (feature flag off)        | `PROVA_VIDA_PUBLIC_API_ENABLED` — permite que prefeitura parceira envie confirmação de prova de vida via API REST sem passar pelo portal. Requer definição de contrato e autenticação OAuth2 client-credentials do parceiro.                    |
+| 8   | **Motor de fórmulas avançado (interpretador nativo)**     | Avaliação futura                    | O FormulaCompiler atual compila DSL para SQL. Se fórmulas complexas exigirem lógica imperativa (loops, condicionais multi-nível), avaliar interpretador TypeScript nativo ou migração parcial para Lua/WASM.                                    |
+| 9   | **Particionamento de tenant por schema**                  | Descartado para MVP                 | Schema-per-tenant oferece isolamento forte mas dificulta migrações e impede pooling de conexões. RLS row-level é o modelo adotado; revisar se surgirem requisitos de compliance que exijam isolamento absoluto de schema.                       |
+| 10  | **Módulo de BI / OLAP**                                   | Roadmap futuro                      | As consultas gerenciais atuais operam sobre o OLTP. Para dashboards analíticos históricos (ex.: evolução da folha por 10 anos), avaliar DataLake S3 + Amazon Athena ou Redshift, alimentado por Change Data Capture (Debezium) a partir do RDS. |
+| 11  | **Portal Transparência — API em tempo real**              | Roadmap futuro                      | Atualmente exportação CSV agendada. Avaliar API REST pública para consulta em tempo real de salários (Lei de Acesso à Informação) com cache CloudFront agressivo.                                                                               |
+| 12  | **Certificado eSocial A3 (HSM)**                          | Dependente de cliente               | Certificados A3 em HSM requerem integração com provider (ex.: Safenet / Thales). Para MVP, suporte apenas a A1 (PKCS#12 armazenado no Secrets Manager com rotação anual).                                                                       |
 
 ### 15.0 Matriz de Decisões Arquiteturais (ADRs Concluídos)
 
 Os itens a seguir foram decididos formalmente e não estão mais em aberto. Cada um deve ter um ADR correspondente criado em `adr/`:
 
-| # | Decisão | Status | ADR |
-|---|---|---|---|
-| AD-001 | Multi-tenancy por RLS (não por schema) | Aprovado | `adr/0001-multitenancy-rls.md` |
-| AD-002 | Motor de fórmulas via SQL compilado (DSL → SQL) | Aprovado | `adr/0002-formula-engine-sql.md` |
-| AD-003 | AWS Cognito como IdP principal (OAuth2/OIDC) | Aprovado | `adr/0003-cognito-idp.md` |
-| AD-004 | S3 exclusivo para armazenamento de arquivos | Aprovado | `adr/0004-s3-file-storage.md` |
-| AD-005 | eSocial apenas leiaute S-1.2 no MVP | Aprovado | `adr/0005-esocial-s12.md` |
-| AD-006 | sgp-payroll-engine como microsserviço separado | Aprovado | `adr/0006-payroll-microservice.md` |
-| AD-007 | Auditoria somente em domínios sensíveis | Aprovado | `adr/0007-auditoria-seletiva.md` |
-| AD-008 | Particionamento de contracheque/lancamento por competência | Aprovado | `adr/0008-particao-folha.md` |
-| AD-009 | ECS Fargate como runtime padrão (não EKS no MVP) | Aprovado | `adr/0009-ecs-fargate.md` |
-| AD-010 | Step Functions para orquestração de folha e eSocial | Aprovado | `adr/0010-step-functions.md` |
+| #      | Decisão                                                    | Status   | ADR                                |
+| ------ | ---------------------------------------------------------- | -------- | ---------------------------------- |
+| AD-001 | Multi-tenancy por RLS (não por schema)                     | Aprovado | `adr/0001-multitenancy-rls.md`     |
+| AD-002 | Motor de fórmulas via SQL compilado (DSL → SQL)            | Aprovado | `adr/0002-formula-engine-sql.md`   |
+| AD-003 | AWS Cognito como IdP principal (OAuth2/OIDC)               | Aprovado | `adr/0003-cognito-idp.md`          |
+| AD-004 | S3 exclusivo para armazenamento de arquivos                | Aprovado | `adr/0004-s3-file-storage.md`      |
+| AD-005 | eSocial apenas leiaute S-1.2 no MVP                        | Aprovado | `adr/0005-esocial-s12.md`          |
+| AD-006 | sgp-payroll-engine como microsserviço separado             | Aprovado | `adr/0006-payroll-microservice.md` |
+| AD-007 | Auditoria somente em domínios sensíveis                    | Aprovado | `adr/0007-auditoria-seletiva.md`   |
+| AD-008 | Particionamento de contracheque/lancamento por competência | Aprovado | `adr/0008-particao-folha.md`       |
+| AD-009 | ECS Fargate como runtime padrão (não EKS no MVP)           | Aprovado | `adr/0009-ecs-fargate.md`          |
+| AD-010 | Step Functions para orquestração de folha e eSocial        | Aprovado | `adr/0010-step-functions.md`       |
 
 ### 15.1 Impactos e Dependências das Decisões em Aberto
 
 Cada decisão pendente tem impacto direto em artefatos de documentação e código ainda não finalizados:
 
-| Decisão | Artefatos bloqueados | Decisão necessária até |
-|---|---|---|
-| ORM (Prisma vs TypeORM) | DDL físico, módulo `infrastructure/database`, convenção de migrations | Sprint 1 de implementação |
-| State Management Angular | Arquitetura de módulo frontend, lib `@sgp/shared-state` | Sprint 1 de implementação frontend |
-| ECS Fargate vs EKS | `infra/modules/ecs/` vs `infra/modules/eks/`; pipeline de deploy | Sprint 0 de infra |
-| Gov.br SSO | `AuthModule`, fluxo de federação Cognito, testes de integração | Aprovação Gov.br (externo) |
-| Prisma Migrate vs Flyway | Pipeline CI migration step, naming conventions, rollback scripts | Sprint 0 de infra |
+| Decisão                  | Artefatos bloqueados                                                  | Decisão necessária até             |
+| ------------------------ | --------------------------------------------------------------------- | ---------------------------------- |
+| ORM (Prisma vs TypeORM)  | DDL físico, módulo `infrastructure/database`, convenção de migrations | Sprint 1 de implementação          |
+| State Management Angular | Arquitetura de módulo frontend, lib `@sgp/shared-state`               | Sprint 1 de implementação frontend |
+| ECS Fargate vs EKS       | `infra/modules/ecs/` vs `infra/modules/eks/`; pipeline de deploy      | Sprint 0 de infra                  |
+| Gov.br SSO               | `AuthModule`, fluxo de federação Cognito, testes de integração        | Aprovação Gov.br (externo)         |
+| Prisma Migrate vs Flyway | Pipeline CI migration step, naming conventions, rollback scripts      | Sprint 0 de infra                  |
 
 ### 15.2 Roadmap Técnico Resumido
 
@@ -2015,4 +2026,4 @@ gantt
 
 ---
 
-*Fim do documento. Próximos artefatos relacionados: `42-modelo-dados-fisico.md` (DDL PostgreSQL por bounded context), `43-especificacao-api-openapi.md` (OpenAPI 3.1 completo), `adr/0001-orm-prisma-vs-typeorm.md`.*
+_Fim do documento. Próximos artefatos relacionados: `42-modelo-dados-fisico.md` (DDL PostgreSQL por bounded context), `43-especificacao-api-openapi.md` (OpenAPI 3.1 completo), `adr/0001-orm-prisma-vs-typeorm.md`._

@@ -6,8 +6,8 @@
   "authority": {
     "productAndEngineering": "docs/eng",
     "payrollEngine": "folia-first",
-    "legacySchemaReference": "docs/sql-reference",
-    "reverseEvidenceArchive": "docs/legacy-reverse"
+    "legacySchemaReference": "docs/leg/sql-reference",
+    "reverseEvidenceArchive": "docs/leg/rev-eng"
   },
   "authoritativeDocs": [
     "docs/eng/README.md",
@@ -22,8 +22,8 @@
   "generatedSurfaces": [
     "docs/eng/69-api-route-alignment.json",
     "docs/eng/64-database-alignment-matrix.json",
-    "docs/governance/runtime-topology.json",
-    "docs/governance/governance-manifest.json"
+    "docs/gov/runtime-topology.json",
+    "docs/gov/governance-manifest.json"
   ],
   "hardFailGates": [
     {

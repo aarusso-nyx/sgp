@@ -1,4 +1,5 @@
 # Escopo e Decisões de Arquitetura — SGP Moderno
+
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
 **Escopo:** transversal (todas as decisões de produto e arquitetura) | **Depende de:** BRIEF.md, 00-visao-produto-glossario.md
 
@@ -26,18 +27,18 @@ As dez decisões a seguir foram aprovadas pelo product owner e são **imutáveis
 
 ### Tabela Resumo
 
-| # | Tema | Decisão |
-|---|---|---|
-| 1 | Multi-tenancy | SaaS multi-tenant com `tenant_id` em todas as tabelas; PostgreSQL Row-Level Security obrigatória |
-| 2 | Motor de folha | Implementação separada `sgp-payroll-engine`, acionável por cron e requisição, com progresso de lote/in-lote e camada fina sobre rotinas `plpgsql` parametrizadas |
-| 3 | Escopo de domínios | Todos os 11 menus de 1º nível cobertos em profundidade equivalente ao legado |
-| 4 | Autenticação / SSO | Alvo futuro OAuth2/OIDC com user pools separados; fluxos OAuth/Cognito/Gov.br ficam em instalação posterior |
-| 5 | Portal do Funcionário | Aplicação separada (`sgp-portal-ui` + `sgp-portal-api`), backend próprio, acesso read-only ao banco com menor privilégio |
-| 6 | Armazenamento de arquivos | S3 real em produção/homologação; MiniIO em Docker permitido em testes sem S3 configurado |
-| 7 | eSocial | Apenas leiaute S-1.2; adapter stub/sandbox no pacote atual; envio real futuro |
-| 8 | Motor de fórmulas de verbas | SQL-based: DSL declarativa compilada para SQL parametrizado no momento do cálculo |
-| 9 | Auditoria | Somente em domínios sensíveis; tabela única `audit_log` com diff JSONB |
-| 10 | i18n / Terminologia | `termo_funcionario` como chave de i18n; pt-BR único idioma no MVP |
+| #   | Tema                        | Decisão                                                                                                                                                          |
+| --- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Multi-tenancy               | SaaS multi-tenant com `tenant_id` em todas as tabelas; PostgreSQL Row-Level Security obrigatória                                                                 |
+| 2   | Motor de folha              | Implementação separada `sgp-payroll-engine`, acionável por cron e requisição, com progresso de lote/in-lote e camada fina sobre rotinas `plpgsql` parametrizadas |
+| 3   | Escopo de domínios          | Todos os 11 menus de 1º nível cobertos em profundidade equivalente ao legado                                                                                     |
+| 4   | Autenticação / SSO          | Alvo futuro OAuth2/OIDC com user pools separados; fluxos OAuth/Cognito/Gov.br ficam em instalação posterior                                                      |
+| 5   | Portal do Funcionário       | Aplicação separada (`sgp-portal-ui` + `sgp-portal-api`), backend próprio, acesso read-only ao banco com menor privilégio                                         |
+| 6   | Armazenamento de arquivos   | S3 real em produção/homologação; MiniIO em Docker permitido em testes sem S3 configurado                                                                         |
+| 7   | eSocial                     | Apenas leiaute S-1.2; adapter stub/sandbox no pacote atual; envio real futuro                                                                                    |
+| 8   | Motor de fórmulas de verbas | SQL-based: DSL declarativa compilada para SQL parametrizado no momento do cálculo                                                                                |
+| 9   | Auditoria                   | Somente em domínios sensíveis; tabela única `audit_log` com diff JSONB                                                                                           |
+| 10  | i18n / Terminologia         | `termo_funcionario` como chave de i18n; pt-BR único idioma no MVP                                                                                                |
 
 ---
 
@@ -48,6 +49,7 @@ As dez decisões a seguir foram aprovadas pelo product owner e são **imutáveis
 **Contexto:** O legado implementa multi-tenancy por schema isolado (um schema PostgreSQL ou banco SQL Server por cliente). Esse modelo tem custo operacional alto: cada novo cliente exige DDL de schema inteiro, as migrations precisam ser rodadas N vezes (uma por tenant), índices e estatísticas ficam fragmentados, e conexões de pool aumentam proporcionalmente ao número de clientes. Com dezenas de prefeituras, o modelo legado se torna inviável.
 
 **Justificativa:**
+
 - **Row-level isolation** permite que todos os tenants compartilhem a mesma instância RDS Multi-AZ, reduzindo custo de infra em até 70% comparado a schemas isolados.
 - **PostgreSQL RLS** é o mecanismo de banco que garante isolamento mesmo se um bug de aplicação não filtrar `tenant_id` — a política de banco é a última linha de defesa.
 - **Migrations únicas:** com Flyway/Prisma Migrate, uma única migration é aplicada a todos os tenants simultaneamente, eliminando deriva de schema.
@@ -55,6 +57,7 @@ As dez decisões a seguir foram aprovadas pelo product owner e são **imutáveis
 - Dados de um tenant nunca aparecem em queries de outro tenant, verificável por teste de contrato (`Pact`).
 
 **Consequências e restrições:**
+
 - Nenhuma tabela de negócio pode existir sem `tenant_id` (verificado por linter de migration).
 - Relatórios cross-tenant (ex.: consolidado de todos os entes para o fornecedor do SaaS) usam conta AWS separada com acesso read-only via AWS DMS/replicação.
 - Backup por tenant é implementado via tag S3 + snapshot RDS filtrado por `tenant_id` em scripts de restore.
@@ -68,6 +71,7 @@ As dez decisões a seguir foram aprovadas pelo product owner e são **imutáveis
 **Contexto:** O legado calcula folha diretamente no monólito, misturando lógica de negócio com chamadas de banco e procedimentos SQL. Isso torna impossível escalar o cálculo independentemente do restante da aplicação, gera timeouts em competências com muitos servidores e impede testes unitários isolados das regras de cálculo.
 
 **Justificativa:**
+
 - **Escala independente:** a engine pode escalar e ser implantada separadamente sem degradar o backend REST administrativo.
 - **Execução operacional flexível:** suporta fechamento automático por agenda e execução sob demanda por ação de usuário/sistema.
 - **Visibilidade de execução:** progresso de lote e in-lote alimenta interfaces sem polling pesado no backend principal.
@@ -75,6 +79,7 @@ As dez decisões a seguir foram aprovadas pelo product owner e são **imutáveis
 - **Camada de gestão mínima:** orchestration e observabilidade ficam na aplicação; regras matemáticas e agregações ficam no banco.
 
 **Comunicação:**
+
 ```mermaid
 sequenceDiagram
     participant SCHED as Cron/Scheduler
@@ -103,6 +108,7 @@ sequenceDiagram
 **Contexto:** Houve debate sobre priorizar apenas Módulo RH + Folha no MVP e deixar Previdenciário, Perícia e Recrutamento para fases posteriores. Essa abordagem foi rejeitada porque clientes do legado utilizam os 11 módulos em operação diária — uma migração parcial obrigaria a manutenção simultânea de dois sistemas por prazo indeterminado.
 
 **Justificativa:**
+
 - Paridade total elimina o risco de dupla operação (legado + novo) que gera inconsistência de dados e custo operacional dobrado.
 - Os 11 bounded contexts são suficientemente isolados para serem desenvolvidos em paralelo por times diferentes.
 - Os golden scenarios (ver seção BRIEF §10) cobrem os fluxos críticos de todos os módulos.
@@ -117,6 +123,7 @@ sequenceDiagram
 **Contexto:** O legado usa session-based authentication com uma API-key proprietária (`SGP-API-KEY`) para sistemas externos. Não há SSO, não há MFA padronizado e a gestão de usuários é acoplada ao banco de dados da aplicação.
 
 **Justificativa:**
+
 - **Separação de blast radius:** incidente de autenticação no portal não contamina autenticação administrativa do core.
 - **Políticas diferentes por população:** MFA, ciclo de senha, lockout e políticas de risco podem divergir entre staff e employees.
 - **Client-credentials flow** para sistemas externos é auditável, revogável e elimina API-keys proprietárias.
@@ -124,6 +131,7 @@ sequenceDiagram
 - **Integração com IdP externo** (ex.: Gov.br) pode existir no pool do portal sem impactar o pool do core.
 
 **Fluxo de autenticação back-office:**
+
 ```mermaid
 sequenceDiagram
     participant U as Usuário (back-office)
@@ -152,6 +160,7 @@ sequenceDiagram
 **Contexto:** No legado, o portal do servidor é uma seção dentro da mesma aplicação administrativa, com controle de acesso frágil baseado em roles. Isso cria risco de exposição de dados sensíveis e dificulta customização da experiência do usuário final.
 
 **Justificativa:**
+
 - **Separação real de aplicação:** portal não compartilha processo backend com core administrativo.
 - **Privilégio mínimo de banco:** `sgp-portal-api` opera com role read-only e acesso restrito a objetos publicados para portal.
 - **Userpool separado:** autenticação de employees não compartilha superfície de identidade com staff.
@@ -166,6 +175,7 @@ sequenceDiagram
 **Contexto:** O legado armazena arquivos em sistema de arquivos local do servidor de aplicação, criando dependência de volume compartilhado (NFS) em ambientes com múltiplas instâncias, risco de perda em restart de containers e impossibilidade de controle de acesso por tenant.
 
 **Justificativa:**
+
 - **Isolamento por tenant:** cada tenant tem bucket próprio (ou prefixo de bucket com política de bucket policy por `tenant_id`), garantindo que arquivos de um ente não sejam acessíveis a outro.
 - **SSE-KMS:** cifragem em repouso com chave KMS por tenant — atende requisitos de LGPD para dados sensíveis (laudos médicos, dados de folha).
 - **Versionamento:** habilitado para buckets de documentos oficiais; permite auditoria de versões anteriores de contracheques e laudos.
@@ -173,6 +183,7 @@ sequenceDiagram
 - **Presigned URLs:** o backend não serve arquivos diretamente — emite presigned URLs com TTL curto (15 minutos), eliminando o custo de transferência pelo Fargate.
 
 **Convenção de chave S3:**
+
 ```
 {tenant_id}/outputs/{dominio}/{ano}/{mes}/{entidade_id}.{ext}
 {tenant_id}/inputs/{dominio}/{ano}/{mes}/{arquivo_original}
@@ -188,12 +199,14 @@ sequenceDiagram
 **Contexto:** O legado suporta o leiaute S-1.0, que está em processo de descontinuação pelo Governo Federal. Manter compatibilidade com múltiplos leiautes aumentaria o custo de manutenção e o risco de inconsistência.
 
 **Justificativa:**
+
 - **S-1.2 é o leiaute ativo e obrigatório** para entes do setor público a partir dos prazos estabelecidos pelo Governo Federal; suportar S-1.0 apenas adicionaria débito técnico.
 - **Lambda + Step Functions** torna o envio resiliente: retry automático com backoff exponencial até 3 tentativas, rastreabilidade de cada evento (estado: gerado, assinado, enviado, recibo confirmado).
 - **Eventos cobertos:** S-1000 (empregador), S-1005 (tabela de estabelecimentos), S-1010 (tabela de rubricas), S-1020 (tabela de lotações), S-1030 (tabela de cargos), S-1035 (cargos públicos), S-1040 (funções), S-1050 (horários), S-1060 (ambientes), S-1070 (processos adm./judicial), S-1080 (operadores portuários), S-2xxx (eventos não-periódicos), S-3xxx (exclusões).
 - **Feature flag `esocial.enabled`:** permite habilitar/desabilitar o módulo por tenant sem redeploy, facilitando implantação faseada.
 
 **Fluxo de envio:**
+
 ```mermaid
 stateDiagram-v2
     [*] --> GERADO : evento criado na aplicação
@@ -215,6 +228,7 @@ stateDiagram-v2
 **Contexto:** O legado implementa fórmulas como código Java/Groovy interpretado, o que torna a manutenção arriscada (scripts podem executar código arbitrário), impede validação estática e dificulta auditoria. A alternativa de reescrever em Turing-complete (ex.: JavaScript sandbox) foi considerada e descartada por risco de performance e segurança.
 
 **Justificativa:**
+
 - **Segurança por design:** a DSL é não-Turing-complete — não permite loops, recursão nem acesso a sistemas externos. O compilador rejeita qualquer expressão fora do subconjunto permitido.
 - **Performance:** expressões SQL executadas diretamente no PostgreSQL aproveitam índices, estatísticas e paralelismo do banco — mais eficiente que loops em aplicação para N servidores.
 - **Transparência:** `memoria_calculo JSONB` no lançamento registra cada variável (`atributo_formula`) e seu valor no momento do cálculo, permitindo auditoria linha a linha do contracheque.
@@ -240,6 +254,7 @@ SQL:    SELECT f.nivel_salarial_valor * (t.dias_trab / t.dias_mes)
 **Contexto:** Auditar 100% das operações de todos os módulos geraria volume de dados excessivo, degradaria performance de escrita e tornaria inviável a análise humana dos registros. A decisão é fazer auditoria seletiva e rica (diff de estado) em vez de auditoria exaustiva e rasa (apenas log de acesso).
 
 **Justificativa:**
+
 - **Conformidade LGPD:** dados sensíveis de folha (rendimentos, descontos, situação previdenciária) e dados médicos (CID, laudos) requerem trilha rastreável de acesso e modificação.
 - **Diff JSONB:** registrar antes/depois em JSON permite reconstruir o histórico exato de qualquer entidade auditada sem consultar tabelas de negócio.
 - **Particionamento:** `audit_log` particionado por `(tenant_id, ano, mes)` mantém queries ágeis mesmo com bilhões de registros acumulados ao longo de anos.
@@ -255,6 +270,7 @@ SQL:    SELECT f.nivel_salarial_valor * (t.dias_trab / t.dias_mes)
 **Contexto:** Entes públicos usam termos diferentes para seus trabalhadores: prefeituras falam "servidor", câmaras falam "vereador" ou "funcionário", empresas mistas falam "colaborador". O legado resolve isso com parametrização de label, mantida como chave de sistema. A pedido do product owner, i18n completo para outros idiomas (espanhol, inglês) foi descartado do MVP por custo/benefício.
 
 **Justificativa:**
+
 - **Custo de i18n completo:** traduzir 11 módulos com centenas de labels, mensagens de erro e relatórios para múltiplos idiomas representa esforço desproporcionalmente alto para um produto de mercado interno brasileiro.
 - **Terminologia variável é suficiente:** a única variação real entre tenants é o nome do trabalhador — não a língua. Resolver só isso tem custo mínimo e valor máximo.
 - **Angular i18n:** `@angular/localize` com chave única `{{ termoFuncionario }}` interpolada em todos os componentes que exibam esse label.
@@ -269,6 +285,7 @@ SQL:    SELECT f.nivel_salarial_valor * (t.dias_trab / t.dias_mes)
 **Contexto:** Esses blocos não são diferenciais de domínio do SGP e já possuem implementação institucional mantida por equipe dedicada.
 
 **Justificativa:**
+
 - **Foco no domínio:** times SGP concentram esforço em RH/Folha/Previdência e paridade com legado.
 - **Padronização corporativa:** mecanismos de identidade e autorização ficam consistentes entre produtos internos.
 - **Menor custo de manutenção local:** o core não reimplementa funcionalidades transversais já maduras.
@@ -279,87 +296,87 @@ SQL:    SELECT f.nivel_salarial_valor * (t.dias_trab / t.dias_mes)
 
 ### Backend
 
-| Componente | Tecnologia | Versão mínima | Justificativa |
-|---|---|---|---|
-| Runtime | Node.js | 20 LTS | Suporte LTS ativo; compatível com NestJS e dependências |
-| Framework | NestJS (TypeScript) | 10.x | Modular, decorators, DI nativo, OpenAPI integrado, guards composáveis |
-| Linguagem | TypeScript | 5.x | Tipagem forte; fundamental para DSL/motor de fórmulas |
-| ORM / Query Builder | Prisma OU TypeORM | Prisma 5.x / TypeORM 0.3.x | Decidir em ADR-0002; Prisma preferido por migrations versionadas e type-safety |
-| Banco de dados | PostgreSQL | 16+ | RLS, JSONB, particionamento, pg_trgm, paralelismo de queries |
-| Mensageria | AWS SQS + SNS + EventBridge | — | Fanout, dead-letter queues, retry gerenciado |
-| Cache | AWS ElastiCache (Redis) | 7.x | Cache de parâmetros de sistema, sessões, rate limiting |
-| Geração de PDF | Puppeteer (headless Chrome) | — | Templates Handlebars renderizados server-side |
-| Validação | class-validator + class-transformer | — | DTOs com decorators; integrado ao NestJS Pipes |
-| Documentação API | @nestjs/swagger (OpenAPI 3.1) | — | Gerado automaticamente dos decorators |
-| Testes unitários | Jest | 29.x | Padrão NestJS; mocks, coverage, snapshot |
-| Testes de contrato | Pact | 12.x | Garantia de compatibilidade entre `sgp-core-api` e `sgp-payroll-engine` |
+| Componente          | Tecnologia                          | Versão mínima              | Justificativa                                                                  |
+| ------------------- | ----------------------------------- | -------------------------- | ------------------------------------------------------------------------------ |
+| Runtime             | Node.js                             | 20 LTS                     | Suporte LTS ativo; compatível com NestJS e dependências                        |
+| Framework           | NestJS (TypeScript)                 | 10.x                       | Modular, decorators, DI nativo, OpenAPI integrado, guards composáveis          |
+| Linguagem           | TypeScript                          | 5.x                        | Tipagem forte; fundamental para DSL/motor de fórmulas                          |
+| ORM / Query Builder | Prisma OU TypeORM                   | Prisma 5.x / TypeORM 0.3.x | Decidir em ADR-0002; Prisma preferido por migrations versionadas e type-safety |
+| Banco de dados      | PostgreSQL                          | 16+                        | RLS, JSONB, particionamento, pg_trgm, paralelismo de queries                   |
+| Mensageria          | AWS SQS + SNS + EventBridge         | —                          | Fanout, dead-letter queues, retry gerenciado                                   |
+| Cache               | AWS ElastiCache (Redis)             | 7.x                        | Cache de parâmetros de sistema, sessões, rate limiting                         |
+| Geração de PDF      | Puppeteer (headless Chrome)         | —                          | Templates Handlebars renderizados server-side                                  |
+| Validação           | class-validator + class-transformer | —                          | DTOs com decorators; integrado ao NestJS Pipes                                 |
+| Documentação API    | @nestjs/swagger (OpenAPI 3.1)       | —                          | Gerado automaticamente dos decorators                                          |
+| Testes unitários    | Jest                                | 29.x                       | Padrão NestJS; mocks, coverage, snapshot                                       |
+| Testes de contrato  | Pact                                | 12.x                       | Garantia de compatibilidade entre `sgp-core-api` e `sgp-payroll-engine`        |
 
 ### Frontend
 
-| Componente | Tecnologia | Versão mínima | Justificativa |
-|---|---|---|---|
-| Framework | Angular | última LTS (18.x+) | Standalone components, signals, SSR, enterprise-grade |
-| Linguagem | TypeScript | 5.x | Consistência com backend |
-| Monorepo | Nx | 19.x | Lazy loading, libs compartilhadas (`@sgp/*`), build cache, affected builds |
-| State management | NgRx Signal Store OU Akita | — | Decidir em ADR-0003; Signal Store preferido por integração nativa com signals |
-| UI Kit | Angular Material + customização | 18.x | Acessibilidade (WCAG 2.1 AA), componentes de formulário ricos |
-| i18n | @angular/localize | — | Chaves pt-BR; `termo_funcionario` como token injetável |
-| Testes e2e | Playwright | 1.x | Multi-browser; testes de fluxo completo de folha e perícia |
-| Build | esbuild (via Angular CLI) | — | Build incremental; code splitting por feature lib |
+| Componente       | Tecnologia                      | Versão mínima      | Justificativa                                                                 |
+| ---------------- | ------------------------------- | ------------------ | ----------------------------------------------------------------------------- |
+| Framework        | Angular                         | última LTS (18.x+) | Standalone components, signals, SSR, enterprise-grade                         |
+| Linguagem        | TypeScript                      | 5.x                | Consistência com backend                                                      |
+| Monorepo         | Nx                              | 19.x               | Lazy loading, libs compartilhadas (`@sgp/*`), build cache, affected builds    |
+| State management | NgRx Signal Store OU Akita      | —                  | Decidir em ADR-0003; Signal Store preferido por integração nativa com signals |
+| UI Kit           | Angular Material + customização | 18.x               | Acessibilidade (WCAG 2.1 AA), componentes de formulário ricos                 |
+| i18n             | @angular/localize               | —                  | Chaves pt-BR; `termo_funcionario` como token injetável                        |
+| Testes e2e       | Playwright                      | 1.x                | Multi-browser; testes de fluxo completo de folha e perícia                    |
+| Build            | esbuild (via Angular CLI)       | —                  | Build incremental; code splitting por feature lib                             |
 
 ### Infra AWS
 
-| Serviço | Uso |
-|---|---|
-| **RDS PostgreSQL Multi-AZ** | Banco principal; réplica de leitura para relatórios pesados |
-| **ECS Fargate** | Containers de `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, workers; auto scaling |
-| **S3** | Armazenamento de arquivos por tenant (contracheques, remessas, laudos, currículos) |
-| **SNS / SQS** | Mensageria assíncrona entre serviços; dead-letter queues para retry |
-| **EventBridge** | Eventos de domínio cross-service (folha calculada, eSocial pendente) |
-| **Lambda** | Funções utilitárias: assinatura digital eSocial, conversão de arquivo, CRON triggers |
-| **Step Functions** | Orquestração de cálculo em lote (`payroll-lote`) e envio eSocial (`esocial-envio`) |
-| **Cognito User Pools** | User pools separados para `SGP-CORE` (staff) e `SGP-PORTAL` (employees/beneficiários/candidatos) |
-| **API Gateway** | Entrada pública de APIs; WAF integrado; rate limiting por tenant |
-| **CloudFront + WAF** | CDN para SPAs Angular; proteção de borda; regras de geo-bloqueio |
-| **Secrets Manager** | Credenciais de banco, certificados eSocial, API keys de bancos |
-| **KMS** | Chaves de cifragem S3 SSE-KMS por tenant; cifragem de secrets em repouso |
-| **CloudWatch** | Logs estruturados JSON; métricas de negócio; dashboards operacionais |
-| **X-Ray** | Rastreamento distribuído de requests através dos microsserviços |
-| **ECR** | Registry de imagens Docker dos serviços |
-| **Route 53** | DNS gerenciado; health checks; failover |
+| Serviço                     | Uso                                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
+| **RDS PostgreSQL Multi-AZ** | Banco principal; réplica de leitura para relatórios pesados                                      |
+| **ECS Fargate**             | Containers de `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, workers; auto scaling      |
+| **S3**                      | Armazenamento de arquivos por tenant (contracheques, remessas, laudos, currículos)               |
+| **SNS / SQS**               | Mensageria assíncrona entre serviços; dead-letter queues para retry                              |
+| **EventBridge**             | Eventos de domínio cross-service (folha calculada, eSocial pendente)                             |
+| **Lambda**                  | Funções utilitárias: assinatura digital eSocial, conversão de arquivo, CRON triggers             |
+| **Step Functions**          | Orquestração de cálculo em lote (`payroll-lote`) e envio eSocial (`esocial-envio`)               |
+| **Cognito User Pools**      | User pools separados para `SGP-CORE` (staff) e `SGP-PORTAL` (employees/beneficiários/candidatos) |
+| **API Gateway**             | Entrada pública de APIs; WAF integrado; rate limiting por tenant                                 |
+| **CloudFront + WAF**        | CDN para SPAs Angular; proteção de borda; regras de geo-bloqueio                                 |
+| **Secrets Manager**         | Credenciais de banco, certificados eSocial, API keys de bancos                                   |
+| **KMS**                     | Chaves de cifragem S3 SSE-KMS por tenant; cifragem de secrets em repouso                         |
+| **CloudWatch**              | Logs estruturados JSON; métricas de negócio; dashboards operacionais                             |
+| **X-Ray**                   | Rastreamento distribuído de requests através dos microsserviços                                  |
+| **ECR**                     | Registry de imagens Docker dos serviços                                                          |
+| **Route 53**                | DNS gerenciado; health checks; failover                                                          |
 
 ### Observabilidade
 
-| Dimensão | Ferramenta | Detalhes |
-|---|---|---|
-| Logs | CloudWatch Logs | Estruturado JSON; campos obrigatórios: `tenant_id`, `request_id`, `service`, `level` |
-| Traces | AWS X-Ray via OpenTelemetry | Span por request HTTP, span por query DB, span por evento SQS |
-| Métricas de negócio | CloudWatch Custom Metrics | `folhas_fechadas_mes`, `contracheques_emitidos_mes`, `esocial_eventos_enviados` |
-| Alertas | CloudWatch Alarms → SNS → PagerDuty/Slack | SLA: p99 API < 2s; erro 5xx < 0.1%; fila SQS > 1000 msgs |
-| Dashboards | CloudWatch Dashboards | Por ambiente (staging, prod) e por serviço |
+| Dimensão            | Ferramenta                                | Detalhes                                                                             |
+| ------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------ |
+| Logs                | CloudWatch Logs                           | Estruturado JSON; campos obrigatórios: `tenant_id`, `request_id`, `service`, `level` |
+| Traces              | AWS X-Ray via OpenTelemetry               | Span por request HTTP, span por query DB, span por evento SQS                        |
+| Métricas de negócio | CloudWatch Custom Metrics                 | `folhas_fechadas_mes`, `contracheques_emitidos_mes`, `esocial_eventos_enviados`      |
+| Alertas             | CloudWatch Alarms → SNS → PagerDuty/Slack | SLA: p99 API < 2s; erro 5xx < 0.1%; fila SQS > 1000 msgs                             |
+| Dashboards          | CloudWatch Dashboards                     | Por ambiente (staging, prod) e por serviço                                           |
 
 ### Testes
 
-| Nível | Ferramenta | Escopo |
-|---|---|---|
-| Unitário | Jest | Services, repositories, formula engine, DTOs |
-| Integração | Jest + testcontainers (PostgreSQL) | Módulos completos com banco real |
-| Contrato | Pact | Interface `sgp-core-api` ↔ `sgp-payroll-engine` |
-| E2E | Playwright | Golden scenarios A-G (ver BRIEF §10) |
-| Migração | Scripts Jest + dumps SQL Server reais | Comparação de dados legado × novo após ETL |
-| Carga | k6 | Simulação de fechamento de folha com 10k servidores simultâneos |
+| Nível      | Ferramenta                            | Escopo                                                          |
+| ---------- | ------------------------------------- | --------------------------------------------------------------- |
+| Unitário   | Jest                                  | Services, repositories, formula engine, DTOs                    |
+| Integração | Jest + testcontainers (PostgreSQL)    | Módulos completos com banco real                                |
+| Contrato   | Pact                                  | Interface `sgp-core-api` ↔ `sgp-payroll-engine`                 |
+| E2E        | Playwright                            | Golden scenarios A-G (ver BRIEF §10)                            |
+| Migração   | Scripts Jest + dumps SQL Server reais | Comparação de dados legado × novo após ETL                      |
+| Carga      | k6                                    | Simulação de fechamento de folha com 10k servidores simultâneos |
 
 ### CI/CD
 
 Alvo futuro. Pela decisão temporária de 2026-04-26, gates de governança/release e a escolha final de IaC não bloqueiam a reavaliação atual.
 
-| Etapa | Ferramenta | Ação |
-|---|---|---|
-| CI | GitHub Actions | Lint, typecheck, testes, build, SAST (CodeQL) |
-| CD (staging) | GitHub Actions → ECR → ECS | Deploy automático em push para `main` |
-| CD (prod) | GitHub Actions + aprovação manual | Deploy via approval gate em PR de release |
-| Migrations | Flyway (ou Prisma Migrate) | Aplicadas antes do deploy; rollback automático em falha |
-| IaC | A definir | CloudFormation, Terraform, AWS SDK e scripts AWS CLI permanecem opções abertas |
+| Etapa        | Ferramenta                        | Ação                                                                           |
+| ------------ | --------------------------------- | ------------------------------------------------------------------------------ |
+| CI           | GitHub Actions                    | Lint, typecheck, testes, build, SAST (CodeQL)                                  |
+| CD (staging) | GitHub Actions → ECR → ECS        | Deploy automático em push para `main`                                          |
+| CD (prod)    | GitHub Actions + aprovação manual | Deploy via approval gate em PR de release                                      |
+| Migrations   | Flyway (ou Prisma Migrate)        | Aplicadas antes do deploy; rollback automático em falha                        |
+| IaC          | A definir                         | CloudFormation, Terraform, AWS SDK e scripts AWS CLI permanecem opções abertas |
 
 ---
 
@@ -377,19 +394,19 @@ flowchart LR
 
 ### Detalhamento por Ambiente
 
-| Dimensão | dev | staging | homologação | prod |
-|---|---|---|---|---|
-| **Conta AWS** | `sgp-dev` | `sgp-staging` | `sgp-homolog` | `sgp-prod` |
-| **Região AWS** | sa-east-1 (São Paulo) | sa-east-1 | sa-east-1 | sa-east-1 (+ us-east-1 para DR) |
-| **PostgreSQL** | RDS t3.medium, Single-AZ | RDS t3.large, Single-AZ | RDS r6g.large, Single-AZ | RDS r6g.xlarge, Multi-AZ, réplica de leitura |
-| **ECS** | Fargate Spot (reduz custo) | Fargate on-demand | Fargate on-demand | Fargate on-demand + auto scaling (min 2, max 10) |
-| **S3** | Bucket por ambiente, sem lifecycle | Bucket por ambiente | Bucket prod-like com lifecycle | Buckets por tenant, SSE-KMS, lifecycle policies |
-| **Cognito** | UserPools core+portal (dev) | UserPools core+portal (staging) | UserPools core+portal (homolog) | UserPools core+portal (prod), com federação externa opcional apenas no portal |
-| **Deploy** | Automático em push para branch feature (opcional) | Automático em push para `main` | Manual via tag de release | Manual via aprovação do PO |
-| **Dados** | Fixtures e seeds gerados; sem dados reais | Dados anonimizados do legado (ETL obfuscado) | Cópia de prod anonimizada para testes de paridade | Dados reais dos tenants; LGPD em pleno vigor |
-| **Migrations** | Automáticas no boot | Automáticas no boot | Automáticas via pipeline | Pré-aprovadas; rodadas no pipeline antes do deploy |
-| **Monitoramento** | CloudWatch básico; sem alertas PagerDuty | CloudWatch + alertas Slack | CloudWatch + alertas Slack | CloudWatch + X-Ray + alertas PagerDuty (on-call) |
-| **Backup** | Não (dados sintéticos) | Snapshot diário (retenção 7 dias) | Snapshot diário (retenção 30 dias) | Snapshot automático Multi-AZ + PITR 35 dias |
+| Dimensão          | dev                                               | staging                                      | homologação                                       | prod                                                                          |
+| ----------------- | ------------------------------------------------- | -------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Conta AWS**     | `sgp-dev`                                         | `sgp-staging`                                | `sgp-homolog`                                     | `sgp-prod`                                                                    |
+| **Região AWS**    | sa-east-1 (São Paulo)                             | sa-east-1                                    | sa-east-1                                         | sa-east-1 (+ us-east-1 para DR)                                               |
+| **PostgreSQL**    | RDS t3.medium, Single-AZ                          | RDS t3.large, Single-AZ                      | RDS r6g.large, Single-AZ                          | RDS r6g.xlarge, Multi-AZ, réplica de leitura                                  |
+| **ECS**           | Fargate Spot (reduz custo)                        | Fargate on-demand                            | Fargate on-demand                                 | Fargate on-demand + auto scaling (min 2, max 10)                              |
+| **S3**            | Bucket por ambiente, sem lifecycle                | Bucket por ambiente                          | Bucket prod-like com lifecycle                    | Buckets por tenant, SSE-KMS, lifecycle policies                               |
+| **Cognito**       | UserPools core+portal (dev)                       | UserPools core+portal (staging)              | UserPools core+portal (homolog)                   | UserPools core+portal (prod), com federação externa opcional apenas no portal |
+| **Deploy**        | Automático em push para branch feature (opcional) | Automático em push para `main`               | Manual via tag de release                         | Manual via aprovação do PO                                                    |
+| **Dados**         | Fixtures e seeds gerados; sem dados reais         | Dados anonimizados do legado (ETL obfuscado) | Cópia de prod anonimizada para testes de paridade | Dados reais dos tenants; LGPD em pleno vigor                                  |
+| **Migrations**    | Automáticas no boot                               | Automáticas no boot                          | Automáticas via pipeline                          | Pré-aprovadas; rodadas no pipeline antes do deploy                            |
+| **Monitoramento** | CloudWatch básico; sem alertas PagerDuty          | CloudWatch + alertas Slack                   | CloudWatch + alertas Slack                        | CloudWatch + X-Ray + alertas PagerDuty (on-call)                              |
+| **Backup**        | Não (dados sintéticos)                            | Snapshot diário (retenção 7 dias)            | Snapshot diário (retenção 30 dias)                | Snapshot automático Multi-AZ + PITR 35 dias                                   |
 
 ### Isolamento de Dados
 
@@ -406,50 +423,50 @@ Paridade funcional é o critério de aceite do MVP. A tabela abaixo define o que
 
 ### 4.1 Paridade por Menu
 
-| Menu | Critério de paridade mínimo |
-|---|---|
-| **Gestão** | CRUD de empresa matriz, filial, lotação, centro de custo, cargo, função, turno, banco, referência salarial; gestão de usuários, perfis e papéis com todos os `ROLE_*` documentados; parametrização de `ParametroSistema` e `ParametroGlobal`. |
-| **Módulo RH** | Ciclo funcional completo (CADASTRO_BASE → POSSE → ATIVO → AFASTAMENTO → TRANSFERÊNCIA → DESLIGAMENTO); ficha funcional como view materializada; dossiê com download ZIP; regras de CPF único, matrícula automática/manual, cedência com sigilo, validação de limite anual de afastamentos. |
-| **Folha de Pagamento** | Abertura/fechamento de competência; criação de folha por (filial × tipo_processamento); todos os 7 tipos de processamento; lançamentos manuais, importação de verbas (servidor/pensionista), importação de consignado; cálculo em lote e pontual; reprocessamento em 3 modos; emissão de contracheque (SERVIDOR, PENSIONISTA) com/sem marca d'água; relatório financeiro, batimento, ficha financeira; remessa CNAB. |
-| **Módulo Avaliação** | Avaliações de desempenho com critérios parametrizáveis; progressões por mérito, titularidade, judicial e correção salarial; plano de cargos e carreira; simulador de nível salarial. |
-| **Recrutamento e Seleção** | Ciclo completo de requisição de pessoal (RASCUNHO → CONCLUIDO); banco de talentos com currículo S3; programa de estágio; matrícula de estagiário; prorrogação e recesso; desligamento automático por data. |
-| **Consultas Gerenciais** | Ficha financeira histórica; relatório gerencial de folha; quadro de pessoal; servidores em pagamento bloqueado; relatório de repasse fundo RH. |
-| **Relatório** | Todos os relatórios PDF/XLSX documentados no BRIEF §7; geração assíncrona; filtros avançados; download via S3 presigned URL. |
-| **Módulo Previdenciário** | Simulação e concessão de aposentadoria; pensão com rateio por cota-parte; certidão de tempo de contribuição; compensação previdenciária; ciclo de recadastramento (aposentado anual, pensionista semestral, universitário com alerta 25 anos); prova de vida pelos 3 canais. |
-| **Auditoria** | Registro em `audit_log` para todos os 6 domínios sensíveis; diff JSONB antes/depois; filtros por entidade, ação, usuário, período; exportação; feature flag `AUDIT_FULL_TRACE_ENABLED`. |
-| **Área de Saúde** | Cadastro de especialidades, médicos e agendas; janelas de agenda geradas automaticamente; ciclo completo de agendamento → prontuário → laudo → licença médica; réplica de licença por CPF para múltiplos vínculos; restrição ocupacional; readaptação; SST (exames, EPI/EPC, agentes nocivos, CAT). |
-| **Convênio** | Cadastro de convênios; gestão de beneficiários; geração de arquivo de remessa e processamento de retorno; desconto automático em folha na competência. |
+| Menu                       | Critério de paridade mínimo                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Gestão**                 | CRUD de empresa matriz, filial, lotação, centro de custo, cargo, função, turno, banco, referência salarial; gestão de usuários, perfis e papéis com todos os `ROLE_*` documentados; parametrização de `ParametroSistema` e `ParametroGlobal`.                                                                                                                                                                        |
+| **Módulo RH**              | Ciclo funcional completo (CADASTRO_BASE → POSSE → ATIVO → AFASTAMENTO → TRANSFERÊNCIA → DESLIGAMENTO); ficha funcional como view materializada; dossiê com download ZIP; regras de CPF único, matrícula automática/manual, cedência com sigilo, validação de limite anual de afastamentos.                                                                                                                           |
+| **Folha de Pagamento**     | Abertura/fechamento de competência; criação de folha por (filial × tipo_processamento); todos os 7 tipos de processamento; lançamentos manuais, importação de verbas (servidor/pensionista), importação de consignado; cálculo em lote e pontual; reprocessamento em 3 modos; emissão de contracheque (SERVIDOR, PENSIONISTA) com/sem marca d'água; relatório financeiro, batimento, ficha financeira; remessa CNAB. |
+| **Módulo Avaliação**       | Avaliações de desempenho com critérios parametrizáveis; progressões por mérito, titularidade, judicial e correção salarial; plano de cargos e carreira; simulador de nível salarial.                                                                                                                                                                                                                                 |
+| **Recrutamento e Seleção** | Ciclo completo de requisição de pessoal (RASCUNHO → CONCLUIDO); banco de talentos com currículo S3; programa de estágio; matrícula de estagiário; prorrogação e recesso; desligamento automático por data.                                                                                                                                                                                                           |
+| **Consultas Gerenciais**   | Ficha financeira histórica; relatório gerencial de folha; quadro de pessoal; servidores em pagamento bloqueado; relatório de repasse fundo RH.                                                                                                                                                                                                                                                                       |
+| **Relatório**              | Todos os relatórios PDF/XLSX documentados no BRIEF §7; geração assíncrona; filtros avançados; download via S3 presigned URL.                                                                                                                                                                                                                                                                                         |
+| **Módulo Previdenciário**  | Simulação e concessão de aposentadoria; pensão com rateio por cota-parte; certidão de tempo de contribuição; compensação previdenciária; ciclo de recadastramento (aposentado anual, pensionista semestral, universitário com alerta 25 anos); prova de vida pelos 3 canais.                                                                                                                                         |
+| **Auditoria**              | Registro em `audit_log` para todos os 6 domínios sensíveis; diff JSONB antes/depois; filtros por entidade, ação, usuário, período; exportação; feature flag `AUDIT_FULL_TRACE_ENABLED`.                                                                                                                                                                                                                              |
+| **Área de Saúde**          | Cadastro de especialidades, médicos e agendas; janelas de agenda geradas automaticamente; ciclo completo de agendamento → prontuário → laudo → licença médica; réplica de licença por CPF para múltiplos vínculos; restrição ocupacional; readaptação; SST (exames, EPI/EPC, agentes nocivos, CAT).                                                                                                                  |
+| **Convênio**               | Cadastro de convênios; gestão de beneficiários; geração de arquivo de remessa e processamento de retorno; desconto automático em folha na competência.                                                                                                                                                                                                                                                               |
 
 ### 4.2 Paridade por Saída Oficial
 
 Cada documento listado no BRIEF §7 deve ser produzido pelo SGP Moderno com conteúdo equivalente ao legado:
 
-| Documento | Formato | Critério de paridade |
-|---|---|---|
-| Contracheque servidor | PDF | Mesmo layout de verbas, totais, dados funcionais; com/sem marca d'água |
-| Contracheque pensionista | PDF | Template PENSIONISTA com beneficiários e rateio |
-| Ficha financeira | PDF / XLSX | Histórico completo de competências com todos os lançamentos |
-| Ficha funcional | PDF | View materializada com histórico funcional completo |
-| Relatório de folha | PDF / XLSX | Totais por filial, tipo de processamento, verba |
-| Batimento | PDF | Comparação competências; sinalização de discrepâncias |
-| Laudo pericial padrão | PDF | Campos de prontuário + assinatura do médico |
-| Comprovante de recadastramento | PDF | Dados do beneficiário + data/hora + operador |
-| Certidão de tempo de contribuição | PDF | Período, órgão, ato de emissão |
-| DIRF | TXT + PDF | Leiaute RFB anual com todos os beneficiários |
-| SIPREV | XML | Leiaute MPS/SIPREV vigente |
-| Remessa CNAB | TXT | CNAB 240 ou 400 por banco; todos os campos obrigatórios |
+| Documento                         | Formato    | Critério de paridade                                                   |
+| --------------------------------- | ---------- | ---------------------------------------------------------------------- |
+| Contracheque servidor             | PDF        | Mesmo layout de verbas, totais, dados funcionais; com/sem marca d'água |
+| Contracheque pensionista          | PDF        | Template PENSIONISTA com beneficiários e rateio                        |
+| Ficha financeira                  | PDF / XLSX | Histórico completo de competências com todos os lançamentos            |
+| Ficha funcional                   | PDF        | View materializada com histórico funcional completo                    |
+| Relatório de folha                | PDF / XLSX | Totais por filial, tipo de processamento, verba                        |
+| Batimento                         | PDF        | Comparação competências; sinalização de discrepâncias                  |
+| Laudo pericial padrão             | PDF        | Campos de prontuário + assinatura do médico                            |
+| Comprovante de recadastramento    | PDF        | Dados do beneficiário + data/hora + operador                           |
+| Certidão de tempo de contribuição | PDF        | Período, órgão, ato de emissão                                         |
+| DIRF                              | TXT + PDF  | Leiaute RFB anual com todos os beneficiários                           |
+| SIPREV                            | XML        | Leiaute MPS/SIPREV vigente                                             |
+| Remessa CNAB                      | TXT        | CNAB 240 ou 400 por banco; todos os campos obrigatórios                |
 
 ### 4.3 Paridade por Integração
 
-| Integração | Critério |
-|---|---|
-| eSocial S-1.2 | Envio dos 11 eventos S-1xxx + S-2xxx/S-3xxx com recibo confirmado em staging |
-| SIPREV | Arquivo XML gerado sem erros de validação no portal SIPREV sandbox |
-| DIRF | Arquivo TXT validado pelo PGD-DIRF sem inconsistências |
+| Integração           | Critério                                                                           |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| eSocial S-1.2        | Envio dos 11 eventos S-1xxx + S-2xxx/S-3xxx com recibo confirmado em staging       |
+| SIPREV               | Arquivo XML gerado sem erros de validação no portal SIPREV sandbox                 |
+| DIRF                 | Arquivo TXT validado pelo PGD-DIRF sem inconsistências                             |
 | CNAB remessa/retorno | Remessa gerada; retorno bancário processado com atualização de status de pagamento |
-| Portal prefeitura | Endpoints `/publico/prefeitura/*` respondendo com dados equivalentes ao legado |
-| API externa | Endpoints `/externo/dados` e `/externo/dicionario/*` com OAuth2 client-credentials |
-| Neoconsig | Import CSV com status `IMPORTADO` / `IMPORTADO_PARCIALMENTE` corretos |
+| Portal prefeitura    | Endpoints `/publico/prefeitura/*` respondendo com dados equivalentes ao legado     |
+| API externa          | Endpoints `/externo/dados` e `/externo/dicionario/*` com OAuth2 client-credentials |
+| Neoconsig            | Import CSV com status `IMPORTADO` / `IMPORTADO_PARCIALMENTE` corretos              |
 
 ---
 
@@ -458,6 +475,7 @@ Cada documento listado no BRIEF §7 deve ser produzido pelo SGP Moderno com cont
 O roadmap de v0.0.1 segue sequência estrita e não prevê camada de compatibilidade retroativa, shim ou modo híbrido com legado.
 
 1. **SGP-CORE Database**
+
 - Implementar o modelo físico canônico cobrindo 100% das features de referência.
 - Garantir operações 1-para-1 com o legado no nível de dados.
 - Organizar por schemas (`hr`, `payroll`, `portal`) sempre que aplicável.
@@ -465,20 +483,24 @@ O roadmap de v0.0.1 segue sequência estrita e não prevê camada de compatibili
 - Melhorar desenho quando houver ganho técnico claro, preservando equivalência funcional.
 
 2. **SGP-CORE Backend**
+
 - Implementar rotas, métodos e contratos necessários para toda a cobertura funcional extraída da referência.
 - Priorizar fechamento de lacunas em endpoints mutáveis (create/update/delete/ações de negócio).
 - Manter `sgp-core-api` e `sgp-portal-api` separados, sem compartilhamento de runtime.
 
 3. **Testes de Backend**
+
 - Subir cobertura com testes unitários, testes de API/contrato e testes e2e de backend.
 - Atingir os thresholds de governança definidos no repositório.
 - Consolidar suíte de regressão para paridade de regras críticas (folha, RH, previdenciário, perícia).
 
 4. **SGP-CORE Frontend**
+
 - Estender a implementação atual para cobrir todos os casos de uso reportados na referência.
 - Preservar separação de aplicações (`sgp-admin` e `sgp-portal-ui`) com experiência e escopo próprios.
 
 5. **Testes de Frontend**
+
 - Implantar testes unitários e e2e para frontend até níveis de cobertura exigidos pela governança.
 - Assegurar regressão automatizada para fluxos críticos administrativos e de autoatendimento.
 
@@ -486,18 +508,18 @@ O roadmap de v0.0.1 segue sequência estrita e não prevê camada de compatibili
 
 ## 6. Riscos e Mitigações
 
-| # | Risco | Probabilidade | Impacto | Mitigação |
-|---|---|---|---|---|
-| R01 | **Paridade de fórmulas de verbas:** fórmulas do legado (Java/Groovy) produzem resultados diferentes das fórmulas SQL compiladas para edge cases numéricos (arredondamento, truncamento, dias úteis) | Alta | Crítico (folha errada = passivo trabalhista) | Criar test suite com 200+ casos extraídos de folhas históricas reais; validar cada verba individualmente durante a Fase 1 (database) e Fase 2 (backend) |
-| R02 | **Migração de dados:** schema legado (SQL Server) tem inconsistências históricas, CPFs inválidos, vínculos sem posse, períodos sobrepostos | Alta | Alto | ETL incremental com regras de sanitização documentadas; testes de migração com dumps reais de staging; campo `migrado_legado_id` para rastreabilidade; período de coexistência com legado |
-| R03 | **eSocial S-1.2 complexidade:** leiaute S-1.2 tem regras de validação XSD e regras de negócio publicadas pelo governo; falhas geram multas | Média | Alto | Ambiente sandbox eSocial desde início da Fase 2 (backend); parceria com empresa especializada em eSocial para revisão; cobertura de testes com XSD validator |
-| R04 | **Multi-tenancy performance:** queries com `tenant_id` em tabelas de bilhões de linhas (contracheque, lancamento, audit_log) podem degradar com muitos tenants | Média | Alto | Particionamento por `(tenant_id, ano, mes)`; índices compostos `(tenant_id, <campo_filtro>)`; testes de carga k6 simulando 50 tenants com 10k servidores cada |
-| R05 | **Sigilo fiscal IRRF:** dados de rendimentos e IRRF são sigilosos; vazamento entre tenants ou exposição indevida via API tem implicações legais | Baixa | Crítico | RLS PostgreSQL como última barreira; `TenantGuard` validado em testes de contrato; auditoria obrigatória de `EXPORT` e `PRINT`; pentest antes do go-live de produção |
-| R06 | **Integração bancária CNAB:** cada banco tem variações do layout CNAB 240/400; formato de agência, conta e dígito variam | Alta | Médio | Biblioteca de parsers CNAB tipesafe com testes por banco (Bradesco, BB, Caixa, Itaú, Santander como prioritários); modo simulação de retorno para homologação |
-| R07 | **Escalabilidade do motor de folha:** processamento de lote de 50.000+ contracheques em uma única competência pode ultrapassar timeouts de Lambda e ECS | Média | Alto | Step Functions `payroll-lote` com paralelismo por filial; cada tarefa processa até 500 contracheques; timeout por tarefa 15min; teste de carga obrigatório até o fim da Fase 2 |
-| R08 | **Certificado digital eSocial (A1/A3):** gestão do ciclo de vida do certificado (expiração, revogação) pode causar interrupção de envios | Média | Médio | Alerta automático com 90/30/7 dias de antecedência; rotação de certificado em Secrets Manager sem downtime; runbook documentado |
-| R09 | **Dependência de IdP externo no portal:** integrações federadas podem sofrer instabilidade e mudanças de contrato sem aviso prévio | Alta | Médio (apenas portal) | Circuit breaker no módulo de federação; fallback para autenticação no user pool próprio do portal; separar domínio de identidade do core |
-| R10 | **Complexidade do Módulo Previdenciário:** regras de aposentadoria variam por ente (EC 103/2019 + legislações estaduais/municipais); parametrização insuficiente pode bloquear implantação | Alta | Alto | `regra_aposentadoria` totalmente parametrizável (critérios em JSON); levantamento de regras com pelo menos 3 entes-piloto antes da Wave 2; validação legal por especialista previdenciário |
+| #   | Risco                                                                                                                                                                                               | Probabilidade | Impacto                                      | Mitigação                                                                                                                                                                                  |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| R01 | **Paridade de fórmulas de verbas:** fórmulas do legado (Java/Groovy) produzem resultados diferentes das fórmulas SQL compiladas para edge cases numéricos (arredondamento, truncamento, dias úteis) | Alta          | Crítico (folha errada = passivo trabalhista) | Criar test suite com 200+ casos extraídos de folhas históricas reais; validar cada verba individualmente durante a Fase 1 (database) e Fase 2 (backend)                                    |
+| R02 | **Migração de dados:** schema legado (SQL Server) tem inconsistências históricas, CPFs inválidos, vínculos sem posse, períodos sobrepostos                                                          | Alta          | Alto                                         | ETL incremental com regras de sanitização documentadas; testes de migração com dumps reais de staging; campo `migrado_legado_id` para rastreabilidade; período de coexistência com legado  |
+| R03 | **eSocial S-1.2 complexidade:** leiaute S-1.2 tem regras de validação XSD e regras de negócio publicadas pelo governo; falhas geram multas                                                          | Média         | Alto                                         | Ambiente sandbox eSocial desde início da Fase 2 (backend); parceria com empresa especializada em eSocial para revisão; cobertura de testes com XSD validator                               |
+| R04 | **Multi-tenancy performance:** queries com `tenant_id` em tabelas de bilhões de linhas (contracheque, lancamento, audit_log) podem degradar com muitos tenants                                      | Média         | Alto                                         | Particionamento por `(tenant_id, ano, mes)`; índices compostos `(tenant_id, <campo_filtro>)`; testes de carga k6 simulando 50 tenants com 10k servidores cada                              |
+| R05 | **Sigilo fiscal IRRF:** dados de rendimentos e IRRF são sigilosos; vazamento entre tenants ou exposição indevida via API tem implicações legais                                                     | Baixa         | Crítico                                      | RLS PostgreSQL como última barreira; `TenantGuard` validado em testes de contrato; auditoria obrigatória de `EXPORT` e `PRINT`; pentest antes do go-live de produção                       |
+| R06 | **Integração bancária CNAB:** cada banco tem variações do layout CNAB 240/400; formato de agência, conta e dígito variam                                                                            | Alta          | Médio                                        | Biblioteca de parsers CNAB tipesafe com testes por banco (Bradesco, BB, Caixa, Itaú, Santander como prioritários); modo simulação de retorno para homologação                              |
+| R07 | **Escalabilidade do motor de folha:** processamento de lote de 50.000+ contracheques em uma única competência pode ultrapassar timeouts de Lambda e ECS                                             | Média         | Alto                                         | Step Functions `payroll-lote` com paralelismo por filial; cada tarefa processa até 500 contracheques; timeout por tarefa 15min; teste de carga obrigatório até o fim da Fase 2             |
+| R08 | **Certificado digital eSocial (A1/A3):** gestão do ciclo de vida do certificado (expiração, revogação) pode causar interrupção de envios                                                            | Média         | Médio                                        | Alerta automático com 90/30/7 dias de antecedência; rotação de certificado em Secrets Manager sem downtime; runbook documentado                                                            |
+| R09 | **Dependência de IdP externo no portal:** integrações federadas podem sofrer instabilidade e mudanças de contrato sem aviso prévio                                                                  | Alta          | Médio (apenas portal)                        | Circuit breaker no módulo de federação; fallback para autenticação no user pool próprio do portal; separar domínio de identidade do core                                                   |
+| R10 | **Complexidade do Módulo Previdenciário:** regras de aposentadoria variam por ente (EC 103/2019 + legislações estaduais/municipais); parametrização insuficiente pode bloquear implantação          | Alta          | Alto                                         | `regra_aposentadoria` totalmente parametrizável (critérios em JSON); levantamento de regras com pelo menos 3 entes-piloto antes da Wave 2; validação legal por especialista previdenciário |
 
 ---
 
@@ -591,4 +613,4 @@ Os checklists a seguir são a tradução operacional da matriz de paridade legad
 
 ---
 
-*Fim do documento 01-escopo-e-decisoes.md*
+_Fim do documento 01-escopo-e-decisoes.md_

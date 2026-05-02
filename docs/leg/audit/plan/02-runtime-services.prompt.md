@@ -19,9 +19,9 @@ Replace scaffolded runtime entrypoints with implemented runtime services for:
 - `docs/eng/44-jobs-rotinas-assincronas.md`
 - `docs/eng/60-catalogo-saidas-oficiais.md`
 - `docs/eng/71-folia-engine-reconciliation.md`
-- `docs/audit/inv/runtime-topology-inventory.json`
-- `docs/audit/diag/runtime-and-worker-gap.md`
-- `docs/governance/runtime-topology.json`
+- `docs/leg/audit/inv/runtime-topology-inventory.json`
+- `docs/leg/audit/diag/runtime-and-worker-gap.md`
+- `docs/gov/runtime-topology.json`
 - `scripts/start-runtime-stub.mjs`
 
 ## Work Items

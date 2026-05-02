@@ -15,11 +15,11 @@ CPF e normalizado para onze digitos. Valores monetarios sao `numeric(14,2)` e ta
 
 ## Adapters
 
-| Adapter | Entrada | Uso |
-| --- | --- | --- |
-| `CANONICAL_CSV` | CSV interno separado por `;` | Base contratual comum entre consignantes |
-| `BANK_X` | Registro posicional com CPF, contrato origem, contrato destino, saldo, parcela, taxa e parcelas | Exemplo inicial de arquivo fixo por consignante |
-| `BANK_Y` | Arquivo delimitado por `|` com cabecalho equivalente ao canonico | Exemplo inicial de arquivo delimitado por consignante |
+| Adapter         | Entrada                                                                                         | Uso                                             |
+| --------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------- |
+| `CANONICAL_CSV` | CSV interno separado por `;`                                                                    | Base contratual comum entre consignantes        |
+| `BANK_X`        | Registro posicional com CPF, contrato origem, contrato destino, saldo, parcela, taxa e parcelas | Exemplo inicial de arquivo fixo por consignante |
+| `BANK_Y`        | Arquivo delimitado por `                                                                        | ` com cabecalho equivalente ao canonico         | Exemplo inicial de arquivo delimitado por consignante |
 
 Novos consignantes devem adicionar adapter isolado em `backend/src/integrations-worker/consignment-portability/adapters/`, mantendo a saida no contrato canonico.
 

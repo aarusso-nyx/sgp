@@ -62,7 +62,7 @@ function validateSingleLockfile() {
 }
 
 function validateGovernanceManifest() {
-  const manifest = readJson('docs/governance/governance-manifest.json');
+  const manifest = readJson('docs/gov/governance-manifest.json');
   record('governance-manifest:implemented', manifest.status === 'implemented', manifest.status);
   for (const control of manifest.controls ?? []) {
     record(
@@ -74,10 +74,7 @@ function validateGovernanceManifest() {
 }
 
 function validateReverseSuccession() {
-  const content = readFileSync(
-    resolve(repoRoot, 'docs/legacy-reverse/deprecation-status.md'),
-    'utf8',
-  );
+  const content = readFileSync(resolve(repoRoot, 'docs/leg/rev-eng/deprecation-status.md'), 'utf8');
   const rows = content
     .split('\n')
     .filter((line) => line.includes('|') && line.includes('2026-04-26'));

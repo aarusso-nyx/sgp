@@ -10,7 +10,7 @@ on:
       - 'database/**'
       - 'scripts/**'
       - 'docs/eng/**'
-      - 'docs/legacy-reverse/**'
+      - 'docs/leg/rev-eng/**'
   push:
     branches:
       - main
@@ -23,7 +23,7 @@ on:
       - 'database/**'
       - 'scripts/**'
       - 'docs/eng/**'
-      - 'docs/legacy-reverse/**'
+      - 'docs/leg/rev-eng/**'
 
 jobs:
   alignment-gate:

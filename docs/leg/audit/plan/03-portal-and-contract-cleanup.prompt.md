@@ -14,10 +14,10 @@ Fix frontend and contract drift identified by the reassessment:
 - `docs/eng/10-uc-administracao-seguranca.md`
 - `docs/eng/40-divisao-modular.md`
 - `docs/eng/42-contratos-integracao.md`
-- `docs/audit/diag/portal-build-and-frontend-tests.md`
-- `docs/audit/diag/compatibility-surface.md`
-- `docs/audit/diag/raw-portal-build.log`
-- `docs/audit/diag/raw-test-portal.log`
+- `docs/leg/audit/diag/portal-build-and-frontend-tests.md`
+- `docs/leg/audit/diag/compatibility-surface.md`
+- `docs/leg/audit/diag/raw-portal-build.log`
+- `docs/leg/audit/diag/raw-test-portal.log`
 - `frontend/package.json`
 - `frontend/portal/src/app`
 - `frontend/src/app/core/api/api-client.ts`

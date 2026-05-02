@@ -2,7 +2,7 @@
   "generated_at": "2026-04-25",
   "authority": [
     "docs/eng",
-    "docs/sql-reference/00_inventory/raw/tables.json",
+    "docs/leg/sql-reference/00_inventory/raw/tables.json",
     "inventories/database-model.json"
   ],
   "status_values": ["implemented", "canonicalized", "deferred", "explicitly_excluded"],
