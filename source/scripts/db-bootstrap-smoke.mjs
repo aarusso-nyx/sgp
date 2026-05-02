@@ -365,6 +365,142 @@ $$;
   console.log('[db-smoke] validated ES-01 S-1xxx event RLS');
 
   await runSqlSnippet(
+    '99-es02-cadastro-s2200-s2205.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  v_employee_id constant uuid := '00000000-0000-4000-8000-000000032205';
+  visible_count integer;
+  pending_before integer;
+  pending_after integer;
+BEGIN
+  GRANT USAGE ON SCHEMA esocial, hr, public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.s2200_emission_state TO sgp_smoke_rls;
+  GRANT SELECT ON esocial.s2205_trigger_field TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON esocial.s2205_pending_alteration TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.employee TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE, DELETE ON hr.employee_dependent TO sgp_smoke_rls;
+  GRANT SELECT, INSERT ON public.audit_event TO sgp_smoke_rls;
+
+  INSERT INTO hr.employee (
+    id,
+    tenant_id,
+    registration,
+    name,
+    cpf,
+    birth_date,
+    gender,
+    email,
+    phone,
+    address,
+    hired_on,
+    marital_status,
+    education_level,
+    lifecycle_status
+  )
+  VALUES (
+    v_employee_id,
+    tenant_a,
+    'ES02-SMOKE',
+    'ES02 Smoke',
+    '11122233344',
+    DATE '1990-01-02',
+    'MALE'::"PersonGender",
+    'es02-smoke@example.test',
+    '61988887777',
+    '{"street":"Rua Smoke","number":"10","zip":"70000000","cityCode":"5300108","state":"DF"}'::jsonb,
+    DATE '2026-01-10',
+    '1',
+    '07',
+    'ACTIVE'::"EmployeeLifecycleStatus"
+  )
+  ON CONFLICT (id) DO UPDATE
+  SET address = EXCLUDED.address,
+      mother_name = NULL,
+      updated_at = now();
+
+  INSERT INTO esocial.s2200_emission_state (
+    tenant_id,
+    employee_id,
+    emitted_at,
+    recibo,
+    payload_hash
+  )
+  VALUES (tenant_a, v_employee_id, now(), 'REC-ES02-SMOKE', repeat('b', 64))
+  ON CONFLICT (tenant_id, employee_id) DO UPDATE
+  SET payload_hash = EXCLUDED.payload_hash,
+      recibo = EXCLUDED.recibo;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_permissions', 'esocial.event.read', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  SELECT count(*) INTO visible_count
+  FROM esocial.s2200_emission_state
+  WHERE employee_id = '00000000-0000-4000-8000-000000032205';
+  RESET ROLE;
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 S-2200 states from tenant A, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', 'rh.employee.write', true);
+  SELECT count(*) INTO pending_before
+  FROM esocial.s2205_pending_alteration
+  WHERE tenant_id = tenant_a
+    AND employee_id = v_employee_id
+    AND status = 'PENDING';
+  SET LOCAL ROLE sgp_smoke_rls;
+  UPDATE hr.employee
+  SET mother_name = 'Fora da whitelist'
+  WHERE id = v_employee_id;
+  RESET ROLE;
+  SELECT count(*) INTO pending_after
+  FROM esocial.s2205_pending_alteration
+  WHERE tenant_id = tenant_a
+    AND employee_id = v_employee_id
+    AND status = 'PENDING';
+  IF pending_after <> pending_before THEN
+    RAISE EXCEPTION 'Expected non-whitelisted employee field to avoid S-2205 queue';
+  END IF;
+
+  PERFORM set_config('app.current_permissions', 'rh.employee.write
+esocial.event.write', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+  UPDATE hr.employee
+  SET address = jsonb_set(address, '{street}', '"Rua Smoke Alterada"', true)
+  WHERE id = v_employee_id;
+  RESET ROLE;
+  SELECT count(*) INTO pending_after
+  FROM esocial.s2205_pending_alteration
+  WHERE tenant_id = tenant_a
+    AND employee_id = v_employee_id
+    AND field_path = 'address.street'
+    AND status = 'PENDING';
+  IF pending_after < 1 THEN
+    RAISE EXCEPTION 'Expected whitelisted address.street to enqueue S-2205';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_policies
+    WHERE schemaname = 'esocial'
+      AND tablename = 's2200_emission_state'
+      AND policyname = 's2200_emission_state_write'
+      AND with_check LIKE '%esocial.event.write%'
+      AND with_check LIKE '%sgp_tenant_matches(tenant_id)%'
+  ) THEN
+    RAISE EXCEPTION 'Expected S-2200 emission-state write policy to require tenant and esocial.event.write';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated ES-02 S-2200/S-2205 trigger whitelist and RLS');
+
+  await runSqlSnippet(
     '99-hr01-employee-lifecycle.sql',
     `
 DO $$

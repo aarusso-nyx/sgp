@@ -84,6 +84,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/esocial/tabelas/esocial-tabelas').then((m) => m.ESocialTabelas),
       },
+      {
+        path: 'esocial/trabalhadores',
+        loadComponent: () =>
+          import('./features/esocial/trabalhadores/esocial-trabalhadores').then(
+            (m) => m.ESocialTrabalhadores,
+          ),
+      },
       ...adminFeatureRoutes,
     ],
   },

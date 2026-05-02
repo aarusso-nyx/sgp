@@ -1,0 +1,54 @@
+<section class="esocial-workers">
+  <header class="page-header">
+    <div>
+      <h1>Cadastro eSocial</h1>
+      <p>Eventos S-2200 e S-2205 por servidor.</p>
+    </div>
+    <button type="button" class="secondary" (click)="load()" [disabled]="loading">Atualizar</button>
+  </header>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <p class="result" *ngIf="lastResult">
+    {{ lastResult.eventKind }} {{ lastResult.emitted ? 'emitido' : 'sem emissao' }}.
+  </p>
+
+  <div class="table-shell">
+    <table>
+      <thead>
+        <tr>
+          <th>Matricula</th>
+          <th>Servidor</th>
+          <th>S-2200</th>
+          <th>Pendencias S-2205</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rows">
+          <td>{{ row.registration }}</td>
+          <td>{{ row.name }}</td>
+          <td>
+            <span class="status" [class.done]="row.s2200Receipt">{{ row.s2200Receipt || 'Pendente' }}</span>
+          </td>
+          <td>{{ row.pendingS2205 }}</td>
+          <td class="actions">
+            <button type="button" (click)="reemitS2200(row)" [disabled]="emitting === row.employeeId">
+              Forcar reemissao
+            </button>
+            <button
+              type="button"
+              class="secondary"
+              (click)="emitS2205(row)"
+              [disabled]="row.pendingS2205 === 0 || emitting === row.employeeId"
+            >
+              Emitir S-2205
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="!loading && rows.length === 0">
+          <td colspan="5" class="empty">Nenhum servidor encontrado.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

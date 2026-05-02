@@ -125,8 +125,8 @@ export class XsdValidatorService {
       xsdPath,
       errors: document.validationErrors.map((error) => ({
         message: error.message.trim(),
-        line: error.line,
-        column: error.column,
+        line: error.line ?? undefined,
+        column: error.column ?? undefined,
       })),
     };
   }

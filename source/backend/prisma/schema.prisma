@@ -266,6 +266,8 @@ enum S1xxxEventKind {
   S_1020 @map("S-1020")
   S_1050 @map("S-1050")
   S_1070 @map("S-1070")
+  S_2200 @map("S-2200")
+  S_2205 @map("S-2205")
 
   @@map("s1xxx_event_kind")
   @@schema("esocial")
@@ -1351,6 +1353,8 @@ model Employee {
   fatherName                 String?                 @map("father_name")
   nationalityCode            String?                 @map("nationality_code")
   birthCityCode              String?                 @map("birth_city_code")
+  maritalStatus              String?                 @map("marital_status")
+  educationLevel             String?                 @map("education_level")
   address                    Json                    @default("{}")
   hiredOn                    DateTime?               @map("hired_on") @db.Date
   terminatedOn               DateTime?               @map("terminated_on") @db.Date
@@ -2723,6 +2727,47 @@ model S1xxxDispatchState {
 
   @@id([tenantId, eventKind, sourceEntityId])
   @@map("s1xxx_dispatch_state")
+  @@schema("esocial")
+}
+
+model S2200EmissionState {
+  tenantId    String   @map("tenant_id") @db.Uuid
+  employeeId  String   @map("employee_id") @db.Uuid
+  emittedAt   DateTime @default(now()) @map("emitted_at") @db.Timestamptz(6)
+  recibo      String?
+  payloadHash String   @map("payload_hash") @db.Char(64)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, employeeId])
+  @@map("s2200_emission_state")
+  @@schema("esocial")
+}
+
+model S2205TriggerField {
+  fieldPath String   @id @map("field_path")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("s2205_trigger_field")
+  @@schema("esocial")
+}
+
+model S2205PendingAlteration {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  employeeId      String    @map("employee_id") @db.Uuid
+  fieldPath       String    @map("field_path")
+  sourceTable     String    @map("source_table")
+  sourceRowId     String    @map("source_row_id") @db.Uuid
+  previousPayload Json?     @map("previous_payload")
+  currentPayload  Json?     @map("current_payload")
+  status          String    @default("PENDING")
+  emittedEventId  String?   @map("emitted_event_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  consumedAt      DateTime? @map("consumed_at") @db.Timestamptz(6)
+
+  @@index([tenantId, employeeId, status, createdAt])
+  @@map("s2205_pending_alteration")
   @@schema("esocial")
 }
 

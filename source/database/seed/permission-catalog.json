@@ -408,15 +408,15 @@
       "moduleKey": "esocial",
       "resourceKey": "event",
       "actionKey": "read",
-      "routePattern": "/api/v1/esocial/tabelas-iniciais/**",
-      "description": "Read eSocial event queue and S-1xxx table dispatch status."
+      "routePattern": "/api/v1/esocial/**",
+      "description": "Read eSocial event queue and table/worker dispatch status."
     },
     {
       "key": "esocial.event.write",
       "moduleKey": "esocial",
       "resourceKey": "event",
       "actionKey": "write",
-      "routePattern": "/api/v1/esocial/tabelas-iniciais/**",
+      "routePattern": "/api/v1/esocial/**",
       "description": "Emit eSocial XML events after XSD validation and XML-DSig signature."
     },
     {

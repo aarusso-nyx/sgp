@@ -16,6 +16,11 @@ import { S1070Builder } from './builders/s1070.builder';
 import { S1xxxController } from './builders/s1xxx.controller';
 import { S1xxxDispatchService } from './builders/s1xxx-common';
 import { S1xxxService } from './builders/s1xxx.service';
+import { S2200Builder } from './builders/s2200.builder';
+import { S2205Builder } from './builders/s2205.builder';
+import { S22xxController } from './builders/s22xx.controller';
+import { S22xxDispatchService } from './builders/s22xx-common';
+import { S22xxService } from './builders/s22xx.service';
 import { ESocialEmitService } from './esocial-emit.service';
 import { ESocialDispatchAdapter } from './esocial-dispatch.adapter';
 import { ESocialWorkerService } from './esocial-worker.service';
@@ -29,7 +34,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     DatabaseModule,
     DocumentsModule,
   ],
-  controllers: [CertificateStoreController, S1xxxController],
+  controllers: [CertificateStoreController, S1xxxController, S22xxController],
   providers: [
     CertificateStoreService,
     ESocialDispatchAdapter,
@@ -44,6 +49,10 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S1070Builder,
     S1xxxDispatchService,
     S1xxxService,
+    S2200Builder,
+    S2205Builder,
+    S22xxDispatchService,
+    S22xxService,
     XsdValidatorService,
   ],
   exports: [
@@ -52,6 +61,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     ESocialWorkerService,
     IcpSignerService,
     S1xxxService,
+    S22xxService,
     XsdValidatorService,
   ],
 })
