@@ -2011,7 +2011,7 @@
       "completed_at": "2026-05-02T08:34:48.021Z"
     },
     "77-es-10-reintegracao-s2298": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "high",
       "branch": "slice/77-es-10-reintegracao-s2298",
       "retries": 0,
@@ -2055,7 +2055,8 @@
       ],
       "wave": 34,
       "theme": "ES",
-      "zero_retry": true
+      "zero_retry": true,
+      "started_at": "2026-05-02T09:24:00Z"
     },
     "78-es-11-alteracao-contratual-tsv-s2306": {
       "status": "completed",
@@ -2156,7 +2157,7 @@
       "failure_log": "logs/maestro/79-rec-07-biometria-candidato.failure.md"
     },
     "80-rec-08-prova-online-proctored": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "high",
       "branch": "slice/80-rec-08-prova-online-proctored",
       "retries": 0,
@@ -2195,7 +2196,8 @@
       ],
       "wave": 34,
       "theme": "REC",
-      "zero_retry": true
+      "zero_retry": true,
+      "started_at": "2026-05-02T09:24:00Z"
     },
     "81-rec-09-certificacao-digital-banca": {
       "status": "pending",
@@ -2243,7 +2245,7 @@
       "zero_retry": false
     },
     "82-ponto-08-biometrico-digital-palm": {
-      "status": "pending",
+      "status": "in_progress",
       "effort": "medium",
       "branch": "slice/82-ponto-08-biometrico-digital-palm",
       "retries": 0,
@@ -2281,7 +2283,8 @@
       ],
       "wave": 34,
       "theme": "PONTO",
-      "zero_retry": false
+      "zero_retry": false,
+      "started_at": "2026-05-02T09:24:00Z"
     },
     "83-ponto-09-geofencing-mobile-clock-in": {
       "status": "pending",
@@ -2374,8 +2377,27 @@
       "zero_retry": true
     }
   },
-  "current_wave": 35,
-  "active_subagents": [],
+  "current_wave": 34,
+  "active_subagents": [
+    {
+      "slice": "77-es-10-reintegracao-s2298",
+      "agent": "pending-spawn",
+      "effort": "high",
+      "started_at": "2026-05-02T09:24:00Z"
+    },
+    {
+      "slice": "82-ponto-08-biometrico-digital-palm",
+      "agent": "pending-spawn",
+      "effort": "medium",
+      "started_at": "2026-05-02T09:24:00Z"
+    },
+    {
+      "slice": "80-rec-08-prova-online-proctored",
+      "agent": "pending-spawn",
+      "effort": "high",
+      "started_at": "2026-05-02T09:24:00Z"
+    }
+  ],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
 }
