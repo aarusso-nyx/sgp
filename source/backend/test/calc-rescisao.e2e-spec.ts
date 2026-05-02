@@ -365,24 +365,14 @@ async function deleteEmployeeStatusHistory(
   client: PoolClient,
   tenantParams: string[],
 ): Promise<void> {
-  await client.query(
-    'ALTER TABLE hr.employee_status_history DISABLE TRIGGER hr01_status_history_immutable',
-  );
-  await client.query(
-    'ALTER TABLE hr.employee_status_history DISABLE TRIGGER hr08_status_history_immutable',
-  );
+  await client.query("SET session_replication_role = 'replica'");
   try {
     await client.query(
       'DELETE FROM hr.employee_status_history WHERE tenant_id = $1::uuid',
       tenantParams,
     );
   } finally {
-    await client.query(
-      'ALTER TABLE hr.employee_status_history ENABLE TRIGGER hr08_status_history_immutable',
-    );
-    await client.query(
-      'ALTER TABLE hr.employee_status_history ENABLE TRIGGER hr01_status_history_immutable',
-    );
+    await client.query("SET session_replication_role = 'origin'");
   }
 }
 
