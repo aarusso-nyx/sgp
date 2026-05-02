@@ -128,4 +128,4 @@ W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migrati
 2026-05-02T10:17:35Z W36 ✓ 84-ponto-10 (high zero-tier, gates passed, commit 0e7a3f9) — facial recognition and liveness
 2026-05-02T10:20:00Z note prior-scope 38-es-09, 41-bank-02, 42-bank-04 marked completed from resume directive; no matching slice commit found
 2026-05-02T10:35:00Z verification ✗ 38-es-09, 41-bank-02, 42-bank-04 are not complete by prompt deliverables; state corrected to pending
-2026-05-02T14:06:06Z W17 ✓ 38-es-09 (high, rerun gates passed, commit 9b2a433) — retorno parser and status sync; completion 82/85 → 83/85
+2026-05-02T14:06:06Z W17 ✓ 38-es-09 (high, rerun gates passed, commit e0e8b43) — retorno parser and status sync; completion 82/85 → 83/85

@@ -16,7 +16,7 @@ Last updated at: 2026-05-02T14:06:06Z
 - Final slice commit: `0e7a3f9` (`slice(ponto-10-reconhecimento-facial): close facial recognition`).
 - Final bookkeeping commit before this report: `5eb1950` (`chore(maestro): record final slice closure`).
 - Pre-resume rows `38-es-09-retorno-parser-status-sync`, `41-bank-02-cnab240-retorno`, and `42-bank-04-pensao-alimenticia` had no matching `slice(...)` commit in local git history. A follow-up verification against prompt deliverables, repository artifacts, and live database objects found they were not complete; state was corrected back to `pending`.
-- `38-es-09-retorno-parser-status-sync` was rerun and completed with migration, parsers, sync services, retry schedule, UI, tests, docs, and maestro defense gates. Commit: `9b2a433`.
+- `38-es-09-retorno-parser-status-sync` was rerun and completed with migration, parsers, sync services, retry schedule, UI, tests, docs, and maestro defense gates. Commit: `e0e8b43`.
 
 ## Pending After Verification
 
