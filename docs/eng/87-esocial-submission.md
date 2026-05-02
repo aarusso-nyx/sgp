@@ -26,3 +26,9 @@ Falhas de timeout, HTTP 429/5xx e faults transitorios de processamento entram em
 ## Testes
 
 Os testes usam WSDL stub commitado em `source/backend/src/esocial-worker/submission/__fixtures__/ws-enviar-lote-eventos.wsdl` e servidor local. O cliente bloqueia endpoints `gov.br` quando executado em Jest, garantindo que CI nao faca chamada real ao Ambiente Nacional.
+
+## Apendice ES-09: classificacao de retorno
+
+O retorno do envio apenas confirma a recepcao do lote e grava `public.esocial_event.protocol_number`. A sincronizacao final ocorre no ES-09 ao parsear `ConsultarLoteEventos`: cada `cdResposta` e consultado em `esocial.response_classification` e roteado para `ACCEPTED`, `RECOVERABLE` ou `DEFINITIVE`.
+
+Codigos `201` e `202` atualizam o evento para `PROCESSADO_COM_SUCESSO`, gravam `receipt_number`, `response_code`, `response_description`, `response_errors` e `last_response_at`, e removem qualquer retry pendente. Codigos recuperaveis (`101`, `301`, `407`, `408`, `409`, `410`) mantem o evento em `ERRO_TECNICO_RETENTAVEL` e criam `esocial.event_retry_schedule` com backoff exponencial. Codigos definitivos (`401` a `406`, `411`, `501` a `505`) marcam `ERRO_DEFINITIVO`, preservam as ocorrencias para a fila administrativa e nao geram retry automatico.

@@ -23,6 +23,7 @@ export const PERMISSIONS = [
   'esocial.certificate.write',
   'esocial.event.exclude',
   'esocial.event.read',
+  'esocial.event.retry',
   'esocial.event.write',
   'esocial.submission.read',
   'esocial.submission.retry',

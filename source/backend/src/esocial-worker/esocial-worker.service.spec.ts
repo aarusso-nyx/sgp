@@ -13,6 +13,9 @@ describe('ESocialWorkerService', () => {
     const service = new ESocialWorkerService(
       { configured: true, query: jest.fn() } as never,
       { submitPendingBatch } as never,
+      {
+        consumeDue: jest.fn().mockResolvedValue({ consumed: 0, eventIds: [] }),
+      } as never,
     );
 
     await expect(service.pollOnce(5)).resolves.toEqual({
@@ -37,6 +40,9 @@ describe('ESocialWorkerService', () => {
           endpointUrl: 'http://127.0.0.1/esocial',
         }),
       } as never,
+      {
+        consumeDue: jest.fn().mockResolvedValue({ consumed: 0, eventIds: [] }),
+      } as never,
     );
 
     await expect(service.pollOnce(1)).resolves.toEqual({
@@ -52,6 +58,7 @@ describe('ESocialWorkerService', () => {
       new ESocialWorkerService(
         { configured: false } as never,
         { submitPendingBatch: jest.fn() } as never,
+        { consumeDue: jest.fn() } as never,
       ).status(),
     ).resolves.toMatchObject({
       dispatchAdapter: 'soap-ws-security-mtls',
@@ -68,6 +75,9 @@ describe('ESocialWorkerService', () => {
     const service = new ESocialWorkerService(
       { configured: true, query } as never,
       { submitPendingBatch } as never,
+      {
+        consumeDue: jest.fn().mockResolvedValue({ consumed: 0, eventIds: [] }),
+      } as never,
     );
 
     await expect(service.status()).resolves.toMatchObject({
@@ -85,6 +95,7 @@ describe('ESocialWorkerService', () => {
       new ESocialWorkerService(
         { configured: false } as never,
         { submitPendingBatch: jest.fn() } as never,
+        { consumeDue: jest.fn() } as never,
       ).pollOnce(),
     ).rejects.toThrow('DATABASE_URL is required');
   });

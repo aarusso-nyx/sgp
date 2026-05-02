@@ -13,6 +13,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/esocial/**', 'esocial.event.read'],
   ['#!/esocial/**', 'esocial.event.write'],
   ['#!/esocial/**', 'esocial.event.exclude'],
+  ['#!/esocial/**', 'esocial.event.retry'],
   ['#!/esocial/**', 'esocial.submission.read'],
   ['#!/esocial/**', 'esocial.submission.retry'],
   ['#!/fiscal/dctfweb', 'fiscal.dctfweb.write'],

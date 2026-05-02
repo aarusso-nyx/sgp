@@ -478,6 +478,17 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/esocial/submissao/esocial-submissao').then((m) => m.ESocialSubmissao),
       },
+      {
+        path: 'esocial/retornos',
+        loadComponent: () =>
+          import('./features/esocial/retornos/esocial-retornos').then((m) => m.ESocialRetornos),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'esocial',
+          permissions: ['esocial.event.read'],
+          moduleLabel: 'eSocial',
+        },
+      },
       ...adminFeatureRoutes,
     ],
   },

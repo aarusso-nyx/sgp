@@ -2408,16 +2408,25 @@
       "summary": "logs/maestro/84-ponto-10-reconhecimento-facial.summary.md"
     },
     "38-es-09-retorno-parser-status-sync": {
-      "status": "pending",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/38-es-09-retorno-parser-status-sync",
-      "commit": null,
-      "started_at": null,
-      "completed_at": null,
+      "commit": "9b2a433",
+      "started_at": "2026-05-02T13:52:00Z",
+      "completed_at": "2026-05-02T14:06:06Z",
       "retries": 0,
+      "agent": "019de8ef-7732-77f3-a69a-678cea65ee20",
+      "summary": "logs/maestro/38-es-09-retorno-parser-status-sync.summary.md",
+      "gates": [
+        "npm run lint",
+        "npm run typecheck",
+        "npm run test",
+        "DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run test:e2e",
+        "DATABASE_URL=postgresql://aarusso@localhost:5432/pecam npm run db:smoke"
+      ],
       "source": "live double-check against prompt deliverables and repository/database artifacts",
       "verified_at": "2026-05-02T10:35:00Z",
-      "verification_result": "Verification failed: no ES-09 migration, response_classification/event_retry_schedule tables, retorno parser/sync services, frontend retornos UI, ES-09 tests, or docs found."
+      "verification_result": "Completed on rerun: ES-09 migration, response_classification/event_retry_schedule tables, retorno parser/sync services, frontend retornos UI, ES-09 tests, docs, and maestro defense gates passed."
     },
     "41-bank-02-cnab240-retorno": {
       "status": "pending",

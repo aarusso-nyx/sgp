@@ -41,6 +41,8 @@ import { ESocialEmitService } from './esocial-emit.service';
 import { ESocialWorkerService } from './esocial-worker.service';
 import { S3000Controller } from './exclusion/s3000.controller';
 import { S3000Service } from './exclusion/s3000.service';
+import { ProcessingParser } from './parsers/processing.parser';
+import { ProtocolParser } from './parsers/protocol.parser';
 import { TotalizerParser } from './parsers/totalizer.parser';
 import { S2298Builder } from './s2298/s2298.builder';
 import { S2298Controller } from './s2298/s2298.controller';
@@ -57,6 +59,10 @@ import { RetryStrategyService } from './submission/retry-strategy.service';
 import { SoapClientService } from './submission/soap-client.service';
 import { SubmissionController } from './submission/submission.controller';
 import { SubmissionService } from './submission/submission.service';
+import { RetornoController } from './sync/retorno.controller';
+import { RetornoService } from './sync/retorno.service';
+import { RetryPolicyService } from './sync/retry-policy.service';
+import { StatusSyncService } from './sync/status-sync.service';
 import { XsdValidatorService } from './xsd/xsd-validator.service';
 
 @Module({
@@ -78,6 +84,7 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S2298Controller,
     S2306Controller,
     SubmissionController,
+    RetornoController,
   ],
   providers: [
     CertificateStoreService,
@@ -120,6 +127,11 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     RetryStrategyService,
     SoapClientService,
     SubmissionService,
+    ProtocolParser,
+    ProcessingParser,
+    RetryPolicyService,
+    StatusSyncService,
+    RetornoService,
     TotalizerParser,
     XsdValidatorService,
   ],
@@ -137,6 +149,11 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     S2306Service,
     S22xxService,
     SubmissionService,
+    ProtocolParser,
+    ProcessingParser,
+    RetryPolicyService,
+    StatusSyncService,
+    RetornoService,
     XsdValidatorService,
   ],
 })

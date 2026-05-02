@@ -4,6 +4,7 @@ import { QueryResultRow } from 'pg';
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
 import { SubmissionService } from './submission/submission.service';
+import { RetryPolicyService } from './sync/retry-policy.service';
 
 interface StatusCountRow extends QueryResultRow {
   status: string;
@@ -22,6 +23,7 @@ export class ESocialWorkerService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly submissionService: SubmissionService,
+    private readonly retryPolicyService: RetryPolicyService,
   ) {}
 
   health() {
@@ -72,12 +74,14 @@ export class ESocialWorkerService {
 
   async pollOnce(limit = 10): Promise<ESocialWorkerRunSummary> {
     this.ensureDatabase();
-    const result = await this.submissionService.submitPendingBatch(
-      this.normalizeLimit(limit),
+    const retryLimit = this.normalizeLimit(limit);
+    const dueRetries = await this.runBypassingRls(() =>
+      this.retryPolicyService.consumeDue(retryLimit),
     );
+    const result = await this.submissionService.submitPendingBatch(retryLimit);
     if (!result) {
       return {
-        discovered: 0,
+        discovered: dueRetries.consumed,
         processed: 0,
         failed: 0,
         skipped: 0,
@@ -85,7 +89,7 @@ export class ESocialWorkerService {
     }
     const failed = result.status === 'ACCEPTED' ? 0 : result.eventCount;
     return {
-      discovered: result.eventCount,
+      discovered: result.eventCount + dueRetries.consumed,
       processed: result.status === 'ACCEPTED' ? result.eventCount : 0,
       failed,
       skipped: 0,
