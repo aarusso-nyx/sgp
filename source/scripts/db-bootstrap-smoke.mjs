@@ -759,7 +759,9 @@ END
 $$;
     `,
   );
-  console.log('[db-smoke] validated ES-08 submission batch RLS, retry permission, audit, and circuit read-only policy');
+  console.log(
+    '[db-smoke] validated ES-08 submission batch RLS, retry permission, audit, and circuit read-only policy',
+  );
 
   await runSqlSnippet(
     '99-hr01-employee-lifecycle.sql',
@@ -3712,7 +3714,9 @@ END
 $$;
     `,
   );
-  console.log('[db-smoke] validated SST-02 PCMSO/PGR constraints, revisions, derived exams, and RLS');
+  console.log(
+    '[db-smoke] validated SST-02 PCMSO/PGR constraints, revisions, derived exams, and RLS',
+  );
 
   await runSqlSnippet(
     '99-sst04-s2220.sql',
@@ -3982,7 +3986,62 @@ END
 $$;
     `,
   );
-  console.log('[db-smoke] validated TCE-01 global adapter RLS, user read, worker mutation, and audit');
+  console.log(
+    '[db-smoke] validated TCE-01 global adapter RLS, user read, worker mutation, and audit',
+  );
+
+  await runSqlSnippet(
+    '99-tce03-audesp-sp.sql',
+    `
+DO $$
+DECLARE
+  policy_count integer;
+  audesp_field_count integer;
+BEGIN
+  IF to_regclass('tce.submission') IS NULL THEN
+    RAISE EXCEPTION 'Expected tce.submission to exist after TCE-03';
+  END IF;
+
+  SELECT count(*) INTO policy_count
+  FROM pg_policies
+  WHERE schemaname = 'tce'
+    AND tablename = 'submission'
+    AND policyname = 'submission_select'
+    AND qual LIKE '%sgp_tenant_matches%'
+    AND qual LIKE '%tce.submission.read%'
+    AND qual LIKE '%tce.submission.manage%';
+
+  SELECT policy_count + count(*) INTO policy_count
+  FROM pg_policies
+  WHERE schemaname = 'tce'
+    AND tablename = 'submission'
+    AND policyname = 'submission_write'
+    AND qual LIKE '%sgp_tenant_matches%'
+    AND qual LIKE '%tce.submission.manage%'
+    AND with_check LIKE '%sgp_tenant_matches%'
+    AND with_check LIKE '%tce.submission.manage%';
+
+  IF policy_count <> 2 THEN
+    RAISE EXCEPTION 'Expected tce.submission RLS policies to require tenant and tce.submission read/manage permissions';
+  END IF;
+
+  SELECT count(*) INTO audesp_field_count
+  FROM tce.layout_field field
+  JOIN tce.layout_version layout ON layout.id = field.layout_version_id
+  JOIN tce.state state ON state.id = layout.state_id
+  WHERE state.code = 'SP'
+    AND layout.system_name = 'AUDESP'
+    AND layout.version = '0.0.1'
+    AND field.field_path LIKE 'AudespFolha.%';
+
+  IF audesp_field_count < 10 THEN
+    RAISE EXCEPTION 'Expected AUDESP/SP folha placeholder fields, found %', audesp_field_count;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated TCE-03 AUDESP/SP submission schema, fields, and RLS');
 
   console.log('[db-smoke] PASSED');
 }

@@ -36,14 +36,19 @@ describe('TCE-01 adapter contract (e2e)', () => {
       .get('/v1/tce/adapters')
       .expect(200);
 
-    expect(response.body).toEqual([
-      expect.objectContaining({
-        adapterId: 'noop',
-        stateCode: 'XX',
-        organKind: 'TCE',
-        version: '0.0.1',
-      }),
-    ]);
-    expect(database.registryRows).toHaveLength(1);
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          adapterId: 'noop',
+          stateCode: 'XX',
+          organKind: 'TCE',
+          version: '0.0.1',
+        }),
+      ]),
+    );
+    expect(response.body.length).toBeGreaterThanOrEqual(1);
+    expect(database.registryRows).toEqual(
+      expect.arrayContaining([expect.objectContaining({ adapter_id: 'noop' })]),
+    );
   });
 });

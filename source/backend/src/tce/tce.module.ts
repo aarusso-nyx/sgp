@@ -3,6 +3,13 @@ import { DiscoveryModule } from '@nestjs/core';
 
 import { AuditModule } from '../audit/audit.module';
 import { DatabaseModule } from '../database/database.module';
+import { AudespSpAdapter } from './adapters/audesp-sp/audesp-sp.adapter';
+import { AudespSpController } from './adapters/audesp-sp/audesp-sp.controller';
+import { AudespSpSubmissionService } from './adapters/audesp-sp/audesp-sp.submission.service';
+import { PayrollToAudespMapper } from './adapters/audesp-sp/mapping/payroll-to-audesp.mapper';
+import { AudespXmlSerializer } from './adapters/audesp-sp/serializer/audesp-xml.serializer';
+import { AudespStubServerService } from './adapters/audesp-sp/stub/audesp-stub-server.service';
+import { AudespValidatorService } from './adapters/audesp-sp/validator/audesp-validator.service';
 import { NoopStubAdapter } from './examples/noop-stub.adapter';
 import { CatalogController } from './catalog/catalog.controller';
 import { LayoutFieldService } from './catalog/layout-field.service';
@@ -22,11 +29,11 @@ export class TceModule {
   static register(options: TceModuleOptions = {}): DynamicModule {
     const adapterProviders = options.adapters?.length
       ? options.adapters
-      : [NoopStubAdapter as Type<unknown>];
+      : [NoopStubAdapter as Type<unknown>, AudespSpAdapter as Type<unknown>];
     return {
       module: TceModule,
       imports: [AuditModule, DatabaseModule, DiscoveryModule],
-      controllers: [TceController, CatalogController],
+      controllers: [TceController, CatalogController, AudespSpController],
       providers: [
         AdapterRegistryService,
         AdapterLoaderService,
@@ -34,6 +41,11 @@ export class TceModule {
         StateService,
         LayoutVersionService,
         LayoutFieldService,
+        AudespSpSubmissionService,
+        PayrollToAudespMapper,
+        AudespXmlSerializer,
+        AudespStubServerService,
+        AudespValidatorService,
         ...adapterProviders,
       ],
       exports: [
