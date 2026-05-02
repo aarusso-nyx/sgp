@@ -50,3 +50,5 @@ W13 ✗ 27-calc-10 (medium → high retry failed: e2e simulation/audit/IRRF drif
 W13 ✓ 27-calc-10 (1 slice, medium→high + manual recovery, gates passed, commit 0f60749) — completeness 26.2% → 26.2%
 W13 ✗ 28-calc-11 (xhigh blocking failure: typecheck TS2345 in frontend folha-mensal.service.ts) — see logs/maestro/28-calc-11-folha-mensal-completa.failure.md
 W13 ✓ 28-calc-11 (1 slice, xhigh + manual recovery, gates passed, commit d62bfb7) — completeness 26.2% → 26.2%
+W13 ✗ 29-calc-12 (high → xhigh retry failed: payroll controller fixture missing rescisao/audit dependency after migration tenant-context repair) — recovered manually
+W13 ✓ 29-calc-12 (1 slice, high→xhigh + manual recovery, gates passed, commit 370c3dc) — completeness 26.2% → 26.2%; Wave 13 complete; CALC waves complete

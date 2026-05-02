@@ -350,8 +350,23 @@
       "failure_log": "logs/maestro/28-calc-11-folha-mensal-completa.failure.md",
       "failure_gate": "npm run typecheck",
       "recovery": "manual frontend query typing, Vitest spec alignment, monthly formula recompilation, and controller audit coverage after blocking xhigh failure"
+    },
+    "29-calc-12-folha-rescisao": {
+      "status": "completed",
+      "effort": "xhigh",
+      "branch": "slice/29-calc-12-folha-rescisao",
+      "commit": "370c3dc10bf9984359319ab47924295bd111e22a",
+      "started_at": "2026-05-01T21:18:11-03:00",
+      "retry_started_at": "2026-05-01T21:33:26-03:00",
+      "completed_at": "2026-05-01T21:44:20-03:00",
+      "retries": 1,
+      "agent": "019de61b-2b18-7882-83b4-543dadf5768d",
+      "previous_agent": "019de60d-0680-7063-b418-5e341c376508",
+      "previous_failure": "logs/maestro/29-calc-12-folha-rescisao.failure.md",
+      "failure_log": "logs/maestro/29-calc-12-folha-rescisao.failure.md",
+      "recovery": "manual controller spec dependency repair and e2e immutable fixture cleanup after xhigh retry repaired migration tenant context"
     }
   },
-  "current_wave": 13,
+  "current_wave": 14,
   "active_subagents": []
 }
