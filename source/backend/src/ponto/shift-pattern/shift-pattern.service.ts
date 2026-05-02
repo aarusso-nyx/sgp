@@ -6,6 +6,7 @@ import {
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { formatDateOnlyUtc } from '../payroll-bridge/tenant-timezone.util';
 import {
   AssignShiftPatternDto,
   CreateShiftPatternDto,
@@ -322,7 +323,7 @@ export class ShiftPatternService {
   }
 
   private dateOnly(value: Date | string): string {
-    return new Date(value).toISOString().slice(0, 10);
+    return formatDateOnlyUtc(value);
   }
 
   private timeToMinutes(value: string): number {

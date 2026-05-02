@@ -10,6 +10,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { CreateRepIngestionBatchDto } from '../ponto.dto';
 import { ApplyToTimeRecordService } from './apply-to-time-record.service';
 import { DedupService } from './dedup.service';
@@ -314,10 +315,8 @@ export class RepIngestionService {
       kind: row.kind,
       fileName: row.file_name,
       fileSha256: row.file_sha256,
-      receivedAt: new Date(row.received_at).toISOString(),
-      processedAt: row.processed_at
-        ? new Date(row.processed_at).toISOString()
-        : null,
+      receivedAt: formatInstantIso(row.received_at),
+      processedAt: row.processed_at ? formatInstantIso(row.processed_at) : null,
       status: row.status,
       errorSummary: row.error_summary ?? {},
       acceptedLines: Number(row.accepted_lines),

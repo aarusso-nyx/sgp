@@ -2,6 +2,7 @@ import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { formatDateOnlyUtc } from '../payroll-bridge/tenant-timezone.util';
 import { CreateWorkScheduleDto } from '../ponto.dto';
 
 interface WorkScheduleRow extends QueryResultRow {
@@ -126,10 +127,8 @@ export class WorkScheduleService {
       weeklyHours: Number(row.weekly_hours),
       toleranceMinutes: row.tolerance_minutes,
       status: row.status,
-      validFrom: new Date(row.valid_from).toISOString().slice(0, 10),
-      validTo: row.valid_to
-        ? new Date(row.valid_to).toISOString().slice(0, 10)
-        : null,
+      validFrom: formatDateOnlyUtc(row.valid_from),
+      validTo: row.valid_to ? formatDateOnlyUtc(row.valid_to) : null,
     };
   }
 }

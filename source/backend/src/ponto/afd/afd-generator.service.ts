@@ -6,6 +6,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { CreateAfdExportDto } from '../ponto.dto';
 import {
   encodeType1,
@@ -126,8 +127,8 @@ export class AfdGeneratorService {
     }
     const content = await this.generateContent({
       repDeviceId: entry.rep_device_id,
-      periodStart: new Date(entry.period_start).toISOString(),
-      periodEnd: new Date(entry.period_end).toISOString(),
+      periodStart: formatInstantIso(entry.period_start),
+      periodEnd: formatInstantIso(entry.period_end),
     });
     return {
       fileName: `${entry.object_store_key.split('/').at(-1) ?? exportId}.afd`,
@@ -166,7 +167,7 @@ export class AfdGeneratorService {
         nsr: 0,
         employerTaxId: device.employer_tax_id,
         employerName: device.manufacturer ?? 'SGP',
-        generatedAt: new Date().toISOString(),
+        generatedAt: formatInstantIso(new Date()),
         periodStart: input.periodStart,
         periodEnd: input.periodEnd,
       }),
@@ -175,7 +176,7 @@ export class AfdGeneratorService {
           nsr: Number(record.nsr),
           employeeIdentifier: record.registration || record.employee_id,
           employeeName: record.employee_name,
-          recordedAt: new Date(record.recorded_at).toISOString(),
+          recordedAt: formatInstantIso(record.recorded_at),
           source: record.source,
           repDeviceId: input.repDeviceId,
           recordHash: record.record_hash.toString('hex'),
@@ -323,9 +324,9 @@ export class AfdGeneratorService {
     return {
       afdExportId: row.afd_export_id,
       repDeviceId: row.rep_device_id,
-      periodStart: new Date(row.period_start).toISOString(),
-      periodEnd: new Date(row.period_end).toISOString(),
-      generatedAt: new Date(row.generated_at).toISOString(),
+      periodStart: formatInstantIso(row.period_start),
+      periodEnd: formatInstantIso(row.period_end),
+      generatedAt: formatInstantIso(row.generated_at),
       fileSha256: row.file_sha256?.toString('hex') ?? null,
       lineCount: Number(row.line_count),
       requestedByUserId: row.requested_by_user_id,

@@ -3,6 +3,10 @@ import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
 import { CreateHourBankDto, ManualHourBankAdjustmentDto } from '../ponto.dto';
+import {
+  formatDateOnlyUtc,
+  formatInstantIso,
+} from '../payroll-bridge/tenant-timezone.util';
 import { HourBankMovement, HourBankSummary } from './hour-bank.types';
 
 interface HourBankRow extends QueryResultRow {
@@ -95,8 +99,8 @@ export class HourBankService {
       hourBankId: row.hour_bank_id,
       employeeId: row.employee_id,
       regime: row.regime as HourBankSummary['regime'],
-      openedAt: this.dateOnly(row.opened_at),
-      expiresAt: this.dateOnly(row.expires_at),
+      openedAt: formatDateOnlyUtc(row.opened_at),
+      expiresAt: formatDateOnlyUtc(row.expires_at),
       balanceMinutes: Number(row.balance_minutes),
       status: row.status,
     };
@@ -106,17 +110,13 @@ export class HourBankService {
     return {
       hourBankMovementId: row.hour_bank_movement_id,
       hourBankId: row.hour_bank_id,
-      workDate: this.dateOnly(row.work_date),
+      workDate: formatDateOnlyUtc(row.work_date),
       kind: row.kind as HourBankMovement['kind'],
       minutes: Number(row.minutes),
       sourceTimeRecordIds: row.source_time_record_ids ?? [],
-      createdAt: new Date(row.created_at).toISOString(),
+      createdAt: formatInstantIso(row.created_at),
       payrollRunId: row.payroll_run_id,
     };
-  }
-
-  private dateOnly(value: Date | string): string {
-    return new Date(value).toISOString().slice(0, 10);
   }
 
   private ensureDatabase(): void {

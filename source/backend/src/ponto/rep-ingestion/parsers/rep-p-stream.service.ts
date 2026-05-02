@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 
 import { BadRequestException, Injectable } from '@nestjs/common';
 
+import { formatInstantIso } from '../../payroll-bridge/tenant-timezone.util';
 import { RepPStreamRecordDto } from '../../ponto.dto';
 import { TimeRecordHashService } from '../../time-record/time-record-hash.service';
 import { ParsedRepLine } from '../rep-ingestion.types';
@@ -31,7 +32,7 @@ export class RepPStreamService {
       employeeId: record.employeeId,
       employeeRegistration: record.employeeRegistration,
       employeeCpf: record.employeeCpf,
-      recordedAt: new Date(record.recordedAt).toISOString(),
+      recordedAt: formatInstantIso(record.recordedAt),
       payload: {
         ...(record.payload ?? {}),
         layout: 'REP_P_JSON',

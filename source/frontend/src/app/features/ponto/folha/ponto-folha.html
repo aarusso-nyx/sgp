@@ -1,0 +1,82 @@
+<section class="ponto-folha" aria-labelledby="ponto-folha-title">
+  <header class="ponto-folha__header">
+    <div>
+      <p>Ponto eletronico</p>
+      <h1 id="ponto-folha-title">Integracao com folha</h1>
+    </div>
+  </header>
+
+  <p class="ponto-folha__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="ponto-folha__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <form [formGroup]="form" class="ponto-folha__panel">
+    <div class="ponto-folha__fields">
+      <label>
+        <span>Folha</span>
+        <input formControlName="payrollRunId" />
+      </label>
+      <label>
+        <span>Periodo de ponto</span>
+        <input formControlName="timesheetPeriodId" />
+      </label>
+    </div>
+    <div class="ponto-folha__actions">
+      <button type="button" (click)="preview()" [disabled]="loading">Pre-visualizar</button>
+      <button type="button" (click)="apply()" [disabled]="applying">Aplicar a folha</button>
+    </div>
+  </form>
+
+  <section class="ponto-folha__panel" *ngIf="previewResult">
+    <h2>Agregados</h2>
+    <dl class="ponto-folha__metrics">
+      <div>
+        <dt>Trabalhadas</dt>
+        <dd>{{ previewResult.aggregate.workedMinutes }}min</dd>
+      </div>
+      <div>
+        <dt>Esperadas</dt>
+        <dd>{{ previewResult.aggregate.expectedMinutes }}min</dd>
+      </div>
+      <div>
+        <dt>HE 50%</dt>
+        <dd>{{ previewResult.aggregate.overtime50Minutes }}min</dd>
+      </div>
+      <div>
+        <dt>HE 100%</dt>
+        <dd>{{ previewResult.aggregate.overtime100Minutes }}min</dd>
+      </div>
+      <div>
+        <dt>Noturno</dt>
+        <dd>{{ previewResult.aggregate.nightMinutes }}min</dd>
+      </div>
+      <div>
+        <dt>Absenteismo</dt>
+        <dd>{{ previewResult.aggregate.absenceUnpaidMinutes }}min</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="ponto-folha__panel" *ngIf="previewResult">
+    <h2>Linhas</h2>
+    <table aria-label="Linhas de folha geradas pelo ponto">
+      <thead>
+        <tr>
+          <th>Rubrica</th>
+          <th>Tipo</th>
+          <th>Horas</th>
+          <th>Referencia</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of previewResult.lines">
+          <td>{{ line.code }}</td>
+          <td>{{ line.kind }}</td>
+          <td>{{ line.quantityHours }}</td>
+          <td>{{ line.referenceValue }}</td>
+          <td>{{ line.amount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

@@ -4,6 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { CreateTimeRecordDto } from '../ponto.dto';
 
 interface LastTimeRecordRow extends QueryResultRow {
@@ -183,7 +184,7 @@ export class TimeRecordHashService {
       employeeId: input.employeeId,
       nsr: input.nsr,
       rawPayload: input.rawPayload,
-      recordedAt: new Date(input.recordedAt).toISOString(),
+      recordedAt: formatInstantIso(input.recordedAt),
       source: input.source,
     };
   }
@@ -215,7 +216,7 @@ export class TimeRecordHashService {
     return {
       timeRecordId: row.time_record_id,
       employeeId: row.employee_id,
-      recordedAt: new Date(row.recorded_at).toISOString(),
+      recordedAt: formatInstantIso(row.recorded_at),
       source: row.source,
       nsr: Number(row.nsr),
       prevHash: row.prev_hash?.toString('hex') ?? null,

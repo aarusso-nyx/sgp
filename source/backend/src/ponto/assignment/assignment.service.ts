@@ -2,6 +2,7 @@ import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { formatDateOnlyUtc } from '../payroll-bridge/tenant-timezone.util';
 import { AssignWorkScheduleDto } from '../ponto.dto';
 
 interface AssignmentRow extends QueryResultRow {
@@ -69,10 +70,8 @@ export class AssignmentService {
       assignmentId: row.assignment_id,
       employeeId: row.employee_id,
       workScheduleId: row.work_schedule_id,
-      validFrom: new Date(row.valid_from).toISOString().slice(0, 10),
-      validTo: row.valid_to
-        ? new Date(row.valid_to).toISOString().slice(0, 10)
-        : null,
+      validFrom: formatDateOnlyUtc(row.valid_from),
+      validTo: row.valid_to ? formatDateOnlyUtc(row.valid_to) : null,
     };
   }
 }

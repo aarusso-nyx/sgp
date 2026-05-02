@@ -10,6 +10,7 @@ import {
   CreateAbsenceJustificationDto,
   DecideAbsenceJustificationDto,
 } from '../ponto.dto';
+import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { JustificationWorkflowService } from './justification-workflow.service';
 import {
   AbsenceJustification,
@@ -124,8 +125,8 @@ export class JustificationService {
           client,
           {
             employeeId: current.employee_id,
-            absenceStart: new Date(current.absence_start).toISOString(),
-            absenceEnd: new Date(current.absence_end).toISOString(),
+            absenceStart: formatInstantIso(current.absence_start),
+            absenceEnd: formatInstantIso(current.absence_end),
             attachmentId: current.attachment_id,
             justificationId: current.absence_justification_id,
           },
@@ -239,14 +240,14 @@ export class JustificationService {
       absenceJustificationId: row.absence_justification_id,
       employeeId: row.employee_id,
       kind: row.kind as AbsenceJustification['kind'],
-      absenceStart: new Date(row.absence_start).toISOString(),
-      absenceEnd: new Date(row.absence_end).toISOString(),
+      absenceStart: formatInstantIso(row.absence_start),
+      absenceEnd: formatInstantIso(row.absence_end),
       status: row.status as AbsenceJustification['status'],
       reason: row.reason,
       attachmentId: row.attachment_id,
       requestedByUserId: row.requested_by_user_id,
       approvedByUserId: row.approved_by_user_id,
-      decidedAt: row.decided_at ? new Date(row.decided_at).toISOString() : null,
+      decidedAt: row.decided_at ? formatInstantIso(row.decided_at) : null,
       payrollTreatment:
         row.payroll_treatment as AbsenceJustification['payrollTreatment'],
       medicalLeaveId: row.medical_leave_id,

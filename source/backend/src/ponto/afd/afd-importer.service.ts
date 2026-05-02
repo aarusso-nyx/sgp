@@ -5,6 +5,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { TimeRecordHashService } from '../time-record/time-record-hash.service';
 import { CreateAfdImportDto } from '../ponto.dto';
 import { AfdRecord, parseAfd } from './afd-layout';
@@ -293,7 +294,7 @@ export class AfdImporterService {
       repDeviceId: row.rep_device_id,
       fileName: row.file_name,
       fileSha256: row.file_sha256.toString('hex'),
-      importedAt: new Date(row.imported_at).toISOString(),
+      importedAt: formatInstantIso(row.imported_at),
       lineCount: Number(row.line_count),
       status: row.status,
       errorSummary: row.error_summary ?? {},

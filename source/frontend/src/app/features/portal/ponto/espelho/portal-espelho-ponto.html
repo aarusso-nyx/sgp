@@ -1,0 +1,49 @@
+<section class="portal-espelho" aria-labelledby="portal-espelho-title">
+  <header class="portal-espelho__header">
+    <h1 id="portal-espelho-title">Espelho de ponto</h1>
+  </header>
+
+  <p class="portal-espelho__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="load()" class="portal-espelho__panel">
+    <label>
+      <span>Folha</span>
+      <input formControlName="payrollRunId" />
+    </label>
+    <label>
+      <span>Periodo</span>
+      <input formControlName="timesheetPeriodId" />
+    </label>
+    <button type="submit" [disabled]="loading">Atualizar</button>
+  </form>
+
+  <section class="portal-espelho__panel" *ngIf="result">
+    <h2>{{ result.aggregate.periodStart }} a {{ result.aggregate.periodEnd }}</h2>
+    <dl class="portal-espelho__metrics">
+      <div>
+        <dt>Trabalhadas</dt>
+        <dd>{{ result.aggregate.workedMinutes }}min</dd>
+      </div>
+      <div>
+        <dt>Esperadas</dt>
+        <dd>{{ result.aggregate.expectedMinutes }}min</dd>
+      </div>
+      <div>
+        <dt>HE 50%</dt>
+        <dd>{{ result.aggregate.overtime50Minutes }}min</dd>
+      </div>
+      <div>
+        <dt>HE 100%</dt>
+        <dd>{{ result.aggregate.overtime100Minutes }}min</dd>
+      </div>
+      <div>
+        <dt>Adicional noturno</dt>
+        <dd>{{ result.aggregate.nightMinutes }}min</dd>
+      </div>
+      <div>
+        <dt>Absenteismo</dt>
+        <dd>{{ result.aggregate.absenceUnpaidMinutes }}min</dd>
+      </div>
+    </dl>
+  </section>
+</section>

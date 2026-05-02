@@ -1,0 +1,41 @@
+.portal-espelho {
+  display: grid;
+  gap: 1rem;
+}
+
+.portal-espelho__header,
+.portal-espelho__panel {
+  background: #fff;
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.portal-espelho__header h1,
+.portal-espelho__panel h2 {
+  margin: 0;
+}
+
+.portal-espelho__panel,
+.portal-espelho__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.75rem;
+}
+
+.portal-espelho label,
+.portal-espelho__metrics div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.portal-espelho input {
+  min-height: 2.25rem;
+  border: 1px solid #b8c1cf;
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+}
+
+.portal-espelho__error {
+  color: #9f1d1d;
+}

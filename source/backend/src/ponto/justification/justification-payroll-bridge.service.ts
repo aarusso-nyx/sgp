@@ -2,6 +2,7 @@ import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { PayrollJustificationTreatment } from './justification.types';
 
 interface TreatmentRow extends QueryResultRow {
@@ -64,8 +65,8 @@ export class JustificationPayrollBridgeService {
     return {
       employeeId: row.employee_id,
       absenceJustificationId: row.absence_justification_id,
-      intervalStart: start.toISOString(),
-      intervalEnd: end.toISOString(),
+      intervalStart: formatInstantIso(start),
+      intervalEnd: formatInstantIso(end),
       payrollTreatment,
       paidMinutes: payrollTreatment === 'PAID' ? minutes : 0,
       unpaidMinutes: payrollTreatment === 'UNPAID' ? minutes : 0,

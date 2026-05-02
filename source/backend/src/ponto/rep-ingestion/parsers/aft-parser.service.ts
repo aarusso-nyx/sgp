@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
+import { formatInstantIso } from '../../payroll-bridge/tenant-timezone.util';
 import { ParsedRepLine } from '../rep-ingestion.types';
 
 @Injectable()
@@ -62,7 +63,7 @@ export class AftParserService {
         `AFDT line ${lineNo} has invalid timestamp`,
       );
     }
-    return date.toISOString();
+    return formatInstantIso(date);
   }
 
   private parseEmployeeIdentifier(

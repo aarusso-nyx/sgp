@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 
 import { DatabaseService } from '../../database/database.service';
+import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { TimeRecordHashService } from './time-record-hash.service';
 
 describe('TimeRecordHashService', () => {
@@ -21,7 +22,7 @@ describe('TimeRecordHashService', () => {
       const nsr = index + 1;
       const record = service.recordForHash({
         employeeId,
-        recordedAt: new Date(Date.UTC(2026, 4, 2, 11, nsr)).toISOString(),
+        recordedAt: formatInstantIso(new Date(Date.UTC(2026, 4, 2, 11, nsr))),
         source: 'MANUAL_ADJUSTMENT',
         nsr,
         rawPayload: { device: 'manual', sequence: nsr },

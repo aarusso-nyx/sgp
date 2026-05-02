@@ -3,6 +3,10 @@ import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
 import { RequestContextStore } from '../../common/request-context/request-context.store';
+import {
+  formatDateOnlyUtc,
+  formatInstantIso,
+} from '../payroll-bridge/tenant-timezone.util';
 import { GenerateDutyRosterDto } from '../ponto.dto';
 import {
   RosterProjectionEntry,
@@ -112,8 +116,8 @@ export class DutyRosterService {
     end.setUTCDate(end.getUTCDate() + 27);
     return this.rosterProjectorService.projectEmployee(
       resolvedEmployeeId,
-      start.toISOString().slice(0, 10),
-      end.toISOString().slice(0, 10),
+      formatDateOnlyUtc(start),
+      formatDateOnlyUtc(end),
     );
   }
 
@@ -141,14 +145,12 @@ export class DutyRosterService {
       periodStart: this.dateOnly(row.period_start),
       periodEnd: this.dateOnly(row.period_end),
       status: row.status,
-      publishedAt: row.published_at
-        ? new Date(row.published_at).toISOString()
-        : null,
+      publishedAt: row.published_at ? formatInstantIso(row.published_at) : null,
     };
   }
 
   private dateOnly(value: Date | string): string {
-    return new Date(value).toISOString().slice(0, 10);
+    return formatDateOnlyUtc(value);
   }
 
   private ensureDatabase(): void {

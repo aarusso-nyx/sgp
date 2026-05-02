@@ -218,6 +218,14 @@ export class SettleHourBankDto {
   competenceYear?: number;
 }
 
+export class ApplyPayrollBridgeDto {
+  @IsUUID()
+  payrollRunId!: string;
+
+  @IsUUID()
+  timesheetPeriodId!: string;
+}
+
 export class CreateAbsenceJustificationDto {
   @IsUUID()
   employeeId!: string;

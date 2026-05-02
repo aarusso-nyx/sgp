@@ -1,0 +1,65 @@
+.ponto-folha {
+  display: grid;
+  gap: 1rem;
+}
+
+.ponto-folha__header,
+.ponto-folha__panel {
+  background: #fff;
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.ponto-folha__header p,
+.ponto-folha__header h1,
+.ponto-folha__panel h2 {
+  margin: 0;
+}
+
+.ponto-folha__fields,
+.ponto-folha__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.75rem;
+}
+
+.ponto-folha label,
+.ponto-folha__metrics div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.ponto-folha input {
+  min-height: 2.25rem;
+  border: 1px solid #b8c1cf;
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+}
+
+.ponto-folha__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.ponto-folha table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ponto-folha th,
+.ponto-folha td {
+  border-bottom: 1px solid #e5e9f0;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.ponto-folha__message {
+  color: #17663a;
+}
+
+.ponto-folha__error {
+  color: #9f1d1d;
+}

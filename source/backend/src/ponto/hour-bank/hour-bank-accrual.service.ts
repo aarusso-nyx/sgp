@@ -6,6 +6,10 @@ import {
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import {
+  formatDateOnlyUtc,
+  formatInstantIso,
+} from '../payroll-bridge/tenant-timezone.util';
 import { AccrueHourBankDayDto } from '../ponto.dto';
 import { HourBankMovement } from './hour-bank.types';
 
@@ -78,11 +82,11 @@ export class HourBankAccrualService {
     return {
       hourBankMovementId: row.hour_bank_movement_id,
       hourBankId: row.hour_bank_id,
-      workDate: new Date(row.work_date).toISOString().slice(0, 10),
+      workDate: formatDateOnlyUtc(row.work_date),
       kind: row.kind as HourBankMovement['kind'],
       minutes: Number(row.minutes),
       sourceTimeRecordIds: row.source_time_record_ids ?? [],
-      createdAt: new Date(row.created_at).toISOString(),
+      createdAt: formatInstantIso(row.created_at),
       payrollRunId: row.payroll_run_id,
     };
   }

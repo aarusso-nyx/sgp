@@ -2,6 +2,7 @@ import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { formatDateOnlyUtc } from '../payroll-bridge/tenant-timezone.util';
 
 interface ShiftProjectionRow extends QueryResultRow {
   shift_assignment_id: string;
@@ -213,7 +214,7 @@ export class RosterProjectorService {
       cursor <= end;
       cursor += 1
     ) {
-      dates.push(new Date(cursor * 86_400_000).toISOString().slice(0, 10));
+      dates.push(formatDateOnlyUtc(new Date(cursor * 86_400_000)));
     }
     return dates;
   }
@@ -243,18 +244,14 @@ export class RosterProjectorService {
     if (!entryTime || !exitTime) return this.combineDateTime(date, exitTime);
     const exitDate =
       this.timeToMinutes(exitTime) <= this.timeToMinutes(entryTime)
-        ? new Date((this.epochDay(date) + 1) * 86_400_000)
-            .toISOString()
-            .slice(0, 10)
+        ? formatDateOnlyUtc(new Date((this.epochDay(date) + 1) * 86_400_000))
         : date;
     return this.combineDateTime(exitDate, exitTime);
   }
 
   private epochDay(value: Date | string): number {
     const date =
-      typeof value === 'string'
-        ? value.slice(0, 10)
-        : value.toISOString().slice(0, 10);
+      typeof value === 'string' ? value.slice(0, 10) : formatDateOnlyUtc(value);
     return Math.floor(Date.parse(`${date}T00:00:00.000Z`) / 86_400_000);
   }
 

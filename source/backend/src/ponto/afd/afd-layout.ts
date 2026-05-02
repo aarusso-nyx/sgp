@@ -2,6 +2,11 @@ import { createHash } from 'node:crypto';
 
 import { BadRequestException } from '@nestjs/common';
 
+import {
+  formatDateOnlyUtc,
+  formatInstantIso,
+} from '../payroll-bridge/tenant-timezone.util';
+
 export const AFD_LINE_WIDTH = 256;
 export const AFD_LAYOUT_VERSION = '671001';
 
@@ -80,7 +85,7 @@ function timestamp(value: string): string {
   if (Number.isNaN(date.getTime())) {
     throw new BadRequestException(`Invalid AFD timestamp: ${value}`);
   }
-  return date.toISOString().replace(/\D/g, '').slice(0, 14);
+  return formatInstantIso(date).replace(/\D/g, '').slice(0, 14);
 }
 
 function dateOnly(value: string): string {
@@ -88,14 +93,14 @@ function dateOnly(value: string): string {
   if (Number.isNaN(date.getTime())) {
     throw new BadRequestException(`Invalid AFD date: ${value}`);
   }
-  return date.toISOString().slice(0, 10).replace(/\D/g, '');
+  return formatDateOnlyUtc(date).replace(/\D/g, '');
 }
 
 function parseTimestamp(value: string): string {
   const text = value.trim();
   if (!/^\d{14}$/.test(text)) return '';
   const iso = `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}T${text.slice(8, 10)}:${text.slice(10, 12)}:${text.slice(12, 14)}.000Z`;
-  return new Date(iso).toISOString();
+  return formatInstantIso(iso);
 }
 
 function base(nsr: number, type: AfdRecordType): string {

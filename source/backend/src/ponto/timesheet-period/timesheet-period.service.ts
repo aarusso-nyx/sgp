@@ -2,6 +2,7 @@ import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { formatDateOnlyUtc } from '../payroll-bridge/tenant-timezone.util';
 import { OpenTimesheetPeriodDto } from '../ponto.dto';
 
 interface TimesheetPeriodRow extends QueryResultRow {
@@ -63,8 +64,8 @@ export class TimesheetPeriodService {
     return {
       timesheetPeriodId: row.timesheet_period_id,
       employeeId: row.employee_id,
-      periodStart: new Date(row.period_start).toISOString().slice(0, 10),
-      periodEnd: new Date(row.period_end).toISOString().slice(0, 10),
+      periodStart: formatDateOnlyUtc(row.period_start),
+      periodEnd: formatDateOnlyUtc(row.period_end),
       status: row.status,
       workedMinutes: row.worked_minutes,
       overtime50Minutes: row.overtime_50_minutes,

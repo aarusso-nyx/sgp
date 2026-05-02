@@ -34,6 +34,10 @@ import { JustificationController } from './justification/justification.controlle
 import { JustificationPayrollBridgeService } from './justification/justification-payroll-bridge.service';
 import { JustificationService } from './justification/justification.service';
 import { JustificationWorkflowService } from './justification/justification-workflow.service';
+import { PayrollBridgeController } from './payroll-bridge/payroll-bridge.controller';
+import { PayrollBridgeService } from './payroll-bridge/payroll-bridge.service';
+import { PayrollLineBuilderService } from './payroll-bridge/payroll-line-builder.service';
+import { TimesheetAggregatorService } from './payroll-bridge/timesheet-aggregator.service';
 import { ShiftPatternController } from './shift-pattern/shift-pattern.controller';
 import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
 
@@ -51,6 +55,7 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     DutyRosterController,
     HourBankController,
     JustificationController,
+    PayrollBridgeController,
   ],
   providers: [
     WorkScheduleService,
@@ -75,6 +80,9 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     JustificationService,
     JustificationWorkflowService,
     JustificationPayrollBridgeService,
+    TimesheetAggregatorService,
+    PayrollLineBuilderService,
+    PayrollBridgeService,
   ],
   exports: [
     WorkScheduleService,
@@ -95,6 +103,9 @@ import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
     JustificationService,
     JustificationWorkflowService,
     JustificationPayrollBridgeService,
+    TimesheetAggregatorService,
+    PayrollLineBuilderService,
+    PayrollBridgeService,
   ],
 })
 export class PontoModule {}

@@ -8,6 +8,7 @@ import { QueryResultRow } from 'pg';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { formatInstantIso } from '../payroll-bridge/tenant-timezone.util';
 import { CreateRepDeviceDto } from '../ponto.dto';
 import { RepDeviceSummary } from '../rep-ingestion/rep-ingestion.types';
 
@@ -116,7 +117,7 @@ export class RepDeviceService {
       manufacturer: row.manufacturer,
       model: row.model,
       programHash: row.program_hash,
-      registeredAt: new Date(row.registered_at).toISOString(),
+      registeredAt: formatInstantIso(row.registered_at),
       status: row.status,
     };
   }
