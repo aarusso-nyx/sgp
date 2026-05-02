@@ -123,6 +123,13 @@ export const routes: Routes = [
           import('./features/recrutamento/posse/posse').then((m) => m.RecrutamentoPosse),
       },
       {
+        path: 'recrutamento/biometria',
+        loadComponent: () =>
+          import('./features/recrutamento/biometria/biometria').then(
+            (m) => m.RecrutamentoBiometria,
+          ),
+      },
+      {
         path: 'avaliacao/estagio-probatorio',
         loadComponent: () =>
           import('./features/avaliacao/estagio-probatorio/estagio-probatorio').then(
@@ -211,6 +218,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/ponto/rep/ponto-rep').then((m) => m.PontoRep),
       },
       {
+        path: 'ponto/afd',
+        loadComponent: () => import('./features/ponto/afd/ponto-afd').then((m) => m.PontoAfd),
+      },
+      {
         path: 'fiscal/dctfweb',
         loadComponent: () =>
           import('./features/fiscal/dctfweb/dctfweb').then((m) => m.FiscalDctfweb),
@@ -218,6 +229,16 @@ export const routes: Routes = [
         data: {
           moduleKey: 'fiscal',
           permissions: ['fiscal.dctfweb.read'],
+          moduleLabel: 'Fiscal',
+        },
+      },
+      {
+        path: 'fiscal/dirf',
+        loadComponent: () => import('./features/fiscal/dirf/dirf').then((m) => m.FiscalDirf),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'fiscal',
+          permissions: ['fiscal.dirf.read'],
           moduleLabel: 'Fiscal',
         },
       },

@@ -572,6 +572,22 @@
       "description": "Generate, sign, transmit, and reconcile DCTFWeb declarations."
     },
     {
+      "key": "fiscal.dirf.read",
+      "moduleKey": "fiscal",
+      "resourceKey": "dirf",
+      "actionKey": "read",
+      "routePattern": "/api/v1/admin/fiscal/dirf/**",
+      "description": "Read DIRF files, beneficiaries, payments, layout version, and validation status."
+    },
+    {
+      "key": "fiscal.dirf.write",
+      "moduleKey": "fiscal",
+      "resourceKey": "dirf",
+      "actionKey": "write",
+      "routePattern": "#!/fiscal/dirf",
+      "description": "Generate annual DIRF original and retificadora files for third-party payments."
+    },
+    {
       "key": "avaliacao.read",
       "moduleKey": "avaliacao",
       "resourceKey": "performance",
@@ -764,6 +780,22 @@
       "description": "Schedule possession, confirm possession, start exercise, prorogue exercise, and cancel possession."
     },
     {
+      "key": "recrutamento.biometric.read",
+      "moduleKey": "recrutamento",
+      "resourceKey": "biometric",
+      "actionKey": "read",
+      "routePattern": "/api/v1/recrutamento/biometria/**",
+      "description": "Read candidate biometric consent, capture metadata, and match decisions."
+    },
+    {
+      "key": "recrutamento.biometric.write",
+      "moduleKey": "recrutamento",
+      "resourceKey": "biometric",
+      "actionKey": "write",
+      "routePattern": "/api/v1/recrutamento/biometria/**",
+      "description": "Capture, match, expire, and revoke candidate biometrics."
+    },
+    {
       "key": "recrutamento.read",
       "moduleKey": "recrutamento",
       "resourceKey": "recruitment",
@@ -948,6 +980,22 @@
       "description": "Create REP devices and ingest REP-P, REP-A, and REP-C batches."
     },
     {
+      "key": "ponto.afd.read",
+      "moduleKey": "ponto",
+      "resourceKey": "afd",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/afd/**",
+      "description": "Read AFD exports, imports, hashes, and processing history."
+    },
+    {
+      "key": "ponto.afd.write",
+      "moduleKey": "ponto",
+      "resourceKey": "afd",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/afd/**",
+      "description": "Generate and import AFD files for REP devices."
+    },
+    {
       "key": "rh.medical_leave.read",
       "moduleKey": "rh",
       "resourceKey": "medical_leave",
@@ -1123,6 +1171,8 @@
       "ponto.timerecord.write",
       "ponto.rep.read",
       "ponto.rep.write",
+      "ponto.afd.read",
+      "ponto.afd.write",
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",
@@ -1176,6 +1226,8 @@
       "esocial.submission.retry",
       "fiscal.dctfweb.read",
       "fiscal.dctfweb.write",
+      "fiscal.dirf.read",
+      "fiscal.dirf.write",
       "portal.paystub.read",
       "report.payslip.read",
       "report.payslip.write",
@@ -1195,6 +1247,7 @@
       "saude.epi.read",
       "ponto.schedule.read",
       "ponto.timerecord.read",
+      "ponto.afd.read",
       "avaliacao.pccs.read",
       "avaliacao.progressao.read",
       "avaliacao.salary_history.read",
@@ -1207,6 +1260,7 @@
       "esocial.event.read",
       "esocial.submission.read",
       "fiscal.dctfweb.read",
+      "fiscal.dirf.read",
       "portal.paystub.read",
       "report.payslip.read",
       "relatorio.read",
