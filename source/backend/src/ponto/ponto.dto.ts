@@ -3,6 +3,7 @@ import {
   ArrayMinSize,
   IsArray,
   IsDateString,
+  IsBoolean,
   IsIn,
   IsInt,
   IsNotEmpty,
@@ -237,4 +238,118 @@ export class CreateAfdImportDto {
   @IsString()
   @IsNotEmpty()
   content!: string;
+}
+
+export class ShiftPatternDayDto {
+  @IsInt()
+  @Min(0)
+  dayIndex!: number;
+
+  @IsBoolean()
+  isWorking!: boolean;
+
+  @IsOptional()
+  @IsString()
+  entryTime?: string;
+
+  @IsOptional()
+  @IsString()
+  exitTime?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  lunchMinutes?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  nightShiftFlag?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  hazardFlag?: boolean;
+}
+
+export class CreateShiftPatternDto {
+  @IsString()
+  @IsNotEmpty()
+  code!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name!: string;
+
+  @IsInt()
+  @Min(1)
+  @Max(31)
+  cycleDays!: number;
+
+  @IsIn(['CLT_12X36', 'CLT_6X1', 'CLT_5X2', 'PLANTAO_24X72', 'CUSTOM'])
+  kind!: string;
+
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => ShiftPatternDayDto)
+  days!: ShiftPatternDayDto[];
+}
+
+export class AssignShiftPatternDto {
+  @IsUUID()
+  employeeId!: string;
+
+  @IsUUID()
+  shiftPatternId!: string;
+
+  @IsDateString()
+  anchorDate!: string;
+
+  @IsDateString()
+  validFrom!: string;
+
+  @IsOptional()
+  @IsDateString()
+  validTo?: string;
+}
+
+export class UpdateShiftAssignmentDto {
+  @IsOptional()
+  @IsUUID()
+  shiftPatternId?: string;
+
+  @IsOptional()
+  @IsDateString()
+  anchorDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  validFrom?: string;
+
+  @IsOptional()
+  @IsDateString()
+  validTo?: string | null;
+}
+
+export class ProjectRosterDto {
+  @IsUUID()
+  employeeId!: string;
+
+  @IsDateString()
+  periodStart!: string;
+
+  @IsDateString()
+  periodEnd!: string;
+}
+
+export class GenerateDutyRosterDto {
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsUUID(undefined, { each: true })
+  employeeIds!: string[];
+
+  @IsDateString()
+  periodStart!: string;
+
+  @IsDateString()
+  periodEnd!: string;
 }

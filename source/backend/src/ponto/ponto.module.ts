@@ -22,6 +22,11 @@ import { RepIngestionService } from './rep-ingestion/rep-ingestion.service';
 import { AfdController } from './afd/afd.controller';
 import { AfdGeneratorService } from './afd/afd-generator.service';
 import { AfdImporterService } from './afd/afd-importer.service';
+import { DutyRosterController } from './duty-roster/duty-roster.controller';
+import { DutyRosterService } from './duty-roster/duty-roster.service';
+import { RosterProjectorService } from './duty-roster/roster-projector.service';
+import { ShiftPatternController } from './shift-pattern/shift-pattern.controller';
+import { ShiftPatternService } from './shift-pattern/shift-pattern.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule],
@@ -33,6 +38,8 @@ import { AfdImporterService } from './afd/afd-importer.service';
     RepDeviceController,
     RepIngestionController,
     AfdController,
+    ShiftPatternController,
+    DutyRosterController,
   ],
   providers: [
     WorkScheduleService,
@@ -47,6 +54,9 @@ import { AfdImporterService } from './afd/afd-importer.service';
     RepIngestionService,
     AfdGeneratorService,
     AfdImporterService,
+    ShiftPatternService,
+    RosterProjectorService,
+    DutyRosterService,
   ],
   exports: [
     WorkScheduleService,
@@ -57,6 +67,9 @@ import { AfdImporterService } from './afd/afd-importer.service';
     RepIngestionService,
     AfdGeneratorService,
     AfdImporterService,
+    ShiftPatternService,
+    RosterProjectorService,
+    DutyRosterService,
   ],
 })
 export class PontoModule {}

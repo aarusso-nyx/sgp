@@ -1,0 +1,100 @@
+<section class="ponto-escalas" aria-labelledby="ponto-escalas-title">
+  <header class="ponto-escalas__header">
+    <div>
+      <p>Ponto eletronico</p>
+      <h1 id="ponto-escalas-title">Escalas e plantoes</h1>
+    </div>
+    <button type="button" (click)="create12x36()" [disabled]="saving">Criar 12x36</button>
+  </header>
+
+  <p class="ponto-escalas__message" *ngIf="message" role="status">{{ message }}</p>
+  <p class="ponto-escalas__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <section class="ponto-escalas__panel">
+    <h2>Padroes</h2>
+    <p *ngIf="loading">Carregando...</p>
+    <div class="ponto-escalas__pattern" *ngFor="let pattern of patterns">
+      <div>
+        <strong>{{ pattern.code }}</strong>
+        <span>{{ pattern.name }} - {{ pattern.kind }}</span>
+      </div>
+      <ol>
+        <li *ngFor="let day of pattern.days" [class.is-rest]="!day.isWorking">
+          D{{ day.dayIndex + 1 }}:
+          <ng-container *ngIf="day.isWorking; else restDay">
+            {{ day.entryTime }}-{{ day.exitTime }} {{ day.expectedMinutes }}min
+            <span *ngIf="day.nightShiftFlag">noturno</span>
+            <span *ngIf="day.hazardFlag">insalubre</span>
+          </ng-container>
+          <ng-template #restDay>folga</ng-template>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <form [formGroup]="rosterForm" (ngSubmit)="generate()" class="ponto-escalas__panel">
+    <h2>Roster mensal</h2>
+    <div class="ponto-escalas__fields">
+      <label>
+        <span>Servidores</span>
+        <input formControlName="employeeIds" placeholder="UUIDs separados por virgula" />
+      </label>
+      <label>
+        <span>Inicio</span>
+        <input type="date" formControlName="periodStart" />
+      </label>
+      <label>
+        <span>Fim</span>
+        <input type="date" formControlName="periodEnd" />
+      </label>
+    </div>
+    <button type="submit" [disabled]="saving">Gerar</button>
+  </form>
+
+  <section class="ponto-escalas__panel">
+    <h2>Rosters</h2>
+    <table aria-label="Rosters">
+      <thead>
+        <tr>
+          <th>Periodo</th>
+          <th>Status</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let roster of rosters">
+          <td>{{ roster.periodStart }} - {{ roster.periodEnd }}</td>
+          <td>{{ roster.status }}</td>
+          <td>
+            <button type="button" (click)="publish(roster)" [disabled]="roster.status !== 'DRAFT'">
+              Publicar
+            </button>
+            <button type="button" (click)="lock(roster)" [disabled]="roster.status === 'LOCKED'">
+              Travar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <form [formGroup]="portalForm" (ngSubmit)="loadUpcoming()" class="ponto-escalas__panel">
+    <h2>Portal - proximas 4 semanas</h2>
+    <label>
+      <span>Servidor</span>
+      <input formControlName="employeeId" placeholder="UUID do servidor" />
+    </label>
+    <button type="submit">Carregar</button>
+    <div class="ponto-escalas__calendar">
+      <article *ngFor="let entry of upcoming" [class.is-night]="entry.nightShiftFlag">
+        <strong>{{ entry.workDate }}</strong>
+        <span *ngIf="entry.expectedMinutes; else dayOff">
+          {{ entry.expectedEntry | date: 'HH:mm' }}-{{ entry.expectedExit | date: 'HH:mm' }}
+        </span>
+        <ng-template #dayOff>Folga</ng-template>
+        <small *ngIf="entry.nightShiftFlag">Noturno</small>
+        <small *ngIf="entry.hazardFlag">Insalubre</small>
+      </article>
+    </div>
+  </form>
+</section>

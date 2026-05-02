@@ -10,6 +10,7 @@ import { MeusDadosBancarios } from './pages/meus-dados/bancarios/bancarios';
 import { PortalFeaturePage } from './pages/portal-feature-page/portal-feature-page';
 import { PortalHome } from './pages/portal-home/portal-home';
 import { PortalShell } from './pages/portal-shell/portal-shell';
+import { ProximasEscalas } from './pages/ponto/proximas-escalas/proximas-escalas';
 
 function normalizePath(path: string): string {
   return path.replace(/^\//, '');
@@ -71,6 +72,10 @@ export const routes: Routes = [
       {
         path: 'licencas/:section',
         component: Licencas,
+      },
+      {
+        path: 'ponto/proximas-escalas',
+        component: ProximasEscalas,
       },
       ...featureRoutes,
     ],

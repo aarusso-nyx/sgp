@@ -1,0 +1,20 @@
+<section class="proximas-escalas" aria-labelledby="proximas-escalas-title">
+  <header>
+    <p>Ponto eletronico</p>
+    <h1 id="proximas-escalas-title">Proximas escalas</h1>
+  </header>
+
+  <p class="proximas-escalas__error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="proximas-escalas__calendar">
+    <article *ngFor="let entry of entries" [class.is-night]="entry.nightShiftFlag">
+      <strong>{{ entry.workDate }}</strong>
+      <span *ngIf="entry.expectedMinutes; else restDay">
+        {{ entry.expectedEntry | date: 'HH:mm' }}-{{ entry.expectedExit | date: 'HH:mm' }}
+      </span>
+      <ng-template #restDay>Folga</ng-template>
+      <small *ngIf="entry.nightShiftFlag">Noturno</small>
+      <small *ngIf="entry.hazardFlag">Insalubre</small>
+    </article>
+  </div>
+</section>

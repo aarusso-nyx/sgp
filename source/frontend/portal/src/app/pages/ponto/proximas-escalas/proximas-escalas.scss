@@ -1,0 +1,38 @@
+.proximas-escalas {
+  display: grid;
+  gap: 1rem;
+}
+
+.proximas-escalas header {
+  border-bottom: 1px solid #d7dde5;
+  padding-bottom: 0.75rem;
+}
+
+.proximas-escalas header p,
+.proximas-escalas header h1 {
+  margin: 0;
+}
+
+.proximas-escalas__calendar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  gap: 0.5rem;
+}
+
+.proximas-escalas__calendar article {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  display: grid;
+  gap: 0.25rem;
+  min-height: 5rem;
+  padding: 0.5rem;
+}
+
+.proximas-escalas__calendar .is-night {
+  border-color: #475569;
+  background: #f8fafc;
+}
+
+.proximas-escalas__error {
+  color: #b91c1c;
+}
