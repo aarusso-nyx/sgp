@@ -81,3 +81,7 @@ W24 ✓ 66-sst-01 (medium, gates passed, commit 841b684) — ASO and occupationa
 W24 ✓ 51-rec-02 (medium, transient concurrent lint failure recovered by maestro defense, commit 476f28e) — public candidate registration
 W23 ✓ 67-sst-02 (low, gates passed, commit 98c6806) — PCMSO/PGR programs
 W24 ✓ 59-ponto-01 (medium, gates passed, commit b8eb28d) — Portaria 671 base
+2026-05-02T03:06:19-03:00 frontier launch 47-clt-01, 52-rec-03, 69-sst-04 — agents 019de74b-5608, 019de74b-5631, 019de74b-569a
+W25 ✓ 47-clt-01 (high, zero-tier, gates passed, commit 9400ac0) — FGTS deposits and termination fine
+W25 ✓ 52-rec-03 (high, gates passed, commit 88372df) — exams, answer keys, resources, notes
+W25 ✓ 69-sst-04 (medium, gates passed, commit 3424242) — S-2220 monitoring events

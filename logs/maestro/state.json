@@ -663,7 +663,7 @@
       "completed_at": "2026-05-02T05:25:32.076Z"
     },
     "47-clt-01-fgts-rescisao-multa": {
-      "status": "pending",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/47-clt-01-fgts-rescisao-multa",
       "retries": 0,
@@ -701,7 +701,11 @@
       ],
       "wave": 25,
       "theme": "CLT",
-      "zero_retry": true
+      "zero_retry": true,
+      "agent": "019de74b-5608-7063-9b18-a9fcafa5c109",
+      "started_at": "2026-05-02T06:06:19.750Z",
+      "commit": "9400ac0",
+      "completed_at": "2026-05-02T06:28:24.418Z"
     },
     "48-clt-02-aviso-previo-reflexos": {
       "status": "pending",
@@ -880,7 +884,7 @@
       "failure_log": "logs/maestro/51-rec-02-inscricao-portal.failure.md"
     },
     "52-rec-03-prova-avaliacao-resultados": {
-      "status": "pending",
+      "status": "completed",
       "effort": "high",
       "branch": "slice/52-rec-03-prova-avaliacao-resultados",
       "retries": 0,
@@ -914,7 +918,11 @@
       ],
       "wave": 25,
       "theme": "REC",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de74b-5631-7420-938d-2c795d633696",
+      "started_at": "2026-05-02T06:06:19.750Z",
+      "commit": "88372df",
+      "completed_at": "2026-05-02T06:28:24.418Z"
     },
     "53-rec-04-classificacao-criterios-desempate": {
       "status": "pending",
@@ -1574,7 +1582,7 @@
       "zero_retry": true
     },
     "69-sst-04-monitoramento-saude-s2220": {
-      "status": "pending",
+      "status": "completed",
       "effort": "medium",
       "branch": "slice/69-sst-04-monitoramento-saude-s2220",
       "retries": 0,
@@ -1611,7 +1619,11 @@
       ],
       "wave": 25,
       "theme": "SST",
-      "zero_retry": false
+      "zero_retry": false,
+      "agent": "019de74b-569a-72b1-9792-d072cdd144b1",
+      "started_at": "2026-05-02T06:06:19.750Z",
+      "commit": "3424242",
+      "completed_at": "2026-05-02T06:28:24.418Z"
     },
     "70-sst-05-riscos-ambientais-s2240-epi": {
       "status": "pending",
@@ -2250,7 +2262,7 @@
       "zero_retry": true
     }
   },
-  "current_wave": 25,
+  "current_wave": 26,
   "active_subagents": [],
   "integration_branch": "integration/phase-6-9-12",
   "scheduler": "runnable-frontier"
