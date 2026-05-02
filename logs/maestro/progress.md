@@ -102,3 +102,6 @@ W28 ✓ 61-ponto-03 (high, zero-tier, transient concurrent DIRF audit failure re
 W30 ✓ 57-fisc-02 (medium, transient concurrent AFD lint failure recovered by maestro defense, commit eff877e) — DIRF annual file
 W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migration drift fixed by maestro defense, commit 5738168) — candidate biometrics
 2026-05-02T07:57:35.658Z frontier launch 62-ponto-04, 71-tce-01, 58-fisc-03 — agents 019de7b1-9da3, 019de7b1-9dcc, 019de7b1-9e12
+2026-05-02T08:20:38.805Z W29 ✓ 62-ponto-04 (medium, shared FISC/TCE migration drift fixed by maestro defense, commit 4931e91) — escalas e plantoes
+2026-05-02T08:20:38.805Z W30 ✓ 58-fisc-03 (medium, enum split plus full gates passed, commit c5587b6) — comprovante de rendimentos
+2026-05-02T08:20:38.805Z W29 ✓ 71-tce-01 (high, audit tenant context and RLS smoke fixed, commit dd4f1fc) — pluggable adapter contract

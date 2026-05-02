@@ -17,6 +17,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/esocial/**', 'esocial.submission.retry'],
   ['#!/fiscal/dctfweb', 'fiscal.dctfweb.write'],
   ['#!/fiscal/dirf', 'fiscal.dirf.write'],
+  ['#!/folha/comprovantes-rendimentos', 'fiscal.yearly_income.write'],
   ['#!/folha/contracheques/**', 'report.payslip.read'],
   ['#!/folha/contracheques/**', 'report.payslip.write'],
   ['#!/folha/fgts/**', 'payroll.fgts.read'],
@@ -39,10 +40,13 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/gestao/parametros/teto-remuneratorio', 'system.parameter.write'],
   ['#!/ponto/afd/**', 'ponto.afd.read'],
   ['#!/ponto/afd/**', 'ponto.afd.write'],
+  ['#!/ponto/escalas/**', 'ponto.roster.read'],
+  ['#!/ponto/escalas/**', 'ponto.roster.write'],
   ['#!/ponto/jornadas/**', 'ponto.schedule.read'],
   ['#!/ponto/jornadas/**', 'ponto.schedule.write'],
   ['#!/ponto/rep/**', 'ponto.rep.read'],
   ['#!/ponto/rep/**', 'ponto.rep.write'],
+  ['#!/portal/comprovante-rendimentos', 'portal.yearly_income.read'],
   ['#!/previdenciario/**', 'previdenciario.read'],
   ['#!/previdenciario/**', 'previdenciario.write'],
   ['#!/recrutamento/**', 'recrutamento.read'],
@@ -59,6 +63,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/saude/exposicoes/**', 'saude.exposure.write'],
   ['#!/saude/programas/**', 'saude.program.read'],
   ['#!/saude/programas/**', 'saude.program.write'],
+  ['#!/tce/adapters', 'tce.adapter.manage'],
 ] as const;
 
 export function permissionsForRoutePath(routePath: string): string[] {

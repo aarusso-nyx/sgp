@@ -588,6 +588,38 @@
       "description": "Generate annual DIRF original and retificadora files for third-party payments."
     },
     {
+      "key": "fiscal.yearly_income.read",
+      "moduleKey": "fiscal",
+      "resourceKey": "yearly_income",
+      "actionKey": "read",
+      "routePattern": "/api/v1/admin/yearly-income-batches/**",
+      "description": "Read yearly income report aggregates and generated file metadata."
+    },
+    {
+      "key": "fiscal.yearly_income.write",
+      "moduleKey": "fiscal",
+      "resourceKey": "yearly_income",
+      "actionKey": "write",
+      "routePattern": "#!/folha/comprovantes-rendimentos",
+      "description": "Generate annual yearly income report PDFs in batch."
+    },
+    {
+      "key": "tce.adapter.read",
+      "moduleKey": "tce",
+      "resourceKey": "adapter",
+      "actionKey": "read",
+      "routePattern": "/api/v1/tce/adapters/**",
+      "description": "Read registered Court of Accounts adapters and lifecycle events."
+    },
+    {
+      "key": "tce.adapter.manage",
+      "moduleKey": "tce",
+      "resourceKey": "adapter",
+      "actionKey": "manage",
+      "routePattern": "#!/tce/adapters",
+      "description": "Enable and disable Court of Accounts adapters through the registry."
+    },
+    {
       "key": "avaliacao.read",
       "moduleKey": "avaliacao",
       "resourceKey": "performance",
@@ -996,6 +1028,22 @@
       "description": "Generate and import AFD files for REP devices."
     },
     {
+      "key": "ponto.roster.read",
+      "moduleKey": "ponto",
+      "resourceKey": "roster",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/escalas/**",
+      "description": "Read shift patterns, assignments, and duty rosters."
+    },
+    {
+      "key": "ponto.roster.write",
+      "moduleKey": "ponto",
+      "resourceKey": "roster",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/escalas/**",
+      "description": "Create, publish, and lock shift patterns, assignments, and duty rosters."
+    },
+    {
       "key": "rh.medical_leave.read",
       "moduleKey": "rh",
       "resourceKey": "medical_leave",
@@ -1108,6 +1156,14 @@
       "description": "Read the authenticated employee monthly paystub after payroll generation."
     },
     {
+      "key": "portal.yearly_income.read",
+      "moduleKey": "portal",
+      "resourceKey": "yearly_income",
+      "actionKey": "read",
+      "routePattern": "#!/portal/comprovante-rendimentos",
+      "description": "Read and download the authenticated employee yearly income report."
+    },
+    {
       "key": "auditoria.read",
       "moduleKey": "auditoria",
       "resourceKey": "audit",
@@ -1173,6 +1229,8 @@
       "ponto.rep.write",
       "ponto.afd.read",
       "ponto.afd.write",
+      "ponto.roster.read",
+      "ponto.roster.write",
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",
@@ -1183,6 +1241,7 @@
       "avaliacao.salary_history.write",
       "avaliacao.probation.write",
       "portal.paystub.read",
+      "portal.yearly_income.read",
       "relatorio.generate"
     ],
     "FOLHA_OPERADOR": [
@@ -1228,7 +1287,12 @@
       "fiscal.dctfweb.write",
       "fiscal.dirf.read",
       "fiscal.dirf.write",
+      "fiscal.yearly_income.read",
+      "fiscal.yearly_income.write",
+      "tce.adapter.read",
+      "tce.adapter.manage",
       "portal.paystub.read",
+      "portal.yearly_income.read",
       "report.payslip.read",
       "report.payslip.write",
       "relatorio.generate"
@@ -1248,6 +1312,7 @@
       "ponto.schedule.read",
       "ponto.timerecord.read",
       "ponto.afd.read",
+      "ponto.roster.read",
       "avaliacao.pccs.read",
       "avaliacao.progressao.read",
       "avaliacao.salary_history.read",
@@ -1261,7 +1326,10 @@
       "esocial.submission.read",
       "fiscal.dctfweb.read",
       "fiscal.dirf.read",
+      "fiscal.yearly_income.read",
+      "tce.adapter.read",
       "portal.paystub.read",
+      "portal.yearly_income.read",
       "report.payslip.read",
       "relatorio.read",
       "relatorio.generate",

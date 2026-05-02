@@ -167,6 +167,13 @@ export const routes: Routes = [
           import('./features/portal/contracheque/contracheque').then((m) => m.PortalContracheque),
       },
       {
+        path: 'portal/comprovante-rendimentos',
+        loadComponent: () =>
+          import('./features/portal/comprovante-rendimentos/comprovante-rendimentos').then(
+            (m) => m.PortalComprovanteRendimentos,
+          ),
+      },
+      {
         path: 'portal/aso',
         loadComponent: () => import('./features/portal/aso/aso').then((m) => m.PortalAso),
       },
@@ -222,6 +229,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/ponto/afd/ponto-afd').then((m) => m.PontoAfd),
       },
       {
+        path: 'ponto/escalas',
+        loadComponent: () =>
+          import('./features/ponto/escalas/ponto-escalas').then((m) => m.PontoEscalas),
+      },
+      {
         path: 'fiscal/dctfweb',
         loadComponent: () =>
           import('./features/fiscal/dctfweb/dctfweb').then((m) => m.FiscalDctfweb),
@@ -240,6 +252,30 @@ export const routes: Routes = [
           moduleKey: 'fiscal',
           permissions: ['fiscal.dirf.read'],
           moduleLabel: 'Fiscal',
+        },
+      },
+      {
+        path: 'tce/adapters',
+        loadComponent: () =>
+          import('./features/tce/adapters/tce-adapters').then((m) => m.TceAdapters),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'tce',
+          permissions: ['tce.adapter.read'],
+          moduleLabel: 'TCE',
+        },
+      },
+      {
+        path: 'folha/comprovantes-rendimentos',
+        loadComponent: () =>
+          import('./features/folha-pagamento/comprovantes-rendimentos/comprovantes-rendimentos').then(
+            (m) => m.ComprovantesRendimentos,
+          ),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'folha',
+          permissions: ['fiscal.yearly_income.write'],
+          moduleLabel: 'Folha de Pgt',
         },
       },
       {

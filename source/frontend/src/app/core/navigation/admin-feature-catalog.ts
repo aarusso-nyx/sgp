@@ -223,6 +223,7 @@ Auditoria||Filtros por Período|/auditoria/periodo/gestao|AUDITORIA.GESTAO||audi
 Ponto Eletrônico|Jornadas|Jornadas e Atribuições|/ponto/jornadas|PONTO.JORNADAS||ponto|Portaria MTP 671/2021: jornada contratada, turnos e vigências
 Ponto Eletrônico|REP|Equipamentos e Ingestão|/ponto/rep|PONTO.REP||ponto|REP-P, REP-A e REP-C: cadastro, AFDT e lotes
 Ponto Eletrônico|AFD|Geração e Importação|/ponto/afd|PONTO.AFD||ponto|Arquivo Fonte de Dados: geração, importação, selo e histórico
+Ponto Eletrônico|Escalas|Escalas e Plantões|/ponto/escalas|PONTO.ESCALAS||ponto|Ciclos 12x36, 6x1, plantões, rosters e flags noturnas/insalubres
 Área de Saúde / Junta Médica|SST|EPC|/saude/epc/gestao|EPC.GESTAO||saude|Equipamento de Proteção Coletiva
 Convênio||Convênios|/convenio/convenio/gestao|CONVENIO.GESTAO||convenio|Vigência, banco de cobrança
 Convênio||Convênio — novo|/convenio/convenio/formulario|CONVENIO.CADASTRAR||convenio|
