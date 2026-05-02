@@ -31,7 +31,12 @@ class FakeDatabaseService {
   query<T>(sql: string): Promise<T[]> {
     if (sql.includes('SELECT DISTINCT p.key')) {
       return Promise.resolve(
-        ['auth.read', 'saude.aso.read', 'saude.aso.write', 'saude.aso.self_read'].map((key) => ({
+        [
+          'auth.read',
+          'saude.aso.read',
+          'saude.aso.write',
+          'saude.aso.self_read',
+        ].map((key) => ({
           key,
         })) as T[],
       );
@@ -99,7 +104,8 @@ describe('SST-01 ASO flow (e2e)', () => {
           id: '00000000-0000-4000-8000-000000000902',
           asoRecordId: asoRecord.id,
           fileUri: 's3://aso/laudo.pdf',
-          sha256: '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824',
+          sha256:
+            '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824',
           mime: 'application/pdf',
           encryptedAtRest: true,
           signedUploadUrl: 's3://aso/laudo.pdf?signature=test',
@@ -149,7 +155,8 @@ describe('SST-01 ASO flow (e2e)', () => {
       .set('authorization', `Bearer ${token()}`)
       .send({
         fileUri: 's3://aso/laudo.pdf',
-        sha256: '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824',
+        sha256:
+          '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824',
         mime: 'application/pdf',
       })
       .expect(201)

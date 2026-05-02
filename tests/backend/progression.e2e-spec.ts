@@ -1,4 +1,8 @@
-import { ConflictException, HttpStatus, INestApplication } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpStatus,
+  INestApplication,
+} from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
@@ -46,7 +50,9 @@ describe('Functional progression API contract (e2e)', () => {
         id: '22222222-2222-4222-8222-222222222222',
         status: 'applied',
       })
-      .mockRejectedValueOnce(new ConflictException('Progression is already applied.'));
+      .mockRejectedValueOnce(
+        new ConflictException('Progression is already applied.'),
+      );
 
     const moduleRef = await Test.createTestingModule({
       controllers: [ProgressionController],
@@ -83,7 +89,9 @@ describe('Functional progression API contract (e2e)', () => {
       .expect(HttpStatus.CREATED)
       .expect(({ body }) => {
         expect(body.salaryResolver).toBe('avaliacao.fn_get_vencimento_vigente');
-        expect(body.formulaEvaluator).toBe('payroll_calc.evaluate_earning_deduction');
+        expect(body.formulaEvaluator).toBe(
+          'payroll_calc.evaluate_earning_deduction',
+        );
       });
 
     await request(app.getHttpServer() as SupertestApp)

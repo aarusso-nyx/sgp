@@ -22,7 +22,8 @@ describe('CALC-08 money rounding boundary (e2e)', () => {
 
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     compiler = new FormulaCompilerService(databaseService);
 
@@ -62,12 +63,15 @@ describe('CALC-08 money rounding boundary (e2e)', () => {
       try {
         await client.query("SELECT set_config('app.bypass_rls', 'true', true)");
         for (const rubricaId of [...rubricaIds].reverse()) {
-          await client.query('DELETE FROM payroll.payroll_earning_deduction WHERE id = $1::uuid', [
-            rubricaId,
-          ]);
+          await client.query(
+            'DELETE FROM payroll.payroll_earning_deduction WHERE id = $1::uuid',
+            [rubricaId],
+          );
         }
         if (employeeId) {
-          await client.query('DELETE FROM hr.employee WHERE id = $1::uuid', [employeeId]);
+          await client.query('DELETE FROM hr.employee WHERE id = $1::uuid', [
+            employeeId,
+          ]);
         }
       } finally {
         client.release();
@@ -81,7 +85,9 @@ describe('CALC-08 money rounding boundary (e2e)', () => {
     const rubricaId = await createAndCompile('100.005');
     const amount = await evaluate(rubricaId);
 
-    expect(new Decimal(amount ?? '0').toFixed(2)).toBe(roundMoney('100.005').toFixed(2));
+    expect(new Decimal(amount ?? '0').toFixed(2)).toBe(
+      roundMoney('100.005').toFixed(2),
+    );
   });
 
   async function createAndCompile(expression: string): Promise<string> {
@@ -140,7 +146,11 @@ describe('CALC-08 money rounding boundary (e2e)', () => {
     return RequestContextStore.run(
       {
         tenantId,
-        permissions: ['payroll.formula.read', 'folha.rubrica.read', 'folha.rubrica.preview'],
+        permissions: [
+          'payroll.formula.read',
+          'folha.rubrica.read',
+          'folha.rubrica.preview',
+        ],
       },
       async () => {
         const rows = await databaseService.query<{ amount: string | null }>(

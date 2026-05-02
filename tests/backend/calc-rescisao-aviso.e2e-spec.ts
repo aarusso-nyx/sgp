@@ -51,7 +51,12 @@ describe('CLT-02 prior notice reflexes in termination payroll (e2e)', () => {
   });
 
   it('projects indemnified notice for one complete CLT year into 13th and vacation avos', async () => {
-    const linkId = await createEmployee('CLT-1Y', 'celetista', '3000.00', '2025-01-20');
+    const linkId = await createEmployee(
+      'CLT-1Y',
+      'celetista',
+      '3000.00',
+      '2025-01-20',
+    );
     await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
 
     const rows = await compute(linkId, '2026-01-20', 'SEM_JUSTA_CAUSA');
@@ -63,7 +68,12 @@ describe('CLT-02 prior notice reflexes in termination payroll (e2e)', () => {
   });
 
   it('calculates 60 notice days for ten complete CLT years', async () => {
-    const linkId = await createEmployee('CLT-10Y', 'celetista', '3000.00', '2016-01-01');
+    const linkId = await createEmployee(
+      'CLT-10Y',
+      'celetista',
+      '3000.00',
+      '2016-01-01',
+    );
     await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
 
     const rows = await compute(linkId, '2026-01-20', 'SEM_JUSTA_CAUSA');
@@ -73,7 +83,12 @@ describe('CLT-02 prior notice reflexes in termination payroll (e2e)', () => {
   });
 
   it('caps proportional notice at 90 days for long CLT service', async () => {
-    const linkId = await createEmployee('CLT-25Y', 'celetista', '3000.00', '2001-01-01');
+    const linkId = await createEmployee(
+      'CLT-25Y',
+      'celetista',
+      '3000.00',
+      '2001-01-01',
+    );
     await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
 
     const rows = await compute(linkId, '2026-01-20', 'SEM_JUSTA_CAUSA');
@@ -83,7 +98,12 @@ describe('CLT-02 prior notice reflexes in termination payroll (e2e)', () => {
   });
 
   it('discounts unworked notice on CLT resignation', async () => {
-    const linkId = await createEmployee('CLT-PED', 'celetista', '3000.00', '2025-01-01');
+    const linkId = await createEmployee(
+      'CLT-PED',
+      'celetista',
+      '3000.00',
+      '2025-01-01',
+    );
     await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
 
     const rows = await compute(linkId, '2026-01-20', 'PEDIDO_DEMISSAO');
@@ -94,7 +114,12 @@ describe('CLT-02 prior notice reflexes in termination payroll (e2e)', () => {
   });
 
   it('does not create prior notice for statutory employment links', async () => {
-    const linkId = await createEmployee('STAT', 'statutory', '3000.00', '2025-01-01');
+    const linkId = await createEmployee(
+      'STAT',
+      'statutory',
+      '3000.00',
+      '2025-01-01',
+    );
     await resolveNotice(linkId, '2026-01-20', 'INDEMNIFIED');
 
     const count = await pool.query<{ count: string }>(
@@ -242,12 +267,20 @@ describe('CLT-02 prior notice reflexes in termination payroll (e2e)', () => {
   }
 });
 
-function expectAmount(rows: RescisaoRow[], code: string, expected: string): void {
+function expectAmount(
+  rows: RescisaoRow[],
+  code: string,
+  expected: string,
+): void {
   const found = rows.find((row) => row.item_code === code);
   expect(new Decimal(found?.amount ?? '0').toFixed(2)).toBe(expected);
 }
 
-function expectQuantity(rows: RescisaoRow[], code: string, expected: string): void {
+function expectQuantity(
+  rows: RescisaoRow[],
+  code: string,
+  expected: string,
+): void {
   const found = rows.find((row) => row.item_code === code);
   expect(new Decimal(found?.quantity ?? '0').toFixed(4)).toBe(expected);
 }
@@ -259,14 +292,35 @@ function expectNoAmount(rows: RescisaoRow[], code: string): void {
 
 async function cleanupTenant(client: PoolClient): Promise<void> {
   const tenantParams = [tenantId];
-  await client.query('DELETE FROM payment.prior_notice WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.employment_contract WHERE tenant_id = $1::uuid', tenantParams);
+  await client.query(
+    'DELETE FROM payment.prior_notice WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.employment_contract WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
   await deleteEmployeeStatusHistory(client, tenantParams);
-  await client.query('DELETE FROM hr.employee WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.functional_status WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.contract_type WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.salary_reference WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.employment_link WHERE tenant_id = $1::uuid', tenantParams);
+  await client.query(
+    'DELETE FROM hr.employee WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.functional_status WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.contract_type WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.salary_reference WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.employment_link WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
 }
 
 async function deleteEmployeeStatusHistory(
@@ -286,6 +340,10 @@ async function deleteEmployeeStatusHistory(
 
 async function setBypassContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
 }

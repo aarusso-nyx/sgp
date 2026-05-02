@@ -33,7 +33,8 @@ describe('CLT-03 PIS/PASEP annual base recompute after S-3000 (e2e)', () => {
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     pisPasepService = new PisPasepService(databaseService);
     await withClient(async (client) => {
@@ -75,7 +76,9 @@ describe('CLT-03 PIS/PASEP annual base recompute after S-3000 (e2e)', () => {
       pisPasepService,
     );
 
-    await runAsTenant(() => s3000.accept(s3000RequestId, '1.1.0000000000000049030'));
+    await runAsTenant(() =>
+      s3000.accept(s3000RequestId, '1.1.0000000000000049030'),
+    );
 
     const clt = await readBase(cltEmployeeId);
     expect(money(clt.monthly_base['05'])).toBe('0.00');
@@ -102,7 +105,9 @@ async function runAsTenant<T>(fn: () => Promise<T>): Promise<T> {
   );
 }
 
-async function withClient<T>(fn: (client: PoolClient) => Promise<T>): Promise<T> {
+async function withClient<T>(
+  fn: (client: PoolClient) => Promise<T>,
+): Promise<T> {
   const client = await pool.connect();
   try {
     return await fn(client);
@@ -116,8 +121,14 @@ async function withClient<T>(fn: (client: PoolClient) => Promise<T>): Promise<T>
 
 async function setContext(client: PoolClient): Promise<void> {
   await client.query('BEGIN');
-  await client.query('SELECT set_config($1, $2, true)', ['app.current_tenant_id', tenantId]);
-  await client.query('SELECT set_config($1, $2, true)', ['app.current_tenant', tenantId]);
+  await client.query('SELECT set_config($1, $2, true)', [
+    'app.current_tenant_id',
+    tenantId,
+  ]);
+  await client.query('SELECT set_config($1, $2, true)', [
+    'app.current_tenant',
+    tenantId,
+  ]);
   await client.query('SELECT set_config($1, $2, true)', [
     'app.current_permissions',
     [
@@ -135,27 +146,46 @@ async function setContext(client: PoolClient): Promise<void> {
 
 async function cleanup(client: PoolClient): Promise<void> {
   await setContext(client);
-  await client.query('DELETE FROM esocial.s3000_request WHERE tenant_id = $1::uuid', [tenantId]);
-  await client.query('DELETE FROM esocial.s1200_emission_state WHERE tenant_id = $1::uuid', [
-    tenantId,
-  ]);
-  await client.query('DELETE FROM public.esocial_event WHERE tenant_id = $1::uuid', [tenantId]);
-  await client.query('DELETE FROM payment.pis_pasep_base_year WHERE tenant_id = $1::uuid', [
-    tenantId,
-  ]);
+  await client.query(
+    'DELETE FROM esocial.s3000_request WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM esocial.s1200_emission_state WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM public.esocial_event WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payment.pis_pasep_base_year WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
   await client.query(
     `UPDATE payroll.payroll_run SET status = 'DRAFT'::"PayrollRunStatus" WHERE tenant_id = $1::uuid`,
     [tenantId],
   );
-  await client.query('DELETE FROM payroll.employee_payroll_item WHERE tenant_id = $1::uuid', [
-    tenantId,
-  ]);
-  await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', [tenantId]);
-  await client.query('DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid', [
-    tenantId,
-  ]);
-  await client.query('DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid', [tenantId]);
-  await client.query('DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid', [tenantId]);
+  await client.query(
+    'DELETE FROM payroll.employee_payroll_item WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
   await client.query('COMMIT');
 }
 
@@ -166,7 +196,11 @@ async function seed(client: PoolClient): Promise<void> {
     INSERT INTO public.tenant (id, slug, code, name, status)
     VALUES ($1::uuid, $2, $3, 'CLT-03 PIS/PASEP E2E', 'ACTIVE'::"RecordStatus")
     `,
-    [tenantId, `clt03-pis-pasep-${tenantId.slice(0, 8)}`, `C${tenantId.slice(0, 5)}`],
+    [
+      tenantId,
+      `clt03-pis-pasep-${tenantId.slice(0, 8)}`,
+      `C${tenantId.slice(0, 5)}`,
+    ],
   );
   const payrollType = await client.query<{ id: string }>(
     `
@@ -209,12 +243,46 @@ async function seed(client: PoolClient): Promise<void> {
   );
   const cltLink = await employmentLink(client, 'CLT03-CLT', 'celetista');
   const statutoryLink = await employmentLink(client, 'CLT03-STAT', 'statutory');
-  await employee(client, cltEmployeeId, cltLink, status.rows[0].id, 'CLT03-CLT');
-  await employee(client, statutoryEmployeeId, statutoryLink, status.rows[0].id, 'CLT03-STAT');
-  await payrollRun(client, cltRunId, payrollType.rows[0].id, processingType.rows[0].id);
-  await payrollRun(client, statutoryRunId, payrollType.rows[0].id, processingType.rows[0].id);
-  await payrollItem(client, cltRunId, cltEmployeeId, rubrica.rows[0].id, '1000.00');
-  await payrollItem(client, statutoryRunId, statutoryEmployeeId, rubrica.rows[0].id, '900.00');
+  await employee(
+    client,
+    cltEmployeeId,
+    cltLink,
+    status.rows[0].id,
+    'CLT03-CLT',
+  );
+  await employee(
+    client,
+    statutoryEmployeeId,
+    statutoryLink,
+    status.rows[0].id,
+    'CLT03-STAT',
+  );
+  await payrollRun(
+    client,
+    cltRunId,
+    payrollType.rows[0].id,
+    processingType.rows[0].id,
+  );
+  await payrollRun(
+    client,
+    statutoryRunId,
+    payrollType.rows[0].id,
+    processingType.rows[0].id,
+  );
+  await payrollItem(
+    client,
+    cltRunId,
+    cltEmployeeId,
+    rubrica.rows[0].id,
+    '1000.00',
+  );
+  await payrollItem(
+    client,
+    statutoryRunId,
+    statutoryEmployeeId,
+    rubrica.rows[0].id,
+    '900.00',
+  );
   await closeRun(client, cltRunId, '1000.00');
   await closeRun(client, statutoryRunId, '900.00');
   await s1200(client, cltRunId, cltEmployeeId, s1200EventId);
@@ -263,7 +331,12 @@ async function employmentLink(
     VALUES ($1::uuid, $2, $2, $3, $4, 'ACTIVE'::"RecordStatus")
     RETURNING id::text
     `,
-    [tenantId, code, contractType, contractType === 'statutory' ? 'Lei 8.112/90' : 'CLT'],
+    [
+      tenantId,
+      code,
+      contractType,
+      contractType === 'statutory' ? 'Lei 8.112/90' : 'CLT',
+    ],
   );
   return row.rows[0].id;
 }
@@ -318,7 +391,11 @@ async function payrollRun(
   );
 }
 
-async function closeRun(client: PoolClient, payrollRunId: string, total: string): Promise<void> {
+async function closeRun(
+  client: PoolClient,
+  payrollRunId: string,
+  total: string,
+): Promise<void> {
   await client.query(
     `
     UPDATE payroll.payroll_run

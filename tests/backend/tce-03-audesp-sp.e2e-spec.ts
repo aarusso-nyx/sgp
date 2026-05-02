@@ -131,7 +131,8 @@ class FakeAudespDatabase {
         },
       ] as T[];
     }
-    if (sql.includes('INSERT INTO tce.adapter_lifecycle_event')) return [] as T[];
+    if (sql.includes('INSERT INTO tce.adapter_lifecycle_event'))
+      return [] as T[];
     if (sql.includes('FROM tce.adapter_registry')) return [] as T[];
     if (sql.includes('FROM tce.layout_version layout')) {
       return [{ id: layoutId(), version: '0.0.1' }] as T[];
@@ -176,7 +177,10 @@ class FakeAudespDatabase {
         envelope_xml_uri: String(values[2]),
         envelope_hash: String(values[3]),
         request_size_bytes: Number(values[4]),
-        response_payload: JSON.parse(String(values[5])) as Record<string, unknown>,
+        response_payload: JSON.parse(String(values[5])) as Record<
+          string,
+          unknown
+        >,
         response_hash: String(values[6]),
         submitted_at: String(values[7]),
         response_at: String(values[7]),

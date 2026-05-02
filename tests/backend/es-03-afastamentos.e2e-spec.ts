@@ -22,8 +22,13 @@ describe('ES-03 S-2230/S-2299 flow (e2e)', () => {
         [leaveRow()],
       ]) as never,
     );
-    const leave = await s2230Leave.buildPending(tenantId, '00000000-0000-4000-8000-000000002230');
-    expect(() => validator.assertValid('S-2230', leave.xml, { allowUnsigned: true })).not.toThrow();
+    const leave = await s2230Leave.buildPending(
+      tenantId,
+      '00000000-0000-4000-8000-000000002230',
+    );
+    expect(() =>
+      validator.assertValid('S-2230', leave.xml, { allowUnsigned: true }),
+    ).not.toThrow();
 
     const s2230Vacation = new S2230Builder(
       database([
@@ -55,7 +60,10 @@ describe('ES-03 S-2230/S-2299 flow (e2e)', () => {
       ]) as never,
     );
     await expect(
-      blockedS2299.buildPending(tenantId, '00000000-0000-4000-8000-000000002299'),
+      blockedS2299.buildPending(
+        tenantId,
+        '00000000-0000-4000-8000-000000002299',
+      ),
     ).rejects.toThrow('payroll_run.status=GENERATED');
 
     const readyS2299 = new S2299Builder(

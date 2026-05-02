@@ -12,7 +12,9 @@ describe('CALC-09 concurrent payroll reprocessing idempotency (e2e)', () => {
 
   beforeAll(async () => {
     if (!process.env.DATABASE_URL) {
-      throw new Error('DATABASE_URL is required for calc-reprocessamento-concorrente');
+      throw new Error(
+        'DATABASE_URL is required for calc-reprocessamento-concorrente',
+      );
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     const client = await pool.connect();
@@ -41,7 +43,10 @@ describe('CALC-09 concurrent payroll reprocessing idempotency (e2e)', () => {
         'DELETE FROM payroll.employee_payroll_item WHERE payroll_run_id = $1::uuid',
         [payrollRunId],
       );
-      await client.query('DELETE FROM payroll.payroll_run WHERE id = $1::uuid', [payrollRunId]);
+      await client.query(
+        'DELETE FROM payroll.payroll_run WHERE id = $1::uuid',
+        [payrollRunId],
+      );
     } finally {
       client.release();
       await pool.end();
@@ -53,7 +58,9 @@ describe('CALC-09 concurrent payroll reprocessing idempotency (e2e)', () => {
       insertCalculatedLine(),
       insertCalculatedLine(),
     ]);
-    const rejected = [first, second].filter((result) => result.status === 'rejected');
+    const rejected = [first, second].filter(
+      (result) => result.status === 'rejected',
+    );
     const active = await pool.query<{ active_count: string }>(
       `
       SELECT count(*)::text AS active_count
@@ -174,16 +181,28 @@ async function seedRunFixture(client: PoolClient): Promise<{
 
 async function setBypassContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
 }
 
-async function setTenantContext(client: PoolClient, permissions: string[]): Promise<void> {
+async function setTenantContext(
+  client: PoolClient,
+  permissions: string[],
+): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'false', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_permissions', $1, false)", [
-    permissions.join('\n'),
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
   ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
+  await client.query(
+    "SELECT set_config('app.current_permissions', $1, false)",
+    [permissions.join('\n')],
+  );
   await client.query("SELECT set_config('app.authenticated', 'true', false)");
 }

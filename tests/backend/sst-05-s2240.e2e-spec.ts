@@ -51,7 +51,9 @@ describe('SST-05 S-2240, EPI, PPP, and CALC-07 flow (e2e)', () => {
       {} as never,
     );
 
-    const result = await withTenant(() => service.emitS2240(exposureId, 'START'));
+    const result = await withTenant(() =>
+      service.emitS2240(exposureId, 'START'),
+    );
 
     expect(result.emitted).toBe(true);
     expect(emitService.emit).toHaveBeenCalledWith(
@@ -68,7 +70,9 @@ describe('SST-05 S-2240, EPI, PPP, and CALC-07 flow (e2e)', () => {
     const database = {
       configured: true,
       query: jest.fn(async () => {
-        throw new Error('environmental_exposure requires an ACTIVE PGR covering exposure_start');
+        throw new Error(
+          'environmental_exposure requires an ACTIVE PGR covering exposure_start',
+        );
       }),
     };
     const service = new EnvironmentalExposureService(database as never);
@@ -87,7 +91,9 @@ describe('SST-05 S-2240, EPI, PPP, and CALC-07 flow (e2e)', () => {
   });
 
   it('rejects unsigned EPI delivery and accepts GovBR evidence', async () => {
-    const service = new EpiDeliveryService(databaseStub([[epiDeliveryRow()]]) as never);
+    const service = new EpiDeliveryService(
+      databaseStub([[epiDeliveryRow()]]) as never,
+    );
 
     await expect(
       service.register({

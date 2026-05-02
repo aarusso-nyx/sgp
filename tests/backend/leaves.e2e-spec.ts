@@ -28,7 +28,12 @@ class FakeLeavesDatabaseService {
   query<T>(sql: string, values: readonly unknown[] = []): Promise<T[]> {
     if (sql.includes('SELECT DISTINCT p.key')) {
       return Promise.resolve(
-        ['auth.read', 'rh.leave.request', 'rh.leave.approve', 'rh.leave.read'].map((key) => ({
+        [
+          'auth.read',
+          'rh.leave.request',
+          'rh.leave.approve',
+          'rh.leave.read',
+        ].map((key) => ({
           key,
         })) as T[],
       );
@@ -68,7 +73,10 @@ class FakeLeavesDatabaseService {
 
   transaction<T>(
     callback: (client: {
-      query: (sql: string, values?: readonly unknown[]) => Promise<{ rows: unknown[] }>;
+      query: (
+        sql: string,
+        values?: readonly unknown[],
+      ) => Promise<{ rows: unknown[] }>;
     }) => Promise<T>,
   ): Promise<T> {
     return callback({
@@ -78,7 +86,12 @@ class FakeLeavesDatabaseService {
     });
   }
 
-  private leaveRow(reason: string, days: number, paid: boolean, approvedAt: string | null = null) {
+  private leaveRow(
+    reason: string,
+    days: number,
+    paid: boolean,
+    approvedAt: string | null = null,
+  ) {
     return {
       id: '00000000-0000-4000-8000-000000000020',
       employee_id: '00000000-0000-4000-8000-000000000001',
@@ -117,7 +130,8 @@ describe('General leaves workflow (e2e)', () => {
 
   afterEach(async () => {
     await app.close();
-    if (originalUnsigned === undefined) delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
+    if (originalUnsigned === undefined)
+      delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
     else process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS = originalUnsigned;
   });
 

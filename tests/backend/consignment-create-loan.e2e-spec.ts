@@ -28,7 +28,11 @@ class FakeConsignmentDatabaseService {
   query<T>(sql: string): Promise<T[]> {
     if (sql.includes('SELECT DISTINCT p.key')) {
       return Promise.resolve(
-        ['auth.read', 'payment.consignment.read', 'payment.consignment.write'].map((key) => ({
+        [
+          'auth.read',
+          'payment.consignment.read',
+          'payment.consignment.write',
+        ].map((key) => ({
           key,
         })) as T[],
       );
@@ -38,7 +42,10 @@ class FakeConsignmentDatabaseService {
 
   async transaction<T>(
     callback: (client: {
-      query: <R>(sql: string, values?: readonly unknown[]) => Promise<{ rows: R[] }>;
+      query: <R>(
+        sql: string,
+        values?: readonly unknown[],
+      ) => Promise<{ rows: R[] }>;
     }) => Promise<T>,
   ): Promise<T> {
     return callback({ query: this.clientQuery.bind(this) });
@@ -47,7 +54,9 @@ class FakeConsignmentDatabaseService {
   private clientQuery<T>(sql: string): Promise<{ rows: T[] }> {
     if (sql.includes('FROM payment.consignment_entity')) {
       return Promise.resolve({
-        rows: [{ consignment_entity_id: '00000000-0000-4000-8000-000000000010' }] as T[],
+        rows: [
+          { consignment_entity_id: '00000000-0000-4000-8000-000000000010' },
+        ] as T[],
       });
     }
     if (sql.includes('FROM public.system_parameter')) {
@@ -91,7 +100,9 @@ describe('Consignment loan creation (e2e)', () => {
 
   it('returns 422 when the loan exceeds the available margin', async () => {
     await request(app.getHttpServer() as SupertestApp)
-      .post('/v1/employees/00000000-0000-4000-8000-000000000001/consignment-loans')
+      .post(
+        '/v1/employees/00000000-0000-4000-8000-000000000001/consignment-loans',
+      )
       .set('Authorization', `Bearer ${token()}`)
       .send({
         consignmentEntityId: '00000000-0000-4000-8000-000000000010',
@@ -106,7 +117,9 @@ describe('Consignment loan creation (e2e)', () => {
       })
       .expect(422)
       .expect(({ body }) => {
-        expect(JSON.stringify(body)).toContain('exceeds available general margin');
+        expect(JSON.stringify(body)).toContain(
+          'exceeds available general margin',
+        );
       });
   });
 });

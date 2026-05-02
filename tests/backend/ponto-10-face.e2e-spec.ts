@@ -54,7 +54,9 @@ describe('PONTO-10 facial recognition (e2e)', () => {
   beforeEach(async () => {
     process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS = 'true';
     fetchSpy = jest.spyOn(global, 'fetch' as never);
-    fetchSpy.mockRejectedValue(new Error('external network is forbidden') as never);
+    fetchSpy.mockRejectedValue(
+      new Error('external network is forbidden') as never,
+    );
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -62,7 +64,9 @@ describe('PONTO-10 facial recognition (e2e)', () => {
       .useClass(FakeDatabaseService)
       .overrideProvider(FaceConsentService)
       .useValue({
-        create: jest.fn((input) => Promise.resolve({ id: 'consent-1', ...input })),
+        create: jest.fn((input) =>
+          Promise.resolve({ id: 'consent-1', ...input }),
+        ),
         withdraw: jest.fn(() =>
           Promise.resolve({
             employeeId,
@@ -102,7 +106,9 @@ describe('PONTO-10 facial recognition (e2e)', () => {
           );
           return Promise.resolve({
             id: livenessPassed ? 'match-accept' : 'match-reject',
-            timeRecordId: livenessPassed ? '00000000-0000-4000-8000-000000000542' : null,
+            timeRecordId: livenessPassed
+              ? '00000000-0000-4000-8000-000000000542'
+              : null,
             score: livenessPassed ? '1.000000' : '0.000000',
             threshold: '0.700000',
             livenessPassed,

@@ -26,11 +26,14 @@ describe('Reintegracao retroativa S-2298 golden flow (e2e)', () => {
 
   beforeAll(async () => {
     if (!process.env.DATABASE_URL) {
-      throw new Error('DATABASE_URL is required for reintegracao-retroativa-6m');
+      throw new Error(
+        'DATABASE_URL is required for reintegracao-retroativa-6m',
+      );
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     await seed(pool, databaseService);
   });
@@ -82,7 +85,9 @@ describe('Reintegracao retroativa S-2298 golden flow (e2e)', () => {
 
       const builder = new S2298Builder(databaseService);
       const built = await builder.build(order.id);
-      expect(built.xml).toContain('<nrRecibo>1.2.0000000000000000001</nrRecibo>');
+      expect(built.xml).toContain(
+        '<nrRecibo>1.2.0000000000000000001</nrRecibo>',
+      );
       expect(built.xml).toContain('<dtEfetRetorno>2025-11-16</dtEfetRetorno>');
       expect(() =>
         new XsdValidatorService().assertValid('S-2298', built.xml, {
@@ -127,7 +132,10 @@ async function runAsTenant<T>(fn: () => Promise<T>): Promise<T> {
   );
 }
 
-async function seed(pool: Pool, databaseService: DatabaseService): Promise<void> {
+async function seed(
+  pool: Pool,
+  databaseService: DatabaseService,
+): Promise<void> {
   const client = await pool.connect();
   try {
     await client.query("SELECT set_config('app.bypass_rls', 'true', true)");
@@ -292,7 +300,12 @@ async function seed(pool: Pool, databaseService: DatabaseService): Promise<void>
       SET receipt_number = EXCLUDED.receipt_number,
           source_entity_id = EXCLUDED.source_entity_id
       `,
-      [s2299EventId, tenantId, JSON.stringify({ employmentLinkId: linkId }), linkId],
+      [
+        s2299EventId,
+        tenantId,
+        JSON.stringify({ employmentLinkId: linkId }),
+        linkId,
+      ],
     );
     await client.query(
       `
@@ -328,7 +341,9 @@ async function seed(pool: Pool, databaseService: DatabaseService): Promise<void>
   }
 
   await runAsTenant(async () => {
-    await new FormulaCompilerService(databaseService).compileEarningDeduction(earningId);
+    await new FormulaCompilerService(databaseService).compileEarningDeduction(
+      earningId,
+    );
   });
 }
 
@@ -336,8 +351,14 @@ async function cleanup(pool: Pool): Promise<void> {
   const client = await pool.connect();
   try {
     await client.query("SELECT set_config('app.bypass_rls', 'true', true)");
-    await client.query('DELETE FROM esocial.s2298_event WHERE tenant_id = $1::uuid', [tenantId]);
-    await client.query('DELETE FROM hr.reintegration_order WHERE tenant_id = $1::uuid', [tenantId]);
+    await client.query(
+      'DELETE FROM esocial.s2298_event WHERE tenant_id = $1::uuid',
+      [tenantId],
+    );
+    await client.query(
+      'DELETE FROM hr.reintegration_order WHERE tenant_id = $1::uuid',
+      [tenantId],
+    );
     await client.query(
       "UPDATE payroll.payroll_run SET status = 'DRAFT'::\"PayrollRunStatus\" WHERE tenant_id = $1::uuid AND cause = 'REINSTATEMENT_RETRO'",
       [tenantId],
@@ -366,10 +387,13 @@ async function cleanup(pool: Pool): Promise<void> {
       "DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid AND code = 'REINSTATEMENT_RETRO'",
       [tenantId],
     );
-    await client.query('DELETE FROM payroll.payroll_earning_deduction WHERE id = $1::uuid', [
-      earningId,
+    await client.query(
+      'DELETE FROM payroll.payroll_earning_deduction WHERE id = $1::uuid',
+      [earningId],
+    );
+    await client.query('DELETE FROM public.esocial_event WHERE id = $1::uuid', [
+      s2299EventId,
     ]);
-    await client.query('DELETE FROM public.esocial_event WHERE id = $1::uuid', [s2299EventId]);
   } finally {
     client.release();
   }

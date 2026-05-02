@@ -28,7 +28,9 @@ describe('CALC-11 monthly payroll validation guard', () => {
       throw new Error('DATABASE_URL is required for calc-folha-validation');
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    database = new DatabaseService(new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }));
+    database = new DatabaseService(
+      new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }),
+    );
     const client = await pool.connect();
     try {
       await setBypassContext(client);
@@ -100,7 +102,11 @@ async function ensureTenant(client: PoolClient): Promise<void> {
         name = EXCLUDED.name,
         status = EXCLUDED.status
     `,
-    [tenantId, `calc11-validation-${tenantId.slice(0, 8)}`, `C11V${tenantSuffix}`],
+    [
+      tenantId,
+      `calc11-validation-${tenantId.slice(0, 8)}`,
+      `C11V${tenantSuffix}`,
+    ],
   );
 }
 
@@ -185,7 +191,13 @@ async function seedNegativeNetRun(client: PoolClient): Promise<string> {
       ($1::uuid, $2::uuid, $3::uuid, $4::uuid, 'CALCULATED'::"PayrollEntrySource", 2026, 5, 100.00, 'validation earning'),
       ($1::uuid, $2::uuid, $3::uuid, $5::uuid, 'CALCULATED'::"PayrollEntrySource", 2026, 5, 150.00, 'validation deduction')
     `,
-    [tenantId, employeeId, run.rows[0].id, earning.rows[0].id, deduction.rows[0].id],
+    [
+      tenantId,
+      employeeId,
+      run.rows[0].id,
+      earning.rows[0].id,
+      deduction.rows[0].id,
+    ],
   );
   await client.query(
     `
@@ -253,12 +265,14 @@ async function createEmployee(client: PoolClient): Promise<string> {
 }
 
 async function cleanupTenant(client: PoolClient): Promise<void> {
-  await client.query('DELETE FROM payroll.employee_payroll_item WHERE tenant_id = $1::uuid', [
-    tenantId,
-  ]);
-  await client.query('DELETE FROM payroll.payroll_financial_record WHERE tenant_id = $1::uuid', [
-    tenantId,
-  ]);
+  await client.query(
+    'DELETE FROM payroll.employee_payroll_item WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_financial_record WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
   await client.query(
     `
     DELETE FROM payroll.payroll_run_status_history history
@@ -268,18 +282,38 @@ async function cleanupTenant(client: PoolClient): Promise<void> {
     `,
     [tenantId],
   );
-  await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', [tenantId]);
-  await client.query('DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid', [
-    tenantId,
-  ]);
-  await client.query('DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid', [tenantId]);
-  await client.query('DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid', [tenantId]);
-  await client.query('DELETE FROM hr.employment_contract WHERE tenant_id = $1::uuid', [tenantId]);
-  await client.query('DELETE FROM public.system_parameter WHERE tenant_id = $1::uuid', [tenantId]);
+  await client.query(
+    'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM hr.employment_contract WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
+  await client.query(
+    'DELETE FROM public.system_parameter WHERE tenant_id = $1::uuid',
+    [tenantId],
+  );
 }
 
 async function setBypassContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
 }

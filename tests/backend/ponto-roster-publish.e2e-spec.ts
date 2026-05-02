@@ -4,23 +4,24 @@ describe('PONTO roster publish flow (e2e)', () => {
   it('publishes and locks a generated roster through the service contract', async () => {
     const databaseService = {
       configured: true,
-      transaction: jest.fn(async (callback: (client: unknown) => Promise<unknown>) =>
-        callback({
-          query: jest
-            .fn()
-            .mockResolvedValueOnce({
-              rows: [
-                {
-                  duty_roster_id: '00000000-0000-4000-8000-000000000064',
-                  period_start: '2026-05-01',
-                  period_end: '2026-05-31',
-                  status: 'DRAFT',
-                  published_at: null,
-                },
-              ],
-            })
-            .mockResolvedValue({ rows: [] }),
-        }),
+      transaction: jest.fn(
+        async (callback: (client: unknown) => Promise<unknown>) =>
+          callback({
+            query: jest
+              .fn()
+              .mockResolvedValueOnce({
+                rows: [
+                  {
+                    duty_roster_id: '00000000-0000-4000-8000-000000000064',
+                    period_start: '2026-05-01',
+                    period_end: '2026-05-31',
+                    status: 'DRAFT',
+                    published_at: null,
+                  },
+                ],
+              })
+              .mockResolvedValue({ rows: [] }),
+          }),
       ),
       query: jest
         .fn()
@@ -57,7 +58,10 @@ describe('PONTO roster publish flow (e2e)', () => {
       ]),
     };
 
-    const service = new DutyRosterService(databaseService as never, projector as never);
+    const service = new DutyRosterService(
+      databaseService as never,
+      projector as never,
+    );
     const generated = await service.generate({
       employeeIds: ['00000000-0000-4000-8000-000000000061'],
       periodStart: '2026-05-01',

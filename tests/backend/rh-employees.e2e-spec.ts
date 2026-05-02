@@ -56,10 +56,16 @@ class FakeRhEmployeeDatabaseService {
     if (sql.includes('SELECT public.sgp_append_audit_event')) {
       return Promise.resolve([] as T[]);
     }
-    if (sql.includes('SELECT count(*)::text AS total') && sql.includes('FROM hr.employee')) {
+    if (
+      sql.includes('SELECT count(*)::text AS total') &&
+      sql.includes('FROM hr.employee')
+    ) {
       return Promise.resolve([{ total: '1' }] as T[]);
     }
-    if (sql.includes('FROM hr.employee e') && sql.includes('ORDER BY e.registration ASC')) {
+    if (
+      sql.includes('FROM hr.employee e') &&
+      sql.includes('ORDER BY e.registration ASC')
+    ) {
       return Promise.resolve([this.employee] as T[]);
     }
     return Promise.resolve([] as T[]);
@@ -67,13 +73,19 @@ class FakeRhEmployeeDatabaseService {
 
   async transaction<T>(
     callback: (client: {
-      query: <R>(sql: string, values?: readonly unknown[]) => Promise<{ rows: R[] }>;
+      query: <R>(
+        sql: string,
+        values?: readonly unknown[],
+      ) => Promise<{ rows: R[] }>;
     }) => Promise<T>,
   ): Promise<T> {
     return callback({ query: this.clientQuery.bind(this) });
   }
 
-  private clientQuery<T>(sql: string, _values: readonly unknown[] = []): Promise<{ rows: T[] }> {
+  private clientQuery<T>(
+    sql: string,
+    _values: readonly unknown[] = [],
+  ): Promise<{ rows: T[] }> {
     if (sql.includes('INSERT INTO hr.functional_status')) {
       return Promise.resolve({ rows: [{ id: 'status-1' }] as T[] });
     }
@@ -97,7 +109,10 @@ class FakeRhEmployeeDatabaseService {
       };
       return Promise.resolve({ rows: [this.employee] as T[] });
     }
-    if (sql.includes('FROM hr.employee e') && sql.includes('WHERE e.id = $1::uuid')) {
+    if (
+      sql.includes('FROM hr.employee e') &&
+      sql.includes('WHERE e.id = $1::uuid')
+    ) {
       return Promise.resolve({ rows: [this.employee] as T[] });
     }
     if (sql.includes('FROM hr.employee_status_history')) {
@@ -119,7 +134,9 @@ class FakeRhEmployeeDatabaseService {
           {
             id: 'contract-1',
             starts_on: new Date('2026-05-01T00:00:00.000Z'),
-            ends_on: this.employee.active ? null : new Date('2026-05-20T00:00:00.000Z'),
+            ends_on: this.employee.active
+              ? null
+              : new Date('2026-05-20T00:00:00.000Z'),
             status: this.employee.active ? 'ACTIVE' : 'INACTIVE',
           },
         ] as T[],
@@ -149,7 +166,8 @@ describe('RH employees lifecycle (e2e)', () => {
 
   afterEach(async () => {
     await app.close();
-    if (originalUnsigned === undefined) delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
+    if (originalUnsigned === undefined)
+      delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
     else process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS = originalUnsigned;
   });
 
@@ -169,7 +187,9 @@ describe('RH employees lifecycle (e2e)', () => {
       })
       .expect(201);
 
-    expect(admitted.body.employeeId).toBe('00000000-0000-4000-8000-000000000001');
+    expect(admitted.body.employeeId).toBe(
+      '00000000-0000-4000-8000-000000000001',
+    );
     expect(admitted.body.employmentContractId).toBe('contract-1');
 
     await request(server())
@@ -181,7 +201,9 @@ describe('RH employees lifecycle (e2e)', () => {
       });
 
     await request(server())
-      .post('/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/desligamento')
+      .post(
+        '/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/desligamento',
+      )
       .set('authorization', bearer)
       .send({
         terminationDate: '2026-05-20',

@@ -33,7 +33,9 @@ describe('Salary history API contract (e2e)', () => {
       }),
     ).resolves.toMatchObject({ affectedCount: 1 });
 
-    await expect(controller.timeline('11111111-1111-4111-8111-111111111111')).resolves.toEqual([
+    await expect(
+      controller.timeline('11111111-1111-4111-8111-111111111111'),
+    ).resolves.toEqual([
       expect.objectContaining({ vencimentoBasico: '1100.00' }),
     ]);
   });

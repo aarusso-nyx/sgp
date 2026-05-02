@@ -93,7 +93,10 @@ describe('concurso publish flow', () => {
           username: 'rec-admin',
           tenantId: '00000000-0000-4000-8000-000000000001',
           groups: [],
-          permissions: ['recrutamento.concurso.write', 'recrutamento.concurso.read'],
+          permissions: [
+            'recrutamento.concurso.write',
+            'recrutamento.concurso.read',
+          ],
           claims: {},
         }),
       })
@@ -117,7 +120,10 @@ describe('concurso publish flow', () => {
         JSON.stringify({
           sub: '00000000-0000-4000-8000-000000000001',
           tenant_id: '00000000-0000-4000-8000-000000000001',
-          permissions: ['recrutamento.concurso.write', 'recrutamento.concurso.read'],
+          permissions: [
+            'recrutamento.concurso.write',
+            'recrutamento.concurso.read',
+          ],
         }),
       ).toString('base64url'),
       '',
@@ -144,7 +150,9 @@ describe('concurso publish flow', () => {
       .expect(201);
 
     await request(app.getHttpServer())
-      .post('/api/v1/recrutamento/concursos/00000000-0000-4000-8000-000000000050/editais')
+      .post(
+        '/api/v1/recrutamento/concursos/00000000-0000-4000-8000-000000000050/editais',
+      )
       .set('Authorization', `Bearer ${token}`)
       .send({
         documentRef: 's3://edital.pdf',
@@ -154,7 +162,9 @@ describe('concurso publish flow', () => {
       .expect(201);
 
     await request(app.getHttpServer())
-      .post('/api/v1/recrutamento/concursos/00000000-0000-4000-8000-000000000050/editais/publish')
+      .post(
+        '/api/v1/recrutamento/concursos/00000000-0000-4000-8000-000000000050/editais/publish',
+      )
       .set('Authorization', `Bearer ${token}`)
       .send({
         administrativeAct: 'Portaria 1/2026',
@@ -167,6 +177,8 @@ describe('concurso publish flow', () => {
       .get('/api/v1/publico/concursos/rec-2026')
       .expect(200);
 
-    expect(response.body.edital.publicUrl).toBe('https://portal.local/rec-2026/edital.pdf');
+    expect(response.body.edital.publicUrl).toBe(
+      'https://portal.local/rec-2026/edital.pdf',
+    );
   });
 });

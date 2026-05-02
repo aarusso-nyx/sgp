@@ -39,7 +39,8 @@ describe('Rubrica API contract (e2e)', () => {
       code: 'VENC',
       description: 'Vencimento basico',
       type: 'provento',
-      formulaExpression: 'base_salary(p_employee_id, make_date(p_year, p_month, 1))',
+      formulaExpression:
+        'base_salary(p_employee_id, make_date(p_year, p_month, 1))',
       attributes: [{ name: 'percentual', type: 'decimal' }],
     });
     const compile = await controller.compileFormula(request, {

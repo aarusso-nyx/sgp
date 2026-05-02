@@ -8,7 +8,10 @@ const arquivoId = '00000000-0000-4000-8000-00000000f502';
 const beneficiaryId = '00000000-0000-4000-8000-00000000b001';
 
 interface TestDbClient {
-  query(sql: string, values: unknown[]): Promise<{ rows: unknown[]; rowCount?: number }>;
+  query(
+    sql: string,
+    values: unknown[],
+  ): Promise<{ rows: unknown[]; rowCount?: number }>;
 }
 
 describe('DIRF validation flow (e2e)', () => {
@@ -19,8 +22,24 @@ describe('DIRF validation flow (e2e)', () => {
       query: jest
         .fn()
         .mockResolvedValueOnce([
-          source('CPF', '11111111111', 'Ana Silva', '0588', '2026-01-01', '1000.00', '100.00'),
-          source('CPF', '11111111111', 'Ana Silva', '0588', '2026-02-01', '500.00', '50.00'),
+          source(
+            'CPF',
+            '11111111111',
+            'Ana Silva',
+            '0588',
+            '2026-01-01',
+            '1000.00',
+            '100.00',
+          ),
+          source(
+            'CPF',
+            '11111111111',
+            'Ana Silva',
+            '0588',
+            '2026-02-01',
+            '500.00',
+            '50.00',
+          ),
         ])
         .mockResolvedValueOnce([arquivoRow('1500.00', '150.00')])
         .mockResolvedValueOnce([beneficiaryRow('1500.00')])
@@ -28,24 +47,25 @@ describe('DIRF validation flow (e2e)', () => {
           paymentRow('0588', '2026-01-01', '1000.00', '100.00'),
           paymentRow('0588', '2026-02-01', '500.00', '50.00'),
         ]),
-      transaction: jest.fn(async (callback: (client: TestDbClient) => Promise<unknown>) =>
-        callback({
-          query: jest.fn(async (sql: string, values: unknown[]) => {
-            if (sql.includes('INSERT INTO fiscal.dirf_arquivo')) {
-              return { rows: [{ id: arquivoId }], rowCount: 1 };
-            }
-            if (sql.includes('INSERT INTO fiscal.dirf_beneficiario')) {
-              return { rows: [{ id: beneficiaryId }], rowCount: 1 };
-            }
-            if (sql.includes('INSERT INTO fiscal.dirf_pagamento')) {
-              insertedPayments.push({
-                amount: String(values[4]),
-                irrf: String(values[5]),
-              });
-            }
-            return { rows: [], rowCount: 0 };
+      transaction: jest.fn(
+        async (callback: (client: TestDbClient) => Promise<unknown>) =>
+          callback({
+            query: jest.fn(async (sql: string, values: unknown[]) => {
+              if (sql.includes('INSERT INTO fiscal.dirf_arquivo')) {
+                return { rows: [{ id: arquivoId }], rowCount: 1 };
+              }
+              if (sql.includes('INSERT INTO fiscal.dirf_beneficiario')) {
+                return { rows: [{ id: beneficiaryId }], rowCount: 1 };
+              }
+              if (sql.includes('INSERT INTO fiscal.dirf_pagamento')) {
+                insertedPayments.push({
+                  amount: String(values[4]),
+                  irrf: String(values[5]),
+                });
+              }
+              return { rows: [], rowCount: 0 };
+            }),
           }),
-        }),
       ),
     };
     const service = new DirfBuilderService(
@@ -62,13 +82,17 @@ describe('DIRF validation flow (e2e)', () => {
       () => service.generate({ yearBase: 2026 }),
     );
 
-    expect(result.txtContent).toContain('DIRF|DIRF-RFB-2.060/2026|2026|ORIGINAL|');
+    expect(result.txtContent).toContain(
+      'DIRF|DIRF-RFB-2.060/2026|2026|ORIGINAL|',
+    );
     expect(result.txtContent).toContain('FIMDIRF|');
     const insertedTotal = insertedPayments.reduce(
       (total, payment) => total + Number(payment.amount),
       0,
     );
-    expect(insertedTotal.toFixed(2)).toBe(String(result.beneficiaries[0].totals['amount']));
+    expect(insertedTotal.toFixed(2)).toBe(
+      String(result.beneficiaries[0].totals['amount']),
+    );
   });
 });
 
@@ -128,7 +152,12 @@ function beneficiaryRow(amount: string) {
   };
 }
 
-function paymentRow(code: string, month_year: string, amount: string, irrf: string) {
+function paymentRow(
+  code: string,
+  month_year: string,
+  amount: string,
+  irrf: string,
+) {
   return {
     id: `00000000-0000-4000-8000-${code.padEnd(12, '0').slice(0, 12)}`,
     code,

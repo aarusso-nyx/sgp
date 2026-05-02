@@ -8,7 +8,8 @@ describe('Reintegracao future date validation (e2e)', () => {
       throw new Error('DATABASE_URL is required for reintegracao-data-futura');
     }
     const databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     const service = new ReintegrationOrderService(databaseService);
 

@@ -24,7 +24,9 @@ describe('CALC-10 payroll simulation dry-run (e2e)', () => {
       throw new Error('DATABASE_URL is required for calc-simulacao');
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    database = new DatabaseService(new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }));
+    database = new DatabaseService(
+      new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }),
+    );
     service = new SimulacaoService(database);
 
     const client = await pool.connect();
@@ -56,7 +58,10 @@ describe('CALC-10 payroll simulation dry-run (e2e)', () => {
         'DELETE FROM payroll.employee_payroll_item WHERE payroll_run_id = $1::uuid',
         [payrollRunId],
       );
-      await client.query('DELETE FROM payroll.payroll_run WHERE id = $1::uuid', [payrollRunId]);
+      await client.query(
+        'DELETE FROM payroll.payroll_run WHERE id = $1::uuid',
+        [payrollRunId],
+      );
       await client.query(
         'DELETE FROM payroll.employment_link_earning WHERE earning_deduction_id = ANY($1::uuid[])',
         [[salaryRubricId, irrfRubricId]],
@@ -65,7 +70,9 @@ describe('CALC-10 payroll simulation dry-run (e2e)', () => {
         'DELETE FROM payroll.payroll_earning_deduction WHERE id = ANY($1::uuid[])',
         [[salaryRubricId, irrfRubricId]],
       );
-      await client.query('DELETE FROM hr.employee WHERE id = $1::uuid', [employeeId]);
+      await client.query('DELETE FROM hr.employee WHERE id = $1::uuid', [
+        employeeId,
+      ]);
       await client.query(
         "DELETE FROM hr.salary_reference WHERE tenant_id = $1::uuid AND code LIKE 'CALC10-SAL-%'",
         [tenantId],
@@ -82,10 +89,10 @@ describe('CALC-10 payroll simulation dry-run (e2e)', () => {
         "DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid AND code LIKE 'CALC10-TYPE-%'",
         [tenantId],
       );
-      await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-        tenantId,
-        'IRRF',
-      ]);
+      await client.query(
+        'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+        [tenantId, 'IRRF'],
+      );
     } finally {
       client.release();
       await database.onModuleDestroy();
@@ -116,8 +123,12 @@ describe('CALC-10 payroll simulation dry-run (e2e)', () => {
 
   it('applies a 10 percent base salary override and moves IRRF into the next amount', async () => {
     const result = await runSimulation({ baseSalary: '2750.00' });
-    const salary = result.lines.find((line) => line.earningDeductionId === salaryRubricId);
-    const irrf = result.lines.find((line) => line.earningDeductionId === irrfRubricId);
+    const salary = result.lines.find(
+      (line) => line.earningDeductionId === salaryRubricId,
+    );
+    const irrf = result.lines.find(
+      (line) => line.earningDeductionId === irrfRubricId,
+    );
 
     expect(salary?.currentAmount).toBe('2500.00');
     expect(salary?.amount).toBe('2750.00');
@@ -268,7 +279,12 @@ async function seedFixture(client: PoolClient): Promise<{
     )
     RETURNING id::text
     `,
-    [tenantId, `CALC10-${suffix}`, employmentLink.rows[0].id, salary.rows[0].id],
+    [
+      tenantId,
+      `CALC10-${suffix}`,
+      employmentLink.rows[0].id,
+      salary.rows[0].id,
+    ],
   );
   const salaryRubric = await client.query<{ id: string }>(
     `
@@ -304,7 +320,12 @@ async function seedFixture(client: PoolClient): Promise<{
       ($1::uuid, $2::uuid, $3::uuid, DATE '2025-01-01', 'ACTIVE'::"RecordStatus"),
       ($1::uuid, $2::uuid, $4::uuid, DATE '2025-01-01', 'ACTIVE'::"RecordStatus")
     `,
-    [tenantId, employmentLink.rows[0].id, salaryRubric.rows[0].id, irrfRubric.rows[0].id],
+    [
+      tenantId,
+      employmentLink.rows[0].id,
+      salaryRubric.rows[0].id,
+      irrfRubric.rows[0].id,
+    ],
   );
   const payrollType = await client.query<{ id: string }>(
     `
@@ -347,7 +368,13 @@ async function seedFixture(client: PoolClient): Promise<{
       ($1::uuid, $2::uuid, $3::uuid, $4::uuid, 'CALCULATED'::"PayrollEntrySource", 2025, 5, 1, 2500.00, 2500.00),
       ($1::uuid, $2::uuid, $3::uuid, $5::uuid, 'CALCULATED'::"PayrollEntrySource", 2025, 5, 1, 18.06, 18.06)
     `,
-    [tenantId, employee.rows[0].id, run.rows[0].id, salaryRubric.rows[0].id, irrfRubric.rows[0].id],
+    [
+      tenantId,
+      employee.rows[0].id,
+      run.rows[0].id,
+      salaryRubric.rows[0].id,
+      irrfRubric.rows[0].id,
+    ],
   );
   return {
     employeeId: employee.rows[0].id,
@@ -359,10 +386,10 @@ async function seedFixture(client: PoolClient): Promise<{
 }
 
 async function seedTaxRate(client: PoolClient): Promise<void> {
-  await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-    tenantId,
-    'IRRF',
-  ]);
+  await client.query(
+    'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+    [tenantId, 'IRRF'],
+  );
   const brackets = [
     ['CALC10-IRRF-01', '0.00', '2259.20', '0.000000', '0.00'],
     ['CALC10-IRRF-02', '2259.21', '2826.65', '7.500000', '169.44'],
@@ -396,6 +423,10 @@ async function seedTaxRate(client: PoolClient): Promise<void> {
 
 async function setBypassContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
 }

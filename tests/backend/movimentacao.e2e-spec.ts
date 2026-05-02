@@ -51,12 +51,18 @@ class FakeTransferDatabaseService {
 
   transaction<T>(
     callback: (client: {
-      query: (sql: string, values?: readonly unknown[]) => Promise<{ rows: unknown[] }>;
+      query: (
+        sql: string,
+        values?: readonly unknown[],
+      ) => Promise<{ rows: unknown[] }>;
     }) => Promise<T>,
   ): Promise<T> {
     return callback({
       query: async (sql: string, values: readonly unknown[] = []) => {
-        if (sql.includes('FROM hr.employee') && !sql.includes('employee_transfer')) {
+        if (
+          sql.includes('FROM hr.employee') &&
+          !sql.includes('employee_transfer')
+        ) {
           return {
             rows: [
               {
@@ -130,7 +136,8 @@ describe('Movimentacao workflow (e2e)', () => {
 
   afterEach(async () => {
     await app.close();
-    if (originalUnsigned === undefined) delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
+    if (originalUnsigned === undefined)
+      delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
     else process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS = originalUnsigned;
   });
 
@@ -152,14 +159,18 @@ describe('Movimentacao workflow (e2e)', () => {
       .expect((response) => expect(response.body.status).toBe('solicitada'));
 
     await request(server())
-      .post('/api/v1/rh/employee-transfer/00000000-0000-4000-8000-000000000020/aprovar')
+      .post(
+        '/api/v1/rh/employee-transfer/00000000-0000-4000-8000-000000000020/aprovar',
+      )
       .set('authorization', `Bearer ${token()}`)
       .send({})
       .expect(200);
 
     database.status = 'aprovada';
     await request(server())
-      .post('/api/v1/rh/employee-transfer/00000000-0000-4000-8000-000000000020/efetivar')
+      .post(
+        '/api/v1/rh/employee-transfer/00000000-0000-4000-8000-000000000020/efetivar',
+      )
       .set('authorization', `Bearer ${token()}`)
       .send({})
       .expect(200)
@@ -170,7 +181,9 @@ describe('Movimentacao workflow (e2e)', () => {
     database.status = 'aprovada';
     database.closed = true;
     await request(server())
-      .post('/api/v1/rh/employee-transfer/00000000-0000-4000-8000-000000000020/efetivar')
+      .post(
+        '/api/v1/rh/employee-transfer/00000000-0000-4000-8000-000000000020/efetivar',
+      )
       .set('authorization', `Bearer ${token()}`)
       .send({})
       .expect(422)
@@ -178,7 +191,8 @@ describe('Movimentacao workflow (e2e)', () => {
         expect(response.body.error).toEqual(
           expect.objectContaining({
             code: 'UNPROCESSABLE_ENTITY',
-            message: 'Transfer effective date is inside a closed payroll competence',
+            message:
+              'Transfer effective date is inside a closed payroll competence',
             status: 422,
           }),
         );

@@ -25,7 +25,9 @@ describe('CALC-09 payroll reprocessing idempotency (e2e)', () => {
       throw new Error('DATABASE_URL is required for calc-reprocessamento');
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    database = new DatabaseService(new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }));
+    database = new DatabaseService(
+      new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }),
+    );
     service = new DecimoTerceiroService(database);
 
     const client = await pool.connect();
@@ -59,7 +61,10 @@ describe('CALC-09 payroll reprocessing idempotency (e2e)', () => {
         `,
         [tenantId],
       );
-      await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', [tenantId]);
+      await client.query(
+        'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+        [tenantId],
+      );
     } finally {
       client.release();
       await database.onModuleDestroy();
@@ -234,16 +239,28 @@ describe('CALC-09 payroll reprocessing idempotency (e2e)', () => {
 
 async function setBypassContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
 }
 
-async function setTenantContext(client: PoolClient, permissions: string[]): Promise<void> {
+async function setTenantContext(
+  client: PoolClient,
+  permissions: string[],
+): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'false', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_permissions', $1, false)", [
-    permissions.join('\n'),
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
   ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
+  await client.query(
+    "SELECT set_config('app.current_permissions', $1, false)",
+    [permissions.join('\n')],
+  );
   await client.query("SELECT set_config('app.authenticated', 'true', false)");
 }

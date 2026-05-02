@@ -30,9 +30,11 @@ class FakeDatabaseService {
   query<T>(sql: string): Promise<T[]> {
     if (sql.includes('SELECT DISTINCT p.key')) {
       return Promise.resolve(
-        ['auth.read', 'saude.program.read', 'saude.program.write'].map((key) => ({
-          key,
-        })) as T[],
+        ['auth.read', 'saude.program.read', 'saude.program.write'].map(
+          (key) => ({
+            key,
+          }),
+        ) as T[],
       );
     }
     return Promise.resolve([] as T[]);

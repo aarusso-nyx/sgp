@@ -54,9 +54,15 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
     }
 
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    database = new DatabaseService(new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }));
+    database = new DatabaseService(
+      new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }),
+    );
     service = new FolhaMensalService(database);
-    portalService = new PortalService(database, {} as CareerPlanService, {} as EligibilityService);
+    portalService = new PortalService(
+      database,
+      {} as CareerPlanService,
+      {} as EligibilityService,
+    );
 
     const client = await pool.connect();
     try {
@@ -84,7 +90,9 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
         ['CLT2', 'celetista', '1800.00'],
       ] as const;
       for (const [code, contractType, salary] of fixtures) {
-        employees.push(await createEmployee(client, tenantId, code, contractType, salary));
+        employees.push(
+          await createEmployee(client, tenantId, code, contractType, salary),
+        );
       }
     } finally {
       client.release();
@@ -106,11 +114,15 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
   });
 
   it('runs OPEN to CLOSED for five mixed-regime employees and publishes portal paystubs only after GENERATED', async () => {
-    const opened = await asPayrollOperator(() => service.openCompetence(competence));
+    const opened = await asPayrollOperator(() =>
+      service.openCompetence(competence),
+    );
     expect(opened.competenceStatus).toBe('OPEN');
     expect(opened.payrollStatus).toBe('DRAFT');
 
-    const calculated = await asPayrollOperator(() => service.calculate(competence));
+    const calculated = await asPayrollOperator(() =>
+      service.calculate(competence),
+    );
     expect(calculated.competenceStatus).toBe('CALCULATED');
     expect(calculated.review).toHaveLength(5);
     assertTotals(calculated.review, calculated.totalNet);
@@ -120,7 +132,9 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
     expect(approved.competenceStatus).toBe('APPROVED');
     await expectPortalUnavailable(employees[0]);
 
-    const generated = await asPayrollOperator(() => service.generate(competence));
+    const generated = await asPayrollOperator(() =>
+      service.generate(competence),
+    );
     expect(generated.competenceStatus).toBe('GENERATED');
     expect(generated.payrollStatus).toBe('GENERATED');
 
@@ -130,7 +144,8 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
     expect(paystub.competence).toBe('2026-05');
     expect(paystub.lines.length).toBeGreaterThan(0);
     expect(paystub.totals.net).toBe(
-      calculated.review.find((row) => row.employeeId === employees[0].id)?.netAmount,
+      calculated.review.find((row) => row.employeeId === employees[0].id)
+        ?.netAmount,
     );
 
     const crossTenantRows = await RequestContextStore.run(
@@ -156,7 +171,9 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
     expect(closed.payrollStatus).toBe('CLOSED');
   });
 
-  async function expectPortalUnavailable(employee: EmployeeFixture): Promise<void> {
+  async function expectPortalUnavailable(
+    employee: EmployeeFixture,
+  ): Promise<void> {
     await expect(
       asPortalEmployee(employee, () =>
         portalService.getPaystub(actorForEmployee(employee), '2026-05'),
@@ -172,11 +189,14 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
     }[],
     totalNet: string,
   ): void {
-    const netSum = rows.reduce((sum, row) => sum.plus(new Decimal(row.netAmount)), new Decimal(0));
+    const netSum = rows.reduce(
+      (sum, row) => sum.plus(new Decimal(row.netAmount)),
+      new Decimal(0),
+    );
     for (const row of rows) {
-      expect(new Decimal(row.totalEarnings).minus(row.totalDeductions).toFixed(2)).toBe(
-        new Decimal(row.netAmount).toFixed(2),
-      );
+      expect(
+        new Decimal(row.totalEarnings).minus(row.totalDeductions).toFixed(2),
+      ).toBe(new Decimal(row.netAmount).toFixed(2));
     }
     expect(netSum.toFixed(2)).toBe(new Decimal(totalNet).toFixed(2));
   }
@@ -192,7 +212,10 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
     );
   }
 
-  function asPortalEmployee<T>(employee: EmployeeFixture, fn: () => Promise<T>): Promise<T> {
+  function asPortalEmployee<T>(
+    employee: EmployeeFixture,
+    fn: () => Promise<T>,
+  ): Promise<T> {
     return RequestContextStore.run(
       {
         tenantId,
@@ -214,7 +237,10 @@ function actorForEmployee(employee: EmployeeFixture): AuthenticatedActor {
   };
 }
 
-function actorForTenant(currentTenantId: string, permissions: string[]): AuthenticatedActor {
+function actorForTenant(
+  currentTenantId: string,
+  permissions: string[],
+): AuthenticatedActor {
   return {
     sub: `calc11-${currentTenantId}`,
     username: 'calc11-operator',
@@ -350,18 +376,28 @@ async function createEmployee(
       DATE '2024-01-01', DATE '2024-01-01', 'ACTIVE'::"RecordStatus"
     )
     `,
-    [currentTenantId, employee.rows[0].id, link.rows[0].id, contract.rows[0].id],
+    [
+      currentTenantId,
+      employee.rows[0].id,
+      link.rows[0].id,
+      contract.rows[0].id,
+    ],
   );
   return { id: employee.rows[0].id, registration };
 }
 
-async function cleanupTenant(client: PoolClient, currentTenantId: string): Promise<void> {
-  await client.query('DELETE FROM payroll.employee_payroll_item WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
-  await client.query('DELETE FROM payroll.payroll_financial_record WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
+async function cleanupTenant(
+  client: PoolClient,
+  currentTenantId: string,
+): Promise<void> {
+  await client.query(
+    'DELETE FROM payroll.employee_payroll_item WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_financial_record WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
   await client.query(
     `
     DELETE FROM payroll.payroll_run_status_history history
@@ -371,34 +407,49 @@ async function cleanupTenant(client: PoolClient, currentTenantId: string): Promi
     `,
     [currentTenantId],
   );
-  await client.query('DELETE FROM payroll.payroll_run_work_location WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
-  await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
-  await client.query('DELETE FROM payroll.payroll_type_earning WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
-  await client.query('DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
-  await client.query('DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
-  await client.query('DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
-  await client.query('DELETE FROM hr.competence_period WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
-  await client.query('DELETE FROM public.system_parameter WHERE tenant_id = $1::uuid', [
-    currentTenantId,
-  ]);
+  await client.query(
+    'DELETE FROM payroll.payroll_run_work_location WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_type_earning WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
+  await client.query(
+    'DELETE FROM hr.competence_period WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
+  await client.query(
+    'DELETE FROM public.system_parameter WHERE tenant_id = $1::uuid',
+    [currentTenantId],
+  );
 }
 
-async function setBypassContext(client: PoolClient, currentTenantId: string): Promise<void> {
+async function setBypassContext(
+  client: PoolClient,
+  currentTenantId: string,
+): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [currentTenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [currentTenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    currentTenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    currentTenantId,
+  ]);
 }

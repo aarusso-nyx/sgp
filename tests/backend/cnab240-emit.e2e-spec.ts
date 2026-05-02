@@ -23,8 +23,9 @@ describe('BANK-01 CNAB 240 emission gate', () => {
       }),
     };
     const service = new Cnab240EmitService({
-      transaction: (callback: (transactionClient: typeof client) => Promise<unknown>) =>
-        callback(client),
+      transaction: (
+        callback: (transactionClient: typeof client) => Promise<unknown>,
+      ) => callback(client),
     } as never);
 
     await expect(

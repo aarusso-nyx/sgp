@@ -138,7 +138,10 @@ describe('nomeacao prazo flow', () => {
           username: 'rec-admin',
           tenantId,
           groups: [],
-          permissions: ['recrutamento.nomeacao.write', 'recrutamento.nomeacao.read'],
+          permissions: [
+            'recrutamento.nomeacao.write',
+            'recrutamento.nomeacao.read',
+          ],
           claims: {},
         }),
       })

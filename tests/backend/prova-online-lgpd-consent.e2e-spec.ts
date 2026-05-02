@@ -57,7 +57,8 @@ describe('REC-08 LGPD recording consent', () => {
             microphone: true,
             screenShare: true,
           },
-          biometricSampleBase64: Buffer.from('candidate-face').toString('base64'),
+          biometricSampleBase64:
+            Buffer.from('candidate-face').toString('base64'),
           biometricKind: 'FACE',
           browserFingerprint: 'fp-1',
           ipAddress: '127.0.0.1',

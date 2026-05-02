@@ -18,7 +18,8 @@ describe('CALC-02 IRRF progressive table golden scenarios (e2e)', () => {
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
 
     const client = await pool.connect();
@@ -46,16 +47,23 @@ describe('CALC-02 IRRF progressive table golden scenarios (e2e)', () => {
     const client = await pool.connect();
     try {
       await client.query("SELECT set_config('app.bypass_rls', 'true', true)");
-      await client.query('DELETE FROM hr.employee_dependent WHERE employee_id = ANY($1::uuid[])', [
+      await client.query(
+        'DELETE FROM hr.employee_dependent WHERE employee_id = ANY($1::uuid[])',
+        [employeeIds],
+      );
+      await client.query('DELETE FROM hr.employee WHERE id = ANY($1::uuid[])', [
         employeeIds,
       ]);
-      await client.query('DELETE FROM hr.employee WHERE id = ANY($1::uuid[])', [employeeIds]);
-      await client.query("DELETE FROM hr.salary_reference WHERE code LIKE 'CALC02-SAL-%'");
-      await client.query("DELETE FROM hr.shift WHERE code LIKE 'CALC02-SHIFT-%'");
-      await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-        tenantId,
-        'IRRF',
-      ]);
+      await client.query(
+        "DELETE FROM hr.salary_reference WHERE code LIKE 'CALC02-SAL-%'",
+      );
+      await client.query(
+        "DELETE FROM hr.shift WHERE code LIKE 'CALC02-SHIFT-%'",
+      );
+      await client.query(
+        'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+        [tenantId, 'IRRF'],
+      );
     } finally {
       client.release();
       await pool.end();
@@ -106,10 +114,10 @@ describe('CALC-02 IRRF progressive table golden scenarios (e2e)', () => {
 });
 
 async function seedIrrfTable(client: import('pg').PoolClient): Promise<void> {
-  await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-    tenantId,
-    'IRRF',
-  ]);
+  await client.query(
+    'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+    [tenantId, 'IRRF'],
+  );
   const brackets = [
     ['IRRF-CALC02-01', '0.00', '2259.20', '0.000000', '0.00'],
     ['IRRF-CALC02-02', '2259.21', '2826.65', '7.500000', '169.44'],
@@ -141,7 +149,9 @@ async function seedIrrfTable(client: import('pg').PoolClient): Promise<void> {
   }
 }
 
-async function seedIrrfRubrica(client: import('pg').PoolClient): Promise<string> {
+async function seedIrrfRubrica(
+  client: import('pg').PoolClient,
+): Promise<string> {
   const result = await client.query<{ id: string }>(
     `
     INSERT INTO payroll.payroll_earning_deduction (
@@ -194,7 +204,13 @@ async function createEmployee(
     VALUES ($1::uuid, $2, $3, $4::uuid, $5::uuid, DATE '2020-01-01', 'ACTIVE'::"EmployeeLifecycleStatus")
     RETURNING id::text
     `,
-    [tenantId, `CALC02-${suffix}`, `CALC-02 ${code}`, salary.rows[0].id, shift.rows[0].id],
+    [
+      tenantId,
+      `CALC02-${suffix}`,
+      `CALC-02 ${code}`,
+      salary.rows[0].id,
+      shift.rows[0].id,
+    ],
   );
   for (let index = 0; index < dependents; index += 1) {
     await client.query(

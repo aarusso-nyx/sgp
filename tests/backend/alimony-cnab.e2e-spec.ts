@@ -42,8 +42,9 @@ describe('BANK-04 alimony CNAB gate', () => {
       }),
     };
     const service = new Cnab240EmitService({
-      transaction: (callback: (transactionClient: typeof client) => Promise<unknown>) =>
-        callback(client),
+      transaction: (
+        callback: (transactionClient: typeof client) => Promise<unknown>,
+      ) => callback(client),
     } as never);
 
     const result = await service.emit({
@@ -54,8 +55,13 @@ describe('BANK-04 alimony CNAB gate', () => {
     });
 
     expect(result.details).toHaveLength(2);
-    expect(result.details.map((detail) => detail.account)).toEqual(['0001-1', '0002-2']);
-    expect(result.details.every((detail) => detail.purposeCode === 'ALIM')).toBe(true);
+    expect(result.details.map((detail) => detail.account)).toEqual([
+      '0001-1',
+      '0002-2',
+    ]);
+    expect(
+      result.details.every((detail) => detail.purposeCode === 'ALIM'),
+    ).toBe(true);
     expect(
       queries.filter((entry) =>
         entry.sql.includes('INSERT INTO payroll.payment_remittance_detail'),

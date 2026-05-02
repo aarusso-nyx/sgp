@@ -15,7 +15,9 @@ describe('FISC-04 GPS residual (e2e)', () => {
       transaction: jest
         .fn()
         .mockImplementationOnce(
-          async (callback: (client: { query: jest.Mock }) => Promise<unknown>) =>
+          async (
+            callback: (client: { query: jest.Mock }) => Promise<unknown>,
+          ) =>
             callback({
               query: jest.fn(async (sql: string) => {
                 if (sql.includes('FROM fiscal.gps_payment_code')) {
@@ -46,11 +48,15 @@ describe('FISC-04 GPS residual (e2e)', () => {
             }),
         )
         .mockImplementationOnce(
-          async (callback: (client: { query: jest.Mock }) => Promise<unknown>) =>
+          async (
+            callback: (client: { query: jest.Mock }) => Promise<unknown>,
+          ) =>
             callback({
               query: jest.fn(async (sql: string) => {
                 if (sql.includes('assert_no_dctfweb_for_competence')) {
-                  throw new Error('GPS residual duplicates transmitted or accepted DCTFWeb');
+                  throw new Error(
+                    'GPS residual duplicates transmitted or accepted DCTFWeb',
+                  );
                 }
                 return { rows: [] };
               }),

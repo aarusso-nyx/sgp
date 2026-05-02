@@ -22,9 +22,9 @@ describe('PermissionGuard deny behavior', () => {
       { verifyAuthorizationHeader: jest.fn() } as never,
     );
 
-    await expect(guard.canActivate(executionContext('Bearer token'))).rejects.toBeInstanceOf(
-      ForbiddenException,
-    );
+    await expect(
+      guard.canActivate(executionContext('Bearer token')),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
 
   it('returns 401 when a protected route receives no token', async () => {
@@ -60,8 +60,8 @@ describe('PermissionGuard deny behavior', () => {
       }),
     } as never);
 
-    await expect(guard.canActivate(executionContext('Bearer token'))).rejects.toBeInstanceOf(
-      ForbiddenException,
-    );
+    await expect(
+      guard.canActivate(executionContext('Bearer token')),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
 });

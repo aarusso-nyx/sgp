@@ -21,7 +21,8 @@ describe('CALC-07 abono permanencia golden scenarios (e2e)', () => {
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     employeesService = new EmployeesService(databaseService);
 
@@ -38,7 +39,10 @@ describe('CALC-07 abono permanencia golden scenarios (e2e)', () => {
       const active = await createEmployee(client, 'ACTIVE', '5000.00');
       const inactive = await createEmployee(client, 'INACTIVE', '5000.00');
       employeeIds.push(active.employeeId, inactive.employeeId);
-      employmentLinkIds.push(active.employmentLinkId, inactive.employmentLinkId);
+      employmentLinkIds.push(
+        active.employmentLinkId,
+        inactive.employmentLinkId,
+      );
     } finally {
       client.release();
     }
@@ -49,16 +53,23 @@ describe('CALC-07 abono permanencia golden scenarios (e2e)', () => {
     const client = await pool.connect();
     try {
       await client.query("SELECT set_config('app.bypass_rls', 'true', true)");
-      await client.query('DELETE FROM hr.employee WHERE id = ANY($1::uuid[])', [employeeIds]);
-      await client.query('DELETE FROM hr.employment_link WHERE id = ANY($1::uuid[])', [
-        employmentLinkIds,
+      await client.query('DELETE FROM hr.employee WHERE id = ANY($1::uuid[])', [
+        employeeIds,
       ]);
-      await client.query("DELETE FROM hr.salary_reference WHERE code LIKE 'CALC07A-SAL-%'");
-      await client.query("DELETE FROM hr.shift WHERE code LIKE 'CALC07A-SHIFT-%'");
-      await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-        tenantId,
-        'RPPS',
-      ]);
+      await client.query(
+        'DELETE FROM hr.employment_link WHERE id = ANY($1::uuid[])',
+        [employmentLinkIds],
+      );
+      await client.query(
+        "DELETE FROM hr.salary_reference WHERE code LIKE 'CALC07A-SAL-%'",
+      );
+      await client.query(
+        "DELETE FROM hr.shift WHERE code LIKE 'CALC07A-SHIFT-%'",
+      );
+      await client.query(
+        'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+        [tenantId, 'RPPS'],
+      );
     } finally {
       client.release();
       await pool.end();
@@ -84,7 +95,10 @@ describe('CALC-07 abono permanencia golden scenarios (e2e)', () => {
     expect(after).toBeGreaterThanOrEqual(before + 2);
   });
 
-  async function updateAbono(employeeId: string, active: boolean): Promise<void> {
+  async function updateAbono(
+    employeeId: string,
+    active: boolean,
+  ): Promise<void> {
     await RequestContextStore.run(
       {
         tenantId,
@@ -150,10 +164,10 @@ describe('CALC-07 abono permanencia golden scenarios (e2e)', () => {
 });
 
 async function seedRppsTable(client: import('pg').PoolClient): Promise<void> {
-  await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-    tenantId,
-    'RPPS',
-  ]);
+  await client.query(
+    'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+    [tenantId, 'RPPS'],
+  );
   await client.query(
     `
     INSERT INTO public.system_parameter (tenant_id, key, value, description, module_key)
@@ -179,7 +193,14 @@ async function seedRppsTable(client: import('pg').PoolClient): Promise<void> {
       VALUES ($1::uuid, $2, $3, 'CALC-07 E2E RPPS', 'RPPS', 2025, $6::numeric, 'RPPS',
         DATE '2025-01-01', $4::numeric, $5::numeric, $6::numeric, 0.00, 0.00, 'ACTIVE'::"RecordStatus")
       `,
-      [tenantId, bracket[0], `RPPS CALC-07 ${index + 1}`, bracket[1], bracket[2], bracket[3]],
+      [
+        tenantId,
+        bracket[0],
+        `RPPS CALC-07 ${index + 1}`,
+        bracket[1],
+        bracket[2],
+        bracket[3],
+      ],
     );
   }
 }

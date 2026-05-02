@@ -28,9 +28,12 @@ class FakeVacationDatabaseService {
   query<T>(sql: string, values: readonly unknown[] = []): Promise<T[]> {
     if (sql.includes('SELECT DISTINCT p.key')) {
       return Promise.resolve(
-        ['auth.read', 'rh.vacation.read', 'rh.vacation.request', 'rh.vacation.approve'].map(
-          (key) => ({ key }),
-        ) as T[],
+        [
+          'auth.read',
+          'rh.vacation.read',
+          'rh.vacation.request',
+          'rh.vacation.approve',
+        ].map((key) => ({ key })) as T[],
       );
     }
     if (sql.includes('hr.f_calculate_vacation_balance')) {
@@ -69,13 +72,19 @@ class FakeVacationDatabaseService {
 
   async transaction<T>(
     callback: (client: {
-      query: <R>(sql: string, values?: readonly unknown[]) => Promise<{ rows: R[] }>;
+      query: <R>(
+        sql: string,
+        values?: readonly unknown[],
+      ) => Promise<{ rows: R[] }>;
     }) => Promise<T>,
   ): Promise<T> {
     return callback({ query: this.clientQuery.bind(this) });
   }
 
-  private clientQuery<T>(sql: string, values: readonly unknown[] = []): Promise<{ rows: T[] }> {
+  private clientQuery<T>(
+    sql: string,
+    values: readonly unknown[] = [],
+  ): Promise<{ rows: T[] }> {
     if (sql.includes('FROM hr.employee employee')) {
       return Promise.resolve({
         rows: [
@@ -131,7 +140,8 @@ describe('Vacation workflow (e2e)', () => {
 
   afterEach(async () => {
     await app.close();
-    if (originalUnsigned === undefined) delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
+    if (originalUnsigned === undefined)
+      delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
     else process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS = originalUnsigned;
   });
 
@@ -183,7 +193,9 @@ describe('Vacation workflow (e2e)', () => {
 
   it('approves a scheduled vacation record', async () => {
     await request(server())
-      .post('/api/v1/ferias/programacao/00000000-0000-4000-8000-000000000090/aprovar')
+      .post(
+        '/api/v1/ferias/programacao/00000000-0000-4000-8000-000000000090/aprovar',
+      )
       .set('authorization', `Bearer ${token()}`)
       .send({})
       .expect(201)

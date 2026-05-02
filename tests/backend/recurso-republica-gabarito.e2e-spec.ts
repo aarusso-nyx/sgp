@@ -91,7 +91,10 @@ describe('REC-03 answer key republication and resources', () => {
           username: 'rec-admin',
           tenantId: '00000000-0000-4000-8000-000000000001',
           groups: [],
-          permissions: ['recrutamento.avaliacao.read', 'recrutamento.avaliacao.write'],
+          permissions: [
+            'recrutamento.avaliacao.read',
+            'recrutamento.avaliacao.write',
+          ],
           claims: {},
         }),
       })
@@ -127,7 +130,9 @@ describe('REC-03 answer key republication and resources', () => {
     const openApp = await createApp('open');
     try {
       await request(openApp.getHttpServer())
-        .post('/api/v1/publico/inscricoes/00000000-0000-4000-8000-000000000402/recursos')
+        .post(
+          '/api/v1/publico/inscricoes/00000000-0000-4000-8000-000000000402/recursos',
+        )
         .query({ token: 'candidate-token' })
         .send({
           provaId: '00000000-0000-4000-8000-000000000302',
@@ -142,7 +147,9 @@ describe('REC-03 answer key republication and resources', () => {
     const closedApp = await createApp('closed');
     try {
       await request(closedApp.getHttpServer())
-        .post('/api/v1/publico/inscricoes/00000000-0000-4000-8000-000000000402/recursos')
+        .post(
+          '/api/v1/publico/inscricoes/00000000-0000-4000-8000-000000000402/recursos',
+        )
         .query({ token: 'candidate-token' })
         .send({
           provaId: '00000000-0000-4000-8000-000000000302',

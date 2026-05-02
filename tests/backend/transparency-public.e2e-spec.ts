@@ -61,10 +61,14 @@ describe('public transparency endpoints', () => {
 
   it('responds without a token and excludes protected fields', async () => {
     const response = await request(app.getHttpServer())
-      .get('/api/v1/public/transparency/00000000-0000-4000-8000-000000000001/payroll')
+      .get(
+        '/api/v1/public/transparency/00000000-0000-4000-8000-000000000001/payroll',
+      )
       .expect(200);
 
-    expect(JSON.stringify(response.body)).not.toMatch(/cpf|bank|dependent|address/i);
+    expect(JSON.stringify(response.body)).not.toMatch(
+      /cpf|bank|dependent|address/i,
+    );
     expect(response.body.items[0]).toMatchObject({
       fullName: 'Ana Silva',
       netTotal: '900.00',

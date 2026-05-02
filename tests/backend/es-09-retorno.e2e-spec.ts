@@ -20,7 +20,10 @@ describe('ES-09 retorno parser status sync (e2e)', () => {
     databaseService = new DatabaseService({
       get: (key: string) => ({ DATABASE_URL: process.env.DATABASE_URL })[key],
     } as never);
-    statusSync = new StatusSyncService(databaseService, new RetryPolicyService(databaseService));
+    statusSync = new StatusSyncService(
+      databaseService,
+      new RetryPolicyService(databaseService),
+    );
     await runAsWorker(() => seed(databaseService));
   });
 
@@ -111,7 +114,11 @@ async function seed(database: DatabaseService): Promise<void> {
     [tenantId],
   );
   await cleanup(database);
-  for (const eventId of [acceptedEventId, recoverableEventId, definitiveEventId]) {
+  for (const eventId of [
+    acceptedEventId,
+    recoverableEventId,
+    definitiveEventId,
+  ]) {
     await database.query(
       `
       INSERT INTO public.esocial_event (
@@ -170,7 +177,11 @@ function runAsWorker<T>(fn: () => Promise<T>): Promise<T> {
   return RequestContextStore.run(
     {
       tenantId,
-      permissions: ['esocial.event.read', 'esocial.event.write', 'esocial.event.retry'],
+      permissions: [
+        'esocial.event.read',
+        'esocial.event.write',
+        'esocial.event.retry',
+      ],
       bypassRls: true,
       bypassRlsReason: 'esocial-worker',
     },

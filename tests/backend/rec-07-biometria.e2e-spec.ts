@@ -13,7 +13,9 @@ import {
 
 const tenantId = '00000000-0000-4000-8000-000000000001';
 const candidatoId = '00000000-0000-4000-8000-000000000721';
-const sampleBase64 = Buffer.from('face-sample-e2e-candidate').toString('base64');
+const sampleBase64 = Buffer.from('face-sample-e2e-candidate').toString(
+  'base64',
+);
 
 class FakeBiometriaDatabase {
   readonly configured = true;
@@ -27,7 +29,9 @@ class FakeBiometriaDatabase {
     return [] as T[];
   }
 
-  async transaction<T>(callback: (client: { query: jest.Mock }) => Promise<T>): Promise<T> {
+  async transaction<T>(
+    callback: (client: { query: jest.Mock }) => Promise<T>,
+  ): Promise<T> {
     const client = {
       query: jest.fn(async (sql: string, values: unknown[] = []) => {
         if (sql.includes('INSERT INTO recrutamento.biometric_consent')) {
@@ -74,7 +78,9 @@ class FakeBiometriaDatabase {
           return {
             rows: [
               {
-                count: String(this.attempts.slice(-5).filter((matched) => !matched).length),
+                count: String(
+                  this.attempts.slice(-5).filter((matched) => !matched).length,
+                ),
               },
             ],
           };
@@ -117,7 +123,10 @@ describe('REC-07 biometria e2e', () => {
           username: 'operator',
           tenantId,
           groups: [],
-          permissions: ['recrutamento.biometric.write', 'recrutamento.biometric.read'],
+          permissions: [
+            'recrutamento.biometric.write',
+            'recrutamento.biometric.read',
+          ],
         })),
       })
       .overrideProvider(DatabaseService)

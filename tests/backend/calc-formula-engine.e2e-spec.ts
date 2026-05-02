@@ -20,7 +20,8 @@ describe('CALC-01 formula engine golden scenarios (e2e)', () => {
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     compiler = new FormulaCompilerService(databaseService);
 
@@ -101,18 +102,26 @@ describe('CALC-01 formula engine golden scenarios (e2e)', () => {
       try {
         await client.query("SELECT set_config('app.bypass_rls', 'true', true)");
         for (const rubricaId of [...rubricaIds].reverse()) {
-          await client.query('DELETE FROM payroll.payroll_earning_deduction WHERE id = $1::uuid', [
-            rubricaId,
-          ]);
+          await client.query(
+            'DELETE FROM payroll.payroll_earning_deduction WHERE id = $1::uuid',
+            [rubricaId],
+          );
         }
         if (employeeId) {
-          await client.query('DELETE FROM hr.employee_dependent WHERE employee_id = $1::uuid', [
+          await client.query(
+            'DELETE FROM hr.employee_dependent WHERE employee_id = $1::uuid',
+            [employeeId],
+          );
+          await client.query('DELETE FROM hr.employee WHERE id = $1::uuid', [
             employeeId,
           ]);
-          await client.query('DELETE FROM hr.employee WHERE id = $1::uuid', [employeeId]);
         }
-        await client.query("DELETE FROM hr.salary_reference WHERE code LIKE 'CALC01-SAL-%'");
-        await client.query("DELETE FROM hr.shift WHERE code LIKE 'CALC01-SHIFT-%'");
+        await client.query(
+          "DELETE FROM hr.salary_reference WHERE code LIKE 'CALC01-SAL-%'",
+        );
+        await client.query(
+          "DELETE FROM hr.shift WHERE code LIKE 'CALC01-SHIFT-%'",
+        );
       } finally {
         client.release();
       }
@@ -125,7 +134,11 @@ describe('CALC-01 formula engine golden scenarios (e2e)', () => {
     ['simple sum', 'SALARIO_BASE + 100', new Decimal('2100.00')],
     ['hour multiplication', 'CARGA_HORARIA * 25', new Decimal('200.00')],
     ['conditional IF', 'IF(DEPENDENTES > 1, 150, 0)', new Decimal('150.00')],
-    ['internal MAX/MIN', 'MAX(MIN(SALARIO_BASE, 1800), 1700)', new Decimal('1800.00')],
+    [
+      'internal MAX/MIN',
+      'MAX(MIN(SALARIO_BASE, 1800), 1700)',
+      new Decimal('1800.00'),
+    ],
   ])('evaluates %s', async (_name, expression, expected) => {
     const rubricaId = await createAndCompile(expression);
     const amount = await evaluate(rubricaId);

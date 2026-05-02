@@ -7,7 +7,7 @@ import requirePermissionRule from './backend/eslint-rules/require-permission.js'
 const backendRequire = createRequire(new URL('./backend/package.json', import.meta.url));
 const { default: eslint } = await import(backendRequire.resolve('@eslint/js'));
 const { default: eslintPluginPrettierRecommended } = await import(
-  backendRequire.resolve('eslint-plugin-prettier/recommended'),
+  backendRequire.resolve('eslint-plugin-prettier/recommended')
 );
 const { default: globals } = await import(backendRequire.resolve('globals'));
 const { default: tseslint } = await import(backendRequire.resolve('typescript-eslint'));
@@ -61,6 +61,15 @@ export default tseslint.config(
       '@typescript-eslint/only-throw-error': 'off',
       '@typescript-eslint/require-await': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
+  {
+    files: ['tests/backend/**/*.ts'],
+    rules: {
+      '@typescript-eslint/await-thenable': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
     },
   },
 );

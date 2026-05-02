@@ -45,11 +45,14 @@ describe('CALC-04 decimo terceiro golden scenarios (e2e)', () => {
         'DELETE FROM payroll.employee_payroll_item WHERE employee_id = ANY($1::uuid[])',
         [employeeIds],
       );
-      await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', [tenantId]);
-      await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-        tenantId,
-        'IRRF',
-      ]);
+      await client.query(
+        'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+        [tenantId],
+      );
+      await client.query(
+        'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+        [tenantId, 'IRRF'],
+      );
     } finally {
       client.release();
       await pool.end();
@@ -87,11 +90,16 @@ describe('CALC-04 decimo terceiro golden scenarios (e2e)', () => {
     await seedFirstParcelPaid(linkId, '1200.00');
     const result = await compute(linkId, 'DECIMO_TERCEIRO_FECHAMENTO');
 
-    expect(new Decimal(result.first_installment_discount).toFixed(2)).toBe('1200.00');
+    expect(new Decimal(result.first_installment_discount).toFixed(2)).toBe(
+      '1200.00',
+    );
     expect(new Decimal(result.installment_amount).toFixed(2)).toBe('1200.00');
   });
 
-  async function compute(linkId: string, kind: string): Promise<DecimoTerceiroResultRow> {
+  async function compute(
+    linkId: string,
+    kind: string,
+  ): Promise<DecimoTerceiroResultRow> {
     const result = await pool.query<DecimoTerceiroResultRow>(
       `
       SELECT *
@@ -190,7 +198,10 @@ describe('CALC-04 decimo terceiro golden scenarios (e2e)', () => {
     }
   }
 
-  async function seedFirstParcelPaid(employmentLinkId: string, amount: string): Promise<void> {
+  async function seedFirstParcelPaid(
+    employmentLinkId: string,
+    amount: string,
+  ): Promise<void> {
     const client = await pool.connect();
     try {
       await client.query("SELECT set_config('app.bypass_rls', 'true', true)");
@@ -229,7 +240,11 @@ describe('CALC-04 decimo terceiro golden scenarios (e2e)', () => {
         VALUES ($1::uuid, 2025, 11, $2::uuid, $3::uuid, 'GENERATED'::"PayrollRunStatus")
         RETURNING id::text
         `,
-        [tenantId, catalog.rows[0].payroll_type_id, catalog.rows[0].processing_type_id],
+        [
+          tenantId,
+          catalog.rows[0].payroll_type_id,
+          catalog.rows[0].processing_type_id,
+        ],
       );
       await client.query(
         `
@@ -242,7 +257,13 @@ describe('CALC-04 decimo terceiro golden scenarios (e2e)', () => {
           2025, 11, $5::numeric
         )
         `,
-        [tenantId, employee.rows[0].id, run.rows[0].id, catalog.rows[0].earning_id, amount],
+        [
+          tenantId,
+          employee.rows[0].id,
+          run.rows[0].id,
+          catalog.rows[0].earning_id,
+          amount,
+        ],
       );
     } finally {
       client.release();
@@ -314,15 +335,19 @@ async function seedCatalog(client: PoolClient): Promise<void> {
 
 async function setSessionContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
 }
 
 async function seedIrrfTable(client: PoolClient): Promise<void> {
-  await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-    tenantId,
-    'IRRF',
-  ]);
+  await client.query(
+    'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+    [tenantId, 'IRRF'],
+  );
   const brackets = [
     ['IRRF-CALC04-01', '0.00', '2259.20', '0.000000', '0.00'],
     ['IRRF-CALC04-02', '2259.21', '2826.65', '7.500000', '169.44'],

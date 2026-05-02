@@ -48,7 +48,11 @@ describe('ES-08 SOAP submission (e2e)', () => {
     };
     databaseService = new DatabaseService(config as never);
     const signer = new IcpSignerService();
-    const certificateStore = new CertificateStoreService(databaseService, config as never, signer);
+    const certificateStore = new CertificateStoreService(
+      databaseService,
+      config as never,
+      signer,
+    );
     submissionService = new SubmissionService(
       databaseService,
       certificateStore,
@@ -111,15 +115,23 @@ describe('ES-08 SOAP submission (e2e)', () => {
         httpStatus: 200,
       });
       const circuits = await submissionService.listCircuitStates();
-      expect(circuits.find((circuit) => circuit.endpointUrl === endpointUrl)).toMatchObject({
+      expect(
+        circuits.find((circuit) => circuit.endpointUrl === endpointUrl),
+      ).toMatchObject({
         state: 'CLOSED',
         failureCount: 0,
       });
     });
 
     expect(requestCount).toBe(2);
-    expect(receivedRequests.every((request) => request.includes('wsse:Security'))).toBe(true);
-    expect(receivedRequests.every((request) => request.includes('EnviarLoteEventos'))).toBe(true);
+    expect(
+      receivedRequests.every((request) => request.includes('wsse:Security')),
+    ).toBe(true);
+    expect(
+      receivedRequests.every((request) =>
+        request.includes('EnviarLoteEventos'),
+      ),
+    ).toBe(true);
   });
 
   async function startStubServer(): Promise<{
@@ -127,7 +139,10 @@ describe('ES-08 SOAP submission (e2e)', () => {
     endpointUrl: string;
   }> {
     const wsdl = readFileSync(
-      join(process.cwd(), 'src/esocial-worker/submission/__fixtures__/ws-enviar-lote-eventos.wsdl'),
+      join(
+        process.cwd(),
+        'src/esocial-worker/submission/__fixtures__/ws-enviar-lote-eventos.wsdl',
+      ),
       'utf8',
     );
     const stubServer = createServer((request, response) => {
@@ -151,7 +166,9 @@ describe('ES-08 SOAP submission (e2e)', () => {
         response.end(successResponse());
       });
     });
-    await new Promise<void>((resolve) => stubServer.listen(0, '127.0.0.1', resolve));
+    await new Promise<void>((resolve) =>
+      stubServer.listen(0, '127.0.0.1', resolve),
+    );
     const address = stubServer.address();
     if (!address || typeof address === 'string') {
       throw new Error('Failed to start eSocial WSDL stub server');

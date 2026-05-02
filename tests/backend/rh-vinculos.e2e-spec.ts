@@ -28,9 +28,12 @@ class FakeRhVinculosDatabaseService {
   query<T>(sql: string): Promise<T[]> {
     if (sql.includes('SELECT DISTINCT p.key')) {
       return Promise.resolve(
-        ['auth.read', 'rh.employee.read', 'rh.employee.write', 'rh.employment_link.write'].map(
-          (key) => ({ key }),
-        ) as T[],
+        [
+          'auth.read',
+          'rh.employee.read',
+          'rh.employee.write',
+          'rh.employment_link.write',
+        ].map((key) => ({ key })) as T[],
       );
     }
     return Promise.resolve([] as T[]);
@@ -38,13 +41,19 @@ class FakeRhVinculosDatabaseService {
 
   async transaction<T>(
     callback: (client: {
-      query: <R>(sql: string, values?: readonly unknown[]) => Promise<{ rows: R[] }>;
+      query: <R>(
+        sql: string,
+        values?: readonly unknown[],
+      ) => Promise<{ rows: R[] }>;
     }) => Promise<T>,
   ): Promise<T> {
     return callback({ query: this.clientQuery.bind(this) });
   }
 
-  private clientQuery<T>(sql: string, _values: readonly unknown[] = []): Promise<{ rows: T[] }> {
+  private clientQuery<T>(
+    sql: string,
+    _values: readonly unknown[] = [],
+  ): Promise<{ rows: T[] }> {
     if (sql.includes('FROM hr.employee') && sql.includes('FOR UPDATE')) {
       return Promise.resolve({
         rows: [
@@ -108,7 +117,8 @@ describe('RH vinculos legal regime (e2e)', () => {
 
   afterEach(async () => {
     await app.close();
-    if (originalUnsigned === undefined) delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
+    if (originalUnsigned === undefined)
+      delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
     else process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS = originalUnsigned;
   });
 
@@ -118,7 +128,9 @@ describe('RH vinculos legal regime (e2e)', () => {
 
   it('rejects temporary legal regime without end date', async () => {
     await request(server())
-      .post('/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/vinculos')
+      .post(
+        '/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/vinculos',
+      )
       .set('authorization', `Bearer ${token()}`)
       .send({
         contractType: 'temporary',
@@ -129,7 +141,9 @@ describe('RH vinculos legal regime (e2e)', () => {
 
   it('creates status history and audit references for a regime change', async () => {
     await request(server())
-      .post('/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/vinculos')
+      .post(
+        '/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/vinculos',
+      )
       .set('authorization', `Bearer ${token()}`)
       .send({
         contractType: 'temporary',
@@ -138,8 +152,12 @@ describe('RH vinculos legal regime (e2e)', () => {
       })
       .expect(201)
       .expect((response) => {
-        expect(response.body.statusHistoryId).toBe('00000000-0000-4000-8000-000000000050');
-        expect(response.body.auditEventId).toBe('00000000-0000-4000-8000-000000000060');
+        expect(response.body.statusHistoryId).toBe(
+          '00000000-0000-4000-8000-000000000050',
+        );
+        expect(response.body.auditEventId).toBe(
+          '00000000-0000-4000-8000-000000000060',
+        );
       });
   });
 });

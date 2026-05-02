@@ -15,7 +15,9 @@ describe('Gestao cargos API (e2e)', () => {
   const database = {
     configured: true,
     query: jest.fn(),
-    transaction: jest.fn(<T>(callback: (client: PoolClient) => Promise<T>) => callback(client)),
+    transaction: jest.fn(<T>(callback: (client: PoolClient) => Promise<T>) =>
+      callback(client),
+    ),
   };
 
   beforeEach(async () => {
@@ -46,7 +48,10 @@ describe('Gestao cargos API (e2e)', () => {
 
     const moduleRef = await Test.createTestingModule({
       controllers: [JobPositionAdminController],
-      providers: [JobPositionService, { provide: DatabaseService, useValue: database }],
+      providers: [
+        JobPositionService,
+        { provide: DatabaseService, useValue: database },
+      ],
     }).compile();
 
     app = moduleRef.createNestApplication();

@@ -33,7 +33,11 @@ describe('TCE-04 queue retry and admin controls (e2e)', () => {
       failureCount: 3,
     });
 
-    await controller.resetCircuit('audesp-sp', encodeURIComponent('stub://audesp-sp'), {} as never);
+    await controller.resetCircuit(
+      'audesp-sp',
+      encodeURIComponent('stub://audesp-sp'),
+      {} as never,
+    );
     expect((await controller.circuits())[0].state).toBe('CLOSED');
 
     await worker.runOnce(1);
@@ -132,7 +136,10 @@ class FakeQueueDatabase {
   };
 
   async query<T>(sql: string): Promise<T[]> {
-    if (sql.includes('UPDATE tce.submission_queue queue') && sql.includes('claimed')) {
+    if (
+      sql.includes('UPDATE tce.submission_queue queue') &&
+      sql.includes('claimed')
+    ) {
       if (!['PENDING', 'RETRY'].includes(this.job.status)) return [] as T[];
       this.job.status = 'LOCKED';
       return [{ ...this.job }] as T[];
@@ -155,7 +162,8 @@ class FakeQueueDatabase {
           } else {
             this.job.status = String(values[1]);
             this.job.attempts += 1;
-            this.job.next_attempt_at = typeof values[2] === 'string' ? values[2] : '';
+            this.job.next_attempt_at =
+              typeof values[2] === 'string' ? values[2] : '';
           }
         }
         return { rows: [] };

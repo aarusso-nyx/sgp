@@ -58,8 +58,12 @@ describe('PONTO-08 biometrico (e2e)', () => {
       .useClass(FakeDatabaseService)
       .overrideProvider(PontoBiometricConsentService)
       .useValue({
-        create: jest.fn((input) => Promise.resolve({ id: 'consent-1', ...input })),
-        withdraw: jest.fn((id) => Promise.resolve({ employeeId: id, withdrawnAt: 'now' })),
+        create: jest.fn((input) =>
+          Promise.resolve({ id: 'consent-1', ...input }),
+        ),
+        withdraw: jest.fn((id) =>
+          Promise.resolve({ employeeId: id, withdrawnAt: 'now' }),
+        ),
       })
       .overrideProvider(TemplateEnrollmentService)
       .useValue({

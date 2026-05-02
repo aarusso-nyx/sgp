@@ -45,7 +45,9 @@ describe('SST-03 CAT S-2210 flow (e2e)', () => {
         {} as never,
       );
 
-      const result = await withTenant(() => service.emitS2210(currentCatEmissionId));
+      const result = await withTenant(() =>
+        service.emitS2210(currentCatEmissionId),
+      );
 
       expect(result.emitted).toBe(true);
       expect(emitService.emit).toHaveBeenCalledWith(
@@ -70,7 +72,9 @@ describe('SST-03 CAT S-2210 flow (e2e)', () => {
     );
 
     expect(sql).toContain('invalid work_accident status transition');
-    expect(sql).toContain('fatal work_accident requires OBITO CAT before closing');
+    expect(sql).toContain(
+      'fatal work_accident requires OBITO CAT before closing',
+    );
     expect(sql).toContain("OLD.status = 'REGISTRADO'");
     expect(sql).toContain("NEW.status = 'COMUNICADO'");
   });
@@ -94,7 +98,10 @@ function catId(catKind: string): string {
   return catEmissionId;
 }
 
-function catRow(currentCatEmissionId: string, catKind: 'INICIAL' | 'REABERTURA' | 'OBITO') {
+function catRow(
+  currentCatEmissionId: string,
+  catKind: 'INICIAL' | 'REABERTURA' | 'OBITO',
+) {
   return {
     cat_emission_id: currentCatEmissionId,
     tenant_id: tenantId,
@@ -125,7 +132,11 @@ function withTenant<T>(callback: () => Promise<T>): Promise<T> {
   return RequestContextStore.run(
     {
       tenantId,
-      permissions: ['esocial.event.read', 'esocial.event.write', 'saude.cat.write'],
+      permissions: [
+        'esocial.event.read',
+        'esocial.event.write',
+        'saude.cat.write',
+      ],
     },
     callback,
   );

@@ -47,9 +47,10 @@ describe('CALC-05 vacation payroll golden scenarios (e2e)', () => {
         'DELETE FROM payroll.employee_payroll_item WHERE employee_id = ANY($1::uuid[])',
         [employeeIds],
       );
-      await client.query('DELETE FROM hr.vacation_record WHERE id = ANY($1::uuid[])', [
-        vacationIds,
-      ]);
+      await client.query(
+        'DELETE FROM hr.vacation_record WHERE id = ANY($1::uuid[])',
+        [vacationIds],
+      );
       await client.query(
         `
         DELETE FROM payroll.payroll_run_status_history history
@@ -59,11 +60,14 @@ describe('CALC-05 vacation payroll golden scenarios (e2e)', () => {
         `,
         [tenantId],
       );
-      await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', [tenantId]);
-      await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-        tenantId,
-        'IRRF',
-      ]);
+      await client.query(
+        'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+        [tenantId],
+      );
+      await client.query(
+        'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+        [tenantId, 'IRRF'],
+      );
     } finally {
       client.release();
       await pool.end();
@@ -168,7 +172,10 @@ describe('CALC-05 vacation payroll golden scenarios (e2e)', () => {
     return new Decimal(found?.amount ?? '0').toFixed(2);
   }
 
-  async function createEmployee(code: string, salaryAmount: string): Promise<string> {
+  async function createEmployee(
+    code: string,
+    salaryAmount: string,
+  ): Promise<string> {
     const client = await pool.connect();
     try {
       await setSessionContext(client);
@@ -237,7 +244,12 @@ describe('CALC-05 vacation payroll golden scenarios (e2e)', () => {
         )
         VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, DATE '2024-01-01', DATE '2024-01-01', 'ACTIVE'::"RecordStatus")
         `,
-        [tenantId, employee.rows[0].id, link.rows[0].id, contractType.rows[0].id],
+        [
+          tenantId,
+          employee.rows[0].id,
+          link.rows[0].id,
+          contractType.rows[0].id,
+        ],
       );
       employeeIds.push(employee.rows[0].id);
       return employee.rows[0].id;
@@ -280,8 +292,12 @@ describe('CALC-05 vacation payroll golden scenarios (e2e)', () => {
 
 async function setSessionContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
 }
 
 async function seedCatalog(client: PoolClient): Promise<void> {
@@ -333,10 +349,10 @@ async function seedCatalog(client: PoolClient): Promise<void> {
 }
 
 async function seedIrrfTable(client: PoolClient): Promise<void> {
-  await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2', [
-    tenantId,
-    'IRRF',
-  ]);
+  await client.query(
+    'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid AND kind = $2',
+    [tenantId, 'IRRF'],
+  );
   const brackets = [
     ['IRRF-CALC05-01', '0.00', '2259.20', '0.000000', '0.00'],
     ['IRRF-CALC05-02', '2259.21', '2826.65', '7.500000', '169.44'],

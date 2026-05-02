@@ -54,10 +54,18 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
 
   it('calculates 40 percent fine for CLT without cause over simulated 24-month FGTS balance', async () => {
     const employee = await createEmployee('CLT-SJC', 'celetista', '2024-01-01');
-    await seedFgtsBalance(employee.employeeId, employee.employmentLinkId, '12000.00');
+    await seedFgtsBalance(
+      employee.employeeId,
+      employee.employmentLinkId,
+      '12000.00',
+    );
     const terminationRunId = await createPayrollRun('RESCISAO', 2026, 4);
 
-    const rows = await computeFine(terminationRunId, employee.employmentLinkId, 'WITHOUT_CAUSE');
+    const rows = await computeFine(
+      terminationRunId,
+      employee.employmentLinkId,
+      'WITHOUT_CAUSE',
+    );
 
     expect(rows).toHaveLength(1);
     expectMoney(rows[0]?.base_amount, '12000.00');
@@ -66,10 +74,18 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
 
   it('does not calculate FGTS fine for CLT with cause', async () => {
     const employee = await createEmployee('CLT-JC', 'celetista', '2024-01-01');
-    await seedFgtsBalance(employee.employeeId, employee.employmentLinkId, '12000.00');
+    await seedFgtsBalance(
+      employee.employeeId,
+      employee.employmentLinkId,
+      '12000.00',
+    );
     const terminationRunId = await createPayrollRun('RESCISAO', 2026, 5);
 
-    const rows = await computeFine(terminationRunId, employee.employmentLinkId, 'COM_JUSTA_CAUSA');
+    const rows = await computeFine(
+      terminationRunId,
+      employee.employmentLinkId,
+      'COM_JUSTA_CAUSA',
+    );
 
     expect(rows).toHaveLength(0);
     await expectMovementCount(employee.employeeId, 'RESCISION_FINE_40', 0);
@@ -78,7 +94,13 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
   it('keeps the monthly deposit for CLT resignation without generating a fine', async () => {
     const employee = await createEmployee('CLT-PED', 'celetista', '2026-01-01');
     const monthlyRunId = await createPayrollRun('MENSAL', 2026, 6);
-    await insertFinancialRecord(monthlyRunId, employee.employeeId, 2026, 6, '1000.00');
+    await insertFinancialRecord(
+      monthlyRunId,
+      employee.employeeId,
+      2026,
+      6,
+      '1000.00',
+    );
 
     const monthly = await computeMonthly(monthlyRunId);
     expect(monthly).toHaveLength(1);
@@ -86,7 +108,11 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
     expectMoney(monthly[0]?.amount, '80.00');
 
     const terminationRunId = await createPayrollRun('RESCISAO', 2026, 6);
-    const fine = await computeFine(terminationRunId, employee.employmentLinkId, 'PEDIDO_DEMISSAO');
+    const fine = await computeFine(
+      terminationRunId,
+      employee.employmentLinkId,
+      'PEDIDO_DEMISSAO',
+    );
 
     expect(fine).toHaveLength(0);
     await expectMovementCount(employee.employeeId, 'DEPOSIT_8', 1);
@@ -95,7 +121,13 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
   it('does not create an FGTS account for statutory employees', async () => {
     const employee = await createEmployee('STAT', 'statutory', '2026-01-01');
     const monthlyRunId = await createPayrollRun('MENSAL', 2026, 7);
-    await insertFinancialRecord(monthlyRunId, employee.employeeId, 2026, 7, '1000.00');
+    await insertFinancialRecord(
+      monthlyRunId,
+      employee.employeeId,
+      2026,
+      7,
+      '1000.00',
+    );
 
     const rows = await computeMonthly(monthlyRunId);
 
@@ -236,7 +268,11 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
             updated_at = now()
         RETURNING id::text
         `,
-        [tenantId, code, code === 'MENSAL' ? 'Folha mensal' : 'Folha de rescisao'],
+        [
+          tenantId,
+          code,
+          code === 'MENSAL' ? 'Folha mensal' : 'Folha de rescisao',
+        ],
       );
       const processingType = await client.query<{ id: string }>(
         `
@@ -269,7 +305,13 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
         VALUES ($1::uuid, $2, $3, $4::uuid, $5::uuid, 'GENERATED'::"PayrollRunStatus")
         RETURNING id::text
         `,
-        [tenantId, year, month, payrollType.rows[0].id, processingType.rows[0].id],
+        [
+          tenantId,
+          year,
+          month,
+          payrollType.rows[0].id,
+          processingType.rows[0].id,
+        ],
       );
       return run.rows[0].id;
     } finally {
@@ -394,7 +436,10 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
     });
   }
 
-  async function expectAccountCount(employeeId: string, expected: number): Promise<void> {
+  async function expectAccountCount(
+    employeeId: string,
+    expected: number,
+  ): Promise<void> {
     await withTenantClient(async (client) => {
       const result = await client.query<{ count: string }>(
         `
@@ -409,7 +454,9 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
     });
   }
 
-  async function withTenantClient<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
+  async function withTenantClient<T>(
+    callback: (client: PoolClient) => Promise<T>,
+  ): Promise<T> {
     const client = await pool.connect();
     try {
       await setContext(client);
@@ -426,8 +473,14 @@ function expectMoney(actual: string | undefined, expected: string): void {
 
 async function cleanupTenant(client: PoolClient): Promise<void> {
   const params = [tenantId];
-  await client.query('DELETE FROM payment.fgts_movement WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payment.fgts_account WHERE tenant_id = $1::uuid', params);
+  await client.query(
+    'DELETE FROM payment.fgts_movement WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payment.fgts_account WHERE tenant_id = $1::uuid',
+    params,
+  );
   await client.query(
     'DELETE FROM payroll.payroll_financial_record WHERE tenant_id = $1::uuid',
     params,
@@ -436,9 +489,18 @@ async function cleanupTenant(client: PoolClient): Promise<void> {
     'DELETE FROM payroll.payroll_run_status_history WHERE tenant_id = $1::uuid',
     params,
   );
-  await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid', params);
+  await client.query(
+    'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid',
+    params,
+  );
   await client.query(
     'DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid',
     params,
@@ -447,10 +509,17 @@ async function cleanupTenant(client: PoolClient): Promise<void> {
 
 async function setContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_permissions', $1, false)", [
-    'payroll.fgts.read\npayroll.fgts.write\npayroll.run.execute\nrh.employee.terminate\nfolha.write',
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
   ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
+  await client.query(
+    "SELECT set_config('app.current_permissions', $1, false)",
+    [
+      'payroll.fgts.read\npayroll.fgts.write\npayroll.run.execute\nrh.employee.terminate\nfolha.write',
+    ],
+  );
   await client.query("SELECT set_config('app.authenticated', 'true', false)");
 }

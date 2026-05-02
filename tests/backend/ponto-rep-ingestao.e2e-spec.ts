@@ -30,7 +30,12 @@ class FakeDatabaseService {
   query<T>(sql: string): Promise<T[]> {
     if (sql.includes('SELECT DISTINCT p.key')) {
       return Promise.resolve(
-        ['auth.read', 'ponto.rep.read', 'ponto.rep.write', 'ponto.timerecord.write'].map((key) => ({
+        [
+          'auth.read',
+          'ponto.rep.read',
+          'ponto.rep.write',
+          'ponto.timerecord.write',
+        ].map((key) => ({
           key,
         })) as T[],
       );
@@ -126,7 +131,9 @@ describe('PONTO-02 REP ingestion (e2e)', () => {
         model: 'C-671',
       })
       .expect(201)
-      .expect((response) => expect(response.body.repDeviceId).toBe(repDeviceId));
+      .expect((response) =>
+        expect(response.body.repDeviceId).toBe(repDeviceId),
+      );
 
     const content = Array.from(
       { length: 50 },

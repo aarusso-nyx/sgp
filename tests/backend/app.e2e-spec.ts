@@ -38,7 +38,14 @@ const fakeProfilePermissions: Record<string, readonly Permission[]> = {
   ADMIN: PERMISSIONS,
   AUDITORIA: ['auth.read', 'auditoria.read'],
   CONVENIO: ['auth.read', 'convenio.read', 'convenio.write'],
-  FOLHA: ['auth.read', 'gestao.read', 'rh.read', 'folha.read', 'folha.write', 'relatorio.generate'],
+  FOLHA: [
+    'auth.read',
+    'gestao.read',
+    'rh.read',
+    'folha.read',
+    'folha.write',
+    'relatorio.generate',
+  ],
   RELATORIO: ['auth.read', 'relatorio.read', 'relatorio.generate'],
   RH: ['auth.read', 'gestao.read', 'rh.read', 'rh.write', 'relatorio.generate'],
 };
@@ -48,7 +55,12 @@ class FakeDatabaseService {
   private readonly uploadSessionId = '00000000-0000-4000-8000-000000000111';
 
   private readonly jobPositions: FakeJobPositionRow[] = [
-    this.row('cargo-analista', 'ANL', 'Analista', 'Cargo administrativo observado.'),
+    this.row(
+      'cargo-analista',
+      'ANL',
+      'Analista',
+      'Cargo administrativo observado.',
+    ),
     this.row('cargo-tecnico', 'TEC', 'Tecnico', 'Cargo operacional observado.'),
   ];
 
@@ -93,7 +105,9 @@ class FakeDatabaseService {
       sql.includes('SELECT count(*)::text AS total') &&
       sql.includes('FROM public.document_attachment')
     ) {
-      return Promise.resolve([{ total: String(this.documentAttachments.length) }] as T[]);
+      return Promise.resolve([
+        { total: String(this.documentAttachments.length) },
+      ] as T[]);
     }
 
     if (
@@ -148,7 +162,9 @@ class FakeDatabaseService {
       sql.includes('FROM public.document_attachment') &&
       sql.includes('WHERE id = $1::uuid')
     ) {
-      const found = this.documentAttachments.find((row) => row.id === values[0]);
+      const found = this.documentAttachments.find(
+        (row) => row.id === values[0],
+      );
       return Promise.resolve((found ? [found] : []) as T[]);
     }
 
@@ -157,18 +173,23 @@ class FakeDatabaseService {
     }
 
     if (sql.includes('SELECT count(*)::text AS total FROM hr.job_position')) {
-      return Promise.resolve([{ total: String(this.filtered(values).length) }] as T[]);
+      return Promise.resolve([
+        { total: String(this.filtered(values).length) },
+      ] as T[]);
     }
 
     if (sql.includes('FROM hr.job_position')) {
       const pageSize = Number(values.at(-2) ?? 20);
       const offset = Number(values.at(-1) ?? 0);
-      return Promise.resolve(this.filtered(values).slice(offset, offset + pageSize) as T[]);
+      return Promise.resolve(
+        this.filtered(values).slice(offset, offset + pageSize) as T[],
+      );
     }
 
     if (sql.includes('INSERT INTO hr.job_position')) {
       const duplicate = this.jobPositions.find((row) => row.code === values[0]);
-      if (duplicate) throw Object.assign(new Error('duplicate key'), { code: '23505' });
+      if (duplicate)
+        throw Object.assign(new Error('duplicate key'), { code: '23505' });
       const created = this.row(
         '00000000-0000-4000-8000-000000000001',
         this.valueAsString(values[0]),
@@ -202,7 +223,9 @@ class FakeDatabaseService {
     return Promise.resolve([] as T[]);
   }
 
-  private permissionRowsForGroups(groupsValue: unknown): Array<{ key: string }> {
+  private permissionRowsForGroups(
+    groupsValue: unknown,
+  ): Array<{ key: string }> {
     const groups = Array.isArray(groupsValue) ? groupsValue : [];
     const keys = new Set<Permission>();
     for (const group of groups) {
@@ -227,17 +250,24 @@ class FakeDatabaseService {
   }
 
   private filtered(values: readonly unknown[]): FakeJobPositionRow[] {
-    const search = this.valueAsString(values[0]).replaceAll('%', '').toLowerCase();
-    const rows = [...this.jobPositions].sort((left, right) => left.code.localeCompare(right.code));
+    const search = this.valueAsString(values[0])
+      .replaceAll('%', '')
+      .toLowerCase();
+    const rows = [...this.jobPositions].sort((left, right) =>
+      left.code.localeCompare(right.code),
+    );
     if (!search) return rows;
     return rows.filter((row) =>
-      `${row.code} ${row.name} ${row.description}`.toLowerCase().includes(search),
+      `${row.code} ${row.name} ${row.description}`
+        .toLowerCase()
+        .includes(search),
     );
   }
 
   private valueAsString(value: unknown): string {
     if (typeof value === 'string') return value;
-    if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+    if (typeof value === 'number' || typeof value === 'boolean')
+      return String(value);
     return '';
   }
 
@@ -270,7 +300,10 @@ class FakeDocumentsStorageService {
     return true;
   }
 
-  createPresignedUpload(input: { storageKey: string; contentType: string }): Promise<{
+  createPresignedUpload(input: {
+    storageKey: string;
+    contentType: string;
+  }): Promise<{
     url: string;
     requiredHeaders: Record<string, string>;
     expiresAt: string;
@@ -282,7 +315,9 @@ class FakeDocumentsStorageService {
     });
   }
 
-  createPresignedDownload(storageKey: string): Promise<{ url: string; expiresAt: string }> {
+  createPresignedDownload(
+    storageKey: string,
+  ): Promise<{ url: string; expiresAt: string }> {
     return Promise.resolve({
       url: `https://s3.example/download/${storageKey}`,
       expiresAt: new Date(Date.now() + 300_000).toISOString(),
@@ -368,7 +403,10 @@ function encodePart(value: unknown): string {
   return Buffer.from(JSON.stringify(value)).toString('base64url');
 }
 
-function tokenFor(groups: string[], overrides: Record<string, unknown> = {}): string {
+function tokenFor(
+  groups: string[],
+  overrides: Record<string, unknown> = {},
+): string {
   const payload = {
     sub: 'test-subject',
     'cognito:username': 'test.user',
@@ -387,8 +425,10 @@ describe('SGP backend foundation (e2e)', () => {
   const originalUnsigned = process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
   const originalS3Region = process.env.S3_REGION;
   const originalS3Bucket = process.env.S3_DOCUMENTS_BUCKET;
-  const originalS3UploadExpires = process.env.S3_DOCUMENTS_PRESIGN_EXPIRES_SECONDS;
-  const originalS3DownloadExpires = process.env.S3_DOCUMENTS_DOWNLOAD_EXPIRES_SECONDS;
+  const originalS3UploadExpires =
+    process.env.S3_DOCUMENTS_PRESIGN_EXPIRES_SECONDS;
+  const originalS3DownloadExpires =
+    process.env.S3_DOCUMENTS_DOWNLOAD_EXPIRES_SECONDS;
   const originalS3Prefix = process.env.S3_DOCUMENTS_KEY_PREFIX;
 
   function server(): SupertestApp {
@@ -436,11 +476,16 @@ describe('SGP backend foundation (e2e)', () => {
     else process.env.S3_DOCUMENTS_BUCKET = originalS3Bucket;
     if (originalS3UploadExpires === undefined)
       delete process.env.S3_DOCUMENTS_PRESIGN_EXPIRES_SECONDS;
-    else process.env.S3_DOCUMENTS_PRESIGN_EXPIRES_SECONDS = originalS3UploadExpires;
+    else
+      process.env.S3_DOCUMENTS_PRESIGN_EXPIRES_SECONDS =
+        originalS3UploadExpires;
     if (originalS3DownloadExpires === undefined)
       delete process.env.S3_DOCUMENTS_DOWNLOAD_EXPIRES_SECONDS;
-    else process.env.S3_DOCUMENTS_DOWNLOAD_EXPIRES_SECONDS = originalS3DownloadExpires;
-    if (originalS3Prefix === undefined) delete process.env.S3_DOCUMENTS_KEY_PREFIX;
+    else
+      process.env.S3_DOCUMENTS_DOWNLOAD_EXPIRES_SECONDS =
+        originalS3DownloadExpires;
+    if (originalS3Prefix === undefined)
+      delete process.env.S3_DOCUMENTS_KEY_PREFIX;
     else process.env.S3_DOCUMENTS_KEY_PREFIX = originalS3Prefix;
   });
 
@@ -457,7 +502,9 @@ describe('SGP backend foundation (e2e)', () => {
   });
 
   it('returns readiness without exposing secrets', async () => {
-    const response = await request(server()).get('/api/v1/health/ready').expect(200);
+    const response = await request(server())
+      .get('/api/v1/health/ready')
+      .expect(200);
     const body = bodyAs<ReadyResponseBody>(response);
 
     expect(body.checks.config.ok).toBe(true);
@@ -493,7 +540,12 @@ describe('SGP backend foundation (e2e)', () => {
     expect(body.actor.username).toBe('test.user');
     expect(body.actor.groups).toEqual(['SGP_RH']);
     expect(body.actor.permissions).toEqual(
-      expect.arrayContaining(['auth.read', 'gestao.read', 'rh.read', 'rh.write']),
+      expect.arrayContaining([
+        'auth.read',
+        'gestao.read',
+        'rh.read',
+        'rh.write',
+      ]),
     );
   });
 
@@ -525,7 +577,9 @@ describe('SGP backend foundation (e2e)', () => {
     expect(body.total).toBeGreaterThanOrEqual(1);
     expect(body.totalPages).toBeGreaterThanOrEqual(1);
     expect(body.items.length).toBeLessThanOrEqual(2);
-    expect(body.items[0]).toEqual(expect.objectContaining({ status: 'observed' }));
+    expect(body.items[0]).toEqual(
+      expect.objectContaining({ status: 'observed' }),
+    );
   });
 
   it('creates, updates, and deactivates a Gestao master-data record', async () => {
@@ -604,7 +658,9 @@ describe('SGP backend foundation (e2e)', () => {
         status: 400,
       }),
     );
-    expect(body.error.details).toEqual(expect.arrayContaining(['page must not be less than 1']));
+    expect(body.error.details).toEqual(
+      expect.arrayContaining(['page must not be less than 1']),
+    );
   });
 
   it('returns paged RH workflow records for RH readers', async () => {
@@ -698,7 +754,9 @@ describe('SGP backend foundation (e2e)', () => {
         sizeBytes: 50,
       })
       .expect(201);
-    const presignBody = bodyAs<{ uploadSessionId: string; documentId: string }>(presignResponse);
+    const presignBody = bodyAs<{ uploadSessionId: string; documentId: string }>(
+      presignResponse,
+    );
     expect(presignBody.uploadSessionId).toEqual(expect.any(String));
     expect(presignBody.documentId).toBe('doc-upload-1');
 

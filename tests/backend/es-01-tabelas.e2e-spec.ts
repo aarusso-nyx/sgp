@@ -67,22 +67,30 @@ describe('ES-01 S-1xxx tables (e2e)', () => {
         };
       }),
     };
-    const dispatch = new S1xxxDispatchService(database as never, emitService as never);
-    const builders = ['S-1000', 'S-1005', 'S-1010', 'S-1020', 'S-1050', 'S-1070'].map(
-      (eventKind) => ({
-        eventKind,
-        build: async () => [
-          {
-            id: `${eventKind}:source`,
-            sourceEntityKind: 'fixture',
-            xml: xmlFor(eventKind, tenantId),
-            reference: `${eventKind}:ref`,
-            competence: '2026-01',
-            payload: {},
-          },
-        ],
-      }),
+    const dispatch = new S1xxxDispatchService(
+      database as never,
+      emitService as never,
     );
+    const builders = [
+      'S-1000',
+      'S-1005',
+      'S-1010',
+      'S-1020',
+      'S-1050',
+      'S-1070',
+    ].map((eventKind) => ({
+      eventKind,
+      build: async () => [
+        {
+          id: `${eventKind}:source`,
+          sourceEntityKind: 'fixture',
+          xml: xmlFor(eventKind, tenantId),
+          reference: `${eventKind}:ref`,
+          competence: '2026-01',
+          payload: {},
+        },
+      ],
+    }));
 
     for (const builder of builders) {
       const first = await dispatch.dispatch(builder as never, { tenantId });
@@ -99,7 +107,11 @@ describe('ES-01 S-1xxx tables (e2e)', () => {
 function xmlFor(eventKind: string, tenantId: string): string {
   const fixture = eventKind.toLowerCase().replace('-', '');
   return readFileSync(
-    join(process.cwd(), 'src/esocial-worker/builders/__fixtures__', `${fixture}.golden.xml`),
+    join(
+      process.cwd(),
+      'src/esocial-worker/builders/__fixtures__',
+      `${fixture}.golden.xml`,
+    ),
     'utf8',
   )
     .replace(/00000000-0000-0000-0000-000000000100/g, tenantId)

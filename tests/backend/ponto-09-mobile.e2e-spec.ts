@@ -53,7 +53,9 @@ describe('PONTO-09 mobile clock-in (e2e)', () => {
       registerDevice: jest.fn((input) =>
         Promise.resolve({ id: 'device-registration-1', ...input }),
       ),
-      createConsent: jest.fn((input) => Promise.resolve({ id: 'consent-1', ...input })),
+      createConsent: jest.fn((input) =>
+        Promise.resolve({ id: 'consent-1', ...input }),
+      ),
       clock: jest.fn((input) => {
         if (input.mockLocation) {
           return Promise.resolve({

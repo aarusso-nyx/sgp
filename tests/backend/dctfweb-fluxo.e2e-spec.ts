@@ -20,13 +20,28 @@ describe('DCTFWeb flow (e2e)', () => {
         .fn()
         .mockResolvedValueOnce([
           totalizer('S-5011', 'REC-S1299', [
-            debit('00000000-0000-4000-8000-000000005011', '1082-01', '1000.00', '200.00'),
+            debit(
+              '00000000-0000-4000-8000-000000005011',
+              '1082-01',
+              '1000.00',
+              '200.00',
+            ),
           ]),
           totalizer('S-5012', 'REC-S1299', [
-            debit('00000000-0000-4000-8000-000000005012', '0561', '500.00', '50.00'),
+            debit(
+              '00000000-0000-4000-8000-000000005012',
+              '0561',
+              '500.00',
+              '50.00',
+            ),
           ]),
           totalizer('S-5013', 'REC-S1299', [
-            debit('00000000-0000-4000-8000-000000005013', 'FGTS', '800.00', '64.00'),
+            debit(
+              '00000000-0000-4000-8000-000000005013',
+              'FGTS',
+              '800.00',
+              '64.00',
+            ),
           ]),
         ])
         .mockResolvedValueOnce([declarationRow('314.00')])
@@ -35,21 +50,22 @@ describe('DCTFWeb flow (e2e)', () => {
           itemRow('S5012', '0561', '500.00', '50.00'),
           itemRow('S5013', 'FGTS', '800.00', '64.00'),
         ]),
-      transaction: jest.fn(async (callback: (client: TestDbClient) => Promise<unknown>) =>
-        callback({
-          query: jest.fn(async (sql: string, values: unknown[]) => {
-            if (sql.includes('INSERT INTO fiscal.dctfweb_declaration')) {
-              return { rows: [{ id: declarationId }] };
-            }
-            if (sql.includes('INSERT INTO fiscal.dctfweb_item')) {
-              inserted.push({
-                baseAmount: String(values[5]),
-                amount: String(values[6]),
-              });
-            }
-            return { rows: [] };
+      transaction: jest.fn(
+        async (callback: (client: TestDbClient) => Promise<unknown>) =>
+          callback({
+            query: jest.fn(async (sql: string, values: unknown[]) => {
+              if (sql.includes('INSERT INTO fiscal.dctfweb_declaration')) {
+                return { rows: [{ id: declarationId }] };
+              }
+              if (sql.includes('INSERT INTO fiscal.dctfweb_item')) {
+                inserted.push({
+                  baseAmount: String(values[5]),
+                  amount: String(values[6]),
+                });
+              }
+              return { rows: [] };
+            }),
           }),
-        }),
       ),
     };
     const service = new DctfwebBuilderService(db as never);
@@ -66,7 +82,10 @@ describe('DCTFWeb flow (e2e)', () => {
       (sum, value) => sum + Number(value),
       0,
     );
-    const itemAmount = inserted.reduce((sum, item) => sum + Number(item.amount), 0);
+    const itemAmount = inserted.reduce(
+      (sum, item) => sum + Number(item.amount),
+      0,
+    );
     expect(itemAmount).toBe(totalizersAmount);
     expect(result.totalAmount).toBe('314.00');
   });
@@ -87,7 +106,9 @@ describe('DCTFWeb flow (e2e)', () => {
       { readPkcs12: jest.fn() } as never,
     );
 
-    await expect(signer.sign(declarationId)).rejects.toBeInstanceOf(PreconditionFailedException);
+    await expect(signer.sign(declarationId)).rejects.toBeInstanceOf(
+      PreconditionFailedException,
+    );
   });
 });
 
@@ -99,7 +120,12 @@ function totalizer(kind: string, receipt: string, items: unknown[]) {
   };
 }
 
-function debit(sourceRunId: string, debitCode: string, baseAmount: string, amount: string) {
+function debit(
+  sourceRunId: string,
+  debitCode: string,
+  baseAmount: string,
+  amount: string,
+) {
   return { sourceRunId, debitCode, baseAmount, amount };
 }
 
@@ -127,7 +153,12 @@ function declarationRow(totalAmount: string) {
   };
 }
 
-function itemRow(sourceEvent: string, debitCode: string, baseAmount: string, amount: string) {
+function itemRow(
+  sourceEvent: string,
+  debitCode: string,
+  baseAmount: string,
+  amount: string,
+) {
   return {
     id: `00000000-0000-4000-8000-${debitCode.padEnd(12, '0').slice(0, 12)}`,
     source_event: sourceEvent,

@@ -21,7 +21,8 @@ describe('TS-V contractual change S-2306 golden flow (e2e)', () => {
       throw new Error('DATABASE_URL is required for TS-V S-2306 e2e');
     }
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     await seed(databaseService);
   });
@@ -160,16 +161,27 @@ async function cleanup(database: DatabaseService): Promise<void> {
       "SELECT to_regclass('esocial.s2306_event') IS NOT NULL AS exists",
     );
     if (s2306EventTable[0]?.exists) {
-      await database.query('DELETE FROM esocial.s2306_event WHERE tenant_id = $1::uuid', [
-        tenantId,
-      ]);
+      await database.query(
+        'DELETE FROM esocial.s2306_event WHERE tenant_id = $1::uuid',
+        [tenantId],
+      );
     }
-    await database.query('DELETE FROM hr.tsv_contract_change WHERE tenant_id = $1::uuid', [
-      tenantId,
+    await database.query(
+      'DELETE FROM hr.tsv_contract_change WHERE tenant_id = $1::uuid',
+      [tenantId],
+    );
+    await database.query(
+      'DELETE FROM hr.tsv_contract WHERE tenant_id = $1::uuid',
+      [tenantId],
+    );
+    await database.query('DELETE FROM hr.employee WHERE id = $1::uuid', [
+      employeeId,
     ]);
-    await database.query('DELETE FROM hr.tsv_contract WHERE tenant_id = $1::uuid', [tenantId]);
-    await database.query('DELETE FROM hr.employee WHERE id = $1::uuid', [employeeId]);
-    await database.query('DELETE FROM hr.work_location WHERE id = $1::uuid', [workLocationId]);
-    await database.query('DELETE FROM hr.employment_link WHERE id = $1::uuid', [linkId]);
+    await database.query('DELETE FROM hr.work_location WHERE id = $1::uuid', [
+      workLocationId,
+    ]);
+    await database.query('DELETE FROM hr.employment_link WHERE id = $1::uuid', [
+      linkId,
+    ]);
   });
 }

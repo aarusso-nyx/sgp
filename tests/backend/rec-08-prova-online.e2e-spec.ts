@@ -59,7 +59,9 @@ class FakeRec08Database {
     return [] as T[];
   }
 
-  async transaction<T>(callback: (client: { query: jest.Mock }) => Promise<T>): Promise<T> {
+  async transaction<T>(
+    callback: (client: { query: jest.Mock }) => Promise<T>,
+  ): Promise<T> {
     const client = {
       query: jest.fn(async (sql: string) => {
         if (sql.includes('FROM recrutamento.inscricao')) {
@@ -181,7 +183,9 @@ describe('REC-08 prova online com proctoring', () => {
       .expect(201);
 
     const review = await request(app.getHttpServer())
-      .post(`/api/v1/recrutamento/prova-online/review/sessions/${sessionId}/void`)
+      .post(
+        `/api/v1/recrutamento/prova-online/review/sessions/${sessionId}/void`,
+      )
       .set(auth)
       .send({ reason: 'Screen-share interrompido durante a prova.' })
       .expect(201);

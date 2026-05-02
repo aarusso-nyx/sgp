@@ -49,7 +49,8 @@ describe('PONTO-01 base flow (e2e)', () => {
   let app: INestApplication;
   const employeeIds = Array.from(
     { length: 10 },
-    (_, index) => `00000000-0000-4000-8000-0000000001${String(index).padStart(2, '0')}`,
+    (_, index) =>
+      `00000000-0000-4000-8000-0000000001${String(index).padStart(2, '0')}`,
   );
   const schedule = {
     workScheduleId: '00000000-0000-4000-8000-000000000059',
@@ -89,27 +90,34 @@ describe('PONTO-01 base flow (e2e)', () => {
       })
       .overrideProvider(TimesheetPeriodService)
       .useValue({
-        open: jest.fn((input: { employeeIds: string[]; periodStart: string; periodEnd: string }) =>
-          Promise.resolve(
-            input.employeeIds.map((employeeId: string, index: number) => ({
-              timesheetPeriodId: `00000000-0000-4000-8000-0000000002${String(index).padStart(2, '0')}`,
-              employeeId,
-              periodStart: input.periodStart,
-              periodEnd: input.periodEnd,
-              status: 'OPEN',
-              workedMinutes: 0,
-              overtime50Minutes: 0,
-              overtime100Minutes: 0,
-              nightMinutes: 0,
-              absenceMinutes: 0,
-            })),
-          ),
+        open: jest.fn(
+          (input: {
+            employeeIds: string[];
+            periodStart: string;
+            periodEnd: string;
+          }) =>
+            Promise.resolve(
+              input.employeeIds.map((employeeId: string, index: number) => ({
+                timesheetPeriodId: `00000000-0000-4000-8000-0000000002${String(index).padStart(2, '0')}`,
+                employeeId,
+                periodStart: input.periodStart,
+                periodEnd: input.periodEnd,
+                status: 'OPEN',
+                workedMinutes: 0,
+                overtime50Minutes: 0,
+                overtime100Minutes: 0,
+                nightMinutes: 0,
+                absenceMinutes: 0,
+              })),
+            ),
         ),
       })
       .overrideProvider(TimeRecordHashService)
       .useValue({
         list: jest.fn().mockResolvedValue([]),
-        createManual: jest.fn().mockRejectedValue(new Error('prev_hash does not match')),
+        createManual: jest
+          .fn()
+          .mockRejectedValue(new Error('prev_hash does not match')),
       })
       .compile();
 
@@ -152,7 +160,9 @@ describe('PONTO-01 base flow (e2e)', () => {
         ],
       })
       .expect(201)
-      .expect((response) => expect(response.body.workScheduleId).toBe(schedule.workScheduleId));
+      .expect((response) =>
+        expect(response.body.workScheduleId).toBe(schedule.workScheduleId),
+      );
 
     for (const employeeId of employeeIds) {
       await request(server())
@@ -178,7 +188,9 @@ describe('PONTO-01 base flow (e2e)', () => {
       .expect((response) => {
         expect(response.body).toHaveLength(10);
         expect(
-          (response.body as Array<{ status: string }>).every((row) => row.status === 'OPEN'),
+          (response.body as Array<{ status: string }>).every(
+            (row) => row.status === 'OPEN',
+          ),
         ).toBe(true);
       });
   });

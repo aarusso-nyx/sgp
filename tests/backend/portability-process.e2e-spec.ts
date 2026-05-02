@@ -32,7 +32,11 @@ class FakePortabilityDatabaseService {
   query<T>(sql: string): Promise<T[]> {
     if (sql.includes('SELECT DISTINCT p.key')) {
       return Promise.resolve(
-        ['auth.read', 'payment.consignment.read', 'payment.consignment.write'].map((key) => ({
+        [
+          'auth.read',
+          'payment.consignment.read',
+          'payment.consignment.write',
+        ].map((key) => ({
           key,
         })) as T[],
       );
@@ -62,14 +66,19 @@ class FakePortabilityDatabaseService {
         rowCount: 1,
       });
     }
-    if (sql.includes('UPDATE payment.consignment_portability_file') && sql.includes('PROCESSING')) {
+    if (
+      sql.includes('UPDATE payment.consignment_portability_file') &&
+      sql.includes('PROCESSING')
+    ) {
       return Promise.resolve({
         rows: [
           {
             file_id: this.fileId,
             status: 'PROCESSING',
-            source_consignment_entity_id: '00000000-0000-4000-8000-000000000010',
-            target_consignment_entity_id: '00000000-0000-4000-8000-000000000020',
+            source_consignment_entity_id:
+              '00000000-0000-4000-8000-000000000010',
+            target_consignment_entity_id:
+              '00000000-0000-4000-8000-000000000020',
           },
         ] as T[],
         rowCount: 1,

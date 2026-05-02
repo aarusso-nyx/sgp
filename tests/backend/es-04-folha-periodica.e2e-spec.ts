@@ -10,7 +10,9 @@ describe('ES-04 periodic payroll flow (e2e)', () => {
   const validator = new XsdValidatorService();
 
   it('emits S-1200 from generated payroll and S-1210 only after bank confirmation', async () => {
-    const s1200 = new S1200Builder(database([[payrollRun()], [payrollItem()]]) as never);
+    const s1200 = new S1200Builder(
+      database([[payrollRun()], [payrollItem()]]) as never,
+    );
     const remuneration = await s1200.build(tenantId, payrollRunId);
     expect(remuneration).toHaveLength(1);
     expect(() =>
@@ -22,9 +24,13 @@ describe('ES-04 periodic payroll flow (e2e)', () => {
     const blockedS1210 = new S1210Builder(
       database([[{ ...remittance(), status: 'GENERATED' }]]) as never,
     );
-    await expect(blockedS1210.build(tenantId, paymentBatchId)).rejects.toThrow('status=PAID');
+    await expect(blockedS1210.build(tenantId, paymentBatchId)).rejects.toThrow(
+      'status=PAID',
+    );
 
-    const s1210 = new S1210Builder(database([[remittance()], [paymentDetail()]]) as never);
+    const s1210 = new S1210Builder(
+      database([[remittance()], [paymentDetail()]]) as never,
+    );
     const payment = await s1210.build(tenantId, paymentBatchId);
     expect(payment).toHaveLength(1);
     expect(() =>

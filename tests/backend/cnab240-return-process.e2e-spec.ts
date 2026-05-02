@@ -26,8 +26,9 @@ describe('BANK-02 CNAB 240 return processing gate', () => {
     const db = {
       configured: true,
       transaction: jest.fn(
-        async (callback: (transactionClient: typeof client) => Promise<unknown>) =>
-          callback(client),
+        async (
+          callback: (transactionClient: typeof client) => Promise<unknown>,
+        ) => callback(client),
       ),
     };
     const service = createService(db);
@@ -82,8 +83,9 @@ describe('BANK-02 CNAB 240 return processing gate', () => {
     const db = {
       configured: true,
       transaction: jest.fn(
-        async (callback: (transactionClient: typeof client) => Promise<unknown>) =>
-          callback(client),
+        async (
+          callback: (transactionClient: typeof client) => Promise<unknown>,
+        ) => callback(client),
       ),
     };
     const service = createService(db);
@@ -103,7 +105,9 @@ describe('BANK-02 CNAB 240 return processing gate', () => {
       ),
     ).toBe(true);
     expect(
-      updates.some((entry) => entry.sql.includes('INSERT INTO payroll.payment_return_detail')),
+      updates.some((entry) =>
+        entry.sql.includes('INSERT INTO payroll.payment_return_detail'),
+      ),
     ).toBe(true);
   });
 
@@ -116,8 +120,9 @@ describe('BANK-02 CNAB 240 return processing gate', () => {
     const db = {
       configured: true,
       transaction: jest.fn(
-        async (callback: (transactionClient: typeof client) => Promise<unknown>) =>
-          callback(client),
+        async (
+          callback: (transactionClient: typeof client) => Promise<unknown>,
+        ) => callback(client),
       ),
     };
     const service = createService(db);
@@ -171,7 +176,11 @@ function segmentA(
   ]);
 }
 
-function line(bankCode: string, recordType: string, fields: Array<[number, string]> = []): string {
+function line(
+  bankCode: string,
+  recordType: string,
+  fields: Array<[number, string]> = [],
+): string {
   const chars = Array.from(' '.repeat(240));
   write(chars, 1, bankCode);
   write(chars, 8, recordType);

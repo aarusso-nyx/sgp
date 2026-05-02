@@ -88,7 +88,8 @@ describe('Medical leave workflow (e2e)', () => {
 
   afterEach(async () => {
     await app.close();
-    if (originalUnsigned === undefined) delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
+    if (originalUnsigned === undefined)
+      delete process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
     else process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS = originalUnsigned;
   });
 
@@ -108,7 +109,9 @@ describe('Medical leave workflow (e2e)', () => {
       })
       .expect(201)
       .expect((response) => {
-        expect(response.body.appointment_id).toBe('00000000-0000-4000-8000-000000000010');
+        expect(response.body.appointment_id).toBe(
+          '00000000-0000-4000-8000-000000000010',
+        );
       });
   });
 

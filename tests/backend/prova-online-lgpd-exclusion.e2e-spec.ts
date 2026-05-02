@@ -18,7 +18,9 @@ class FakeExclusionDatabase {
     return [] as T[];
   }
 
-  async transaction<T>(callback: (client: { query: jest.Mock }) => Promise<T>): Promise<T> {
+  async transaction<T>(
+    callback: (client: { query: jest.Mock }) => Promise<T>,
+  ): Promise<T> {
     const client = {
       query: jest.fn(async (sql: string) => {
         if (sql.includes('retention_until >')) {
@@ -64,7 +66,9 @@ describe('REC-08 LGPD artifact exclusion', () => {
     const pendingApp = await createApp(true);
     try {
       const pending = await request(pendingApp.getHttpServer() as SupertestApp)
-        .delete(`/api/v1/recrutamento/prova-online/sessions/${sessionId}/artifacts`)
+        .delete(
+          `/api/v1/recrutamento/prova-online/sessions/${sessionId}/artifacts`,
+        )
         .set('Authorization', 'Bearer fake')
         .expect(200);
       expect(pending.body.status).toBe('PENDING');
@@ -76,7 +80,9 @@ describe('REC-08 LGPD artifact exclusion', () => {
     const deletionApp = await createApp(false);
     try {
       const deleted = await request(deletionApp.getHttpServer() as SupertestApp)
-        .delete(`/api/v1/recrutamento/prova-online/sessions/${sessionId}/artifacts`)
+        .delete(
+          `/api/v1/recrutamento/prova-online/sessions/${sessionId}/artifacts`,
+        )
         .set('Authorization', 'Bearer fake')
         .expect(200);
       expect(deleted.body).toEqual({ status: 'DELETED', deleted: 2 });

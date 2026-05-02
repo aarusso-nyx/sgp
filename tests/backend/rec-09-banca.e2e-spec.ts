@@ -72,7 +72,9 @@ class FakeRec09Database {
     return [] as T[];
   }
 
-  async transaction<T>(callback: (client: { query: jest.Mock }) => Promise<T>): Promise<T> {
+  async transaction<T>(
+    callback: (client: { query: jest.Mock }) => Promise<T>,
+  ): Promise<T> {
     const client = {
       query: jest.fn(async (sql: string, values: unknown[] = []) => {
         if (sql.includes('FOR UPDATE') && sql.includes('signed_document')) {
@@ -113,7 +115,9 @@ class FakeRec09Database {
 
   private signatureRows() {
     return this.signatures.map((signature) => {
-      const member = this.members.find((candidate) => candidate.id === signature.banca_membro_id);
+      const member = this.members.find(
+        (candidate) => candidate.id === signature.banca_membro_id,
+      );
       return { ...signature, ...member };
     });
   }
@@ -159,7 +163,9 @@ describe('REC-09 certificacao digital da banca', () => {
         kind: 'GABARITO',
         sourceRef: 'rec-09-gabarito-final',
         format: 'PADES',
-        payloadBase64: Buffer.from('%PDF-1.7 final answer key').toString('base64'),
+        payloadBase64: Buffer.from('%PDF-1.7 final answer key').toString(
+          'base64',
+        ),
       })
       .expect(201);
 
@@ -178,7 +184,9 @@ describe('REC-09 certificacao digital da banca', () => {
       .expect(201);
 
     const verified = await request(app.getHttpServer())
-      .get(`/api/v1/publico/banca/verify/${database.document.public_verify_token}`)
+      .get(
+        `/api/v1/publico/banca/verify/${database.document.public_verify_token}`,
+      )
       .expect(200);
 
     expect(verified.body.valid).toBe(true);

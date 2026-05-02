@@ -20,8 +20,15 @@ describe('audit coverage', () => {
 
     for (const filePath of controllerFiles(srcDir)) {
       const source = readFileSync(filePath, 'utf8');
-      const sourceFile = ts.createSourceFile(filePath, source, ts.ScriptTarget.Latest, true);
-      const classHasAuditMutation = [...source.matchAll(/@AuditMutation\(/g)].some((match) => {
+      const sourceFile = ts.createSourceFile(
+        filePath,
+        source,
+        ts.ScriptTarget.Latest,
+        true,
+      );
+      const classHasAuditMutation = [
+        ...source.matchAll(/@AuditMutation\(/g),
+      ].some((match) => {
         const after = source.slice(match.index ?? 0, (match.index ?? 0) + 300);
         return after.includes('class ');
       });
@@ -46,7 +53,9 @@ describe('audit coverage', () => {
             const decoratorName = (
               mutatingDecorator.expression as ts.CallExpression
             ).expression.getText(sourceFile);
-            missing.push(`${filePath.replace(`${srcDir}/`, '')}:${decoratorName}:${methodName}`);
+            missing.push(
+              `${filePath.replace(`${srcDir}/`, '')}:${decoratorName}:${methodName}`,
+            );
           }
         }
         ts.forEachChild(node, visit);

@@ -21,7 +21,8 @@ describe('ES-06 S-3000 exclusion flow (e2e)', () => {
       throw new Error('DATABASE_URL is required for es-06-exclusao');
     }
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     await seed(databaseService);
   });
@@ -33,7 +34,9 @@ describe('ES-06 S-3000 exclusion flow (e2e)', () => {
 
   it('requests, emits, accepts S-3000, and marks original event EXCLUIDO', async () => {
     const emitService = {
-      emit: jest.fn(async (input: EmitESocialInput) => persistMockEvent(databaseService, input)),
+      emit: jest.fn(async (input: EmitESocialInput) =>
+        persistMockEvent(databaseService, input),
+      ),
     };
     const service = new S3000Service(
       databaseService,
@@ -245,14 +248,17 @@ async function seed(database: DatabaseService): Promise<void> {
 
 async function cleanup(database: DatabaseService): Promise<void> {
   await runAsTenant(async () => {
-    await database.query('DELETE FROM esocial.s3000_request WHERE tenant_id = $1::uuid', [
-      tenantId,
-    ]);
-    await database.query('DELETE FROM esocial.s1299_emission_state WHERE tenant_id = $1::uuid', [
-      tenantId,
-    ]);
-    await database.query('DELETE FROM public.esocial_event WHERE id = ANY($1::uuid[])', [
-      [targetEventId, periodicEventId, s3000EventId],
-    ]);
+    await database.query(
+      'DELETE FROM esocial.s3000_request WHERE tenant_id = $1::uuid',
+      [tenantId],
+    );
+    await database.query(
+      'DELETE FROM esocial.s1299_emission_state WHERE tenant_id = $1::uuid',
+      [tenantId],
+    );
+    await database.query(
+      'DELETE FROM public.esocial_event WHERE id = ANY($1::uuid[])',
+      [[targetEventId, periodicEventId, s3000EventId]],
+    );
   });
 }

@@ -51,7 +51,12 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
   });
 
   it('calculates CLT without cause with current 8 avos and vested vacation without implicit notice', async () => {
-    const linkId = await createEmployee('CLT-SJC', 'celetista', '3000.00', '2024-01-01');
+    const linkId = await createEmployee(
+      'CLT-SJC',
+      'celetista',
+      '3000.00',
+      '2024-01-01',
+    );
     const rows = await compute(linkId, '2025-08-20', 'SEM_JUSTA_CAUSA');
 
     expectAmount(rows, 'RESC_SALDO', '2000.00');
@@ -65,7 +70,12 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
   });
 
   it('calculates CLT resignation without FGTS fine or indemnified notice', async () => {
-    const linkId = await createEmployee('CLT-PED', 'celetista', '3000.00', '2025-01-01');
+    const linkId = await createEmployee(
+      'CLT-PED',
+      'celetista',
+      '3000.00',
+      '2025-01-01',
+    );
     const rows = await compute(linkId, '2025-08-20', 'PEDIDO_DEMISSAO');
 
     expectAmount(rows, 'RESC_SALDO', '2000.00');
@@ -77,7 +87,12 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
   });
 
   it('calculates statutory retirement with proportional thirteenth and no FGTS fine', async () => {
-    const linkId = await createEmployee('STAT-APOS', 'statutory', '6000.00', '2025-01-01');
+    const linkId = await createEmployee(
+      'STAT-APOS',
+      'statutory',
+      '6000.00',
+      '2025-01-01',
+    );
     const rows = await compute(linkId, '2025-09-20', 'APOSENTADORIA');
 
     expectAmount(rows, 'RESC_SALDO', '4000.00');
@@ -87,7 +102,12 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
   });
 
   it('calculates statutory vested and proportional vacations', async () => {
-    const linkId = await createEmployee('STAT-FERIAS', 'statutory', '3600.00', '2024-01-01');
+    const linkId = await createEmployee(
+      'STAT-FERIAS',
+      'statutory',
+      '3600.00',
+      '2024-01-01',
+    );
     const rows = await compute(linkId, '2026-03-20', 'OUTRA');
 
     expectAmount(rows, 'RESC_SALDO', '2400.00');
@@ -206,7 +226,11 @@ describe('CALC-12 termination payroll golden scenarios (e2e)', () => {
   }
 });
 
-function expectAmount(rows: RescisaoRow[], code: string, expected: string): void {
+function expectAmount(
+  rows: RescisaoRow[],
+  code: string,
+  expected: string,
+): void {
   const found = rows.find((row) => row.item_code === code);
   expect(new Decimal(found?.amount ?? '0').toFixed(2)).toBe(expected);
 }
@@ -266,7 +290,10 @@ async function seedRppsTable(client: PoolClient): Promise<void> {
 
 async function cleanupTenant(client: PoolClient): Promise<void> {
   const tenantParams = [tenantId];
-  await client.query('DELETE FROM payment.prior_notice WHERE tenant_id = $1::uuid', tenantParams);
+  await client.query(
+    'DELETE FROM payment.prior_notice WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
   await client.query(
     'DELETE FROM payroll.employee_payroll_item WHERE tenant_id = $1::uuid',
     tenantParams,
@@ -279,7 +306,10 @@ async function cleanupTenant(client: PoolClient): Promise<void> {
     'DELETE FROM payroll.payroll_run_status_history WHERE tenant_id = $1::uuid',
     tenantParams,
   );
-  await client.query('DELETE FROM hr.employment_contract WHERE tenant_id = $1::uuid', tenantParams);
+  await client.query(
+    'DELETE FROM hr.employment_contract WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
   await client.query(
     `
     UPDATE hr.employment_link
@@ -288,23 +318,47 @@ async function cleanupTenant(client: PoolClient): Promise<void> {
     `,
     tenantParams,
   );
-  await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', tenantParams);
+  await client.query(
+    'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
   await client.query(
     'DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid',
     tenantParams,
   );
-  await client.query('DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid', tenantParams);
+  await client.query(
+    'DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
   await client.query(
     'DELETE FROM payroll.payroll_earning_deduction WHERE tenant_id = $1::uuid',
     tenantParams,
   );
   await deleteEmployeeStatusHistory(client, tenantParams);
-  await client.query('DELETE FROM hr.employee WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.functional_status WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.contract_type WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.salary_reference WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM hr.employment_link WHERE tenant_id = $1::uuid', tenantParams);
-  await client.query('DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid', tenantParams);
+  await client.query(
+    'DELETE FROM hr.employee WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.functional_status WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.contract_type WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.salary_reference WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM hr.employment_link WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
+  await client.query(
+    'DELETE FROM public.tax_rate WHERE tenant_id = $1::uuid',
+    tenantParams,
+  );
 }
 
 async function deleteEmployeeStatusHistory(
@@ -324,6 +378,10 @@ async function deleteEmployeeStatusHistory(
 
 async function setBypassContext(client: PoolClient): Promise<void> {
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
+  ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
 }

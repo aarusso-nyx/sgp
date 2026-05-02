@@ -22,7 +22,9 @@ describe('ES-05 S-1299 closure flow (e2e)', () => {
       ]) as never,
     );
 
-    await expect(blockedBuilder.build(tenantId, '2026-01')).rejects.toMatchObject({
+    await expect(
+      blockedBuilder.build(tenantId, '2026-01'),
+    ).rejects.toMatchObject({
       response: expect.objectContaining({
         code: 'ESOCIAL_S1299_PERIODICS_PENDING',
       }),

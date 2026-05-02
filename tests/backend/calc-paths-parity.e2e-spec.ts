@@ -54,8 +54,13 @@ describe('CALC-08 SQL and TS money boundary parity', () => {
       }
 
       const row = rows.rows[0];
-      await client.query("SELECT set_config('app.current_tenant_id', $1, true)", [row.tenant_id]);
-      await client.query("SELECT set_config('app.current_tenant', $1, true)", [row.tenant_id]);
+      await client.query(
+        "SELECT set_config('app.current_tenant_id', $1, true)",
+        [row.tenant_id],
+      );
+      await client.query("SELECT set_config('app.current_tenant', $1, true)", [
+        row.tenant_id,
+      ]);
 
       const evaluated = await client.query<{ amount: string }>(
         `

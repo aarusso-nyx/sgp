@@ -16,7 +16,10 @@ describe('PONTO hour-bank golden scenarios (e2e)', () => {
     const databaseService = {
       configured: true,
       query: jest.fn(async (sql: string, values: unknown[]) => {
-        if (values[2] === 'ACCRUAL_POSITIVE' || values[2] === 'ACCRUAL_NEGATIVE') {
+        if (
+          values[2] === 'ACCRUAL_POSITIVE' ||
+          values[2] === 'ACCRUAL_NEGATIVE'
+        ) {
           const minutes = Number(values[3]);
           balance += minutes;
           movements.push({ kind: String(values[2]), minutes });
@@ -51,7 +54,9 @@ describe('PONTO hour-bank golden scenarios (e2e)', () => {
           ];
         }
         const payrollRunId = String(values[0]);
-        const alreadySettled = movements.some((movement) => movement.payrollRunId === payrollRunId);
+        const alreadySettled = movements.some(
+          (movement) => movement.payrollRunId === payrollRunId,
+        );
         if (alreadySettled) {
           return [
             {
@@ -79,7 +84,9 @@ describe('PONTO hour-bank golden scenarios (e2e)', () => {
       }),
     };
     const accrual = new HourBankAccrualService(databaseService as never);
-    const compensation = new HourBankCompensationService(databaseService as never);
+    const compensation = new HourBankCompensationService(
+      databaseService as never,
+    );
     const settlement = new HourBankSettlementService(databaseService as never);
     const employeeId = '00000000-0000-4000-8000-000000000061';
     const hourBankId = '00000000-0000-4000-8000-000000000065';
@@ -119,7 +126,9 @@ describe('PONTO hour-bank golden scenarios (e2e)', () => {
     expect(first).toMatchObject({ settledCount: 1, overtimeMinutes: 300 });
     expect(second).toMatchObject({ settledCount: 0, overtimeMinutes: 0 });
     expect(balance).toBe(0);
-    expect(movements.reduce((sum, movement) => sum + movement.minutes, 0)).toBe(0);
+    expect(movements.reduce((sum, movement) => sum + movement.minutes, 0)).toBe(
+      0,
+    );
   });
 
   it('blocks compensation without available positive balance', async () => {

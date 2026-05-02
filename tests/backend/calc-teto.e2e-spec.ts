@@ -22,7 +22,8 @@ describe('CALC-06 remuneration ceiling golden scenarios (e2e)', () => {
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
 
     const client = await pool.connect();
@@ -41,7 +42,11 @@ describe('CALC-06 remuneration ceiling golden scenarios (e2e)', () => {
       const inside = await createEmployee(client, 'INSIDE');
       const exceeded = await createEmployee(client, 'EXCEEDED');
       const immune = await createEmployee(client, 'IMMUNE');
-      employeeIds.push(inside.employeeId, exceeded.employeeId, immune.employeeId);
+      employeeIds.push(
+        inside.employeeId,
+        exceeded.employeeId,
+        immune.employeeId,
+      );
       employmentLinkIds.push(
         inside.employmentLinkId,
         exceeded.employmentLinkId,
@@ -49,8 +54,12 @@ describe('CALC-06 remuneration ceiling golden scenarios (e2e)', () => {
       );
 
       payrollRunIds.push(
-        await seedPayrollItems(client, inside.employeeId, [[earningRubricaId, '28000.00']]),
-        await seedPayrollItems(client, exceeded.employeeId, [[earningRubricaId, '35000.00']]),
+        await seedPayrollItems(client, inside.employeeId, [
+          [earningRubricaId, '28000.00'],
+        ]),
+        await seedPayrollItems(client, exceeded.employeeId, [
+          [earningRubricaId, '35000.00'],
+        ]),
         await seedPayrollItems(client, immune.employeeId, [
           [earningRubricaId, '35000.00'],
           [immuneRubricaId, '2000.00'],
@@ -70,15 +79,23 @@ describe('CALC-06 remuneration ceiling golden scenarios (e2e)', () => {
         'DELETE FROM payroll.employee_payroll_item WHERE payroll_run_id = ANY($1::uuid[])',
         [payrollRunIds],
       );
-      await client.query('DELETE FROM payroll.payroll_run WHERE id = ANY($1::uuid[])', [
-        payrollRunIds,
+      await client.query(
+        'DELETE FROM payroll.payroll_run WHERE id = ANY($1::uuid[])',
+        [payrollRunIds],
+      );
+      await client.query('DELETE FROM hr.employee WHERE id = ANY($1::uuid[])', [
+        employeeIds,
       ]);
-      await client.query('DELETE FROM hr.employee WHERE id = ANY($1::uuid[])', [employeeIds]);
-      await client.query('DELETE FROM hr.employment_link WHERE id = ANY($1::uuid[])', [
-        employmentLinkIds,
-      ]);
-      await client.query("DELETE FROM hr.salary_reference WHERE code LIKE 'CALC06-SAL-%'");
-      await client.query("DELETE FROM hr.shift WHERE code LIKE 'CALC06-SHIFT-%'");
+      await client.query(
+        'DELETE FROM hr.employment_link WHERE id = ANY($1::uuid[])',
+        [employmentLinkIds],
+      );
+      await client.query(
+        "DELETE FROM hr.salary_reference WHERE code LIKE 'CALC06-SAL-%'",
+      );
+      await client.query(
+        "DELETE FROM hr.shift WHERE code LIKE 'CALC06-SHIFT-%'",
+      );
       await client.query(
         "DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid AND code LIKE 'CALC06-%'",
         [tenantId],
@@ -98,10 +115,13 @@ describe('CALC-06 remuneration ceiling golden scenarios (e2e)', () => {
     ['inside ceiling', 0, new Decimal('0.00')],
     ['fully subject excess', 1, new Decimal('5000.00')],
     ['partially immune excess', 2, new Decimal('5000.00')],
-  ])('evaluates DESCONTO_TETO for %s', async (_name, employeeIndex, expected) => {
-    const amount = await evaluate(employeeIds[employeeIndex]);
-    expect(new Decimal(amount ?? '0').toFixed(2)).toBe(expected.toFixed(2));
-  });
+  ])(
+    'evaluates DESCONTO_TETO for %s',
+    async (_name, employeeIndex, expected) => {
+      const amount = await evaluate(employeeIds[employeeIndex]);
+      expect(new Decimal(amount ?? '0').toFixed(2)).toBe(expected.toFixed(2));
+    },
+  );
 
   it('fails explicitly when the required TETO parameter is not configured', async () => {
     const client = await pool.connect();
@@ -154,7 +174,10 @@ describe('CALC-06 remuneration ceiling golden scenarios (e2e)', () => {
   }
 });
 
-async function seedCeiling(client: import('pg').PoolClient, amount: string): Promise<void> {
+async function seedCeiling(
+  client: import('pg').PoolClient,
+  amount: string,
+): Promise<void> {
   await client.query(
     `
     INSERT INTO public.system_parameter (tenant_id, key, value, description, module_key)
@@ -188,7 +211,9 @@ async function seedRubrica(
   return result.rows[0].id;
 }
 
-async function seedTetoRubrica(client: import('pg').PoolClient): Promise<string> {
+async function seedTetoRubrica(
+  client: import('pg').PoolClient,
+): Promise<string> {
   const result = await client.query<{ id: string }>(
     `
     INSERT INTO payroll.payroll_earning_deduction (
@@ -298,7 +323,9 @@ async function seedPayrollItems(
   return run.rows[0].id;
 }
 
-async function ensurePayrollType(client: import('pg').PoolClient): Promise<string> {
+async function ensurePayrollType(
+  client: import('pg').PoolClient,
+): Promise<string> {
   const result = await client.query<{ id: string }>(
     `
     INSERT INTO payroll.payroll_type (tenant_id, code, description, status)

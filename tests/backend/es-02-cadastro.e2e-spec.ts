@@ -23,7 +23,8 @@ describe('ES-02 S-2200/S-2205 cadastro flow (e2e)', () => {
       throw new Error('DATABASE_URL is required for es-02-cadastro');
     }
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
     await seed(databaseService);
   });
@@ -36,9 +37,14 @@ describe('ES-02 S-2200/S-2205 cadastro flow (e2e)', () => {
   it('queues whitelisted changes, ignores non-whitelisted changes, emits XSD-valid S-2205, and blocks unchanged S-2200 reemission', async () => {
     const validator = new XsdValidatorService();
     const emitService = {
-      emit: jest.fn(async (input: EmitESocialInput) => persistMockEvent(databaseService, input)),
+      emit: jest.fn(async (input: EmitESocialInput) =>
+        persistMockEvent(databaseService, input),
+      ),
     };
-    const dispatch = new S22xxDispatchService(databaseService, emitService as never);
+    const dispatch = new S22xxDispatchService(
+      databaseService,
+      emitService as never,
+    );
     const s2200 = new S2200Builder(databaseService);
     const s2205 = new S2205Builder(databaseService);
 
@@ -83,7 +89,10 @@ describe('ES-02 S-2200/S-2205 cadastro flow (e2e)', () => {
         `,
         [tenantId, employeeId],
       );
-      expect(pending.map((row) => row.field_path)).toEqual(['address.street', 'dependent.*']);
+      expect(pending.map((row) => row.field_path)).toEqual([
+        'address.street',
+        'dependent.*',
+      ]);
 
       const s2205Build = await s2205.buildPending(tenantId, employeeId);
       expect(() =>
@@ -91,7 +100,10 @@ describe('ES-02 S-2200/S-2205 cadastro flow (e2e)', () => {
           allowUnsigned: true,
         }),
       ).not.toThrow();
-      const s2205Result = await dispatch.emitS2205(s2205Build.record, s2205Build.pendingIds);
+      const s2205Result = await dispatch.emitS2205(
+        s2205Build.record,
+        s2205Build.pendingIds,
+      );
       expect(s2205Result.emitted).toBe(true);
 
       const s2200Record = await s2200.build(tenantId, employeeId);
@@ -101,9 +113,9 @@ describe('ES-02 S-2200/S-2205 cadastro flow (e2e)', () => {
         }),
       ).not.toThrow();
       await dispatch.emitS2200(s2200Record);
-      await expect(dispatch.emitS2200(s2200Record, { force: true })).rejects.toThrow(
-        'payload_hash did not change',
-      );
+      await expect(
+        dispatch.emitS2200(s2200Record, { force: true }),
+      ).rejects.toThrow('payload_hash did not change');
     });
   });
 });
@@ -127,11 +139,17 @@ async function runAsTenant<T>(fn: () => Promise<T>): Promise<T> {
 
 async function cleanup(database: DatabaseService): Promise<void> {
   await runAsTenant(async () => {
-    await database.query('DELETE FROM hr.employee_dependent WHERE id = $1::uuid', [dependentId]);
-    await database.query('DELETE FROM hr.employee WHERE id = $1::uuid', [employeeId]);
-    await database.query('DELETE FROM public.esocial_event WHERE id = ANY($1::uuid[])', [
-      [s2200EventId, s2205EventId],
+    await database.query(
+      'DELETE FROM hr.employee_dependent WHERE id = $1::uuid',
+      [dependentId],
+    );
+    await database.query('DELETE FROM hr.employee WHERE id = $1::uuid', [
+      employeeId,
     ]);
+    await database.query(
+      'DELETE FROM public.esocial_event WHERE id = ANY($1::uuid[])',
+      [[s2200EventId, s2205EventId]],
+    );
   });
 }
 

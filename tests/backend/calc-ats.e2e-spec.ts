@@ -20,7 +20,8 @@ describe('CALC-07 ATS, trienio, quinquenio and sexta-parte golden scenarios (e2e
     }
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
     databaseService = new DatabaseService({
-      get: (key: string) => (key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined),
+      get: (key: string) =>
+        key === 'DATABASE_URL' ? process.env.DATABASE_URL : undefined,
     } as never);
 
     const client = await pool.connect();
@@ -55,15 +56,23 @@ describe('CALC-07 ATS, trienio, quinquenio and sexta-parte golden scenarios (e2e
     const client = await pool.connect();
     try {
       await client.query("SELECT set_config('app.bypass_rls', 'true', true)");
-      await client.query('DELETE FROM hr.service_time_record WHERE employee_id = ANY($1::uuid[])', [
+      await client.query(
+        'DELETE FROM hr.service_time_record WHERE employee_id = ANY($1::uuid[])',
+        [employeeIds],
+      );
+      await client.query('DELETE FROM hr.employee WHERE id = ANY($1::uuid[])', [
         employeeIds,
       ]);
-      await client.query('DELETE FROM hr.employee WHERE id = ANY($1::uuid[])', [employeeIds]);
-      await client.query('DELETE FROM hr.employment_link WHERE id = ANY($1::uuid[])', [
-        employmentLinkIds,
-      ]);
-      await client.query("DELETE FROM hr.salary_reference WHERE code LIKE 'CALC07B-SAL-%'");
-      await client.query("DELETE FROM hr.shift WHERE code LIKE 'CALC07B-SHIFT-%'");
+      await client.query(
+        'DELETE FROM hr.employment_link WHERE id = ANY($1::uuid[])',
+        [employmentLinkIds],
+      );
+      await client.query(
+        "DELETE FROM hr.salary_reference WHERE code LIKE 'CALC07B-SAL-%'",
+      );
+      await client.query(
+        "DELETE FROM hr.shift WHERE code LIKE 'CALC07B-SHIFT-%'",
+      );
     } finally {
       client.release();
       await pool.end();
@@ -86,7 +95,10 @@ describe('CALC-07 ATS, trienio, quinquenio and sexta-parte golden scenarios (e2e
     expect(new Decimal(amount ?? '0').toFixed(2)).toBe('166.67');
   });
 
-  async function evaluate(rubricaId: string, employeeId: string): Promise<string | null> {
+  async function evaluate(
+    rubricaId: string,
+    employeeId: string,
+  ): Promise<string | null> {
     return RequestContextStore.run(
       {
         tenantId,

@@ -49,7 +49,11 @@ describe('BANK-05 FGTS GRRF remittance (e2e)', () => {
 
   it('emits GRRF for a without-cause termination with a R$ 4.800,00 FGTS fine and SIFGE round-trip', async () => {
     const employee = await createEmployee();
-    await seedFgtsBalance(employee.employeeId, employee.employmentLinkId, '12000.00');
+    await seedFgtsBalance(
+      employee.employeeId,
+      employee.employmentLinkId,
+      '12000.00',
+    );
     const payrollRunId = await createPayrollRun();
     const [fine] = await computeFine(payrollRunId, employee.employmentLinkId);
 
@@ -110,7 +114,13 @@ describe('BANK-05 FGTS GRRF remittance (e2e)', () => {
           0
         )
         `,
-        [tenantId, remittance.rows[0].id, employee.employmentLinkId, fine.base_amount, fine.amount],
+        [
+          tenantId,
+          remittance.rows[0].id,
+          employee.employmentLinkId,
+          fine.base_amount,
+          fine.amount,
+        ],
       );
       return remittance.rows[0].id;
     });
@@ -204,7 +214,12 @@ describe('BANK-05 FGTS GRRF remittance (e2e)', () => {
         )
         RETURNING id::text
         `,
-        [tenantId, `BANK05-${suffix}`, link.rows[0].id, functionalStatus.rows[0].id],
+        [
+          tenantId,
+          `BANK05-${suffix}`,
+          link.rows[0].id,
+          functionalStatus.rows[0].id,
+        ],
       );
       return {
         employeeId: employee.rows[0].id,
@@ -304,7 +319,10 @@ describe('BANK-05 FGTS GRRF remittance (e2e)', () => {
     });
   }
 
-  async function computeFine(payrollRunId: string, employmentLinkId: string): Promise<FineRow[]> {
+  async function computeFine(
+    payrollRunId: string,
+    employmentLinkId: string,
+  ): Promise<FineRow[]> {
     return withClient(async (client) => {
       const result = await client.query<FineRow>(
         `
@@ -322,7 +340,9 @@ describe('BANK-05 FGTS GRRF remittance (e2e)', () => {
     });
   }
 
-  async function withClient<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
+  async function withClient<T>(
+    callback: (client: PoolClient) => Promise<T>,
+  ): Promise<T> {
     const client = await pool.connect();
     try {
       await setContext(client);
@@ -335,11 +355,26 @@ describe('BANK-05 FGTS GRRF remittance (e2e)', () => {
 
 async function cleanupTenant(client: PoolClient): Promise<void> {
   const params = [tenantId];
-  await client.query('DELETE FROM payment.fgts_grrf WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payment.fgts_grf WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payment.fgts_remittance WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payment.fgts_movement WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payment.fgts_account WHERE tenant_id = $1::uuid', params);
+  await client.query(
+    'DELETE FROM payment.fgts_grrf WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payment.fgts_grf WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payment.fgts_remittance WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payment.fgts_movement WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payment.fgts_account WHERE tenant_id = $1::uuid',
+    params,
+  );
   await client.query(
     'DELETE FROM payroll.payroll_financial_record WHERE tenant_id = $1::uuid',
     params,
@@ -348,26 +383,42 @@ async function cleanupTenant(client: PoolClient): Promise<void> {
     'DELETE FROM payroll.payroll_run_status_history WHERE tenant_id = $1::uuid',
     params,
   );
-  await client.query('DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid', params);
-  await client.query('DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid', params);
+  await client.query(
+    'DELETE FROM payroll.payroll_run WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payroll.processing_type WHERE tenant_id = $1::uuid',
+    params,
+  );
+  await client.query(
+    'DELETE FROM payroll.payroll_type WHERE tenant_id = $1::uuid',
+    params,
+  );
 }
 
 async function setContext(client: PoolClient): Promise<void> {
   await client.query('SET row_security = on');
   await client.query("SELECT set_config('app.bypass_rls', 'true', false)");
-  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_tenant', $1, false)", [tenantId]);
-  await client.query("SELECT set_config('app.current_permissions', $1, false)", [
-    [
-      'payroll.fgts.read',
-      'payroll.fgts.write',
-      'payment.remittance.write',
-      'payroll.run.execute',
-      'rh.employee.terminate',
-      'folha.write',
-      'gestao.write',
-    ].join('\n'),
+  await client.query("SELECT set_config('app.current_tenant_id', $1, false)", [
+    tenantId,
   ]);
+  await client.query("SELECT set_config('app.current_tenant', $1, false)", [
+    tenantId,
+  ]);
+  await client.query(
+    "SELECT set_config('app.current_permissions', $1, false)",
+    [
+      [
+        'payroll.fgts.read',
+        'payroll.fgts.write',
+        'payment.remittance.write',
+        'payroll.run.execute',
+        'rh.employee.terminate',
+        'folha.write',
+        'gestao.write',
+      ].join('\n'),
+    ],
+  );
   await client.query("SELECT set_config('app.authenticated', 'true', false)");
 }
