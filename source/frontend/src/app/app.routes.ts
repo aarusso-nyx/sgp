@@ -185,6 +185,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'portal/ponto/justificativa',
+        loadComponent: () =>
+          import('./features/portal/ponto/justificativa/portal-justificativa').then(
+            (m) => m.PortalJustificativa,
+          ),
+      },
+      {
         path: 'saude/exames',
         loadComponent: () => import('./features/saude/exames/exames').then((m) => m.SaudeExames),
       },
@@ -246,6 +253,13 @@ export const routes: Routes = [
           import('./features/ponto/banco-horas/ponto-banco-horas').then((m) => m.PontoBancoHoras),
       },
       {
+        path: 'ponto/justificativas',
+        loadComponent: () =>
+          import('./features/ponto/justificativas/ponto-justificativas').then(
+            (m) => m.PontoJustificativas,
+          ),
+      },
+      {
         path: 'fiscal/dctfweb',
         loadComponent: () =>
           import('./features/fiscal/dctfweb/dctfweb').then((m) => m.FiscalDctfweb),
@@ -295,6 +309,16 @@ export const routes: Routes = [
         data: {
           moduleKey: 'tce',
           permissions: ['tce.catalog.read'],
+          moduleLabel: 'TCE',
+        },
+      },
+      {
+        path: 'tce/audesp-sp',
+        loadComponent: () => import('./features/tce/audesp-sp/audesp-sp').then((m) => m.AudespSp),
+        canActivate: [permissionGuard],
+        data: {
+          moduleKey: 'tce',
+          permissions: ['tce.submission.read'],
           moduleLabel: 'TCE',
         },
       },

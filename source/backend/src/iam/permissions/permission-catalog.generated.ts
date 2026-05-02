@@ -68,6 +68,9 @@ export const PERMISSIONS = [
   'ponto.afd.write',
   'ponto.hourbank.read',
   'ponto.hourbank.write',
+  'ponto.justification.approve',
+  'ponto.justification.read',
+  'ponto.justification.write',
   'ponto.rep.read',
   'ponto.rep.write',
   'ponto.roster.read',
@@ -148,6 +151,8 @@ export const PERMISSIONS = [
   'tce.adapter.read',
   'tce.catalog.manage',
   'tce.catalog.read',
+  'tce.submission.manage',
+  'tce.submission.read',
   'transparency.publish',
 ] as const;
 

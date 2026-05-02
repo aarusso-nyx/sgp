@@ -652,6 +652,22 @@
       "description": "Manage Court of Accounts layout versions and field metadata."
     },
     {
+      "key": "tce.submission.read",
+      "moduleKey": "tce",
+      "resourceKey": "submission",
+      "actionKey": "read",
+      "routePattern": "/api/v1/tce/audesp-sp/submissions/**",
+      "description": "Read AUDESP/SP TCE submissions."
+    },
+    {
+      "key": "tce.submission.manage",
+      "moduleKey": "tce",
+      "resourceKey": "submission",
+      "actionKey": "manage",
+      "routePattern": "/api/v1/tce/audesp-sp/submissions/**",
+      "description": "Create, validate, serialize, and submit AUDESP/SP TCE submissions in stub mode."
+    },
+    {
       "key": "avaliacao.read",
       "moduleKey": "avaliacao",
       "resourceKey": "performance",
@@ -1092,6 +1108,30 @@
       "description": "Open, accrue, compensate, settle, and manually adjust hour banks."
     },
     {
+      "key": "ponto.justification.read",
+      "moduleKey": "ponto",
+      "resourceKey": "justification",
+      "actionKey": "read",
+      "routePattern": "#!/ponto/justificativas/**",
+      "description": "Read absence justification and allowance requests."
+    },
+    {
+      "key": "ponto.justification.write",
+      "moduleKey": "ponto",
+      "resourceKey": "justification",
+      "actionKey": "write",
+      "routePattern": "#!/ponto/justificativas/**",
+      "description": "Request, cancel, and maintain absence justifications."
+    },
+    {
+      "key": "ponto.justification.approve",
+      "moduleKey": "ponto",
+      "resourceKey": "justification",
+      "actionKey": "approve",
+      "routePattern": "#!/ponto/justificativas/**",
+      "description": "Approve or reject absence justifications."
+    },
+    {
       "key": "rh.medical_leave.read",
       "moduleKey": "rh",
       "resourceKey": "medical_leave",
@@ -1281,6 +1321,9 @@
       "ponto.roster.write",
       "ponto.hourbank.read",
       "ponto.hourbank.write",
+      "ponto.justification.read",
+      "ponto.justification.write",
+      "ponto.justification.approve",
       "avaliacao.read",
       "avaliacao.pccs.read",
       "avaliacao.pccs.write",
@@ -1345,6 +1388,8 @@
       "tce.adapter.manage",
       "tce.catalog.read",
       "tce.catalog.manage",
+      "tce.submission.read",
+      "tce.submission.manage",
       "portal.paystub.read",
       "portal.yearly_income.read",
       "report.payslip.read",
@@ -1368,6 +1413,7 @@
       "ponto.afd.read",
       "ponto.roster.read",
       "ponto.hourbank.read",
+      "ponto.justification.read",
       "avaliacao.pccs.read",
       "avaliacao.progressao.read",
       "avaliacao.salary_history.read",
@@ -1385,6 +1431,7 @@
       "fiscal.yearly_income.read",
       "tce.adapter.read",
       "tce.catalog.read",
+      "tce.submission.read",
       "portal.paystub.read",
       "portal.yearly_income.read",
       "report.payslip.read",

@@ -32,31 +32,31 @@ O SGP adota **Domain-Driven Design (DDD)** como filosofia central de divisão. C
 
 Os bounded contexts identificados são:
 
-| Bounded Context             | Código                  | Módulo NestJS principal                  |
-| --------------------------- | ----------------------- | ---------------------------------------- |
-| Identidade e Acesso         | `CORE_AUTH`             | `auth`                                   |
-| Multi-tenancy               | `CORE_TENANT`           | `tenant`                                 |
-| Pessoa Civil                | `CORE_PESSOA`           | `pessoa`                                 |
-| Estrutura Organizacional    | `CORE_ORGANIZACAO`      | `organizacao`                            |
-| Parametrizações e Estrutura | `GESTAO`                | `gestao`                                 |
-| Vida Funcional (RH)         | `MODULO_RH`             | `rh`                                     |
-| Folha de Pagamento          | `FOLHA_PAGAMENTO`       | `folha` (cliente) + `sgp-payroll-engine` |
-| FGTS CLT                    | `FOLHA_PAGAMENTO`       | `folha-pagamento/fgts`                   |
-| Avaliação e Progressão      | `MODULO_AVALIACAO`      | `avaliacao`                              |
-| Recrutamento e Seleção      | `RECRUTAMENTO_SELECAO`  | `recrutamento`                           |
-| Consultas Gerenciais        | `CONSULTAS_GERENCIAIS`  | `consultas`                              |
-| Relatórios                  | `RELATORIO`             | `relatorios`                             |
-| Previdenciário              | `MODULO_PREVIDENCIARIO` | `previdenciario`                         |
-| Auditoria                   | `AUDITORIA`             | `auditoria`                              |
-| Saúde Ocupacional           | `JUNTA_MEDICA`          | `saude`                                  |
-| Ponto Eletrônico            | `PONTO_ELETRONICO`      | `ponto`                                  |
-| Convênios                   | `CONVENIO`              | `convenio`                               |
-| Notificações                | `NOTIFICACOES`          | `notificacoes`                           |
-| Arquivos                    | `ARQUIVOS`              | `arquivos`                               |
-| Parâmetros e Feature Flags  | `PARAMETROS`            | `parametros`                             |
-| Integrações Externas        | `INTEGRACOES`           | `integracoes`                            |
-| Tribunais de Contas         | `COMPLIANCE_TCE`        | `tce`                                    |
-| Portal Publico              | `PUBLICO`               | `publico/transparency`                   |
+| Bounded Context             | Código                  | Módulo NestJS principal                                    |
+| --------------------------- | ----------------------- | ---------------------------------------------------------- |
+| Identidade e Acesso         | `CORE_AUTH`             | `auth`                                                     |
+| Multi-tenancy               | `CORE_TENANT`           | `tenant`                                                   |
+| Pessoa Civil                | `CORE_PESSOA`           | `pessoa`                                                   |
+| Estrutura Organizacional    | `CORE_ORGANIZACAO`      | `organizacao`                                              |
+| Parametrizações e Estrutura | `GESTAO`                | `gestao`                                                   |
+| Vida Funcional (RH)         | `MODULO_RH`             | `rh`                                                       |
+| Folha de Pagamento          | `FOLHA_PAGAMENTO`       | `folha` (cliente) + `sgp-payroll-engine`                   |
+| FGTS CLT                    | `FOLHA_PAGAMENTO`       | `folha-pagamento/fgts`; `folha-pagamento/operations/sifge` |
+| Avaliação e Progressão      | `MODULO_AVALIACAO`      | `avaliacao`                                                |
+| Recrutamento e Seleção      | `RECRUTAMENTO_SELECAO`  | `recrutamento`                                             |
+| Consultas Gerenciais        | `CONSULTAS_GERENCIAIS`  | `consultas`                                                |
+| Relatórios                  | `RELATORIO`             | `relatorios`                                               |
+| Previdenciário              | `MODULO_PREVIDENCIARIO` | `previdenciario`                                           |
+| Auditoria                   | `AUDITORIA`             | `auditoria`                                                |
+| Saúde Ocupacional           | `JUNTA_MEDICA`          | `saude`                                                    |
+| Ponto Eletrônico            | `PONTO_ELETRONICO`      | `ponto`                                                    |
+| Convênios                   | `CONVENIO`              | `convenio`                                                 |
+| Notificações                | `NOTIFICACOES`          | `notificacoes`                                             |
+| Arquivos                    | `ARQUIVOS`              | `arquivos`                                                 |
+| Parâmetros e Feature Flags  | `PARAMETROS`            | `parametros`                                               |
+| Integrações Externas        | `INTEGRACOES`           | `integracoes`                                              |
+| Tribunais de Contas         | `COMPLIANCE_TCE`        | `tce`                                                      |
+| Portal Publico              | `PUBLICO`               | `publico/transparency`                                     |
 
 ### 1.2 Módulos NestJS por Contexto
 
@@ -529,7 +529,7 @@ stateDiagram-v2
 
 **Entidades (no sgp-core-api):** `competencia`, `folha_pagamento`, `tipo_processamento`, `lote_processamento`, `lancamento` (lançamentos manuais pré-cálculo), `consignado`, `importacao_consignado`, `importacao_lancamento_manual`, `relatorio_financeiro`.
 
-**Serviços:** `CompetenciaService`, `FolhaPagamentoService`, `LancamentoService`, `ConsignadoService`, `ImportacaoService`, `CalculoOrquestradorService` (dispara para payroll-engine), `ContrachequeViewService`, `RelatorioFinanceiroService`, `folha-pagamento/operations/bank-account` para validação BANK-03 de dados bancários antes da elegibilidade CNAB, e `folha-pagamento/operations/consignment` para CONS-01: cadastro de consignantes, averbações, cálculo de margem geral/cartão e emissão de descontos consignados na cadeia CALC-11.
+**Serviços:** `CompetenciaService`, `FolhaPagamentoService`, `LancamentoService`, `ConsignadoService`, `ImportacaoService`, `CalculoOrquestradorService` (dispara para payroll-engine), `ContrachequeViewService`, `RelatorioFinanceiroService`, `folha-pagamento/operations/bank-account` para validação BANK-03 de dados bancários antes da elegibilidade CNAB, `folha-pagamento/operations/consignment` para CONS-01: cadastro de consignantes, averbações, cálculo de margem geral/cartão e emissão de descontos consignados na cadeia CALC-11, e `folha-pagamento/operations/sifge` para BANK-05: geração de GRF mensal, GRRF rescisória, DAE e arquivo SIFGE 4.0 por adapter Caixa pluggável.
 
 **Controladores:**
 
@@ -923,9 +923,9 @@ stateDiagram-v2
 
 #### `tce` — Tribunais de Contas
 
-**Responsabilidades:** declarar o contrato `TceAdapter`, descobrir adapters via metadata NestJS, registrar o catálogo global de adapters em `tce.adapter_registry`, emitir eventos de lifecycle em `tce.adapter_lifecycle_event` e expor administração read/manage para habilitar ou desabilitar adapters. O submódulo `tce/catalog` mantém o catálogo público de UFs, TCU, TCMs e versões de leiaute em `tce.state`, `tce.layout_version` e `tce.layout_field`, com vigência temporal, transições controladas e placeholders sem leiautes proprietários. O catálogo é global, não tenant-scoped, e mutações são auditadas via `sgp_append_audit_event`.
+**Responsabilidades:** declarar o contrato `TceAdapter`, descobrir adapters via metadata NestJS, registrar o catálogo global de adapters em `tce.adapter_registry`, emitir eventos de lifecycle em `tce.adapter_lifecycle_event` e expor administração read/manage para habilitar ou desabilitar adapters. O submódulo `tce/catalog` mantém o catálogo público de UFs, TCU, TCMs e versões de leiaute em `tce.state`, `tce.layout_version` e `tce.layout_field`, com vigência temporal, transições controladas e placeholders sem leiautes proprietários. O submódulo `tce/adapters/audesp-sp` implementa o adapter de referência AUDESP/SP para Folha de Pagamento em modo stub, persistindo submissões tenant-scoped em `tce.submission`. O catálogo é global, não tenant-scoped; submissões são tenant-scoped; mutações são auditadas via `sgp_append_audit_event`.
 
-**Serviços:** `AdapterLoaderService`, `AdapterRegistryService`, `LifecycleEmitterService`, `StateService`, `LayoutVersionService`, `LayoutFieldService` e adapters concretos anotados com `@TceAdapter`. O adapter `noop` (`state_code = XX`) é o stub determinístico de contrato para validar registration, validation, serialization, submission, response parsing e health check sem chamadas externas reais.
+**Serviços:** `AdapterLoaderService`, `AdapterRegistryService`, `LifecycleEmitterService`, `StateService`, `LayoutVersionService`, `LayoutFieldService`, `AudespSpSubmissionService`, `PayrollToAudespMapper`, `AudespXmlSerializer`, `AudespValidatorService`, `AudespStubServerService` e adapters concretos anotados com `@TceAdapter`. O adapter `noop` (`state_code = XX`) é o stub determinístico de contrato para validar registration, validation, serialization, submission, response parsing e health check sem chamadas externas reais. O adapter `audesp-sp` (`state_code = SP`) serializa XML AUDESP/SP localmente, valida campos publicos do placeholder e simula aceite/rejeicao sem chamada de rede.
 
 **Controladores:**
 
@@ -949,6 +949,11 @@ stateDiagram-v2
 - `POST /api/v1/tce/layouts` — criar versão `DRAFT`
 - `PATCH /api/v1/tce/layouts/:id/status` — transicionar `DRAFT -> ACTIVE -> SUPERSEDED -> RETIRED`
 - `POST /api/v1/tce/layout-fields` e `DELETE /api/v1/tce/layout-fields/:id` — administrar metadados de campos
+- `GET /api/v1/tce/audesp-sp/submissions` — listar submissões AUDESP/SP por competência
+- `POST /api/v1/tce/audesp-sp/submissions` — criar draft a partir de `payroll_run_id`
+- `POST /api/v1/tce/audesp-sp/submissions/:id/validate` — validar DTO/XML contra `tce.layout_field`
+- `POST /api/v1/tce/audesp-sp/submissions/:id/submit` — enviar para stub local quando `TCE_STUB_MODE=true`
+- `GET /api/v1/tce/audesp-sp/submissions/:id/envelope.xml` — baixar XML determinístico gerado
 - `GET /api/external/v1/prefeitura/autenticacao` — endpoint prefeitura pública
 - `GET /api/external/v1/prefeitura/dependentes`
 - `GET /api/external/v1/dicionario/entidades`

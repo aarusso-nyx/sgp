@@ -110,3 +110,6 @@ W33 ✓ 79-rec-07 (medium, transient concurrent AFD lint plus permission migrati
 2026-05-02T08:34:48.021Z W31 ✓ 72-tce-02 (low, catalog count drift fixed by maestro defense, commit 749f7b4) — state/layout catalog
 2026-05-02T08:34:48.021Z W32 ✓ 76-fisc-04 (medium, catalog count drift fixed by maestro defense, commit 5a22944) — GPS residual CLT
 2026-05-02T08:35:37.788Z frontier launch 64-ponto-06, 73-tce-03, 75-bank-05 — agents 019de7d4-0676, 019de7d4-06f9, 019de7d4-0724
+2026-05-02T08:56:52.150Z W31 ✓ 64-ponto-06 (low, concurrent SIFGE type drift fixed by maestro defense, commit d85d0c9) — justificativa e abono
+2026-05-02T08:56:52.150Z W32 ✓ 73-tce-03 (medium, promise contract and RLS smoke fixed by maestro defense, commit 46862d4) — AUDESP/SP stub
+2026-05-02T08:56:52.150Z W33 ✓ 75-bank-05 (high, zero-tier, e2e cleanup and audit wiring fixed by maestro defense, commit a123a31) — SIFGE/FGTS Caixa

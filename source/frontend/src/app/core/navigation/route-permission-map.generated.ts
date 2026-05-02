@@ -68,6 +68,7 @@ export const ROUTE_PERMISSION_MAP = [
   ['#!/saude/programas/**', 'saude.program.write'],
   ['#!/tce/adapters', 'tce.adapter.manage'],
   ['#!/tce/catalog', 'tce.catalog.manage'],
+  ['#!/tce/audesp-sp', 'tce.submission.manage'],
 ] as const;
 
 export function permissionsForRoutePath(routePath: string): string[] {
