@@ -1,0 +1,56 @@
+<section class="bank-data">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Dados bancarios</h1>
+  </header>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="panel">
+    <div class="fields">
+      <label>
+        <span>Servidor</span>
+        <input formControlName="employeeId" />
+      </label>
+      <label>
+        <span>Banco</span>
+        <select formControlName="bankCode">
+          <option *ngFor="let bank of banks" [value]="bank">{{ bank }}</option>
+        </select>
+      </label>
+      <label [class.invalid]="invalidField === 'agency'">
+        <span>Agencia</span>
+        <input formControlName="agency" />
+      </label>
+      <label>
+        <span>DV agencia</span>
+        <input formControlName="agencyDigit" />
+      </label>
+      <label [class.invalid]="invalidField === 'accountNumber'">
+        <span>Conta</span>
+        <input formControlName="accountNumber" />
+      </label>
+      <label>
+        <span>DV conta</span>
+        <input formControlName="accountDigit" />
+      </label>
+      <label [class.invalid]="invalidField === 'holderCpf'">
+        <span>CPF titular</span>
+        <input formControlName="holderCpf" />
+      </label>
+      <label>
+        <span>Titularidade</span>
+        <select formControlName="holderKind">
+          <option value="SELF">Proprio servidor</option>
+          <option value="DEPENDENT">Dependente autorizado</option>
+        </select>
+      </label>
+      <label>
+        <span>Dependente</span>
+        <input formControlName="dependentId" />
+      </label>
+    </div>
+    <button type="submit" [disabled]="saving">Validar</button>
+  </form>
+</section>

@@ -148,6 +148,22 @@
       "description": "Activate or deactivate employee abono permanencia records."
     },
     {
+      "key": "hr.bank_account.read",
+      "moduleKey": "hr",
+      "resourceKey": "bank_account",
+      "actionKey": "read",
+      "routePattern": "/api/v1/employees/*/bank-accounts",
+      "description": "Read validated employee bank accounts and change history."
+    },
+    {
+      "key": "hr.bank_account.write",
+      "moduleKey": "hr",
+      "resourceKey": "bank_account",
+      "actionKey": "write",
+      "routePattern": "/api/v1/employees/*/bank-accounts/**",
+      "description": "Create and revalidate employee bank accounts for payroll credit."
+    },
+    {
       "key": "rh.employment_link.write",
       "moduleKey": "rh",
       "resourceKey": "employment_link",
@@ -724,6 +740,8 @@
       "rh.employee.admit",
       "rh.employee.terminate",
       "rh.employee.abono.write",
+      "hr.bank_account.read",
+      "hr.bank_account.write",
       "rh.employment_link.write",
       "rh.history.read",
       "rh.dependent.read",
@@ -762,6 +780,7 @@
       "rh.read",
       "rh.employee.read",
       "rh.dependent.read",
+      "hr.bank_account.read",
       "avaliacao.pccs.read",
       "avaliacao.progressao.read",
       "avaliacao.progressao.simulate",

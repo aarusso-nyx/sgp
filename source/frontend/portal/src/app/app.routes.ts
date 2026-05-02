@@ -6,6 +6,7 @@ import { Ferias } from './pages/ferias/ferias';
 import { Licencas } from './pages/licencas/licencas';
 import { LicencasSaude } from './pages/licencas/saude/saude';
 import { MeusDados } from './pages/meus-dados/meus-dados';
+import { MeusDadosBancarios } from './pages/meus-dados/bancarios/bancarios';
 import { PortalFeaturePage } from './pages/portal-feature-page/portal-feature-page';
 import { PortalHome } from './pages/portal-home/portal-home';
 import { PortalShell } from './pages/portal-shell/portal-shell';
@@ -50,6 +51,10 @@ export const routes: Routes = [
       {
         path: 'contracheques/:section/:detail',
         component: Contracheque,
+      },
+      {
+        path: 'meus-dados/bancarios',
+        component: MeusDadosBancarios,
       },
       {
         path: 'meus-dados/:section',

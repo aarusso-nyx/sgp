@@ -12,6 +12,7 @@ import { RhHome } from './pages/rh-home/rh-home';
 import { RhLicencas } from './licencas/licencas';
 import { RhEmployeeTransfer } from './employee-transfer/employee-transfer';
 import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-employee-transfer';
+import { RhEmployeeBankAccounts } from './employees/bank-accounts/bank-accounts';
 
 @NgModule({
   imports: [
@@ -31,6 +32,10 @@ import { RhPortalEmployeeTransfer } from './portal-employee-transfer/portal-empl
       {
         path: 'funcionarios/:id/abono-permanencia',
         component: RhAbonoPermanencia,
+      },
+      {
+        path: 'funcionarios/:id/dados-bancarios',
+        component: RhEmployeeBankAccounts,
       },
       {
         path: 'funcionarios/vinculos',

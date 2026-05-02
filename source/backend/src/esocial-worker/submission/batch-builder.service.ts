@@ -188,13 +188,19 @@ export class BatchBuilderService {
         endpoint_url,
         event_ids::text[],
         attempts
-      FROM esocial.submission_batch
+      FROM esocial.submission_batch batch
       WHERE status IN (
           'PENDING'::esocial.submission_batch_status,
           'RETRY'::esocial.submission_batch_status,
           'TIMEOUT'::esocial.submission_batch_status
         )
         AND (next_attempt_at IS NULL OR next_attempt_at <= now())
+        AND cardinality(event_ids) = (
+          SELECT count(*)::int
+          FROM public.esocial_event event
+          WHERE event.tenant_id = batch.tenant_id
+            AND event.id = ANY(batch.event_ids)
+        )
       ORDER BY next_attempt_at NULLS FIRST, created_at ASC
       LIMIT 1
       FOR UPDATE SKIP LOCKED

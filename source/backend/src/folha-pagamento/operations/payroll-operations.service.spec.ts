@@ -23,6 +23,7 @@ describe('PayrollOperationsService', () => {
           total_net: '5800.00',
         },
       ])
+      .mockResolvedValueOnce([{ total: '1' }])
       .mockResolvedValueOnce([{ total: '0' }])
       .mockResolvedValueOnce([{ id: 'rem-1' }])
       .mockResolvedValueOnce([{ id: 'def-1' }])
@@ -45,7 +46,7 @@ describe('PayrollOperationsService', () => {
     });
 
     expect(query).toHaveBeenNthCalledWith(
-      3,
+      4,
       expect.stringContaining('INSERT INTO payroll.payment_remittance_file'),
       [
         'run-1',
@@ -59,7 +60,7 @@ describe('PayrollOperationsService', () => {
       ],
     );
     expect(query).toHaveBeenNthCalledWith(
-      5,
+      6,
       expect.stringContaining('INSERT INTO public.report_request'),
       ['def-1', 'branch-1', 'run-1', 'proc-1', 2026, 4, expect.any(String)],
     );
@@ -73,7 +74,8 @@ describe('PayrollOperationsService', () => {
       .mockResolvedValueOnce([{ total: '0' }])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([{ ...runRow, branch_id: null }])
-      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([{ total: '1' }])
+      .mockResolvedValueOnce([{ total: '0' }])
       .mockResolvedValueOnce([{ id: 'rem-2' }])
       .mockResolvedValueOnce([{ id: 'def-1' }])
       .mockResolvedValueOnce([
@@ -107,7 +109,7 @@ describe('PayrollOperationsService', () => {
         fileName: 'remessa_000001.txt',
       },
     });
-    const parameters = JSON.parse(query.mock.calls[7][1][6] as string);
+    const parameters = JSON.parse(query.mock.calls[8][1][6] as string);
     expect(parameters).toMatchObject({
       format: 'CNAB240',
       launchType: 'ACCOUNT_CREDIT',

@@ -15,6 +15,9 @@ import {
   PayrollOperationsController,
 } from './operations/payroll-operations.controller';
 import { PayrollOperationsService } from './operations/payroll-operations.service';
+import { BankAccountController } from './operations/bank-account/bank-account.controller';
+import { BankAccountService } from './operations/bank-account/bank-account.service';
+import { BankAccountValidatorService } from './operations/bank-account/bank-account-validator.service';
 import { PayrollController } from './payroll/payroll.controller';
 import { DecimoTerceiroService } from './payroll/decimo-terceiro.service';
 import { FeriasPayrollService } from './payroll/ferias-payroll.service';
@@ -36,6 +39,7 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
     ESocialController,
     PayrollOperationsController,
     PayrollGfipController,
+    BankAccountController,
     SimulacaoController,
   ],
   providers: [
@@ -48,6 +52,8 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
     PayrollAccountingService,
     RubricaService,
     PayrollOperationsService,
+    BankAccountService,
+    BankAccountValidatorService,
     ESocialService,
     PayrollEngineService,
     FormulaCompilerService,

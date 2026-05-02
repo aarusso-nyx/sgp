@@ -146,6 +146,7 @@ export class PayrollOperationsService {
   ): Promise<OperationRequestSummary> {
     this.ensureDatabase();
     const run = await this.getPayrollRun(payrollRunId);
+    await this.ensureValidBankAccountsForRemittance();
     const nextNumber = await this.getNextRemittanceNumber(run);
     const fileName = `remessa_${String(nextNumber).padStart(6, '0')}.txt`;
     const paymentDate =
@@ -417,6 +418,21 @@ export class PayrollOperationsService {
       throw new NotFoundException('Payroll run not found');
     }
     return rows[0];
+  }
+
+  private async ensureValidBankAccountsForRemittance(): Promise<void> {
+    const rows = await this.databaseService.query<CountRow>(
+      `
+      SELECT count(*)::text AS total
+      FROM hr.employee_bank_account
+      WHERE validation_status = 'VALID'::hr.employee_bank_account_validation_status
+      `,
+    );
+    if (Number(rows[0]?.total ?? 0) === 0) {
+      throw new NotFoundException(
+        'No valid employee bank account is eligible for CNAB remittance',
+      );
+    }
   }
 
   private async getRemittance(
