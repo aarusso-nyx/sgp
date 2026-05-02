@@ -1,0 +1,80 @@
+.fgts-remittances {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+mat-form-field {
+  width: 180px;
+}
+
+.wide {
+  width: min(460px, 100%);
+}
+
+.error {
+  color: #b42318;
+  margin: 0;
+}
+
+.remittance {
+  display: grid;
+  gap: 16px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.summary div {
+  border: 1px solid #d7dde5;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.summary span,
+dt {
+  color: #425466;
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.summary strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+dl {
+  display: grid;
+  gap: 8px 16px;
+  grid-template-columns: 120px minmax(0, 1fr);
+  margin: 0;
+}
+
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.86rem;
+}

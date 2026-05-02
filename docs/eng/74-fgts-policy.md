@@ -19,7 +19,7 @@ O SGP calcula FGTS somente para vinculos celetistas (`contract_type` CLT/celetis
 
 ## Integracao
 
-Os movimentos alimentam bases para S-1200/S-2299/S-5013 e para relatorios operacionais. A geracao de arquivos de recolhimento mensal ou GRRF permanece fora deste slice e pertence as trilhas eSocial/obrigacoes acessorias.
+Os movimentos alimentam bases para S-1200/S-2299/S-5013 e para relatorios operacionais. A geracao dos instrumentos de recolhimento fica em `folha-pagamento/operations/sifge`: a GRF mensal consolida movimentos `DEPOSIT_8`/`DEPOSIT_AVISO` da competencia, a GRRF rescisoria consome o movimento `RESCISION_FINE_40` ja apurado por CLT-01/CALC-12, e o adapter Caixa produz a estrutura SIFGE 4.0 com DAE e assinatura quando exigida pelo layout.
 
 ## Controles
 

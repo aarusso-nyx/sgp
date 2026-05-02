@@ -1,0 +1,95 @@
+<section class="fgts-remittances">
+  <header>
+    <h1>Remessas FGTS Caixa</h1>
+  </header>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Competencia</mat-label>
+      <input matInput type="month" formControlName="competence" />
+    </mat-form-field>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="generateMonthly()"
+      [disabled]="loading"
+    >
+      <mat-icon>request_quote</mat-icon>
+      Gerar GRF
+    </button>
+  </form>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Vinculo</mat-label>
+      <input matInput formControlName="employmentLinkId" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Folha rescisoria</mat-label>
+      <input matInput formControlName="terminationId" />
+    </mat-form-field>
+    <button mat-stroked-button type="button" (click)="generateTermination()" [disabled]="loading">
+      <mat-icon>account_balance</mat-icon>
+      Gerar GRRF
+    </button>
+  </form>
+
+  <form [formGroup]="form" class="toolbar">
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label>Remessa</mat-label>
+      <input matInput formControlName="remittanceId" />
+    </mat-form-field>
+    <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
+      <mat-icon>search</mat-icon>
+      Buscar
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section *ngIf="remittance" class="remittance">
+    <div class="summary">
+      <div>
+        <span>Status</span>
+        <strong>{{ remittance.status }}</strong>
+      </div>
+      <div>
+        <span>Tipo</span>
+        <strong>{{ remittance.kind }}</strong>
+      </div>
+      <div>
+        <span>Competencia</span>
+        <strong>{{ remittance.competence }}</strong>
+      </div>
+      <div>
+        <span>Total</span>
+        <strong>{{ remittance.totalAmount | moneyBr }}</strong>
+      </div>
+    </div>
+
+    <dl>
+      <dt>DAE</dt>
+      <dd class="mono">{{ remittance.daeBarcode || '-' }}</dd>
+      <dt>Arquivo</dt>
+      <dd class="mono">{{ remittance.fileUri || '-' }}</dd>
+      <dt>Layout</dt>
+      <dd>{{ remittance.layoutVersion }}</dd>
+      <dt>Assinatura</dt>
+      <dd>{{ remittance.signed ? 'Aplicada' : 'Nao exigida' }}</dd>
+      <dt>Hash</dt>
+      <dd class="mono">{{ remittance.fileHash || '-' }}</dd>
+    </dl>
+
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="download()"
+      [disabled]="!remittance.fileContentBase64"
+    >
+      <mat-icon>download</mat-icon>
+      SIFGE
+    </button>
+  </section>
+</section>
