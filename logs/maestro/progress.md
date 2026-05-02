@@ -48,3 +48,5 @@ W13 ✗ 26-calc-09 (high → xhigh retry failed: lint unused recalculated after 
 W13 ✓ 26-calc-09 (1 slice, high→xhigh + manual recovery, gates passed, commit 0b9430a) — completeness 26.2% → 26.2%
 W13 ✗ 27-calc-10 (medium → high retry failed: e2e simulation/audit/IRRF drift) — recovered manually
 W13 ✓ 27-calc-10 (1 slice, medium→high + manual recovery, gates passed, commit 0f60749) — completeness 26.2% → 26.2%
+W13 ✗ 28-calc-11 (xhigh blocking failure: typecheck TS2345 in frontend folha-mensal.service.ts) — see logs/maestro/28-calc-11-folha-mensal-completa.failure.md
+W13 ✓ 28-calc-11 (1 slice, xhigh + manual recovery, gates passed, commit d62bfb7) — completeness 26.2% → 26.2%

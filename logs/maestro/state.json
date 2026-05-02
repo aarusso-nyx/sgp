@@ -336,6 +336,20 @@
       "previous_failure": "logs/maestro/27-calc-10-simulacao-dry-run.failure.md",
       "failure_log": "logs/maestro/27-calc-10-simulacao-dry-run.failure.md",
       "recovery": "manual simulation override migration repair, IRRF compatibility restore, audit coverage, and tenant-scoped dry-run persistence guard after high retry failure"
+    },
+    "28-calc-11-folha-mensal-completa": {
+      "status": "completed",
+      "effort": "xhigh",
+      "branch": "slice/28-calc-11-folha-mensal-completa",
+      "commit": "d62bfb71ada4e887ea9ddf21e40a3fd84667811a",
+      "started_at": "2026-05-01T20:24:28-03:00",
+      "failed_at": "2026-05-01T20:56:06-03:00",
+      "completed_at": "2026-05-01T21:12:53-03:00",
+      "retries": 0,
+      "agent": "019de5db-dc70-7610-b445-4147ab2077e4",
+      "failure_log": "logs/maestro/28-calc-11-folha-mensal-completa.failure.md",
+      "failure_gate": "npm run typecheck",
+      "recovery": "manual frontend query typing, Vitest spec alignment, monthly formula recompilation, and controller audit coverage after blocking xhigh failure"
     }
   },
   "current_wave": 13,
