@@ -1,0 +1,44 @@
+<section class="portal-consignments">
+  <header>
+    <h1>Consignados</h1>
+  </header>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <section class="margin-grid" *ngIf="margin">
+    <article>
+      <span>Base liquida</span>
+      <strong>{{ margin.netBase }}</strong>
+    </article>
+    <article>
+      <span>Disponivel geral</span>
+      <strong>{{ margin.availableGeneral }}</strong>
+    </article>
+    <article>
+      <span>Disponivel cartao</span>
+      <strong>{{ margin.availableCard }}</strong>
+    </article>
+  </section>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Contrato</th>
+        <th>Consignante</th>
+        <th>Parcela</th>
+        <th>Restantes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let loan of loans">
+        <td>{{ loan.contractNumber }}</td>
+        <td>{{ loan.consignmentEntityName }}</td>
+        <td>{{ loan.monthlyAmount }}</td>
+        <td>{{ loan.remainingInstallments }}</td>
+      </tr>
+      <tr *ngIf="loans.length === 0">
+        <td colspan="4" class="empty">Nenhum contrato ativo.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

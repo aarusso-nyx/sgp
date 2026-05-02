@@ -18,6 +18,10 @@ import { PayrollOperationsService } from './operations/payroll-operations.servic
 import { BankAccountController } from './operations/bank-account/bank-account.controller';
 import { BankAccountService } from './operations/bank-account/bank-account.service';
 import { BankAccountValidatorService } from './operations/bank-account/bank-account-validator.service';
+import { ConsignmentController } from './operations/consignment/consignment.controller';
+import { ConsignmentDeductionService } from './operations/consignment/consignment-deduction.service';
+import { ConsignmentLoanService } from './operations/consignment/consignment-loan.service';
+import { MarginCalculatorService } from './operations/consignment/margin-calculator.service';
 import { PayrollController } from './payroll/payroll.controller';
 import { DecimoTerceiroService } from './payroll/decimo-terceiro.service';
 import { FeriasPayrollService } from './payroll/ferias-payroll.service';
@@ -40,6 +44,7 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
     PayrollOperationsController,
     PayrollGfipController,
     BankAccountController,
+    ConsignmentController,
     SimulacaoController,
   ],
   providers: [
@@ -54,6 +59,9 @@ import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
     PayrollOperationsService,
     BankAccountService,
     BankAccountValidatorService,
+    MarginCalculatorService,
+    ConsignmentLoanService,
+    ConsignmentDeductionService,
     ESocialService,
     PayrollEngineService,
     FormulaCompilerService,

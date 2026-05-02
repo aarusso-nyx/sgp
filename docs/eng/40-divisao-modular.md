@@ -53,6 +53,7 @@ Os bounded contexts identificados são:
 | Arquivos                    | `ARQUIVOS`              | `arquivos`                               |
 | Parâmetros e Feature Flags  | `PARAMETROS`            | `parametros`                             |
 | Integrações Externas        | `INTEGRACOES`           | `integracoes`                            |
+| Portal Publico              | `PUBLICO`               | `publico/transparency`                   |
 
 ### 1.2 Módulos NestJS por Contexto
 
@@ -525,7 +526,7 @@ stateDiagram-v2
 
 **Entidades (no sgp-core-api):** `competencia`, `folha_pagamento`, `tipo_processamento`, `lote_processamento`, `lancamento` (lançamentos manuais pré-cálculo), `consignado`, `importacao_consignado`, `importacao_lancamento_manual`, `relatorio_financeiro`.
 
-**Serviços:** `CompetenciaService`, `FolhaPagamentoService`, `LancamentoService`, `ConsignadoService`, `ImportacaoService`, `CalculoOrquestradorService` (dispara para payroll-engine), `ContrachequeViewService`, `RelatorioFinanceiroService`, `folha-pagamento/operations/bank-account` para validação BANK-03 de dados bancários antes da elegibilidade CNAB.
+**Serviços:** `CompetenciaService`, `FolhaPagamentoService`, `LancamentoService`, `ConsignadoService`, `ImportacaoService`, `CalculoOrquestradorService` (dispara para payroll-engine), `ContrachequeViewService`, `RelatorioFinanceiroService`, `folha-pagamento/operations/bank-account` para validação BANK-03 de dados bancários antes da elegibilidade CNAB, e `folha-pagamento/operations/consignment` para CONS-01: cadastro de consignantes, averbações, cálculo de margem geral/cartão e emissão de descontos consignados na cadeia CALC-11.
 
 **Controladores:**
 
@@ -540,6 +541,9 @@ stateDiagram-v2
 - `GET /api/v1/folha/contracheques/:id` — contracheque individual
 - `GET /api/v1/folha/contracheques/:id/pdf` — PDF do contracheque
 - `POST /api/v1/folha/importacoes/consignados` — importar arquivo consignado
+- `GET /api/v1/employees/:id/consignment-margin?competence=YYYY-MM` — consultar margem consignável geral/cartão
+- `GET /api/v1/employees/:id/consignment-loans` — listar averbações de consignado do servidor
+- `POST /api/v1/employees/:id/consignment-loans` — averbar contrato respeitando margem disponível
 - `POST /api/v1/folha/importacoes/verbas` — importar verbas servidor/pensionista
 - `GET /api/v1/folha/relatorios-financeiros` — listar relatórios financeiros
 - `GET /api/v1/folha/verbas` — catálogo de verbas/rubricas
@@ -659,8 +663,13 @@ stateDiagram-v2
 - `GET /api/v1/report-service/status` — status operacional do adaptador de fila
 - `POST /api/v1/report-service/requests` — enfileirar solicitação runtime de relatório
 - `POST /api/v1/report-service/poll` — executar ciclo pontual de processamento em ambiente controlado
+- `POST /api/v1/admin/payslip-batches` — gera lote de contracheques oficiais PDF/A-1b por competência e folha
+- `GET /api/v1/portal/payslips` — lista contracheques oficiais do servidor autenticado
+- `GET /api/v1/portal/payslips/:id/pdf` — baixa o PDF oficial do próprio servidor autenticado
 
 **Eventos publicados:** `report.gerar.<tipo>` (para `sgp-report-service`).
+
+`report-service/payslip` substitui a geração textual de contracheque por PDF binário gerado com `pdf-lib`. O serviço lê `payroll.payroll_run`, `payroll.payroll_financial_record` e `payroll.v_payroll_run_line_active`, grava metadados em `public.generated_report_file` com `report_kind = PAYSLIP`, `pdf_a_compliance = PDF_A_1B`, `retention_until` e `file_hash` SHA-256, e controla geração administrativa em `public.payslip_batch`. O portal aplica filtro de controller e RLS por `employee_id = sgp_current_employee_id()`.
 
 **Eventos consumidos:** `report.gerado` (atualiza status da solicitação).
 

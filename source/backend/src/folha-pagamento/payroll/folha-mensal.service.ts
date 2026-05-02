@@ -2,12 +2,14 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { ConsignmentDeductionService } from '../operations/consignment/consignment-deduction.service';
 import { FolhaMensalCompetenceDto } from './payroll.dto';
 
 type CompetenceStatus =
@@ -29,6 +31,7 @@ interface CatalogRow extends QueryResultRow {
   payroll_type_id: string;
   processing_type_id: string;
   base_earning_id: string;
+  consignment_deduction_id: string;
 }
 
 interface CompetenceRow extends QueryResultRow {
@@ -94,7 +97,11 @@ export interface FolhaMensalResult {
 
 @Injectable()
 export class FolhaMensalService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @Optional()
+    private readonly consignmentDeductionService?: ConsignmentDeductionService,
+  ) {}
 
   async openCompetence(
     input: FolhaMensalCompetenceDto,
@@ -149,6 +156,12 @@ export class FolhaMensalService {
         client,
         context.run.id,
         context.catalog.base_earning_id,
+        input,
+      );
+      await this.insertConsignmentDeductions(
+        client,
+        context.run.id,
+        context.catalog.consignment_deduction_id,
         input,
       );
       await this.refreshFinancialRecords(client, context.run.id, input);
@@ -392,6 +405,90 @@ export class FolhaMensalService {
         WHERE tenant_id = public.sgp_current_tenant_uuid()
           AND code = 'MONTHLY_BASE_SALARY'
         LIMIT 1
+      ),
+      consignment_deduction_upsert AS (
+        INSERT INTO payroll.payroll_earning_deduction (
+          tenant_id,
+          code,
+          description,
+          kind,
+          taxable,
+          active,
+          incidences,
+          starts_on,
+          subject_to_ceiling,
+          formula_alias,
+          formula_function_name,
+          formula_expression,
+          formula_function_ddl,
+          formula_dependencies,
+          formula_ready
+        )
+        VALUES (
+          public.sgp_current_tenant_uuid(),
+          'CONSIGNMENT_LOAN_DEDUCTION',
+          'Consignment loan deduction',
+          'DEDUCTION'::"PayrollEntryKind",
+          false,
+          true,
+          '{"monthly_payroll":true,"consignment":true,"deduction_order":"after_pension_and_legal"}'::jsonb,
+          DATE '2025-01-01',
+          false,
+          'consignment_loan_deduction',
+          'f_consignment_loan_deduction',
+          '0',
+          'CREATE OR REPLACE FUNCTION payroll_calc.f_consignment_loan_deduction(uuid, integer, integer) RETURNS numeric LANGUAGE sql STABLE SECURITY DEFINER SET search_path = payroll_calc, hr, payroll, public, pg_catalog AS $function$ SELECT 0::numeric(14,2); $function$;',
+          ARRAY['REFERENCE_VALUE'],
+          true
+        )
+        ON CONFLICT (tenant_id, code) DO UPDATE
+        SET description = EXCLUDED.description,
+            kind = EXCLUDED.kind,
+            taxable = EXCLUDED.taxable,
+            active = true,
+            incidences = EXCLUDED.incidences,
+            starts_on = EXCLUDED.starts_on,
+            subject_to_ceiling = EXCLUDED.subject_to_ceiling,
+            formula_alias = EXCLUDED.formula_alias,
+            formula_function_name = EXCLUDED.formula_function_name,
+            formula_expression = EXCLUDED.formula_expression,
+            formula_function_ddl = EXCLUDED.formula_function_ddl,
+            formula_dependencies = EXCLUDED.formula_dependencies,
+            formula_ready = true,
+            formula_error = NULL,
+            updated_at = now()
+        RETURNING id
+      ),
+      consignment_deduction_row AS (
+        SELECT id FROM consignment_deduction_upsert
+        UNION ALL
+        SELECT id FROM payroll.payroll_earning_deduction
+        WHERE tenant_id = public.sgp_current_tenant_uuid()
+          AND code = 'CONSIGNMENT_LOAN_DEDUCTION'
+        LIMIT 1
+      ),
+      consignment_type_earning AS (
+        INSERT INTO payroll.payroll_type_earning (
+          tenant_id,
+          payroll_type_id,
+          earning_deduction_id,
+          default_quantity,
+          starts_on,
+          status
+        )
+        SELECT
+          public.sgp_current_tenant_uuid(),
+          (SELECT id FROM payroll_type_row),
+          (SELECT id FROM consignment_deduction_row),
+          1,
+          DATE '2025-01-01',
+          'ACTIVE'::"RecordStatus"
+        ON CONFLICT (tenant_id, payroll_type_id, earning_deduction_id) DO UPDATE
+        SET default_quantity = EXCLUDED.default_quantity,
+            starts_on = EXCLUDED.starts_on,
+            status = EXCLUDED.status,
+            updated_at = now()
+        RETURNING id
       )
       INSERT INTO payroll.payroll_type_earning (
         tenant_id,
@@ -416,7 +513,8 @@ export class FolhaMensalService {
       RETURNING
         (SELECT id::text FROM payroll_type_row) AS payroll_type_id,
         (SELECT id::text FROM processing_type_row) AS processing_type_id,
-        (SELECT id::text FROM earning_row) AS base_earning_id
+        (SELECT id::text FROM earning_row) AS base_earning_id,
+        (SELECT id::text FROM consignment_deduction_row) AS consignment_deduction_id
       `,
     );
     const row = rows.rows[0];
@@ -715,6 +813,21 @@ export class FolhaMensalService {
       [payrollRunId, earningDeductionId, input.year, input.month],
     );
     return Number(rows.rows[0]?.inserted_count ?? '0');
+  }
+
+  private async insertConsignmentDeductions(
+    client: PoolClient,
+    payrollRunId: string,
+    earningDeductionId: string,
+    input: FolhaMensalCompetenceDto,
+  ): Promise<number> {
+    if (!this.consignmentDeductionService) return 0;
+    return this.consignmentDeductionService.insertActiveLoanDeductions(client, {
+      payrollRunId,
+      earningDeductionId,
+      competenceYear: input.year,
+      competenceMonth: input.month,
+    });
   }
 
   private async refreshFinancialRecords(

@@ -1,0 +1,44 @@
+.portal-consignments {
+  display: grid;
+  gap: 16px;
+}
+
+.margin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.margin-grid article {
+  border: 1px solid #d7dde6;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.margin-grid span {
+  color: #5b6472;
+  display: block;
+  font-size: 0.85rem;
+}
+
+.margin-grid strong {
+  display: block;
+  margin-top: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e1e6ee;
+  padding: 10px;
+  text-align: left;
+}
+
+.empty,
+.error {
+  color: #9a3412;
+}

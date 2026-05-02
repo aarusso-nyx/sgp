@@ -1,0 +1,60 @@
+.consignments-page {
+  display: grid;
+  gap: 16px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.wide {
+  min-width: min(420px, 100%);
+}
+
+.margin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.margin-grid article {
+  border: 1px solid #d7dde6;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.margin-grid span {
+  display: block;
+  color: #5b6472;
+  font-size: 0.85rem;
+}
+
+.margin-grid strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.15rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e1e6ee;
+  padding: 10px;
+  text-align: left;
+}
+
+.empty,
+.error {
+  color: #9a3412;
+}
