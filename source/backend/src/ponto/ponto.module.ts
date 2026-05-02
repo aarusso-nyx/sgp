@@ -44,6 +44,12 @@ import { PontoBiometriaController } from './biometria/biometria.controller';
 import { PontoBiometricMatcherService } from './biometria/biometric-matcher.service';
 import { PontoBiometricConsentService } from './biometria/consent.service';
 import { TemplateEnrollmentService } from './biometria/template-enrollment.service';
+import { FaceConsentService } from './face/consent.service';
+import { FaceController } from './face/face.controller';
+import { FaceEnrollmentService } from './face/face-enrollment.service';
+import { FaceMatcherService } from './face/face-matcher.service';
+import { FaceLivenessService } from './face/liveness.service';
+import { FaceThresholdAdminService } from './face/threshold-admin.service';
 import { GeofenceValidatorService } from './mobile/geofence-validator.service';
 import { MobileClockController } from './mobile/mobile-clock.controller';
 import { MobileClockService } from './mobile/mobile-clock.service';
@@ -66,6 +72,7 @@ import { MobileClockPlausibilityService } from './mobile/plausibility.service';
     JustificationController,
     PayrollBridgeController,
     PontoBiometriaController,
+    FaceController,
     MobileClockController,
   ],
   providers: [
@@ -97,6 +104,11 @@ import { MobileClockPlausibilityService } from './mobile/plausibility.service';
     PontoBiometricConsentService,
     TemplateEnrollmentService,
     PontoBiometricMatcherService,
+    FaceConsentService,
+    FaceEnrollmentService,
+    FaceMatcherService,
+    FaceLivenessService,
+    FaceThresholdAdminService,
     GeofenceValidatorService,
     MobileClockPlausibilityService,
     MockLocationDetector,
@@ -127,6 +139,11 @@ import { MobileClockPlausibilityService } from './mobile/plausibility.service';
     PontoBiometricConsentService,
     TemplateEnrollmentService,
     PontoBiometricMatcherService,
+    FaceConsentService,
+    FaceEnrollmentService,
+    FaceMatcherService,
+    FaceLivenessService,
+    FaceThresholdAdminService,
     GeofenceValidatorService,
     MobileClockPlausibilityService,
     MockLocationDetector,

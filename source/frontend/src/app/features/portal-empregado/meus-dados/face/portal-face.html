@@ -1,0 +1,28 @@
+<section class="portal-face">
+  <header>
+    <h1>Reconhecimento facial</h1>
+  </header>
+
+  <form [formGroup]="form">
+    <label>
+      Servidor
+      <input formControlName="employeeId" placeholder="UUID do empregado" />
+    </label>
+    <button type="button" (click)="load()">Consultar</button>
+    <button type="button" (click)="revoke()" [disabled]="saving">Solicitar exclusao</button>
+  </form>
+
+  <dl *ngIf="status">
+    <dt>Status</dt>
+    <dd>{{ status['status'] || 'SEM TEMPLATE' }}</dd>
+    <dt>Captura</dt>
+    <dd>{{ status['capturedAt'] || '-' }}</dd>
+    <dt>Modelo</dt>
+    <dd>{{ status['modelId'] || '-' }}</dd>
+    <dt>Versao</dt>
+    <dd>{{ status['modelVersion'] || '-' }}</dd>
+  </dl>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+</section>

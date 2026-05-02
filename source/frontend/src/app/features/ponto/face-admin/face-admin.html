@@ -1,0 +1,66 @@
+<section class="face-admin">
+  <header>
+    <h1>Reconhecimento facial</h1>
+    <button type="button" (click)="loadTemplates()" [disabled]="loading">Atualizar</button>
+  </header>
+
+  <form [formGroup]="thresholdForm" (ngSubmit)="saveThreshold()" class="threshold">
+    <label>
+      Threshold
+      <input formControlName="threshold" type="number" min="0" max="1" step="0.01" />
+    </label>
+    <label class="check">
+      <input formControlName="livenessRequired" type="checkbox" />
+      Liveness obrigatorio
+    </label>
+    <button type="submit" [disabled]="saving">Salvar threshold</button>
+  </form>
+
+  <form [formGroup]="enrollForm" (ngSubmit)="enroll()">
+    <label>
+      Servidor
+      <input formControlName="employeeId" placeholder="UUID do empregado" />
+    </label>
+    <label>
+      Frame rosto aberto
+      <textarea formControlName="frameOpenBase64" rows="4"></textarea>
+    </label>
+    <label>
+      Frame piscando
+      <textarea formControlName="frameBlinkBase64" rows="4"></textarea>
+    </label>
+    <label>
+      KMS key
+      <input formControlName="templateKmsKeyId" />
+    </label>
+    <label>
+      Termo LGPD art. 11
+      <input formControlName="consentVersion" />
+    </label>
+    <button type="submit" [disabled]="saving">Cadastrar face</button>
+  </form>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Servidor</th>
+        <th>Modelo</th>
+        <th>Versao</th>
+        <th>Status</th>
+        <th>Captura</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let template of templates">
+        <td>{{ template.employeeId }}</td>
+        <td>{{ template.modelId }}</td>
+        <td>{{ template.modelVersion }}</td>
+        <td>{{ template.status }}</td>
+        <td>{{ template.capturedAt | date: 'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

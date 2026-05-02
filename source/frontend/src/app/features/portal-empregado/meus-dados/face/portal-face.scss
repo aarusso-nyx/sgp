@@ -1,0 +1,41 @@
+.portal-face {
+  display: grid;
+  gap: 16px;
+
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: end;
+  }
+
+  label {
+    display: grid;
+    gap: 4px;
+    min-width: 240px;
+  }
+
+  input {
+    border: 1px solid #c8ced8;
+    border-radius: 4px;
+    padding: 8px;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 8px 16px;
+  }
+
+  dt {
+    font-weight: 600;
+  }
+
+  .message {
+    color: #1f7a3f;
+  }
+
+  .error {
+    color: #9a1f1f;
+  }
+}

@@ -1,0 +1,51 @@
+.face-admin {
+  display: grid;
+  gap: 16px;
+
+  header,
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: end;
+  }
+
+  label {
+    display: grid;
+    gap: 4px;
+    min-width: 220px;
+  }
+
+  textarea,
+  input {
+    border: 1px solid #c8ced8;
+    border-radius: 4px;
+    padding: 8px;
+  }
+
+  .check {
+    align-items: center;
+    display: flex;
+    min-width: 180px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid #e1e5ec;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .message {
+    color: #1f7a3f;
+  }
+
+  .error {
+    color: #9a1f1f;
+  }
+}
