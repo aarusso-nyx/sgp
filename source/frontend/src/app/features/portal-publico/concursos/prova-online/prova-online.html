@@ -1,0 +1,47 @@
+<section class="online-exam" [class.recording]="recording">
+  <header class="exam-header">
+    <div>
+      <h1>Prova online</h1>
+      <span>{{ state | uppercase }}</span>
+    </div>
+    <strong>{{ remainingLabel }}</strong>
+  </header>
+
+  <section class="media-grid">
+    <video #cameraPreview muted playsinline></video>
+    <video #screenPreview muted playsinline></video>
+  </section>
+
+  <section class="exam-controls" *ngIf="state === 'setup' || state === 'blocked'">
+    <label class="consent">
+      <input type="checkbox" [(ngModel)]="consentAccepted" />
+      Consentimento para gravacao de audio, video e tela
+    </label>
+    <button type="button" (click)="requestMedia()">Liberar camera, microfone e tela</button>
+    <strong *ngIf="blockReason">{{ blockReason }}</strong>
+  </section>
+
+  <section class="exam-controls" *ngIf="state === 'ready'">
+    <button type="button" (click)="start()">Iniciar prova</button>
+  </section>
+
+  <section class="question-surface" *ngIf="state === 'running'">
+    <div class="recording-indicator">REC</div>
+    <article>
+      <h2>Questao 1</h2>
+      <p>Selecione a alternativa correta para concluir a avaliacao.</p>
+      <label><input type="radio" name="q1" /> Alternativa A</label>
+      <label><input type="radio" name="q1" /> Alternativa B</label>
+      <label><input type="radio" name="q1" /> Alternativa C</label>
+    </article>
+    <footer>
+      <span>Snapshot {{ lastSnapshotAt || '-' }}</span>
+      <button type="button" (click)="submit()">Finalizar</button>
+    </footer>
+  </section>
+
+  <section class="submitted" *ngIf="state === 'submitted'">
+    <h2>Prova submetida</h2>
+    <p>Protocolo {{ sessionId }}</p>
+  </section>
+</section>

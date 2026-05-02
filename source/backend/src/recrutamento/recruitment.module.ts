@@ -11,6 +11,7 @@ import { ConcursoModule } from './concurso/concurso.module';
 import { InscricaoModule } from './inscricao/inscricao.module';
 import { NomeacaoModule } from './nomeacao/nomeacao.module';
 import { PosseModule } from './posse/posse.module';
+import { ProvaOnlineModule } from './prova-online/prova-online.module';
 import { RecrutamentoAvaliacaoModule } from './avaliacao/avaliacao.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { RecrutamentoAvaliacaoModule } from './avaliacao/avaliacao.module';
     ConcursoModule,
     InscricaoModule,
     RecrutamentoAvaliacaoModule,
+    ProvaOnlineModule,
     ClassificacaoModule,
     NomeacaoModule,
     PosseModule,

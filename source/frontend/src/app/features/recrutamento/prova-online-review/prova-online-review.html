@@ -1,0 +1,44 @@
+<section class="review-workspace">
+  <header>
+    <div>
+      <h1>Revisao de prova online</h1>
+      <span>{{ selectedSessionId }}</span>
+    </div>
+    <strong [class.reject]="decision === 'REJECT'" [class.accept]="decision === 'ACCEPT'">
+      {{ decision }}
+    </strong>
+  </header>
+
+  <main>
+    <section class="timeline">
+      <article *ngFor="let event of events" [class.severe]="event.severity === 'SEVERE'">
+        <time>{{ event.at }}</time>
+        <h2>{{ event.kind }}</h2>
+        <p>{{ event.evidenceRef }}</p>
+        <span>{{ event.severity }} / {{ event.decision }}</span>
+      </article>
+    </section>
+
+    <aside>
+      <div class="player">
+        <span>SNAPSHOT</span>
+      </div>
+      <audio controls></audio>
+      <label>
+        Motivo
+        <textarea name="voidReason" [(ngModel)]="voidReason"></textarea>
+      </label>
+      <div class="actions">
+        <button type="button" (click)="accept()">Aceitar</button>
+        <button
+          type="button"
+          class="danger"
+          (click)="voidSession()"
+          [disabled]="!voidReason.trim()"
+        >
+          Anular e reagendar
+        </button>
+      </div>
+    </aside>
+  </main>
+</section>
