@@ -1,0 +1,4 @@
+interface:
+  display_name: "SGP Fix Build"
+  short_description: "Iterate SGP build failures to green"
+  default_prompt: "Use $sgp-fix-build to run SGP builds and fix failures until clean."

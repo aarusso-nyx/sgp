@@ -1,0 +1,4 @@
+interface:
+  display_name: "SGP Round Audit"
+  short_description: "Audit SGP repo into round artifacts"
+  default_prompt: "Use $sgp-round-audit to inspect the current SGP repo and produce the next round audit pack."

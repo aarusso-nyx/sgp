@@ -1,0 +1,4 @@
+interface:
+  display_name: "SGP Round Backlog"
+  short_description: "Turn SGP audits into wave prompts"
+  default_prompt: "Use $sgp-round-backlog to convert the latest SGP audit pack into wave-grouped prompts."

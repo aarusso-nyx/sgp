@@ -1,0 +1,4 @@
+interface:
+  display_name: "SGP Round Orchestrator"
+  short_description: "Run SGP wave prompts with gates"
+  default_prompt: "Use $sgp-round-orchestrator to run an SGP orchestration prompt wave by wave."
