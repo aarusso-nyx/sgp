@@ -196,7 +196,7 @@ export class ReintegrationOrderService {
           terminationEvent.receipt,
         ],
       );
-      return this.toSummary(rows.rows[0]);
+      return this.toSummary(rows.rows[0]!);
     });
   }
 
@@ -322,7 +322,7 @@ export class ReintegrationOrderService {
         },
       );
       return {
-        ...this.toSummary(updated.rows[0]),
+        ...this.toSummary(updated.rows[0]!),
         employeeId: link.employee_id,
         reprocessedCompetencies: retro.competencies,
         totalPayable: retro.totalPayable,
@@ -615,11 +615,11 @@ export class ReintegrationOrderService {
           updated_at = now()
       RETURNING id::text
       `,
-      [tenantId, payrollType.rows[0].id, link.employment_link_id],
+      [tenantId, payrollType.rows[0]!.id, link.employment_link_id],
     );
     return {
-      payroll_type_id: payrollType.rows[0].id,
-      processing_type_id: processingType.rows[0].id,
+      payroll_type_id: payrollType.rows[0]!.id,
+      processing_type_id: processingType.rows[0]!.id,
     };
   }
 
@@ -700,7 +700,7 @@ export class ReintegrationOrderService {
         payrollTypes.processing_type_id,
       ],
     );
-    return inserted.rows[0].id;
+    return inserted.rows[0]!.id;
   }
 
   private async refreshRunTotals(
@@ -727,7 +727,7 @@ export class ReintegrationOrderService {
       `,
       [runId],
     );
-    const total = totals.rows[0];
+    const total = totals.rows[0]!;
     await client.query(
       `
       UPDATE payroll.payroll_run
@@ -752,6 +752,10 @@ export class ReintegrationOrderService {
     );
     const [yearText, monthText] = competence.split('-');
     await client.query(
+      'SELECT payroll.sgp_create_payroll_financial_record_partition(make_date($1::integer, $2::integer, 1))',
+      [Number(yearText), Number(monthText)],
+    );
+    await client.query(
       `
       INSERT INTO payroll.payroll_financial_record (
         tenant_id,
@@ -762,6 +766,7 @@ export class ReintegrationOrderService {
         functional_status_id,
         competence_year,
         competence_month,
+        competence,
         total_earnings,
         total_deductions,
         net_amount,
@@ -776,12 +781,13 @@ export class ReintegrationOrderService {
         NULLIF($6, '')::uuid,
         $7,
         $8,
+        make_date($7::integer, $8::integer, 1),
         $9::numeric(16,2),
         $10::numeric(16,2),
         $11::numeric(16,2),
         $12::jsonb
       )
-      ON CONFLICT (employee_id, competence_year, competence_month, payroll_run_id)
+      ON CONFLICT (employee_id, competence_year, competence_month, payroll_run_id, competence)
       DO UPDATE
       SET total_earnings = EXCLUDED.total_earnings,
           total_deductions = EXCLUDED.total_deductions,
@@ -910,7 +916,7 @@ function competenceRange(
 }
 
 function cents(value: string): bigint {
-  const [whole, fraction = ''] = value.split('.');
+  const [whole = '', fraction = ''] = value.split('.');
   const sign = whole.startsWith('-') ? -1n : 1n;
   const normalizedWhole = whole.replace('-', '') || '0';
   const normalizedFraction = fraction.padEnd(2, '0').slice(0, 2);

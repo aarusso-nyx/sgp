@@ -95,21 +95,22 @@ export class RosterProjectorService {
 
     const assignments = [...byAssignment.values()].sort(
       (left, right) =>
-        this.epochDay(right[0].valid_from) - this.epochDay(left[0].valid_from),
+        this.epochDay(right[0]!.valid_from) -
+        this.epochDay(left[0]!.valid_from),
     );
 
     const output: RosterProjectionEntry[] = [];
     for (const date of this.eachDate(periodStart, periodEnd)) {
       const dateDay = this.epochDay(date);
       const assignment = assignments.find((candidate) => {
-        const first = candidate[0];
+        const first = candidate[0]!;
         return (
           dateDay >= this.epochDay(first.valid_from) &&
           dateDay <= this.epochDay(first.valid_to ?? '9999-12-31')
         );
       });
       if (!assignment) continue;
-      const first = assignment[0];
+      const first = assignment[0]!;
       const offset = this.positiveModulo(
         dateDay - this.epochDay(first.anchor_date),
         first.cycle_days,

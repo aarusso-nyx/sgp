@@ -16,12 +16,28 @@ export type ApiBody = Record<string, unknown>;
 export class OpenApiClient {
   constructor(private readonly api: ApiClient) {}
 
+  deleteApiV1ArquivosById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/arquivos/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiPortalV1AuthGovbrSignCallback(): Observable<unknown> {
+    return this.api.get<unknown>('/portal/v1/auth/govbr/sign/callback');
+  }
+
   getApiPortalV1AuthGovbrStatus(): Observable<unknown> {
     return this.api.get<unknown>('/portal/v1/auth/govbr/status');
   }
 
   getApiPortalV1AuthMe(): Observable<unknown> {
     return this.api.get<unknown>('/portal/v1/auth/me');
+  }
+
+  getApiV1Arquivos(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/arquivos', query);
+  }
+
+  getApiV1ArquivosDownloadById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/arquivos/${encodeURIComponent(params.id)}/download`);
   }
 
   getApiV1AuditoriaExportacoesByJobId(params: { job_id: string }): Observable<unknown> {
@@ -164,6 +180,24 @@ export class OpenApiClient {
     return this.api.get<unknown>(`/v1/portal/yearly-income/${encodeURIComponent(params.year)}/pdf`);
   }
 
+  getApiV1ReportServiceHealth(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/report-service/health');
+  }
+
+  getApiV1ReportServiceStatus(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/report-service/status');
+  }
+
+  patchApiV1ArquivosConfirmarByAnexoId(
+    params: { anexo_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/arquivos/${encodeURIComponent(params.anexo_id)}/confirmar`,
+      body,
+    );
+  }
+
   patchApiV1AvaliacaoCareerPlanById(
     params: { id: string },
     body: ApiBody = {},
@@ -194,12 +228,24 @@ export class OpenApiClient {
     );
   }
 
+  postApiPortalV1AuthGovbrSign(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/portal/v1/auth/govbr/sign', body);
+  }
+
+  postApiPortalV1LgpdDireitos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/portal/v1/lgpd/direitos', body);
+  }
+
   postApiV1AdminPayslipBatches(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/payslip-batches', body);
   }
 
   postApiV1AdminYearlyIncomeBatches(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/yearly-income-batches', body);
+  }
+
+  postApiV1ArquivosPresignedUpload(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/arquivos/presigned-upload', body);
   }
 
   postApiV1AuditoriaExportacoes(body: ApiBody = {}): Observable<unknown> {
@@ -278,6 +324,14 @@ export class OpenApiClient {
 
   postApiV1AvaliacaoSimulacoes(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/simulacoes', body);
+  }
+
+  postApiV1ReportServicePoll(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/report-service/poll', body);
+  }
+
+  postApiV1ReportServiceRequests(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/report-service/requests', body);
   }
 
   putApiV1AuthAlterarSenha(body: ApiBody = {}): Observable<unknown> {

@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { AssignmentService } from './assignment.service';
 export class AssignmentController {
   constructor(private readonly assignmentService: AssignmentService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('ponto.schedule.read')
   @ApiOkResponse({ description: 'Employee work schedule assignments.' })
@@ -24,6 +26,7 @@ export class AssignmentController {
     return this.assignmentService.list(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST Assign' })
   @Post()
   @RequirePermission('ponto.schedule.write')
   @AuditMutation({

@@ -144,7 +144,7 @@ export class OnlineExamService {
         ],
       );
       AuditMutationContextStore.markMutationAudited();
-      return this.toSession(rows.rows[0]);
+      return this.toSession(rows.rows[0]!);
     });
   }
 
@@ -191,7 +191,10 @@ export class OnlineExamService {
     );
     if (!rows[0]) throw new NotFoundException('Online exam session not found');
     AuditMutationContextStore.markMutationAudited();
-    return { id: rows[0].id, severity: rows[0].severity as ProctoringSeverity };
+    return {
+      id: rows[0].id,
+      severity: rows[0].severity as ProctoringSeverity,
+    };
   }
 
   async submit(

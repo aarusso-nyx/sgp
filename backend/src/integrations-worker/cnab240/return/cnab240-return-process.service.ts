@@ -118,7 +118,7 @@ export class Cnab240ReturnProcessService {
           input.processedBy ?? '',
         ],
       );
-      const returnFileId = returnFileRows.rows[0].id;
+      const returnFileId = returnFileRows.rows[0]!.id;
 
       let rejectedCount = 0;
       for (const parsedDetail of parsed.details) {

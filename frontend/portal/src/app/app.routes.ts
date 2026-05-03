@@ -1,8 +1,10 @@
-import { Routes } from '@angular/router';
+import { Route, Routes } from '@angular/router';
 
+import { authGuard } from './core/auth/auth-guard';
 import { PORTAL_FEATURE_CATALOG } from './core/portal/portal-feature-catalog';
 import { Contracheque } from './pages/contracheque/contracheque';
 import { Ferias } from './pages/ferias/ferias';
+import { GovBrSignCallback } from './pages/govbr-sign-callback/govbr-sign-callback';
 import { Licencas } from './pages/licencas/licencas';
 import { LicencasSaude } from './pages/licencas/saude/saude';
 import { MeusDados } from './pages/meus-dados/meus-dados';
@@ -28,7 +30,15 @@ const featureRoutes: Routes = PORTAL_FEATURE_CATALOG.flatMap((section) =>
   })),
 );
 
-export const routes: Routes = [
+function withAuthGuard(route: Route): Route {
+  return {
+    ...route,
+    canActivate: [authGuard, ...(route.canActivate ?? [])],
+    children: route.children?.map(withAuthGuard),
+  };
+}
+
+const portalRoutes: Routes = [
   {
     path: '',
     component: PortalShell,
@@ -37,6 +47,11 @@ export const routes: Routes = [
         path: '',
         component: PortalHome,
       },
+      {
+        path: 'govbr-sign/callback',
+        component: GovBrSignCallback,
+      },
+      ...featureRoutes,
       {
         path: 'contracheque',
         component: Contracheque,
@@ -77,7 +92,6 @@ export const routes: Routes = [
         path: 'ponto/proximas-escalas',
         component: ProximasEscalas,
       },
-      ...featureRoutes,
     ],
   },
   {
@@ -85,3 +99,5 @@ export const routes: Routes = [
     redirectTo: '',
   },
 ];
+
+export const routes: Routes = portalRoutes.map(withAuthGuard);

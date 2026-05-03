@@ -1,6 +1,7 @@
 // @ts-check
 import { createRequire } from 'node:module';
 import noMathRoundMoneyRule from './backend/eslint-rules/no-math-round-money.js';
+import noHardcoded2025DateInSpecRule from './backend/eslint-rules/no-hardcoded-2025-date-in-spec.js';
 import noPontoDateToIsoRule from './backend/eslint-rules/no-ponto-date-to-iso.js';
 import requirePermissionRule from './backend/eslint-rules/require-permission.js';
 
@@ -37,17 +38,19 @@ export default tseslint.config(
       sgp: {
         rules: {
           'no-math-round-money': noMathRoundMoneyRule,
+          'no-hardcoded-2025-date-in-spec': noHardcoded2025DateInSpecRule,
           'no-ponto-date-to-iso': noPontoDateToIsoRule,
           'require-permission': requirePermissionRule,
         },
       },
     },
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-unsafe-argument': 'warn',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
       'sgp/no-math-round-money': 'error',
+      'sgp/no-hardcoded-2025-date-in-spec': 'error',
       'sgp/no-ponto-date-to-iso': 'error',
       'sgp/require-permission': 'error',
     },

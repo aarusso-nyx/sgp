@@ -4,7 +4,7 @@
   "moduleDirectories": ["node_modules", "<rootDir>/backend/node_modules"],
   "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
   "testEnvironment": "node",
-  "testRegex": "(backend/src/.*\\.spec\\.ts|tests/backend/.*\\.e2e-spec\\.ts)$",
+  "testRegex": "(backend/src/.*\\.spec\\.ts|tests/backend/.*\\.(e2e-)?spec\\.ts|tests/rls/.*\\.spec\\.ts)$",
   "transform": {
     "^.+\\.ts$": [
       "<rootDir>/backend/node_modules/ts-jest",
@@ -18,7 +18,6 @@
   "collectCoverageFrom": [
     "backend/src/**/*.ts",
     "!backend/src/**/*.spec.ts",
-    "!backend/src/main*.ts",
     "!backend/src/**/*.controller.ts",
     "!backend/src/**/*.dto.ts",
     "!backend/src/**/*.module.ts",

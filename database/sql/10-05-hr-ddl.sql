@@ -131,6 +131,7 @@ CREATE TABLE hr.employee (
     terminated_on date,
     termination_reason_id uuid,
     lifecycle_status public."EmployeeLifecycleStatus" DEFAULT 'ACTIVE'::public."EmployeeLifecycleStatus" NOT NULL,
+    version integer DEFAULT 0 NOT NULL,
     created_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
@@ -158,6 +159,7 @@ CREATE TABLE hr.employment_link (
     code text NOT NULL,
     name text NOT NULL,
     status public."RecordStatus" DEFAULT 'ACTIVE'::public."RecordStatus" NOT NULL,
+    version integer DEFAULT 0 NOT NULL,
     created_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
@@ -734,18 +736,31 @@ CREATE TABLE hr.internship_record (
     agreement_id uuid,
     program_id uuid,
     employee_id uuid,
+    tsv_contract_id uuid,
     intern_name text NOT NULL,
     intern_cpf text,
     supervisor_name text,
+    supervisor_employee_id uuid,
     starts_on date NOT NULL,
     ends_on date,
     stipend_amount numeric(14,2),
+    term_number text NOT NULL,
+    term_signed_on date,
+    activity_plan_uri text NOT NULL,
+    activity_plan_description text DEFAULT ''::text NOT NULL,
+    role text DEFAULT 'Estagiario'::text NOT NULL,
+    weekly_hours numeric(18,6) DEFAULT 30.000000 NOT NULL,
+    course_name text,
+    education_level text,
+    insurance_policy text,
     status public."AgreementStatus" DEFAULT 'ACTIVE'::public."AgreementStatus" NOT NULL,
     created_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
     CONSTRAINT internship_record_dates_check CHECK (((ends_on IS NULL) OR (ends_on >= starts_on))),
-    CONSTRAINT internship_record_stipend_nonnegative_check CHECK (((stipend_amount IS NULL) OR (stipend_amount >= (0)::numeric)))
+    CONSTRAINT internship_record_stipend_nonnegative_check CHECK (((stipend_amount IS NULL) OR (stipend_amount >= (0)::numeric))),
+    CONSTRAINT internship_record_term_plan_check CHECK (((length(btrim(term_number)) > 0) AND (length(btrim(activity_plan_uri)) > 0))),
+    CONSTRAINT internship_record_weekly_hours_check CHECK (((weekly_hours > (0)::numeric) AND (weekly_hours <= (30)::numeric)))
 );
 
 CREATE TABLE hr.job_function (
@@ -795,6 +810,27 @@ CREATE TABLE hr.job_position (
     CONSTRAINT job_position_vacancies_consistent CHECK ((vacancies_total = (vacancies_filled + vacancies_open))),
     CONSTRAINT job_position_vacancies_count_non_negative CHECK ((vacancies_count >= 0)),
     CONSTRAINT job_position_vacancies_non_negative CHECK (((vacancies_total >= 0) AND (vacancies_filled >= 0) AND (vacancies_open >= 0)))
+);
+
+CREATE TABLE hr.organic_definition (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
+    code text NOT NULL,
+    name text NOT NULL,
+    description text DEFAULT ''::text NOT NULL,
+    work_location_id uuid NOT NULL,
+    job_position_id uuid NOT NULL,
+    vacancies_total integer NOT NULL,
+    vacancies_filled integer DEFAULT 0 NOT NULL,
+    vacancies_open integer NOT NULL,
+    effective_from date DEFAULT CURRENT_DATE NOT NULL,
+    effective_to date,
+    status public."RecordStatus" DEFAULT 'ACTIVE'::public."RecordStatus" NOT NULL,
+    created_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT organic_definition_effective_range_check CHECK (((effective_to IS NULL) OR (effective_to >= effective_from))),
+    CONSTRAINT organic_definition_vacancies_consistent CHECK ((vacancies_total = (vacancies_filled + vacancies_open))),
+    CONSTRAINT organic_definition_vacancies_non_negative CHECK (((vacancies_total >= 0) AND (vacancies_filled >= 0) AND (vacancies_open >= 0)))
 );
 
 CREATE TABLE hr.job_structure_employment_link (
@@ -1788,6 +1824,9 @@ ALTER TABLE ONLY hr.job_position
 
 ALTER TABLE ONLY hr.job_position
     ADD CONSTRAINT job_position_tenant_id_id_uq UNIQUE (tenant_id, id);
+
+ALTER TABLE ONLY hr.organic_definition
+    ADD CONSTRAINT organic_definition_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY hr.job_structure_employment_link
     ADD CONSTRAINT job_structure_employment_link_pkey PRIMARY KEY (id);

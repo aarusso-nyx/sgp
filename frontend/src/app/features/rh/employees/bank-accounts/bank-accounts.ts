@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ApiClient } from '../../../../core/api/api-client';
 
 interface BankAccountRow {
   id: string;
@@ -12,6 +12,7 @@ interface BankAccountRow {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-rh-employee-bank-accounts',
   standalone: false,
   templateUrl: './bank-accounts.html',
@@ -24,28 +25,26 @@ export class RhEmployeeBankAccounts {
   message = '';
   loading = false;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   load(): void {
     if (!this.employeeId) return;
     this.loading = true;
     this.error = '';
-    this.http
-      .get<BankAccountRow[]>(`/api/v1/employees/${this.employeeId}/bank-accounts`)
-      .subscribe({
-        next: (rows) => {
-          this.loading = false;
-          this.rows = rows;
-        },
-        error: () => {
-          this.loading = false;
-          this.error = 'Nao foi possivel carregar os dados bancarios.';
-        },
-      });
+    this.api.get<BankAccountRow[]>(`/api/v1/employees/${this.employeeId}/bank-accounts`).subscribe({
+      next: (rows) => {
+        this.loading = false;
+        this.rows = rows;
+      },
+      error: () => {
+        this.loading = false;
+        this.error = 'Nao foi possivel carregar os dados bancarios.';
+      },
+    });
   }
 
   revalidate(row: BankAccountRow): void {
-    this.http
+    this.api
       .post<BankAccountRow>(
         `/api/v1/employees/${this.employeeId}/bank-accounts/${row.id}/revalidate`,
         {},

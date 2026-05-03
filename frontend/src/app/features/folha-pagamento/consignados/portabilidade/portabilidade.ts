@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import {
@@ -8,6 +8,7 @@ import {
 } from './portabilidade.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-consignado-portabilidade',
   standalone: false,
   templateUrl: './portabilidade.html',

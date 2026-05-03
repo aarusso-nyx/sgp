@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -16,6 +17,7 @@ import { FgtsService } from './fgts.service';
 export class FgtsController {
   constructor(private readonly fgtsService: FgtsService) {}
 
+  @ApiOperation({ summary: 'GET accounts/:employeeId' })
   @Get('accounts/:employeeId')
   @RequirePermission('payroll.fgts.read')
   @ApiOkResponse({
@@ -25,6 +27,7 @@ export class FgtsController {
     return this.fgtsService.accountByEmployee(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST reprocessar' })
   @Post('reprocessar')
   @RequirePermission('payroll.fgts.write')
   @AuditMutation({

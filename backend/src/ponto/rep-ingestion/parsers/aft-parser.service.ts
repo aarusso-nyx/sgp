@@ -25,7 +25,8 @@ export class AftParserService {
       throw new BadRequestException(`AFDT line ${lineNo} has too few fields`);
     }
 
-    const [nsrText, employeeIdentifier, dateText, timeText, eventText] = parts;
+    const [nsrText, employeeIdentifier, dateText, timeText, eventText] =
+      parts as [string, string, string, string, string];
     const nsr = Number(nsrText);
     if (!Number.isInteger(nsr) || nsr < 1) {
       throw new BadRequestException(`AFDT line ${lineNo} has invalid NSR`);

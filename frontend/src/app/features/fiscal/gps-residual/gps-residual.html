@@ -1,26 +1,29 @@
 <section class="gps-residual">
   <header class="page-header">
     <div>
-      <h1>GPS residual</h1>
-      <p>Safety-net para recolhimentos RGPS fora da cobertura DCTFWeb.</p>
+      <h1 i18n>GPS residual</h1>
+      <p i18n>Safety-net para recolhimentos RGPS fora da cobertura DCTFWeb.</p>
     </div>
   </header>
 
   <div class="warning">
     <mat-icon>warning</mat-icon>
     <span
-      >GPS residual — verifique se a competência já não foi recolhida via DCTFWeb (FISC-01)</span
+      ><ng-container i18n
+        >GPS residual — verifique se a competência já não foi recolhida via DCTFWeb
+        (FISC-01)</ng-container
+      ></span
     >
   </div>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline">
-      <mat-label>Competência</mat-label>
+      <mat-label i18n>Competência</mat-label>
       <input matInput type="date" formControlName="competence" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="code">
-      <mat-label>Código</mat-label>
+      <mat-label i18n>Código</mat-label>
       <mat-select formControlName="paymentCodeId">
         <mat-option *ngFor="let code of paymentCodes" [value]="code.id">
           {{ code.code }} — {{ code.description }}
@@ -29,50 +32,50 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Motivo</mat-label>
+      <mat-label i18n>Motivo</mat-label>
       <mat-select formControlName="reason">
-        <mat-option value="TRANSITION">Transição</mat-option>
-        <mat-option value="RETROACTIVE">Retroativo</mat-option>
-        <mat-option value="MALHA_FINA">Malha fina</mat-option>
+        <mat-option value="TRANSITION" i18n>Transição</mat-option>
+        <mat-option value="RETROACTIVE" i18n>Retroativo</mat-option>
+        <mat-option value="MALHA_FINA" i18n>Malha fina</mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="detail">
-      <mat-label>Detalhe</mat-label>
+      <mat-label i18n>Detalhe</mat-label>
       <input matInput formControlName="reasonDetail" />
     </mat-form-field>
 
     <button mat-flat-button color="primary" type="button" (click)="generate()" [disabled]="busy">
       <mat-icon>add</mat-icon>
-      Gerar
+      <ng-container i18n>Gerar</ng-container>
     </button>
   </form>
 
   <form [formGroup]="filter" class="filters">
     <mat-form-field appearance="outline">
-      <mat-label>Motivo</mat-label>
+      <mat-label i18n>Motivo</mat-label>
       <mat-select formControlName="reason">
-        <mat-option value="">Todos</mat-option>
-        <mat-option value="TRANSITION">Transição</mat-option>
-        <mat-option value="RETROACTIVE">Retroativo</mat-option>
-        <mat-option value="MALHA_FINA">Malha fina</mat-option>
+        <mat-option value="" i18n>Todos</mat-option>
+        <mat-option value="TRANSITION" i18n>Transição</mat-option>
+        <mat-option value="RETROACTIVE" i18n>Retroativo</mat-option>
+        <mat-option value="MALHA_FINA" i18n>Malha fina</mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Status</mat-label>
+      <mat-label i18n>Status</mat-label>
       <mat-select formControlName="status">
-        <mat-option value="">Todos</mat-option>
-        <mat-option value="DRAFT">Rascunho</mat-option>
-        <mat-option value="GENERATED">Gerado</mat-option>
-        <mat-option value="PAID">Pago</mat-option>
-        <mat-option value="CANCELLED">Cancelado</mat-option>
+        <mat-option value="" i18n>Todos</mat-option>
+        <mat-option value="DRAFT" i18n>Rascunho</mat-option>
+        <mat-option value="GENERATED" i18n>Gerado</mat-option>
+        <mat-option value="PAID" i18n>Pago</mat-option>
+        <mat-option value="CANCELLED" i18n>Cancelado</mat-option>
       </mat-select>
     </mat-form-field>
 
     <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
       <mat-icon>search</mat-icon>
-      Consultar
+      <ng-container i18n>Consultar</ng-container>
     </button>
   </form>
 
@@ -83,13 +86,13 @@
       <table>
         <thead>
           <tr>
-            <th>Competência</th>
-            <th>Código</th>
-            <th>Motivo</th>
-            <th>Status</th>
-            <th>Principal</th>
-            <th>Total</th>
-            <th>TXT</th>
+            <th i18n>Competência</th>
+            <th i18n>Código</th>
+            <th i18n>Motivo</th>
+            <th i18n>Status</th>
+            <th i18n>Principal</th>
+            <th i18n>Total</th>
+            <th i18n>TXT</th>
           </tr>
         </thead>
         <tbody>
@@ -107,7 +110,13 @@
             <td>{{ money(item.amount) }}</td>
             <td>{{ money(item.totalAmount) }}</td>
             <td>
-              <a mat-icon-button [href]="downloadUrl(item)" target="_blank" title="Baixar TXT">
+              <a
+                mat-icon-button
+                [href]="downloadUrl(item)"
+                target="_blank"
+                title="Baixar TXT"
+                i18n-title
+              >
                 <mat-icon>download</mat-icon>
               </a>
             </td>
@@ -117,30 +126,30 @@
     </section>
 
     <aside class="details" *ngIf="selected">
-      <h2>Integridade</h2>
+      <h2 i18n>Integridade</h2>
       <dl>
         <div>
-          <dt>Remessa</dt>
+          <dt i18n>Remessa</dt>
           <dd>{{ selected.id }}</dd>
         </div>
         <div>
-          <dt>Código</dt>
+          <dt i18n>Código</dt>
           <dd>{{ selected.paymentCodeDescription }}</dd>
         </div>
         <div>
-          <dt>Base</dt>
+          <dt i18n>Base</dt>
           <dd>{{ money(selected.baseAmount) }}</dd>
         </div>
         <div>
-          <dt>Juros e multa</dt>
+          <dt i18n>Juros e multa</dt>
           <dd>{{ money(selected.interestAmount) }} / {{ money(selected.fineAmount) }}</dd>
         </div>
         <div>
-          <dt>Hash TXT</dt>
+          <dt i18n>Hash TXT</dt>
           <dd>{{ selected.txtHash }}</dd>
         </div>
         <div>
-          <dt>Arquivo</dt>
+          <dt i18n>Arquivo</dt>
           <dd>{{ selected.fileUri || '-' }}</dd>
         </div>
       </dl>

@@ -1,18 +1,18 @@
 <section class="ponto-escalas" aria-labelledby="ponto-escalas-title">
   <header class="ponto-escalas__header">
     <div>
-      <p>Ponto eletronico</p>
-      <h1 id="ponto-escalas-title">Escalas e plantoes</h1>
+      <p i18n>Ponto eletronico</p>
+      <h1 id="ponto-escalas-title" i18n>Escalas e plantoes</h1>
     </div>
-    <button type="button" (click)="create12x36()" [disabled]="saving">Criar 12x36</button>
+    <button type="button" (click)="create12x36()" [disabled]="saving" i18n>Criar 12x36</button>
   </header>
 
   <p class="ponto-escalas__message" *ngIf="message" role="status">{{ message }}</p>
   <p class="ponto-escalas__error" *ngIf="error" role="alert">{{ error }}</p>
 
   <section class="ponto-escalas__panel">
-    <h2>Padroes</h2>
-    <p *ngIf="loading">Carregando...</p>
+    <h2 i18n>Padroes</h2>
+    <p *ngIf="loading" i18n>Carregando...</p>
     <div class="ponto-escalas__pattern" *ngFor="let pattern of patterns">
       <div>
         <strong>{{ pattern.code }}</strong>
@@ -20,45 +20,51 @@
       </div>
       <ol>
         <li *ngFor="let day of pattern.days" [class.is-rest]="!day.isWorking">
-          D{{ day.dayIndex + 1 }}:
+          <ng-container i18n>D{{ day.dayIndex + 1 }}:</ng-container>
           <ng-container *ngIf="day.isWorking; else restDay">
-            {{ day.entryTime }}-{{ day.exitTime }} {{ day.expectedMinutes }}min
-            <span *ngIf="day.nightShiftFlag">noturno</span>
-            <span *ngIf="day.hazardFlag">insalubre</span>
+            <ng-container i18n>
+              {{ day.entryTime }}-{{ day.exitTime }} {{ day.expectedMinutes }}min
+            </ng-container>
+            <span *ngIf="day.nightShiftFlag" i18n>noturno</span>
+            <span *ngIf="day.hazardFlag" i18n>insalubre</span>
           </ng-container>
-          <ng-template #restDay>folga</ng-template>
+          <ng-template #restDay i18n>folga</ng-template>
         </li>
       </ol>
     </div>
   </section>
 
   <form [formGroup]="rosterForm" (ngSubmit)="generate()" class="ponto-escalas__panel">
-    <h2>Roster mensal</h2>
+    <h2 i18n>Roster mensal</h2>
     <div class="ponto-escalas__fields">
       <label>
-        <span>Servidores</span>
-        <input formControlName="employeeIds" placeholder="UUIDs separados por virgula" />
+        <span i18n>Servidores</span>
+        <input
+          formControlName="employeeIds"
+          placeholder="UUIDs separados por virgula"
+          i18n-placeholder
+        />
       </label>
       <label>
-        <span>Inicio</span>
+        <span i18n>Inicio</span>
         <input type="date" formControlName="periodStart" />
       </label>
       <label>
-        <span>Fim</span>
+        <span i18n>Fim</span>
         <input type="date" formControlName="periodEnd" />
       </label>
     </div>
-    <button type="submit" [disabled]="saving">Gerar</button>
+    <button type="submit" [disabled]="saving" i18n>Gerar</button>
   </form>
 
   <section class="ponto-escalas__panel">
-    <h2>Rosters</h2>
-    <table aria-label="Rosters">
+    <h2 i18n>Rosters</h2>
+    <table aria-label="Rosters" i18n-aria-label>
       <thead>
         <tr>
-          <th>Periodo</th>
-          <th>Status</th>
-          <th>Acoes</th>
+          <th i18n>Periodo</th>
+          <th i18n>Status</th>
+          <th i18n>Acoes</th>
         </tr>
       </thead>
       <tbody>
@@ -66,10 +72,20 @@
           <td>{{ roster.periodStart }} - {{ roster.periodEnd }}</td>
           <td>{{ roster.status }}</td>
           <td>
-            <button type="button" (click)="publish(roster)" [disabled]="roster.status !== 'DRAFT'">
+            <button
+              type="button"
+              (click)="publish(roster)"
+              [disabled]="roster.status !== 'DRAFT'"
+              i18n
+            >
               Publicar
             </button>
-            <button type="button" (click)="lock(roster)" [disabled]="roster.status === 'LOCKED'">
+            <button
+              type="button"
+              (click)="lock(roster)"
+              [disabled]="roster.status === 'LOCKED'"
+              i18n
+            >
               Travar
             </button>
           </td>
@@ -79,21 +95,21 @@
   </section>
 
   <form [formGroup]="portalForm" (ngSubmit)="loadUpcoming()" class="ponto-escalas__panel">
-    <h2>Portal - proximas 4 semanas</h2>
+    <h2 i18n>Portal - proximas 4 semanas</h2>
     <label>
-      <span>Servidor</span>
-      <input formControlName="employeeId" placeholder="UUID do servidor" />
+      <span i18n>Servidor</span>
+      <input formControlName="employeeId" placeholder="UUID do servidor" i18n-placeholder />
     </label>
-    <button type="submit">Carregar</button>
+    <button type="submit" i18n>Carregar</button>
     <div class="ponto-escalas__calendar">
       <article *ngFor="let entry of upcoming" [class.is-night]="entry.nightShiftFlag">
         <strong>{{ entry.workDate }}</strong>
         <span *ngIf="entry.expectedMinutes; else dayOff">
           {{ entry.expectedEntry | date: 'HH:mm' }}-{{ entry.expectedExit | date: 'HH:mm' }}
         </span>
-        <ng-template #dayOff>Folga</ng-template>
-        <small *ngIf="entry.nightShiftFlag">Noturno</small>
-        <small *ngIf="entry.hazardFlag">Insalubre</small>
+        <ng-template #dayOff i18n>Folga</ng-template>
+        <small *ngIf="entry.nightShiftFlag" i18n>Noturno</small>
+        <small *ngIf="entry.hazardFlag" i18n>Insalubre</small>
       </article>
     </div>
   </form>

@@ -27,6 +27,30 @@ describe('ESocialWorkerService', () => {
     expect(submitPendingBatch).toHaveBeenCalledWith(5);
   });
 
+  it('reports backpressure from pending eSocial queue and active claims', async () => {
+    const query = jest.fn(async (sql: string) => {
+      if (sql.includes("status = 'PENDENTE'")) return [{ total: '7' }];
+      if (sql.includes('FROM esocial.event_retry_schedule')) {
+        return [{ total: '2' }];
+      }
+      if (sql.includes("status = 'ENVIANDO'")) return [{ total: '3' }];
+      return [];
+    });
+    const service = new ESocialWorkerService(
+      { configured: true, query } as never,
+      { submitPendingBatch: jest.fn() } as never,
+      { consumeDue: jest.fn() } as never,
+    );
+
+    await expect(service.backpressureStatus(10)).resolves.toMatchObject({
+      queueDepth: 9,
+      activeClaims: 3,
+      capacity: 10,
+      limit: 7,
+      skipped: false,
+    });
+  });
+
   it('reports retryable SOAP failures as failed discovered work', async () => {
     const service = new ESocialWorkerService(
       { configured: true, query: jest.fn() } as never,

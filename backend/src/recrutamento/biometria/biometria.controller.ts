@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -27,6 +28,7 @@ export class BiometriaController {
     private readonly matcherService: BiometricMatcherService,
   ) {}
 
+  @ApiOperation({ summary: 'POST consentimentos' })
   @Post('consentimentos')
   @RequirePermission('recrutamento.biometric.write')
   @AuditMutation({
@@ -41,6 +43,7 @@ export class BiometriaController {
     return this.consentService.create(body);
   }
 
+  @ApiOperation({ summary: 'POST capturas' })
   @Post('capturas')
   @RequirePermission('recrutamento.biometric.write')
   @AuditMutation({
@@ -55,6 +58,7 @@ export class BiometriaController {
     return this.captureService.capture(body);
   }
 
+  @ApiOperation({ summary: 'POST matching' })
   @Post('matching')
   @RequirePermission('recrutamento.biometric.write')
   @AuditMutation({
@@ -69,6 +73,7 @@ export class BiometriaController {
     return this.matcherService.match(body);
   }
 
+  @ApiOperation({ summary: 'DELETE candidatos/:candidatoId' })
   @Delete('candidatos/:candidatoId')
   @RequirePermission('recrutamento.biometric.write')
   @AuditMutation({

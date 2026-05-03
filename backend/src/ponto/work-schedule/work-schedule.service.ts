@@ -72,15 +72,15 @@ export class WorkScheduleService {
           VALUES ($1::uuid, $2, $3::ponto.work_shift_kind)
           RETURNING work_shift_id::text
           `,
-          [schedule.rows[0].work_schedule_id, shift.code.trim(), shift.kind],
+          [schedule.rows[0]!.work_schedule_id, shift.code.trim(), shift.kind],
         );
         await this.insertDaySchedules(
           client,
-          shiftResult.rows[0].work_shift_id,
+          shiftResult.rows[0]!.work_shift_id,
           shift.daySchedules,
         );
       }
-      return this.toSummary(schedule.rows[0]);
+      return this.toSummary(schedule.rows[0]!);
     });
   }
 

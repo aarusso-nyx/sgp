@@ -1,43 +1,43 @@
 <section class="face-admin">
   <header>
-    <h1>Reconhecimento facial</h1>
-    <button type="button" (click)="loadTemplates()" [disabled]="loading">Atualizar</button>
+    <h1 i18n>Reconhecimento facial</h1>
+    <button type="button" (click)="loadTemplates()" [disabled]="loading" i18n>Atualizar</button>
   </header>
 
   <form [formGroup]="thresholdForm" (ngSubmit)="saveThreshold()" class="threshold">
     <label>
-      Threshold
+      <ng-container i18n>Threshold</ng-container>
       <input formControlName="threshold" type="number" min="0" max="1" step="0.01" />
     </label>
     <label class="check">
       <input formControlName="livenessRequired" type="checkbox" />
-      Liveness obrigatorio
+      <ng-container i18n>Liveness obrigatorio</ng-container>
     </label>
-    <button type="submit" [disabled]="saving">Salvar threshold</button>
+    <button type="submit" [disabled]="saving" i18n>Salvar threshold</button>
   </form>
 
   <form [formGroup]="enrollForm" (ngSubmit)="enroll()">
     <label>
-      Servidor
-      <input formControlName="employeeId" placeholder="UUID do empregado" />
+      <ng-container i18n>Servidor</ng-container>
+      <input formControlName="employeeId" placeholder="UUID do empregado" i18n-placeholder />
     </label>
     <label>
-      Frame rosto aberto
+      <ng-container i18n>Frame rosto aberto</ng-container>
       <textarea formControlName="frameOpenBase64" rows="4"></textarea>
     </label>
     <label>
-      Frame piscando
+      <ng-container i18n>Frame piscando</ng-container>
       <textarea formControlName="frameBlinkBase64" rows="4"></textarea>
     </label>
     <label>
-      KMS key
+      <ng-container i18n>KMS key</ng-container>
       <input formControlName="templateKmsKeyId" />
     </label>
     <label>
-      Termo LGPD art. 11
+      <ng-container i18n>Termo LGPD art. 11</ng-container>
       <input formControlName="consentVersion" />
     </label>
-    <button type="submit" [disabled]="saving">Cadastrar face</button>
+    <button type="submit" [disabled]="saving" i18n>Cadastrar face</button>
   </form>
 
   <p class="message" *ngIf="message">{{ message }}</p>
@@ -46,11 +46,11 @@
   <table>
     <thead>
       <tr>
-        <th>Servidor</th>
-        <th>Modelo</th>
-        <th>Versao</th>
-        <th>Status</th>
-        <th>Captura</th>
+        <th i18n>Servidor</th>
+        <th i18n>Modelo</th>
+        <th i18n>Versao</th>
+        <th i18n>Status</th>
+        <th i18n>Captura</th>
       </tr>
     </thead>
     <tbody>

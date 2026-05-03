@@ -130,7 +130,7 @@ export class EmployeeTransferService {
         ],
       );
 
-      return this.toTransfer(result.rows[0]);
+      return this.toTransfer(result.rows[0]!);
     });
   }
 
@@ -201,7 +201,7 @@ export class EmployeeTransferService {
         `,
         [id],
       );
-      return this.toTransfer(result.rows[0]);
+      return this.toTransfer(result.rows[0]!);
     });
   }
 

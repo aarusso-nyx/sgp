@@ -1,33 +1,33 @@
 <section class="portal-banco-horas" aria-labelledby="portal-banco-horas-title">
   <header>
-    <p>Portal do servidor</p>
-    <h1 id="portal-banco-horas-title">Banco de horas</h1>
+    <p i18n>Portal do servidor</p>
+    <h1 id="portal-banco-horas-title" i18n>Banco de horas</h1>
   </header>
 
   <p class="portal-banco-horas__error" *ngIf="error" role="alert">{{ error }}</p>
 
   <section class="portal-banco-horas__summary" *ngIf="bank">
     <article>
-      <span>Saldo atual</span>
-      <strong>{{ bank.balanceMinutes }}min</strong>
+      <span i18n>Saldo atual</span>
+      <strong i18n>{{ bank.balanceMinutes }}min</strong>
     </article>
     <article>
-      <span>Prazo de zeragem</span>
+      <span i18n>Prazo de zeragem</span>
       <strong>{{ bank.expiresAt }}</strong>
     </article>
     <article>
-      <span>Status</span>
+      <span i18n>Status</span>
       <strong>{{ bank.status }}</strong>
     </article>
   </section>
 
   <section class="portal-banco-horas__extract">
-    <h2>Ultimos 90 movimentos</h2>
+    <h2 i18n>Ultimos 90 movimentos</h2>
     <ol>
       <li *ngFor="let movement of movements">
         <strong>{{ movement.workDate }}</strong>
         <span>{{ movement.kind }}</span>
-        <span>{{ movement.minutes }}min</span>
+        <span i18n>{{ movement.minutes }}min</span>
       </li>
     </ol>
   </section>

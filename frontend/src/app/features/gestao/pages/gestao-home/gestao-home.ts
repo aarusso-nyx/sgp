@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
@@ -18,6 +18,7 @@ import {
 type ViewRecord = Record<string, unknown> & MasterDataRecord;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-gestao-home',
   standalone: false,
   templateUrl: './gestao-home.html',

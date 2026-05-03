@@ -1,54 +1,54 @@
 <section class="irrf" aria-labelledby="irrf-title">
   <header class="irrf__header">
     <div>
-      <p class="irrf__eyebrow">Parametros</p>
-      <h1 id="irrf-title">Tabela IRRF</h1>
+      <p class="irrf__eyebrow" i18n>Parametros</p>
+      <h1 id="irrf-title" i18n>Tabela IRRF</h1>
     </div>
     <button mat-raised-button color="primary" type="button" (click)="load()">
       <mat-icon>refresh</mat-icon>
-      Atualizar
+      <ng-container i18n>Atualizar</ng-container>
     </button>
   </header>
 
   <form class="irrf__form" [formGroup]="form" (ngSubmit)="importCsv()">
     <mat-form-field appearance="outline">
-      <mat-label>Competencia inicial</mat-label>
+      <mat-label i18n>Competencia inicial</mat-label>
       <input matInput formControlName="competenceStart" type="date" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Competencia final</mat-label>
+      <mat-label i18n>Competencia final</mat-label>
       <input matInput formControlName="competenceEnd" type="date" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Ano</mat-label>
+      <mat-label i18n>Ano</mat-label>
       <input matInput formControlName="referenceYear" />
     </mat-form-field>
     <mat-form-field class="irrf__csv" appearance="outline">
-      <mat-label>CSV: minimo;maximo;aliquota;deducao;deducao_dependente</mat-label>
+      <mat-label i18n>CSV: minimo;maximo;aliquota;deducao;deducao_dependente</mat-label>
       <textarea matInput formControlName="csv" rows="6"></textarea>
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+    <button mat-raised-button color="primary" type="submit" [disabled]="loading()">
       <mat-icon>upload_file</mat-icon>
-      Importar CSV
+      <ng-container i18n>Importar CSV</ng-container>
     </button>
   </form>
 
-  <p class="irrf__error" *ngIf="error" role="alert">{{ error }}</p>
-  <p class="irrf__success" *ngIf="success">{{ success }}</p>
+  <p class="irrf__error" *ngIf="error()" role="alert">{{ error() }}</p>
+  <p class="irrf__success" *ngIf="success()">{{ success() }}</p>
 
   <table class="irrf__table">
     <thead>
       <tr>
-        <th>Faixa</th>
-        <th>Minimo</th>
-        <th>Maximo</th>
-        <th>Aliquota</th>
-        <th>Deducao</th>
-        <th>Dependente</th>
+        <th i18n>Faixa</th>
+        <th i18n>Minimo</th>
+        <th i18n>Maximo</th>
+        <th i18n>Aliquota</th>
+        <th i18n>Deducao</th>
+        <th i18n>Dependente</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let bracket of brackets">
+      <tr *ngFor="let bracket of brackets()">
         <td>{{ bracket.code }}</td>
         <td>{{ bracket.bracketMin }}</td>
         <td>{{ bracket.bracketMax || 'Sem limite' }}</td>

@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ import { SessionService } from './session.service';
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
+  @ApiOperation({ summary: 'GET me' })
   @Get('me')
   @RequirePermission('auth.read')
   @ApiBearerAuth()
@@ -29,6 +31,7 @@ export class SessionController {
     return this.sessionService.currentSession(actor);
   }
 
+  @ApiOperation({ summary: 'GET menus' })
   @Get('menus')
   @RequirePermission('auth.read')
   @ApiBearerAuth()
@@ -39,6 +42,7 @@ export class SessionController {
     return this.sessionService.currentMenus(actor);
   }
 
+  @ApiOperation({ summary: 'POST logout' })
   @Post('logout')
   @RequirePermission('auth.read')
   @ApiBearerAuth()
@@ -47,6 +51,7 @@ export class SessionController {
     return this.sessionService.logout(actor);
   }
 
+  @ApiOperation({ summary: 'POST recuperar-senha' })
   @Post('recuperar-senha')
   @Public()
   @ApiCreatedResponse({ description: 'Start password recovery flow.' })
@@ -60,6 +65,7 @@ export class SessionController {
     return this.sessionService.recoverPassword(body);
   }
 
+  @ApiOperation({ summary: 'POST confirmar-nova-senha' })
   @Post('confirmar-nova-senha')
   @Public()
   @ApiCreatedResponse({ description: 'Confirm recovered password.' })
@@ -73,6 +79,7 @@ export class SessionController {
     return this.sessionService.confirmNewPassword(body);
   }
 
+  @ApiOperation({ summary: 'PUT alterar-senha' })
   @Put('alterar-senha')
   @RequirePermission('auth.read')
   @ApiBearerAuth()

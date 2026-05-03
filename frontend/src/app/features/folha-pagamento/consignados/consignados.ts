@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { ConsignadosService, ConsignmentLoan, ConsignmentMargin } from './consignados.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-consignados',
   standalone: false,
   templateUrl: './consignados.html',

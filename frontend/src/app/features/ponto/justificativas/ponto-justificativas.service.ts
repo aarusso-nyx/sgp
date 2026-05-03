@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface PontoJustificativa {
   absenceJustificationId: string;
@@ -16,11 +16,11 @@ export interface PontoJustificativa {
 
 @Injectable({ providedIn: 'root' })
 export class PontoJustificativasService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   list(status?: string) {
     const query = status ? `?status=${encodeURIComponent(status)}` : '';
-    return this.http.get<PontoJustificativa[]>(`/api/v1/ponto/justifications${query}`);
+    return this.api.get<PontoJustificativa[]>(`/api/v1/ponto/justifications${query}`);
   }
 
   request(input: {
@@ -33,10 +33,10 @@ export class PontoJustificativasService {
     attachmentId?: string;
     payrollTreatment?: string;
   }) {
-    return this.http.post<PontoJustificativa>('/api/v1/ponto/justifications', input);
+    return this.api.post<PontoJustificativa>('/api/v1/ponto/justifications', input);
   }
 
   decide(id: string, input: { decision: string; approverUserId: string; reason?: string }) {
-    return this.http.post<PontoJustificativa>(`/api/v1/ponto/justifications/${id}/decide`, input);
+    return this.api.post<PontoJustificativa>(`/api/v1/ponto/justifications/${id}/decide`, input);
   }
 }

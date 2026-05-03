@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { ApiClient } from '../../../../core/api/api-client';
 
 export interface PortabilityFileUpload {
   sourceConsignmentEntityId: string;
@@ -25,17 +25,14 @@ export interface PortabilityProcessResult {
 
 @Injectable({ providedIn: 'root' })
 export class PortabilidadeService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   upload(input: PortabilityFileUpload) {
-    return this.http.post<PortabilityUploadResult>(
-      '/api/v1/payment/consignment-portability',
-      input,
-    );
+    return this.api.post<PortabilityUploadResult>('/api/v1/payment/consignment-portability', input);
   }
 
   process(fileId: string) {
-    return this.http.post<PortabilityProcessResult>(
+    return this.api.post<PortabilityProcessResult>(
       `/api/v1/payment/consignment-portability/${fileId}/process`,
       {},
     );

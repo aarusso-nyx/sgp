@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -26,6 +27,7 @@ export class AsoController {
     private readonly attachmentService: AsoAttachmentService,
   ) {}
 
+  @ApiOperation({ summary: 'GET exames' })
   @Get('exames')
   @RequirePermission('saude.aso.read')
   @ApiOkResponse({ description: 'Occupational medical exam catalog.' })
@@ -33,6 +35,7 @@ export class AsoController {
     return this.asoService.listMedicalExams();
   }
 
+  @ApiOperation({ summary: 'POST exames' })
   @Post('exames')
   @RequirePermission('saude.aso.write')
   @AuditMutation({
@@ -45,6 +48,7 @@ export class AsoController {
     return this.asoService.createMedicalExam(body);
   }
 
+  @ApiOperation({ summary: 'GET aso' })
   @Get('aso')
   @RequirePermission('saude.aso.read')
   @ApiOkResponse({ description: 'ASO records.' })
@@ -52,6 +56,7 @@ export class AsoController {
     return this.asoService.listAsoRecords();
   }
 
+  @ApiOperation({ summary: 'GET aso/painel/vencimentos' })
   @Get('aso/painel/vencimentos')
   @RequirePermission('saude.aso.read')
   @ApiOkResponse({ description: 'Periodic ASO due in up to 30 days.' })
@@ -59,6 +64,7 @@ export class AsoController {
     return this.asoService.listDueSoon();
   }
 
+  @ApiOperation({ summary: 'POST aso' })
   @Post('aso')
   @RequirePermission('saude.aso.write')
   @AuditMutation({
@@ -71,6 +77,7 @@ export class AsoController {
     return this.asoService.schedule(body);
   }
 
+  @ApiOperation({ summary: 'PATCH aso/:id/realizacao' })
   @Patch('aso/:id/realizacao')
   @RequirePermission('saude.aso.write')
   @AuditMutation({
@@ -83,6 +90,7 @@ export class AsoController {
     return this.asoService.perform(id, body);
   }
 
+  @ApiOperation({ summary: 'POST aso/:id/anexos' })
   @Post('aso/:id/anexos')
   @RequirePermission('saude.aso.write')
   @AuditMutation({
@@ -95,6 +103,7 @@ export class AsoController {
     return this.attachmentService.attach(id, body);
   }
 
+  @ApiOperation({ summary: 'PATCH aso/:id/arquivar' })
   @Patch('aso/:id/arquivar')
   @RequirePermission('saude.aso.write')
   @AuditMutation({

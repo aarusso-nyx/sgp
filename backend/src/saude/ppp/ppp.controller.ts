@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { PppService } from './ppp.service';
 export class PppController {
   constructor(private readonly service: PppService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('saude.exposure.read')
   @ApiOkResponse({ description: 'Immutable PPP records.' })
@@ -24,6 +26,7 @@ export class PppController {
     return this.service.list();
   }
 
+  @ApiOperation({ summary: 'POST gerar' })
   @Post('gerar')
   @RequirePermission('saude.exposure.write')
   @AuditMutation({

@@ -107,3 +107,225 @@ BEGIN
   RETURN NEXT;
 END;
 $$;
+
+CREATE FUNCTION public_data.sgp_lai_request_audit() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  v_id uuid;
+  v_tenant_id uuid;
+  v_protocol text;
+  v_status text;
+BEGIN
+  v_id := COALESCE(NEW.id, OLD.id);
+  v_tenant_id := COALESCE(NEW.tenant_id, OLD.tenant_id);
+  v_protocol := COALESCE(NEW.protocol, OLD.protocol);
+  v_status := COALESCE(NEW.status, OLD.status);
+
+  PERFORM public.sgp_append_audit_event(
+    (CASE TG_OP WHEN 'INSERT' THEN 'CREATE' WHEN 'UPDATE' THEN 'UPDATE' ELSE 'DELETE' END)::text,
+    'public_data.lai_request'::text,
+    v_id::text,
+    NULL::uuid,
+    current_setting('app.current_user_sub', true),
+    current_setting('app.current_login', true),
+    'public_data.lai_request'::text,
+    current_setting('app.request_id', true),
+    jsonb_build_object(
+      'tenantId', v_tenant_id,
+      'protocol', v_protocol,
+      'status', v_status
+    )::jsonb,
+    NULL::text,
+    NULL::text,
+    NULL::text
+  );
+  IF TG_OP = 'DELETE' THEN
+    RETURN OLD;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION public_data.create_lai_request(p_tenant_id uuid, p_requester_name text, p_requester_email text, p_request_text text, p_requester_document text DEFAULT NULL::text) RETURNS TABLE(protocol text, access_key text, status text, submitted_at timestamp with time zone, due_at timestamp with time zone)
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public_data', 'public', 'pg_catalog'
+    AS $$
+DECLARE
+  v_id uuid;
+  v_protocol text;
+  v_access_key text;
+  v_submitted_at timestamp with time zone;
+  v_due_at timestamp with time zone;
+BEGIN
+  PERFORM set_config('app.bypass_rls', 'true', true);
+  PERFORM set_config('app.current_tenant_id', p_tenant_id::text, true);
+
+  SELECT now() INTO v_submitted_at;
+  v_due_at := v_submitted_at + interval '20 days';
+  v_access_key := replace(gen_random_uuid()::text, '-', '') || replace(gen_random_uuid()::text, '-', '');
+  v_protocol := 'LAI-' || to_char(v_submitted_at AT TIME ZONE 'UTC', 'YYYYMMDD') || '-' || upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 8));
+
+  INSERT INTO public_data.lai_request (
+    tenant_id,
+    protocol,
+    requester_name,
+    requester_email,
+    requester_document_hash,
+    request_text,
+    access_key_hash,
+    status,
+    submitted_at,
+    due_at
+  )
+  VALUES (
+    p_tenant_id,
+    v_protocol,
+    btrim(p_requester_name),
+    lower(btrim(p_requester_email)),
+    CASE
+      WHEN NULLIF(btrim(COALESCE(p_requester_document, '')), '') IS NULL THEN NULL
+      ELSE encode(digest(btrim(p_requester_document), 'sha256'), 'hex')
+    END,
+    btrim(p_request_text),
+    encode(digest(v_access_key, 'sha256'), 'hex'),
+    'RECEIVED',
+    v_submitted_at,
+    v_due_at
+  )
+  RETURNING id INTO v_id;
+
+  INSERT INTO public_data.lai_request_event (
+    tenant_id,
+    request_id,
+    from_status,
+    to_status,
+    metadata
+  )
+  VALUES (
+    p_tenant_id,
+    v_id,
+    NULL,
+    'RECEIVED',
+    jsonb_build_object('protocol', v_protocol, 'source', 'public-api')
+  );
+
+  protocol := v_protocol;
+  access_key := v_access_key;
+  status := 'RECEIVED';
+  submitted_at := v_submitted_at;
+  due_at := v_due_at;
+  RETURN NEXT;
+END;
+$$;
+
+CREATE FUNCTION public_data.get_lai_request_status(p_tenant_id uuid, p_protocol text, p_access_key text) RETURNS TABLE(protocol text, status text, submitted_at timestamp with time zone, due_at timestamp with time zone, extended_due_at timestamp with time zone, answered_at timestamp with time zone, closed_at timestamp with time zone)
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public_data', 'public', 'pg_catalog'
+    AS $$
+BEGIN
+  PERFORM set_config('app.bypass_rls', 'true', true);
+  PERFORM set_config('app.current_tenant_id', p_tenant_id::text, true);
+
+  RETURN QUERY
+  SELECT
+    request.protocol,
+    request.status,
+    request.submitted_at,
+    request.due_at,
+    request.extended_due_at,
+    request.answered_at,
+    request.closed_at
+  FROM public_data.lai_request request
+  WHERE request.tenant_id = p_tenant_id
+    AND request.protocol = p_protocol
+    AND request.access_key_hash = encode(digest(p_access_key, 'sha256'), 'hex');
+END;
+$$;
+
+CREATE FUNCTION public_data.transition_lai_request(p_tenant_id uuid, p_protocol text, p_status text, p_reason text DEFAULT NULL::text) RETURNS TABLE(id uuid, protocol text, status text, submitted_at timestamp with time zone, due_at timestamp with time zone, extended_due_at timestamp with time zone, answered_at timestamp with time zone, closed_at timestamp with time zone)
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public_data', 'public', 'pg_catalog'
+    AS $$
+DECLARE
+  v_current public_data.lai_request%ROWTYPE;
+  v_now timestamp with time zone;
+  v_from_status text;
+BEGIN
+  PERFORM set_config('app.bypass_rls', 'true', true);
+  PERFORM set_config('app.current_tenant_id', p_tenant_id::text, true);
+  SELECT now() INTO v_now;
+
+  SELECT *
+  INTO v_current
+  FROM public_data.lai_request request
+  WHERE request.tenant_id = p_tenant_id
+    AND request.protocol = p_protocol
+  FOR UPDATE;
+
+  IF v_current.id IS NULL THEN
+    RETURN;
+  END IF;
+
+  IF NOT (
+    (v_current.status = 'RECEIVED' AND p_status = ANY (ARRAY['IN_REVIEW', 'AWAITING_CLARIFICATION', 'EXTENDED', 'ANSWERED', 'DENIED', 'CLOSED'])) OR
+    (v_current.status = 'IN_REVIEW' AND p_status = ANY (ARRAY['AWAITING_CLARIFICATION', 'EXTENDED', 'ANSWERED', 'DENIED'])) OR
+    (v_current.status = 'AWAITING_CLARIFICATION' AND p_status = ANY (ARRAY['IN_REVIEW', 'CLOSED'])) OR
+    (v_current.status = 'EXTENDED' AND p_status = ANY (ARRAY['ANSWERED', 'DENIED', 'CLOSED'])) OR
+    (v_current.status = 'ANSWERED' AND p_status = 'CLOSED') OR
+    (v_current.status = 'DENIED' AND p_status = 'CLOSED')
+  ) THEN
+    RAISE EXCEPTION 'Invalid LAI request transition from % to %', v_current.status, p_status
+      USING ERRCODE = '23514';
+  END IF;
+
+  v_from_status := v_current.status;
+
+  UPDATE public_data.lai_request request
+  SET
+    status = p_status,
+    extended_due_at = CASE
+      WHEN p_status = 'EXTENDED' THEN COALESCE(request.extended_due_at, request.due_at + interval '10 days')
+      ELSE request.extended_due_at
+    END,
+    answered_at = CASE
+      WHEN p_status IN ('ANSWERED', 'DENIED') THEN COALESCE(request.answered_at, v_now)
+      ELSE request.answered_at
+    END,
+    closed_at = CASE
+      WHEN p_status = 'CLOSED' THEN COALESCE(request.closed_at, v_now)
+      ELSE request.closed_at
+    END,
+    updated_at = v_now
+  WHERE request.id = v_current.id
+  RETURNING request.*
+  INTO v_current;
+
+  INSERT INTO public_data.lai_request_event (
+    tenant_id,
+    request_id,
+    from_status,
+    to_status,
+    reason,
+    metadata
+  )
+  VALUES (
+    p_tenant_id,
+    v_current.id,
+    v_from_status,
+    p_status,
+    NULLIF(btrim(COALESCE(p_reason, '')), ''),
+    jsonb_build_object('protocol', p_protocol, 'source', 'state-machine')
+  );
+
+  id := v_current.id;
+  protocol := v_current.protocol;
+  status := v_current.status;
+  submitted_at := v_current.submitted_at;
+  due_at := v_current.due_at;
+  extended_due_at := v_current.extended_due_at;
+  answered_at := v_current.answered_at;
+  closed_at := v_current.closed_at;
+  RETURN NEXT;
+END;
+$$;

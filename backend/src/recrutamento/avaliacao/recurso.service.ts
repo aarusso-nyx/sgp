@@ -106,7 +106,7 @@ export class RecursoService {
         ],
       );
       AuditMutationContextStore.markMutationAudited();
-      return this.toSummary(rows.rows[0]);
+      return this.toSummary(rows.rows[0]!);
     });
   }
 

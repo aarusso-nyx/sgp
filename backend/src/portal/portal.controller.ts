@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -19,6 +20,7 @@ import { PortalService } from './portal.service';
 export class PortalController {
   constructor(private readonly portalService: PortalService) {}
 
+  @ApiOperation({ summary: 'GET portal/v1/auth/me' })
   @Get('portal/v1/auth/me')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'Authenticated portal actor session alias.' })
@@ -26,6 +28,7 @@ export class PortalController {
     return this.portalService.currentSession(actor);
   }
 
+  @ApiOperation({ summary: 'GET portal/v1/auth/govbr/status' })
   @Get('portal/v1/auth/govbr/status')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'Gov.br identity provider status.' })
@@ -33,6 +36,7 @@ export class PortalController {
     return this.portalService.govBrStatus();
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/meus-dados/cadastro' })
   @Get('v1/portal/meus-dados/cadastro')
   @RequirePermission('portal.profile.read')
   @ApiOkResponse({ description: 'Authenticated employee personal profile.' })
@@ -40,6 +44,7 @@ export class PortalController {
     return this.portalService.getPersonalData(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/meus-dados/endereco' })
   @Get('v1/portal/meus-dados/endereco')
   @RequirePermission('portal.profile.read')
   @ApiOkResponse({ description: 'Authenticated employee address.' })
@@ -47,6 +52,7 @@ export class PortalController {
     return this.portalService.getAddress(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/meus-dados/contato' })
   @Get('v1/portal/meus-dados/contato')
   @RequirePermission('portal.profile.read')
   @ApiOkResponse({ description: 'Authenticated employee contact data.' })
@@ -54,6 +60,7 @@ export class PortalController {
     return this.portalService.getContact(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/meus-dados/dependentes' })
   @Get('v1/portal/meus-dados/dependentes')
   @RequirePermission('portal.profile.read')
   @ApiOkResponse({ description: 'Authenticated employee dependents.' })
@@ -61,6 +68,7 @@ export class PortalController {
     return this.portalService.getDependents(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/meus-dados/documentos' })
   @Get('v1/portal/meus-dados/documentos')
   @RequirePermission('portal.profile.read')
   @ApiOkResponse({ description: 'Authenticated employee documents.' })
@@ -68,6 +76,7 @@ export class PortalController {
     return this.portalService.getDocuments(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/meus-dados/cargo' })
   @Get('v1/portal/meus-dados/cargo')
   @RequirePermission('portal.profile.read')
   @ApiOkResponse({
@@ -77,6 +86,7 @@ export class PortalController {
     return this.portalService.getMyJob(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/minha-carreira' })
   @Get('v1/portal/minha-carreira')
   @RequirePermission('portal.profile.read')
   @ApiOkResponse({
@@ -86,6 +96,7 @@ export class PortalController {
     return this.portalService.getMyCareer(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/contracheques/ferias' })
   @Get('v1/portal/contracheques/ferias')
   @RequirePermission('portal.profile.read')
   @ApiOkResponse({
@@ -95,6 +106,7 @@ export class PortalController {
     return this.portalService.vacationPayslips(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/termos-rescisao' })
   @Get('v1/portal/termos-rescisao')
   @RequirePermission('portal.paystub.read')
   @ApiOkResponse({
@@ -104,6 +116,7 @@ export class PortalController {
     return this.portalService.terminationTerms(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/contracheque/:competence' })
   @Get('v1/portal/contracheque/:competence')
   @RequirePermission('portal.paystub.read')
   @ApiOkResponse({
@@ -116,6 +129,7 @@ export class PortalController {
     return this.portalService.getPaystub(actor, competence);
   }
 
+  @ApiOperation({ summary: 'PUT v1/portal/meus-dados/:section' })
   @Put('v1/portal/meus-dados/:section')
   @RequirePermission('portal.profile.write')
   @AuditMutation({

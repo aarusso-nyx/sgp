@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
@@ -17,6 +17,7 @@ interface VacationRecord {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-rh-ferias',
   standalone: false,
   templateUrl: './ferias.html',

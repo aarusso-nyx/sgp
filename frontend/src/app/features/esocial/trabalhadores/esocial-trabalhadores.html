@@ -1,10 +1,12 @@
 <section class="esocial-workers">
   <header class="page-header">
     <div>
-      <h1>Cadastro eSocial</h1>
-      <p>Eventos S-2200, S-2205, S-2220, S-2230, S-2240 e S-2299 por servidor.</p>
+      <h1 i18n>Cadastro eSocial</h1>
+      <p i18n>Eventos S-2200, S-2205, S-2220, S-2230, S-2240 e S-2299 por servidor.</p>
     </div>
-    <button type="button" class="secondary" (click)="load()" [disabled]="loading">Atualizar</button>
+    <button type="button" class="secondary" (click)="load()" [disabled]="loading" i18n>
+      Atualizar
+    </button>
   </header>
 
   <p class="error" *ngIf="error">{{ error }}</p>
@@ -16,11 +18,11 @@
     <table>
       <thead>
         <tr>
-          <th>Matricula</th>
-          <th>Servidor</th>
-          <th>S-2200</th>
-          <th>Pendencias S-2205</th>
-          <th>Acoes</th>
+          <th i18n>Matricula</th>
+          <th i18n>Servidor</th>
+          <th i18n>S-2200</th>
+          <th i18n>Pendencias S-2205</th>
+          <th i18n>Acoes</th>
         </tr>
       </thead>
       <tbody>
@@ -38,6 +40,7 @@
               type="button"
               (click)="reemitS2200(row)"
               [disabled]="emitting === row.employeeId"
+              i18n
             >
               Forcar reemissao
             </button>
@@ -46,13 +49,14 @@
               class="secondary"
               (click)="emitS2205(row)"
               [disabled]="row.pendingS2205 === 0 || emitting === row.employeeId"
+              i18n
             >
               Emitir S-2205
             </button>
           </td>
         </tr>
         <tr *ngIf="!loading && rows.length === 0">
-          <td colspan="5" class="empty">Nenhum servidor encontrado.</td>
+          <td colspan="5" class="empty" i18n>Nenhum servidor encontrado.</td>
         </tr>
       </tbody>
     </table>
@@ -60,16 +64,16 @@
 
   <div class="tabs">
     <section>
-      <h2>CAT (S-2210)</h2>
+      <h2 i18n>CAT (S-2210)</h2>
       <div class="table-shell">
         <table>
           <thead>
             <tr>
-              <th>Servidor</th>
-              <th>CAT</th>
-              <th>Status</th>
-              <th>Erro</th>
-              <th>Acoes</th>
+              <th i18n>Servidor</th>
+              <th i18n>CAT</th>
+              <th i18n>Status</th>
+              <th i18n>Erro</th>
+              <th i18n>Acoes</th>
             </tr>
           </thead>
           <tbody>
@@ -87,6 +91,7 @@
                     type="button"
                     (click)="emitWorkerEvent(row)"
                     [disabled]="emitting === row.id"
+                    i18n
                   >
                     Emitir S-2210
                   </button>
@@ -99,16 +104,16 @@
     </section>
 
     <section>
-      <h2>Monitoramento Saúde (S-2220)</h2>
+      <h2 i18n>Monitoramento Saúde (S-2220)</h2>
       <div class="table-shell">
         <table>
           <thead>
             <tr>
-              <th>Servidor</th>
-              <th>ASO</th>
-              <th>Status</th>
-              <th>Erro</th>
-              <th>Acoes</th>
+              <th i18n>Servidor</th>
+              <th i18n>ASO</th>
+              <th i18n>Status</th>
+              <th i18n>Erro</th>
+              <th i18n>Acoes</th>
             </tr>
           </thead>
           <tbody>
@@ -130,6 +135,7 @@
                     type="button"
                     (click)="emitWorkerEvent(row)"
                     [disabled]="emitting === row.id"
+                    i18n
                   >
                     Reenviar
                   </button>
@@ -142,15 +148,15 @@
     </section>
 
     <section>
-      <h2>Afastamentos</h2>
+      <h2 i18n>Afastamentos</h2>
       <div class="table-shell">
         <table>
           <thead>
             <tr>
-              <th>Servidor</th>
-              <th>Status</th>
-              <th>Recibo</th>
-              <th>Acoes</th>
+              <th i18n>Servidor</th>
+              <th i18n>Status</th>
+              <th i18n>Recibo</th>
+              <th i18n>Acoes</th>
             </tr>
           </thead>
           <tbody>
@@ -164,6 +170,7 @@
                     type="button"
                     (click)="emitWorkerEvent(row)"
                     [disabled]="row.status !== 'PENDING' || emitting === row.id"
+                    i18n
                   >
                     Emitir S-2230
                   </button>
@@ -176,16 +183,16 @@
     </section>
 
     <section>
-      <h2>Agentes Nocivos (S-2240)</h2>
+      <h2 i18n>Agentes Nocivos (S-2240)</h2>
       <div class="table-shell">
         <table>
           <thead>
             <tr>
-              <th>Servidor</th>
-              <th>Exposicao</th>
-              <th>Gatilho</th>
-              <th>Erro</th>
-              <th>Acoes</th>
+              <th i18n>Servidor</th>
+              <th i18n>Exposicao</th>
+              <th i18n>Gatilho</th>
+              <th i18n>Erro</th>
+              <th i18n>Acoes</th>
             </tr>
           </thead>
           <tbody>
@@ -200,6 +207,7 @@
                     type="button"
                     (click)="emitWorkerEvent(row)"
                     [disabled]="emitting === row.id"
+                    i18n
                   >
                     Emitir S-2240
                   </button>
@@ -212,15 +220,15 @@
     </section>
 
     <section>
-      <h2>Desligamentos</h2>
+      <h2 i18n>Desligamentos</h2>
       <div class="table-shell">
         <table>
           <thead>
             <tr>
-              <th>Servidor</th>
-              <th>Status</th>
-              <th>Bloqueio</th>
-              <th>Acoes</th>
+              <th i18n>Servidor</th>
+              <th i18n>Status</th>
+              <th i18n>Bloqueio</th>
+              <th i18n>Acoes</th>
             </tr>
           </thead>
           <tbody>
@@ -237,6 +245,7 @@
                     [disabled]="
                       row.status !== 'PENDING' || !!row.blockedReason || emitting === row.id
                     "
+                    i18n
                   >
                     Emitir S-2299
                   </button>

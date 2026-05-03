@@ -94,6 +94,7 @@ export class BatchBuilderService {
 
       const events = await this.lockPendingEvents(client, batchLimit);
       if (events.length === 0) return null;
+      const firstEvent = events[0]!;
       const inserted = await client.query<BatchRow>(
         `
         INSERT INTO esocial.submission_batch (
@@ -119,7 +120,7 @@ export class BatchBuilderService {
           attempts
         `,
         [
-          events[0].tenant_id,
+          firstEvent.tenant_id,
           environment,
           endpointUrl,
           events.map((event) => event.id),
@@ -133,9 +134,9 @@ export class BatchBuilderService {
         WHERE tenant_id = $1::uuid
           AND id = ANY($2::uuid[])
         `,
-        [events[0].tenant_id, events.map((event) => event.id)],
+        [firstEvent.tenant_id, events.map((event) => event.id)],
       );
-      return this.toWorkItem(inserted.rows[0], events);
+      return this.toWorkItem(inserted.rows[0]!, events);
     });
   }
 
@@ -143,7 +144,7 @@ export class BatchBuilderService {
     if (events.length === 0) {
       throw new BadRequestException('At least one eSocial event is required');
     }
-    const employer = this.extractEmployer(events[0].xml_payload);
+    const employer = this.extractEmployer(events[0]!.xml_payload);
     const transmitter = this.transmitterIdentity(employer);
     const eventGroup = this.eventGroup(events);
     const eventXml = events

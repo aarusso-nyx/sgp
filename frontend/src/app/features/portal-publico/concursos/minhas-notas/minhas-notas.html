@@ -1,27 +1,32 @@
 <section class="notas-workspace">
   <header>
-    <h1>Minhas notas</h1>
+    <h1 i18n>Minhas notas</h1>
   </header>
 
   <form class="lookup">
-    <label>Inscricao <input name="inscricaoId" [(ngModel)]="lookup.inscricaoId" /></label>
-    <label>Token <input name="token" [(ngModel)]="lookup.token" /></label>
+    <label
+      ><ng-container i18n>Inscricao</ng-container>
+      <input name="inscricaoId" [(ngModel)]="lookup.inscricaoId"
+    /></label>
+    <label
+      ><ng-container i18n>Token</ng-container> <input name="token" [(ngModel)]="lookup.token"
+    /></label>
   </form>
 
   <section class="mirror">
-    <h2>Espelho da prova</h2>
+    <h2 i18n>Espelho da prova</h2>
     <table>
       <thead>
         <tr>
-          <th>Prova</th>
-          <th>Bruta</th>
-          <th>Ponderada</th>
-          <th>Recalculo</th>
+          <th i18n>Prova</th>
+          <th i18n>Bruta</th>
+          <th i18n>Ponderada</th>
+          <th i18n>Recalculo</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>OBJETIVA</td>
+          <td i18n>OBJETIVA</td>
           <td>0.000000</td>
           <td>0.000000</td>
           <td>--</td>
@@ -31,9 +36,17 @@
   </section>
 
   <form class="resource">
-    <h2>Recurso</h2>
-    <label>Prova <input name="provaId" [(ngModel)]="recurso.provaId" /></label>
-    <label>Questao <input name="questaoId" [(ngModel)]="recurso.questaoId" /></label>
-    <label>Fundamentacao <textarea name="reason" [(ngModel)]="recurso.reason"></textarea></label>
+    <h2 i18n>Recurso</h2>
+    <label
+      ><ng-container i18n>Prova</ng-container> <input name="provaId" [(ngModel)]="recurso.provaId"
+    /></label>
+    <label
+      ><ng-container i18n>Questao</ng-container>
+      <input name="questaoId" [(ngModel)]="recurso.questaoId"
+    /></label>
+    <label
+      ><ng-container i18n>Fundamentacao</ng-container>
+      <textarea name="reason" [(ngModel)]="recurso.reason"></textarea>
+    </label>
   </form>
 </section>

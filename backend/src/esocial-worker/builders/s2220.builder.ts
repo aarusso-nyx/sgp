@@ -36,6 +36,7 @@ interface AsoSourceRow extends QueryResultRow {
   doctor_name: string | null;
   conclusion: string | null;
   cnpj: string | null;
+  work_environment_code: string | null;
 }
 
 interface AsoExamRow extends QueryResultRow {
@@ -84,9 +85,12 @@ export class S2220Builder {
         aso.doctor_crm,
         aso.doctor_name,
         aso.conclusion::text,
-        company.cnpj
+        company.cnpj,
+        work_location.code AS work_environment_code
       FROM saude.aso_record aso
       JOIN hr.employee employee ON employee.id = aso.employee_id
+      LEFT JOIN hr.work_location work_location
+        ON work_location.id = employee.work_location_id
       LEFT JOIN LATERAL (
         SELECT cnpj
         FROM hr.company
@@ -148,11 +152,16 @@ export class S2220Builder {
       payload: {
         asoRecordId: source.id,
         asoKind: source.aso_kind,
+        workEnvironmentCode: environmentCode(source.work_environment_code),
         tpExameOcup: asoKindCode(source.aso_kind),
         examCount: Math.max(exams.length, 1),
       },
     };
   }
+}
+
+function environmentCode(value: string | null | undefined): string | null {
+  return value ? value.trim().slice(0, 30) : null;
 }
 
 function examXml(exams: AsoExamRow[], asoDate: string): string {

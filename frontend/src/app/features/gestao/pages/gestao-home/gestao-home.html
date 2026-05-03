@@ -1,17 +1,20 @@
 <section class="gestao-home" aria-labelledby="gestao-title">
   <header class="gestao-home__header">
     <div>
-      <p class="gestao-home__eyebrow">Gestao</p>
+      <p class="gestao-home__eyebrow" i18n>Gestao</p>
       <h1 id="gestao-title">{{ currentResource?.label || 'Cadastros' }}</h1>
       <p>
-        CRUD modernizado para cadastros mestres observados no SGP legado. Rota legada:
+        <ng-container i18n
+          >CRUD modernizado para cadastros mestres observados no SGP legado. Rota
+          legada:</ng-container
+        >
         <strong>{{ currentResource?.route || 'nao selecionada' }}</strong>
       </p>
     </div>
 
     <button type="button" mat-flat-button color="primary" (click)="openCreateForm()">
       <mat-icon aria-hidden="true">add</mat-icon>
-      Novo registro
+      <ng-container i18n>Novo registro</ng-container>
     </button>
   </header>
 
@@ -37,26 +40,26 @@
     <mat-card-content>
       <form [formGroup]="form" class="gestao-home__fields" (ngSubmit)="save()">
         <mat-form-field appearance="outline">
-          <mat-label>Codigo</mat-label>
+          <mat-label i18n>Codigo</mat-label>
           <input matInput formControlName="code" maxlength="40" />
-          <mat-error *ngIf="form.controls.code.invalid">Codigo obrigatorio.</mat-error>
+          <mat-error *ngIf="form.controls.code.invalid" i18n>Codigo obrigatorio.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Nome</mat-label>
+          <mat-label i18n>Nome</mat-label>
           <input matInput formControlName="name" maxlength="160" />
-          <mat-error *ngIf="form.controls.name.invalid">Nome obrigatorio.</mat-error>
+          <mat-error *ngIf="form.controls.name.invalid" i18n>Nome obrigatorio.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="gestao-home__description">
-          <mat-label>Descricao</mat-label>
+          <mat-label i18n>Descricao</mat-label>
           <textarea matInput formControlName="description" maxlength="500" rows="3"></textarea>
         </mat-form-field>
 
-        <mat-checkbox formControlName="active">Ativo</mat-checkbox>
+        <mat-checkbox formControlName="active" i18n>Ativo</mat-checkbox>
 
         <div class="gestao-home__form-actions">
-          <button type="button" mat-stroked-button (click)="cancelForm()">Cancelar</button>
+          <button type="button" mat-stroked-button (click)="cancelForm()" i18n>Cancelar</button>
           <button type="submit" mat-flat-button color="primary" [disabled]="saving">
             {{ saving ? 'Salvando...' : 'Salvar' }}
           </button>

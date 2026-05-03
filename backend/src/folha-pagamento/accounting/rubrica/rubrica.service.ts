@@ -483,7 +483,7 @@ export class RubricaService {
       `,
       this.mutationValues(undefined, input).slice(1),
     );
-    return rows.rows[0];
+    return rows.rows[0]!;
   }
 
   private async replaceAttributes(

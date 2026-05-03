@@ -113,10 +113,10 @@ export class AiFlagsService {
     );
     AuditMutationContextStore.markMutationAudited();
     return {
-      id: rows[0].id,
-      kind: rows[0].kind as ProctoringEventKind,
-      severity: rows[0].severity as ProctoringSeverity,
-      aiScore: rows[0].ai_score,
+      id: rows[0]!.id,
+      kind: rows[0]!.kind as ProctoringEventKind,
+      severity: rows[0]!.severity as ProctoringSeverity,
+      aiScore: rows[0]!.ai_score,
     };
   }
 

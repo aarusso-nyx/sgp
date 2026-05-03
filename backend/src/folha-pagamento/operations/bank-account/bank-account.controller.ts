@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ import { BankAccountService } from './bank-account.service';
 export class BankAccountController {
   constructor(private readonly bankAccountService: BankAccountService) {}
 
+  @ApiOperation({ summary: 'GET :id/bank-accounts' })
   @Get(':id/bank-accounts')
   @RequirePermission('hr.bank_account.read')
   @ApiOkResponse({ description: 'Employee bank accounts.' })
@@ -28,6 +30,7 @@ export class BankAccountController {
     return this.bankAccountService.list(id);
   }
 
+  @ApiOperation({ summary: 'POST :id/bank-accounts' })
   @Post(':id/bank-accounts')
   @RequirePermission('hr.bank_account.write')
   @ApiCreatedResponse({
@@ -37,6 +40,7 @@ export class BankAccountController {
     return this.bankAccountService.create(id, body);
   }
 
+  @ApiOperation({ summary: 'POST :id/bank-accounts/:accountId/revalidate' })
   @Post(':id/bank-accounts/:accountId/revalidate')
   @RequirePermission('hr.bank_account.write')
   @ApiOkResponse({ description: 'Revalidate an employee bank account.' })

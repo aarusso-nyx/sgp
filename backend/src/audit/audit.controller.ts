@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -26,6 +27,7 @@ import { AuditService } from './audit.service';
 export class AuditController {
   constructor(private readonly auditService: AuditService) {}
 
+  @ApiOperation({ summary: 'GET logs' })
   @Get('logs')
   @RequirePermission('auditoria.read')
   @ApiOkResponse({ description: 'Paged audit events.' })
@@ -33,6 +35,7 @@ export class AuditController {
     return this.auditService.list(query);
   }
 
+  @ApiOperation({ summary: 'GET logs/:id' })
   @Get('logs/:id')
   @RequirePermission('auditoria.read')
   @ApiOkResponse({ description: 'Fetch audit event detail by id.' })
@@ -44,6 +47,7 @@ export class AuditController {
     return event;
   }
 
+  @ApiOperation({ summary: 'POST exportacoes' })
   @Post('exportacoes')
   @RequirePermission('auditoria.read')
   @ApiCreatedResponse({ description: 'Create an audit trail report request.' })
@@ -60,6 +64,7 @@ export class AuditController {
     return created;
   }
 
+  @ApiOperation({ summary: 'GET exportacoes/:job_id' })
   @Get('exportacoes/:job_id')
   @RequirePermission('auditoria.read')
   @ApiOkResponse({ description: 'Fetch audit export request status.' })

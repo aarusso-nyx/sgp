@@ -1,0 +1,64 @@
+.lgpd-encarregado {
+  display: grid;
+  gap: 1rem;
+}
+
+header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+header p,
+header h1,
+.lgpd-encarregado__details {
+  margin: 0;
+}
+
+header p {
+  color: #52616b;
+}
+
+button {
+  min-height: 2.25rem;
+}
+
+.lgpd-encarregado__details {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 48rem;
+}
+
+.lgpd-encarregado__details div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) 1fr;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e4e9ee;
+}
+
+dt {
+  color: #52616b;
+  font-weight: 600;
+}
+
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.lgpd-encarregado__error {
+  color: #9b1c1c;
+}
+
+@media (max-width: 640px) {
+  header,
+  .lgpd-encarregado__details div {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    display: grid;
+  }
+}

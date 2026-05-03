@@ -1,8 +1,8 @@
 <section class="ponto-afd" aria-labelledby="ponto-afd-title">
   <header class="ponto-afd__header">
     <div>
-      <p>Ponto eletronico</p>
-      <h1 id="ponto-afd-title">AFD</h1>
+      <p i18n>Ponto eletronico</p>
+      <h1 id="ponto-afd-title" i18n>AFD</h1>
     </div>
   </header>
 
@@ -10,58 +10,58 @@
   <p class="ponto-afd__error" *ngIf="error" role="alert">{{ error }}</p>
 
   <form [formGroup]="exportForm" (ngSubmit)="generate()" class="ponto-afd__panel">
-    <h2>Geracao</h2>
+    <h2 i18n>Geracao</h2>
     <div class="ponto-afd__fields">
       <label>
-        <span>Equipamento REP</span>
+        <span i18n>Equipamento REP</span>
         <input formControlName="repDeviceId" />
       </label>
       <label>
-        <span>Inicio</span>
+        <span i18n>Inicio</span>
         <input type="datetime-local" formControlName="periodStart" />
       </label>
       <label>
-        <span>Fim</span>
+        <span i18n>Fim</span>
         <input type="datetime-local" formControlName="periodEnd" />
       </label>
     </div>
-    <button type="submit" [disabled]="saving">Gerar AFD</button>
+    <button type="submit" [disabled]="saving" i18n>Gerar AFD</button>
   </form>
 
   <form [formGroup]="importForm" (ngSubmit)="importAfd()" class="ponto-afd__panel">
-    <h2>Importacao</h2>
+    <h2 i18n>Importacao</h2>
     <div class="ponto-afd__fields">
       <label>
-        <span>Equipamento REP</span>
+        <span i18n>Equipamento REP</span>
         <input formControlName="repDeviceId" />
       </label>
       <label>
-        <span>Arquivo</span>
+        <span i18n>Arquivo</span>
         <input formControlName="fileName" />
       </label>
       <label>
-        <span>Upload</span>
+        <span i18n>Upload</span>
         <input type="file" accept=".txt,.afd,text/plain" (change)="readFile($event)" />
       </label>
     </div>
     <label class="ponto-afd__textarea">
-      <span>Conteudo</span>
+      <span i18n>Conteudo</span>
       <textarea formControlName="content" rows="8"></textarea>
     </label>
-    <button type="submit" [disabled]="saving">Importar AFD</button>
+    <button type="submit" [disabled]="saving" i18n>Importar AFD</button>
   </form>
 
   <section class="ponto-afd__panel">
-    <h2>Exports</h2>
-    <p *ngIf="loading">Carregando...</p>
-    <table aria-label="Exports AFD">
+    <h2 i18n>Exports</h2>
+    <p *ngIf="loading" i18n>Carregando...</p>
+    <table aria-label="Exports AFD" i18n-aria-label>
       <thead>
         <tr>
-          <th>Gerado em</th>
-          <th>Status</th>
-          <th>Linhas</th>
-          <th>SHA-256</th>
-          <th>Download</th>
+          <th i18n>Gerado em</th>
+          <th i18n>Status</th>
+          <th i18n>Linhas</th>
+          <th i18n>SHA-256</th>
+          <th i18n>Download</th>
         </tr>
       </thead>
       <tbody>
@@ -71,7 +71,9 @@
           <td>{{ entry.lineCount }}</td>
           <td class="ponto-afd__hash">{{ entry.fileSha256 || '-' }}</td>
           <td>
-            <a *ngIf="entry.status === 'READY'" [href]="downloadUrl(entry.afdExportId)">Baixar</a>
+            <a *ngIf="entry.status === 'READY'" [href]="downloadUrl(entry.afdExportId)" i18n
+              >Baixar</a
+            >
           </td>
         </tr>
       </tbody>
@@ -79,16 +81,16 @@
   </section>
 
   <section class="ponto-afd__panel">
-    <h2>Imports</h2>
-    <table aria-label="Imports AFD">
+    <h2 i18n>Imports</h2>
+    <table aria-label="Imports AFD" i18n-aria-label>
       <thead>
         <tr>
-          <th>Arquivo</th>
-          <th>Status</th>
-          <th>Aceitas</th>
-          <th>Rejeitadas</th>
-          <th>SHA-256</th>
-          <th>Erro</th>
+          <th i18n>Arquivo</th>
+          <th i18n>Status</th>
+          <th i18n>Aceitas</th>
+          <th i18n>Rejeitadas</th>
+          <th i18n>SHA-256</th>
+          <th i18n>Erro</th>
         </tr>
       </thead>
       <tbody>

@@ -1,5 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -12,6 +17,7 @@ import { PayrollBridgeService } from './payroll-bridge.service';
 export class PayrollBridgeController {
   constructor(private readonly payrollBridgeService: PayrollBridgeService) {}
 
+  @ApiOperation({ summary: 'POST preview' })
   @Post('preview')
   @RequirePermission('ponto.payroll.read')
   @AuditMutation({
@@ -27,6 +33,7 @@ export class PayrollBridgeController {
     return this.payrollBridgeService.preview(body);
   }
 
+  @ApiOperation({ summary: 'POST apply' })
   @Post('apply')
   @RequirePermission('ponto.payroll.write')
   @AuditMutation({

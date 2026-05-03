@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { HealthService } from './health.service';
 import { Public } from '../../iam/decorators/require-permission.decorator';
@@ -9,12 +9,14 @@ import { Public } from '../../iam/decorators/require-permission.decorator';
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 
+  @ApiOperation({ summary: 'GET Health' })
   @Get()
   @Public()
   health() {
     return this.healthService.health();
   }
 
+  @ApiOperation({ summary: 'GET ready' })
   @Get('ready')
   @Public()
   readiness() {

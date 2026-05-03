@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -26,6 +27,7 @@ export class ConsignmentController {
     private readonly consignmentLoanService: ConsignmentLoanService,
   ) {}
 
+  @ApiOperation({ summary: 'GET :id/consignment-margin' })
   @Get(':id/consignment-margin')
   @RequirePermission('payment.consignment.read')
   @ApiOkResponse({ description: 'Employee consignment margin.' })
@@ -36,6 +38,7 @@ export class ConsignmentController {
     return this.consignmentLoanService.getMargin(id, query.competence);
   }
 
+  @ApiOperation({ summary: 'GET :id/consignment-loans' })
   @Get(':id/consignment-loans')
   @RequirePermission('payment.consignment.read')
   @ApiOkResponse({ description: 'Employee consignment loans.' })
@@ -43,6 +46,7 @@ export class ConsignmentController {
     return this.consignmentLoanService.list(id);
   }
 
+  @ApiOperation({ summary: 'POST :id/consignment-loans' })
   @Post(':id/consignment-loans')
   @RequirePermission('payment.consignment.write')
   @ApiCreatedResponse({ description: 'Create a consignment loan.' })

@@ -2,12 +2,15 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { createHash } from 'node:crypto';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import type { AuthenticatedActor } from '../../auth/auth.types';
+import { LGPD_DATA_FLOWS } from '../../common/lgpd/legal-basis.registry';
+import { LgpdLegalBasisService } from '../../common/lgpd/legal-basis.service';
 import { DatabaseService } from '../../database/database.service';
 import { PdfABuilderService } from '../payslip/pdf-a-builder.service';
 import {
@@ -36,6 +39,7 @@ interface AggregateRow extends QueryResultRow {
   irrf_total: string;
   dependents_count: number | string;
   s1210_total: string;
+  s1210_irrf_total: string;
   recomputed_at: Date | string;
 }
 
@@ -61,11 +65,14 @@ export class YearlyIncomeRenderService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly pdfBuilder: PdfABuilderService,
+    @Optional()
+    private readonly legalBasisService?: LgpdLegalBasisService,
   ) {}
 
   async listPortalFiles(actor: AuthenticatedActor | undefined) {
     this.ensureDatabase();
     const employee = await this.loadActorEmployee(actor);
+    await this.assertYearlyIncomeLegalBasis();
     const rows = await this.databaseService.query<AggregateRow>(
       `
       SELECT *
@@ -166,6 +173,7 @@ export class YearlyIncomeRenderService {
     yearBase: number,
     employeeId: string,
   ): Promise<AggregateRow> {
+    await this.assertYearlyIncomeLegalBasis();
     const rows = await client.query<AggregateRow>(
       `
       SELECT *
@@ -205,7 +213,7 @@ export class YearlyIncomeRenderService {
       `,
       [tenantId],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureReportRequest(
@@ -237,7 +245,7 @@ export class YearlyIncomeRenderService {
       `,
       [row.tenant_id, definitionId, Number(row.year_base), row.employee_id],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureAttachment(
@@ -288,7 +296,7 @@ export class YearlyIncomeRenderService {
         file.fileHash,
       ],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureGeneratedFile(
@@ -322,7 +330,7 @@ export class YearlyIncomeRenderService {
         $5::uuid,
         NULL,
         'PDF_A_1B'::public."PdfACompliance",
-        'NONE'::public."SignatureKind",
+        'ICP_BRASIL_A1'::public."SignatureKind",
         make_date($4::integer + 10, 12, 31),
         $6
       )
@@ -337,7 +345,7 @@ export class YearlyIncomeRenderService {
         file.fileHash,
       ],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async loadActorEmployee(
@@ -388,8 +396,15 @@ export class YearlyIncomeRenderService {
       irrfTotal: row.irrf_total,
       dependentsCount: Number(row.dependents_count),
       s1210Total: row.s1210_total,
+      s1210IrrfTotal: row.s1210_irrf_total,
       recomputedAt: this.toIso(row.recomputed_at),
     };
+  }
+
+  private async assertYearlyIncomeLegalBasis(): Promise<void> {
+    await this.legalBasisService?.assertPiiReadAllowed(
+      LGPD_DATA_FLOWS.FISCAL_YEARLY_INCOME_PDF,
+    );
   }
 
   private ensureDatabase(): void {

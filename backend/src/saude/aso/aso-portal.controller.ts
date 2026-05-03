@@ -1,5 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { AsoService } from './aso.service';
@@ -10,6 +15,7 @@ import { AsoService } from './aso.service';
 export class AsoPortalController {
   constructor(private readonly asoService: AsoService) {}
 
+  @ApiOperation({ summary: 'GET List own aso' })
   @Get()
   @RequirePermission('saude.aso.self_read')
   @ApiOkResponse({
@@ -28,6 +34,7 @@ export class AsoPortalController {
     }));
   }
 
+  @ApiOperation({ summary: 'GET proximo' })
   @Get('proximo')
   @RequirePermission('saude.aso.self_read')
   @ApiOkResponse({ description: 'Own next ASO due date.' })

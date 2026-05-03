@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface ESocialExcludableEvent {
   id: string;
@@ -30,18 +30,18 @@ export interface S3000RequestStatus {
 
 @Injectable({ providedIn: 'root' })
 export class ESocialExclusaoService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   events(): Observable<ESocialExcludableEvent[]> {
-    return this.http.get<ESocialExcludableEvent[]>('/api/v1/esocial/events/excludable');
+    return this.api.get<ESocialExcludableEvent[]>('/api/v1/esocial/events/excludable');
   }
 
   requests(): Observable<S3000RequestStatus[]> {
-    return this.http.get<S3000RequestStatus[]>('/api/v1/esocial/exclusions');
+    return this.api.get<S3000RequestStatus[]>('/api/v1/esocial/exclusions');
   }
 
   exclude(eventId: string, justification: string): Observable<S3000RequestStatus> {
-    return this.http.post<S3000RequestStatus>(`/api/v1/esocial/events/${eventId}/exclude`, {
+    return this.api.post<S3000RequestStatus>(`/api/v1/esocial/events/${eventId}/exclude`, {
       justification,
     });
   }

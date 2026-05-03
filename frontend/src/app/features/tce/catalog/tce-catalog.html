@@ -1,19 +1,19 @@
 <section class="tce-catalog">
   <header class="page-header">
     <div>
-      <h1>Catálogo TCE</h1>
-      <p>UF, sistemas, versões e campos públicos para adapters TCE.</p>
+      <h1 i18n>Catálogo TCE</h1>
+      <p i18n>UF, sistemas, versões e campos públicos para adapters TCE.</p>
     </div>
     <button mat-stroked-button type="button" (click)="loadStates()" [disabled]="loading">
       <mat-icon>refresh</mat-icon>
-      Atualizar
+      <ng-container i18n>Atualizar</ng-container>
     </button>
   </header>
 
   <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
   <div class="layout">
-    <nav class="states" aria-label="Unidades federativas">
+    <nav class="states" aria-label="Unidades federativas" i18n-aria-label>
       <button
         *ngFor="let state of states"
         type="button"
@@ -30,11 +30,11 @@
       <table>
         <thead>
           <tr>
-            <th>Sistema</th>
-            <th>Versão</th>
-            <th>Vigência</th>
-            <th>Status</th>
-            <th>Ações</th>
+            <th i18n>Sistema</th>
+            <th i18n>Versão</th>
+            <th i18n>Vigência</th>
+            <th i18n>Status</th>
+            <th i18n>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +54,7 @@
                 title="Marcar ativa"
                 [disabled]="busyLayoutId === layout.id || layout.status !== 'DRAFT'"
                 (click)="activate(layout); $event.stopPropagation()"
+                i18n-title
               >
                 <mat-icon>check_circle</mat-icon>
               </button>
@@ -63,6 +64,7 @@
                 title="Marcar superada"
                 [disabled]="busyLayoutId === layout.id || layout.status !== 'ACTIVE'"
                 (click)="supersede(layout); $event.stopPropagation()"
+                i18n-title
               >
                 <mat-icon>archive</mat-icon>
               </button>
@@ -73,18 +75,18 @@
     </section>
 
     <aside class="fields">
-      <h2>Campos</h2>
-      <p *ngIf="!selectedLayout">Selecione uma versão.</p>
-      <p *ngIf="selectedLayout && fields.length === 0">
+      <h2 i18n>Campos</h2>
+      <p *ngIf="!selectedLayout" i18n>Selecione uma versão.</p>
+      <p *ngIf="selectedLayout && fields.length === 0" i18n>
         Nenhum campo publicado para este placeholder.
       </p>
       <table *ngIf="fields.length > 0">
         <thead>
           <tr>
-            <th>Ordem</th>
-            <th>Caminho</th>
-            <th>Tipo</th>
-            <th>Obrigatório</th>
+            <th i18n>Ordem</th>
+            <th i18n>Caminho</th>
+            <th i18n>Tipo</th>
+            <th i18n>Obrigatório</th>
           </tr>
         </thead>
         <tbody>

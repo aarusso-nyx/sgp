@@ -42,7 +42,7 @@ export class FaceConsentService {
       [input.employeeId, input.consentVersion.trim(), input.consentAt ?? null],
     );
     AuditMutationContextStore.markMutationAudited();
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async withdraw(employeeId: string): Promise<Record<string, unknown>> {
@@ -95,7 +95,7 @@ export class FaceConsentService {
       `,
       [employeeId],
     );
-    const row = rows[0];
+    const row = rows[0]!;
     return {
       employeeId: row.employee_id,
       status: row.status,

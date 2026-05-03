@@ -91,7 +91,9 @@ export class AudespValidatorService {
       return;
     }
     const decimal = new Decimal(text);
-    const [integerPart, fractionalPart = ''] = decimal.toFixed().split('.');
+    const [integerPart = '0', fractionalPart = ''] = decimal
+      .toFixed()
+      .split('.');
     const integerDigits = integerPart.replace('-', '').length;
     const precision = field.decimalPrecision ?? 14;
     const scale = field.decimalScale ?? 2;

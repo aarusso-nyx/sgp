@@ -46,7 +46,7 @@ export class BiometricConsentService {
         input.signedDocRef.trim(),
       ],
     );
-    return { id: rows.rows[0].id };
+    return { id: rows.rows[0]!.id };
   }
 
   async assertActiveConsent(

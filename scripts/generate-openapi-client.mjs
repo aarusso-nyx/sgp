@@ -5,6 +5,14 @@ import { dirname, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 
 const sourceRoot = process.cwd();
+const backendRoot = resolve(sourceRoot, 'backend');
+const nodePath = [
+  resolve(backendRoot, 'node_modules'),
+  resolve(sourceRoot, 'node_modules'),
+  process.env.NODE_PATH,
+]
+  .filter(Boolean)
+  .join(':');
 const backendDistMain = resolve(sourceRoot, 'backend/dist/src/main.js');
 const backendDistPortalMain = resolve(sourceRoot, 'backend/dist/src/main-portal.js');
 
@@ -38,6 +46,20 @@ async function waitForJson(url) {
     await sleep(400);
   }
   throw new Error(`Timed out waiting for ${url}`);
+}
+
+function normalizeOpenApi31(spec, label) {
+  if (!spec || typeof spec !== 'object') {
+    throw new Error(`[openapi-client] ${label} did not return an OpenAPI document`);
+  }
+  if (!spec.paths || typeof spec.paths !== 'object') {
+    throw new Error(`[openapi-client] ${label} OpenAPI document is missing paths`);
+  }
+  return {
+    ...spec,
+    openapi: '3.1.0',
+    jsonSchemaDialect: 'https://json-schema.org/draft/2020-12/schema',
+  };
 }
 
 function toPascal(value) {
@@ -231,9 +253,10 @@ async function main() {
   mkdirSync(portalOutDir, { recursive: true });
 
   const coreProcess = spawn(process.execPath, [backendDistMain], {
-    cwd: sourceRoot,
+    cwd: backendRoot,
     env: {
       ...process.env,
+      NODE_PATH: nodePath,
       PORT: String(corePort),
       APP_SERVICE_NAME: 'sgp-core-api',
     },
@@ -241,9 +264,10 @@ async function main() {
   });
 
   const portalProcess = spawn(process.execPath, [backendDistPortalMain], {
-    cwd: sourceRoot,
+    cwd: backendRoot,
     env: {
       ...process.env,
+      NODE_PATH: nodePath,
       PORTAL_API_PORT: String(portalPort),
       APP_SERVICE_NAME: 'sgp-portal-api',
     },
@@ -251,10 +275,12 @@ async function main() {
   });
 
   try {
-    const [coreSpec, portalSpec] = await Promise.all([
+    const [rawCoreSpec, rawPortalSpec] = await Promise.all([
       waitForJson(`http://127.0.0.1:${corePort}/api/docs-json`),
       waitForJson(`http://127.0.0.1:${portalPort}/api/portal-docs-json`),
     ]);
+    const coreSpec = normalizeOpenApi31(rawCoreSpec, 'core');
+    const portalSpec = normalizeOpenApi31(rawPortalSpec, 'portal');
 
     writeFileSync(coreSpecPath, `${JSON.stringify(coreSpec, null, 2)}\n`, 'utf8');
     writeFileSync(portalSpecPath, `${JSON.stringify(portalSpec, null, 2)}\n`, 'utf8');

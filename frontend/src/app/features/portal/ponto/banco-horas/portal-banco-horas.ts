@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { EMPTY, Subject, switchMap, takeUntil } from 'rxjs';
 
 import {
@@ -9,6 +9,7 @@ import {
 } from '../../../ponto/banco-horas/ponto-banco-horas.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-portal-banco-horas',
   standalone: true,
   imports: [CommonModule],

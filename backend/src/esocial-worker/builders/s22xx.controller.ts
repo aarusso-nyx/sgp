@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString, Matches } from 'class-validator';
 
 import { AuditService } from '../../audit/audit.service';
@@ -27,6 +32,7 @@ export class S22xxController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET Status' })
   @Get()
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({ description: 'List worker eSocial S-2200/S-2205 status.' })
@@ -34,6 +40,7 @@ export class S22xxController {
     return this.service.listStatus();
   }
 
+  @ApiOperation({ summary: 'POST :employeeId/s2200/emitir' })
   @Post(':employeeId/s2200/emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({ description: 'Force or schedule S-2200 emission.' })
@@ -51,6 +58,7 @@ export class S22xxController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST :employeeId/s2205/emitir' })
   @Post(':employeeId/s2205/emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({ description: 'Emit pending S-2205 worker changes.' })

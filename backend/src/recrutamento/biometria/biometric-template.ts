@@ -28,7 +28,7 @@ export function scoreBiometricTemplates(left: Buffer, right: Buffer): number {
   if (length === 0) return 0;
   let matchingBits = 0;
   for (let index = 0; index < length; index += 1) {
-    matchingBits += 8 - bitCount(left[index] ^ right[index]);
+    matchingBits += 8 - bitCount(left[index]! ^ right[index]!);
   }
   return matchingBits / (length * 8);
 }
@@ -39,7 +39,7 @@ export function encryptTemplate(template: Buffer, kmsKeyId: string): Buffer {
   const mask = createHmac('sha512', key).update(nonce).digest();
   const cipher = Buffer.alloc(template.length);
   for (let index = 0; index < template.length; index += 1) {
-    cipher[index] = template[index] ^ mask[index % mask.length];
+    cipher[index] = template[index]! ^ mask[index % mask.length]!;
   }
   return Buffer.concat([Buffer.from('SGPBIO1:'), nonce, cipher]);
 }
@@ -55,7 +55,7 @@ export function decryptTemplate(cipher: Buffer, kmsKeyId: string): Buffer {
   const mask = createHmac('sha512', key).update(nonce).digest();
   const template = Buffer.alloc(body.length);
   for (let index = 0; index < body.length; index += 1) {
-    template[index] = body[index] ^ mask[index % mask.length];
+    template[index] = body[index]! ^ mask[index % mask.length]!;
   }
   return template;
 }

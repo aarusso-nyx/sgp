@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
 import { Public } from '../iam/decorators/require-permission.decorator';
@@ -12,6 +12,7 @@ export class PublicTransparencyController {
     private readonly publicTransparencyService: PublicTransparencyService,
   ) {}
 
+  @ApiOperation({ summary: 'GET folha' })
   @Get('folha')
   @Public()
   @ApiOkResponse({ description: 'Public payroll transparency listing.' })

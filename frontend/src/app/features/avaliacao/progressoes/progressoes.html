@@ -1,10 +1,10 @@
 <section class="progressions" aria-labelledby="progressions-title">
   <header class="progressions__header">
     <div>
-      <p>Avaliacao</p>
-      <h1 id="progressions-title">Progressoes</h1>
+      <p i18n>Avaliacao</p>
+      <h1 id="progressions-title" i18n>Progressoes</h1>
     </div>
-    <div class="progressions__filters" role="tablist" aria-label="Filtro de status">
+    <div class="progressions__filters" role="tablist" aria-label="Filtro de status" i18n-aria-label>
       <button
         mat-stroked-button
         type="button"
@@ -23,59 +23,64 @@
   <div class="progressions__layout">
     <form [formGroup]="simulationForm" (ngSubmit)="simulate()" class="progressions__form">
       <label>
-        <span>Servidor</span>
+        <span i18n>Servidor</span>
         <input formControlName="employeeId" />
       </label>
       <label>
-        <span>Data efeito</span>
+        <span i18n>Data efeito</span>
         <input type="date" formControlName="effectDate" />
       </label>
       <label>
-        <span>Tipo</span>
+        <span i18n>Tipo</span>
         <select formControlName="progressionType">
-          <option value="merit_horizontal">Merito horizontal</option>
-          <option value="vertical_promotion">Promocao vertical</option>
+          <option value="merit_horizontal" i18n>Merito horizontal</option>
+          <option value="vertical_promotion" i18n>Promocao vertical</option>
         </select>
       </label>
       <label>
-        <span>Nivel destino</span>
+        <span i18n>Nivel destino</span>
         <input formControlName="targetSalaryRangeLevelId" />
       </label>
       <label>
-        <span>Rubrica de calculo</span>
+        <span i18n>Rubrica de calculo</span>
         <input formControlName="earningDeductionId" />
       </label>
       <label>
-        <span>Ato</span>
+        <span i18n>Ato</span>
         <input formControlName="appointmentAct" />
       </label>
       <label class="progressions__wide">
-        <span>Justificativa</span>
+        <span i18n>Justificativa</span>
         <textarea rows="4" formControlName="justification"></textarea>
       </label>
       <button mat-flat-button color="primary" type="submit">
         <mat-icon>calculate</mat-icon>
-        Simular
+        <ng-container i18n>Simular</ng-container>
       </button>
     </form>
 
-    <section class="progressions__result" *ngIf="simulation" aria-label="Resultado da simulacao">
+    <section
+      class="progressions__result"
+      *ngIf="simulation"
+      aria-label="Resultado da simulacao"
+      i18n-aria-label
+    >
       <span>{{ simulation.progressionId }}</span>
       <strong>{{ simulation.netDelta }}</strong>
       <small>{{ simulation.sourceSalary }} -> {{ simulation.targetSalary }}</small>
     </section>
   </div>
 
-  <section class="progressions__table" aria-label="Lista de progressoes">
-    <p *ngIf="loading">Carregando...</p>
+  <section class="progressions__table" aria-label="Lista de progressoes" i18n-aria-label>
+    <p *ngIf="loading" i18n>Carregando...</p>
     <table>
       <thead>
         <tr>
-          <th>Servidor</th>
-          <th>Tipo</th>
-          <th>Status</th>
-          <th>Efeito</th>
-          <th>Impacto</th>
+          <th i18n>Servidor</th>
+          <th i18n>Tipo</th>
+          <th i18n>Status</th>
+          <th i18n>Efeito</th>
+          <th i18n>Impacto</th>
           <th></th>
         </tr>
       </thead>
@@ -98,7 +103,7 @@
               [disabled]="record.status === 'applied'"
             >
               <mat-icon>check_circle</mat-icon>
-              Aplicar
+              <ng-container i18n>Aplicar</ng-container>
             </button>
           </td>
         </tr>

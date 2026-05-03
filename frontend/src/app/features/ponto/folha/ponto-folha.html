@@ -1,8 +1,8 @@
 <section class="ponto-folha" aria-labelledby="ponto-folha-title">
   <header class="ponto-folha__header">
     <div>
-      <p>Ponto eletronico</p>
-      <h1 id="ponto-folha-title">Integracao com folha</h1>
+      <p i18n>Ponto eletronico</p>
+      <h1 id="ponto-folha-title" i18n>Integracao com folha</h1>
     </div>
   </header>
 
@@ -12,60 +12,60 @@
   <form [formGroup]="form" class="ponto-folha__panel">
     <div class="ponto-folha__fields">
       <label>
-        <span>Folha</span>
+        <span i18n>Folha</span>
         <input formControlName="payrollRunId" />
       </label>
       <label>
-        <span>Periodo de ponto</span>
+        <span i18n>Periodo de ponto</span>
         <input formControlName="timesheetPeriodId" />
       </label>
     </div>
     <div class="ponto-folha__actions">
-      <button type="button" (click)="preview()" [disabled]="loading">Pre-visualizar</button>
-      <button type="button" (click)="apply()" [disabled]="applying">Aplicar a folha</button>
+      <button type="button" (click)="preview()" [disabled]="loading" i18n>Pre-visualizar</button>
+      <button type="button" (click)="apply()" [disabled]="applying" i18n>Aplicar a folha</button>
     </div>
   </form>
 
   <section class="ponto-folha__panel" *ngIf="previewResult">
-    <h2>Agregados</h2>
+    <h2 i18n>Agregados</h2>
     <dl class="ponto-folha__metrics">
       <div>
-        <dt>Trabalhadas</dt>
-        <dd>{{ previewResult.aggregate.workedMinutes }}min</dd>
+        <dt i18n>Trabalhadas</dt>
+        <dd i18n>{{ previewResult.aggregate.workedMinutes }}min</dd>
       </div>
       <div>
-        <dt>Esperadas</dt>
-        <dd>{{ previewResult.aggregate.expectedMinutes }}min</dd>
+        <dt i18n>Esperadas</dt>
+        <dd i18n>{{ previewResult.aggregate.expectedMinutes }}min</dd>
       </div>
       <div>
-        <dt>HE 50%</dt>
-        <dd>{{ previewResult.aggregate.overtime50Minutes }}min</dd>
+        <dt i18n>HE 50%</dt>
+        <dd i18n>{{ previewResult.aggregate.overtime50Minutes }}min</dd>
       </div>
       <div>
-        <dt>HE 100%</dt>
-        <dd>{{ previewResult.aggregate.overtime100Minutes }}min</dd>
+        <dt i18n>HE 100%</dt>
+        <dd i18n>{{ previewResult.aggregate.overtime100Minutes }}min</dd>
       </div>
       <div>
-        <dt>Noturno</dt>
-        <dd>{{ previewResult.aggregate.nightMinutes }}min</dd>
+        <dt i18n>Noturno</dt>
+        <dd i18n>{{ previewResult.aggregate.nightMinutes }}min</dd>
       </div>
       <div>
-        <dt>Absenteismo</dt>
-        <dd>{{ previewResult.aggregate.absenceUnpaidMinutes }}min</dd>
+        <dt i18n>Absenteismo</dt>
+        <dd i18n>{{ previewResult.aggregate.absenceUnpaidMinutes }}min</dd>
       </div>
     </dl>
   </section>
 
   <section class="ponto-folha__panel" *ngIf="previewResult">
-    <h2>Linhas</h2>
-    <table aria-label="Linhas de folha geradas pelo ponto">
+    <h2 i18n>Linhas</h2>
+    <table aria-label="Linhas de folha geradas pelo ponto" i18n-aria-label>
       <thead>
         <tr>
-          <th>Rubrica</th>
-          <th>Tipo</th>
-          <th>Horas</th>
-          <th>Referencia</th>
-          <th>Valor</th>
+          <th i18n>Rubrica</th>
+          <th i18n>Tipo</th>
+          <th i18n>Horas</th>
+          <th i18n>Referencia</th>
+          <th i18n>Valor</th>
         </tr>
       </thead>
       <tbody>

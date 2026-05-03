@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { AuditModule } from '../audit/audit.module';
 import { AuthModule } from '../auth/auth.module';
+import { ConsultasModule } from '../consultas/consultas.module';
 import { DatabaseModule } from '../database/database.module';
 import { EmployeesController } from './employees/employees.controller';
 import { EmployeesService } from './employees/employees.service';
@@ -20,9 +21,11 @@ import { LeavesController } from './workflows/leaves/leaves.controller';
 import { LeavesService } from './workflows/leaves/leaves.service';
 import { EmployeeTransferController } from './employee-transfer/employee-transfer.controller';
 import { EmployeeTransferService } from './employee-transfer/employee-transfer.service';
+import { OrganicDefinitionController } from './organic-definitions/organic-definition.controller';
+import { OrganicDefinitionService } from './organic-definitions/organic-definition.service';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule],
+  imports: [AuthModule, DatabaseModule, AuditModule, ConsultasModule],
   controllers: [
     EmployeesController,
     RhWorkflowsController,
@@ -31,6 +34,7 @@ import { EmployeeTransferService } from './employee-transfer/employee-transfer.s
     MedicalLeaveController,
     LeavesController,
     EmployeeTransferController,
+    OrganicDefinitionController,
   ],
   providers: [
     EmployeesService,
@@ -41,6 +45,7 @@ import { EmployeeTransferService } from './employee-transfer/employee-transfer.s
     MedicalLeaveService,
     LeavesService,
     EmployeeTransferService,
+    OrganicDefinitionService,
   ],
 })
 export class RhModule {}

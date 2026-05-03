@@ -1,22 +1,22 @@
 <section class="pis-pasep">
   <header>
-    <h1>PIS/PASEP</h1>
+    <h1 i18n>PIS/PASEP</h1>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Servidor</mat-label>
+      <mat-label i18n>Servidor</mat-label>
       <input matInput formControlName="employeeId" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Ano-base</mat-label>
+      <mat-label i18n>Ano-base</mat-label>
       <input matInput type="number" min="2000" max="2100" formControlName="year" />
     </mat-form-field>
 
     <button mat-flat-button color="primary" type="button" (click)="load()" [disabled]="loading">
       <mat-icon>search</mat-icon>
-      Consultar
+      <ng-container i18n>Consultar</ng-container>
     </button>
   </form>
 
@@ -24,19 +24,19 @@
 
   <section *ngIf="result as base" class="summary" aria-live="polite">
     <div>
-      <span>Servidor</span>
+      <span i18n>Servidor</span>
       <strong>{{ base.registration }} - {{ base.employeeName }}</strong>
     </div>
     <div>
-      <span>Programa</span>
+      <span i18n>Programa</span>
       <strong>{{ base.program }}</strong>
     </div>
     <div>
-      <span>Total anual</span>
+      <span i18n>Total anual</span>
       <strong>{{ base.totalBase | moneyBr }}</strong>
     </div>
     <div>
-      <span>Atualizado</span>
+      <span i18n>Atualizado</span>
       <strong>{{ base.updatedAt | date: 'short' }}</strong>
     </div>
   </section>
@@ -44,8 +44,8 @@
   <table *ngIf="result as base">
     <thead>
       <tr>
-        <th>Mes</th>
-        <th>Base</th>
+        <th i18n>Mes</th>
+        <th i18n>Base</th>
       </tr>
     </thead>
     <tbody>

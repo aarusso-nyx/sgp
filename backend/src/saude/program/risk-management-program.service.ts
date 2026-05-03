@@ -63,7 +63,7 @@ export class RiskManagementProgramService {
         input.responsibleEngineerId ?? '',
       ],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async activate(id: string) {
@@ -107,7 +107,7 @@ export class RiskManagementProgramService {
         `,
         [id],
       );
-      const active = updated.rows[0];
+      const active = updated.rows[0]!;
       await this.revisionService.createWithClient(client, {
         parentProgramId: id,
         parentProgramKind: 'PGR',

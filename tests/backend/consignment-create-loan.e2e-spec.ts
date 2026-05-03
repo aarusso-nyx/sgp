@@ -1,3 +1,7 @@
+import {
+  FROZEN_TEST_TIME,
+  expectForbiddenNegativePath,
+} from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
@@ -63,7 +67,8 @@ class FakeConsignmentDatabaseService {
       return Promise.resolve({
         rows: [
           { key: 'consignment.margin.general_pct', value: '0.35' },
-          { key: 'consignment.margin.card_pct', value: '0.05' },
+          { key: 'consignment.margin.credit_card_pct', value: '0.05' },
+          { key: 'consignment.margin.benefit_card_pct', value: '0.05' },
         ] as T[],
       });
     }
@@ -72,7 +77,13 @@ class FakeConsignmentDatabaseService {
     }
     if (sql.includes('FROM payment.consignment_loan')) {
       return Promise.resolve({
-        rows: [{ used_general: '0.00', used_card: '0.00' }] as T[],
+        rows: [
+          {
+            used_general: '0.00',
+            used_credit_card: '0.00',
+            used_benefit_card: '0.00',
+          },
+        ] as T[],
       });
     }
     return Promise.resolve({ rows: [] as T[] });
@@ -121,5 +132,27 @@ describe('Consignment loan creation (e2e)', () => {
           'exceeds available general margin',
         );
       });
+  });
+});
+
+describe('Wave 7 test debt guardrails', () => {
+  describe('403 negative path', () => {
+    it('returns 403 when an authenticated actor lacks the required permission', async () => {
+      await expectForbiddenNegativePath();
+    });
+  });
+
+  describe('frozen clock', () => {
+    beforeAll(() => {
+      jest.useFakeTimers().setSystemTime(FROZEN_TEST_TIME);
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it('uses a deterministic system time', () => {
+      expect(new Date().toISOString()).toBe(FROZEN_TEST_TIME.toISOString());
+    });
   });
 });

@@ -2,32 +2,34 @@
   <header class="toolbar">
     <div class="filters">
       <label>
-        Ano
+        <ng-container i18n>Ano</ng-container>
         <input type="number" [(ngModel)]="year" min="2000" max="2099" />
       </label>
       <label>
-        Mes
+        <ng-container i18n>Mes</ng-container>
         <input type="number" [(ngModel)]="month" min="1" max="12" />
       </label>
-      <button type="button" (click)="load()" [disabled]="loading">Atualizar</button>
-      <button type="button" (click)="close()" [disabled]="!canClose">Fechar competencia</button>
+      <button type="button" (click)="load()" [disabled]="loading" i18n>Atualizar</button>
+      <button type="button" (click)="close()" [disabled]="!canClose" i18n>
+        Fechar competencia
+      </button>
     </div>
     <p *ngIf="state" class="state">{{ state.competence }} · {{ state.status || 'ABERTA' }}</p>
   </header>
 
   <p *ngIf="error" class="error">{{ error }}</p>
-  <p *ngIf="lastHash" class="result">S-1299 emitido: {{ lastHash }}</p>
+  <p *ngIf="lastHash" class="result" i18n>S-1299 emitido: {{ lastHash }}</p>
 
   <div class="grid">
     <section class="panel">
-      <h2>Pendencias S-1200/S-1210</h2>
+      <h2 i18n>Pendencias S-1200/S-1210</h2>
       <table>
         <thead>
           <tr>
-            <th>Evento</th>
-            <th>Servidor</th>
-            <th>Origem</th>
-            <th>Motivo</th>
+            <th i18n>Evento</th>
+            <th i18n>Servidor</th>
+            <th i18n>Origem</th>
+            <th i18n>Motivo</th>
           </tr>
         </thead>
         <tbody>
@@ -49,20 +51,20 @@
             <td>{{ pending.reason }}</td>
           </tr>
           <tr *ngIf="(state?.pending || []).length === 0 && !loading">
-            <td colspan="4" class="empty">Sem pendencias para a competencia.</td>
+            <td colspan="4" class="empty" i18n>Sem pendencias para a competencia.</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section class="panel">
-      <h2>Totalizadores S-5xxx</h2>
+      <h2 i18n>Totalizadores S-5xxx</h2>
       <table>
         <thead>
           <tr>
-            <th>Tipo</th>
-            <th>Recibo origem</th>
-            <th>Recebido em</th>
+            <th i18n>Tipo</th>
+            <th i18n>Recibo origem</th>
+            <th i18n>Recebido em</th>
           </tr>
         </thead>
         <tbody>
@@ -72,7 +74,7 @@
             <td>{{ totalizer.receivedAt | date: 'short' }}</td>
           </tr>
           <tr *ngIf="(state?.totalizers || []).length === 0 && !loading">
-            <td colspan="3" class="empty">Nenhum totalizador recebido.</td>
+            <td colspan="3" class="empty" i18n>Nenhum totalizador recebido.</td>
           </tr>
         </tbody>
       </table>

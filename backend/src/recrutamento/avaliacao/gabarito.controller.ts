@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { GabaritoService } from './gabarito.service';
 export class GabaritoController {
   constructor(private readonly gabaritoService: GabaritoService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('recrutamento.avaliacao.read')
   @ApiOkResponse({ description: 'List answer key versions.' })
@@ -24,6 +26,7 @@ export class GabaritoController {
     return this.gabaritoService.list(provaId);
   }
 
+  @ApiOperation({ summary: 'POST Publish' })
   @Post()
   @RequirePermission('recrutamento.avaliacao.write')
   @AuditMutation({

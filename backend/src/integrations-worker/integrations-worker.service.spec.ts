@@ -542,6 +542,26 @@ describe('IntegrationsWorkerService', () => {
     ).resolves.toMatchObject({ failed: 1, processed: 0 });
   });
 
+  it('reports queue and active-claim backpressure for integration workers', async () => {
+    const query = jest.fn(async (_sql: string, values?: unknown[]) => {
+      if (values?.[0] === 'REQUESTED') return [{ total: '6' }];
+      if (values?.[0] === 'RUNNING') return [{ total: '6' }];
+      return [];
+    });
+    const service = new IntegrationsWorkerService(
+      { query } as never,
+      { storeGeneratedObject: jest.fn() } as never,
+    );
+
+    await expect(service.backpressureStatus(6)).resolves.toMatchObject({
+      queueDepth: 6,
+      activeClaims: 6,
+      capacity: 6,
+      limit: 0,
+      skipped: true,
+    });
+  });
+
   it('uses fallback worker parameters and reports missing source records', async () => {
     const jobs = [
       {

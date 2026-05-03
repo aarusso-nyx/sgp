@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -20,6 +21,7 @@ import { ClassificacaoService } from './classificacao.service';
 export class ClassificacaoController {
   constructor(private readonly classificacaoService: ClassificacaoService) {}
 
+  @ApiOperation({ summary: 'POST :id/classificacao' })
   @Post(':id/classificacao')
   @RequirePermission('recrutamento.classificacao.write')
   @AuditMutation({
@@ -32,6 +34,7 @@ export class ClassificacaoController {
     return this.classificacaoService.gerar(id);
   }
 
+  @ApiOperation({ summary: 'POST :id/classificacao/publicacao' })
   @Post(':id/classificacao/publicacao')
   @RequirePermission('recrutamento.classificacao.write')
   @AuditMutation({
@@ -50,6 +53,7 @@ export class ClassificacaoController {
 export class PublicClassificacaoController {
   constructor(private readonly classificacaoService: ClassificacaoService) {}
 
+  @ApiOperation({ summary: 'GET :slug/classificacao' })
   @Get(':slug/classificacao')
   @Public()
   @ApiOkResponse({ description: 'Published public contest classification.' })

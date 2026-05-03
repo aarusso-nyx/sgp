@@ -105,7 +105,7 @@ export class TotalizerParser {
 
       return result.rows;
     });
-    return mapRow(rows[0]);
+    return mapRow(rows[0]!);
   }
 }
 
@@ -129,7 +129,7 @@ export function parseTotalizerXml(
     );
   }
 
-  const kind = KIND_BY_EVENT_ELEMENT[eventElement];
+  const kind = KIND_BY_EVENT_ELEMENT[eventElement]!;
   const competence = monthCompetence(firstText(document, 'perApur'));
   const sourceEventRecibo =
     firstOptionalText(document, 'nrRecArqBase') ??
@@ -151,8 +151,124 @@ export function parseTotalizerXml(
       eventId: firstAttribute(document, eventElement, 'Id'),
       sourceEventRecibo,
       competence,
+      ...structuredPayload(kind, document),
       rawXml: xml,
     },
+  };
+}
+
+function structuredPayload(
+  kind: ESocialTotalizerKind,
+  document: libxml.Document,
+): Record<string, unknown> {
+  if (kind === 'S-5001') {
+    return structuredS5001Payload(document);
+  }
+  if (kind === 'S-5012') {
+    return structuredS5012Payload(document);
+  }
+  if (kind !== 'S-5002') return {};
+  return structuredS5002Payload(document);
+}
+
+function structuredS5001Payload(document: libxml.Document) {
+  const workers = childElements(document, 'ideTrabalhador').map((worker) => {
+    const bases = childElements(worker, 'infoBaseCS').map((base) => ({
+      valueType: optionalChildText(base, 'tpValor'),
+      amount: moneyText(optionalChildText(base, 'valor')),
+    }));
+    const pisPasepBases = childElements(worker, 'basesPisPasep').map(
+      (base) => ({
+        valueType: optionalChildText(base, 'tpValorPisPasep'),
+        amount: moneyText(optionalChildText(base, 'valorPisPasep')),
+      }),
+    );
+    return {
+      cpfTrab: optionalChildText(worker, 'cpfTrab'),
+      bases,
+      pisPasepBases,
+      baseTotal: sumMoneyText(bases.map((base) => base.amount)),
+      pisPasepBaseTotal: sumMoneyText(pisPasepBases.map((base) => base.amount)),
+      seguradoContribution: sumDescendantElementMoney(worker, ['vrDescSeg']),
+      calculatedContribution: sumDescendantElementMoney(worker, ['vrCpSeg']),
+    };
+  });
+
+  return {
+    workers,
+    baseTotal: sumMoneyText(workers.map((worker) => worker.baseTotal)),
+    pisPasepBaseTotal: sumMoneyText(
+      workers.map((worker) => worker.pisPasepBaseTotal),
+    ),
+    seguradoContributionTotal: sumMoneyText(
+      workers.map((worker) => worker.seguradoContribution),
+    ),
+  };
+}
+
+function structuredS5002Payload(document: libxml.Document) {
+  const workers = childElements(document, 'ideTrabalhador').map((worker) => {
+    const demonstratives = childElements(worker, 'dmDev').map((dmDev) => {
+      const monthlyRows = childElements(dmDev, 'totApurMen').map((total) => {
+        const revenueCode = optionalChildText(total, 'CRMen');
+        const withholding = sumElementMoney(total, ['vlrCRMen', 'vlrCR13Men']);
+        return {
+          revenueCode,
+          taxableIncome: moneyText(optionalChildText(total, 'vlrRendTrib')),
+          thirteenthTaxableIncome: moneyText(
+            optionalChildText(total, 'vlrRendTrib13'),
+          ),
+          irrf: moneyText(withholding),
+        };
+      });
+      const dailyRows = childElements(dmDev, 'totApurDia').map((total) => ({
+        revenueCode: optionalChildText(total, 'CRDia'),
+        irrf: moneyText(optionalChildText(total, 'vlrCRDia')),
+        paidAmount: moneyText(optionalChildText(total, 'vlrPagoDia')),
+      }));
+      return {
+        ideDmDev: optionalChildText(dmDev, 'ideDmDev'),
+        monthlyRows,
+        dailyRows,
+        irrfTotal: sumMoneyText([
+          ...monthlyRows.map((row) => row.irrf),
+          ...dailyRows.map((row) => row.irrf),
+        ]),
+      };
+    });
+    return {
+      cpfBenef: optionalChildText(worker, 'cpfBenef'),
+      demonstratives,
+      irrfTotal: sumMoneyText(
+        demonstratives.map((demonstrative) => demonstrative.irrfTotal),
+      ),
+    };
+  });
+
+  return {
+    workers,
+    irrfTotal: sumMoneyText(workers.map((worker) => worker.irrfTotal)),
+  };
+}
+
+function structuredS5012Payload(document: libxml.Document) {
+  const monthlyRows = childElements(document, 'infoCRMen').map((row) => ({
+    revenueCode: optionalChildText(row, 'CRMen'),
+    irrf: moneyText(optionalChildText(row, 'vrCRMen')),
+  }));
+  const dailyRows = childElements(document, 'infoCRDia').map((row) => ({
+    day: optionalChildText(row, 'perApurDia'),
+    revenueCode: optionalChildText(row, 'CRDia'),
+    irrf: moneyText(optionalChildText(row, 'vrCRDia')),
+  }));
+
+  return {
+    monthlyRows,
+    dailyRows,
+    irrfTotal: sumMoneyText([
+      ...monthlyRows.map((row) => row.irrf),
+      ...dailyRows.map((row) => row.irrf),
+    ]),
   };
 }
 
@@ -179,6 +295,70 @@ function firstOptionalText(
     | undefined;
   const value = node?.text().trim();
   return value || null;
+}
+
+type XmlNode = {
+  find(xpath: string): unknown[];
+  get(xpath: string): unknown;
+  text(): string;
+};
+
+function childElements(
+  node: libxml.Document | XmlNode,
+  name: string,
+): XmlNode[] {
+  return (node as { find(xpath: string): unknown[] }).find(
+    `.//*[local-name() = '${name}']`,
+  ) as XmlNode[];
+}
+
+function optionalChildText(node: XmlNode, name: string): string | null {
+  const selected = node.get(`./*[local-name() = '${name}']`) as
+    | { text(): string }
+    | undefined;
+  const value = selected?.text().trim();
+  return value || null;
+}
+
+function sumElementMoney(node: XmlNode, names: string[]): string {
+  return sumMoneyText(names.map((name) => optionalChildText(node, name)));
+}
+
+function sumDescendantElementMoney(node: XmlNode, names: string[]): string {
+  return sumMoneyText(
+    names.flatMap((name) =>
+      childElements(node, name).map((child) => child.text().trim()),
+    ),
+  );
+}
+
+function sumMoneyText(values: Array<string | null>): string {
+  return centsToMoney(
+    values.reduce((sum, value) => sum + moneyToCents(value), 0n),
+  );
+}
+
+function moneyText(value: string | null): string {
+  return centsToMoney(moneyToCents(value));
+}
+
+function moneyToCents(value: string | null): bigint {
+  if (!value) return 0n;
+  const normalized = value.trim().replace(',', '.');
+  const sign = normalized.startsWith('-') ? -1n : 1n;
+  const unsigned = normalized.replace(/^-/, '');
+  const [reais, cents = ''] = unsigned.split('.');
+  return (
+    sign *
+    (BigInt(reais || '0') * 100n +
+      BigInt((cents.padEnd(2, '0').slice(0, 2) || '0').replace(/\D/g, '0')))
+  );
+}
+
+function centsToMoney(value: bigint): string {
+  const sign = value < 0n ? '-' : '';
+  const absolute = value < 0n ? -value : value;
+  return `${sign}${absolute / 100n}.${String(absolute % 100n).padStart(2, '0')}`;
 }
 
 function firstAttribute(

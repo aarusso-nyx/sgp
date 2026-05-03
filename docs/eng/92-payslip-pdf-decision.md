@@ -12,5 +12,5 @@ O contracheque oficial passa a ser gerado em `backend/src/report-service/payslip
 - `puppeteer` permanece fora do runtime público deste slice.
 - O hash SHA-256 do PDF é persistido em `public.generated_report_file.file_hash`.
 - `public.generated_report_file` registra `report_kind = PAYSLIP`, `pdf_a_compliance = PDF_A_1B`, `signature_kind`, competência, servidor, folha e retenção.
-- Assinatura ICP-Brasil/GovBR fica plugável por `signature_kind` e `signed_at`; a integração real continua fora do escopo deste slice.
-- A validação automatizada do slice verifica cabeçalho binário `%PDF-`, metadados, fontes e persistência do hash; validação externa veraPDF pode ser adicionada ao gate de release quando disponível no ambiente.
+- O PDF/A renderizado é assinado pelo `PadesAdapter` antes do cálculo do hash e da persistência do arquivo gerado; o registro usa `signature_kind = ICP_BRASIL_A1` e `signed_at` na competência do contracheque.
+- A validação automatizada do slice verifica cabeçalho binário `%PDF-`, metadados, fontes, bloco `%%SGP-PADES-SIGNATURE`, golden PDF byte-estável e persistência do hash; validação externa veraPDF pode ser adicionada ao gate de release quando disponível no ambiente.

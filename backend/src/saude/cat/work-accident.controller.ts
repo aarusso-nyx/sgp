@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ import { WorkAccidentService } from './work-accident.service';
 export class WorkAccidentController {
   constructor(private readonly service: WorkAccidentService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('saude.cat.read')
   @ApiOkResponse({ description: 'Work accident and CAT records.' })
@@ -28,6 +30,7 @@ export class WorkAccidentController {
     return this.service.list();
   }
 
+  @ApiOperation({ summary: 'GET prazos' })
   @Get('prazos')
   @RequirePermission('saude.cat.read')
   @ApiOkResponse({ description: 'CAT deadlines due in less than four hours.' })
@@ -35,6 +38,7 @@ export class WorkAccidentController {
     return this.service.listDeadlineAlerts();
   }
 
+  @ApiOperation({ summary: 'POST Register' })
   @Post()
   @RequirePermission('saude.cat.write')
   @AuditMutation({
@@ -47,6 +51,7 @@ export class WorkAccidentController {
     return this.service.register(body);
   }
 
+  @ApiOperation({ summary: 'POST :id/cat' })
   @Post(':id/cat')
   @RequirePermission('saude.cat.write')
   @AuditMutation({
@@ -59,6 +64,7 @@ export class WorkAccidentController {
     return this.service.emitCat(id, body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/reabrir' })
   @Patch(':id/reabrir')
   @RequirePermission('saude.cat.write')
   @AuditMutation({
@@ -71,6 +77,7 @@ export class WorkAccidentController {
     return this.service.reopen(id, body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/comunicar-obito' })
   @Patch(':id/comunicar-obito')
   @RequirePermission('saude.cat.write')
   @AuditMutation({
@@ -86,6 +93,7 @@ export class WorkAccidentController {
     return this.service.reportDeath(id, body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/encerrar' })
   @Patch(':id/encerrar')
   @RequirePermission('saude.cat.write')
   @AuditMutation({

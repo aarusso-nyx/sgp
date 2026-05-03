@@ -25,6 +25,15 @@ export class CreateNomeacaoDto {
   atoAdministrativo!: string;
 
   @IsOptional()
+  @IsUUID()
+  actClassificationId?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  actClassificationCode?: string;
+
+  @IsOptional()
   @IsDateString()
   publishedAt?: string;
 }

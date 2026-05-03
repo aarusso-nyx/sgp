@@ -19,6 +19,7 @@ export interface YearlyIncomeAggregate {
   irrfTotal: string;
   dependentsCount: number;
   s1210Total: string;
+  s1210IrrfTotal: string;
   recomputedAt: string;
 }
 
@@ -46,6 +47,7 @@ export interface YearlyIncomeDocument {
     dependentsCount: number;
   };
   esocialTotal: string;
+  esocialIrrfTotal: string;
   legalReference: string;
   recomputedAt: string;
 }
@@ -60,6 +62,13 @@ export function toYearlyIncomeDocument(
   if (!taxablePlusExempt.equals(s1210Total)) {
     throw new Error(
       `S-1210 coherence failed for ${aggregate.employeeId}/${aggregate.yearBase}: ${taxablePlusExempt.toFixed(2)} != ${s1210Total.toFixed(2)}`,
+    );
+  }
+  const irrfTotal = money(aggregate.irrfTotal);
+  const s1210IrrfTotal = money(aggregate.s1210IrrfTotal);
+  if (!irrfTotal.equals(s1210IrrfTotal)) {
+    throw new Error(
+      `S-1210 IRRF coherence failed for ${aggregate.employeeId}/${aggregate.yearBase}: ${irrfTotal.toFixed(2)} != ${s1210IrrfTotal.toFixed(2)}`,
     );
   }
 
@@ -87,6 +96,7 @@ export function toYearlyIncomeDocument(
       dependentsCount: aggregate.dependentsCount,
     },
     esocialTotal: fixed(aggregate.s1210Total),
+    esocialIrrfTotal: fixed(aggregate.s1210IrrfTotal),
     legalReference:
       'IN RFB 2.060/2021, art. 16 e Anexo I - Comprovante de Rendimentos Pagos e de IRRF.',
     recomputedAt: aggregate.recomputedAt,

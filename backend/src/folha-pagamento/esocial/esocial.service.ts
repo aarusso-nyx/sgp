@@ -101,11 +101,13 @@ export class ESocialService {
       RETURNING id::text
       `,
     );
-    return rows[0].id;
+    return rows[0]!.id;
   }
 
   private parseCompetence(competence: string): { year: number; month: number } {
-    const [year, month] = competence.split('-').map((value) => Number(value));
+    const [year, month] = competence
+      .split('-')
+      .map((value) => Number(value)) as [number, number];
     return {
       year,
       month,

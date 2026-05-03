@@ -8,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -34,6 +35,7 @@ import {
 export class JobPositionAdminController {
   constructor(private readonly jobPositionService: JobPositionService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('gestao.cargo.read')
   @ApiOkResponse({ description: 'List job positions.' })
@@ -41,6 +43,7 @@ export class JobPositionAdminController {
     return this.jobPositionService.list(query);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('gestao.cargo.write')
   @AuditMutation({
@@ -53,6 +56,7 @@ export class JobPositionAdminController {
     return this.jobPositionService.create(body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id' })
   @Patch(':id')
   @RequirePermission('gestao.cargo.write')
   @AuditMutation({
@@ -65,6 +69,7 @@ export class JobPositionAdminController {
     return this.jobPositionService.update(id, body);
   }
 
+  @ApiOperation({ summary: 'GET :id/tabela-salarial' })
   @Get(':id/tabela-salarial')
   @RequirePermission('gestao.cargo.read')
   @ApiOkResponse({
@@ -84,12 +89,14 @@ export class JobPositionAdminController {
 export class SalaryRangeController {
   constructor(private readonly salaryRangeService: SalaryRangeService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('gestao.cargo.read')
   list() {
     return this.salaryRangeService.list();
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('gestao.cargo.write')
   @AuditMutation({
@@ -110,12 +117,14 @@ export class SalaryRangeLevelController {
     private readonly salaryRangeLevelService: SalaryRangeLevelService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('gestao.cargo.read')
   list(@Param('salaryRangeId') salaryRangeId: string) {
     return this.salaryRangeLevelService.list(salaryRangeId);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('gestao.cargo.write')
   @AuditMutation({

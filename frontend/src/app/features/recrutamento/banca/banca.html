@@ -1,39 +1,42 @@
 <section class="banca-workspace">
   <header>
-    <h1>Banca examinadora</h1>
-    <nav aria-label="Fluxo da banca">
-      <button type="button" [class.active]="view === 'members'" (click)="setView('members')">
+    <h1 i18n>Banca examinadora</h1>
+    <nav aria-label="Fluxo da banca" i18n-aria-label>
+      <button type="button" [class.active]="view === 'members'" (click)="setView('members')" i18n>
         Membros
       </button>
-      <button type="button" [class.active]="view === 'signing'" (click)="setView('signing')">
+      <button type="button" [class.active]="view === 'signing'" (click)="setView('signing')" i18n>
         Assinatura
       </button>
-      <button type="button" [class.active]="view === 'publish'" (click)="setView('publish')">
+      <button type="button" [class.active]="view === 'publish'" (click)="setView('publish')" i18n>
         Publicacao
       </button>
     </nav>
   </header>
 
   <form *ngIf="view === 'members'" class="panel">
-    <label>Nome <input name="fullName" [(ngModel)]="member.fullName" /></label>
     <label
-      >CPF <input name="cpf" inputmode="numeric" maxlength="11" [(ngModel)]="member.cpf"
+      ><ng-container i18n>Nome</ng-container> <input name="fullName" [(ngModel)]="member.fullName"
+    /></label>
+    <label
+      ><ng-container i18n>CPF</ng-container>
+      <input name="cpf" inputmode="numeric" maxlength="11" [(ngModel)]="member.cpf"
     /></label>
     <label>
-      Funcao
+      <ng-container i18n>Funcao</ng-container>
       <select name="role" [(ngModel)]="member.role">
-        <option value="PRESIDENTE">Presidente</option>
-        <option value="MEMBRO">Membro</option>
-        <option value="SECRETARIO">Secretario</option>
+        <option value="PRESIDENTE" i18n>Presidente</option>
+        <option value="MEMBRO" i18n>Membro</option>
+        <option value="SECRETARIO" i18n>Secretario</option>
       </select>
     </label>
     <label>
-      Certificado
+      <ng-container i18n>Certificado</ng-container>
       <select name="certKind" [(ngModel)]="member.certKind">
-        <option value="ICP_A1">ICP-Brasil A1</option>
-        <option value="ICP_A3">ICP-Brasil A3</option>
-        <option value="GOVBR_OURO">GovBR ouro</option>
-        <option value="GOVBR_PRATA">GovBR prata</option>
+        <option value="ICP_A1" i18n>ICP-Brasil A1</option>
+        <option value="ICP_A3" i18n>ICP-Brasil A3</option>
+        <option value="GOVBR_OURO" i18n>GovBR ouro</option>
+        <option value="GOVBR_PRATA" i18n>GovBR prata</option>
       </select>
     </label>
   </form>
@@ -43,13 +46,16 @@
       <strong>{{ document.kind }}</strong>
       <span>{{ document.sourceRef }}</span>
       <progress [value]="document.signed" [max]="document.required"></progress>
-      <button type="button">Assinar proximo</button>
+      <button type="button" i18n>Assinar proximo</button>
     </article>
   </div>
 
   <div *ngIf="view === 'publish'" class="panel">
-    <label>Link publico <input value="/publico/banca/verify/token" readonly /></label>
-    <div class="qr" aria-label="QR de verificacao publica"></div>
-    <button type="button">Publicar documento assinado</button>
+    <label
+      ><ng-container i18n>Link publico</ng-container>
+      <input value="/publico/banca/verify/token" readonly
+    /></label>
+    <div class="qr" aria-label="QR de verificacao publica" i18n-aria-label></div>
+    <button type="button" i18n>Publicar documento assinado</button>
   </div>
 </section>

@@ -1,59 +1,59 @@
 <section class="ats" aria-labelledby="ats-title">
   <header class="ats__header">
     <div>
-      <p>Parametros</p>
-      <h1 id="ats-title">ATS e sexta-parte</h1>
+      <p i18n>Parametros</p>
+      <h1 id="ats-title" i18n>ATS e sexta-parte</h1>
     </div>
-    <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
+    <button mat-stroked-button type="button" (click)="load()" [disabled]="loading()">
       <mat-icon>refresh</mat-icon>
-      Atualizar
+      <ng-container i18n>Atualizar</ng-container>
     </button>
   </header>
 
   <form class="ats__form" [formGroup]="form" (ngSubmit)="save()">
     <mat-form-field appearance="outline">
-      <mat-label>Parametro</mat-label>
+      <mat-label i18n>Parametro</mat-label>
       <select matNativeControl formControlName="key">
-        <option value="ATS_PERCENT_PER_YEAR">ATS anual (%)</option>
-        <option value="TRIENIO_PERCENT_PER_PERIOD">Trienio (%)</option>
-        <option value="QUINQUENIO_PERCENT_PER_PERIOD">Quinquenio (%)</option>
-        <option value="SEXTA_PARTE_SERVICE_YEARS">Sexta-parte anos</option>
-        <option value="SEXTA_PARTE_FRACTION">Sexta-parte fracao</option>
+        <option value="ATS_PERCENT_PER_YEAR" i18n>ATS anual (%)</option>
+        <option value="TRIENIO_PERCENT_PER_PERIOD" i18n>Trienio (%)</option>
+        <option value="QUINQUENIO_PERCENT_PER_PERIOD" i18n>Quinquenio (%)</option>
+        <option value="SEXTA_PARTE_SERVICE_YEARS" i18n>Sexta-parte anos</option>
+        <option value="SEXTA_PARTE_FRACTION" i18n>Sexta-parte fracao</option>
       </select>
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Valor</mat-label>
+      <mat-label i18n>Valor</mat-label>
       <input matInput formControlName="value" inputmode="decimal" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="ats__description">
-      <mat-label>Descricao</mat-label>
+      <mat-label i18n>Descricao</mat-label>
       <input matInput formControlName="description" />
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+    <button mat-raised-button color="primary" type="submit" [disabled]="loading()">
       <mat-icon>save</mat-icon>
-      Salvar
+      <ng-container i18n>Salvar</ng-container>
     </button>
   </form>
 
-  <p class="ats__error" *ngIf="error" role="alert">{{ error }}</p>
-  <p class="ats__success" *ngIf="success" role="status">{{ success }}</p>
+  <p class="ats__error" *ngIf="error()" role="alert">{{ error() }}</p>
+  <p class="ats__success" *ngIf="success()" role="status">{{ success() }}</p>
 
   <table class="ats__table">
     <thead>
       <tr>
-        <th>Parametro</th>
-        <th>Valor</th>
-        <th>Descricao</th>
+        <th i18n>Parametro</th>
+        <th i18n>Valor</th>
+        <th i18n>Descricao</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of items">
+      <tr *ngFor="let item of items()">
         <td>{{ item.key }}</td>
         <td>{{ item.value }}</td>
         <td>{{ item.description }}</td>
         <td>
-          <button mat-button type="button" (click)="edit(item)">Editar</button>
+          <button mat-button type="button" (click)="edit(item)" i18n>Editar</button>
         </td>
       </tr>
     </tbody>

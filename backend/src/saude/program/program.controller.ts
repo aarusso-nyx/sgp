@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -26,6 +27,7 @@ export class ProgramController {
     private readonly riskManagementProgramService: RiskManagementProgramService,
   ) {}
 
+  @ApiOperation({ summary: 'GET pcmso' })
   @Get('pcmso')
   @RequirePermission('saude.program.read')
   @ApiOkResponse({ description: 'PCMSO programs.' })
@@ -33,6 +35,7 @@ export class ProgramController {
     return this.healthProgramService.list();
   }
 
+  @ApiOperation({ summary: 'POST pcmso' })
   @Post('pcmso')
   @RequirePermission('saude.program.write')
   @AuditMutation({
@@ -45,6 +48,7 @@ export class ProgramController {
     return this.healthProgramService.create(body);
   }
 
+  @ApiOperation({ summary: 'PATCH pcmso/:id/ativar' })
   @Patch('pcmso/:id/ativar')
   @RequirePermission('saude.program.write')
   @AuditMutation({
@@ -59,6 +63,7 @@ export class ProgramController {
     return this.healthProgramService.activate(id);
   }
 
+  @ApiOperation({ summary: 'POST pcmso/:id/revisoes' })
   @Post('pcmso/:id/revisoes')
   @RequirePermission('saude.program.write')
   @AuditMutation({
@@ -71,6 +76,7 @@ export class ProgramController {
     return this.healthProgramService.revise(id, body);
   }
 
+  @ApiOperation({ summary: 'POST pcmso/:id/exames' })
   @Post('pcmso/:id/exames')
   @RequirePermission('saude.program.write')
   @AuditMutation({
@@ -83,6 +89,7 @@ export class ProgramController {
     return this.healthProgramService.addRequiredExam(id, body);
   }
 
+  @ApiOperation({ summary: 'GET pgr' })
   @Get('pgr')
   @RequirePermission('saude.program.read')
   @ApiOkResponse({ description: 'PGR programs.' })
@@ -90,6 +97,7 @@ export class ProgramController {
     return this.riskManagementProgramService.list();
   }
 
+  @ApiOperation({ summary: 'POST pgr' })
   @Post('pgr')
   @RequirePermission('saude.program.write')
   @AuditMutation({
@@ -102,6 +110,7 @@ export class ProgramController {
     return this.riskManagementProgramService.create(body);
   }
 
+  @ApiOperation({ summary: 'PATCH pgr/:id/ativar' })
   @Patch('pgr/:id/ativar')
   @RequirePermission('saude.program.write')
   @AuditMutation({
@@ -116,6 +125,7 @@ export class ProgramController {
     return this.riskManagementProgramService.activate(id);
   }
 
+  @ApiOperation({ summary: 'POST pgr/:id/revisoes' })
   @Post('pgr/:id/revisoes')
   @RequirePermission('saude.program.write')
   @AuditMutation({

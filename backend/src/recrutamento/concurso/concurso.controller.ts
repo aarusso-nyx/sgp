@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -23,6 +24,7 @@ import { CreateConcursoDto } from './concurso.dto';
 export class ConcursoController {
   constructor(private readonly concursoService: ConcursoService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('recrutamento.concurso.read')
   @ApiOkResponse({ description: 'List public contests.' })
@@ -30,6 +32,7 @@ export class ConcursoController {
     return this.concursoService.list();
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('recrutamento.concurso.write')
   @AuditMutation({
@@ -51,6 +54,7 @@ export class ConcursoController {
 export class PublicConcursoController {
   constructor(private readonly editalService: EditalService) {}
 
+  @ApiOperation({ summary: 'GET :slug' })
   @Get(':slug')
   @Public()
   @ApiOkResponse({ description: 'Published public contest notice.' })

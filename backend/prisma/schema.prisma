@@ -381,16 +381,34 @@ enum S1xxxEventKind {
   S_1005 @map("S-1005")
   S_1010 @map("S-1010")
   S_1020 @map("S-1020")
+  S_1030 @map("S-1030")
+  S_1040 @map("S-1040")
   S_1050 @map("S-1050")
+  S_1060 @map("S-1060")
   S_1070 @map("S-1070")
   S_1200 @map("S-1200")
+  S_1202 @map("S-1202")
+  S_1207 @map("S-1207")
   S_1210 @map("S-1210")
+  S_1298 @map("S-1298")
   S_1299 @map("S-1299")
   S_2200 @map("S-2200")
   S_2205 @map("S-2205")
-  S_2306 @map("S-2306")
+  S_2206 @map("S-2206")
+  S_2210 @map("S-2210")
+  S_2220 @map("S-2220")
   S_2230 @map("S-2230")
+  S_2240 @map("S-2240")
+  S_2298 @map("S-2298")
   S_2299 @map("S-2299")
+  S_2300 @map("S-2300")
+  S_2306 @map("S-2306")
+  S_2399 @map("S-2399")
+  S_2400 @map("S-2400")
+  S_2405 @map("S-2405")
+  S_2410 @map("S-2410")
+  S_2416 @map("S-2416")
+  S_2501 @map("S-2501")
   S_3000 @map("S-3000")
 
   @@map("s1xxx_event_kind")
@@ -788,6 +806,7 @@ model WorkLocation {
   recruitmentRequests    RecruitmentRequest[]
   performanceEvaluations PerformanceEvaluation[]
   structureAssignments   WorkLocationStructureAssignment[]
+  organicDefinitions     OrganicDefinition[]
 
   @@unique([tenantId, code])
   @@index([branchId])
@@ -863,6 +882,7 @@ model JobPosition {
   referenceLinks          JobStructureReferenceLink[]
   employmentLinks         JobStructureEmploymentLink[]
   workLocationAssignments WorkLocationStructureAssignment[]
+  organicDefinitions      OrganicDefinition[]
   salaryRange             SalaryRange?                      @relation(fields: [salaryRangeId], references: [id], onDelete: Restrict)
 
   @@unique([tenantId, code])
@@ -1008,6 +1028,7 @@ model EmploymentLink {
   functionalStatusId      String?      @map("functional_status_id") @db.Uuid
   terminationPayrollRunId String?      @map("termination_payroll_run_id") @db.Uuid
   status                  RecordStatus @default(ACTIVE)
+  version                 Int          @default(0)
   createdAt               DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt               DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -1456,6 +1477,36 @@ model WorkLocationStructureAssignment {
   @@schema("hr")
 }
 
+model OrganicDefinition {
+  id                String       @id @default(uuid()) @db.Uuid
+  tenantId          String       @map("tenant_id") @db.Uuid
+  code              String
+  name              String
+  description       String       @default("")
+  workLocationId    String       @map("work_location_id") @db.Uuid
+  jobPositionId     String       @map("job_position_id") @db.Uuid
+  vacanciesTotal    Int          @map("vacancies_total")
+  vacanciesFilled   Int          @default(0) @map("vacancies_filled")
+  vacanciesOpen     Int          @map("vacancies_open")
+  effectiveFrom     DateTime     @default(now()) @map("effective_from") @db.Date
+  effectiveTo       DateTime?    @map("effective_to") @db.Date
+  status            RecordStatus @default(ACTIVE)
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  workLocation WorkLocation @relation(fields: [workLocationId], references: [id])
+  jobPosition  JobPosition  @relation(fields: [jobPositionId], references: [id])
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, id, jobPositionId], map: "organic_definition_tenant_id_id_job_position_uq")
+  @@unique([tenantId, workLocationId, jobPositionId, effectiveFrom], map: "organic_definition_location_position_effective_key")
+  @@index([workLocationId])
+  @@index([jobPositionId])
+  @@index([status])
+  @@map("organic_definition")
+  @@schema("hr")
+}
+
 model SystemParameter {
   id              String   @id @default(uuid()) @db.Uuid
   tenantId        String   @map("tenant_id") @db.Uuid
@@ -1519,6 +1570,7 @@ model Employee {
   abonoPermanenciaInicio     DateTime?               @map("abono_permanencia_inicio") @db.Date
   abonoPermanenciaFundamento String?                 @map("abono_permanencia_fundamento")
   lifecycleStatus            EmployeeLifecycleStatus @default(ACTIVE) @map("lifecycle_status")
+  version                    Int                     @default(0)
   createdAt                  DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt                  DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -2811,8 +2863,8 @@ model PaymentRemittanceDetail {
   occurrenceCode     String?   @map("occurrence_code")
   purposeCode        String?   @map("purpose_code")
   alimonyId          String?   @map("alimony_id") @db.Uuid
-  lastOccurrenceCode String?  @map("last_occurrence_code")
-  lastInternalStatus String?  @map("last_internal_status")
+  lastOccurrenceCode String?   @map("last_occurrence_code")
+  lastInternalStatus String?   @map("last_internal_status")
   lastSettledAt      DateTime? @map("last_settled_at") @db.Timestamptz(6)
   createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
 
@@ -3062,6 +3114,22 @@ model S1200EmissionState {
   @@id([tenantId, payrollRunId, employeeId])
   @@index([tenantId, employeeId, emittedAt])
   @@map("s1200_emission_state")
+  @@schema("esocial")
+}
+
+model S1202EmissionState {
+  tenantId     String   @map("tenant_id") @db.Uuid
+  payrollRunId String   @map("payroll_run_id") @db.Uuid
+  employeeId   String   @map("employee_id") @db.Uuid
+  recibo       String?
+  payloadHash  String   @map("payload_hash") @db.Char(64)
+  emittedAt    DateTime @default(now()) @map("emitted_at") @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([tenantId, payrollRunId, employeeId])
+  @@index([tenantId, employeeId, emittedAt])
+  @@map("s1202_emission_state")
   @@schema("esocial")
 }
 
@@ -3402,20 +3470,31 @@ model HealthExamProviderExamLink {
 }
 
 model InternshipRecord {
-  id             String          @id @default(uuid()) @db.Uuid
-  tenantId       String          @map("tenant_id") @db.Uuid
-  agreementId    String?         @map("agreement_id") @db.Uuid
-  programId      String?         @map("program_id") @db.Uuid
-  employeeId     String?         @map("employee_id") @db.Uuid
-  internName     String          @map("intern_name")
-  internCpf      String?         @map("intern_cpf")
-  supervisorName String?         @map("supervisor_name")
-  startsOn       DateTime        @map("starts_on") @db.Date
-  endsOn         DateTime?       @map("ends_on") @db.Date
-  stipendAmount  Decimal?        @map("stipend_amount") @db.Decimal(14, 2)
-  status         AgreementStatus @default(ACTIVE)
-  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                      String          @id @default(uuid()) @db.Uuid
+  tenantId                String          @map("tenant_id") @db.Uuid
+  agreementId             String?         @map("agreement_id") @db.Uuid
+  programId               String?         @map("program_id") @db.Uuid
+  employeeId              String?         @map("employee_id") @db.Uuid
+  tsvContractId           String?         @map("tsv_contract_id") @db.Uuid
+  internName              String          @map("intern_name")
+  internCpf               String?         @map("intern_cpf")
+  supervisorName          String?         @map("supervisor_name")
+  supervisorEmployeeId    String?         @map("supervisor_employee_id") @db.Uuid
+  startsOn                DateTime        @map("starts_on") @db.Date
+  endsOn                  DateTime?       @map("ends_on") @db.Date
+  stipendAmount           Decimal?        @map("stipend_amount") @db.Decimal(14, 2)
+  termNumber              String          @map("term_number")
+  termSignedOn            DateTime?       @map("term_signed_on") @db.Date
+  activityPlanUri         String          @map("activity_plan_uri")
+  activityPlanDescription String          @default("") @map("activity_plan_description")
+  role                    String          @default("Estagiario")
+  weeklyHours             Decimal         @default(30.000000) @map("weekly_hours") @db.Decimal(18, 6)
+  courseName              String?         @map("course_name")
+  educationLevel          String?         @map("education_level")
+  insurancePolicy         String?         @map("insurance_policy")
+  status                  AgreementStatus @default(ACTIVE)
+  createdAt               DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   agreement Agreement?         @relation(fields: [agreementId], references: [id])
   program   InternshipProgram? @relation(fields: [programId], references: [id])
@@ -3426,6 +3505,8 @@ model InternshipRecord {
   @@index([employeeId])
   @@index([internCpf])
   @@index([status])
+  @@index([supervisorEmployeeId])
+  @@unique([tsvContractId], map: "internship_record_tsv_contract_id_key")
   @@map("internship_record")
   @@schema("hr")
 }

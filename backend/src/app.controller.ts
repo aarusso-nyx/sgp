@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
 import { Public } from './iam/decorators/require-permission.decorator';
@@ -9,6 +9,7 @@ import { Public } from './iam/decorators/require-permission.decorator';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @ApiOperation({ summary: 'GET Get root metadata' })
   @Get()
   @Public()
   getRootMetadata() {

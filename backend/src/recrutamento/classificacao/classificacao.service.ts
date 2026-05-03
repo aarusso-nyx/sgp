@@ -78,7 +78,7 @@ export class ClassificacaoService {
       'SELECT recrutamento.gerar_classificacao($1::uuid)::text AS snapshot_id',
       [concursoId],
     );
-    return this.findSnapshot(rows[0].snapshot_id);
+    return this.findSnapshot(rows[0]!.snapshot_id);
   }
 
   async publicar(snapshotId: string): Promise<Record<string, unknown>> {

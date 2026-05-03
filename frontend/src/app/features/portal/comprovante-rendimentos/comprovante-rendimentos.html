@@ -1,7 +1,7 @@
 <section class="yearly-income">
   <header>
-    <p>Portal do servidor</p>
-    <h1>Comprovante de rendimentos</h1>
+    <p i18n>Portal do servidor</p>
+    <h1 i18n>Comprovante de rendimentos</h1>
   </header>
 
   <p class="yearly-income__error" *ngIf="error" role="alert">{{ error }}</p>
@@ -9,15 +9,15 @@
   <ol class="yearly-income__list">
     <li *ngFor="let item of files">
       <div>
-        <span>Ano-base {{ item.yearBase }}</span>
+        <span i18n>Ano-base {{ item.yearBase }}</span>
         <strong>{{ money(item.taxableTotal) }}</strong>
       </div>
-      <span>{{ money(item.exemptTotal) }} isentos</span>
-      <span>{{ money(item.irrfTotal) }} IRRF</span>
-      <button type="button" (click)="download(item)">Baixar PDF</button>
+      <span i18n>{{ money(item.exemptTotal) }} isentos</span>
+      <span i18n>{{ money(item.irrfTotal) }} IRRF</span>
+      <button type="button" (click)="download(item)" i18n>Baixar PDF</button>
     </li>
     <li *ngIf="files.length === 0">
-      <span>Nenhum comprovante disponivel.</span>
+      <span i18n>Nenhum comprovante disponivel.</span>
     </li>
   </ol>
 </section>

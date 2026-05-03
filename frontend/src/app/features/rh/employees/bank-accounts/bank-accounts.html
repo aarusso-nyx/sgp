@@ -1,28 +1,28 @@
 <section class="bank-accounts">
   <header>
     <div>
-      <p>Recursos Humanos</p>
-      <h1>Dados bancarios do servidor</h1>
+      <p i18n>Recursos Humanos</p>
+      <h1 i18n>Dados bancarios do servidor</h1>
     </div>
     <label>
-      <span>Servidor</span>
+      <span i18n>Servidor</span>
       <input [(ngModel)]="employeeId" />
     </label>
-    <button type="button" mat-stroked-button (click)="load()">Carregar</button>
+    <button type="button" mat-stroked-button (click)="load()" i18n>Carregar</button>
   </header>
 
   <p *ngIf="message" role="status" class="message">{{ message }}</p>
   <p *ngIf="error" role="alert" class="error">{{ error }}</p>
-  <p *ngIf="loading">Carregando...</p>
+  <p *ngIf="loading" i18n>Carregando...</p>
 
-  <table aria-label="Contas bancarias">
+  <table aria-label="Contas bancarias" i18n-aria-label>
     <thead>
       <tr>
-        <th>Banco</th>
-        <th>Agencia</th>
-        <th>Conta</th>
-        <th>Status</th>
-        <th>Historico</th>
+        <th i18n>Banco</th>
+        <th i18n>Agencia</th>
+        <th i18n>Conta</th>
+        <th i18n>Status</th>
+        <th i18n>Historico</th>
         <th></th>
       </tr>
     </thead>
@@ -34,7 +34,7 @@
         <td>{{ row.validationStatus }}</td>
         <td>{{ row.updatedAt }}</td>
         <td>
-          <button type="button" mat-stroked-button (click)="revalidate(row)">Revalidar</button>
+          <button type="button" mat-stroked-button (click)="revalidate(row)" i18n>Revalidar</button>
         </td>
       </tr>
     </tbody>

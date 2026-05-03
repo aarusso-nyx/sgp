@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface TimelineEvent {
@@ -11,6 +11,7 @@ interface TimelineEvent {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recrutamento-prova-online-review',
   standalone: true,
   imports: [CommonModule, FormsModule],

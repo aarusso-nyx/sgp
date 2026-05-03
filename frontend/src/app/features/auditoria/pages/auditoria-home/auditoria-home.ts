@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Subject, finalize, forkJoin, takeUntil } from 'rxjs';
 
@@ -16,6 +16,7 @@ import {
 type AuditRow = Record<string, unknown> & AuditEventRecord;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-auditoria-home',
   standalone: false,
   templateUrl: './auditoria-home.html',

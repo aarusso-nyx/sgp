@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface RepDeviceSummary {
   repDeviceId: string;
@@ -31,10 +31,10 @@ export interface RepBatchSummary {
 
 @Injectable({ providedIn: 'root' })
 export class PontoRepService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   listDevices(): Observable<RepDeviceSummary[]> {
-    return this.http.get<RepDeviceSummary[]>('/api/v1/ponto/rep');
+    return this.api.get<RepDeviceSummary[]>('/api/v1/ponto/rep');
   }
 
   createDevice(payload: {
@@ -45,18 +45,18 @@ export class PontoRepService {
     model?: string;
     programHash?: string;
   }): Observable<RepDeviceSummary> {
-    return this.http.post<RepDeviceSummary>('/api/v1/ponto/rep', payload);
+    return this.api.post<RepDeviceSummary>('/api/v1/ponto/rep', payload);
   }
 
   listBatches(): Observable<RepBatchSummary[]> {
-    return this.http.get<RepBatchSummary[]>('/api/v1/ponto/rep/batches');
+    return this.api.get<RepBatchSummary[]>('/api/v1/ponto/rep/batches');
   }
 
   uploadBatch(
     repDeviceId: string,
     payload: { fileName: string; content: string },
   ): Observable<RepBatchSummary> {
-    return this.http.post<RepBatchSummary>(`/api/v1/ponto/rep/${repDeviceId}/batches`, payload);
+    return this.api.post<RepBatchSummary>(`/api/v1/ponto/rep/${repDeviceId}/batches`, payload);
   }
 
   originalUrl(batchId: string): string {

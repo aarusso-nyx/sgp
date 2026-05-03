@@ -1,5 +1,10 @@
 import { Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
@@ -15,6 +20,7 @@ export class RetornoController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET falhas' })
   @Get('falhas')
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({
@@ -24,6 +30,7 @@ export class RetornoController {
     return this.retornoService.listFailures(status);
   }
 
+  @ApiOperation({ summary: 'GET eventos/:eventId' })
   @Get('eventos/:eventId')
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({ description: 'Show one eSocial return failure detail.' })
@@ -31,6 +38,7 @@ export class RetornoController {
     return this.retornoService.eventDetail(eventId);
   }
 
+  @ApiOperation({ summary: 'POST eventos/:eventId/retry' })
   @Post('eventos/:eventId/retry')
   @RequirePermission('esocial.event.retry')
   @ApiOkResponse({
@@ -58,6 +66,7 @@ export class RetornoController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST eventos/:eventId/tratado' })
   @Post('eventos/:eventId/tratado')
   @RequirePermission('esocial.event.retry')
   @ApiOkResponse({

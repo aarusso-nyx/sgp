@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -33,6 +34,7 @@ export class CertificateStoreController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('esocial.certificate.read')
   @ApiOkResponse({ description: 'List current-tenant eSocial certificates.' })
@@ -40,6 +42,7 @@ export class CertificateStoreController {
     return this.certificateStore.listCurrentTenantCertificates();
   }
 
+  @ApiOperation({ summary: 'POST Upload' })
   @Post()
   @RequirePermission('esocial.certificate.write')
   @ApiCreatedResponse({ description: 'Upload a new ICP-Brasil certificate.' })
@@ -61,6 +64,7 @@ export class CertificateStoreController {
     return uploaded;
   }
 
+  @ApiOperation({ summary: 'PUT :certificateId/rotacao' })
   @Put(':certificateId/rotacao')
   @RequirePermission('esocial.certificate.write')
   @ApiOkResponse({ description: 'Rotate an ICP-Brasil certificate.' })
@@ -83,6 +87,7 @@ export class CertificateStoreController {
     return rotated;
   }
 
+  @ApiOperation({ summary: 'DELETE :certificateId' })
   @Delete(':certificateId')
   @RequirePermission('esocial.certificate.write')
   @ApiOkResponse({ description: 'Revoke an ICP-Brasil certificate.' })

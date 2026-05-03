@@ -24,6 +24,7 @@ describe('S-2210 builder', () => {
 
     const record = await builder.buildPending(tenantId, catEmissionId);
     expect(record.xml).toBe(golden(goldenFile));
+    expect(record.payload).toMatchObject({ workEnvironmentCode: 'AMB01' });
     expect(() =>
       validator.assertValid('S-2210', record.xml, { allowUnsigned: true }),
     ).not.toThrow();
@@ -55,6 +56,7 @@ function catRow(
     registration: 'MAT-2210',
     cpf: '11122233344',
     cnpj: '12345678000199',
+    work_environment_code: 'AMB01',
     accident_at: '2026-05-01T10:30:00.000Z',
     accident_type: 'TIPICO',
     location_text: 'Patio operacional',

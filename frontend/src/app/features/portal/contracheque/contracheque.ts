@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 interface PortalPayslipFile {
   id: string;
@@ -11,6 +11,7 @@ interface PortalPayslipFile {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-portal-contracheque',
   standalone: true,
   imports: [CommonModule],
@@ -19,13 +20,13 @@ interface PortalPayslipFile {
 })
 export class PortalContracheque implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   payslips: PortalPayslipFile[] = [];
   error = '';
 
   ngOnInit(): void {
-    this.http
+    this.api
       .get<PortalPayslipFile[]>('/api/v1/portal/payslips')
       .pipe(takeUntil(this.destroy$))
       .subscribe({

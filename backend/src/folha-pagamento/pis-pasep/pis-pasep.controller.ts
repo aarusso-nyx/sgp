@@ -1,5 +1,10 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { PisPasepService } from './pis-pasep.service';
@@ -10,6 +15,7 @@ import { PisPasepService } from './pis-pasep.service';
 export class PisPasepController {
   constructor(private readonly service: PisPasepService) {}
 
+  @ApiOperation({ summary: 'GET :employeeId' })
   @Get(':employeeId')
   @RequirePermission('payroll.payroll.read')
   @ApiOkResponse({ description: 'Read annual PIS/PASEP base by employee.' })

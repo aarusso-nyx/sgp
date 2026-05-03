@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ApiClient } from '../../../../core/api/api-client';
 
 interface AlimonyRow {
   id: string;
@@ -19,6 +19,7 @@ interface AlimonyRow {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-rh-employee-alimony',
   standalone: false,
   templateUrl: './alimony.html',
@@ -49,13 +50,13 @@ export class RhEmployeeAlimony {
     notes: '',
   };
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   load(): void {
     if (!this.employeeId) return;
     this.loading = true;
     this.error = '';
-    this.http
+    this.api
       .get<AlimonyRow[]>(`/api/v1/employees/${this.employeeId}/alimonies?status=${this.status}`)
       .subscribe({
         next: (rows) => {
@@ -79,7 +80,7 @@ export class RhEmployeeAlimony {
       validTo: this.form.validTo || undefined,
       baseSpecificCodes: [],
     };
-    this.http.post<AlimonyRow>(`/api/v1/employees/${this.employeeId}/alimonies`, body).subscribe({
+    this.api.post<AlimonyRow>(`/api/v1/employees/${this.employeeId}/alimonies`, body).subscribe({
       next: () => {
         this.message = 'Ordem de pensao cadastrada.';
         this.load();
@@ -105,7 +106,7 @@ export class RhEmployeeAlimony {
       status: 'SUSPENDED',
       baseSpecificCodes: [],
     };
-    this.http
+    this.api
       .patch<AlimonyRow>(`/api/v1/employees/${this.employeeId}/alimonies/${row.id}`, body)
       .subscribe({
         next: () => {

@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { MedicalLeaveService } from './medical-leave.service';
 export class MedicalLeaveController {
   constructor(private readonly medicalLeaveService: MedicalLeaveService) {}
 
+  @ApiOperation({ summary: 'GET :employee_id' })
   @Get(':employee_id')
   @RequirePermission('rh.medical_leave.read')
   @ApiOkResponse({ description: 'List employee medical leaves.' })
@@ -24,6 +26,7 @@ export class MedicalLeaveController {
     return this.medicalLeaveService.listByEmployee(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST agendamento' })
   @Post('agendamento')
   @RequirePermission('saude.appointment.write')
   @AuditMutation({

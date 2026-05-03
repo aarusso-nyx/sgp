@@ -8,6 +8,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -22,6 +23,11 @@ import { RequirePermission } from '../../iam/decorators/require-permission.decor
 import { ES05Service } from './es05.service';
 
 class CloseCompetenceDto {
+  year!: number;
+  month!: number;
+}
+
+class ReopenCompetenceDto {
   year!: number;
   month!: number;
 }
@@ -41,6 +47,7 @@ export class ES05Controller {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET Status' })
   @Get()
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({
@@ -54,6 +61,7 @@ export class ES05Controller {
     return this.service.status(year, month);
   }
 
+  @ApiOperation({ summary: 'POST fechar' })
   @Post('fechar')
   @RequirePermission('esocial.event.write')
   @ApiCreatedResponse({
@@ -76,6 +84,7 @@ export class ES05Controller {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST totalizadores' })
   @Post('totalizadores')
   @RequirePermission('esocial.event.write')
   @ApiCreatedResponse({
@@ -103,6 +112,7 @@ export class ES05Controller {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST reabrir' })
   @Post('reabrir')
   @RequirePermission('esocial.event.write')
   @AuditMutation({
@@ -111,9 +121,9 @@ export class ES05Controller {
     action: 'PROCESS',
   })
   @ApiOkResponse({
-    description: 'S-1298 reopening is intentionally out of scope.',
+    description: 'Emit S-1298 to reopen an accepted periodic competence.',
   })
-  reopen() {
-    return this.service.reopen();
+  reopen(@Body() body: ReopenCompetenceDto) {
+    return this.service.reopen(body.year, body.month);
   }
 }

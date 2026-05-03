@@ -138,7 +138,7 @@ export class EnvironmentalExposureService {
         input.specialRetirementEligible ?? false,
       ],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async update(id: string, input: UpdateEnvironmentalExposureDto) {

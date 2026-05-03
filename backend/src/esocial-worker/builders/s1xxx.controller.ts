@@ -7,7 +7,12 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString, Matches } from 'class-validator';
 
 import { AuditService } from '../../audit/audit.service';
@@ -16,11 +21,14 @@ import { RequirePermission } from '../../iam/decorators/require-permission.decor
 import type { S1xxxEventKind } from './s1xxx-common';
 import { S1xxxService } from './s1xxx.service';
 
-const S1XXX_EVENT_KINDS = [
+const S1XXX_EVENT_KINDS: readonly S1xxxEventKind[] = [
   'S-1000',
   'S-1005',
   'S-1010',
   'S-1020',
+  'S-1030',
+  'S-1040',
+  'S-1060',
   'S-1050',
   'S-1070',
 ] as const;
@@ -45,6 +53,7 @@ export class S1xxxController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET Status' })
   @Get()
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({ description: 'List S-1xxx table dispatch status.' })
@@ -52,6 +61,7 @@ export class S1xxxController {
     return this.s1xxxService.status();
   }
 
+  @ApiOperation({ summary: 'POST emitir' })
   @Post('emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({ description: 'Emit all S-1xxx table deltas.' })
@@ -70,6 +80,7 @@ export class S1xxxController {
     return results;
   }
 
+  @ApiOperation({ summary: 'POST :eventKind/emitir' })
   @Post(':eventKind/emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({ description: 'Emit one S-1xxx table delta.' })

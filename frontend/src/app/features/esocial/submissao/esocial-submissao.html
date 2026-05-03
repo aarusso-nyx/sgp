@@ -1,30 +1,30 @@
 <section class="submission" aria-labelledby="esocial-submission-title">
   <header class="submission__header">
     <div>
-      <p class="submission__eyebrow">eSocial</p>
-      <h1 id="esocial-submission-title">Submissao SOAP</h1>
-      <p>Lotes, tentativas e circuitos dos endpoints de envio.</p>
+      <p class="submission__eyebrow" i18n>eSocial</p>
+      <h1 id="esocial-submission-title" i18n>Submissao SOAP</h1>
+      <p i18n>Lotes, tentativas e circuitos dos endpoints de envio.</p>
     </div>
-    <button type="button" (click)="load()" [disabled]="loading">Atualizar</button>
+    <button type="button" (click)="load()" [disabled]="loading" i18n>Atualizar</button>
   </header>
 
   <p class="submission__error" *ngIf="error" role="alert">{{ error }}</p>
-  <p class="submission__loading" *ngIf="loading">Carregando...</p>
+  <p class="submission__loading" *ngIf="loading" i18n>Carregando...</p>
 
   <section class="submission__section">
-    <h2>Lotes</h2>
+    <h2 i18n>Lotes</h2>
     <div class="submission__table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Lote</th>
-            <th>Ambiente</th>
-            <th>Status</th>
-            <th>Eventos</th>
-            <th>Tentativas</th>
-            <th>HTTP</th>
-            <th>Proximo retry</th>
-            <th>Hash SOAP</th>
+            <th i18n>Lote</th>
+            <th i18n>Ambiente</th>
+            <th i18n>Status</th>
+            <th i18n>Eventos</th>
+            <th i18n>Tentativas</th>
+            <th i18n>HTTP</th>
+            <th i18n>Proximo retry</th>
+            <th i18n>Hash SOAP</th>
             <th></th>
           </tr>
         </thead>
@@ -54,13 +54,14 @@
                 type="button"
                 (click)="forceRetry(batch)"
                 [disabled]="!canRetry(batch) || retryingBatchId === batch.batchId"
+                i18n
               >
                 Retry
               </button>
             </td>
           </tr>
           <tr *ngIf="!batches.length && !loading">
-            <td colspan="9">Nenhum lote registrado.</td>
+            <td colspan="9" i18n>Nenhum lote registrado.</td>
           </tr>
         </tbody>
       </table>
@@ -68,16 +69,16 @@
   </section>
 
   <section class="submission__section">
-    <h2>Circuitos</h2>
+    <h2 i18n>Circuitos</h2>
     <div class="submission__table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Endpoint</th>
-            <th>Estado</th>
-            <th>Falhas</th>
-            <th>Aberto em</th>
-            <th>Ultima falha</th>
+            <th i18n>Endpoint</th>
+            <th i18n>Estado</th>
+            <th i18n>Falhas</th>
+            <th i18n>Aberto em</th>
+            <th i18n>Ultima falha</th>
           </tr>
         </thead>
         <tbody>
@@ -101,7 +102,7 @@
             </td>
           </tr>
           <tr *ngIf="!circuits.length && !loading">
-            <td colspan="5">Nenhum circuito registrado.</td>
+            <td colspan="5" i18n>Nenhum circuito registrado.</td>
           </tr>
         </tbody>
       </table>

@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { RemessaBancariaService, RemittanceSummary } from './remessa-bancaria.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-remessa-bancaria',
   standalone: false,
   templateUrl: './remessa-bancaria.html',

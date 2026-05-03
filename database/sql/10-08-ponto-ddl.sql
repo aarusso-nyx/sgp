@@ -561,6 +561,15 @@ CREATE TABLE ponto.shift_pattern_day (
     CONSTRAINT shift_pattern_day_working_times_chk CHECK (((is_working AND (entry_time IS NOT NULL) AND (exit_time IS NOT NULL)) OR (NOT is_working)))
 );
 
+CREATE TABLE ponto.time_record_identity (
+    tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
+    time_record_id uuid DEFAULT gen_random_uuid() NOT NULL,
+    employee_id uuid NOT NULL,
+    recorded_at timestamp with time zone NOT NULL,
+    nsr bigint NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
 CREATE TABLE ponto.time_record (
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
     time_record_id uuid DEFAULT gen_random_uuid() NOT NULL,
@@ -574,7 +583,9 @@ CREATE TABLE ponto.time_record (
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT time_record_hash_len_chk CHECK ((length(record_hash) = 32)),
     CONSTRAINT time_record_prev_hash_len_chk CHECK (((prev_hash IS NULL) OR (length(prev_hash) = 32)))
-);
+) PARTITION BY RANGE (recorded_at);
+
+CREATE TABLE ponto.time_record_default PARTITION OF ponto.time_record DEFAULT;
 
 CREATE TABLE ponto.time_record_justification_link (
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
@@ -743,10 +754,16 @@ ALTER TABLE ONLY ponto.time_record_justification_link
     ADD CONSTRAINT time_record_justification_link_pkey PRIMARY KEY (tenant_id, time_record_id, absence_justification_id);
 
 ALTER TABLE ONLY ponto.time_record
-    ADD CONSTRAINT time_record_pkey PRIMARY KEY (time_record_id);
+    ADD CONSTRAINT time_record_pkey PRIMARY KEY (time_record_id, recorded_at);
+
+ALTER TABLE ONLY ponto.time_record_identity
+    ADD CONSTRAINT time_record_identity_pkey PRIMARY KEY (time_record_id);
+
+ALTER TABLE ONLY ponto.time_record_identity
+    ADD CONSTRAINT time_record_identity_tenant_employee_nsr_uq UNIQUE (tenant_id, employee_id, nsr);
 
 ALTER TABLE ONLY ponto.time_record
-    ADD CONSTRAINT time_record_tenant_employee_nsr_uq UNIQUE (tenant_id, employee_id, nsr);
+    ADD CONSTRAINT time_record_tenant_employee_nsr_uq UNIQUE (tenant_id, employee_id, nsr, recorded_at);
 
 ALTER TABLE ONLY ponto.timesheet_period
     ADD CONSTRAINT timesheet_period_employee_range_uq UNIQUE (tenant_id, employee_id, period_start, period_end);

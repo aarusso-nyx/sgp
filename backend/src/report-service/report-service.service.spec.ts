@@ -64,7 +64,7 @@ describe('ReportRuntimeService', () => {
     );
   });
 
-  it('polls only report-service definitions', async () => {
+  it('polls through the report worker runtime', async () => {
     const pollOnce = jest.fn().mockResolvedValue({
       discovered: 0,
       processed: 0,
@@ -78,10 +78,7 @@ describe('ReportRuntimeService', () => {
 
     await service.pollOnce({ limit: 7 });
 
-    expect(pollOnce).toHaveBeenCalledWith(
-      7,
-      expect.not.arrayContaining(['ESOCIAL_EVENTO_PROCESSAR']),
-    );
+    expect(pollOnce).toHaveBeenCalledWith(7);
   });
 
   it('normalizes defaults, dry-runs, and validates report runtime requests', async () => {

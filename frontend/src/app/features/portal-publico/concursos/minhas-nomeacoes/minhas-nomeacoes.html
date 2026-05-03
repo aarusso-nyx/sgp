@@ -1,6 +1,6 @@
 <section class="appointments">
   <header>
-    <h1>Minhas nomeacoes</h1>
+    <h1 i18n>Minhas nomeacoes</h1>
   </header>
 
   <article *ngFor="let appointment of appointments">
@@ -9,11 +9,11 @@
       <span>{{ appointment.status }}</span>
     </div>
     <dl>
-      <dt>Ato</dt>
+      <dt i18n>Ato</dt>
       <dd>{{ appointment.ato }}</dd>
-      <dt>Publicacao</dt>
+      <dt i18n>Publicacao</dt>
       <dd>{{ appointment.publishedAt }}</dd>
-      <dt>Prazo</dt>
+      <dt i18n>Prazo</dt>
       <dd>{{ appointment.comparecimentoUntil }}</dd>
     </dl>
     <p>{{ appointment.instructions }}</p>

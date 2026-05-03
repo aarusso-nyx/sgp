@@ -76,7 +76,7 @@ export class BankAccountService {
         account.validation_error_code,
         account.validated_at,
         account.updated_at
-      FROM hr.employee_bank_account account
+      FROM hr.v_employee_bank_account_pii_decrypted account
       JOIN hr.bank bank ON bank.id = account.bank_id
       WHERE account.employee_id = $1::uuid
       ORDER BY account.updated_at DESC
@@ -150,7 +150,7 @@ export class BankAccountService {
           bank.code AS bank_code,
           inserted.agency,
           inserted.agency_digit,
-          inserted.account_number,
+          account.account_number,
           inserted.account_digit,
           inserted.holder_kind::text,
           inserted.holder_cpf,
@@ -159,6 +159,8 @@ export class BankAccountService {
           inserted.validated_at,
           inserted.updated_at
         FROM inserted
+        JOIN hr.v_employee_bank_account_pii_decrypted account
+          ON account.id = inserted.id
         JOIN hr.bank bank ON bank.id = inserted.bank_id
         `,
         [
@@ -175,7 +177,7 @@ export class BankAccountService {
         ],
       );
 
-      return this.toSummary(rows.rows[0]);
+      return this.toSummary(rows.rows[0]!);
     });
   }
 
@@ -201,7 +203,7 @@ export class BankAccountService {
           account.validation_error_code,
           account.validated_at,
           account.updated_at
-        FROM hr.employee_bank_account account
+        FROM hr.v_employee_bank_account_pii_decrypted account
         JOIN hr.bank bank ON bank.id = account.bank_id
         WHERE account.employee_id = $1::uuid
           AND account.id = $2::uuid
@@ -221,25 +223,33 @@ export class BankAccountService {
       });
       const rows = await client.query<BankAccountRow>(
         `
-        UPDATE hr.employee_bank_account
-        SET validation_status = $3::hr.employee_bank_account_validation_status,
-            validation_error_code = $4,
-            validated_at = CASE WHEN $3 = 'VALID' THEN now() ELSE NULL END,
-            updated_at = now()
-        WHERE employee_id = $1::uuid
-          AND id = $2::uuid
-        RETURNING id::text,
-          (SELECT code FROM hr.bank WHERE id = bank_id) AS bank_code,
-          agency,
-          agency_digit,
-          account_number,
-          account_digit,
-          holder_kind::text,
-          holder_cpf,
-          validation_status::text,
-          validation_error_code,
-          validated_at,
-          updated_at
+        WITH updated AS (
+          UPDATE hr.employee_bank_account
+          SET validation_status = $3::hr.employee_bank_account_validation_status,
+              validation_error_code = $4,
+              validated_at = CASE WHEN $3 = 'VALID' THEN now() ELSE NULL END,
+              updated_at = now()
+          WHERE employee_id = $1::uuid
+            AND id = $2::uuid
+          RETURNING id
+        )
+        SELECT
+          account.id::text,
+          bank.code AS bank_code,
+          account.agency,
+          account.agency_digit,
+          account.account_number,
+          account.account_digit,
+          account.holder_kind::text,
+          account.holder_cpf,
+          account.validation_status::text,
+          account.validation_error_code,
+          account.validated_at,
+          account.updated_at
+        FROM updated
+        JOIN hr.v_employee_bank_account_pii_decrypted account
+          ON account.id = updated.id
+        JOIN hr.bank bank ON bank.id = account.bank_id
         `,
         [
           employeeId,
@@ -248,7 +258,7 @@ export class BankAccountService {
           validation.validationErrorCode,
         ],
       );
-      return this.toSummary(rows.rows[0]);
+      return this.toSummary(rows.rows[0]!);
     });
   }
 

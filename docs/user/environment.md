@@ -19,6 +19,7 @@ This file documents variables used by `sgp-admin`, `sgp-portal`, the Nest APIs, 
 
 - `API_BASE_URL`: API base URL for both SPAs and tooling.
 - `API_BASE_PATH`: API prefix path consumed by both SPAs (default `/api`).
+- `CORS_ORIGIN`: comma-separated browser origins allowed by the Nest HTTP entrypoints. It is required when `NODE_ENV=production`; local development defaults to `http://localhost:4200` only when unset.
 - `DATABASE_URL`: PostgreSQL connection string for backend and Prisma.
 - `S3_REGION`: AWS region for the S3 documents bucket (defaults to `AWS_REGION` when omitted).
 - `S3_ENDPOINT`: optional S3-compatible endpoint override.
@@ -27,6 +28,18 @@ This file documents variables used by `sgp-admin`, `sgp-portal`, the Nest APIs, 
 - `S3_DOCUMENTS_PRESIGN_EXPIRES_SECONDS`: upload URL TTL in seconds (default `900`).
 - `S3_DOCUMENTS_DOWNLOAD_EXPIRES_SECONDS`: download URL TTL in seconds (default `300`).
 - `S3_DOCUMENTS_KEY_PREFIX`: object key prefix for generated document storage keys (default `documents`).
+- `SGP_RATE_LIMIT_IP_LIMIT`: requests allowed per IP window (default `120`).
+- `SGP_RATE_LIMIT_IP_TTL_MS`: per-IP rate-limit window in milliseconds (default `60000`).
+- `SGP_RATE_LIMIT_TENANT_LIMIT`: requests allowed per tenant window; must be higher than `SGP_RATE_LIMIT_IP_LIMIT` (default `600`).
+- `SGP_RATE_LIMIT_TENANT_TTL_MS`: per-tenant rate-limit window in milliseconds (default matches `SGP_RATE_LIMIT_IP_TTL_MS`).
+- `SGP_RATE_LIMIT_TRUST_PROXY`: set to `true` only behind a trusted proxy so Express uses forwarded client IP metadata.
+- `/metrics`: Prometheus text endpoint exposed by `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, and `sgp-report-service`. The endpoint includes HTTP request counters/histograms plus queue depth, eSocial submission, and DCTFWeb transmission metric objects for worker/domain instrumentation.
+- `OTEL_TRACES_EXPORTER`: set to `otlp` to enable the dependency-free local OTLP/HTTP request-span exporter, or `none` to disable trace export.
+- `OTEL_EXPORTER_OTLP_ENDPOINT`: OTLP/HTTP collector base URL. When `OTEL_TRACES_EXPORTER=otlp` and this is unset, local development exports to `http://localhost:4318/v1/traces`.
+- `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`: exact OTLP/HTTP traces endpoint; overrides `OTEL_EXPORTER_OTLP_ENDPOINT`.
+- `OTEL_SERVICE_NAME`: service name attached to trace resource attributes; defaults to the runtime entrypoint name (`sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, or `sgp-report-service`).
+- `OTEL_RESOURCE_ATTRIBUTES`: comma-separated resource attributes (`deployment.environment=dev,service.namespace=sgp`).
+- `OTEL_SDK_DISABLED`: set to `true` to disable local tracing hooks even when OTLP variables are set.
 - `MINIO_TEST_STORAGE_ENABLED`: enables Docker MiniIO fallback for tests when S3 bucket/region are not set.
 - `MINIO_ENDPOINT`: MiniIO endpoint for tests (default `http://127.0.0.1:9000`).
 - `MINIO_DOCUMENTS_BUCKET`: MiniIO bucket for tests (default `sgp-test-documents`).

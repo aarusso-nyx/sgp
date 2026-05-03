@@ -1,5 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -17,6 +22,7 @@ import { MobileClockService } from './mobile-clock.service';
 export class MobileClockController {
   constructor(private readonly mobileClockService: MobileClockService) {}
 
+  @ApiOperation({ summary: 'POST devices' })
   @Post('devices')
   @RequirePermission('ponto.mobile.write')
   @AuditMutation({
@@ -29,6 +35,7 @@ export class MobileClockController {
     return this.mobileClockService.registerDevice(body);
   }
 
+  @ApiOperation({ summary: 'POST consents' })
   @Post('consents')
   @RequirePermission('ponto.mobile.write')
   @AuditMutation({
@@ -41,6 +48,7 @@ export class MobileClockController {
     return this.mobileClockService.createConsent(body);
   }
 
+  @ApiOperation({ summary: 'POST clock' })
   @Post('clock')
   @RequirePermission('ponto.mobile.write')
   @AuditMutation({
@@ -53,6 +61,7 @@ export class MobileClockController {
     return this.mobileClockService.clock(body);
   }
 
+  @ApiOperation({ summary: 'POST geofences' })
   @Post('geofences')
   @RequirePermission('ponto.mobile.write')
   @AuditMutation({

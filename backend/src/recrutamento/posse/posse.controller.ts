@@ -1,5 +1,6 @@
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { PosseService } from './posse.service';
 export class PosseController {
   constructor(private readonly posseService: PosseService) {}
 
+  @ApiOperation({ summary: 'POST Agendar' })
   @Post()
   @RequirePermission(['recrutamento.posse.write', 'rh.employee.write'])
   @AuditMutation({
@@ -33,6 +35,7 @@ export class PosseController {
     );
   }
 
+  @ApiOperation({ summary: 'PATCH :id/realizar-posse' })
   @Patch(':id/realizar-posse')
   @RequirePermission(['recrutamento.posse.write', 'rh.employee.write'])
   @AuditMutation({
@@ -45,6 +48,7 @@ export class PosseController {
     return this.posseService.realizarPosse(id);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/iniciar-exercicio' })
   @Patch(':id/iniciar-exercicio')
   @RequirePermission(['recrutamento.posse.write', 'rh.employee.write'])
   @AuditMutation({
@@ -57,6 +61,7 @@ export class PosseController {
     return this.posseService.iniciarExercicio(id);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/prorrogar-exercicio' })
   @Patch(':id/prorrogar-exercicio')
   @RequirePermission(['recrutamento.posse.write', 'rh.employee.write'])
   @AuditMutation({
@@ -71,6 +76,7 @@ export class PosseController {
     return this.posseService.prorrogarExercicio(id);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/cancelar' })
   @Patch(':id/cancelar')
   @RequirePermission(['recrutamento.posse.write', 'rh.employee.write'])
   @AuditMutation({

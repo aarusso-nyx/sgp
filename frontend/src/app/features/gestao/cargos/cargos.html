@@ -1,12 +1,12 @@
 <section class="cargos" aria-labelledby="cargos-title">
   <header class="cargos__header">
     <div>
-      <p class="cargos__eyebrow">Gestao</p>
-      <h1 id="cargos-title">Cargos</h1>
+      <p class="cargos__eyebrow" i18n>Gestao</p>
+      <h1 id="cargos-title" i18n>Cargos</h1>
     </div>
     <button mat-flat-button color="primary" type="button" (click)="save()">
       <mat-icon>save</mat-icon>
-      Salvar
+      <ng-container i18n>Salvar</ng-container>
     </button>
   </header>
 
@@ -15,31 +15,31 @@
   <div class="cargos__layout">
     <form class="cargos__form" [formGroup]="form" (ngSubmit)="save()">
       <mat-form-field appearance="outline">
-        <mat-label>Codigo</mat-label>
+        <mat-label i18n>Codigo</mat-label>
         <input matInput formControlName="code" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Nome</mat-label>
+        <mat-label i18n>Nome</mat-label>
         <input matInput formControlName="name" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Categoria</mat-label>
+        <mat-label i18n>Categoria</mat-label>
         <input matInput formControlName="category" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Regime juridico</mat-label>
+        <mat-label i18n>Regime juridico</mat-label>
         <input matInput formControlName="legalRegime" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Lei de criacao</mat-label>
+        <mat-label i18n>Lei de criacao</mat-label>
         <input matInput formControlName="creationLaw" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Vagas</mat-label>
+        <mat-label i18n>Vagas</mat-label>
         <input matInput type="number" formControlName="vacanciesCount" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Faixa salarial</mat-label>
+        <mat-label i18n>Faixa salarial</mat-label>
         <input matInput formControlName="salaryRangeId" list="salary-ranges" />
         <datalist id="salary-ranges">
           <option *ngFor="let range of salaryRanges" [value]="range.id">
@@ -48,12 +48,12 @@
         </datalist>
       </mat-form-field>
       <mat-form-field appearance="outline" class="cargos__description">
-        <mat-label>Descricao</mat-label>
+        <mat-label i18n>Descricao</mat-label>
         <textarea matInput formControlName="description" rows="3"></textarea>
       </mat-form-field>
     </form>
 
-    <div class="cargos__table" aria-label="Lista de cargos">
+    <div class="cargos__table" aria-label="Lista de cargos" i18n-aria-label>
       <button
         mat-button
         type="button"
@@ -68,14 +68,14 @@
     </div>
   </div>
 
-  <section class="cargos__salary" aria-label="Tabela salarial">
-    <h2>Tabela Salarial</h2>
+  <section class="cargos__salary" aria-label="Tabela salarial" i18n-aria-label>
+    <h2 i18n>Tabela Salarial</h2>
     <table>
       <thead>
         <tr>
-          <th>Classe</th>
-          <th>Nivel</th>
-          <th>Vencimento basico</th>
+          <th i18n>Classe</th>
+          <th i18n>Nivel</th>
+          <th i18n>Vencimento basico</th>
         </tr>
       </thead>
       <tbody>

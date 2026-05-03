@@ -1,46 +1,46 @@
 <section class="simulation" aria-labelledby="simulation-title">
   <header class="simulation__header">
     <div>
-      <p class="simulation__eyebrow">Folha</p>
-      <h1 id="simulation-title">Simulacao</h1>
+      <p class="simulation__eyebrow" i18n>Folha</p>
+      <h1 id="simulation-title" i18n>Simulacao</h1>
     </div>
     <button mat-flat-button color="primary" type="button" (click)="run()" [disabled]="loading">
       <mat-icon>calculate</mat-icon>
-      Simular
+      <ng-container i18n>Simular</ng-container>
     </button>
   </header>
 
   <form class="simulation__form" [formGroup]="form" (ngSubmit)="run()">
     <mat-form-field appearance="outline">
-      <mat-label>Tenant</mat-label>
+      <mat-label i18n>Tenant</mat-label>
       <input matInput formControlName="tenantId" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Vinculo ou servidor</mat-label>
+      <mat-label i18n>Vinculo ou servidor</mat-label>
       <input matInput formControlName="employmentLinkId" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Competencia</mat-label>
+      <mat-label i18n>Competencia</mat-label>
       <input matInput type="date" formControlName="competence" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Salario base</mat-label>
+      <mat-label i18n>Salario base</mat-label>
       <input matInput inputmode="decimal" formControlName="baseSalary" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Dependentes IRRF</mat-label>
+      <mat-label i18n>Dependentes IRRF</mat-label>
       <input matInput type="number" min="0" formControlName="dependentCount" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Rubrica adicional</mat-label>
+      <mat-label i18n>Rubrica adicional</mat-label>
       <input matInput formControlName="rubricId" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Valor da rubrica</mat-label>
+      <mat-label i18n>Valor da rubrica</mat-label>
       <input matInput inputmode="decimal" formControlName="rubricAmount" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Quantidade</mat-label>
+      <mat-label i18n>Quantidade</mat-label>
       <input matInput inputmode="decimal" formControlName="rubricQuantity" />
     </mat-form-field>
   </form>
@@ -49,19 +49,19 @@
 
   <section *ngIf="result as simulationResult" class="simulation__result" aria-live="polite">
     <div class="simulation__totals">
-      <span>Liquido atual {{ simulationResult.totals.currentNet | moneyBr }}</span>
-      <span>Liquido simulado {{ simulationResult.totals.simulatedNet | moneyBr }}</span>
-      <strong>Impacto {{ simulationResult.totals.netDelta | moneyBr }}</strong>
+      <span i18n>Liquido atual {{ simulationResult.totals.currentNet | moneyBr }}</span>
+      <span i18n>Liquido simulado {{ simulationResult.totals.simulatedNet | moneyBr }}</span>
+      <strong i18n>Impacto {{ simulationResult.totals.netDelta | moneyBr }}</strong>
     </div>
     <table>
       <thead>
         <tr>
-          <th>Codigo</th>
-          <th>Descricao</th>
-          <th>Tipo</th>
-          <th>Atual</th>
-          <th>Simulado</th>
-          <th>Impacto</th>
+          <th i18n>Codigo</th>
+          <th i18n>Descricao</th>
+          <th i18n>Tipo</th>
+          <th i18n>Atual</th>
+          <th i18n>Simulado</th>
+          <th i18n>Impacto</th>
         </tr>
       </thead>
       <tbody>

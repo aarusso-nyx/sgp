@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../../core/api/api-client';
 
 export type RemunerationCeilingKey =
   | 'TETO_PREFEITURA'
@@ -24,10 +24,10 @@ export interface RemunerationCeilingTable {
 export class TetoRemuneratorioService {
   private readonly url = '/api/v1/admin/parametros/teto-remuneratorio';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   list(): Observable<RemunerationCeilingTable> {
-    return this.http.get<RemunerationCeilingTable>(this.url);
+    return this.api.get<RemunerationCeilingTable>(this.url);
   }
 
   upsert(payload: {
@@ -35,6 +35,6 @@ export class TetoRemuneratorioService {
     amount: string;
     description?: string;
   }): Observable<RemunerationCeilingTable> {
-    return this.http.put<RemunerationCeilingTable>(this.url, payload);
+    return this.api.put<RemunerationCeilingTable>(this.url, payload);
   }
 }

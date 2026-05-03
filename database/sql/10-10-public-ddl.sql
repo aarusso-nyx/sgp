@@ -81,7 +81,9 @@ CREATE TABLE public.audit_event (
     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
     reason text
-);
+) PARTITION BY RANGE (occurred_at);
+
+CREATE TABLE public.audit_event_default PARTITION OF public.audit_event DEFAULT;
 
 CREATE TABLE public.document_attachment (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
@@ -317,7 +319,7 @@ ALTER TABLE ONLY public.access_profile
     ADD CONSTRAINT access_profile_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY public.audit_event
-    ADD CONSTRAINT audit_event_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT audit_event_pkey PRIMARY KEY (id, occurred_at);
 
 ALTER TABLE ONLY public.document_attachment
     ADD CONSTRAINT document_attachment_pkey PRIMARY KEY (id);

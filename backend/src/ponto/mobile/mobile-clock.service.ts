@@ -164,7 +164,7 @@ export class MobileClockService {
 
   async updateGeofence(input: UpdateWorkLocationGeofenceDto) {
     this.ensureDatabase();
-    const points = [...input.polygon, input.polygon[0]];
+    const points = [...input.polygon, input.polygon[0]!];
     const wkt = `POLYGON((${points
       .map((point) => `${point.lon} ${point.lat}`)
       .join(', ')}))`;
@@ -276,7 +276,7 @@ export class MobileClockService {
         decision.timeRecordId,
       ],
     );
-    return result.rows[0];
+    return result.rows[0]!;
   }
 
   private ensureDatabase(): void {

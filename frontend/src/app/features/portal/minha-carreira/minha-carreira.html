@@ -1,7 +1,7 @@
 <section class="career" aria-labelledby="career-title">
   <header>
-    <p>Portal do servidor</p>
-    <h1 id="career-title">Minha Carreira</h1>
+    <p i18n>Portal do servidor</p>
+    <h1 id="career-title" i18n>Minha Carreira</h1>
   </header>
 
   <p class="career__error" *ngIf="error" role="alert">{{ error }}</p>
@@ -9,32 +9,39 @@
   <div class="career__current" *ngIf="trail?.current">
     <span>{{ trail?.name }}</span>
     <strong
-      >Classe {{ trail?.current?.classNumber }} · Referencia
-      {{ trail?.current?.referenceNumber }}</strong
+      ><ng-container i18n
+        >Classe {{ trail?.current?.classNumber }} · Referencia
+        {{ trail?.current?.referenceNumber }}</ng-container
+      ></strong
     >
     <small>{{ trail?.current?.jobPositionName }} · {{ trail?.current?.baseSalary }}</small>
   </div>
 
-  <section class="career__next" *ngIf="trail?.nextProgression" aria-label="Proxima progressao">
-    <span>Proxima Progressao</span>
+  <section
+    class="career__next"
+    *ngIf="trail?.nextProgression"
+    aria-label="Proxima progressao"
+    i18n-aria-label
+  >
+    <span i18n>Proxima Progressao</span>
     <strong>{{ trail?.nextProgression?.eligible ? 'Elegivel' : 'Em acompanhamento' }}</strong>
-    <small *ngIf="trail?.nextProgression?.nextLevel">
+    <small *ngIf="trail?.nextProgression?.nextLevel" i18n>
       Classe {{ trail?.nextProgression?.nextLevel?.classNumber }} · Referencia
       {{ trail?.nextProgression?.nextLevel?.levelNumber }} ·
       {{ trail?.nextProgression?.nextLevel?.salary }}
     </small>
   </section>
 
-  <ol class="career__steps" aria-label="Trilha de progressao">
+  <ol class="career__steps" aria-label="Trilha de progressao" i18n-aria-label>
     <li *ngFor="let step of trail?.steps" [class.career__step--current]="step.current">
-      <span>Classe {{ step.classNumber }}</span>
-      <strong>Referencia {{ step.referenceNumber }}</strong>
+      <span i18n>Classe {{ step.classNumber }}</span>
+      <strong i18n>Referencia {{ step.referenceNumber }}</strong>
       <small>{{ step.baseSalary }}</small>
     </li>
   </ol>
 
   <section class="career__history" aria-labelledby="salary-history-title">
-    <h2 id="salary-history-title">Historico de vencimentos</h2>
+    <h2 id="salary-history-title" i18n>Historico de vencimentos</h2>
     <ol>
       <li *ngFor="let item of trail?.salaryHistory">
         <span>{{ item.vigenciaInicio | date: 'yyyy-MM-dd' }}</span>
@@ -45,7 +52,7 @@
   </section>
 
   <section class="career__history" aria-labelledby="vacation-payslips-title">
-    <h2 id="vacation-payslips-title">Contracheques de ferias</h2>
+    <h2 id="vacation-payslips-title" i18n>Contracheques de ferias</h2>
     <ol>
       <li *ngFor="let item of vacationPayslips">
         <span>{{ item.competenceYear }}-{{ item.competenceMonth }}</span>
@@ -56,7 +63,7 @@
   </section>
 
   <section class="career__history" aria-labelledby="termination-terms-title">
-    <h2 id="termination-terms-title">Termos de rescisao</h2>
+    <h2 id="termination-terms-title" i18n>Termos de rescisao</h2>
     <ol>
       <li *ngFor="let item of terminationTerms">
         <span>{{ item.terminationDate || item.competenceYear + '-' + item.competenceMonth }}</span>

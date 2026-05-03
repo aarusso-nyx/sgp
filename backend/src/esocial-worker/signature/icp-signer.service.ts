@@ -72,15 +72,18 @@ export class IcpSignerService {
       const der = forge.util.createBuffer(pkcs12.toString('binary'));
       const asn1 = forge.asn1.fromDer(der);
       const p12 = forge.pkcs12.pkcs12FromAsn1(asn1, false, password);
+      const keyBagOid = forge.pki.oids.pkcs8ShroudedKeyBag;
+      const certBagOid = forge.pki.oids.certBag;
+      if (!keyBagOid || !certBagOid) {
+        throw new BadRequestException('Unsupported PKCS#12 bag OID set');
+      }
       const keyBag = this.firstBag(
         p12.getBags({
-          bagType: forge.pki.oids.pkcs8ShroudedKeyBag,
-        })[forge.pki.oids.pkcs8ShroudedKeyBag],
+          bagType: keyBagOid,
+        })[keyBagOid],
       );
       const certBag = this.firstBag(
-        p12.getBags({ bagType: forge.pki.oids.certBag })[
-          forge.pki.oids.certBag
-        ],
+        p12.getBags({ bagType: certBagOid })[certBagOid],
       );
 
       if (!keyBag?.key || !certBag?.cert) {
@@ -96,7 +99,7 @@ export class IcpSignerService {
         validTo: certBag.cert.validity.notAfter,
         subject: certBag.cert.subject.attributes
           .map(
-            (attribute) =>
+            (attribute: forge.pki.CertificateField) =>
               `${attribute.shortName ?? attribute.name}=${String(attribute.value)}`,
           )
           .join(','),
@@ -126,7 +129,9 @@ export class IcpSignerService {
     return id;
   }
 
-  private firstBag<T>(bags: T[] | undefined): T | undefined {
+  private firstBag(
+    bags: forge.pkcs12.Bag[] | undefined,
+  ): forge.pkcs12.Bag | undefined {
     return bags?.[0];
   }
 }

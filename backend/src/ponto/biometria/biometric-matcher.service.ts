@@ -159,7 +159,7 @@ export class PontoBiometricMatcherService {
       ],
     );
     return {
-      id: rows.rows[0].id,
+      id: rows.rows[0]!.id,
       matched,
       score: score.toFixed(6),
       threshold: threshold.toFixed(6),

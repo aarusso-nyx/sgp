@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -35,6 +36,7 @@ export class PayrollAccountingController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET catalogos' })
   @Get('catalogos')
   @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll catalog resources.' })
@@ -42,6 +44,7 @@ export class PayrollAccountingController {
     return this.payrollAccountingService.listCatalogResources();
   }
 
+  @ApiOperation({ summary: 'GET catalogos/:resource' })
   @Get('catalogos/:resource')
   @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll catalog records.' })
@@ -52,6 +55,7 @@ export class PayrollAccountingController {
     return this.payrollAccountingService.listCatalogRecords(resource, query);
   }
 
+  @ApiOperation({ summary: 'POST catalogos/:resource' })
   @Post('catalogos/:resource')
   @RequirePermission('folha.write')
   @ApiCreatedResponse({ description: 'Create a payroll catalog record.' })
@@ -77,6 +81,7 @@ export class PayrollAccountingController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH catalogos/:resource/:id' })
   @Patch('catalogos/:resource/:id')
   @RequirePermission('folha.write')
   @ApiOkResponse({ description: 'Update a payroll catalog record.' })
@@ -104,6 +109,7 @@ export class PayrollAccountingController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'DELETE catalogos/:resource/:id' })
   @Delete('catalogos/:resource/:id')
   @RequirePermission('folha.write')
   @ApiOkResponse({ description: 'Deactivate a payroll catalog record.' })
@@ -129,6 +135,7 @@ export class PayrollAccountingController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'GET contabilidade' })
   @Get('contabilidade')
   @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll accounting-account mappings.' })
@@ -136,6 +143,7 @@ export class PayrollAccountingController {
     return this.payrollAccountingService.listAccountingAccounts(query);
   }
 
+  @ApiOperation({ summary: 'POST contabilidade' })
   @Post('contabilidade')
   @RequirePermission('folha.write')
   @ApiCreatedResponse({
@@ -160,6 +168,7 @@ export class PayrollAccountingController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH contabilidade/:id' })
   @Patch('contabilidade/:id')
   @RequirePermission('folha.write')
   @ApiOkResponse({
@@ -187,6 +196,7 @@ export class PayrollAccountingController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'DELETE contabilidade/:id' })
   @Delete('contabilidade/:id')
   @RequirePermission('folha.write')
   @ApiOkResponse({

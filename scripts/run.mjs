@@ -178,6 +178,7 @@ function handleStart() {
     'payroll-engine': { APP_SERVICE_NAME: 'sgp-payroll-engine', PAYROLL_ENGINE_PORT: '3302' },
     'esocial-worker': { APP_SERVICE_NAME: 'sgp-esocial-worker' },
     'integrations-worker': { APP_SERVICE_NAME: 'sgp-integrations-worker' },
+    'report-worker': { APP_SERVICE_NAME: 'sgp-report-worker' },
     'report-service': { APP_SERVICE_NAME: 'sgp-report-service', REPORT_SERVICE_PORT: '3305' },
   };
   const targetByRuntime = {
@@ -188,6 +189,7 @@ function handleStart() {
     'payroll-engine': { workspace: 'backend', script: 'start:payroll-engine' },
     'esocial-worker': { workspace: 'backend', script: 'start:esocial-worker' },
     'integrations-worker': { workspace: 'backend', script: 'start:integrations-worker' },
+    'report-worker': { workspace: 'backend', script: 'start:report-worker' },
     'report-service': { workspace: 'backend', script: 'start:report-service' },
   };
 
@@ -195,7 +197,7 @@ function handleStart() {
     const target = targetByRuntime[subcommand];
     if (!target) {
       console.error(
-        '[start] valid subcommands: all, admin, portal, core-api, portal-api, payroll-engine, esocial-worker, integrations-worker, report-service',
+        '[start] valid subcommands: all, admin, portal, core-api, portal-api, payroll-engine, esocial-worker, integrations-worker, report-worker, report-service',
       );
       return 1;
     }
@@ -239,10 +241,18 @@ function handleStart() {
 function handleLint() {
   const check = hasFlag('check') || args[0] === 'check';
   const frontendScript = check ? 'lint:check' : 'lint';
-  return runSequence([
+  const steps = [
     () => runNpm(['--workspace', 'frontend', 'run', frontendScript, '--if-present']),
     () => runWorkspaceScript('backend', check ? 'lint:check' : 'lint'),
-  ]);
+  ];
+  if (check) {
+    steps.push(
+      () => runCommand(process.execPath, ['scripts/check-test-debt-coverage.mjs']),
+      () => runCommand(process.execPath, ['scripts/check-api-operation-decorators.mjs']),
+      () => runCommand(process.execPath, ['scripts/check-openapi-generated.mjs']),
+    );
+  }
+  return runSequence(steps);
 }
 
 function handleFormat() {
@@ -278,7 +288,9 @@ function handleTest() {
         () => runWorkspaceScript('backend', 'test'),
       ]),
     admin: () => runWorkspaceScript('frontend', 'test:admin', args.slice(1)),
+    'admin-e2e': () => runWorkspaceScript('frontend', 'test:admin:e2e', args.slice(1)),
     portal: () => runWorkspaceScript('frontend', 'test:portal', args.slice(1)),
+    'portal-e2e': () => runWorkspaceScript('frontend', 'test:portal:e2e', args.slice(1)),
     backend: () => runWorkspaceScript('backend', 'test', args.slice(1)),
     db: () =>
       runCommand(process.execPath, ['scripts/db-bootstrap-smoke.mjs'], {
@@ -299,7 +311,7 @@ function handleTest() {
 
   if (!handlers[subcommand]) {
     console.error(
-      '[test] valid subcommands: unit, admin, portal, backend, db, e2e, coverage, qa, qa-api, qa-frontend',
+      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, backend, db, e2e, coverage, qa, qa-api, qa-frontend',
     );
     return 1;
   }
@@ -393,6 +405,7 @@ function handleHealth() {
     'scripts/run.mjs',
     'backend/src/main-payroll-engine.ts',
     'backend/src/main-esocial-worker.ts',
+    'backend/src/main-report-worker.ts',
     'backend/src/main-report-service.ts',
     'docs/gov/runtime-topology.json',
   ];

@@ -25,6 +25,7 @@
     "start:payroll-engine": "node scripts/run.mjs start payroll-engine",
     "start:esocial-worker": "node scripts/run.mjs start esocial-worker",
     "start:integrations-worker": "node scripts/run.mjs start integrations-worker",
+    "start:report-worker": "node scripts/run.mjs start report-worker",
     "start:report-service": "node scripts/run.mjs start report-service",
     "lint": "node scripts/run.mjs lint",
     "lint:check": "node scripts/run.mjs lint check",
@@ -37,6 +38,8 @@
     "test:backend": "node scripts/run.mjs test backend",
     "test:db": "node scripts/run.mjs test db",
     "test:e2e": "node scripts/run.mjs test e2e",
+    "test:admin:e2e": "node scripts/run.mjs test admin-e2e",
+    "test:portal:e2e": "node scripts/run.mjs test portal-e2e",
     "test:coverage": "node scripts/run.mjs test coverage",
     "test:qa": "node scripts/run.mjs test qa",
     "test:qa:api": "node scripts/run.mjs test qa-api",
@@ -49,8 +52,13 @@
     "db:seed": "node scripts/run.mjs db seed",
     "db:smoke": "node scripts/run.mjs db smoke",
     "db:studio": "node scripts/run.mjs db studio",
+    "db:fk-coverage:check": "node scripts/check-db-fk-coverage.mjs",
+    "db:fk-coverage:write": "node scripts/check-db-fk-coverage.mjs --write",
+    "db:push:guard": "node scripts/check-prisma-db-push-guard.mjs",
     "api:alignment:sync": "node scripts/sync-api-route-alignment.mjs",
     "api:alignment:check": "node scripts/check-api-route-alignment.mjs",
+    "api:operation:check": "node scripts/check-api-operation-decorators.mjs",
+    "api:spec:check": "node scripts/check-openapi-generated.mjs",
     "api:client:generate": "npm run build:backend && node scripts/generate-openapi-client.mjs",
     "db:alignment:check": "node scripts/check-db-alignment.mjs",
     "governance:check": "node scripts/run.mjs governance check",
@@ -66,5 +74,8 @@
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "typescript": "~5.9.2"
+  }
 }

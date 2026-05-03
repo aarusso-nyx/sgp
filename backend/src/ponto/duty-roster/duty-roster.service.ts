@@ -80,7 +80,7 @@ export class DutyRosterService {
           VALUES ($1::uuid, $2::uuid, $3::date, $4::timestamptz, $5::timestamptz, $6, $7, $8)
           `,
           [
-            roster.rows[0].duty_roster_id,
+            roster.rows[0]!.duty_roster_id,
             entry.employeeId,
             entry.workDate,
             entry.expectedEntry,
@@ -91,7 +91,7 @@ export class DutyRosterService {
           ],
         );
       }
-      return this.toSummary(roster.rows[0]);
+      return this.toSummary(roster.rows[0]!);
     });
   }
 
@@ -136,7 +136,7 @@ export class DutyRosterService {
       `,
       [dutyRosterId, status],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   private toSummary(row: DutyRosterRow): DutyRosterSummary {

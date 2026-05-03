@@ -17,7 +17,6 @@ import {
 import { AuditMutationContextStore } from './audit-mutation-context.store';
 
 const MUTATING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
-const ENFORCED_ENVS = new Set(['development', 'dev', 'test']);
 
 @Injectable()
 export class AuditRequiredInterceptor implements NestInterceptor {
@@ -38,19 +37,26 @@ export class AuditRequiredInterceptor implements NestInterceptor {
     );
 
     return new Observable((subscriber) =>
-      AuditMutationContextStore.run(true, () => {
-        const subscription = next.handle().subscribe({
-          next: (value) => subscriber.next(value),
-          error: (error: unknown) => subscriber.error(error),
-          complete: () => {
-            void this.completeAuditedRequest(context, request, metadata)
-              .then(() => subscriber.complete())
-              .catch((error: unknown) => subscriber.error(error));
-          },
-        });
+      AuditMutationContextStore.run(
+        true,
+        () => {
+          const subscription = next.handle().subscribe({
+            next: (value) => subscriber.next(value),
+            error: (error: unknown) => subscriber.error(error),
+            complete: () => {
+              void this.completeAuditedRequest(context, request, metadata)
+                .then(() => subscriber.complete())
+                .catch((error: unknown) => subscriber.error(error));
+            },
+          });
 
-        return () => subscription.unsubscribe();
-      }),
+          return () => subscription.unsubscribe();
+        },
+        {
+          controller: context.getClass().name,
+          route: this.route(request),
+        },
+      ),
     );
   }
 
@@ -85,9 +91,6 @@ export class AuditRequiredInterceptor implements NestInterceptor {
   }
 
   private shouldEnforce(context: ExecutionContext): boolean {
-    if (!ENFORCED_ENVS.has(process.env.NODE_ENV ?? 'development')) {
-      return false;
-    }
     const request = context.switchToHttp().getRequest<{ method?: string }>();
     return MUTATING_METHODS.has(String(request.method ?? '').toUpperCase());
   }
@@ -116,6 +119,13 @@ export class AuditRequiredInterceptor implements NestInterceptor {
       params?.profile_id ??
       undefined
     );
+  }
+
+  private route(request: RequestWithContext): string {
+    const route = request.route as { path?: unknown } | undefined;
+    const routePath = typeof route?.path === 'string' ? route.path : undefined;
+    if (routePath) return `${request.baseUrl ?? ''}${routePath}`;
+    return request.path ?? request.originalUrl?.split('?')[0] ?? 'unknown';
   }
 
   private reason(

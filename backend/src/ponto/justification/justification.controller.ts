@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -20,6 +21,7 @@ import { JustificationService } from './justification.service';
 export class JustificationController {
   constructor(private readonly justificationService: JustificationService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('ponto.justification.read')
   @ApiOkResponse({ description: 'Absence justification requests.' })
@@ -27,6 +29,7 @@ export class JustificationController {
     return this.justificationService.list(status);
   }
 
+  @ApiOperation({ summary: 'POST Request' })
   @Post()
   @RequirePermission('ponto.justification.write')
   @AuditMutation({
@@ -39,6 +42,7 @@ export class JustificationController {
     return this.justificationService.request(body);
   }
 
+  @ApiOperation({ summary: 'POST :id/decide' })
   @Post(':id/decide')
   @RequirePermission('ponto.justification.approve')
   @AuditMutation({
@@ -51,6 +55,7 @@ export class JustificationController {
     return this.justificationService.decide(id, body);
   }
 
+  @ApiOperation({ summary: 'POST :id/cancel' })
   @Post(':id/cancel')
   @RequirePermission('ponto.justification.write')
   @AuditMutation({

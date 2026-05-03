@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   ConsignadosService,
@@ -8,6 +8,7 @@ import {
 } from '../../../folha-pagamento/consignados/consignados.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-portal-consignados',
   standalone: true,
   imports: [CommonModule],

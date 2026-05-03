@@ -1,3 +1,28 @@
+import {
+  TEST_DATE_1960_04_20,
+  TEST_DATE_1962_01_01,
+  TEST_DATE_1964_01_01,
+  TEST_DATE_1965_01_01,
+  TEST_DATE_1972_01_01,
+  TEST_DATE_1985_01_01,
+  TEST_DATE_1985_03_01,
+  TEST_DATE_1989_01_01,
+  TEST_DATE_1990_01_01,
+  TEST_DATE_1994_01_01,
+  TEST_DATE_1995_01_01,
+  TEST_DATE_1998_01_01,
+  TEST_DATE_2000_01_01,
+  TEST_DATE_2010_01_01,
+  TEST_DATE_2012_01_01,
+  TEST_DATE_2020_01_01,
+  TEST_DATE_2023_01_01,
+  TEST_DATE_2025_01_01,
+  TEST_DATE_2026_01_01,
+  TEST_DATE_2026_04_25,
+  TEST_DATE_2026_10_25,
+  TEST_DATE_2026_12_31,
+  TEST_INSTANT_2026_04_25_10_00_00_000Z,
+} from './../../../tests/backend/helpers/date-fixtures';
 import { PrevidenciarioService } from './previdenciario.service';
 
 describe('PrevidenciarioService', () => {
@@ -5,8 +30,8 @@ describe('PrevidenciarioService', () => {
     id: 'emp-1',
     registration: '0001',
     name: 'Servidor Aposentavel',
-    birth_date: '1960-04-20',
-    hired_on: '1985-03-01',
+    birth_date: TEST_DATE_1960_04_20,
+    hired_on: TEST_DATE_1985_03_01,
     cpf: '00011122233',
   };
   const rule = {
@@ -33,7 +58,7 @@ describe('PrevidenciarioService', () => {
       proventoEstimado: 4920,
     },
     details_json: '{"criteriosAtendidos":["IDADE_MINIMA"]}',
-    simulated_on: '2026-04-25T10:00:00.000Z',
+    simulated_on: TEST_INSTANT_2026_04_25_10_00_00_000Z,
     created_by_ref: 'usr-previd',
   };
   const retirementGrant = {
@@ -43,7 +68,7 @@ describe('PrevidenciarioService', () => {
     employee_name: employee.name,
     rule_id: rule.id,
     rule_name: rule.name,
-    granted_on: '2026-04-25',
+    granted_on: TEST_DATE_2026_04_25,
     legal_basis: 'Lei 1',
     appointment_act: 'Ato 1',
     status: 'CONCEDIDA',
@@ -63,7 +88,7 @@ describe('PrevidenciarioService', () => {
     share_percent: '50.5',
     adjustment_mode: 'PARIDADE',
     nature: 'VITALICIA',
-    granted_on: '2026-04-25',
+    granted_on: TEST_DATE_2026_04_25,
     ceased_on: null,
     legal_basis: 'Lei 1',
     notes: 'Observacao',
@@ -73,12 +98,12 @@ describe('PrevidenciarioService', () => {
     employee_id: employee.id,
     registration: employee.registration,
     employee_name: employee.name,
-    period_start: '2000-01-01',
-    period_end: '2026-01-01',
+    period_start: TEST_DATE_2000_01_01,
+    period_end: TEST_DATE_2026_01_01,
     issuing_agency: 'RPPS',
     issuance_act: 'Ato CTC',
     storage_key: 'ctc.pdf',
-    issued_at: '2026-04-25T10:00:00.000Z',
+    issued_at: TEST_INSTANT_2026_04_25_10_00_00_000Z,
     issued_by_ref: 'usr-previd',
   };
   const declaration = {
@@ -87,7 +112,7 @@ describe('PrevidenciarioService', () => {
     registration: employee.registration,
     employee_name: employee.name,
     type: 'TEMPO_CONTRIBUICAO',
-    issued_at: '2026-04-25T10:00:00.000Z',
+    issued_at: TEST_INSTANT_2026_04_25_10_00_00_000Z,
     storage_key: 'decl.pdf',
     issued_by_ref: 'usr-previd',
   };
@@ -112,8 +137,8 @@ describe('PrevidenciarioService', () => {
     (type, index) => ({
       id: `campaign-${index}`,
       type,
-      cycle_start: '2026-01-01',
-      cycle_end: '2026-12-31',
+      cycle_start: TEST_DATE_2026_01_01,
+      cycle_end: TEST_DATE_2026_12_31,
       filter_json: index === 0 ? '{"active":true}' : { active: true },
       active: true,
     }),
@@ -131,13 +156,13 @@ describe('PrevidenciarioService', () => {
     employee_name: employee.name,
     campaign_id: 'campaign-1',
     type: campaignRows[index % campaignRows.length].type,
-    next_due_date: '2026-10-25',
+    next_due_date: TEST_DATE_2026_10_25,
     status,
   }));
   const recertificationRecord = {
     id: 'record-1',
     beneficiary_id: 'beneficiary-1',
-    recertified_on: '2026-04-25',
+    recertified_on: TEST_DATE_2026_04_25,
     operator_ref: 'operator-1',
     snapshot_json: { ok: true },
     receipt_storage_key: 'receipt.pdf',
@@ -147,7 +172,7 @@ describe('PrevidenciarioService', () => {
     beneficiary_id: 'beneficiary-1',
     channel: 'APP',
     authentication_json: '{"score":1}',
-    proven_at: '2026-04-25T10:00:00.000Z',
+    proven_at: TEST_INSTANT_2026_04_25_10_00_00_000Z,
   };
   const contactHistory = {
     id: 'contact-1',
@@ -155,14 +180,14 @@ describe('PrevidenciarioService', () => {
     employee_id: employee.id,
     registration: employee.registration,
     employee_name: employee.name,
-    contacted_on: '2026-04-25',
+    contacted_on: TEST_DATE_2026_04_25,
     user_ref: 'operator-1',
     notes: 'Contato realizado',
   };
   const requestRow = {
     id: 'request-1',
     status: 'REQUESTED',
-    requested_at: '2026-04-25T10:00:00.000Z',
+    requested_at: TEST_INSTANT_2026_04_25_10_00_00_000Z,
   };
 
   const createQuery = (overrides: Record<string, unknown> = {}) =>
@@ -244,8 +269,8 @@ describe('PrevidenciarioService', () => {
           id: 'emp-1',
           registration: '0001',
           name: 'Servidor Aposentavel',
-          birth_date: '1960-04-20',
-          hired_on: '1985-03-01',
+          birth_date: TEST_DATE_1960_04_20,
+          hired_on: TEST_DATE_1985_03_01,
           cpf: '00011122233',
         },
       ])
@@ -276,7 +301,7 @@ describe('PrevidenciarioService', () => {
             proventoEstimado: 4920,
           },
           details_json: { criteriosAtendidos: ['IDADE_MINIMA'] },
-          simulated_on: '2026-04-25T10:00:00.000Z',
+          simulated_on: TEST_INSTANT_2026_04_25_10_00_00_000Z,
           created_by_ref: 'usr-previd',
         },
       ]);
@@ -289,13 +314,394 @@ describe('PrevidenciarioService', () => {
       {
         funcionarioId: 'emp-1',
         regraId: 'regra-1',
-        dataReferencia: '2026-04-25',
+        dataReferencia: TEST_DATE_2026_04_25,
       },
       'usr-previd',
     );
 
     expect(result.resultado.elegivel).toBe(true);
     expect(result.regra).toBe('Voluntaria integral');
+  });
+
+  it('creates an eligible EC 103 Pedagio 100 retirement simulation', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: 'emp-1',
+          registration: '0001',
+          name: 'Servidor Aposentavel',
+          birth_date: TEST_DATE_1962_01_01,
+          hired_on: TEST_DATE_1985_01_01,
+          cpf: '00011122233',
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          id: 'regra-ec103',
+          name: 'EC 103 Pedagio 100',
+          legal_basis: 'EC 103/2019 art. 20',
+          age_criteria: { transitionRule: 'EC103_PEDAGIO_100' },
+          contribution_time_criteria: {},
+          grace_period_criteria: {},
+          applicable_employment_link: null,
+          active: true,
+        },
+      ])
+      .mockImplementationOnce(async (_sql: string, params: unknown[]) => [
+        {
+          id: 'sim-ec103',
+          employee_id: 'emp-1',
+          registration: '0001',
+          employee_name: 'Servidor Aposentavel',
+          rule_id: 'regra-ec103',
+          rule_name: 'EC 103 Pedagio 100',
+          result: JSON.parse(params[2] as string),
+          details_json: JSON.parse(params[3] as string),
+          simulated_on: TEST_INSTANT_2026_04_25_10_00_00_000Z,
+          created_by_ref: 'usr-previd',
+        },
+      ]);
+    const service = new PrevidenciarioService({
+      configured: true,
+      query,
+    } as never);
+
+    const result = await service.createSimulation(
+      {
+        funcionarioId: 'emp-1',
+        regraId: 'regra-ec103',
+        dataReferencia: TEST_DATE_2025_01_01,
+        regraTransicao: 'EC103_PEDAGIO_100',
+        sexo: 'MALE',
+        dataInicioServicoPublico: TEST_DATE_1998_01_01,
+        dataInicioCargoAtual: TEST_DATE_2010_01_01,
+        tempoContribuicaoReformaAnos: 34,
+      },
+      'usr-previd',
+    );
+
+    expect(result.resultado).toMatchObject({
+      elegivel: true,
+      regraTransicao: 'EC103_PEDAGIO_100',
+      fundamentoLegal: 'EC 103/2019 art. 20',
+    });
+    expect(result.detalheJson).toMatchObject({
+      ec103: expect.objectContaining({
+        rule: 'EC103_PEDAGIO_100',
+        required: expect.objectContaining({ tollYears: 1 }),
+      }),
+    });
+  });
+
+  it('runs the direct EC 103 Pedagio 100 simulator', () => {
+    const service = new PrevidenciarioService({
+      configured: true,
+      query: createQuery(),
+    } as never);
+
+    expect(
+      service.simulatePedagio100({
+        sexo: 'FEMALE',
+        dataNascimento: TEST_DATE_1972_01_01,
+        dataInicioContribuicao: TEST_DATE_1995_01_01,
+        dataInicioServicoPublico: TEST_DATE_2012_01_01,
+        dataInicioCargoAtual: TEST_DATE_2023_01_01,
+        dataReferencia: TEST_DATE_2025_01_01,
+        tempoContribuicaoReformaAnos: 27,
+      }),
+    ).toMatchObject({
+      eligible: false,
+      rule: 'EC103_PEDAGIO_100',
+      required: expect.objectContaining({ tollYears: 3 }),
+      blockers: expect.arrayContaining([
+        'IDADE_MINIMA',
+        'TEMPO_CONTRIBUICAO_COM_PEDAGIO_100',
+      ]),
+    });
+  });
+
+  it('creates an eligible EC 103 Pedagio 50 retirement simulation', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: 'emp-1',
+          registration: '0001',
+          name: 'Segurada RGPS',
+          birth_date: TEST_DATE_1965_01_01,
+          hired_on: TEST_DATE_1990_01_01,
+          cpf: '00011122233',
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          id: 'regra-ec103',
+          name: 'EC 103 Pedagio 50',
+          legal_basis: 'EC 103/2019 art. 17',
+          age_criteria: { transitionRule: 'EC103_PEDAGIO_50' },
+          contribution_time_criteria: {},
+          grace_period_criteria: {},
+          applicable_employment_link: null,
+          active: true,
+        },
+      ])
+      .mockImplementationOnce(async (_sql: string, params: unknown[]) => [
+        {
+          id: 'sim-ec103',
+          employee_id: 'emp-1',
+          registration: '0001',
+          employee_name: 'Segurada RGPS',
+          rule_id: 'regra-ec103',
+          rule_name: 'EC 103 Pedagio 50',
+          result: JSON.parse(params[2] as string),
+          details_json: JSON.parse(params[3] as string),
+          simulated_on: TEST_INSTANT_2026_04_25_10_00_00_000Z,
+          created_by_ref: 'usr-previd',
+        },
+      ]);
+    const service = new PrevidenciarioService({
+      configured: true,
+      query,
+    } as never);
+
+    const result = await service.createSimulation(
+      {
+        funcionarioId: 'emp-1',
+        regraId: 'regra-ec103',
+        dataReferencia: TEST_DATE_2025_01_01,
+        regraTransicao: 'EC103_PEDAGIO_50',
+        sexo: 'FEMALE',
+        tempoContribuicaoReformaAnos: 29,
+        tempoContribuicaoReferenciaAnos: 31,
+      },
+      'usr-previd',
+    );
+
+    expect(result.resultado).toMatchObject({
+      elegivel: true,
+      regraTransicao: 'EC103_PEDAGIO_50',
+      fundamentoLegal: 'EC 103/2019 art. 17',
+    });
+    expect(result.detalheJson).toMatchObject({
+      ec103: expect.objectContaining({
+        rule: 'EC103_PEDAGIO_50',
+        required: expect.objectContaining({ tollYears: 0.5 }),
+      }),
+    });
+  });
+
+  it('creates an eligible EC 103 points retirement simulation', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: 'emp-1',
+          registration: '0001',
+          name: 'Servidor Pontos',
+          birth_date: TEST_DATE_1962_01_01,
+          hired_on: TEST_DATE_1985_01_01,
+          cpf: '00011122233',
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          id: 'regra-ec103',
+          name: 'EC 103 Pontos',
+          legal_basis: 'EC 103/2019 art. 4',
+          age_criteria: { transitionRule: 'EC103_PONTOS' },
+          contribution_time_criteria: {},
+          grace_period_criteria: {},
+          applicable_employment_link: null,
+          active: true,
+        },
+      ])
+      .mockImplementationOnce(async (_sql: string, params: unknown[]) => [
+        {
+          id: 'sim-ec103',
+          employee_id: 'emp-1',
+          registration: '0001',
+          employee_name: 'Servidor Pontos',
+          rule_id: 'regra-ec103',
+          rule_name: 'EC 103 Pontos',
+          result: JSON.parse(params[2] as string),
+          details_json: JSON.parse(params[3] as string),
+          simulated_on: TEST_INSTANT_2026_04_25_10_00_00_000Z,
+          created_by_ref: 'usr-previd',
+        },
+      ]);
+    const service = new PrevidenciarioService({
+      configured: true,
+      query,
+    } as never);
+
+    const result = await service.createSimulation(
+      {
+        funcionarioId: 'emp-1',
+        regraId: 'regra-ec103',
+        dataReferencia: TEST_DATE_2025_01_01,
+        regraTransicao: 'EC103_PONTOS',
+        sexo: 'MALE',
+        dataInicioServicoPublico: TEST_DATE_1998_01_01,
+        dataInicioCargoAtual: TEST_DATE_2010_01_01,
+      },
+      'usr-previd',
+    );
+
+    expect(result.resultado).toMatchObject({
+      elegivel: true,
+      regraTransicao: 'EC103_PONTOS',
+      fundamentoLegal: 'EC 103/2019 art. 4',
+    });
+    expect(result.detalheJson).toMatchObject({
+      ec103: expect.objectContaining({
+        rule: 'EC103_PONTOS',
+        required: expect.objectContaining({ points: 102 }),
+      }),
+    });
+  });
+
+  it('creates an eligible EC 103 progressive age retirement simulation', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: 'emp-1',
+          registration: '0001',
+          name: 'Segurada Progressiva',
+          birth_date: TEST_DATE_1965_01_01,
+          hired_on: TEST_DATE_1990_01_01,
+          cpf: '00011122233',
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          id: 'regra-ec103',
+          name: 'EC 103 Idade Progressiva',
+          legal_basis: 'EC 103/2019 art. 16',
+          age_criteria: { transitionRule: 'EC103_IDADE_PROGRESSIVA' },
+          contribution_time_criteria: {},
+          grace_period_criteria: {},
+          applicable_employment_link: null,
+          active: true,
+        },
+      ])
+      .mockImplementationOnce(async (_sql: string, params: unknown[]) => [
+        {
+          id: 'sim-ec103',
+          employee_id: 'emp-1',
+          registration: '0001',
+          employee_name: 'Segurada Progressiva',
+          rule_id: 'regra-ec103',
+          rule_name: 'EC 103 Idade Progressiva',
+          result: JSON.parse(params[2] as string),
+          details_json: JSON.parse(params[3] as string),
+          simulated_on: TEST_INSTANT_2026_04_25_10_00_00_000Z,
+          created_by_ref: 'usr-previd',
+        },
+      ]);
+    const service = new PrevidenciarioService({
+      configured: true,
+      query,
+    } as never);
+
+    const result = await service.createSimulation(
+      {
+        funcionarioId: 'emp-1',
+        regraId: 'regra-ec103',
+        dataReferencia: TEST_DATE_2025_01_01,
+        regraTransicao: 'EC103_IDADE_PROGRESSIVA',
+        sexo: 'FEMALE',
+        tempoContribuicaoReferenciaAnos: 35,
+      },
+      'usr-previd',
+    );
+
+    expect(result.resultado).toMatchObject({
+      elegivel: true,
+      regraTransicao: 'EC103_IDADE_PROGRESSIVA',
+      fundamentoLegal: 'EC 103/2019 art. 16',
+    });
+    expect(result.detalheJson).toMatchObject({
+      ec103: expect.objectContaining({
+        rule: 'EC103_IDADE_PROGRESSIVA',
+        required: expect.objectContaining({ ageYears: 59 }),
+      }),
+    });
+  });
+
+  it('creates an eligible EC 103 risk activity retirement simulation', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: 'emp-1',
+          registration: '0001',
+          name: 'Servidor Risco',
+          birth_date: TEST_DATE_1964_01_01,
+          hired_on: TEST_DATE_1989_01_01,
+          cpf: '00011122233',
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          id: 'regra-ec103',
+          name: 'EC 103 Atividade Risco',
+          legal_basis: 'EC 103/2019 art. 5',
+          age_criteria: {
+            transitionRule: 'EC103_ATIVIDADE_RISCO_PROFESSOR',
+          },
+          contribution_time_criteria: {},
+          grace_period_criteria: {},
+          applicable_employment_link: null,
+          active: true,
+        },
+      ])
+      .mockImplementationOnce(async (_sql: string, params: unknown[]) => [
+        {
+          id: 'sim-ec103',
+          employee_id: 'emp-1',
+          registration: '0001',
+          employee_name: 'Servidor Risco',
+          rule_id: 'regra-ec103',
+          rule_name: 'EC 103 Atividade Risco',
+          result: JSON.parse(params[2] as string),
+          details_json: JSON.parse(params[3] as string),
+          simulated_on: TEST_INSTANT_2026_04_25_10_00_00_000Z,
+          created_by_ref: 'usr-previd',
+        },
+      ]);
+    const service = new PrevidenciarioService({
+      configured: true,
+      query,
+    } as never);
+
+    const result = await service.createSimulation(
+      {
+        funcionarioId: 'emp-1',
+        regraId: 'regra-ec103',
+        dataReferencia: TEST_DATE_2025_01_01,
+        regraTransicao: 'EC103_ATIVIDADE_RISCO_PROFESSOR',
+        populacaoAtividadeRiscoProfessor: 'RISK_ACTIVITY',
+        sexo: 'MALE',
+        dataInicioCarreira: TEST_DATE_1994_01_01,
+        tempoContribuicaoReformaAnos: 30,
+        tempoCarreiraReformaAnos: 20,
+      },
+      'usr-previd',
+    );
+
+    expect(result.resultado).toMatchObject({
+      elegivel: true,
+      regraTransicao: 'EC103_ATIVIDADE_RISCO_PROFESSOR',
+      fundamentoLegal: 'EC 103/2019 art. 5',
+    });
+    expect(result.detalheJson).toMatchObject({
+      ec103: expect.objectContaining({
+        rule: 'EC103_ATIVIDADE_RISCO_PROFESSOR',
+        population: 'RISK_ACTIVITY',
+      }),
+    });
   });
 
   it('lists previdenciario runtime records with status and type mappings', async () => {
@@ -374,7 +780,7 @@ describe('PrevidenciarioService', () => {
         {
           funcionarioId: employee.id,
           regraId: rule.id,
-          dataConcessao: '2026-04-25',
+          dataConcessao: TEST_DATE_2026_04_25,
           fundamento: ' Lei 1 ',
           atoNomeacao: ' Ato 1 ',
           observacao: ' Observacao ',
@@ -393,7 +799,7 @@ describe('PrevidenciarioService', () => {
         cotaParte: 50.5,
         formaReajuste: ' PARIDADE ',
         natureza: ' VITALICIA ',
-        dataConcessao: '2026-04-25',
+        dataConcessao: TEST_DATE_2026_04_25,
         fundamento: ' Lei 1 ',
         observacao: ' Observacao ',
       }),
@@ -401,8 +807,8 @@ describe('PrevidenciarioService', () => {
     await expect(
       service.createContributionTimeCertificate({
         funcionarioId: employee.id,
-        periodoInicio: '2000-01-01',
-        periodoFim: '2026-01-01',
+        periodoInicio: TEST_DATE_2000_01_01,
+        periodoFim: TEST_DATE_2026_01_01,
         orgaoEmitente: ' RPPS ',
         atoEmissao: ' Ato CTC ',
         storageKey: 'ctc.pdf',
@@ -451,8 +857,8 @@ describe('PrevidenciarioService', () => {
       await expect(
         service.createCampaign({
           tipo,
-          cicloInicio: '2026-01-01',
-          cicloFim: '2026-12-31',
+          cicloInicio: TEST_DATE_2026_01_01,
+          cicloFim: TEST_DATE_2026_12_31,
           filtro: { tipo },
           ativa: true,
         }),
@@ -471,7 +877,7 @@ describe('PrevidenciarioService', () => {
           funcionarioId: employee.id,
           campanhaId: 'campaign-1',
           tipo: 'APOSENTADO',
-          dataProxima: '2026-10-25',
+          dataProxima: TEST_DATE_2026_10_25,
           status,
         }),
       ).resolves.toHaveProperty('status', 'PENDENTE');
@@ -480,7 +886,7 @@ describe('PrevidenciarioService', () => {
     await expect(
       service.createRecord({
         beneficiarioId: 'beneficiary-1',
-        data: '2026-04-25',
+        data: TEST_DATE_2026_04_25,
         operadorId: ' operator-1 ',
         dadosSnapshot: { ok: true },
         comprovanteStorageKey: 'receipt.pdf',
@@ -491,13 +897,13 @@ describe('PrevidenciarioService', () => {
         beneficiarioId: 'beneficiary-1',
         canal: 'APP',
         autenticacao: { score: 1 },
-        data: '2026-04-25T10:00:00.000Z',
+        data: TEST_INSTANT_2026_04_25_10_00_00_000Z,
       }),
     ).resolves.toHaveProperty('canal', 'APP');
     await expect(
       service.createBeneficiaryContactHistory({
         beneficiarioId: 'beneficiary-1',
-        data: '2026-04-25',
+        data: TEST_DATE_2026_04_25,
         usuarioId: ' operator-1 ',
         observacao: ' Contato realizado ',
       }),
@@ -535,15 +941,15 @@ describe('PrevidenciarioService', () => {
         cotaParte: 50,
         formaReajuste: ' PARIDADE ',
         natureza: ' VITALICIA ',
-        dataConcessao: '2026-04-25',
+        dataConcessao: TEST_DATE_2026_04_25,
         fundamento: ' Lei 1 ',
       }),
     ).resolves.toHaveProperty('nomeBeneficiario', 'Beneficiario');
     await expect(
       service.createContributionTimeCertificate({
         funcionarioId: employee.id,
-        periodoInicio: '2000-01-01',
-        periodoFim: '2026-01-01',
+        periodoInicio: TEST_DATE_2000_01_01,
+        periodoFim: TEST_DATE_2026_01_01,
         orgaoEmitente: ' RPPS ',
         atoEmissao: ' Ato CTC ',
       }),
@@ -567,21 +973,21 @@ describe('PrevidenciarioService', () => {
     await expect(
       service.createCampaign({
         tipo: 'APOSENTADO',
-        cicloInicio: '2026-01-01',
-        cicloFim: '2026-12-31',
+        cicloInicio: TEST_DATE_2026_01_01,
+        cicloFim: TEST_DATE_2026_12_31,
       }),
     ).resolves.toHaveProperty('id', campaignRows[0].id);
     await expect(
       service.createBeneficiary({
         funcionarioId: employee.id,
         tipo: 'APOSENTADO',
-        dataProxima: '2026-10-25',
+        dataProxima: TEST_DATE_2026_10_25,
       }),
     ).resolves.toHaveProperty('id', beneficiaryRows[0].id);
     await expect(
       service.createRecord({
         beneficiarioId: 'beneficiary-1',
-        data: '2026-04-25',
+        data: TEST_DATE_2026_04_25,
         operadorId: 'operator-1',
       }),
     ).resolves.toHaveProperty('id', recertificationRecord.id);
@@ -640,7 +1046,7 @@ describe('PrevidenciarioService', () => {
       } as never).createSimulation({
         funcionarioId: employee.id,
         regraId: rule.id,
-        dataReferencia: '2026-04-25',
+        dataReferencia: TEST_DATE_2026_04_25,
       }),
     ).rejects.toThrow('Employee not found');
     await expect(
@@ -649,14 +1055,14 @@ describe('PrevidenciarioService', () => {
         query: createQuery({
           employee: {
             ...employee,
-            birth_date: '2000-01-01',
-            hired_on: '2020-01-01',
+            birth_date: TEST_DATE_2000_01_01,
+            hired_on: TEST_DATE_2020_01_01,
           },
         }),
       } as never).createRetirementGrant({
         funcionarioId: employee.id,
         regraId: rule.id,
-        dataConcessao: '2026-04-25',
+        dataConcessao: TEST_DATE_2026_04_25,
         fundamento: 'Lei 1',
         atoNomeacao: 'Ato 1',
       }),
@@ -668,7 +1074,7 @@ describe('PrevidenciarioService', () => {
       } as never).createExternalLifeProof({
         beneficiarioId: 'missing',
         canal: 'APP',
-        data: '2026-04-25T10:00:00.000Z',
+        data: TEST_INSTANT_2026_04_25_10_00_00_000Z,
       }),
     ).rejects.toThrow('Recertification beneficiary not found');
   });

@@ -1,35 +1,35 @@
 <section class="history" aria-labelledby="history-title">
   <header class="history__header">
     <div>
-      <p>Recursos Humanos</p>
-      <h1 id="history-title">Historico funcional</h1>
+      <p i18n>Recursos Humanos</p>
+      <h1 id="history-title" i18n>Historico funcional</h1>
     </div>
     <label>
-      <span>Inicio</span>
+      <span i18n>Inicio</span>
       <input type="date" [(ngModel)]="startDate" />
     </label>
     <label>
-      <span>Fim</span>
+      <span i18n>Fim</span>
       <input type="date" [(ngModel)]="endDate" />
     </label>
     <label>
-      <span>Tipo</span>
+      <span i18n>Tipo</span>
       <select [(ngModel)]="type">
-        <option value="">Todos</option>
-        <option value="functional_status">Situacao</option>
-        <option value="vacation">Ferias</option>
-        <option value="leave">Licenca</option>
-        <option value="medical_leave">Licenca medica</option>
-        <option value="service_time">Tempo de servico</option>
+        <option value="" i18n>Todos</option>
+        <option value="functional_status" i18n>Situacao</option>
+        <option value="vacation" i18n>Ferias</option>
+        <option value="leave" i18n>Licenca</option>
+        <option value="medical_leave" i18n>Licenca medica</option>
+        <option value="service_time" i18n>Tempo de servico</option>
       </select>
     </label>
-    <button type="button" mat-stroked-button (click)="load()">Filtrar</button>
+    <button type="button" mat-stroked-button (click)="load()" i18n>Filtrar</button>
   </header>
 
   <p class="history__error" *ngIf="error" role="alert">{{ error }}</p>
-  <p *ngIf="loading">Carregando...</p>
+  <p *ngIf="loading" i18n>Carregando...</p>
 
-  <ol class="history__timeline" aria-label="Linha do tempo funcional">
+  <ol class="history__timeline" aria-label="Linha do tempo funcional" i18n-aria-label>
     <li *ngFor="let event of events">
       <time>{{ event.date }}</time>
       <div>

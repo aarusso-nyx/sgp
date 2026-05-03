@@ -1,16 +1,17 @@
 <section class="returns" aria-labelledby="esocial-returns-title">
   <header class="returns__header">
     <div>
-      <p class="returns__eyebrow">eSocial</p>
-      <h1 id="esocial-returns-title">Retornos</h1>
-      <p>Fila de erros, retries e recibos retornados pelo Ambiente Nacional.</p>
+      <p class="returns__eyebrow" i18n>eSocial</p>
+      <h1 id="esocial-returns-title" i18n>Retornos</h1>
+      <p i18n>Fila de erros, retries e recibos retornados pelo Ambiente Nacional.</p>
     </div>
     <div class="returns__actions">
-      <button type="button" (click)="load('')" [class.active]="!activeStatus">Todos</button>
+      <button type="button" (click)="load('')" [class.active]="!activeStatus" i18n>Todos</button>
       <button
         type="button"
         (click)="load('ERRO_DEFINITIVO')"
         [class.active]="activeStatus === 'ERRO_DEFINITIVO'"
+        i18n
       >
         Definitivos
       </button>
@@ -18,43 +19,44 @@
         type="button"
         (click)="load('ERRO_TECNICO_RETENTAVEL')"
         [class.active]="activeStatus === 'ERRO_TECNICO_RETENTAVEL'"
+        i18n
       >
         Recoverable
       </button>
-      <button type="button" (click)="load()" [disabled]="loading">Atualizar</button>
+      <button type="button" (click)="load()" [disabled]="loading" i18n>Atualizar</button>
     </div>
   </header>
 
   <p class="returns__error" *ngIf="error" role="alert">{{ error }}</p>
-  <p class="returns__loading" *ngIf="loading">Carregando...</p>
+  <p class="returns__loading" *ngIf="loading" i18n>Carregando...</p>
 
   <div class="returns__summary">
     <div>
       <strong>{{ definitiveFailures().length }}</strong>
-      <span>Definitivos</span>
+      <span i18n>Definitivos</span>
     </div>
     <div>
       <strong>{{ recoverableFailures().length }}</strong>
-      <span>Recoverable</span>
+      <span i18n>Recoverable</span>
     </div>
     <div>
       <strong>{{ failures.length }}</strong>
-      <span>Total na fila</span>
+      <span i18n>Total na fila</span>
     </div>
   </div>
 
   <section class="returns__section">
-    <h2>Fila administrativa</h2>
+    <h2 i18n>Fila administrativa</h2>
     <div class="returns__table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Evento</th>
-            <th>Status</th>
-            <th>Codigo</th>
-            <th>Mensagem</th>
-            <th>Proximo retry</th>
-            <th>Tentativas</th>
+            <th i18n>Evento</th>
+            <th i18n>Status</th>
+            <th i18n>Codigo</th>
+            <th i18n>Mensagem</th>
+            <th i18n>Proximo retry</th>
+            <th i18n>Tentativas</th>
             <th></th>
           </tr>
         </thead>
@@ -86,6 +88,7 @@
                 *ngIf="canRetry(failure)"
                 (click)="forceRetry(failure); $event.stopPropagation()"
                 [disabled]="actionEventId === failure.eventId"
+                i18n
               >
                 Retry
               </button>
@@ -94,13 +97,14 @@
                 *ngIf="canMarkHandled(failure)"
                 (click)="markHandled(failure); $event.stopPropagation()"
                 [disabled]="actionEventId === failure.eventId"
+                i18n
               >
                 Tratado
               </button>
             </td>
           </tr>
           <tr *ngIf="!failures.length && !loading">
-            <td colspan="7">Nenhum retorno pendente de acao.</td>
+            <td colspan="7" i18n>Nenhum retorno pendente de acao.</td>
           </tr>
         </tbody>
       </table>
@@ -108,14 +112,14 @@
   </section>
 
   <section class="returns__section" *ngIf="selected">
-    <h2>Detalhe do evento</h2>
+    <h2 i18n>Detalhe do evento</h2>
     <dl class="returns__detail">
       <div>
-        <dt>Referencia</dt>
+        <dt i18n>Referencia</dt>
         <dd class="returns__mono">{{ selected.reference }}</dd>
       </div>
       <div>
-        <dt>Ultimo retorno</dt>
+        <dt i18n>Ultimo retorno</dt>
         <dd>
           <span *ngIf="selected.lastResponseAt">{{
             selected.lastResponseAt | date: 'dd/MM/yyyy HH:mm'
@@ -124,12 +128,12 @@
         </dd>
       </div>
       <div>
-        <dt>Erro</dt>
+        <dt i18n>Erro</dt>
         <dd>{{ selected.lastError || selected.responseDescription || '-' }}</dd>
       </div>
     </dl>
     <div class="returns__occurrences" *ngIf="selected.responseErrors.length">
-      <h3>Ocorrencias</h3>
+      <h3 i18n>Ocorrencias</h3>
       <ul>
         <li *ngFor="let occurrence of selected.responseErrors">
           <span class="returns__mono">{{ occurrence.code || '-' }}</span>

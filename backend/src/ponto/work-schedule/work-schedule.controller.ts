@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { WorkScheduleService } from './work-schedule.service';
 export class WorkScheduleController {
   constructor(private readonly workScheduleService: WorkScheduleService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('ponto.schedule.read')
   @ApiOkResponse({ description: 'Work schedules.' })
@@ -24,6 +26,7 @@ export class WorkScheduleController {
     return this.workScheduleService.list();
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('ponto.schedule.write')
   @AuditMutation({

@@ -2,6 +2,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { createHash } from 'node:crypto';
@@ -9,6 +10,8 @@ import { PoolClient, QueryResultRow } from 'pg';
 
 import type { AuthenticatedActor } from '../../auth/auth.types';
 import { RequestContextStore } from '../../common/request-context/request-context.store';
+import { LGPD_DATA_FLOWS } from '../../common/lgpd/legal-basis.registry';
+import { LgpdLegalBasisService } from '../../common/lgpd/legal-basis.service';
 import { DatabaseService } from '../../database/database.service';
 import { PdfABuilderService } from './pdf-a-builder.service';
 import {
@@ -76,6 +79,8 @@ export class PayslipRenderService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly pdfBuilder: PdfABuilderService,
+    @Optional()
+    private readonly legalBasisService?: LgpdLegalBasisService,
   ) {}
 
   async renderAndPersist(
@@ -171,6 +176,7 @@ export class PayslipRenderService {
     payrollRunId: string,
     employeeId: string,
   ): Promise<PayslipDocument> {
+    await this.assertPayslipLegalBasis();
     const rows = await this.databaseService.query<PayslipSourceRow>(
       this.sourceSql('WHERE run.id = $1::uuid AND employee.id = $2::uuid'),
       [payrollRunId, employeeId],
@@ -219,7 +225,7 @@ export class PayslipRenderService {
         `,
         [tenantId, competence, payrollRunId],
       );
-      const batchId = batchRows.rows[0].id;
+      const batchId = batchRows.rows[0]!.id;
 
       const employees = await client.query<IdRow>(
         `
@@ -282,6 +288,7 @@ export class PayslipRenderService {
     payrollRunId: string,
     employeeId: string,
   ): Promise<RenderedPayslip> {
+    await this.assertPayslipLegalBasis();
     const rows = await client.query<PayslipSourceRow>(
       this.sourceSql('WHERE run.id = $1::uuid AND employee.id = $2::uuid'),
       [payrollRunId, employeeId],
@@ -363,7 +370,7 @@ export class PayslipRenderService {
       JOIN payroll.payroll_financial_record financial
         ON financial.tenant_id = run.tenant_id
        AND financial.payroll_run_id = run.id
-      JOIN hr.employee employee
+      JOIN hr.v_employee_pii_decrypted employee
         ON employee.tenant_id = run.tenant_id
        AND employee.id = financial.employee_id
       LEFT JOIN hr.branch branch ON branch.id = employee.branch_id
@@ -395,6 +402,12 @@ export class PayslipRenderService {
         financial.total_deductions,
         financial.net_amount
     `;
+  }
+
+  private async assertPayslipLegalBasis(): Promise<void> {
+    await this.legalBasisService?.assertPiiReadAllowed(
+      LGPD_DATA_FLOWS.PAYROLL_PAYSLIP_PDF,
+    );
   }
 
   private toDocument(row: PayslipSourceRow): PayslipDocument {
@@ -464,7 +477,7 @@ export class PayslipRenderService {
       `,
       [tenantId],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureReportRequest(
@@ -504,7 +517,7 @@ export class PayslipRenderService {
         row.employee_id,
       ],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureAttachment(
@@ -555,7 +568,7 @@ export class PayslipRenderService {
         file.storageKey,
       ],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureGeneratedFile(
@@ -580,6 +593,7 @@ export class PayslipRenderService {
         payroll_run_id,
         pdf_a_compliance,
         signature_kind,
+        signed_at,
         retention_until,
         file_hash
       )
@@ -593,7 +607,8 @@ export class PayslipRenderService {
         $5::uuid,
         $6::uuid,
         'PDF_A_1B'::public."PdfACompliance",
-        'NONE'::public."SignatureKind",
+        'ICP_BRASIL_A1'::public."SignatureKind",
+        $4::date::timestamptz,
         ($4::date + interval '10 years')::date,
         $7
       )
@@ -609,7 +624,7 @@ export class PayslipRenderService {
         file.fileHash,
       ],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async loadActorEmployee(

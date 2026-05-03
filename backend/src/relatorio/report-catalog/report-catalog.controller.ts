@@ -1,5 +1,10 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -15,6 +20,7 @@ export class ReportCatalogController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('relatorio.read')
   @ApiOkResponse({ description: 'List report definitions.' })

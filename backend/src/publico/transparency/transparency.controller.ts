@@ -9,7 +9,7 @@ import {
   Query,
   Res,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 
 import { CurrentActor } from '../../auth/current-actor.decorator';
@@ -36,6 +36,7 @@ export class TransparencyController {
     private readonly publishService: TransparencyPublishService,
   ) {}
 
+  @ApiOperation({ summary: 'GET payroll' })
   @Get('payroll')
   @Public()
   @ApiOkResponse({ description: 'Public payroll transparency snapshot.' })
@@ -58,6 +59,7 @@ export class TransparencyController {
     return this.queryService.list(tenantId, query);
   }
 
+  @ApiOperation({ summary: 'GET payroll.csv' })
   @Get('payroll.csv')
   @Public()
   @Header('Content-Type', 'text/csv; charset=utf-8')
@@ -72,6 +74,7 @@ export class TransparencyController {
     return this.csvService.export(tenantId, query);
   }
 
+  @ApiOperation({ summary: 'POST publish' })
   @Post('publish')
   @RequirePermission('transparency.publish')
   @AuditMutation({

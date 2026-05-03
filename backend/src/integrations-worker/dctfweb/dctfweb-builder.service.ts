@@ -21,7 +21,7 @@ import {
 } from './dctfweb.dto';
 
 interface TotalizerRow extends QueryResultRow {
-  kind: 'S-5011' | 'S-5012' | 'S-5013';
+  kind: 'S-5011' | 'S-5012' | 'S-5013' | 'R-9015';
   source_event_recibo: string;
   payload: Record<string, unknown> | string;
 }
@@ -63,12 +63,16 @@ interface SourceItem {
   debitCode: string;
   baseAmount: string;
   amount: string;
+  mitStatus?: string;
+  mitDebitId?: string;
+  cnpjFilial?: string;
 }
 
 const EVENT_MAP: Record<TotalizerRow['kind'], DctfwebSourceEvent> = {
   'S-5011': 'S5011',
   'S-5012': 'S5012',
   'S-5013': 'S5013',
+  'R-9015': 'R9015',
 };
 
 @Injectable()
@@ -163,7 +167,7 @@ export class DctfwebBuilderService {
     const items = totalizers.flatMap((row) => this.itemsFromTotalizer(row));
     if (!items.length) {
       throw new PreconditionFailedException(
-        'DCTFWeb generation requires accepted S-5011, S-5012, or S-5013 totalizers for the competence',
+        'DCTFWeb generation requires accepted S-5011, S-5012, S-5013, or EFD-Reinf R-9015 totalizers for the competence',
       );
     }
 
@@ -219,7 +223,7 @@ export class DctfwebBuilderService {
           xmlHash,
         ],
       );
-      const declarationId = inserted.rows[0].id;
+      const declarationId = inserted.rows[0]!.id;
       for (const item of items) {
         await client.query(
           `
@@ -282,7 +286,16 @@ export class DctfwebBuilderService {
           'S-5012'::esocial.esocial_totalizer_kind,
           'S-5013'::esocial.esocial_totalizer_kind
         )
-      ORDER BY totalizer.kind, totalizer.source_event_recibo
+      UNION ALL
+      SELECT
+        totalizer.kind::text AS kind,
+        totalizer.receipt_number AS source_event_recibo,
+        totalizer.payload
+      FROM fiscal.efd_reinf_totalizer totalizer
+      WHERE totalizer.tenant_id = $1::uuid
+        AND totalizer.competence = $2::date
+        AND totalizer.kind = 'R-9015'::fiscal.efd_reinf_totalizer_kind
+      ORDER BY kind, source_event_recibo
       `,
       [tenantId, competence],
     );
@@ -394,7 +407,9 @@ export function buildDctfwebXml(input: {
   const itemsXml = input.items
     .map(
       (item) =>
-        `    <debito sourceEvent="${item.sourceEvent}" sourceRunId="${item.sourceRunId}" codigo="${xmlEscape(
+        `    <debito sourceEvent="${item.sourceEvent}"${mitAttributes(
+          item,
+        )} sourceRunId="${item.sourceRunId}" codigo="${xmlEscape(
           item.debitCode,
         )}" base="${item.baseAmount}" valor="${item.amount}" />`,
     )
@@ -413,6 +428,16 @@ ${itemsXml}
     </totalizadores>
   </declaracao>
 </DCTFWeb>`;
+}
+
+function mitAttributes(item: SourceItem): string {
+  if (item.sourceEvent !== 'MIT') return '';
+  const attrs = [
+    item.mitStatus ? `mitStatus="${xmlEscape(item.mitStatus)}"` : null,
+    item.mitDebitId ? `mitId="${xmlEscape(item.mitDebitId)}"` : null,
+    item.cnpjFilial ? `cnpjFilial="${xmlEscape(item.cnpjFilial)}"` : null,
+  ].filter(Boolean);
+  return attrs.length ? ` ${attrs.join(' ')}` : '';
 }
 
 function normalizePayloadItem(

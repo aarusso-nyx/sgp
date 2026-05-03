@@ -20,6 +20,7 @@ import { RepPStreamService } from './rep-ingestion/parsers/rep-p-stream.service'
 import { RepIngestionController } from './rep-ingestion/rep-ingestion.controller';
 import { RepIngestionService } from './rep-ingestion/rep-ingestion.service';
 import { AfdController } from './afd/afd.controller';
+import { AfdtAcjefGeneratorService } from './afd/afdt-acjef-generator.service';
 import { AfdGeneratorService } from './afd/afd-generator.service';
 import { AfdImporterService } from './afd/afd-importer.service';
 import { DutyRosterController } from './duty-roster/duty-roster.controller';
@@ -88,6 +89,7 @@ import { MobileClockPlausibilityService } from './mobile/plausibility.service';
     RepIngestionService,
     AfdGeneratorService,
     AfdImporterService,
+    AfdtAcjefGeneratorService,
     ShiftPatternService,
     RosterProjectorService,
     DutyRosterService,
@@ -123,6 +125,7 @@ import { MobileClockPlausibilityService } from './mobile/plausibility.service';
     RepIngestionService,
     AfdGeneratorService,
     AfdImporterService,
+    AfdtAcjefGeneratorService,
     ShiftPatternService,
     RosterProjectorService,
     DutyRosterService,

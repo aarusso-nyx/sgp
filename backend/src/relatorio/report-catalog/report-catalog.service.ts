@@ -156,7 +156,7 @@ export class ReportCatalogService {
       ],
     );
 
-    const row = rows[0];
+    const row = rows[0]!;
     return {
       id: row.id,
       status: row.status,

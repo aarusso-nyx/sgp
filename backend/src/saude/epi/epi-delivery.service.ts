@@ -97,7 +97,7 @@ export class EpiDeliveryService {
         input.trainingDoneAt ?? '',
       ],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   private assertSignature(input: RegisterEpiDeliveryDto): void {

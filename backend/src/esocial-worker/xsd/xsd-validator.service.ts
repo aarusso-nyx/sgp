@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { BadRequestException, Injectable } from '@nestjs/common';
@@ -58,7 +58,7 @@ const XSD_BY_EVENT_KIND: Record<string, string> = {
   'S-2418': 'evtReativBen.xsd',
   'S-2420': 'evtCdBenTerm.xsd',
   'S-2500': 'evtProcTrab.xsd',
-  'S-2501': 'evtTribProcTrab.xsd',
+  'S-2501': 'evtContProc.xsd',
   'S-2555': 'evtConsolidContProc.xsd',
   'S-3000': 'evtExclusao.xsd',
   'S-3500': 'evtExcProcTrab.xsd',
@@ -152,7 +152,13 @@ export class XsdValidatorService {
   }
 
   manifestFileCount(): number {
-    return this.manifest.fileCount;
+    return this.xsdFileNames().length;
+  }
+
+  xsdFileNames(): string[] {
+    return readdirSync(this.xsdDir)
+      .filter((fileName) => fileName.endsWith('.xsd'))
+      .sort();
   }
 
   private schemaFor(xsdPath: string): libxml.Document {

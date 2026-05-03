@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface HourBank {
   hourBankId: string;
@@ -24,14 +24,14 @@ export interface HourBankMovement {
 
 @Injectable({ providedIn: 'root' })
 export class PontoBancoHorasService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   list(): Observable<HourBank[]> {
-    return this.http.get<HourBank[]>('/api/v1/ponto/banco-horas');
+    return this.api.get<HourBank[]>('/api/v1/ponto/banco-horas');
   }
 
   movements(hourBankId: string): Observable<HourBankMovement[]> {
-    return this.http.get<HourBankMovement[]>(`/api/v1/ponto/banco-horas/${hourBankId}/movimentos`);
+    return this.api.get<HourBankMovement[]>(`/api/v1/ponto/banco-horas/${hourBankId}/movimentos`);
   }
 
   adjust(payload: {
@@ -39,6 +39,6 @@ export class PontoBancoHorasService {
     workDate: string;
     minutes: number;
   }): Observable<HourBankMovement> {
-    return this.http.post<HourBankMovement>('/api/v1/ponto/banco-horas/ajuste-manual', payload);
+    return this.api.post<HourBankMovement>('/api/v1/ponto/banco-horas/ajuste-manual', payload);
   }
 }

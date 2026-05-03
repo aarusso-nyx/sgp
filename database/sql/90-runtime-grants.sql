@@ -74,6 +74,7 @@ BEGIN
 
     REVOKE UPDATE, DELETE ON public.audit_event FROM sgp_app_role;
     REVOKE UPDATE, DELETE ON hr.employee_status_history FROM sgp_app_role;
+    REVOKE UPDATE, DELETE ON ponto.time_record_identity FROM sgp_app_role;
   END IF;
 
   IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'sgp_portal_api') THEN

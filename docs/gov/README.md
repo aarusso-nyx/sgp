@@ -14,6 +14,7 @@ This folder tracks governance controls and operational readiness for SGP v0.0.1.
 - `compliance/scoring.md`: current control scoring and known gaps.
 - `health/preflight.md`: preflight checks before deploy or migration.
 - `audit/README.md`: audit logging model and retention notes.
+- `observability/`: governed Grafana dashboards and Prometheus alert rules.
 
 ## Validation
 

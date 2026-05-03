@@ -2,16 +2,16 @@
   <header class="toolbar">
     <div class="filters">
       <label>
-        Ano
+        <ng-container i18n>Ano</ng-container>
         <input type="number" [(ngModel)]="year" min="2000" max="2099" />
       </label>
       <label>
-        Mes
+        <ng-container i18n>Mes</ng-container>
         <input type="number" [(ngModel)]="month" min="1" max="12" />
       </label>
-      <button type="button" (click)="load()" [disabled]="loading">Atualizar</button>
+      <button type="button" (click)="load()" [disabled]="loading" i18n>Atualizar</button>
     </div>
-    <p *ngIf="lastResult.length" class="result">
+    <p *ngIf="lastResult.length" class="result" i18n>
       {{ lastResult.length }} evento(s), {{ lastResult[0].xmlHash }}
     </p>
   </header>
@@ -22,13 +22,13 @@
     <table>
       <thead>
         <tr>
-          <th>Matricula</th>
-          <th>Servidor</th>
-          <th>Run</th>
-          <th>S-1200</th>
-          <th>S-1210</th>
-          <th>Recibo</th>
-          <th>Acoes</th>
+          <th i18n>Matricula</th>
+          <th i18n>Servidor</th>
+          <th i18n>Run</th>
+          <th i18n>S-1200</th>
+          <th i18n>S-1210</th>
+          <th i18n>Recibo</th>
+          <th i18n>Acoes</th>
         </tr>
       </thead>
       <tbody>
@@ -51,13 +51,19 @@
             <span>{{ row.s1210Receipt || '-' }}</span>
           </td>
           <td class="actions">
-            <button type="button" (click)="emitS1200(row)" [disabled]="emitting === row.employeeId">
+            <button
+              type="button"
+              (click)="emitS1200(row)"
+              [disabled]="emitting === row.employeeId"
+              i18n
+            >
               S-1200
             </button>
             <button
               type="button"
               (click)="emitS1210(row)"
               [disabled]="!row.paymentBatchId || emitting === row.employeeId"
+              i18n
             >
               S-1210
             </button>
@@ -65,13 +71,14 @@
               type="button"
               (click)="reemitWorker(row)"
               [disabled]="emitting === row.employeeId"
+              i18n
             >
               Reemitir trabalhador
             </button>
           </td>
         </tr>
         <tr *ngIf="rows.length === 0 && !loading">
-          <td colspan="7" class="empty">Sem trabalhadores para a competencia.</td>
+          <td colspan="7" class="empty" i18n>Sem trabalhadores para a competencia.</td>
         </tr>
       </tbody>
     </table>

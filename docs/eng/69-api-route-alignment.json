@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-02",
+  "generated_at": "2026-05-03",
   "authority": [
     "docs/eng/00-visao-produto-glossario.md",
     "docs/eng/01-escopo-e-decisoes.md",
@@ -43,12 +43,14 @@
     "docs/eng/86-esocial-eventos-tabelas.md",
     "docs/eng/86-gps-residual-clt.md",
     "docs/eng/87-cnab240-layout.md",
+    "docs/eng/87-efd-reinf-r4000.md",
     "docs/eng/87-esocial-submission.md",
     "docs/eng/87-proctoring-online.md",
     "docs/eng/87-reintegracao-s2298.md",
     "docs/eng/88-assinatura-banca-xades-pades.md",
     "docs/eng/88-cnab240-occurrence-codes.md",
     "docs/eng/88-esocial-retorno-parser.md",
+    "docs/eng/88-siafic-integration.md",
     "docs/eng/88-tsv-alteracao-contratual-s2306.md",
     "docs/eng/89-pensao-alimenticia.md",
     "docs/eng/89-ponto-biometrico-portaria-671.md",
@@ -70,8 +72,11 @@
     "docs/eng/93-portal-transparencia.md",
     "docs/eng/93-sst-epi-ppp.md",
     "docs/eng/93-tce-submission-queue.md",
+    "docs/eng/94-lgpd-encarregado.md",
     "docs/eng/94-ponto-banco-de-horas.md",
+    "docs/eng/95-lai-requests.md",
     "docs/eng/95-ponto-justificativa-abono.md",
+    "docs/eng/96-govbr-advanced-signature.md",
     "docs/eng/96-ponto-folha-integration.md",
     "docs/eng/97-time-zone-policy.md",
     "docs/eng/98-audit-implementation.md",
@@ -121,12 +126,14 @@
     "docs/eng/86-esocial-eventos-tabelas.md",
     "docs/eng/86-gps-residual-clt.md",
     "docs/eng/87-cnab240-layout.md",
+    "docs/eng/87-efd-reinf-r4000.md",
     "docs/eng/87-esocial-submission.md",
     "docs/eng/87-proctoring-online.md",
     "docs/eng/87-reintegracao-s2298.md",
     "docs/eng/88-assinatura-banca-xades-pades.md",
     "docs/eng/88-cnab240-occurrence-codes.md",
     "docs/eng/88-esocial-retorno-parser.md",
+    "docs/eng/88-siafic-integration.md",
     "docs/eng/88-tsv-alteracao-contratual-s2306.md",
     "docs/eng/89-pensao-alimenticia.md",
     "docs/eng/89-ponto-biometrico-portaria-671.md",
@@ -148,8 +155,11 @@
     "docs/eng/93-portal-transparencia.md",
     "docs/eng/93-sst-epi-ppp.md",
     "docs/eng/93-tce-submission-queue.md",
+    "docs/eng/94-lgpd-encarregado.md",
     "docs/eng/94-ponto-banco-de-horas.md",
+    "docs/eng/95-lai-requests.md",
     "docs/eng/95-ponto-justificativa-abono.md",
+    "docs/eng/96-govbr-advanced-signature.md",
     "docs/eng/96-ponto-folha-integration.md",
     "docs/eng/97-time-zone-policy.md",
     "docs/eng/98-audit-implementation.md",
@@ -191,15 +201,15 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 521,
-    "documented_candidates_total": 673,
-    "documented_outside_runtime": 152,
-    "documented": 448,
-    "runtime_total": 532,
-    "runtime": 448,
-    "deferred_documented": 73,
-    "deferred_runtime": 84,
-    "implemented": 448,
+    "documented_total": 554,
+    "documented_candidates_total": 697,
+    "documented_outside_runtime": 143,
+    "documented": 479,
+    "runtime_total": 579,
+    "runtime": 479,
+    "deferred_documented": 75,
+    "deferred_runtime": 100,
+    "implemented": 479,
     "explicitly_excluded": 0,
     "documented_missing": 0,
     "runtime_only": 0,
@@ -337,6 +347,18 @@
       "evidence": "explicit_method",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/portal/v1/auth/govbr/sign/callback",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "source_docs": [
+        "docs/eng/10-uc-administracao-seguranca.md",
+        "docs/eng/96-govbr-advanced-signature.md"
+      ],
+      "evidence": "explicit_method",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
     },
     {
       "method": "GET",
@@ -579,6 +601,18 @@
       "evidence": "explicit_method",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/portal/v1/auth/govbr/sign",
+      "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
+      "source_docs": [
+        "docs/eng/10-uc-administracao-seguranca.md",
+        "docs/eng/96-govbr-advanced-signature.md"
+      ],
+      "evidence": "explicit_method",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
     },
     {
       "method": "POST",
@@ -1239,20 +1273,6 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/recrutamento/estagios/estagiarios",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/recrutamento/estagios/programas",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "GET",
       "path": "/api/v1/recrutamento/requisicoes",
       "source_doc": "docs/eng/40-divisao-modular.md",
       "evidence": "explicit_method",
@@ -1463,13 +1483,6 @@
     },
     {
       "method": "POST",
-      "path": "/api/v1/convenios",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "POST",
       "path": "/api/v1/convenios/:id/beneficiarios",
       "source_doc": "docs/eng/40-divisao-modular.md",
       "evidence": "explicit_method",
@@ -1534,13 +1547,6 @@
     {
       "method": "POST",
       "path": "/api/v1/folha/importacoes/consignados",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/folha/importacoes/verbas",
       "source_doc": "docs/eng/40-divisao-modular.md",
       "evidence": "explicit_method",
       "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
@@ -1716,35 +1722,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/v1/recrutamento/estagios/:id/desligar",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/recrutamento/estagios/:id/prorrogacao",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "POST",
       "path": "/api/v1/recrutamento/estagios/:id/recesso",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/recrutamento/estagios/estagiarios",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/recrutamento/estagios/programas",
       "source_doc": "docs/eng/40-divisao-modular.md",
       "evidence": "explicit_method",
       "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
@@ -1753,7 +1731,6 @@
       "method": "POST",
       "path": "/api/v1/relatorios/solicitar",
       "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md", "docs/eng/44-jobs-rotinas-assincronas.md"],
       "evidence": "explicit_method",
       "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
     },
@@ -1838,13 +1815,6 @@
       "method": "POST",
       "path": "/api/v1/siprev/gerar",
       "source_doc": "docs/eng/44-jobs-rotinas-assincronas.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/convenios/:id",
-      "source_doc": "docs/eng/40-divisao-modular.md",
       "evidence": "explicit_method",
       "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
     },
@@ -1950,6 +1920,13 @@
     },
     {
       "method": "GET",
+      "path": "/api/portal/v1/auth/govbr/sign/callback",
+      "source_file": "backend/src/auth/govbr/sign.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
+    },
+    {
+      "method": "GET",
       "path": "/api/portal/v1/auth/govbr/status",
       "source_file": "backend/src/portal/portal.controller.ts",
       "deferred_scope": "IDENTITY_INSTALL_LATER",
@@ -2013,6 +1990,20 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/fiscal/efd-reinf",
+      "source_file": "backend/src/integrations-worker/efd-reinf/efd-reinf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/fiscal/efd-reinf/:id",
+      "source_file": "backend/src/integrations-worker/efd-reinf/efd-reinf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/fiscal/gps",
       "source_file": "backend/src/integrations-worker/gps/gps.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2036,6 +2027,20 @@
       "method": "GET",
       "path": "/api/v1/admin/fiscal/gps/payment-codes",
       "source_file": "backend/src/integrations-worker/gps/gps.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/lgpd/incidents",
+      "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/lgpd/ropa",
+      "source_file": "backend/src/lgpd/ropa.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2167,6 +2172,41 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/incidents/:id/close",
+      "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/incidents/:id/complement",
+      "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/incidents/:id/report",
+      "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/incidents/:id/triage",
+      "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/ropa/:id",
+      "source_file": "backend/src/lgpd/ropa.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/admin/nomeacoes/:id/desistencia",
       "source_file": "backend/src/recrutamento/nomeacao/nomeacao.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2234,6 +2274,13 @@
       "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/portal/v1/auth/govbr/sign",
+      "source_file": "backend/src/auth/govbr/sign.controller.ts",
+      "deferred_scope": "IDENTITY_INSTALL_LATER",
+      "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
     },
     {
       "method": "POST",
@@ -2307,6 +2354,27 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/admin/fiscal/efd-reinf/:id/assinar",
+      "source_file": "backend/src/integrations-worker/efd-reinf/efd-reinf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/efd-reinf/:id/transmitir",
+      "source_file": "backend/src/integrations-worker/efd-reinf/efd-reinf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/efd-reinf/gerar",
+      "source_file": "backend/src/integrations-worker/efd-reinf/efd-reinf.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/admin/fiscal/gps",
       "source_file": "backend/src/integrations-worker/gps/gps.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2323,6 +2391,20 @@
       "method": "POST",
       "path": "/api/v1/admin/hr/reintegrations/:id/apply",
       "source_file": "backend/src/folha-pagamento/operations/reintegration/reintegration-order.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/lgpd/incidents",
+      "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/lgpd/ropa",
+      "source_file": "backend/src/lgpd/ropa.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2572,6 +2654,11 @@
         },
         {
           "method": "DELETE",
+          "path": "/api/v1/rh/organic-definitions/:id",
+          "source_file": "backend/src/rh/organic-definitions/organic-definition.controller.ts"
+        },
+        {
+          "method": "DELETE",
           "path": "/api/v1/rh/processos-funcao/:id",
           "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
         },
@@ -2599,14 +2686,12 @@
           "method": "GET",
           "path": "/api/v1/funcionarios/:id/historico",
           "source_file": "backend/src/rh/employees/employees.controller.ts"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/funcionarios/:id/tempo-servico",
-          "source_file": "backend/src/rh/employees/employees.controller.ts"
         }
       ],
-      "source_evidence": ["backend/src/rh/workflows/rh-workflows.controller.ts"],
+      "source_evidence": [
+        "backend/src/rh/workflows/rh-workflows.controller.ts",
+        "backend/src/rh/organic-definitions/organic-definition.controller.ts"
+      ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -2806,6 +2891,16 @@
       "route_evidence": [
         {
           "method": "GET",
+          "path": "/api/v1/consultas/batimento",
+          "source_file": "backend/src/consultas/batimento.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/consultas/business-days",
+          "source_file": "backend/src/consultas/business-days.controller.ts"
+        },
+        {
+          "method": "GET",
           "path": "/api/v1/consultas/dashboards",
           "source_file": "backend/src/consultas/managerial-queries.controller.ts"
         },
@@ -2835,7 +2930,11 @@
           "source_file": "backend/src/consultas/managerial-queries.controller.ts"
         }
       ],
-      "source_evidence": ["backend/src/consultas/managerial-queries.controller.ts"],
+      "source_evidence": [
+        "backend/src/consultas/batimento.controller.ts",
+        "backend/src/consultas/business-days.controller.ts",
+        "backend/src/consultas/managerial-queries.controller.ts"
+      ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -3040,12 +3139,30 @@
       "status": "implemented",
       "route_evidence": [
         {
+          "method": "DELETE",
+          "path": "/api/v1/convenios/:id",
+          "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
+        },
+        {
           "method": "GET",
+          "path": "/api/v1/convenios",
+          "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/convenios/:id",
+          "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
+        },
+        {
+          "method": "POST",
           "path": "/api/v1/convenios",
           "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
         }
       ],
-      "source_evidence": ["backend/src/convenio/agreements/agreements.controller.ts"],
+      "source_evidence": [
+        "backend/src/convenio/agreements/agreements.controller.ts",
+        "backend/src/convenio/internships/internships.controller.ts"
+      ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -3113,6 +3230,11 @@
           },
           {
             "method": "DELETE",
+            "path": "/api/v1/rh/organic-definitions/:id",
+            "source_file": "backend/src/rh/organic-definitions/organic-definition.controller.ts"
+          },
+          {
+            "method": "DELETE",
             "path": "/api/v1/rh/processos-funcao/:id",
             "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
           },
@@ -3140,14 +3262,12 @@
             "method": "GET",
             "path": "/api/v1/funcionarios/:id/historico",
             "source_file": "backend/src/rh/employees/employees.controller.ts"
-          },
-          {
-            "method": "GET",
-            "path": "/api/v1/funcionarios/:id/tempo-servico",
-            "source_file": "backend/src/rh/employees/employees.controller.ts"
           }
         ],
-        "source_evidence": ["backend/src/rh/workflows/rh-workflows.controller.ts"],
+        "source_evidence": [
+          "backend/src/rh/workflows/rh-workflows.controller.ts",
+          "backend/src/rh/organic-definitions/organic-definition.controller.ts"
+        ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -3347,6 +3467,16 @@
         "route_evidence": [
           {
             "method": "GET",
+            "path": "/api/v1/consultas/batimento",
+            "source_file": "backend/src/consultas/batimento.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/consultas/business-days",
+            "source_file": "backend/src/consultas/business-days.controller.ts"
+          },
+          {
+            "method": "GET",
             "path": "/api/v1/consultas/dashboards",
             "source_file": "backend/src/consultas/managerial-queries.controller.ts"
           },
@@ -3376,7 +3506,11 @@
             "source_file": "backend/src/consultas/managerial-queries.controller.ts"
           }
         ],
-        "source_evidence": ["backend/src/consultas/managerial-queries.controller.ts"],
+        "source_evidence": [
+          "backend/src/consultas/batimento.controller.ts",
+          "backend/src/consultas/business-days.controller.ts",
+          "backend/src/consultas/managerial-queries.controller.ts"
+        ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -3581,12 +3715,30 @@
         "status": "implemented",
         "route_evidence": [
           {
+            "method": "DELETE",
+            "path": "/api/v1/convenios/:id",
+            "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
+          },
+          {
             "method": "GET",
+            "path": "/api/v1/convenios",
+            "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/v1/convenios/:id",
+            "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
+          },
+          {
+            "method": "POST",
             "path": "/api/v1/convenios",
             "source_file": "backend/src/convenio/agreements/agreements.controller.ts"
           }
         ],
-        "source_evidence": ["backend/src/convenio/agreements/agreements.controller.ts"],
+        "source_evidence": [
+          "backend/src/convenio/agreements/agreements.controller.ts",
+          "backend/src/convenio/internships/internships.controller.ts"
+        ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -5326,6 +5478,15 @@
     },
     {
       "method": "DELETE",
+      "path": "/api/v1/convenios/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
       "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
@@ -5450,6 +5611,14 @@
       "path": "/api/v1/rh/afastamentos/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/rh/organic-definitions/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/98-rh-workflows.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5661,6 +5830,22 @@
       "path": "/api/v1/cargos",
       "status": "implemented",
       "source_doc": "docs/eng/42-contratos-integracao.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/consultas/batimento",
+      "status": "implemented",
+      "source_doc": "docs/eng/44-jobs-rotinas-assincronas.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/consultas/business-days",
+      "status": "implemented",
+      "source_doc": "docs/eng/98-rh-workflows.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6557,6 +6742,28 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/public/lai/:tenantId/requests/:protocol/status",
+      "status": "implemented",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "source_docs": [
+        "docs/eng/42-contratos-integracao.md",
+        "docs/eng/43-maquinas-estado.md",
+        "docs/eng/95-lai-requests.md"
+      ],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/public/lgpd/encarregado",
+      "status": "implemented",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "source_docs": ["docs/eng/42-contratos-integracao.md", "docs/eng/94-lgpd-encarregado.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/public/transparency/:tenantId/payroll",
       "status": "implemented",
       "source_doc": "docs/eng/42-contratos-integracao.md",
@@ -6674,6 +6881,24 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/recrutamento/estagios/estagiarios",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/estagios/programas",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/recrutamento/prova-online/review/sessions/:id",
       "status": "implemented",
       "source_doc": "docs/eng/42-contratos-integracao.md",
@@ -6725,6 +6950,14 @@
       "path": "/api/v1/rh/employee-transfer/employee/:employeeId",
       "status": "implemented",
       "source_doc": "docs/eng/42-contratos-integracao.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/organic-definitions",
+      "status": "implemented",
+      "source_doc": "docs/eng/98-rh-workflows.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6974,6 +7207,15 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/convenios/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
@@ -7181,6 +7423,14 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/rh/organic-definitions/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/98-rh-workflows.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/rh/processos-funcao/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
@@ -7264,6 +7514,14 @@
       "path": "/api/v1/tce/layouts/:id/status",
       "status": "implemented",
       "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/portal/v1/lgpd/direitos",
+      "status": "implemented",
+      "source_doc": "docs/eng/94-lgpd-encarregado.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7379,6 +7637,15 @@
       "path": "/api/v1/cargos",
       "status": "implemented",
       "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/convenios",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7566,6 +7833,10 @@
       "path": "/api/v1/esocial/folha-periodica/payments/:paymentBatchId/s1210/emitir",
       "status": "implemented",
       "source_doc": "docs/eng/42-contratos-integracao.md",
+      "source_docs": [
+        "docs/eng/42-contratos-integracao.md",
+        "docs/eng/86-esocial-eventos-tabelas.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7574,6 +7845,18 @@
       "path": "/api/v1/esocial/folha-periodica/runs/:payrollRunId/s1200/emitir",
       "status": "implemented",
       "source_doc": "docs/eng/42-contratos-integracao.md",
+      "source_docs": [
+        "docs/eng/42-contratos-integracao.md",
+        "docs/eng/86-esocial-eventos-tabelas.md"
+      ],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/esocial/folha-periodica/runs/:payrollRunId/s1202/emitir",
+      "status": "implemented",
+      "source_doc": "docs/eng/86-esocial-eventos-tabelas.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7745,6 +8028,37 @@
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
       "source_docs": ["docs/eng/62-estrategia-testes.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/importar/lancamento-manual",
+      "status": "implemented",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "source_docs": ["docs/eng/42-contratos-integracao.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/importar/pensionista",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md", "docs/eng/42-contratos-integracao.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/importar/servidor",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": [
+        "docs/eng/40-divisao-modular.md",
+        "docs/eng/42-contratos-integracao.md",
+        "docs/eng/62-estrategia-testes.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -8050,6 +8364,24 @@
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
       "source_docs": ["docs/eng/62-estrategia-testes.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/afd/acjef",
+      "status": "implemented",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "source_docs": ["docs/eng/42-contratos-integracao.md", "docs/eng/92-ponto-afd.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ponto/afd/afdt",
+      "status": "implemented",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "source_docs": ["docs/eng/42-contratos-integracao.md", "docs/eng/92-ponto-afd.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -8460,9 +8792,62 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/atividade-risco-professor",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/idade-progressiva",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/pedagio-100",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/pedagio-50",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/pontos",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/previdenciario/transferencia-siprev/exportar",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/public/lai/:tenantId/requests",
+      "status": "implemented",
+      "source_doc": "docs/eng/42-contratos-integracao.md",
+      "source_docs": [
+        "docs/eng/42-contratos-integracao.md",
+        "docs/eng/43-maquinas-estado.md",
+        "docs/eng/95-lai-requests.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -8612,6 +8997,54 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/:id/desligar",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/:id/esocial/s2300",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": [
+        "docs/eng/40-divisao-modular.md",
+        "docs/eng/88-tsv-alteracao-contratual-s2306.md"
+      ],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/:id/prorrogacao",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/estagiarios",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/programas",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/recrutamento/prova-online/review/sessions/:id/accept",
       "status": "implemented",
       "source_doc": "docs/eng/42-contratos-integracao.md",
@@ -8753,6 +9186,14 @@
       "path": "/api/v1/rh/employee-transfer/:id/efetivar",
       "status": "implemented",
       "source_doc": "docs/eng/42-contratos-integracao.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/organic-definitions",
+      "status": "implemented",
+      "source_doc": "docs/eng/98-rh-workflows.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },

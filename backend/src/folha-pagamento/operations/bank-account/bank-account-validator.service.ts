@@ -142,7 +142,7 @@ export class BankAccountValidatorService {
   private calculateMod11Digit(value: string, weights: number[]): string {
     const sum = value
       .split('')
-      .reduce((acc, digit, index) => acc + Number(digit) * weights[index], 0);
+      .reduce((acc, digit, index) => acc + Number(digit) * weights[index]!, 0);
     const remainder = sum % 11;
     const digit = 11 - remainder;
     return digit === 10 ? 'X' : digit === 11 ? '0' : String(digit);
@@ -150,7 +150,7 @@ export class BankAccountValidatorService {
 
   private calculateMod10Digit(value: string, weights: number[]): string {
     const sum = value.split('').reduce((acc, digit, index) => {
-      const product = Number(digit) * weights[index];
+      const product = Number(digit) * weights[index]!;
       return acc + Math.floor(product / 10) + (product % 10);
     }, 0);
     return String((10 - (sum % 10)) % 10);

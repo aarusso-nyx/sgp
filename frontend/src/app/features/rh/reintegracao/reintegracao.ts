@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { ReintegrationOrder, ReintegracaoService } from './reintegracao.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sgp-rh-reintegracao',
   templateUrl: './reintegracao.html',
   styleUrl: './reintegracao.scss',

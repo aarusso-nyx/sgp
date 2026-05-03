@@ -1,52 +1,52 @@
 <section class="saude-exames">
   <header>
-    <p>Saude ocupacional</p>
-    <h1>Exames ocupacionais</h1>
+    <p i18n>Saude ocupacional</p>
+    <h1 i18n>Exames ocupacionais</h1>
   </header>
 
   <form [formGroup]="form" (ngSubmit)="create()" class="panel">
     <label>
-      <span>Codigo</span>
+      <span i18n>Codigo</span>
       <input formControlName="code" />
     </label>
     <label>
-      <span>Nome</span>
+      <span i18n>Nome</span>
       <input formControlName="name" />
     </label>
     <label>
-      <span>Tipo</span>
+      <span i18n>Tipo</span>
       <select formControlName="examType">
-        <option value="CLINICO">Clinico</option>
-        <option value="LABORATORIAL">Laboratorial</option>
-        <option value="COMPLEMENTAR">Complementar</option>
-        <option value="IMAGEM">Imagem</option>
+        <option value="CLINICO" i18n>Clinico</option>
+        <option value="LABORATORIAL" i18n>Laboratorial</option>
+        <option value="COMPLEMENTAR" i18n>Complementar</option>
+        <option value="IMAGEM" i18n>Imagem</option>
       </select>
     </label>
     <label>
-      <span>Periodicidade</span>
+      <span i18n>Periodicidade</span>
       <input type="number" min="1" formControlName="periodicityMonths" />
     </label>
     <label class="check">
       <input type="checkbox" formControlName="isMandatoryAdmission" />
-      <span>Admissional</span>
+      <span i18n>Admissional</span>
     </label>
     <label class="check">
       <input type="checkbox" formControlName="isMandatoryPeriodic" />
-      <span>Periodico</span>
+      <span i18n>Periodico</span>
     </label>
-    <button type="submit" [disabled]="saving">Salvar</button>
+    <button type="submit" [disabled]="saving" i18n>Salvar</button>
   </form>
 
   <section class="panel">
-    <button type="button" (click)="load()" [disabled]="loading">Atualizar</button>
+    <button type="button" (click)="load()" [disabled]="loading" i18n>Atualizar</button>
     <table>
       <thead>
         <tr>
-          <th>Codigo</th>
-          <th>Nome</th>
-          <th>Tipo</th>
-          <th>Meses</th>
-          <th>Status</th>
+          <th i18n>Codigo</th>
+          <th i18n>Nome</th>
+          <th i18n>Tipo</th>
+          <th i18n>Meses</th>
+          <th i18n>Status</th>
         </tr>
       </thead>
       <tbody>

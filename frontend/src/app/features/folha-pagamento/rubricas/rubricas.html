@@ -1,17 +1,17 @@
 <section class="rubricas" aria-labelledby="rubricas-title">
   <header class="rubricas__header">
     <div>
-      <p class="rubricas__eyebrow">Folha</p>
-      <h1 id="rubricas-title">Rubricas</h1>
+      <p class="rubricas__eyebrow" i18n>Folha</p>
+      <h1 id="rubricas-title" i18n>Rubricas</h1>
     </div>
     <div class="rubricas__actions">
       <button mat-stroked-button type="button" (click)="newRubrica()">
         <mat-icon>add</mat-icon>
-        Nova
+        <ng-container i18n>Nova</ng-container>
       </button>
       <button mat-flat-button color="primary" type="button" (click)="save()">
         <mat-icon>save</mat-icon>
-        Salvar
+        <ng-container i18n>Salvar</ng-container>
       </button>
     </div>
   </header>
@@ -20,7 +20,7 @@
   <p class="rubricas__message" *ngIf="message">{{ message }}</p>
 
   <div class="rubricas__layout">
-    <nav class="rubricas__list" aria-label="Lista de rubricas">
+    <nav class="rubricas__list" aria-label="Lista de rubricas" i18n-aria-label>
       <button
         mat-button
         type="button"
@@ -36,47 +36,47 @@
 
     <form class="rubricas__form" [formGroup]="form">
       <mat-form-field appearance="outline">
-        <mat-label>Codigo</mat-label>
+        <mat-label i18n>Codigo</mat-label>
         <input matInput formControlName="code" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Descricao</mat-label>
+        <mat-label i18n>Descricao</mat-label>
         <input matInput formControlName="description" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Tipo</mat-label>
+        <mat-label i18n>Tipo</mat-label>
         <select matNativeControl formControlName="type">
-          <option value="provento">Provento</option>
-          <option value="desconto">Desconto</option>
-          <option value="informativa">Informativa</option>
-          <option value="base">Base</option>
+          <option value="provento" i18n>Provento</option>
+          <option value="desconto" i18n>Desconto</option>
+          <option value="informativa" i18n>Informativa</option>
+          <option value="base" i18n>Base</option>
         </select>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Inicio vigencia</mat-label>
+        <mat-label i18n>Inicio vigencia</mat-label>
         <input matInput type="date" formControlName="startsOn" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Fim vigencia</mat-label>
+        <mat-label i18n>Fim vigencia</mat-label>
         <input matInput type="date" formControlName="endsOn" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Alias formula</mat-label>
+        <mat-label i18n>Alias formula</mat-label>
         <input matInput formControlName="formulaAlias" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="rubricas__wide">
-        <mat-label>Formula</mat-label>
+        <mat-label i18n>Formula</mat-label>
         <textarea matInput rows="5" formControlName="formulaExpression"></textarea>
       </mat-form-field>
-      <section class="rubricas__formula rubricas__wide" aria-label="Formula">
+      <section class="rubricas__formula rubricas__wide" aria-label="Formula" i18n-aria-label>
         <div class="rubricas__formula-actions">
           <button mat-stroked-button type="button" (click)="validateFormula()">
             <mat-icon>rule</mat-icon>
-            Validar
+            <ng-container i18n>Validar</ng-container>
           </button>
           <button mat-stroked-button type="button" (click)="recompileNow()" [disabled]="!selected">
             <mat-icon>sync</mat-icon>
-            Recompilar agora
+            <ng-container i18n>Recompilar agora</ng-container>
           </button>
         </div>
         <ul class="rubricas__lint" *ngIf="formulaLintMessages.length > 0">
@@ -84,51 +84,51 @@
         </ul>
       </section>
       <mat-form-field appearance="outline">
-        <mat-label>Codigo eSocial</mat-label>
+        <mat-label i18n>Codigo eSocial</mat-label>
         <input matInput formControlName="esocialCode" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Rubrica oficial</mat-label>
+        <mat-label i18n>Rubrica oficial</mat-label>
         <input matInput formControlName="officialRubricCode" />
       </mat-form-field>
 
       <div class="rubricas__checks rubricas__wide">
-        <mat-checkbox formControlName="taxable">Tributavel</mat-checkbox>
-        <mat-checkbox formControlName="active">Ativa</mat-checkbox>
-        <mat-checkbox formControlName="irrf">IRRF</mat-checkbox>
-        <mat-checkbox formControlName="inss">INSS</mat-checkbox>
-        <mat-checkbox formControlName="fgts">FGTS</mat-checkbox>
-        <mat-checkbox formControlName="rpps">RPPS</mat-checkbox>
-        <mat-checkbox formControlName="employerContribution">Patronal</mat-checkbox>
+        <mat-checkbox formControlName="taxable" i18n>Tributavel</mat-checkbox>
+        <mat-checkbox formControlName="active" i18n>Ativa</mat-checkbox>
+        <mat-checkbox formControlName="irrf" i18n>IRRF</mat-checkbox>
+        <mat-checkbox formControlName="inss" i18n>INSS</mat-checkbox>
+        <mat-checkbox formControlName="fgts" i18n>FGTS</mat-checkbox>
+        <mat-checkbox formControlName="rpps" i18n>RPPS</mat-checkbox>
+        <mat-checkbox formControlName="employerContribution" i18n>Patronal</mat-checkbox>
       </div>
     </form>
   </div>
 
-  <section class="rubricas__panel" aria-label="Atributos da formula">
-    <h2>Atributos</h2>
+  <section class="rubricas__panel" aria-label="Atributos da formula" i18n-aria-label>
+    <h2 i18n>Atributos</h2>
     <form class="rubricas__attributes" [formGroup]="attributeForm">
       <mat-form-field appearance="outline">
-        <mat-label>Nome</mat-label>
+        <mat-label i18n>Nome</mat-label>
         <input matInput formControlName="name" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Tipo</mat-label>
+        <mat-label i18n>Tipo</mat-label>
         <select matNativeControl formControlName="type">
-          <option value="decimal">Decimal</option>
-          <option value="int">Inteiro</option>
-          <option value="bool">Booleano</option>
-          <option value="date">Data</option>
-          <option value="text">Texto</option>
+          <option value="decimal" i18n>Decimal</option>
+          <option value="int" i18n>Inteiro</option>
+          <option value="bool" i18n>Booleano</option>
+          <option value="date" i18n>Data</option>
+          <option value="text" i18n>Texto</option>
         </select>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Valor padrao</mat-label>
+        <mat-label i18n>Valor padrao</mat-label>
         <input matInput formControlName="defaultValue" />
       </mat-form-field>
-      <mat-checkbox formControlName="required">Obrigatorio</mat-checkbox>
+      <mat-checkbox formControlName="required" i18n>Obrigatorio</mat-checkbox>
       <button mat-stroked-button type="button" (click)="addAttribute()">
         <mat-icon>add</mat-icon>
-        Atributo
+        <ng-container i18n>Atributo</ng-container>
       </button>
     </form>
     <div class="rubricas__chips">
@@ -145,30 +145,30 @@
 
   <section class="rubricas__grid">
     <form class="rubricas__panel" [formGroup]="previewForm" (ngSubmit)="preview()">
-      <h2>Preview</h2>
+      <h2 i18n>Preview</h2>
       <mat-form-field appearance="outline">
-        <mat-label>Servidor</mat-label>
+        <mat-label i18n>Servidor</mat-label>
         <input matInput formControlName="employeeId" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Ano</mat-label>
+        <mat-label i18n>Ano</mat-label>
         <input matInput type="number" formControlName="competenceYear" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Mes</mat-label>
+        <mat-label i18n>Mes</mat-label>
         <input matInput type="number" formControlName="competenceMonth" />
       </mat-form-field>
       <button mat-flat-button color="primary" type="submit">
         <mat-icon>calculate</mat-icon>
-        Preview
+        <ng-container i18n>Preview</ng-container>
       </button>
       <strong class="rubricas__amount" *ngIf="previewAmount">{{ previewAmount | moneyBr }}</strong>
     </form>
 
     <form class="rubricas__panel" [formGroup]="linkForm" (ngSubmit)="linkJobPosition()">
-      <h2>Cargo x Rubrica</h2>
+      <h2 i18n>Cargo x Rubrica</h2>
       <mat-form-field appearance="outline">
-        <mat-label>Cargo</mat-label>
+        <mat-label i18n>Cargo</mat-label>
         <select matNativeControl formControlName="jobPositionId">
           <option value=""></option>
           <option *ngFor="let job of jobPositions" [value]="job.id">
@@ -177,32 +177,32 @@
         </select>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Inicio vigencia</mat-label>
+        <mat-label i18n>Inicio vigencia</mat-label>
         <input matInput type="date" formControlName="startsOn" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Fim vigencia</mat-label>
+        <mat-label i18n>Fim vigencia</mat-label>
         <input matInput type="date" formControlName="endsOn" />
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Condicao</mat-label>
+        <mat-label i18n>Condicao</mat-label>
         <input matInput formControlName="applicationCondition" />
       </mat-form-field>
       <button mat-flat-button color="primary" type="submit">
         <mat-icon>link</mat-icon>
-        Vincular
+        <ng-container i18n>Vincular</ng-container>
       </button>
     </form>
   </section>
 
-  <section class="rubricas__panel" aria-label="Vinculos existentes">
-    <h2>Vinculos</h2>
+  <section class="rubricas__panel" aria-label="Vinculos existentes" i18n-aria-label>
+    <h2 i18n>Vinculos</h2>
     <table>
       <thead>
         <tr>
-          <th>Cargo</th>
-          <th>Rubrica</th>
-          <th>Vigencia</th>
+          <th i18n>Cargo</th>
+          <th i18n>Rubrica</th>
+          <th i18n>Vigencia</th>
         </tr>
       </thead>
       <tbody>

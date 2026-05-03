@@ -288,7 +288,7 @@ function money(value: string): string {
 }
 
 function decimal(value: string, scale: number): string {
-  const [wholeRaw, fractionRaw = ''] = String(value).split('.');
+  const [wholeRaw = '0', fractionRaw = ''] = String(value).split('.');
   const whole = wholeRaw.replace(/[^\d-]/g, '') || '0';
   const fraction = fractionRaw
     .replace(/\D/g, '')
@@ -298,7 +298,7 @@ function decimal(value: string, scale: number): string {
 }
 
 function cents(value: string): bigint {
-  const [wholeRaw, fractionRaw = ''] = money(value).split('.');
+  const [wholeRaw = '0', fractionRaw = ''] = money(value).split('.');
   return (
     BigInt(wholeRaw) * 100n + BigInt(fractionRaw.padEnd(2, '0').slice(0, 2))
   );

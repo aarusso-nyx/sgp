@@ -1,57 +1,57 @@
 <section class="tsv-contracts">
   <header>
-    <h1>Contratos TS-V</h1>
-    <p>Alteração contratual e emissão S-2306</p>
+    <h1 i18n>Contratos TS-V</h1>
+    <p i18n>Alteração contratual e emissão S-2306</p>
   </header>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="change-form">
     <mat-form-field appearance="outline">
-      <mat-label>Contrato</mat-label>
+      <mat-label i18n>Contrato</mat-label>
       <input matInput formControlName="contractId" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Data efetiva</mat-label>
+      <mat-label i18n>Data efetiva</mat-label>
       <input matInput type="date" formControlName="effectiveDate" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Motivo</mat-label>
+      <mat-label i18n>Motivo</mat-label>
       <input matInput formControlName="reason" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Função</mat-label>
+      <mat-label i18n>Função</mat-label>
       <input matInput formControlName="role" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Bolsa mensal</mat-label>
+      <mat-label i18n>Bolsa mensal</mat-label>
       <input matInput inputmode="decimal" formControlName="monthlyAmount" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Jornada semanal</mat-label>
+      <mat-label i18n>Jornada semanal</mat-label>
       <input matInput inputmode="decimal" formControlName="weeklyHours" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Lotação</mat-label>
+      <mat-label i18n>Lotação</mat-label>
       <input matInput formControlName="workplaceId" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Supervisor</mat-label>
+      <mat-label i18n>Supervisor</mat-label>
       <input matInput formControlName="supervisorEmployeeId" />
     </mat-form-field>
 
-    <button mat-flat-button color="primary" type="submit" [disabled]="saving">
+    <button mat-flat-button color="primary" type="submit" [disabled]="saving" i18n>
       Salvar alteração
     </button>
   </form>
 
   <section class="diff-preview" *ngIf="preview.length > 0">
-    <h2>Preview do diff</h2>
+    <h2 i18n>Preview do diff</h2>
     <table>
       <tr *ngFor="let item of preview">
         <th>{{ item.field }}</th>
@@ -61,7 +61,7 @@
   </section>
 
   <section class="history" *ngIf="savedChange">
-    <h2>Alteração salva</h2>
+    <h2 i18n>Alteração salva</h2>
     <p>{{ savedChange.effectiveDate }} · {{ savedChange.reason }}</p>
     <table>
       <tr *ngFor="let item of savedChange.fieldsChanged | keyvalue">
@@ -69,11 +69,11 @@
         <td>{{ savedChange.newValues[item.key] }}</td>
       </tr>
     </table>
-    <button mat-stroked-button type="button" (click)="transmit()" [disabled]="transmitting">
+    <button mat-stroked-button type="button" (click)="transmit()" [disabled]="transmitting" i18n>
       Transmitir S-2306
     </button>
   </section>
 
   <p class="error" *ngIf="error">{{ error }}</p>
-  <p class="status" *ngIf="transmission">S-2306 transmitido.</p>
+  <p class="status" *ngIf="transmission" i18n>S-2306 transmitido.</p>
 </section>

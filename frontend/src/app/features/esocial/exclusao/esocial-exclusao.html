@@ -1,10 +1,12 @@
 <section class="esocial-exclusao">
   <header class="page-header">
     <div>
-      <h1>Exclusao eSocial S-3000</h1>
-      <p>Retratacao de eventos aceitos com justificativa auditada.</p>
+      <h1 i18n>Exclusao eSocial S-3000</h1>
+      <p i18n>Retratacao de eventos aceitos com justificativa auditada.</p>
     </div>
-    <button type="button" class="secondary" (click)="load()" [disabled]="loading">Atualizar</button>
+    <button type="button" class="secondary" (click)="load()" [disabled]="loading" i18n>
+      Atualizar
+    </button>
   </header>
 
   <p class="error" *ngIf="error">{{ error }}</p>
@@ -13,11 +15,11 @@
     <table>
       <thead>
         <tr>
-          <th>Evento</th>
-          <th>Competencia</th>
-          <th>Recibo</th>
-          <th>Origem</th>
-          <th>Acoes</th>
+          <th i18n>Evento</th>
+          <th i18n>Competencia</th>
+          <th i18n>Recibo</th>
+          <th i18n>Origem</th>
+          <th i18n>Acoes</th>
         </tr>
       </thead>
       <tbody>
@@ -27,26 +29,26 @@
           <td>{{ row.receipt }}</td>
           <td>{{ row.sourceEntityKind || 'Evento' }}</td>
           <td class="actions">
-            <button type="button" (click)="open(row)">Retratar</button>
+            <button type="button" (click)="open(row)" i18n>Retratar</button>
           </td>
         </tr>
         <tr *ngIf="!loading && events.length === 0">
-          <td colspan="5" class="empty">Nenhum evento aceito elegivel.</td>
+          <td colspan="5" class="empty" i18n>Nenhum evento aceito elegivel.</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <section>
-    <h2>Acompanhamento</h2>
+    <h2 i18n>Acompanhamento</h2>
     <div class="table-shell">
       <table>
         <thead>
           <tr>
-            <th>Alvo</th>
-            <th>Status</th>
-            <th>Bloqueio</th>
-            <th>Solicitado em</th>
+            <th i18n>Alvo</th>
+            <th i18n>Status</th>
+            <th i18n>Bloqueio</th>
+            <th i18n>Solicitado em</th>
           </tr>
         </thead>
         <tbody>
@@ -59,7 +61,7 @@
             <td>{{ row.requestedAt | date: 'short' }}</td>
           </tr>
           <tr *ngIf="requests.length === 0">
-            <td colspan="4" class="empty">Nenhuma solicitacao registrada.</td>
+            <td colspan="4" class="empty" i18n>Nenhuma solicitacao registrada.</td>
           </tr>
         </tbody>
       </table>
@@ -68,9 +70,9 @@
 
   <div class="modal-backdrop" *ngIf="selected">
     <form class="modal" (ngSubmit)="submit()">
-      <h2>Retratar {{ selected.eventKind }}</h2>
+      <h2 i18n>Retratar {{ selected.eventKind }}</h2>
       <p>{{ selected.receipt }}</p>
-      <label for="justification">Justificativa</label>
+      <label for="justification" i18n>Justificativa</label>
       <textarea
         id="justification"
         name="justification"
@@ -80,8 +82,8 @@
         rows="5"
       ></textarea>
       <div class="modal-actions">
-        <button type="button" class="secondary" (click)="close()">Cancelar</button>
-        <button type="submit" [disabled]="justification.trim().length < 30 || submitting">
+        <button type="button" class="secondary" (click)="close()" i18n>Cancelar</button>
+        <button type="submit" [disabled]="justification.trim().length < 30 || submitting" i18n>
           Solicitar exclusao
         </button>
       </div>

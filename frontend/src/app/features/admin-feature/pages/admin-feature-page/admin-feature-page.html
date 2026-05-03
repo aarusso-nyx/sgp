@@ -3,21 +3,21 @@
     <div>
       <p class="admin-feature__eyebrow">{{ feature.moduleLabel }}</p>
       <h1 id="admin-feature-title">{{ feature.label }}</h1>
-      <dl class="admin-feature__metadata" aria-label="Metadados da tela">
+      <dl class="admin-feature__metadata" aria-label="Metadados da tela" i18n-aria-label>
         <div>
-          <dt>Grupo</dt>
+          <dt i18n>Grupo</dt>
           <dd>{{ feature.sectionLabel || feature.moduleLabel }}</dd>
         </div>
         <div>
-          <dt>Rota</dt>
+          <dt i18n>Rota</dt>
           <dd>{{ feature.routePath }}</dd>
         </div>
         <div>
-          <dt>Papel</dt>
+          <dt i18n>Papel</dt>
           <dd>{{ feature.requiredRole || 'Sem papel específico' }}</dd>
         </div>
         <div>
-          <dt>Modo</dt>
+          <dt i18n>Modo</dt>
           <dd>{{ modeLabel }}</dd>
         </div>
       </dl>
@@ -26,15 +26,15 @@
     <div class="admin-feature__actions">
       <button type="button" mat-stroked-button>
         <mat-icon aria-hidden="true">download</mat-icon>
-        Exportar
+        <ng-container i18n>Exportar</ng-container>
       </button>
       <button type="button" mat-stroked-button>
         <mat-icon aria-hidden="true">history</mat-icon>
-        Auditoria
+        <ng-container i18n>Auditoria</ng-container>
       </button>
       <button type="button" mat-flat-button color="primary" (click)="openCreateForm()">
         <mat-icon aria-hidden="true">add</mat-icon>
-        Novo
+        <ng-container i18n>Novo</ng-container>
       </button>
     </div>
   </header>
@@ -49,62 +49,73 @@
   ></app-filter-bar>
 
   <div class="admin-feature__workspace">
-    <section class="admin-feature__panel" *ngIf="formOpen" aria-label="Formulário da tela">
+    <section
+      class="admin-feature__panel"
+      *ngIf="formOpen"
+      aria-label="Formulário da tela"
+      i18n-aria-label
+    >
       <header class="admin-feature__panel-header">
         <div>
           <p>{{ feature.backendModule }}</p>
           <h2>{{ editingRecord ? 'Registro selecionado' : 'Novo registro' }}</h2>
         </div>
-        <button type="button" mat-icon-button aria-label="Fechar formulário" (click)="cancelForm()">
+        <button
+          type="button"
+          mat-icon-button
+          aria-label="Fechar formulário"
+          (click)="cancelForm()"
+          i18n-aria-label
+        >
           <mat-icon>close</mat-icon>
         </button>
       </header>
 
       <form [formGroup]="form" class="admin-feature__form" (ngSubmit)="save()">
         <mat-form-field appearance="outline">
-          <mat-label>Código</mat-label>
+          <mat-label i18n>Código</mat-label>
           <input matInput formControlName="code" maxlength="40" />
-          <mat-error *ngIf="form.controls.code.invalid">Código obrigatório.</mat-error>
+          <mat-error *ngIf="form.controls.code.invalid" i18n>Código obrigatório.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Registro</mat-label>
+          <mat-label i18n>Registro</mat-label>
           <input matInput formControlName="title" maxlength="160" />
-          <mat-error *ngIf="form.controls.title.invalid">Registro obrigatório.</mat-error>
+          <mat-error *ngIf="form.controls.title.invalid" i18n>Registro obrigatório.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Status</mat-label>
+          <mat-label i18n>Status</mat-label>
           <mat-select formControlName="status">
-            <mat-option value="Ativo">Ativo</mat-option>
-            <mat-option value="Em revisão">Em revisão</mat-option>
-            <mat-option value="Pendente">Pendente</mat-option>
+            <mat-option value="Ativo" i18n>Ativo</mat-option>
+            <mat-option value="Em revisão" i18n>Em revisão</mat-option>
+            <mat-option value="Pendente" i18n>Pendente</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Responsável</mat-label>
+          <mat-label i18n>Responsável</mat-label>
           <input matInput formControlName="owner" maxlength="120" />
-          <mat-error *ngIf="form.controls.owner.invalid">Responsável obrigatório.</mat-error>
+          <mat-error *ngIf="form.controls.owner.invalid" i18n>Responsável obrigatório.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Atualização</mat-label>
+          <mat-label i18n>Atualização</mat-label>
           <input matInput type="date" formControlName="updatedAt" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="admin-feature__notes">
-          <mat-label>Observação</mat-label>
+          <mat-label i18n>Observação</mat-label>
           <textarea matInput rows="3" formControlName="notes" maxlength="500"></textarea>
         </mat-form-field>
 
         <mat-checkbox formControlName="generateAuditTrail"
-          >Registrar trilha de auditoria</mat-checkbox
+          ><ng-container i18n>Registrar trilha de auditoria</ng-container></mat-checkbox
         >
 
         <div class="admin-feature__form-actions">
-          <button type="button" mat-stroked-button (click)="cancelForm()">Cancelar</button>
-          <button type="submit" mat-flat-button color="primary">Salvar</button>
+          <button type="button" mat-stroked-button (click)="cancelForm()" i18n>Cancelar</button>
+          <button type="submit" mat-flat-button color="primary" i18n>Salvar</button>
         </div>
       </form>
     </section>
@@ -115,7 +126,7 @@
           <p>{{ feature.requiredRole || feature.backendModule }}</p>
           <h2>{{ feature.sectionLabel || 'Registros' }}</h2>
         </div>
-        <span class="admin-feature__count">{{ filteredRecords.length }} itens</span>
+        <span class="admin-feature__count" i18n>{{ filteredRecords.length }} itens</span>
       </header>
 
       <p class="admin-feature__message" *ngIf="message" role="status">{{ message }}</p>

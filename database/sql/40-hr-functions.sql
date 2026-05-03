@@ -526,6 +526,16 @@ BEGIN
 END;
 $$;
 
+CREATE FUNCTION hr.sgp_cadastro_optimistic_version() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  NEW.updated_at := now();
+  NEW.version := OLD.version + 1;
+  RETURN NEW;
+END;
+$$;
+
 CREATE FUNCTION hr.sgp_hr01_status_history_immutable() RETURNS trigger
     LANGUAGE plpgsql
     AS $$

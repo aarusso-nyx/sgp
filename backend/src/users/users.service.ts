@@ -161,7 +161,7 @@ export class UsersService {
         ],
       );
 
-      const row = rows[0];
+      const row = rows[0]!;
       return {
         id: row.id,
         login: row.login,

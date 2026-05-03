@@ -1,38 +1,45 @@
 <section class="dirf">
   <header class="page-header">
     <div>
-      <h1>DIRF</h1>
-      <p>Arquivo anual de rendimentos de terceiros em transição com eSocial.</p>
+      <h1 i18n>DIRF</h1>
+      <p i18n>Arquivo anual de rendimentos de terceiros em transição com eSocial.</p>
     </div>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline">
-      <mat-label>Ano-base</mat-label>
+      <mat-label i18n>Ano-base</mat-label>
       <input matInput type="number" formControlName="yearBase" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Tipo</mat-label>
+      <mat-label i18n>Tipo</mat-label>
       <mat-select formControlName="kind">
-        <mat-option value="ORIGINAL">Original</mat-option>
-        <mat-option value="RETIFICADORA">Retificadora</mat-option>
+        <mat-option value="ORIGINAL" i18n>Original</mat-option>
+        <mat-option value="RETIFICADORA" i18n>Retificadora</mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Arquivo original</mat-label>
+      <mat-label i18n>Arquivo original</mat-label>
       <input matInput formControlName="originalArquivoId" />
     </mat-form-field>
 
     <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
       <mat-icon>search</mat-icon>
-      Consultar
+      <ng-container i18n>Consultar</ng-container>
     </button>
 
-    <button mat-flat-button color="primary" type="button" (click)="generate()" [disabled]="busy">
+    <button
+      *ngIf="canGenerateDirf()"
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="generate()"
+      [disabled]="busy"
+    >
       <mat-icon>add</mat-icon>
-      Gerar
+      <ng-container i18n>Gerar</ng-container>
     </button>
   </form>
 
@@ -43,13 +50,13 @@
       <table>
         <thead>
           <tr>
-            <th>Ano-base</th>
-            <th>Tipo</th>
-            <th>Status</th>
-            <th>Beneficiários</th>
-            <th>Total</th>
-            <th>IRRF</th>
-            <th>TXT</th>
+            <th i18n>Ano-base</th>
+            <th i18n>Tipo</th>
+            <th i18n>Status</th>
+            <th i18n>Beneficiários</th>
+            <th i18n>Total</th>
+            <th i18n>IRRF</th>
+            <th i18n>TXT</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +74,13 @@
             <td>{{ money(item.totalAmount) }}</td>
             <td>{{ money(item.totalIrrf) }}</td>
             <td>
-              <a mat-icon-button [href]="downloadUrl(item)" target="_blank" title="Baixar TXT">
+              <a
+                mat-icon-button
+                [href]="downloadUrl(item)"
+                target="_blank"
+                title="Baixar TXT"
+                i18n-title
+              >
                 <mat-icon>download</mat-icon>
               </a>
             </td>
@@ -77,26 +90,26 @@
     </section>
 
     <aside class="details" *ngIf="selected">
-      <h2>Integridade</h2>
+      <h2 i18n>Integridade</h2>
       <dl>
         <div>
-          <dt>Arquivo</dt>
+          <dt i18n>Arquivo</dt>
           <dd>{{ selected.id }}</dd>
         </div>
         <div>
-          <dt>Leiaute</dt>
+          <dt i18n>Leiaute</dt>
           <dd>{{ selected.layoutVersion }}</dd>
         </div>
         <div>
-          <dt>Hash TXT</dt>
+          <dt i18n>Hash TXT</dt>
           <dd>{{ selected.txtHash }}</dd>
         </div>
         <div>
-          <dt>Referência</dt>
+          <dt i18n>Referência</dt>
           <dd>{{ selected.txtRef }}</dd>
         </div>
         <div>
-          <dt>Original</dt>
+          <dt i18n>Original</dt>
           <dd>{{ selected.originalArquivoId || '-' }}</dd>
         </div>
       </dl>

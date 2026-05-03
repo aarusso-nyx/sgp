@@ -3,6 +3,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { inspectRlsSpecs } from './check-rls-specs.mjs';
 import { hardFailGateCommands } from './lib/workspace-commands.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
@@ -155,6 +156,23 @@ function validateCanonicalRootScripts() {
   }
 }
 
+function validateRlsSpecsExecutable() {
+  const result = inspectRlsSpecs(repoRoot);
+
+  record(
+    'rls-specs:no-stub-only-files',
+    result.stubOnlyFiles.length === 0,
+    result.stubOnlyFiles.length === 0
+      ? `${result.executableCount} executable files`
+      : result.stubOnlyFiles.join('; '),
+  );
+  record(
+    'rls-specs:tenant-insert-select-promoted',
+    result.smokeExecutableCount >= 50,
+    `${result.smokeExecutableCount} executable tenant-A insert + tenant-B zero-row specs`,
+  );
+}
+
 function listMarkdownFiles(relativeDir) {
   const absoluteDir = resolve(repoRoot, relativeDir);
   return readdirSync(absoluteDir, { withFileTypes: true }).flatMap((entry) => {
@@ -201,6 +219,20 @@ function validateLiveDocPaths() {
   );
 }
 
+function validateAdr011CurrentState() {
+  const content = readFileSync(resolve(repoRoot, 'docs/eng/70-adrs.md'), 'utf8');
+  record(
+    'adr-011:current-state-marker',
+    content.includes('ADR-011-CURRENT-STATE'),
+    'docs/eng/70-adrs.md',
+  );
+  record(
+    'adr-011:no-current-nx-tree-claim',
+    !content.includes('apps/\n  sgp-core-api') && !content.includes('libs/\n  @sgp/domain'),
+    'docs/eng/70-adrs.md',
+  );
+}
+
 function main() {
   validatePackagePins();
   validateSingleLockfile();
@@ -208,7 +240,9 @@ function main() {
   validateReverseSuccession();
   validateDevaiConfig();
   validateCanonicalRootScripts();
+  validateRlsSpecsExecutable();
   validateLiveDocPaths();
+  validateAdr011CurrentState();
 
   const failures = checks.filter((check) => !check.ok);
   for (const check of checks) {

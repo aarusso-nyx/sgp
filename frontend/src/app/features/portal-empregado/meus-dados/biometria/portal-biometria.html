@@ -1,11 +1,11 @@
 <section class="portal-biometria">
-  <h1>Biometria</h1>
+  <h1 i18n>Biometria</h1>
   <form [formGroup]="form" (ngSubmit)="revoke()">
     <label>
-      Servidor
-      <input formControlName="employeeId" placeholder="UUID do empregado" />
+      <ng-container i18n>Servidor</ng-container>
+      <input formControlName="employeeId" placeholder="UUID do empregado" i18n-placeholder />
     </label>
-    <button type="submit" [disabled]="saving">Revogar consentimento</button>
+    <button type="submit" [disabled]="saving" i18n>Revogar consentimento</button>
   </form>
   <p class="message" *ngIf="message">{{ message }}</p>
   <p class="error" *ngIf="error">{{ error }}</p>

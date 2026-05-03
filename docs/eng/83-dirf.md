@@ -1,12 +1,14 @@
 # DIRF Anual
 
-**Escopo:** FISC-02 — geracao anual de DIRF para rendimentos de terceiros ainda nao substituidos pelo S-1210/eSocial.
+**Escopo:** FISC-02 — geracao anual de DIRF para rendimentos de terceiros ainda nao substituidos pelo S-1210/eSocial, somente para ano-base anterior a 2025.
 
 ## Escopo funcional
 
 A DIRF do SGP cobre apenas pagamentos a terceiros: autonomos nao empregados, pessoas juridicas, beneficiarios no exterior e outros rendimentos retidos fora da folha de empregados. A folha mensal de servidores segue coberta por CALC-11 e ES-04/S-1210, e nao e fonte deste arquivo.
 
 O modulo le `payment.dirf_payment_source`, agrega por ano-base, tenant, beneficiario e codigo de receita, e grava o resultado em `fiscal.dirf_arquivo`, `fiscal.dirf_beneficiario` e `fiscal.dirf_pagamento`. O arquivo TXT fica em `txt_content` para os gates locais e em `txt_ref` como referencia auditavel de armazenamento externo.
+
+DIRF esta deprecada para fatos geradores a partir de 2025-01-01. A API `POST /v1/admin/fiscal/dirf/gerar` retorna `410 Gone` para ano-base `2025` ou posterior, e a acao de geracao na interface fica oculta nesses anos-base. A substituicao regulatoria fica no escopo de EFD-Reinf R-4000.
 
 ## Leiaute e validacao
 
@@ -23,5 +25,6 @@ As tabelas DIRF sao tenant-scoped, usam RLS forcado por `tenant_id` com `sgp_ten
 ## Fora do escopo
 
 - DIRF de folha de empregados substituida pelo S-1210.
+- Geracao de DIRF para ano-base 2025 ou posterior.
 - Transmissao automatica a RFB ou Receitanet.
 - Conversao de moeda para beneficiario no exterior; o valor entra ja convertido em reais.

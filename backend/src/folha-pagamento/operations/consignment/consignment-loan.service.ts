@@ -178,7 +178,7 @@ export class ConsignmentLoanService {
           input.validTo,
         ],
       );
-      const row = inserted.rows[0];
+      const row = inserted.rows[0]!;
       await this.appendAudit(client, row.loan_id, margin);
       return toLoanSummary(row);
     });

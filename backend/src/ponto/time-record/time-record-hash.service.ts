@@ -155,7 +155,7 @@ export class TimeRecordHashService {
         JSON.stringify(rawPayload),
       ],
     );
-    return this.toSummary(rows.rows[0]);
+    return this.toSummary(rows.rows[0]!);
   }
 
   async list(employeeId: string, limit = 50): Promise<TimeRecordSummary[]> {

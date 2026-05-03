@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -49,6 +50,7 @@ export class PayrollController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List runs' })
   @Get()
   @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll runs.' })
@@ -56,6 +58,7 @@ export class PayrollController {
     return this.payrollService.listRuns(query);
   }
 
+  @ApiOperation({ summary: 'GET :folha_id/historico' })
   @Get(':folha_id/historico')
   @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'List payroll run execution history.' })
@@ -63,6 +66,7 @@ export class PayrollController {
     return this.payrollService.listRunHistory(payrollRunId);
   }
 
+  @ApiOperation({ summary: 'POST Create run' })
   @Post()
   @RequirePermission('folha.write')
   @ApiCreatedResponse({ description: 'Create a payroll run.' })
@@ -78,6 +82,7 @@ export class PayrollController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH :folha_id/status' })
   @Patch(':folha_id/status')
   @RequirePermission('folha.write')
   @ApiOkResponse({ description: 'Update payroll run status.' })
@@ -98,6 +103,7 @@ export class PayrollController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST :folha_rescisao_id/calcular' })
   @Post(':folha_rescisao_id/calcular')
   @Post(':folha_id/calcular')
   @RequirePermission('folha.write')
@@ -117,6 +123,7 @@ export class PayrollController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST :folha_id/massa' })
   @Post(':folha_id/massa')
   @RequirePermission('folha.write')
   @ApiOkResponse({
@@ -136,6 +143,7 @@ export class PayrollController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST :folha_id/adiantamentos' })
   @Post(':folha_id/adiantamentos')
   @RequirePermission('folha.write')
   @ApiCreatedResponse({
@@ -167,6 +175,7 @@ export class PayrollController {
     return created;
   }
 
+  @ApiOperation({ summary: 'POST decimo-terceiro/adiantamento' })
   @Post('decimo-terceiro/adiantamento')
   @RequirePermission('payroll.run.execute')
   @ApiCreatedResponse({ description: 'Generate the first 13th salary parcel.' })
@@ -190,6 +199,7 @@ export class PayrollController {
     return created;
   }
 
+  @ApiOperation({ summary: 'POST decimo-terceiro/fechamento' })
   @Post('decimo-terceiro/fechamento')
   @RequirePermission('payroll.run.execute')
   @ApiCreatedResponse({ description: 'Generate the closing 13th salary run.' })
@@ -213,6 +223,7 @@ export class PayrollController {
     return created;
   }
 
+  @ApiOperation({ summary: 'POST ferias/calcular' })
   @Post('ferias/calcular')
   @RequirePermission(['payroll.run.execute', 'rh.vacation.payout'])
   @ApiCreatedResponse({ description: 'Generate a vacation payroll run.' })
@@ -233,6 +244,7 @@ export class PayrollController {
     return created;
   }
 
+  @ApiOperation({ summary: 'POST rescisao/calcular' })
   @Post('rescisao/calcular')
   @RequirePermission(['payroll.run.execute', 'rh.employee.terminate'])
   @ApiCreatedResponse({ description: 'Generate a termination payroll run.' })
@@ -261,6 +273,7 @@ export class PayrollController {
     return created;
   }
 
+  @ApiOperation({ summary: 'POST mensal/abrir' })
   @Post('mensal/abrir')
   @RequirePermission(['payroll.run.execute', 'folha.write'])
   @ApiCreatedResponse({ description: 'Open a monthly payroll competence.' })
@@ -281,6 +294,7 @@ export class PayrollController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST mensal/calcular' })
   @Post('mensal/calcular')
   @RequirePermission(['payroll.run.execute', 'folha.write'])
   @ApiOkResponse({ description: 'Calculate a monthly payroll competence.' })
@@ -301,6 +315,7 @@ export class PayrollController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST mensal/aprovar' })
   @Post('mensal/aprovar')
   @RequirePermission(['payroll.run.execute', 'folha.write'])
   @ApiOkResponse({ description: 'Approve a monthly payroll competence.' })
@@ -321,6 +336,7 @@ export class PayrollController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST mensal/gerar' })
   @Post('mensal/gerar')
   @RequirePermission(['payroll.run.execute', 'folha.write'])
   @ApiOkResponse({ description: 'Generate monthly employee paystubs.' })
@@ -341,6 +357,7 @@ export class PayrollController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST mensal/fechar' })
   @Post('mensal/fechar')
   @RequirePermission(['payroll.run.execute', 'folha.write'])
   @ApiOkResponse({ description: 'Close a monthly payroll competence.' })
@@ -361,6 +378,7 @@ export class PayrollController {
     return result;
   }
 
+  @ApiOperation({ summary: 'GET mensal/revisao' })
   @Get('mensal/revisao')
   @RequirePermission(['payroll.run.execute', 'folha.read'])
   @ApiOkResponse({ description: 'Review monthly payroll totals by employee.' })

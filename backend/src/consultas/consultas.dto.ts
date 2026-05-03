@@ -1,6 +1,14 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsDateString,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Max,
+  Min,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class FinancialRecordQueryDto {
   @ApiPropertyOptional()
@@ -60,4 +68,46 @@ export class OperationalHistoryQueryDto {
   @IsOptional()
   @IsString()
   recurso?: string;
+}
+
+export class BusinessDaysQueryDto {
+  @ApiProperty({
+    description: 'Inclusive start date in ISO yyyy-mm-dd format.',
+  })
+  @IsDateString()
+  startDate!: string;
+
+  @ApiProperty({
+    description: 'Inclusive end date in ISO yyyy-mm-dd format.',
+  })
+  @IsDateString()
+  endDate!: string;
+}
+
+export class BatimentoQueryDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  payrollRunId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(2000)
+  @Max(2100)
+  competenceYear?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(12)
+  competenceMonth?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  branchId?: string;
 }

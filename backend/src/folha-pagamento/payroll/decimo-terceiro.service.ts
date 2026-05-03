@@ -288,7 +288,7 @@ export class DecimoTerceiroService {
       `,
       [kind],
     );
-    return rows.rows[0];
+    return rows.rows[0]!;
   }
 
   private async ensureRun(
@@ -338,7 +338,7 @@ export class DecimoTerceiroService {
       `,
       [year, month, catalog.payroll_type_id, catalog.processing_type_id],
     );
-    return inserted.rows[0];
+    return inserted.rows[0]!;
   }
 
   private async prepareRunForReprocessing(
@@ -491,6 +491,10 @@ export class DecimoTerceiroService {
     },
   ): Promise<void> {
     await client.query(
+      'SELECT payroll.sgp_create_payroll_financial_record_partition(make_date($1::integer, $2::integer, 1))',
+      [input.year, input.month],
+    );
+    await client.query(
       `
       INSERT INTO payroll.payroll_financial_record (
         tenant_id,
@@ -500,6 +504,7 @@ export class DecimoTerceiroService {
         functional_status_id,
         competence_year,
         competence_month,
+        competence,
         total_earnings,
         total_deductions,
         net_amount,
@@ -513,12 +518,13 @@ export class DecimoTerceiroService {
         NULLIF($4, '')::uuid,
         $5,
         $6,
+        make_date($5::integer, $6::integer, 1),
         $7::decimal,
         $8::decimal,
         ($7::decimal - $8::decimal),
         $9::jsonb
       )
-      ON CONFLICT (employee_id, competence_year, competence_month, payroll_run_id)
+      ON CONFLICT (employee_id, competence_year, competence_month, payroll_run_id, competence)
       DO UPDATE SET
         total_earnings = EXCLUDED.total_earnings,
         total_deductions = EXCLUDED.total_deductions,

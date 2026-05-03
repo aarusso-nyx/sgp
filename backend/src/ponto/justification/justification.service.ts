@@ -98,7 +98,7 @@ export class JustificationService {
           input.payrollTreatment ?? 'PAID',
         ],
       );
-      return this.toModel(rows.rows[0]);
+      return this.toModel(rows.rows[0]!);
     });
   }
 
@@ -155,7 +155,7 @@ export class JustificationService {
           medicalLeaveId ?? '',
         ],
       );
-      const decided = rows.rows[0];
+      const decided = rows.rows[0]!;
       if (input.decision === 'APPROVED') {
         await this.linkTimeRecords(client, decided);
       }
@@ -182,7 +182,7 @@ export class JustificationService {
         `,
         [id],
       );
-      return this.toModel(rows.rows[0]);
+      return this.toModel(rows.rows[0]!);
     });
   }
 

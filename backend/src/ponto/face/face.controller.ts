@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -40,6 +41,7 @@ export class FaceController {
     private readonly thresholdService: FaceThresholdAdminService,
   ) {}
 
+  @ApiOperation({ summary: 'GET templates' })
   @Get('templates')
   @RequirePermission('ponto.face.read')
   @ApiOkResponse({ description: 'Employee face template metadata.' })
@@ -47,6 +49,7 @@ export class FaceController {
     return this.enrollmentService.list(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST consents' })
   @Post('consents')
   @RequirePermission('ponto.face.write')
   @AuditMutation({
@@ -61,6 +64,7 @@ export class FaceController {
     return this.consentService.create(body);
   }
 
+  @ApiOperation({ summary: 'GET employees/:employeeId/status' })
   @Get('employees/:employeeId/status')
   @RequirePermission('ponto.face.read')
   @ApiOkResponse({
@@ -70,6 +74,7 @@ export class FaceController {
     return this.consentService.status(employeeId);
   }
 
+  @ApiOperation({ summary: 'DELETE employees/:employeeId/consent' })
   @Delete('employees/:employeeId/consent')
   @RequirePermission('ponto.face.write')
   @AuditMutation({
@@ -84,6 +89,7 @@ export class FaceController {
     return this.consentService.withdraw(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST templates' })
   @Post('templates')
   @RequirePermission('ponto.face.write')
   @AuditMutation({
@@ -96,6 +102,7 @@ export class FaceController {
     return this.enrollmentService.enroll(body);
   }
 
+  @ApiOperation({ summary: 'POST matches' })
   @Post('matches')
   @RequirePermission('ponto.face.write')
   @AuditMutation({
@@ -110,6 +117,7 @@ export class FaceController {
     return this.matcherService.match(body);
   }
 
+  @ApiOperation({ summary: 'POST clock' })
   @Post('clock')
   @RequirePermission('ponto.face.write')
   @AuditMutation({
@@ -124,6 +132,7 @@ export class FaceController {
     return this.matcherService.clock(body);
   }
 
+  @ApiOperation({ summary: 'GET threshold' })
   @Get('threshold')
   @RequirePermission('ponto.face.read')
   @ApiOkResponse({
@@ -133,6 +142,7 @@ export class FaceController {
     return this.thresholdService.getCurrent();
   }
 
+  @ApiOperation({ summary: 'PUT threshold' })
   @Put('threshold')
   @RequirePermission('ponto.face.write')
   @AuditMutation({

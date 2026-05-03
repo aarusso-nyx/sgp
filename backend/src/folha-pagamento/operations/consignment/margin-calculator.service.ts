@@ -9,6 +9,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 import { DatabaseService } from '../../../database/database.service';
 
 export type ConsignmentLoanKind = 'PAYROLL_LOAN' | 'CARD' | 'OTHER';
+type ConsignmentMarginBucket = 'general' | 'credit card' | 'benefit card';
 
 interface ParameterRow extends QueryResultRow {
   key: string;
@@ -21,7 +22,8 @@ interface BaseRow extends QueryResultRow {
 
 interface UsedRow extends QueryResultRow {
   used_general: string;
-  used_card: string;
+  used_credit_card: string;
+  used_benefit_card: string;
 }
 
 export interface MarginCalculationInput {
@@ -29,9 +31,11 @@ export interface MarginCalculationInput {
   competence: string;
   netBase?: string;
   generalPercent?: string;
-  cardPercent?: string;
+  creditCardPercent?: string;
+  benefitCardPercent?: string;
   usedGeneral?: string;
-  usedCard?: string;
+  usedCreditCard?: string;
+  usedBenefitCard?: string;
 }
 
 export interface ConsignmentMargin {
@@ -39,11 +43,14 @@ export interface ConsignmentMargin {
   competence: string;
   netBase: string;
   availableGeneral: string;
-  availableCard: string;
+  availableCreditCard: string;
+  availableBenefitCard: string;
   usedGeneral: string;
-  usedCard: string;
+  usedCreditCard: string;
+  usedBenefitCard: string;
   generalPercent: string;
-  cardPercent: string;
+  creditCardPercent: string;
+  benefitCardPercent: string;
 }
 
 @Injectable()
@@ -54,9 +61,11 @@ export class MarginCalculatorService {
     this.assertCompetence(input.competence);
     const netBase = money(input.netBase ?? '0');
     const generalPercent = decimal(input.generalPercent ?? '0.35');
-    const cardPercent = decimal(input.cardPercent ?? '0.05');
+    const creditCardPercent = decimal(input.creditCardPercent ?? '0.05');
+    const benefitCardPercent = decimal(input.benefitCardPercent ?? '0.05');
     const usedGeneral = money(input.usedGeneral ?? '0');
-    const usedCard = money(input.usedCard ?? '0');
+    const usedCreditCard = money(input.usedCreditCard ?? '0');
+    const usedBenefitCard = money(input.usedBenefitCard ?? '0');
 
     return {
       employeeId: input.employeeId,
@@ -66,14 +75,23 @@ export class MarginCalculatorService {
         netBase.mul(generalPercent).toDecimalPlaces(2).minus(usedGeneral),
         0,
       ).toFixed(2),
-      availableCard: Decimal.max(
-        netBase.mul(cardPercent).toDecimalPlaces(2).minus(usedCard),
+      availableCreditCard: Decimal.max(
+        netBase.mul(creditCardPercent).toDecimalPlaces(2).minus(usedCreditCard),
+        0,
+      ).toFixed(2),
+      availableBenefitCard: Decimal.max(
+        netBase
+          .mul(benefitCardPercent)
+          .toDecimalPlaces(2)
+          .minus(usedBenefitCard),
         0,
       ).toFixed(2),
       usedGeneral: usedGeneral.toFixed(2),
-      usedCard: usedCard.toFixed(2),
+      usedCreditCard: usedCreditCard.toFixed(2),
+      usedBenefitCard: usedBenefitCard.toFixed(2),
       generalPercent: generalPercent.toFixed(6),
-      cardPercent: cardPercent.toFixed(6),
+      creditCardPercent: creditCardPercent.toFixed(6),
+      benefitCardPercent: benefitCardPercent.toFixed(6),
     };
   }
 
@@ -96,12 +114,9 @@ export class MarginCalculatorService {
     monthlyAmount: string,
   ): void {
     const amount = money(monthlyAmount);
-    const available =
-      kind === 'CARD'
-        ? money(margin.availableCard)
-        : money(margin.availableGeneral);
+    const bucket = marginBucketForKind(kind);
+    const available = money(availableForBucket(margin, bucket));
     if (amount.gt(available)) {
-      const bucket = kind === 'CARD' ? 'card' : 'general';
       throw new UnprocessableEntityException(
         `Consignment loan monthly amount ${amount.toFixed(2)} exceeds available ${bucket} margin ${available.toFixed(2)}.`,
       );
@@ -119,7 +134,11 @@ export class MarginCalculatorService {
       SELECT key, value
       FROM public.system_parameter
       WHERE tenant_id = public.sgp_current_tenant_uuid()
-        AND key IN ('consignment.margin.general_pct', 'consignment.margin.card_pct')
+        AND key IN (
+          'consignment.margin.general_pct',
+          'consignment.margin.credit_card_pct',
+          'consignment.margin.benefit_card_pct'
+        )
       `,
     );
     const parameters = new Map(
@@ -150,8 +169,9 @@ export class MarginCalculatorService {
     const used = await client.query<UsedRow>(
       `
       SELECT
-        coalesce(sum(CASE WHEN kind IN ('PAYROLL_LOAN', 'OTHER') THEN monthly_amount ELSE 0 END), 0)::numeric(14, 2)::text AS used_general,
-        coalesce(sum(CASE WHEN kind = 'CARD' THEN monthly_amount ELSE 0 END), 0)::numeric(14, 2)::text AS used_card
+        coalesce(sum(CASE WHEN kind = 'PAYROLL_LOAN' THEN monthly_amount ELSE 0 END), 0)::numeric(14, 2)::text AS used_general,
+        coalesce(sum(CASE WHEN kind = 'CARD' THEN monthly_amount ELSE 0 END), 0)::numeric(14, 2)::text AS used_credit_card,
+        coalesce(sum(CASE WHEN kind = 'OTHER' THEN monthly_amount ELSE 0 END), 0)::numeric(14, 2)::text AS used_benefit_card
       FROM payment.consignment_loan
       WHERE tenant_id = public.sgp_current_tenant_uuid()
         AND employee_id = $1::uuid
@@ -167,9 +187,13 @@ export class MarginCalculatorService {
       netBase: base.rows[0].net_base,
       generalPercent:
         parameters.get('consignment.margin.general_pct') ?? '0.35',
-      cardPercent: parameters.get('consignment.margin.card_pct') ?? '0.05',
+      creditCardPercent:
+        parameters.get('consignment.margin.credit_card_pct') ?? '0.05',
+      benefitCardPercent:
+        parameters.get('consignment.margin.benefit_card_pct') ?? '0.05',
       usedGeneral: used.rows[0]?.used_general ?? '0',
-      usedCard: used.rows[0]?.used_card ?? '0',
+      usedCreditCard: used.rows[0]?.used_credit_card ?? '0',
+      usedBenefitCard: used.rows[0]?.used_benefit_card ?? '0',
     });
   }
 
@@ -182,6 +206,23 @@ export class MarginCalculatorService {
       throw new ServiceUnavailableException('DATABASE_URL is not configured');
     }
   }
+}
+
+function marginBucketForKind(
+  kind: ConsignmentLoanKind,
+): ConsignmentMarginBucket {
+  if (kind === 'CARD') return 'credit card';
+  if (kind === 'OTHER') return 'benefit card';
+  return 'general';
+}
+
+function availableForBucket(
+  margin: ConsignmentMargin,
+  bucket: ConsignmentMarginBucket,
+): string {
+  if (bucket === 'credit card') return margin.availableCreditCard;
+  if (bucket === 'benefit card') return margin.availableBenefitCard;
+  return margin.availableGeneral;
 }
 
 export function parseCompetence(competence: string): [number, number] {

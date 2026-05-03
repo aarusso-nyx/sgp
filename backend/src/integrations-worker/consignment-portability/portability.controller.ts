@@ -1,5 +1,6 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ import { PortabilityProcessService } from './portability-process.service';
 export class PortabilityController {
   constructor(private readonly portabilityService: PortabilityProcessService) {}
 
+  @ApiOperation({ summary: 'POST Upload' })
   @Post()
   @RequirePermission('payment.consignment.write')
   @ApiCreatedResponse({
@@ -30,6 +32,7 @@ export class PortabilityController {
     return this.portabilityService.upload(body);
   }
 
+  @ApiOperation({ summary: 'POST :id/process' })
   @Post(':id/process')
   @RequirePermission('payment.consignment.write')
   @ApiOkResponse({ description: 'Process a consignment portability file.' })

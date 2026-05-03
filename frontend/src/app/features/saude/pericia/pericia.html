@@ -1,7 +1,7 @@
 <section class="pericia">
   <header>
-    <p>Saude ocupacional</p>
-    <h1>Licenca de saude e pericia</h1>
+    <p i18n>Saude ocupacional</p>
+    <h1 i18n>Licenca de saude e pericia</h1>
   </header>
 
   <p *ngIf="message" class="message" role="status">{{ message }}</p>
@@ -9,106 +9,106 @@
 
   <div class="layout">
     <form [formGroup]="scheduleForm" (ngSubmit)="schedule()" class="panel">
-      <h2>Agenda de pericias</h2>
+      <h2 i18n>Agenda de pericias</h2>
       <label>
-        <span>Servidor</span>
-        <input formControlName="employeeId" placeholder="UUID do servidor" />
+        <span i18n>Servidor</span>
+        <input formControlName="employeeId" placeholder="UUID do servidor" i18n-placeholder />
       </label>
       <label>
-        <span>Janela</span>
+        <span i18n>Janela</span>
         <input formControlName="slotRef" />
       </label>
       <label>
-        <span>Data</span>
+        <span i18n>Data</span>
         <input type="date" formControlName="scheduledOn" />
       </label>
       <label>
-        <span>Hora</span>
+        <span i18n>Hora</span>
         <input formControlName="scheduledTime" />
       </label>
       <label>
-        <span>Telefone</span>
+        <span i18n>Telefone</span>
         <input formControlName="contactPhone" />
       </label>
-      <button type="submit" [disabled]="saving">Agendar</button>
+      <button type="submit" [disabled]="saving" i18n>Agendar</button>
     </form>
 
     <form [formGroup]="opinionForm" (ngSubmit)="recordOpinion()" class="panel">
-      <h2>Parecer pericial</h2>
+      <h2 i18n>Parecer pericial</h2>
       <label>
-        <span>Agendamento</span>
+        <span i18n>Agendamento</span>
         <input formControlName="appointmentId" />
       </label>
       <label>
-        <span>Medico</span>
+        <span i18n>Medico</span>
         <input formControlName="physicianId" />
       </label>
       <label>
-        <span>Decisao</span>
+        <span i18n>Decisao</span>
         <select formControlName="decision">
-          <option value="granted">Concedida</option>
-          <option value="denied">Negada</option>
+          <option value="granted" i18n>Concedida</option>
+          <option value="denied" i18n>Negada</option>
         </select>
       </label>
       <label>
-        <span>CID-10</span>
+        <span i18n>CID-10</span>
         <input formControlName="cidCode" />
       </label>
       <label>
-        <span>CID secundario</span>
+        <span i18n>CID secundario</span>
         <input formControlName="cidSecondary" />
       </label>
       <label>
-        <span>Dias</span>
+        <span i18n>Dias</span>
         <input type="number" min="1" formControlName="grantedDays" />
       </label>
       <label>
-        <span>Inicio</span>
+        <span i18n>Inicio</span>
         <input type="date" formControlName="startsOn" />
       </label>
       <label>
-        <span>Fim</span>
+        <span i18n>Fim</span>
         <input type="date" formControlName="endsOn" />
       </label>
       <label class="wide">
-        <span>Motivo</span>
+        <span i18n>Motivo</span>
         <textarea formControlName="reason"></textarea>
       </label>
       <label class="wide">
-        <span>Parecer</span>
+        <span i18n>Parecer</span>
         <textarea formControlName="opinionNotes"></textarea>
       </label>
-      <button type="submit" [disabled]="saving">Registrar parecer</button>
+      <button type="submit" [disabled]="saving" i18n>Registrar parecer</button>
     </form>
   </div>
 
   <section class="panel">
     <form [formGroup]="lookupForm" (ngSubmit)="loadLeaves()" class="toolbar">
       <label>
-        <span>Servidor</span>
-        <input formControlName="employeeId" placeholder="UUID do servidor" />
+        <span i18n>Servidor</span>
+        <input formControlName="employeeId" placeholder="UUID do servidor" i18n-placeholder />
       </label>
-      <button type="submit" [disabled]="loading">Carregar licencas</button>
+      <button type="submit" [disabled]="loading" i18n>Carregar licencas</button>
     </form>
 
     <table>
       <thead>
         <tr>
-          <th>Periodo</th>
-          <th>Dias</th>
-          <th>CID</th>
-          <th>Status</th>
+          <th i18n>Periodo</th>
+          <th i18n>Dias</th>
+          <th i18n>CID</th>
+          <th i18n>Status</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let leave of leaves">
-          <td>{{ leave.startsOn }} a {{ leave.endsOn }}</td>
+          <td i18n>{{ leave.startsOn }} a {{ leave.endsOn }}</td>
           <td>{{ leave.grantedDays }}</td>
           <td>{{ leave.cidCode || '-' }}</td>
           <td>{{ leave.status }}</td>
         </tr>
         <tr *ngIf="!leaves.length">
-          <td colspan="4">Nenhuma licenca carregada.</td>
+          <td colspan="4" i18n>Nenhuma licenca carregada.</td>
         </tr>
       </tbody>
     </table>

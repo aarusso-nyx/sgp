@@ -390,7 +390,7 @@ function tokenize(expression: string): Token[] {
   const tokens: Token[] = [];
   let index = 0;
   while (index < expression.length) {
-    const char = expression[index];
+    const char = expression[index]!;
     if (/\s/.test(char)) {
       index += 1;
       continue;
@@ -423,16 +423,18 @@ function tokenize(expression: string): Token[] {
     }
     const numberMatch = /^\d+(?:\.\d+)?/.exec(expression.slice(index));
     if (numberMatch) {
-      tokens.push({ kind: 'number', value: numberMatch[0] });
-      index += numberMatch[0].length;
+      const value = numberMatch[0];
+      tokens.push({ kind: 'number', value });
+      index += value.length;
       continue;
     }
     const identifierMatch = /^[A-Za-z_][A-Za-z0-9_]*/.exec(
       expression.slice(index),
     );
     if (identifierMatch) {
-      tokens.push({ kind: 'identifier', value: identifierMatch[0] });
-      index += identifierMatch[0].length;
+      const value = identifierMatch[0];
+      tokens.push({ kind: 'identifier', value });
+      index += value.length;
       continue;
     }
     throw new BadRequestException(`Invalid formula token near "${char}"`);
@@ -490,7 +492,12 @@ function emitCall(
         'IF requires condition, true, and false arguments',
       );
     }
-    return `(CASE WHEN ${emitSql(node.args[0], context)} THEN ${emitSql(node.args[1], context)} ELSE ${emitSql(node.args[2], context)} END)`;
+    const [condition, trueValue, falseValue] = node.args as [
+      AstNode,
+      AstNode,
+      AstNode,
+    ];
+    return `(CASE WHEN ${emitSql(condition, context)} THEN ${emitSql(trueValue, context)} ELSE ${emitSql(falseValue, context)} END)`;
   }
   if (name === 'MAX' || name === 'MIN') {
     if (node.args.length < 2) {

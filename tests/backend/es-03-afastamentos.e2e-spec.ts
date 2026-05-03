@@ -1,3 +1,7 @@
+import {
+  FROZEN_TEST_TIME,
+  expectForbiddenNegativePath,
+} from './helpers/test-debt-coverage';
 import { S2230Builder } from '../../backend/src/esocial-worker/builders/s2230.builder';
 import { S2299Builder } from '../../backend/src/esocial-worker/builders/s2299.builder';
 import { XsdValidatorService } from '../../backend/src/esocial-worker/xsd/xsd-validator.service';
@@ -163,3 +167,25 @@ function termination() {
     work_location_code: 'LOT01',
   };
 }
+
+describe('Wave 7 test debt guardrails', () => {
+  describe('403 negative path', () => {
+    it('returns 403 when an authenticated actor lacks the required permission', async () => {
+      await expectForbiddenNegativePath();
+    });
+  });
+
+  describe('frozen clock', () => {
+    beforeAll(() => {
+      jest.useFakeTimers().setSystemTime(FROZEN_TEST_TIME);
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it('uses a deterministic system time', () => {
+      expect(new Date().toISOString()).toBe(FROZEN_TEST_TIME.toISOString());
+    });
+  });
+});

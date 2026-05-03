@@ -1,45 +1,45 @@
 <section class="remittance-page">
   <header>
-    <h1>Remessa bancaria CNAB 240</h1>
+    <h1 i18n>Remessa bancaria CNAB 240</h1>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline">
-      <mat-label>Ano</mat-label>
+      <mat-label i18n>Ano</mat-label>
       <input matInput type="number" formControlName="year" min="2000" max="2100" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Mes</mat-label>
+      <mat-label i18n>Mes</mat-label>
       <input matInput type="number" formControlName="month" min="1" max="12" />
     </mat-form-field>
     <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
       <mat-icon>search</mat-icon>
-      Buscar
+      <ng-container i18n>Buscar</ng-container>
     </button>
   </form>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Folha aprovada</mat-label>
+      <mat-label i18n>Folha aprovada</mat-label>
       <input matInput formControlName="payrollRunId" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Banco</mat-label>
+      <mat-label i18n>Banco</mat-label>
       <mat-select formControlName="bankId">
-        <mat-option value="001">001 Banco do Brasil</mat-option>
-        <mat-option value="104">104 Caixa</mat-option>
-        <mat-option value="341">341 Itau</mat-option>
-        <mat-option value="237">237 Bradesco</mat-option>
-        <mat-option value="033">033 Santander</mat-option>
+        <mat-option value="001" i18n>001 Banco do Brasil</mat-option>
+        <mat-option value="104" i18n>104 Caixa</mat-option>
+        <mat-option value="341" i18n>341 Itau</mat-option>
+        <mat-option value="237" i18n>237 Bradesco</mat-option>
+        <mat-option value="033" i18n>033 Santander</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Pagamento</mat-label>
+      <mat-label i18n>Pagamento</mat-label>
       <input matInput type="date" formControlName="paymentDate" />
     </mat-form-field>
     <button mat-flat-button color="primary" type="button" (click)="generate()" [disabled]="loading">
       <mat-icon>account_balance</mat-icon>
-      Gerar remessa
+      <ng-container i18n>Gerar remessa</ng-container>
     </button>
   </form>
 
@@ -50,12 +50,12 @@
     <table>
       <thead>
         <tr>
-          <th>Arquivo</th>
-          <th>Status</th>
-          <th>Banco</th>
-          <th>Registros</th>
-          <th>Total</th>
-          <th>Hash</th>
+          <th i18n>Arquivo</th>
+          <th i18n>Status</th>
+          <th i18n>Banco</th>
+          <th i18n>Registros</th>
+          <th i18n>Total</th>
+          <th i18n>Hash</th>
           <th></th>
         </tr>
       </thead>
@@ -74,13 +74,14 @@
               (click)="download(remittance)"
               [disabled]="!remittance.attachmentId"
               aria-label="Baixar remessa"
+              i18n-aria-label
             >
               <mat-icon>download</mat-icon>
             </button>
           </td>
         </tr>
         <tr *ngIf="remittances.length === 0">
-          <td colspan="7" class="empty">Nenhuma remessa encontrada.</td>
+          <td colspan="7" class="empty" i18n>Nenhuma remessa encontrada.</td>
         </tr>
       </tbody>
     </table>

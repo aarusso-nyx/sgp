@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.1.0",
   "paths": {
     "/api/v1": {
       "get": {
@@ -10,6 +10,7 @@
             "description": ""
           }
         },
+        "summary": "GET Get root metadata",
         "tags": ["root"]
       }
     },
@@ -27,6 +28,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET me",
         "tags": ["auth"]
       }
     },
@@ -44,6 +46,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET menus",
         "tags": ["auth"]
       }
     },
@@ -61,6 +64,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST logout",
         "tags": ["auth"]
       }
     },
@@ -73,6 +77,7 @@
             "description": "Start password recovery flow."
           }
         },
+        "summary": "POST recuperar-senha",
         "tags": ["auth"]
       }
     },
@@ -85,6 +90,7 @@
             "description": "Confirm recovered password."
           }
         },
+        "summary": "POST confirmar-nova-senha",
         "tags": ["auth"]
       }
     },
@@ -102,7 +108,39 @@
             "bearer": []
           }
         ],
+        "summary": "PUT alterar-senha",
         "tags": ["auth"]
+      }
+    },
+    "/api/portal/v1/auth/govbr/sign": {
+      "post": {
+        "operationId": "GovBrSignController_initiate",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Create a local gov.br advanced signature sandbox request."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST Initiate",
+        "tags": ["portal-govbr-sign"]
+      }
+    },
+    "/api/portal/v1/auth/govbr/sign/callback": {
+      "get": {
+        "operationId": "GovBrSignController_callback",
+        "parameters": [],
+        "responses": {
+          "302": {
+            "description": "Apply the local sandbox gov.br decision and redirect back to the portal callback route."
+          }
+        },
+        "summary": "GET callback",
+        "tags": ["portal-govbr-sign"]
       }
     },
     "/api/v1/iam/permissions": {
@@ -119,6 +157,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List permissions",
         "tags": ["iam"]
       }
     },
@@ -277,6 +316,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET logs",
         "tags": ["audit"]
       }
     },
@@ -303,6 +343,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET logs/:id",
         "tags": ["audit"]
       }
     },
@@ -330,6 +371,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST exportacoes",
         "tags": ["audit"]
       }
     },
@@ -356,6 +398,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET exportacoes/:job_id",
         "tags": ["audit"]
       }
     },
@@ -436,6 +479,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["users"]
       },
       "post": {
@@ -461,6 +505,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["users"]
       }
     },
@@ -497,6 +542,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id",
         "tags": ["users"]
       }
     },
@@ -533,6 +579,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT :id/perfis",
         "tags": ["users"]
       }
     },
@@ -569,6 +616,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT :id/papeis-diretos",
         "tags": ["users"]
       }
     },
@@ -586,6 +634,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST admin/usuarios/convite",
         "tags": ["users"]
       }
     },
@@ -612,6 +661,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE admin/convites/:id",
         "tags": ["users"]
       }
     },
@@ -633,6 +683,7 @@
             "description": "Accept invitation and create credentials."
           }
         },
+        "summary": "POST :token/aceitar",
         "tags": ["users"]
       }
     },
@@ -695,6 +746,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["profiles"]
       },
       "post": {
@@ -720,6 +772,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["profiles"]
       }
     },
@@ -746,6 +799,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id",
         "tags": ["profiles"]
       },
       "put": {
@@ -780,6 +834,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT :id",
         "tags": ["profiles"]
       },
       "delete": {
@@ -804,6 +859,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE :id",
         "tags": ["profiles"]
       }
     },
@@ -840,6 +896,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT :id/papeis",
         "tags": ["profiles"]
       }
     },
@@ -857,6 +914,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET sistema",
         "tags": ["system-parameters"]
       },
       "put": {
@@ -882,6 +940,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT sistema",
         "tags": ["system-parameters"]
       }
     },
@@ -899,6 +958,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET globais",
         "tags": ["system-parameters"]
       }
     },
@@ -935,6 +995,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT globais/:chave",
         "tags": ["system-parameters"]
       }
     },
@@ -952,6 +1013,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET teto-remuneratorio",
         "tags": ["system-parameters"]
       },
       "put": {
@@ -977,6 +1039,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT teto-remuneratorio",
         "tags": ["system-parameters"]
       }
     },
@@ -994,6 +1057,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET ats",
         "tags": ["system-parameters"]
       },
       "put": {
@@ -1019,6 +1083,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT ats",
         "tags": ["system-parameters"]
       }
     },
@@ -1055,6 +1120,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :chave",
         "tags": ["feature-flags"]
       }
     },
@@ -1072,6 +1138,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["menus"]
       },
       "post": {
@@ -1087,6 +1154,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["menus"]
       }
     },
@@ -1113,6 +1181,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT :id",
         "tags": ["menus"]
       },
       "delete": {
@@ -1137,6 +1206,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE :id",
         "tags": ["menus"]
       }
     },
@@ -1173,6 +1243,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH feature-flags/:chave",
         "tags": ["admin"]
       }
     },
@@ -1190,6 +1261,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST tenants",
         "tags": ["admin"]
       }
     },
@@ -1216,6 +1288,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH tenants/:id",
         "tags": ["admin"]
       }
     },
@@ -1242,6 +1315,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST tenants/:id/importacao",
         "tags": ["admin"]
       }
     },
@@ -1276,6 +1350,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET tenants/:id/importacao/:job_id/progresso",
         "tags": ["admin"]
       }
     },
@@ -1302,6 +1377,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST esocial/eventos/:id/reprocessar",
         "tags": ["admin"]
       }
     },
@@ -1319,6 +1395,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT esocial/certificado",
         "tags": ["admin"]
       }
     },
@@ -1345,6 +1422,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["tax-rate"]
       },
       "put": {
@@ -1370,6 +1448,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT Upsert",
         "tags": ["tax-rate"]
       }
     },
@@ -1396,6 +1475,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["tax-rate"]
       },
       "put": {
@@ -1421,6 +1501,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT Upsert",
         "tags": ["tax-rate"]
       }
     },
@@ -1483,6 +1564,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["notifications"]
       }
     },
@@ -1500,6 +1582,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET stream",
         "tags": ["notifications"]
       }
     },
@@ -1517,6 +1600,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET unread-count",
         "tags": ["notifications"]
       }
     },
@@ -1534,6 +1618,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH marcar-todas-lidas",
         "tags": ["notifications"]
       }
     },
@@ -1570,6 +1655,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id",
         "tags": ["notifications"]
       }
     },
@@ -1587,6 +1673,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET preferencias-notificacao",
         "tags": ["notifications"]
       },
       "put": {
@@ -1612,6 +1699,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT preferencias-notificacao",
         "tags": ["notifications"]
       }
     },
@@ -1674,6 +1762,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["documents"]
       }
     },
@@ -1701,6 +1790,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST presigned-upload",
         "tags": ["documents"]
       }
     },
@@ -1718,6 +1808,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :anexo_id/confirmar",
         "tags": ["documents"]
       }
     },
@@ -1744,6 +1835,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE :id",
         "tags": ["documents"]
       }
     },
@@ -1770,6 +1862,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/download",
         "tags": ["documents"]
       }
     },
@@ -1787,6 +1880,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET portal/v1/auth/me",
         "tags": ["portal"]
       }
     },
@@ -1804,6 +1898,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET portal/v1/auth/govbr/status",
         "tags": ["portal"]
       }
     },
@@ -1821,6 +1916,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/meus-dados/cadastro",
         "tags": ["portal"]
       }
     },
@@ -1838,6 +1934,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/meus-dados/endereco",
         "tags": ["portal"]
       }
     },
@@ -1855,6 +1952,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/meus-dados/contato",
         "tags": ["portal"]
       }
     },
@@ -1872,6 +1970,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/meus-dados/dependentes",
         "tags": ["portal"]
       }
     },
@@ -1889,6 +1988,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/meus-dados/documentos",
         "tags": ["portal"]
       }
     },
@@ -1906,6 +2006,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/meus-dados/cargo",
         "tags": ["portal"]
       }
     },
@@ -1923,6 +2024,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/minha-carreira",
         "tags": ["portal"]
       }
     },
@@ -1940,6 +2042,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/contracheques/ferias",
         "tags": ["portal"]
       }
     },
@@ -1957,6 +2060,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/termos-rescisao",
         "tags": ["portal"]
       }
     },
@@ -1983,6 +2087,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET v1/portal/contracheque/:competence",
         "tags": ["portal"]
       }
     },
@@ -2010,69 +2115,27 @@
             "bearer": []
           }
         ],
+        "summary": "PUT v1/portal/meus-dados/:section",
         "tags": ["portal"]
       }
     },
-    "/api/v1/portal/payslips": {
-      "get": {
-        "operationId": "PayslipController_listPortal",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "List authenticated employee payslip PDF files."
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": ["payslips"]
-      }
-    },
-    "/api/v1/portal/payslips/{id}/pdf": {
-      "get": {
-        "operationId": "PayslipController_portalDownload",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Download authenticated employee payslip PDF."
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": ["payslips"]
-      }
-    },
-    "/api/v1/admin/payslip-batches": {
+    "/api/portal/v1/lgpd/direitos": {
       "post": {
-        "operationId": "PayslipController_createBatch",
+        "operationId": "LgpdRightsController_create",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PayslipBatchRequestDto"
+                "$ref": "#/components/schemas/CreateLgpdRightsRequestDto"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Generate official payslip PDFs for a competence."
+            "description": "Create an LGPD Art. 18 rights request ticket."
           }
         },
         "security": [
@@ -2080,77 +2143,8 @@
             "bearer": []
           }
         ],
-        "tags": ["payslips"]
-      }
-    },
-    "/api/v1/portal/yearly-income": {
-      "get": {
-        "operationId": "YearlyIncomeController_listPortal",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "List authenticated employee yearly income reports."
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": ["yearly-income"]
-      }
-    },
-    "/api/v1/portal/yearly-income/{year}/pdf": {
-      "get": {
-        "operationId": "YearlyIncomeController_portalDownload",
-        "parameters": [
-          {
-            "name": "year",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Download authenticated employee yearly income PDF."
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": ["yearly-income"]
-      }
-    },
-    "/api/v1/admin/yearly-income-batches": {
-      "post": {
-        "operationId": "YearlyIncomeController_createBatch",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/YearlyIncomeBatchRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Generate yearly income PDFs for a year-base."
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": ["yearly-income"]
+        "summary": "POST Create",
+        "tags": ["portal-lgpd"]
       }
     },
     "/api/v1/avaliacao/desempenhos": {
@@ -2167,6 +2161,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET desempenhos",
         "tags": ["avaliacao"]
       },
       "post": {
@@ -2192,6 +2187,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST desempenhos",
         "tags": ["avaliacao"]
       }
     },
@@ -2228,6 +2224,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH desempenhos/:id",
         "tags": ["avaliacao"]
       }
     },
@@ -2245,6 +2242,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET progressoes",
         "tags": ["avaliacao"]
       },
       "post": {
@@ -2270,6 +2268,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST progressoes",
         "tags": ["avaliacao"]
       }
     },
@@ -2287,6 +2286,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET simulacoes",
         "tags": ["avaliacao"]
       },
       "post": {
@@ -2312,6 +2312,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST simulacoes",
         "tags": ["avaliacao"]
       }
     },
@@ -2329,6 +2330,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET planos-cargos",
         "tags": ["avaliacao"]
       },
       "post": {
@@ -2354,6 +2356,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST planos-cargos",
         "tags": ["avaliacao"]
       }
     },
@@ -2390,6 +2393,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH planos-cargos/:id",
         "tags": ["avaliacao"]
       }
     },
@@ -2426,6 +2430,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST desempenhos/:id/ficha",
         "tags": ["avaliacao"]
       }
     },
@@ -2462,6 +2467,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST ciclos/:periodo/relatorio",
         "tags": ["avaliacao"]
       }
     },
@@ -2479,6 +2485,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["avaliacao"]
       },
       "post": {
@@ -2504,6 +2511,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["avaliacao"]
       }
     },
@@ -2540,6 +2548,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id",
         "tags": ["avaliacao"]
       }
     },
@@ -2574,6 +2583,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/trilha",
         "tags": ["avaliacao"]
       }
     },
@@ -2600,6 +2610,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET a-vencer",
         "tags": ["avaliacao"]
       }
     },
@@ -2627,6 +2638,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["avaliacao"]
       }
     },
@@ -2654,6 +2666,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["avaliacao"]
       }
     },
@@ -2689,6 +2702,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET eligibility",
         "tags": ["avaliacao"]
       }
     },
@@ -2716,6 +2730,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST simulate",
         "tags": ["avaliacao"]
       }
     },
@@ -2742,6 +2757,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/apply",
         "tags": ["avaliacao"]
       }
     },
@@ -2768,6 +2784,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :salaryRangeLevelId/timeline",
         "tags": ["avaliacao"]
       }
     },
@@ -2795,7 +2812,226 @@
             "bearer": []
           }
         ],
+        "summary": "POST reajuste-massa",
         "tags": ["avaliacao"]
+      }
+    },
+    "/api/v1/report-service/health": {
+      "get": {
+        "operationId": "ReportServiceController_health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Report service health."
+          }
+        },
+        "summary": "GET health",
+        "tags": ["report-service"]
+      }
+    },
+    "/api/v1/report-service/status": {
+      "get": {
+        "operationId": "ReportServiceController_status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Report service runtime status."
+          }
+        },
+        "summary": "GET status",
+        "tags": ["report-service"]
+      }
+    },
+    "/api/v1/report-service/requests": {
+      "post": {
+        "operationId": "ReportServiceController_queueReport",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RuntimeReportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queue a report request."
+          }
+        },
+        "summary": "POST requests",
+        "tags": ["report-service"]
+      }
+    },
+    "/api/v1/report-service/poll": {
+      "post": {
+        "operationId": "ReportServiceController_pollOnce",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportServicePollDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Process pending report requests."
+          }
+        },
+        "summary": "POST poll",
+        "tags": ["report-service"]
+      }
+    },
+    "/api/v1/portal/payslips": {
+      "get": {
+        "operationId": "PayslipController_listPortal",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List authenticated employee payslip PDF files."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET v1/portal/payslips",
+        "tags": ["payslips"]
+      }
+    },
+    "/api/v1/portal/payslips/{id}/pdf": {
+      "get": {
+        "operationId": "PayslipController_portalDownload",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Download authenticated employee payslip PDF."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET v1/portal/payslips/:id/pdf",
+        "tags": ["payslips"]
+      }
+    },
+    "/api/v1/admin/payslip-batches": {
+      "post": {
+        "operationId": "PayslipController_createBatch",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayslipBatchRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate official payslip PDFs for a competence."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST v1/admin/payslip-batches",
+        "tags": ["payslips"]
+      }
+    },
+    "/api/v1/portal/yearly-income": {
+      "get": {
+        "operationId": "YearlyIncomeController_listPortal",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List authenticated employee yearly income reports."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET v1/portal/yearly-income",
+        "tags": ["yearly-income"]
+      }
+    },
+    "/api/v1/portal/yearly-income/{year}/pdf": {
+      "get": {
+        "operationId": "YearlyIncomeController_portalDownload",
+        "parameters": [
+          {
+            "name": "year",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Download authenticated employee yearly income PDF."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET v1/portal/yearly-income/:year/pdf",
+        "tags": ["yearly-income"]
+      }
+    },
+    "/api/v1/admin/yearly-income-batches": {
+      "post": {
+        "operationId": "YearlyIncomeController_createBatch",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/YearlyIncomeBatchRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate yearly income PDFs for a year-base."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST v1/admin/yearly-income-batches",
+        "tags": ["yearly-income"]
       }
     },
     "/api/v1/ponto/jornadas": {
@@ -2812,6 +3048,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["ponto-work-schedule"]
       },
       "post": {
@@ -2837,6 +3074,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["ponto-work-schedule"]
       }
     },
@@ -2863,6 +3101,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["ponto-assignment"]
       },
       "post": {
@@ -2888,6 +3127,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Assign",
         "tags": ["ponto-assignment"]
       }
     },
@@ -2922,6 +3162,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :employeeId",
         "tags": ["ponto-time-record"]
       }
     },
@@ -2949,6 +3190,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["ponto-time-record"]
       }
     },
@@ -2976,6 +3218,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Open",
         "tags": ["ponto-timesheet-period"]
       }
     },
@@ -2993,6 +3236,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["ponto-rep-device"]
       },
       "post": {
@@ -3018,6 +3262,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["ponto-rep-device"]
       }
     },
@@ -3044,6 +3289,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :repDeviceId",
         "tags": ["ponto-rep-device"]
       }
     },
@@ -3061,6 +3307,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET batches",
         "tags": ["ponto-rep-ingestion"]
       }
     },
@@ -3087,6 +3334,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET batches/:batchId/original",
         "tags": ["ponto-rep-ingestion"]
       }
     },
@@ -3123,6 +3371,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :repDeviceId/batches",
         "tags": ["ponto-rep-ingestion"]
       }
     },
@@ -3140,6 +3389,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET exports",
         "tags": ["ponto-afd"]
       },
       "post": {
@@ -3165,6 +3415,63 @@
             "bearer": []
           }
         ],
+        "summary": "POST exports",
+        "tags": ["ponto-afd"]
+      }
+    },
+    "/api/v1/ponto/afd/afdt": {
+      "post": {
+        "operationId": "AfdController_generateAfdt",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAfdExportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Generated AFDT flat file."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST afdt",
+        "tags": ["ponto-afd"]
+      }
+    },
+    "/api/v1/ponto/afd/acjef": {
+      "post": {
+        "operationId": "AfdController_generateAcjef",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAfdExportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Generated ACJEF flat file."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST acjef",
         "tags": ["ponto-afd"]
       }
     },
@@ -3191,6 +3498,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET exports/:afdExportId/download",
         "tags": ["ponto-afd"]
       }
     },
@@ -3208,6 +3516,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET imports",
         "tags": ["ponto-afd"]
       },
       "post": {
@@ -3233,6 +3542,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST imports",
         "tags": ["ponto-afd"]
       }
     },
@@ -3250,6 +3560,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET padroes",
         "tags": ["ponto-shift-pattern"]
       },
       "post": {
@@ -3275,6 +3586,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST padroes",
         "tags": ["ponto-shift-pattern"]
       }
     },
@@ -3301,6 +3613,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET atribuicoes",
         "tags": ["ponto-shift-pattern"]
       },
       "post": {
@@ -3326,6 +3639,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST atribuicoes",
         "tags": ["ponto-shift-pattern"]
       }
     },
@@ -3362,6 +3676,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH atribuicoes/:shiftAssignmentId",
         "tags": ["ponto-shift-pattern"]
       }
     },
@@ -3379,6 +3694,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET rosters",
         "tags": ["ponto-duty-roster"]
       },
       "post": {
@@ -3404,6 +3720,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST rosters",
         "tags": ["ponto-duty-roster"]
       }
     },
@@ -3446,6 +3763,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET rosters/projetar",
         "tags": ["ponto-duty-roster"]
       }
     },
@@ -3472,6 +3790,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST rosters/:dutyRosterId/publicar",
         "tags": ["ponto-duty-roster"]
       }
     },
@@ -3498,6 +3817,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST rosters/:dutyRosterId/travar",
         "tags": ["ponto-duty-roster"]
       }
     },
@@ -3524,6 +3844,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET proximas",
         "tags": ["ponto-duty-roster"]
       }
     },
@@ -3541,6 +3862,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["ponto-hour-bank"]
       },
       "post": {
@@ -3566,6 +3888,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["ponto-hour-bank"]
       }
     },
@@ -3592,6 +3915,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :hourBankId/movimentos",
         "tags": ["ponto-hour-bank"]
       }
     },
@@ -3619,6 +3943,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST acumular-dia",
         "tags": ["ponto-hour-bank"]
       }
     },
@@ -3646,6 +3971,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST compensar",
         "tags": ["ponto-hour-bank"]
       }
     },
@@ -3673,6 +3999,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST ajuste-manual",
         "tags": ["ponto-hour-bank"]
       }
     },
@@ -3700,6 +4027,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST zerar-vencidos",
         "tags": ["ponto-hour-bank"]
       }
     },
@@ -3726,6 +4054,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["ponto-justifications"]
       },
       "post": {
@@ -3751,6 +4080,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Request",
         "tags": ["ponto-justifications"]
       }
     },
@@ -3787,6 +4117,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/decide",
         "tags": ["ponto-justifications"]
       }
     },
@@ -3813,6 +4144,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/cancel",
         "tags": ["ponto-justifications"]
       }
     },
@@ -3840,6 +4172,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST preview",
         "tags": ["ponto-payroll-bridge"]
       }
     },
@@ -3867,6 +4200,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST apply",
         "tags": ["ponto-payroll-bridge"]
       }
     },
@@ -3893,6 +4227,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET templates",
         "tags": ["ponto-biometria"]
       },
       "post": {
@@ -3918,6 +4253,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST templates",
         "tags": ["ponto-biometria"]
       }
     },
@@ -3945,6 +4281,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST consents",
         "tags": ["ponto-biometria"]
       }
     },
@@ -3971,6 +4308,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE employees/:employeeId/consent",
         "tags": ["ponto-biometria"]
       }
     },
@@ -3998,6 +4336,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST matches",
         "tags": ["ponto-biometria"]
       }
     },
@@ -4024,6 +4363,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET templates",
         "tags": ["ponto-face"]
       },
       "post": {
@@ -4049,6 +4389,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST templates",
         "tags": ["ponto-face"]
       }
     },
@@ -4076,6 +4417,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST consents",
         "tags": ["ponto-face"]
       }
     },
@@ -4102,6 +4444,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET employees/:employeeId/status",
         "tags": ["ponto-face"]
       }
     },
@@ -4128,6 +4471,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE employees/:employeeId/consent",
         "tags": ["ponto-face"]
       }
     },
@@ -4155,6 +4499,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST matches",
         "tags": ["ponto-face"]
       }
     },
@@ -4182,6 +4527,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST clock",
         "tags": ["ponto-face"]
       }
     },
@@ -4199,6 +4545,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET threshold",
         "tags": ["ponto-face"]
       },
       "put": {
@@ -4224,6 +4571,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT threshold",
         "tags": ["ponto-face"]
       }
     },
@@ -4251,6 +4599,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST devices",
         "tags": ["ponto-mobile"]
       }
     },
@@ -4278,6 +4627,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST consents",
         "tags": ["ponto-mobile"]
       }
     },
@@ -4305,6 +4655,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST clock",
         "tags": ["ponto-mobile"]
       }
     },
@@ -4332,6 +4683,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST geofences",
         "tags": ["ponto-mobile"]
       }
     },
@@ -4349,6 +4701,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET dados",
         "tags": ["external"]
       }
     },
@@ -4366,6 +4719,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET dicionario/entidades",
         "tags": ["external"]
       }
     },
@@ -4383,6 +4737,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["esocial-certificates"]
       },
       "post": {
@@ -4408,6 +4763,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Upload",
         "tags": ["esocial-certificates"]
       }
     },
@@ -4444,6 +4800,7 @@
             "bearer": []
           }
         ],
+        "summary": "PUT :certificateId/rotacao",
         "tags": ["esocial-certificates"]
       }
     },
@@ -4470,6 +4827,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE :certificateId",
         "tags": ["esocial-certificates"]
       }
     },
@@ -4487,6 +4845,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET Status",
         "tags": ["esocial"]
       }
     },
@@ -4513,6 +4872,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST s2210/:catEmissionId/emitir",
         "tags": ["esocial"]
       }
     },
@@ -4539,6 +4899,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST s2220/:asoRecordId/retry",
         "tags": ["esocial"]
       }
     },
@@ -4565,6 +4926,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST s2240/:environmentalExposureId/emitir",
         "tags": ["esocial"]
       }
     },
@@ -4591,6 +4953,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST s2230/:pendingId/emitir",
         "tags": ["esocial"]
       }
     },
@@ -4617,6 +4980,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST s2299/:pendingId/emitir",
         "tags": ["esocial"]
       }
     },
@@ -4651,6 +5015,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET Status",
         "tags": ["esocial"]
       }
     },
@@ -4687,6 +5052,44 @@
             "bearer": []
           }
         ],
+        "summary": "POST runs/:payrollRunId/s1200/emitir",
+        "tags": ["esocial"]
+      }
+    },
+    "/api/v1/esocial/folha-periodica/runs/{payrollRunId}/s1202/emitir": {
+      "post": {
+        "operationId": "ES04Controller_emitS1202",
+        "parameters": [
+          {
+            "name": "payrollRunId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmitPeriodicPayrollDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Emit S-1202 RPPS remuneration events."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST runs/:payrollRunId/s1202/emitir",
         "tags": ["esocial"]
       }
     },
@@ -4723,6 +5126,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST payments/:paymentBatchId/s1210/emitir",
         "tags": ["esocial"]
       }
     },
@@ -4757,6 +5161,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET Status",
         "tags": ["esocial"]
       }
     },
@@ -4784,6 +5189,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST fechar",
         "tags": ["esocial"]
       }
     },
@@ -4811,6 +5217,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST totalizadores",
         "tags": ["esocial"]
       }
     },
@@ -4818,9 +5225,19 @@
       "post": {
         "operationId": "ES05Controller_reopen",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReopenCompetenceDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "S-1298 reopening is intentionally out of scope."
+            "description": "Emit S-1298 to reopen an accepted periodic competence."
           }
         },
         "security": [
@@ -4828,6 +5245,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST reabrir",
         "tags": ["esocial"]
       }
     },
@@ -4845,6 +5263,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET events/excludable",
         "tags": ["esocial"]
       }
     },
@@ -4862,6 +5281,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET exclusions",
         "tags": ["esocial"]
       }
     },
@@ -4898,6 +5318,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST events/:id/exclude",
         "tags": ["esocial"]
       }
     },
@@ -4934,6 +5355,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST exclusions/:requestId/accept",
         "tags": ["esocial"]
       }
     },
@@ -4951,6 +5373,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET Status",
         "tags": ["esocial"]
       }
     },
@@ -4978,6 +5401,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST emitir",
         "tags": ["esocial"]
       }
     },
@@ -5014,6 +5438,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :eventKind/emitir",
         "tags": ["esocial"]
       }
     },
@@ -5031,6 +5456,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET Status",
         "tags": ["esocial"]
       }
     },
@@ -5067,6 +5493,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :employeeId/s2200/emitir",
         "tags": ["esocial"]
       }
     },
@@ -5103,6 +5530,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :employeeId/s2205/emitir",
         "tags": ["esocial"]
       }
     },
@@ -5129,6 +5557,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :orderId",
         "tags": ["esocial"]
       }
     },
@@ -5155,6 +5584,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :changeId",
         "tags": ["esocial"]
       }
     },
@@ -5172,6 +5602,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List batches",
         "tags": ["esocial-submission"]
       }
     },
@@ -5189,6 +5620,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET circuitos",
         "tags": ["esocial-submission"]
       }
     },
@@ -5215,6 +5647,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :batchId/retry",
         "tags": ["esocial-submission"]
       }
     },
@@ -5241,6 +5674,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET falhas",
         "tags": ["esocial-retornos"]
       }
     },
@@ -5267,6 +5701,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET eventos/:eventId",
         "tags": ["esocial-retornos"]
       }
     },
@@ -5293,6 +5728,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST eventos/:eventId/retry",
         "tags": ["esocial-retornos"]
       }
     },
@@ -5319,6 +5755,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST eventos/:eventId/tratado",
         "tags": ["esocial-retornos"]
       }
     },
@@ -5353,6 +5790,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :employeeId",
         "tags": ["pis-pasep"]
       }
     },
@@ -5380,6 +5818,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Upload",
         "tags": ["payment"]
       }
     },
@@ -5406,6 +5845,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/process",
         "tags": ["payment"]
       }
     },
@@ -5433,6 +5873,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Process",
         "tags": ["payment-return-files"]
       }
     },
@@ -5459,6 +5900,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/reprocess-rejected",
         "tags": ["payment-return-files"]
       }
     },
@@ -5493,6 +5935,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["fiscal-dctfweb"]
       }
     },
@@ -5519,6 +5962,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id",
         "tags": ["fiscal-dctfweb"]
       }
     },
@@ -5546,6 +5990,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST gerar",
         "tags": ["fiscal-dctfweb"]
       }
     },
@@ -5572,6 +6017,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/assinar",
         "tags": ["fiscal-dctfweb"]
       }
     },
@@ -5598,6 +6044,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/transmitir",
         "tags": ["fiscal-dctfweb"]
       }
     },
@@ -5624,6 +6071,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["fiscal-dirf"]
       }
     },
@@ -5650,6 +6098,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id",
         "tags": ["fiscal-dirf"]
       }
     },
@@ -5676,6 +6125,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/txt",
         "tags": ["fiscal-dirf"]
       }
     },
@@ -5703,7 +6153,160 @@
             "bearer": []
           }
         ],
+        "summary": "POST gerar",
         "tags": ["fiscal-dirf"]
+      }
+    },
+    "/api/v1/admin/fiscal/efd-reinf": {
+      "get": {
+        "operationId": "EfdReinfController_list",
+        "parameters": [
+          {
+            "name": "year",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "month",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "eventType",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List EFD-Reinf R-4000 events."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET List",
+        "tags": ["fiscal-efd-reinf"]
+      }
+    },
+    "/api/v1/admin/fiscal/efd-reinf/{id}": {
+      "get": {
+        "operationId": "EfdReinfController_find",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get an EFD-Reinf event with items."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET :id",
+        "tags": ["fiscal-efd-reinf"]
+      }
+    },
+    "/api/v1/admin/fiscal/efd-reinf/gerar": {
+      "post": {
+        "operationId": "EfdReinfController_generate",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateEfdReinfDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate an EFD-Reinf R-4000 event."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST gerar",
+        "tags": ["fiscal-efd-reinf"]
+      }
+    },
+    "/api/v1/admin/fiscal/efd-reinf/{id}/assinar": {
+      "post": {
+        "operationId": "EfdReinfController_sign",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Sign an EFD-Reinf event with the tenant ICP-Brasil certificate."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST :id/assinar",
+        "tags": ["fiscal-efd-reinf"]
+      }
+    },
+    "/api/v1/admin/fiscal/efd-reinf/{id}/transmitir": {
+      "post": {
+        "operationId": "EfdReinfController_transmit",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Transmit a signed EFD-Reinf event to RFB or sandbox endpoint."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST :id/transmitir",
+        "tags": ["fiscal-efd-reinf"]
       }
     },
     "/api/v1/admin/fiscal/gps": {
@@ -5737,6 +6340,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["fiscal-gps"]
       },
       "post": {
@@ -5762,6 +6366,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Generate",
         "tags": ["fiscal-gps"]
       }
     },
@@ -5779,6 +6384,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET payment-codes",
         "tags": ["fiscal-gps"]
       }
     },
@@ -5805,6 +6411,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id",
         "tags": ["fiscal-gps"]
       }
     },
@@ -5831,7 +6438,365 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/txt",
         "tags": ["fiscal-gps"]
+      }
+    },
+    "/api/v1/admin/lgpd/ropa": {
+      "get": {
+        "operationId": "LgpdRopaController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List LGPD ROPA entries for the tenant."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET List",
+        "tags": ["lgpd"]
+      },
+      "post": {
+        "operationId": "LgpdRopaController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRopaEntryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an LGPD ROPA entry."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST Create",
+        "tags": ["lgpd"]
+      }
+    },
+    "/api/v1/admin/lgpd/ropa/{id}": {
+      "patch": {
+        "operationId": "LgpdRopaController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRopaEntryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patch an LGPD ROPA entry."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "PATCH :id",
+        "tags": ["lgpd"]
+      }
+    },
+    "/api/v1/admin/lgpd/incidents": {
+      "get": {
+        "operationId": "LgpdIncidentsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List LGPD RCIS security incidents."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET List",
+        "tags": ["lgpd"]
+      },
+      "post": {
+        "operationId": "LgpdIncidentsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLgpdIncidentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a detected LGPD RCIS incident."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST Create",
+        "tags": ["lgpd"]
+      }
+    },
+    "/api/v1/admin/lgpd/incidents/{id}/triage": {
+      "patch": {
+        "operationId": "LgpdIncidentsController_triage",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriageLgpdIncidentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Move an LGPD RCIS incident to TRIAGED."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "PATCH :id/triage",
+        "tags": ["lgpd"]
+      }
+    },
+    "/api/v1/admin/lgpd/incidents/{id}/report": {
+      "patch": {
+        "operationId": "LgpdIncidentsController_report",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportLgpdIncidentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Move an LGPD RCIS incident to REPORTED."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "PATCH :id/report",
+        "tags": ["lgpd"]
+      }
+    },
+    "/api/v1/admin/lgpd/incidents/{id}/complement": {
+      "patch": {
+        "operationId": "LgpdIncidentsController_complement",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComplementLgpdIncidentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Move an LGPD RCIS incident to COMPLEMENTED."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "PATCH :id/complement",
+        "tags": ["lgpd"]
+      }
+    },
+    "/api/v1/admin/lgpd/incidents/{id}/close": {
+      "patch": {
+        "operationId": "LgpdIncidentsController_close",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloseLgpdIncidentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Move an LGPD RCIS incident to CLOSED."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "PATCH :id/close",
+        "tags": ["lgpd"]
+      }
+    },
+    "/api/v1/public/lai/{tenantId}/requests": {
+      "post": {
+        "operationId": "LaiRequestsController_create",
+        "parameters": [
+          {
+            "name": "tenantId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLaiRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "LAI access request received."
+          }
+        },
+        "summary": "POST Create",
+        "tags": ["public-lai"]
+      }
+    },
+    "/api/v1/public/lai/{tenantId}/requests/{protocol}/status": {
+      "get": {
+        "operationId": "LaiRequestsController_status",
+        "parameters": [
+          {
+            "name": "tenantId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "protocol",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "LAI access request public status."
+          }
+        },
+        "summary": "GET :protocol/status",
+        "tags": ["public-lai"]
+      }
+    },
+    "/api/v1/public/lgpd/encarregado": {
+      "get": {
+        "operationId": "LgpdDpoController_encarregado",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public LGPD DPO contact."
+          }
+        },
+        "summary": "GET encarregado",
+        "tags": ["public-lgpd"]
       }
     },
     "/api/publico/v1/{tenant}/transparencia/folha": {
@@ -5896,6 +6861,7 @@
             "description": "Public payroll transparency listing."
           }
         },
+        "summary": "GET folha",
         "tags": ["publico"]
       }
     },
@@ -5917,6 +6883,7 @@
             "description": "Public payroll transparency snapshot."
           }
         },
+        "summary": "GET payroll",
         "tags": ["public-transparency"]
       }
     },
@@ -5938,6 +6905,7 @@
             "description": ""
           }
         },
+        "summary": "GET payroll.csv",
         "tags": ["public-transparency"]
       }
     },
@@ -5960,6 +6928,7 @@
             "description": ""
           }
         },
+        "summary": "POST publish",
         "tags": ["public-transparency"]
       }
     },
@@ -6022,6 +6991,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List resources",
         "tags": ["gestao"]
       }
     },
@@ -6092,6 +7062,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :resource",
         "tags": ["gestao"]
       },
       "post": {
@@ -6126,6 +7097,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :resource",
         "tags": ["gestao"]
       }
     },
@@ -6170,6 +7142,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :resource/:id",
         "tags": ["gestao"]
       },
       "delete": {
@@ -6202,6 +7175,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE :resource/:id",
         "tags": ["gestao"]
       }
     },
@@ -6264,6 +7238,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["gestao"]
       },
       "post": {
@@ -6289,6 +7264,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["gestao"]
       }
     },
@@ -6351,6 +7327,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["gestao"]
       },
       "post": {
@@ -6376,6 +7353,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["gestao"]
       }
     },
@@ -6412,6 +7390,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id",
         "tags": ["gestao"]
       }
     },
@@ -6438,6 +7417,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/tabela-salarial",
         "tags": ["gestao"]
       }
     },
@@ -6455,6 +7435,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["gestao"]
       },
       "post": {
@@ -6480,6 +7461,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["gestao"]
       }
     },
@@ -6506,6 +7488,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["gestao"]
       },
       "post": {
@@ -6540,6 +7523,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["gestao"]
       }
     },
@@ -6602,6 +7586,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET funcionarios",
         "tags": ["rh"]
       },
       "post": {
@@ -6627,6 +7612,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST funcionarios",
         "tags": ["rh"]
       }
     },
@@ -6644,6 +7630,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET funcionarios/cadastral-changes",
         "tags": ["rh"]
       }
     },
@@ -6680,6 +7667,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST funcionarios/cadastral-changes/:id/approve",
         "tags": ["rh"]
       }
     },
@@ -6716,6 +7704,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST funcionarios/cadastral-changes/:id/reject",
         "tags": ["rh"]
       }
     },
@@ -6742,6 +7731,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET funcionarios/:id/dossie",
         "tags": ["rh"]
       }
     },
@@ -6792,6 +7782,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET funcionarios/:id/historico",
         "tags": ["rh"]
       }
     },
@@ -6818,6 +7809,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET funcionarios/:id/tempo-servico",
         "tags": ["rh"]
       },
       "post": {
@@ -6852,6 +7844,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST funcionarios/:id/tempo-servico",
         "tags": ["rh"]
       }
     },
@@ -6878,6 +7871,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET funcionarios/:id/abono-permanencia",
         "tags": ["rh"]
       },
       "post": {
@@ -6912,6 +7906,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST funcionarios/:id/abono-permanencia",
         "tags": ["rh"]
       }
     },
@@ -6938,6 +7933,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET pericia/prontuarios/:id/laudo/pdf",
         "tags": ["rh"]
       }
     },
@@ -6964,6 +7960,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET recadastramento/:recadastramento_id/comprovante",
         "tags": ["rh"]
       }
     },
@@ -7000,6 +7997,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST funcionarios/:func_rescisao/desligamento",
         "tags": ["rh"]
       }
     },
@@ -7036,6 +8034,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST funcionarios/:id/vinculos",
         "tags": ["rh"]
       }
     },
@@ -7098,6 +8097,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET afastamentos",
         "tags": ["rh"]
       },
       "post": {
@@ -7123,6 +8123,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST afastamentos",
         "tags": ["rh"]
       }
     },
@@ -7159,6 +8160,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH afastamentos/:id",
         "tags": ["rh"]
       },
       "delete": {
@@ -7183,6 +8185,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE afastamentos/:id",
         "tags": ["rh"]
       }
     },
@@ -7245,6 +8248,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET processos",
         "tags": ["rh"]
       },
       "post": {
@@ -7270,6 +8274,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST processos",
         "tags": ["rh"]
       }
     },
@@ -7306,6 +8311,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH processos/:id",
         "tags": ["rh"]
       },
       "delete": {
@@ -7330,6 +8336,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE processos/:id",
         "tags": ["rh"]
       }
     },
@@ -7392,6 +8399,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET processos-funcao",
         "tags": ["rh"]
       },
       "post": {
@@ -7417,6 +8425,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST processos-funcao",
         "tags": ["rh"]
       }
     },
@@ -7453,6 +8462,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH processos-funcao/:id",
         "tags": ["rh"]
       },
       "delete": {
@@ -7477,6 +8487,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE processos-funcao/:id",
         "tags": ["rh"]
       }
     },
@@ -7547,6 +8558,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET dependentes-beneficio",
         "tags": ["rh"]
       },
       "post": {
@@ -7581,6 +8593,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST dependentes-beneficio",
         "tags": ["rh"]
       }
     },
@@ -7617,6 +8630,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH dependentes-beneficio/:id",
         "tags": ["rh"]
       },
       "delete": {
@@ -7641,6 +8655,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE dependentes-beneficio/:id",
         "tags": ["rh"]
       }
     },
@@ -7711,6 +8726,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET contribuicoes-sindicais",
         "tags": ["rh"]
       },
       "post": {
@@ -7745,6 +8761,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST contribuicoes-sindicais",
         "tags": ["rh"]
       }
     },
@@ -7781,6 +8798,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH contribuicoes-sindicais/:id",
         "tags": ["rh"]
       },
       "delete": {
@@ -7805,6 +8823,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE contribuicoes-sindicais/:id",
         "tags": ["rh"]
       }
     },
@@ -7875,6 +8894,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET exercicios",
         "tags": ["rh"]
       },
       "post": {
@@ -7909,6 +8929,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST exercicios",
         "tags": ["rh"]
       }
     },
@@ -7945,6 +8966,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH exercicios/:id",
         "tags": ["rh"]
       },
       "delete": {
@@ -7969,6 +8991,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE exercicios/:id",
         "tags": ["rh"]
       }
     },
@@ -8039,6 +9062,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET pensoes-alimenticias",
         "tags": ["rh"]
       },
       "post": {
@@ -8073,6 +9097,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST pensoes-alimenticias",
         "tags": ["rh"]
       }
     },
@@ -8109,6 +9134,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH pensoes-alimenticias/:id",
         "tags": ["rh"]
       },
       "delete": {
@@ -8133,6 +9159,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE pensoes-alimenticias/:id",
         "tags": ["rh"]
       }
     },
@@ -8203,6 +9230,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET vales-transporte",
         "tags": ["rh"]
       },
       "post": {
@@ -8237,6 +9265,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST vales-transporte",
         "tags": ["rh"]
       }
     },
@@ -8273,6 +9302,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH vales-transporte/:id",
         "tags": ["rh"]
       },
       "delete": {
@@ -8297,6 +9327,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE vales-transporte/:id",
         "tags": ["rh"]
       }
     },
@@ -8331,6 +9362,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET saldo/:employee_id",
         "tags": ["rh"]
       }
     },
@@ -8358,6 +9390,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST programacao",
         "tags": ["rh"]
       }
     },
@@ -8384,6 +9417,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST programacao/:id/aprovar",
         "tags": ["rh"]
       }
     },
@@ -8410,6 +9444,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST programacao/:id/cancelar",
         "tags": ["rh"]
       }
     },
@@ -8436,6 +9471,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :employee_id",
         "tags": ["rh"]
       }
     },
@@ -8463,6 +9499,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST agendamento",
         "tags": ["rh"]
       }
     },
@@ -8490,6 +9527,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["rh"]
       }
     },
@@ -8516,6 +9554,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :employee_id",
         "tags": ["rh"]
       }
     },
@@ -8542,6 +9581,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/aprovar",
         "tags": ["rh"]
       }
     },
@@ -8568,6 +9608,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/cancelar",
         "tags": ["rh"]
       }
     },
@@ -8594,6 +9635,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["rh"]
       },
       "post": {
@@ -8619,6 +9661,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["rh"]
       }
     },
@@ -8645,6 +9688,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET employee/:employeeId",
         "tags": ["rh"]
       }
     },
@@ -8681,6 +9725,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/aprovar",
         "tags": ["rh"]
       }
     },
@@ -8707,6 +9752,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/cancelar",
         "tags": ["rh"]
       }
     },
@@ -8733,6 +9779,158 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/efetivar",
+        "tags": ["rh"]
+      }
+    },
+    "/api/v1/rh/organic-definitions": {
+      "get": {
+        "operationId": "OrganicDefinitionController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List organic staffing definitions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET List",
+        "tags": ["rh"]
+      },
+      "post": {
+        "operationId": "OrganicDefinitionController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganicDefinitionMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an organic staffing definition."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST Create",
+        "tags": ["rh"]
+      }
+    },
+    "/api/v1/rh/organic-definitions/{id}": {
+      "patch": {
+        "operationId": "OrganicDefinitionController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganicDefinitionMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update an organic staffing definition."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "PATCH :id",
+        "tags": ["rh"]
+      },
+      "delete": {
+        "operationId": "OrganicDefinitionController_deactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deactivate an organic staffing definition."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "DELETE :id",
         "tags": ["rh"]
       }
     },
@@ -8775,6 +9973,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET ficha-financeira",
         "tags": ["consultas"]
       }
     },
@@ -8809,6 +10008,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET ficha-funcional",
         "tags": ["consultas"]
       }
     },
@@ -8826,6 +10026,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET relatorios-situacao",
         "tags": ["consultas"]
       }
     },
@@ -8860,6 +10061,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET pagamentos-bloqueados",
         "tags": ["consultas"]
       }
     },
@@ -8886,6 +10088,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET historico-operacional",
         "tags": ["consultas"]
       }
     },
@@ -8903,6 +10106,95 @@
             "bearer": []
           }
         ],
+        "summary": "GET dashboards",
+        "tags": ["consultas"]
+      }
+    },
+    "/api/v1/consultas/business-days": {
+      "get": {
+        "operationId": "BusinessDaysController_getWorkingDays",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": true,
+            "in": "query",
+            "description": "Inclusive start date in ISO yyyy-mm-dd format.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": true,
+            "in": "query",
+            "description": "Inclusive end date in ISO yyyy-mm-dd format.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return configured working days between two inclusive dates."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET Get working days",
+        "tags": ["consultas"]
+      }
+    },
+    "/api/v1/consultas/batimento": {
+      "get": {
+        "operationId": "BatimentoController_createReport",
+        "parameters": [
+          {
+            "name": "payrollRunId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "competenceYear",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "competenceMonth",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "branchId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Create a folha batimento report request and return reconciliation assertions."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET Create report",
         "tags": ["consultas"]
       }
     },
@@ -8920,6 +10212,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET regras",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -8945,6 +10238,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST regras",
         "tags": ["previdenciario"]
       }
     },
@@ -8981,6 +10275,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH regras/:id",
         "tags": ["previdenciario"]
       }
     },
@@ -8998,6 +10293,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET simulacoes",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9023,6 +10319,147 @@
             "bearer": []
           }
         ],
+        "summary": "POST simulacoes",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/pedagio-100": {
+      "post": {
+        "operationId": "PrevidenciarioController_simulateEc103Pedagio100",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103Pedagio100Dto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 art. 20 Pedagio 100 transition rule."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/pedagio-100",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/pedagio-50": {
+      "post": {
+        "operationId": "PrevidenciarioController_simulateEc103Pedagio50",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103Pedagio50Dto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 art. 17 Pedagio 50 transition rule."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/pedagio-50",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/pontos": {
+      "post": {
+        "operationId": "PrevidenciarioController_simulateEc103Pontos",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103PontosDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 art. 4 points transition rule."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/pontos",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/idade-progressiva": {
+      "post": {
+        "operationId": "PrevidenciarioController_simulateEc103IdadeProgressiva",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103IdadeProgressivaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 art. 16 progressive age rule."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/idade-progressiva",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/atividade-risco-professor": {
+      "post": {
+        "operationId": "PrevidenciarioController_simulateEc103AtividadeRiscoProfessor",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103AtividadeRiscoProfessorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 risk-activity or federal teacher transition rules."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/atividade-risco-professor",
         "tags": ["previdenciario"]
       }
     },
@@ -9040,6 +10477,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET aposentadorias",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9065,6 +10503,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST aposentadorias",
         "tags": ["previdenciario"]
       }
     },
@@ -9082,6 +10521,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET pensoes",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9107,6 +10547,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST pensoes",
         "tags": ["previdenciario"]
       }
     },
@@ -9124,6 +10565,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET certidoes-tempo",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9149,6 +10591,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST certidoes-tempo",
         "tags": ["previdenciario"]
       }
     },
@@ -9185,6 +10628,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST certidoes-tempo/:id/emitir",
         "tags": ["previdenciario"]
       }
     },
@@ -9202,6 +10646,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET declaracoes",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9227,6 +10672,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST declaracoes",
         "tags": ["previdenciario"]
       }
     },
@@ -9263,6 +10709,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST declaracoes/:id/emitir",
         "tags": ["previdenciario"]
       }
     },
@@ -9280,6 +10727,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET compensacoes",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9305,6 +10753,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST compensacoes",
         "tags": ["previdenciario"]
       }
     },
@@ -9341,6 +10790,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH compensacoes/:id",
         "tags": ["previdenciario"]
       }
     },
@@ -9358,6 +10808,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET recadastramentos/campanhas",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9383,6 +10834,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST recadastramentos/campanhas",
         "tags": ["previdenciario"]
       }
     },
@@ -9400,6 +10852,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET recadastramentos/beneficiarios",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9425,6 +10878,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST recadastramentos/beneficiarios",
         "tags": ["previdenciario"]
       }
     },
@@ -9442,6 +10896,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET recadastramentos/pendencias",
         "tags": ["previdenciario"]
       }
     },
@@ -9459,6 +10914,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET recadastramentos/historico",
         "tags": ["previdenciario"]
       },
       "post": {
@@ -9484,6 +10940,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST recadastramentos/historico",
         "tags": ["previdenciario"]
       }
     },
@@ -9511,6 +10968,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST recadastramentos/atos",
         "tags": ["previdenciario"]
       }
     },
@@ -9538,6 +10996,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST provas-vida",
         "tags": ["previdenciario"]
       }
     },
@@ -9565,6 +11024,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST recadastramentos/convocacoes",
         "tags": ["previdenciario"]
       }
     },
@@ -9592,6 +11052,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST recadastramentos/relatorios",
         "tags": ["previdenciario"]
       }
     },
@@ -9619,6 +11080,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST transferencia-siprev/exportar",
         "tags": ["previdenciario"]
       }
     },
@@ -9646,6 +11108,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST agendamentos",
         "tags": ["saude"]
       }
     },
@@ -9682,6 +11145,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH agendamentos/:agendamento_id",
         "tags": ["saude"]
       }
     },
@@ -9709,6 +11173,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST prontuarios",
         "tags": ["saude"]
       }
     },
@@ -9745,6 +11210,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST agendamentos/:agendamento_id/parecer",
         "tags": ["saude"]
       }
     },
@@ -9781,6 +11247,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH prontuarios/:prontuario_id/validar",
         "tags": ["saude"]
       }
     },
@@ -9817,6 +11284,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST prontuarios/:prontuario_id/replicar",
         "tags": ["saude"]
       }
     },
@@ -9834,6 +11302,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET exames",
         "tags": ["saude-aso"]
       },
       "post": {
@@ -9859,6 +11328,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST exames",
         "tags": ["saude-aso"]
       }
     },
@@ -9876,6 +11346,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET aso",
         "tags": ["saude-aso"]
       },
       "post": {
@@ -9901,6 +11372,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST aso",
         "tags": ["saude-aso"]
       }
     },
@@ -9918,6 +11390,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET aso/painel/vencimentos",
         "tags": ["saude-aso"]
       }
     },
@@ -9954,6 +11427,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH aso/:id/realizacao",
         "tags": ["saude-aso"]
       }
     },
@@ -9990,6 +11464,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST aso/:id/anexos",
         "tags": ["saude-aso"]
       }
     },
@@ -10016,6 +11491,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH aso/:id/arquivar",
         "tags": ["saude-aso"]
       }
     },
@@ -10033,6 +11509,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List own aso",
         "tags": ["portal-aso"]
       }
     },
@@ -10050,6 +11527,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET proximo",
         "tags": ["portal-aso"]
       }
     },
@@ -10067,6 +11545,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["saude-cat"]
       },
       "post": {
@@ -10092,6 +11571,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Register",
         "tags": ["saude-cat"]
       }
     },
@@ -10109,6 +11589,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET prazos",
         "tags": ["saude-cat"]
       }
     },
@@ -10145,6 +11626,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/cat",
         "tags": ["saude-cat"]
       }
     },
@@ -10171,6 +11653,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/reabrir",
         "tags": ["saude-cat"]
       }
     },
@@ -10207,6 +11690,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/comunicar-obito",
         "tags": ["saude-cat"]
       }
     },
@@ -10233,6 +11717,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/encerrar",
         "tags": ["saude-cat"]
       }
     },
@@ -10250,6 +11735,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET pcmso",
         "tags": ["saude-programas"]
       },
       "post": {
@@ -10275,6 +11761,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST pcmso",
         "tags": ["saude-programas"]
       }
     },
@@ -10301,6 +11788,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH pcmso/:id/ativar",
         "tags": ["saude-programas"]
       }
     },
@@ -10337,6 +11825,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST pcmso/:id/revisoes",
         "tags": ["saude-programas"]
       }
     },
@@ -10373,6 +11862,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST pcmso/:id/exames",
         "tags": ["saude-programas"]
       }
     },
@@ -10390,6 +11880,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET pgr",
         "tags": ["saude-programas"]
       },
       "post": {
@@ -10415,6 +11906,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST pgr",
         "tags": ["saude-programas"]
       }
     },
@@ -10441,6 +11933,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH pgr/:id/ativar",
         "tags": ["saude-programas"]
       }
     },
@@ -10477,6 +11970,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST pgr/:id/revisoes",
         "tags": ["saude-programas"]
       }
     },
@@ -10494,6 +11988,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["saude-exposicoes"]
       },
       "post": {
@@ -10519,6 +12014,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["saude-exposicoes"]
       }
     },
@@ -10553,6 +12049,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET folha",
         "tags": ["saude-exposicoes"]
       }
     },
@@ -10589,6 +12086,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id",
         "tags": ["saude-exposicoes"]
       }
     },
@@ -10606,6 +12104,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET inventario",
         "tags": ["saude-epi"]
       },
       "post": {
@@ -10631,6 +12130,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST inventario",
         "tags": ["saude-epi"]
       }
     },
@@ -10648,6 +12148,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET entregas",
         "tags": ["saude-epi"]
       },
       "post": {
@@ -10673,6 +12174,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST entregas",
         "tags": ["saude-epi"]
       }
     },
@@ -10690,6 +12192,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["saude-ppp"]
       }
     },
@@ -10717,6 +12220,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST gerar",
         "tags": ["saude-ppp"]
       }
     },
@@ -10779,6 +12283,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List runs",
         "tags": ["folha-pagamento"]
       },
       "post": {
@@ -10804,6 +12309,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create run",
         "tags": ["folha-pagamento"]
       }
     },
@@ -10830,6 +12336,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :folha_id/historico",
         "tags": ["folha-pagamento"]
       }
     },
@@ -10866,6 +12373,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :folha_id/status",
         "tags": ["folha-pagamento"]
       }
     },
@@ -10893,6 +12401,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :folha_rescisao_id/calcular",
         "tags": ["folha-pagamento"]
       }
     },
@@ -10929,6 +12438,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :folha_id/massa",
         "tags": ["folha-pagamento"]
       }
     },
@@ -10965,6 +12475,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :folha_id/adiantamentos",
         "tags": ["folha-pagamento"]
       }
     },
@@ -10992,6 +12503,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST decimo-terceiro/adiantamento",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11019,6 +12531,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST decimo-terceiro/fechamento",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11046,6 +12559,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST ferias/calcular",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11073,6 +12587,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST rescisao/calcular",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11100,6 +12615,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST mensal/abrir",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11127,6 +12643,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST mensal/calcular",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11154,6 +12671,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST mensal/aprovar",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11181,6 +12699,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST mensal/gerar",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11208,6 +12727,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST mensal/fechar",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11246,6 +12766,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET mensal/revisao",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11263,6 +12784,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET catalogos",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11333,6 +12855,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET catalogos/:resource",
         "tags": ["folha-pagamento"]
       },
       "post": {
@@ -11367,6 +12890,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST catalogos/:resource",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11411,6 +12935,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH catalogos/:resource/:id",
         "tags": ["folha-pagamento"]
       },
       "delete": {
@@ -11443,6 +12968,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE catalogos/:resource/:id",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11505,6 +13031,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET contabilidade",
         "tags": ["folha-pagamento"]
       },
       "post": {
@@ -11530,6 +13057,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST contabilidade",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11566,6 +13094,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH contabilidade/:id",
         "tags": ["folha-pagamento"]
       },
       "delete": {
@@ -11590,6 +13119,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE contabilidade/:id",
         "tags": ["folha-pagamento"]
       }
     },
@@ -11607,6 +13137,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List rubricas",
         "tags": ["folha-rubrica"]
       },
       "post": {
@@ -11632,6 +13163,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create rubrica",
         "tags": ["folha-rubrica"]
       }
     },
@@ -11658,6 +13190,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id",
         "tags": ["folha-rubrica"]
       },
       "patch": {
@@ -11692,6 +13225,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id",
         "tags": ["folha-rubrica"]
       },
       "delete": {
@@ -11716,6 +13250,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE :id",
         "tags": ["folha-rubrica"]
       }
     },
@@ -11743,6 +13278,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST compile",
         "tags": ["folha-rubrica"]
       }
     },
@@ -11769,6 +13305,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/recompile",
         "tags": ["folha-rubrica"]
       }
     },
@@ -11805,6 +13342,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/preview",
         "tags": ["folha-rubrica"]
       }
     },
@@ -11822,6 +13360,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET links/job-positions",
         "tags": ["folha-rubrica"]
       },
       "post": {
@@ -11847,6 +13386,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST links/job-positions",
         "tags": ["folha-rubrica"]
       }
     },
@@ -11874,7 +13414,143 @@
             "bearer": []
           }
         ],
+        "summary": "POST eventos",
         "tags": ["esocial"]
+      }
+    },
+    "/api/v1/folhas/{folha_id}/importar/lancamento-manual": {
+      "post": {
+        "operationId": "ManualEntryImportController_importManualEntries",
+        "parameters": [
+          {
+            "name": "folha_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "XLSX file with manual payroll entries."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Imports manual payroll entries from XLSX."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST :folha_id/importar/lancamento-manual",
+        "tags": ["folha-pagamento"]
+      }
+    },
+    "/api/v1/folhas/{folha_id}/importar/pensionista": {
+      "post": {
+        "operationId": "PensionistaImportController_importPensionista",
+        "parameters": [
+          {
+            "name": "folha_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "XLSX file with pensionista payroll items."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Imports pensionista payroll items from XLSX."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST :folha_id/importar/pensionista",
+        "tags": ["folha-pagamento"]
+      }
+    },
+    "/api/v1/folhas/{folha_id}/importar/servidor": {
+      "post": {
+        "operationId": "ServidorImportController_importServidor",
+        "parameters": [
+          {
+            "name": "folha_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "XLSX file with servidor payroll items."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Imports servidor payroll items from XLSX."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST :folha_id/importar/servidor",
+        "tags": ["folha-pagamento"]
       }
     },
     "/api/v1/folha/remessa": {
@@ -11952,6 +13628,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET remessa",
         "tags": ["folha-pagamento"]
       }
     },
@@ -12022,6 +13699,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/remessa",
         "tags": ["folha-pagamento"]
       },
       "post": {
@@ -12056,6 +13734,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/remessa",
         "tags": ["folha-pagamento"]
       }
     },
@@ -12092,6 +13771,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/retorno",
         "tags": ["folha-pagamento"]
       }
     },
@@ -12119,6 +13799,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST gerar",
         "tags": ["folha-pagamento"]
       }
     },
@@ -12145,6 +13826,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/bank-accounts",
         "tags": ["rh"]
       },
       "post": {
@@ -12179,6 +13861,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/bank-accounts",
         "tags": ["rh"]
       }
     },
@@ -12213,6 +13896,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/bank-accounts/:accountId/revalidate",
         "tags": ["rh"]
       }
     },
@@ -12247,6 +13931,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/alimonies",
         "tags": ["rh"]
       },
       "post": {
@@ -12281,6 +13966,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/alimonies",
         "tags": ["rh"]
       }
     },
@@ -12325,6 +14011,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/alimonies/:alimonyId",
         "tags": ["rh"]
       },
       "delete": {
@@ -12357,6 +14044,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE :id/alimonies/:alimonyId",
         "tags": ["rh"]
       }
     },
@@ -12392,6 +14080,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/consignment-margin",
         "tags": ["payment"]
       }
     },
@@ -12418,6 +14107,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/consignment-loans",
         "tags": ["payment"]
       },
       "post": {
@@ -12452,6 +14142,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/consignment-loans",
         "tags": ["payment"]
       }
     },
@@ -12479,6 +14170,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Run",
         "tags": ["folha-pagamento"]
       }
     },
@@ -12515,6 +14207,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/prior-notice",
         "tags": ["folha-pagamento"]
       }
     },
@@ -12542,6 +14235,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Register",
         "tags": ["rh"]
       }
     },
@@ -12578,6 +14272,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/apply",
         "tags": ["rh"]
       }
     },
@@ -12614,7 +14309,57 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id",
         "tags": ["rh"]
+      }
+    },
+    "/api/v1/payroll-engine/health": {
+      "get": {
+        "operationId": "PayrollEngineController_health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Payroll engine health."
+          }
+        },
+        "summary": "GET health",
+        "tags": ["payroll-engine"]
+      }
+    },
+    "/api/v1/payroll-engine/status": {
+      "get": {
+        "operationId": "PayrollEngineController_status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Payroll engine runtime and formula status."
+          }
+        },
+        "summary": "GET status",
+        "tags": ["payroll-engine"]
+      }
+    },
+    "/api/v1/payroll-engine/calculations": {
+      "post": {
+        "operationId": "PayrollEngineController_requestCalculation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayrollCalculationRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Validate and execute a payroll calculation request."
+          }
+        },
+        "summary": "POST calculations",
+        "tags": ["payroll-engine"]
       }
     },
     "/api/v1/admin/fgts/accounts/{employeeId}": {
@@ -12640,6 +14385,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET accounts/:employeeId",
         "tags": ["fgts"]
       }
     },
@@ -12657,6 +14403,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST reprocessar",
         "tags": ["fgts"]
       }
     },
@@ -12684,6 +14431,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Generate",
         "tags": ["fgts-remittances"]
       }
     },
@@ -12710,6 +14458,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id",
         "tags": ["fgts-remittances"]
       }
     },
@@ -12772,7 +14521,375 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["convenio"]
+      },
+      "post": {
+        "operationId": "AgreementsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgreementMutationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an agreement."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST Create",
+        "tags": ["convenio"]
+      }
+    },
+    "/api/v1/convenios/{id}": {
+      "patch": {
+        "operationId": "AgreementsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgreementPatchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update an agreement."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "PATCH :id",
+        "tags": ["convenio"]
+      },
+      "delete": {
+        "operationId": "AgreementsController_deactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Terminate an agreement."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "DELETE :id",
+        "tags": ["convenio"]
+      }
+    },
+    "/api/v1/recrutamento/estagios/programas": {
+      "get": {
+        "operationId": "InternshipsController_listPrograms",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List internship programs."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET programas",
+        "tags": ["convenio-internships"]
+      },
+      "post": {
+        "operationId": "InternshipsController_createProgram",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInternshipProgramDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an internship program."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST programas",
+        "tags": ["convenio-internships"]
+      }
+    },
+    "/api/v1/recrutamento/estagios/estagiarios": {
+      "get": {
+        "operationId": "InternshipsController_listInternships",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Optional field name for sorting.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Case-insensitive text filter for representative read endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List internships."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET estagiarios",
+        "tags": ["convenio-internships"]
+      },
+      "post": {
+        "operationId": "InternshipsController_createInternship",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInternshipDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create an internship record with a TS-V S-2300 source."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST estagiarios",
+        "tags": ["convenio-internships"]
+      }
+    },
+    "/api/v1/recrutamento/estagios/{id}/prorrogacao": {
+      "post": {
+        "operationId": "InternshipsController_extend",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtendInternshipDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Extend internship term."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST :id/prorrogacao",
+        "tags": ["convenio-internships"]
+      }
+    },
+    "/api/v1/recrutamento/estagios/{id}/desligar": {
+      "post": {
+        "operationId": "InternshipsController_terminate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminateInternshipDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Terminate internship."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST :id/desligar",
+        "tags": ["convenio-internships"]
+      }
+    },
+    "/api/v1/recrutamento/estagios/{id}/esocial/s2300": {
+      "post": {
+        "operationId": "InternshipsController_buildS2300",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Build the S-2300 XML for an internship."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST :id/esocial/s2300",
+        "tags": ["convenio-internships"]
       }
     },
     "/api/v1/recrutamento/requisicoes": {
@@ -12799,6 +14916,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST requisicoes",
         "tags": ["recrutamento"]
       }
     },
@@ -12825,6 +14943,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH requisicoes/:requisicao_id/encaminhar",
         "tags": ["recrutamento"]
       }
     },
@@ -12861,6 +14980,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST requisicoes/:requisicao_id/candidatos",
         "tags": ["recrutamento"]
       }
     },
@@ -12897,6 +15017,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH candidatos/:candidato_id",
         "tags": ["recrutamento"]
       }
     },
@@ -12923,6 +15044,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH requisicoes/:requisicao_id/concluir",
         "tags": ["recrutamento"]
       }
     },
@@ -12949,6 +15071,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET concursos/:concursoId/membros",
         "tags": ["recrutamento-banca"]
       }
     },
@@ -12976,6 +15099,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST membros",
         "tags": ["recrutamento-banca"]
       }
     },
@@ -13003,6 +15127,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST documentos",
         "tags": ["recrutamento-banca"]
       }
     },
@@ -13039,6 +15164,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST documentos/:id/signatures",
         "tags": ["recrutamento-banca"]
       }
     },
@@ -13065,6 +15191,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST documentos/:id/publicacao",
         "tags": ["recrutamento-banca"]
       }
     },
@@ -13086,6 +15213,7 @@
             "description": "Public verification metadata for a signed board document."
           }
         },
+        "summary": "GET verify/:token",
         "tags": ["public-banca"]
       }
     },
@@ -13113,6 +15241,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST consentimentos",
         "tags": ["recrutamento-biometria"]
       }
     },
@@ -13140,6 +15269,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST capturas",
         "tags": ["recrutamento-biometria"]
       }
     },
@@ -13167,6 +15297,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST matching",
         "tags": ["recrutamento-biometria"]
       }
     },
@@ -13193,6 +15324,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE candidatos/:candidatoId",
         "tags": ["recrutamento-biometria"]
       }
     },
@@ -13210,6 +15342,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["recrutamento-concurso"]
       },
       "post": {
@@ -13235,6 +15368,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["recrutamento-concurso"]
       }
     },
@@ -13271,6 +15405,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create version",
         "tags": ["recrutamento-concurso"]
       }
     },
@@ -13307,6 +15442,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST publish",
         "tags": ["recrutamento-concurso"]
       }
     },
@@ -13328,6 +15464,7 @@
             "description": "Published public contest notice."
           }
         },
+        "summary": "GET :slug",
         "tags": ["public-concursos"]
       }
     },
@@ -13359,6 +15496,7 @@
             "description": "Create a public contest application."
           }
         },
+        "summary": "POST v1/publico/concursos/:slug/inscricoes",
         "tags": ["public-inscricoes"]
       }
     },
@@ -13380,6 +15518,7 @@
             "description": "Return a public application by access token."
           }
         },
+        "summary": "GET v1/publico/inscricoes/:id",
         "tags": ["public-inscricoes"]
       }
     },
@@ -13406,6 +15545,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET concursos/:concursoId",
         "tags": ["recrutamento-avaliacao"]
       }
     },
@@ -13433,6 +15573,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Create",
         "tags": ["recrutamento-avaliacao"]
       }
     },
@@ -13469,6 +15610,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :provaId/questoes",
         "tags": ["recrutamento-avaliacao"]
       }
     },
@@ -13505,6 +15647,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :provaId/respostas",
         "tags": ["recrutamento-avaliacao"]
       }
     },
@@ -13531,6 +15674,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["recrutamento-avaliacao"]
       },
       "post": {
@@ -13565,6 +15709,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Publish",
         "tags": ["recrutamento-avaliacao"]
       }
     },
@@ -13591,6 +15736,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET provas/:provaId",
         "tags": ["recrutamento-avaliacao"]
       }
     },
@@ -13627,6 +15773,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/decisao",
         "tags": ["recrutamento-avaliacao"]
       }
     },
@@ -13658,6 +15805,7 @@
             "description": "Open a candidate resource by token."
           }
         },
+        "summary": "POST Create",
         "tags": ["public-inscricoes"]
       }
     },
@@ -13684,6 +15832,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET inscricoes/:inscricaoId",
         "tags": ["recrutamento-avaliacao"]
       }
     },
@@ -13705,6 +15854,7 @@
             "description": "Return candidate notes by application token."
           }
         },
+        "summary": "GET Get",
         "tags": ["public-inscricoes"]
       }
     },
@@ -13732,6 +15882,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST sessions",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -13768,6 +15919,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST sessions/:id/events",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -13804,6 +15956,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST sessions/:id/artifacts",
         "tags": ["recrutamento-prova-online"]
       },
       "delete": {
@@ -13828,6 +15981,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE sessions/:id/artifacts",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -13864,6 +16018,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST sessions/:id/ai/audio",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -13900,6 +16055,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST sessions/:id/ai/frame",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -13936,6 +16092,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST sessions/:id/submit",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -13962,6 +16119,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET review/sessions/:id",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -13988,6 +16146,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST review/sessions/:id/accept",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -14024,6 +16183,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST review/sessions/:id/void",
         "tags": ["recrutamento-prova-online"]
       }
     },
@@ -14050,6 +16210,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/classificacao",
         "tags": ["recrutamento-classificacao"]
       }
     },
@@ -14077,6 +16238,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/classificacao/publicacao",
         "tags": ["recrutamento-classificacao"]
       }
     },
@@ -14098,6 +16260,7 @@
             "description": "Published public contest classification."
           }
         },
+        "summary": "GET :slug/classificacao",
         "tags": ["public-concursos"]
       }
     },
@@ -14125,6 +16288,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Nomear",
         "tags": ["recrutamento-nomeacao"]
       }
     },
@@ -14161,6 +16325,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/convocacoes",
         "tags": ["recrutamento-nomeacao"]
       }
     },
@@ -14187,6 +16352,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/desistencia",
         "tags": ["recrutamento-nomeacao"]
       }
     },
@@ -14213,6 +16379,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/expirar-prazo",
         "tags": ["recrutamento-nomeacao"]
       }
     },
@@ -14240,6 +16407,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST Agendar",
         "tags": ["recrutamento-posse"]
       }
     },
@@ -14266,6 +16434,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/realizar-posse",
         "tags": ["recrutamento-posse"]
       }
     },
@@ -14292,6 +16461,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/iniciar-exercicio",
         "tags": ["recrutamento-posse"]
       }
     },
@@ -14318,6 +16488,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/prorrogar-exercicio",
         "tags": ["recrutamento-posse"]
       }
     },
@@ -14354,6 +16525,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH :id/cancelar",
         "tags": ["recrutamento-posse"]
       }
     },
@@ -14416,6 +16588,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["relatorio"]
       }
     },
@@ -14433,6 +16606,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET List",
         "tags": ["tce"]
       }
     },
@@ -14459,6 +16633,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET :id/events",
         "tags": ["tce"]
       }
     },
@@ -14485,6 +16660,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/enable",
         "tags": ["tce"]
       }
     },
@@ -14511,6 +16687,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST :id/disable",
         "tags": ["tce"]
       }
     },
@@ -14528,6 +16705,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET states",
         "tags": ["tce-catalog"]
       }
     },
@@ -14554,6 +16732,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET states/:code/layouts",
         "tags": ["tce-catalog"]
       }
     },
@@ -14580,6 +16759,7 @@
             "bearer": []
           }
         ],
+        "summary": "GET layouts/:id/fields",
         "tags": ["tce-catalog"]
       }
     },
@@ -14597,6 +16777,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST layouts",
         "tags": ["tce-catalog"]
       }
     },
@@ -14623,6 +16804,7 @@
             "bearer": []
           }
         ],
+        "summary": "PATCH layouts/:id/status",
         "tags": ["tce-catalog"]
       }
     },
@@ -14640,6 +16822,7 @@
             "bearer": []
           }
         ],
+        "summary": "POST layout-fields",
         "tags": ["tce-catalog"]
       }
     },
@@ -14666,6 +16849,7 @@
             "bearer": []
           }
         ],
+        "summary": "DELETE layout-fields/:id",
         "tags": ["tce-catalog"]
       }
     },
@@ -14695,7 +16879,8 @@
             "description": ""
           }
         },
-        "tags": ["AudespSp"]
+        "summary": "GET List",
+        "tags": ["tce-audesp-sp"]
       },
       "post": {
         "operationId": "AudespSpController_create",
@@ -14705,7 +16890,8 @@
             "description": ""
           }
         },
-        "tags": ["AudespSp"]
+        "summary": "POST Create",
+        "tags": ["tce-audesp-sp"]
       }
     },
     "/api/v1/tce/audesp-sp/submissions/{id}/validate": {
@@ -14726,7 +16912,8 @@
             "description": ""
           }
         },
-        "tags": ["AudespSp"]
+        "summary": "POST :id/validate",
+        "tags": ["tce-audesp-sp"]
       }
     },
     "/api/v1/tce/audesp-sp/submissions/{id}/submit": {
@@ -14747,7 +16934,8 @@
             "description": ""
           }
         },
-        "tags": ["AudespSp"]
+        "summary": "POST :id/submit",
+        "tags": ["tce-audesp-sp"]
       }
     },
     "/api/v1/tce/audesp-sp/submissions/{id}/envelope.xml": {
@@ -14768,7 +16956,8 @@
             "description": ""
           }
         },
-        "tags": ["AudespSp"]
+        "summary": "GET :id/envelope.xml",
+        "tags": ["tce-audesp-sp"]
       }
     },
     "/api/v1/tce/queue": {
@@ -14813,7 +17002,8 @@
             "description": ""
           }
         },
-        "tags": ["TceQueue"]
+        "summary": "GET queue",
+        "tags": ["tce-queue"]
       }
     },
     "/api/v1/tce/queue/{id}": {
@@ -14834,7 +17024,8 @@
             "description": ""
           }
         },
-        "tags": ["TceQueue"]
+        "summary": "GET queue/:id",
+        "tags": ["tce-queue"]
       }
     },
     "/api/v1/tce/queue/{id}/replay": {
@@ -14855,7 +17046,8 @@
             "description": ""
           }
         },
-        "tags": ["TceQueue"]
+        "summary": "POST queue/:id/replay",
+        "tags": ["tce-queue"]
       }
     },
     "/api/v1/tce/circuits": {
@@ -14867,7 +17059,8 @@
             "description": ""
           }
         },
-        "tags": ["TceQueue"]
+        "summary": "GET circuits",
+        "tags": ["tce-queue"]
       }
     },
     "/api/v1/tce/circuits/{adapter_id}/{endpoint}/reset": {
@@ -14896,7 +17089,8 @@
             "description": ""
           }
         },
-        "tags": ["TceQueue"]
+        "summary": "POST circuits/:adapter_id/:endpoint/reset",
+        "tags": ["tce-queue"]
       }
     },
     "/api/v1/health": {
@@ -14908,6 +17102,7 @@
             "description": ""
           }
         },
+        "summary": "GET Health",
         "tags": ["health"]
       }
     },
@@ -14920,6 +17115,7 @@
             "description": ""
           }
         },
+        "summary": "GET ready",
         "tags": ["health"]
       }
     }
@@ -15289,11 +17485,7 @@
         },
         "required": ["section", "payload"]
       },
-      "PayslipBatchRequestDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "YearlyIncomeBatchRequestDto": {
+      "CreateLgpdRightsRequestDto": {
         "type": "object",
         "properties": {}
       },
@@ -15661,6 +17853,73 @@
         },
         "required": ["percentual", "vigenciaInicio", "leiReferencia", "escopo"]
       },
+      "RuntimeReportRequestDto": {
+        "type": "object",
+        "properties": {
+          "tenantId": {
+            "type": "string"
+          },
+          "definitionCode": {
+            "type": "string"
+          },
+          "moduleKey": {
+            "type": "string",
+            "default": "RELATORIO"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "branchId": {
+            "type": "string"
+          },
+          "payrollRunId": {
+            "type": "string"
+          },
+          "processingTypeId": {
+            "type": "string"
+          },
+          "competenceYear": {
+            "type": "number",
+            "minimum": 2000,
+            "maximum": 2100
+          },
+          "competenceMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "parameters": {
+            "type": "object"
+          },
+          "dryRun": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": ["tenantId", "definitionCode"]
+      },
+      "ReportServicePollDto": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 10
+          }
+        }
+      },
+      "PayslipBatchRequestDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "YearlyIncomeBatchRequestDto": {
+        "type": "object",
+        "properties": {}
+      },
       "CreateWorkScheduleDto": {
         "type": "object",
         "properties": {}
@@ -15809,6 +18068,10 @@
         "type": "object",
         "properties": {}
       },
+      "ReopenCompetenceDto": {
+        "type": "object",
+        "properties": {}
+      },
       "RequestS3000ExclusionDto": {
         "type": "object",
         "properties": {}
@@ -15877,7 +18140,43 @@
         "type": "object",
         "properties": {}
       },
+      "GenerateEfdReinfDto": {
+        "type": "object",
+        "properties": {}
+      },
       "GenerateGpsDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateRopaEntryDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateRopaEntryDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateLgpdIncidentDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "TriageLgpdIncidentDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ReportLgpdIncidentDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ComplementLgpdIncidentDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CloseLgpdIncidentDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateLaiRequestDto": {
         "type": "object",
         "properties": {}
       },
@@ -16133,6 +18432,12 @@
           "jobFunctionId": {
             "type": "string"
           },
+          "jobPositionId": {
+            "type": "string"
+          },
+          "workLocationId": {
+            "type": "string"
+          },
           "reasonId": {
             "type": "string"
           },
@@ -16207,6 +18512,12 @@
             "type": "number"
           },
           "daysCount": {
+            "type": "number"
+          },
+          "vacanciesTotal": {
+            "type": "number"
+          },
+          "vacanciesFilled": {
             "type": "number"
           },
           "absenceDays": {
@@ -16409,6 +18720,10 @@
           }
         }
       },
+      "OrganicDefinitionMutationDto": {
+        "type": "object",
+        "properties": {}
+      },
       "CreateRetirementRuleDto": {
         "type": "object",
         "properties": {
@@ -16477,9 +18792,251 @@
           "dataReferencia": {
             "type": "string",
             "format": "date"
+          },
+          "regraTransicao": {
+            "type": "string",
+            "enum": [
+              "EC103_PEDAGIO_100",
+              "EC103_PEDAGIO_50",
+              "EC103_PONTOS",
+              "EC103_IDADE_PROGRESSIVA",
+              "EC103_ATIVIDADE_RISCO_PROFESSOR"
+            ]
+          },
+          "sexo": {
+            "type": "string",
+            "enum": ["FEMALE", "MALE"]
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioContribuicao": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioServicoPublico": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioCargoAtual": {
+            "type": "string",
+            "format": "date"
+          },
+          "tempoContribuicaoReformaAnos": {
+            "type": "number"
+          },
+          "tempoContribuicaoReferenciaAnos": {
+            "type": "number"
+          },
+          "professor": {
+            "type": "boolean",
+            "default": false
+          },
+          "populacaoAtividadeRiscoProfessor": {
+            "type": "string",
+            "enum": ["RISK_ACTIVITY", "TEACHER"]
+          },
+          "dataInicioCarreira": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioMagisterio": {
+            "type": "string",
+            "format": "date"
+          },
+          "tempoCarreiraReformaAnos": {
+            "type": "number"
+          },
+          "ingressoCarreiraAteReforma": {
+            "type": "boolean"
           }
         },
         "required": ["funcionarioId", "regraId", "dataReferencia"]
+      },
+      "SimulateEc103Pedagio100Dto": {
+        "type": "object",
+        "properties": {
+          "sexo": {
+            "type": "string",
+            "enum": ["FEMALE", "MALE"]
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioContribuicao": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataReferencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioServicoPublico": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioCargoAtual": {
+            "type": "string",
+            "format": "date"
+          },
+          "tempoContribuicaoReformaAnos": {
+            "type": "number"
+          },
+          "tempoContribuicaoReferenciaAnos": {
+            "type": "number"
+          },
+          "professor": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": ["sexo", "dataNascimento", "dataInicioContribuicao", "dataReferencia"]
+      },
+      "SimulateEc103Pedagio50Dto": {
+        "type": "object",
+        "properties": {
+          "sexo": {
+            "type": "string",
+            "enum": ["FEMALE", "MALE"]
+          },
+          "dataInicioContribuicao": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataReferencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "tempoContribuicaoReformaAnos": {
+            "type": "number"
+          },
+          "tempoContribuicaoReferenciaAnos": {
+            "type": "number"
+          }
+        },
+        "required": ["sexo", "dataInicioContribuicao", "dataReferencia"]
+      },
+      "SimulateEc103PontosDto": {
+        "type": "object",
+        "properties": {
+          "sexo": {
+            "type": "string",
+            "enum": ["FEMALE", "MALE"]
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioContribuicao": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataReferencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioServicoPublico": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioCargoAtual": {
+            "type": "string",
+            "format": "date"
+          },
+          "professor": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": ["sexo", "dataNascimento", "dataInicioContribuicao", "dataReferencia"]
+      },
+      "SimulateEc103IdadeProgressivaDto": {
+        "type": "object",
+        "properties": {
+          "sexo": {
+            "type": "string",
+            "enum": ["FEMALE", "MALE"]
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioContribuicao": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataReferencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "tempoContribuicaoReferenciaAnos": {
+            "type": "number"
+          },
+          "professor": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": ["sexo", "dataNascimento", "dataInicioContribuicao", "dataReferencia"]
+      },
+      "SimulateEc103AtividadeRiscoProfessorDto": {
+        "type": "object",
+        "properties": {
+          "populacao": {
+            "type": "string",
+            "enum": ["RISK_ACTIVITY", "TEACHER"]
+          },
+          "sexo": {
+            "type": "string",
+            "enum": ["FEMALE", "MALE"]
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioContribuicao": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataReferencia": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioServicoPublico": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioCargoAtual": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioCarreira": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataInicioMagisterio": {
+            "type": "string",
+            "format": "date"
+          },
+          "tempoContribuicaoReformaAnos": {
+            "type": "number"
+          },
+          "tempoCarreiraReformaAnos": {
+            "type": "number"
+          },
+          "ingressoCarreiraAteReforma": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "populacao",
+          "sexo",
+          "dataNascimento",
+          "dataInicioContribuicao",
+          "dataReferencia"
+        ]
       },
       "CreateRetirementGrantDto": {
         "type": "object",
@@ -18010,6 +20567,37 @@
         "type": "object",
         "properties": {}
       },
+      "PayrollCalculationRequestDto": {
+        "type": "object",
+        "properties": {
+          "payrollRunId": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["TOTAL", "RETROACTIVE"],
+            "default": "TOTAL"
+          },
+          "competenceYear": {
+            "type": "number",
+            "minimum": 2000,
+            "maximum": 2100
+          },
+          "competenceMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "dryRun": {
+            "type": "boolean",
+            "default": false
+          },
+          "requestedBy": {
+            "type": "string"
+          }
+        },
+        "required": ["payrollRunId"]
+      },
       "CreateFgtsRemittanceDto": {
         "type": "object",
         "properties": {
@@ -18030,6 +20618,243 @@
           }
         },
         "required": ["kind"]
+      },
+      "AgreementMutationDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "institutionId": {
+            "type": "string"
+          },
+          "programId": {
+            "type": "string"
+          },
+          "startsOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "endsOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "ACTIVE", "SUSPENDED", "EXPIRED", "TERMINATED"]
+          }
+        },
+        "required": ["code"]
+      },
+      "AgreementPatchDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "institutionId": {
+            "type": "object"
+          },
+          "programId": {
+            "type": "object"
+          },
+          "startsOn": {
+            "type": "object",
+            "format": "date"
+          },
+          "endsOn": {
+            "type": "object",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "ACTIVE", "SUSPENDED", "EXPIRED", "TERMINATED"]
+          }
+        }
+      },
+      "CreateInternshipProgramDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "institutionId": {
+            "type": "string"
+          },
+          "startsOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "endsOn": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": ["code", "name"]
+      },
+      "CreateInternshipDto": {
+        "type": "object",
+        "properties": {
+          "programId": {
+            "type": "string"
+          },
+          "agreementId": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "string"
+          },
+          "registration": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "internName": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "internCpf": {
+            "type": "string",
+            "maxLength": 14
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["FEMALE", "MALE", "OTHER", "UNDECLARED"]
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "workplaceId": {
+            "type": "string"
+          },
+          "employmentLinkId": {
+            "type": "string"
+          },
+          "supervisorName": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "supervisorEmployeeId": {
+            "type": "string"
+          },
+          "startsOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "endsOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "termNumber": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "termSignedOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "activityPlanUri": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "activityPlanDescription": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "courseName": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "educationLevel": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "role": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "weeklyHours": {
+            "type": "string",
+            "example": "30.000000"
+          },
+          "stipendAmount": {
+            "type": "string",
+            "example": "1200.00"
+          },
+          "insurancePolicy": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "programId",
+          "registration",
+          "internName",
+          "internCpf",
+          "workplaceId",
+          "supervisorName",
+          "startsOn",
+          "endsOn",
+          "termNumber",
+          "termSignedOn",
+          "activityPlanUri",
+          "activityPlanDescription",
+          "role",
+          "weeklyHours"
+        ]
+      },
+      "ExtendInternshipDto": {
+        "type": "object",
+        "properties": {
+          "endsOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": ["endsOn", "reason"]
+      },
+      "TerminateInternshipDto": {
+        "type": "object",
+        "properties": {
+          "terminationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": ["terminationDate", "reason"]
       },
       "RecruitmentRequestedFunctionDto": {
         "type": "object",
@@ -18225,5 +21050,6 @@
         "properties": {}
       }
     }
-  }
+  },
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema"
 }

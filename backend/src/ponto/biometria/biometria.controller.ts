@@ -8,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -35,6 +36,7 @@ export class PontoBiometriaController {
     private readonly consentService: PontoBiometricConsentService,
   ) {}
 
+  @ApiOperation({ summary: 'GET templates' })
   @Get('templates')
   @RequirePermission('ponto.biometric.read')
   @ApiOkResponse({ description: 'Employee biometric template metadata.' })
@@ -42,6 +44,7 @@ export class PontoBiometriaController {
     return this.enrollmentService.list(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST consents' })
   @Post('consents')
   @RequirePermission('ponto.biometric.write')
   @AuditMutation({
@@ -56,6 +59,7 @@ export class PontoBiometriaController {
     return this.consentService.create(body);
   }
 
+  @ApiOperation({ summary: 'DELETE employees/:employeeId/consent' })
   @Delete('employees/:employeeId/consent')
   @RequirePermission('ponto.biometric.write')
   @AuditMutation({
@@ -70,6 +74,7 @@ export class PontoBiometriaController {
     return this.consentService.withdraw(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST templates' })
   @Post('templates')
   @RequirePermission('ponto.biometric.write')
   @AuditMutation({
@@ -84,6 +89,7 @@ export class PontoBiometriaController {
     return this.enrollmentService.enroll(body);
   }
 
+  @ApiOperation({ summary: 'POST matches' })
   @Post('matches')
   @RequirePermission('ponto.biometric.write')
   @AuditMutation({

@@ -36,6 +36,7 @@ describe('S-2220 builder', () => {
 
     const record = await builder.buildPending(tenantId, asoRecordId);
     expect(record.xml).toBe(golden(goldenFile));
+    expect(record.payload).toMatchObject({ workEnvironmentCode: 'AMB01' });
     expect(() =>
       validator.assertValid('S-2220', record.xml, { allowUnsigned: true }),
     ).not.toThrow();
@@ -78,6 +79,7 @@ function asoRow(id: string, asoKind: string) {
     doctor_name: 'Dra Monitoramento',
     conclusion: 'APTO',
     cnpj: '12345678000199',
+    work_environment_code: 'AMB01',
   };
 }
 

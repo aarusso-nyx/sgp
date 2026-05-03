@@ -54,7 +54,7 @@ export class FaceEnrollmentService {
       if (threshold.livenessRequired && !liveness.passed) {
         throw new BadRequestException('Facial liveness check failed');
       }
-      const extracted = extractLocalFaceEmbedding(input.frames[0].imageBase64);
+      const extracted = extractLocalFaceEmbedding(input.frames[0]!.imageBase64);
       const cipher = encryptFaceEmbedding(
         extracted.embedding,
         input.templateKmsKeyId.trim(),
@@ -82,7 +82,7 @@ export class FaceEnrollmentService {
           extracted.embedding,
         ],
       );
-      const row = rows.rows[0];
+      const row = rows.rows[0]!;
       if (!row.encrypted_differs) {
         throw new BadRequestException(
           'Face embedding must be encrypted at rest',

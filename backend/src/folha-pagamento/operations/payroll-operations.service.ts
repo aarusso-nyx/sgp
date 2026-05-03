@@ -341,7 +341,7 @@ export class PayrollOperationsService {
       ],
     );
 
-    return this.toRequestSummary(requestRows[0], {
+    return this.toRequestSummary(requestRows[0]!, {
       remittanceId,
       remittanceNumber: nextNumber,
       fileName,
@@ -419,7 +419,7 @@ export class PayrollOperationsService {
       ],
     );
 
-    return this.toRequestSummary(requestRows[0], {
+    return this.toRequestSummary(requestRows[0]!, {
       remittanceId: input.remittanceId,
       s3Key: input.s3Key,
     });
@@ -484,7 +484,7 @@ export class PayrollOperationsService {
       ],
     );
 
-    return this.toRequestSummary(requestRows[0], {
+    return this.toRequestSummary(requestRows[0]!, {
       payrollRunId: input.payrollRunId ?? null,
       branchId: input.branchId ?? run?.branch_id ?? null,
       collectionCode: input.collectionCode,
@@ -525,14 +525,14 @@ export class PayrollOperationsService {
       isUuid
         ? `
           SELECT count(*)::text AS total
-          FROM hr.employee_bank_account account
+          FROM hr.v_employee_bank_account_pii_decrypted account
           JOIN hr.bank bank ON bank.id = account.bank_id
           WHERE account.validation_status = 'VALID'::hr.employee_bank_account_validation_status
             AND bank.id = $1::uuid
           `
         : `
           SELECT count(*)::text AS total
-          FROM hr.employee_bank_account account
+          FROM hr.v_employee_bank_account_pii_decrypted account
           JOIN hr.bank bank ON bank.id = account.bank_id
           WHERE account.validation_status = 'VALID'::hr.employee_bank_account_validation_status
             AND bank.code = lpad(regexp_replace($1, '\\D', '', 'g'), 3, '0')

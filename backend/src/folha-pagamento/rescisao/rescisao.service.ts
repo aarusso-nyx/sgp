@@ -330,7 +330,7 @@ export class RescisaoService {
       `,
     );
     await this.ensureEarningCatalog(client);
-    return result.rows[0];
+    return result.rows[0]!;
   }
 
   private async ensureEarningCatalog(client: PoolClient): Promise<void> {
@@ -425,7 +425,7 @@ export class RescisaoService {
         context.branch_id ?? '',
       ],
     );
-    return result.rows[0];
+    return result.rows[0]!;
   }
 
   private async prepareRunForReprocessing(
@@ -620,6 +620,10 @@ export class RescisaoService {
     month: number,
   ): Promise<void> {
     await client.query(
+      'SELECT payroll.sgp_create_payroll_financial_record_partition(make_date($1::integer, $2::integer, 1))',
+      [year, month],
+    );
+    await client.query(
       `
       WITH totals AS (
         SELECT
@@ -639,6 +643,7 @@ export class RescisaoService {
         functional_status_id,
         competence_year,
         competence_month,
+        competence,
         total_earnings,
         total_deductions,
         net_amount,
@@ -653,12 +658,13 @@ export class RescisaoService {
         NULLIF($5, '')::uuid,
         $6,
         $7,
+        make_date($6::integer, $7::integer, 1),
         totals.earnings,
         totals.deductions,
         (totals.earnings - totals.deductions)::numeric(16, 2),
         jsonb_build_object('origin', 'termination', 'employmentLinkId', $8::text)
       FROM totals
-      ON CONFLICT (employee_id, competence_year, competence_month, payroll_run_id)
+      ON CONFLICT (employee_id, competence_year, competence_month, payroll_run_id, competence)
       DO UPDATE SET
         total_earnings = EXCLUDED.total_earnings,
         total_deductions = EXCLUDED.total_deductions,

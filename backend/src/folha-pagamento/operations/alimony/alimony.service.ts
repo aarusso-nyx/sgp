@@ -190,7 +190,7 @@ export class EmployeeAlimonyService {
         this.values(employeeId, input),
       );
       AuditMutationContextStore.markMutationAudited();
-      return toSummary(rows.rows[0]);
+      return toSummary(rows.rows[0]!);
     });
   }
 

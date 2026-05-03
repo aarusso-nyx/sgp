@@ -253,7 +253,7 @@ export class GpsService {
           generatedAt,
         ],
       );
-      return inserted.rows[0].id;
+      return inserted.rows[0]!.id;
     });
 
     return this.find(id);

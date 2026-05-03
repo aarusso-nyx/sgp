@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -29,6 +30,7 @@ export class ProgressionController {
     private readonly applyService: ProgressionApplyService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('avaliacao.progressao.read')
   @ApiOkResponse({ description: 'List functional progressions.' })
@@ -36,6 +38,7 @@ export class ProgressionController {
     return this.simulationService.list(query.status);
   }
 
+  @ApiOperation({ summary: 'GET eligibility' })
   @Get('eligibility')
   @RequirePermission('avaliacao.progressao.read')
   @ApiOkResponse({ description: 'Check employee progression eligibility.' })
@@ -46,6 +49,7 @@ export class ProgressionController {
     );
   }
 
+  @ApiOperation({ summary: 'POST simulate' })
   @Post('simulate')
   @RequirePermission('avaliacao.progressao.simulate')
   @AuditMutation({
@@ -60,6 +64,7 @@ export class ProgressionController {
     return this.simulationService.simulate(body);
   }
 
+  @ApiOperation({ summary: 'POST :id/apply' })
   @Post(':id/apply')
   @RequirePermission('avaliacao.progressao.apply')
   @AuditMutation({

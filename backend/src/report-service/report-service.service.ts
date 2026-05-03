@@ -8,9 +8,9 @@ import { QueryResultRow } from 'pg';
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
 import {
-  IntegrationsWorkerService,
-  REPORT_SERVICE_DEFINITIONS,
-} from '../integrations-worker/integrations-worker.service';
+  REPORT_WORKER_DEFINITIONS,
+  ReportWorkerService,
+} from './report-worker.service';
 import {
   ReportServicePollDto,
   RuntimeReportRequestDto,
@@ -55,7 +55,7 @@ const REPORT_SERVICE_PERMISSIONS = [
 export class ReportRuntimeService {
   constructor(
     private readonly databaseService: DatabaseService,
-    private readonly integrationsWorkerService: IntegrationsWorkerService,
+    private readonly reportWorkerService: ReportWorkerService,
   ) {}
 
   health() {
@@ -64,7 +64,7 @@ export class ReportRuntimeService {
       service: 'sgp-report-service',
       status: 'implemented',
       databaseConfigured: this.databaseService.configured,
-      supportedDefinitions: REPORT_SERVICE_DEFINITIONS,
+      supportedDefinitions: REPORT_WORKER_DEFINITIONS,
       storageContract: {
         configuredRuntime: 'S3',
         localFallback: 'development-only',
@@ -78,7 +78,7 @@ export class ReportRuntimeService {
       ...this.health(),
       queues: {
         localAdapter: 'public.report_request',
-        excludedDefinitions: ['ESOCIAL_EVENTO_PROCESSAR'],
+        workerEntrypoint: 'main-report-worker.ts',
       },
     };
   }
@@ -186,7 +186,7 @@ export class ReportRuntimeService {
           request.definitionCode,
         ],
       );
-      const row = rows[0];
+      const row = rows[0]!;
       return {
         accepted: true,
         dryRun: false,
@@ -200,10 +200,7 @@ export class ReportRuntimeService {
 
   async pollOnce(input: ReportServicePollDto = {}) {
     const limit = this.normalizeLimit(input.limit ?? 10);
-    return this.integrationsWorkerService.pollOnce(
-      limit,
-      REPORT_SERVICE_DEFINITIONS,
-    );
+    return this.reportWorkerService.pollOnce(limit);
   }
 
   private async ensureDefinition(
@@ -234,7 +231,7 @@ export class ReportRuntimeService {
         request.description,
       ],
     );
-    return rows[0].id;
+    return rows[0]!.id;
   }
 
   private validateOptionalUuid(value: string | undefined, field: string): void {

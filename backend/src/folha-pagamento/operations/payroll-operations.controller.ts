@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -35,6 +36,7 @@ export class PayrollOperationsController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET remessa' })
   @Get('remessa')
   @RequirePermission('payment.remittance.read')
   @ApiOkResponse({
@@ -52,6 +54,7 @@ export class PayrollOperationsController {
     );
   }
 
+  @ApiOperation({ summary: 'GET :id/remessa' })
   @Get(':id/remessa')
   @RequirePermission('payment.remittance.read')
   @ApiOkResponse({
@@ -64,6 +67,7 @@ export class PayrollOperationsController {
     return this.payrollOperationsService.listRemittances(payrollRunId, query);
   }
 
+  @ApiOperation({ summary: 'POST :id/remessa' })
   @Post(':id/remessa')
   @RequirePermission('payment.remittance.write')
   @ApiCreatedResponse({
@@ -90,6 +94,7 @@ export class PayrollOperationsController {
     return created;
   }
 
+  @ApiOperation({ summary: 'POST :id/retorno' })
   @Post(':id/retorno')
   @RequirePermission('folha.write')
   @ApiCreatedResponse({
@@ -131,6 +136,7 @@ export class PayrollGfipController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'POST gerar' })
   @Post('gerar')
   @RequirePermission('folha.write')
   @ApiCreatedResponse({

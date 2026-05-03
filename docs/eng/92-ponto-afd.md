@@ -20,6 +20,14 @@ A geracao recebe `rep_device_id`, `period_start` e `period_end`, emite stream de
 
 Linhas tipo 4 importadas sao convertidas para `ponto.time_record` usando a cadeia `TimeRecordHashService`, preservando `prev_hash` e `record_hash` do modelo PONTO-01.
 
+## AFDT e ACJEF
+
+R2-82 adiciona extratos fiscais AFDT e ACJEF gerados pelo backend a partir do mesmo corte de `rep_device_id`, `period_start` e `period_end` usado no AFD. A Portaria MTP 671/2021 usa o AEJ como arquivo vigente de jornada; por isso este corte nao redefine versao regulatoria externa nem substitui o AFD/AEJ. Os arquivos AFDT/ACJEF do SGP sao saídas deterministicas de fiscalizacao/historico para fechar o residual de aderencia apontado no round-1.
+
+`POST /api/v1/ponto/afd/afdt` retorna um flat-file UTF-8 com cabecalho `AFDT`, linhas `AFDT-DETAIL` ordenadas por NSR a partir de `ponto.time_record`, e trailer com SHA-256 das linhas anteriores. Cada detalhe preserva NSR, instante, origem REP, equipamento, servidor, matricula, CPF, nome e hash da marcacao.
+
+`POST /api/v1/ponto/afd/acjef` retorna um flat-file UTF-8 com cabecalho `ACJEF`, linhas `ACJEF-SUMMARY` por servidor e trailer com SHA-256. Cada resumo usa `ponto.fn_aggregate_timesheet(...)` para consolidar minutos trabalhados, esperados, extras, noturnos, atrasos, ausencias abonadas/nao abonadas e acertos de banco de horas do periodo.
+
 ## Seguranca e Auditoria
 
-As tabelas `ponto.afd_export`, `ponto.afd_import` e `ponto.afd_import_line` forcam RLS com `sgp_tenant_matches(tenant_id)` e permissoes `ponto.afd.read` / `ponto.afd.write`. Todas as mutacoes disparam `sgp_append_audit_event(...)` por trigger de banco, e os endpoints mutaveis exigem `@RequirePermission('ponto.afd.write')`.
+As tabelas `ponto.afd_export`, `ponto.afd_import` e `ponto.afd_import_line` forcam RLS com `sgp_tenant_matches(tenant_id)` e permissoes `ponto.afd.read` / `ponto.afd.write`. Todas as mutacoes disparam `sgp_append_audit_event(...)` por trigger de banco, e os endpoints mutaveis exigem `@RequirePermission('ponto.afd.write')`. As rotas AFDT/ACJEF nao persistem artefato nem alteram estado; elas reutilizam `ponto.afd.read`.

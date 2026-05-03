@@ -125,7 +125,7 @@ export class EditalService {
           latest.rows[0].version,
         ],
       );
-      return this.toSummary(result.rows[0]);
+      return this.toSummary(result.rows[0]!);
     });
   }
 

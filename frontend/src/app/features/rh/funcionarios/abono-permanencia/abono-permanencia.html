@@ -1,12 +1,12 @@
 <section class="abono" aria-labelledby="abono-title">
   <header class="abono__header">
     <div>
-      <p>Recursos Humanos</p>
-      <h1 id="abono-title">Abono permanencia</h1>
+      <p i18n>Recursos Humanos</p>
+      <h1 id="abono-title" i18n>Abono permanencia</h1>
     </div>
     <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
       <mat-icon>refresh</mat-icon>
-      Atualizar
+      <ng-container i18n>Atualizar</ng-container>
     </button>
   </header>
 
@@ -14,18 +14,18 @@
   <p class="abono__error" *ngIf="error" role="alert">{{ error }}</p>
 
   <form class="abono__panel" [formGroup]="form" (ngSubmit)="save()">
-    <mat-checkbox formControlName="active">Abono ativo</mat-checkbox>
+    <mat-checkbox formControlName="active" i18n>Abono ativo</mat-checkbox>
     <mat-form-field appearance="outline">
-      <mat-label>Inicio</mat-label>
+      <mat-label i18n>Inicio</mat-label>
       <input matInput type="date" formControlName="startsOn" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="abono__wide">
-      <mat-label>Fundamento legal</mat-label>
+      <mat-label i18n>Fundamento legal</mat-label>
       <textarea matInput rows="4" formControlName="legalBasis"></textarea>
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit" [disabled]="saving">
       <mat-icon>save</mat-icon>
-      Salvar
+      <ng-container i18n>Salvar</ng-container>
     </button>
   </form>
 </section>

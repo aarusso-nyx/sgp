@@ -64,17 +64,19 @@ export class CognitoJwtService {
     if (parts.length !== 3 || !parts[0] || !parts[1]) {
       throw new UnauthorizedException('Invalid bearer token');
     }
+    const [headerPart, payloadPart] = parts as [string, string, string];
+    const signaturePart = parts[2] ?? '';
 
     try {
       return {
         header: JSON.parse(
-          Buffer.from(parts[0], 'base64url').toString('utf8'),
+          Buffer.from(headerPart, 'base64url').toString('utf8'),
         ) as CognitoJwtHeader,
         payload: JSON.parse(
-          Buffer.from(parts[1], 'base64url').toString('utf8'),
+          Buffer.from(payloadPart, 'base64url').toString('utf8'),
         ) as CognitoJwtPayload,
-        signingInput: `${parts[0]}.${parts[1]}`,
-        signature: Buffer.from(parts[2], 'base64url'),
+        signingInput: `${headerPart}.${payloadPart}`,
+        signature: Buffer.from(signaturePart, 'base64url'),
       };
     } catch {
       throw new UnauthorizedException('Invalid bearer token');

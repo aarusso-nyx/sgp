@@ -114,11 +114,11 @@ export class TaxRateService {
     const sorted = [...brackets].sort((left, right) =>
       new Decimal(left.bracketMin).cmp(new Decimal(right.bracketMin)),
     );
-    if (!new Decimal(sorted[0].bracketMin).equals(0)) {
+    if (!new Decimal(sorted[0]!.bracketMin).equals(0)) {
       throw new BadRequestException(`First ${kind} bracket must start at 0.00`);
     }
     for (let index = 0; index < sorted.length; index += 1) {
-      const current = sorted[index];
+      const current = sorted[index]!;
       const min = new Decimal(current.bracketMin);
       const max = current.bracketMax ? new Decimal(current.bracketMax) : null;
       if (max && max.lessThan(min)) {
@@ -132,7 +132,7 @@ export class TaxRateService {
             `Only the final ${kind} bracket can be open-ended`,
           );
         }
-        const next = new Decimal(sorted[index + 1].bracketMin);
+        const next = new Decimal(sorted[index + 1]!.bracketMin);
         if (!next.equals(max.plus('0.01'))) {
           throw new BadRequestException(
             `${kind} brackets must be continuous by cent`,

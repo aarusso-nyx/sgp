@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -33,6 +34,7 @@ import { EmployeeAlimonyService } from './alimony.service';
 export class EmployeeAlimonyController {
   constructor(private readonly alimonyService: EmployeeAlimonyService) {}
 
+  @ApiOperation({ summary: 'GET :id/alimonies' })
   @Get(':id/alimonies')
   @RequirePermission('hr.alimony.read')
   @ApiOkResponse({ description: 'Employee alimony court orders.' })
@@ -40,6 +42,7 @@ export class EmployeeAlimonyController {
     return this.alimonyService.list(id, status);
   }
 
+  @ApiOperation({ summary: 'POST :id/alimonies' })
   @Post(':id/alimonies')
   @RequirePermission('hr.alimony.write')
   @ApiCreatedResponse({ description: 'Create an employee alimony order.' })
@@ -47,6 +50,7 @@ export class EmployeeAlimonyController {
     return this.alimonyService.create(id, body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/alimonies/:alimonyId' })
   @Patch(':id/alimonies/:alimonyId')
   @RequirePermission('hr.alimony.write')
   @ApiOkResponse({ description: 'Update an employee alimony order.' })
@@ -58,6 +62,7 @@ export class EmployeeAlimonyController {
     return this.alimonyService.update(id, alimonyId, body);
   }
 
+  @ApiOperation({ summary: 'DELETE :id/alimonies/:alimonyId' })
   @Delete(':id/alimonies/:alimonyId')
   @RequirePermission('hr.alimony.write')
   @ApiOkResponse({ description: 'Delete an employee alimony order.' })

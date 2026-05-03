@@ -192,7 +192,7 @@ export class DocumentSigningService {
       );
       AuditMutationContextStore.markMutationAudited();
       return this.toDocument(
-        updatedRows.rows[0],
+        updatedRows.rows[0]!,
         await this.signatures(client, document.tenant_id, document.id),
       );
     });
@@ -376,11 +376,11 @@ export class DocumentSigningService {
         const actualDigest = signature.signature_value.toString('utf8');
         if (
           expectedDigest !== actualDigest ||
-          finalEnvelope.signatures[index].digest !== actualDigest
+          finalEnvelope.signatures[index]!.digest !== actualDigest
         ) {
           return false;
         }
-        replay.signatures.push(finalEnvelope.signatures[index]);
+        replay.signatures.push(finalEnvelope.signatures[index]!);
       }
       return true;
     } catch {

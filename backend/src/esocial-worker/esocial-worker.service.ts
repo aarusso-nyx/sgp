@@ -1,6 +1,11 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
+import {
+  countRows,
+  decideWorkerBackpressure,
+  WorkerBackpressureDecision,
+} from '../common/observability/worker-backpressure';
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
 import { SubmissionService } from './submission/submission.service';
@@ -20,6 +25,8 @@ export interface ESocialWorkerRunSummary {
 
 @Injectable()
 export class ESocialWorkerService {
+  private readonly workerName = 'sgp-esocial-worker';
+
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly submissionService: SubmissionService,
@@ -96,9 +103,52 @@ export class ESocialWorkerService {
     };
   }
 
+  async backpressureStatus(limit = 10): Promise<WorkerBackpressureDecision> {
+    this.ensureDatabase();
+    const requestedLimit = this.normalizeLimit(limit);
+    return this.runBypassingRls(() => this.backpressure(requestedLimit));
+  }
+
   private normalizeLimit(limit: number): number {
     if (!Number.isInteger(limit) || limit < 1) return 10;
     return Math.min(limit, 100);
+  }
+
+  private async backpressure(
+    requestedLimit: number,
+  ): Promise<ReturnType<typeof decideWorkerBackpressure>> {
+    const [pendingEvents, dueRetries, activeClaims] = await Promise.all([
+      countRows(
+        (sql, values) => this.databaseService.query(sql, values),
+        `
+        SELECT count(*)::text AS total
+        FROM public.esocial_event
+        WHERE status = 'PENDENTE'::public."ESocialEventStatus"
+          AND xml_payload IS NOT NULL
+        `,
+      ),
+      countRows(
+        (sql, values) => this.databaseService.query(sql, values),
+        `
+        SELECT count(*)::text AS total
+        FROM esocial.event_retry_schedule
+        WHERE next_at <= now()
+        `,
+      ),
+      countRows(
+        (sql, values) => this.databaseService.query(sql, values),
+        `
+        SELECT count(*)::text AS total
+        FROM public.esocial_event
+        WHERE status = 'ENVIANDO'::public."ESocialEventStatus"
+        `,
+      ),
+    ]);
+    return decideWorkerBackpressure(this.workerName, requestedLimit, {
+      queueDepth: pendingEvents + dueRetries,
+      activeClaims,
+      capacity: requestedLimit,
+    });
   }
 
   private ensureDatabase(): void {

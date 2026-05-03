@@ -34,7 +34,11 @@ CREATE INDEX inscricao_status_idx ON recrutamento.inscricao USING btree (tenant_
 
 CREATE INDEX nomeacao_concurso_vaga_status_idx ON recrutamento.nomeacao USING btree (tenant_id, concurso_id, vaga_id, status);
 
+CREATE INDEX nomeacao_act_classification_idx ON recrutamento.nomeacao USING btree (tenant_id, act_classification_id);
+
 CREATE INDEX nomeacao_expiration_idx ON recrutamento.nomeacao USING btree (tenant_id, comparecimento_until, status) WHERE (status = ANY (ARRAY['NOMEADO'::recrutamento.nomeacao_status, 'CONVOCADO'::recrutamento.nomeacao_status]));
+
+CREATE INDEX vaga_organic_definition_idx ON recrutamento.vaga USING btree (tenant_id, organic_definition_id) WHERE (organic_definition_id IS NOT NULL);
 
 CREATE INDEX nota_lookup_idx ON recrutamento.nota USING btree (tenant_id, inscricao_id, prova_id);
 
@@ -185,6 +189,9 @@ ALTER TABLE ONLY recrutamento.nomeacao
     ADD CONSTRAINT nomeacao_inscricao_fk FOREIGN KEY (tenant_id, inscricao_id) REFERENCES recrutamento.inscricao(tenant_id, id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY recrutamento.nomeacao
+    ADD CONSTRAINT nomeacao_act_classification_fk FOREIGN KEY (act_classification_id) REFERENCES hr.act_classification(id) ON DELETE RESTRICT;
+
+ALTER TABLE ONLY recrutamento.nomeacao
     ADD CONSTRAINT nomeacao_vaga_fk FOREIGN KEY (tenant_id, concurso_id, vaga_id) REFERENCES recrutamento.vaga(tenant_id, concurso_id, position_id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY recrutamento.nota
@@ -246,6 +253,9 @@ ALTER TABLE ONLY recrutamento.signed_document
 
 ALTER TABLE ONLY recrutamento.vaga
     ADD CONSTRAINT vaga_concurso_fk FOREIGN KEY (tenant_id, concurso_id) REFERENCES recrutamento.concurso(tenant_id, id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY recrutamento.vaga
+    ADD CONSTRAINT vaga_organic_definition_fk FOREIGN KEY (tenant_id, organic_definition_id, position_id) REFERENCES hr.organic_definition(tenant_id, id, job_position_id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY recrutamento.vaga
     ADD CONSTRAINT vaga_position_fk FOREIGN KEY (tenant_id, position_id) REFERENCES hr.job_position(tenant_id, id) ON DELETE RESTRICT;

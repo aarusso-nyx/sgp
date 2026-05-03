@@ -63,8 +63,8 @@ export class TceQueueEnqueueService {
       FROM ${queueJobFromClause()}
       WHERE queue.id = $1::uuid
       `,
-      [rows[0].id],
+      [rows[0]!.id],
     );
-    return mapQueueJob(queueRows[0]);
+    return mapQueueJob(queueRows[0]!);
   }
 }

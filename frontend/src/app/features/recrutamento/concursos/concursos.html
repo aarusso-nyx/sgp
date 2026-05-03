@@ -1,61 +1,86 @@
 <section class="concurso-workspace">
   <header>
-    <h1>Concursos publicos</h1>
-    <nav aria-label="Etapas">
-      <button [class.active]="step === 'general'" type="button">Dados</button>
-      <button [class.active]="step === 'seats'" type="button">Vagas</button>
-      <button [class.active]="step === 'edital'" type="button">Edital</button>
-      <button [class.active]="step === 'publish'" type="button">Publicacao</button>
+    <h1 i18n>Concursos publicos</h1>
+    <nav aria-label="Etapas" i18n-aria-label>
+      <button [class.active]="step === 'general'" type="button" i18n>Dados</button>
+      <button [class.active]="step === 'seats'" type="button" i18n>Vagas</button>
+      <button [class.active]="step === 'edital'" type="button" i18n>Edital</button>
+      <button [class.active]="step === 'publish'" type="button" i18n>Publicacao</button>
     </nav>
   </header>
 
   <form>
     <fieldset *ngIf="step === 'general'">
-      <label>Codigo <input name="code" [(ngModel)]="draft.code" /></label>
-      <label>Nome <input name="name" [(ngModel)]="draft.name" /></label>
-      <label>Validade <input name="validUntil" type="date" [(ngModel)]="draft.validUntil" /></label>
+      <label
+        ><ng-container i18n>Codigo</ng-container> <input name="code" [(ngModel)]="draft.code"
+      /></label>
+      <label
+        ><ng-container i18n>Nome</ng-container> <input name="name" [(ngModel)]="draft.name"
+      /></label>
+      <label
+        ><ng-container i18n>Validade</ng-container>
+        <input name="validUntil" type="date" [(ngModel)]="draft.validUntil"
+      /></label>
     </fieldset>
 
     <fieldset *ngIf="step === 'seats'">
       <div class="seat-row" *ngFor="let seat of seats; index as i">
-        <label>Cargo <input [name]="'positionId' + i" [(ngModel)]="seat.positionId" /></label>
         <label
-          >Total <input [name]="'totalSeats' + i" type="number" [(ngModel)]="seat.totalSeats"
+          ><ng-container i18n>Cargo</ng-container>
+          <input [name]="'positionId' + i" [(ngModel)]="seat.positionId"
         /></label>
         <label
-          >PCD <input [name]="'pcdSeats' + i" type="number" [(ngModel)]="seat.pcdSeats"
+          ><ng-container i18n>Total</ng-container>
+          <input [name]="'totalSeats' + i" type="number" [(ngModel)]="seat.totalSeats"
         /></label>
         <label
-          >Negros <input [name]="'racialSeats' + i" type="number" [(ngModel)]="seat.racialSeats"
+          ><ng-container i18n>PCD</ng-container>
+          <input [name]="'pcdSeats' + i" type="number" [(ngModel)]="seat.pcdSeats"
         /></label>
         <label
-          >Indigenas/quilombolas
+          ><ng-container i18n>Negros</ng-container>
+          <input [name]="'racialSeats' + i" type="number" [(ngModel)]="seat.racialSeats"
+        /></label>
+        <label
+          ><ng-container i18n>Indigenas/quilombolas</ng-container>
           <input [name]="'indigenousSeats' + i" type="number" [(ngModel)]="seat.indigenousSeats"
         /></label>
-        <label>Salario <input [name]="'baseSalary' + i" [(ngModel)]="seat.baseSalary" /></label>
+        <label
+          ><ng-container i18n>Salario</ng-container>
+          <input [name]="'baseSalary' + i" [(ngModel)]="seat.baseSalary"
+        /></label>
       </div>
-      <button type="button" (click)="addSeat()">Adicionar vaga</button>
+      <button type="button" (click)="addSeat()" i18n>Adicionar vaga</button>
     </fieldset>
 
     <fieldset *ngIf="step === 'edital'">
-      <label>Documento <input name="editalRef" [(ngModel)]="draft.editalRef" /></label>
-      <label>Ato <input name="administrativeAct" [(ngModel)]="draft.administrativeAct" /></label>
       <label
-        >Data do ato
+        ><ng-container i18n>Documento</ng-container>
+        <input name="editalRef" [(ngModel)]="draft.editalRef"
+      /></label>
+      <label
+        ><ng-container i18n>Ato</ng-container>
+        <input name="administrativeAct" [(ngModel)]="draft.administrativeAct"
+      /></label>
+      <label
+        ><ng-container i18n>Data do ato</ng-container>
         <input name="administrativeActDate" type="date" [(ngModel)]="draft.administrativeActDate"
       /></label>
     </fieldset>
 
     <fieldset *ngIf="step === 'publish'">
-      <label>URL publica <input name="publicUrl" [(ngModel)]="draft.publicUrl" /></label>
-      <p>
+      <label
+        ><ng-container i18n>URL publica</ng-container>
+        <input name="publicUrl" [(ngModel)]="draft.publicUrl"
+      /></label>
+      <p i18n>
         O edital publicado aparece no Portal Transparencia apos validacao do ato administrativo.
       </p>
     </fieldset>
   </form>
 
   <footer>
-    <button type="button" (click)="previous()" [disabled]="step === 'general'">Voltar</button>
-    <button type="button" (click)="next()" [disabled]="step === 'publish'">Avancar</button>
+    <button type="button" (click)="previous()" [disabled]="step === 'general'" i18n>Voltar</button>
+    <button type="button" (click)="next()" [disabled]="step === 'publish'" i18n>Avancar</button>
   </footer>
 </section>

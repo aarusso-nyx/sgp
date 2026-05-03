@@ -1,6 +1,6 @@
 <section class="biometric-review">
   <header>
-    <h1>Conferencia biometrica</h1>
+    <h1 i18n>Conferencia biometrica</h1>
     <strong
       [class.accept]="result.decision === 'ACCEPT'"
       [class.reject]="result.decision === 'REJECT'"
@@ -10,24 +10,33 @@
   </header>
 
   <form>
-    <label>Candidato <input name="candidatoId" [(ngModel)]="search.candidatoId" /></label>
-    <label>Sessao de prova <input name="examSessionId" [(ngModel)]="search.examSessionId" /></label>
-    <label>Leitor <input name="deviceRef" [(ngModel)]="search.deviceRef" /></label>
-    <button type="button" (click)="runMatch()">Conferir digital</button>
+    <label
+      ><ng-container i18n>Candidato</ng-container>
+      <input name="candidatoId" [(ngModel)]="search.candidatoId"
+    /></label>
+    <label
+      ><ng-container i18n>Sessao de prova</ng-container>
+      <input name="examSessionId" [(ngModel)]="search.examSessionId"
+    /></label>
+    <label
+      ><ng-container i18n>Leitor</ng-container>
+      <input name="deviceRef" [(ngModel)]="search.deviceRef"
+    /></label>
+    <button type="button" (click)="runMatch()" i18n>Conferir digital</button>
   </form>
 
   <dl>
     <div>
-      <dt>Score</dt>
+      <dt i18n>Score</dt>
       <dd>{{ result.score }}</dd>
     </div>
     <div>
-      <dt>Threshold</dt>
+      <dt i18n>Threshold</dt>
       <dd>{{ result.threshold }}</dd>
     </div>
     <div>
-      <dt>Template</dt>
-      <dd>Oculto</dd>
+      <dt i18n>Template</dt>
+      <dd i18n>Oculto</dd>
     </div>
   </dl>
 </section>

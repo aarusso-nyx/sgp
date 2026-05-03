@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -38,6 +39,7 @@ export class RubricaController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List rubricas' })
   @Get()
   @RequirePermission('folha.rubrica.read')
   @ApiOkResponse({ description: 'List payroll rubrics.' })
@@ -48,6 +50,7 @@ export class RubricaController {
     return this.rubricaService.listRubricas(query);
   }
 
+  @ApiOperation({ summary: 'GET :id' })
   @Get(':id')
   @RequirePermission('folha.rubrica.read')
   @ApiOkResponse({ description: 'Get a payroll rubric.' })
@@ -55,6 +58,7 @@ export class RubricaController {
     return this.rubricaService.getRubrica(id);
   }
 
+  @ApiOperation({ summary: 'POST Create rubrica' })
   @Post()
   @RequirePermission('folha.rubrica.write')
   @ApiCreatedResponse({ description: 'Create a payroll rubric.' })
@@ -71,6 +75,7 @@ export class RubricaController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH :id' })
   @Patch(':id')
   @RequirePermission('folha.rubrica.write')
   @ApiOkResponse({ description: 'Update a payroll rubric.' })
@@ -88,6 +93,7 @@ export class RubricaController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'DELETE :id' })
   @Delete(':id')
   @RequirePermission('folha.rubrica.write')
   @ApiOkResponse({ description: 'Deactivate a payroll rubric.' })
@@ -104,6 +110,7 @@ export class RubricaController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST compile' })
   @Post('compile')
   @RequirePermission('payroll.formula.write')
   @ApiOkResponse({ description: 'Validate a payroll rubric formula.' })
@@ -127,6 +134,7 @@ export class RubricaController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST :id/recompile' })
   @Post(':id/recompile')
   @RequirePermission('payroll.formula.write')
   @ApiOkResponse({ description: 'Recompile a payroll rubric formula now.' })
@@ -151,6 +159,7 @@ export class RubricaController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST :id/preview' })
   @Post(':id/preview')
   @RequirePermission('folha.rubrica.preview')
   @ApiOkResponse({ description: 'Preview a payroll rubric formula value.' })
@@ -177,6 +186,7 @@ export class RubricaController {
     return preview;
   }
 
+  @ApiOperation({ summary: 'GET links/job-positions' })
   @Get('links/job-positions')
   @RequirePermission('folha.rubrica.read')
   @ApiOkResponse({ description: 'List job-position rubric links.' })
@@ -184,6 +194,7 @@ export class RubricaController {
     return this.rubricaService.listJobPositionRubricas();
   }
 
+  @ApiOperation({ summary: 'POST links/job-positions' })
   @Post('links/job-positions')
   @RequirePermission('folha.rubrica.write')
   @ApiCreatedResponse({

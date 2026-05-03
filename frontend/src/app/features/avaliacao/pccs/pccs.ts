@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
+
+import { ApiClient } from '../../../core/api/api-client';
 
 interface CareerPlan {
   id: string;
@@ -23,6 +24,7 @@ interface SalaryAdjustmentResult {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-avaliacao-pccs',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatIconModule],
@@ -32,7 +34,7 @@ interface SalaryAdjustmentResult {
 export class AvaliacaoPccs implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   readonly form = this.formBuilder.group({
     name: ['', [Validators.required]],
@@ -68,8 +70,8 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
   }
 
   load(): void {
-    this.http
-      .get<CareerPlan[]>('/api/v1/avaliacao/career-plan')
+    this.api
+      .get<CareerPlan[]>('v1/avaliacao/career-plan')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (plans) => {
@@ -113,8 +115,11 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
       salaryRangeId: value.salaryRangeId || undefined,
     };
     const request = this.selected?.id
-      ? this.http.patch(`/api/v1/avaliacao/career-plan/${this.selected.id}`, payload)
-      : this.http.post('/api/v1/avaliacao/career-plan', payload);
+      ? this.api.patch<unknown, typeof payload>(
+          `v1/avaliacao/career-plan/${this.selected.id}`,
+          payload,
+        )
+      : this.api.post<unknown, typeof payload>('v1/avaliacao/career-plan', payload);
     request.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.message = 'PCCS salvo.';
@@ -138,8 +143,11 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
       leiReferencia: value.leiReferencia,
       escopo: { salaryRangeId: value.salaryRangeId },
     };
-    this.http
-      .post<SalaryAdjustmentResult>('/api/v1/avaliacao/salary-history/reajuste-massa', payload)
+    this.api
+      .post<SalaryAdjustmentResult, typeof payload>(
+        'v1/avaliacao/salary-history/reajuste-massa',
+        payload,
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (result) => {

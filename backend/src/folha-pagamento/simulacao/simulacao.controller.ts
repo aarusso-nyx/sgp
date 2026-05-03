@@ -1,5 +1,10 @@
 import { Body, Controller, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -16,6 +21,7 @@ export class SimulacaoController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'POST Run' })
   @Post()
   @RequirePermission('payroll.simulation.execute')
   @ApiOkResponse({ description: 'Run a dry-run payroll simulation.' })

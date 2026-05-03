@@ -107,7 +107,7 @@ export class PppService {
       [input.employeeId, input.periodStart, input.periodEnd],
     );
 
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   private ensureDatabase(): void {

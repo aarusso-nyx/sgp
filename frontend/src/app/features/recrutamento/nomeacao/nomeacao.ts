@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface NextCall {
@@ -13,12 +13,14 @@ interface NextCall {
 interface AppointmentNotice {
   candidateName: string;
   ato: string;
+  actClassificationCode: string;
   status: 'NOMEADO' | 'CONVOCADO' | 'DESISTENTE' | 'EXONERADO_POR_NAO_POSSE';
   channel: 'PUBLICACAO_OFICIAL' | 'EMAIL' | 'POSTAL';
   evidenceRef: string;
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recrutamento-nomeacao',
   standalone: true,
   imports: [CommonModule, FormsModule],
@@ -28,6 +30,7 @@ interface AppointmentNotice {
 export class RecrutamentoNomeacao {
   concursoId = '';
   atoAdministrativo = 'Portaria 54/2026';
+  actClassificationCode = 'NOMEACAO';
   emailEnabled = true;
   nextCalls: NextCall[] = [
     {
@@ -49,6 +52,7 @@ export class RecrutamentoNomeacao {
     {
       candidateName: 'Ana Souza',
       ato: 'Portaria 51/2026',
+      actClassificationCode: 'NOMEACAO',
       status: 'CONVOCADO',
       channel: 'EMAIL',
       evidenceRef: 'email:messageId=local-ana',
@@ -60,6 +64,7 @@ export class RecrutamentoNomeacao {
       {
         candidateName: call.candidateName,
         ato: this.atoAdministrativo,
+        actClassificationCode: this.actClassificationCode,
         status: this.emailEnabled ? 'CONVOCADO' : 'NOMEADO',
         channel: this.emailEnabled ? 'EMAIL' : 'PUBLICACAO_OFICIAL',
         evidenceRef: this.emailEnabled ? 'email:messageId=pending' : this.atoAdministrativo,

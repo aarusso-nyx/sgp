@@ -67,7 +67,7 @@ export class RepDeviceService {
       ],
     );
     AuditMutationContextStore.markMutationAudited();
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async get(repDeviceId: string): Promise<RepDeviceSummary> {

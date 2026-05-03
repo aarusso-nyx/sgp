@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { MasterData, MasterDataRecord, MasterDataResource } from '../services/master-data';
@@ -10,6 +10,7 @@ interface LocationNode extends MasterDataRecord {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-gestao-master-data',
   standalone: false,
   templateUrl: './master-data.html',

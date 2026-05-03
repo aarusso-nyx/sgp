@@ -172,7 +172,7 @@ export class WorkAccidentService {
         input.deathAt ?? '',
       ],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async emitCat(

@@ -93,7 +93,7 @@ export class FaceMatcherService {
     if (liveness.passed || !config.livenessRequired) {
       const stored = await this.findActiveTemplate(client, input.employeeId);
       if (stored) {
-        const probe = extractLocalFaceEmbedding(input.frames[0].imageBase64);
+        const probe = extractLocalFaceEmbedding(input.frames[0]!.imageBase64);
         score = cosineSimilarity(
           probe.embedding,
           decryptFaceEmbedding(
@@ -252,7 +252,7 @@ export class FaceMatcherService {
         input.deviceId ?? '',
       ],
     );
-    return rows.rows[0];
+    return rows.rows[0]!;
   }
 
   private ensureDatabase(): void {

@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { PayrollSimulationResult, SimulacaoFolhaService } from './simulacao.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-folha-simulacao',
   standalone: false,
   templateUrl: './simulacao.html',

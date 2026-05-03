@@ -46,7 +46,7 @@ describe('AgreementsService', () => {
       endsOn: '2026-12-31T00:00:00.000Z',
     });
     await expect(
-      service.update('agr-1', { code: ' CONV-2 ' }),
+      service.update('agr-1', { code: ' CONV-2 ', startsOn: null }),
     ).resolves.toMatchObject({ institution: null, program: null });
     await expect(service.deactivate('agr-1')).resolves.toMatchObject({
       status: 'TERMINATED',

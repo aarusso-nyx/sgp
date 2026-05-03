@@ -1,9 +1,9 @@
 <section class="tables" aria-labelledby="esocial-tables-title">
   <header class="tables__header">
     <div>
-      <p class="tables__eyebrow">eSocial</p>
-      <h1 id="esocial-tables-title">Tabelas iniciais</h1>
-      <p>Status de emissao dos eventos S-1000, S-1005, S-1010, S-1020, S-1050 e S-1070.</p>
+      <p class="tables__eyebrow" i18n>eSocial</p>
+      <h1 id="esocial-tables-title" i18n>Tabelas iniciais</h1>
+      <p i18n>Status de emissao dos eventos S-1000, S-1005, S-1010, S-1020, S-1050 e S-1070.</p>
     </div>
     <button type="button" (click)="emitAll()" [disabled]="!!emitting">
       {{ emitting === 'all' ? 'Emitindo...' : 'Re-emitir delta' }}
@@ -11,14 +11,14 @@
   </header>
 
   <p class="tables__error" *ngIf="error" role="alert">{{ error }}</p>
-  <p class="tables__loading" *ngIf="loading">Carregando...</p>
+  <p class="tables__loading" *ngIf="loading" i18n>Carregando...</p>
 
   <table>
     <thead>
       <tr>
-        <th>Evento</th>
-        <th>Ultimo envio</th>
-        <th>Hash</th>
+        <th i18n>Evento</th>
+        <th i18n>Ultimo envio</th>
+        <th i18n>Hash</th>
         <th></th>
       </tr>
     </thead>
@@ -37,7 +37,7 @@
   </table>
 
   <section class="tables__results" *ngIf="lastResults.length">
-    <h2>Resultado</h2>
+    <h2 i18n>Resultado</h2>
     <ul>
       <li *ngFor="let result of lastResults">
         {{ result.eventKind }} - {{ result.emitted ? 'emitido' : 'sem mudanca' }} -

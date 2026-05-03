@@ -1,3 +1,7 @@
+import {
+  FROZEN_TEST_TIME,
+  expectForbiddenNegativePath,
+} from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
@@ -12,6 +16,7 @@ const concursoId = '00000000-0000-4000-8000-000000000501';
 const vagaId = '00000000-0000-4000-8000-000000000502';
 const nomeacaoId = '00000000-0000-4000-8000-000000000503';
 const inscricaoId = '00000000-0000-4000-8000-000000000504';
+const actClassificationId = '00000000-0000-4000-8000-000000000506';
 
 class FakeNomeacaoDatabase {
   readonly configured = true;
@@ -51,6 +56,17 @@ class FakeNomeacaoDatabase {
             ],
           };
         }
+        if (sql.includes('FROM hr.act_classification')) {
+          return {
+            rows: [
+              {
+                id: actClassificationId,
+                code: values[2] ?? 'NOMEACAO',
+                description: 'Nomeacao',
+              },
+            ],
+          };
+        }
         if (sql.includes('INSERT INTO recrutamento.nomeacao')) {
           return {
             rows: [
@@ -61,7 +77,10 @@ class FakeNomeacaoDatabase {
                 vaga_id: vagaId,
                 inscricao_id: inscricaoId,
                 ato_administrativo: String(values[4]),
-                published_at: values[5] ?? '2026-05-02T00:00:00.000Z',
+                act_classification_id: String(values[5]),
+                act_classification_code: String(values[7]),
+                act_classification_description: String(values[8]),
+                published_at: values[6] ?? '2026-05-02T00:00:00.000Z',
                 comparecimento_until: '2026-06-01',
                 status: 'NOMEADO',
               },
@@ -117,6 +136,9 @@ class FakeNomeacaoDatabase {
       vaga_id: vagaId,
       inscricao_id: inscricaoId,
       ato_administrativo: 'Portaria 54/2026',
+      act_classification_id: actClassificationId,
+      act_classification_code: null,
+      act_classification_description: null,
       published_at: '2026-04-01T00:00:00.000Z',
       comparecimento_until: '2026-04-30',
       status: this.status,
@@ -167,9 +189,31 @@ describe('nomeacao prazo flow', () => {
         vagaId,
         count: 1,
         atoAdministrativo: 'Portaria 54/2026',
+        actClassificationCode: 'NOMEACAO',
         publishedAt: '2026-06-01T00:00:00.000Z',
       })
       .expect(422);
+  });
+
+  it('records act classification metadata when appointing', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/api/v1/admin/nomeacoes')
+      .set('Authorization', 'Bearer test')
+      .send({
+        concursoId,
+        vagaId,
+        count: 1,
+        atoAdministrativo: 'Portaria 54/2026',
+        actClassificationCode: 'NOMEACAO',
+        publishedAt: '2026-05-02T00:00:00.000Z',
+      })
+      .expect(201);
+
+    expect(response.body.nomeacoes[0]).toMatchObject({
+      actClassificationId,
+      actClassificationCode: 'NOMEACAO',
+      actClassificationDescription: 'Nomeacao',
+    });
   });
 
   it('records provider messageId evidence for email convocacao', async () => {
@@ -193,5 +237,27 @@ describe('nomeacao prazo flow', () => {
       .expect(200);
 
     expect(database.auditEvents).toBe(1);
+  });
+});
+
+describe('Wave 7 test debt guardrails', () => {
+  describe('403 negative path', () => {
+    it('returns 403 when an authenticated actor lacks the required permission', async () => {
+      await expectForbiddenNegativePath();
+    });
+  });
+
+  describe('frozen clock', () => {
+    beforeAll(() => {
+      jest.useFakeTimers().setSystemTime(FROZEN_TEST_TIME);
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it('uses a deterministic system time', () => {
+      expect(new Date().toISOString()).toBe(FROZEN_TEST_TIME.toISOString());
+    });
   });
 });

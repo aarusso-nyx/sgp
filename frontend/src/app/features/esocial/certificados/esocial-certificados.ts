@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { ESocialCertificate, ESocialCertificatesService } from './esocial-certificates.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-esocial-certificados',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],

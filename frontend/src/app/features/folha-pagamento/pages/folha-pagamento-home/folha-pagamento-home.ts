@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -10,6 +10,7 @@ import {
 } from '../../processamentos/decimo-terceiro.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-folha-pagamento-home',
   standalone: false,
   templateUrl: './folha-pagamento-home.html',

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -11,6 +11,7 @@ import {
 type MonthlyAction = 'open' | 'calculate' | 'approve' | 'generate' | 'close' | 'review';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-folha-mensal',
   standalone: false,
   templateUrl: './folha-mensal.html',

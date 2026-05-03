@@ -5,13 +5,18 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { StandardExceptionFilter } from '../common/errors/standard-exception.filter';
+import { LgpdModule } from '../common/lgpd/lgpd.module';
+import { createLoggingModule } from '../common/logging/logging.config';
+import { createRateLimitOptions } from '../common/rate-limit/rate-limit.config';
 import { RequestIdMiddleware } from '../common/request-id/request-id.middleware';
 import { validateEnvironment } from '../config/environment';
 import { DatabaseModule } from '../database/database.module';
-import { IntegrationsWorkerModule } from '../integrations-worker/integrations-worker.module';
+import { DocumentsModule } from '../documents/documents.module';
+import { PadesAdapter } from '../external/signature/pades.adapter';
 import { PdfABuilderService } from './payslip/pdf-a-builder.service';
 import { PayslipController } from './payslip/payslip.controller';
 import { PayslipRenderService } from './payslip/payslip-render.service';
@@ -20,12 +25,18 @@ import { YearlyIncomeController } from './yearly-income/yearly-income.controller
 import { YearlyIncomeRenderService } from './yearly-income/yearly-income-render.service';
 import { ReportServiceController } from './report-service.controller';
 import { ReportRuntimeService } from './report-service.service';
+import { ReportWorkerService } from './report-worker.service';
 
 @Module({
   imports: [
+    createLoggingModule('sgp-report-service'),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
+    ThrottlerModule.forRootAsync({
+      useFactory: createRateLimitOptions,
+    }),
     DatabaseModule,
-    IntegrationsWorkerModule,
+    LgpdModule,
+    DocumentsModule,
   ],
   controllers: [
     ReportServiceController,
@@ -34,10 +45,12 @@ import { ReportRuntimeService } from './report-service.service';
   ],
   providers: [
     ReportRuntimeService,
+    PadesAdapter,
     PdfABuilderService,
     PayslipRenderService,
     YearlyIncomeRenderService,
     YearlyIncomeBatchService,
+    ReportWorkerService,
     {
       provide: APP_PIPE,
       useFactory: () =>
@@ -51,6 +64,17 @@ import { ReportRuntimeService } from './report-service.service';
       provide: APP_FILTER,
       useClass: StandardExceptionFilter,
     },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
+  exports: [
+    PadesAdapter,
+    PdfABuilderService,
+    PayslipRenderService,
+    YearlyIncomeRenderService,
+    YearlyIncomeBatchService,
   ],
 })
 export class ReportServiceModule implements NestModule {

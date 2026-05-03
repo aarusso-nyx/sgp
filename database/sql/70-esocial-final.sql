@@ -3,9 +3,19 @@ CREATE VIEW esocial.v_competence_periodics_pending WITH (security_invoker='true'
          SELECT DISTINCT run.tenant_id,
             make_date(run.competence_year, run.competence_month, 1) AS competence,
             run.id AS payroll_run_id,
-            item.employee_id
+            item.employee_id,
+                CASE
+                    WHEN link.contract_type = ANY (ARRAY['statutory'::text, 'commissioned'::text]) THEN 'S-1202'::text
+                    ELSE 'S-1200'::text
+                END AS event_kind,
+                CASE
+                    WHEN link.contract_type = ANY (ARRAY['statutory'::text, 'commissioned'::text]) THEN 'missing_s1202_receipt'::text
+                    ELSE 'missing_s1200_receipt'::text
+                END AS reason
            FROM (payroll.payroll_run run
-             JOIN payroll.employee_payroll_item item ON (((item.tenant_id = run.tenant_id) AND (item.payroll_run_id = run.id) AND (item.deleted_at IS NULL))))
+             JOIN payroll.employee_payroll_item item ON (((item.tenant_id = run.tenant_id) AND (item.payroll_run_id = run.id) AND (item.deleted_at IS NULL)))
+             JOIN hr.employee employee ON (((employee.tenant_id = item.tenant_id) AND (employee.id = item.employee_id)))
+             LEFT JOIN hr.employment_link link ON (((link.tenant_id = employee.tenant_id) AND (link.id = employee.employment_link_id))))
           WHERE (run.status = ANY (ARRAY['GENERATED'::public."PayrollRunStatus", 'APPROVED'::public."PayrollRunStatus", 'PAID'::public."PayrollRunStatus", 'CLOSED'::public."PayrollRunStatus"]))
         ), paid_workers AS (
          SELECT DISTINCT file.tenant_id,
@@ -19,15 +29,17 @@ CREATE VIEW esocial.v_competence_periodics_pending WITH (security_invoker='true'
         )
  SELECT run_workers.tenant_id,
     run_workers.competence,
-    'S-1200'::text AS event_kind,
+    run_workers.event_kind,
     run_workers.payroll_run_id,
     NULL::uuid AS payment_batch_id,
     run_workers.employee_id,
-    'missing_s1200_receipt'::text AS reason
+    run_workers.reason
    FROM run_workers
-  WHERE (NOT (EXISTS ( SELECT 1
+  WHERE (((run_workers.event_kind = 'S-1200'::text) AND (NOT (EXISTS ( SELECT 1
            FROM esocial.s1200_emission_state state
-          WHERE ((state.tenant_id = run_workers.tenant_id) AND (state.payroll_run_id = run_workers.payroll_run_id) AND (state.employee_id = run_workers.employee_id) AND (NULLIF(btrim(state.recibo), ''::text) IS NOT NULL)))))
+          WHERE ((state.tenant_id = run_workers.tenant_id) AND (state.payroll_run_id = run_workers.payroll_run_id) AND (state.employee_id = run_workers.employee_id) AND (NULLIF(btrim(state.recibo), ''::text) IS NOT NULL)))))) OR ((run_workers.event_kind = 'S-1202'::text) AND (NOT (EXISTS ( SELECT 1
+           FROM esocial.s1202_emission_state state
+          WHERE ((state.tenant_id = run_workers.tenant_id) AND (state.payroll_run_id = run_workers.payroll_run_id) AND (state.employee_id = run_workers.employee_id) AND (NULLIF(btrim(state.recibo), ''::text) IS NOT NULL)))))))
 UNION ALL
  SELECT paid_workers.tenant_id,
     paid_workers.competence,
@@ -72,6 +84,8 @@ CREATE INDEX event_retry_schedule_due_idx ON esocial.event_retry_schedule USING 
 
 CREATE INDEX s1200_emission_state_employee_idx ON esocial.s1200_emission_state USING btree (tenant_id, employee_id, emitted_at DESC);
 
+CREATE INDEX s1202_emission_state_employee_idx ON esocial.s1202_emission_state USING btree (tenant_id, employee_id, emitted_at DESC);
+
 CREATE INDEX s1210_emission_state_employee_idx ON esocial.s1210_emission_state USING btree (tenant_id, employee_id, emitted_at DESC);
 
 CREATE INDEX s2205_pending_alteration_pending_idx ON esocial.s2205_pending_alteration USING btree (tenant_id, employee_id, status, created_at);
@@ -115,6 +129,8 @@ CREATE TRIGGER es03_s2230_pending_audit AFTER INSERT OR DELETE OR UPDATE ON esoc
 CREATE TRIGGER es03_s2299_pending_audit AFTER INSERT OR DELETE OR UPDATE ON esocial.s2299_pending FOR EACH ROW EXECUTE FUNCTION esocial.sgp_es03_pending_audit();
 
 CREATE TRIGGER es04_s1200_emission_state_audit AFTER INSERT OR DELETE OR UPDATE ON esocial.s1200_emission_state FOR EACH ROW EXECUTE FUNCTION esocial.sgp_es04_emission_state_audit();
+
+CREATE TRIGGER es04_s1202_emission_state_audit AFTER INSERT OR DELETE OR UPDATE ON esocial.s1202_emission_state FOR EACH ROW EXECUTE FUNCTION esocial.sgp_es04_emission_state_audit();
 
 CREATE TRIGGER es04_s1210_emission_state_audit AFTER INSERT OR DELETE OR UPDATE ON esocial.s1210_emission_state FOR EACH ROW EXECUTE FUNCTION esocial.sgp_es04_emission_state_audit();
 
@@ -244,6 +260,8 @@ ALTER TABLE ONLY esocial.event_retry_schedule FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY esocial.s1200_emission_state FORCE ROW LEVEL SECURITY;
 
+ALTER TABLE ONLY esocial.s1202_emission_state FORCE ROW LEVEL SECURITY;
+
 ALTER TABLE ONLY esocial.s1210_emission_state FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY esocial.s1299_emission_state FORCE ROW LEVEL SECURITY;
@@ -307,6 +325,12 @@ ALTER TABLE esocial.s1200_emission_state ENABLE ROW LEVEL SECURITY;
 CREATE POLICY s1200_emission_state_select ON esocial.s1200_emission_state FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.read'::text, 'esocial.event.write'::text])));
 
 CREATE POLICY s1200_emission_state_write ON esocial.s1200_emission_state USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.write'::text])));
+
+ALTER TABLE esocial.s1202_emission_state ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY s1202_emission_state_select ON esocial.s1202_emission_state FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.read'::text, 'esocial.event.write'::text])));
+
+CREATE POLICY s1202_emission_state_write ON esocial.s1202_emission_state USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.write'::text])));
 
 ALTER TABLE esocial.s1210_emission_state ENABLE ROW LEVEL SECURITY;
 

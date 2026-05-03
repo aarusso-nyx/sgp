@@ -1,5 +1,10 @@
 import { Body, Controller, Param, Patch } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../../iam/decorators/require-permission.decorator';
@@ -12,6 +17,7 @@ import { TsvContractService } from './tsv-contract.service';
 export class TsvContractController {
   constructor(private readonly service: TsvContractService) {}
 
+  @ApiOperation({ summary: 'PATCH :id' })
   @Patch(':id')
   @RequirePermission('hr.employment.write')
   @AuditMutation({

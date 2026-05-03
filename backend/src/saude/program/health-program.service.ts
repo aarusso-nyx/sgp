@@ -97,7 +97,7 @@ export class HealthProgramService {
         input.responsibleDoctorName.trim(),
       ],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async activate(id: string): Promise<HealthProgramSummary> {
@@ -145,7 +145,7 @@ export class HealthProgramService {
         `,
         [id],
       );
-      const active = updated.rows[0];
+      const active = updated.rows[0]!;
       await this.revisionService.createWithClient(client, {
         parentProgramId: id,
         parentProgramKind: 'PCMSO',
@@ -211,7 +211,7 @@ export class HealthProgramService {
         input.periodicityMonthsOverride ?? null,
       ],
     );
-    const row = rows[0];
+    const row = rows[0]!;
     return {
       id: row.id,
       healthProgramId: row.health_program_id,

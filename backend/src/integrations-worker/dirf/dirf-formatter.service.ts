@@ -30,6 +30,10 @@ export interface FormatDirfInput {
   beneficiaries: DirfBeneficiaryBlock[];
 }
 
+/**
+ * @deprecated DIRF formatting is retained only for year-base competences before
+ * 2025-01-01. Use EFD-Reinf R-4000 for facts from 2025-01-01 onward.
+ */
 @Injectable()
 export class DirfFormatterService {
   format(input: FormatDirfInput): string {
@@ -69,7 +73,7 @@ export class DirfFormatterService {
   }
 
   private toBeneficiary(payments: DirfSourcePayment[]): DirfBeneficiaryBlock {
-    const first = payments[0];
+    const first = payments[0]!;
     const byCode: Record<string, { amount: string; irrf: string }> = {};
     for (const payment of payments) {
       const current = byCode[payment.revenueCode] ?? {

@@ -79,6 +79,8 @@ CREATE INDEX shift_pattern_day_pattern_idx ON ponto.shift_pattern_day USING btre
 
 CREATE INDEX time_record_employee_recorded_idx ON ponto.time_record USING btree (tenant_id, employee_id, recorded_at DESC);
 
+CREATE INDEX time_record_identity_tenant_recorded_idx ON ponto.time_record_identity USING btree (tenant_id, recorded_at DESC);
+
 CREATE INDEX time_record_justification_link_record_idx ON ponto.time_record_justification_link USING btree (tenant_id, time_record_id);
 
 CREATE INDEX timesheet_period_employee_idx ON ponto.timesheet_period USING btree (tenant_id, employee_id, period_start DESC);
@@ -191,6 +193,12 @@ CREATE TRIGGER time_record_append_only BEFORE DELETE OR UPDATE ON ponto.time_rec
 
 CREATE TRIGGER time_record_audit AFTER INSERT ON ponto.time_record FOR EACH ROW EXECUTE FUNCTION ponto.ponto01_audit_row();
 
+CREATE TRIGGER time_record_default_partition_auto_create BEFORE INSERT ON ponto.time_record_default FOR EACH ROW EXECUTE FUNCTION ponto.sgp_time_record_default_partition_redirect();
+
+CREATE TRIGGER time_record_identity_append_only BEFORE DELETE OR UPDATE ON ponto.time_record_identity FOR EACH ROW EXECUTE FUNCTION ponto.sgp_time_record_identity_append_only();
+
+CREATE TRIGGER time_record_identity_register AFTER INSERT ON ponto.time_record FOR EACH ROW EXECUTE FUNCTION ponto.sgp_register_time_record_identity();
+
 CREATE TRIGGER time_record_justification_link_audit AFTER INSERT OR DELETE OR UPDATE ON ponto.time_record_justification_link FOR EACH ROW EXECUTE FUNCTION ponto.ponto06_audit_row();
 
 CREATE TRIGGER timesheet_period_audit AFTER INSERT OR DELETE OR UPDATE ON ponto.timesheet_period FOR EACH ROW EXECUTE FUNCTION ponto.ponto01_audit_row();
@@ -204,6 +212,12 @@ CREATE TRIGGER work_schedule_touch_updated_at BEFORE UPDATE ON ponto.work_schedu
 CREATE TRIGGER work_shift_audit AFTER INSERT OR DELETE OR UPDATE ON ponto.work_shift FOR EACH ROW EXECUTE FUNCTION ponto.ponto01_audit_row();
 
 CREATE TRIGGER work_shift_touch_updated_at BEFORE UPDATE ON ponto.work_shift FOR EACH ROW EXECUTE FUNCTION ponto.ponto01_touch_updated_at();
+
+ALTER TABLE ponto.time_record_default ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE ponto.time_record_default FORCE ROW LEVEL SECURITY;
+
+SELECT ponto.sgp_create_time_record_partitions();
 
 ALTER TABLE ONLY ponto.absence_justification
     ADD CONSTRAINT absence_justification_approved_by_user_id_fkey FOREIGN KEY (approved_by_user_id) REFERENCES public.user_account(id) ON DELETE SET NULL;
@@ -239,7 +253,7 @@ ALTER TABLE ONLY ponto.afd_import_line
     ADD CONSTRAINT afd_import_line_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY ponto.afd_import_line
-    ADD CONSTRAINT afd_import_line_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record(time_record_id) ON DELETE SET NULL;
+    ADD CONSTRAINT afd_import_line_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record_identity(time_record_id) ON DELETE SET NULL;
 
 ALTER TABLE ONLY ponto.afd_import
     ADD CONSTRAINT afd_import_rep_device_id_fkey FOREIGN KEY (rep_device_id) REFERENCES ponto.rep_device(rep_device_id) ON DELETE RESTRICT;
@@ -263,7 +277,7 @@ ALTER TABLE ONLY ponto.biometric_match
     ADD CONSTRAINT biometric_match_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY ponto.biometric_match
-    ADD CONSTRAINT biometric_match_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record(time_record_id) ON DELETE CASCADE;
+    ADD CONSTRAINT biometric_match_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record_identity(time_record_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY ponto.day_schedule
     ADD CONSTRAINT day_schedule_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
@@ -317,7 +331,7 @@ ALTER TABLE ONLY ponto.face_match
     ADD CONSTRAINT face_match_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY ponto.face_match
-    ADD CONSTRAINT face_match_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record(time_record_id) ON DELETE SET NULL;
+    ADD CONSTRAINT face_match_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record_identity(time_record_id) ON DELETE SET NULL;
 
 ALTER TABLE ONLY ponto.face_threshold_config
     ADD CONSTRAINT face_threshold_config_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
@@ -350,7 +364,7 @@ ALTER TABLE ONLY ponto.mobile_clock_in_attempt
     ADD CONSTRAINT mobile_clock_in_attempt_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY ponto.mobile_clock_in_attempt
-    ADD CONSTRAINT mobile_clock_in_attempt_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record(time_record_id) ON DELETE SET NULL;
+    ADD CONSTRAINT mobile_clock_in_attempt_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record_identity(time_record_id) ON DELETE SET NULL;
 
 ALTER TABLE ONLY ponto.mobile_clock_in_attempt
     ADD CONSTRAINT mobile_clock_in_attempt_work_location_id_fkey FOREIGN KEY (work_location_id) REFERENCES hr.work_location(id) ON DELETE RESTRICT;
@@ -398,7 +412,7 @@ ALTER TABLE ONLY ponto.rep_ingestion_line
     ADD CONSTRAINT rep_ingestion_line_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY ponto.rep_ingestion_line
-    ADD CONSTRAINT rep_ingestion_line_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record(time_record_id) ON DELETE SET NULL;
+    ADD CONSTRAINT rep_ingestion_line_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record_identity(time_record_id) ON DELETE SET NULL;
 
 ALTER TABLE ONLY ponto.shift_assignment
     ADD CONSTRAINT shift_assignment_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES hr.employee(id) ON DELETE RESTRICT;
@@ -418,8 +432,14 @@ ALTER TABLE ONLY ponto.shift_pattern_day
 ALTER TABLE ONLY ponto.shift_pattern
     ADD CONSTRAINT shift_pattern_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
-ALTER TABLE ONLY ponto.time_record
+ALTER TABLE ponto.time_record
     ADD CONSTRAINT time_record_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES hr.employee(id) ON DELETE RESTRICT;
+
+ALTER TABLE ONLY ponto.time_record_identity
+    ADD CONSTRAINT time_record_identity_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES hr.employee(id) ON DELETE RESTRICT;
+
+ALTER TABLE ONLY ponto.time_record_identity
+    ADD CONSTRAINT time_record_identity_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY ponto.time_record_justification_link
     ADD CONSTRAINT time_record_justification_link_absence_justification_id_fkey FOREIGN KEY (absence_justification_id) REFERENCES ponto.absence_justification(absence_justification_id) ON DELETE CASCADE;
@@ -431,9 +451,9 @@ ALTER TABLE ONLY ponto.time_record_justification_link
     ADD CONSTRAINT time_record_justification_link_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY ponto.time_record_justification_link
-    ADD CONSTRAINT time_record_justification_link_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record(time_record_id) ON DELETE CASCADE;
+    ADD CONSTRAINT time_record_justification_link_time_record_id_fkey FOREIGN KEY (time_record_id) REFERENCES ponto.time_record_identity(time_record_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY ponto.time_record
+ALTER TABLE ponto.time_record
     ADD CONSTRAINT time_record_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT;
 
 ALTER TABLE ONLY ponto.timesheet_period
@@ -506,6 +526,8 @@ ALTER TABLE ONLY ponto.shift_pattern FORCE ROW LEVEL SECURITY;
 ALTER TABLE ONLY ponto.shift_pattern_day FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY ponto.time_record FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY ponto.time_record_identity FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY ponto.time_record_justification_link FORCE ROW LEVEL SECURITY;
 
@@ -625,9 +647,13 @@ CREATE POLICY shift_pattern_rw ON ponto.shift_pattern USING ((public.sgp_tenant_
 
 ALTER TABLE ponto.time_record ENABLE ROW LEVEL SECURITY;
 
+ALTER TABLE ponto.time_record_identity ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE ponto.time_record_justification_link ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY time_record_justification_link_rw ON ponto.time_record_justification_link USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['ponto.justification.read'::text, 'ponto.justification.write'::text, 'ponto.justification.approve'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['ponto.justification.write'::text, 'ponto.justification.approve'::text])));
+
+CREATE POLICY time_record_identity_rw ON ponto.time_record_identity USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['ponto.schedule.read'::text, 'ponto.schedule.write'::text, 'ponto.timerecord.read'::text, 'ponto.timerecord.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['ponto.timerecord.write'::text])));
 
 CREATE POLICY time_record_rw ON ponto.time_record USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['ponto.schedule.read'::text, 'ponto.schedule.write'::text, 'ponto.timerecord.read'::text, 'ponto.timerecord.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['ponto.timerecord.write'::text])));
 

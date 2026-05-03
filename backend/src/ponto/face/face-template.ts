@@ -39,8 +39,8 @@ export function cosineSimilarity(left: Buffer, right: Buffer): number {
   let leftNorm = 0;
   let rightNorm = 0;
   for (let index = 0; index < length; index += 1) {
-    const leftValue = left[index] - 128;
-    const rightValue = right[index] - 128;
+    const leftValue = left[index]! - 128;
+    const rightValue = right[index]! - 128;
     dot += leftValue * rightValue;
     leftNorm += leftValue * leftValue;
     rightNorm += rightValue * rightValue;
@@ -61,7 +61,7 @@ export function encryptFaceEmbedding(
   const mask = createHmac('sha512', key).update(nonce).digest();
   const cipher = Buffer.alloc(embedding.length);
   for (let index = 0; index < embedding.length; index += 1) {
-    cipher[index] = embedding[index] ^ mask[index % mask.length];
+    cipher[index] = embedding[index]! ^ mask[index % mask.length]!;
   }
   return Buffer.concat([Buffer.from('SGPFACE1:'), nonce, cipher]);
 }
@@ -77,7 +77,7 @@ export function decryptFaceEmbedding(cipher: Buffer, kmsKeyId: string): Buffer {
   const mask = createHmac('sha512', key).update(nonce).digest();
   const embedding = Buffer.alloc(body.length);
   for (let index = 0; index < body.length; index += 1) {
-    embedding[index] = body[index] ^ mask[index % mask.length];
+    embedding[index] = body[index]! ^ mask[index % mask.length]!;
   }
   return embedding;
 }

@@ -1,21 +1,21 @@
 <section class="monthly-payroll">
   <header>
-    <h1>Folha mensal</h1>
+    <h1 i18n>Folha mensal</h1>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline">
-      <mat-label>Ano</mat-label>
+      <mat-label i18n>Ano</mat-label>
       <input matInput type="number" formControlName="year" min="2000" max="2100" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Mes</mat-label>
+      <mat-label i18n>Mes</mat-label>
       <input matInput type="number" formControlName="month" min="1" max="12" />
     </mat-form-field>
 
     <button mat-stroked-button type="button" (click)="run('open')" [disabled]="disabled('open')">
       <mat-icon>lock_open</mat-icon>
-      Abrir
+      <ng-container i18n>Abrir</ng-container>
     </button>
     <button
       mat-stroked-button
@@ -24,7 +24,7 @@
       [disabled]="disabled('calculate')"
     >
       <mat-icon>calculate</mat-icon>
-      Calcular
+      <ng-container i18n>Calcular</ng-container>
     </button>
     <button
       mat-stroked-button
@@ -33,7 +33,7 @@
       [disabled]="disabled('approve')"
     >
       <mat-icon>verified</mat-icon>
-      Aprovar
+      <ng-container i18n>Aprovar</ng-container>
     </button>
     <button
       mat-flat-button
@@ -43,13 +43,13 @@
       [disabled]="disabled('generate')"
     >
       <mat-icon>receipt_long</mat-icon>
-      Gerar
+      <ng-container i18n>Gerar</ng-container>
     </button>
     <button mat-stroked-button type="button" (click)="run('close')" [disabled]="disabled('close')">
       <mat-icon>lock</mat-icon>
-      Fechar
+      <ng-container i18n>Fechar</ng-container>
     </button>
-    <button mat-button type="button" (click)="run('review')" [disabled]="disabled('review')">
+    <button mat-button type="button" (click)="run('review')" [disabled]="disabled('review')" i18n>
       Revisao
     </button>
   </form>
@@ -58,33 +58,33 @@
 
   <section *ngIf="result as payroll" class="summary" aria-live="polite">
     <div>
-      <span>Competencia</span>
+      <span i18n>Competencia</span>
       <strong>{{ payroll.competenceYear }}-{{ payroll.competenceMonth }}</strong>
     </div>
     <div>
-      <span>Status</span>
+      <span i18n>Status</span>
       <strong>{{ payroll.competenceStatus }}</strong>
     </div>
     <div>
-      <span>Servidores</span>
+      <span i18n>Servidores</span>
       <strong>{{ payroll.employeeCount }}</strong>
     </div>
     <div>
-      <span>Liquido</span>
+      <span i18n>Liquido</span>
       <strong>{{ payroll.totalNet | moneyBr }}</strong>
     </div>
   </section>
 
   <section *ngIf="result as payroll" class="review">
-    <h2>Totais por servidor</h2>
+    <h2 i18n>Totais por servidor</h2>
     <table *ngIf="payroll.review.length">
       <thead>
         <tr>
-          <th>Matricula</th>
-          <th>Servidor</th>
-          <th>Proventos</th>
-          <th>Descontos</th>
-          <th>Liquido</th>
+          <th i18n>Matricula</th>
+          <th i18n>Servidor</th>
+          <th i18n>Proventos</th>
+          <th i18n>Descontos</th>
+          <th i18n>Liquido</th>
         </tr>
       </thead>
       <tbody>

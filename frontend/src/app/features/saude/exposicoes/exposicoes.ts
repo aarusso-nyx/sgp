@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
@@ -20,6 +20,7 @@ interface EnvironmentalExposure {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-saude-exposicoes',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],

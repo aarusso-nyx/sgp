@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 interface YearlyIncomeFile {
   yearBase: number;
@@ -12,6 +12,7 @@ interface YearlyIncomeFile {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-portal-comprovante-rendimentos',
   standalone: true,
   imports: [CommonModule],
@@ -20,13 +21,13 @@ interface YearlyIncomeFile {
 })
 export class PortalComprovanteRendimentos implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   files: YearlyIncomeFile[] = [];
   error = '';
 
   ngOnInit(): void {
-    this.http
+    this.api
       .get<YearlyIncomeFile[]>('/api/v1/portal/yearly-income')
       .pipe(takeUntil(this.destroy$))
       .subscribe({

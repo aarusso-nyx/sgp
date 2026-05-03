@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ export class DutyRosterController {
     private readonly rosterProjectorService: RosterProjectorService,
   ) {}
 
+  @ApiOperation({ summary: 'GET rosters' })
   @Get('rosters')
   @RequirePermission('ponto.roster.read')
   @ApiOkResponse({ description: 'Duty rosters.' })
@@ -28,6 +30,7 @@ export class DutyRosterController {
     return this.dutyRosterService.list();
   }
 
+  @ApiOperation({ summary: 'GET rosters/projetar' })
   @Get('rosters/projetar')
   @RequirePermission('ponto.roster.read')
   @ApiOkResponse({ description: 'Projected roster entries.' })
@@ -43,6 +46,7 @@ export class DutyRosterController {
     );
   }
 
+  @ApiOperation({ summary: 'POST rosters' })
   @Post('rosters')
   @RequirePermission('ponto.roster.write')
   @AuditMutation({
@@ -55,6 +59,7 @@ export class DutyRosterController {
     return this.dutyRosterService.generate(body);
   }
 
+  @ApiOperation({ summary: 'POST rosters/:dutyRosterId/publicar' })
   @Post('rosters/:dutyRosterId/publicar')
   @RequirePermission('ponto.roster.write')
   @AuditMutation({
@@ -67,6 +72,7 @@ export class DutyRosterController {
     return this.dutyRosterService.publish(dutyRosterId);
   }
 
+  @ApiOperation({ summary: 'POST rosters/:dutyRosterId/travar' })
   @Post('rosters/:dutyRosterId/travar')
   @RequirePermission('ponto.roster.write')
   @AuditMutation({
@@ -79,6 +85,7 @@ export class DutyRosterController {
     return this.dutyRosterService.lock(dutyRosterId);
   }
 
+  @ApiOperation({ summary: 'GET proximas' })
   @Get('proximas')
   @RequirePermission('ponto.roster.read')
   @ApiOkResponse({ description: 'Next four weeks for an employee.' })

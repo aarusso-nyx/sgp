@@ -1,5 +1,6 @@
 import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { LeavesService } from './leaves.service';
 export class LeavesController {
   constructor(private readonly leavesService: LeavesService) {}
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('rh.leave.request')
   @AuditMutation({
@@ -29,6 +31,7 @@ export class LeavesController {
     return this.leavesService.create(body);
   }
 
+  @ApiOperation({ summary: 'GET :employee_id' })
   @Get(':employee_id')
   @RequirePermission('rh.leave.read')
   @ApiOkResponse({ description: 'List employee general leaves.' })
@@ -36,6 +39,7 @@ export class LeavesController {
     return this.leavesService.listByEmployee(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST :id/aprovar' })
   @Post(':id/aprovar')
   @RequirePermission('rh.leave.approve')
   @AuditMutation({
@@ -49,6 +53,7 @@ export class LeavesController {
     return this.leavesService.approve(id);
   }
 
+  @ApiOperation({ summary: 'POST :id/cancelar' })
   @Post(':id/cancelar')
   @RequirePermission('rh.leave.approve')
   @AuditMutation({

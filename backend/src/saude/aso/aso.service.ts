@@ -115,7 +115,7 @@ export class AsoService {
         input.active ?? true,
       ],
     );
-    return this.toMedicalExam(rows[0]);
+    return this.toMedicalExam(rows[0]!);
   }
 
   async listAsoRecords(): Promise<AsoRecordSummary[]> {
@@ -208,7 +208,7 @@ export class AsoService {
       `,
       [input.employeeId, input.asoKind, input.scheduledAt, nextDue],
     );
-    return this.toAsoRecord(rows[0]);
+    return this.toAsoRecord(rows[0]!);
   }
 
   async createAdmissionPending(employeeId: string): Promise<AsoRecordSummary> {
@@ -266,7 +266,7 @@ export class AsoService {
         nextDue,
       ],
     );
-    return this.toAsoRecord(rows[0]);
+    return this.toAsoRecord(rows[0]!);
   }
 
   async archive(id: string): Promise<AsoRecordSummary> {
@@ -299,7 +299,7 @@ export class AsoService {
       `,
       [id],
     );
-    return this.toAsoRecord(rows[0]);
+    return this.toAsoRecord(rows[0]!);
   }
 
   async findRecord(id: string): Promise<AsoRecordSummary> {

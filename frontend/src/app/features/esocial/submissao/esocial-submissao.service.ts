@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface ESocialSubmissionBatch {
   batchId: string;
@@ -29,20 +29,17 @@ export interface ESocialCircuitState {
 
 @Injectable({ providedIn: 'root' })
 export class ESocialSubmissaoService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   listBatches(): Observable<ESocialSubmissionBatch[]> {
-    return this.http.get<ESocialSubmissionBatch[]>('/api/v1/esocial/submissoes');
+    return this.api.get<ESocialSubmissionBatch[]>('/api/v1/esocial/submissoes');
   }
 
   listCircuits(): Observable<ESocialCircuitState[]> {
-    return this.http.get<ESocialCircuitState[]>('/api/v1/esocial/submissoes/circuitos');
+    return this.api.get<ESocialCircuitState[]>('/api/v1/esocial/submissoes/circuitos');
   }
 
   forceRetry(batchId: string): Observable<ESocialSubmissionBatch> {
-    return this.http.post<ESocialSubmissionBatch>(
-      `/api/v1/esocial/submissoes/${batchId}/retry`,
-      {},
-    );
+    return this.api.post<ESocialSubmissionBatch>(`/api/v1/esocial/submissoes/${batchId}/retry`, {});
   }
 }

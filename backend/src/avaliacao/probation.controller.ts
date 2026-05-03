@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ export class ProbationController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET a-vencer' })
   @Get('a-vencer')
   @RequirePermission('avaliacao.read')
   @ApiOkResponse({
@@ -32,6 +34,7 @@ export class ProbationController {
     );
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('avaliacao.probation.write')
   @ApiCreatedResponse({ description: 'Register a probation evaluation.' })

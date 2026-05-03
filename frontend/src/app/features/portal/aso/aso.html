@@ -1,17 +1,17 @@
 <section class="portal-aso">
   <header>
-    <p>Portal do servidor</p>
-    <h1>Meus ASOs</h1>
-    <button type="button" (click)="load()">Atualizar</button>
+    <p i18n>Portal do servidor</p>
+    <h1 i18n>Meus ASOs</h1>
+    <button type="button" (click)="load()" i18n>Atualizar</button>
   </header>
 
   <table>
     <thead>
       <tr>
-        <th>Tipo</th>
-        <th>Realizacao</th>
-        <th>Conclusao</th>
-        <th>Proximo exame</th>
+        <th i18n>Tipo</th>
+        <th i18n>Realizacao</th>
+        <th i18n>Conclusao</th>
+        <th i18n>Proximo exame</th>
       </tr>
     </thead>
     <tbody>
@@ -22,7 +22,7 @@
         <td>{{ record.nextExamDueAt || '-' }}</td>
       </tr>
       <tr *ngIf="!records.length">
-        <td colspan="4">Nenhum ASO disponivel.</td>
+        <td colspan="4" i18n>Nenhum ASO disponivel.</td>
       </tr>
     </tbody>
   </table>

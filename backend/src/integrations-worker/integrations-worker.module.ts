@@ -16,8 +16,10 @@ import { PortabilityParserService } from './consignment-portability/portability-
 import { PortabilityProcessService } from './consignment-portability/portability-process.service';
 import { DctfwebModule } from './dctfweb/dctfweb.module';
 import { DirfModule } from './dirf/dirf.module';
+import { EfdReinfModule } from './efd-reinf/efd-reinf.module';
 import { GpsModule } from './gps/gps.module';
 import { IntegrationsWorkerService } from './integrations-worker.service';
+import { SiaficModule } from './siafic/siafic.module';
 
 @Module({
   imports: [
@@ -27,7 +29,9 @@ import { IntegrationsWorkerService } from './integrations-worker.service';
     DocumentsModule,
     DctfwebModule,
     DirfModule,
+    EfdReinfModule,
     GpsModule,
+    SiaficModule,
   ],
   controllers: [PortabilityController, Cnab240ReturnController],
   providers: [

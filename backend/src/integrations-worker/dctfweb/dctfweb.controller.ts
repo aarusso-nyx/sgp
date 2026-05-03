@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -34,6 +35,7 @@ export class DctfwebController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('fiscal.dctfweb.read')
   @ApiOkResponse({ description: 'List DCTFWeb declarations.' })
@@ -44,6 +46,7 @@ export class DctfwebController {
     return this.builder.list(year, month);
   }
 
+  @ApiOperation({ summary: 'GET :id' })
   @Get(':id')
   @RequirePermission('fiscal.dctfweb.read')
   @ApiOkResponse({ description: 'Get a DCTFWeb declaration with items.' })
@@ -51,6 +54,7 @@ export class DctfwebController {
     return this.builder.find(id);
   }
 
+  @ApiOperation({ summary: 'POST gerar' })
   @Post('gerar')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({
@@ -79,6 +83,7 @@ export class DctfwebController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST :id/assinar' })
   @Post(':id/assinar')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({
@@ -100,6 +105,7 @@ export class DctfwebController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST :id/transmitir' })
   @Post(':id/transmitir')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({

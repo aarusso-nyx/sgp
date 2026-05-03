@@ -75,13 +75,14 @@ export class ConcursoService {
           RETURNING *
         ), inserted_vagas AS (
           INSERT INTO recrutamento.vaga (
-            tenant_id, concurso_id, position_id, total_seats, pcd_seats, racial_seats,
-            indigenous_seats, requirement, base_salary
+            tenant_id, concurso_id, position_id, organic_definition_id, total_seats,
+            pcd_seats, racial_seats, indigenous_seats, requirement, base_salary
           )
           SELECT
             created.tenant_id,
             created.id,
             payload.position_id::uuid,
+            NULLIF(payload.organic_definition_id, '')::uuid,
             payload.total_seats,
             payload.pcd_seats,
             payload.racial_seats,
@@ -91,6 +92,7 @@ export class ConcursoService {
           FROM created
           CROSS JOIN LATERAL jsonb_to_recordset($5::jsonb) AS payload(
             position_id text,
+            organic_definition_id text,
             total_seats integer,
             pcd_seats integer,
             racial_seats integer,
@@ -108,6 +110,7 @@ export class ConcursoService {
           created.valid_until,
           COALESCE(jsonb_agg(jsonb_build_object(
             'positionId', inserted_vagas.position_id::text,
+            'organicDefinitionId', inserted_vagas.organic_definition_id::text,
             'totalSeats', inserted_vagas.total_seats,
             'pcdSeats', inserted_vagas.pcd_seats,
             'racialSeats', inserted_vagas.racial_seats,
@@ -127,6 +130,7 @@ export class ConcursoService {
           JSON.stringify(
             input.vagas.map((vaga) => ({
               position_id: vaga.positionId,
+              organic_definition_id: vaga.organicDefinitionId ?? '',
               total_seats: vaga.totalSeats,
               pcd_seats: vaga.pcdSeats,
               racial_seats: vaga.racialSeats,
@@ -137,7 +141,7 @@ export class ConcursoService {
           ),
         ],
       );
-      return this.toSummary(rows.rows[0]);
+      return this.toSummary(rows.rows[0]!);
     });
   }
 
@@ -153,6 +157,7 @@ export class ConcursoService {
         c.valid_until,
         COALESCE(jsonb_agg(jsonb_build_object(
           'positionId', v.position_id::text,
+          'organicDefinitionId', v.organic_definition_id::text,
           'totalSeats', v.total_seats,
           'pcdSeats', v.pcd_seats,
           'racialSeats', v.racial_seats,

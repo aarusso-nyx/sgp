@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,7 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { DirfApiService, DirfArquivo } from './dirf.service';
 
+const DIRF_DEPRECATED_FROM_YEAR_BASE = 2025;
+
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-fiscal-dirf',
   standalone: true,
   imports: [
@@ -63,6 +66,9 @@ export class FiscalDirf {
       return;
     }
     const value = this.form.getRawValue();
+    if (!this.canGenerateDirf(value.yearBase)) {
+      return;
+    }
     if (value.kind === 'RETIFICADORA' && !value.originalArquivoId) {
       this.form.controls.originalArquivoId.markAsTouched();
       return;
@@ -88,6 +94,10 @@ export class FiscalDirf {
   downloadUrl(item: DirfArquivo): string {
     const basePath = '/api/v1/admin/fiscal/dirf';
     return `${basePath}/${item.id}/txt`;
+  }
+
+  canGenerateDirf(yearBase = this.form.getRawValue().yearBase): boolean {
+    return yearBase < DIRF_DEPRECATED_FROM_YEAR_BASE;
   }
 
   money(value: string): string {

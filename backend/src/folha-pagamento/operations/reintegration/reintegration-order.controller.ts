@@ -1,5 +1,10 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../../iam/decorators/require-permission.decorator';
@@ -15,6 +20,7 @@ import { ReintegrationOrderService } from './reintegration-order.service';
 export class ReintegrationOrderController {
   constructor(private readonly service: ReintegrationOrderService) {}
 
+  @ApiOperation({ summary: 'POST Register' })
   @Post()
   @RequirePermission('hr.employment.write')
   @AuditMutation({
@@ -27,6 +33,7 @@ export class ReintegrationOrderController {
     return this.service.register(body.employmentLinkId, body);
   }
 
+  @ApiOperation({ summary: 'POST :id/apply' })
   @Post(':id/apply')
   @RequirePermission('hr.employment.write')
   @AuditMutation({

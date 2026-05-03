@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface FaceTemplateSummary {
   id: string;
@@ -24,23 +25,22 @@ export interface FaceFramePayload {
 
 @Injectable({ providedIn: 'root' })
 export class FaceAdminService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   listTemplates(employeeId?: string): Observable<FaceTemplateSummary[]> {
-    const query = employeeId ? `?employeeId=${encodeURIComponent(employeeId)}` : '';
-    return this.http.get<FaceTemplateSummary[]>(`/api/v1/ponto/face/templates${query}`);
+    return this.api.get<FaceTemplateSummary[]>('v1/ponto/face/templates', { employeeId });
   }
 
   threshold(): Observable<FaceThresholdConfig> {
-    return this.http.get<FaceThresholdConfig>('/api/v1/ponto/face/threshold');
+    return this.api.get<FaceThresholdConfig>('v1/ponto/face/threshold');
   }
 
   updateThreshold(payload: { threshold: number; livenessRequired: boolean }) {
-    return this.http.put('/api/v1/ponto/face/threshold', payload);
+    return this.api.put('v1/ponto/face/threshold', payload);
   }
 
   createConsent(payload: { employeeId: string; consentVersion: string }) {
-    return this.http.post('/api/v1/ponto/face/consents', payload);
+    return this.api.post('v1/ponto/face/consents', payload);
   }
 
   enroll(payload: {
@@ -48,16 +48,18 @@ export class FaceAdminService {
     frames: FaceFramePayload[];
     templateKmsKeyId: string;
   }): Observable<FaceTemplateSummary> {
-    return this.http.post<FaceTemplateSummary>('/api/v1/ponto/face/templates', payload);
+    return this.api.post<FaceTemplateSummary, typeof payload>('v1/ponto/face/templates', payload);
   }
 
   status(employeeId: string) {
-    return this.http.get(`/api/v1/ponto/face/employees/${encodeURIComponent(employeeId)}/status`);
+    return this.api.get<unknown>(
+      `v1/ponto/face/employees/${encodeURIComponent(employeeId)}/status`,
+    );
   }
 
   withdraw(employeeId: string) {
-    return this.http.delete(
-      `/api/v1/ponto/face/employees/${encodeURIComponent(employeeId)}/consent`,
+    return this.api.delete<unknown>(
+      `v1/ponto/face/employees/${encodeURIComponent(employeeId)}/consent`,
     );
   }
 }

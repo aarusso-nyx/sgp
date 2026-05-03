@@ -1,11 +1,70 @@
 import { S1000_VALID_XML } from './testing/esocial-fixtures';
 import { XsdValidatorService } from './xsd/xsd-validator.service';
 
+const BUILDER_XSD_REFERENCES: Record<string, string[]> = {
+  'builders/s1000.builder.ts': ['evtInfoEmpregador.xsd'],
+  'builders/s1005.builder.ts': ['evtTabEstab.xsd'],
+  'builders/s1010.builder.ts': ['evtTabRubrica.xsd'],
+  'builders/s1020.builder.ts': ['evtTabLotacao.xsd'],
+  'builders/s1050.builder.ts': ['evtTabJornada.xsd'],
+  'builders/s1070.builder.ts': ['evtTabProcesso.xsd'],
+  'builders/s1200.builder.ts': ['evtRemun.xsd'],
+  'builders/s1207.builder.ts': ['evtBenPrRP.xsd'],
+  'builders/s1210.builder.ts': ['evtPgtos.xsd'],
+  'builders/s1298.builder.ts': ['evtReabreEvPer.xsd'],
+  'builders/s1299.builder.ts': ['evtFechaEvPer.xsd'],
+  'builders/s2501.builder.ts': ['evtContProc.xsd'],
+  'builders/s2200.builder.ts': ['evtAdmissao.xsd'],
+  'builders/s2205.builder.ts': ['evtAltCadastral.xsd'],
+  'builders/s2206.builder.ts': ['evtAltContratual.xsd'],
+  'builders/s2210.builder.ts': ['evtCAT.xsd'],
+  'builders/s2220.builder.ts': ['evtMonit.xsd'],
+  'builders/s2230.builder.ts': ['evtAfastTemp.xsd'],
+  'builders/s2240.builder.ts': ['evtExpRisco.xsd'],
+  'builders/s2299.builder.ts': ['evtDeslig.xsd'],
+  'builders/s2300.builder.ts': ['evtTSVInicio.xsd'],
+  'builders/s2399.builder.ts': ['evtTSVTermino.xsd'],
+  'builders/s2400.builder.ts': ['evtCdBenefIn.xsd'],
+  'builders/s2405.builder.ts': ['evtCdBenefAlt.xsd'],
+  'builders/s2410.builder.ts': ['evtCdBenIn.xsd'],
+  'builders/s2416.builder.ts': ['evtCdBenAlt.xsd'],
+  'builders/s2418.builder.ts': ['evtReativBen.xsd'],
+  'builders/s2420.builder.ts': ['evtCdBenTerm.xsd'],
+  'builders/s3000.builder.ts': ['evtExclusao.xsd'],
+  's2298/s2298.builder.ts': ['evtReintegr.xsd'],
+  's2306/s2306.builder.ts': ['evtTSVAltContr.xsd'],
+};
+
+const FUTURE_EVENT_STUB_XSDS = new Set([
+  'evtAdmPrelim.xsd',
+  'evtAnotJud.xsd',
+  'evtBaixa.xsd',
+  'evtBasesFGTS.xsd',
+  'evtBasesTrab.xsd',
+  'evtCessao.xsd',
+  'evtComProd.xsd',
+  'evtConsolidContProc.xsd',
+  'evtContratAvNP.xsd',
+  'evtCS.xsd',
+  'evtExcProcTrab.xsd',
+  'evtFGTS.xsd',
+  'evtFGTSProcTrab.xsd',
+  'evtInfoComplPer.xsd',
+  'evtIrrf.xsd',
+  'evtIrrfBenef.xsd',
+  'evtProcTrab.xsd',
+  'evtRmnRPPS.xsd',
+  'evtToxic.xsd',
+  'evtTribProcTrab.xsd',
+  'tipos.xsd',
+  'xmldsig-core-schema.xsd',
+]);
+
 describe('XsdValidatorService', () => {
   it('validates an eSocial S-1.3 S-1000 golden XML against the committed XSD bundle', () => {
     const service = new XsdValidatorService();
 
-    expect(service.manifestFileCount()).toBe(52);
+    expect(service.manifestFileCount()).toBe(service.xsdFileNames().length);
     expect(service.bundleHash('evtInfoEmpregador.xsd')).toBe(
       '80ca0aaf6980aaf7b549bcb0201fc49b7b094a50619962618f6768534c0cf26a',
     );
@@ -27,5 +86,38 @@ describe('XsdValidatorService', () => {
     expect(() =>
       service.assertValid('S-1000', invalidXml, { allowUnsigned: true }),
     ).toThrow('failed XSD validation');
+  });
+
+  it('classifies each committed XSD as one builder reference or a future-event-stub', () => {
+    const service = new XsdValidatorService();
+    const builderReferences = new Map<string, string[]>();
+
+    for (const [builderPath, xsdFiles] of Object.entries(
+      BUILDER_XSD_REFERENCES,
+    )) {
+      for (const xsdFile of xsdFiles) {
+        builderReferences.set(xsdFile, [
+          ...(builderReferences.get(xsdFile) ?? []),
+          builderPath,
+        ]);
+      }
+    }
+
+    const duplicateBuilderReferences = [...builderReferences.entries()]
+      .filter(([, builderPaths]) => builderPaths.length !== 1)
+      .map(([xsdFile, builderPaths]) => ({ xsdFile, builderPaths }));
+    const manifestCoverage = service.xsdFileNames().map((xsdFile) => ({
+      xsdFile,
+      builderPaths: builderReferences.get(xsdFile) ?? [],
+      futureEventStub: FUTURE_EVENT_STUB_XSDS.has(xsdFile),
+    }));
+
+    expect(duplicateBuilderReferences).toEqual([]);
+    expect(
+      manifestCoverage.filter(
+        ({ builderPaths, futureEventStub }) =>
+          builderPaths.length + Number(futureEventStub) !== 1,
+      ),
+    ).toEqual([]);
   });
 });

@@ -1,6 +1,6 @@
 <section class="rh-licencas">
   <header>
-    <h2>Licencas</h2>
+    <h2 i18n>Licencas</h2>
     <p *ngIf="selected">{{ selected.name }}</p>
   </header>
 
@@ -12,15 +12,15 @@
 
   <form [formGroup]="approvalForm" class="toolbar">
     <label>
-      Licenca
+      <ng-container i18n>Licenca</ng-container>
       <input formControlName="leaveId" />
     </label>
     <label>
-      Motivo
+      <ng-container i18n>Motivo</ng-container>
       <input formControlName="reason" (input)="applyFilter()" />
     </label>
-    <button type="button" (click)="approve()" [disabled]="saving">Aprovar</button>
-    <button type="button" (click)="cancel()" [disabled]="saving">Cancelar</button>
+    <button type="button" (click)="approve()" [disabled]="saving" i18n>Aprovar</button>
+    <button type="button" (click)="cancel()" [disabled]="saving" i18n>Cancelar</button>
   </form>
 
   <p class="message" *ngIf="message">{{ message }}</p>
@@ -29,11 +29,11 @@
   <table *ngIf="filtered.length > 0">
     <thead>
       <tr>
-        <th>Id</th>
-        <th>Motivo</th>
-        <th>Periodo</th>
-        <th>Dias</th>
-        <th>Status</th>
+        <th i18n>Id</th>
+        <th i18n>Motivo</th>
+        <th i18n>Periodo</th>
+        <th i18n>Dias</th>
+        <th i18n>Status</th>
       </tr>
     </thead>
     <tbody>

@@ -1,67 +1,83 @@
 <section class="avaliacao-workspace">
   <header>
-    <h1>Provas e resultados</h1>
-    <nav aria-label="Fluxo de avaliacao">
-      <button type="button" [class.active]="mode === 'provas'" (click)="mode = 'provas'">
+    <h1 i18n>Provas e resultados</h1>
+    <nav aria-label="Fluxo de avaliacao" i18n-aria-label>
+      <button type="button" [class.active]="mode === 'provas'" (click)="mode = 'provas'" i18n>
         Provas
       </button>
-      <button type="button" [class.active]="mode === 'gabarito'" (click)="mode = 'gabarito'">
+      <button type="button" [class.active]="mode === 'gabarito'" (click)="mode = 'gabarito'" i18n>
         Gabarito
       </button>
-      <button type="button" [class.active]="mode === 'recursos'" (click)="mode = 'recursos'">
+      <button type="button" [class.active]="mode === 'recursos'" (click)="mode = 'recursos'" i18n>
         Recursos
       </button>
     </nav>
   </header>
 
   <form *ngIf="mode === 'provas'" class="panel">
-    <label>Concurso <input name="concursoId" [(ngModel)]="prova.concursoId" /></label>
+    <label
+      ><ng-container i18n>Concurso</ng-container>
+      <input name="concursoId" [(ngModel)]="prova.concursoId"
+    /></label>
     <label>
-      Tipo
+      <ng-container i18n>Tipo</ng-container>
       <select name="kind" [(ngModel)]="prova.kind">
-        <option value="OBJETIVA">Objetiva</option>
-        <option value="DISCURSIVA">Discursiva</option>
-        <option value="PRATICA">Pratica</option>
-        <option value="TITULOS">Titulos</option>
+        <option value="OBJETIVA" i18n>Objetiva</option>
+        <option value="DISCURSIVA" i18n>Discursiva</option>
+        <option value="PRATICA" i18n>Pratica</option>
+        <option value="TITULOS" i18n>Titulos</option>
       </select>
     </label>
     <label
-      >Aplicacao <input name="appliedAt" type="datetime-local" [(ngModel)]="prova.appliedAt"
+      ><ng-container i18n>Aplicacao</ng-container>
+      <input name="appliedAt" type="datetime-local" [(ngModel)]="prova.appliedAt"
     /></label>
-    <label>Peso <input name="weight" [(ngModel)]="prova.weight" /></label>
+    <label
+      ><ng-container i18n>Peso</ng-container> <input name="weight" [(ngModel)]="prova.weight"
+    /></label>
 
     <div class="question-row" *ngFor="let question of questions; index as i">
       <label
-        >Numero <input [name]="'number' + i" type="number" [(ngModel)]="question.number"
+        ><ng-container i18n>Numero</ng-container>
+        <input [name]="'number' + i" type="number" [(ngModel)]="question.number"
       /></label>
       <label
-        >Enunciado <textarea [name]="'statement' + i" [(ngModel)]="question.statement"></textarea>
+        ><ng-container i18n>Enunciado</ng-container>
+        <textarea [name]="'statement' + i" [(ngModel)]="question.statement"></textarea>
       </label>
-      <label>Resposta <input [name]="'answer' + i" [(ngModel)]="question.answer" /></label>
+      <label
+        ><ng-container i18n>Resposta</ng-container>
+        <input [name]="'answer' + i" [(ngModel)]="question.answer"
+      /></label>
     </div>
-    <button type="button" (click)="addQuestion()">Adicionar questao</button>
+    <button type="button" (click)="addQuestion()" i18n>Adicionar questao</button>
   </form>
 
   <section *ngIf="mode === 'gabarito'" class="panel">
     <label
-      >Status
+      ><ng-container i18n>Status</ng-container>
       <select>
-        <option>PRELIMINARY</option>
-        <option>FINAL</option>
+        <option i18n>PRELIMINARY</option>
+        <option i18n>FINAL</option>
       </select>
     </label>
     <pre>{{ answersPreview() }}</pre>
   </section>
 
   <form *ngIf="mode === 'recursos'" class="panel">
-    <label>Recurso <input name="recursoId" [(ngModel)]="recurso.id" /></label>
+    <label
+      ><ng-container i18n>Recurso</ng-container> <input name="recursoId" [(ngModel)]="recurso.id"
+    /></label>
     <label>
-      Decisao
+      <ng-container i18n>Decisao</ng-container>
       <select name="status" [(ngModel)]="recurso.status">
-        <option value="UPHELD">Deferido</option>
-        <option value="REJECTED">Indeferido</option>
+        <option value="UPHELD" i18n>Deferido</option>
+        <option value="REJECTED" i18n>Indeferido</option>
       </select>
     </label>
-    <label>Parecer <textarea name="parecer" [(ngModel)]="recurso.parecer"></textarea></label>
+    <label
+      ><ng-container i18n>Parecer</ng-container>
+      <textarea name="parecer" [(ngModel)]="recurso.parecer"></textarea>
+    </label>
   </form>
 </section>

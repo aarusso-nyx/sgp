@@ -102,7 +102,7 @@ export class PayrollBridgeService {
           JSON.stringify(preview.lines),
         ],
       );
-      return rows.rows[0];
+      return rows.rows[0]!;
     });
 
     return {

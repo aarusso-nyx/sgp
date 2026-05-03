@@ -1,5 +1,10 @@
 import { Body, Controller, Param, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../../audit/audit.service';
 import type { RequestWithContext } from '../../../common/request-id/request-with-context';
@@ -16,6 +21,7 @@ export class Cnab240ReturnController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'POST Process' })
   @Post()
   @RequirePermission('payment.return.write')
   @ApiCreatedResponse({
@@ -45,6 +51,7 @@ export class Cnab240ReturnController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST :id/reprocess-rejected' })
   @Post(':id/reprocess-rejected')
   @RequirePermission('payment.return.write')
   @ApiCreatedResponse({

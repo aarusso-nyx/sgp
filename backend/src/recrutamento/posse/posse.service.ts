@@ -122,7 +122,7 @@ export class PosseService {
         [posseId],
       );
       await this.updateNomeacaoStatus(client, nomeacao.id, 'POSSE');
-      return this.map(rows.rows[0]);
+      return this.map(rows.rows[0]!);
     });
   }
 

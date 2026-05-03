@@ -1,42 +1,52 @@
 <section class="appointment-workspace">
   <header class="toolbar">
     <div>
-      <h1>Nomeacao e convocacao</h1>
-      <p>Ordem de chamada por vaga</p>
+      <h1 i18n>Nomeacao e convocacao</h1>
+      <p i18n>Ordem de chamada por vaga</p>
     </div>
     <label>
-      Concurso
-      <input name="concursoId" [(ngModel)]="concursoId" placeholder="UUID do concurso" />
+      <ng-container i18n>Concurso</ng-container>
+      <input
+        name="concursoId"
+        [(ngModel)]="concursoId"
+        placeholder="UUID do concurso"
+        i18n-placeholder
+      />
     </label>
     <label>
-      Ato administrativo
+      <ng-container i18n>Ato administrativo</ng-container>
       <input name="atoAdministrativo" [(ngModel)]="atoAdministrativo" />
+    </label>
+    <label>
+      <ng-container i18n>Classificacao</ng-container>
+      <input name="actClassificationCode" [(ngModel)]="actClassificationCode" />
     </label>
     <label class="toggle">
       <input type="checkbox" name="emailEnabled" [(ngModel)]="emailEnabled" />
-      Enviar email
+      <ng-container i18n>Enviar email</ng-container>
     </label>
   </header>
 
-  <section class="call-grid" aria-label="Proximas chamadas">
+  <section class="call-grid" aria-label="Proximas chamadas" i18n-aria-label>
     <article *ngFor="let call of nextCalls">
       <span>{{ call.nextOrder }}</span>
       <strong>{{ call.candidateName }}</strong>
       <small>{{ call.vaga }}</small>
       <em>{{ call.bucket }}</em>
       <time>{{ call.deadline }}</time>
-      <button type="button" (click)="appoint(call)">Nomear</button>
+      <button type="button" (click)="appoint(call)" i18n>Nomear</button>
     </article>
   </section>
 
   <table>
     <thead>
       <tr>
-        <th>Candidato</th>
-        <th>Ato</th>
-        <th>Status</th>
-        <th>Canal</th>
-        <th>Evidencia</th>
+        <th i18n>Candidato</th>
+        <th i18n>Ato</th>
+        <th i18n>Classificacao</th>
+        <th i18n>Status</th>
+        <th i18n>Canal</th>
+        <th i18n>Evidencia</th>
         <th></th>
       </tr>
     </thead>
@@ -44,6 +54,7 @@
       <tr *ngFor="let notice of notices">
         <td>{{ notice.candidateName }}</td>
         <td>{{ notice.ato }}</td>
+        <td>{{ notice.actClassificationCode }}</td>
         <td>{{ notice.status }}</td>
         <td>{{ notice.channel }}</td>
         <td>{{ notice.evidenceRef }}</td>
@@ -52,6 +63,7 @@
             type="button"
             [disabled]="notice.status === 'DESISTENTE'"
             (click)="withdraw(notice)"
+            i18n
           >
             Desistencia
           </button>

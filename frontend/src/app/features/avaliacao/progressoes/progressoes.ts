@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 interface ProgressionRecord {
   id: string;
@@ -26,6 +26,7 @@ interface ProgressionSimulationResult {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-avaliacao-progressoes',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatIconModule],
@@ -35,7 +36,7 @@ interface ProgressionSimulationResult {
 export class AvaliacaoProgressoes implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   readonly filters = ['eligible', 'simulated', 'applied'] as const;
   readonly simulationForm = this.formBuilder.group({
@@ -67,7 +68,7 @@ export class AvaliacaoProgressoes implements OnInit, OnDestroy {
   load(status = this.selectedStatus): void {
     this.selectedStatus = status;
     this.loading = true;
-    this.http
+    this.api
       .get<ProgressionRecord[]>('/api/v1/avaliacao/progression', {
         params: { status },
       })
@@ -99,7 +100,7 @@ export class AvaliacaoProgressoes implements OnInit, OnDestroy {
       appointmentAct: value.appointmentAct || undefined,
       justification: value.justification || undefined,
     };
-    this.http
+    this.api
       .post<ProgressionSimulationResult>('/api/v1/avaliacao/progression/simulate', payload)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -120,7 +121,7 @@ export class AvaliacaoProgressoes implements OnInit, OnDestroy {
     const secondConfirmation = window.confirm('A aplicacao atualiza o nivel salarial vigente.');
     if (!secondConfirmation) return;
 
-    this.http
+    this.api
       .post(`/api/v1/avaliacao/progression/${record.id}/apply`, {})
       .pipe(takeUntil(this.destroy$))
       .subscribe({

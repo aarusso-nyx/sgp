@@ -35,6 +35,10 @@ class FakeRhEmployeeDatabaseService {
     branch_name: null,
     branch_id: null,
     active: true,
+    abono_permanencia_ativo: false,
+    abono_permanencia_inicio: null as Date | null,
+    abono_permanencia_fundamento: null as string | null,
+    version: 0,
     created_at: new Date('2026-05-01T00:00:00.000Z'),
     updated_at: new Date('2026-05-01T00:00:00.000Z'),
   };
@@ -50,11 +54,27 @@ class FakeRhEmployeeDatabaseService {
           'rh.employee.write',
           'rh.employee.admit',
           'rh.employee.terminate',
+          'rh.employee.abono.write',
         ].map((key) => ({ key })) as T[],
       );
     }
     if (sql.includes('SELECT public.sgp_append_audit_event')) {
       return Promise.resolve([] as T[]);
+    }
+    if (
+      sql.includes('abono_permanencia_ativo AS active') &&
+      sql.includes('FROM hr.employee')
+    ) {
+      return Promise.resolve([
+        {
+          id: this.employee.id,
+          active: this.employee.abono_permanencia_ativo,
+          starts_on: this.employee.abono_permanencia_inicio,
+          legal_basis: this.employee.abono_permanencia_fundamento,
+          version: this.employee.version,
+          updated_at: this.employee.updated_at,
+        },
+      ] as T[]);
     }
     if (
       sql.includes('SELECT count(*)::text AS total') &&
@@ -95,12 +115,44 @@ class FakeRhEmployeeDatabaseService {
     if (sql.includes('INSERT INTO hr.contract_type')) {
       return Promise.resolve({ rows: [{ id: 'contract-type-1' }] as T[] });
     }
+    if (sql.includes('SELECT version') && sql.includes('FROM hr.employee')) {
+      return Promise.resolve({
+        rows: [{ version: this.employee.version }] as T[],
+      });
+    }
     if (sql.includes('WITH created_employee AS')) {
       return Promise.resolve({
         rows: [{ ...this.employee, contract_id: 'contract-1' }] as T[],
       });
     }
     if (sql.includes('UPDATE hr.employee')) {
+      if (sql.includes('abono_permanencia_ativo')) {
+        const active = Boolean(_values[1]);
+        this.employee = {
+          ...this.employee,
+          abono_permanencia_ativo: active,
+          abono_permanencia_inicio: active
+            ? new Date(String(_values[2]))
+            : null,
+          abono_permanencia_fundamento:
+            typeof _values[3] === 'string' && _values[3] ? _values[3] : null,
+          version: this.employee.version + 1,
+          updated_at: new Date('2026-05-01T00:01:00.000Z'),
+        };
+        return Promise.resolve({
+          rows: [
+            {
+              id: this.employee.id,
+              active: this.employee.abono_permanencia_ativo,
+              starts_on: this.employee.abono_permanencia_inicio,
+              legal_basis: this.employee.abono_permanencia_fundamento,
+              audit_event_id: 'audit-1',
+              version: this.employee.version,
+              updated_at: this.employee.updated_at,
+            },
+          ] as T[],
+        });
+      }
       this.employee = {
         ...this.employee,
         lifecycle_status: 'TERMINATED',
@@ -213,5 +265,39 @@ describe('RH employees lifecycle (e2e)', () => {
       .expect((response) => {
         expect(response.body.employee.lifecycleStatus).toBe('TERMINATED');
       });
+  });
+
+  it('returns 412 when two editors submit the same cadastro version', async () => {
+    const bearer = `Bearer ${token()}`;
+    const employeeUrl =
+      '/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/abono-permanencia';
+
+    const firstRead = await request(server())
+      .get(employeeUrl)
+      .set('authorization', bearer)
+      .expect(200);
+
+    expect(firstRead.headers.etag).toBe('"0"');
+
+    await request(server())
+      .post(employeeUrl)
+      .set('authorization', bearer)
+      .set('if-match', firstRead.headers.etag)
+      .send({
+        active: true,
+        startsOn: '2026-05-01',
+        legalBasis: 'EC 41/2003 art. 3 paragraph 1',
+      })
+      .expect(201)
+      .expect((response) => {
+        expect(response.body.version).toBe(1);
+      });
+
+    await request(server())
+      .post(employeeUrl)
+      .set('authorization', bearer)
+      .set('if-match', firstRead.headers.etag)
+      .send({ active: false })
+      .expect(412);
   });
 });

@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -31,6 +32,7 @@ export class DocumentsController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('documents.download')
   @ApiOkResponse({ description: 'Paged document attachment metadata.' })
@@ -38,6 +40,7 @@ export class DocumentsController {
     return this.documentsService.list(query);
   }
 
+  @ApiOperation({ summary: 'POST presigned-upload' })
   @Post('presigned-upload')
   @RequirePermission('documents.upload')
   @ApiCreatedResponse({ description: 'Create a presigned upload URL for S3.' })
@@ -58,6 +61,7 @@ export class DocumentsController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH :anexo_id/confirmar' })
   @Patch(':anexo_id/confirmar')
   @Patch(':id/confirmar')
   @RequirePermission('documents.register')
@@ -84,6 +88,7 @@ export class DocumentsController {
     return registered;
   }
 
+  @ApiOperation({ summary: 'DELETE :id' })
   @Delete(':id')
   @RequirePermission('documents.register')
   @ApiOkResponse({
@@ -106,6 +111,7 @@ export class DocumentsController {
     return deleted;
   }
 
+  @ApiOperation({ summary: 'GET :id/download' })
   @Get(':id/download')
   @RequirePermission('documents.download')
   @ApiOkResponse({

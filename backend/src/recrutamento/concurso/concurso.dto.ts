@@ -19,6 +19,10 @@ export class ConcursoVagaDto {
   @IsUUID()
   positionId!: string;
 
+  @IsOptional()
+  @IsUUID()
+  organicDefinitionId?: string;
+
   @IsInt()
   @Min(1)
   totalSeats!: number;

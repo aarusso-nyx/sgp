@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface BiometricTemplateSummary {
   id: string;
@@ -13,15 +14,16 @@ export interface BiometricTemplateSummary {
 
 @Injectable({ providedIn: 'root' })
 export class PontoBiometriaService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   listTemplates(employeeId?: string): Observable<BiometricTemplateSummary[]> {
-    const query = employeeId ? `?employeeId=${encodeURIComponent(employeeId)}` : '';
-    return this.http.get<BiometricTemplateSummary[]>(`/api/v1/ponto/biometria/templates${query}`);
+    return this.api.get<BiometricTemplateSummary[]>('v1/ponto/biometria/templates', {
+      employeeId,
+    });
   }
 
   createConsent(payload: { employeeId: string; consentVersion: string }) {
-    return this.http.post('/api/v1/ponto/biometria/consents', payload);
+    return this.api.post('v1/ponto/biometria/consents', payload);
   }
 
   enroll(payload: {
@@ -31,12 +33,15 @@ export class PontoBiometriaService {
     templateKmsKeyId: string;
     minimumQuality: number;
   }): Observable<BiometricTemplateSummary> {
-    return this.http.post<BiometricTemplateSummary>('/api/v1/ponto/biometria/templates', payload);
+    return this.api.post<BiometricTemplateSummary, typeof payload>(
+      'v1/ponto/biometria/templates',
+      payload,
+    );
   }
 
   withdraw(employeeId: string) {
-    return this.http.delete(
-      `/api/v1/ponto/biometria/employees/${encodeURIComponent(employeeId)}/consent`,
+    return this.api.delete<unknown>(
+      `v1/ponto/biometria/employees/${encodeURIComponent(employeeId)}/consent`,
     );
   }
 }

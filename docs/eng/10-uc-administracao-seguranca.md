@@ -28,6 +28,7 @@ O bounded context de **Administração & Segurança** é transversal a todos os 
 
 - **Row-Level Security** em PostgreSQL: todas as queries filtram `tenant_id` via `TenantGuard` NestJS que injeta o contexto antes da execução.
 - **JWT Cognito** como token de acesso; claims `tenant_id`, `usuario_id`, `papeis[]` incluídos via Lambda trigger `pre-token-generation`.
+- **Proteção dos SPAs**: `sgp-admin` e `sgp-portal` registram guardas de autenticação nas rotas privadas e enviam o JWT Cognito no cabeçalho `Authorization: Bearer` das chamadas HTTP autenticadas.
 - **Sem segredo no front-end**: o PKCE elimina `client_secret` no SPA Angular; o `client_secret` existe apenas nos workers server-side (client-credentials).
 - **Imutabilidade de papéis de sistema**: papéis `ROLE_*` são gerados por seed e versionados; o Admin do Tenant opera sobre associações, nunca sobre a definição dos papéis.
 - **Presigned URLs efêmeras**: upload e download de S3 via URL com TTL ≤ 15 min; nenhum arquivo trafega pelo backend.
@@ -348,6 +349,8 @@ flowchart TD
 
 - `GET /api/portal/v1/auth/me`
 - `GET /api/portal/v1/auth/govbr/status` — verifica se o tenant tem Gov.br ativo.
+- `POST /api/portal/v1/auth/govbr/sign` — inicia assinatura avancada Gov.br local/sandbox para fluxos de autosservico.
+- `GET /api/portal/v1/auth/govbr/sign/callback` — aplica a decisao local/sandbox e retorna ao callback do portal.
 
 ---
 
@@ -1250,9 +1253,9 @@ flowchart TD
 
 - RN-ADM-038: CPF e dados de conta bancária sempre mascarados na exibição do diff, mesmo para admins.
 - RN-ADM-039: O `diff_jsonb` e o registro físico em `public.audit_event` são imutáveis após gravação; `UPDATE` e `DELETE` disparam a função `sgp_audit_event_immutable()` e falham com `audit_event is immutable`.
-- RN-ADM-039A: Toda rota mutante (`POST`, `PUT`, `PATCH`, `DELETE`) deve registrar auditoria por `sgp_append_audit_event(...)` na mesma unidade de trabalho lógica. Em `dev` e `test`, o interceptor global `AuditRequiredInterceptor` falha a requisição com `500` se uma rota mutante termina sem chamada de auditoria ou sem declaração explícita `@AuditMutation(...)` para fallback controlado.
+- RN-ADM-039A: Toda rota mutante (`POST`, `PUT`, `PATCH`, `DELETE`) deve registrar auditoria por `sgp_append_audit_event(...)` na mesma unidade de trabalho lógica. Em todos os ambientes, incluindo produção, o interceptor global `AuditRequiredInterceptor` falha a requisição com `500` se uma rota mutante termina sem chamada de auditoria ou sem declaração explícita `@AuditMutation(...)` para fallback controlado.
 - RN-ADM-039B: O papel aplicacional `sgp_app_role` possui apenas `INSERT` e `SELECT` em `public.audit_event`; `UPDATE` e `DELETE` ficam revogados. Janelas de retenção de pelo menos 6 meses dependem de papel administrativo dedicado e não são feitas pela aplicação.
-- RN-ADM-039C: Mutações sensíveis podem informar `reason` no evento de auditoria. Quando um handler for marcado com `reasonRequired`, o interceptor rejeita a mutação em `dev` e `test` se a justificativa não vier no payload.
+- RN-ADM-039C: Mutações sensíveis podem informar `reason` no evento de auditoria. Quando um handler for marcado com `reasonRequired`, o interceptor rejeita a mutação em todos os ambientes se a justificativa não vier no payload.
 
 **Endpoints REST:** `GET /api/v1/auditoria/logs/:id`.
 

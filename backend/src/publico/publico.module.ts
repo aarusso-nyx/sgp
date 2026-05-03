@@ -1,6 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 import { DatabaseModule } from '../database/database.module';
+import { LaiRequestsController } from './lai/lai-requests.controller';
+import { LaiRequestsService } from './lai/lai-requests.service';
+import { LaiSlaService } from './lai/lai-sla.service';
+import { LgpdDpoController } from './lgpd-dpo.controller';
+import { LgpdDpoService } from './lgpd-dpo.service';
 import { PublicTransparencyController } from './public-transparency.controller';
 import { PublicTransparencyService } from './public-transparency.service';
 import { TransparencyAccessLogMiddleware } from './transparency/transparency-access-log.middleware';
@@ -11,8 +16,16 @@ import { TransparencyQueryService } from './transparency/transparency-query.serv
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [PublicTransparencyController, TransparencyController],
+  controllers: [
+    LaiRequestsController,
+    LgpdDpoController,
+    PublicTransparencyController,
+    TransparencyController,
+  ],
   providers: [
+    LaiRequestsService,
+    LaiSlaService,
+    LgpdDpoService,
     PublicTransparencyService,
     TransparencyQueryService,
     TransparencyCsvService,

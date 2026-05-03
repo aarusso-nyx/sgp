@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
@@ -18,6 +23,7 @@ import { ReportRuntimeService } from './report-service.service';
 export class ReportServiceController {
   constructor(private readonly reportRuntimeService: ReportRuntimeService) {}
 
+  @ApiOperation({ summary: 'GET health' })
   @Get('health')
   @Public()
   @ApiOkResponse({ description: 'Report service health.' })
@@ -25,6 +31,7 @@ export class ReportServiceController {
     return this.reportRuntimeService.health();
   }
 
+  @ApiOperation({ summary: 'GET status' })
   @Get('status')
   @RequirePermission('relatorio.read')
   @ApiOkResponse({ description: 'Report service runtime status.' })
@@ -32,6 +39,7 @@ export class ReportServiceController {
     return this.reportRuntimeService.status();
   }
 
+  @ApiOperation({ summary: 'POST requests' })
   @Post('requests')
   @RequirePermission('relatorio.generate')
   @ApiCreatedResponse({ description: 'Queue a report request.' })
@@ -39,6 +47,7 @@ export class ReportServiceController {
     return this.reportRuntimeService.queueReport(body);
   }
 
+  @ApiOperation({ summary: 'POST poll' })
   @Post('poll')
   @RequirePermission('relatorio.generate')
   @ApiOkResponse({ description: 'Process pending report requests.' })

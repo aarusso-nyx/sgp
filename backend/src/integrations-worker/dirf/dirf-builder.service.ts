@@ -75,6 +75,10 @@ interface PaymentRow extends QueryResultRow {
   deductions: Record<string, unknown> | string;
 }
 
+/**
+ * @deprecated DIRF file generation is retained only for year-base competences
+ * before 2025-01-01. Use EFD-Reinf R-4000 for facts from 2025-01-01 onward.
+ */
 @Injectable()
 export class DirfBuilderService {
   constructor(
@@ -237,7 +241,7 @@ export class DirfBuilderService {
           layoutVersion,
         ],
       );
-      const arquivoId = inserted.rows[0].id;
+      const arquivoId = inserted.rows[0]!.id;
       for (const beneficiary of beneficiaries) {
         const beneficiaryId = await this.insertBeneficiary(
           client,
@@ -337,7 +341,7 @@ export class DirfBuilderService {
         JSON.stringify(beneficiary.totals),
       ],
     );
-    return inserted.rows[0].id;
+    return inserted.rows[0]!.id;
   }
 
   private async assertOriginalExists(

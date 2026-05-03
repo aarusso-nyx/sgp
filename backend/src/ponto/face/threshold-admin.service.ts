@@ -29,7 +29,7 @@ export class FaceThresholdAdminService {
         RETURNING threshold::text, liveness_required
         `,
       );
-      return this.toConfig(rows.rows[0]);
+      return this.toConfig(rows.rows[0]!);
     };
     if (client) return runner(client);
     this.ensureDatabase();
@@ -57,7 +57,7 @@ export class FaceThresholdAdminService {
       [input.threshold.toFixed(6), input.livenessRequired],
     );
     AuditMutationContextStore.markMutationAudited();
-    return this.toConfig(rows[0]);
+    return this.toConfig(rows[0]!);
   }
 
   private toConfig(row: ThresholdRow): FaceThresholdConfig {

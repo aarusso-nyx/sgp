@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface PossessionAgendaItem {
@@ -13,6 +13,7 @@ interface PossessionAgendaItem {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recrutamento-posse',
   standalone: true,
   imports: [CommonModule, FormsModule],

@@ -68,7 +68,7 @@ export class LayoutVersionService {
           input.notes ?? null,
         ],
       );
-      return toLayoutVersionDto(rows[0]);
+      return toLayoutVersionDto(rows[0]!);
     } catch (error) {
       this.rethrowConstraint(error);
     }
