@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp *)",
+      "Bash(python -c \"import mempalace\")",
+      "Bash(python -m mempalace.mcp_server --help)",
+      "Read(//Users/aarusso/.mempalace/palace-coding/**)",
+      "Bash(/usr/bin/python3 -c \"from mempalace import Palace; p = Palace\\('/Users/aarusso/.mempalace/palace-coding'\\); rooms = p.list_rooms\\(\\); print\\('Rooms:', rooms\\)\")",
+      "Bash(/usr/bin/python3 -c \"import mempalace; print\\(dir\\(mempalace\\)\\)\")",
+      "Bash(/usr/bin/python3 -m mempalace.mcp_server --palace /Users/aarusso/.mempalace/palace-coding --help)",
+      "Bash(/usr/bin/python3 -c ' *)",
+      "Bash(git -C /Users/aarusso/Development/stech/sgp log --oneline -15)",
+      "Bash(git -C /Users/aarusso/Development/stech/sgp show c9d99ee --stat)",
+      "Bash(git -C /Users/aarusso/Development/stech/sgp diff c66a7b9..HEAD --shortstat)",
+      "Bash(git -C /Users/aarusso/Development/stech/sgp diff c66a7b9..HEAD --name-only)",
+      "Bash(grep -E '\\\\.\\(ts|sql|mjs|js\\)$')",
+      "Bash(git -C /Users/aarusso/Development/stech/sgp diff c66a7b9..HEAD -- .github/workflows/source-ci.yml)",
+      "Bash(git -C /Users/aarusso/Development/stech/sgp diff c66a7b9..HEAD -- backend/src/saude/pericia.service.ts)",
+      "Bash(git -C /Users/aarusso/Development/stech/sgp diff c66a7b9..HEAD -- database/sql/10-02-esocial-ddl.sql)",
+      "Bash(git -C /Users/aarusso/Development/stech/sgp diff c66a7b9..HEAD -- database/sql/15-pii-encryption.sql)",
+      "Bash(grep '\\\\.spec\\\\.ts$')",
+      "Bash(mkdir -p /Users/aarusso/Development/stech/sgp/.claude/skills)",
+      "Bash(cp -r /Users/aarusso/Development/stech/sgp/.codex/skills/sgp-* /Users/aarusso/Development/stech/sgp/.claude/skills/)"
+    ]
+  }
+}
