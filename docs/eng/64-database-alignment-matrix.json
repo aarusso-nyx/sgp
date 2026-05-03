@@ -931,10 +931,10 @@
     },
     {
       "legacy_object": "dbo.tipo_ferias",
-      "status": "canonicalized",
-      "phase": "phase_1_core",
+      "status": "implemented",
+      "phase": "post_phase_1",
       "canonical_object": "hr.vacation_type",
-      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+      "note": "Implemented through the Gestao master-data runtime as the tenant-scoped Tipos de Ferias catalog."
     },
     {
       "legacy_object": "dbo.tipo_folha",

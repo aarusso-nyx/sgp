@@ -8,7 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { SharedPlatformModule } from '../shared-platform/shared-platform-module';
+import { CrudTable } from '../../shared-platform/crud-table/crud-table';
+import { FilterBar } from '../../shared-platform/filter-bar/filter-bar';
 import { TaxRateIrrf } from '../admin/parametros/tax-rate-irrf/tax-rate-irrf';
 import { TaxRateRpps } from '../admin/parametros/tax-rate-rpps/tax-rate-rpps';
 import { TetoRemuneratorio } from '../admin/parametros/teto-remuneratorio/teto-remuneratorio';
@@ -37,7 +38,8 @@ import { GestaoHome } from './pages/gestao-home/gestao-home';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    SharedPlatformModule,
+    CrudTable,
+    FilterBar,
     GestaoRoutingModule,
   ],
 })

@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common';
+
 import { PericiaService } from './pericia.service';
 
 describe('PericiaService', () => {
@@ -203,7 +205,11 @@ describe('PericiaService', () => {
         data: '2026-04-22',
         hora: '09:00',
       }),
-    ).rejects.toThrow('DATABASE_URL is required');
+    ).rejects.toMatchObject({
+      code: 'SAUDE.PERICIA.DATABASE_UNAVAILABLE',
+      message: 'DATABASE_URL is required for pericia operations',
+      status: HttpStatus.SERVICE_UNAVAILABLE,
+    });
     await expect(
       new PericiaService({
         configured: true,
@@ -214,7 +220,11 @@ describe('PericiaService', () => {
         data: '2026-04-22',
         hora: '09:00',
       }),
-    ).rejects.toThrow('Employee not found');
+    ).rejects.toMatchObject({
+      code: 'SAUDE.PERICIA.EMPLOYEE_NOT_FOUND',
+      message: 'Employee not found',
+      status: HttpStatus.NOT_FOUND,
+    });
     await expect(
       new PericiaService({
         configured: true,
@@ -225,7 +235,11 @@ describe('PericiaService', () => {
         data: '2026-04-22',
         hora: '09:00',
       }),
-    ).rejects.toThrow('não se encontra em exercício');
+    ).rejects.toMatchObject({
+      code: 'SAUDE.PERICIA.EMPLOYEE_NOT_ACTIVE',
+      message: 'Funcionário não se encontra em exercício',
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+    });
     await expect(
       new PericiaService({
         configured: true,
@@ -236,7 +250,11 @@ describe('PericiaService', () => {
         data: '2026-04-22',
         hora: '09:00',
       }),
-    ).rejects.toThrow('Appointment slot already occupied');
+    ).rejects.toMatchObject({
+      code: 'SAUDE.PERICIA.APPOINTMENT_SLOT_OCCUPIED',
+      message: 'Appointment slot already occupied',
+      status: HttpStatus.CONFLICT,
+    });
     await expect(
       new PericiaService({
         configured: true,

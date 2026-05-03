@@ -31,8 +31,8 @@ describe('AdminFeaturePage', () => {
   });
 
   it('loads documented feature metadata from route data', () => {
-    expect(component.feature.label).toBe('Avaliação de Desempenho');
-    expect(component.filteredRecords.length).toBe(3);
+    expect(component.feature().label).toBe('Avaliação de Desempenho');
+    expect(component.filteredRecords().length).toBe(3);
   });
 
   it('creates workspace records from the generic form', () => {
@@ -46,7 +46,7 @@ describe('AdminFeaturePage', () => {
     });
     component.save();
 
-    expect(component.records[0].code).toBe('AVD-010');
-    expect(component.message).toContain('incluído');
+    expect(component.records()[0].code).toBe('AVD-010');
+    expect(component.message()).toContain('incluído');
   });
 });

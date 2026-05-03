@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { createHash } from 'node:crypto';
 
 import { Pool, PoolClient } from 'pg';
@@ -250,3 +251,9 @@ function complementaryLineHash(input: {
     )
     .digest('hex');
 }
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

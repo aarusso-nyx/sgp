@@ -49,6 +49,39 @@ Run the existing backend in-process Nest e2e suite:
 npm run test:e2e
 ```
 
+Run the frontend coverage ratchet for both Angular apps:
+
+```bash
+npm run test:frontend:coverage
+```
+
+The coverage reports are written to `frontend/coverage/sgp-admin/` and
+`frontend/coverage/sgp-portal/`. The current ratchet is intentionally a
+measured frontend baseline, not the backend 85 % target: admin requires 31 %
+statements, 35 % branches, 16 % functions, and 31 % lines; portal requires 40 %
+statements, 44 % branches, 37 % functions, and 42 % lines.
+
+Run the canonical Playwright browser gate for both Angular apps:
+
+```bash
+npm run test:frontend:e2e
+```
+
+The command starts the required dev servers through the checked-in Playwright
+configs, then runs the admin Chromium suite and the portal Chromium suite.
+
+Run the R3-016 regulatory golden slice:
+
+```bash
+npm --workspace backend exec jest -- \
+  --config ../tests/backend/jest-unit.json \
+  --runTestsByPath src/report-service/yearly-income/pdf-a-yearly.service.spec.ts
+
+npm --workspace backend exec jest -- \
+  --config ../tests/backend/jest-e2e.json \
+  --runTestsByPath ../tests/backend/tce-golden.e2e-spec.ts ../tests/backend/transparency-public.e2e-spec.ts
+```
+
 ## Environment
 
 The QA harness is black-box by default and does not store credentials. Set only base URLs and explicit test-mode flags in your shell.
@@ -63,6 +96,27 @@ The QA harness is black-box by default and does not store credentials. Set only 
 - `AUTH_ALLOW_UNSIGNED_TEST_TOKENS`: backend runtime flag used only for local/CI QA e2e tests with generated unsigned tokens.
 
 Do not put real passwords, Cognito tokens, database URLs, or app credentials into test files, docs, snapshots, or logs. If reverse-documentation automation needs legacy credentials, keep using environment placeholders such as `${APP_LOGIN}` and `${APP_PASSWORD}` outside the QA harness.
+
+## Golden Fixture Regeneration
+
+Regenerate committed golden files only when the output contract intentionally
+changes. For the R3-016 TCE, transparency, and annual comprovante fixtures, use
+the env-gated Jest path from the repository root:
+
+```bash
+SGP_UPDATE_R3_016_GOLDENS=1 npm --workspace backend exec jest -- \
+  --config ../tests/backend/jest-unit.json \
+  --runTestsByPath src/report-service/yearly-income/pdf-a-yearly.service.spec.ts
+
+SGP_UPDATE_R3_016_GOLDENS=1 npm --workspace backend exec jest -- \
+  --config ../tests/backend/jest-e2e.json \
+  --runTestsByPath ../tests/backend/tce-golden.e2e-spec.ts ../tests/backend/transparency-public.e2e-spec.ts
+```
+
+Then rerun the same commands without `SGP_UPDATE_R3_016_GOLDENS=1`. Review the
+fixture diff before publishing; the TCE source-pending fixture must keep
+`sourceStatus=UNVERIFIED_LAYOUT` and `officialConformance=false` until an owner
+approves an official layout source.
 
 ## Backend QA Flow
 

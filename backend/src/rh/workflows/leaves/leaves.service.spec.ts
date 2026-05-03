@@ -108,6 +108,37 @@ describe('LeavesService', () => {
     ).rejects.toThrow('requires at least five years');
   });
 
+  it('creates licenca premio as a paid ninety-day leave', async () => {
+    const db = database();
+    const service = new LeavesService(db as never);
+
+    await expect(
+      service.create({
+        employeeId,
+        reason: 'premio',
+        startsOn: '2026-05-01',
+      }),
+    ).resolves.toMatchObject({ reason: 'premio', days: 90, paid: true });
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('hr.f_validate_leave_eligibility'),
+      [employeeId, 'premio', '2026-05-01', 90, ''],
+    );
+  });
+
+  it('rejects licenca premio before five years of service', async () => {
+    const service = new LeavesService(
+      database({ rejectEligibility: true }) as never,
+    );
+
+    await expect(
+      service.create({
+        employeeId,
+        reason: 'premio',
+        startsOn: '2026-05-01',
+      }),
+    ).rejects.toThrow('requires at least five years');
+  });
+
   it('records interesse particular as unpaid', async () => {
     const service = new LeavesService(database() as never);
 

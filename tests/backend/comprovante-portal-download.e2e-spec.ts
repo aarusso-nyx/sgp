@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { ForbiddenException } from '@nestjs/common';
 
 import { YearlyIncomeRenderService } from '../../backend/src/report-service/yearly-income/yearly-income-render.service';
@@ -38,5 +39,11 @@ describe('FISC-03 portal yearly income isolation (e2e contract)', () => {
         2025,
       ),
     ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

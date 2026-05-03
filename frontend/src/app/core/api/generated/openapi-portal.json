@@ -7,7 +7,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Current authenticated Cognito actor."
+            "description": "Current authenticated Cognito actor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -25,7 +102,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Resolved menu entries for the authenticated actor."
+            "description": "Resolved menu entries for the authenticated actor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -43,7 +197,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Invalidate current actor session."
+            "description": "Invalidate current actor session.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -61,7 +292,84 @@
         "parameters": [],
         "responses": {
           "201": {
-            "description": "Start password recovery flow."
+            "description": "Start password recovery flow.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "POST recuperar-senha",
@@ -74,7 +382,84 @@
         "parameters": [],
         "responses": {
           "201": {
-            "description": "Confirm recovered password."
+            "description": "Confirm recovered password.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "POST confirmar-nova-senha",
@@ -87,7 +472,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Change current actor password."
+            "description": "Change current actor password.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -105,7 +567,84 @@
         "parameters": [],
         "responses": {
           "201": {
-            "description": "Create a local gov.br advanced signature sandbox request."
+            "description": "Create a local gov.br advanced signature sandbox request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -124,6 +663,76 @@
         "responses": {
           "302": {
             "description": "Apply the local sandbox gov.br decision and redirect back to the portal callback route."
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "GET callback",
@@ -136,7 +745,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List available runtime permissions."
+            "description": "List available runtime permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -295,7 +981,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Paged audit events."
+            "description": "Paged audit events.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -322,7 +1085,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Fetch audit event detail by id."
+            "description": "Fetch audit event detail by id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -350,7 +1190,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create an audit trail report request."
+            "description": "Create an audit trail report request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -377,7 +1294,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Fetch audit export request status."
+            "description": "Fetch audit export request status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -395,7 +1389,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated portal actor session alias."
+            "description": "Authenticated portal actor session alias.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -413,7 +1484,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Gov.br identity provider status."
+            "description": "Gov.br identity provider status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -431,7 +1579,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee personal profile."
+            "description": "Authenticated employee personal profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -449,7 +1674,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee address."
+            "description": "Authenticated employee address.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -467,7 +1769,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee contact data."
+            "description": "Authenticated employee contact data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -485,7 +1864,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee dependents."
+            "description": "Authenticated employee dependents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -503,7 +1959,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee documents."
+            "description": "Authenticated employee documents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -521,7 +2054,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee current job and salary level."
+            "description": "Authenticated employee current job and salary level.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -539,7 +2149,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee PCCS career progression trail."
+            "description": "Authenticated employee PCCS career progression trail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -557,7 +2244,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee vacation payroll payslips."
+            "description": "Authenticated employee vacation payroll payslips.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -575,7 +2339,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Authenticated employee generated termination terms."
+            "description": "Authenticated employee generated termination terms.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -602,7 +2443,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Authenticated employee monthly paystub by competence."
+            "description": "Authenticated employee monthly paystub by competence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -630,7 +2548,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create a cadastral change request."
+            "description": "Create a cadastral change request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -658,7 +2653,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create an LGPD Art. 18 rights request ticket."
+            "description": "Create an LGPD Art. 18 rights request ticket.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -676,7 +2748,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List performance evaluations."
+            "description": "List performance evaluations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -702,7 +2851,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create a performance evaluation."
+            "description": "Create a performance evaluation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -739,7 +2965,84 @@
         },
         "responses": {
           "200": {
-            "description": "Update a performance evaluation."
+            "description": "Update a performance evaluation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -757,7 +3060,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List career progressions."
+            "description": "List career progressions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -783,7 +3163,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create a career progression."
+            "description": "Create a career progression.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -801,7 +3258,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List salary simulations."
+            "description": "List salary simulations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -827,7 +3361,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create a salary simulation."
+            "description": "Create a salary simulation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -845,7 +3456,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List career plans."
+            "description": "List career plans.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -871,7 +3559,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create a career plan."
+            "description": "Create a career plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -908,7 +3673,84 @@
         },
         "responses": {
           "200": {
-            "description": "Update a career plan."
+            "description": "Update a career plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -945,7 +3787,84 @@
         },
         "responses": {
           "201": {
-            "description": "Queue a performance evaluation sheet."
+            "description": "Queue a performance evaluation sheet.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -982,7 +3901,84 @@
         },
         "responses": {
           "201": {
-            "description": "Queue a cycle evaluation report."
+            "description": "Queue a cycle evaluation report.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1000,7 +3996,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List PCCS career plans."
+            "description": "List PCCS career plans.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1026,7 +4099,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create a PCCS career plan."
+            "description": "Create a PCCS career plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1063,7 +4213,84 @@
         },
         "responses": {
           "200": {
-            "description": "Update a PCCS career plan."
+            "description": "Update a PCCS career plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1098,7 +4325,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Return the PCCS progression trail."
+            "description": "Return the PCCS progression trail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1125,7 +4429,84 @@
         ],
         "responses": {
           "200": {
-            "description": "List statutory employees close to 36 probation months."
+            "description": "List statutory employees close to 36 probation months.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1153,7 +4534,84 @@
         },
         "responses": {
           "201": {
-            "description": "Register a probation evaluation."
+            "description": "Register a probation evaluation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1181,7 +4639,84 @@
         ],
         "responses": {
           "200": {
-            "description": "List functional progressions."
+            "description": "List functional progressions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1217,7 +4752,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Check employee progression eligibility."
+            "description": "Check employee progression eligibility.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1245,7 +4857,84 @@
         },
         "responses": {
           "201": {
-            "description": "Simulate functional progression impact."
+            "description": "Simulate functional progression impact.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1272,7 +4961,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Apply simulated functional progression."
+            "description": "Apply simulated functional progression.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1299,7 +5065,84 @@
         ],
         "responses": {
           "200": {
-            "description": "List salary base history for one level."
+            "description": "List salary base history for one level.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1327,7 +5170,84 @@
         },
         "responses": {
           "201": {
-            "description": "Apply mass salary-base adjustment."
+            "description": "Apply mass salary-base adjustment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1345,7 +5265,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Report service health."
+            "description": "Report service health.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "GET health",
@@ -1358,7 +5355,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Report service runtime status."
+            "description": "Report service runtime status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "GET status",
@@ -1381,7 +5455,84 @@
         },
         "responses": {
           "201": {
-            "description": "Queue a report request."
+            "description": "Queue a report request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "POST requests",
@@ -1404,7 +5555,84 @@
         },
         "responses": {
           "200": {
-            "description": "Process pending report requests."
+            "description": "Process pending report requests.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "POST poll",
@@ -1417,7 +5645,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List authenticated employee payslip PDF files."
+            "description": "List authenticated employee payslip PDF files.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1444,7 +5749,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Download authenticated employee payslip PDF."
+            "description": "Download authenticated employee payslip PDF.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1472,7 +5854,84 @@
         },
         "responses": {
           "201": {
-            "description": "Generate official payslip PDFs for a competence."
+            "description": "Generate official payslip PDFs for a competence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1490,7 +5949,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "List authenticated employee yearly income reports."
+            "description": "List authenticated employee yearly income reports.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1517,7 +6053,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Download authenticated employee yearly income PDF."
+            "description": "Download authenticated employee yearly income PDF.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1545,7 +6158,84 @@
         },
         "responses": {
           "201": {
-            "description": "Generate yearly income PDFs for a year-base."
+            "description": "Generate yearly income PDFs for a year-base.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1608,7 +6298,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Paged document attachment metadata."
+            "description": "Paged document attachment metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1636,7 +6403,84 @@
         },
         "responses": {
           "201": {
-            "description": "Create a presigned upload URL for S3."
+            "description": "Create a presigned upload URL for S3.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1654,7 +6498,84 @@
         "parameters": [],
         "responses": {
           "201": {
-            "description": "Register a completed upload as attachment metadata."
+            "description": "Register a completed upload as attachment metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1681,7 +6602,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Delete a document attachment metadata record."
+            "description": "Delete a document attachment metadata record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1708,7 +6706,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Create a short-lived presigned download URL."
+            "description": "Create a short-lived presigned download URL.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1726,7 +6801,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "GET Health",
@@ -1739,7 +6891,84 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
           }
         },
         "summary": "GET ready",
@@ -2289,6 +7518,68 @@
           }
         },
         "required": ["ownerType", "fileName", "contentType"]
+      },
+      "SgpProblemDetails": {
+        "type": "object",
+        "required": ["statusCode", "message", "error"],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "message": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "error": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "SgpOperationResult": {
+        "description": "Fallback success response for operations that return plain objects or arrays without a dedicated DTO class yet.",
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     }
   },

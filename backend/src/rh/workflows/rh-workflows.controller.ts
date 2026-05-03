@@ -83,6 +83,75 @@ export class RhWorkflowsController {
     return this.deleteGlobalWorkflow(request, 'leaves', 'leave_record', id);
   }
 
+  @ApiOperation({ summary: 'GET professional-experiences' })
+  @Get('professional-experiences')
+  @RequirePermission('rh.read')
+  @ApiOkResponse({
+    description: 'List prior professional experience records.',
+  })
+  listProfessionalExperiences(@Query() query: DomainListQueryDto) {
+    return this.workflowsService.listWorkflow(
+      'professional-experiences',
+      query,
+    );
+  }
+
+  @ApiOperation({ summary: 'POST professional-experiences' })
+  @Post('professional-experiences')
+  @RequirePermission('rh.write')
+  @ApiCreatedResponse({
+    description: 'Create a prior professional experience record.',
+  })
+  async createProfessionalExperience(
+    @Req() request: RequestWithContext,
+    @Body() body: RhWorkflowMutationDto,
+  ) {
+    return this.createGlobalWorkflow(
+      request,
+      'professional-experiences',
+      'professional_experience',
+      body,
+    );
+  }
+
+  @ApiOperation({ summary: 'PATCH professional-experiences/:id' })
+  @Patch('professional-experiences/:id')
+  @RequirePermission('rh.write')
+  @ApiOkResponse({
+    description: 'Update a prior professional experience record.',
+  })
+  async updateProfessionalExperience(
+    @Req() request: RequestWithContext,
+    @Param('id') id: string,
+    @Body() body: RhWorkflowMutationDto,
+  ) {
+    return this.updateGlobalWorkflow(
+      request,
+      'professional-experiences',
+      'professional_experience',
+      id,
+      body,
+    );
+  }
+
+  @ApiOperation({ summary: 'DELETE professional-experiences/:id' })
+  @Delete('professional-experiences/:id')
+  @RequirePermission('rh.write')
+  @ApiOkResponse({
+    description: 'Deactivate a prior professional experience record.',
+  })
+  async deleteProfessionalExperience(
+    @Req() request: RequestWithContext,
+    @Param('id') id: string,
+  ) {
+    return this.deleteGlobalWorkflow(
+      request,
+      'professional-experiences',
+      'professional_experience',
+      id,
+    );
+  }
+
   @ApiOperation({ summary: 'GET processos' })
   @Get('processos')
   @RequirePermission('rh.read')

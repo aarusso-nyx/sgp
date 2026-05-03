@@ -1,8 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subject, combineLatest, takeUntil } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,6 +44,11 @@ interface WorkspaceRecord {
   notes: string;
 }
 
+interface RouteWorkspaceState {
+  feature: AdminFeature;
+  routeId: string | null;
+}
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-admin-feature-page',
@@ -54,19 +67,53 @@ interface WorkspaceRecord {
   templateUrl: './admin-feature-page.html',
   styleUrl: './admin-feature-page.scss',
 })
-export class AdminFeaturePage implements OnInit, OnDestroy {
+export class AdminFeaturePage {
   private readonly route = inject(ActivatedRoute);
   private readonly formBuilder = inject(FormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
-  feature = ADMIN_FEATURES[0];
-  records: WorkspaceRecord[] = [];
-  filteredRecords: WorkspaceRecord[] = [];
-  formOpen = false;
-  editingRecord: WorkspaceRecord | null = null;
-  message = '';
-  search = '';
-  status = '';
+  private readonly routeState = toSignal(
+    combineLatest([this.route.data, this.route.paramMap]).pipe(
+      map(([data, params]): RouteWorkspaceState => {
+        const featureRoutePath = data['featureRoutePath'] as string | undefined;
+        const feature =
+          (featureRoutePath ? findAdminFeatureByRoutePath(featureRoutePath) : undefined) ??
+          this.findFirstFeatureForModule(data['moduleKey'] as string | undefined);
+
+        return { feature, routeId: params.get('id') };
+      }),
+    ),
+    { initialValue: { feature: ADMIN_FEATURES[0], routeId: null } },
+  );
+
+  readonly feature = computed(() => this.routeState().feature);
+  readonly records = signal<WorkspaceRecord[]>([]);
+  readonly formOpen = signal(false);
+  readonly editingRecord = signal<WorkspaceRecord | null>(null);
+  readonly message = signal('');
+  readonly search = signal('');
+  readonly status = signal('');
+  readonly filteredRecords = computed(() => {
+    const normalizedSearch = this.search().trim().toLowerCase();
+    const status = this.status();
+
+    return this.records().filter((record) => {
+      const matchesSearch =
+        !normalizedSearch ||
+        [record.code, record.title, record.owner, record.notes]
+          .join(' ')
+          .toLowerCase()
+          .includes(normalizedSearch);
+      const matchesStatus = !status || record.status === status;
+      return matchesSearch && matchesStatus;
+    });
+  });
+
+  private readonly routeWorkspaceEffect = effect(() => {
+    const { feature, routeId } = this.routeState();
+    const records = this.seedRecords(feature, routeId);
+    this.records.set(records);
+    this.resetWorkspace(feature, records);
+  });
 
   readonly columns: CrudTableColumn[] = [
     { key: 'code', header: 'Código' },
@@ -119,33 +166,12 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
     generateAuditTrail: [true],
   });
 
-  ngOnInit(): void {
-    combineLatest([this.route.data, this.route.paramMap])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([data, params]) => {
-        const featureRoutePath = data['featureRoutePath'] as string | undefined;
-        const feature =
-          (featureRoutePath ? findAdminFeatureByRoutePath(featureRoutePath) : undefined) ??
-          this.findFirstFeatureForModule(data['moduleKey'] as string | undefined);
-
-        this.feature = feature;
-        this.records = this.seedRecords(feature, params.get('id'));
-        this.resetWorkspace(feature.mode);
-        this.applyCurrentFilters();
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   get isFormMode(): boolean {
-    return this.feature.mode === 'form';
+    return this.feature().mode === 'form';
   }
 
   get isDetailsMode(): boolean {
-    return this.feature.mode === 'details';
+    return this.feature().mode === 'details';
   }
 
   get modeLabel(): string {
@@ -155,25 +181,24 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
       details: 'Detalhes',
       dashboard: 'Painel',
     };
-    return labels[this.feature.mode];
+    return labels[this.feature().mode];
   }
 
   applyFilters(filters: Record<string, string>): void {
-    this.search = filters['search'] ?? '';
-    this.status = filters['status'] ?? '';
-    this.applyCurrentFilters();
+    this.search.set(filters['search'] ?? '');
+    this.status.set(filters['status'] ?? '');
   }
 
   clearFilters(): void {
-    this.search = '';
-    this.status = '';
-    this.applyCurrentFilters();
+    this.search.set('');
+    this.status.set('');
   }
 
   openCreateForm(): void {
-    this.editingRecord = null;
+    const feature = this.feature();
+    this.editingRecord.set(null);
     this.form.reset({
-      code: this.feature.requiredRole.split('.')[0] || this.feature.backendModule,
+      code: feature.requiredRole.split('.')[0] || feature.backendModule,
       title: '',
       status: 'Ativo',
       owner: 'Operador RH',
@@ -181,13 +206,13 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
       notes: '',
       generateAuditTrail: true,
     });
-    this.formOpen = true;
-    this.message = '';
+    this.formOpen.set(true);
+    this.message.set('');
   }
 
   handleRowAction(event: { actionId: string; row: Record<string, unknown> }): void {
     const record = event.row as unknown as WorkspaceRecord;
-    this.editingRecord = record;
+    this.editingRecord.set(record);
     this.form.reset({
       code: record.code,
       title: record.title,
@@ -197,8 +222,8 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
       notes: record.notes,
       generateAuditTrail: true,
     });
-    this.formOpen = true;
-    this.message = event.actionId === 'details' ? 'Registro aberto em modo de consulta.' : '';
+    this.formOpen.set(true);
+    this.message.set(event.actionId === 'details' ? 'Registro aberto em modo de consulta.' : '');
   }
 
   save(): void {
@@ -208,8 +233,9 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
     }
 
     const value = this.form.getRawValue();
+    const editingRecord = this.editingRecord();
     const record: WorkspaceRecord = {
-      id: this.editingRecord?.id ?? `draft-${Date.now()}`,
+      id: editingRecord?.id ?? `draft-${Date.now()}`,
       code: value.code,
       title: value.title,
       status: value.status,
@@ -218,37 +244,37 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
       notes: value.notes,
     };
 
-    if (this.editingRecord) {
-      this.records = this.records.map((candidate) =>
-        candidate.id === this.editingRecord?.id ? record : candidate,
+    if (editingRecord) {
+      this.records.update((records) =>
+        records.map((candidate) => (candidate.id === editingRecord.id ? record : candidate)),
       );
-      this.message = 'Registro atualizado no workspace.';
+      this.message.set('Registro atualizado no workspace.');
     } else {
-      this.records = [record, ...this.records];
-      this.message = 'Registro incluído no workspace.';
+      this.records.update((records) => [record, ...records]);
+      this.message.set('Registro incluído no workspace.');
     }
 
-    this.formOpen = this.isFormMode;
-    this.editingRecord = this.isFormMode ? record : null;
-    this.applyCurrentFilters();
+    this.formOpen.set(this.isFormMode);
+    this.editingRecord.set(this.isFormMode ? record : null);
   }
 
   cancelForm(): void {
-    this.formOpen = this.isFormMode || this.isDetailsMode;
-    this.editingRecord = null;
-    this.message = '';
+    this.formOpen.set(this.isFormMode || this.isDetailsMode);
+    this.editingRecord.set(null);
+    this.message.set('');
   }
 
   trackByFeature(_: number, feature: AdminFeature): string {
     return feature.id;
   }
 
-  private resetWorkspace(mode: AdminFeatureMode): void {
-    this.formOpen = mode === 'form' || mode === 'details';
-    this.editingRecord = this.formOpen ? (this.records[0] ?? null) : null;
-    const selected = this.editingRecord;
+  private resetWorkspace(feature: AdminFeature, records: WorkspaceRecord[]): void {
+    const formOpen = feature.mode === 'form' || feature.mode === 'details';
+    this.formOpen.set(formOpen);
+    const selected = formOpen ? (records[0] ?? null) : null;
+    this.editingRecord.set(selected);
     this.form.reset({
-      code: selected?.code ?? this.feature.requiredRole.split('.')[0] ?? '',
+      code: selected?.code ?? feature.requiredRole.split('.')[0] ?? '',
       title: selected?.title ?? '',
       status: selected?.status ?? 'Ativo',
       owner: selected?.owner ?? 'Operador RH',
@@ -256,21 +282,7 @@ export class AdminFeaturePage implements OnInit, OnDestroy {
       notes: selected?.notes ?? '',
       generateAuditTrail: true,
     });
-    this.message = '';
-  }
-
-  private applyCurrentFilters(): void {
-    const normalizedSearch = this.search.trim().toLowerCase();
-    this.filteredRecords = this.records.filter((record) => {
-      const matchesSearch =
-        !normalizedSearch ||
-        [record.code, record.title, record.owner, record.notes]
-          .join(' ')
-          .toLowerCase()
-          .includes(normalizedSearch);
-      const matchesStatus = !this.status || record.status === this.status;
-      return matchesSearch && matchesStatus;
-    });
+    this.message.set('');
   }
 
   private findFirstFeatureForModule(moduleKey: string | undefined): AdminFeature {

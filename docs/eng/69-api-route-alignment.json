@@ -4,6 +4,11 @@
     "docs/eng/00-visao-produto-glossario.md",
     "docs/eng/01-escopo-e-decisoes.md",
     "docs/eng/10-uc-administracao-seguranca.md",
+    "docs/eng/100-observability-worker-backpressure.md",
+    "docs/eng/101-tce-state-source-pending-adapters.md",
+    "docs/eng/102-official-fiscal-exports.md",
+    "docs/eng/103-deferred-decision-ledger.md",
+    "docs/eng/104-backend-surface-notes.md",
     "docs/eng/32-diagramas-er.md",
     "docs/eng/40-divisao-modular.md",
     "docs/eng/41-arquitetura-sistema.md",
@@ -87,6 +92,11 @@
     "docs/eng/00-visao-produto-glossario.md",
     "docs/eng/01-escopo-e-decisoes.md",
     "docs/eng/10-uc-administracao-seguranca.md",
+    "docs/eng/100-observability-worker-backpressure.md",
+    "docs/eng/101-tce-state-source-pending-adapters.md",
+    "docs/eng/102-official-fiscal-exports.md",
+    "docs/eng/103-deferred-decision-ledger.md",
+    "docs/eng/104-backend-surface-notes.md",
     "docs/eng/32-diagramas-er.md",
     "docs/eng/40-divisao-modular.md",
     "docs/eng/41-arquitetura-sistema.md",
@@ -166,6 +176,15 @@
     "docs/eng/98-rh-workflows.md",
     "docs/eng/BRIEF.md"
   ],
+  "documentation_semantics": {
+    "route_contract_authority_roots": ["docs/eng"],
+    "governance_control_roots": ["docs/gov"],
+    "operator_guidance_roots": ["docs/user"],
+    "legacy_evidence_roots": ["docs/leg"],
+    "scratch_excluded_roots": ["docs/work"],
+    "route_contract_excluded_prefixes": ["docs/gov/", "docs/user/", "docs/leg/", "docs/work/"],
+    "note": "Route acceptance is extracted only from docs/eng. Governance, user, legacy, and scratch documents are excluded from route-contract authority."
+  },
   "domain_workflow_menu_authority": [
     "docs/eng/BRIEF.md",
     "docs/eng/40-divisao-modular.md",
@@ -201,15 +220,15 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 554,
-    "documented_candidates_total": 697,
-    "documented_outside_runtime": 143,
-    "documented": 479,
-    "runtime_total": 579,
-    "runtime": 479,
-    "deferred_documented": 75,
-    "deferred_runtime": 100,
-    "implemented": 479,
+    "documented_total": 566,
+    "documented_candidates_total": 707,
+    "documented_outside_runtime": 141,
+    "documented": 488,
+    "runtime_total": 594,
+    "runtime": 488,
+    "deferred_documented": 78,
+    "deferred_runtime": 106,
+    "implemented": 488,
     "explicitly_excluded": 0,
     "documented_missing": 0,
     "runtime_only": 0,
@@ -388,6 +407,14 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/lgpd/dpo",
+      "source_doc": "docs/eng/94-lgpd-encarregado.md",
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/menus",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
       "source_docs": ["docs/eng/10-uc-administracao-seguranca.md"],
@@ -503,6 +530,14 @@
         "docs/eng/40-divisao-modular.md",
         "docs/eng/88-tsv-alteracao-contratual-s2306.md"
       ],
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/dpo",
+      "source_doc": "docs/eng/94-lgpd-encarregado.md",
       "evidence": "explicit_method",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
@@ -669,6 +704,14 @@
       "method": "POST",
       "path": "/api/v1/admin/hr/reintegrations/:id/apply",
       "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/lgpd/dpo",
+      "source_doc": "docs/eng/94-lgpd-encarregado.md",
       "evidence": "explicit_method",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
@@ -1266,13 +1309,6 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/recrutamento/banco-talentos",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "GET",
       "path": "/api/v1/recrutamento/requisicoes",
       "source_doc": "docs/eng/40-divisao-modular.md",
       "evidence": "explicit_method",
@@ -1715,13 +1751,6 @@
     },
     {
       "method": "POST",
-      "path": "/api/v1/recrutamento/banco-talentos",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "POST",
       "path": "/api/v1/recrutamento/estagios/:id/recesso",
       "source_doc": "docs/eng/40-divisao-modular.md",
       "evidence": "explicit_method",
@@ -2032,8 +2061,22 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/lgpd/dpo",
+      "source_file": "backend/src/lgpd/dpo.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/lgpd/incidents",
       "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/lgpd/public-power-treatments",
+      "source_file": "backend/src/lgpd/public-power.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2172,6 +2215,13 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/dpo",
+      "source_file": "backend/src/lgpd/dpo.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/admin/lgpd/incidents/:id/close",
       "source_file": "backend/src/lgpd/incidents.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2195,6 +2245,13 @@
       "method": "PATCH",
       "path": "/api/v1/admin/lgpd/incidents/:id/triage",
       "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/public-power-treatments/:id",
+      "source_file": "backend/src/lgpd/public-power.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2396,8 +2453,22 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/admin/lgpd/dpo",
+      "source_file": "backend/src/lgpd/dpo.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/admin/lgpd/incidents",
       "source_file": "backend/src/lgpd/incidents.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/lgpd/public-power-treatments",
+      "source_file": "backend/src/lgpd/public-power.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2668,6 +2739,11 @@
           "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
         },
         {
+          "method": "DELETE",
+          "path": "/api/v1/rh/professional-experiences/:id",
+          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+        },
+        {
           "method": "GET",
           "path": "/api/v1/funcionarios",
           "source_file": "backend/src/rh/employees/employees.controller.ts"
@@ -2680,11 +2756,6 @@
         {
           "method": "GET",
           "path": "/api/v1/funcionarios/:id/dossie",
-          "source_file": "backend/src/rh/employees/employees.controller.ts"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/funcionarios/:id/historico",
           "source_file": "backend/src/rh/employees/employees.controller.ts"
         }
       ],
@@ -2828,6 +2899,11 @@
       "route_evidence": [
         {
           "method": "DELETE",
+          "path": "/api/v1/recrutamento/banco-talentos/:id",
+          "source_file": "backend/src/recrutamento/banco-talentos/banco-talentos.controller.ts"
+        },
+        {
+          "method": "DELETE",
           "path": "/api/v1/recrutamento/biometria/candidatos/:candidatoId",
           "source_file": "backend/src/recrutamento/biometria/biometria.controller.ts"
         },
@@ -2860,14 +2936,10 @@
           "method": "GET",
           "path": "/api/v1/recrutamento/banca/concursos/:concursoId/membros",
           "source_file": "backend/src/recrutamento/banca/banca.controller.ts"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/recrutamento/concursos",
-          "source_file": "backend/src/recrutamento/concurso/concurso.controller.ts"
         }
       ],
       "source_evidence": [
+        "backend/src/recrutamento/banco-talentos/banco-talentos.controller.ts",
         "backend/src/recrutamento/biometria/biometria.controller.ts",
         "backend/src/recrutamento/prova-online/online-exam.controller.ts",
         "backend/src/recrutamento/banca/banca.controller.ts",
@@ -3244,6 +3316,11 @@
             "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
           },
           {
+            "method": "DELETE",
+            "path": "/api/v1/rh/professional-experiences/:id",
+            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          },
+          {
             "method": "GET",
             "path": "/api/v1/funcionarios",
             "source_file": "backend/src/rh/employees/employees.controller.ts"
@@ -3256,11 +3333,6 @@
           {
             "method": "GET",
             "path": "/api/v1/funcionarios/:id/dossie",
-            "source_file": "backend/src/rh/employees/employees.controller.ts"
-          },
-          {
-            "method": "GET",
-            "path": "/api/v1/funcionarios/:id/historico",
             "source_file": "backend/src/rh/employees/employees.controller.ts"
           }
         ],
@@ -3404,6 +3476,11 @@
         "route_evidence": [
           {
             "method": "DELETE",
+            "path": "/api/v1/recrutamento/banco-talentos/:id",
+            "source_file": "backend/src/recrutamento/banco-talentos/banco-talentos.controller.ts"
+          },
+          {
+            "method": "DELETE",
             "path": "/api/v1/recrutamento/biometria/candidatos/:candidatoId",
             "source_file": "backend/src/recrutamento/biometria/biometria.controller.ts"
           },
@@ -3436,14 +3513,10 @@
             "method": "GET",
             "path": "/api/v1/recrutamento/banca/concursos/:concursoId/membros",
             "source_file": "backend/src/recrutamento/banca/banca.controller.ts"
-          },
-          {
-            "method": "GET",
-            "path": "/api/v1/recrutamento/concursos",
-            "source_file": "backend/src/recrutamento/concurso/concurso.controller.ts"
           }
         ],
         "source_evidence": [
+          "backend/src/recrutamento/banco-talentos/banco-talentos.controller.ts",
           "backend/src/recrutamento/biometria/biometria.controller.ts",
           "backend/src/recrutamento/prova-online/online-exam.controller.ts",
           "backend/src/recrutamento/banca/banca.controller.ts",
@@ -5480,8 +5553,8 @@
       "method": "DELETE",
       "path": "/api/v1/convenios/:id",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5591,6 +5664,14 @@
     },
     {
       "method": "DELETE",
+      "path": "/api/v1/recrutamento/banco-talentos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
       "path": "/api/v1/recrutamento/biometria/candidatos/:candidatoId",
       "status": "implemented",
       "source_doc": "docs/eng/40-divisao-modular.md",
@@ -5635,6 +5716,19 @@
       "path": "/api/v1/rh/processos/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/rh/professional-experiences/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": [
+        "docs/eng/40-divisao-modular.md",
+        "docs/eng/62-estrategia-testes.md",
+        "docs/eng/98-rh-workflows.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5837,7 +5931,11 @@
       "method": "GET",
       "path": "/api/v1/consultas/batimento",
       "status": "implemented",
-      "source_doc": "docs/eng/44-jobs-rotinas-assincronas.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": [
+        "docs/eng/104-backend-surface-notes.md",
+        "docs/eng/44-jobs-rotinas-assincronas.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5845,7 +5943,8 @@
       "method": "GET",
       "path": "/api/v1/consultas/business-days",
       "status": "implemented",
-      "source_doc": "docs/eng/98-rh-workflows.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/98-rh-workflows.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5853,7 +5952,8 @@
       "method": "GET",
       "path": "/api/v1/consultas/dashboards",
       "status": "implemented",
-      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/62-estrategia-testes.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5861,8 +5961,12 @@
       "method": "GET",
       "path": "/api/v1/consultas/ficha-financeira",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md", "docs/eng/62-estrategia-testes.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": [
+        "docs/eng/104-backend-surface-notes.md",
+        "docs/eng/40-divisao-modular.md",
+        "docs/eng/62-estrategia-testes.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5870,7 +5974,8 @@
       "method": "GET",
       "path": "/api/v1/consultas/ficha-funcional",
       "status": "implemented",
-      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/62-estrategia-testes.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5878,7 +5983,8 @@
       "method": "GET",
       "path": "/api/v1/consultas/historico-operacional",
       "status": "implemented",
-      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/62-estrategia-testes.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5886,7 +5992,8 @@
       "method": "GET",
       "path": "/api/v1/consultas/pagamentos-bloqueados",
       "status": "implemented",
-      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/62-estrategia-testes.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5894,7 +6001,8 @@
       "method": "GET",
       "path": "/api/v1/consultas/relatorios-situacao",
       "status": "implemented",
-      "source_doc": "docs/eng/62-estrategia-testes.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/62-estrategia-testes.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -5902,7 +6010,8 @@
       "method": "GET",
       "path": "/api/v1/convenios",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6300,6 +6409,7 @@
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
       "source_docs": [
         "docs/eng/10-uc-administracao-seguranca.md",
+        "docs/eng/104-backend-surface-notes.md",
         "docs/eng/40-divisao-modular.md"
       ],
       "evidence": "explicit_method",
@@ -6310,7 +6420,10 @@
       "path": "/api/v1/notificacoes/stream",
       "status": "implemented",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
-      "source_docs": ["docs/eng/10-uc-administracao-seguranca.md"],
+      "source_docs": [
+        "docs/eng/10-uc-administracao-seguranca.md",
+        "docs/eng/104-backend-surface-notes.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6318,7 +6431,8 @@
       "method": "GET",
       "path": "/api/v1/notificacoes/unread-count",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6873,6 +6987,23 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/recrutamento/banco-talentos",
+      "status": "implemented",
+      "source_doc": "docs/eng/103-deferred-decision-ledger.md",
+      "source_docs": ["docs/eng/103-deferred-decision-ledger.md", "docs/eng/40-divisao-modular.md"],
+      "evidence": "runtime_backed_path_mention",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/recrutamento/banco-talentos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/recrutamento/concursos",
       "status": "implemented",
       "source_doc": "docs/eng/40-divisao-modular.md",
@@ -6883,8 +7014,8 @@
       "method": "GET",
       "path": "/api/v1/recrutamento/estagios/estagiarios",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6892,8 +7023,8 @@
       "method": "GET",
       "path": "/api/v1/recrutamento/estagios/programas",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6974,6 +7105,19 @@
       "path": "/api/v1/rh/processos-funcao",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/professional-experiences",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": [
+        "docs/eng/40-divisao-modular.md",
+        "docs/eng/62-estrategia-testes.md",
+        "docs/eng/98-rh-workflows.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7160,7 +7304,10 @@
       "path": "/api/v1/usuarios/me/preferencias-notificacao",
       "status": "implemented",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
-      "source_docs": ["docs/eng/10-uc-administracao-seguranca.md"],
+      "source_docs": [
+        "docs/eng/10-uc-administracao-seguranca.md",
+        "docs/eng/104-backend-surface-notes.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7209,8 +7356,8 @@
       "method": "PATCH",
       "path": "/api/v1/convenios/:id",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7315,7 +7462,10 @@
       "path": "/api/v1/notificacoes/:id",
       "status": "implemented",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
-      "source_docs": ["docs/eng/10-uc-administracao-seguranca.md"],
+      "source_docs": [
+        "docs/eng/10-uc-administracao-seguranca.md",
+        "docs/eng/104-backend-surface-notes.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7324,7 +7474,10 @@
       "path": "/api/v1/notificacoes/marcar-todas-lidas",
       "status": "implemented",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
-      "source_docs": ["docs/eng/10-uc-administracao-seguranca.md"],
+      "source_docs": [
+        "docs/eng/10-uc-administracao-seguranca.md",
+        "docs/eng/104-backend-surface-notes.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7367,6 +7520,14 @@
       "path": "/api/v1/previdenciario/regras/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/banco-talentos/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7442,6 +7603,19 @@
       "path": "/api/v1/rh/processos/:id",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/rh/professional-experiences/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": [
+        "docs/eng/40-divisao-modular.md",
+        "docs/eng/62-estrategia-testes.md",
+        "docs/eng/98-rh-workflows.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7644,8 +7818,8 @@
       "method": "POST",
       "path": "/api/v1/convenios",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -8254,8 +8428,13 @@
       "method": "POST",
       "path": "/api/v1/licencas",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md", "docs/eng/61-guia-parametrizacao.md"],
+      "source_doc": "docs/eng/103-deferred-decision-ledger.md",
+      "source_docs": [
+        "docs/eng/103-deferred-decision-ledger.md",
+        "docs/eng/40-divisao-modular.md",
+        "docs/eng/61-guia-parametrizacao.md",
+        "docs/eng/98-rh-workflows.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -8949,6 +9128,15 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/recrutamento/banco-talentos",
+      "status": "implemented",
+      "source_doc": "docs/eng/103-deferred-decision-ledger.md",
+      "source_docs": ["docs/eng/103-deferred-decision-ledger.md", "docs/eng/40-divisao-modular.md"],
+      "evidence": "runtime_backed_path_mention",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/recrutamento/biometria/capturas",
       "status": "implemented",
       "source_doc": "docs/eng/40-divisao-modular.md",
@@ -8999,8 +9187,8 @@
       "method": "POST",
       "path": "/api/v1/recrutamento/estagios/:id/desligar",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -9008,8 +9196,9 @@
       "method": "POST",
       "path": "/api/v1/recrutamento/estagios/:id/esocial/s2300",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
       "source_docs": [
+        "docs/eng/104-backend-surface-notes.md",
         "docs/eng/40-divisao-modular.md",
         "docs/eng/88-tsv-alteracao-contratual-s2306.md"
       ],
@@ -9020,8 +9209,8 @@
       "method": "POST",
       "path": "/api/v1/recrutamento/estagios/:id/prorrogacao",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -9029,8 +9218,8 @@
       "method": "POST",
       "path": "/api/v1/recrutamento/estagios/estagiarios",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -9038,8 +9227,8 @@
       "method": "POST",
       "path": "/api/v1/recrutamento/estagios/programas",
       "status": "implemented",
-      "source_doc": "docs/eng/40-divisao-modular.md",
-      "source_docs": ["docs/eng/40-divisao-modular.md"],
+      "source_doc": "docs/eng/104-backend-surface-notes.md",
+      "source_docs": ["docs/eng/104-backend-surface-notes.md", "docs/eng/40-divisao-modular.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -9210,6 +9399,19 @@
       "path": "/api/v1/rh/processos-funcao",
       "status": "implemented",
       "source_doc": "docs/eng/62-estrategia-testes.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/professional-experiences",
+      "status": "implemented",
+      "source_doc": "docs/eng/40-divisao-modular.md",
+      "source_docs": [
+        "docs/eng/40-divisao-modular.md",
+        "docs/eng/62-estrategia-testes.md",
+        "docs/eng/98-rh-workflows.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -9432,7 +9634,10 @@
       "path": "/api/v1/usuarios/me/preferencias-notificacao",
       "status": "implemented",
       "source_doc": "docs/eng/10-uc-administracao-seguranca.md",
-      "source_docs": ["docs/eng/10-uc-administracao-seguranca.md"],
+      "source_docs": [
+        "docs/eng/10-uc-administracao-seguranca.md",
+        "docs/eng/104-backend-surface-notes.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     }

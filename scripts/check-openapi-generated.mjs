@@ -10,11 +10,25 @@ const specPaths = [
 
 const methods = new Set(['get', 'post', 'put', 'patch', 'delete', 'head', 'options']);
 const failures = [];
+const standardClientErrorStatuses = ['400', '401', '403', '404', '409', '422', '429'];
 
 function record(ok, detail) {
   if (!ok) {
     failures.push(detail);
   }
+}
+
+function responseJsonSchema(response) {
+  return response?.content?.['application/json']?.schema;
+}
+
+function hasJsonSchema(response) {
+  return Boolean(responseJsonSchema(response));
+}
+
+function hasProblemDetailsRef(response) {
+  const schema = responseJsonSchema(response);
+  return schema?.$ref === '#/components/schemas/SgpProblemDetails';
 }
 
 for (const specPath of specPaths) {
@@ -47,6 +61,22 @@ for (const specPath of specPaths) {
         operation.responses && Object.keys(operation.responses).length > 0,
         `${label}: missing responses`,
       );
+
+      const responses = operation.responses ?? {};
+      const twoHundredStatuses = Object.keys(responses).filter((status) => /^2\d\d$/.test(status));
+      const schemaBackedSuccess = twoHundredStatuses
+        .filter((status) => status !== '204')
+        .some((status) => hasJsonSchema(responses[status]));
+      if (twoHundredStatuses.some((status) => status !== '204')) {
+        record(schemaBackedSuccess, `${label}: missing JSON schema for non-204 2xx response`);
+      }
+
+      for (const status of standardClientErrorStatuses) {
+        record(
+          hasProblemDetailsRef(responses[status]),
+          `${label}: missing ${status} SgpProblemDetails response contract`,
+        );
+      }
     }
   }
 }
@@ -62,4 +92,6 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log('[openapi-generated] generated specs are OpenAPI 3.1 and documented');
+console.log(
+  '[openapi-generated] generated specs are OpenAPI 3.1 and include documented 2xx/4xx contracts',
+);

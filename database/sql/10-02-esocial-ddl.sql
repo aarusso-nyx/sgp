@@ -291,7 +291,9 @@ CREATE TABLE esocial.s2230_pending (
     status esocial.es03_pending_status DEFAULT 'PENDING'::esocial.es03_pending_status NOT NULL,
     emitted_event_id uuid,
     enqueued_at timestamp with time zone DEFAULT now() NOT NULL,
-    consumed_at timestamp with time zone
+    consumed_at timestamp with time zone,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 CREATE TABLE esocial.s2240_pending (
@@ -329,7 +331,9 @@ CREATE TABLE esocial.s2299_pending (
     status esocial.es03_pending_status DEFAULT 'PENDING'::esocial.es03_pending_status NOT NULL,
     emitted_event_id uuid,
     ready_at timestamp with time zone DEFAULT now() NOT NULL,
-    consumed_at timestamp with time zone
+    consumed_at timestamp with time zone,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 CREATE TABLE esocial.s2306_event (
@@ -358,6 +362,7 @@ CREATE TABLE esocial.s3000_request (
     accepted_receipt text,
     accepted_at timestamp with time zone,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT s3000_request_block_status_chk CHECK ((((status = 'BLOCKED'::esocial.s3000_request_status) AND (block_reason IS NOT NULL)) OR (status <> 'BLOCKED'::esocial.s3000_request_status))),
     CONSTRAINT s3000_request_justification_min_chk CHECK ((char_length(btrim(justification)) >= 30)),
     CONSTRAINT s3000_request_target_kind_chk CHECK ((target_event_kind ~ '^S-[0-9]{4}$'::text))

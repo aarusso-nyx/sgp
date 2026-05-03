@@ -233,8 +233,15 @@ CREATE TABLE recrutamento.candidato (
     address jsonb DEFAULT '{}'::jsonb NOT NULL,
     lgpd_consent_at timestamp with time zone NOT NULL,
     lgpd_consent_version text NOT NULL,
+    source text DEFAULT 'portal'::text NOT NULL,
+    curriculum_s3_key text,
+    profile_summary text DEFAULT ''::text NOT NULL,
+    skills text[] DEFAULT ARRAY[]::text[] NOT NULL,
+    pool_status text DEFAULT 'ACTIVE'::text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT candidato_cpf_digits_check CHECK ((cpf ~ '^[0-9]{11}$'::text))
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT candidato_cpf_digits_check CHECK ((cpf ~ '^[0-9]{11}$'::text)),
+    CONSTRAINT candidato_pool_status_check CHECK ((pool_status = ANY (ARRAY['ACTIVE'::text, 'ARCHIVED'::text])))
 );
 
 CREATE TABLE recrutamento.classificacao_item (

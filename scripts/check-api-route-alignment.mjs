@@ -6,6 +6,8 @@ import { resolve } from 'node:path';
 const workspaceRoot = process.cwd();
 const alignmentPath = resolve(workspaceRoot, 'docs/eng/69-api-route-alignment.json');
 const ALLOWED_STATUSES = new Set(['implemented', 'explicitly_excluded']);
+const ROUTE_CONTRACT_AUTHORITY_ROOT = 'docs/eng/';
+const FORBIDDEN_ROUTE_AUTHORITY_PREFIXES = ['docs/gov/', 'docs/user/', 'docs/leg/', 'docs/work/'];
 
 const argv = process.argv.slice(2);
 const asJson = argv.includes('--json');
@@ -25,9 +27,74 @@ function routeLabel(route) {
   return `${route.method} ${route.path}`;
 }
 
+function asStringArray(value) {
+  return Array.isArray(value) ? value.filter((entry) => typeof entry === 'string') : [];
+}
+
+function isAllowedRouteAuthorityDoc(path) {
+  return (
+    path.startsWith(ROUTE_CONTRACT_AUTHORITY_ROOT) &&
+    FORBIDDEN_ROUTE_AUTHORITY_PREFIXES.every((prefix) => !path.startsWith(prefix))
+  );
+}
+
+function assertDocumentationSemantics(alignment) {
+  const routeAuthority = asStringArray(alignment.route_contract_authority);
+  if (routeAuthority.length === 0) {
+    fail('Route alignment is missing route_contract_authority metadata.');
+  }
+
+  const invalidAuthority = routeAuthority.filter((path) => !isAllowedRouteAuthorityDoc(path));
+  if (invalidAuthority.length > 0) {
+    fail(
+      `Route contract authority includes non-docs/eng files: ${invalidAuthority
+        .slice(0, 20)
+        .join(', ')}`,
+    );
+  } else if (routeAuthority.length > 0) {
+    ok(`Route contract authority is limited to ${ROUTE_CONTRACT_AUTHORITY_ROOT} documents.`);
+  }
+
+  const allAuthority = asStringArray(alignment.authority);
+  const forbiddenAuthority = allAuthority.filter((path) =>
+    FORBIDDEN_ROUTE_AUTHORITY_PREFIXES.some((prefix) => path.startsWith(prefix)),
+  );
+  if (forbiddenAuthority.length > 0) {
+    fail(
+      `Route authority includes excluded documentation roots: ${forbiddenAuthority
+        .slice(0, 20)
+        .join(', ')}`,
+    );
+  }
+
+  const semantics = alignment.documentation_semantics ?? {};
+  const routeRoots = asStringArray(semantics.route_contract_authority_roots);
+  const excludedPrefixes = asStringArray(semantics.route_contract_excluded_prefixes);
+  if (!routeRoots.includes('docs/eng')) {
+    fail('Documentation semantics must name docs/eng as route_contract_authority_roots.');
+  }
+
+  const missingExcludedPrefix = FORBIDDEN_ROUTE_AUTHORITY_PREFIXES.filter(
+    (prefix) => !excludedPrefixes.includes(prefix),
+  );
+  if (missingExcludedPrefix.length > 0) {
+    fail(
+      `Documentation semantics must exclude route authority prefixes: ${missingExcludedPrefix.join(
+        ', ',
+      )}`,
+    );
+  } else if (routeRoots.includes('docs/eng')) {
+    ok(
+      'Documentation semantics exclude governance, user, legacy, and scratch docs from route authority.',
+    );
+  }
+}
+
 function main() {
   const alignment = JSON.parse(readFileSync(alignmentPath, 'utf8'));
   const routes = Array.isArray(alignment.routes) ? alignment.routes : [];
+
+  assertDocumentationSemantics(alignment);
 
   if (routes.length === 0) {
     fail('Route alignment file has no routes.');

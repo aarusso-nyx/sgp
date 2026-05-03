@@ -1,10 +1,24 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 
-import { AppModule } from '../../backend/src/app.module';
 import { DatabaseService } from '../../backend/src/database/database.service';
+import { PublicoModule } from '../../backend/src/publico/publico.module';
+
+const goldenDir = join(
+  __dirname,
+  'golden',
+  'transparency',
+  'public-payroll-v01',
+);
+const transparencyFixture = readJson<TransparencyGoldenInput>(
+  join(goldenDir, 'input.json'),
+);
+const updateGoldens = process.env.SGP_UPDATE_R3_016_GOLDENS === '1';
 
 class FakeTransparencyDatabase {
   readonly configured = true;
@@ -13,27 +27,17 @@ class FakeTransparencyDatabase {
   query<T>(sql: string): Promise<T[]> {
     this.queries.push(sql);
     if (sql.includes('transparency_publish_event')) {
-      return Promise.resolve([{ snapshot_hash: 'hash-1' }] as T[]);
+      return Promise.resolve([
+        { snapshot_hash: transparencyFixture.snapshotHash },
+      ] as T[]);
     }
     if (sql.includes('count(*)::text')) {
-      return Promise.resolve([{ total: '1' }] as T[]);
+      return Promise.resolve([
+        { total: String(transparencyFixture.rows.length) },
+      ] as T[]);
     }
     if (sql.includes('transparency_payroll_snapshot')) {
-      return Promise.resolve([
-        {
-          tenant_id: '00000000-0000-4000-8000-000000000001',
-          competence: '2026-04-01',
-          employee_public_id: 'pub-1',
-          full_name: 'Ana Silva',
-          registration_number: 'MAT-1',
-          position_name: 'Analista',
-          organizational_unit: 'Administracao',
-          gross_total: '1000.00',
-          deductions_total: '100.00',
-          net_total: '900.00',
-          snapshot_taken_at: '2026-05-02 00:00:00+00',
-        },
-      ] as T[]);
+      return Promise.resolve(transparencyFixture.rows as T[]);
     }
     return Promise.resolve([] as T[]);
   }
@@ -44,7 +48,7 @@ describe('public transparency endpoints', () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [PublicoModule],
     })
       .overrideProvider(DatabaseService)
       .useValue(new FakeTransparencyDatabase())
@@ -59,19 +63,61 @@ describe('public transparency endpoints', () => {
     await app.close();
   });
 
-  it('responds without a token and excludes protected fields', async () => {
+  it('matches the public payroll JSON golden without protected fields', async () => {
     const response = await request(app.getHttpServer())
       .get(
-        '/api/v1/public/transparency/00000000-0000-4000-8000-000000000001/payroll',
+        `/api/v1/public/transparency/${transparencyFixture.tenantId}/payroll`,
       )
       .expect(200);
 
-    expect(JSON.stringify(response.body)).not.toMatch(
-      /cpf|bank|dependent|address/i,
+    expect(JSON.stringify(response.body)).not.toMatch(protectedFieldPattern);
+    expect(response.body).toEqual(
+      expectedJson(join(goldenDir, 'expected.json'), response.body),
     );
-    expect(response.body.items[0]).toMatchObject({
-      fullName: 'Ana Silva',
-      netTotal: '900.00',
-    });
+  });
+
+  it('matches the public payroll CSV golden without protected fields', async () => {
+    const response = await request(app.getHttpServer())
+      .get(
+        `/api/v1/public/transparency/${transparencyFixture.tenantId}/payroll.csv`,
+      )
+      .expect(200);
+
+    expect(response.text.charCodeAt(0)).toBe(0xfeff);
+    expect(response.text).not.toMatch(protectedFieldPattern);
+    expect(response.text).toBe(
+      expectedText(join(goldenDir, 'expected.csv'), response.text),
+    );
   });
 });
+
+const protectedFieldPattern = /cpf|bank|dependent|address/i;
+
+interface TransparencyGoldenInput {
+  tenantId: string;
+  snapshotHash: string;
+  rows: Array<Record<string, string>>;
+}
+
+function readJson<T>(path: string): T {
+  return JSON.parse(readFileSync(path, 'utf8')) as T;
+}
+
+function expectedJson(path: string, actual: unknown): unknown {
+  if (updateGoldens || !existsSync(path)) {
+    writeExpected(path, `${JSON.stringify(actual, null, 2)}\n`);
+  }
+  return readJson(path);
+}
+
+function expectedText(path: string, actual: string): string {
+  if (updateGoldens || !existsSync(path)) {
+    writeExpected(path, actual);
+  }
+  return readFileSync(path, 'utf8');
+}
+
+function writeExpected(path: string, value: string): void {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, value, 'utf8');
+}

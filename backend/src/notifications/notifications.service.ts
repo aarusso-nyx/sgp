@@ -2,7 +2,11 @@ import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
-import { PagedResponse } from '../common/pagination/paged-response';
+import {
+  createPagedResponse,
+  PagedResponse,
+  resolvePagination,
+} from '../common/pagination/paged-response';
 import { DatabaseService } from '../database/database.service';
 
 interface NotificationRow extends QueryResultRow {
@@ -30,9 +34,7 @@ export class NotificationsService {
 
   async list(query: DomainListQueryDto): Promise<PagedResponse<unknown>> {
     this.ensureDatabase();
-    const page = query.page ?? 1;
-    const pageSize = query.pageSize ?? 20;
-    const offset = (page - 1) * pageSize;
+    const pagination = resolvePagination(query);
     const searchTerm = `%${(query.search ?? '').toLowerCase()}%`;
 
     const count = await this.databaseService.query<CountRow>(
@@ -54,12 +56,12 @@ export class NotificationsService {
       ORDER BY n.created_at DESC
       LIMIT $2 OFFSET $3
       `,
-      [searchTerm, pageSize, offset],
+      [searchTerm, pagination.pageSize, pagination.offset],
     );
 
     const total = Number(count[0]?.total ?? 0);
-    return {
-      items: rows.map((row) => ({
+    return createPagedResponse(
+      rows.map((row) => ({
         id: row.id,
         title: row.title,
         body: row.body,
@@ -68,11 +70,9 @@ export class NotificationsService {
         createdAt: this.toIso(row.created_at),
         metadata: row.metadata ?? {},
       })),
-      page,
-      pageSize,
       total,
-      totalPages: total === 0 ? 0 : Math.ceil(total / pageSize),
-    };
+      pagination,
+    );
   }
 
   async unreadCount(): Promise<{ unread: number }> {

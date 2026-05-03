@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { NomeacaoService } from '../../backend/src/recrutamento/nomeacao/nomeacao.service';
 
 describe('posse deadline expiration (e2e contract)', () => {
@@ -17,5 +18,11 @@ describe('posse deadline expiration (e2e contract)', () => {
         },
       ]),
     ).toBe('next-candidate');
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

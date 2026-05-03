@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
@@ -205,5 +206,11 @@ describe('Consignment portability processing (e2e)', () => {
     expect(database.sql.join('\n')).toContain("status = 'TRANSFERRED'");
     expect(database.sql.join('\n')).toContain("internal_status = 'UNMATCHED'");
     expect(database.sql.join('\n')).toContain('sgp_append_audit_event');
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

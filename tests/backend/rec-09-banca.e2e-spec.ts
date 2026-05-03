@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
@@ -192,5 +193,11 @@ describe('REC-09 certificacao digital da banca', () => {
     expect(verified.body.valid).toBe(true);
     expect(verified.body.signers).toHaveLength(3);
     expect(JSON.stringify(verified.body)).not.toContain('123456789');
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

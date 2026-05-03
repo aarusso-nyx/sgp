@@ -3,6 +3,12 @@
 **Versao:** 1.0 | **Data:** 2026-05-02 | **Status:** Implementado
 **Escopo:** ES-08, envio de lotes SOAP, WS-Security, mTLS e circuit breaker.
 
+**Truth banner:** ES-08 has internal SOAP client plumbing, persistence,
+WS-Security/mTLS code paths, circuit-breaker behavior, and local stub tests.
+Production certificates, national-environment transmission, and external
+homologation evidence remain deferred under
+`103-deferred-decision-ledger.md#deferred-decision-ledger`.
+
 ## Decisao
 
 O `sgp-esocial-worker` deixa de usar adapter sandbox para submissao e passa a operar pelo submodulo `backend/src/esocial-worker/submission/`. O fluxo oficial agrupa eventos `public.esocial_event` ja validados e assinados pelo ES-07, cria uma linha em `esocial.submission_batch`, monta o lote `EnviarLoteEventos`, assina o envelope SOAP com WS-Security e transmite por mTLS usando o PKCS#12 ativo do tenant em `esocial.tenant_certificate`.

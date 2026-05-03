@@ -56,6 +56,31 @@ CREATE TABLE lgpd.ropa_entry (
     CONSTRAINT ropa_entry_status_check CHECK (status = ANY (ARRAY['ACTIVE'::text, 'UNDER_REVIEW'::text, 'RETIRED'::text]))
 );
 
+CREATE TABLE lgpd.public_power_treatment (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
+    ropa_entry_id uuid NOT NULL,
+    legal_basis_rule_id uuid NOT NULL,
+    flow_key text NOT NULL,
+    purpose text NOT NULL,
+    legal_basis_reference text NOT NULL,
+    responsible_area text NOT NULL,
+    evidence_refs text[] DEFAULT ARRAY[]::text[] NOT NULL,
+    status text DEFAULT 'REGISTERED'::text NOT NULL,
+    notes text,
+    created_by_ref text,
+    updated_by_ref text,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT public_power_treatment_pkey PRIMARY KEY (id),
+    CONSTRAINT public_power_treatment_status_check CHECK (status = ANY (ARRAY['REGISTERED'::text, 'UNDER_REVIEW'::text, 'SUSPENDED'::text, 'RETIRED'::text])),
+    CONSTRAINT public_power_treatment_required_text_check CHECK (
+        length(btrim(purpose)) > 0
+        AND length(btrim(legal_basis_reference)) > 0
+        AND length(btrim(responsible_area)) > 0
+    )
+);
+
 CREATE TABLE lgpd.data_subject_request (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,

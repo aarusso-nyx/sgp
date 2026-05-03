@@ -40,7 +40,9 @@
     "test:e2e": "node scripts/run.mjs test e2e",
     "test:admin:e2e": "node scripts/run.mjs test admin-e2e",
     "test:portal:e2e": "node scripts/run.mjs test portal-e2e",
+    "test:frontend:e2e": "node scripts/run.mjs test frontend-e2e",
     "test:coverage": "node scripts/run.mjs test coverage",
+    "test:frontend:coverage": "node scripts/run.mjs test frontend-coverage",
     "test:qa": "node scripts/run.mjs test qa",
     "test:qa:api": "node scripts/run.mjs test qa-api",
     "test:qa:frontend": "node scripts/run.mjs test qa-frontend",
@@ -76,6 +78,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "devDependencies": {
+    "jsdom": "^28.1.0",
     "typescript": "~5.9.2"
   }
 }

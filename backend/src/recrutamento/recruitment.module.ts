@@ -6,6 +6,8 @@ import { DatabaseModule } from '../database/database.module';
 import { RecruitmentController } from './recruitment.controller';
 import { RecruitmentService } from './recruitment.service';
 import { BancaModule } from './banca/banca.module';
+import { BancoTalentosController } from './banco-talentos/banco-talentos.controller';
+import { BancoTalentosService } from './banco-talentos/banco-talentos.service';
 import { BiometriaModule } from './biometria/biometria.module';
 import { ClassificacaoModule } from './classificacao/classificacao.module';
 import { ConcursoModule } from './concurso/concurso.module';
@@ -30,7 +32,7 @@ import { RecrutamentoAvaliacaoModule } from './avaliacao/avaliacao.module';
     NomeacaoModule,
     PosseModule,
   ],
-  controllers: [RecruitmentController],
-  providers: [RecruitmentService],
+  controllers: [RecruitmentController, BancoTalentosController],
+  providers: [RecruitmentService, BancoTalentosService],
 })
 export class RecruitmentModule {}

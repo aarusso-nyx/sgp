@@ -10,6 +10,8 @@ CREATE INDEX candidate_biometric_retention_idx ON recrutamento.candidate_biometr
 
 CREATE INDEX candidato_lookup_idx ON recrutamento.candidato USING btree (tenant_id, cpf);
 
+CREATE INDEX candidato_pool_status_idx ON recrutamento.candidato USING btree (tenant_id, pool_status, created_at DESC);
+
 CREATE INDEX classificacao_item_call_order_idx ON recrutamento.classificacao_item USING btree (tenant_id, snapshot_id, vaga_id, call_order) WHERE (call_order IS NOT NULL);
 
 CREATE INDEX classificacao_item_rank_idx ON recrutamento.classificacao_item USING btree (tenant_id, snapshot_id, vaga_id, rank_general);

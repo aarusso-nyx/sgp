@@ -6,6 +6,7 @@ import {
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { isActivePayrollItemIdempotencyConflict } from './payroll-idempotency';
 
 type DecimoKind = 'DECIMO_TERCEIRO_ADIANTAMENTO' | 'DECIMO_TERCEIRO_FECHAMENTO';
 
@@ -215,7 +216,7 @@ export class DecimoTerceiroService {
         };
       });
     } catch (error: unknown) {
-      if (this.isIdempotencyConflict(error)) {
+      if (isActivePayrollItemIdempotencyConflict(error)) {
         throw new ConflictException(
           'Payroll run reprocessing conflicted with another execution',
         );
@@ -409,14 +410,6 @@ export class DecimoTerceiroService {
         ],
       );
     }
-  }
-
-  private isIdempotencyConflict(error: unknown): boolean {
-    const candidate = error as { code?: string; constraint?: string };
-    return (
-      candidate.code === '23505' &&
-      candidate.constraint === 'employee_payroll_item_active_idempotency_uq'
-    );
   }
 
   private async insertItem(

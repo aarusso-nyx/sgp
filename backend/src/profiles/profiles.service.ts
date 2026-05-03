@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
-import { PagedResponse } from '../common/pagination/paged-response';
+import {
+  createPagedResponse,
+  PagedResponse,
+  resolvePagination,
+} from '../common/pagination/paged-response';
 import { DatabaseService } from '../database/database.service';
 import {
   AssignProfilePermissionsDto,
@@ -35,9 +39,7 @@ export class ProfilesService {
 
   async list(query: ProfileListQueryDto): Promise<PagedResponse<unknown>> {
     this.ensureDatabase();
-    const page = query.page ?? 1;
-    const pageSize = query.pageSize ?? 20;
-    const offset = (page - 1) * pageSize;
+    const pagination = resolvePagination(query);
     const searchTerm = `%${(query.search ?? '').toLowerCase()}%`;
 
     const countRows = await this.databaseService.query<CountRow>(
@@ -66,17 +68,15 @@ export class ProfilesService {
       ORDER BY ap.name ASC
       LIMIT $2 OFFSET $3
       `,
-      [searchTerm, pageSize, offset],
+      [searchTerm, pagination.pageSize, pagination.offset],
     );
 
     const total = Number(countRows[0]?.total ?? 0);
-    return {
-      items: rows.map((row) => this.toDto(row)),
-      page,
-      pageSize,
+    return createPagedResponse(
+      rows.map((row) => this.toDto(row)),
       total,
-      totalPages: total === 0 ? 0 : Math.ceil(total / pageSize),
-    };
+      pagination,
+    );
   }
 
   async getById(id: string): Promise<unknown> {

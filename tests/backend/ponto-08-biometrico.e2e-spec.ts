@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
@@ -145,5 +146,11 @@ describe('PONTO-08 biometrico (e2e)', () => {
           expect(Number(response.body.score)).toBeGreaterThanOrEqual(0.85);
         });
     }
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

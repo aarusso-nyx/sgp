@@ -25,6 +25,12 @@ This directory is the authoritative engineering and product specification source
 - `70-adrs.md`
 - `71-folia-engine-reconciliation.md`
 - `99-implementation-status.md`
+- `103-deferred-decision-ledger.md`
+- `104-backend-surface-notes.md`
+- `lgpd/legal-basis.md`
+- `lgpd/ropa.md`
+- `lgpd/public-power.md`
+- `lgpd/pii-at-rest.md`
 
 ## Reverse Evidence Succession
 

@@ -123,6 +123,14 @@ describe('RhWorkflowsController', () => {
         table: 'leave_record',
       },
       {
+        list: 'listProfessionalExperiences',
+        create: 'createProfessionalExperience',
+        update: 'updateProfessionalExperience',
+        remove: 'deleteProfessionalExperience',
+        workflow: 'professional-experiences',
+        table: 'professional_experience',
+      },
+      {
         list: 'listProcesses',
         create: 'createProcess',
         update: 'updateProcess',

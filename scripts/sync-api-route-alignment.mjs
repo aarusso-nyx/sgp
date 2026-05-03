@@ -33,6 +33,16 @@ const ROUTE_AUTHORITY_EXCLUDED_DOCS = new Set([
 
 const ROUTE_AUTHORITY_EXCLUDED_PREFIXES = ['docs/gov/', 'docs/user/', 'docs/leg/', 'docs/work/'];
 
+const DOCUMENTATION_SEMANTICS = {
+  route_contract_authority_roots: ['docs/eng'],
+  governance_control_roots: ['docs/gov'],
+  operator_guidance_roots: ['docs/user'],
+  legacy_evidence_roots: ['docs/leg'],
+  scratch_excluded_roots: ['docs/work'],
+  route_contract_excluded_prefixes: ROUTE_AUTHORITY_EXCLUDED_PREFIXES,
+  note: 'Route acceptance is extracted only from docs/eng. Governance, user, legacy, and scratch documents are excluded from route-contract authority.',
+};
+
 const DEFERRED_SCOPES = [
   {
     key: 'ADMIN_INSTALL_LATER',
@@ -591,6 +601,7 @@ function main() {
       file.replace(`${repoRoot}/`, ''),
     ),
     route_contract_authority: authorityDocs.map((file) => file.replace(`${repoRoot}/`, '')),
+    documentation_semantics: DOCUMENTATION_SEMANTICS,
     domain_workflow_menu_authority: domainWorkflowMenuDocs.map((file) =>
       file.replace(`${repoRoot}/`, ''),
     ),

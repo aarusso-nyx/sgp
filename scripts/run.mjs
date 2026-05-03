@@ -291,6 +291,11 @@ function handleTest() {
     'admin-e2e': () => runWorkspaceScript('frontend', 'test:admin:e2e', args.slice(1)),
     portal: () => runWorkspaceScript('frontend', 'test:portal', args.slice(1)),
     'portal-e2e': () => runWorkspaceScript('frontend', 'test:portal:e2e', args.slice(1)),
+    'frontend-e2e': () =>
+      runSequence([
+        () => runWorkspaceScript('frontend', 'test:admin:e2e', args.slice(1)),
+        () => runWorkspaceScript('frontend', 'test:portal:e2e', args.slice(1)),
+      ]),
     backend: () => runWorkspaceScript('backend', 'test', args.slice(1)),
     db: () =>
       runCommand(process.execPath, ['scripts/db-bootstrap-smoke.mjs'], {
@@ -304,6 +309,7 @@ function handleTest() {
       runWorkspaceScript('backend', 'test:cov', args.slice(1), {
         env: localTestDatabaseEnv(),
       }),
+    'frontend-coverage': () => runWorkspaceScript('frontend', 'test:coverage', args.slice(1)),
     qa: () => runSequence([() => handleTestQaApi(), () => handleTestQaFrontend()]),
     'qa-api': handleTestQaApi,
     'qa-frontend': handleTestQaFrontend,
@@ -311,7 +317,7 @@ function handleTest() {
 
   if (!handlers[subcommand]) {
     console.error(
-      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, backend, db, e2e, coverage, qa, qa-api, qa-frontend',
+      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, frontend-e2e, backend, db, e2e, coverage, frontend-coverage, qa, qa-api, qa-frontend',
     );
     return 1;
   }

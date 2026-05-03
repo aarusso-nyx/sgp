@@ -159,6 +159,23 @@ describe('General leaves workflow (e2e)', () => {
       });
   });
 
+  it('creates licenca premio requests through the general leave path', async () => {
+    await request(server())
+      .post('/api/v1/licencas')
+      .set('authorization', `Bearer ${token()}`)
+      .send({
+        employeeId: '00000000-0000-4000-8000-000000000001',
+        reason: 'premio',
+        startsOn: '2026-05-01',
+      })
+      .expect(201)
+      .expect((response) => {
+        expect(response.body.reason).toBe('premio');
+        expect(response.body.days).toBe(90);
+        expect(response.body.paid).toBe(true);
+      });
+  });
+
   it('approves leave requests', async () => {
     await request(server())
       .post('/api/v1/licencas/00000000-0000-4000-8000-000000000020/aprovar')

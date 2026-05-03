@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { Test } from '@nestjs/testing';
 
 import { DatabaseService } from '../../backend/src/database/database.service';
@@ -31,5 +32,11 @@ describe('PONTO-07 payroll bridge timezone e2e contract', () => {
 
     expect(moduleRef.get(TimesheetAggregatorService)).toBeDefined();
     expect(moduleRef.get(PayrollLineBuilderService)).toBeDefined();
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

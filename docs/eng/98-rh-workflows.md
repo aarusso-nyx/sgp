@@ -4,27 +4,30 @@ The modern RH slice implements the legacy SGP RH route family as PostgreSQL-back
 
 ## Implemented Workflow Coverage
 
-| Legacy route                           | Modern API resource            | Status      | Notes                                                                                         |
-| -------------------------------------- | ------------------------------ | ----------- | --------------------------------------------------------------------------------------------- |
-| `#!/funcionario/gestao`                | `/employees`                   | observed    | Employee registry list, create, update, and deactivate.                                       |
-| `#!/dependente/gestao`                 | `/rh/dependents`               | observed    | Employee dependents with CPF, birth date, relationship, and IR dependent flag.                |
-| `#!/experienciaProfissional/gestao`    | `/rh/professional-experiences` | observed    | Prior professional experience and period fields.                                              |
-| `#!/frequencia/gestao`                 | `/rh/frequencies`              | observed    | Frequency and absence days, with import request endpoint.                                     |
-| `#!/diaUtil/gestao`                    | `/consultas/business-days`     | observed    | Tenant-scoped business-day calendar backed by `hr.business_day`, including holiday overrides. |
-| `#!/historicoSituacaoFuncional/gestao` | `/rh/status-history`           | observed    | Functional status history and afastamento reasons.                                            |
-| `#!/nivelSalarialHistorico/gestao`     | `/rh/salary-history`           | observed    | Salary level/reference history.                                                               |
-| `#!/tempoServico/gestao`               | `/rh/service-time`             | observed    | Service-time periods and day counts.                                                          |
-| `#!/transferenciaFuncionario/gestao`   | `/rh/transfers`                | observed    | Employee branch/work-location transfers.                                                      |
-| `#!/dadoCadastralComplementar/gestao`  | `/rh/complement-data`          | inferred    | Implemented because the legacy route was present but access was restricted during extraction. |
-| `#!/definicaoOrganico/gestao`          | `/rh/organic-definitions`      | implemented | CRUD de `hr.organic_definition`, vinculando lotacao, cargo e vagas autorizadas por vigencia.  |
-| `#!/feriasProgramacao/gestao`          | `/rh/vacations`                | inferred    | Vacation scheduling workflow.                                                                 |
-| `#!/licencaPremio/gestao`              | `/rh/leaves`                   | inferred    | Leave/licenca-premio records.                                                                 |
+| Legacy route                           | Modern API resource                   | Status      | Notes                                                                                         |
+| -------------------------------------- | ------------------------------------- | ----------- | --------------------------------------------------------------------------------------------- |
+| `#!/funcionario/gestao`                | `/employees`                          | observed    | Employee registry list, create, update, and deactivate.                                       |
+| `#!/dependente/gestao`                 | `/rh/dependents`                      | observed    | Employee dependents with CPF, birth date, relationship, and IR dependent flag.                |
+| `#!/experienciaProfissional/gestao`    | `/api/v1/rh/professional-experiences` | implemented | Prior professional experience and period fields persisted in `hr.professional_experience`.    |
+| `#!/frequencia/gestao`                 | `/rh/frequencies`                     | observed    | Frequency and absence days, with import request endpoint.                                     |
+| `#!/diaUtil/gestao`                    | `/consultas/business-days`            | observed    | Tenant-scoped business-day calendar backed by `hr.business_day`, including holiday overrides. |
+| `#!/historicoSituacaoFuncional/gestao` | `/rh/status-history`                  | observed    | Functional status history and afastamento reasons.                                            |
+| `#!/nivelSalarialHistorico/gestao`     | `/rh/salary-history`                  | observed    | Salary level/reference history.                                                               |
+| `#!/tempoServico/gestao`               | `/rh/service-time`                    | observed    | Service-time periods and day counts.                                                          |
+| `#!/transferenciaFuncionario/gestao`   | `/rh/transfers`                       | observed    | Employee branch/work-location transfers.                                                      |
+| `#!/dadoCadastralComplementar/gestao`  | `/rh/complement-data`                 | inferred    | Implemented because the legacy route was present but access was restricted during extraction. |
+| `#!/definicaoOrganico/gestao`          | `/rh/organic-definitions`             | implemented | CRUD de `hr.organic_definition`, vinculando lotacao, cargo e vagas autorizadas por vigencia.  |
+| `#!/feriasProgramacao/gestao`          | `/rh/vacations`                       | inferred    | Vacation scheduling workflow.                                                                 |
+| `#!/licencaPremio/gestao`              | `/api/v1/licencas`                    | implemented | Licença-prêmio record management through general leave requests with reason `premio`.         |
 
 ## Backend Behavior
 
 - RH workflow APIs are guarded by Cognito JWT and permission guards.
-- Read operations require `rh:read`.
-- Mutating operations require `rh:write`.
+- Read operations require `rh.read`.
+- Mutating operations require `rh.write`.
+- Professional-experience record management is exposed through `GET /api/v1/rh/professional-experiences`, `POST /api/v1/rh/professional-experiences`, `PATCH /api/v1/rh/professional-experiences/:id`, and `DELETE /api/v1/rh/professional-experiences/:id`; it reuses the workflow service, `hr.professional_experience`, and RH mutation audit records.
+- Licença-prêmio uses the general leave surface `POST /api/v1/licencas` with reason `premio`, defaults to 90 paid days, and calls `hr.f_validate_leave_eligibility` before inserting `hr.leave_record`.
+- Licença-prêmio accrual, unused-balance tracking, and pecuniary conversion on termination/retirement are payroll-impacting policy and remain deferred in `docs/eng/103-deferred-decision-ledger.md`.
 - Business-day queries are exposed as `GET /api/v1/consultas/business-days?startDate=yyyy-mm-dd&endDate=yyyy-mm-dd`; the service treats Monday-Friday as the default workweek and applies active `hr.business_day` rows as tenant-scoped overrides, so configured holidays can make weekdays non-working and configured compensations can make weekends working.
 - Frequency creation defaults `worked_days` from the business-day calendar for the submitted year/month when the caller does not provide `workedDays`; explicit caller values still win.
 - Vacation scheduling resolves omitted installment `days` through the same business-day calendar before persisting `hr.vacation_record`.

@@ -8,7 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { SharedPlatformModule } from '../shared-platform/shared-platform-module';
+import { CrudTable } from '../../shared-platform/crud-table/crud-table';
+import { FilterBar } from '../../shared-platform/filter-bar/filter-bar';
 import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
 import { RhFerias } from './ferias/ferias';
 import { RhFuncionarios } from './funcionarios/funcionarios';
@@ -52,7 +53,8 @@ import { RhTsvContratos } from './tsv-contratos/tsv-contratos';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    SharedPlatformModule,
+    CrudTable,
+    FilterBar,
     RhRoutingModule,
   ],
 })

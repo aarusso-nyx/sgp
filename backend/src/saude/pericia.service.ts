@@ -1,12 +1,7 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  NotFoundException,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
+import { domainError } from '../common/errors/domain-error';
 import { DatabaseService } from '../database/database.service';
 import {
   CreateMedicalRecordDto,
@@ -53,6 +48,64 @@ interface ReplicationRow extends QueryResultRow {
   employee_id: string;
 }
 
+const PERICIA_ERRORS = {
+  appointmentNotFound: () =>
+    domainError.notFound(
+      'SAUDE.PERICIA.APPOINTMENT_NOT_FOUND',
+      'Medical appointment not found',
+    ),
+  appointmentRecordCreationUnavailable: () =>
+    domainError.badRequest(
+      'SAUDE.PERICIA.APPOINTMENT_RECORD_CREATION_UNAVAILABLE',
+      'Medical appointment is not available for record creation',
+    ),
+  appointmentSlotOccupied: () =>
+    domainError.conflict(
+      'SAUDE.PERICIA.APPOINTMENT_SLOT_OCCUPIED',
+      'Appointment slot already occupied',
+    ),
+  databaseUnavailable: () =>
+    domainError.serviceUnavailable(
+      'SAUDE.PERICIA.DATABASE_UNAVAILABLE',
+      'DATABASE_URL is required for pericia operations',
+    ),
+  employeeNotActive: () =>
+    domainError.unprocessable(
+      'SAUDE.PERICIA.EMPLOYEE_NOT_ACTIVE',
+      'Funcionário não se encontra em exercício',
+    ),
+  employeeNotFound: () =>
+    domainError.notFound(
+      'SAUDE.PERICIA.EMPLOYEE_NOT_FOUND',
+      'Employee not found',
+    ),
+  grantedOpinionIncomplete: () =>
+    domainError.badRequest(
+      'SAUDE.PERICIA.GRANTED_OPINION_INCOMPLETE',
+      'Granted opinion requires grantedDays, startsOn, and endsOn',
+    ),
+  leaveNotFound: () =>
+    domainError.notFound(
+      'SAUDE.PERICIA.LEAVE_NOT_FOUND',
+      'Medical leave not found',
+    ),
+  leaveReplicationSourceNotFound: () =>
+    domainError.notFound(
+      'SAUDE.PERICIA.LEAVE_REPLICATION_SOURCE_NOT_FOUND',
+      'Medical leave not found for record replication',
+    ),
+  recordCreationFailed: () =>
+    domainError.notFound(
+      'SAUDE.PERICIA.RECORD_CREATION_FAILED',
+      'Medical record could not be created',
+    ),
+  recordNotFound: () =>
+    domainError.notFound(
+      'SAUDE.PERICIA.RECORD_NOT_FOUND',
+      'Medical record not found',
+    ),
+} as const;
+
 export interface PericiaAppointmentSummary {
   id: string;
   funcionarioId: string;
@@ -92,10 +145,10 @@ export class PericiaService {
 
     const employee = await this.employeeState(input.funcionarioId);
     if (!employee) {
-      throw new NotFoundException('Employee not found');
+      throw PERICIA_ERRORS.employeeNotFound();
     }
     if (employee.lifecycle_status === 'ON_LEAVE') {
-      throw new BadRequestException('Funcionário não se encontra em exercício');
+      throw PERICIA_ERRORS.employeeNotActive();
     }
 
     try {
@@ -145,7 +198,7 @@ export class PericiaService {
       return this.toAppointmentSummary(rows[0]);
     } catch (error: unknown) {
       if ((error as { code?: string }).code === '23505') {
-        throw new ConflictException('Appointment slot already occupied');
+        throw PERICIA_ERRORS.appointmentSlotOccupied();
       }
       throw error;
     }
@@ -207,12 +260,10 @@ export class PericiaService {
     );
     const currentAppointment = appointment[0];
     if (!currentAppointment) {
-      throw new NotFoundException('Medical appointment not found');
+      throw PERICIA_ERRORS.appointmentNotFound();
     }
     if (!['ATTENDED', 'SCHEDULED'].includes(currentAppointment.status)) {
-      throw new BadRequestException(
-        'Medical appointment is not available for record creation',
-      );
+      throw PERICIA_ERRORS.appointmentRecordCreationUnavailable();
     }
 
     const recordRows = await this.databaseService.query<MedicalRecordRow>(
@@ -281,7 +332,7 @@ export class PericiaService {
     );
     const record = recordRows[0];
     if (!record) {
-      throw new NotFoundException('Medical record could not be created');
+      throw PERICIA_ERRORS.recordCreationFailed();
     }
 
     let leave: MedicalLeaveSummary | null = null;
@@ -401,9 +452,7 @@ export class PericiaService {
 
     if (opinion.decision === 'granted') {
       if (!opinion.grantedDays || !opinion.startsOn || !opinion.endsOn) {
-        throw new BadRequestException(
-          'Granted opinion requires grantedDays, startsOn, and endsOn',
-        );
+        throw PERICIA_ERRORS.grantedOpinionIncomplete();
       }
     }
 
@@ -482,7 +531,7 @@ export class PericiaService {
     );
     const record = recordRows[0];
     if (!record) {
-      throw new NotFoundException('Medical appointment not found');
+      throw PERICIA_ERRORS.appointmentNotFound();
     }
 
     const leaveRows = await this.databaseService.query<MedicalLeaveRow>(
@@ -520,9 +569,7 @@ export class PericiaService {
     );
     const sourceLeave = leaveRows[0];
     if (!sourceLeave) {
-      throw new NotFoundException(
-        'Medical leave not found for record replication',
-      );
+      throw PERICIA_ERRORS.leaveReplicationSourceNotFound();
     }
 
     const replicated = await this.databaseService.query<ReplicationRow>(
@@ -603,7 +650,7 @@ export class PericiaService {
     row: AppointmentRow | undefined,
   ): PericiaAppointmentSummary {
     if (!row) {
-      throw new NotFoundException('Medical appointment not found');
+      throw PERICIA_ERRORS.appointmentNotFound();
     }
 
     return {
@@ -622,7 +669,7 @@ export class PericiaService {
     leave: MedicalLeaveSummary | null,
   ): MedicalRecordSummary {
     if (!row) {
-      throw new NotFoundException('Medical record not found');
+      throw PERICIA_ERRORS.recordNotFound();
     }
 
     return {
@@ -640,7 +687,7 @@ export class PericiaService {
     row: MedicalLeaveRow | undefined,
   ): MedicalLeaveSummary {
     if (!row) {
-      throw new NotFoundException('Medical leave not found');
+      throw PERICIA_ERRORS.leaveNotFound();
     }
     return {
       id: row.id,
@@ -687,9 +734,7 @@ export class PericiaService {
 
   private ensureDatabase(): void {
     if (!this.databaseService.configured) {
-      throw new ServiceUnavailableException(
-        'DATABASE_URL is required for pericia operations',
-      );
+      throw PERICIA_ERRORS.databaseUnavailable();
     }
   }
 

@@ -10,6 +10,7 @@ import { PagedResponse } from '../../common/pagination/paged-response';
 import { roundMoney, toMoney } from '../../common/money/money';
 import { DatabaseService } from '../../database/database.service';
 import { PayrollEarningWriter } from './payroll-earning.writer';
+import { isActivePayrollItemIdempotencyConflict } from './payroll-idempotency';
 import { PayrollItemReader } from './payroll-item.reader';
 import { PayrollLineWriter } from './payroll-line.writer';
 import {
@@ -181,7 +182,7 @@ export class PayrollService {
       await this.refreshPayrollRunAggregates(run.id);
       return this.toSummary(await this.itemReader.getSummary(run.id));
     } catch (error: unknown) {
-      if (this.isIdempotencyConflict(error)) {
+      if (isActivePayrollItemIdempotencyConflict(error)) {
         throw new ConflictException(
           'Payroll run reprocessing conflicted with another execution',
         );
@@ -279,7 +280,7 @@ export class PayrollService {
 
       return this.toSummary(row);
     } catch (error: unknown) {
-      if (this.isIdempotencyConflict(error)) {
+      if (isActivePayrollItemIdempotencyConflict(error)) {
         throw new ConflictException(
           'Payroll run reprocessing conflicted with another execution',
         );
@@ -317,14 +318,6 @@ export class PayrollService {
     return value instanceof Date
       ? value.toISOString()
       : new Date(value).toISOString();
-  }
-
-  private isIdempotencyConflict(error: unknown): boolean {
-    const candidate = error as { code?: string; constraint?: string };
-    return (
-      candidate.code === '23505' &&
-      candidate.constraint === 'employee_payroll_item_active_idempotency_uq'
-    );
   }
 
   private resolveMappedAmount(

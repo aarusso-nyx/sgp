@@ -140,6 +140,12 @@ export class OpenApiClient {
     );
   }
 
+  deleteApiV1RecrutamentoBancoTalentosById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/recrutamento/banco-talentos/${encodeURIComponent(params.id)}`,
+    );
+  }
+
   deleteApiV1RecrutamentoBiometriaCandidatosByCandidatoId(params: {
     candidatoId: string;
   }): Observable<unknown> {
@@ -170,6 +176,12 @@ export class OpenApiClient {
 
   deleteApiV1RhProcessosById(params: { id: string }): Observable<unknown> {
     return this.api.delete<unknown>(`/v1/rh/processos/${encodeURIComponent(params.id)}`);
+  }
+
+  deleteApiV1RhProfessionalExperiencesById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(
+      `/v1/rh/professional-experiences/${encodeURIComponent(params.id)}`,
+    );
   }
 
   deleteApiV1TceLayoutFieldsById(params: { id: string }): Observable<unknown> {
@@ -273,8 +285,16 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/admin/fiscal/gps/payment-codes');
   }
 
+  getApiV1AdminLgpdDpo(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/lgpd/dpo');
+  }
+
   getApiV1AdminLgpdIncidents(): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/lgpd/incidents');
+  }
+
+  getApiV1AdminLgpdPublicPowerTreatments(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/lgpd/public-power-treatments');
   }
 
   getApiV1AdminLgpdRopa(): Observable<unknown> {
@@ -1062,6 +1082,16 @@ export class OpenApiClient {
     );
   }
 
+  getApiV1RecrutamentoBancoTalentos(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/recrutamento/banco-talentos', query);
+  }
+
+  getApiV1RecrutamentoBancoTalentosById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/recrutamento/banco-talentos/${encodeURIComponent(params.id)}`,
+    );
+  }
+
   getApiV1RecrutamentoConcursos(): Observable<unknown> {
     return this.api.get<unknown>('/v1/recrutamento/concursos');
   }
@@ -1118,6 +1148,10 @@ export class OpenApiClient {
 
   getApiV1RhProcessosFuncao(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/rh/processos-funcao', query);
+  }
+
+  getApiV1RhProfessionalExperiences(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/rh/professional-experiences', query);
   }
 
   getApiV1SaudeAcidentes(): Observable<unknown> {
@@ -1251,6 +1285,10 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1AdminLgpdDpo(body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>('/v1/admin/lgpd/dpo', body);
+  }
+
   patchApiV1AdminLgpdIncidentsCloseById(
     params: { id: string },
     body: ApiBody = {},
@@ -1287,6 +1325,16 @@ export class OpenApiClient {
   ): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/admin/lgpd/incidents/${encodeURIComponent(params.id)}/triage`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdPublicPowerTreatmentsById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/public-power-treatments/${encodeURIComponent(params.id)}`,
       body,
     );
   }
@@ -1584,6 +1632,16 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1RecrutamentoBancoTalentosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/recrutamento/banco-talentos/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
   patchApiV1RecrutamentoCandidatosByCandidatoId(
     params: { candidato_id: string },
     body: ApiBody = {},
@@ -1641,6 +1699,16 @@ export class OpenApiClient {
   patchApiV1RhProcessosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/rh/processos/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1RhProfessionalExperiencesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/professional-experiences/${encodeURIComponent(params.id)}`,
       body,
     );
   }
@@ -1876,8 +1944,16 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1AdminLgpdDpo(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/dpo', body);
+  }
+
   postApiV1AdminLgpdIncidents(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/incidents', body);
+  }
+
+  postApiV1AdminLgpdPublicPowerTreatments(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/public-power-treatments', body);
   }
 
   postApiV1AdminLgpdRopa(body: ApiBody = {}): Observable<unknown> {
@@ -3073,6 +3149,10 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/recrutamento/banca/membros', body);
   }
 
+  postApiV1RecrutamentoBancoTalentos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/banco-talentos', body);
+  }
+
   postApiV1RecrutamentoBiometriaCapturas(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/recrutamento/biometria/capturas', body);
   }
@@ -3291,6 +3371,10 @@ export class OpenApiClient {
 
   postApiV1RhProcessosFuncao(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/rh/processos-funcao', body);
+  }
+
+  postApiV1RhProfessionalExperiences(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/rh/professional-experiences', body);
   }
 
   postApiV1SaudeAcidentes(body: ApiBody = {}): Observable<unknown> {

@@ -2,6 +2,11 @@
 
 **Escopo:** FISC-03 — comprovante anual de rendimentos pagos e de Imposto sobre a Renda Retido na Fonte para servidores, com geração em lote no admin e download pelo Portal do Servidor.
 
+**Truth banner:** The PDF/A runtime uses internal hash and
+`%%SGP-PADES-SIGNATURE` evidence through `PadesAdapter`. This is not real
+CMS/PKCS#7/PAdES signing; legal PAdES remains deferred in
+`103-deferred-decision-ledger.md#deferred-decision-ledger`.
+
 ## Fundamento e Cobertura
 
 O comprovante segue a IN RFB n.º 2.060/2021, art. 16 e Anexo I, para ano-calendário fechado. A fonte de dados é a folha do SGP já calculada: folha mensal completa, 13.º salário, férias pagas no ano e rescisão quando houver desligamento. Pagamentos a terceiros, PJ/autônomos e beneficiários no exterior continuam cobertos pela DIRF transicional de FISC-02.

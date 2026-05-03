@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { PayrollBridgeService } from '../../backend/src/ponto/payroll-bridge/payroll-bridge.service';
 
 describe('PONTO-07 payroll bridge idempotency e2e contract', () => {
@@ -50,5 +51,11 @@ describe('PONTO-07 payroll bridge idempotency e2e contract', () => {
       payrollBridgeEventId: existing.payroll_bridge_event_id,
     });
     expect(databaseService.transaction).not.toHaveBeenCalled();
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

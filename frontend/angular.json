@@ -76,7 +76,16 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "coverageReporters": ["text-summary", "json-summary", "lcov"],
+            "coverageThresholds": {
+              "statements": 31,
+              "branches": 35,
+              "functions": 16,
+              "lines": 31
+            }
+          }
         },
         "extract-i18n": {
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
@@ -158,7 +167,14 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "tsconfig.portal.spec.json"
+            "tsConfig": "tsconfig.portal.spec.json",
+            "coverageReporters": ["text-summary", "json-summary", "lcov"],
+            "coverageThresholds": {
+              "statements": 40,
+              "branches": 44,
+              "functions": 37,
+              "lines": 42
+            }
           }
         }
       }

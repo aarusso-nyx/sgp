@@ -18,5 +18,6 @@ describeRlsSmokeSpec({
     "await client.query(\"SELECT set_config('app.authenticated', 'true', true)\")",
     'const result = await client.query<{ count: string }>(',
     'SELECT count(*)::text',
+    'Direct table assertions: fiscal.efd_reinf_event, fiscal.efd_reinf_item, and fiscal.efd_reinf_totalizer force RLS.',
   ],
 });

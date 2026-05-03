@@ -9,5 +9,6 @@ workspace.
 - `environment.md`: environment variable catalog and placeholder conventions.
 - `testing.md`: test, QA, and smoke command usage.
 - `source-workspace.md`: workspace orientation for contributors and operators.
+- `lgpd.md`: LGPD DPO designation and data-subject request operations.
 
 Keep these docs free of secrets and environment-specific credentials.

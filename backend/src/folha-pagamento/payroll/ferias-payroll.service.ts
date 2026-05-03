@@ -7,6 +7,7 @@ import {
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { isActivePayrollItemIdempotencyConflict } from './payroll-idempotency';
 
 interface VacationContextRow extends QueryResultRow {
   vacation_record_id: string;
@@ -186,7 +187,7 @@ export class FeriasPayrollService {
         };
       });
     } catch (error: unknown) {
-      if (this.isIdempotencyConflict(error)) {
+      if (isActivePayrollItemIdempotencyConflict(error)) {
         throw new ConflictException(
           'Payroll run reprocessing conflicted with another execution',
         );
@@ -387,14 +388,6 @@ export class FeriasPayrollService {
         ],
       );
     }
-  }
-
-  private isIdempotencyConflict(error: unknown): boolean {
-    const candidate = error as { code?: string; constraint?: string };
-    return (
-      candidate.code === '23505' &&
-      candidate.constraint === 'employee_payroll_item_active_idempotency_uq'
-    );
   }
 
   private async refreshAggregates(

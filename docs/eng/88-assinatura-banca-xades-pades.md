@@ -3,9 +3,14 @@
 **Versão:** 1.0 | **Data:** 2026-05-02 | **Status:** Implementado
 **Escopo:** `recrutamento/banca` | **Base:** Lei 14.063/2020, MP 2.200-2/2001, CF art. 37 II, Lei 8.112/1990 art. 5-15
 
+**Truth banner:** The current runtime preserves sequential signature evidence
+and public verification metadata. Real CMS/PKCS#7/PAdES signing, certificate
+chain validation, and production Gov.br provider integration remain deferred in
+`103-deferred-decision-ledger.md#deferred-decision-ledger`.
+
 ## Decisão
 
-O SGP registra membros da banca examinadora por concurso e permite assinatura digital sequencial de documentos formais: gabarito final, ata da banca, lista de aprovados e outros atos correlatos. O fluxo aceita documentos XML em XAdES e PDF em PAdES. Cada assinatura gera uma linha própria em `recrutamento.document_signature`, preserva a ordem de assinatura e atualiza o hash público do documento assinado.
+O SGP registra membros da banca examinadora por concurso e permite assinatura sequencial com evidência verificável para documentos formais: gabarito final, ata da banca, lista de aprovados e outros atos correlatos. Cada assinatura gera uma linha própria em `recrutamento.document_signature`, preserva a ordem de assinatura e atualiza o hash público do documento assinado. A validade legal de XAdES/PAdES real depende da decisão pendente de provedor/assinador.
 
 ## Fluxo
 

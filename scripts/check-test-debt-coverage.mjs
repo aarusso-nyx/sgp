@@ -4,9 +4,10 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
-const minimumForbiddenE2eFiles = 80;
+const minimumForbiddenE2eFiles = 100;
 const minimumFakeTimerSpecFiles = 50;
 const minimumDtoSnapshots = 20;
+const assertionPattern = /\bexpect\s*\(/;
 
 function walk(dir, predicate) {
   return readdirSync(dir).flatMap((entry) => {
@@ -31,6 +32,13 @@ const specFiles = [
   ...walk(join(root, 'frontend', 'src'), (path) => path.endsWith('.spec.ts')),
   ...walk(join(root, 'frontend', 'portal', 'src'), (path) => path.endsWith('.spec.ts')),
 ];
+const backendAssertionFiles = [
+  ...walk(join(root, 'backend', 'src'), (path) => path.endsWith('.spec.ts')),
+  ...walk(join(root, 'tests', 'backend'), (path) => path.endsWith('.e2e-spec.ts')),
+];
+const backendSpecFilesWithoutAssertions = backendAssertionFiles.filter(
+  (path) => !assertionPattern.test(read(path)),
+);
 const fakeTimerSpecFiles = specFiles.filter((path) => read(path).includes('useFakeTimers'));
 const hardcoded2025Dates = specFiles.flatMap((path) => {
   const content = read(path);
@@ -60,12 +68,20 @@ if (hardcoded2025Dates.length > 0) {
 if (dtoSnapshots < minimumDtoSnapshots) {
   failures.push(`DTO snapshots: ${dtoSnapshots}/${minimumDtoSnapshots}`);
 }
+if (backendSpecFilesWithoutAssertions.length > 0) {
+  failures.push(
+    `backend specs without assertions:\n${backendSpecFilesWithoutAssertions
+      .map((path) => path.replace(`${root}/`, ''))
+      .join('\n')}`,
+  );
+}
 
 console.log(
   [
     `[test-debt] e2e files with 403 negative path: ${forbiddenE2eFiles.length}/${e2eFiles.length}`,
     `[test-debt] specs using useFakeTimers: ${fakeTimerSpecFiles.length}/${specFiles.length}`,
     `[test-debt] hard-coded new Date('2025-...') in specs: ${hardcoded2025Dates.length}`,
+    `[test-debt] backend specs without assertions: ${backendSpecFilesWithoutAssertions.length}`,
     `[test-debt] stable DTO snapshots: ${dtoSnapshots}`,
   ].join('\n'),
 );

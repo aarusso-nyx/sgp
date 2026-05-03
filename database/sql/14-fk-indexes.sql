@@ -84,6 +84,8 @@ CREATE INDEX IF NOT EXISTS idx_hr_tsv_contract_workplace_id_fk ON hr.tsv_contrac
 CREATE INDEX IF NOT EXISTS idx_hr_work_accident_tenant_id_fk ON hr.work_accident (tenant_id);
 CREATE INDEX IF NOT EXISTS idx_lgpd_data_subject_request_legal_basis_rule_id_fk ON lgpd.data_subject_request (legal_basis_rule_id);
 CREATE INDEX IF NOT EXISTS idx_lgpd_data_subject_request_ropa_entry_id_fk ON lgpd.data_subject_request (ropa_entry_id);
+CREATE INDEX IF NOT EXISTS idx_lgpd_public_power_treatment_legal_basis_rule_id_fk ON lgpd.public_power_treatment (legal_basis_rule_id);
+CREATE INDEX IF NOT EXISTS idx_lgpd_public_power_treatment_ropa_entry_id_fk ON lgpd.public_power_treatment (ropa_entry_id);
 CREATE INDEX IF NOT EXISTS idx_lgpd_ropa_entry_legal_basis_rule_id_fk ON lgpd.ropa_entry (legal_basis_rule_id);
 CREATE INDEX IF NOT EXISTS idx_lgpd_security_incident_legal_basis_rule_id_fk ON lgpd.security_incident (legal_basis_rule_id);
 CREATE INDEX IF NOT EXISTS idx_lgpd_security_incident_ropa_entry_id_fk ON lgpd.security_incident (ropa_entry_id);

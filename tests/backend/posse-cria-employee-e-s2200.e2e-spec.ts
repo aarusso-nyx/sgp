@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { PosseService } from '../../backend/src/recrutamento/posse/posse.service';
 
 describe('posse exercise handoff (e2e contract)', () => {
@@ -44,5 +45,11 @@ describe('posse exercise handoff (e2e contract)', () => {
       s2200EventCount: 1,
       s2200: { eventKind: 'S-2200', emitted: true },
     });
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

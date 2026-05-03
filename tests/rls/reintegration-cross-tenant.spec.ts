@@ -18,5 +18,6 @@ describeRlsSmokeSpec({
     "await client.query(\"SELECT set_config('app.authenticated', 'true', true)\")",
     'const result = await client.query<{ count: string }>(',
     'SELECT count(*)::text',
+    'Direct table assertions: hr.reintegration_order and esocial.s2298_event force RLS.',
   ],
 });

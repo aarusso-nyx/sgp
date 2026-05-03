@@ -126,7 +126,11 @@ CREATE TRIGGER audit_s2306_event_mutation AFTER INSERT OR DELETE OR UPDATE ON es
 
 CREATE TRIGGER es03_s2230_pending_audit AFTER INSERT OR DELETE OR UPDATE ON esocial.s2230_pending FOR EACH ROW EXECUTE FUNCTION esocial.sgp_es03_pending_audit();
 
+CREATE TRIGGER es03_s2230_pending_touch_updated_at BEFORE UPDATE ON esocial.s2230_pending FOR EACH ROW EXECUTE FUNCTION esocial.sgp_touch_updated_at();
+
 CREATE TRIGGER es03_s2299_pending_audit AFTER INSERT OR DELETE OR UPDATE ON esocial.s2299_pending FOR EACH ROW EXECUTE FUNCTION esocial.sgp_es03_pending_audit();
+
+CREATE TRIGGER es03_s2299_pending_touch_updated_at BEFORE UPDATE ON esocial.s2299_pending FOR EACH ROW EXECUTE FUNCTION esocial.sgp_touch_updated_at();
 
 CREATE TRIGGER es04_s1200_emission_state_audit AFTER INSERT OR DELETE OR UPDATE ON esocial.s1200_emission_state FOR EACH ROW EXECUTE FUNCTION esocial.sgp_es04_emission_state_audit();
 

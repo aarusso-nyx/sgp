@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { DutyRosterService } from '../../backend/src/ponto/duty-roster/duty-roster.service';
 
 describe('PONTO roster publish flow (e2e)', () => {
@@ -72,5 +73,11 @@ describe('PONTO roster publish flow (e2e)', () => {
 
     expect(published.status).toBe('PUBLISHED');
     expect(locked.status).toBe('LOCKED');
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

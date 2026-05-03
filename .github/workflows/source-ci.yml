@@ -53,7 +53,7 @@ jobs:
   source-gates:
     name: Workspace gates
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     services:
       postgres:
         image: postgres:16
@@ -107,11 +107,20 @@ jobs:
       - name: Unit tests
         run: npm run test
 
+      - name: Frontend coverage
+        run: npm run test:frontend:coverage
+
+      - name: Install Playwright browsers
+        run: npm --workspace frontend exec -- playwright install --with-deps chromium
+
       - name: Integration smoke
         run: npm run test:db
 
       - name: Backend e2e
         run: npm run test:e2e -- --runInBand
+
+      - name: Frontend Playwright
+        run: npm run test:frontend:e2e
 
       - name: Build
         run: npm run build
@@ -128,4 +137,20 @@ jobs:
         with:
           name: backend-coverage
           path: backend/coverage
+          if-no-files-found: ignore
+
+      - name: Upload frontend coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage
+          if-no-files-found: ignore
+
+      - name: Upload frontend Playwright traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-playwright-traces
+          path: test-results
           if-no-files-found: ignore

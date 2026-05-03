@@ -9,6 +9,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
 import { FgtsService } from '../fgts/fgts.service';
+import { isActivePayrollItemIdempotencyConflict } from '../payroll/payroll-idempotency';
 import {
   PriorNoticeKind,
   PriorNoticeReductionMode,
@@ -211,7 +212,7 @@ export class RescisaoService {
         };
       });
     } catch (error: unknown) {
-      if (this.isIdempotencyConflict(error)) {
+      if (isActivePayrollItemIdempotencyConflict(error)) {
         throw new ConflictException(
           'Termination payroll reprocessing conflicted with another execution',
         );
@@ -791,14 +792,6 @@ export class RescisaoService {
       )
       `,
       [payrollRunId, JSON.stringify(metadata)],
-    );
-  }
-
-  private isIdempotencyConflict(error: unknown): boolean {
-    const candidate = error as { code?: string; constraint?: string };
-    return (
-      candidate.code === '23505' &&
-      candidate.constraint === 'employee_payroll_item_active_idempotency_uq'
     );
   }
 }

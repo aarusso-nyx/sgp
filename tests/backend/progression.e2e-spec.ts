@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import {
   ConflictException,
   HttpStatus,
@@ -106,5 +107,11 @@ describe('Functional progression API contract (e2e)', () => {
       .expect(HttpStatus.CONFLICT);
 
     expect(applyService.apply).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

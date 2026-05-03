@@ -3,6 +3,11 @@
 **Versao:** 1.0 | **Data:** 2026-05-02 | **Status:** Implementado
 **Escopo:** ES-09, retorno de lote, status de evento, recibos e fila administrativa.
 
+**Truth banner:** ES-09 implements local retorno parsing, status
+classification, persistence, and retry scheduling. It does not prove accepted
+national eSocial processing or homologation; that remains tracked in
+`103-deferred-decision-ledger.md#deferred-decision-ledger`.
+
 ## Decisao
 
 O parser de retorno usa `backend/src/esocial-worker/parsers/` para ler as mensagens oficiais `RetornoEnvioLoteEventos` e `RetornoProcessamentoLoteEventos`. A tabela canonical de eventos permanece `public.esocial_event`; nao ha schema de compatibilidade. Os campos de sincronizacao sao fisicamente em ingles: `receipt_number`, `protocol_number`, `response_code`, `response_description`, `response_errors` e `last_response_at`.

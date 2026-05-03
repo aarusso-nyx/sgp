@@ -24,7 +24,35 @@ describe('NotificationsService', () => {
     const result = await service.list({ page: 1, pageSize: 20 });
 
     expect(result.total).toBe(1);
+    expect(Object.keys(result)).toEqual([
+      'items',
+      'page',
+      'pageSize',
+      'total',
+      'totalPages',
+    ]);
     expect(result.items[0]).toEqual(expect.objectContaining({ id: 'n-1' }));
+  });
+
+  it('uses the shared pagination boundary values for notification lists', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([{ total: '101' }])
+      .mockResolvedValueOnce([]);
+    const service = new NotificationsService({
+      configured: true,
+      query,
+    } as never);
+
+    await expect(service.list({ page: 3, pageSize: 50 })).resolves.toEqual({
+      items: [],
+      page: 3,
+      pageSize: 50,
+      total: 101,
+      totalPages: 3,
+    });
+
+    expect(query).toHaveBeenLastCalledWith(expect.any(String), ['%%', 50, 100]);
   });
 
   it('handles empty pages, unread counts, read updates, and preferences', async () => {

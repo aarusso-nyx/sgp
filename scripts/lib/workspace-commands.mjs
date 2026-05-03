@@ -13,7 +13,7 @@ export const workspaceCommandDescriptions = {
   lint: 'Run fix-mode lint across frontend and backend workspaces.',
   format: 'Format workspace files and code.',
   typecheck: 'Run TypeScript checks across frontend and backend workspaces.',
-  test: 'Run admin, portal, and backend unit tests.',
+  test: 'Run workspace tests; unit tests are the default subcommand.',
   db: 'Run database helper commands (generate, migrate, seed, studio).',
   qa: 'Run QA helper commands.',
   evidence: 'Run the authoritative evidence gate sequence.',
@@ -114,6 +114,11 @@ export const evidenceSteps = [
     requiredEnv: ['DATABASE_URL'],
   },
   {
+    name: 'frontend-e2e',
+    command: 'npm',
+    args: ['run', 'test:frontend:e2e'],
+  },
+  {
     name: 'db-smoke',
     command: 'npm',
     args: ['run', 'test:db'],
@@ -124,6 +129,11 @@ export const evidenceSteps = [
     command: 'npm',
     args: ['run', 'test:coverage'],
     requiredEnv: ['DATABASE_URL'],
+  },
+  {
+    name: 'frontend-coverage',
+    command: 'npm',
+    args: ['run', 'test:frontend:coverage'],
   },
   {
     name: 'governance-check',

@@ -71,6 +71,15 @@ BEGIN
 END
 $$;
 
+CREATE FUNCTION esocial.sgp_touch_updated_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  NEW.updated_at := now();
+  RETURN NEW;
+END;
+$$;
+
 CREATE FUNCTION esocial.audit_s1xxx_dispatch_state_mutation() RETURNS trigger
     LANGUAGE plpgsql
     AS $$

@@ -468,11 +468,11 @@ Arrecadação Previdenciária é versão futura. O layout atual não declara bib
 
 ##### `gestao.master-data` — Estrutura organizacional
 
-**Responsabilidades:** CRUD administrativo de cargos, funções, lotações hierárquicas, centros de custo e vínculos entre cargo/função e vínculo funcional. Essa base é pré-requisito para o vínculo funcional (`rh`) e para o cadastro do servidor.
+**Responsabilidades:** CRUD administrativo de cargos, funções, lotações hierárquicas, centros de custo, vínculos entre cargo/função e vínculo funcional, tipos de férias e legislação local. Essa base é pré-requisito para o vínculo funcional (`rh`), para o cadastro do servidor e para parametrizações funcionais que dependem de normas do ente.
 
-**Entidades físicas:** `hr.job_position`, `hr.job_function`, `hr.work_location`, `hr.cost_center`, `hr.job_structure_employment_link`, `hr.work_location_structure_assignment`.
+**Entidades físicas:** `hr.job_position`, `hr.job_function`, `hr.work_location`, `hr.cost_center`, `hr.job_structure_employment_link`, `hr.work_location_structure_assignment`, `hr.vacation_type`, `hr.legislation`.
 
-**Controladores:** `GET/POST/PATCH/DELETE /api/v1/master-data/{resource}` para `cargo`, `funcao`, `lotacao`, `centroCusto`, `cargoVinculo` e `funcaoVinculo`; `POST /api/v1/cargos` é a rota operacional de cargo exigida pelo contrato HR-06.
+**Controladores:** `GET/POST/PATCH/DELETE /api/v1/master-data/{resource}` para `cargo`, `funcao`, `lotacao`, `centroCusto`, `cargoVinculo`, `funcaoVinculo`, `tipoFerias` e `legislacao`; `POST /api/v1/cargos` é a rota operacional de cargo exigida pelo contrato HR-06.
 
 **Permissões:** leitura exige `gestao.master_data.read`; mutações exigem `gestao.master_data.write`. As tabelas tenant-scoped têm RLS por `tenant_id` e registram mutações por `sgp_append_audit_event(...)`.
 
@@ -634,7 +634,10 @@ stateDiagram-v2
 - `GET /api/v1/publico/banca/verify/:token`
 - `GET /api/v1/publico/concursos/:slug`
 - `GET /api/v1/recrutamento/banco-talentos`
+- `GET /api/v1/recrutamento/banco-talentos/:id`
 - `POST /api/v1/recrutamento/banco-talentos`
+- `PATCH /api/v1/recrutamento/banco-talentos/:id`
+- `DELETE /api/v1/recrutamento/banco-talentos/:id`
 - `GET /api/v1/recrutamento/estagios/programas`
 - `POST /api/v1/recrutamento/estagios/programas`
 - `GET /api/v1/recrutamento/estagios/estagiarios`
@@ -1726,7 +1729,10 @@ Os levantamentos em `docs/leg/rev-eng/data-archaeology/` e `docs/leg/rev-eng/mod
 - A nomenclatura legada `funcionario` continua sendo termo de negócio, mas o modelo físico separa `pessoa` de `funcionario/vinculo`.
 - `rh.employees.vinculos` é a superfície HR-02 para reenquadramento de regime jurídico: o backend expõe `POST /api/v1/funcionarios/:id/vinculos`, usa `hr.employment_link` como registro tenant-scoped do regime e mantém a vigência em `hr.employment_contract`; a UI dedicada fica em `frontend/src/app/features/rh/funcionarios/vinculos/`.
 - `rh.vacation` é a superfície HR-03 para saldo e programação de férias: o backend expõe `GET /api/v1/ferias/saldo/:employee_id` e `POST /api/v1/ferias/programacao`, persiste em `hr.vacation_record`, calcula saldo em `hr.f_calculate_vacation_balance`, atende o portal em `frontend/portal/src/app/pages/ferias/` e a fila administrativa em `frontend/src/app/features/rh/ferias/`.
+- `rh.workflows.professional-experiences` é a superfície F-RH-005 para experiências profissionais anteriores: o backend expõe `GET/POST /api/v1/rh/professional-experiences` e `PATCH/DELETE /api/v1/rh/professional-experiences/:id`, persiste em `hr.professional_experience` e audita mutações pelo contrato comum de workflows RH.
 - `rh.workflows.leaves` é a superfície HR-05 para licenças não médicas: o backend expõe `POST /api/v1/licencas`, `GET /api/v1/licencas/:employee_id`, aprovação e cancelamento; persiste em `hr.leave_record` com motivo em `hr.absence_reason`, valida elegibilidade em `hr.f_validate_leave_eligibility`, atende o portal em `frontend/portal/src/app/pages/licencas/` e a fila administrativa em `frontend/src/app/features/rh/licencas/`.
+- `rh.workflows.leaves` cobre o registro F-RH-008 Licença-Prêmio como licença geral com motivo `premio`, padrão de 90 dias remunerados e validação em `hr.f_validate_leave_eligibility`; saldo acumulado, interrupções, conversão pecuniária e reflexos de folha ficam em decisão separada no ledger de diferimentos.
+- `recrutamento.banco-talentos` é a primeira superfície F-RCR-002: o backend expõe busca, leitura, criação, atualização e arquivamento por status em `/api/v1/recrutamento/banco-talentos`, persiste perfis em `recrutamento.candidato`, mantém consentimento LGPD e anexa referência de currículo. Ranking, matching automático e política de priorização permanecem fora deste primeiro slice.
 - `ponto/mobile` é a superfície PONTO-09 para batida móvel georreferenciada: o backend expõe `POST /api/v1/ponto/mobile/clock`, registra dispositivos e consentimento LGPD, valida `hr.work_location.geofence_polygon` com PostGIS e persiste tentativas em `ponto.mobile_clock_in_attempt`; a UI do empregado fica em `frontend/src/app/features/portal-empregado/ponto-mobile/` e a administração de polígonos em `frontend/src/app/features/ponto/geofence-admin/`.
 - `ponto/face` é a superfície PONTO-10 para reconhecimento facial no ponto eletrônico: o backend expõe cadastro, consentimento, matching, batida `POST /api/v1/ponto/face/clock`, threshold por tenant e exclusão LGPD; persiste embeddings cifrados em `ponto.employee_face_template`, decisões em `ponto.face_match`, configuração em `ponto.face_threshold_config` e consentimento em `ponto.face_consent`; a UI administrativa fica em `frontend/src/app/features/ponto/face-admin/` e o portal `/meus-dados` em `frontend/src/app/features/portal-empregado/meus-dados/face/`.
 - Fórmulas de folha, dependências entre verbas e atributos calculáveis são responsabilidade do engine; telas e APIs de folha apenas solicitam cálculo e leem resultados.

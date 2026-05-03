@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { BadRequestException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 
@@ -144,5 +145,11 @@ describe('PONTO hour-bank golden scenarios (e2e)', () => {
         minutes: 240,
       }),
     ).rejects.toThrow(BadRequestException);
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

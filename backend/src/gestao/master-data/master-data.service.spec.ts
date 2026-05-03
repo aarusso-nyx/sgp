@@ -246,6 +246,52 @@ describe('MasterDataService', () => {
     }
   });
 
+  it('covers vacation-type and legislation parity resources explicitly', async () => {
+    const query = createQuery();
+    const service = new MasterDataService({
+      configured: true,
+      query,
+    } as never);
+    const resourceKeys = service
+      .listResources({ page: 1, pageSize: 500 })
+      .items.map((item) => item.key);
+
+    expect(resourceKeys).toEqual(
+      expect.arrayContaining(['tipoFerias', 'legislacao']),
+    );
+
+    await expect(
+      service.listRecords('tipoFerias', { page: 1, pageSize: 5 }),
+    ).resolves.toHaveProperty('items');
+    await expect(
+      service.createRecord('tipoFerias', mutation),
+    ).resolves.toHaveProperty('code', 'CODE');
+    await expect(
+      service.createRecord('legislacao', mutation),
+    ).resolves.toHaveProperty('code', 'CODE');
+
+    expect(query).toHaveBeenCalledWith(
+      expect.stringContaining('FROM hr.vacation_type'),
+      expect.any(Array),
+    );
+    expect(query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO hr.vacation_type'),
+      expect.any(Array),
+    );
+    expect(query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO hr.legislation'),
+      expect.arrayContaining([
+        'CODE',
+        'Description',
+        'INACTIVE',
+        '123',
+        2026,
+        'LEI',
+        'BR',
+      ]),
+    );
+  });
+
   it('reports unavailable schemas, duplicate codes, and missing records', async () => {
     await expect(
       new MasterDataService({ configured: false } as never).listRecords(

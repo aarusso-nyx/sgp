@@ -48,6 +48,9 @@ COMMENT ON COLUMN recrutamento.candidato.cpf IS 'pii=true;classification=nationa
 COMMENT ON COLUMN recrutamento.candidato.email IS 'pii=true;classification=contact;category=email;ropa_export=true;source=R2-204';
 COMMENT ON COLUMN recrutamento.candidato.phone IS 'pii=true;classification=contact;category=phone;ropa_export=true;source=R2-204';
 COMMENT ON COLUMN recrutamento.candidato.address IS 'pii=true;classification=address;category=address;ropa_export=true;source=R2-204';
+COMMENT ON COLUMN recrutamento.candidato.curriculum_s3_key IS 'pii=true;classification=document_reference;category=curriculum;ropa_export=true;source=R3-025';
+COMMENT ON COLUMN recrutamento.candidato.profile_summary IS 'pii=true;classification=profile;category=talent_pool;ropa_export=true;source=R3-025';
+COMMENT ON COLUMN recrutamento.candidato.skills IS 'pii=true;classification=profile;category=talent_pool;ropa_export=true;source=R3-025';
 
 CREATE VIEW lgpd.v_pii_column_catalog WITH (security_invoker='true') AS
 SELECT

@@ -1,20 +1,20 @@
 <section class="admin-feature" aria-labelledby="admin-feature-title">
   <header class="admin-feature__header">
     <div>
-      <p class="admin-feature__eyebrow">{{ feature.moduleLabel }}</p>
-      <h1 id="admin-feature-title">{{ feature.label }}</h1>
+      <p class="admin-feature__eyebrow">{{ feature().moduleLabel }}</p>
+      <h1 id="admin-feature-title">{{ feature().label }}</h1>
       <dl class="admin-feature__metadata" aria-label="Metadados da tela" i18n-aria-label>
         <div>
           <dt i18n>Grupo</dt>
-          <dd>{{ feature.sectionLabel || feature.moduleLabel }}</dd>
+          <dd>{{ feature().sectionLabel || feature().moduleLabel }}</dd>
         </div>
         <div>
           <dt i18n>Rota</dt>
-          <dd>{{ feature.routePath }}</dd>
+          <dd>{{ feature().routePath }}</dd>
         </div>
         <div>
           <dt i18n>Papel</dt>
-          <dd>{{ feature.requiredRole || 'Sem papel específico' }}</dd>
+          <dd>{{ feature().requiredRole || 'Sem papel específico' }}</dd>
         </div>
         <div>
           <dt i18n>Modo</dt>
@@ -41,7 +41,7 @@
 
   <app-filter-bar
     [fields]="filterFields"
-    [initialValues]="{ search: search, status: status }"
+    [initialValues]="{ search: search(), status: status() }"
     applyLabel="Pesquisar"
     clearLabel="Limpar"
     (applyFilters)="applyFilters($event)"
@@ -51,14 +51,14 @@
   <div class="admin-feature__workspace">
     <section
       class="admin-feature__panel"
-      *ngIf="formOpen"
+      *ngIf="formOpen()"
       aria-label="Formulário da tela"
       i18n-aria-label
     >
       <header class="admin-feature__panel-header">
         <div>
-          <p>{{ feature.backendModule }}</p>
-          <h2>{{ editingRecord ? 'Registro selecionado' : 'Novo registro' }}</h2>
+          <p>{{ feature().backendModule }}</p>
+          <h2>{{ editingRecord() ? 'Registro selecionado' : 'Novo registro' }}</h2>
         </div>
         <button
           type="button"
@@ -123,19 +123,19 @@
     <section class="admin-feature__panel admin-feature__panel--table">
       <header class="admin-feature__panel-header">
         <div>
-          <p>{{ feature.requiredRole || feature.backendModule }}</p>
-          <h2>{{ feature.sectionLabel || 'Registros' }}</h2>
+          <p>{{ feature().requiredRole || feature().backendModule }}</p>
+          <h2>{{ feature().sectionLabel || 'Registros' }}</h2>
         </div>
-        <span class="admin-feature__count" i18n>{{ filteredRecords.length }} itens</span>
+        <span class="admin-feature__count" i18n>{{ filteredRecords().length }} itens</span>
       </header>
 
-      <p class="admin-feature__message" *ngIf="message" role="status">{{ message }}</p>
+      <p class="admin-feature__message" *ngIf="message()" role="status">{{ message() }}</p>
 
       <app-crud-table
         [columns]="columns"
-        [rows]="filteredRecords"
+        [rows]="filteredRecords()"
         [actions]="rowActions"
-        [tableLabel]="feature.label"
+        [tableLabel]="feature().label"
         rowLabelKey="title"
         (actionTriggered)="handleRowAction($event)"
       ></app-crud-table>

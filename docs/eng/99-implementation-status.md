@@ -3,7 +3,7 @@
 This document tracks the current implementation state for SGP v0.0.1 after the stale
 audit snapshot workflow was replaced by live command evidence.
 
-Last reassessed: 2026-05-02 against the root npm workspace, current
+Last reassessed: 2026-05-03 against the root npm workspace, current
 `docs/eng`, `docs/gov`, `docs/user`, backend, frontend, database, scripts, and
 GitHub Actions surfaces.
 
@@ -29,10 +29,22 @@ The current implementation covers:
   public, and external API surfaces.
 - Document module S3-compatible flow with MiniIO permitted for tests when S3 is
   not configured.
+- LGPD public DPO contact, portal Art. 18 titular-rights ticket intake, ROPA
+  linkage, auditable backend DPO designation lifecycle, and auditable
+  treatment-by-public-power records tied to active ROPA/legal-basis evidence.
+- PII-at-rest hardening for a non-destructive high-risk HR identifier/banking
+  batch using `pgcrypto` ciphertext siblings and decrypting views.
+- Validated inferred FK closure for the current conservative FK set, with
+  eSocial pending/request tables carrying standard audit timestamps.
 - QA bootstrap support for local API/admin/portal smoke execution.
 - Reverse-engineering evidence from 2026-04-26 is canonicalized in
   `docs/eng` successor sections and tracked in
   `docs/leg/rev-eng/deprecation-status.md`.
+- Deferred or source-pending decisions are tracked in
+  `docs/eng/103-deferred-decision-ledger.md` and must not be treated as
+  production-complete claims.
+- Thin backend surfaces are documented in
+  `docs/eng/104-backend-surface-notes.md`.
 - Source workspace CI/governance baseline is installed with Node 24, npm,
   single `package-lock.json`, non-mutating lint/format/typecheck gates,
   alignment gates, health JSON, tests, build, coverage, and governance
@@ -44,13 +56,19 @@ The current status is based on these live gates:
 
 - `npm run api:alignment:check -- --json`
   - OK.
-  - `448` current documented runtime routes.
+  - `488` current documented runtime routes.
   - `0` documented missing routes.
   - `0` runtime-only routes.
   - `11/11` current SGP domain modules covered.
   - Portal menu alignment covers `31` implemented routes and `3` postponed
     identity routes.
   - Admin menu parity remains postponed under `ADMIN_INSTALL_LATER`.
+- `node scripts/check-openapi-generated.mjs`
+  - OK.
+  - Generated admin/core and portal specs are OpenAPI 3.1 with JSON Schema
+    2020-12.
+  - Non-204 2xx responses have JSON schemas and standard 4xx responses use
+    `SgpProblemDetails`.
 - `npm run db:alignment:check -- --json`
   - OK.
   - `full_closure` covers `150` in-scope objects.
@@ -71,10 +89,12 @@ The current status is based on these live gates:
   - OK.
 - `npm run typecheck`
   - OK.
-- `npm run test:coverage`
-  - OK: `289` suites and `2515` tests passed.
-  - Coverage: statements `95.46%`, branches `85.56%`, functions `98.97%`,
-    lines `95.46%`.
+- `npm run test:backend -- --runInBand`
+  - OK: `285` suites and `3121` tests passed.
+- `npm run test:coverage -- --runInBand`
+  - OK: `495` suites, `4044` tests, and `22` snapshots passed.
+  - Coverage: `95.13%` statements, `85.34%` branches, `98.35%`
+    functions, and `95.13%` lines.
 
 DB-backed local tests use
 `DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test` when they need a real
@@ -86,7 +106,7 @@ PostgreSQL database.
 
 - Database full closure is green for current scope: `150` full-closure objects,
   `0` deferred objects, and `0` in-scope explicit exclusions.
-- Route alignment is green for current scope: `448` documented runtime routes,
+- Route alignment is green for current scope: `488` documented runtime routes,
   `0` documented missing routes, and `0` runtime-only routes.
 - Domain/workflow/menu parity is green for current non-deferred scope:
   `11/11` current domain modules covered, portal menu alignment green, and
@@ -120,6 +140,18 @@ not current implementation blockers:
 - OAuth/Cognito/Gov.br identity paths and administrative identity management.
 - Arrecadacao Previdenciaria.
 - Real eSocial external transmission, production certificates, and homologation.
+- Real CMS/PKCS#7/PAdES signing and production Gov.br advanced-signature
+  provider integration.
+- Licença-prêmio accrual balance, interruptions, pecuniary conversion, and
+  payroll/reflex calculation policy.
+- Banco de Talentos ranking/matching, portal-public curriculum intake, and
+  hiring-policy prioritization beyond the backend CRUD/search slice.
+- Repasse Fundo RH report generation until the fund basis, eligible rubricas,
+  accounting allocation, reconciliation rules, and layout/golden fixtures are
+  selected.
+- Object-level malware scanning and quarantine.
+- Real TCE/AUDESP/state-court submission and accepted Siconfi/SIOPE/SIOPS
+  transmission.
 - Final `infra` strategy choice.
 - Release/homologation gates such as Pact, scanners, and production observability
   enforcement.
@@ -134,6 +166,11 @@ Open work is limited to deferred product/operations decisions:
 - Decide and implement the final infrastructure strategy.
 - Replace eSocial stub/sandbox behavior with real external integration when that
   version is scheduled.
+- Replace the internal PAdES/Gov.br evidence adapters with owner-selected real
+  providers when that scope is scheduled.
+- Decide the licença-prêmio payroll policy before adding accrual balance or
+  payment/conversion logic.
+- Decide the Repasse Fundo RH report policy before adding runtime generation.
 - Expand beyond the source CI baseline into full release/homologation gates when
   the postponed gate scope is approved.
 

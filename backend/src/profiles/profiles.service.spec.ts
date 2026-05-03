@@ -43,6 +43,14 @@ describe('ProfilesService', () => {
         },
       ],
     });
+    await expect(
+      service.list({ page: 2, pageSize: 100, search: 'admin' }),
+    ).resolves.toMatchObject({
+      page: 2,
+      pageSize: 100,
+      total: 1,
+      totalPages: 1,
+    });
     await expect(service.getById('profile-1')).resolves.toMatchObject({
       code: 'ADMIN',
       papeis: ['rh.read', 'rh.write'],
@@ -78,6 +86,34 @@ describe('ProfilesService', () => {
       expect.stringContaining('INSERT INTO public.profile_permission'),
       ['profile-1', ['rh.read', 'rh.write']],
     );
+    expect(query).toHaveBeenCalledWith(
+      expect.stringContaining('LIMIT $2 OFFSET $3'),
+      ['%admin%', 100, 100],
+    );
+  });
+
+  it('preserves the profile list response envelope shape', async () => {
+    const query = createQuery();
+    const service = new ProfilesService({
+      configured: true,
+      query,
+    } as never);
+
+    const result = await service.list({});
+
+    expect(Object.keys(result)).toEqual([
+      'items',
+      'page',
+      'pageSize',
+      'total',
+      'totalPages',
+    ]);
+    expect(result).toMatchObject({
+      page: 1,
+      pageSize: 20,
+      total: 1,
+      totalPages: 1,
+    });
   });
 
   it('rejects unavailable databases, duplicates, and missing profiles', async () => {

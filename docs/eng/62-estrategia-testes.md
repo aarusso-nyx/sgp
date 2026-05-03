@@ -83,6 +83,8 @@ drift de threshold ou transform:
 
 No pacote backend, `npm run test:backend` permanece restrito aos specs unitários em `src/**/*.spec.ts`. O gate canônico de cobertura do workspace é `npm run test:coverage`; ele delega para o `test:cov` do backend, executa os specs unitários e e2e cobertos, aplica limiares globais de 85 % para linhas, branches e funções, e coleta cobertura de runtime em `src/**/*.ts`. DTOs, controllers, modules, bootstrap/config e artefatos de metadados Nest/Swagger ficam fora do gate global de branches porque são verificados por contrato/e2e e geram branches instrumentados sem decisão de negócio.
 
+No pacote frontend, `npm run test:frontend:coverage` é o gate canônico de cobertura Angular. Ele delega para `frontend` e executa `sgp-admin` e `sgp-portal` com Vitest/V8, reporters `text-summary`, `json-summary` e `lcov`, e limiares de ratchet por aplicação em `frontend/angular.json`. O baseline inicial não exclui código ativo de forma ampla: `sgp-admin` exige 31 % statements, 35 % branches, 16 % functions e 31 % lines; `sgp-portal` exige 40 % statements, 44 % branches, 37 % functions e 42 % lines. O root declara `jsdom` como dependência de desenvolvimento porque o workspace npm hoista o Vitest usado pelo builder Angular para a raiz; sem essa resolução explícita, o ambiente jsdom falha de forma dependente do layout de `node_modules`.
+
 A regressão monetária de folha mensal usa fixture golden versionada em `tests/backend/golden/payroll-mensal-v01/`, com `input.json` e `expected-employee-payroll-items.json`. O spec unitário `backend/src/folha-pagamento/payroll/folha-mensal.spec.ts` mantém o arquivo esperado byte-estável a partir dos vetores Decimal, e o e2e `tests/backend/payroll-mensal-golden.e2e-spec.ts` executa o caminho real de `FolhaMensalService.calculate(...)` contra `payroll_calc.evaluate_earning_deduction(...)`.
 
 A regressão monetária de rescisão usa fixture golden versionada em `tests/backend/golden/rescisao-v01/`, com `input.json` e `expected-employee-payroll-items.json`. O e2e `tests/backend/rescisao-golden.e2e-spec.ts` executa o caminho real de `RescisaoService.run(...)`, cobrindo sem justa causa com multa FGTS, com justa causa sem multa FGTS e aposentadoria estatutária com RPPS, sem comparar UUIDs ou timestamps.
@@ -93,11 +95,15 @@ A regressão monetária da folha de ferias usa fixture golden versionada em `tes
 
 O contracheque oficial PDF/A com PAdES usa fixture golden versionada em `tests/backend/golden/payslip-pdf-a-v01/`, com `input.json` e `expected.pdf`. O spec `backend/src/report-service/payslip/pdf-a-builder.service.spec.ts` verifica byte-equality, bloco `%%SGP-PADES-SIGNATURE`, metadados do assinante e validação PDF/A-1b do pipeline interno.
 
-O enforcement corrente é orquestrado pelo `scripts/run.mjs` a partir da raiz do workspace. O script backend `test:cov` executa Jest, inclui specs unitários e e2e cobertos, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer corte por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
+O comprovante anual de rendimentos usa fixture golden versionada em `tests/backend/golden/comprovante-anual-v01/`, com agregado de entrada em `input.json` e `expected.pdf`. O spec `backend/src/report-service/yearly-income/pdf-a-yearly.service.spec.ts` executa `toYearlyIncomeDocument(...)`, preserva a reconciliação S-1210/IRRF existente e compara o PDF/A byte a byte, incluindo o bloco interno `%%SGP-PADES-SIGNATURE`.
+
+Os goldens regulatórios R3-016 cobrem uma amostra mínima determinística de TCE e transparência pública sem promover leiaute oficial quando a fonte ainda está pendente. `tests/backend/golden/tce/state-payroll-v01/` fixa o envelope JSON do adapter TCE-MG em modo `sourceStatus=UNVERIFIED_LAYOUT` e `officialConformance=false`; `tests/backend/tce-golden.e2e-spec.ts` valida serialização e hash. `tests/backend/golden/transparency/public-payroll-v01/` fixa a resposta JSON e CSV pública de folha, com BOM UTF-8 no CSV e sem CPF, banco, dependentes, endereço ou outros campos protegidos; `tests/backend/transparency-public.e2e-spec.ts` compara os endpoints públicos aos arquivos esperados.
+
+O enforcement corrente é orquestrado pelo `scripts/run.mjs` a partir da raiz do workspace. O script backend `test:cov` executa Jest, inclui specs unitários e e2e cobertos, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. O script frontend `test:frontend:coverage` executa os targets Angular cobertos e grava artefatos em `frontend/coverage/sgp-admin/` e `frontend/coverage/sgp-portal/`. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer corte backend por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
 
 O contrato regulatório de redaction de logs é coberto por `backend/src/common/logging/logging.config.spec.ts`. O spec instancia pino com a configuração canônica de `backend/src/common/logging/logging.config.ts` e prova que CPF/PIS/PASEP, e-mail, conta bancária e cabeçalho Authorization são substituídos por `[redacted]` antes de serialização.
 
-O gate agregado corrente é `npm run evidence:check` no workspace root. Ele executa alinhamento de rotas, alinhamento de banco, health JSON, geração do cliente OpenAPI, build, lint, testes Angular admin/portal, testes unitários backend, e2e backend, smoke DB, cobertura backend e smoke QA. Os passos nomeados backend-e2e, db-smoke e backend-coverage exigem `DATABASE_URL`. O smoke QA exige URLs vivos e falha como evidência bloqueada quando as variáveis de base URL não estão configuradas. A ordem e os requisitos do gate vivem no registro compartilhado em `scripts/lib/`.
+O gate agregado corrente é `npm run evidence:check` no workspace root. Ele executa alinhamento de rotas, alinhamento de banco, health JSON, geração do cliente OpenAPI, build, lint, testes Angular admin/portal, testes unitários backend, e2e backend, Playwright admin/portal, smoke DB, cobertura backend, cobertura frontend e smoke QA. Os passos nomeados backend-e2e, db-smoke e backend-coverage exigem `DATABASE_URL`. O smoke QA exige URLs vivos e falha como evidência bloqueada quando as variáveis de base URL não estão configuradas. A ordem e os requisitos do gate vivem no registro compartilhado em `scripts/lib/`.
 
 O gate de lint também executa `scripts/check-api-operation-decorators.mjs` e `scripts/check-openapi-generated.mjs`. Todo método de controller com decorator HTTP deve declarar `@ApiOperation`, e os artefatos versionados em `frontend/src/app/core/api/generated/` e `frontend/portal/src/app/core/api/generated/` devem permanecer em OpenAPI 3.1 com summaries, tags e responses por operação. Rotas administrativas podem existir em `/api/admin/v1/*`; rotas fora do prefixo global `/api` são bloqueadas.
 
@@ -252,6 +258,14 @@ Rota contratual: `POST /api/v1/rh/afastamentos`
 Rota contratual: `PATCH /api/v1/rh/afastamentos/{id}`
 
 Rota contratual: `DELETE /api/v1/rh/afastamentos/{id}`
+
+Rota contratual: `GET /api/v1/rh/professional-experiences`
+
+Rota contratual: `POST /api/v1/rh/professional-experiences`
+
+Rota contratual: `PATCH /api/v1/rh/professional-experiences/{id}`
+
+Rota contratual: `DELETE /api/v1/rh/professional-experiences/{id}`
 
 Rota contratual: `GET /api/v1/rh/processos`
 

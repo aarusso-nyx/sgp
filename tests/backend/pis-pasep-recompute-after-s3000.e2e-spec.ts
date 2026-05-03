@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { randomUUID } from 'node:crypto';
 import { Pool, PoolClient, QueryResultRow } from 'pg';
 
@@ -492,3 +493,9 @@ function money(value: string | number | undefined): string {
   const [whole = '0', fraction = ''] = String(value ?? '0').split('.');
   return `${whole}.${fraction.padEnd(2, '0').slice(0, 2)}`;
 }
+
+describe('403 negative path', () => {
+  it('returns 403 when an authenticated actor lacks the required permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});
