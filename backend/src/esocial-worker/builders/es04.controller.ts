@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -40,6 +41,7 @@ export class ES04Controller {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET Status' })
   @Get()
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({ description: 'List S-1200/S-1210 status by competence.' })
@@ -50,6 +52,7 @@ export class ES04Controller {
     return this.service.listStatus(year, month);
   }
 
+  @ApiOperation({ summary: 'POST runs/:payrollRunId/s1200/emitir' })
   @Post('runs/:payrollRunId/s1200/emitir')
   @RequirePermission('esocial.event.write')
   @ApiCreatedResponse({ description: 'Emit S-1200 remuneration events.' })
@@ -70,6 +73,28 @@ export class ES04Controller {
     return results;
   }
 
+  @ApiOperation({ summary: 'POST runs/:payrollRunId/s1202/emitir' })
+  @Post('runs/:payrollRunId/s1202/emitir')
+  @RequirePermission('esocial.event.write')
+  @ApiCreatedResponse({ description: 'Emit S-1202 RPPS remuneration events.' })
+  async emitS1202(
+    @Req() request: RequestWithContext,
+    @Param('payrollRunId') payrollRunId: string,
+    @Body() body: EmitPeriodicPayrollDto,
+  ) {
+    const results = await this.service.emitS1202(payrollRunId, body);
+    await this.auditService.auditMutation(request, 'PROCESS', 'esocial.s1202', {
+      resourceId: payrollRunId,
+      tableName: 'esocial.s1202_emission_state',
+      metadata: {
+        employeeId: body.employeeId ?? null,
+        emitted: results.filter((result) => result.emitted).length,
+      },
+    });
+    return results;
+  }
+
+  @ApiOperation({ summary: 'POST payments/:paymentBatchId/s1210/emitir' })
   @Post('payments/:paymentBatchId/s1210/emitir')
   @RequirePermission('esocial.event.write')
   @ApiCreatedResponse({ description: 'Emit S-1210 payment events.' })

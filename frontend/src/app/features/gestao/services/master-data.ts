@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 import { PagedResult } from '../../../core/models/paged-result';
 
@@ -84,10 +85,10 @@ export interface SalaryRangeLevelRecord {
   providedIn: 'root',
 })
 export class MasterData {
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   listResources(query: MasterDataQuery = {}): Observable<PagedResult<MasterDataResource>> {
-    return this.http.get<PagedResult<MasterDataResource>>('/api/v1/master-data', {
+    return this.api.get<PagedResult<MasterDataResource>>('/api/v1/master-data', {
       params: this.params(query),
     });
   }
@@ -96,13 +97,13 @@ export class MasterData {
     resource: string,
     query: MasterDataQuery = {},
   ): Observable<PagedResult<MasterDataRecord>> {
-    return this.http.get<PagedResult<MasterDataRecord>>(`/api/v1/master-data/${resource}`, {
+    return this.api.get<PagedResult<MasterDataRecord>>(`/api/v1/master-data/${resource}`, {
       params: this.params(query),
     });
   }
 
   createRecord(resource: string, body: MasterDataMutation): Observable<MasterDataRecord> {
-    return this.http.post<MasterDataRecord>(`/api/v1/master-data/${resource}`, body);
+    return this.api.post<MasterDataRecord>(`/api/v1/master-data/${resource}`, body);
   }
 
   updateRecord(
@@ -110,29 +111,29 @@ export class MasterData {
     id: string,
     body: MasterDataMutation,
   ): Observable<MasterDataRecord> {
-    return this.http.patch<MasterDataRecord>(`/api/v1/master-data/${resource}/${id}`, body);
+    return this.api.patch<MasterDataRecord>(`/api/v1/master-data/${resource}/${id}`, body);
   }
 
   deactivateRecord(resource: string, id: string): Observable<MasterDataRecord> {
-    return this.http.delete<MasterDataRecord>(`/api/v1/master-data/${resource}/${id}`);
+    return this.api.delete<MasterDataRecord>(`/api/v1/master-data/${resource}/${id}`);
   }
 
   listJobPositions(query: MasterDataQuery = {}): Observable<PagedResult<JobPositionRecord>> {
-    return this.http.get<PagedResult<JobPositionRecord>>('/api/v1/gestao/cargos', {
+    return this.api.get<PagedResult<JobPositionRecord>>('/api/v1/gestao/cargos', {
       params: this.params(query),
     });
   }
 
   createJobPosition(body: Partial<JobPositionRecord>): Observable<JobPositionRecord> {
-    return this.http.post<JobPositionRecord>('/api/v1/gestao/cargos', body);
+    return this.api.post<JobPositionRecord>('/api/v1/gestao/cargos', body);
   }
 
   listSalaryRanges(): Observable<SalaryRangeRecord[]> {
-    return this.http.get<SalaryRangeRecord[]>('/api/v1/gestao/faixas-salariais');
+    return this.api.get<SalaryRangeRecord[]>('/api/v1/gestao/faixas-salariais');
   }
 
   listSalaryLevels(salaryRangeId: string): Observable<SalaryRangeLevelRecord[]> {
-    return this.http.get<SalaryRangeLevelRecord[]>(
+    return this.api.get<SalaryRangeLevelRecord[]>(
       `/api/v1/gestao/faixas-salariais/${salaryRangeId}/niveis`,
     );
   }

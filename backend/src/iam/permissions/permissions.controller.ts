@@ -1,5 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { RequirePermission } from '../decorators/require-permission.decorator';
 import { PermissionsService } from './permissions.service';
 
@@ -9,6 +14,7 @@ import { PermissionsService } from './permissions.service';
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
+  @ApiOperation({ summary: 'GET List permissions' })
   @Get()
   @RequirePermission('iam.read')
   @ApiOkResponse({ description: 'List available runtime permissions.' })

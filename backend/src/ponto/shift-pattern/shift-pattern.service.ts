@@ -100,10 +100,10 @@ export class ShiftPatternService {
       );
       await this.insertDays(
         client,
-        created.rows[0].shift_pattern_id,
+        created.rows[0]!.shift_pattern_id,
         input.days,
       );
-      return this.patternWithDays(created.rows[0], client);
+      return this.patternWithDays(created.rows[0]!, client);
     });
   }
 
@@ -126,7 +126,7 @@ export class ShiftPatternService {
         input.validTo ?? null,
       ],
     );
-    return this.toAssignmentSummary(rows[0]);
+    return this.toAssignmentSummary(rows[0]!);
   }
 
   async updateAssignment(

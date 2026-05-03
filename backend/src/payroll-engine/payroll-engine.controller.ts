@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import {
@@ -15,6 +20,7 @@ import { PayrollEngineService } from './payroll-engine.service';
 export class PayrollEngineController {
   constructor(private readonly payrollEngineService: PayrollEngineService) {}
 
+  @ApiOperation({ summary: 'GET health' })
   @Get('health')
   @Public()
   @ApiOkResponse({ description: 'Payroll engine health.' })
@@ -22,6 +28,7 @@ export class PayrollEngineController {
     return this.payrollEngineService.health();
   }
 
+  @ApiOperation({ summary: 'GET status' })
   @Get('status')
   @RequirePermission('folha.read')
   @ApiOkResponse({ description: 'Payroll engine runtime and formula status.' })
@@ -29,6 +36,7 @@ export class PayrollEngineController {
     return this.payrollEngineService.status();
   }
 
+  @ApiOperation({ summary: 'POST calculations' })
   @Post('calculations')
   @RequirePermission('folha.write')
   @ApiCreatedResponse({

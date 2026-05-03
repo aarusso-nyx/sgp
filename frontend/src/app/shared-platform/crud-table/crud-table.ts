@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -21,6 +21,7 @@ export interface CrudTableAction<T = Record<string, unknown>> {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-crud-table',
   imports: [CommonModule, MatButtonModule, MatIconModule, MatTableModule, MatTooltipModule],
   templateUrl: './crud-table.html',

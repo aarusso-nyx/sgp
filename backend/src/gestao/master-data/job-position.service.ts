@@ -99,7 +99,7 @@ export class JobPositionService {
           input.salaryRangeId ?? null,
         ],
       );
-      const row = rows.rows[0];
+      const row = rows.rows[0]!;
       await this.appendAudit(client, 'CREATE', row.id, null, this.toDto(row));
       return this.toDto(row);
     });
@@ -135,7 +135,7 @@ export class JobPositionService {
           input.salaryRangeId ?? null,
         ],
       );
-      const after = updated.rows[0];
+      const after = updated.rows[0]!;
       await this.appendAudit(
         client,
         'UPDATE',

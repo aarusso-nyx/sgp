@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface ClassificationVersion {
@@ -20,6 +20,7 @@ interface ClassificationRow {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recrutamento-classificacao',
   standalone: true,
   imports: [CommonModule, FormsModule],

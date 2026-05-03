@@ -61,6 +61,16 @@
       "id": "governance.runtime-topology",
       "status": "implemented",
       "evidence": "docs/gov/runtime-topology.json"
+    },
+    {
+      "id": "observability.audit-coverage-dashboard",
+      "status": "implemented",
+      "evidence": "docs/gov/observability/audit-worker-dashboard.json"
+    },
+    {
+      "id": "observability.audit-worker-alerts",
+      "status": "implemented",
+      "evidence": "docs/gov/observability/audit-worker-alerts.yml"
     }
   ]
 }

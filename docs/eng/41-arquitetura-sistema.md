@@ -69,7 +69,11 @@ Comunicação inter-serviço produtiva (API → payroll-engine, API → workers,
 
 ### 2.7 Observabilidade First-Class
 
-Observabilidade produtiva continua objetivo arquitetural: cada serviço deve emitir **logs estruturados JSON**, **traces distribuídos** via OpenTelemetry e **métricas customizadas** de negócio. A implementação de CloudWatch/X-Ray/alarms fica postergada junto aos gates de governança; no pacote atual, health checks e readiness probes seguem como evidência mínima de runtime.
+Observabilidade produtiva continua objetivo arquitetural: cada serviço deve emitir **logs estruturados JSON**, **traces distribuídos** via OpenTelemetry e **métricas customizadas** de negócio. No backend atual, os entrypoints `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, `sgp-esocial-worker`, `sgp-integrations-worker` e `sgp-report-service` inicializam `nestjs-pino` por meio de `backend/src/common/logging/logging.config.ts` e aplicam o logger no bootstrap com `backend/src/common/logging/bootstrap-logger.ts`.
+
+O contrato de redaction de logs usa o censor literal `[redacted]` para os caminhos `cpf`, `pis_pasep`, `bank_account`, `email` e cabeçalhos `authorization`/`Authorization` em objetos HTTP ou payloads estruturados aninhados até cinco níveis. Esse contrato é preventivo para triagem operacional e resposta a incidentes: dados pessoais de folha/RH não devem aparecer em logs de aplicação, inclusive quando serviços fazem `Logger.log(...)` com objetos estruturados.
+
+A implementação de CloudWatch/X-Ray/alarms fica postergada junto aos gates de governança; no pacote atual, health checks, readiness probes e o contrato de redaction de logs seguem como evidência mínima de runtime.
 
 ### 2.8 Estratégia de Infraestrutura Temporariamente Aberta
 

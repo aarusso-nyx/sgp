@@ -1,5 +1,10 @@
 import { Controller, Param, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -11,6 +16,7 @@ import { S2306Service } from './s2306.service';
 export class S2306Controller {
   constructor(private readonly service: S2306Service) {}
 
+  @ApiOperation({ summary: 'POST :changeId' })
   @Post(':changeId')
   @RequirePermission('esocial.event.write')
   @AuditMutation({

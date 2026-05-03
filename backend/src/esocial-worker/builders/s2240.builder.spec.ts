@@ -43,6 +43,7 @@ describe('S-2240 builder', () => {
         triggerEvent,
       );
       expect(record.xml).toBe(golden(goldenFile));
+      expect(record.payload).toMatchObject({ workEnvironmentCode: 'AMB01' });
       expect(() =>
         validator.assertValid('S-2240', record.xml, { allowUnsigned: true }),
       ).not.toThrow();
@@ -66,6 +67,7 @@ function exposureRow(id: string, intensityValue: string, ended: boolean) {
     cpf: '11122233344',
     employee_name: 'Servidor Risco',
     cnpj: '12345678000199',
+    work_environment_code: 'AMB01',
     work_location_name: 'Oficina de maquinas',
     responsible_cpf: '22233344455',
     harmful_agent_code: '01.01.001',

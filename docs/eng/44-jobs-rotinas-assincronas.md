@@ -698,17 +698,19 @@ Implementado como Step Functions `esocial-envio` — ver §3.3.
 
 #### `JOB_RELATORIO_ASSINCRONO`
 
-| Campo               | Valor                                                                                                                                                                                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Owner**           | `sgp-report-service`                                                                                                                                                                  |
-| **Trigger**         | `POST /api/v1/relatorios/solicitar` (retorna `job_id`) → SQS `sgp-report-queue`                                                                                                       |
-| **Input**           | `{ tenant_id, tipo_relatorio, parametros_json, formato ∈ {PDF, XLSX}, notificar_email: bool }`                                                                                        |
-| **Output**          | Arquivo gerado em S3 `{tenant}/outputs/relatorios/{tipo}/{uuid}.{ext}`; `relatorio_solicitado.status = CONCLUIDO`; URL presigned enviada por email/in-app se `notificar_email = true` |
-| **Retry policy**    | 2 tentativas; backoff 2/5 min; DLQ `sgp-report-dlq`                                                                                                                                   |
-| **Idempotency key** | `{tenant_id}#{tipo_relatorio}#{hash(parametros)}#{data_hoje}`                                                                                                                         |
-| **Timeout**         | 20 min                                                                                                                                                                                |
-| **Observabilidade** | Log stream `/sgp/report-service/relatorio`; métrica `RelatoriosGerados`, `RelatoriosDuracao`                                                                                          |
-| **Alertas**         | `RelatoriosDuracao > 15 min` → SNS operador                                                                                                                                           |
+| Campo               | Valor                                                                                                                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Owner**           | `sgp-report-service`                                                                                                                                                             |
+| **Trigger**         | Registro `public.report_request` com `status = REQUESTED`; em produção pode ser alimentado por SQS `sgp-report-queue`, mas o contrato durável é a tabela local                   |
+| **Input**           | `tenant_id`, `definition.code`, `payroll_run_id` ou `competence_year`/`competence_month`, `branch_id` opcional e `parameters` JSONB                                              |
+| **Output**          | Arquivo gerado em S3 `{tenant}/outputs/reports/{tipo}/{ano}/{mes}/{arquivo}`; `public.document_attachment` e `public.generated_report_file`; `report_request.status = COMPLETED` |
+| **Retry policy**    | 2 tentativas; backoff 2/5 min; DLQ `sgp-report-dlq`                                                                                                                              |
+| **Idempotency key** | `report_request.id`; o worker usa `FOR UPDATE SKIP LOCKED` para evitar dupla execução concorrente                                                                                |
+| **Timeout**         | 20 min                                                                                                                                                                           |
+| **Observabilidade** | Log stream `/sgp/report-service/relatorio`; métrica `RelatoriosGerados`, `RelatoriosDuracao`                                                                                     |
+| **Alertas**         | `RelatoriosDuracao > 15 min` → SNS operador                                                                                                                                      |
+
+O entrypoint `backend/src/main-report-worker.ts` executa `ReportWorkerService.pollOnce()` em loop (`REPORT_WORKER_POLL_MS`, default 5s) ou em modo one-shot (`REPORT_WORKER_ONESHOT=true`). O worker cobre F-FOL-013 e F-FOL-016 com geração pareada PDF+XLSX na mesma `report_request`; F-FOL-014/015/017 geram PDF. O endpoint `GET /api/v1/consultas/batimento` cria a solicitação F-FOL-016 e retorna as assertivas de conferência entre folha, registros financeiros e totalizadores eSocial. Novos relatórios devem adicionar o código em `REPORT_WORKER_DEFINITIONS`, mapear para um código canônico em `ReportWorkerService.canonicalCode()` e implementar um método `process*` que reutilize `persistResult()` para manter a trilha `document_attachment` + `generated_report_file`.
 
 ---
 

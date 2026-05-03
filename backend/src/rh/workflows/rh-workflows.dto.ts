@@ -64,6 +64,16 @@ export class RhWorkflowMutationDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  jobPositionId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  workLocationId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   reasonId?: string;
 
   @ApiPropertyOptional()
@@ -186,6 +196,18 @@ export class RhWorkflowMutationDto {
   @IsInt()
   @Min(0)
   daysCount?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  vacanciesTotal?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  vacanciesFilled?: number;
 
   @ApiPropertyOptional()
   @IsOptional()

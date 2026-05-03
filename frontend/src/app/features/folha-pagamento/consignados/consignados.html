@@ -1,20 +1,20 @@
 <section class="consignments-page">
   <header>
-    <h1>Consignados</h1>
+    <h1 i18n>Consignados</h1>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Servidor</mat-label>
+      <mat-label i18n>Servidor</mat-label>
       <input matInput formControlName="employeeId" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Competencia</mat-label>
+      <mat-label i18n>Competencia</mat-label>
       <input matInput type="month" formControlName="competence" />
     </mat-form-field>
     <button mat-flat-button color="primary" type="button" (click)="load()" [disabled]="loading">
       <mat-icon>search</mat-icon>
-      Simular margem
+      <ng-container i18n>Simular margem</ng-container>
     </button>
   </form>
 
@@ -22,19 +22,19 @@
 
   <section class="margin-grid" *ngIf="margin">
     <article>
-      <span>Base liquida</span>
+      <span i18n>Base liquida</span>
       <strong>{{ margin.netBase }}</strong>
     </article>
     <article>
-      <span>Margem geral</span>
+      <span i18n>Margem geral</span>
       <strong>{{ margin.availableGeneral }}</strong>
     </article>
     <article>
-      <span>Margem cartao</span>
+      <span i18n>Margem cartao</span>
       <strong>{{ margin.availableCard }}</strong>
     </article>
     <article>
-      <span>Uso atual</span>
+      <span i18n>Uso atual</span>
       <strong>{{ margin.usedGeneral }} / {{ margin.usedCard }}</strong>
     </article>
   </section>
@@ -43,12 +43,12 @@
     <table>
       <thead>
         <tr>
-          <th>Consignante</th>
-          <th>Contrato</th>
-          <th>Tipo</th>
-          <th>Parcela</th>
-          <th>Parcelas</th>
-          <th>Status</th>
+          <th i18n>Consignante</th>
+          <th i18n>Contrato</th>
+          <th i18n>Tipo</th>
+          <th i18n>Parcela</th>
+          <th i18n>Parcelas</th>
+          <th i18n>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -61,7 +61,7 @@
           <td>{{ loan.status }}</td>
         </tr>
         <tr *ngIf="loans.length === 0">
-          <td colspan="6" class="empty">Nenhuma averbacao encontrada.</td>
+          <td colspan="6" class="empty" i18n>Nenhuma averbacao encontrada.</td>
         </tr>
       </tbody>
     </table>

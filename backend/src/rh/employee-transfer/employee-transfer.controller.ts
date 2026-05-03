@@ -8,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -30,6 +31,7 @@ export class EmployeeTransferController {
     private readonly employeeTransferService: EmployeeTransferService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('rh.movimentacao.read')
   @ApiOkResponse({ description: 'List employee transfer workflow queues.' })
@@ -37,6 +39,7 @@ export class EmployeeTransferController {
     return this.employeeTransferService.listByStatus(status);
   }
 
+  @ApiOperation({ summary: 'GET employee/:employeeId' })
   @Get('employee/:employeeId')
   @RequirePermission('rh.movimentacao.read')
   @ApiOkResponse({ description: 'List an employee transfer history.' })
@@ -44,6 +47,7 @@ export class EmployeeTransferController {
     return this.employeeTransferService.listByEmployee(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('rh.movimentacao.request')
   @AuditMutation({
@@ -56,6 +60,7 @@ export class EmployeeTransferController {
     return this.employeeTransferService.create(body);
   }
 
+  @ApiOperation({ summary: 'POST :id/aprovar' })
   @Post(':id/aprovar')
   @RequirePermission('rh.movimentacao.approve')
   @AuditMutation({
@@ -69,6 +74,7 @@ export class EmployeeTransferController {
     return this.employeeTransferService.approve(id, body);
   }
 
+  @ApiOperation({ summary: 'POST :id/cancelar' })
   @Post(':id/cancelar')
   @RequirePermission('rh.movimentacao.approve')
   @AuditMutation({
@@ -82,6 +88,7 @@ export class EmployeeTransferController {
     return this.employeeTransferService.cancel(id);
   }
 
+  @ApiOperation({ summary: 'POST :id/efetivar' })
   @Post(':id/efetivar')
   @RequirePermission('rh.movimentacao.effect')
   @AuditMutation({

@@ -8,6 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -18,6 +19,7 @@ import type { Response } from 'express';
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { CreateAfdExportDto, CreateAfdImportDto } from '../ponto.dto';
+import { AfdtAcjefGeneratorService } from './afdt-acjef-generator.service';
 import { AfdGeneratorService } from './afd-generator.service';
 import { AfdImporterService } from './afd-importer.service';
 
@@ -28,8 +30,10 @@ export class AfdController {
   constructor(
     private readonly afdGeneratorService: AfdGeneratorService,
     private readonly afdImporterService: AfdImporterService,
+    private readonly afdtAcjefGeneratorService: AfdtAcjefGeneratorService,
   ) {}
 
+  @ApiOperation({ summary: 'GET exports' })
   @Get('exports')
   @RequirePermission('ponto.afd.read')
   @ApiOkResponse({ description: 'AFD export history.' })
@@ -37,6 +41,7 @@ export class AfdController {
     return this.afdGeneratorService.listExports();
   }
 
+  @ApiOperation({ summary: 'POST exports' })
   @Post('exports')
   @RequirePermission('ponto.afd.write')
   @AuditMutation({
@@ -49,6 +54,49 @@ export class AfdController {
     return this.afdGeneratorService.createExport(body);
   }
 
+  @ApiOperation({ summary: 'POST afdt' })
+  @Post('afdt')
+  @RequirePermission('ponto.afd.read')
+  @AuditMutation({
+    action: 'GENERATE',
+    resourceType: 'ponto.afdt_export',
+  })
+  @Header('content-type', 'text/plain; charset=utf-8')
+  @ApiOkResponse({ description: 'Generated AFDT flat file.' })
+  async generateAfdt(
+    @Body() body: CreateAfdExportDto,
+    @Res() response: Response,
+  ) {
+    const download = await this.afdtAcjefGeneratorService.downloadAfdt(body);
+    response.setHeader(
+      'content-disposition',
+      `attachment; filename="${download.fileName.replace(/"/g, '')}"`,
+    );
+    download.stream.pipe(response);
+  }
+
+  @ApiOperation({ summary: 'POST acjef' })
+  @Post('acjef')
+  @RequirePermission('ponto.afd.read')
+  @AuditMutation({
+    action: 'GENERATE',
+    resourceType: 'ponto.acjef_export',
+  })
+  @Header('content-type', 'text/plain; charset=utf-8')
+  @ApiOkResponse({ description: 'Generated ACJEF flat file.' })
+  async generateAcjef(
+    @Body() body: CreateAfdExportDto,
+    @Res() response: Response,
+  ) {
+    const download = await this.afdtAcjefGeneratorService.downloadAcjef(body);
+    response.setHeader(
+      'content-disposition',
+      `attachment; filename="${download.fileName.replace(/"/g, '')}"`,
+    );
+    download.stream.pipe(response);
+  }
+
+  @ApiOperation({ summary: 'GET exports/:afdExportId/download' })
   @Get('exports/:afdExportId/download')
   @RequirePermission('ponto.afd.read')
   @Header('content-type', 'text/plain; charset=iso-8859-1')
@@ -65,6 +113,7 @@ export class AfdController {
     download.stream.pipe(response);
   }
 
+  @ApiOperation({ summary: 'GET imports' })
   @Get('imports')
   @RequirePermission('ponto.afd.read')
   @ApiOkResponse({ description: 'AFD import history.' })
@@ -72,6 +121,7 @@ export class AfdController {
     return this.afdImporterService.listImports();
   }
 
+  @ApiOperation({ summary: 'POST imports' })
   @Post('imports')
   @RequirePermission('ponto.afd.write')
   @AuditMutation({

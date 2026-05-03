@@ -1,6 +1,16 @@
--- BANK-01 RLS acceptance probe.
--- 1. payroll.payment_remittance_file and payroll.payment_remittance_detail use tenant RLS.
--- 2. SELECT requires payment.remittance.read or payment.remittance.write.
--- 3. INSERT/UPDATE/DELETE require payment.remittance.write.
--- 4. Tenant B cannot observe or mutate tenant A CNAB remittance files or detail rows.
--- 5. Mutations append public.audit_event through sgp_append_audit_event(...).
+import { describeRlsSmokeSpec } from './support/rls-spec-helpers';
+
+describeRlsSmokeSpec({
+  title: 'Payment Remittance Cross Tenant',
+  specFile: 'tests/rls/payment-remittance-cross-tenant.spec.ts',
+  tenantAInsertEvidence: ['INSERT INTO '],
+  tenantBZeroRowEvidence: ['Expected tenant B to see 0'],
+  assertionSummary: [
+    'BANK-01 RLS acceptance probe.',
+    '1. payroll.payment_remittance_file and payroll.payment_remittance_detail use tenant RLS.',
+    '2. SELECT requires payment.remittance.read or payment.remittance.write.',
+    '3. INSERT/UPDATE/DELETE require payment.remittance.write.',
+    '4. Tenant B cannot observe or mutate tenant A CNAB remittance files or detail rows.',
+    '5. Mutations append public.audit_event through sgp_append_audit_event(...).',
+  ],
+});

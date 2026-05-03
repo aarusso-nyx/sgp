@@ -1,21 +1,21 @@
 <section class="termination-payroll">
   <header>
-    <h1>Rescisao</h1>
+    <h1 i18n>Rescisao</h1>
   </header>
 
   <form [formGroup]="form" class="toolbar" (ngSubmit)="run()">
     <mat-form-field appearance="outline" class="link-field">
-      <mat-label>Vinculo</mat-label>
+      <mat-label i18n>Vinculo</mat-label>
       <input matInput formControlName="employmentLinkId" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Desligamento</mat-label>
+      <mat-label i18n>Desligamento</mat-label>
       <input matInput type="date" formControlName="terminationDate" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Causa</mat-label>
+      <mat-label i18n>Causa</mat-label>
       <mat-select formControlName="cause">
         <mat-option *ngFor="let cause of causes" [value]="cause.code">
           {{ cause.label }}
@@ -24,7 +24,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Aviso previo</mat-label>
+      <mat-label i18n>Aviso previo</mat-label>
       <mat-select formControlName="priorNoticeKind">
         <mat-option *ngFor="let kind of priorNoticeKinds" [value]="kind.code">
           {{ kind.label }}
@@ -33,7 +33,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Reducao</mat-label>
+      <mat-label i18n>Reducao</mat-label>
       <mat-select formControlName="priorNoticeReductionMode">
         <mat-option *ngFor="let mode of reductionModes" [value]="mode.code">
           {{ mode.label }}
@@ -43,7 +43,7 @@
 
     <button mat-flat-button color="primary" type="submit" [disabled]="loading">
       <mat-icon>calculate</mat-icon>
-      Calcular
+      <ng-container i18n>Calcular</ng-container>
     </button>
   </form>
 
@@ -51,69 +51,71 @@
 
   <section *ngIf="result as payroll" class="summary" aria-live="polite">
     <div>
-      <span>Run</span>
+      <span i18n>Run</span>
       <strong>{{ payroll.payrollRunId }}</strong>
     </div>
     <div>
-      <span>Status</span>
+      <span i18n>Status</span>
       <strong>{{ payroll.status }}</strong>
     </div>
     <div>
-      <span>Proventos</span>
+      <span i18n>Proventos</span>
       <strong>{{ payroll.totalEarnings | moneyBr }}</strong>
     </div>
     <div>
-      <span>Descontos</span>
+      <span i18n>Descontos</span>
       <strong>{{ payroll.totalDeductions | moneyBr }}</strong>
     </div>
     <div>
-      <span>Liquido</span>
+      <span i18n>Liquido</span>
       <strong>{{ payroll.totalNet | moneyBr }}</strong>
     </div>
   </section>
 
   <section *ngIf="priorNotice as notice" class="fgts-block">
-    <h2>Aviso previo {{ notice.code === 'RESC_AVISO_PREVIO' ? 'indenizado' : 'trabalhado' }}</h2>
+    <h2 i18n>
+      Aviso previo {{ notice.code === 'RESC_AVISO_PREVIO' ? 'indenizado' : 'trabalhado' }}
+    </h2>
     <div>
-      <span>Dias</span>
+      <span i18n>Dias</span>
       <strong>{{ notice.quantity }}</strong>
     </div>
     <div>
-      <span>Base</span>
+      <span i18n>Base</span>
       <strong>{{ notice.referenceValue | moneyBr }}</strong>
     </div>
     <div>
-      <span>Valor</span>
+      <span i18n>Valor</span>
       <strong>{{ notice.amount | moneyBr }}</strong>
     </div>
   </section>
 
   <section *ngIf="fgtsFine as fgts" class="fgts-block">
-    <h2>FGTS</h2>
+    <h2 i18n>FGTS</h2>
     <div>
-      <span>Base</span>
+      <span i18n>Base</span>
       <strong>{{ fgts.referenceValue | moneyBr }}</strong>
     </div>
     <div>
-      <span>Aliquota</span>
+      <span i18n>Aliquota</span>
       <strong>{{ fgts.quantity }}</strong>
     </div>
     <div>
-      <span>Multa</span>
+      <span i18n>Multa</span>
       <strong>{{ fgts.amount | moneyBr }}</strong>
     </div>
   </section>
 
   <section *ngIf="result as payroll" class="components">
-    <h2>Composicao</h2>
+    <h2 i18n>Composicao</h2>
     <table>
       <thead>
         <tr>
-          <th>Origem</th>
-          <th>Tipo</th>
-          <th>Quantidade</th>
-          <th>Referencia</th>
-          <th>Valor</th>
+          <th i18n>Origem</th>
+          <th i18n>Tipo</th>
+          <th i18n>Quantidade</th>
+          <th i18n>Referencia</th>
+          <th i18n>Valor</th>
         </tr>
       </thead>
       <tbody>

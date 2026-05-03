@@ -1,6 +1,11 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
+import {
+  countRows,
+  decideWorkerBackpressure,
+  WorkerBackpressureDecision,
+} from '../common/observability/worker-backpressure';
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
 import { DocumentsStorageService } from '../documents/documents-storage.service';
@@ -188,6 +193,7 @@ const WORKER_PERMISSIONS = [
 export class IntegrationsWorkerService {
   private readonly logger = new Logger(IntegrationsWorkerService.name);
   private readonly cnab240EmitService: Cnab240Emitter;
+  private readonly workerName = 'sgp-integrations-worker';
 
   constructor(
     private readonly databaseService: DatabaseService,
@@ -273,9 +279,53 @@ export class IntegrationsWorkerService {
     return summary;
   }
 
+  async backpressureStatus(
+    limit = 10,
+    definitions: readonly string[] = SUPPORTED_DEFINITIONS,
+  ): Promise<WorkerBackpressureDecision> {
+    const requestedLimit = this.normalizeLimit(limit);
+    return this.runBypassingRls(async () => {
+      const queueDepth = await this.countReportRequests(
+        'REQUESTED',
+        definitions,
+      );
+      const activeClaims = await this.countReportRequests(
+        'RUNNING',
+        definitions,
+      );
+      return decideWorkerBackpressure(this.workerName, requestedLimit, {
+        queueDepth,
+        activeClaims,
+        capacity: requestedLimit,
+      });
+    });
+  }
+
   private async expireNomeacaoDeadlines(): Promise<void> {
     if (!this.nomeacaoService) return;
     await this.runBypassingRls(() => this.nomeacaoService!.expireOverdue());
+  }
+
+  private countReportRequests(
+    status: 'REQUESTED' | 'RUNNING',
+    definitions: readonly string[],
+  ): Promise<number> {
+    return countRows(
+      (sql, values) => this.databaseService.query(sql, values),
+      `
+      SELECT count(*)::text AS total
+      FROM public.report_request rr
+      JOIN public.report_definition rd ON rd.id = rr.definition_id
+      WHERE rr.status = $1::"ReportRequestStatus"
+        AND rd.code = ANY($2::text[])
+      `,
+      [status, definitions],
+    );
+  }
+
+  private normalizeLimit(limit: number): number {
+    if (!Number.isInteger(limit) || limit < 1) return 10;
+    return Math.min(limit, 100);
   }
 
   private async claim(job: PendingJobRow): Promise<PendingJobRow | null> {

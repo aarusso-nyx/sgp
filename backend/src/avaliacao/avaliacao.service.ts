@@ -269,7 +269,7 @@ export class AvaliacaoService {
       ],
     );
 
-    return this.toPerformanceEvaluationSummary(rows[0]);
+    return this.toPerformanceEvaluationSummary(rows[0]!);
   }
 
   async updatePerformanceEvaluation(
@@ -476,7 +476,7 @@ export class AvaliacaoService {
       ],
     );
 
-    return this.toProgressionSummary(rows[0]);
+    return this.toProgressionSummary(rows[0]!);
   }
 
   async listSimulations(): Promise<SalarySimulationSummary[]> {
@@ -638,7 +638,7 @@ export class AvaliacaoService {
       ],
     );
 
-    return this.toSimulationSummary(rows[0]);
+    return this.toSimulationSummary(rows[0]!);
   }
 
   async listCareerPlans(): Promise<CareerPlanSummary[]> {
@@ -721,7 +721,7 @@ export class AvaliacaoService {
       ],
     );
 
-    return this.toCareerPlanSummary(rows[0]);
+    return this.toCareerPlanSummary(rows[0]!);
   }
 
   async updateCareerPlan(

@@ -1,5 +1,10 @@
 import { Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../audit/audit.service';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
@@ -15,6 +20,7 @@ export class TceController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('tce.adapter.read')
   @ApiOkResponse({ description: 'List registered TCE/TCM/TCU adapters.' })
@@ -22,6 +28,7 @@ export class TceController {
     return this.registry.list();
   }
 
+  @ApiOperation({ summary: 'GET :id/events' })
   @Get(':id/events')
   @RequirePermission('tce.adapter.read')
   @ApiOkResponse({ description: 'List lifecycle events for a TCE adapter.' })
@@ -29,6 +36,7 @@ export class TceController {
     return this.registry.events(id);
   }
 
+  @ApiOperation({ summary: 'POST :id/enable' })
   @Post(':id/enable')
   @RequirePermission('tce.adapter.manage')
   @ApiOkResponse({ description: 'Enable a TCE adapter.' })
@@ -47,6 +55,7 @@ export class TceController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST :id/disable' })
   @Post(':id/disable')
   @RequirePermission('tce.adapter.manage')
   @ApiOkResponse({ description: 'Disable a TCE adapter.' })

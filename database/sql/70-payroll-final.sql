@@ -207,7 +207,7 @@ CREATE INDEX payroll_financial_record_branch_id_idx ON payroll.payroll_financial
 
 CREATE INDEX payroll_financial_record_competence_year_competence_month_idx ON payroll.payroll_financial_record USING btree (competence_year, competence_month);
 
-CREATE UNIQUE INDEX payroll_financial_record_employee_id_competence_year_compet_key ON payroll.payroll_financial_record USING btree (employee_id, competence_year, competence_month, payroll_run_id);
+CREATE UNIQUE INDEX payroll_financial_record_employee_id_competence_year_compet_key ON payroll.payroll_financial_record USING btree (employee_id, competence_year, competence_month, payroll_run_id, competence);
 
 CREATE INDEX payroll_financial_record_functional_status_id_idx ON payroll.payroll_financial_record USING btree (functional_status_id);
 
@@ -303,6 +303,8 @@ CREATE TRIGGER payment_return_detail_audit AFTER INSERT OR DELETE OR UPDATE ON p
 
 CREATE TRIGGER payment_return_file_audit AFTER INSERT OR DELETE OR UPDATE ON payroll.payment_return_file FOR EACH ROW EXECUTE FUNCTION payroll.sgp_payment_return_audit();
 
+CREATE TRIGGER payroll_financial_record_default_partition_auto_create BEFORE INSERT ON payroll.payroll_financial_record_default FOR EACH ROW EXECUTE FUNCTION payroll.sgp_payroll_financial_record_default_partition_redirect();
+
 CREATE TRIGGER trg_compile_formula_expression BEFORE INSERT OR UPDATE OF code, formula_alias, formula_expression ON payroll.payroll_earning_deduction FOR EACH ROW WHEN (((new.formula_expression IS NOT NULL) AND (btrim(new.formula_expression) <> ''::text))) EXECUTE FUNCTION payroll_calc.compile_formula_expression();
 
 CREATE TRIGGER trg_earning_after_delete AFTER DELETE ON payroll.payroll_earning_deduction FOR EACH ROW EXECUTE FUNCTION payroll_calc.on_earning_after_delete();
@@ -314,6 +316,12 @@ CREATE TRIGGER trg_earning_before_truncate BEFORE TRUNCATE ON payroll.payroll_ea
 CREATE TRIGGER trg_earning_formula_cache_invalidate AFTER UPDATE ON payroll.payroll_earning_deduction FOR EACH ROW EXECUTE FUNCTION payroll_calc.on_earning_formula_cache_invalidate();
 
 CREATE TRIGGER trg_earning_formula_cache_materialize AFTER INSERT OR UPDATE ON payroll.payroll_earning_deduction FOR EACH ROW EXECUTE FUNCTION payroll_calc.on_earning_formula_cache_materialize();
+
+ALTER TABLE payroll.payroll_financial_record_default ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE payroll.payroll_financial_record_default FORCE ROW LEVEL SECURITY;
+
+SELECT payroll.sgp_create_payroll_financial_record_partitions();
 
 ALTER TABLE ONLY payroll.accounting_account
     ADD CONSTRAINT accounting_account_accounting_history_id_fkey FOREIGN KEY (accounting_history_id) REFERENCES payroll.accounting_history(id) ON UPDATE CASCADE ON DELETE SET NULL;
@@ -468,19 +476,19 @@ ALTER TABLE ONLY payroll.employee_payroll_item
 ALTER TABLE ONLY payroll.employment_link_earning
     ADD CONSTRAINT payroll_employment_link_earning_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
-ALTER TABLE ONLY payroll.payroll_financial_record
+ALTER TABLE payroll.payroll_financial_record
     ADD CONSTRAINT payroll_financial_record_branch_id_fkey FOREIGN KEY (branch_id) REFERENCES hr.branch(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
-ALTER TABLE ONLY payroll.payroll_financial_record
+ALTER TABLE payroll.payroll_financial_record
     ADD CONSTRAINT payroll_financial_record_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES hr.employee(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
-ALTER TABLE ONLY payroll.payroll_financial_record
+ALTER TABLE payroll.payroll_financial_record
     ADD CONSTRAINT payroll_financial_record_functional_status_id_fkey FOREIGN KEY (functional_status_id) REFERENCES hr.functional_status(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
-ALTER TABLE ONLY payroll.payroll_financial_record
+ALTER TABLE payroll.payroll_financial_record
     ADD CONSTRAINT payroll_financial_record_payroll_run_id_fkey FOREIGN KEY (payroll_run_id) REFERENCES payroll.payroll_run(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
-ALTER TABLE ONLY payroll.payroll_financial_record
+ALTER TABLE payroll.payroll_financial_record
     ADD CONSTRAINT payroll_financial_record_work_location_id_fkey FOREIGN KEY (work_location_id) REFERENCES hr.work_location(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 ALTER TABLE ONLY payroll.formula_attribute
@@ -501,7 +509,7 @@ ALTER TABLE ONLY payroll.payment_remittance_file
 ALTER TABLE ONLY payroll.payroll_earning_deduction
     ADD CONSTRAINT payroll_payroll_earning_deduction_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
-ALTER TABLE ONLY payroll.payroll_financial_record
+ALTER TABLE payroll.payroll_financial_record
     ADD CONSTRAINT payroll_payroll_financial_record_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
 ALTER TABLE ONLY payroll.payroll_run_status_history
@@ -808,6 +816,8 @@ CREATE POLICY payroll_run_select ON payroll.payroll_run FOR SELECT USING ((publi
 ALTER TABLE payroll.payroll_run_status_history ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY payroll_run_status_history_select ON payroll.payroll_run_status_history FOR SELECT USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['folha.read'::text, 'folha.write'::text, 'relatorio.read'::text, 'relatorio.generate'::text, 'auditoria.read'::text]))));
+
+COMMENT ON TABLE payroll.payroll_financial_record IS 'Payroll financial record facts partitioned monthly by generated competence date. Destructive retention/drop/detach policy is deferred pending owner decision.';
 
 CREATE POLICY payroll_run_status_history_write ON payroll.payroll_run_status_history USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['folha.write'::text])))) WITH CHECK ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['folha.write'::text]))));
 

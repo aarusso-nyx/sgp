@@ -1,22 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { IrrfTaxRateBracket, IrrfTaxRateImport, TaxRateIrrfService } from './tax-rate-irrf.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-tax-rate-irrf',
   standalone: false,
   templateUrl: './tax-rate-irrf.html',
   styleUrl: './tax-rate-irrf.scss',
 })
-export class TaxRateIrrf implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>();
-
-  brackets: IrrfTaxRateBracket[] = [];
-  loading = false;
-  error = '';
-  success = '';
+export class TaxRateIrrf implements OnInit {
+  readonly brackets = signal<IrrfTaxRateBracket[]>([]);
+  readonly loading = signal(false);
+  readonly error = signal('');
+  readonly success = signal('');
 
   form;
 
@@ -33,60 +32,49 @@ export class TaxRateIrrf implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  async load(): Promise<void> {
+    this.loading.set(true);
+    this.error.set('');
+    try {
+      const items = await firstValueFrom(
+        this.service.list(this.form.value.competenceStart || undefined),
+      );
+      this.brackets.set(items);
+    } catch {
+      this.error.set('Nao foi possivel carregar a tabela de IRRF.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
-  load(): void {
-    this.loading = true;
-    this.error = '';
-    this.service
-      .list(this.form.value.competenceStart || undefined)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (items) => {
-          this.brackets = items;
-          this.loading = false;
-        },
-        error: () => {
-          this.error = 'Nao foi possivel carregar a tabela de IRRF.';
-          this.loading = false;
-        },
-      });
-  }
-
-  importCsv(): void {
+  async importCsv(): Promise<void> {
     const parsed = this.parseCsv(String(this.form.value.csv ?? ''));
     if (parsed.length !== 5) {
-      this.error = 'Informe cinco faixas no CSV.';
+      this.error.set('Informe cinco faixas no CSV.');
       return;
     }
-    this.loading = true;
-    this.error = '';
-    this.success = '';
-    this.service
-      .importTable({
-        competenceStart: String(this.form.value.competenceStart),
-        competenceEnd: this.form.value.competenceEnd || null,
-        referenceYear: String(this.form.value.referenceYear),
-        brackets: parsed,
-      })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (items) => {
-          this.brackets = items;
-          this.success = 'Tabela IRRF atualizada.';
-          this.loading = false;
-        },
-        error: () => {
-          this.error = 'CSV invalido ou faixas sem continuidade.';
-          this.loading = false;
-        },
-      });
+    this.loading.set(true);
+    this.error.set('');
+    this.success.set('');
+    try {
+      const items = await firstValueFrom(
+        this.service.importTable({
+          competenceStart: String(this.form.value.competenceStart),
+          competenceEnd: this.form.value.competenceEnd || null,
+          referenceYear: String(this.form.value.referenceYear),
+          brackets: parsed,
+        }),
+      );
+      this.brackets.set(items);
+      this.success.set('Tabela IRRF atualizada.');
+    } catch {
+      this.error.set('CSV invalido ou faixas sem continuidade.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   private parseCsv(csv: string): IrrfTaxRateImport['brackets'] {

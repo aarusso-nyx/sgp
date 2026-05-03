@@ -1,8 +1,8 @@
 <section class="ponto-rep" aria-labelledby="ponto-rep-title">
   <header class="ponto-rep__header">
     <div>
-      <p>Ponto eletronico</p>
-      <h1 id="ponto-rep-title">REP</h1>
+      <p i18n>Ponto eletronico</p>
+      <h1 id="ponto-rep-title" i18n>REP</h1>
     </div>
   </header>
 
@@ -10,45 +10,45 @@
   <p class="ponto-rep__error" *ngIf="error" role="alert">{{ error }}</p>
 
   <form [formGroup]="deviceForm" (ngSubmit)="createDevice()" class="ponto-rep__panel">
-    <h2>Equipamento</h2>
+    <h2 i18n>Equipamento</h2>
     <div class="ponto-rep__fields">
       <label>
-        <span>Tipo</span>
+        <span i18n>Tipo</span>
         <select formControlName="kind">
-          <option value="REP_C">REP-C</option>
-          <option value="REP_A">REP-A</option>
-          <option value="REP_P">REP-P</option>
+          <option value="REP_C" i18n>REP-C</option>
+          <option value="REP_A" i18n>REP-A</option>
+          <option value="REP_P" i18n>REP-P</option>
         </select>
       </label>
       <label>
-        <span>Numero de fabricacao</span>
+        <span i18n>Numero de fabricacao</span>
         <input formControlName="serialNumber" />
       </label>
       <label>
-        <span>CNPJ/CPF empregador</span>
+        <span i18n>CNPJ/CPF empregador</span>
         <input formControlName="employerTaxId" />
       </label>
       <label>
-        <span>Fabricante</span>
+        <span i18n>Fabricante</span>
         <input formControlName="manufacturer" />
       </label>
       <label>
-        <span>Modelo</span>
+        <span i18n>Modelo</span>
         <input formControlName="model" />
       </label>
       <label>
-        <span>Hash do programa</span>
+        <span i18n>Hash do programa</span>
         <input formControlName="programHash" />
       </label>
     </div>
-    <button type="submit" [disabled]="saving">Cadastrar</button>
+    <button type="submit" [disabled]="saving" i18n>Cadastrar</button>
   </form>
 
   <form [formGroup]="batchForm" (ngSubmit)="uploadBatch()" class="ponto-rep__panel">
-    <h2>Ingestao AFDT</h2>
+    <h2 i18n>Ingestao AFDT</h2>
     <div class="ponto-rep__fields">
       <label>
-        <span>Equipamento</span>
+        <span i18n>Equipamento</span>
         <select formControlName="repDeviceId">
           <option *ngFor="let device of devices" [value]="device.repDeviceId">
             {{ device.kind }} - {{ device.serialNumber || device.repDeviceId }}
@@ -56,27 +56,27 @@
         </select>
       </label>
       <label>
-        <span>Arquivo</span>
+        <span i18n>Arquivo</span>
         <input formControlName="fileName" />
       </label>
     </div>
     <label class="ponto-rep__textarea">
-      <span>Conteudo</span>
+      <span i18n>Conteudo</span>
       <textarea formControlName="content" rows="8"></textarea>
     </label>
-    <button type="submit" [disabled]="saving">Processar lote</button>
+    <button type="submit" [disabled]="saving" i18n>Processar lote</button>
   </form>
 
   <section class="ponto-rep__panel">
-    <h2>Equipamentos cadastrados</h2>
-    <p *ngIf="loading">Carregando...</p>
-    <table aria-label="Equipamentos REP">
+    <h2 i18n>Equipamentos cadastrados</h2>
+    <p *ngIf="loading" i18n>Carregando...</p>
+    <table aria-label="Equipamentos REP" i18n-aria-label>
       <thead>
         <tr>
-          <th>Tipo</th>
-          <th>Identificacao</th>
-          <th>Empregador</th>
-          <th>Status</th>
+          <th i18n>Tipo</th>
+          <th i18n>Identificacao</th>
+          <th i18n>Empregador</th>
+          <th i18n>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -91,15 +91,15 @@
   </section>
 
   <section class="ponto-rep__panel">
-    <h2>Lotes</h2>
-    <table aria-label="Lotes REP">
+    <h2 i18n>Lotes</h2>
+    <table aria-label="Lotes REP" i18n-aria-label>
       <thead>
         <tr>
-          <th>Arquivo</th>
-          <th>Status</th>
-          <th>Criadas</th>
-          <th>Duplicadas</th>
-          <th>Original</th>
+          <th i18n>Arquivo</th>
+          <th i18n>Status</th>
+          <th i18n>Criadas</th>
+          <th i18n>Duplicadas</th>
+          <th i18n>Original</th>
         </tr>
       </thead>
       <tbody>
@@ -108,7 +108,7 @@
           <td>{{ batch.status }}</td>
           <td>{{ batch.createdTimeRecords }}</td>
           <td>{{ batch.duplicateLines }}</td>
-          <td><a [href]="originalUrl(batch.batchId)">Baixar</a></td>
+          <td><a [href]="originalUrl(batch.batchId)" i18n>Baixar</a></td>
         </tr>
       </tbody>
     </table>

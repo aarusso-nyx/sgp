@@ -1,20 +1,21 @@
 <section class="funcionarios" aria-labelledby="funcionarios-title">
   <header class="funcionarios__header">
     <div>
-      <p>Recursos Humanos</p>
-      <h1 id="funcionarios-title">Cadastro do servidor</h1>
+      <p i18n>Recursos Humanos</p>
+      <h1 id="funcionarios-title" i18n>Cadastro do servidor</h1>
     </div>
     <label>
-      <span>Filtro</span>
+      <span i18n>Filtro</span>
       <input
         type="search"
         [value]="search"
         (input)="search = $any($event.target).value"
         (keyup.enter)="load()"
         placeholder="Matricula, nome, CPF ou situacao"
+        i18n-placeholder
       />
     </label>
-    <button type="button" mat-stroked-button (click)="load()">Pesquisar</button>
+    <button type="button" mat-stroked-button (click)="load()" i18n>Pesquisar</button>
   </header>
 
   <p class="funcionarios__message" *ngIf="message" role="status">{{ message }}</p>
@@ -22,15 +23,15 @@
 
   <div class="funcionarios__layout">
     <section class="funcionarios__panel">
-      <h2>Servidores</h2>
-      <p *ngIf="loading">Carregando...</p>
-      <table aria-label="Servidores admitidos">
+      <h2 i18n>Servidores</h2>
+      <p *ngIf="loading" i18n>Carregando...</p>
+      <table aria-label="Servidores admitidos" i18n-aria-label>
         <thead>
           <tr>
-            <th>Matricula</th>
-            <th>Nome</th>
-            <th>Situacao</th>
-            <th>Lotacao</th>
+            <th i18n>Matricula</th>
+            <th i18n>Nome</th>
+            <th i18n>Situacao</th>
+            <th i18n>Lotacao</th>
           </tr>
         </thead>
         <tbody>
@@ -49,114 +50,120 @@
     </section>
 
     <section class="funcionarios__panel" *ngIf="selected">
-      <h2>Dossie</h2>
+      <h2 i18n>Dossie</h2>
       <dl>
-        <dt>Matricula</dt>
+        <dt i18n>Matricula</dt>
         <dd>{{ selected.registration }}</dd>
-        <dt>Nome</dt>
+        <dt i18n>Nome</dt>
         <dd>{{ selected.name }}</dd>
-        <dt>CPF</dt>
+        <dt i18n>CPF</dt>
         <dd>{{ selected.cpf || '-' }}</dd>
-        <dt>E-mail</dt>
+        <dt i18n>E-mail</dt>
         <dd>{{ selected.email || '-' }}</dd>
-        <dt>Origem</dt>
+        <dt i18n>Origem</dt>
         <dd>
-          <span class="funcionarios__badge" *ngIf="selected.recruitmentOrigin; else noOrigin">
+          <span class="funcionarios__badge" *ngIf="selected.recruitmentOrigin; else noOrigin" i18n>
             Origem: {{ selected.recruitmentOrigin }}
           </span>
           <ng-template #noOrigin>-</ng-template>
         </dd>
-        <dt>Abono permanencia</dt>
+        <dt i18n>Abono permanencia</dt>
         <dd>{{ selected.abonoPermanenciaAtivo ? 'Ativo' : 'Inativo' }}</dd>
       </dl>
       <a mat-stroked-button [routerLink]="['/rh/funcionarios', selected.id, 'abono-permanencia']">
         <mat-icon>paid</mat-icon>
-        Abono permanencia
+        <ng-container i18n>Abono permanencia</ng-container>
       </a>
     </section>
   </div>
 
   <div class="funcionarios__forms">
     <form [formGroup]="admissionForm" (ngSubmit)="admit()" class="funcionarios__panel">
-      <h2>Admissao</h2>
+      <h2 i18n>Admissao</h2>
       <div class="funcionarios__fields">
         <label>
-          <span>Matricula</span>
+          <span i18n>Matricula</span>
           <input formControlName="registration" />
         </label>
         <label>
-          <span>Nome</span>
+          <span i18n>Nome</span>
           <input formControlName="name" />
         </label>
         <label>
-          <span>CPF</span>
+          <span i18n>CPF</span>
           <input formControlName="cpf" />
         </label>
         <label>
-          <span>E-mail</span>
+          <span i18n>E-mail</span>
           <input formControlName="email" />
         </label>
         <label>
-          <span>Data de admissao</span>
+          <span i18n>Data de admissao</span>
           <input type="date" formControlName="hiredOn" />
         </label>
         <label>
-          <span>Nomeacao</span>
+          <span i18n>Nomeacao</span>
           <input type="date" formControlName="appointedOn" />
         </label>
         <label>
-          <span>Posse</span>
+          <span i18n>Posse</span>
           <input type="date" formControlName="possessionOn" />
         </label>
         <label>
-          <span>Exercicio</span>
+          <span i18n>Exercicio</span>
           <input type="date" formControlName="exerciseOn" />
         </label>
         <label>
-          <span>PIS/PASEP</span>
+          <span i18n>PIS/PASEP</span>
           <input formControlName="pisPasep" />
         </label>
         <label>
-          <span>RG</span>
+          <span i18n>RG</span>
           <input formControlName="rg" />
         </label>
         <label>
-          <span>Mae</span>
+          <span i18n>Mae</span>
           <input formControlName="motherName" />
         </label>
         <label>
-          <span>Pai</span>
+          <span i18n>Pai</span>
           <input formControlName="fatherName" />
         </label>
         <label class="funcionarios__wide">
-          <span>Fundamento legal</span>
+          <span i18n>Fundamento legal</span>
           <textarea rows="3" formControlName="legalBasis"></textarea>
         </label>
       </div>
-      <button type="submit" mat-flat-button color="primary" [disabled]="saving">Admitir</button>
+      <button type="submit" mat-flat-button color="primary" [disabled]="saving" i18n>
+        Admitir
+      </button>
     </form>
 
     <form [formGroup]="terminationForm" (ngSubmit)="terminate()" class="funcionarios__panel">
-      <h2>Desligamento</h2>
+      <h2 i18n>Desligamento</h2>
       <div class="funcionarios__fields">
         <label>
-          <span>Servidor</span>
+          <span i18n>Servidor</span>
           <input formControlName="employeeId" />
         </label>
         <label>
-          <span>Data</span>
+          <span i18n>Data</span>
           <input type="date" formControlName="terminationDate" />
         </label>
         <label>
-          <span>Motivo</span>
-          <input formControlName="terminationReasonId" placeholder="UUID do motivo" />
+          <span i18n>Motivo</span>
+          <input
+            formControlName="terminationReasonId"
+            placeholder="UUID do motivo"
+            i18n-placeholder
+          />
         </label>
         <label class="funcionarios__wide">
-          <span>Justificativa</span>
+          <span i18n>Justificativa</span>
           <textarea rows="3" formControlName="justification"></textarea>
         </label>
       </div>
-      <button type="submit" mat-flat-button color="warn" [disabled]="saving">Desligar</button>
+      <button type="submit" mat-flat-button color="warn" [disabled]="saving" i18n>Desligar</button>
     </form>
   </div>
 </section>

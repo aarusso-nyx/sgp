@@ -170,7 +170,7 @@ export class DocumentsService {
     const documentRows = await this.databaseService.query<IdRow>(
       'SELECT gen_random_uuid()::text AS id',
     );
-    const documentId = documentRows[0].id;
+    const documentId = documentRows[0]!.id;
     const storageKey = this.buildStorageKey(
       this.requireTenantId(request),
       documentId,
@@ -236,7 +236,7 @@ export class DocumentsService {
     );
 
     return {
-      uploadSessionId: rows[0].id,
+      uploadSessionId: rows[0]!.id,
       documentId,
       uploadUrl: presigned.url,
       bucket: this.storageService.bucket ?? '',
@@ -360,7 +360,7 @@ export class DocumentsService {
       [uploadSessionId, session.document_id],
     );
 
-    const row = rows[0];
+    const row = rows[0]!;
     return {
       id: row.id,
       ownerType: row.owner_type ?? '',

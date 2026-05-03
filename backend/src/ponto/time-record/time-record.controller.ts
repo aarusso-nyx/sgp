@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { TimeRecordHashService } from './time-record-hash.service';
 export class TimeRecordController {
   constructor(private readonly timeRecordHashService: TimeRecordHashService) {}
 
+  @ApiOperation({ summary: 'GET :employeeId' })
   @Get(':employeeId')
   @RequirePermission('ponto.timerecord.read')
   @ApiOkResponse({ description: 'Paginated employee time records.' })
@@ -27,6 +29,7 @@ export class TimeRecordController {
     return this.timeRecordHashService.list(employeeId, Number(limit ?? 50));
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('ponto.timerecord.write')
   @AuditMutation({

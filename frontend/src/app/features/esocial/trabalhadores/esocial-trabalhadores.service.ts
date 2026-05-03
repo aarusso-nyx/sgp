@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface ESocialWorkerStatus {
   employeeId: string;
@@ -41,39 +41,39 @@ export interface ESocialWorkerEventQueue {
 
 @Injectable({ providedIn: 'root' })
 export class ESocialTrabalhadoresService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   status(): Observable<ESocialWorkerStatus[]> {
-    return this.http.get<ESocialWorkerStatus[]>('/api/v1/esocial/trabalhadores');
+    return this.api.get<ESocialWorkerStatus[]>('/api/v1/esocial/trabalhadores');
   }
 
   reemitS2200(employeeId: string): Observable<ESocialWorkerDispatchResult> {
-    return this.http.post<ESocialWorkerDispatchResult>(
+    return this.api.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/trabalhadores/${employeeId}/s2200/emitir`,
       { force: true },
     );
   }
 
   emitS2205(employeeId: string): Observable<ESocialWorkerDispatchResult> {
-    return this.http.post<ESocialWorkerDispatchResult>(
+    return this.api.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/trabalhadores/${employeeId}/s2205/emitir`,
       {},
     );
   }
 
   eventQueue(): Observable<ESocialWorkerEventQueue[]> {
-    return this.http.get<ESocialWorkerEventQueue[]>('/api/v1/esocial/eventos-trabalhador');
+    return this.api.get<ESocialWorkerEventQueue[]>('/api/v1/esocial/eventos-trabalhador');
   }
 
   emitS2210(catEmissionId: string): Observable<ESocialWorkerDispatchResult> {
-    return this.http.post<ESocialWorkerDispatchResult>(
+    return this.api.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/eventos-trabalhador/s2210/${catEmissionId}/emitir`,
       {},
     );
   }
 
   emitS2230(pendingId: string): Observable<ESocialWorkerDispatchResult> {
-    return this.http.post<ESocialWorkerDispatchResult>(
+    return this.api.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/eventos-trabalhador/s2230/${pendingId}/emitir`,
       {},
     );
@@ -83,21 +83,21 @@ export class ESocialTrabalhadoresService {
     environmentalExposureId: string,
     triggerEvent: 'START' | 'END' | 'CHANGE',
   ): Observable<ESocialWorkerDispatchResult> {
-    return this.http.post<ESocialWorkerDispatchResult>(
+    return this.api.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/eventos-trabalhador/s2240/${environmentalExposureId}/emitir`,
       { triggerEvent },
     );
   }
 
   retryS2220(asoRecordId: string): Observable<ESocialWorkerDispatchResult> {
-    return this.http.post<ESocialWorkerDispatchResult>(
+    return this.api.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/eventos-trabalhador/s2220/${asoRecordId}/retry`,
       {},
     );
   }
 
   emitS2299(pendingId: string): Observable<ESocialWorkerDispatchResult> {
-    return this.http.post<ESocialWorkerDispatchResult>(
+    return this.api.post<ESocialWorkerDispatchResult>(
       `/api/v1/esocial/eventos-trabalhador/s2299/${pendingId}/emitir`,
       {},
     );

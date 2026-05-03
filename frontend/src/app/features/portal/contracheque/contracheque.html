@@ -1,7 +1,7 @@
 <section class="paystub">
   <header>
-    <p>Portal do servidor</p>
-    <h1>Contracheques</h1>
+    <p i18n>Portal do servidor</p>
+    <h1 i18n>Contracheques</h1>
   </header>
 
   <p class="paystub__error" *ngIf="error" role="alert">{{ error }}</p>
@@ -10,10 +10,10 @@
     <li *ngFor="let item of payslips">
       <span>{{ item.competence | date: 'yyyy-MM' }}</span>
       <strong>{{ item.fileHash }}</strong>
-      <button type="button" (click)="download(item)">Baixar PDF</button>
+      <button type="button" (click)="download(item)" i18n>Baixar PDF</button>
     </li>
     <li *ngIf="payslips.length === 0">
-      <span>Nenhum contracheque disponivel.</span>
+      <span i18n>Nenhum contracheque disponivel.</span>
     </li>
   </ol>
 </section>

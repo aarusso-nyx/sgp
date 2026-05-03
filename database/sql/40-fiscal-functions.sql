@@ -229,7 +229,11 @@ BEGIN
     after_json ->> 'id',
     before_json ->> 'id',
     after_json ->> 'declaracao_id',
-    before_json ->> 'declaracao_id'
+    before_json ->> 'declaracao_id',
+    after_json ->> 'event_id',
+    before_json ->> 'event_id',
+    after_json ->> 'source_event_id',
+    before_json ->> 'source_event_id'
   );
   tenant_value := COALESCE(row_after.tenant_id, row_before.tenant_id);
 

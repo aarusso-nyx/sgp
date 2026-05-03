@@ -201,7 +201,7 @@ export class SalaryHistoryService {
         input.leiReferencia,
       ],
     );
-    const inserted = result.rows[0];
+    const inserted = result.rows[0]!;
 
     await client.query(
       `

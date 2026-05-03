@@ -10,6 +10,7 @@ import {
   mockTransactionDatabase,
   queryResult,
 } from '../../../../tests/backend/support/mock-db.cjs';
+import { LGPD_DATA_FLOWS } from '../../common/lgpd/legal-basis.registry';
 import { YearlyIncomeRenderService } from './yearly-income-render.service';
 
 const actor = {
@@ -40,6 +41,7 @@ const aggregate = {
   irrf_total: '4000.00',
   dependents_count: '1',
   s1210_total: '60000.00',
+  s1210_irrf_total: '4000.00',
   recomputed_at: new Date('2026-02-28T00:00:00.000Z'),
 };
 
@@ -112,6 +114,30 @@ describe('YearlyIncomeRenderService', () => {
       dependentsCount: 1,
       recomputedAt: '2026-02-28T00:00:00.000Z',
     });
+  });
+
+  it('checks the LGPD legal-basis rule before reading yearly income PII', async () => {
+    const client = {
+      query: jest.fn().mockResolvedValueOnce(queryResult([aggregate])),
+    };
+    const legalBasis = {
+      assertPiiReadAllowed: jest.fn().mockResolvedValue({}),
+    };
+    const service = new YearlyIncomeRenderService(
+      { configured: true } as never,
+      {} as never,
+      legalBasis as never,
+    );
+
+    await expect(
+      (
+        service as never as { loadAggregateWithClient: Function }
+      ).loadAggregateWithClient(client, 2025, 'employee-1'),
+    ).resolves.toEqual(aggregate);
+    expect(legalBasis.assertPiiReadAllowed).toHaveBeenCalledWith(
+      LGPD_DATA_FLOWS.FISCAL_YEARLY_INCOME_PDF,
+    );
+    expect(client.query).toHaveBeenCalledTimes(1);
   });
 
   it('rejects missing aggregate rows and invalid PDF/A output', async () => {

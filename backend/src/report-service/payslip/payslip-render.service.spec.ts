@@ -10,6 +10,7 @@ const {
   mockTransactionDatabase,
   queryResult,
 } = require('../../../../tests/backend/support/mock-db.cjs');
+import { LGPD_DATA_FLOWS } from '../../common/lgpd/legal-basis.registry';
 import { PayslipRenderService } from './payslip-render.service';
 
 const actor = {
@@ -142,6 +143,28 @@ describe('PayslipRenderService', () => {
     });
   });
 
+  it('checks the LGPD legal-basis rule before reading payslip PII', async () => {
+    const query = jest.fn().mockResolvedValueOnce([sourceRow]);
+    const legalBasis = {
+      assertPiiReadAllowed: jest.fn().mockResolvedValue({}),
+    };
+    const service = new PayslipRenderService(
+      { configured: true, query } as never,
+      {} as never,
+      legalBasis as never,
+    );
+
+    await expect(
+      service.loadPayslipDocument('run-1', 'employee-1'),
+    ).resolves.toMatchObject({
+      employee: { id: 'employee-1' },
+    });
+    expect(legalBasis.assertPiiReadAllowed).toHaveBeenCalledWith(
+      LGPD_DATA_FLOWS.PAYROLL_PAYSLIP_PDF,
+    );
+    expect(query).toHaveBeenCalledTimes(1);
+  });
+
   it('fails when source data or PDF/A validation is unavailable', async () => {
     const client = { query: jest.fn().mockResolvedValueOnce(queryResult([])) };
     const service = new PayslipRenderService(
@@ -186,8 +209,9 @@ describe('PayslipRenderService', () => {
         { id: 'file-1' },
       ]),
     };
+    const signedPdf = Buffer.from('%PDF-test\n%%SGP-PADES-SIGNATURE:test\n');
     const pdf = {
-      buildPayslip: jest.fn().mockResolvedValue(Buffer.from('%PDF-test')),
+      buildPayslip: jest.fn().mockResolvedValue(signedPdf),
       validatePdfA1b: jest.fn().mockReturnValue({ valid: true, reasons: [] }),
     };
     const service = new PayslipRenderService(
@@ -204,8 +228,13 @@ describe('PayslipRenderService', () => {
       employeeId: 'employee-1',
       payrollRunId: 'run-1',
       competence: '2026-05-01',
+      fileHash:
+        'cc592f3cac31a8ce28e43ae7eeaf9b6ecb7fb2f092f2fac0bac566ad16c0b72f',
     });
     expect(client.query).toHaveBeenCalledTimes(5);
+    expect(client.query.mock.calls[4][0]).toContain(
+      '\'ICP_BRASIL_A1\'::public."SignatureKind"',
+    );
   });
 
   it('marks a batch as failed when one employee render fails', async () => {

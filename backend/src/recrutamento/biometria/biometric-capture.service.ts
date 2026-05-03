@@ -69,7 +69,7 @@ export class BiometricCaptureService {
           input.retentionUntil,
         ],
       );
-      const row = rows.rows[0];
+      const row = rows.rows[0]!;
       return {
         id: row.id,
         kind: input.kind,

@@ -8,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -29,6 +30,7 @@ import { ShiftPatternService } from './shift-pattern.service';
 export class ShiftPatternController {
   constructor(private readonly shiftPatternService: ShiftPatternService) {}
 
+  @ApiOperation({ summary: 'GET padroes' })
   @Get('padroes')
   @RequirePermission('ponto.roster.read')
   @ApiOkResponse({ description: 'Shift patterns with cycle preview.' })
@@ -36,6 +38,7 @@ export class ShiftPatternController {
     return this.shiftPatternService.list();
   }
 
+  @ApiOperation({ summary: 'POST padroes' })
   @Post('padroes')
   @RequirePermission('ponto.roster.write')
   @AuditMutation({
@@ -48,6 +51,7 @@ export class ShiftPatternController {
     return this.shiftPatternService.create(body);
   }
 
+  @ApiOperation({ summary: 'GET atribuicoes' })
   @Get('atribuicoes')
   @RequirePermission('ponto.roster.read')
   @ApiOkResponse({ description: 'Shift assignments.' })
@@ -55,6 +59,7 @@ export class ShiftPatternController {
     return this.shiftPatternService.listAssignments(employeeId);
   }
 
+  @ApiOperation({ summary: 'POST atribuicoes' })
   @Post('atribuicoes')
   @RequirePermission('ponto.roster.write')
   @AuditMutation({
@@ -67,6 +72,7 @@ export class ShiftPatternController {
     return this.shiftPatternService.assign(body);
   }
 
+  @ApiOperation({ summary: 'PATCH atribuicoes/:shiftAssignmentId' })
   @Patch('atribuicoes/:shiftAssignmentId')
   @RequirePermission('ponto.roster.write')
   @AuditMutation({

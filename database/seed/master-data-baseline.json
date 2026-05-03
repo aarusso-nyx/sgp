@@ -23,6 +23,11 @@
       { "code": "ESTATUTARIO", "name": "Estatutário" },
       { "code": "ESTAGIO", "name": "Estágio" }
     ],
+    "actClassifications": [
+      { "code": "NOMEACAO", "description": "Nomeação" },
+      { "code": "POSSE", "description": "Posse" },
+      { "code": "EXONERACAO", "description": "Exoneração" }
+    ],
     "payrollTypes": [
       { "code": "NORMAL", "description": "Folha normal" },
       { "code": "DECIMO_TERCEIRO", "description": "13º salário" },

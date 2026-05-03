@@ -73,7 +73,7 @@ export class ProgramRevisionService {
         input.sha256 ?? '',
       ],
     );
-    return this.toSummary(rows.rows[0]);
+    return this.toSummary(rows.rows[0]!);
   }
 
   toSummary(row: RevisionRow): ProgramRevisionSummary {

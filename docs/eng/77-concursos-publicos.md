@@ -6,7 +6,7 @@ O modulo `recrutamento/concurso` administra a abertura de concursos publicos do 
 
 ## Modelo operacional
 
-Cada concurso nasce em `DRAFT` com codigo publico, nome, validade e criador. As vagas sao registradas por cargo (`hr.job_position`) com total de vagas, reserva PCD, reserva racial, reserva indigena/quilombola quando aplicavel, requisitos em JSON e salario-base em `numeric(14,2)`.
+Cada concurso nasce em `DRAFT` com codigo publico, nome, validade e criador. As vagas sao registradas por cargo (`hr.job_position`) e podem referenciar a definicao de organico vigente (`hr.organic_definition`) para travar a lotacao/cargo autorizados e o quadro de vagas consumido pelo certame. Cada vaga guarda total de vagas, reserva PCD, reserva racial, reserva indigena/quilombola quando aplicavel, requisitos em JSON e salario-base em `numeric(14,2)`.
 
 O edital e versionado em `recrutamento.edital`. Cada versao guarda referencia documental, ato administrativo, data do ato e prazo para recursos de prova quando houver etapa avaliativa. A publicacao exige uma versao existente do edital, ato administrativo, data do ato e URL publica. Ao publicar, o edital recebe `published_at`, `public_url` e o concurso passa para `PUBLISHED`; concursos publicados ficam disponiveis sem autenticacao em `/api/v1/publico/concursos/:slug`.
 
@@ -30,7 +30,7 @@ O ranking por vaga ordena por nota total ponderada decrescente, aplica prioridad
 
 ## Nomeacao e convocacao
 
-A nomeacao REC-05 consome a classificacao publicada sem recalcular ranking. A funcao `recrutamento.proxima_chamada(concurso_id, vaga_id)` retorna a proxima inscricao elegivel pela ordem de chamada ja publicada, respeitando a alternancia de cotas registrada em `allocation_bucket` e ignorando candidatos ja nomeados. A API administrativa `POST /api/v1/admin/nomeacoes` cria `recrutamento.nomeacao` com ato administrativo, data de publicacao e prazo de comparecimento de 30 dias corridos; o backend rejeita nomeacao apos `recrutamento.concurso.valid_until`.
+A nomeacao REC-05 consome a classificacao publicada sem recalcular ranking. A funcao `recrutamento.proxima_chamada(concurso_id, vaga_id)` retorna a proxima inscricao elegivel pela ordem de chamada ja publicada, respeitando a alternancia de cotas registrada em `allocation_bucket` e ignorando candidatos ja nomeados. Quando a vaga possui `organic_definition_id`, o retorno administrativo de nomeacao inclui essa referencia para que posse/exercicio e controle de lotacao sigam a mesma definicao de organico usada na abertura do concurso. A API administrativa `POST /api/v1/admin/nomeacoes` cria `recrutamento.nomeacao` com ato administrativo, data de publicacao e prazo de comparecimento de 30 dias corridos; o backend rejeita nomeacao apos `recrutamento.concurso.valid_until`.
 
 Convocacoes ficam em `recrutamento.convocacao` por canal `PUBLICACAO_OFICIAL`, `EMAIL` ou `POSTAL`. A publicacao oficial e o postal exigem referencia manual de evidencia. O canal `EMAIL` registra `evidence_ref` contendo `messageId` do provedor; em ambiente local o provedor deterministico usa prefixo `email:messageId=local-...`. Desistencia manual muda a nomeacao para `DESISTENTE`. A expiracao de prazo muda `NOMEADO` ou `CONVOCADO` vencido para `EXONERADO_POR_NAO_POSSE`; a operacao e idempotente para permitir reexecucao segura pelo worker.
 

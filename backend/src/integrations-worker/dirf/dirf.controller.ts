@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  GoneException,
   Header,
   Param,
   ParseIntPipe,
@@ -10,6 +11,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -22,6 +24,12 @@ import { RequirePermission } from '../../iam/decorators/require-permission.decor
 import { DirfBuilderService } from './dirf-builder.service';
 import { GenerateDirfDto } from './dirf.dto';
 
+const DIRF_DEPRECATED_FROM_YEAR_BASE = 2025;
+
+/**
+ * @deprecated DIRF generation is retained only for year-base competences before
+ * 2025-01-01. Use EFD-Reinf R-4000 for facts from 2025-01-01 onward.
+ */
 @ApiTags('fiscal-dirf')
 @ApiBearerAuth()
 @Controller('v1/admin/fiscal/dirf')
@@ -31,6 +39,7 @@ export class DirfController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('fiscal.dirf.read')
   @ApiOkResponse({ description: 'List DIRF annual files.' })
@@ -40,6 +49,7 @@ export class DirfController {
     return this.builder.list(yearBase);
   }
 
+  @ApiOperation({ summary: 'GET :id' })
   @Get(':id')
   @RequirePermission('fiscal.dirf.read')
   @ApiOkResponse({ description: 'Get a DIRF annual file with beneficiaries.' })
@@ -47,6 +57,7 @@ export class DirfController {
     return this.builder.find(id);
   }
 
+  @ApiOperation({ summary: 'GET :id/txt' })
   @Get(':id/txt')
   @Header('Content-Type', 'text/plain; charset=utf-8')
   @RequirePermission('fiscal.dirf.read')
@@ -56,6 +67,7 @@ export class DirfController {
     return result.txtContent;
   }
 
+  @ApiOperation({ summary: 'POST gerar' })
   @Post('gerar')
   @RequirePermission('fiscal.dirf.write')
   @ApiCreatedResponse({ description: 'Generate annual DIRF TXT.' })
@@ -63,6 +75,12 @@ export class DirfController {
     @Req() request: RequestWithContext,
     @Body() body: GenerateDirfDto,
   ) {
+    if (body.yearBase >= DIRF_DEPRECATED_FROM_YEAR_BASE) {
+      throw new GoneException(
+        'DIRF generation is deprecated for competences from 2025-01-01 onward',
+      );
+    }
+
     const result = await this.builder.generate(body);
     await this.auditService.auditMutation(request, 'GENERATE', 'fiscal.dirf', {
       resourceId: result.id,

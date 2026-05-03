@@ -1,48 +1,48 @@
 <section class="portal-espelho" aria-labelledby="portal-espelho-title">
   <header class="portal-espelho__header">
-    <h1 id="portal-espelho-title">Espelho de ponto</h1>
+    <h1 id="portal-espelho-title" i18n>Espelho de ponto</h1>
   </header>
 
   <p class="portal-espelho__error" *ngIf="error" role="alert">{{ error }}</p>
 
   <form [formGroup]="form" (ngSubmit)="load()" class="portal-espelho__panel">
     <label>
-      <span>Folha</span>
+      <span i18n>Folha</span>
       <input formControlName="payrollRunId" />
     </label>
     <label>
-      <span>Periodo</span>
+      <span i18n>Periodo</span>
       <input formControlName="timesheetPeriodId" />
     </label>
-    <button type="submit" [disabled]="loading">Atualizar</button>
+    <button type="submit" [disabled]="loading" i18n>Atualizar</button>
   </form>
 
   <section class="portal-espelho__panel" *ngIf="result">
-    <h2>{{ result.aggregate.periodStart }} a {{ result.aggregate.periodEnd }}</h2>
+    <h2 i18n>{{ result.aggregate.periodStart }} a {{ result.aggregate.periodEnd }}</h2>
     <dl class="portal-espelho__metrics">
       <div>
-        <dt>Trabalhadas</dt>
-        <dd>{{ result.aggregate.workedMinutes }}min</dd>
+        <dt i18n>Trabalhadas</dt>
+        <dd i18n>{{ result.aggregate.workedMinutes }}min</dd>
       </div>
       <div>
-        <dt>Esperadas</dt>
-        <dd>{{ result.aggregate.expectedMinutes }}min</dd>
+        <dt i18n>Esperadas</dt>
+        <dd i18n>{{ result.aggregate.expectedMinutes }}min</dd>
       </div>
       <div>
-        <dt>HE 50%</dt>
-        <dd>{{ result.aggregate.overtime50Minutes }}min</dd>
+        <dt i18n>HE 50%</dt>
+        <dd i18n>{{ result.aggregate.overtime50Minutes }}min</dd>
       </div>
       <div>
-        <dt>HE 100%</dt>
-        <dd>{{ result.aggregate.overtime100Minutes }}min</dd>
+        <dt i18n>HE 100%</dt>
+        <dd i18n>{{ result.aggregate.overtime100Minutes }}min</dd>
       </div>
       <div>
-        <dt>Adicional noturno</dt>
-        <dd>{{ result.aggregate.nightMinutes }}min</dd>
+        <dt i18n>Adicional noturno</dt>
+        <dd i18n>{{ result.aggregate.nightMinutes }}min</dd>
       </div>
       <div>
-        <dt>Absenteismo</dt>
-        <dd>{{ result.aggregate.absenceUnpaidMinutes }}min</dd>
+        <dt i18n>Absenteismo</dt>
+        <dd i18n>{{ result.aggregate.absenceUnpaidMinutes }}min</dd>
       </div>
     </dl>
   </section>

@@ -8,6 +8,7 @@ import { DctfwebController } from './dctfweb.controller';
 import { DctfwebReceiptService } from './dctfweb-receipt.service';
 import { DctfwebSignerService } from './dctfweb-signer.service';
 import { DctfwebTransmitterService } from './dctfweb-transmitter.service';
+import { MitInclusionService } from './mit-inclusion.service';
 
 @Module({
   imports: [AuditModule, DatabaseModule, ESocialWorkerModule],
@@ -17,12 +18,14 @@ import { DctfwebTransmitterService } from './dctfweb-transmitter.service';
     DctfwebReceiptService,
     DctfwebSignerService,
     DctfwebTransmitterService,
+    MitInclusionService,
   ],
   exports: [
     DctfwebBuilderService,
     DctfwebReceiptService,
     DctfwebSignerService,
     DctfwebTransmitterService,
+    MitInclusionService,
   ],
 })
 export class DctfwebModule {}

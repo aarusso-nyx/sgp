@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface ESocialCertificate {
   certificateId: string;
@@ -24,21 +24,21 @@ export interface ESocialCertificatePayload {
 
 @Injectable({ providedIn: 'root' })
 export class ESocialCertificatesService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   list(): Observable<ESocialCertificate[]> {
-    return this.http.get<ESocialCertificate[]>('/api/v1/esocial/certificados');
+    return this.api.get<ESocialCertificate[]>('/api/v1/esocial/certificados');
   }
 
   upload(payload: ESocialCertificatePayload): Observable<ESocialCertificate> {
-    return this.http.post<ESocialCertificate>('/api/v1/esocial/certificados', payload);
+    return this.api.post<ESocialCertificate>('/api/v1/esocial/certificados', payload);
   }
 
   rotate(
     certificateId: string,
     payload: ESocialCertificatePayload,
   ): Observable<ESocialCertificate> {
-    return this.http.put<ESocialCertificate>(
+    return this.api.put<ESocialCertificate>(
       `/api/v1/esocial/certificados/${certificateId}/rotacao`,
       payload,
     );

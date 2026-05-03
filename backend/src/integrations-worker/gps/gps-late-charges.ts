@@ -47,7 +47,7 @@ export function calculateGpsLateCharges(
 }
 
 function gpsDueDate(competence: string): Date {
-  const [year, month] = competence.slice(0, 10).split('-').map(Number);
+  const [year = 0, month = 1] = competence.slice(0, 10).split('-').map(Number);
   return new Date(Date.UTC(year, month, 20));
 }
 

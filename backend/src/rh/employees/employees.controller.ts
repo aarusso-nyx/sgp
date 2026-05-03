@@ -1,10 +1,23 @@
-import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
 import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Param,
+  Post,
+  PreconditionFailedException,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
+import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import type { Response } from 'express';
 
 import { AuditService } from '../../audit/audit.service';
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
@@ -35,6 +48,7 @@ export class EmployeesController {
     private readonly serviceTimeService: ServiceTimeService,
   ) {}
 
+  @ApiOperation({ summary: 'GET funcionarios' })
   @Get('funcionarios')
   @RequirePermission('rh.employee.read')
   @ApiOkResponse({ description: 'Paged employee registry.' })
@@ -42,6 +56,7 @@ export class EmployeesController {
     return this.employeesService.list(query);
   }
 
+  @ApiOperation({ summary: 'GET funcionarios/cadastral-changes' })
   @Get('funcionarios/cadastral-changes')
   @RequirePermission('rh.cadastral_change.approve')
   @ApiOkResponse({ description: 'Pending employee cadastral change requests.' })
@@ -49,6 +64,7 @@ export class EmployeesController {
     return this.employeesService.listCadastralChanges(status);
   }
 
+  @ApiOperation({ summary: 'POST funcionarios/cadastral-changes/:id/approve' })
   @Post('funcionarios/cadastral-changes/:id/approve')
   @RequirePermission('rh.cadastral_change.approve')
   @AuditMutation({
@@ -64,6 +80,7 @@ export class EmployeesController {
     return this.employeesService.approveCadastralChange(id, body);
   }
 
+  @ApiOperation({ summary: 'POST funcionarios/cadastral-changes/:id/reject' })
   @Post('funcionarios/cadastral-changes/:id/reject')
   @RequirePermission('rh.cadastral_change.approve')
   @AuditMutation({
@@ -79,6 +96,7 @@ export class EmployeesController {
     return this.employeesService.rejectCadastralChange(id, body);
   }
 
+  @ApiOperation({ summary: 'POST funcionarios' })
   @Post('funcionarios')
   @RequirePermission('rh.employee.admit')
   @ApiCreatedResponse({ description: 'Admit an employee.' })
@@ -98,6 +116,7 @@ export class EmployeesController {
     return admitted;
   }
 
+  @ApiOperation({ summary: 'GET funcionarios/:id/dossie' })
   @Get('funcionarios/:id/dossie')
   @RequirePermission('rh.employee.read')
   @ApiOkResponse({ description: 'Employee dossier document.' })
@@ -105,6 +124,7 @@ export class EmployeesController {
     return this.employeesService.getDossier(id);
   }
 
+  @ApiOperation({ summary: 'GET funcionarios/:id/historico' })
   @Get('funcionarios/:id/historico')
   @RequirePermission('rh.history.read')
   @ApiOkResponse({ description: 'Immutable employee career timeline.' })
@@ -121,6 +141,7 @@ export class EmployeesController {
     });
   }
 
+  @ApiOperation({ summary: 'GET funcionarios/:id/tempo-servico' })
   @Get('funcionarios/:id/tempo-servico')
   @RequirePermission('rh.history.read')
   @ApiOkResponse({ description: 'Employee service-time records.' })
@@ -128,6 +149,7 @@ export class EmployeesController {
     return this.serviceTimeService.list(id);
   }
 
+  @ApiOperation({ summary: 'POST funcionarios/:id/tempo-servico' })
   @Post('funcionarios/:id/tempo-servico')
   @RequirePermission('rh.employee.write')
   @AuditMutation({
@@ -145,13 +167,20 @@ export class EmployeesController {
     return this.serviceTimeService.create(id, body);
   }
 
+  @ApiOperation({ summary: 'GET funcionarios/:id/abono-permanencia' })
   @Get('funcionarios/:id/abono-permanencia')
   @RequirePermission('rh.employee.read')
   @ApiOkResponse({ description: 'Employee permanence allowance state.' })
-  getAbonoPermanencia(@Param('id') id: string) {
-    return this.employeesService.getAbonoPermanencia(id);
+  async getAbonoPermanencia(
+    @Param('id') id: string,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const result = await this.employeesService.getAbonoPermanencia(id);
+    this.setEtag(response, result);
+    return result;
   }
 
+  @ApiOperation({ summary: 'POST funcionarios/:id/abono-permanencia' })
   @Post('funcionarios/:id/abono-permanencia')
   @RequirePermission('rh.employee.abono.write')
   @AuditMutation({
@@ -162,11 +191,17 @@ export class EmployeesController {
   @ApiOkResponse({ description: 'Update employee permanence allowance state.' })
   updateAbonoPermanencia(
     @Param('id') id: string,
+    @Headers('if-match') ifMatch: string | string[] | undefined,
     @Body() body: UpdateAbonoPermanenciaDto,
   ) {
-    return this.employeesService.updateAbonoPermanencia(id, body);
+    return this.employeesService.updateAbonoPermanencia(
+      id,
+      body,
+      this.parseIfMatch(ifMatch),
+    );
   }
 
+  @ApiOperation({ summary: 'GET pericia/prontuarios/:id/laudo/pdf' })
   @Get('pericia/prontuarios/:id/laudo/pdf')
   @RequirePermission('saude.read')
   @ApiOkResponse({ description: 'Medical report PDF metadata.' })
@@ -179,6 +214,9 @@ export class EmployeesController {
     };
   }
 
+  @ApiOperation({
+    summary: 'GET recadastramento/:recadastramento_id/comprovante',
+  })
   @Get('recadastramento/:recadastramento_id/comprovante')
   @RequirePermission('rh.employee.read')
   @ApiOkResponse({ description: 'Recadastramento receipt metadata.' })
@@ -193,6 +231,7 @@ export class EmployeesController {
     };
   }
 
+  @ApiOperation({ summary: 'POST funcionarios/:func_rescisao/desligamento' })
   @Post('funcionarios/:func_rescisao/desligamento')
   @RequirePermission('rh.employee.terminate')
   @ApiOkResponse({
@@ -216,6 +255,7 @@ export class EmployeesController {
     return terminated;
   }
 
+  @ApiOperation({ summary: 'POST funcionarios/:id/vinculos' })
   @Post('funcionarios/:id/vinculos')
   @RequirePermission('rh.employment_link.write')
   @AuditMutation({
@@ -226,8 +266,37 @@ export class EmployeesController {
   @ApiCreatedResponse({ description: 'Change employee legal regime.' })
   changeContractRegime(
     @Param('id') id: string,
+    @Headers('if-match') ifMatch: string | string[] | undefined,
     @Body() body: ChangeContractRegimeDto,
   ) {
-    return this.employeesService.changeContractRegime(id, body);
+    return this.employeesService.changeContractRegime(
+      id,
+      body,
+      this.parseIfMatch(ifMatch),
+    );
+  }
+
+  private parseIfMatch(value: string | string[] | undefined): number {
+    const header = Array.isArray(value) ? value[0] : value;
+    const trimmed = header?.trim();
+    if (!trimmed) {
+      throw new PreconditionFailedException('If-Match header is required');
+    }
+
+    const match = /^"?(?<version>\d+)"?$/.exec(trimmed);
+    if (!match?.groups?.version) {
+      throw new PreconditionFailedException(
+        'If-Match header must contain a numeric version ETag',
+      );
+    }
+    return Number(match.groups.version);
+  }
+
+  private setEtag(
+    response: Response,
+    value: Record<string, unknown> & { version?: unknown },
+  ): void {
+    if (value.version === undefined) return;
+    response.setHeader('ETag', `"${Number(value.version)}"`);
   }
 }

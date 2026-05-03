@@ -1,3 +1,21 @@
+import {
+  TEST_DATE_2025_01_01,
+  TEST_DATE_2025_12_31,
+  TEST_DATE_2026_01_01,
+  TEST_DATE_2026_01_02,
+  TEST_DATE_2026_01_05,
+  TEST_DATE_2026_01_10,
+  TEST_DATE_2026_01_20,
+  TEST_DATE_2026_01_21,
+  TEST_DATE_2026_02_01,
+  TEST_DATE_2026_02_05,
+  TEST_DATE_2026_02_10,
+  TEST_DATE_2026_03_01,
+  TEST_DATE_2026_03_05,
+  TEST_DATE_2026_04_01,
+  TEST_DATE_2026_04_05,
+  TEST_INSTANT_2026_01_01_00_00_00_000Z,
+} from './../../../../../tests/backend/helpers/date-fixtures';
 import { BadRequestException } from '@nestjs/common';
 
 import { VacationService } from './vacation.service';
@@ -26,16 +44,16 @@ describe('VacationService', () => {
               {
                 id: 'vac-1',
                 employee_id: employeeId,
-                accrual_period_start: '2025-01-01',
-                accrual_period_end: '2025-12-31',
+                accrual_period_start: TEST_DATE_2025_01_01,
+                accrual_period_end: TEST_DATE_2025_12_31,
                 installment_number: 1,
                 pecuniary_bonus_days: 10,
-                starts_on: '2026-01-02',
-                ends_on: '2026-01-21',
+                starts_on: TEST_DATE_2026_01_02,
+                ends_on: TEST_DATE_2026_01_21,
                 days: 20,
                 status: 'programado',
-                created_at: '2026-01-01T00:00:00.000Z',
-                updated_at: '2026-01-01T00:00:00.000Z',
+                created_at: TEST_INSTANT_2026_01_01_00_00_00_000Z,
+                updated_at: TEST_INSTANT_2026_01_01_00_00_00_000Z,
               },
             ],
           };
@@ -57,8 +75,8 @@ describe('VacationService', () => {
     db.query.mockResolvedValueOnce([
       {
         employee_id: employeeId,
-        accrual_period_start: '2025-01-01',
-        accrual_period_end: '2025-12-31',
+        accrual_period_start: TEST_DATE_2025_01_01,
+        accrual_period_end: TEST_DATE_2025_12_31,
         accrued_days: 30,
         used_days: 0,
         pecuniary_bonus_days: 0,
@@ -68,7 +86,10 @@ describe('VacationService', () => {
     const service = new VacationService(db as never);
 
     await expect(
-      service.getBalance(employeeId, new Date('2026-01-01T00:00:00Z')),
+      service.getBalance(
+        employeeId,
+        new Date(TEST_INSTANT_2026_01_01_00_00_00_000Z),
+      ),
     ).resolves.toEqual([
       expect.objectContaining({
         employeeId,
@@ -84,13 +105,13 @@ describe('VacationService', () => {
     await expect(
       service.schedule({
         employeeId,
-        accrualPeriodStart: '2025-01-01',
-        accrualPeriodEnd: '2025-12-31',
+        accrualPeriodStart: TEST_DATE_2025_01_01,
+        accrualPeriodEnd: TEST_DATE_2025_12_31,
         installments: [
-          { startsOn: '2026-01-01', endsOn: '2026-01-05' },
-          { startsOn: '2026-02-01', endsOn: '2026-02-05' },
-          { startsOn: '2026-03-01', endsOn: '2026-03-05' },
-          { startsOn: '2026-04-01', endsOn: '2026-04-05' },
+          { startsOn: TEST_DATE_2026_01_01, endsOn: TEST_DATE_2026_01_05 },
+          { startsOn: TEST_DATE_2026_02_01, endsOn: TEST_DATE_2026_02_05 },
+          { startsOn: TEST_DATE_2026_03_01, endsOn: TEST_DATE_2026_03_05 },
+          { startsOn: TEST_DATE_2026_04_01, endsOn: TEST_DATE_2026_04_05 },
         ],
       }),
     ).rejects.toThrow(BadRequestException);
@@ -102,10 +123,12 @@ describe('VacationService', () => {
     await expect(
       service.schedule({
         employeeId,
-        accrualPeriodStart: '2025-01-01',
-        accrualPeriodEnd: '2025-12-31',
+        accrualPeriodStart: TEST_DATE_2025_01_01,
+        accrualPeriodEnd: TEST_DATE_2025_12_31,
         pecuniaryBonusDays: 11,
-        installments: [{ startsOn: '2026-01-01', endsOn: '2026-01-20' }],
+        installments: [
+          { startsOn: TEST_DATE_2026_01_01, endsOn: TEST_DATE_2026_01_20 },
+        ],
       }),
     ).rejects.toThrow(BadRequestException);
   });
@@ -116,13 +139,39 @@ describe('VacationService', () => {
     await expect(
       service.schedule({
         employeeId,
-        accrualPeriodStart: '2025-01-01',
-        accrualPeriodEnd: '2025-12-31',
+        accrualPeriodStart: TEST_DATE_2025_01_01,
+        accrualPeriodEnd: TEST_DATE_2025_12_31,
         installments: [
-          { startsOn: '2026-01-01', endsOn: '2026-01-10' },
-          { startsOn: '2026-02-01', endsOn: '2026-02-10' },
+          { startsOn: TEST_DATE_2026_01_01, endsOn: TEST_DATE_2026_01_10 },
+          { startsOn: TEST_DATE_2026_02_01, endsOn: TEST_DATE_2026_02_10 },
         ],
       }),
     ).rejects.toThrow('at least 14 continuous days');
+  });
+
+  it('uses the business-day calendar when installment days are omitted', async () => {
+    const db = database();
+    const businessDays = {
+      countWorkingDays: jest.fn().mockResolvedValue(14),
+    };
+    const service = new VacationService(db as never, businessDays as never);
+
+    await service.schedule({
+      employeeId,
+      accrualPeriodStart: TEST_DATE_2025_01_01,
+      accrualPeriodEnd: TEST_DATE_2025_12_31,
+      installments: [
+        { startsOn: TEST_DATE_2026_01_02, endsOn: TEST_DATE_2026_01_21 },
+      ],
+    });
+
+    expect(businessDays.countWorkingDays).toHaveBeenCalledWith(
+      TEST_DATE_2026_01_02,
+      TEST_DATE_2026_01_21,
+    );
+    expect(db.client.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO hr.vacation_record'),
+      expect.arrayContaining([14]),
+    );
   });
 });

@@ -256,7 +256,7 @@ export class TsvContractService {
         reason,
       ],
     );
-    const row = result.rows[0];
+    const row = result.rows[0]!;
     return {
       id: row.id,
       tenantId: row.tenant_id,

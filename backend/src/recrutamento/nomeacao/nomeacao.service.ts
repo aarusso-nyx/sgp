@@ -20,6 +20,7 @@ interface NextCallRow extends QueryResultRow {
   tenant_id: string;
   concurso_id: string;
   vaga_id: string;
+  organic_definition_id: string | null;
   inscricao_id: string;
   call_order: number;
   allocation_bucket: string;
@@ -33,6 +34,9 @@ interface NomeacaoRow extends QueryResultRow {
   vaga_id: string;
   inscricao_id: string;
   ato_administrativo: string;
+  act_classification_id: string;
+  act_classification_code: string | null;
+  act_classification_description: string | null;
   published_at: Date | string;
   comparecimento_until: Date | string;
   status: string;
@@ -50,6 +54,12 @@ interface EmailRecipientRow extends QueryResultRow {
   email: string;
 }
 
+interface ActClassificationRow extends QueryResultRow {
+  id: string;
+  code: string;
+  description: string;
+}
+
 @Injectable()
 export class NomeacaoService {
   constructor(private readonly database: DatabaseService) {}
@@ -59,6 +69,8 @@ export class NomeacaoService {
     vagaId: string;
     count: number;
     atoAdministrativo: string;
+    actClassificationId?: string;
+    actClassificationCode?: string;
     publishedAt?: string;
   }): Promise<Record<string, unknown>> {
     this.ensureDatabase();
@@ -70,6 +82,11 @@ export class NomeacaoService {
           'Nomeacao after concurso valid_until is not allowed',
         );
       }
+      const actClassification = await this.resolveActClassification(client, {
+        tenantId: concurso.tenant_id,
+        id: input.actClassificationId,
+        code: input.actClassificationCode,
+      });
 
       const created: NomeacaoRow[] = [];
       for (let index = 0; index < input.count; index += 1) {
@@ -87,6 +104,7 @@ export class NomeacaoService {
             vaga_id,
             inscricao_id,
             ato_administrativo,
+            act_classification_id,
             published_at,
             comparecimento_until,
             status
@@ -97,8 +115,9 @@ export class NomeacaoService {
             $3::uuid,
             $4::uuid,
             $5,
-            COALESCE($6::timestamptz, now()),
-            (COALESCE($6::timestamptz, now())::date + INTERVAL '30 days')::date,
+            $6::uuid,
+            COALESCE($7::timestamptz, now()),
+            (COALESCE($7::timestamptz, now())::date + INTERVAL '30 days')::date,
             'NOMEADO'::recrutamento.nomeacao_status
           )
           RETURNING
@@ -106,8 +125,18 @@ export class NomeacaoService {
             tenant_id::text,
             concurso_id::text,
             vaga_id::text,
+            (
+              SELECT v.organic_definition_id::text
+              FROM recrutamento.vaga v
+              WHERE v.tenant_id = recrutamento.nomeacao.tenant_id
+                AND v.concurso_id = recrutamento.nomeacao.concurso_id
+                AND v.position_id = recrutamento.nomeacao.vaga_id
+            ) AS organic_definition_id,
             inscricao_id::text,
             ato_administrativo,
+            act_classification_id::text,
+            $8::text AS act_classification_code,
+            $9::text AS act_classification_description,
             published_at,
             comparecimento_until,
             status::text
@@ -118,10 +147,13 @@ export class NomeacaoService {
             next.vaga_id,
             next.inscricao_id,
             input.atoAdministrativo,
+            actClassification.id,
             input.publishedAt ?? null,
+            actClassification.code,
+            actClassification.description,
           ],
         );
-        created.push(rows.rows[0]);
+        created.push(rows.rows[0]!);
       }
 
       return { nomeacoes: created.map((row) => this.mapNomeacao(row)) };
@@ -166,8 +198,18 @@ export class NomeacaoService {
           tenant_id::text,
           concurso_id::text,
           vaga_id::text,
+          (
+            SELECT v.organic_definition_id::text
+            FROM recrutamento.vaga v
+            WHERE v.tenant_id = recrutamento.nomeacao.tenant_id
+              AND v.concurso_id = recrutamento.nomeacao.concurso_id
+              AND v.position_id = recrutamento.nomeacao.vaga_id
+          ) AS organic_definition_id,
           inscricao_id::text,
           ato_administrativo,
+          act_classification_id::text,
+          NULL::text AS act_classification_code,
+          NULL::text AS act_classification_description,
           published_at,
           comparecimento_until,
           status::text
@@ -176,7 +218,7 @@ export class NomeacaoService {
       );
       return {
         nomeacao: this.mapNomeacao(updated.rows[0] ?? nomeacao),
-        convocacao: this.mapConvocacao(convocacao.rows[0]),
+        convocacao: this.mapConvocacao(convocacao.rows[0]!),
       };
     });
   }
@@ -267,8 +309,18 @@ export class NomeacaoService {
         tenant_id::text,
         concurso_id::text,
         vaga_id::text,
+        (
+          SELECT v.organic_definition_id::text
+          FROM recrutamento.vaga v
+          WHERE v.tenant_id = recrutamento.nomeacao.tenant_id
+            AND v.concurso_id = recrutamento.nomeacao.concurso_id
+            AND v.position_id = recrutamento.nomeacao.vaga_id
+        ) AS organic_definition_id,
         inscricao_id::text,
         ato_administrativo,
+        act_classification_id::text,
+        NULL::text AS act_classification_code,
+        NULL::text AS act_classification_description,
         published_at,
         comparecimento_until,
         status::text
@@ -305,6 +357,13 @@ export class NomeacaoService {
         tenant_id::text,
         concurso_id::text,
         vaga_id::text,
+        (
+          SELECT v.organic_definition_id::text
+          FROM recrutamento.vaga v
+          WHERE v.tenant_id = recrutamento.nomeacao.tenant_id
+            AND v.concurso_id = recrutamento.nomeacao.concurso_id
+            AND v.position_id = recrutamento.nomeacao.vaga_id
+        ) AS organic_definition_id,
         inscricao_id::text,
         call_order,
         allocation_bucket,
@@ -329,6 +388,9 @@ export class NomeacaoService {
         vaga_id::text,
         inscricao_id::text,
         ato_administrativo,
+        act_classification_id::text,
+        NULL::text AS act_classification_code,
+        NULL::text AS act_classification_description,
         published_at,
         comparecimento_until,
         status::text
@@ -385,14 +447,47 @@ export class NomeacaoService {
     return reference.getTime() > valid.getTime();
   }
 
+  private async resolveActClassification(
+    client: PoolClient,
+    input: { tenantId: string; id?: string; code?: string },
+  ): Promise<ActClassificationRow> {
+    const code = input.code?.trim() || 'NOMEACAO';
+    const rows = await client.query<ActClassificationRow>(
+      `
+      SELECT id::text, code, description
+      FROM hr.act_classification
+      WHERE tenant_id = $1::uuid
+        AND status = 'ACTIVE'::"RecordStatus"
+        AND (
+          ($2::uuid IS NOT NULL AND id = $2::uuid)
+          OR ($2::uuid IS NULL AND upper(code) = upper($3))
+        )
+      ORDER BY code
+      LIMIT 1
+      `,
+      [input.tenantId, input.id ?? null, code],
+    );
+    if (!rows.rows[0]) {
+      throw new UnprocessableEntityException(
+        `Act classification not found: ${input.id ?? code}`,
+      );
+    }
+    return rows.rows[0];
+  }
+
   private mapNomeacao(row: NomeacaoRow): Record<string, unknown> {
     return {
       id: row.id,
       tenantId: row.tenant_id,
       concursoId: row.concurso_id,
       vagaId: row.vaga_id,
+      organicDefinitionId: row.organic_definition_id,
       inscricaoId: row.inscricao_id,
       atoAdministrativo: row.ato_administrativo,
+      actClassificationId: row.act_classification_id,
+      actClassificationCode: row.act_classification_code ?? undefined,
+      actClassificationDescription:
+        row.act_classification_description ?? undefined,
       publishedAt: row.published_at,
       comparecimentoUntil: row.comparecimento_until,
       status: row.status,

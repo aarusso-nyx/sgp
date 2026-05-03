@@ -242,7 +242,7 @@ export class S3000Service {
       [tenantId, request.request_id, event.id],
     );
     return {
-      ...mapRequestRow(updated[0]),
+      ...mapRequestRow(updated[0]!),
       emitted: true,
       xmlHash,
       event,

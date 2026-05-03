@@ -255,7 +255,7 @@ export class FeriasPayrollService {
         (SELECT id::text FROM processing_type_upsert) AS processing_type_id
       `,
     );
-    return result.rows[0];
+    return result.rows[0]!;
   }
 
   private async ensureRun(
@@ -291,7 +291,7 @@ export class FeriasPayrollService {
       `,
       [year, month, catalog.payroll_type_id, catalog.processing_type_id],
     );
-    return result.rows[0];
+    return result.rows[0]!;
   }
 
   private async loadRun(
@@ -418,7 +418,7 @@ export class FeriasPayrollService {
       `,
       [payrollRunId],
     );
-    const summary = totals.rows[0];
+    const summary = totals.rows[0]!;
     await client.query(
       `
       UPDATE payroll.payroll_run
@@ -449,6 +449,10 @@ export class FeriasPayrollService {
     month: number,
   ): Promise<void> {
     await client.query(
+      'SELECT payroll.sgp_create_payroll_financial_record_partition(make_date($1::integer, $2::integer, 1))',
+      [year, month],
+    );
+    await client.query(
       `
       INSERT INTO payroll.payroll_financial_record (
         tenant_id,
@@ -458,6 +462,7 @@ export class FeriasPayrollService {
         functional_status_id,
         competence_year,
         competence_month,
+        competence,
         total_earnings,
         total_deductions,
         net_amount,
@@ -471,13 +476,14 @@ export class FeriasPayrollService {
         NULLIF($4, '')::uuid,
         $5,
         $6,
+        make_date($5::integer, $6::integer, 1),
         run.total_earnings,
         run.total_deductions,
         run.total_net,
         jsonb_build_object('origin', 'vacation_payroll', 'vacationRecordId', $7::text)
       FROM payroll.payroll_run run
       WHERE run.id = $2::uuid
-      ON CONFLICT (employee_id, competence_year, competence_month, payroll_run_id)
+      ON CONFLICT (employee_id, competence_year, competence_month, payroll_run_id, competence)
       DO UPDATE SET
         total_earnings = EXCLUDED.total_earnings,
         total_deductions = EXCLUDED.total_deductions,

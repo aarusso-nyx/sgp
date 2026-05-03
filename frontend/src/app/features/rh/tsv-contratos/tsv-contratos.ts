@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { TsvContractChange, TsvContratosService } from './tsv-contratos.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sgp-rh-tsv-contratos',
   templateUrl: './tsv-contratos.html',
   styleUrl: './tsv-contratos.scss',

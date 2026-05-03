@@ -1,5 +1,6 @@
 import { Body, Controller, Param, Patch, Post, Req } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -25,6 +26,7 @@ export class RecruitmentController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'POST requisicoes' })
   @Post('requisicoes')
   @RequirePermission('recrutamento.write')
   @ApiCreatedResponse({ description: 'Create a recruitment request.' })
@@ -45,6 +47,7 @@ export class RecruitmentController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH requisicoes/:requisicao_id/encaminhar' })
   @Patch('requisicoes/:requisicao_id/encaminhar')
   @RequirePermission('recrutamento.write')
   @ApiOkResponse({ description: 'Forward a recruitment request to RH.' })
@@ -69,6 +72,7 @@ export class RecruitmentController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST requisicoes/:requisicao_id/candidatos' })
   @Post('requisicoes/:requisicao_id/candidatos')
   @RequirePermission('recrutamento.write')
   @ApiCreatedResponse({
@@ -96,6 +100,7 @@ export class RecruitmentController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH candidatos/:candidato_id' })
   @Patch('candidatos/:candidato_id')
   @RequirePermission('recrutamento.write')
   @ApiOkResponse({ description: 'Update recruitment candidate analysis.' })
@@ -120,6 +125,7 @@ export class RecruitmentController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'PATCH requisicoes/:requisicao_id/concluir' })
   @Patch('requisicoes/:requisicao_id/concluir')
   @RequirePermission('recrutamento.write')
   @ApiOkResponse({ description: 'Conclude recruitment analysis.' })

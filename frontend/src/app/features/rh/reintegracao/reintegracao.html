@@ -1,109 +1,115 @@
 <section class="reintegracao">
   <header>
-    <h1>Reintegracao S-2298</h1>
-    <p>Registro da ordem, reprocessamento retroativo e transmissao eSocial.</p>
+    <h1 i18n>Reintegracao S-2298</h1>
+    <p i18n>Registro da ordem, reprocessamento retroativo e transmissao eSocial.</p>
   </header>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="order-form">
     <mat-form-field appearance="outline">
-      <mat-label>Vinculo desligado</mat-label>
+      <mat-label i18n>Vinculo desligado</mat-label>
       <input matInput formControlName="employmentLinkId" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Evento S-2299 original</mat-label>
+      <mat-label i18n>Evento S-2299 original</mat-label>
       <input matInput formControlName="originalTerminationEventId" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Recibo S-2299</mat-label>
+      <mat-label i18n>Recibo S-2299</mat-label>
       <input matInput formControlName="originalS2299Receipt" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Data do desligamento</mat-label>
+      <mat-label i18n>Data do desligamento</mat-label>
       <input matInput type="date" formControlName="terminationDate" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Data de reintegracao</mat-label>
+      <mat-label i18n>Data de reintegracao</mat-label>
       <input matInput type="date" formControlName="reinstatementDate" />
     </mat-form-field>
 
     <label class="select-field">
-      <span>Tipo</span>
+      <span i18n>Tipo</span>
       <select formControlName="kind">
-        <option value="JUDICIAL">Judicial</option>
-        <option value="ADMINISTRATIVE_ANNULMENT">Anulacao administrativa</option>
-        <option value="AMNESTY">Anistia</option>
+        <option value="JUDICIAL" i18n>Judicial</option>
+        <option value="ADMINISTRATIVE_ANNULMENT" i18n>Anulacao administrativa</option>
+        <option value="AMNESTY" i18n>Anistia</option>
       </select>
     </label>
 
     <mat-form-field appearance="outline">
-      <mat-label>Numero do processo</mat-label>
+      <mat-label i18n>Numero do processo</mat-label>
       <input matInput formControlName="processNumber" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Orgao judicial</mat-label>
+      <mat-label i18n>Orgao judicial</mat-label>
       <input matInput formControlName="court" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Data da decisao</mat-label>
+      <mat-label i18n>Data da decisao</mat-label>
       <input matInput type="date" formControlName="decisionDate" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Anexo digitalizado</mat-label>
+      <mat-label i18n>Anexo digitalizado</mat-label>
       <input matInput formControlName="attachmentUri" />
     </mat-form-field>
 
-    <button mat-flat-button color="primary" type="submit" [disabled]="saving || clientSideInvalid">
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="saving || clientSideInvalid"
+      i18n
+    >
       Registrar ordem
     </button>
   </form>
 
-  <p class="error" *ngIf="clientSideInvalid">
+  <p class="error" *ngIf="clientSideInvalid" i18n>
     Data de reintegracao nao pode ser futura nem anterior ao desligamento.
   </p>
   <p class="error" *ngIf="error">{{ error }}</p>
 
   <section class="detail" *ngIf="savedOrder">
-    <h2>Ordem registrada</h2>
+    <h2 i18n>Ordem registrada</h2>
     <dl>
       <div>
-        <dt>Status</dt>
+        <dt i18n>Status</dt>
         <dd>{{ savedOrder.status }}</dd>
       </div>
       <div>
-        <dt>Data</dt>
+        <dt i18n>Data</dt>
         <dd>{{ savedOrder.reinstatementDate }}</dd>
       </div>
       <div>
-        <dt>Recibo S-2299</dt>
+        <dt i18n>Recibo S-2299</dt>
         <dd>{{ savedOrder.originalS2299Receipt }}</dd>
       </div>
     </dl>
-    <button mat-stroked-button type="button" (click)="apply()" [disabled]="applying">
+    <button mat-stroked-button type="button" (click)="apply()" [disabled]="applying" i18n>
       Aplicar reintegracao
     </button>
-    <button mat-stroked-button type="button" (click)="transmit()" [disabled]="transmitting">
+    <button mat-stroked-button type="button" (click)="transmit()" [disabled]="transmitting" i18n>
       Transmitir S-2298
     </button>
   </section>
 
   <section class="detail" *ngIf="appliedOrder">
-    <h2>Reprocessamento</h2>
-    <p>Saldo total: {{ appliedOrder.totalPayable }}</p>
+    <h2 i18n>Reprocessamento</h2>
+    <p i18n>Saldo total: {{ appliedOrder.totalPayable }}</p>
     <ul>
       <li *ngFor="let competence of appliedOrder.reprocessedCompetencies">{{ competence }}</li>
     </ul>
   </section>
 
   <section class="xml-preview">
-    <h2>XML S-2298</h2>
+    <h2 i18n>XML S-2298</h2>
     <pre>{{ transmission?.['xml'] || xmlPreview }}</pre>
-    <p class="status" *ngIf="transmission">S-2298 transmitido.</p>
+    <p class="status" *ngIf="transmission" i18n>S-2298 transmitido.</p>
   </section>
 </section>

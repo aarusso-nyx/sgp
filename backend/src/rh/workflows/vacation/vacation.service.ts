@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
+import { BusinessDaysService } from '../../../consultas/business-days.service';
 import { DatabaseService } from '../../../database/database.service';
 import { ScheduleVacationDto, VacationInstallmentDto } from './vacation.dto';
 
@@ -67,7 +68,10 @@ export interface VacationRecord {
 
 @Injectable()
 export class VacationService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly businessDaysService?: BusinessDaysService,
+  ) {}
 
   async getBalance(
     employeeId: string,
@@ -104,7 +108,7 @@ export class VacationService {
 
       const rows: VacationRecordRow[] = [];
       for (const [index, installment] of body.installments.entries()) {
-        const days = installment.days ?? this.inclusiveDays(installment);
+        const days = await this.resolveInstallmentDays(installment);
         const result = await client.query<VacationRecordRow>(
           `
           INSERT INTO hr.vacation_record (
@@ -164,7 +168,7 @@ export class VacationService {
             days,
           ],
         );
-        rows.push(result.rows[0]);
+        rows.push(result.rows[0]!);
       }
       return rows.map((row) => this.toRecord(row));
     });
@@ -284,6 +288,18 @@ export class VacationService {
     const start = new Date(`${installment.startsOn}T00:00:00Z`);
     const end = new Date(`${installment.endsOn}T00:00:00Z`);
     return Math.floor((end.getTime() - start.getTime()) / 86_400_000) + 1;
+  }
+
+  private async resolveInstallmentDays(
+    installment: VacationInstallmentDto,
+  ): Promise<number> {
+    if (installment.days != null || !this.businessDaysService) {
+      return installment.days ?? this.inclusiveDays(installment);
+    }
+    return this.businessDaysService.countWorkingDays(
+      installment.startsOn,
+      installment.endsOn,
+    );
   }
 
   private toBalance(row: VacationBalanceRow): VacationBalance {

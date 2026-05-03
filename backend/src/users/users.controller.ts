@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -33,6 +34,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('gestao.read')
   @ApiOkResponse({
@@ -42,6 +44,7 @@ export class UsersController {
     return this.usersService.list(query);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create a new admin user.' })
@@ -49,6 +52,7 @@ export class UsersController {
     return this.usersService.create(body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id' })
   @Patch(':id')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Update admin user identity/status.' })
@@ -56,6 +60,7 @@ export class UsersController {
     return this.usersService.update(id, body);
   }
 
+  @ApiOperation({ summary: 'PUT :id/perfis' })
   @Put(':id/perfis')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Replace admin user profile assignments.' })
@@ -63,6 +68,7 @@ export class UsersController {
     return this.usersService.assignProfiles(id, body);
   }
 
+  @ApiOperation({ summary: 'PUT :id/papeis-diretos' })
   @Put(':id/papeis-diretos')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Replace direct role snapshots for a user.' })

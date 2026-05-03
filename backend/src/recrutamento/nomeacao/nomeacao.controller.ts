@@ -1,5 +1,6 @@
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { NomeacaoService } from './nomeacao.service';
 export class NomeacaoController {
   constructor(private readonly nomeacaoService: NomeacaoService) {}
 
+  @ApiOperation({ summary: 'POST Nomear' })
   @Post()
   @RequirePermission('recrutamento.nomeacao.write')
   @AuditMutation({
@@ -31,6 +33,7 @@ export class NomeacaoController {
     return this.nomeacaoService.nomear(body);
   }
 
+  @ApiOperation({ summary: 'POST :id/convocacoes' })
   @Post(':id/convocacoes')
   @RequirePermission('recrutamento.nomeacao.write')
   @AuditMutation({
@@ -45,6 +48,7 @@ export class NomeacaoController {
     return this.nomeacaoService.convocar(id, body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/desistencia' })
   @Patch(':id/desistencia')
   @RequirePermission('recrutamento.nomeacao.write')
   @AuditMutation({
@@ -57,6 +61,7 @@ export class NomeacaoController {
     return this.nomeacaoService.marcarDesistencia(id);
   }
 
+  @ApiOperation({ summary: 'PATCH :id/expirar-prazo' })
   @Patch(':id/expirar-prazo')
   @RequirePermission('recrutamento.nomeacao.write')
   @AuditMutation({

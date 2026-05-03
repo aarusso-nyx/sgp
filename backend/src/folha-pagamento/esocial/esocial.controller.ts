@@ -1,5 +1,10 @@
 import { Body, Controller, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -16,6 +21,7 @@ export class ESocialController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'POST eventos' })
   @Post('eventos')
   @RequirePermission('folha.write')
   @ApiCreatedResponse({ description: 'Queue a new eSocial event.' })

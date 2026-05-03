@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface ESocialClosurePending {
   eventKind: 'S-1200' | 'S-1210';
@@ -36,16 +36,16 @@ export interface ESocialClosureResult {
 
 @Injectable({ providedIn: 'root' })
 export class ESocialFechamentoService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   status(year: number, month: number): Observable<ESocialClosureState> {
-    return this.http.get<ESocialClosureState>(
+    return this.api.get<ESocialClosureState>(
       `/api/v1/esocial/fechamento?year=${year}&month=${month}`,
     );
   }
 
   close(year: number, month: number): Observable<ESocialClosureResult> {
-    return this.http.post<ESocialClosureResult>('/api/v1/esocial/fechamento/fechar', {
+    return this.api.post<ESocialClosureResult>('/api/v1/esocial/fechamento/fechar', {
       year,
       month,
     });

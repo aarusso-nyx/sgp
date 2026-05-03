@@ -145,7 +145,7 @@ export class AuditQueryService {
       `,
       [id],
     );
-    const row = rows[0];
+    const row = rows[0]!;
     return row ? this.toDto(row) : null;
   }
 
@@ -207,7 +207,7 @@ export class AuditQueryService {
       [JSON.stringify(parameters)],
     );
 
-    const row = rows[0];
+    const row = rows[0]!;
     return {
       id: row.id,
       status: row.status,

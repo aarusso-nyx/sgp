@@ -54,3 +54,14 @@ td {
 .error {
   color: #8b1e1e;
 }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.secondary {
+  background: #f7fbf8;
+  border: 1px solid #6aa96f;
+}

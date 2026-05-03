@@ -346,7 +346,7 @@ export class ProgressionSimulationService {
           input.justification ?? '',
         ],
       );
-      const progressionId = String(progression.rows[0].id);
+      const progressionId = String(progression.rows[0]!.id);
       const simulation = await client.query<IdOnlyRow>(
         `
         INSERT INTO hr.salary_simulation (
@@ -380,12 +380,12 @@ export class ProgressionSimulationService {
       );
       await this.appendAudit(client, 'CREATE', progressionId, {
         event: 'avaliacao.progressao.simulated',
-        simulationId: simulation.rows[0].id,
+        simulationId: simulation.rows[0]!.id,
         ...salaries,
       });
       return {
         progressionId,
-        simulationId: simulation.rows[0].id,
+        simulationId: simulation.rows[0]!.id,
         ...salaries,
       };
     });
@@ -425,7 +425,7 @@ export class ProgressionSimulationService {
         employeeId,
       ],
     );
-    const row = result.rows[0];
+    const row = result.rows[0]!;
     return {
       sourceSalary: row.source_salary,
       targetSalary: row.target_salary,
@@ -492,12 +492,12 @@ export class ProgressionApplyService {
         `,
         [id],
       );
-      if (!current.rows[0])
-        throw new NotFoundException('Progression not found.');
-      if (current.rows[0].status === 'applied') {
+      const currentRow = current.rows[0];
+      if (!currentRow) throw new NotFoundException('Progression not found.');
+      if (currentRow.status === 'applied') {
         throw new ConflictException('Progression is already applied.');
       }
-      if (current.rows[0].status === 'revoked') {
+      if (currentRow.status === 'revoked') {
         throw new ConflictException('Revoked progression cannot be applied.');
       }
 
@@ -526,10 +526,10 @@ export class ProgressionApplyService {
         [id],
       );
       return {
-        id: updated.rows[0].id,
-        employeeId: updated.rows[0].employee_id,
-        status: updated.rows[0].status,
-        appliedAt: updated.rows[0].applied_at,
+        id: updated.rows[0]!.id,
+        employeeId: updated.rows[0]!.employee_id,
+        status: updated.rows[0]!.status,
+        appliedAt: updated.rows[0]!.applied_at,
       };
     });
   }

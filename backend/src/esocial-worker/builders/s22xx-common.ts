@@ -15,7 +15,7 @@ import {
 } from '../esocial-emit.service';
 import { employerRegistration, onlyDigits, xmlEscape } from './s1xxx-common';
 
-export type S22xxEventKind = 'S-2200' | 'S-2205';
+export type S22xxEventKind = 'S-2200' | 'S-2205' | 'S-2206';
 
 export interface S22xxSourceRecord {
   id: string;

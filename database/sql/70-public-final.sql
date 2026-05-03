@@ -233,13 +233,21 @@ CREATE INDEX user_group_snapshot_group_key_idx ON public.user_group_snapshot USI
 
 CREATE INDEX user_group_snapshot_user_id_captured_at_idx ON public.user_group_snapshot USING btree (user_id, captured_at);
 
+CREATE TRIGGER audit_event_default_partition_auto_create BEFORE INSERT ON public.audit_event_default FOR EACH ROW EXECUTE FUNCTION public.sgp_audit_event_default_partition_redirect();
+
 CREATE TRIGGER audit_event_immutable BEFORE DELETE OR UPDATE ON public.audit_event FOR EACH ROW EXECUTE FUNCTION public.sgp_audit_event_immutable();
 
 CREATE TRIGGER trg_generated_report_file_audit AFTER INSERT OR DELETE OR UPDATE ON public.generated_report_file FOR EACH ROW EXECUTE FUNCTION public.audit_report_file_mutation();
 
 CREATE TRIGGER trg_payslip_batch_audit AFTER INSERT OR DELETE OR UPDATE ON public.payslip_batch FOR EACH ROW EXECUTE FUNCTION public.audit_payslip_batch_mutation();
 
-ALTER TABLE ONLY public.audit_event
+ALTER TABLE public.audit_event_default ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE public.audit_event_default FORCE ROW LEVEL SECURITY;
+
+SELECT public.sgp_create_audit_event_partitions();
+
+ALTER TABLE public.audit_event
     ADD CONSTRAINT audit_event_actor_user_id_fkey FOREIGN KEY (actor_user_id) REFERENCES public.user_account(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 ALTER TABLE ONLY public.document_attachment
@@ -296,7 +304,7 @@ ALTER TABLE ONLY public.profile_permission
 ALTER TABLE ONLY public.access_profile
     ADD CONSTRAINT public_access_profile_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
-ALTER TABLE ONLY public.audit_event
+ALTER TABLE public.audit_event
     ADD CONSTRAINT public_audit_event_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
 ALTER TABLE ONLY public.document_attachment
@@ -517,6 +525,6 @@ CREATE POLICY user_group_snapshot_write ON public.user_group_snapshot USING ((pu
 
 COMMENT ON SCHEMA public IS 'standard public schema';
 
-COMMENT ON TABLE public.audit_event IS 'Immutable audit trail for all mutating SGP transactions. Events are append-only, protected from UPDATE/DELETE, and retained for at least 6 months before administrative retention windows may truncate eligible partitions.';
+COMMENT ON TABLE public.audit_event IS 'Immutable audit trail for all mutating SGP transactions. Events are append-only, protected from UPDATE/DELETE, and partitioned monthly by occurred_at. Destructive retention/drop/detach policy is owner-decision gated.';
 
 COMMENT ON COLUMN public.tax_rate.rate_percent IS 'Legal rate/factor value; numeric(18,6); rounded half-away-from-zero only at policy boundary.';

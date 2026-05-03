@@ -49,7 +49,7 @@ export class AfdImporterService {
         const device = await this.getDevice(client, input.repDeviceId);
         let acceptedLines = 0;
         for (let index = 0; index < parsed.records.length; index += 1) {
-          const record = parsed.records[index];
+          const record = parsed.records[index]!;
           const timeRecordId =
             record.type === '4'
               ? await this.applyTimeRecord(client, device, record, importId)
@@ -149,7 +149,7 @@ export class AfdImporterService {
         this.countInputLines(input.content),
       ],
     );
-    return rows.rows[0].afd_import_id;
+    return rows.rows[0]!.afd_import_id;
   }
 
   private async getDevice(
@@ -275,7 +275,7 @@ export class AfdImporterService {
       `,
       [importId],
     );
-    return this.toImportSummary(rows.rows[0]);
+    return this.toImportSummary(rows.rows[0]!);
   }
 
   private countInputLines(content: string): number {

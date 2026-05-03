@@ -3,3 +3,5 @@
 -- ponto.time_record is append-only: UPDATE and DELETE are blocked by
 -- ponto.ponto01_time_record_append_only(), while INSERT appends an audit event
 -- through sgp_append_audit_event(...).
+-- Monthly partitions keep the append-only trigger, and time_record_identity
+-- preserves time_record_id references without changing the hash-chain payload.

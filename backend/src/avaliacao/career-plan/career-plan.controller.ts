@@ -8,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -25,6 +26,7 @@ import { CareerPlanService } from './career-plan.service';
 export class CareerPlanController {
   constructor(private readonly careerPlanService: CareerPlanService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('avaliacao.pccs.read')
   @ApiOkResponse({ description: 'List PCCS career plans.' })
@@ -32,6 +34,7 @@ export class CareerPlanController {
     return this.careerPlanService.list();
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('avaliacao.pccs.write')
   @AuditMutation({
@@ -44,6 +47,7 @@ export class CareerPlanController {
     return this.careerPlanService.create(body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id' })
   @Patch(':id')
   @RequirePermission('avaliacao.pccs.write')
   @AuditMutation({
@@ -56,6 +60,7 @@ export class CareerPlanController {
     return this.careerPlanService.update(id, body);
   }
 
+  @ApiOperation({ summary: 'GET :id/trilha' })
   @Get(':id/trilha')
   @RequirePermission('avaliacao.pccs.read')
   @ApiOkResponse({ description: 'Return the PCCS progression trail.' })

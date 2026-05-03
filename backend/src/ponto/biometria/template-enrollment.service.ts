@@ -90,7 +90,7 @@ export class TemplateEnrollmentService {
         ],
       );
       AuditMutationContextStore.markMutationAudited();
-      const row = rows.rows[0];
+      const row = rows.rows[0]!;
       if (!row.encrypted_differs) {
         throw new BadRequestException(
           'Biometric template must be encrypted at rest',

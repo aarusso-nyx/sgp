@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface WorkScheduleSummary {
   workScheduleId: string;
@@ -23,14 +23,14 @@ export interface AssignmentSummary {
 
 @Injectable({ providedIn: 'root' })
 export class PontoJornadasService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   listSchedules(): Observable<WorkScheduleSummary[]> {
-    return this.http.get<WorkScheduleSummary[]>('/api/v1/ponto/jornadas');
+    return this.api.get<WorkScheduleSummary[]>('/api/v1/ponto/jornadas');
   }
 
   createDefaultSchedule(): Observable<WorkScheduleSummary> {
-    return this.http.post<WorkScheduleSummary>('/api/v1/ponto/jornadas', {
+    return this.api.post<WorkScheduleSummary>('/api/v1/ponto/jornadas', {
       code: 'DEFAULT-8H',
       name: 'Jornada padrao 8h',
       weeklyHours: 40,
@@ -55,7 +55,7 @@ export class PontoJornadasService {
 
   listAssignments(employeeId?: string): Observable<AssignmentSummary[]> {
     const suffix = employeeId ? `?employeeId=${encodeURIComponent(employeeId)}` : '';
-    return this.http.get<AssignmentSummary[]>(`/api/v1/ponto/atribuicoes${suffix}`);
+    return this.api.get<AssignmentSummary[]>(`/api/v1/ponto/atribuicoes${suffix}`);
   }
 
   assign(payload: {
@@ -64,6 +64,6 @@ export class PontoJornadasService {
     validFrom: string;
     validTo?: string;
   }): Observable<AssignmentSummary> {
-    return this.http.post<AssignmentSummary>('/api/v1/ponto/atribuicoes', payload);
+    return this.api.post<AssignmentSummary>('/api/v1/ponto/atribuicoes', payload);
   }
 }

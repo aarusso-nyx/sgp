@@ -4,7 +4,7 @@
   "productionDate": "2026-04-27",
   "sourceUrl": "https://www.gov.br/esocial/pt-br/documentacao-tecnica/manuais/2026-04-27_esquemas_xsd_v_s_01_03_00.zip",
   "sourceZipSha256": "2d057bcdcb58982f39194e2db264141ee8cb18f92db29d76cbcceec98a44a0f0",
-  "fileCount": 52,
+  "fileCount": 53,
   "files": {
     "evtInfoEmpregador.xsd": "80ca0aaf6980aaf7b549bcb0201fc49b7b094a50619962618f6768534c0cf26a",
     "tipos.xsd": "283c83693ceca569279938c63b0947996ff557dc9af6c661940469d8af027467",

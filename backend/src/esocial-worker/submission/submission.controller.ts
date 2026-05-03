@@ -1,5 +1,10 @@
 import { Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
@@ -15,6 +20,7 @@ export class SubmissionController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List batches' })
   @Get()
   @RequirePermission('esocial.submission.read')
   @ApiOkResponse({ description: 'List eSocial SOAP submission batches.' })
@@ -22,6 +28,7 @@ export class SubmissionController {
     return this.submissionService.listBatches();
   }
 
+  @ApiOperation({ summary: 'GET circuitos' })
   @Get('circuitos')
   @RequirePermission('esocial.submission.read')
   @ApiOkResponse({ description: 'List eSocial endpoint circuit states.' })
@@ -29,6 +36,7 @@ export class SubmissionController {
     return this.submissionService.listCircuitStates();
   }
 
+  @ApiOperation({ summary: 'POST :batchId/retry' })
   @Post(':batchId/retry')
   @RequirePermission('esocial.submission.retry')
   @ApiOkResponse({

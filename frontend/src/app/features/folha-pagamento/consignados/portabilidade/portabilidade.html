@@ -1,31 +1,31 @@
 <section class="portability-page">
   <header>
-    <h1>Portabilidade de consignados</h1>
+    <h1 i18n>Portabilidade de consignados</h1>
   </header>
 
   <form [formGroup]="form" class="portability-form">
     <mat-form-field appearance="outline">
-      <mat-label>Consignante origem</mat-label>
+      <mat-label i18n>Consignante origem</mat-label>
       <input matInput formControlName="sourceConsignmentEntityId" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Consignante destino</mat-label>
+      <mat-label i18n>Consignante destino</mat-label>
       <input matInput formControlName="targetConsignmentEntityId" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Layout</mat-label>
+      <mat-label i18n>Layout</mat-label>
       <mat-select formControlName="layout">
-        <mat-option value="CANONICAL_CSV">Canonico CSV</mat-option>
-        <mat-option value="BANK_X">Banco X</mat-option>
-        <mat-option value="BANK_Y">Banco Y</mat-option>
+        <mat-option value="CANONICAL_CSV" i18n>Canonico CSV</mat-option>
+        <mat-option value="BANK_X" i18n>Banco X</mat-option>
+        <mat-option value="BANK_Y" i18n>Banco Y</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Arquivo</mat-label>
+      <mat-label i18n>Arquivo</mat-label>
       <input matInput formControlName="fileName" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="content">
-      <mat-label>Conteudo</mat-label>
+      <mat-label i18n>Conteudo</mat-label>
       <textarea matInput rows="10" formControlName="content"></textarea>
     </mat-form-field>
     <div class="actions">
@@ -37,7 +37,7 @@
         [disabled]="uploading"
       >
         <mat-icon>upload_file</mat-icon>
-        Importar
+        <ng-container i18n>Importar</ng-container>
       </button>
       <button
         mat-stroked-button
@@ -46,7 +46,7 @@
         [disabled]="processing || !uploadResult"
       >
         <mat-icon>sync</mat-icon>
-        Processar
+        <ng-container i18n>Processar</ng-container>
       </button>
     </div>
   </form>
@@ -55,34 +55,34 @@
 
   <section class="result-grid" *ngIf="uploadResult">
     <article>
-      <span>Arquivo</span>
+      <span i18n>Arquivo</span>
       <strong>{{ uploadResult.fileId }}</strong>
     </article>
     <article>
-      <span>Status</span>
+      <span i18n>Status</span>
       <strong>{{ uploadResult.status }}</strong>
     </article>
     <article>
-      <span>Linhas</span>
+      <span i18n>Linhas</span>
       <strong>{{ uploadResult.detailCount }}</strong>
     </article>
     <article>
-      <span>Hash</span>
+      <span i18n>Hash</span>
       <strong>{{ uploadResult.fileHash }}</strong>
     </article>
   </section>
 
   <section class="result-grid" *ngIf="processResult">
     <article>
-      <span>Processadas</span>
+      <span i18n>Processadas</span>
       <strong>{{ processResult.processed }}</strong>
     </article>
     <article>
-      <span>Match</span>
+      <span i18n>Match</span>
       <strong>{{ processResult.matched }}</strong>
     </article>
     <article>
-      <span>Nao conciliadas</span>
+      <span i18n>Nao conciliadas</span>
       <strong>{{ processResult.unmatched }}</strong>
     </article>
   </section>

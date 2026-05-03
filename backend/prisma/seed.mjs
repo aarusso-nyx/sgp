@@ -268,6 +268,21 @@ async function upsertMasterData(client, payload) {
     );
   }
 
+  for (const row of md.actClassifications ?? []) {
+    await client.query(
+      `
+      INSERT INTO hr.act_classification (tenant_id, code, description, status)
+      VALUES (public.sgp_current_tenant_uuid(), $1, $2, 'ACTIVE'::"RecordStatus")
+      ON CONFLICT (tenant_id, code) DO UPDATE
+      SET
+        description = EXCLUDED.description,
+        status = EXCLUDED.status,
+        updated_at = now()
+      `,
+      [row.code, row.description],
+    );
+  }
+
   for (const row of md.payrollTypes ?? []) {
     await client.query(
       `
@@ -548,6 +563,174 @@ async function upsertFixtureScenarios(client, payload, profileIdByCode) {
   }
 }
 
+async function upsertLgpdDpoDefaults(client) {
+  await client.query(
+    `
+    INSERT INTO public.system_parameter (
+      tenant_id,
+      key,
+      value,
+      description,
+      module_key
+    )
+    VALUES (
+      public.sgp_current_tenant_uuid(),
+      'lgpd.encarregado',
+      $1::jsonb,
+      'Public LGPD encarregado contact',
+      'lgpd'
+    )
+    ON CONFLICT (tenant_id, key) DO UPDATE
+    SET
+      value = EXCLUDED.value,
+      description = EXCLUDED.description,
+      module_key = EXCLUDED.module_key,
+      updated_at = now()
+    `,
+    [
+      JSON.stringify({
+        name: 'Encarregado pelo Tratamento de Dados Pessoais',
+        email: 'dpo@example.invalid',
+        phone: '',
+        channelUrl: '/lgpd/encarregado',
+        officeHours: 'Dias uteis, 9h as 17h',
+        postalAddress: '',
+      }),
+    ],
+  );
+}
+
+const LGPD_ROPA_SEED_ENTRIES = [
+  {
+    flowKey: 'payroll.payslip_pdf',
+    operationName: 'Payroll payslip generation and employee delivery',
+    controllerArea: 'Payroll and report service',
+    processorName: 'SGP report-service',
+    externalRecipients: [],
+    internationalTransfer: false,
+    securityControls: [
+      'tenant RLS',
+      'permission guard',
+      'audit event for report generation',
+      'PDF/A artifact retention',
+    ],
+    lifecycleEvidence: [
+      'docs/eng/lgpd/legal-basis.md#ADR-LGPD-001',
+      'report-service/payslip legal-basis assertion',
+    ],
+    riskLevel: 'HIGH',
+    reviewDueAt: '2026-11-02',
+    notes: 'Seeded ROPA entry for the folha major data flow.',
+  },
+  {
+    flowKey: 'time.attendance_register',
+    operationName: 'Attendance register and time-bank processing',
+    controllerArea: 'Ponto operations',
+    processorName: 'SGP ponto module',
+    externalRecipients: [],
+    internationalTransfer: false,
+    securityControls: ['tenant RLS', 'permission guard', 'immutable time-record evidence'],
+    lifecycleEvidence: [
+      'docs/eng/lgpd/legal-basis.md#ADR-LGPD-003',
+      'Portaria MTP 671 retention rule',
+    ],
+    riskLevel: 'MEDIUM',
+    reviewDueAt: '2026-11-02',
+    notes: 'Seeded ROPA entry for the ponto major data flow.',
+  },
+  {
+    flowKey: 'recruitment.public_application',
+    operationName: 'Public recruitment application intake',
+    controllerArea: 'Recruitment operations',
+    processorName: 'SGP recruitment module',
+    externalRecipients: [],
+    internationalTransfer: false,
+    securityControls: [
+      'tenant RLS',
+      'permission guard',
+      'candidate token access',
+      'explicit LGPD consent evidence',
+    ],
+    lifecycleEvidence: [
+      'docs/eng/lgpd/legal-basis.md#ADR-LGPD-005',
+      'public application LGPD consent test',
+    ],
+    riskLevel: 'HIGH',
+    reviewDueAt: '2026-11-02',
+    notes: 'Seeded ROPA entry for the recrutamento major data flow.',
+  },
+];
+
+async function upsertLgpdRopaEntries(client) {
+  for (const entry of LGPD_ROPA_SEED_ENTRIES) {
+    await client.query(
+      `
+      INSERT INTO lgpd.ropa_entry (
+        tenant_id,
+        legal_basis_rule_id,
+        flow_key,
+        operation_name,
+        controller_area,
+        processor_name,
+        external_recipients,
+        international_transfer,
+        security_controls,
+        lifecycle_evidence,
+        risk_level,
+        status,
+        review_due_at,
+        notes
+      )
+      SELECT
+        public.sgp_current_tenant_uuid(),
+        rule.id,
+        rule.flow_key,
+        $2,
+        $3,
+        $4,
+        $5::text[],
+        $6,
+        $7::text[],
+        $8::text[],
+        $9,
+        'ACTIVE',
+        $10::date,
+        $11
+      FROM lgpd.legal_basis_rule rule
+      WHERE rule.flow_key = $1
+        AND rule.status = 'ACTIVE'
+      ON CONFLICT (tenant_id, flow_key, operation_name) DO UPDATE
+      SET
+        legal_basis_rule_id = EXCLUDED.legal_basis_rule_id,
+        controller_area = EXCLUDED.controller_area,
+        processor_name = EXCLUDED.processor_name,
+        external_recipients = EXCLUDED.external_recipients,
+        international_transfer = EXCLUDED.international_transfer,
+        security_controls = EXCLUDED.security_controls,
+        lifecycle_evidence = EXCLUDED.lifecycle_evidence,
+        risk_level = EXCLUDED.risk_level,
+        status = EXCLUDED.status,
+        review_due_at = EXCLUDED.review_due_at,
+        notes = EXCLUDED.notes,
+        updated_at = now()
+      `,
+      [
+        entry.flowKey,
+        entry.operationName,
+        entry.controllerArea,
+        entry.processorName,
+        entry.externalRecipients,
+        entry.internationalTransfer,
+        entry.securityControls,
+        entry.lifecycleEvidence,
+        entry.riskLevel,
+        entry.reviewDueAt,
+        entry.notes,
+      ],
+    );
+  }
+}
+
 async function main() {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
@@ -584,19 +767,15 @@ async function main() {
       `,
       [tenant.id, tenant.slug, tenant.code, tenant.name],
     );
-    await client.query(
-      `SELECT set_config('app.current_tenant_id', $1, true)`,
-      [tenant.id],
-    );
-    await client.query(
-      `SELECT set_config('app.current_tenant', $1, true)`,
-      [tenant.id],
-    );
+    await client.query(`SELECT set_config('app.current_tenant_id', $1, true)`, [tenant.id]);
+    await client.query(`SELECT set_config('app.current_tenant', $1, true)`, [tenant.id]);
     const profileIdByCode = await upsertAccessProfiles(client, permissions);
     const permissionIdByKey = await upsertPermissions(client, permissions);
     await upsertProfilePermissions(client, permissions, profileIdByCode, permissionIdByKey);
     await upsertCanonicalFormulaAttributes(client);
     await upsertMasterData(client, masterData);
+    await upsertLgpdDpoDefaults(client);
+    await upsertLgpdRopaEntries(client);
     await upsertFixtureScenarios(client, fixtures, profileIdByCode);
     await client.query('COMMIT');
   } catch (error) {

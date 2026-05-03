@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 
 import { PayrollBridgePreview, PontoFolhaService } from './ponto-folha.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ponto-folha',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],

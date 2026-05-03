@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -20,6 +21,7 @@ import { InvitesService } from './invites.service';
 export class InvitesController {
   constructor(private readonly invitesService: InvitesService) {}
 
+  @ApiOperation({ summary: 'POST admin/usuarios/convite' })
   @Post('admin/usuarios/convite')
   @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create user invitation.' })
@@ -35,6 +37,7 @@ export class InvitesController {
     return this.invitesService.createInvite(body);
   }
 
+  @ApiOperation({ summary: 'DELETE admin/convites/:id' })
   @Delete('admin/convites/:id')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Cancel invitation.' })
@@ -48,6 +51,7 @@ export class InvitesController {
 export class InviteAcceptanceController {
   constructor(private readonly invitesService: InvitesService) {}
 
+  @ApiOperation({ summary: 'POST :token/aceitar' })
   @Post(':token/aceitar')
   @Public()
   @ApiCreatedResponse({

@@ -17,7 +17,13 @@ describe('DatabaseService', () => {
   const createService = (databaseUrl?: string) =>
     new DatabaseService({
       get: jest.fn((key: string) =>
-        key === 'DATABASE_URL' ? databaseUrl : undefined,
+        key === 'DATABASE_URL'
+          ? databaseUrl
+          : key === 'SGP_PII_PGCRYPTO_KEY'
+            ? 'test-pii-secret'
+            : key === 'SGP_PII_PGCRYPTO_KEY_ID'
+              ? 'test-pii-key'
+              : undefined,
       ),
     } as never);
 
@@ -85,6 +91,14 @@ describe('DatabaseService', () => {
     expect(client.query).toHaveBeenCalledWith(
       'SELECT set_config($1, $2, true)',
       ['app.bypass_rls', 'true'],
+    );
+    expect(client.query).toHaveBeenCalledWith(
+      'SELECT set_config($1, $2, true)',
+      ['app.pii_encryption_key', 'test-pii-secret'],
+    );
+    expect(client.query).toHaveBeenCalledWith(
+      'SELECT set_config($1, $2, true)',
+      ['app.pii_encryption_key_id', 'test-pii-key'],
     );
     expect(client.release).toHaveBeenCalledTimes(1);
   });

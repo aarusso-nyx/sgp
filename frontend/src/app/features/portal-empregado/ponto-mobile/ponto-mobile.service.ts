@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface MobileClockResult {
   attemptId: string;
@@ -12,7 +13,7 @@ export interface MobileClockResult {
 
 @Injectable({ providedIn: 'root' })
 export class PontoMobileService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   registerDevice(payload: {
     employeeId: string;
@@ -20,11 +21,11 @@ export class PontoMobileService {
     platform: 'IOS' | 'ANDROID';
     publicKey: string;
   }): Observable<unknown> {
-    return this.http.post('/api/v1/ponto/mobile/devices', payload);
+    return this.api.post('v1/ponto/mobile/devices', payload);
   }
 
   createConsent(payload: { employeeId: string; consentVersion: string }): Observable<unknown> {
-    return this.http.post('/api/v1/ponto/mobile/consents', payload);
+    return this.api.post('v1/ponto/mobile/consents', payload);
   }
 
   clock(payload: {
@@ -37,6 +38,6 @@ export class PontoMobileService {
     deviceId: string;
     platform: 'IOS' | 'ANDROID';
   }): Observable<MobileClockResult> {
-    return this.http.post<MobileClockResult>('/api/v1/ponto/mobile/clock', payload);
+    return this.api.post<MobileClockResult, typeof payload>('v1/ponto/mobile/clock', payload);
   }
 }

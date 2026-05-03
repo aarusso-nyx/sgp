@@ -1,23 +1,23 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { AtsParameter, AtsParameterKey, AtsParametrosService } from './ats-parametros.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ats-parametros',
   standalone: false,
   templateUrl: './ats-parametros.html',
   styleUrl: './ats-parametros.scss',
 })
-export class AtsParametros implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>();
+export class AtsParametros implements OnInit {
   private readonly fb = inject(FormBuilder);
 
-  items: AtsParameter[] = [];
-  loading = false;
-  error = '';
-  success = '';
+  readonly items = signal<AtsParameter[]>([]);
+  readonly loading = signal(false);
+  readonly error = signal('');
+  readonly success = signal('');
 
   readonly form = this.fb.group({
     key: ['ATS_PERCENT_PER_YEAR' as AtsParameterKey, Validators.required],
@@ -28,30 +28,20 @@ export class AtsParametros implements OnInit, OnDestroy {
   constructor(private readonly service: AtsParametrosService) {}
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
-    this.loading = true;
-    this.error = '';
-    this.service
-      .list()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (table) => {
-          this.items = table.items;
-          this.loading = false;
-        },
-        error: () => {
-          this.error = 'Nao foi possivel carregar os parametros de ATS.';
-          this.loading = false;
-        },
-      });
+  async load(): Promise<void> {
+    this.loading.set(true);
+    this.error.set('');
+    try {
+      const table = await firstValueFrom(this.service.list());
+      this.items.set(table.items);
+    } catch {
+      this.error.set('Nao foi possivel carregar os parametros de ATS.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   edit(item: AtsParameter): void {
@@ -62,31 +52,28 @@ export class AtsParametros implements OnInit, OnDestroy {
     });
   }
 
-  save(): void {
+  async save(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    this.loading = true;
-    this.error = '';
-    this.success = '';
-    this.service
-      .upsert({
-        key: this.form.value.key as AtsParameterKey,
-        value: String(this.form.value.value),
-        description: this.form.value.description || undefined,
-      })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (table) => {
-          this.items = table.items;
-          this.success = 'Parametro atualizado.';
-          this.loading = false;
-        },
-        error: () => {
-          this.error = 'Valor invalido para o parametro.';
-          this.loading = false;
-        },
-      });
+    this.loading.set(true);
+    this.error.set('');
+    this.success.set('');
+    try {
+      const table = await firstValueFrom(
+        this.service.upsert({
+          key: this.form.value.key as AtsParameterKey,
+          value: String(this.form.value.value),
+          description: this.form.value.description || undefined,
+        }),
+      );
+      this.items.set(table.items);
+      this.success.set('Parametro atualizado.');
+    } catch {
+      this.error.set('Valor invalido para o parametro.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 }

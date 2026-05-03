@@ -45,7 +45,7 @@ Permissões: leitura exige `rh.employee.read`; admissão exige `rh.employee.admi
 
 ## 0.1.1. Nomeação, posse e exercício REC-05/REC-06
 
-`recrutamento.nomeacao` controla a chamada do candidato aprovado e `recrutamento.posse` registra a agenda de posse, o prazo de exercício de 15 dias úteis e a lotação inicial. O servidor ativo só nasce na transição para exercício: `recrutamento.efetivar_posse(posse_id)` cria `hr.employee`, `hr.employment_link`, `hr.employment_contract` e a linha de `hr.employee_status_history`, atualiza a nomeação para `EXERCICIO` e dispara a trilha de auditoria. Em seguida a API publica o S-2200 pelo fluxo ES-02.
+`recrutamento.nomeacao` controla a chamada do candidato aprovado e `recrutamento.posse` registra a agenda de posse, o prazo de exercício de 15 dias úteis e a lotação inicial. Cada nomeação referencia `hr.act_classification`, mantida pelo cadastro **Classificação de Atos** em Gestão, para separar a classificação do ato (nomeação, posse, exoneração etc.) do número/texto do ato administrativo publicado. O servidor ativo só nasce na transição para exercício: `recrutamento.efetivar_posse(posse_id)` cria `hr.employee`, `hr.employment_link`, `hr.employment_contract` e a linha de `hr.employee_status_history`, atualiza a nomeação para `EXERCICIO` e dispara a trilha de auditoria. Em seguida a API publica o S-2200 pelo fluxo ES-02.
 
 | Estado                    | Descrição                                                     |
 | ------------------------- | ------------------------------------------------------------- |
@@ -291,15 +291,15 @@ No runtime v0.0.1, a competência mensal de folha é materializada em `hr.compet
 | `GENERATED`   | Folha mensal gerada e contracheques liberados em `portal.v_employee_paystub`        |
 | `CLOSED`      | Competência encerrada; contracheques seguem disponíveis para consulta histórica     |
 
-| Transição | De           | Evento mensal        | Guarda                                                                  | Efeito                                                                                                 | Para         |
-| --------- | ------------ | -------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------ |
-| CALC11-T1 | _(início)_   | `ABRIR_MENSAL`       | mês/ano válido por tenant                                               | cria `competence_period`, cria/reusa `payroll_run` `MENSAL`, audita abertura                           | `OPEN`       |
-| CALC11-T2 | `OPEN`       | `CALCULAR_MENSAL`    | servidores elegíveis com situação funcional que entra em folha          | recalcula rubricas via `payroll_calc.evaluate_earning_deduction(...)`, gera financeiros, valida totais | `CALCULATED` |
-| CALC11-T3 | `CALCULATED` | `APROVAR_MENSAL`     | `payroll_calc.validate_payroll_run(...)` sem divergência                | muda competência e run para aprovado, preservando relatório de revisão                                 | `APPROVED`   |
-| CALC11-T4 | `APPROVED`   | `GERAR_CONTRACHEQUE` | validação sem líquido negativo não autorizado e sem divergência de soma | muda competência e run para `GENERATED`; portal passa a listar contracheques                           | `GENERATED`  |
-| CALC11-T5 | `GENERATED`  | `FECHAR_MENSAL`      | validação final da run                                                  | muda competência e run para fechado e preenche `closed_at`                                             | `CLOSED`     |
+| Transição | De           | Evento mensal        | Guarda                                                                  | Efeito                                                                                                                                                                                              | Para         |
+| --------- | ------------ | -------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| CALC11-T1 | _(início)_   | `ABRIR_MENSAL`       | mês/ano válido por tenant                                               | cria `competence_period`, cria/reusa `payroll_run` `MENSAL`, audita abertura                                                                                                                        | `OPEN`       |
+| CALC11-T2 | `OPEN`       | `CALCULAR_MENSAL`    | servidores elegíveis com situação funcional que entra em folha          | recalcula rubricas `MENSAL` ativas via `payroll_calc.evaluate_earning_deduction(...)` em fases determinísticas: vencimentos/vantagens, previdência oficial e IRRF; gera financeiros e valida totais | `CALCULATED` |
+| CALC11-T3 | `CALCULATED` | `APROVAR_MENSAL`     | `payroll_calc.validate_payroll_run(...)` sem divergência                | muda competência e run para aprovado, preservando relatório de revisão                                                                                                                              | `APPROVED`   |
+| CALC11-T4 | `APPROVED`   | `GERAR_CONTRACHEQUE` | validação sem líquido negativo não autorizado e sem divergência de soma | muda competência e run para `GENERATED`; portal passa a listar contracheques                                                                                                                        | `GENERATED`  |
+| CALC11-T5 | `GENERATED`  | `FECHAR_MENSAL`      | validação final da run                                                  | muda competência e run para fechado e preenche `closed_at`                                                                                                                                          | `CLOSED`     |
 
-Invariantes: para cada servidor, `total_earnings - total_deductions = net_amount`; a soma dos líquidos de `payroll.payroll_financial_record` deve ser igual a `payroll_run.total_net`; líquido negativo é bloqueado salvo parâmetro tenant `ALLOW_NEGATIVE_NET=true`. A view `portal.v_employee_paystub` só retorna linhas quando a competência está `GENERATED` ou `CLOSED`, a run está `GENERATED` ou `CLOSED`, o tenant coincide e o ator possui `portal.paystub.read`.
+Invariantes: para cada servidor, `total_earnings - total_deductions = net_amount`; a soma dos líquidos de `payroll.payroll_financial_record` deve ser igual a `payroll_run.total_net`; líquido negativo é bloqueado salvo parâmetro tenant `ALLOW_NEGATIVE_NET=true`. Rubricas mensais com valor zero não geram linha calculada, exceto a rubrica base `MONTHLY_BASE_SALARY`, que preserva a referência de dias trabalhados da competência. A view `portal.v_employee_paystub` só retorna linhas quando a competência está `GENERATED` ou `CLOSED`, a run está `GENERATED` ou `CLOSED`, o tenant coincide e o ator possui `portal.paystub.read`.
 
 ```mermaid
 stateDiagram-v2
@@ -1423,9 +1423,9 @@ stateDiagram-v2
 
 ### 18.5 Efeitos colaterais
 
-- `estagio.contratado` → emite eSocial S-2200 (admissão).
-- `estagio.rescindido` / `concluido` → emite eSocial S-2299 (desligamento).
-- `estagio.prorrogado` → emite eSocial S-2206 (alteração contratual).
+- `estagio.contratado` → gera fonte TS-V categoria 901 e emite eSocial S-2300.
+- `estagio.rescindido` / `concluido` → atualiza o contrato TS-V para emissão eSocial S-2399.
+- `estagio.prorrogado` → atualiza o contrato TS-V para emissão eSocial S-2306.
 
 ### 18.6 Diagrama
 
@@ -1492,9 +1492,9 @@ A tabela abaixo cruza as 18 máquinas de estado com os papéis que disparam tran
 | **Requisição Documento**   | Entregar              | GRH     | `documento.entregue`                       | interno                                                                         |
 | **Consignado**             | Averbar               | SIS     | `consignado.averbado`                      | SNS `folha-eventos` → lançamento desconto                                       |
 | **Consignado**             | Quitar                | SIS     | `consignado.quitado`                       | SNS `folha-eventos` → remove lançamento                                         |
-| **Estágio**                | Contratar             | GRH     | `estagio.contratado`                       | SNS `recrutamento-eventos` + eSocial S-2200                                     |
-| **Estágio**                | Prorrogar             | GRH     | `estagio.prorrogado`                       | SNS `recrutamento-eventos` + eSocial S-2206                                     |
-| **Estágio**                | Concluir / Rescindir  | GRH/SIS | `estagio.concluido` / `estagio.rescindido` | SNS `recrutamento-eventos` + eSocial S-2299                                     |
+| **Estágio**                | Contratar             | GRH     | `estagio.contratado`                       | SNS `recrutamento-eventos` + eSocial S-2300                                     |
+| **Estágio**                | Prorrogar             | GRH     | `estagio.prorrogado`                       | SNS `recrutamento-eventos` + eSocial S-2306                                     |
+| **Estágio**                | Concluir / Rescindir  | GRH/SIS | `estagio.concluido` / `estagio.rescindido` | SNS `recrutamento-eventos` + eSocial S-2399                                     |
 
 ---
 
@@ -1511,6 +1511,42 @@ A tabela abaixo cruza as 18 máquinas de estado com os papéis que disparam tran
 | SOL        | Solicitante — papel `ROLE_RECRUTAMENTO_SELECAO.CADASTRAR`                     |
 | MED        | `ROLE_MEDICO.GESTAO` (identificado via CPF do usuário logado)                 |
 | SIS        | Sistema / job assíncrono (sem papel — executa em contexto de serviço interno) |
+
+---
+
+## LAI - pedidos de acesso a informacao
+
+O pedido nasce pelo endpoint publico `POST /api/v1/public/lai/:tenantId/requests`
+e recebe protocolo mais chave de acompanhamento. O status publico e consultado
+por `GET /api/v1/public/lai/:tenantId/requests/:protocol/status?accessKey=...`.
+
+```mermaid
+stateDiagram-v2
+  [*] --> RECEIVED
+  RECEIVED --> IN_REVIEW
+  RECEIVED --> AWAITING_CLARIFICATION
+  RECEIVED --> EXTENDED
+  RECEIVED --> ANSWERED
+  RECEIVED --> DENIED
+  RECEIVED --> CLOSED
+  IN_REVIEW --> AWAITING_CLARIFICATION
+  IN_REVIEW --> EXTENDED
+  IN_REVIEW --> ANSWERED
+  IN_REVIEW --> DENIED
+  AWAITING_CLARIFICATION --> IN_REVIEW
+  AWAITING_CLARIFICATION --> CLOSED
+  EXTENDED --> ANSWERED
+  EXTENDED --> DENIED
+  EXTENDED --> CLOSED
+  ANSWERED --> CLOSED
+  DENIED --> CLOSED
+  CLOSED --> [*]
+```
+
+O prazo inicial e de 20 dias corridos a partir de `submitted_at`. `EXTENDED`
+registra prorrogacao unica de 10 dias corridos sobre `due_at`, com justificativa
+persistida em `public_data.lai_request_event.reason`. `ANSWERED` e `DENIED`
+marcam `answered_at`; `CLOSED` marca `closed_at` e encerra a maquina.
 
 ---
 

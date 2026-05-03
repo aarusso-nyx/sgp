@@ -1,85 +1,69 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { Cnab240ReturnParserService } from './cnab240-return-parser.service';
+
+interface Cnab240ReturnGoldenCase {
+  slug: string;
+  bankCode: string;
+}
+
+interface SerializedCnab240ReturnFixture {
+  bankCode: string;
+  expectedHash: string;
+  details: Array<{
+    bankCode: string;
+    sequence: number;
+    employeeId: string;
+    amount: string;
+    occurrenceCode: string;
+  }>;
+}
+
+const GOLDEN_ROOT = join(
+  __dirname,
+  '../../../../../tests/backend/golden/cnab240/return',
+);
+
+const GOLDEN_CASES: Cnab240ReturnGoldenCase[] = [
+  { slug: 'bb', bankCode: '001' },
+  { slug: 'caixa', bankCode: '104' },
+  { slug: 'itau', bankCode: '341' },
+  { slug: 'bradesco', bankCode: '237' },
+  { slug: 'santander', bankCode: '033' },
+];
 
 describe('Cnab240ReturnParserService', () => {
   const parser = new Cnab240ReturnParserService();
 
-  it('parses accepted, rejected, and returned segment A records', () => {
-    const content = [
-      line('001', '0'),
-      segmentA(
-        '001',
-        1,
-        '00000000-0000-4000-8000-000000000001',
-        '123.45',
-        '00',
-      ),
-      segmentA('001', 3, '00000000-0000-4000-8000-000000000002', '50.00', 'BD'),
-      segmentA('001', 5, '00000000-0000-4000-8000-000000000003', '10.20', 'RJ'),
-      line('001', '5'),
-      line('001', '9'),
-    ].join('');
+  it.each(GOLDEN_CASES)(
+    'parses the validated retorno byte fixture for $slug',
+    ({ slug, bankCode }) => {
+      const fixture = readGoldenFixture(slug);
+      const result = parser.parse(fixture.expected);
 
-    const result = parser.parse(content);
-
-    expect(result.bankCode).toBe('001');
-    expect(result.details).toEqual([
-      expect.objectContaining({
-        sequence: 1,
-        amount: '123.45',
-        occurrenceCode: '00',
-      }),
-      expect.objectContaining({
-        sequence: 3,
-        amount: '50.00',
-        occurrenceCode: 'BD',
-      }),
-      expect.objectContaining({
-        sequence: 5,
-        amount: '10.20',
-        occurrenceCode: 'RJ',
-      }),
-    ]);
-    expect(result.fileHash).toMatch(/^[a-f0-9]{64}$/);
-  });
+      expect(fixture.input.bankCode).toBe(bankCode);
+      expect(result.bankCode).toBe(bankCode);
+      expect(result.details).toEqual(fixture.input.details);
+      expect(result.fileHash).toBe(fixture.input.expectedHash);
+      expect(fixture.expected.byteLength).toBe(
+        (fixture.input.details.length + 3) * 240,
+      );
+    },
+  );
 });
 
-function segmentA(
-  bankCode: string,
-  sequence: number,
-  employeeId: string,
-  amount: string,
-  occurrenceCode: string,
-): string {
-  return line(bankCode, '3', [
-    [9, String(sequence).padStart(5, '0')],
-    [14, 'A'],
-    [74, employeeId.padEnd(20, ' ')],
-    [120, moneyCents(amount, 15)],
-    [231, occurrenceCode.padEnd(5, ' ')],
-  ]);
-}
+function readGoldenFixture(slug: string): {
+  input: SerializedCnab240ReturnFixture;
+  expected: Buffer;
+} {
+  const dir = join(GOLDEN_ROOT, slug);
+  const input = JSON.parse(
+    readFileSync(join(dir, 'input.json'), 'utf8'),
+  ) as SerializedCnab240ReturnFixture;
 
-function line(
-  bankCode: string,
-  recordType: string,
-  fields: Array<[number, string]> = [],
-): string {
-  const chars = Array.from(' '.repeat(240));
-  write(chars, 1, bankCode);
-  write(chars, 8, recordType);
-  for (const [position, value] of fields) {
-    write(chars, position, value);
-  }
-  return chars.join('');
-}
-
-function write(chars: string[], oneBasedPosition: number, value: string): void {
-  const index = oneBasedPosition - 1;
-  for (let offset = 0; offset < value.length; offset += 1) {
-    chars[index + offset] = value[offset];
-  }
-}
-
-function moneyCents(amount: string, width: number): string {
-  return amount.replace('.', '').padStart(width, '0');
+  return {
+    input,
+    expected: readFileSync(join(dir, 'expected.ret')),
+  };
 }

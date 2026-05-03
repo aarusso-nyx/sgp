@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface AfdExportSummary {
   afdExportId: string;
@@ -32,10 +32,10 @@ export interface AfdImportSummary {
 
 @Injectable({ providedIn: 'root' })
 export class PontoAfdService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   listExports(): Observable<AfdExportSummary[]> {
-    return this.http.get<AfdExportSummary[]>('/api/v1/ponto/afd/exports');
+    return this.api.get<AfdExportSummary[]>('/api/v1/ponto/afd/exports');
   }
 
   createExport(payload: {
@@ -43,11 +43,11 @@ export class PontoAfdService {
     periodStart: string;
     periodEnd: string;
   }): Observable<AfdExportSummary> {
-    return this.http.post<AfdExportSummary>('/api/v1/ponto/afd/exports', payload);
+    return this.api.post<AfdExportSummary>('/api/v1/ponto/afd/exports', payload);
   }
 
   listImports(): Observable<AfdImportSummary[]> {
-    return this.http.get<AfdImportSummary[]>('/api/v1/ponto/afd/imports');
+    return this.api.get<AfdImportSummary[]>('/api/v1/ponto/afd/imports');
   }
 
   importAfd(payload: {
@@ -55,7 +55,7 @@ export class PontoAfdService {
     fileName: string;
     content: string;
   }): Observable<AfdImportSummary> {
-    return this.http.post<AfdImportSummary>('/api/v1/ponto/afd/imports', payload);
+    return this.api.post<AfdImportSummary>('/api/v1/ponto/afd/imports', payload);
   }
 
   exportDownloadUrl(afdExportId: string): string {

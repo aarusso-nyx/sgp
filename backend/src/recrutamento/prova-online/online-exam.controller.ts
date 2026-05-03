@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -33,6 +34,7 @@ export class OnlineExamController {
     private readonly reviewService: OnlineExamReviewService,
   ) {}
 
+  @ApiOperation({ summary: 'POST sessions' })
   @Post('sessions')
   @RequirePermission('recrutamento.exam.write')
   @AuditMutation({
@@ -45,6 +47,7 @@ export class OnlineExamController {
     return this.onlineExamService.start(body);
   }
 
+  @ApiOperation({ summary: 'POST sessions/:id/events' })
   @Post('sessions/:id/events')
   @RequirePermission('recrutamento.exam.write')
   @AuditMutation({
@@ -57,6 +60,7 @@ export class OnlineExamController {
     return this.onlineExamService.recordEvent(id, body);
   }
 
+  @ApiOperation({ summary: 'POST sessions/:id/artifacts' })
   @Post('sessions/:id/artifacts')
   @RequirePermission('recrutamento.exam.write')
   @AuditMutation({
@@ -74,6 +78,7 @@ export class OnlineExamController {
     return this.ingestService.ingest(id, body);
   }
 
+  @ApiOperation({ summary: 'DELETE sessions/:id/artifacts' })
   @Delete('sessions/:id/artifacts')
   @RequirePermission('recrutamento.exam.write')
   @AuditMutation({
@@ -88,6 +93,7 @@ export class OnlineExamController {
     return this.ingestService.requestExclusion(id);
   }
 
+  @ApiOperation({ summary: 'POST sessions/:id/ai/audio' })
   @Post('sessions/:id/ai/audio')
   @RequirePermission('recrutamento.exam.write')
   @AuditMutation({
@@ -102,6 +108,7 @@ export class OnlineExamController {
     return this.aiFlagsService.analyzeAudio({ ...body, sessionId: id });
   }
 
+  @ApiOperation({ summary: 'POST sessions/:id/ai/frame' })
   @Post('sessions/:id/ai/frame')
   @RequirePermission('recrutamento.exam.write')
   @AuditMutation({
@@ -116,6 +123,7 @@ export class OnlineExamController {
     return this.aiFlagsService.analyzeFrame({ ...body, sessionId: id });
   }
 
+  @ApiOperation({ summary: 'POST sessions/:id/submit' })
   @Post('sessions/:id/submit')
   @RequirePermission('recrutamento.exam.write')
   @AuditMutation({
@@ -128,6 +136,7 @@ export class OnlineExamController {
     return this.onlineExamService.submit(id, body);
   }
 
+  @ApiOperation({ summary: 'GET review/sessions/:id' })
   @Get('review/sessions/:id')
   @RequirePermission('recrutamento.exam.review')
   @ApiOkResponse({ description: 'Read proctoring event timeline for review.' })
@@ -135,6 +144,7 @@ export class OnlineExamController {
     return this.reviewService.timeline(id);
   }
 
+  @ApiOperation({ summary: 'POST review/sessions/:id/accept' })
   @Post('review/sessions/:id/accept')
   @RequirePermission('recrutamento.exam.review')
   @AuditMutation({
@@ -147,6 +157,7 @@ export class OnlineExamController {
     return this.reviewService.accept(id);
   }
 
+  @ApiOperation({ summary: 'POST review/sessions/:id/void' })
   @Post('review/sessions/:id/void')
   @RequirePermission('recrutamento.exam.review')
   @AuditMutation({

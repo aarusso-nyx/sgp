@@ -56,7 +56,7 @@ export class AsoAttachmentService {
       `,
       [asoRecordId, input.fileUri.trim(), sha, input.mime],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   verifySha256(content: Buffer | string, expectedSha256: string): boolean {

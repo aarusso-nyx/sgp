@@ -88,7 +88,8 @@ export class PortabilityProcessService {
           fileHash,
         ],
       );
-      const fileId = inserted.rows[0].file_id;
+      const insertedFile = inserted.rows[0]!;
+      const fileId = insertedFile.file_id;
       for (const detail of details) {
         await this.insertDetail(client, fileId, detail);
       }
@@ -101,7 +102,7 @@ export class PortabilityProcessService {
       });
       return {
         fileId,
-        status: inserted.rows[0].status,
+        status: insertedFile.status,
         detailCount: details.length,
         fileHash,
       };
@@ -278,7 +279,7 @@ export class PortabilityProcessService {
         sourceLoan.loan_id,
       ],
     );
-    const newLoanId = inserted.rows[0].loan_id;
+    const newLoanId = inserted.rows[0]!.loan_id;
 
     await client.query(
       `

@@ -1,94 +1,94 @@
 <section class="alimony-page">
   <header>
     <div>
-      <p>Recursos Humanos</p>
-      <h1>Pensao alimenticia</h1>
+      <p i18n>Recursos Humanos</p>
+      <h1 i18n>Pensao alimenticia</h1>
     </div>
     <label>
-      <span>Servidor</span>
+      <span i18n>Servidor</span>
       <input [(ngModel)]="employeeId" />
     </label>
     <label>
-      <span>Status</span>
+      <span i18n>Status</span>
       <select [(ngModel)]="status">
-        <option value="ACTIVE">Ativa</option>
-        <option value="SUSPENDED">Suspensa</option>
-        <option value="TERMINATED">Encerrada</option>
+        <option value="ACTIVE" i18n>Ativa</option>
+        <option value="SUSPENDED" i18n>Suspensa</option>
+        <option value="TERMINATED" i18n>Encerrada</option>
       </select>
     </label>
-    <button type="button" mat-stroked-button (click)="load()">Carregar</button>
+    <button type="button" mat-stroked-button (click)="load()" i18n>Carregar</button>
   </header>
 
   <p *ngIf="message" role="status" class="message">{{ message }}</p>
   <p *ngIf="error" role="alert" class="error">{{ error }}</p>
-  <p *ngIf="loading">Carregando...</p>
+  <p *ngIf="loading" i18n>Carregando...</p>
 
   <form class="alimony-form">
     <label>
-      <span>Ordem judicial</span>
+      <span i18n>Ordem judicial</span>
       <input [(ngModel)]="form.courtOrderNumber" name="courtOrderNumber" />
     </label>
     <label>
-      <span>Beneficiario</span>
+      <span i18n>Beneficiario</span>
       <input [(ngModel)]="form.beneficiaryName" name="beneficiaryName" />
     </label>
     <label>
-      <span>CPF beneficiario</span>
+      <span i18n>CPF beneficiario</span>
       <input [(ngModel)]="form.beneficiaryCpf" name="beneficiaryCpf" />
     </label>
     <label>
-      <span>Banco judicial</span>
+      <span i18n>Banco judicial</span>
       <input type="number" [(ngModel)]="form.beneficiaryBankCode" name="beneficiaryBankCode" />
     </label>
     <label>
-      <span>Agencia judicial</span>
+      <span i18n>Agencia judicial</span>
       <input [(ngModel)]="form.beneficiaryBranch" name="beneficiaryBranch" />
     </label>
     <label>
-      <span>Conta judicial</span>
+      <span i18n>Conta judicial</span>
       <input [(ngModel)]="form.beneficiaryAccount" name="beneficiaryAccount" />
     </label>
     <label>
-      <span>Base</span>
+      <span i18n>Base</span>
       <select [(ngModel)]="form.calculationBasis" name="calculationBasis">
-        <option value="GROSS">Bruta</option>
-        <option value="NET">Liquida</option>
-        <option value="BASE_SPECIFIC">Especifica</option>
+        <option value="GROSS" i18n>Bruta</option>
+        <option value="NET" i18n>Liquida</option>
+        <option value="BASE_SPECIFIC" i18n>Especifica</option>
       </select>
     </label>
     <label>
-      <span>Percentual</span>
+      <span i18n>Percentual</span>
       <input [(ngModel)]="form.rate" name="rate" />
     </label>
     <label>
-      <span>Valor fixo</span>
+      <span i18n>Valor fixo</span>
       <input [(ngModel)]="form.fixedAmount" name="fixedAmount" />
     </label>
     <label>
-      <span>Inicio</span>
+      <span i18n>Inicio</span>
       <input type="date" [(ngModel)]="form.validFrom" name="validFrom" />
     </label>
     <label>
-      <span>Fim</span>
+      <span i18n>Fim</span>
       <input type="date" [(ngModel)]="form.validTo" name="validTo" />
     </label>
     <label>
-      <span>Prioridade</span>
+      <span i18n>Prioridade</span>
       <input type="number" [(ngModel)]="form.priority" name="priority" />
     </label>
-    <button type="button" mat-flat-button color="primary" (click)="create()">Cadastrar</button>
+    <button type="button" mat-flat-button color="primary" (click)="create()" i18n>Cadastrar</button>
   </form>
 
-  <table aria-label="Ordens de pensao alimenticia">
+  <table aria-label="Ordens de pensao alimenticia" i18n-aria-label>
     <thead>
       <tr>
-        <th>Ordem</th>
-        <th>Beneficiario</th>
-        <th>Conta judicial</th>
-        <th>Base</th>
-        <th>Valor</th>
-        <th>Vigencia</th>
-        <th>Status</th>
+        <th i18n>Ordem</th>
+        <th i18n>Beneficiario</th>
+        <th i18n>Conta judicial</th>
+        <th i18n>Base</th>
+        <th i18n>Valor</th>
+        <th i18n>Vigencia</th>
+        <th i18n>Status</th>
         <th></th>
       </tr>
     </thead>
@@ -104,11 +104,11 @@
         <td>{{ row.validFrom }} - {{ row.validTo || 'sem fim' }}</td>
         <td>{{ row.status }}</td>
         <td>
-          <button type="button" mat-stroked-button (click)="suspend(row)">Suspender</button>
+          <button type="button" mat-stroked-button (click)="suspend(row)" i18n>Suspender</button>
         </td>
       </tr>
       <tr *ngIf="rows.length === 0">
-        <td colspan="8" class="empty">Nenhuma ordem encontrada.</td>
+        <td colspan="8" class="empty" i18n>Nenhuma ordem encontrada.</td>
       </tr>
     </tbody>
   </table>

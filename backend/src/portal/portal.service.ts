@@ -535,7 +535,7 @@ export class PortalService {
       ],
     );
     return {
-      id: rows[0].id,
+      id: rows[0]!.id,
       status: 'PENDING',
       section,
       requestedPayload: payload,
@@ -658,7 +658,7 @@ export class PortalService {
         mother_name,
         father_name,
         address
-      FROM hr.employee
+      FROM hr.v_employee_pii_decrypted
       WHERE tenant_id = public.sgp_current_tenant_uuid()
         AND (
           cpf = NULLIF($1, '')

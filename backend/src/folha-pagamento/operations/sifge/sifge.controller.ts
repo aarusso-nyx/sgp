@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ export class SifgeController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'POST Generate' })
   @Post()
   @RequirePermission('payment.remittance.write')
   @ApiCreatedResponse({
@@ -60,6 +62,7 @@ export class SifgeController {
     return result;
   }
 
+  @ApiOperation({ summary: 'GET :id' })
   @Get(':id')
   @RequirePermission('payroll.fgts.read')
   @ApiOkResponse({ description: 'Get a generated FGTS remittance.' })

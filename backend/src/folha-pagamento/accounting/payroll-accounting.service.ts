@@ -199,7 +199,7 @@ export class PayrollAccountingService {
             this.toRecordStatus(input.active),
           ],
     );
-    return this.toCatalogRecord(rows[0]);
+    return this.toCatalogRecord(rows[0]!);
   }
 
   async updateCatalogRecord(
@@ -428,7 +428,7 @@ export class PayrollAccountingService {
         this.toRecordStatus(input.active),
       ],
     );
-    const created = rows[0];
+    const created = rows[0]!;
     await this.syncAccountingWorkLocations(
       created.id,
       input.workLocationIds ?? [],

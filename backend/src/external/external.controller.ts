@@ -1,5 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { ExternalService } from './external.service';
@@ -10,6 +15,7 @@ import { ExternalService } from './external.service';
 export class ExternalController {
   constructor(private readonly externalService: ExternalService) {}
 
+  @ApiOperation({ summary: 'GET dados' })
   @Get('dados')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'External API health/data probe.' })
@@ -17,6 +23,7 @@ export class ExternalController {
     return this.externalService.dados();
   }
 
+  @ApiOperation({ summary: 'GET dicionario/entidades' })
   @Get('dicionario/entidades')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'External API entity dictionary.' })

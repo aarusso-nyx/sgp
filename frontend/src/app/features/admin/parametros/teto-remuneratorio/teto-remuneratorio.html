@@ -1,62 +1,62 @@
 <section class="teto" aria-labelledby="teto-title">
   <header class="teto__header">
     <div>
-      <p class="teto__eyebrow">Parametros</p>
-      <h1 id="teto-title">Teto remuneratorio</h1>
+      <p class="teto__eyebrow" i18n>Parametros</p>
+      <h1 id="teto-title" i18n>Teto remuneratorio</h1>
     </div>
-    <button mat-raised-button color="primary" type="button" (click)="load()">
+    <button mat-raised-button color="primary" type="button" (click)="load()" [disabled]="loading()">
       <mat-icon>refresh</mat-icon>
-      Atualizar
+      <ng-container i18n>Atualizar</ng-container>
     </button>
   </header>
 
   <form class="teto__form" [formGroup]="form" (ngSubmit)="save()">
     <mat-form-field appearance="outline">
-      <mat-label>Subteto</mat-label>
+      <mat-label i18n>Subteto</mat-label>
       <select matNativeControl formControlName="key">
-        <option value="TETO_PREFEITURA">Prefeitura</option>
-        <option value="TETO_VICE">Vice-prefeito</option>
-        <option value="TETO_VEREADOR">Vereador</option>
-        <option value="TETO_SECRETARIO">Secretario</option>
+        <option value="TETO_PREFEITURA" i18n>Prefeitura</option>
+        <option value="TETO_VICE" i18n>Vice-prefeito</option>
+        <option value="TETO_VEREADOR" i18n>Vereador</option>
+        <option value="TETO_SECRETARIO" i18n>Secretario</option>
       </select>
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Valor</mat-label>
+      <mat-label i18n>Valor</mat-label>
       <input matInput formControlName="amount" inputmode="decimal" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="teto__description">
-      <mat-label>Descricao</mat-label>
+      <mat-label i18n>Descricao</mat-label>
       <input matInput formControlName="description" />
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+    <button mat-raised-button color="primary" type="submit" [disabled]="loading()">
       <mat-icon>save</mat-icon>
-      Salvar
+      <ng-container i18n>Salvar</ng-container>
     </button>
   </form>
 
-  <p class="teto__error" *ngIf="error" role="alert">{{ error }}</p>
-  <p class="teto__success" *ngIf="success">{{ success }}</p>
+  <p class="teto__error" *ngIf="error()" role="alert">{{ error() }}</p>
+  <p class="teto__success" *ngIf="success()">{{ success() }}</p>
 
   <table class="teto__table">
     <thead>
       <tr>
-        <th>Cargo/poder</th>
-        <th>Parametro</th>
-        <th>Valor</th>
-        <th>Vigencia</th>
-        <th>Parcelas imunes</th>
+        <th i18n>Cargo/poder</th>
+        <th i18n>Parametro</th>
+        <th i18n>Valor</th>
+        <th i18n>Vigencia</th>
+        <th i18n>Parcelas imunes</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let ceiling of ceilings">
+      <tr *ngFor="let ceiling of ceilings()">
         <td>{{ ceiling.description }}</td>
         <td>{{ ceiling.key }}</td>
         <td>{{ ceiling.amount || 'Pendente' }}</td>
-        <td>Atual</td>
-        <td>{{ immuneFlag }}</td>
+        <td i18n>Atual</td>
+        <td>{{ immuneFlag() }}</td>
         <td>
-          <button mat-button type="button" (click)="edit(ceiling)">Editar</button>
+          <button mat-button type="button" (click)="edit(ceiling)" i18n>Editar</button>
         </td>
       </tr>
     </tbody>

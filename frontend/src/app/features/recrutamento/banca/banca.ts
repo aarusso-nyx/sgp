@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface BoardMemberDraft {
@@ -10,6 +10,7 @@ interface BoardMemberDraft {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recrutamento-banca',
   standalone: true,
   imports: [CommonModule, FormsModule],

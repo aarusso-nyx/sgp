@@ -1,5 +1,12 @@
+import {
+  FROZEN_TEST_TIME,
+  expectForbiddenNegativePath,
+} from './helpers/test-debt-coverage';
+import { GoneException } from '@nestjs/common';
+
 import { RequestContextStore } from '../../backend/src/common/request-context/request-context.store';
 import { DirfBuilderService } from '../../backend/src/integrations-worker/dirf/dirf-builder.service';
+import { DirfController } from '../../backend/src/integrations-worker/dirf/dirf.controller';
 import { DirfFormatterService } from '../../backend/src/integrations-worker/dirf/dirf-formatter.service';
 import { DirfValidatorService } from '../../backend/src/integrations-worker/dirf/dirf-validator.service';
 
@@ -15,6 +22,29 @@ interface TestDbClient {
 }
 
 describe('DIRF validation flow (e2e)', () => {
+  it('returns 410 when generating DIRF for competences from 2025-01-01 onward', async () => {
+    const builder = {
+      generate: jest.fn(),
+    };
+    const auditService = {
+      auditMutation: jest.fn(),
+    };
+    const controller = new DirfController(
+      builder as never,
+      auditService as never,
+    );
+
+    for (const yearBase of [2025, 2026]) {
+      const failure = await controller
+        .generate({} as never, { yearBase })
+        .catch((error: unknown) => error);
+      expect(failure).toBeInstanceOf(GoneException);
+      expect((failure as GoneException).getStatus()).toBe(410);
+    }
+    expect(builder.generate).not.toHaveBeenCalled();
+    expect(auditService.auditMutation).not.toHaveBeenCalled();
+  });
+
   it('emits header and closing records and matches payment sums to totals', async () => {
     const insertedPayments: Array<{ amount: string; irrf: string }> = [];
     const db = {
@@ -27,7 +57,7 @@ describe('DIRF validation flow (e2e)', () => {
             '11111111111',
             'Ana Silva',
             '0588',
-            '2026-01-01',
+            '2024-01-01',
             '1000.00',
             '100.00',
           ),
@@ -36,7 +66,7 @@ describe('DIRF validation flow (e2e)', () => {
             '11111111111',
             'Ana Silva',
             '0588',
-            '2026-02-01',
+            '2024-02-01',
             '500.00',
             '50.00',
           ),
@@ -44,8 +74,8 @@ describe('DIRF validation flow (e2e)', () => {
         .mockResolvedValueOnce([arquivoRow('1500.00', '150.00')])
         .mockResolvedValueOnce([beneficiaryRow('1500.00')])
         .mockResolvedValueOnce([
-          paymentRow('0588', '2026-01-01', '1000.00', '100.00'),
-          paymentRow('0588', '2026-02-01', '500.00', '50.00'),
+          paymentRow('0588', '2024-01-01', '1000.00', '100.00'),
+          paymentRow('0588', '2024-02-01', '500.00', '50.00'),
         ]),
       transaction: jest.fn(
         async (callback: (client: TestDbClient) => Promise<unknown>) =>
@@ -79,11 +109,11 @@ describe('DIRF validation flow (e2e)', () => {
         tenantId,
         permissions: ['fiscal.dirf.read', 'fiscal.dirf.write'],
       },
-      () => service.generate({ yearBase: 2026 }),
+      () => service.generate({ yearBase: 2024 }),
     );
 
     expect(result.txtContent).toContain(
-      'DIRF|DIRF-RFB-2.060/2026|2026|ORIGINAL|',
+      'DIRF|DIRF-RFB-2.060/2024|2024|ORIGINAL|',
     );
     expect(result.txtContent).toContain('FIMDIRF|');
     const insertedTotal = insertedPayments.reduce(
@@ -120,21 +150,21 @@ function source(
 function arquivoRow(total_amount: string, total_irrf: string) {
   return {
     id: arquivoId,
-    year_base: 2026,
+    year_base: 2024,
     kind: 'ORIGINAL',
     status: 'VALIDATED',
     original_arquivo_id: null,
     txt_ref: 's3://dirf.txt',
-    txt_content: 'DIRF|DIRF-RFB-2.060/2026|2026|ORIGINAL|\r\nFIMDIRF|\r\n',
+    txt_content: 'DIRF|DIRF-RFB-2.060/2024|2024|ORIGINAL|\r\nFIMDIRF|\r\n',
     txt_hash: 'a'.repeat(64),
-    layout_version: 'DIRF-RFB-2.060/2026',
-    generated_at: '2026-05-02T12:00:00.000Z',
+    layout_version: 'DIRF-RFB-2.060/2024',
+    generated_at: '2024-05-02T12:00:00.000Z',
     beneficiary_count: 1,
     payment_count: 2,
     total_amount,
     total_irrf,
-    created_at: '2026-05-02T12:00:00.000Z',
-    updated_at: '2026-05-02T12:00:00.000Z',
+    created_at: '2024-05-02T12:00:00.000Z',
+    updated_at: '2024-05-02T12:00:00.000Z',
   };
 }
 
@@ -167,3 +197,25 @@ function paymentRow(
     deductions: {},
   };
 }
+
+describe('Wave 7 test debt guardrails', () => {
+  describe('403 negative path', () => {
+    it('returns 403 when an authenticated actor lacks the required permission', async () => {
+      await expectForbiddenNegativePath();
+    });
+  });
+
+  describe('frozen clock', () => {
+    beforeAll(() => {
+      jest.useFakeTimers().setSystemTime(FROZEN_TEST_TIME);
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it('uses a deterministic system time', () => {
+      expect(new Date().toISOString()).toBe(FROZEN_TEST_TIME.toISOString());
+    });
+  });
+});

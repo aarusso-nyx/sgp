@@ -1,45 +1,45 @@
 <section class="ponto-mobile">
   <header>
-    <h1>Ponto mobile</h1>
-    <button type="button" (click)="clock()" [disabled]="clocking">Bater ponto</button>
+    <h1 i18n>Ponto mobile</h1>
+    <button type="button" (click)="clock()" [disabled]="clocking" i18n>Bater ponto</button>
   </header>
 
   <form [formGroup]="form">
     <label>
-      Servidor
-      <input formControlName="employeeId" placeholder="UUID do empregado" />
+      <ng-container i18n>Servidor</ng-container>
+      <input formControlName="employeeId" placeholder="UUID do empregado" i18n-placeholder />
     </label>
     <label>
-      Dispositivo
+      <ng-container i18n>Dispositivo</ng-container>
       <input formControlName="deviceId" />
     </label>
     <label>
-      Plataforma
+      <ng-container i18n>Plataforma</ng-container>
       <select formControlName="platform">
-        <option value="ANDROID">Android</option>
-        <option value="IOS">iOS</option>
+        <option value="ANDROID" i18n>Android</option>
+        <option value="IOS" i18n>iOS</option>
       </select>
     </label>
     <label>
-      Chave publica
+      <ng-container i18n>Chave publica</ng-container>
       <textarea formControlName="publicKey" rows="3"></textarea>
     </label>
     <label>
-      Termo
+      <ng-container i18n>Termo</ng-container>
       <input formControlName="consentVersion" />
     </label>
     <div class="actions">
-      <button type="button" (click)="registerDevice()" [disabled]="saving">
+      <button type="button" (click)="registerDevice()" [disabled]="saving" i18n>
         Registrar aparelho
       </button>
-      <button type="button" (click)="createConsent()" [disabled]="saving">
+      <button type="button" (click)="createConsent()" [disabled]="saving" i18n>
         Consentir geolocalizacao
       </button>
     </div>
   </form>
 
   <p class="message" *ngIf="message">{{ message }}</p>
-  <p class="message" *ngIf="distanceM !== null">
+  <p class="message" *ngIf="distanceM !== null" i18n>
     Distancia ao centro: {{ distanceM | number: '1.0-0' }} m
   </p>
   <p class="error" *ngIf="error">{{ error }}</p>

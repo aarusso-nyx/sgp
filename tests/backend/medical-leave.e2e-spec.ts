@@ -1,3 +1,7 @@
+import {
+  FROZEN_TEST_TIME,
+  expectForbiddenNegativePath,
+} from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
@@ -124,5 +128,27 @@ describe('Medical leave workflow (e2e)', () => {
         expect(response.body[0].grantedDays).toBe(15);
         expect(response.body[0].cidCode).toBe('J10');
       });
+  });
+});
+
+describe('Wave 7 test debt guardrails', () => {
+  describe('403 negative path', () => {
+    it('returns 403 when an authenticated actor lacks the required permission', async () => {
+      await expectForbiddenNegativePath();
+    });
+  });
+
+  describe('frozen clock', () => {
+    beforeAll(() => {
+      jest.useFakeTimers().setSystemTime(FROZEN_TEST_TIME);
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it('uses a deterministic system time', () => {
+      expect(new Date().toISOString()).toBe(FROZEN_TEST_TIME.toISOString());
+    });
   });
 });

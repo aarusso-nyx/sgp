@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eSocial xmlns="http://www.esocial.gov.br/schema/evt/evtIrrfBenef/v_S_01_03_00">
+  <evtIrrfBenef Id="ID5002000000000000000000000000000001">
+    <ideEvento>
+      <perApur>2026-01</perApur>
+    </ideEvento>
+    <ideTrabalhador>
+      <cpfBenef>11122233344</cpfBenef>
+      <dmDev>
+        <ideDmDev>DM-2025-IRRF</ideDmDev>
+        <totApurMen>
+          <CRMen>056107</CRMen>
+          <vlrRendTrib>60000.00</vlrRendTrib>
+          <vlrRendTrib13>0.00</vlrRendTrib13>
+          <vlrPrevOficial>0.00</vlrPrevOficial>
+          <vlrPrevOficial13>0.00</vlrPrevOficial13>
+          <vlrCRMen>4200.00</vlrCRMen>
+          <vlrCR13Men>0.00</vlrCR13Men>
+        </totApurMen>
+      </dmDev>
+    </ideTrabalhador>
+    <infoTotal>
+      <nrRecArqBase>1.1.0000000000000001299</nrRecArqBase>
+    </infoTotal>
+  </evtIrrfBenef>
+</eSocial>

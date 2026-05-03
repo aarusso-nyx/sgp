@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 interface CareerTrailStep {
   jobPositionName: string | null;
@@ -56,6 +56,7 @@ interface TerminationTerm {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-portal-minha-carreira',
   standalone: true,
   imports: [CommonModule],
@@ -64,7 +65,7 @@ interface TerminationTerm {
 })
 export class PortalMinhaCarreira implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   trail?: CareerTrail;
   vacationPayslips: VacationPayslip[] = [];
@@ -72,7 +73,7 @@ export class PortalMinhaCarreira implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.http
+    this.api
       .get<CareerTrail>('/api/v1/portal/minha-carreira')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -83,7 +84,7 @@ export class PortalMinhaCarreira implements OnInit, OnDestroy {
           this.error = 'Nao foi possivel carregar a trilha de carreira.';
         },
       });
-    this.http
+    this.api
       .get<VacationPayslip[]>('/api/v1/portal/contracheques/ferias')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -94,7 +95,7 @@ export class PortalMinhaCarreira implements OnInit, OnDestroy {
           this.vacationPayslips = [];
         },
       });
-    this.http
+    this.api
       .get<TerminationTerm[]>('/api/v1/portal/termos-rescisao')
       .pipe(takeUntil(this.destroy$))
       .subscribe({

@@ -6,11 +6,14 @@ import {
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
 import { AuditRequiredInterceptor } from './common/audit/audit-required.interceptor';
 import { StandardExceptionFilter } from './common/errors/standard-exception.filter';
+import { createLoggingModule } from './common/logging/logging.config';
+import { createRateLimitOptions } from './common/rate-limit/rate-limit.config';
 import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { validateEnvironment } from './config/environment';
 import { DatabaseModule } from './database/database.module';
@@ -20,7 +23,11 @@ import { PortalModule } from './portal/portal.module';
 
 @Module({
   imports: [
+    createLoggingModule('sgp-portal-api'),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
+    ThrottlerModule.forRootAsync({
+      useFactory: createRateLimitOptions,
+    }),
     AuthModule,
     AuditModule,
     DatabaseModule,
@@ -44,6 +51,10 @@ import { PortalModule } from './portal/portal.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: AuditRequiredInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
     {
       provide: APP_GUARD,

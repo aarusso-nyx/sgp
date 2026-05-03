@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -32,6 +33,7 @@ export class MasterDataController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List resources' })
   @Get()
   @RequirePermission('gestao.master_data.read')
   @ApiOkResponse({ description: 'List the foundational catalog resources.' })
@@ -39,6 +41,7 @@ export class MasterDataController {
     return this.masterDataService.listResources(query);
   }
 
+  @ApiOperation({ summary: 'GET :resource' })
   @Get(':resource')
   @RequirePermission('gestao.master_data.read')
   @ApiOkResponse({ description: 'List canonical records for one catalog.' })
@@ -49,6 +52,7 @@ export class MasterDataController {
     return this.masterDataService.listRecords(resource, query);
   }
 
+  @ApiOperation({ summary: 'POST :resource' })
   @Post(':resource')
   @RequirePermission('gestao.master_data.write')
   @ApiCreatedResponse({ description: 'Create a canonical catalog record.' })
@@ -66,6 +70,7 @@ export class MasterDataController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH :resource/:id' })
   @Patch(':resource/:id')
   @RequirePermission('gestao.master_data.write')
   @ApiOkResponse({ description: 'Update a canonical catalog record.' })
@@ -88,6 +93,7 @@ export class MasterDataController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'DELETE :resource/:id' })
   @Delete(':resource/:id')
   @RequirePermission('gestao.master_data.write')
   @ApiOkResponse({ description: 'Deactivate a canonical catalog record.' })
@@ -115,6 +121,7 @@ export class JobPositionsController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('gestao.master_data.read')
   @ApiOkResponse({ description: 'List job positions.' })
@@ -122,6 +129,7 @@ export class JobPositionsController {
     return this.masterDataService.listRecords('cargo', query);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('gestao.master_data.write')
   @ApiCreatedResponse({ description: 'Create a job position.' })

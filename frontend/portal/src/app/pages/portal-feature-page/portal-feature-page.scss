@@ -71,3 +71,31 @@ dd {
 .note h2 {
   margin-top: 0;
 }
+
+.gap {
+  border-left: 3px solid var(--portal-accent);
+  padding-left: 0.75rem;
+  color: var(--portal-muted);
+}
+
+.error {
+  color: #9f1d1d;
+}
+
+.data-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.data-list div {
+  display: grid;
+  gap: 0.25rem;
+  border-top: 1px solid var(--portal-line);
+  padding-top: 0.75rem;
+}
+
+.data-list dd {
+  color: var(--portal-muted);
+  overflow-wrap: anywhere;
+}

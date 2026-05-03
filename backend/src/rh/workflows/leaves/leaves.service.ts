@@ -192,7 +192,7 @@ export class LeavesService {
         ],
       );
 
-      return this.toLeave(result.rows[0]);
+      return this.toLeave(result.rows[0]!);
     });
   }
 
@@ -305,7 +305,7 @@ export class LeavesService {
       `,
       [tenantId, reason, LEAVE_REASONS[reason]],
     );
-    return result.rows[0].id;
+    return result.rows[0]!.id;
   }
 
   private async empresaCidadaActive(client: PoolClient): Promise<boolean> {

@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 type SessionState = 'setup' | 'ready' | 'running' | 'blocked' | 'submitted';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-portal-publico-prova-online',
   standalone: true,
   imports: [CommonModule, FormsModule],

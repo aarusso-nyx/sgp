@@ -69,7 +69,7 @@ export class SalaryRangeService {
           input.endsOn ?? null,
         ],
       );
-      return this.toRangeDto(result.rows[0]);
+      return this.toRangeDto(result.rows[0]!);
     });
   }
 
@@ -103,7 +103,7 @@ export class SalaryRangeService {
           input.baseSalary,
         ],
       );
-      return this.toLevelDto(result.rows[0]);
+      return this.toLevelDto(result.rows[0]!);
     });
   }
 

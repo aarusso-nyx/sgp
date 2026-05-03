@@ -1,0 +1,45 @@
+<section class="lgpd-encarregado" aria-labelledby="lgpd-encarregado-title">
+  <header>
+    <p i18n>LGPD</p>
+    <h1 id="lgpd-encarregado-title" i18n>Encarregado de dados pessoais</h1>
+    <button type="button" (click)="load()" i18n>Atualizar</button>
+  </header>
+
+  <p *ngIf="loading" class="lgpd-encarregado__state" i18n>Carregando...</p>
+  <p *ngIf="error" class="lgpd-encarregado__error" role="alert">{{ error }}</p>
+
+  <dl *ngIf="info" class="lgpd-encarregado__details">
+    <div>
+      <dt i18n>Nome</dt>
+      <dd>{{ info.name }}</dd>
+    </div>
+    <div>
+      <dt i18n>E-mail</dt>
+      <dd>
+        <a [href]="'mailto:' + info.contact.email">{{ info.contact.email }}</a>
+      </dd>
+    </div>
+    <div *ngIf="info.contact.phone">
+      <dt i18n>Telefone</dt>
+      <dd>{{ info.contact.phone }}</dd>
+    </div>
+    <div>
+      <dt i18n>Canal</dt>
+      <dd>
+        <a [href]="info.contact.channelUrl">{{ info.contact.channelUrl }}</a>
+      </dd>
+    </div>
+    <div>
+      <dt i18n>Atendimento</dt>
+      <dd>{{ info.contact.officeHours }}</dd>
+    </div>
+    <div *ngIf="info.contact.postalAddress">
+      <dt i18n>Endereco</dt>
+      <dd>{{ info.contact.postalAddress }}</dd>
+    </div>
+    <div>
+      <dt i18n>Atualizacao</dt>
+      <dd>{{ info.updatedAt || 'Configuracao padrao' }}</dd>
+    </div>
+  </dl>
+</section>

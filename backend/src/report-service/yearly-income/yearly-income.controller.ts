@@ -10,6 +10,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -34,6 +35,7 @@ export class YearlyIncomeController {
     private readonly batchService: YearlyIncomeBatchService,
   ) {}
 
+  @ApiOperation({ summary: 'GET v1/portal/yearly-income' })
   @Get('v1/portal/yearly-income')
   @RequirePermission('portal.yearly_income.read')
   @ApiOkResponse({
@@ -43,6 +45,7 @@ export class YearlyIncomeController {
     return this.renderService.listPortalFiles(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/yearly-income/:year/pdf' })
   @Get('v1/portal/yearly-income/:year/pdf')
   @RequirePermission('portal.yearly_income.read')
   @Header('Content-Type', 'application/pdf')
@@ -63,6 +66,7 @@ export class YearlyIncomeController {
     return new StreamableFile(rendered.buffer);
   }
 
+  @ApiOperation({ summary: 'POST v1/admin/yearly-income-batches' })
   @Post('v1/admin/yearly-income-batches')
   @RequirePermission('fiscal.yearly_income.write')
   @AuditMutation({

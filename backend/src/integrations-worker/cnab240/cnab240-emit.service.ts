@@ -292,7 +292,7 @@ export class Cnab240EmitService {
           account.agency_digit,
           account.account_number,
           account.account_digit
-        FROM hr.employee_bank_account account
+        FROM hr.v_employee_bank_account_pii_decrypted account
         JOIN hr.bank bank ON bank.id = account.bank_id
         WHERE account.validation_status = 'VALID'::hr.employee_bank_account_validation_status
           AND bank.code = $2

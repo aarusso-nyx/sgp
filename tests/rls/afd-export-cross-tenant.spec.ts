@@ -1,9 +1,17 @@
-export const afdExportCrossTenantSpec = `
--- Exercised by npm run db:smoke through the PONTO-03 migration and RLS coverage check.
--- Assertions:
--- 1. ponto.afd_export, ponto.afd_import, and ponto.afd_import_line force RLS.
--- 2. Rows are visible only when sgp_tenant_matches(tenant_id) is true.
--- 3. Reads require ponto.afd.read or ponto.afd.write.
--- 4. Mutations require ponto.afd.write.
--- 5. Mutations append public.audit_event through sgp_append_audit_event(...).
-`;
+import { describeRlsSmokeSpec } from './support/rls-spec-helpers';
+
+describeRlsSmokeSpec({
+  title: 'Afd Export Cross Tenant',
+  specFile: 'tests/rls/afd-export-cross-tenant.spec.ts',
+  tenantAInsertEvidence: ['INSERT INTO '],
+  tenantBZeroRowEvidence: ['Expected tenant B to see 0'],
+  assertionSummary: [
+    'Exercised by npm run db:smoke through the PONTO-03 migration and RLS coverage check.',
+    'Assertions:',
+    '1. ponto.afd_export, ponto.afd_import, and ponto.afd_import_line force RLS.',
+    '2. Rows are visible only when sgp_tenant_matches(tenant_id) is true.',
+    '3. Reads require ponto.afd.read or ponto.afd.write.',
+    '4. Mutations require ponto.afd.write.',
+    '5. Mutations append public.audit_event through sgp_append_audit_event(...).',
+  ],
+});

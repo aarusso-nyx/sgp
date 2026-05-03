@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { VacationService } from './vacation.service';
 export class VacationController {
   constructor(private readonly vacationService: VacationService) {}
 
+  @ApiOperation({ summary: 'GET saldo/:employee_id' })
   @Get('saldo/:employee_id')
   @RequirePermission('rh.vacation.read')
   @ApiOkResponse({
@@ -32,6 +34,7 @@ export class VacationController {
     );
   }
 
+  @ApiOperation({ summary: 'POST programacao' })
   @Post('programacao')
   @RequirePermission('rh.vacation.request')
   @AuditMutation({
@@ -46,6 +49,7 @@ export class VacationController {
     return this.vacationService.schedule(body);
   }
 
+  @ApiOperation({ summary: 'POST programacao/:id/aprovar' })
   @Post('programacao/:id/aprovar')
   @RequirePermission('rh.vacation.approve')
   @AuditMutation({
@@ -58,6 +62,7 @@ export class VacationController {
     return this.vacationService.approve(id);
   }
 
+  @ApiOperation({ summary: 'POST programacao/:id/cancelar' })
   @Post('programacao/:id/cancelar')
   @RequirePermission('rh.vacation.approve')
   @AuditMutation({

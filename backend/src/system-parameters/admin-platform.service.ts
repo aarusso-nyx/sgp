@@ -163,6 +163,6 @@ export class AdminPlatformService {
       RETURNING id::text
       `,
     );
-    return rows[0].id;
+    return rows[0]!.id;
   }
 }

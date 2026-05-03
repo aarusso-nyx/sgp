@@ -50,5 +50,21 @@ describe('TCE-01 adapter contract (e2e)', () => {
     expect(database.registryRows).toEqual(
       expect.arrayContaining([expect.objectContaining({ adapter_id: 'noop' })]),
     );
+    expect(
+      response.body.map((adapter: { adapterId: string }) => adapter.adapterId),
+    ).toEqual(
+      expect.arrayContaining([
+        'tce-ba',
+        'tce-ce',
+        'tce-df',
+        'tce-go',
+        'tce-mg',
+        'tce-pe',
+        'tce-pr',
+        'tce-rj',
+        'tce-rs',
+        'tce-sc',
+      ]),
+    );
   });
 });

@@ -10,6 +10,12 @@ import { RubricaController } from './accounting/rubrica/rubrica.controller';
 import { RubricaService } from './accounting/rubrica/rubrica.service';
 import { ESocialController } from './esocial/esocial.controller';
 import { ESocialService } from './esocial/esocial.service';
+import { ManualEntryImportController } from './import/manual-entry-import.controller';
+import { ManualEntryImportService } from './import/manual-entry-import.service';
+import { PensionistaImportController } from './import/pensionista-import.controller';
+import { PensionistaImportService } from './import/pensionista-import.service';
+import { ServidorImportController } from './import/servidor-import.controller';
+import { ServidorImportService } from './import/servidor-import.service';
 import {
   PayrollGfipController,
   PayrollOperationsController,
@@ -35,9 +41,7 @@ import { PriorNoticeController } from './rescisao/prior-notice/prior-notice.cont
 import { PriorNoticeService } from './rescisao/prior-notice/prior-notice.service';
 import { SimulacaoController } from './simulacao/simulacao.controller';
 import { SimulacaoService } from './simulacao/simulacao.service';
-import { FormulaCacheService } from '../payroll-engine/formula-cache.service';
-import { FormulaCompilerService } from '../payroll-engine/formula-compiler.service';
-import { PayrollEngineService } from '../payroll-engine/payroll-engine.service';
+import { PayrollEngineModule } from '../payroll-engine/payroll-engine.module';
 import { FgtsModule } from './fgts/fgts.module';
 import { PisPasepModule } from './pis-pasep/pis-pasep.module';
 import { ReintegrationOrderController } from './operations/reintegration/reintegration-order.controller';
@@ -52,6 +56,7 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     DatabaseModule,
     AuditModule,
     ESocialWorkerModule,
+    PayrollEngineModule,
     FgtsModule,
     PisPasepModule,
     SifgeModule,
@@ -61,6 +66,9 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     PayrollAccountingController,
     RubricaController,
     ESocialController,
+    ManualEntryImportController,
+    PensionistaImportController,
+    ServidorImportController,
     PayrollOperationsController,
     PayrollGfipController,
     BankAccountController,
@@ -90,11 +98,11 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     ConsignmentLoanService,
     ConsignmentDeductionService,
     ESocialService,
+    ManualEntryImportService,
+    PensionistaImportService,
+    ServidorImportService,
     ReintegrationOrderService,
     TsvContractService,
-    PayrollEngineService,
-    FormulaCompilerService,
-    FormulaCacheService,
   ],
 })
 export class FolhaPagamentoModule {}

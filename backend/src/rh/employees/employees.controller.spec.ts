@@ -105,17 +105,32 @@ describe('EmployeesController', () => {
     );
 
     await expect(
-      controller.changeContractRegime('emp-1', {
+      controller.changeContractRegime('emp-1', '"3"', {
         contractType: 'temporary',
         effectiveOn: '2026-05-01',
         endDate: '2026-11-01',
       }),
     ).resolves.toMatchObject({ employmentLinkId: 'link-1' });
-    expect(changeContractRegime).toHaveBeenCalledWith('emp-1', {
-      contractType: 'temporary',
-      effectiveOn: '2026-05-01',
-      endDate: '2026-11-01',
-    });
+    expect(changeContractRegime).toHaveBeenCalledWith(
+      'emp-1',
+      {
+        contractType: 'temporary',
+        effectiveOn: '2026-05-01',
+        endDate: '2026-11-01',
+      },
+      3,
+    );
+  });
+
+  it('requires If-Match for cadastro mutations', async () => {
+    const controller = new EmployeesController(
+      { updateAbonoPermanencia: jest.fn() } as never,
+      {} as never,
+    );
+
+    expect(() =>
+      controller.updateAbonoPermanencia('emp-1', undefined, { active: false }),
+    ).toThrow('If-Match header is required');
   });
 
   it('declares HR-01 specific permission metadata', () => {

@@ -2,9 +2,10 @@ CREATE MATERIALIZED VIEW payment.consignment_margin_view AS
  WITH parameters AS (
          SELECT system_parameter.tenant_id,
             max((system_parameter.value)::numeric) FILTER (WHERE (system_parameter.key = 'consignment.margin.general_pct'::text)) AS general_pct,
-            max((system_parameter.value)::numeric) FILTER (WHERE (system_parameter.key = 'consignment.margin.card_pct'::text)) AS card_pct
+            max((system_parameter.value)::numeric) FILTER (WHERE (system_parameter.key = 'consignment.margin.credit_card_pct'::text)) AS credit_card_pct,
+            max((system_parameter.value)::numeric) FILTER (WHERE (system_parameter.key = 'consignment.margin.benefit_card_pct'::text)) AS benefit_card_pct
            FROM public.system_parameter
-          WHERE (system_parameter.key = ANY (ARRAY['consignment.margin.general_pct'::text, 'consignment.margin.card_pct'::text]))
+          WHERE (system_parameter.key = ANY (ARRAY['consignment.margin.general_pct'::text, 'consignment.margin.credit_card_pct'::text, 'consignment.margin.benefit_card_pct'::text]))
           GROUP BY system_parameter.tenant_id
         ), base AS (
          SELECT DISTINCT ON (record.tenant_id, record.employee_id, record.competence_year, record.competence_month) record.tenant_id,
@@ -19,14 +20,19 @@ CREATE MATERIALIZED VIEW payment.consignment_margin_view AS
             base_1.reference_competence,
             (sum(
                 CASE
-                    WHEN (loan.kind = ANY (ARRAY['PAYROLL_LOAN'::payment.consignment_loan_kind, 'OTHER'::payment.consignment_loan_kind])) THEN loan.monthly_amount
+                    WHEN (loan.kind = 'PAYROLL_LOAN'::payment.consignment_loan_kind) THEN loan.monthly_amount
                     ELSE (0)::numeric
                 END))::numeric(14,2) AS used_general,
             (sum(
                 CASE
                     WHEN (loan.kind = 'CARD'::payment.consignment_loan_kind) THEN loan.monthly_amount
                     ELSE (0)::numeric
-                END))::numeric(14,2) AS used_card
+                END))::numeric(14,2) AS used_credit_card,
+            (sum(
+                CASE
+                    WHEN (loan.kind = 'OTHER'::payment.consignment_loan_kind) THEN loan.monthly_amount
+                    ELSE (0)::numeric
+                END))::numeric(14,2) AS used_benefit_card
            FROM (payment.consignment_loan loan
              JOIN base base_1 ON (((base_1.tenant_id = loan.tenant_id) AND (base_1.employee_id = loan.employee_id) AND ((base_1.reference_competence >= (date_trunc('month'::text, (loan.valid_from)::timestamp with time zone))::date) AND (base_1.reference_competence <= (date_trunc('month'::text, (loan.valid_to)::timestamp with time zone))::date)))))
           WHERE (loan.status = 'ACTIVE'::payment.consignment_loan_status)
@@ -37,9 +43,11 @@ CREATE MATERIALIZED VIEW payment.consignment_margin_view AS
     base.reference_competence,
     base.net_base,
     (GREATEST((round((base.net_base * COALESCE(parameters.general_pct, 0.35)), 2) - COALESCE(used.used_general, (0)::numeric)), (0)::numeric))::numeric(14,2) AS available_general,
-    (GREATEST((round((base.net_base * COALESCE(parameters.card_pct, 0.05)), 2) - COALESCE(used.used_card, (0)::numeric)), (0)::numeric))::numeric(14,2) AS available_card,
+    (GREATEST((round((base.net_base * COALESCE(parameters.credit_card_pct, 0.05)), 2) - COALESCE(used.used_credit_card, (0)::numeric)), (0)::numeric))::numeric(14,2) AS available_credit_card,
+    (GREATEST((round((base.net_base * COALESCE(parameters.benefit_card_pct, 0.05)), 2) - COALESCE(used.used_benefit_card, (0)::numeric)), (0)::numeric))::numeric(14,2) AS available_benefit_card,
     (COALESCE(used.used_general, (0)::numeric))::numeric(14,2) AS used_general,
-    (COALESCE(used.used_card, (0)::numeric))::numeric(14,2) AS used_card
+    (COALESCE(used.used_credit_card, (0)::numeric))::numeric(14,2) AS used_credit_card,
+    (COALESCE(used.used_benefit_card, (0)::numeric))::numeric(14,2) AS used_benefit_card
    FROM ((base
      LEFT JOIN parameters ON ((parameters.tenant_id = base.tenant_id)))
      LEFT JOIN used ON (((used.tenant_id = base.tenant_id) AND (used.employee_id = base.employee_id) AND (used.reference_competence = base.reference_competence))))

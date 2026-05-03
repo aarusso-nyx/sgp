@@ -1,5 +1,10 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../../iam/decorators/require-permission.decorator';
@@ -12,6 +17,7 @@ import { PriorNoticeService } from './prior-notice.service';
 export class PriorNoticeController {
   constructor(private readonly priorNoticeService: PriorNoticeService) {}
 
+  @ApiOperation({ summary: 'POST :id/prior-notice' })
   @Post(':id/prior-notice')
   @RequirePermission('rh.employee.terminate')
   @AuditMutation({

@@ -239,7 +239,7 @@ export class RepIngestionService {
       `,
       [repDeviceId, kind, fileName, fileSha256, rawContent],
     );
-    return rows.rows[0].batch_id;
+    return rows.rows[0]!.batch_id;
   }
 
   private async insertLine(
@@ -306,7 +306,7 @@ export class RepIngestionService {
       `,
       [batchId],
     );
-    return this.toSummary(rows.rows[0]);
+    return this.toSummary(rows.rows[0]!);
   }
 
   private defaultFileName(kind: string): string {

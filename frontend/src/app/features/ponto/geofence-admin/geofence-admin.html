@@ -1,16 +1,16 @@
 <section class="geofence-admin">
   <header>
-    <h1>Geofence de lotacao</h1>
-    <button type="button" (click)="preview()">Validar</button>
+    <h1 i18n>Geofence de lotacao</h1>
+    <button type="button" (click)="preview()" i18n>Validar</button>
   </header>
 
   <form [formGroup]="form">
     <label>
-      Lotacao
-      <input formControlName="workLocationId" placeholder="UUID da lotacao" />
+      <ng-container i18n>Lotacao</ng-container>
+      <input formControlName="workLocationId" placeholder="UUID da lotacao" i18n-placeholder />
     </label>
     <label>
-      Poligono
+      <ng-container i18n>Poligono</ng-container>
       <textarea formControlName="polygonText" rows="8"></textarea>
     </label>
   </form>

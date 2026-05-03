@@ -1,7 +1,7 @@
 <section class="online-exam" [class.recording]="recording">
   <header class="exam-header">
     <div>
-      <h1>Prova online</h1>
+      <h1 i18n>Prova online</h1>
       <span>{{ state | uppercase }}</span>
     </div>
     <strong>{{ remainingLabel }}</strong>
@@ -15,33 +15,39 @@
   <section class="exam-controls" *ngIf="state === 'setup' || state === 'blocked'">
     <label class="consent">
       <input type="checkbox" [(ngModel)]="consentAccepted" />
-      Consentimento para gravacao de audio, video e tela
+      <ng-container i18n>Consentimento para gravacao de audio, video e tela</ng-container>
     </label>
-    <button type="button" (click)="requestMedia()">Liberar camera, microfone e tela</button>
+    <button type="button" (click)="requestMedia()" i18n>Liberar camera, microfone e tela</button>
     <strong *ngIf="blockReason">{{ blockReason }}</strong>
   </section>
 
   <section class="exam-controls" *ngIf="state === 'ready'">
-    <button type="button" (click)="start()">Iniciar prova</button>
+    <button type="button" (click)="start()" i18n>Iniciar prova</button>
   </section>
 
   <section class="question-surface" *ngIf="state === 'running'">
-    <div class="recording-indicator">REC</div>
+    <div class="recording-indicator" i18n>REC</div>
     <article>
-      <h2>Questao 1</h2>
-      <p>Selecione a alternativa correta para concluir a avaliacao.</p>
-      <label><input type="radio" name="q1" /> Alternativa A</label>
-      <label><input type="radio" name="q1" /> Alternativa B</label>
-      <label><input type="radio" name="q1" /> Alternativa C</label>
+      <h2 i18n>Questao 1</h2>
+      <p i18n>Selecione a alternativa correta para concluir a avaliacao.</p>
+      <label
+        ><input type="radio" name="q1" /> <ng-container i18n>Alternativa A</ng-container></label
+      >
+      <label
+        ><input type="radio" name="q1" /> <ng-container i18n>Alternativa B</ng-container></label
+      >
+      <label
+        ><input type="radio" name="q1" /> <ng-container i18n>Alternativa C</ng-container></label
+      >
     </article>
     <footer>
-      <span>Snapshot {{ lastSnapshotAt || '-' }}</span>
-      <button type="button" (click)="submit()">Finalizar</button>
+      <span i18n>Snapshot {{ lastSnapshotAt || '-' }}</span>
+      <button type="button" (click)="submit()" i18n>Finalizar</button>
     </footer>
   </section>
 
   <section class="submitted" *ngIf="state === 'submitted'">
-    <h2>Prova submetida</h2>
-    <p>Protocolo {{ sessionId }}</p>
+    <h2 i18n>Prova submetida</h2>
+    <p i18n>Protocolo {{ sessionId }}</p>
   </section>
 </section>

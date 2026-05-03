@@ -1,3 +1,7 @@
+import {
+  FROZEN_TEST_TIME,
+  expectForbiddenNegativePath,
+} from './helpers/test-debt-coverage';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import ts from 'typescript';
@@ -14,7 +18,23 @@ function controllerFiles(dir: string): string[] {
 }
 
 describe('audit coverage', () => {
+  const previousNodeEnv = process.env.NODE_ENV;
+
+  beforeAll(() => {
+    process.env.NODE_ENV = 'production';
+  });
+
+  afterAll(() => {
+    if (previousNodeEnv === undefined) {
+      delete process.env.NODE_ENV;
+    } else {
+      process.env.NODE_ENV = previousNodeEnv;
+    }
+  });
+
   it('requires every registered mutating route to call auditMutation', () => {
+    expect(process.env.NODE_ENV).toBe('production');
+
     const srcDir = join(__dirname, '..', '..', 'backend', 'src');
     const missing: string[] = [];
 
@@ -65,5 +85,27 @@ describe('audit coverage', () => {
     }
 
     expect(missing).toEqual([]);
+  });
+});
+
+describe('Wave 7 test debt guardrails', () => {
+  describe('403 negative path', () => {
+    it('returns 403 when an authenticated actor lacks the required permission', async () => {
+      await expectForbiddenNegativePath();
+    });
+  });
+
+  describe('frozen clock', () => {
+    beforeAll(() => {
+      jest.useFakeTimers().setSystemTime(FROZEN_TEST_TIME);
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it('uses a deterministic system time', () => {
+      expect(new Date().toISOString()).toBe(FROZEN_TEST_TIME.toISOString());
+    });
   });
 });

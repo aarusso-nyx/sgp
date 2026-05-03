@@ -1,7 +1,7 @@
 <section class="probation" aria-labelledby="probation-title">
   <header>
-    <p>Modulo Avaliacao</p>
-    <h1 id="probation-title">Estagio probatorio</h1>
+    <p i18n>Modulo Avaliacao</p>
+    <h1 id="probation-title" i18n>Estagio probatorio</h1>
   </header>
 
   <p class="probation__message" *ngIf="message" role="status">{{ message }}</p>
@@ -9,15 +9,15 @@
 
   <div class="probation__layout">
     <section>
-      <h2>Servidores a avaliar</h2>
-      <p *ngIf="loading">Carregando...</p>
-      <table aria-label="Servidores em estagio probatorio">
+      <h2 i18n>Servidores a avaliar</h2>
+      <p *ngIf="loading" i18n>Carregando...</p>
+      <table aria-label="Servidores em estagio probatorio" i18n-aria-label>
         <thead>
           <tr>
-            <th>Matricula</th>
-            <th>Nome</th>
-            <th>Completa em</th>
-            <th>Dias</th>
+            <th i18n>Matricula</th>
+            <th i18n>Nome</th>
+            <th i18n>Completa em</th>
+            <th i18n>Dias</th>
           </tr>
         </thead>
         <tbody>
@@ -32,41 +32,43 @@
     </section>
 
     <form [formGroup]="evaluationForm" (ngSubmit)="submit()">
-      <h2>Avaliacao parcial</h2>
+      <h2 i18n>Avaliacao parcial</h2>
       <label>
-        <span>Servidor</span>
+        <span i18n>Servidor</span>
         <input formControlName="funcionarioId" />
       </label>
       <label>
-        <span>Periodo inicio</span>
+        <span i18n>Periodo inicio</span>
         <input type="date" formControlName="periodoInicio" />
       </label>
       <label>
-        <span>Periodo fim</span>
+        <span i18n>Periodo fim</span>
         <input type="date" formControlName="periodoFim" />
       </label>
       <label>
-        <span>Nota</span>
+        <span i18n>Nota</span>
         <input type="number" min="0" max="10" step="0.01" formControlName="nota" />
       </label>
       <label>
-        <span>Decisao</span>
+        <span i18n>Decisao</span>
         <select formControlName="decisao">
-          <option value="pending">Pendente</option>
-          <option value="approved">Aprovado</option>
-          <option value="rejected">Reprovado</option>
-          <option value="extended">Prorrogado</option>
+          <option value="pending" i18n>Pendente</option>
+          <option value="approved" i18n>Aprovado</option>
+          <option value="rejected" i18n>Reprovado</option>
+          <option value="extended" i18n>Prorrogado</option>
         </select>
       </label>
       <label>
-        <span>Avaliador</span>
+        <span i18n>Avaliador</span>
         <input formControlName="avaliadorId" />
       </label>
       <label class="probation__wide">
-        <span>Observacao</span>
+        <span i18n>Observacao</span>
         <textarea rows="3" formControlName="observacao"></textarea>
       </label>
-      <button type="submit" mat-flat-button color="primary" [disabled]="saving">Registrar</button>
+      <button type="submit" mat-flat-button color="primary" [disabled]="saving" i18n>
+        Registrar
+      </button>
     </form>
   </div>
 </section>

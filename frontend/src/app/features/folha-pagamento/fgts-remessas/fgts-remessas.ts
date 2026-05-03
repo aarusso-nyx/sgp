@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { FgtsRemessasService, FgtsRemittance } from './fgts-remessas.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-fgts-remessas',
   standalone: false,
   templateUrl: './fgts-remessas.html',

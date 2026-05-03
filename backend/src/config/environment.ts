@@ -24,6 +24,8 @@ export interface ValidatedEnvironment {
   MINIO_DOCUMENTS_BUCKET?: string;
   MINIO_ACCESS_KEY?: string;
   MINIO_SECRET_KEY?: string;
+  SGP_PII_PGCRYPTO_KEY?: string;
+  SGP_PII_PGCRYPTO_KEY_ID?: string;
 }
 
 function optionalUrl(
@@ -164,5 +166,7 @@ export function validateEnvironment(
     MINIO_DOCUMENTS_BUCKET: optionalString(config.MINIO_DOCUMENTS_BUCKET),
     MINIO_ACCESS_KEY: optionalString(config.MINIO_ACCESS_KEY),
     MINIO_SECRET_KEY: optionalString(config.MINIO_SECRET_KEY),
+    SGP_PII_PGCRYPTO_KEY: optionalString(config.SGP_PII_PGCRYPTO_KEY),
+    SGP_PII_PGCRYPTO_KEY_ID: optionalString(config.SGP_PII_PGCRYPTO_KEY_ID),
   };
 }

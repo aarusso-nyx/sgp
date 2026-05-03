@@ -1,18 +1,18 @@
 <section class="master-data" aria-labelledby="master-data-title">
   <header class="master-data__header">
     <div>
-      <p class="master-data__eyebrow">Gestao</p>
-      <h1 id="master-data-title">Estrutura organizacional</h1>
-      <p>Cargos, funcoes, lotacoes, centros de custo e vinculos de estrutura.</p>
+      <p class="master-data__eyebrow" i18n>Gestao</p>
+      <h1 id="master-data-title" i18n>Estrutura organizacional</h1>
+      <p i18n>Cargos, funcoes, lotacoes, centros de custo e vinculos de estrutura.</p>
     </div>
   </header>
 
   <p class="master-data__error" *ngIf="error" role="alert">{{ error }}</p>
-  <p class="master-data__loading" *ngIf="loading">Carregando...</p>
+  <p class="master-data__loading" *ngIf="loading" i18n>Carregando...</p>
 
   <div class="master-data__grid">
     <section class="master-data__panel">
-      <h2>Hierarquia de lotacoes</h2>
+      <h2 i18n>Hierarquia de lotacoes</h2>
       <ul class="master-data__tree">
         <ng-container *ngFor="let location of locationTree">
           <ng-container
@@ -23,13 +23,13 @@
     </section>
 
     <section class="master-data__panel">
-      <h2>Cargos</h2>
+      <h2 i18n>Cargos</h2>
       <table>
         <thead>
           <tr>
-            <th>Codigo</th>
-            <th>Nome</th>
-            <th>Vagas</th>
+            <th i18n>Codigo</th>
+            <th i18n>Nome</th>
+            <th i18n>Vagas</th>
           </tr>
         </thead>
         <tbody>
@@ -47,21 +47,21 @@
     </section>
 
     <section class="master-data__panel">
-      <h2>Funcoes</h2>
+      <h2 i18n>Funcoes</h2>
       <ul>
         <li *ngFor="let function of jobFunctions">{{ function.code }} - {{ function.name }}</li>
       </ul>
     </section>
 
     <section class="master-data__panel">
-      <h2>Centros de custo</h2>
+      <h2 i18n>Centros de custo</h2>
       <ul>
         <li *ngFor="let center of costCenters">{{ center.code }} - {{ center.name }}</li>
       </ul>
     </section>
 
     <section class="master-data__panel master-data__panel--wide">
-      <h2>Vinculos cargo/função x vínculo funcional</h2>
+      <h2 i18n>Vinculos cargo/função x vínculo funcional</h2>
       <ul>
         <li *ngFor="let link of structureLinks">{{ link.code }} - {{ link.name }}</li>
       </ul>

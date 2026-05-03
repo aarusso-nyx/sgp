@@ -193,7 +193,7 @@ export class InscricaoService {
             status = 'PENDING_PAYMENT'::recrutamento.inscricao_status
         WHERE tenant_id = $1::uuid AND id = $2::uuid
         `,
-        [concurso.tenantId, created.id, charge.rows[0].id],
+        [concurso.tenantId, created.id, charge.rows[0]!.id],
       );
       return {
         id: created.id,
@@ -324,7 +324,7 @@ export class InscricaoService {
         JSON.stringify(input.quotaSelfDeclaration ?? {}),
       ],
     );
-    return rows.rows[0];
+    return rows.rows[0]!;
   }
 
   private async applyPortalMutationContext(

@@ -58,7 +58,7 @@ export class ProvaService {
       [input.concursoId, input.kind, input.appliedAt, input.weight],
     );
     AuditMutationContextStore.markMutationAudited();
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async list(concursoId: string): Promise<ProvaSummary[]> {

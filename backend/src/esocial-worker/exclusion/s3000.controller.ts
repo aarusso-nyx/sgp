@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
@@ -16,6 +21,7 @@ export class S3000Controller {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET events/excludable' })
   @Get('events/excludable')
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({
@@ -25,6 +31,7 @@ export class S3000Controller {
     return this.service.eligibleEvents();
   }
 
+  @ApiOperation({ summary: 'GET exclusions' })
   @Get('exclusions')
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({ description: 'List S-3000 exclusion requests.' })
@@ -32,6 +39,7 @@ export class S3000Controller {
     return this.service.requests();
   }
 
+  @ApiOperation({ summary: 'POST events/:id/exclude' })
   @Post('events/:id/exclude')
   @RequirePermission('esocial.event.exclude')
   @ApiOkResponse({
@@ -62,6 +70,7 @@ export class S3000Controller {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST exclusions/:requestId/accept' })
   @Post('exclusions/:requestId/accept')
   @RequirePermission('esocial.event.exclude')
   @ApiOkResponse({

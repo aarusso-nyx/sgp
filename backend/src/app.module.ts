@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { AuditModule } from './audit/audit.module';
 import { AuditoriaModule } from './auditoria/auditoria.module';
@@ -13,7 +14,9 @@ import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { AuthModule } from './auth/auth.module';
 import { StandardExceptionFilter } from './common/errors/standard-exception.filter';
 import { AuditRequiredInterceptor } from './common/audit/audit-required.interceptor';
+import { createLoggingModule } from './common/logging/logging.config';
 import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
+import { createRateLimitOptions } from './common/rate-limit/rate-limit.config';
 import { validateEnvironment } from './config/environment';
 import { ConvenioModule } from './convenio/convenio.module';
 import { ConsultasModule } from './consultas/consultas.module';
@@ -27,6 +30,7 @@ import { HealthModule } from './health/health.module';
 import { IamModule } from './iam/iam.module';
 import { PermissionGuard } from './iam/guards/permission.guard';
 import { IntegrationsWorkerModule } from './integrations-worker/integrations-worker.module';
+import { LgpdAdminModule } from './lgpd/lgpd-admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { PortalModule } from './portal/portal.module';
 import { PontoModule } from './ponto/ponto.module';
@@ -46,7 +50,11 @@ import { AppService } from './app.service';
 
 @Module({
   imports: [
+    createLoggingModule('sgp-core-api'),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
+    ThrottlerModule.forRootAsync({
+      useFactory: createRateLimitOptions,
+    }),
     AuthModule,
     IamModule,
     AuditModule,
@@ -60,6 +68,7 @@ import { AppService } from './app.service';
     ExternalModule,
     ESocialWorkerModule,
     IntegrationsWorkerModule,
+    LgpdAdminModule,
     PublicoModule,
     ReportsModule,
     GestaoModule,
@@ -96,6 +105,10 @@ import { AppService } from './app.service';
     {
       provide: APP_INTERCEPTOR,
       useClass: AuditRequiredInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
     {
       provide: APP_GUARD,

@@ -1,39 +1,49 @@
 <section class="posse-workspace">
   <header class="posse-toolbar">
     <div>
-      <h1>Posse e exercicio</h1>
-      <p>Agenda administrativa de candidatos nomeados</p>
+      <h1 i18n>Posse e exercicio</h1>
+      <p i18n>Agenda administrativa de candidatos nomeados</p>
     </div>
     <label>
-      Nomeacao
-      <input name="nomeacaoId" [(ngModel)]="nomeacaoId" placeholder="UUID da nomeacao" />
+      <ng-container i18n>Nomeacao</ng-container>
+      <input
+        name="nomeacaoId"
+        [(ngModel)]="nomeacaoId"
+        placeholder="UUID da nomeacao"
+        i18n-placeholder
+      />
     </label>
     <label>
-      Posse
+      <ng-container i18n>Posse</ng-container>
       <input name="posseAt" type="datetime-local" [(ngModel)]="posseAt" />
     </label>
     <label>
-      Lotacao
-      <input name="lotacaoId" [(ngModel)]="lotacaoId" placeholder="UUID da lotacao" />
+      <ng-container i18n>Lotacao</ng-container>
+      <input
+        name="lotacaoId"
+        [(ngModel)]="lotacaoId"
+        placeholder="UUID da lotacao"
+        i18n-placeholder
+      />
     </label>
-    <button type="button" (click)="schedule()">Agendar</button>
+    <button type="button" (click)="schedule()" i18n>Agendar</button>
   </header>
 
   <label class="posse-reason">
-    Motivo de cancelamento
+    <ng-container i18n>Motivo de cancelamento</ng-container>
     <input name="reason" [(ngModel)]="reason" />
   </label>
 
-  <table aria-label="Agenda de posses">
+  <table aria-label="Agenda de posses" i18n-aria-label>
     <thead>
       <tr>
-        <th>Candidato</th>
-        <th>Posse</th>
-        <th>Exercicio ate</th>
-        <th>Lotacao</th>
-        <th>Status</th>
-        <th>Servidor</th>
-        <th>Acoes</th>
+        <th i18n>Candidato</th>
+        <th i18n>Posse</th>
+        <th i18n>Exercicio ate</th>
+        <th i18n>Lotacao</th>
+        <th i18n>Status</th>
+        <th i18n>Servidor</th>
+        <th i18n>Acoes</th>
       </tr>
     </thead>
     <tbody>
@@ -45,10 +55,10 @@
         <td>{{ item.status }}</td>
         <td>{{ item.employeeRegistration || '-' }}</td>
         <td class="posse-actions">
-          <button type="button" (click)="markPossession(item)">Posse</button>
-          <button type="button" (click)="startExercise(item)">Exercicio</button>
-          <button type="button" (click)="prorogue(item)">Prorrogar</button>
-          <button type="button" (click)="cancel(item)">Cancelar</button>
+          <button type="button" (click)="markPossession(item)" i18n>Posse</button>
+          <button type="button" (click)="startExercise(item)" i18n>Exercicio</button>
+          <button type="button" (click)="prorogue(item)" i18n>Prorrogar</button>
+          <button type="button" (click)="cancel(item)" i18n>Cancelar</button>
         </td>
       </tr>
     </tbody>

@@ -1,0 +1,199 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`DTO serialization snapshots AdmitEmployeeDto remains stable on the wire 1`] = `
+{
+  "active": true,
+  "appointedOn": "2026-04-20",
+  "exerciseOn": "2026-05-02",
+  "hiredOn": "2026-05-02",
+  "name": "Servidor Admitido",
+  "possessionOn": "2026-05-01",
+  "registration": "000152",
+}
+`;
+
+exports[`DTO serialization snapshots AuditEventQueryDto remains stable on the wire 1`] = `
+{
+  "action": "UPDATE",
+  "actor": "auditor",
+  "dateFrom": "2026-05-01T00:00:00.000Z",
+  "dateTo": "2026-05-31T23:59:59.000Z",
+  "page": 2,
+  "pageSize": 50,
+  "resourceType": "employee",
+  "statusCode": 403,
+}
+`;
+
+exports[`DTO serialization snapshots CalculatePayrollRunDto remains stable on the wire 1`] = `
+{
+  "mode": "TOTAL",
+}
+`;
+
+exports[`DTO serialization snapshots ChangeContractRegimeDto remains stable on the wire 1`] = `
+{
+  "contractType": "statutory",
+  "effectiveOn": "2026-06-01",
+  "justification": "Alteracao por concurso interno",
+  "regimeLawReference": "Lei 151/2026",
+}
+`;
+
+exports[`DTO serialization snapshots ConcursoVagaDto remains stable on the wire 1`] = `
+{
+  "baseSalary": "5100.00",
+  "indigenousSeats": 1,
+  "pcdSeats": 1,
+  "positionId": "00000000-0000-4000-8000-000000000156",
+  "racialSeats": 2,
+  "requirement": {
+    "schooling": "SUPERIOR",
+  },
+  "totalSeats": 10,
+}
+`;
+
+exports[`DTO serialization snapshots CreateAdvancePaymentDto remains stable on the wire 1`] = `
+{
+  "approvedAmount": "1000.00",
+  "employeeId": "00000000-0000-4000-8000-000000000153",
+  "notes": "Adiantamento autorizado",
+  "requestedAmount": "1200.00",
+  "requestedOn": "2026-05-03",
+}
+`;
+
+exports[`DTO serialization snapshots CreateConcursoDto remains stable on the wire 1`] = `
+{
+  "code": "CP-2026-01",
+  "name": "Concurso Publico Snapshot",
+  "vagas": [
+    {
+      "baseSalary": "5100.00",
+      "indigenousSeats": 1,
+      "pcdSeats": 1,
+      "positionId": "00000000-0000-4000-8000-000000000156",
+      "racialSeats": 2,
+      "totalSeats": 10,
+    },
+  ],
+  "validUntil": "2028-05-03",
+}
+`;
+
+exports[`DTO serialization snapshots CreateConsignmentLoanDto remains stable on the wire 1`] = `
+{
+  "consignmentEntityId": "00000000-0000-4000-8000-000000000155",
+  "contractNumber": "CONSIG-151",
+  "installmentsPaid": 2,
+  "installmentsTotal": 24,
+  "kind": "PAYROLL_LOAN",
+  "monthlyAmount": "350.00",
+  "rate": "1.450000",
+  "validFrom": "2026-05-01",
+  "validTo": "2028-04-30",
+}
+`;
+
+exports[`DTO serialization snapshots CreateEditalDto remains stable on the wire 1`] = `
+{
+  "administrativeAct": "Portaria 151/2026",
+  "administrativeActDate": "2026-05-03",
+  "documentRef": "s3://sgp/editais/cp-2026-01.pdf",
+  "resourceDeadlineAt": "2026-05-10T23:59:59.000Z",
+}
+`;
+
+exports[`DTO serialization snapshots CreatePayrollRunDto remains stable on the wire 1`] = `
+{
+  "branchId": "matriz",
+  "competenceMonth": 5,
+  "competenceYear": 2026,
+  "payrollTypeId": "mensal",
+  "processingTypeId": "normal",
+}
+`;
+
+exports[`DTO serialization snapshots EmployeeMutationDto remains stable on the wire 1`] = `
+{
+  "active": true,
+  "cpf": "12345678901",
+  "email": "servidor@example.test",
+  "name": "Servidor Snapshot",
+  "registration": "000151",
+}
+`;
+
+exports[`DTO serialization snapshots JobPositionMutationDto remains stable on the wire 1`] = `
+{
+  "category": "efetivo",
+  "code": "ANL-RH",
+  "creationLaw": "Lei 100/2026",
+  "legalRegime": "estatutario",
+  "name": "Analista de RH",
+  "vacanciesCount": 5,
+}
+`;
+
+exports[`DTO serialization snapshots PopulatePayrollRunDto remains stable on the wire 1`] = `
+{
+  "replaceCalculatedItems": true,
+}
+`;
+
+exports[`DTO serialization snapshots PublishEditalDto remains stable on the wire 1`] = `
+{
+  "administrativeAct": "Portaria 151/2026",
+  "administrativeActDate": "2026-05-03",
+  "publicUrl": "https://publico.example.test/editais/cp-2026-01",
+}
+`;
+
+exports[`DTO serialization snapshots RunDecimoTerceiroDto remains stable on the wire 1`] = `
+{
+  "year": 2026,
+}
+`;
+
+exports[`DTO serialization snapshots RunFeriasPayrollDto remains stable on the wire 1`] = `
+{
+  "vacationRecordId": "00000000-0000-4000-8000-000000000154",
+}
+`;
+
+exports[`DTO serialization snapshots SalaryRangeLevelMutationDto remains stable on the wire 1`] = `
+{
+  "baseSalary": "4200.00",
+  "classNumber": 1,
+  "code": "A1",
+  "levelNumber": 1,
+  "name": "Nivel A1",
+  "salaryRangeId": "00000000-0000-4000-8000-000000000151",
+}
+`;
+
+exports[`DTO serialization snapshots SalaryRangeMutationDto remains stable on the wire 1`] = `
+{
+  "classCode": "A",
+  "code": "RH-A",
+  "groupCode": "RH",
+  "name": "RH Classe A",
+  "startsOn": "2026-05-01",
+}
+`;
+
+exports[`DTO serialization snapshots TerminateEmployeeDto remains stable on the wire 1`] = `
+{
+  "generateTerminationPayroll": true,
+  "justification": "Portaria 151/2026",
+  "terminationDate": "2026-05-31",
+  "terminationReasonId": "aposentadoria",
+}
+`;
+
+exports[`DTO serialization snapshots UpdatePayrollRunStatusDto remains stable on the wire 1`] = `
+{
+  "status": "APPROVED",
+}
+`;

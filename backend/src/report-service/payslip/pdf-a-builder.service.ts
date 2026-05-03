@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
+import { PadesAdapter } from '../../external/signature/pades.adapter';
 import { PayslipDocument } from './payslip-template';
 import { YearlyIncomeDocument } from '../yearly-income/yearly-income-template';
 
@@ -11,6 +12,11 @@ export interface PdfAValidationResult {
 
 @Injectable()
 export class PdfABuilderService {
+  constructor(
+    @Optional()
+    private readonly padesAdapter: PadesAdapter = new PadesAdapter(),
+  ) {}
+
   async buildPayslip(document: PayslipDocument): Promise<Buffer> {
     const pdf = await PDFDocument.create();
     pdf.setTitle(`Contracheque ${document.competence}`);
@@ -100,8 +106,14 @@ export class PdfABuilderService {
       7,
     );
 
-    const bytes = await pdf.save({ useObjectStreams: false });
-    return Buffer.from(bytes);
+    const rendered = Buffer.from(await pdf.save({ useObjectStreams: false }));
+    return this.padesAdapter.embedVerificationHint({
+      payload: rendered,
+      verifyUrl: `/v1/portal/payslips/${document.employee.id}/${document.competence.slice(0, 7)}/pdf`,
+      signerName: document.tenantName,
+      signedAt: new Date(`${document.competence}T00:00:00.000Z`).toISOString(),
+      reason: `Contracheque ${document.competence.slice(0, 7)}`,
+    });
   }
 
   validatePdfA1b(buffer: Buffer): PdfAValidationResult {
@@ -188,6 +200,7 @@ export class PdfABuilderService {
     line();
 
     draw(`Total conciliado S-1210: ${document.esocialTotal}`, margin, 9, bold);
+    draw(`IRRF S-1210: ${document.esocialIrrfTotal}`, 330, 9, bold);
     y -= 14;
     draw(`Recomputado em: ${document.recomputedAt}`, margin, 8);
     y -= 14;
@@ -199,8 +212,14 @@ export class PdfABuilderService {
       7,
     );
 
-    const bytes = await pdf.save({ useObjectStreams: false });
-    return Buffer.from(bytes);
+    const rendered = Buffer.from(await pdf.save({ useObjectStreams: false }));
+    return this.padesAdapter.embedVerificationHint({
+      payload: rendered,
+      verifyUrl: `/v1/portal/yearly-income/${document.yearBase}/pdf`,
+      signerName: document.payer.name,
+      signedAt: document.recomputedAt,
+      reason: `Comprovante de Rendimentos ${document.yearBase}`,
+    });
   }
 
   private clean(value: string): string {

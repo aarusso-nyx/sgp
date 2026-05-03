@@ -32,6 +32,10 @@ export class OpenApiClient {
     return this.api.delete<unknown>(`/v1/arquivos/${encodeURIComponent(params.id)}`);
   }
 
+  deleteApiV1ConveniosById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/convenios/${encodeURIComponent(params.id)}`);
+  }
+
   deleteApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeIdAndId(params: {
     employeeId: string;
     id: string;
@@ -156,6 +160,10 @@ export class OpenApiClient {
     return this.api.delete<unknown>(`/v1/rh/afastamentos/${encodeURIComponent(params.id)}`);
   }
 
+  deleteApiV1RhOrganicDefinitionsById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/rh/organic-definitions/${encodeURIComponent(params.id)}`);
+  }
+
   deleteApiV1RhProcessosFuncaoById(params: { id: string }): Observable<unknown> {
     return this.api.delete<unknown>(`/v1/rh/processos-funcao/${encodeURIComponent(params.id)}`);
   }
@@ -183,6 +191,10 @@ export class OpenApiClient {
 
   getApiExternalV1DicionarioEntidades(): Observable<unknown> {
     return this.api.get<unknown>('/external/v1/dicionario/entidades');
+  }
+
+  getApiPortalV1AuthGovbrSignCallback(): Observable<unknown> {
+    return this.api.get<unknown>('/portal/v1/auth/govbr/sign/callback');
   }
 
   getApiPortalV1AuthGovbrStatus(): Observable<unknown> {
@@ -237,6 +249,14 @@ export class OpenApiClient {
     return this.api.get<unknown>(`/v1/admin/fiscal/dirf/${encodeURIComponent(params.id)}/txt`);
   }
 
+  getApiV1AdminFiscalEfdReinf(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/fiscal/efd-reinf', query);
+  }
+
+  getApiV1AdminFiscalEfdReinfById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/admin/fiscal/efd-reinf/${encodeURIComponent(params.id)}`);
+  }
+
   getApiV1AdminFiscalGps(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/fiscal/gps', query);
   }
@@ -251,6 +271,14 @@ export class OpenApiClient {
 
   getApiV1AdminFiscalGpsPaymentCodes(): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/fiscal/gps/payment-codes');
+  }
+
+  getApiV1AdminLgpdIncidents(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/lgpd/incidents');
+  }
+
+  getApiV1AdminLgpdRopa(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/lgpd/ropa');
   }
 
   getApiV1AdminMenus(): Observable<unknown> {
@@ -383,6 +411,14 @@ export class OpenApiClient {
 
   getApiV1Cargos(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/cargos', query);
+  }
+
+  getApiV1ConsultasBatimento(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/consultas/batimento', query);
+  }
+
+  getApiV1ConsultasBusinessDays(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/consultas/business-days', query);
   }
 
   getApiV1ConsultasDashboards(): Observable<unknown> {
@@ -697,6 +733,14 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/notificacoes/unread-count');
   }
 
+  getApiV1PayrollEngineHealth(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/payroll-engine/health');
+  }
+
+  getApiV1PayrollEngineStatus(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/payroll-engine/status');
+  }
+
   getApiV1PericiaProntuariosLaudoPdfById(params: { id: string }): Observable<unknown> {
     return this.api.get<unknown>(
       `/v1/pericia/prontuarios/${encodeURIComponent(params.id)}/laudo/pdf`,
@@ -921,6 +965,19 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/previdenciario/simulacoes');
   }
 
+  getApiV1PublicLaiRequestsStatusByTenantIdAndProtocol(params: {
+    tenantId: string;
+    protocol: string;
+  }): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/public/lai/${encodeURIComponent(params.tenantId)}/requests/${encodeURIComponent(params.protocol)}/status`,
+    );
+  }
+
+  getApiV1PublicLgpdEncarregado(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/public/lgpd/encarregado');
+  }
+
   getApiV1PublicTransparencyPayrollByTenantId(params: { tenantId: string }): Observable<unknown> {
     return this.api.get<unknown>(
       `/v1/public/transparency/${encodeURIComponent(params.tenantId)}/payroll`,
@@ -1009,6 +1066,14 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/recrutamento/concursos');
   }
 
+  getApiV1RecrutamentoEstagiosEstagiarios(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/recrutamento/estagios/estagiarios', query);
+  }
+
+  getApiV1RecrutamentoEstagiosProgramas(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/recrutamento/estagios/programas', query);
+  }
+
   getApiV1RecrutamentoProvaOnlineReviewSessionsById(params: { id: string }): Observable<unknown> {
     return this.api.get<unknown>(
       `/v1/recrutamento/prova-online/review/sessions/${encodeURIComponent(params.id)}`,
@@ -1017,6 +1082,14 @@ export class OpenApiClient {
 
   getApiV1Relatorios(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/relatorios', query);
+  }
+
+  getApiV1ReportServiceHealth(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/report-service/health');
+  }
+
+  getApiV1ReportServiceStatus(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/report-service/status');
   }
 
   getApiV1RhAfastamentos(query: ApiQuery = {}): Observable<unknown> {
@@ -1033,6 +1106,10 @@ export class OpenApiClient {
     return this.api.get<unknown>(
       `/v1/rh/employee-transfer/employee/${encodeURIComponent(params.employeeId)}`,
     );
+  }
+
+  getApiV1RhOrganicDefinitions(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/rh/organic-definitions', query);
   }
 
   getApiV1RhProcessos(query: ApiQuery = {}): Observable<unknown> {
@@ -1174,6 +1251,53 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1AdminLgpdIncidentsCloseById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/incidents/${encodeURIComponent(params.id)}/close`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdIncidentsComplementById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/incidents/${encodeURIComponent(params.id)}/complement`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdIncidentsReportById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/incidents/${encodeURIComponent(params.id)}/report`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdIncidentsTriageById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/incidents/${encodeURIComponent(params.id)}/triage`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdRopaById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/ropa/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
   patchApiV1AdminNomeacoesDesistenciaById(
     params: { id: string },
     body: ApiBody = {},
@@ -1279,6 +1403,10 @@ export class OpenApiClient {
       `/v1/avaliacao/planos-cargos/${encodeURIComponent(params.id)}`,
       body,
     );
+  }
+
+  patchApiV1ConveniosById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(`/v1/convenios/${encodeURIComponent(params.id)}`, body);
   }
 
   patchApiV1EmployeesRhWorkflowsContribuicoesSindicaisByEmployeeIdAndId(
@@ -1493,6 +1621,16 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1RhOrganicDefinitionsById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/organic-definitions/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
   patchApiV1RhProcessosFuncaoById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/rh/processos-funcao/${encodeURIComponent(params.id)}`,
@@ -1612,6 +1750,14 @@ export class OpenApiClient {
     );
   }
 
+  postApiPortalV1AuthGovbrSign(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/portal/v1/auth/govbr/sign', body);
+  }
+
+  postApiPortalV1LgpdDireitos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/portal/v1/lgpd/direitos', body);
+  }
+
   postApiV1AdminConcursosClassificacaoById(
     params: { id: string },
     body: ApiBody = {},
@@ -1688,6 +1834,30 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/dirf/gerar', body);
   }
 
+  postApiV1AdminFiscalEfdReinfAssinarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/fiscal/efd-reinf/${encodeURIComponent(params.id)}/assinar`,
+      body,
+    );
+  }
+
+  postApiV1AdminFiscalEfdReinfTransmitirById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/fiscal/efd-reinf/${encodeURIComponent(params.id)}/transmitir`,
+      body,
+    );
+  }
+
+  postApiV1AdminFiscalEfdReinfGerar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/efd-reinf/gerar', body);
+  }
+
   postApiV1AdminFiscalGps(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/gps', body);
   }
@@ -1704,6 +1874,14 @@ export class OpenApiClient {
       `/v1/admin/hr/reintegrations/${encodeURIComponent(params.id)}/apply`,
       body,
     );
+  }
+
+  postApiV1AdminLgpdIncidents(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/incidents', body);
+  }
+
+  postApiV1AdminLgpdRopa(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/ropa', body);
   }
 
   postApiV1AdminMenus(body: ApiBody = {}): Observable<unknown> {
@@ -1842,6 +2020,10 @@ export class OpenApiClient {
 
   postApiV1Cargos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/cargos', body);
+  }
+
+  postApiV1Convenios(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/convenios', body);
   }
 
   postApiV1ConvitesAceitarByToken(
@@ -2051,6 +2233,16 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1EsocialFolhaPeriodicaRunsS1202EmitirByPayrollRunId(
+    params: { payrollRunId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/esocial/folha-periodica/runs/${encodeURIComponent(params.payrollRunId)}/s1202/emitir`,
+      body,
+    );
+  }
+
   postApiV1EsocialRetornosEventosRetryByEventId(
     params: { eventId: string },
     body: ApiBody = {},
@@ -2199,6 +2391,36 @@ export class OpenApiClient {
   ): Observable<unknown> {
     return this.api.post<unknown, ApiBody>(
       `/v1/folhas/${encodeURIComponent(params.folha_id)}/adiantamentos`,
+      body,
+    );
+  }
+
+  postApiV1FolhasImportarLancamentoManualByFolhaId(
+    params: { folha_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folhas/${encodeURIComponent(params.folha_id)}/importar/lancamento-manual`,
+      body,
+    );
+  }
+
+  postApiV1FolhasImportarPensionistaByFolhaId(
+    params: { folha_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folhas/${encodeURIComponent(params.folha_id)}/importar/pensionista`,
+      body,
+    );
+  }
+
+  postApiV1FolhasImportarServidorByFolhaId(
+    params: { folha_id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/folhas/${encodeURIComponent(params.folha_id)}/importar/servidor`,
       body,
     );
   }
@@ -2419,6 +2641,10 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1PayrollEngineCalculations(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/payroll-engine/calculations', body);
+  }
+
   postApiV1PericiaAgendamentos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/pericia/agendamentos', body);
   }
@@ -2445,6 +2671,14 @@ export class OpenApiClient {
       `/v1/pericia/prontuarios/${encodeURIComponent(params.prontuario_id)}/replicar`,
       body,
     );
+  }
+
+  postApiV1PontoAfdAcjef(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/afd/acjef', body);
+  }
+
+  postApiV1PontoAfdAfdt(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/ponto/afd/afdt', body);
   }
 
   postApiV1PontoAfdExports(body: ApiBody = {}): Observable<unknown> {
@@ -2692,9 +2926,47 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/previdenciario/simulacoes', body);
   }
 
+  postApiV1PrevidenciarioSimulacoesEc103AtividadeRiscoProfessor(
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      '/v1/previdenciario/simulacoes/ec103/atividade-risco-professor',
+      body,
+    );
+  }
+
+  postApiV1PrevidenciarioSimulacoesEc103IdadeProgressiva(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      '/v1/previdenciario/simulacoes/ec103/idade-progressiva',
+      body,
+    );
+  }
+
+  postApiV1PrevidenciarioSimulacoesEc103Pedagio100(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/previdenciario/simulacoes/ec103/pedagio-100', body);
+  }
+
+  postApiV1PrevidenciarioSimulacoesEc103Pedagio50(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/previdenciario/simulacoes/ec103/pedagio-50', body);
+  }
+
+  postApiV1PrevidenciarioSimulacoesEc103Pontos(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/previdenciario/simulacoes/ec103/pontos', body);
+  }
+
   postApiV1PrevidenciarioTransferenciaSiprevExportar(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>(
       '/v1/previdenciario/transferencia-siprev/exportar',
+      body,
+    );
+  }
+
+  postApiV1PublicLaiRequestsByTenantId(
+    params: { tenantId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/public/lai/${encodeURIComponent(params.tenantId)}/requests`,
       body,
     );
   }
@@ -2837,6 +3109,44 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1RecrutamentoEstagiosDesligarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/estagios/${encodeURIComponent(params.id)}/desligar`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoEstagiosEsocialS2300ById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/estagios/${encodeURIComponent(params.id)}/esocial/s2300`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoEstagiosProrrogacaoById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/recrutamento/estagios/${encodeURIComponent(params.id)}/prorrogacao`,
+      body,
+    );
+  }
+
+  postApiV1RecrutamentoEstagiosEstagiarios(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/estagios/estagiarios', body);
+  }
+
+  postApiV1RecrutamentoEstagiosProgramas(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/recrutamento/estagios/programas', body);
+  }
+
   postApiV1RecrutamentoProvaOnlineReviewSessionsAcceptById(
     params: { id: string },
     body: ApiBody = {},
@@ -2925,6 +3235,14 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1ReportServicePoll(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/report-service/poll', body);
+  }
+
+  postApiV1ReportServiceRequests(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/report-service/requests', body);
+  }
+
   postApiV1RhAfastamentos(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/rh/afastamentos', body);
   }
@@ -2961,6 +3279,10 @@ export class OpenApiClient {
       `/v1/rh/employee-transfer/${encodeURIComponent(params.id)}/efetivar`,
       body,
     );
+  }
+
+  postApiV1RhOrganicDefinitions(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/rh/organic-definitions', body);
   }
 
   postApiV1RhProcessos(body: ApiBody = {}): Observable<unknown> {

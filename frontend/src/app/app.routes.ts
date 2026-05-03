@@ -33,6 +33,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'lgpd/encarregado',
+    loadComponent: () =>
+      import('./features/portal/lgpd-encarregado/lgpd-encarregado').then((m) => m.LgpdEncarregado),
+  },
+  {
     path: 'publico/concursos/:slug/inscricao',
     loadComponent: () =>
       import('./features/portal-publico/concursos/inscricao/inscricao').then(
@@ -183,6 +188,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/avaliacao/progressoes/progressoes').then(
             (m) => m.AvaliacaoProgressoes,
+          ),
+      },
+      {
+        path: 'portal/lgpd/encarregado',
+        loadComponent: () =>
+          import('./features/portal/lgpd-encarregado/lgpd-encarregado').then(
+            (m) => m.LgpdEncarregado,
           ),
       },
       {

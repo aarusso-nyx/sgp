@@ -1,6 +1,10 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import Decimal from 'decimal.js';
 
+/**
+ * @deprecated DIRF validation is retained only for year-base competences before
+ * 2025-01-01. Use EFD-Reinf R-4000 for facts from 2025-01-01 onward.
+ */
 @Injectable()
 export class DirfValidatorService {
   validate(txt: string): void {

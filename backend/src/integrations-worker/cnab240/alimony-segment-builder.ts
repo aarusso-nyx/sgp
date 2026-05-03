@@ -12,7 +12,8 @@ export interface AlimonyRemittanceOrder {
 }
 
 export function toAlimonyPaymentInput(order: AlimonyRemittanceOrder) {
-  const [account, accountDigit = '0'] = order.beneficiaryAccount.split('-');
+  const [account = '', accountDigit = '0'] =
+    order.beneficiaryAccount.split('-');
   return {
     employeeId: order.employeeId,
     employeeName: order.beneficiaryName,

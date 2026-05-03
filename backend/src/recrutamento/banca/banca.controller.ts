@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -28,6 +29,7 @@ export class BancaController {
     private readonly documentSigningService: DocumentSigningService,
   ) {}
 
+  @ApiOperation({ summary: 'GET concursos/:concursoId/membros' })
   @Get('concursos/:concursoId/membros')
   @RequirePermission('recrutamento.banca.read')
   @ApiOkResponse({ description: 'List examination board members.' })
@@ -35,6 +37,7 @@ export class BancaController {
     return this.bancaService.listMembers(concursoId);
   }
 
+  @ApiOperation({ summary: 'POST membros' })
   @Post('membros')
   @RequirePermission('recrutamento.banca.write')
   @AuditMutation({
@@ -47,6 +50,7 @@ export class BancaController {
     return this.bancaService.createMember(body);
   }
 
+  @ApiOperation({ summary: 'POST documentos' })
   @Post('documentos')
   @RequirePermission('recrutamento.banca.write')
   @AuditMutation({
@@ -61,6 +65,7 @@ export class BancaController {
     return this.documentSigningService.create(body);
   }
 
+  @ApiOperation({ summary: 'POST documentos/:id/signatures' })
   @Post('documentos/:id/signatures')
   @RequirePermission('recrutamento.banca.write')
   @AuditMutation({
@@ -73,6 +78,7 @@ export class BancaController {
     return this.documentSigningService.sign(id, body);
   }
 
+  @ApiOperation({ summary: 'POST documentos/:id/publicacao' })
   @Post('documentos/:id/publicacao')
   @RequirePermission('recrutamento.banca.write')
   @AuditMutation({
@@ -95,6 +101,7 @@ export class PublicBancaVerifyController {
     private readonly documentSigningService: DocumentSigningService,
   ) {}
 
+  @ApiOperation({ summary: 'GET verify/:token' })
   @Get('verify/:token')
   @Public()
   @ApiOkResponse({

@@ -1,5 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface ConsignmentMargin {
   employeeId: string;
@@ -25,16 +26,16 @@ export interface ConsignmentLoan {
 
 @Injectable({ providedIn: 'root' })
 export class ConsignadosService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   margin(employeeId: string, competence: string) {
     const params = new HttpParams().set('competence', competence);
-    return this.http.get<ConsignmentMargin>(`/api/v1/employees/${employeeId}/consignment-margin`, {
+    return this.api.get<ConsignmentMargin>(`/api/v1/employees/${employeeId}/consignment-margin`, {
       params,
     });
   }
 
   loans(employeeId: string) {
-    return this.http.get<ConsignmentLoan[]>(`/api/v1/employees/${employeeId}/consignment-loans`);
+    return this.api.get<ConsignmentLoan[]>(`/api/v1/employees/${employeeId}/consignment-loans`);
   }
 }

@@ -131,6 +131,14 @@ export class DatabaseService implements OnModuleDestroy {
       'app.bypass_rls',
       context?.bypassRls ? 'true' : 'false',
     ]);
+    await client.query('SELECT set_config($1, $2, true)', [
+      'app.pii_encryption_key',
+      this.configService.get<string>('SGP_PII_PGCRYPTO_KEY') ?? '',
+    ]);
+    await client.query('SELECT set_config($1, $2, true)', [
+      'app.pii_encryption_key_id',
+      this.configService.get<string>('SGP_PII_PGCRYPTO_KEY_ID') ?? '',
+    ]);
   }
 
   private assertBypassRlsAllowed(sql: string): void {

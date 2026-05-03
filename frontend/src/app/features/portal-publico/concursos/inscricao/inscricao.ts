@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 type Step = 'personal' | 'position' | 'quota' | 'exemption' | 'biometrics' | 'confirm' | 'payment';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-portal-publico-inscricao',
   standalone: true,
   imports: [CommonModule, FormsModule],

@@ -58,7 +58,7 @@ Os bounded contexts identificados são:
 | Parâmetros e Feature Flags  | `PARAMETROS`            | `parametros`                                               |
 | Integrações Externas        | `INTEGRACOES`           | `integracoes`                                              |
 | Tribunais de Contas         | `COMPLIANCE_TCE`        | `tce`                                                      |
-| Portal Publico              | `PUBLICO`               | `publico/transparency`                                     |
+| Portal Publico              | `PUBLICO`               | `publico/transparency`, `publico/lai`                      |
 
 ### 1.2 Módulos NestJS por Contexto
 
@@ -561,7 +561,8 @@ stateDiagram-v2
 - `GET /api/v1/employees/:id/alimonies?status=ACTIVE` — listar ordens judiciais de pensão alimentícia do servidor
 - `POST /api/v1/employees/:id/alimonies` — cadastrar ordem judicial com beneficiário, conta judicial, base, vigência e prioridade
 - `PATCH /api/v1/employees/:id/alimonies/:alimonyId` — atualizar, suspender ou encerrar ordem preservando versão anterior em histórico
-- `POST /api/v1/folha/importacoes/verbas` — importar verbas servidor/pensionista
+- `POST /api/v1/folhas/:folha_id/importar/servidor` — importar XLSX de verbas de servidor para folha específica
+- `POST /api/v1/folhas/:folha_id/importar/pensionista` — importar XLSX de verbas de pensionista para folha específica
 - `GET /api/v1/folha/relatorios-financeiros` — listar relatórios financeiros
 - `GET /api/v1/folha/verbas` — catálogo de verbas/rubricas
 - `GET /api/v1/payroll-engine/health` — health check do runtime separado de cálculo
@@ -711,7 +712,7 @@ stateDiagram-v2
 
 #### `previdenciario` — Módulo Previdenciário e Recadastramento
 
-**Responsabilidades:** gestão de aposentadorias e pensões; certidões de tempo de contribuição e compensação previdenciária; campanhas de recadastramento; controle de beneficiários (prazo, status RECADASTRADO/PERTO_VENCER/NAO_RECADASTRADO); histórico de ligações; prova de vida por canais externos.
+**Responsabilidades:** gestão de aposentadorias e pensões; certidões de tempo de contribuição e compensação previdenciária; simulação de regras de transição previdenciária EC 103/2019, incluindo Pedágio 100 % (`EC103_PEDAGIO_100`, art. 20), Pedágio 50 % (`EC103_PEDAGIO_50`, art. 17), Sistema de Pontos (`EC103_PONTOS`, art. 4), Idade Mínima Progressiva (`EC103_IDADE_PROGRESSIVA`, art. 16) e Atividade de Risco/Professor (`EC103_ATIVIDADE_RISCO_PROFESSOR`, art. 5 ou art. 10 § 2º III conforme população); campanhas de recadastramento; controle de beneficiários (prazo, status RECADASTRADO/PERTO_VENCER/NAO_RECADASTRADO); histórico de ligações; prova de vida por canais externos.
 
 **Entidades:** `regra_aposentadoria`, `simulacao_aposentadoria`, `aposentadoria`, `pensao`, `certidao_tempo_contribuicao`, `compensacao_previdenciaria`, `declaracao_aposentadoria`, `declaracao_ex_servidor`, `campanha_recadastramento`, `beneficiario_recadastramento`, `recadastramento`, `historico_ligacao`, `prova_vida_externa`.
 
@@ -722,6 +723,11 @@ stateDiagram-v2
 - `GET /api/v1/previdenciario/aposentadorias`
 - `POST /api/v1/previdenciario/aposentadorias`
 - `POST /api/v1/previdenciario/simulacoes`
+- `POST /api/v1/previdenciario/simulacoes/ec103/pedagio-100`
+- `POST /api/v1/previdenciario/simulacoes/ec103/pedagio-50`
+- `POST /api/v1/previdenciario/simulacoes/ec103/pontos`
+- `POST /api/v1/previdenciario/simulacoes/ec103/idade-progressiva`
+- `POST /api/v1/previdenciario/simulacoes/ec103/atividade-risco-professor`
 - `GET /api/v1/previdenciario/pensoes`
 - `POST /api/v1/previdenciario/pensoes`
 - `GET /api/v1/previdenciario/certidoes`
@@ -889,11 +895,14 @@ stateDiagram-v2
 
 - `GET /api/v1/convenios`
 - `POST /api/v1/convenios`
-- `PUT /api/v1/convenios/:id`
+- `PATCH /api/v1/convenios/:id`
+- `DELETE /api/v1/convenios/:id`
 - `GET /api/v1/convenios/:id/beneficiarios`
 - `POST /api/v1/convenios/:id/beneficiarios`
 - `DELETE /api/v1/convenios/:id/beneficiarios/:pessoaId`
 - `GET /api/v1/convenios/descontos-folha/:competenciaId`
+
+**Operacionalização R2-76:** `POST /api/v1/convenios`, `PATCH /api/v1/convenios/:id` e `DELETE /api/v1/convenios/:id` promovem o cadastro de convênios para escrita. O ciclo de estágio usa `GET/POST /api/v1/recrutamento/estagios/programas`, `GET/POST /api/v1/recrutamento/estagios/estagiarios`, `POST /api/v1/recrutamento/estagios/:id/prorrogacao`, `POST /api/v1/recrutamento/estagios/:id/desligar` e `POST /api/v1/recrutamento/estagios/:id/esocial/s2300`. A contratação de estagiário grava TCE, plano de atividades, vínculo TS-V categoria 901 e fonte do S-2300.
 
 **Eventos publicados:** `convenio.desconto.calculado` (para módulo `folha` incluir na folha).
 

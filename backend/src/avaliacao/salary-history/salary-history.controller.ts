@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { SalaryHistoryService } from './salary-history.service';
 export class SalaryHistoryController {
   constructor(private readonly salaryHistoryService: SalaryHistoryService) {}
 
+  @ApiOperation({ summary: 'GET :salaryRangeLevelId/timeline' })
   @Get(':salaryRangeLevelId/timeline')
   @RequirePermission('avaliacao.salary_history.read')
   @ApiOkResponse({ description: 'List salary base history for one level.' })
@@ -24,6 +26,7 @@ export class SalaryHistoryController {
     return this.salaryHistoryService.timeline(salaryRangeLevelId);
   }
 
+  @ApiOperation({ summary: 'POST reajuste-massa' })
   @Post('reajuste-massa')
   @RequirePermission('avaliacao.salary_history.write')
   @AuditMutation({

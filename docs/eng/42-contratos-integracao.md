@@ -691,6 +691,98 @@ Reimportação do mesmo arquivo em mesma competência é permitida — opera em 
 
 ---
 
+## 8A. Importador XLSX de Verbas de Servidor
+
+### 8A.1 Finalidade e dono de negócio
+
+Importação mensal de verbas variáveis de servidores ativos para uma folha específica. Dono: **Módulo Folha** — responsável: Analista de verbas / Analista de folha.
+
+### 8A.2 Endpoint e leiaute
+
+`POST /api/v1/folhas/{folha_id}/importar/servidor` recebe `multipart/form-data` com campo `file` em formato `.xlsx`.
+
+Colunas aceitas na primeira planilha:
+
+| Coluna canônica | Aliases aceitos                                                        | Obrigatório                                     | Destino                                         |
+| --------------- | ---------------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
+| `matricula`     | `registro`, `servidor_matricula`, `employee_registration`              | Sim, salvo quando `employee_id` vier preenchido | `hr.employee.registration`                      |
+| `employee_id`   | `servidor_id`                                                          | Não                                             | `hr.employee.id`                                |
+| `verba_codigo`  | `verba`, `rubrica`, `codigo_verba`, `codigo_rubrica`, `rubrica_codigo` | Sim                                             | `payroll.payroll_earning_deduction.code`        |
+| `valor`         | `amount`                                                               | Sim                                             | `payroll.employee_payroll_item.amount`          |
+| `quantidade`    | `qtd`, `quantity`                                                      | Não                                             | `payroll.employee_payroll_item.quantity`        |
+| `referencia`    | `valor_referencia`, `reference_value`                                  | Não                                             | `payroll.employee_payroll_item.reference_value` |
+| `observacao`    | `observacoes`, `notes`, `comentario`                                   | Não                                             | `payroll.employee_payroll_item.notes`           |
+
+### 8A.3 Persistência, idempotência e auditoria
+
+Linhas válidas criam ou atualizam `payroll.employee_payroll_item` com `source=IMPORTED`, competência herdada de `payroll.payroll_run` e chave idempotente por tenant, competência, folha, servidor, verba e origem. Reenvio da mesma linha substitui quantidade, referência, valor e observação do lançamento ativo correspondente.
+
+Folhas nos estados `GENERATED`, `APPROVED`, `PAID` ou `CLOSED` rejeitam o arquivo. Linhas com matrícula ou verba inexistente são rejeitadas individualmente e retornadas no resumo sem bloquear as demais linhas válidas. Cada linha aceita emite evento de auditoria `IMPORT` em `public.audit_event`, além do resumo da importação.
+
+## 8B. Importador XLSX de Verbas de Pensionista
+
+### 8B.1 Finalidade e dono de negócio
+
+Importação mensal de verbas variáveis de pensionistas para uma folha específica. Dono: **Módulo Folha** — responsável: Analista de verbas / Controle interno.
+
+### 8B.2 Endpoint e leiaute
+
+`POST /api/v1/folhas/{folha_id}/importar/pensionista` recebe `multipart/form-data` com campo `file` em formato `.xlsx`.
+
+Colunas aceitas na primeira planilha:
+
+| Coluna canônica         | Aliases aceitos                                                            | Obrigatório                                                                | Destino / validação                                             |
+| ----------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `pensao_id`             | `pension_grant_id`, `pension_id`                                           | Sim                                                                        | `hr.pension_grant.id`; compõe a chave idempotente de pensão     |
+| `matricula_pensionista` | `pensionista_matricula`, `beneficiario_matricula`, `matricula`, `registro` | Sim, salvo quando `pensionista_id` ou `beneficiario_id` vierem preenchidos | `hr.employee.registration` vinculado a beneficiário pensionista |
+| `pensionista_id`        | `employee_id`, `beneficiario_employee_id`                                  | Não                                                                        | `hr.employee.id`                                                |
+| `beneficiario_id`       | `recertification_beneficiary_id`, `pensionista_beneficiario_id`            | Não                                                                        | `hr.recertification_beneficiary.id` com tipo pensionista        |
+| `verba_codigo`          | `verba`, `rubrica`, `codigo_verba`, `codigo_rubrica`, `rubrica_codigo`     | Sim                                                                        | `payroll.payroll_earning_deduction.code`                        |
+| `valor`                 | `amount`                                                                   | Sim                                                                        | `payroll.employee_payroll_item.amount`                          |
+| `quantidade`            | `qtd`, `quantity`                                                          | Não                                                                        | `payroll.employee_payroll_item.quantity`                        |
+| `referencia`            | `valor_referencia`, `reference_value`                                      | Não                                                                        | `payroll.employee_payroll_item.reference_value`                 |
+| `observacao`            | `observacoes`, `notes`, `comentario`                                       | Não                                                                        | `payroll.employee_payroll_item.notes`                           |
+
+### 8B.3 Persistência, idempotência e auditoria
+
+Linhas válidas criam ou atualizam `payroll.employee_payroll_item` com `source=IMPORTED`, competência herdada de `payroll.payroll_run` e chave idempotente do lançamento por tenant, competência, folha, pensionista, verba e origem. O importador também calcula e audita uma chave idempotente de pensão por tenant, competência, folha, `pensao_id`, pensionista, verba e origem `PENSIONISTA_IMPORTED`, garantindo que o vínculo previdenciário separado acompanhe cada linha aceita.
+
+Folhas nos estados `GENERATED`, `APPROVED`, `PAID` ou `CLOSED` rejeitam o arquivo. Linhas com `pensao_id`, pensionista ou verba inexistentes são rejeitadas individualmente e retornadas no resumo sem bloquear as demais linhas válidas. Cada linha aceita emite evento de auditoria `IMPORT` em `public.audit_event`, além do resumo da importação.
+
+---
+
+## 8C. Importador XLSX de Lançamentos Manuais
+
+### 8C.1 Finalidade e dono de negócio
+
+Importação de lançamentos manuais em lote para uma folha específica, preservando vínculo explícito entre arquivo XLSX e `folha_pagamento_id`. Dono: **Módulo Folha** — responsável: Analista de folha / Gestor de folha.
+
+### 8C.2 Endpoint e leiaute
+
+`POST /api/v1/folhas/{folha_id}/importar/lancamento-manual` recebe `multipart/form-data` com campo `file` em formato `.xlsx`.
+
+Colunas aceitas na primeira planilha:
+
+| Coluna canônica | Aliases aceitos                                                        | Obrigatório                                     | Destino                                         |
+| --------------- | ---------------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
+| `matricula`     | `registro`, `servidor_matricula`, `employee_registration`              | Sim, salvo quando `employee_id` vier preenchido | `hr.employee.registration`                      |
+| `employee_id`   | `servidor_id`                                                          | Não                                             | `hr.employee.id`                                |
+| `verba_codigo`  | `verba`, `rubrica`, `codigo_verba`, `codigo_rubrica`, `rubrica_codigo` | Sim                                             | `payroll.payroll_earning_deduction.code`        |
+| `valor`         | `amount`                                                               | Sim                                             | `payroll.employee_payroll_item.amount`          |
+| `quantidade`    | `qtd`, `quantity`                                                      | Não                                             | `payroll.employee_payroll_item.quantity`        |
+| `referencia`    | `valor_referencia`, `reference_value`                                  | Não                                             | `payroll.employee_payroll_item.reference_value` |
+| `observacao`    | `observacoes`, `notes`, `comentario`                                   | Não                                             | `payroll.employee_payroll_item.notes`           |
+
+### 8C.3 Persistência, idempotência e auditoria
+
+Linhas válidas criam ou atualizam `payroll.employee_payroll_item` com `source=IMPORTED`, competência herdada de `payroll.payroll_run` e chave idempotente por tenant, competência, folha, servidor, verba e origem. Reenvio da mesma linha substitui quantidade, referência, valor e observação do lançamento ativo correspondente.
+
+O valor do lançamento deve ser positivo. Folhas nos estados `GENERATED`, `APPROVED`, `PAID` ou `CLOSED` rejeitam o arquivo. Linhas com matrícula ou verba inexistente são rejeitadas individualmente e retornadas no resumo sem bloquear as demais linhas válidas.
+
+Cada importação com linha aceita grava histórico em `payroll.payroll_run_status_history` com `kind=MANUAL_ENTRY_XLSX_IMPORT`, `folhaPagamentoId`, nome/hash SHA-256 do arquivo e contagem de linhas aceitas/rejeitadas. A API também emite evento de auditoria `IMPORT` em `public.audit_event` para o resumo da importação, com `resourceId={folha_id}`, e para cada linha aceita.
+
+---
+
 ## 9. CNAB 240 / 400 (Remessa e Retorno Bancário)
 
 ### 9.1 Finalidade e dono de negócio
@@ -1409,6 +1501,8 @@ Esta seção é autoridade viva para rotas já expostas pelo runtime atual e usa
 - `GET /api/v1/portal/yearly-income/:year/pdf` - `backend/src/report-service/yearly-income/yearly-income.controller.ts`
 - `GET /api/v1/public/transparency/:tenantId/payroll` - `backend/src/publico/transparency/transparency.controller.ts`
 - `GET /api/v1/public/transparency/:tenantId/payroll.csv` - `backend/src/publico/transparency/transparency.controller.ts`
+- `GET /api/v1/public/lai/:tenantId/requests/:protocol/status` - `backend/src/publico/lai/lai-requests.controller.ts`
+- `GET /api/v1/public/lgpd/encarregado` - `backend/src/publico/lgpd-dpo.controller.ts`
 - `GET /api/v1/recrutamento/avaliacao/notas/inscricoes/:inscricaoId` - `backend/src/recrutamento/avaliacao/nota.controller.ts`
 - `GET /api/v1/recrutamento/avaliacao/provas/:provaId/gabaritos` - `backend/src/recrutamento/avaliacao/gabarito.controller.ts`
 - `GET /api/v1/recrutamento/avaliacao/provas/concursos/:concursoId` - `backend/src/recrutamento/avaliacao/prova.controller.ts`
@@ -1463,6 +1557,9 @@ Esta seção é autoridade viva para rotas já expostas pelo runtime atual e usa
 - `POST /api/v1/folha/rubrica/compile` - `backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts`
 - `POST /api/v1/folha/rubrica/links/job-positions` - `backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts`
 - `POST /api/v1/folha/simulacao` - `backend/src/folha-pagamento/simulacao/simulacao.controller.ts`
+- `POST /api/v1/folhas/:folha_id/importar/lancamento-manual` - `backend/src/folha-pagamento/import/manual-entry-import.controller.ts`
+- `POST /api/v1/folhas/:folha_id/importar/servidor` - `backend/src/folha-pagamento/import/servidor-import.controller.ts`
+- `POST /api/v1/folhas/:folha_id/importar/pensionista` - `backend/src/folha-pagamento/import/pensionista-import.controller.ts`
 - `POST /api/v1/folhas/decimo-terceiro/adiantamento` - `backend/src/folha-pagamento/payroll/payroll.controller.ts`
 - `POST /api/v1/folhas/decimo-terceiro/fechamento` - `backend/src/folha-pagamento/payroll/payroll.controller.ts`
 - `POST /api/v1/folhas/mensal/abrir` - `backend/src/folha-pagamento/payroll/payroll.controller.ts`
@@ -1482,6 +1579,8 @@ Esta seção é autoridade viva para rotas já expostas pelo runtime atual e usa
 - `POST /api/v1/payment/return-files` - `backend/src/integrations-worker/cnab240/return/cnab240-return.controller.ts`
 - `POST /api/v1/payment/return-files/:id/reprocess-rejected` - `backend/src/integrations-worker/cnab240/return/cnab240-return.controller.ts`
 - `POST /api/v1/pericia/agendamentos/:agendamento_id/parecer` - `backend/src/saude/pericia.controller.ts`
+- `POST /api/v1/ponto/afd/acjef` - `backend/src/ponto/afd/afd.controller.ts`
+- `POST /api/v1/ponto/afd/afdt` - `backend/src/ponto/afd/afd.controller.ts`
 - `POST /api/v1/ponto/afd/exports` - `backend/src/ponto/afd/afd.controller.ts`
 - `POST /api/v1/ponto/afd/imports` - `backend/src/ponto/afd/afd.controller.ts`
 - `POST /api/v1/ponto/banco-horas` - `backend/src/ponto/hour-bank/hour-bank.controller.ts`
@@ -1504,6 +1603,7 @@ Esta seção é autoridade viva para rotas já expostas pelo runtime atual e usa
 - `POST /api/v1/ponto/mobile/geofences` - `backend/src/ponto/mobile/mobile-clock.controller.ts`
 - `POST /api/v1/ponto/rep` - `backend/src/ponto/rep-device/rep-device.controller.ts`
 - `POST /api/v1/ponto/rep/:repDeviceId/batches` - `backend/src/ponto/rep-ingestion/rep-ingestion.controller.ts`
+- `POST /api/v1/public/lai/:tenantId/requests` - `backend/src/publico/lai/lai-requests.controller.ts`
 - `POST /api/v1/public/transparency/:tenantId/publish` - `backend/src/publico/transparency/transparency.controller.ts`
 - `POST /api/v1/publico/inscricoes/:id/recursos` - `backend/src/recrutamento/avaliacao/recurso.controller.ts`
 - `POST /api/v1/recrutamento/avaliacao/provas` - `backend/src/recrutamento/avaliacao/prova.controller.ts`

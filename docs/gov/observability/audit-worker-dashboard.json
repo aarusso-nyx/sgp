@@ -1,0 +1,69 @@
+{
+  "title": "SGP Audit and Worker Coverage",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "tags": ["sgp", "audit", "workers", "wave-7"],
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Audit Coverage Ratio",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "sum(rate(sgp_audit_events_emitted_total[5m])) / clamp_min(sum(rate(sgp_http_requests_total{method=~\"POST|PUT|PATCH|DELETE\"}[5m])), 1)",
+          "legendFormat": "audit_events / mutating_requests"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Audit Events by Controller and Route",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "sum by (controller, route) (rate(sgp_audit_events_emitted_total[5m]))",
+          "legendFormat": "{{controller}} {{route}}"
+        }
+      ],
+      "gridPos": { "h": 8, "w": 16, "x": 8, "y": 0 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Worker Queue Depth",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "sgp_queue_depth{queue=~\"sgp-.*-worker\"}",
+          "legendFormat": "{{queue}}"
+        }
+      ],
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Worker Active Claims",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "sgp_worker_active_claims",
+          "legendFormat": "{{worker}}"
+        }
+      ],
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
+    }
+  ]
+}

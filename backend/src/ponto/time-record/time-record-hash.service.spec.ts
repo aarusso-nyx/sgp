@@ -44,6 +44,33 @@ describe('TimeRecordHashService', () => {
     expect(service.verifyChain(records)).toBe(false);
   });
 
+  it('verifies a chain across monthly partition boundaries', () => {
+    const employeeId = '00000000-0000-4000-8000-000000000001';
+    const recordedInstants = [
+      '2026-04-30T23:58:00.000Z',
+      '2026-05-01T00:02:00.000Z',
+      '2026-05-31T23:59:00.000Z',
+      '2026-06-01T00:01:00.000Z',
+    ];
+    let prevHash: Buffer | null = null;
+    const records = recordedInstants.map((recordedAt, index) => {
+      const nsr = index + 1;
+      const record = service.recordForHash({
+        employeeId,
+        recordedAt,
+        source: 'MANUAL_ADJUSTMENT',
+        nsr,
+        rawPayload: { device: 'manual', sequence: nsr },
+      });
+      const recordHash = service.calculateHash(prevHash, record);
+      const entry = { prevHash, recordHash, record };
+      prevHash = recordHash;
+      return entry;
+    });
+
+    expect(service.verifyChain(records)).toBe(true);
+  });
+
   it('rejects manual creation when prev_hash diverges from the latest record', async () => {
     const latestHash = Buffer.from('aa'.repeat(32), 'hex');
     const fakeDatabase = {

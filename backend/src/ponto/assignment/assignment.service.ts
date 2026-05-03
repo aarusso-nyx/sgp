@@ -42,7 +42,7 @@ export class AssignmentService {
         input.validTo ?? null,
       ],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async list(employeeId?: string): Promise<AssignmentSummary[]> {

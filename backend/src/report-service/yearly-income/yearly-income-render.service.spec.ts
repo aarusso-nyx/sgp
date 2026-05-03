@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import {
   toYearlyIncomeDocument,
   YearlyIncomeAggregate,
@@ -22,6 +25,7 @@ const base: YearlyIncomeAggregate = {
   irrfTotal: '4200.00',
   dependentsCount: 1,
   s1210Total: '60000.00',
+  s1210IrrfTotal: '4200.00',
   recomputedAt: '2026-02-28T00:00:00.000Z',
 };
 
@@ -53,6 +57,24 @@ describe('yearly income golden scenarios', () => {
     expect(document.esocialTotal).toBe('75700.25');
   });
 
+  it('reconciles annual IRRF against the S-1210 golden fixture', () => {
+    const fixture = s1210AnnualGolden();
+    const document = toYearlyIncomeDocument({
+      ...base,
+      employeeId: fixture.employeeId,
+      yearBase: fixture.yearBase,
+      taxableTotal: fixture.incomeTotal,
+      s1210Total: fixture.incomeTotal,
+      irrfTotal: fixture.irrfTotal,
+      s1210IrrfTotal: sumMoney(
+        fixture.competences.map((competence) => competence.irrfTotal),
+      ),
+    });
+
+    expect(document.totals.irrfTotal).toBe('4200.00');
+    expect(document.esocialIrrfTotal).toBe('4200.00');
+  });
+
   it('maps severance totals for a termination in the year-base', () => {
     const document = toYearlyIncomeDocument({
       ...base,
@@ -75,4 +97,42 @@ describe('yearly income golden scenarios', () => {
       }),
     ).toThrow('S-1210 coherence failed');
   });
+
+  it('rejects IRRF totals that diverge from the S-1210 annual totalizer', () => {
+    expect(() =>
+      toYearlyIncomeDocument({
+        ...base,
+        s1210IrrfTotal: '4199.99',
+      }),
+    ).toThrow('S-1210 IRRF coherence failed');
+  });
 });
+
+interface S1210AnnualGolden {
+  employeeId: string;
+  yearBase: number;
+  incomeTotal: string;
+  irrfTotal: string;
+  competences: Array<{
+    competence: string;
+    paidTotal: string;
+    irrfTotal: string;
+  }>;
+}
+
+function s1210AnnualGolden(): S1210AnnualGolden {
+  return JSON.parse(
+    readFileSync(
+      join(__dirname, '__fixtures__', 's1210-irrf-annual.golden.json'),
+      'utf8',
+    ),
+  ) as S1210AnnualGolden;
+}
+
+function sumMoney(values: string[]): string {
+  const cents = values.reduce((total, value) => {
+    const [whole, fraction = ''] = value.split('.');
+    return total + Number(whole) * 100 + Number(fraction.padEnd(2, '0'));
+  }, 0);
+  return `${Math.trunc(cents / 100)}.${String(cents % 100).padStart(2, '0')}`;
+}

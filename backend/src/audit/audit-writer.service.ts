@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import { AuditMutationContextStore } from '../common/audit/audit-mutation-context.store';
+import { recordAuditEvent } from '../common/observability/prometheus.metrics';
 import { DatabaseService } from '../database/database.service';
 import { AuditActionValue } from './audit.dto';
 import { redactAuditMetadata } from './audit-redaction.util';
@@ -22,7 +23,7 @@ export class AuditWriterService {
     request: RequestWithContext,
     action: Extract<
       AuditActionValue,
-      'CREATE' | 'UPDATE' | 'DELETE' | 'PROCESS' | 'GENERATE'
+      'CREATE' | 'UPDATE' | 'DELETE' | 'PROCESS' | 'GENERATE' | 'IMPORT'
     >,
     resourceType: string,
     options: AuditAppendOptions = {},
@@ -80,6 +81,33 @@ export class AuditWriterService {
         this.userAgent(request),
       ],
     );
+    const labels = AuditMutationContextStore.labels();
+    recordAuditEvent(
+      this.auditLabel(labels?.controller, options.metadata?.['controller']),
+      this.auditRoute(labels?.route, request),
+    );
+  }
+
+  private auditLabel(
+    contextValue: string | undefined,
+    metadataValue: unknown,
+  ): string {
+    if (contextValue) return contextValue;
+    if (typeof metadataValue === 'string' && metadataValue.trim()) {
+      return metadataValue.trim();
+    }
+    return 'unknown';
+  }
+
+  private auditRoute(
+    contextRoute: string | undefined,
+    request: RequestWithContext,
+  ): string {
+    if (contextRoute) return contextRoute;
+    const route = request.route as { path?: unknown } | undefined;
+    const routePath = typeof route?.path === 'string' ? route.path : undefined;
+    if (routePath) return `${request.baseUrl ?? ''}${routePath}`;
+    return request.path ?? request.originalUrl?.split('?')[0] ?? 'unknown';
   }
 
   private userAgent(request: RequestWithContext): string | null {

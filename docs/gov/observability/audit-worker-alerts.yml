@@ -1,0 +1,26 @@
+groups:
+  - name: sgp-audit-worker-coverage
+    interval: 30s
+    rules:
+      - alert: SgpAuditCoverageBelowMutatingRequests
+        expr: |
+          sum(rate(sgp_audit_events_emitted_total[5m]))
+            / clamp_min(sum(rate(sgp_http_requests_total{method=~"POST|PUT|PATCH|DELETE"}[5m])), 1) < 1
+        for: 10m
+        labels:
+          severity: warning
+          service: sgp
+        annotations:
+          summary: SGP audit event coverage is below mutating request volume.
+          description: Mutating HTTP traffic exceeded emitted audit events for 10 minutes. Inspect sgp_audit_events_emitted_total by controller and route.
+      - alert: SgpWorkerBackpressureSaturated
+        expr: |
+          sum(sgp_queue_depth{queue=~"sgp-.*-worker"}) > 0
+            and sum(sgp_worker_active_claims) > 0
+        for: 15m
+        labels:
+          severity: warning
+          service: sgp
+        annotations:
+          summary: SGP worker queues have pending work while active claims remain nonzero.
+          description: Worker poll loops may be backpressured. Check worker logs for poll skipped lines and stale RUNNING or ENVIANDO claims.

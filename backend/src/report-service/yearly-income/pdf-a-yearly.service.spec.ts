@@ -25,6 +25,7 @@ describe('PdfABuilderService yearly income', () => {
       irrfTotal: '6100.00',
       dependentsCount: 2,
       s1210Total: '75700.25',
+      s1210IrrfTotal: '6100.00',
       recomputedAt: '2026-02-28T00:00:00.000Z',
     };
     const service = new PdfABuilderService();
@@ -33,6 +34,7 @@ describe('PdfABuilderService yearly income', () => {
     );
 
     expect(buffer.subarray(0, 5).toString('latin1')).toBe('%PDF-');
+    expect(buffer.toString('latin1')).toContain('%%SGP-PADES-SIGNATURE:');
     expect(service.validatePdfA1b(buffer)).toEqual({
       valid: true,
       reasons: [],

@@ -547,6 +547,8 @@ CREATE FUNCTION recrutamento.get_public_concurso(p_slug text) RETURNS jsonb
     'vagas', COALESCE(jsonb_agg(jsonb_build_object(
       'positionId', v.position_id::text,
       'positionName', jp.name,
+      'organicDefinitionId', v.organic_definition_id::text,
+      'workLocationId', od.work_location_id::text,
       'totalSeats', v.total_seats,
       'pcdSeats', v.pcd_seats,
       'racialSeats', v.racial_seats,
@@ -564,6 +566,7 @@ CREATE FUNCTION recrutamento.get_public_concurso(p_slug text) RETURNS jsonb
   ) e ON true
   LEFT JOIN recrutamento.vaga v ON v.tenant_id = c.tenant_id AND v.concurso_id = c.id
   LEFT JOIN hr.job_position jp ON jp.tenant_id = v.tenant_id AND jp.id = v.position_id
+  LEFT JOIN hr.organic_definition od ON od.tenant_id = v.tenant_id AND od.id = v.organic_definition_id
   WHERE c.code = p_slug AND c.status IN ('PUBLISHED', 'OPEN')
   GROUP BY c.tenant_id, c.id, c.code, c.name, c.status, c.valid_until, e.version, e.document_ref, e.published_at, e.public_url
 $$;

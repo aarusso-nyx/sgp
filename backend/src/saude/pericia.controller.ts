@@ -1,5 +1,6 @@
 import { Body, Controller, Param, Patch, Post, Req } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -30,6 +31,7 @@ export class PericiaController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'POST agendamentos' })
   @Post('agendamentos')
   @RequirePermission('saude.write')
   @ApiCreatedResponse({ description: 'Schedule a medical appointment.' })
@@ -50,6 +52,7 @@ export class PericiaController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH agendamentos/:agendamento_id' })
   @Patch('agendamentos/:agendamento_id')
   @RequirePermission('saude.write')
   @ApiOkResponse({
@@ -76,6 +79,7 @@ export class PericiaController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST prontuarios' })
   @Post('prontuarios')
   @RequirePermission('saude.write')
   @ApiCreatedResponse({
@@ -94,6 +98,7 @@ export class PericiaController {
     return created;
   }
 
+  @ApiOperation({ summary: 'POST agendamentos/:agendamento_id/parecer' })
   @Post('agendamentos/:agendamento_id/parecer')
   @RequirePermission('saude.opinion.write')
   @ApiCreatedResponse({
@@ -119,6 +124,7 @@ export class PericiaController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH prontuarios/:prontuario_id/validar' })
   @Patch('prontuarios/:prontuario_id/validar')
   @RequirePermission('saude.write')
   @ApiOkResponse({ description: 'Approve or reject a medical record.' })
@@ -144,6 +150,7 @@ export class PericiaController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST prontuarios/:prontuario_id/replicar' })
   @Post('prontuarios/:prontuario_id/replicar')
   @RequirePermission('saude.write')
   @ApiCreatedResponse({

@@ -7,7 +7,17 @@ The Auditoria slice implements the observed legacy route `#!/auditoria/gestao` a
 - Audit events are appended to `public.audit_event` and treated as immutable by application code.
 - Existing mutation controllers call `AuditService.appendMutation`, which now delegates to `AuditWriterService`.
 - `AuditWriterService` persists actor subject, actor login, action, resource type, resource id, table name, request id, client IP, user agent, and redacted metadata.
+- Successful audit writes increment `sgp_audit_events_emitted_total{controller,route}`. The controller and route labels come from the mutating request interceptor context when available, then fall back to request metadata.
 - If `DATABASE_URL` is not configured, audit writes remain no-ops so non-persistent tests and startup checks are not blocked.
+
+## Coverage Observability
+
+The Prometheus metric `sgp_audit_events_emitted_total{controller,route}` is paired with `sgp_http_requests_total{method=~"POST|PUT|PATCH|DELETE"}` to monitor audit coverage for mutating requests. The governed Grafana dashboard and Prometheus alert rules live in:
+
+- `docs/gov/observability/audit-worker-dashboard.json`
+- `docs/gov/observability/audit-worker-alerts.yml`
+
+The alert `SgpAuditCoverageBelowMutatingRequests` fires when `audit_events / mutating_requests < 1` for 10 minutes.
 
 ## Redaction Policy
 

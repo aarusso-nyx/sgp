@@ -51,7 +51,7 @@ export function parseCanonicalCsv(text: string): ParsedPortabilityDetail[] {
     );
   }
 
-  const header = splitCsvLine(lines[0]).map((entry) => normalizeHeader(entry));
+  const header = splitCsvLine(lines[0]!).map((entry) => normalizeHeader(entry));
   const required = [
     'employee_cpf',
     'source_contract_number',

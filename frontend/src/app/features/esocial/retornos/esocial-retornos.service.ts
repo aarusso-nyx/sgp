@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export type ESocialReturnStatus =
   | 'PROCESSADO_COM_ERROS'
@@ -34,22 +34,22 @@ export interface ESocialReturnFailure {
 
 @Injectable({ providedIn: 'root' })
 export class ESocialRetornosService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   listFailures(status?: ESocialReturnStatus): Observable<ESocialReturnFailure[]> {
     const suffix = status ? `?status=${encodeURIComponent(status)}` : '';
-    return this.http.get<ESocialReturnFailure[]>(`/api/v1/esocial/retornos/falhas${suffix}`);
+    return this.api.get<ESocialReturnFailure[]>(`/api/v1/esocial/retornos/falhas${suffix}`);
   }
 
   forceRetry(eventId: string): Observable<ESocialReturnFailure> {
-    return this.http.post<ESocialReturnFailure>(
+    return this.api.post<ESocialReturnFailure>(
       `/api/v1/esocial/retornos/eventos/${eventId}/retry`,
       {},
     );
   }
 
   markHandled(eventId: string): Observable<{ eventId: string; handled: boolean }> {
-    return this.http.post<{ eventId: string; handled: boolean }>(
+    return this.api.post<{ eventId: string; handled: boolean }>(
       `/api/v1/esocial/retornos/eventos/${eventId}/tratado`,
       {},
     );

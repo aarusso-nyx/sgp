@@ -1,40 +1,42 @@
 <section class="epi-page">
   <header>
-    <p>Saude ocupacional</p>
-    <h1>EPI</h1>
+    <p i18n>Saude ocupacional</p>
+    <h1 i18n>EPI</h1>
   </header>
 
   <div class="grid">
     <form [formGroup]="inventoryForm" (ngSubmit)="createInventory()" class="panel">
-      <h2>Inventario</h2>
-      <label><span>CA</span><input formControlName="caNumber" /></label>
-      <label><span>Nome</span><input formControlName="name" /></label>
-      <label><span>Descricao</span><textarea formControlName="description"></textarea></label>
+      <h2 i18n>Inventario</h2>
+      <label><span i18n>CA</span><input formControlName="caNumber" /></label>
+      <label><span i18n>Nome</span><input formControlName="name" /></label>
+      <label><span i18n>Descricao</span><textarea formControlName="description"></textarea></label>
       <label
-        ><span>Validade em meses</span><input type="number" formControlName="validityMonths"
+        ><span i18n>Validade em meses</span><input type="number" formControlName="validityMonths"
       /></label>
-      <button type="submit" [disabled]="saving">Salvar EPI</button>
+      <button type="submit" [disabled]="saving" i18n>Salvar EPI</button>
     </form>
 
     <form [formGroup]="deliveryForm" (ngSubmit)="registerDelivery()" class="panel">
-      <h2>Entrega assinada</h2>
-      <label><span>Servidor</span><input formControlName="employeeId" /></label>
-      <label><span>EPI</span><input formControlName="epiInventoryId" /></label>
+      <h2 i18n>Entrega assinada</h2>
+      <label><span i18n>Servidor</span><input formControlName="employeeId" /></label>
+      <label><span i18n>EPI</span><input formControlName="epiInventoryId" /></label>
       <label
-        ><span>Entrega</span><input type="datetime-local" formControlName="deliveredAt"
+        ><span i18n>Entrega</span><input type="datetime-local" formControlName="deliveredAt"
       /></label>
-      <label><span>Quantidade</span><input type="number" formControlName="quantity" /></label>
+      <label><span i18n>Quantidade</span><input type="number" formControlName="quantity" /></label>
       <label>
-        <span>Assinatura</span>
+        <span i18n>Assinatura</span>
         <select formControlName="signatureMethod">
-          <option value="FISICA">Fisica</option>
-          <option value="DIGITAL">Digital</option>
-          <option value="GOVBR">GovBR</option>
+          <option value="FISICA" i18n>Fisica</option>
+          <option value="DIGITAL" i18n>Digital</option>
+          <option value="GOVBR" i18n>GovBR</option>
         </select>
       </label>
-      <label><span>Evidencia</span><input formControlName="signatureEvidenceUri" /></label>
-      <label><span>Treinamento</span><input type="date" formControlName="trainingDoneAt" /></label>
-      <button type="submit" [disabled]="saving">Registrar entrega</button>
+      <label><span i18n>Evidencia</span><input formControlName="signatureEvidenceUri" /></label>
+      <label
+        ><span i18n>Treinamento</span><input type="date" formControlName="trainingDoneAt"
+      /></label>
+      <button type="submit" [disabled]="saving" i18n>Registrar entrega</button>
     </form>
   </div>
 
@@ -43,11 +45,11 @@
   <table>
     <thead>
       <tr>
-        <th>Servidor</th>
-        <th>EPI</th>
-        <th>Entrega</th>
-        <th>Assinatura</th>
-        <th>Evidencia</th>
+        <th i18n>Servidor</th>
+        <th i18n>EPI</th>
+        <th i18n>Entrega</th>
+        <th i18n>Assinatura</th>
+        <th i18n>Evidencia</th>
       </tr>
     </thead>
     <tbody>

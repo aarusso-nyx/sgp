@@ -940,82 +940,64 @@ A documentação é produzida a partir de: análise dos 62 documentos legados, i
 
 ---
 
-## ADR-011: Monorepo Nx para o stack completo
+## ADR-011: Workspace npm autoritativo, com Nx adiado
 
-- **Status**: Aceito
+- **Status**: Reconciliado com estado atual
 - **Data**: 2026-04-21
+- **Revisão**: 2026-05-03
 - **Decisores**: Arquitetura SGP
-- **Revisão**: Reavaliar ao atingir > 50 libs no monorepo ou se o build local superar 30 minutos sem cache.
+- **Marcador de CI**: ADR-011-CURRENT-STATE
 
 ---
 
 ### Contexto
 
-O SGP possui múltiplos apps e bibliotecas interdependentes:
+O desenho inicial previa Nx para coordenar múltiplos runtimes. O estado implementado do SGP v0.0.1, porém, é um monorepo npm com dois workspaces (`frontend` e `backend`) e comandos autoritativos no dispatcher `scripts/run.mjs`.
 
-- **Apps backend**: `sgp-core-api`, `sgp-payroll-engine`, `sgp-esocial-worker`, `sgp-integrations-worker`.
-- **Apps frontend**: `sgp-admin`, `sgp-portal-ui`.
-- **Libs compartilhadas**: tipos de domínio, clientes de infraestrutura, design system, lógica de autorização.
+Runtimes NestJS são entrypoints dentro de `backend/src/`:
 
-Sem um monorepo, cada app seria um repositório separado, exigindo: versionamento semântico de libs compartilhadas, publicação no NPM privado, atualizações de dependência coordenadas entre múltiplos repos, e impossibilidade de refatoração atômica cross-repo.
+- `main.ts` para `sgp-core-api`;
+- `main-portal.ts` para `sgp-portal-api`;
+- `main-payroll-engine.ts` para `sgp-payroll-engine`;
+- `main-esocial-worker.ts` para `sgp-esocial-worker`;
+- `main-integrations-worker.ts` para `sgp-integrations-worker`;
+- `main-report-worker.ts` para `sgp-report-worker`;
+- `main-report-service.ts` para `sgp-report-service`.
+
+Frontends Angular vivem em `frontend/src/` e `frontend/portal/src/`. O repositório ainda não possui `nx.json`, `project.json` por app/lib, `eslint-plugin-nx`, nem árvore `apps/`/`libs/` instalada.
 
 ### Decisão
 
-**Nx monorepo** com a seguinte estrutura de workspace:
+Para v0.0.1, a autoridade operacional é:
 
-```
-apps/
-  sgp-core-api/          # NestJS — API principal
-  sgp-payroll-engine/    # NestJS — motor de folha
-  sgp-esocial-worker/    # NestJS — worker eSocial
-  sgp-integrations-worker/ # NestJS — workers de integração
-  sgp-admin/             # Angular SPA administrativa
-  sgp-portal-ui/         # Angular SPA Portal do Funcionário
-  sgp-portal-api/        # NestJS API do Portal (read-only)
-libs/
-  @sgp/domain/           # Tipos TypeScript, enums, interfaces de domínio
-  @sgp/infra/            # Clientes HTTP, S3, SQS, Cognito, helpers AWS
-  @sgp/authz/            # Guards NestJS, diretivas Angular, tipos de papel
-  @sgp/ui/               # Design system Angular (componentes, tokens)
-  @sgp/testing/          # Factories, mocks, fixtures para testes
-  @sgp/esocial/          # Serializers/parsers eSocial (compartilhado entre worker e core)
-  @sgp/payroll-dsl/      # Compilador DSL→SQL (compartilhado entre engine e core)
-  @sgp/reports/          # Templates de relatórios, helpers PDF
-```
+- npm workspaces em `package.json`;
+- Node 24 e npm 11.12.1 fixados nos manifests;
+- `scripts/run.mjs` e `scripts/lib/workspace-commands.mjs` como superfície única de comandos;
+- evidência local e CI por `npm run lint:check`, `npm run format:check`, `npm run typecheck`, `npm run test:*`, `npm run governance:check`, `npm run evidence:check`;
+- OpenAPI gerado e versionado em `frontend/src/app/core/api/generated/` e `frontend/portal/src/app/core/api/generated/`.
 
-**Configuração Nx:**
-
-- `nx affected` em CI: só re-testa e re-builda apps/libs afetados pelo PR.
-- **Cache distribuído** com Nx Cloud: builds são compartilhados entre CI e máquinas dos desenvolvedores.
-- **Executores afinados**: `@nx/nest` para backends, `@nx/angular` para frontends.
-- Constraints de dependência (`project.json` `tags`): `frontend` libs não podem depender de `backend` libs que expõem internals de banco.
-- `eslint-plugin-nx` para enforçar boundaries entre libs.
-
-**Alternativa avaliada: Turborepo**
-
-- Prós: mais simples; menor overhead de configuração.
-- Contras: suporte a Angular e NestJS menos maduro que Nx; sem generators para scaffolding de módulos; cache menos granular.
+Nx fica adiado. Ele só deve ser reintroduzido por nova ADR quando houver necessidade comprovada de `affected`, cache distribuído ou boundaries formais entre pacotes internos que justifiquem migrar a estrutura atual.
 
 ### Consequências
 
 **Positivas:**
 
-- Refatoração atômica de tipos de domínio afeta todos os apps em um único PR.
-- `nx affected` reduz tempo de CI de 45 min para < 10 min em mudanças localizadas.
-- Nx generators criam módulos NestJS e feature libs Angular com estrutura padronizada.
-- Design system compartilhado (`@sgp/ui`) garante consistência visual entre admin e portal.
-- Libs `@sgp/domain` e `@sgp/authz` eliminam duplicação de tipos entre frontend e backend.
+- O estado documentado passa a refletir a árvore real do repositório.
+- A superfície de comandos permanece pequena, auditável e compatível com npm workspaces.
+- O gate de governança consegue validar scripts e caminhos sem pressupor Nx inexistente.
 
 **Negativas:**
 
-- Clone inicial do repo é maior; `node_modules` compartilhados exigem gestão cuidadosa de versões.
-- Curva de aprendizado do Nx para desenvolvedores não familiarizados.
-- Cache distribuído Nx Cloud tem custo (ou necessidade de self-hosted).
+- O repositório não tem `nx affected` nem cache distribuído.
+- Boundaries entre domínios continuam sendo disciplina de código, lint e módulo Nest/Angular, não constraints Nx.
+- Uma futura migração para Nx exigirá ADR própria e atualização coordenada de scripts, CI e docs.
 
 ### Referências
 
-- BRIEF.md §2 — Stack de referência (monorepo Nx mencionado explicitamente).
-- ADR-005 — Portal como aplicação separada (UI + API) (justifica necessidade de monorepo).
+- `package.json`
+- `scripts/run.mjs`
+- `scripts/lib/workspace-commands.mjs`
+- `docs/gov/runtime-topology.json`
 
 ---
 

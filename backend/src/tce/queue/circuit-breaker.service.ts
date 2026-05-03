@@ -150,7 +150,7 @@ export class TceCircuitBreakerService {
       `,
       [adapterId, this.endpointKey(endpointUrl)],
     );
-    return mapCircuit(rows[0]);
+    return mapCircuit(rows[0]!);
   }
 
   async list(): Promise<TceCircuitStateDto[]> {

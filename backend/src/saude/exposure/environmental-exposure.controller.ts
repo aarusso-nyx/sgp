@@ -8,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -28,6 +29,7 @@ import { EnvironmentalExposureService } from './environmental-exposure.service';
 export class EnvironmentalExposureController {
   constructor(private readonly service: EnvironmentalExposureService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('saude.exposure.read')
   @ApiOkResponse({ description: 'Environmental exposure records.' })
@@ -35,6 +37,7 @@ export class EnvironmentalExposureController {
     return this.service.list();
   }
 
+  @ApiOperation({ summary: 'GET folha' })
   @Get('folha')
   @RequirePermission('saude.exposure.read')
   @ApiOkResponse({
@@ -47,6 +50,7 @@ export class EnvironmentalExposureController {
     return this.service.readForPayroll(employeeId, refDate);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('saude.exposure.write')
   @AuditMutation({
@@ -61,6 +65,7 @@ export class EnvironmentalExposureController {
     return this.service.create(body);
   }
 
+  @ApiOperation({ summary: 'PATCH :id' })
   @Patch(':id')
   @RequirePermission('saude.exposure.write')
   @AuditMutation({

@@ -48,6 +48,56 @@ CREATE VIEW fiscal.v_dirf_summary WITH (security_invoker='true') AS
   WHERE (public.sgp_tenant_matches(arquivo.tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dirf.read'::text, 'fiscal.dirf.write'::text]))
   GROUP BY arquivo.tenant_id, arquivo.id, arquivo.year_base, arquivo.kind, arquivo.status, arquivo.original_arquivo_id, arquivo.txt_ref, arquivo.txt_content, arquivo.txt_hash, arquivo.layout_version, arquivo.generated_at, arquivo.created_at, arquivo.updated_at;
 
+CREATE VIEW fiscal.v_efd_reinf_event_summary WITH (security_invoker='true') AS
+ SELECT event.tenant_id,
+    event.id AS event_id,
+    event.competence,
+    event.event_type,
+    event.kind,
+    event.status,
+    event.original_event_id,
+    event.payload_xml_ref,
+    event.payload_xml,
+    event.payload_xml_hash,
+    event.signed_xml_ref,
+    event.signed_xml,
+    event.signed_xml_hash,
+    event.transmitted_xml_hash,
+    event.receipt_number,
+    event.receipt_at,
+    (count(item.id))::integer AS item_count,
+    (COALESCE(sum(item.gross_amount), (0)::numeric))::numeric(14,2) AS total_gross_amount,
+    (COALESCE(sum(item.retained_amount), (0)::numeric))::numeric(14,2) AS total_retained_amount,
+    event.created_at,
+    event.updated_at
+   FROM (fiscal.efd_reinf_event event
+     LEFT JOIN fiscal.efd_reinf_item item ON (((item.tenant_id = event.tenant_id) AND (item.event_id = event.id))))
+  WHERE (public.sgp_tenant_matches(event.tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text]))
+  GROUP BY event.tenant_id, event.id, event.competence, event.event_type, event.kind, event.status, event.original_event_id, event.payload_xml_ref, event.payload_xml, event.payload_xml_hash, event.signed_xml_ref, event.signed_xml, event.signed_xml_hash, event.transmitted_xml_hash, event.receipt_number, event.receipt_at, event.created_at, event.updated_at;
+
+CREATE VIEW fiscal.v_siafic_sync_summary WITH (security_invoker='true') AS
+ SELECT batch.tenant_id,
+    batch.id AS batch_id,
+    batch.payroll_run_id,
+    batch.competence,
+    batch.ente_code,
+    batch.status,
+    batch.circuit_state,
+    batch.attempts,
+    batch.receipt_number,
+    batch.last_error,
+    batch.stage_status,
+    batch.item_count,
+    batch.total_amount,
+    batch.created_at,
+    batch.updated_at,
+    (count(item.id))::integer AS synced_item_count,
+    (COALESCE(sum(item.amount), (0)::numeric))::numeric(14,2) AS synced_amount
+   FROM (fiscal.siafic_sync_batch batch
+     LEFT JOIN fiscal.siafic_sync_item item ON (((item.tenant_id = batch.tenant_id) AND (item.batch_id = batch.id))))
+  WHERE (public.sgp_tenant_matches(batch.tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text]))
+  GROUP BY batch.tenant_id, batch.id, batch.payroll_run_id, batch.competence, batch.ente_code, batch.status, batch.circuit_state, batch.attempts, batch.receipt_number, batch.last_error, batch.stage_status, batch.item_count, batch.total_amount, batch.created_at, batch.updated_at;
+
 CREATE VIEW fiscal.v_gps_remittance_summary WITH (security_invoker='true') AS
  SELECT remittance.tenant_id,
     remittance.id,
@@ -92,6 +142,7 @@ CREATE VIEW fiscal.v_yearly_income WITH (security_invoker='true') AS
     aggregate.irrf_total,
     aggregate.dependents_count,
     ((aggregate.taxable_total + aggregate.exempt_total))::numeric(14,2) AS s1210_total,
+    aggregate.irrf_total AS s1210_irrf_total,
     aggregate.recomputed_at
    FROM ((((fiscal.yearly_income_aggregate aggregate
      JOIN hr.employee employee ON (((employee.id = aggregate.employee_id) AND (employee.tenant_id = aggregate.tenant_id))))
@@ -105,6 +156,22 @@ CREATE INDEX dctfweb_declaration_competence_idx ON fiscal.dctfweb_declaration US
 CREATE UNIQUE INDEX dctfweb_declaration_original_uq ON fiscal.dctfweb_declaration USING btree (tenant_id, competence) WHERE (kind = 'ORIGINAL'::fiscal.dctfweb_declaration_kind);
 
 CREATE INDEX dctfweb_item_declaration_idx ON fiscal.dctfweb_item USING btree (tenant_id, declaracao_id, source_event);
+
+CREATE INDEX dctf_pgd_tax_debit_competence_idx ON fiscal.dctf_pgd_tax_debit USING btree (tenant_id, competence, cnpj_filial, mit_status);
+
+CREATE INDEX efd_reinf_event_competence_idx ON fiscal.efd_reinf_event USING btree (tenant_id, competence, event_type, status);
+
+CREATE UNIQUE INDEX efd_reinf_event_original_uq ON fiscal.efd_reinf_event USING btree (tenant_id, competence, event_type) WHERE (kind = 'ORIGINAL'::fiscal.efd_reinf_event_kind);
+
+CREATE INDEX efd_reinf_item_event_idx ON fiscal.efd_reinf_item USING btree (tenant_id, event_id, revenue_code);
+
+CREATE INDEX efd_reinf_totalizer_lookup_idx ON fiscal.efd_reinf_totalizer USING btree (tenant_id, competence, kind);
+
+CREATE INDEX siafic_sync_batch_competence_idx ON fiscal.siafic_sync_batch USING btree (tenant_id, competence, payroll_run_id, status);
+
+CREATE INDEX siafic_sync_batch_ente_circuit_idx ON fiscal.siafic_sync_batch USING btree (tenant_id, ente_code, circuit_state, updated_at DESC);
+
+CREATE INDEX siafic_sync_item_batch_idx ON fiscal.siafic_sync_item USING btree (tenant_id, batch_id, stage, status);
 
 CREATE UNIQUE INDEX dirf_arquivo_original_uq ON fiscal.dirf_arquivo USING btree (tenant_id, year_base) WHERE (kind = 'ORIGINAL'::fiscal.dirf_arquivo_kind);
 
@@ -125,6 +192,22 @@ CREATE TRIGGER dctfweb_declaration_audit AFTER INSERT OR DELETE OR UPDATE ON fis
 CREATE TRIGGER dctfweb_declaration_touch_updated_at BEFORE UPDATE ON fiscal.dctfweb_declaration FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_touch_updated_at();
 
 CREATE TRIGGER dctfweb_item_audit AFTER INSERT OR DELETE OR UPDATE ON fiscal.dctfweb_item FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_audit();
+
+CREATE TRIGGER efd_reinf_event_audit AFTER INSERT OR DELETE OR UPDATE ON fiscal.efd_reinf_event FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_audit();
+
+CREATE TRIGGER efd_reinf_event_touch_updated_at BEFORE UPDATE ON fiscal.efd_reinf_event FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_touch_updated_at();
+
+CREATE TRIGGER efd_reinf_item_audit AFTER INSERT OR DELETE OR UPDATE ON fiscal.efd_reinf_item FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_audit();
+
+CREATE TRIGGER efd_reinf_totalizer_audit AFTER INSERT OR DELETE OR UPDATE ON fiscal.efd_reinf_totalizer FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_audit();
+
+CREATE TRIGGER siafic_sync_batch_audit AFTER INSERT OR DELETE OR UPDATE ON fiscal.siafic_sync_batch FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_audit();
+
+CREATE TRIGGER siafic_sync_batch_touch_updated_at BEFORE UPDATE ON fiscal.siafic_sync_batch FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_touch_updated_at();
+
+CREATE TRIGGER siafic_sync_item_audit AFTER INSERT OR DELETE OR UPDATE ON fiscal.siafic_sync_item FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_audit();
+
+CREATE TRIGGER siafic_sync_item_touch_updated_at BEFORE UPDATE ON fiscal.siafic_sync_item FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dctfweb_touch_updated_at();
 
 CREATE TRIGGER dirf_arquivo_audit AFTER INSERT OR DELETE OR UPDATE ON fiscal.dirf_arquivo FOR EACH ROW EXECUTE FUNCTION fiscal.sgp_dirf_audit();
 
@@ -151,6 +234,45 @@ ALTER TABLE ONLY fiscal.dctfweb_item
 
 ALTER TABLE ONLY fiscal.dctfweb_item
     ADD CONSTRAINT dctfweb_item_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
+ALTER TABLE ONLY fiscal.dctf_pgd_tax_debit
+    ADD CONSTRAINT dctf_pgd_tax_debit_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
+ALTER TABLE ONLY fiscal.efd_reinf_event
+    ADD CONSTRAINT efd_reinf_event_original_fk FOREIGN KEY (tenant_id, original_event_id) REFERENCES fiscal.efd_reinf_event(tenant_id, id);
+
+ALTER TABLE ONLY fiscal.efd_reinf_event
+    ADD CONSTRAINT efd_reinf_event_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
+ALTER TABLE ONLY fiscal.efd_reinf_item
+    ADD CONSTRAINT efd_reinf_item_event_fk FOREIGN KEY (tenant_id, event_id) REFERENCES fiscal.efd_reinf_event(tenant_id, id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY fiscal.efd_reinf_item
+    ADD CONSTRAINT efd_reinf_item_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
+ALTER TABLE ONLY fiscal.efd_reinf_totalizer
+    ADD CONSTRAINT efd_reinf_totalizer_event_fk FOREIGN KEY (tenant_id, source_event_id) REFERENCES fiscal.efd_reinf_event(tenant_id, id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY fiscal.efd_reinf_totalizer
+    ADD CONSTRAINT efd_reinf_totalizer_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
+ALTER TABLE ONLY fiscal.siafic_sync_batch
+    ADD CONSTRAINT siafic_sync_batch_payroll_run_fk FOREIGN KEY (payroll_run_id) REFERENCES payroll.payroll_run(id) ON DELETE RESTRICT;
+
+ALTER TABLE ONLY fiscal.siafic_sync_batch
+    ADD CONSTRAINT siafic_sync_batch_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
+ALTER TABLE ONLY fiscal.siafic_sync_item
+    ADD CONSTRAINT siafic_sync_item_accounting_account_fk FOREIGN KEY (accounting_account_id) REFERENCES payroll.accounting_account(id) ON DELETE RESTRICT;
+
+ALTER TABLE ONLY fiscal.siafic_sync_item
+    ADD CONSTRAINT siafic_sync_item_batch_fk FOREIGN KEY (tenant_id, batch_id) REFERENCES fiscal.siafic_sync_batch(tenant_id, id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY fiscal.siafic_sync_item
+    ADD CONSTRAINT siafic_sync_item_source_line_fk FOREIGN KEY (source_line_id) REFERENCES payroll.employee_payroll_item(id) ON DELETE RESTRICT;
+
+ALTER TABLE ONLY fiscal.siafic_sync_item
+    ADD CONSTRAINT siafic_sync_item_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
 ALTER TABLE ONLY fiscal.dirf_arquivo
     ADD CONSTRAINT dirf_arquivo_original_fk FOREIGN KEY (tenant_id, original_arquivo_id) REFERENCES fiscal.dirf_arquivo(tenant_id, id);
@@ -188,6 +310,18 @@ ALTER TABLE ONLY fiscal.dctfweb_declaration FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY fiscal.dctfweb_item FORCE ROW LEVEL SECURITY;
 
+ALTER TABLE ONLY fiscal.dctf_pgd_tax_debit FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY fiscal.efd_reinf_event FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY fiscal.efd_reinf_item FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY fiscal.efd_reinf_totalizer FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY fiscal.siafic_sync_batch FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY fiscal.siafic_sync_item FORCE ROW LEVEL SECURITY;
+
 ALTER TABLE ONLY fiscal.dirf_arquivo FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY fiscal.dirf_beneficiario FORCE ROW LEVEL SECURITY;
@@ -207,6 +341,42 @@ ALTER TABLE fiscal.dctfweb_item ENABLE ROW LEVEL SECURITY;
 CREATE POLICY dctfweb_item_select ON fiscal.dctfweb_item FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text])));
 
 CREATE POLICY dctfweb_item_write ON fiscal.dctfweb_item USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text])));
+
+ALTER TABLE fiscal.dctf_pgd_tax_debit ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY dctf_pgd_tax_debit_select ON fiscal.dctf_pgd_tax_debit FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text])));
+
+CREATE POLICY dctf_pgd_tax_debit_write ON fiscal.dctf_pgd_tax_debit USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text])));
+
+ALTER TABLE fiscal.efd_reinf_event ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY efd_reinf_event_select ON fiscal.efd_reinf_event FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text])));
+
+CREATE POLICY efd_reinf_event_write ON fiscal.efd_reinf_event USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text])));
+
+ALTER TABLE fiscal.efd_reinf_item ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY efd_reinf_item_select ON fiscal.efd_reinf_item FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text])));
+
+CREATE POLICY efd_reinf_item_write ON fiscal.efd_reinf_item USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text])));
+
+ALTER TABLE fiscal.efd_reinf_totalizer ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY efd_reinf_totalizer_select ON fiscal.efd_reinf_totalizer FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text])));
+
+CREATE POLICY efd_reinf_totalizer_write ON fiscal.efd_reinf_totalizer USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text])));
+
+ALTER TABLE fiscal.siafic_sync_batch ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY siafic_sync_batch_select ON fiscal.siafic_sync_batch FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text])));
+
+CREATE POLICY siafic_sync_batch_write ON fiscal.siafic_sync_batch USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text])));
+
+ALTER TABLE fiscal.siafic_sync_item ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY siafic_sync_item_select ON fiscal.siafic_sync_item FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.read'::text, 'fiscal.dctfweb.write'::text])));
+
+CREATE POLICY siafic_sync_item_write ON fiscal.siafic_sync_item USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.dctfweb.write'::text])));
 
 ALTER TABLE fiscal.dirf_arquivo ENABLE ROW LEVEL SECURITY;
 

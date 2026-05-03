@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
@@ -15,6 +20,7 @@ export class ES03Controller {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET Status' })
   @Get()
   @RequirePermission('esocial.event.read')
   @ApiOkResponse({
@@ -24,6 +30,7 @@ export class ES03Controller {
     return this.service.listStatus();
   }
 
+  @ApiOperation({ summary: 'POST s2210/:catEmissionId/emitir' })
   @Post('s2210/:catEmissionId/emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({
@@ -46,6 +53,7 @@ export class ES03Controller {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST s2220/:asoRecordId/retry' })
   @Post('s2220/:asoRecordId/retry')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({
@@ -68,6 +76,7 @@ export class ES03Controller {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST s2240/:environmentalExposureId/emitir' })
   @Post('s2240/:environmentalExposureId/emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({
@@ -96,6 +105,7 @@ export class ES03Controller {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST s2230/:pendingId/emitir' })
   @Post('s2230/:pendingId/emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({ description: 'Emit a pending S-2230 event.' })
@@ -112,6 +122,7 @@ export class ES03Controller {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST s2299/:pendingId/emitir' })
   @Post('s2299/:pendingId/emitir')
   @RequirePermission('esocial.event.write')
   @ApiOkResponse({ description: 'Emit a pending S-2299 event.' })

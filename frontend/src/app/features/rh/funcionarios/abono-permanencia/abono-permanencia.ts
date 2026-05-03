@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { ApiClient } from '../../../../core/api/api-client';
 
 interface AbonoPermanenciaState {
   employeeId: string;
@@ -13,6 +13,7 @@ interface AbonoPermanenciaState {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-rh-abono-permanencia',
   standalone: false,
   templateUrl: './abono-permanencia.html',
@@ -36,7 +37,7 @@ export class RhAbonoPermanencia implements OnInit, OnDestroy {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly http: HttpClient,
+    private readonly api: ApiClient,
   ) {}
 
   ngOnInit(): void {
@@ -53,7 +54,7 @@ export class RhAbonoPermanencia implements OnInit, OnDestroy {
     if (!this.employeeId) return;
     this.loading = true;
     this.error = '';
-    this.http
+    this.api
       .get<AbonoPermanenciaState>(`/api/v1/funcionarios/${this.employeeId}/abono-permanencia`)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -86,7 +87,7 @@ export class RhAbonoPermanencia implements OnInit, OnDestroy {
     this.saving = true;
     this.error = '';
     this.message = '';
-    this.http
+    this.api
       .post<AbonoPermanenciaState>(`/api/v1/funcionarios/${this.employeeId}/abono-permanencia`, {
         active: Boolean(value.active),
         startsOn: value.startsOn || undefined,

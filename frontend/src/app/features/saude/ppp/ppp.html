@@ -1,26 +1,26 @@
 <section class="ppp-page">
   <header>
-    <p>Saude ocupacional</p>
-    <h1>PPP</h1>
+    <p i18n>Saude ocupacional</p>
+    <h1 i18n>PPP</h1>
   </header>
 
   <form [formGroup]="form" (ngSubmit)="generate()" class="panel">
-    <h2>Geracao</h2>
-    <label><span>Servidor</span><input formControlName="employeeId" /></label>
-    <label><span>Inicio</span><input type="date" formControlName="periodStart" /></label>
-    <label><span>Fim</span><input type="date" formControlName="periodEnd" /></label>
-    <button type="submit" [disabled]="saving">Gerar PPP</button>
+    <h2 i18n>Geracao</h2>
+    <label><span i18n>Servidor</span><input formControlName="employeeId" /></label>
+    <label><span i18n>Inicio</span><input type="date" formControlName="periodStart" /></label>
+    <label><span i18n>Fim</span><input type="date" formControlName="periodEnd" /></label>
+    <button type="submit" [disabled]="saving" i18n>Gerar PPP</button>
     <p class="error" *ngIf="error">{{ error }}</p>
   </form>
 
   <table>
     <thead>
       <tr>
-        <th>Servidor</th>
-        <th>Periodo</th>
-        <th>Exposicoes</th>
-        <th>EPIs</th>
-        <th>Gerado em</th>
+        <th i18n>Servidor</th>
+        <th i18n>Periodo</th>
+        <th i18n>Exposicoes</th>
+        <th i18n>EPIs</th>
+        <th i18n>Gerado em</th>
       </tr>
     </thead>
     <tbody>

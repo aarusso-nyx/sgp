@@ -135,7 +135,7 @@ export class ProfilesService {
         `,
         [input.code.trim(), input.name.trim(), input.description?.trim() ?? ''],
       );
-      return this.toDto(rows[0]);
+      return this.toDto(rows[0]!);
     } catch (error: unknown) {
       const code = (error as { code?: string }).code;
       if (code === '23505') {

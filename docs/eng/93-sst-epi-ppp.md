@@ -11,6 +11,10 @@ O SGP v0.0.1 registra exposicoes ambientais em `saude.environmental_exposure`, s
 
 Cada insercao de exposicao cria pendencia `START` em `esocial.s2240_pending`. Alteracoes de agente, intensidade, periodo ou mitigacoes criam `CHANGE`; preenchimento de `exposure_end` cria `END`. O builder `backend/src/esocial-worker/builders/s2240.builder.ts` gera `evtExpRisco` S-1.3 e envia pelo hub ES-07, sem escrita direta em `public.esocial_event`.
 
+## S-1060
+
+`hr.work_location` e a fonte canonica dos codigos de ambiente de trabalho para o cluster SST. O builder `backend/src/esocial-worker/builders/s1060.builder.ts` emite `evtTabAmbiente` a partir de lotacoes ativas e propaga `workEnvironmentCode` para os payloads S-2210, S-2220 e S-2240. A validacao XSD compartilhada ainda depende da reconciliacao do bundle pelo orchestrator, pois o bundle S-1.3 corrente nao inclui `evtTabAmbiente.xsd`.
+
 ## EPI
 
 O inventario de EPI fica em `saude.epi_inventory`, por CA, nome, descricao e validade em meses. Entregas ficam em `saude.epi_delivery` e exigem `signature_method` `FISICA`, `DIGITAL` ou `GOVBR`; entregas digitais e GovBR exigem `signature_evidence_uri`. O campo `training_done_at` registra treinamento NR-6 quando aplicavel.

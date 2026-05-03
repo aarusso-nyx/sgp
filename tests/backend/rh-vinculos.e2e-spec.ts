@@ -63,6 +63,7 @@ class FakeRhVinculosDatabaseService {
             registration: 'MAT-001',
             name: 'Servidor',
             functional_status_id: '00000000-0000-4000-8000-000000000010',
+            version: 0,
           },
         ] as T[],
       });
@@ -74,7 +75,9 @@ class FakeRhVinculosDatabaseService {
     }
     if (sql.includes('INSERT INTO hr.employment_link')) {
       return Promise.resolve({
-        rows: [{ id: '00000000-0000-4000-8000-000000000030' }] as T[],
+        rows: [
+          { id: '00000000-0000-4000-8000-000000000030', version: 0 },
+        ] as T[],
       });
     }
     if (sql.includes('WITH closed_contracts AS')) {
@@ -89,6 +92,8 @@ class FakeRhVinculosDatabaseService {
             end_date: '2026-11-01',
             status_history_id: '00000000-0000-4000-8000-000000000050',
             audit_event_id: '00000000-0000-4000-8000-000000000060',
+            employee_version: 1,
+            employment_link_version: 0,
           },
         ] as T[],
       });
@@ -132,6 +137,7 @@ describe('RH vinculos legal regime (e2e)', () => {
         '/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/vinculos',
       )
       .set('authorization', `Bearer ${token()}`)
+      .set('if-match', '"0"')
       .send({
         contractType: 'temporary',
         effectiveOn: '2026-05-01',
@@ -145,6 +151,7 @@ describe('RH vinculos legal regime (e2e)', () => {
         '/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/vinculos',
       )
       .set('authorization', `Bearer ${token()}`)
+      .set('if-match', '"0"')
       .send({
         contractType: 'temporary',
         effectiveOn: '2026-05-01',

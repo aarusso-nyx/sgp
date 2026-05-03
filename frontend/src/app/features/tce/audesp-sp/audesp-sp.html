@@ -1,31 +1,31 @@
 <section class="audesp-sp">
   <header class="page-header">
     <div>
-      <h1>AUDESP/SP</h1>
-      <p>Submissoes stub da categoria Folha de Pagamento.</p>
+      <h1 i18n>AUDESP/SP</h1>
+      <p i18n>Submissoes stub da categoria Folha de Pagamento.</p>
     </div>
     <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
       <mat-icon>refresh</mat-icon>
-      Atualizar
+      <ng-container i18n>Atualizar</ng-container>
     </button>
   </header>
 
   <form class="toolbar" (ngSubmit)="create()">
     <mat-form-field appearance="outline">
-      <mat-label>Payroll run ID</mat-label>
+      <mat-label i18n>Payroll run ID</mat-label>
       <input matInput name="payrollRunId" [(ngModel)]="payrollRunId" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Ano</mat-label>
+      <mat-label i18n>Ano</mat-label>
       <input matInput type="number" name="year" [(ngModel)]="year" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Mes</mat-label>
+      <mat-label i18n>Mes</mat-label>
       <input matInput type="number" name="month" min="1" max="12" [(ngModel)]="month" />
     </mat-form-field>
     <button mat-flat-button color="primary" type="submit" [disabled]="loading || !payrollRunId">
       <mat-icon>add</mat-icon>
-      Criar draft
+      <ng-container i18n>Criar draft</ng-container>
     </button>
   </form>
 
@@ -36,11 +36,11 @@
       <table>
         <thead>
           <tr>
-            <th>Competencia</th>
-            <th>Folha</th>
-            <th>Status</th>
-            <th>Hash</th>
-            <th>Acoes</th>
+            <th i18n>Competencia</th>
+            <th i18n>Folha</th>
+            <th i18n>Status</th>
+            <th i18n>Hash</th>
+            <th i18n>Acoes</th>
           </tr>
         </thead>
         <tbody>
@@ -62,6 +62,7 @@
                 title="Validar"
                 (click)="validate(submission); $event.stopPropagation()"
                 [disabled]="isBusy(submission)"
+                i18n-title
               >
                 <mat-icon>rule</mat-icon>
               </button>
@@ -71,6 +72,7 @@
                 title="Enviar stub"
                 (click)="submit(submission); $event.stopPropagation()"
                 [disabled]="isBusy(submission)"
+                i18n-title
               >
                 <mat-icon>send</mat-icon>
               </button>
@@ -79,6 +81,7 @@
                 type="button"
                 title="XML"
                 (click)="downloadXml(submission); $event.stopPropagation()"
+                i18n-title
               >
                 <mat-icon>download</mat-icon>
               </button>
@@ -89,14 +92,14 @@
     </section>
 
     <aside class="details" *ngIf="selected">
-      <h2>Validacao</h2>
-      <p *ngIf="!selected.validationErrors.length" class="empty">Sem erros.</p>
+      <h2 i18n>Validacao</h2>
+      <p *ngIf="!selected.validationErrors.length" class="empty" i18n>Sem erros.</p>
       <table *ngIf="selected.validationErrors.length">
         <thead>
           <tr>
-            <th>Campo</th>
-            <th>Codigo</th>
-            <th>Mensagem</th>
+            <th i18n>Campo</th>
+            <th i18n>Codigo</th>
+            <th i18n>Mensagem</th>
           </tr>
         </thead>
         <tbody>
@@ -108,18 +111,18 @@
         </tbody>
       </table>
 
-      <h2>Resposta stub</h2>
+      <h2 i18n>Resposta stub</h2>
       <dl>
         <div>
-          <dt>Tamanho</dt>
+          <dt i18n>Tamanho</dt>
           <dd>{{ selected.requestSizeBytes || '-' }}</dd>
         </div>
         <div>
-          <dt>Submetido em</dt>
+          <dt i18n>Submetido em</dt>
           <dd>{{ selected.submittedAt || '-' }}</dd>
         </div>
         <div>
-          <dt>Resposta em</dt>
+          <dt i18n>Resposta em</dt>
           <dd>{{ selected.responseAt || '-' }}</dd>
         </div>
       </dl>

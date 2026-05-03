@@ -1,21 +1,21 @@
 <section class="fgts">
   <header>
-    <h1>FGTS</h1>
+    <h1 i18n>FGTS</h1>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Servidor</mat-label>
+      <mat-label i18n>Servidor</mat-label>
       <input matInput formControlName="employeeId" />
     </mat-form-field>
 
     <button mat-flat-button color="primary" type="button" (click)="load()" [disabled]="loading">
       <mat-icon>search</mat-icon>
-      Consultar
+      <ng-container i18n>Consultar</ng-container>
     </button>
 
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Folha mensal</mat-label>
+      <mat-label i18n>Folha mensal</mat-label>
       <input matInput formControlName="payrollRunId" />
     </mat-form-field>
 
@@ -26,7 +26,7 @@
       [disabled]="reprocessing || loading"
     >
       <mat-icon>refresh</mat-icon>
-      Reprocessar
+      <ng-container i18n>Reprocessar</ng-container>
     </button>
   </form>
 
@@ -35,19 +35,19 @@
   <section *ngFor="let account of accounts" class="account">
     <div class="summary">
       <div>
-        <span>Conta</span>
+        <span i18n>Conta</span>
         <strong>{{ account.accountId }}</strong>
       </div>
       <div>
-        <span>Status</span>
+        <span i18n>Status</span>
         <strong>{{ account.status }}</strong>
       </div>
       <div>
-        <span>Saldo base</span>
+        <span i18n>Saldo base</span>
         <strong>{{ account.depositBalance | moneyBr }}</strong>
       </div>
       <div>
-        <span>Multas</span>
+        <span i18n>Multas</span>
         <strong>{{ account.rescissionFineTotal | moneyBr }}</strong>
       </div>
     </div>
@@ -55,11 +55,11 @@
     <table>
       <thead>
         <tr>
-          <th>Competencia</th>
-          <th>Origem</th>
-          <th>Base</th>
-          <th>Aliquota</th>
-          <th>Valor</th>
+          <th i18n>Competencia</th>
+          <th i18n>Origem</th>
+          <th i18n>Base</th>
+          <th i18n>Aliquota</th>
+          <th i18n>Valor</th>
         </tr>
       </thead>
       <tbody>

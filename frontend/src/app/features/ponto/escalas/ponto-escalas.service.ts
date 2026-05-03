@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface ShiftPatternDay {
   dayIndex: number;
@@ -42,14 +42,14 @@ export interface RosterEntry {
 
 @Injectable({ providedIn: 'root' })
 export class PontoEscalasService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   listPatterns(): Observable<ShiftPattern[]> {
-    return this.http.get<ShiftPattern[]>('/api/v1/ponto/escalas/padroes');
+    return this.api.get<ShiftPattern[]>('/api/v1/ponto/escalas/padroes');
   }
 
   createDefault12x36(): Observable<ShiftPattern> {
-    return this.http.post<ShiftPattern>('/api/v1/ponto/escalas/padroes', {
+    return this.api.post<ShiftPattern>('/api/v1/ponto/escalas/padroes', {
       code: `12X36-${Date.now()}`,
       name: 'Escala 12x36 noturna',
       cycleDays: 2,
@@ -70,7 +70,7 @@ export class PontoEscalasService {
   }
 
   listRosters(): Observable<DutyRoster[]> {
-    return this.http.get<DutyRoster[]>('/api/v1/ponto/escalas/rosters');
+    return this.api.get<DutyRoster[]>('/api/v1/ponto/escalas/rosters');
   }
 
   generateRoster(payload: {
@@ -78,19 +78,19 @@ export class PontoEscalasService {
     periodStart: string;
     periodEnd: string;
   }): Observable<DutyRoster> {
-    return this.http.post<DutyRoster>('/api/v1/ponto/escalas/rosters', payload);
+    return this.api.post<DutyRoster>('/api/v1/ponto/escalas/rosters', payload);
   }
 
   publish(rosterId: string): Observable<DutyRoster> {
-    return this.http.post<DutyRoster>(`/api/v1/ponto/escalas/rosters/${rosterId}/publicar`, {});
+    return this.api.post<DutyRoster>(`/api/v1/ponto/escalas/rosters/${rosterId}/publicar`, {});
   }
 
   lock(rosterId: string): Observable<DutyRoster> {
-    return this.http.post<DutyRoster>(`/api/v1/ponto/escalas/rosters/${rosterId}/travar`, {});
+    return this.api.post<DutyRoster>(`/api/v1/ponto/escalas/rosters/${rosterId}/travar`, {});
   }
 
   upcoming(employeeId: string): Observable<RosterEntry[]> {
-    return this.http.get<RosterEntry[]>(
+    return this.api.get<RosterEntry[]>(
       `/api/v1/ponto/escalas/proximas?employeeId=${encodeURIComponent(employeeId)}`,
     );
   }

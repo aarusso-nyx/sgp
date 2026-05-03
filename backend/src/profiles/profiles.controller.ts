@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -32,6 +33,7 @@ import { ProfilesService } from './profiles.service';
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('gestao.read')
   @ApiOkResponse({ description: 'List access profiles.' })
@@ -39,6 +41,7 @@ export class ProfilesController {
     return this.profilesService.list(query);
   }
 
+  @ApiOperation({ summary: 'GET :id' })
   @Get(':id')
   @RequirePermission('gestao.read')
   @ApiOkResponse({ description: 'Fetch one profile with permissions.' })
@@ -46,6 +49,7 @@ export class ProfilesController {
     return this.profilesService.getById(id);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create an access profile.' })
@@ -53,6 +57,7 @@ export class ProfilesController {
     return this.profilesService.create(body);
   }
 
+  @ApiOperation({ summary: 'PUT :id' })
   @Put(':id')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Update profile metadata.' })
@@ -60,6 +65,7 @@ export class ProfilesController {
     return this.profilesService.update(id, body);
   }
 
+  @ApiOperation({ summary: 'DELETE :id' })
   @Delete(':id')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Deactivate an access profile.' })
@@ -67,6 +73,7 @@ export class ProfilesController {
     return this.profilesService.deactivate(id);
   }
 
+  @ApiOperation({ summary: 'PUT :id/papeis' })
   @Put(':id/papeis')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Replace profile permission mappings.' })

@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -34,6 +35,7 @@ export class RhWorkflowsController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET afastamentos' })
   @Get('afastamentos')
   @RequirePermission('rh.read')
   @ApiOkResponse({ description: 'List employee leave and absence records.' })
@@ -41,6 +43,7 @@ export class RhWorkflowsController {
     return this.workflowsService.listWorkflow('leaves', query);
   }
 
+  @ApiOperation({ summary: 'POST afastamentos' })
   @Post('afastamentos')
   @RequirePermission('rh.write')
   @ApiCreatedResponse({ description: 'Register an employee leave entry.' })
@@ -51,6 +54,7 @@ export class RhWorkflowsController {
     return this.createGlobalWorkflow(request, 'leaves', 'leave_record', body);
   }
 
+  @ApiOperation({ summary: 'PATCH afastamentos/:id' })
   @Patch('afastamentos/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Update an employee leave record.' })
@@ -68,6 +72,7 @@ export class RhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'DELETE afastamentos/:id' })
   @Delete('afastamentos/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Deactivate an employee leave record.' })
@@ -78,6 +83,7 @@ export class RhWorkflowsController {
     return this.deleteGlobalWorkflow(request, 'leaves', 'leave_record', id);
   }
 
+  @ApiOperation({ summary: 'GET processos' })
   @Get('processos')
   @RequirePermission('rh.read')
   @ApiOkResponse({ description: 'List administrative processes.' })
@@ -85,6 +91,7 @@ export class RhWorkflowsController {
     return this.workflowsService.listWorkflow('processes', query);
   }
 
+  @ApiOperation({ summary: 'POST processos' })
   @Post('processos')
   @RequirePermission('rh.write')
   @ApiCreatedResponse({ description: 'Create an administrative process.' })
@@ -100,6 +107,7 @@ export class RhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'PATCH processos/:id' })
   @Patch('processos/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Update an administrative process.' })
@@ -117,6 +125,7 @@ export class RhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'DELETE processos/:id' })
   @Delete('processos/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Deactivate an administrative process.' })
@@ -132,6 +141,7 @@ export class RhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'GET processos-funcao' })
   @Get('processos-funcao')
   @RequirePermission('rh.read')
   @ApiOkResponse({ description: 'List process to function assignments.' })
@@ -139,6 +149,7 @@ export class RhWorkflowsController {
     return this.workflowsService.listWorkflow('process-functions', query);
   }
 
+  @ApiOperation({ summary: 'POST processos-funcao' })
   @Post('processos-funcao')
   @RequirePermission('rh.write')
   @ApiCreatedResponse({
@@ -156,6 +167,7 @@ export class RhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'PATCH processos-funcao/:id' })
   @Patch('processos-funcao/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Update a process to function assignment.' })
@@ -173,6 +185,7 @@ export class RhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'DELETE processos-funcao/:id' })
   @Delete('processos-funcao/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({
@@ -257,6 +270,7 @@ export class EmployeeRhWorkflowsController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET dependentes-beneficio' })
   @Get('dependentes-beneficio')
   @RequirePermission('rh.read')
   @ApiOkResponse({
@@ -273,6 +287,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'POST dependentes-beneficio' })
   @Post('dependentes-beneficio')
   @RequirePermission('rh.write')
   @ApiCreatedResponse({ description: 'Create a benefit-dependent record.' })
@@ -290,6 +305,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'PATCH dependentes-beneficio/:id' })
   @Patch('dependentes-beneficio/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Update a benefit-dependent record.' })
@@ -307,6 +323,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'DELETE dependentes-beneficio/:id' })
   @Delete('dependentes-beneficio/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Deactivate a benefit-dependent record.' })
@@ -322,6 +339,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'GET contribuicoes-sindicais' })
   @Get('contribuicoes-sindicais')
   @RequirePermission('rh.read')
   @ApiOkResponse({
@@ -338,6 +356,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'POST contribuicoes-sindicais' })
   @Post('contribuicoes-sindicais')
   @RequirePermission('rh.write')
   @ApiCreatedResponse({ description: 'Create a union contribution record.' })
@@ -355,6 +374,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'PATCH contribuicoes-sindicais/:id' })
   @Patch('contribuicoes-sindicais/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Update a union contribution record.' })
@@ -372,6 +392,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'DELETE contribuicoes-sindicais/:id' })
   @Delete('contribuicoes-sindicais/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Deactivate a union contribution record.' })
@@ -387,6 +408,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'GET exercicios' })
   @Get('exercicios')
   @RequirePermission('rh.read')
   @ApiOkResponse({ description: 'List exercise assignments for an employee.' })
@@ -397,6 +419,7 @@ export class EmployeeRhWorkflowsController {
     return this.workflowsService.listWorkflow('exercises', query, employeeId);
   }
 
+  @ApiOperation({ summary: 'POST exercicios' })
   @Post('exercicios')
   @RequirePermission('rh.write')
   @ApiCreatedResponse({ description: 'Create an exercise assignment.' })
@@ -414,6 +437,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'PATCH exercicios/:id' })
   @Patch('exercicios/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Update an exercise assignment.' })
@@ -431,6 +455,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'DELETE exercicios/:id' })
   @Delete('exercicios/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Deactivate an exercise assignment.' })
@@ -443,6 +468,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'GET pensoes-alimenticias' })
   @Get('pensoes-alimenticias')
   @RequirePermission('rh.read')
   @ApiOkResponse({ description: 'List alimony records for an employee.' })
@@ -453,6 +479,7 @@ export class EmployeeRhWorkflowsController {
     return this.workflowsService.listWorkflow('alimonies', query, employeeId);
   }
 
+  @ApiOperation({ summary: 'POST pensoes-alimenticias' })
   @Post('pensoes-alimenticias')
   @RequirePermission('rh.write')
   @ApiCreatedResponse({ description: 'Create an alimony record.' })
@@ -470,6 +497,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'PATCH pensoes-alimenticias/:id' })
   @Patch('pensoes-alimenticias/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Update an alimony record.' })
@@ -487,6 +515,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'DELETE pensoes-alimenticias/:id' })
   @Delete('pensoes-alimenticias/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Deactivate an alimony record.' })
@@ -499,6 +528,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'GET vales-transporte' })
   @Get('vales-transporte')
   @RequirePermission('rh.read')
   @ApiOkResponse({
@@ -515,6 +545,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'POST vales-transporte' })
   @Post('vales-transporte')
   @RequirePermission('rh.write')
   @ApiCreatedResponse({ description: 'Create a transit benefit grant.' })
@@ -532,6 +563,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'PATCH vales-transporte/:id' })
   @Patch('vales-transporte/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Update a transit benefit grant.' })
@@ -549,6 +581,7 @@ export class EmployeeRhWorkflowsController {
     );
   }
 
+  @ApiOperation({ summary: 'DELETE vales-transporte/:id' })
   @Delete('vales-transporte/:id')
   @RequirePermission('rh.write')
   @ApiOkResponse({ description: 'Deactivate a transit benefit grant.' })

@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -29,6 +30,7 @@ export class AvaliacaoController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET desempenhos' })
   @Get('desempenhos')
   @RequirePermission('avaliacao.read')
   @ApiOkResponse({ description: 'List performance evaluations.' })
@@ -36,6 +38,7 @@ export class AvaliacaoController {
     return this.avaliacaoService.listPerformanceEvaluations();
   }
 
+  @ApiOperation({ summary: 'POST desempenhos' })
   @Post('desempenhos')
   @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Create a performance evaluation.' })
@@ -57,6 +60,7 @@ export class AvaliacaoController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH desempenhos/:id' })
   @Patch('desempenhos/:id')
   @RequirePermission('avaliacao.write')
   @ApiOkResponse({ description: 'Update a performance evaluation.' })
@@ -81,6 +85,7 @@ export class AvaliacaoController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'GET progressoes' })
   @Get('progressoes')
   @RequirePermission('avaliacao.read')
   @ApiOkResponse({ description: 'List career progressions.' })
@@ -88,6 +93,7 @@ export class AvaliacaoController {
     return this.avaliacaoService.listProgressions();
   }
 
+  @ApiOperation({ summary: 'POST progressoes' })
   @Post('progressoes')
   @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Create a career progression.' })
@@ -108,6 +114,7 @@ export class AvaliacaoController {
     return created;
   }
 
+  @ApiOperation({ summary: 'GET simulacoes' })
   @Get('simulacoes')
   @RequirePermission('avaliacao.read')
   @ApiOkResponse({ description: 'List salary simulations.' })
@@ -115,6 +122,7 @@ export class AvaliacaoController {
     return this.avaliacaoService.listSimulations();
   }
 
+  @ApiOperation({ summary: 'POST simulacoes' })
   @Post('simulacoes')
   @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Create a salary simulation.' })
@@ -138,6 +146,7 @@ export class AvaliacaoController {
     return created;
   }
 
+  @ApiOperation({ summary: 'GET planos-cargos' })
   @Get('planos-cargos')
   @RequirePermission('avaliacao.read')
   @ApiOkResponse({ description: 'List career plans.' })
@@ -145,6 +154,7 @@ export class AvaliacaoController {
     return this.avaliacaoService.listCareerPlans();
   }
 
+  @ApiOperation({ summary: 'POST planos-cargos' })
   @Post('planos-cargos')
   @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Create a career plan.' })
@@ -160,6 +170,7 @@ export class AvaliacaoController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH planos-cargos/:id' })
   @Patch('planos-cargos/:id')
   @RequirePermission('avaliacao.write')
   @ApiOkResponse({ description: 'Update a career plan.' })
@@ -176,6 +187,7 @@ export class AvaliacaoController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST desempenhos/:id/ficha' })
   @Post('desempenhos/:id/ficha')
   @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Queue a performance evaluation sheet.' })
@@ -200,6 +212,7 @@ export class AvaliacaoController {
     return created;
   }
 
+  @ApiOperation({ summary: 'POST ciclos/:periodo/relatorio' })
   @Post('ciclos/:periodo/relatorio')
   @RequirePermission('avaliacao.write')
   @ApiCreatedResponse({ description: 'Queue a cycle evaluation report.' })

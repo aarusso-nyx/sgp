@@ -19,14 +19,26 @@
       <dt>Visibility</dt>
       <dd>{{ item.capability }}</dd>
     </div>
+    <div>
+      <dt>Backend endpoint</dt>
+      <dd>
+        <code>{{ endpoint.endpoint }}</code>
+      </dd>
+    </div>
   </dl>
 
   <article class="note">
-    <h2>Current status</h2>
+    <h2>Backend data</h2>
     <p>{{ item.description }}</p>
-    <p>
-      The page shell is live in `sgp-portal` so route/menu parity can be tracked independently from
-      `sgp-admin` while backend contracts continue to close by domain wave.
-    </p>
+    <p *ngIf="endpoint.gap" class="gap">{{ endpoint.gap }}</p>
+    <p *ngIf="loading" role="status">Carregando dados...</p>
+    <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+    <dl *ngIf="rows.length" class="data-list">
+      <div *ngFor="let row of rows">
+        <dt>{{ row.key }}</dt>
+        <dd>{{ row.value }}</dd>
+      </div>
+    </dl>
   </article>
 </section>

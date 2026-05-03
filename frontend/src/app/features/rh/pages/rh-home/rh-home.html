@@ -1,13 +1,15 @@
 <section class="rh-home" aria-labelledby="rh-title">
   <header class="rh-home__hero">
     <div>
-      <p class="rh-home__eyebrow">Recursos Humanos</p>
+      <p class="rh-home__eyebrow" i18n>Recursos Humanos</p>
       <h1 id="rh-title">{{ currentConfig.label }}</h1>
       <p>
-        Workspace modernizado para rotas RH observadas no SGP legado. Rota:
+        <ng-container i18n
+          >Workspace modernizado para rotas RH observadas no SGP legado. Rota:</ng-container
+        >
         <strong>{{ currentConfig.legacyRoute }}</strong>
       </p>
-      <p class="rh-home__evidence">
+      <p class="rh-home__evidence" i18n>
         Evidencia: {{ currentConfig.evidence }} · Status: {{ currentConfig.observedStatus }} ·
         Workflows backend:
         {{ backendDefinitionCount || 'indisponivel' }}
@@ -22,7 +24,7 @@
         *ngIf="currentConfig.importKind"
       >
         <mat-icon aria-hidden="true">upload_file</mat-icon>
-        Importar
+        <ng-container i18n>Importar</ng-container>
       </button>
       <button
         type="button"
@@ -31,16 +33,16 @@
         *ngIf="currentConfig.reportKey"
       >
         <mat-icon aria-hidden="true">description</mat-icon>
-        Relatorio
+        <ng-container i18n>Relatorio</ng-container>
       </button>
       <button type="button" mat-flat-button color="primary" (click)="openCreateForm()">
         <mat-icon aria-hidden="true">add</mat-icon>
-        Novo registro
+        <ng-container i18n>Novo registro</ng-container>
       </button>
     </div>
   </header>
 
-  <nav class="rh-home__modules" aria-label="Workflows de RH">
+  <nav class="rh-home__modules" aria-label="Workflows de RH" i18n-aria-label>
     <a
       *ngFor="let config of configs"
       [routerLink]="['/rh', config.childPath]"
@@ -103,10 +105,10 @@
                 />
               </ng-template>
 
-              <mat-error *ngIf="fieldControl(field).hasError('required')">
+              <mat-error *ngIf="fieldControl(field).hasError('required')" i18n>
                 {{ field.label }} e obrigatorio.
               </mat-error>
-              <mat-error *ngIf="fieldControl(field).hasError('maxlength')">
+              <mat-error *ngIf="fieldControl(field).hasError('maxlength')" i18n>
                 Valor excede o tamanho permitido.
               </mat-error>
             </mat-form-field>
@@ -114,7 +116,7 @@
         </ng-container>
 
         <div class="rh-home__form-actions">
-          <button type="button" mat-stroked-button (click)="cancelForm()">Cancelar</button>
+          <button type="button" mat-stroked-button (click)="cancelForm()" i18n>Cancelar</button>
           <button type="submit" mat-flat-button color="primary" [disabled]="saving">
             {{ saving ? 'Salvando...' : 'Salvar' }}
           </button>

@@ -1,22 +1,27 @@
 <section class="classification-workspace">
   <header class="toolbar">
     <div>
-      <h1>Classificacao final</h1>
-      <p>Snapshots, desempates e cotas por vaga</p>
+      <h1 i18n>Classificacao final</h1>
+      <p i18n>Snapshots, desempates e cotas por vaga</p>
     </div>
     <label>
-      Concurso
-      <input name="concursoId" [(ngModel)]="concursoId" placeholder="UUID do concurso" />
+      <ng-container i18n>Concurso</ng-container>
+      <input
+        name="concursoId"
+        [(ngModel)]="concursoId"
+        placeholder="UUID do concurso"
+        i18n-placeholder
+      />
     </label>
-    <button type="button" (click)="generate()">Gerar</button>
+    <button type="button" (click)="generate()" i18n>Gerar</button>
   </header>
 
-  <section class="version-strip" aria-label="Versoes de classificacao">
+  <section class="version-strip" aria-label="Versoes de classificacao" i18n-aria-label>
     <article *ngFor="let version of versions" [class.published]="version.published">
       <strong>{{ version.status }}</strong>
       <span>{{ version.generatedAt }}</span>
-      <span>{{ version.totalCandidates }} candidatos</span>
-      <button type="button" [disabled]="version.published" (click)="publish(version)">
+      <span i18n>{{ version.totalCandidates }} candidatos</span>
+      <button type="button" [disabled]="version.published" (click)="publish(version)" i18n>
         Publicar
       </button>
     </article>
@@ -24,13 +29,13 @@
 
   <section class="compare-grid">
     <label>
-      Versao anterior
+      <ng-container i18n>Versao anterior</ng-container>
       <select name="selectedLeft" [(ngModel)]="selectedLeft">
         <option *ngFor="let version of versions" [value]="version.id">{{ version.id }}</option>
       </select>
     </label>
     <label>
-      Versao atual
+      <ng-container i18n>Versao atual</ng-container>
       <select name="selectedRight" [(ngModel)]="selectedRight">
         <option *ngFor="let version of versions" [value]="version.id">{{ version.id }}</option>
       </select>
@@ -40,12 +45,12 @@
   <table>
     <thead>
       <tr>
-        <th>Chamada</th>
-        <th>Geral</th>
-        <th>Candidato</th>
-        <th>Nota</th>
-        <th>Vaga</th>
-        <th>Cota</th>
+        <th i18n>Chamada</th>
+        <th i18n>Geral</th>
+        <th i18n>Candidato</th>
+        <th i18n>Nota</th>
+        <th i18n>Vaga</th>
+        <th i18n>Cota</th>
       </tr>
     </thead>
     <tbody>

@@ -1,11 +1,11 @@
 <section class="fgts-remittances">
   <header>
-    <h1>Remessas FGTS Caixa</h1>
+    <h1 i18n>Remessas FGTS Caixa</h1>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline">
-      <mat-label>Competencia</mat-label>
+      <mat-label i18n>Competencia</mat-label>
       <input matInput type="month" formControlName="competence" />
     </mat-form-field>
     <button
@@ -16,33 +16,33 @@
       [disabled]="loading"
     >
       <mat-icon>request_quote</mat-icon>
-      Gerar GRF
+      <ng-container i18n>Gerar GRF</ng-container>
     </button>
   </form>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Vinculo</mat-label>
+      <mat-label i18n>Vinculo</mat-label>
       <input matInput formControlName="employmentLinkId" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Folha rescisoria</mat-label>
+      <mat-label i18n>Folha rescisoria</mat-label>
       <input matInput formControlName="terminationId" />
     </mat-form-field>
     <button mat-stroked-button type="button" (click)="generateTermination()" [disabled]="loading">
       <mat-icon>account_balance</mat-icon>
-      Gerar GRRF
+      <ng-container i18n>Gerar GRRF</ng-container>
     </button>
   </form>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Remessa</mat-label>
+      <mat-label i18n>Remessa</mat-label>
       <input matInput formControlName="remittanceId" />
     </mat-form-field>
     <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
       <mat-icon>search</mat-icon>
-      Buscar
+      <ng-container i18n>Buscar</ng-container>
     </button>
   </form>
 
@@ -51,33 +51,33 @@
   <section *ngIf="remittance" class="remittance">
     <div class="summary">
       <div>
-        <span>Status</span>
+        <span i18n>Status</span>
         <strong>{{ remittance.status }}</strong>
       </div>
       <div>
-        <span>Tipo</span>
+        <span i18n>Tipo</span>
         <strong>{{ remittance.kind }}</strong>
       </div>
       <div>
-        <span>Competencia</span>
+        <span i18n>Competencia</span>
         <strong>{{ remittance.competence }}</strong>
       </div>
       <div>
-        <span>Total</span>
+        <span i18n>Total</span>
         <strong>{{ remittance.totalAmount | moneyBr }}</strong>
       </div>
     </div>
 
     <dl>
-      <dt>DAE</dt>
+      <dt i18n>DAE</dt>
       <dd class="mono">{{ remittance.daeBarcode || '-' }}</dd>
-      <dt>Arquivo</dt>
+      <dt i18n>Arquivo</dt>
       <dd class="mono">{{ remittance.fileUri || '-' }}</dd>
-      <dt>Layout</dt>
+      <dt i18n>Layout</dt>
       <dd>{{ remittance.layoutVersion }}</dd>
-      <dt>Assinatura</dt>
+      <dt i18n>Assinatura</dt>
       <dd>{{ remittance.signed ? 'Aplicada' : 'Nao exigida' }}</dd>
-      <dt>Hash</dt>
+      <dt i18n>Hash</dt>
       <dd class="mono">{{ remittance.fileHash || '-' }}</dd>
     </dl>
 
@@ -89,7 +89,7 @@
       [disabled]="!remittance.fileContentBase64"
     >
       <mat-icon>download</mat-icon>
-      SIFGE
+      <ng-container i18n>SIFGE</ng-container>
     </button>
   </section>
 </section>

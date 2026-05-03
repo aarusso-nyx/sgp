@@ -56,7 +56,17 @@
         </dl>
       </section>
 
-      <button type="submit" [disabled]="saving || loading || !diff.length">Enviar</button>
+      <div class="actions">
+        <button type="submit" [disabled]="saving || loading || !diff.length">Enviar</button>
+        <button
+          type="button"
+          class="secondary"
+          [disabled]="signing || saving || loading || !diff.length"
+          (click)="startGovBrSignature()"
+        >
+          Assinar com Gov.br
+        </button>
+      </div>
     </form>
   </ng-template>
 </section>

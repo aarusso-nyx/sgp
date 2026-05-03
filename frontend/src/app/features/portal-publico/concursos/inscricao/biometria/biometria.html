@@ -1,33 +1,44 @@
 <section class="candidate-biometrics">
   <header>
-    <h1>Biometria do candidato</h1>
-    <span [class.ready]="consentAccepted">LGPD art. 11 {{ consentVersion }}</span>
+    <h1 i18n>Biometria do candidato</h1>
+    <span [class.ready]="consentAccepted" i18n>LGPD art. 11 {{ consentVersion }}</span>
   </header>
 
   <div class="consent-panel" *ngIf="!consentAccepted">
-    <h2>Consentimento especifico</h2>
-    <p>
+    <h2 i18n>Consentimento especifico</h2>
+    <p i18n>
       Autorizo a captura de template de impressao digital e face para conferencia presencial de
       identidade no dia da prova, com retencao limitada ao edital e recursos.
     </p>
-    <button type="button" (click)="acceptConsent()">Aceitar termo destacado</button>
+    <button type="button" (click)="acceptConsent()" i18n>Aceitar termo destacado</button>
   </div>
 
   <div class="capture-grid">
     <article>
-      <h2>Digital</h2>
-      <label>Dispositivo <input name="deviceRef" [(ngModel)]="capture.deviceRef" /></label>
+      <h2 i18n>Digital</h2>
+      <label
+        ><ng-container i18n>Dispositivo</ng-container>
+        <input name="deviceRef" [(ngModel)]="capture.deviceRef"
+      /></label>
       <meter min="0" max="1" [value]="fingerprintQuality"></meter>
-      <button type="button" (click)="simulateFingerprintCapture()" [disabled]="!consentAccepted">
+      <button
+        type="button"
+        (click)="simulateFingerprintCapture()"
+        [disabled]="!consentAccepted"
+        i18n
+      >
         Capturar digital
       </button>
     </article>
 
     <article>
-      <h2>Face</h2>
-      <label>Camera <input name="faceDeviceRef" [(ngModel)]="capture.faceDeviceRef" /></label>
+      <h2 i18n>Face</h2>
+      <label
+        ><ng-container i18n>Camera</ng-container>
+        <input name="faceDeviceRef" [(ngModel)]="capture.faceDeviceRef"
+      /></label>
       <meter min="0" max="1" [value]="faceQuality"></meter>
-      <button type="button" (click)="simulateFaceCapture()" [disabled]="!consentAccepted">
+      <button type="button" (click)="simulateFaceCapture()" [disabled]="!consentAccepted" i18n>
         Capturar face
       </button>
     </article>
@@ -35,9 +46,10 @@
 
   <footer>
     <label
-      >Retencao ate <input name="retentionUntil" type="date" [(ngModel)]="capture.retentionUntil"
+      ><ng-container i18n>Retencao ate</ng-container>
+      <input name="retentionUntil" type="date" [(ngModel)]="capture.retentionUntil"
     /></label>
-    <button type="button" (click)="requestDeletion()">Solicitar exclusao</button>
-    <strong *ngIf="deletionRequested">Solicitacao LGPD art. 18 registrada</strong>
+    <button type="button" (click)="requestDeletion()" i18n>Solicitar exclusao</button>
+    <strong *ngIf="deletionRequested" i18n>Solicitacao LGPD art. 18 registrada</strong>
   </footer>
 </section>

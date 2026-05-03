@@ -1,7 +1,7 @@
 <section class="review-workspace">
   <header>
     <div>
-      <h1>Revisao de prova online</h1>
+      <h1 i18n>Revisao de prova online</h1>
       <span>{{ selectedSessionId }}</span>
     </div>
     <strong [class.reject]="decision === 'REJECT'" [class.accept]="decision === 'ACCEPT'">
@@ -21,20 +21,21 @@
 
     <aside>
       <div class="player">
-        <span>SNAPSHOT</span>
+        <span i18n>SNAPSHOT</span>
       </div>
       <audio controls></audio>
       <label>
-        Motivo
+        <ng-container i18n>Motivo</ng-container>
         <textarea name="voidReason" [(ngModel)]="voidReason"></textarea>
       </label>
       <div class="actions">
-        <button type="button" (click)="accept()">Aceitar</button>
+        <button type="button" (click)="accept()" i18n>Aceitar</button>
         <button
           type="button"
           class="danger"
           (click)="voidSession()"
           [disabled]="!voidReason.trim()"
+          i18n
         >
           Anular e reagendar
         </button>

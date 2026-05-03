@@ -1,5 +1,6 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { EditalService } from './edital.service';
 export class EditalController {
   constructor(private readonly editalService: EditalService) {}
 
+  @ApiOperation({ summary: 'POST Create version' })
   @Post()
   @RequirePermission('recrutamento.concurso.write')
   @AuditMutation({
@@ -32,6 +34,7 @@ export class EditalController {
     return this.editalService.createVersion(concursoId, body);
   }
 
+  @ApiOperation({ summary: 'POST publish' })
   @Post('publish')
   @RequirePermission('recrutamento.concurso.write')
   @AuditMutation({

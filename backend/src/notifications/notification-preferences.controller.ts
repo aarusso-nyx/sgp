@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Put } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
@@ -26,6 +31,7 @@ class NotificationPreferencesDto {
 export class NotificationPreferencesController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
+  @ApiOperation({ summary: 'GET preferencias-notificacao' })
   @Get('preferencias-notificacao')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'Current user notification preferences.' })
@@ -33,6 +39,7 @@ export class NotificationPreferencesController {
     return this.notificationsService.getUserPreferences();
   }
 
+  @ApiOperation({ summary: 'PUT preferencias-notificacao' })
   @Put('preferencias-notificacao')
   @RequirePermission('auth.read')
   @ApiOkResponse({

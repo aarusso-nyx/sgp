@@ -224,10 +224,10 @@
     },
     {
       "legacy_object": "dbo.classificacao_ato",
-      "status": "canonicalized",
-      "phase": "phase_1_core",
+      "status": "implemented",
+      "phase": "phase_3_core",
       "canonical_object": "hr.act_classification",
-      "note": "Mapped to canonical runtime object in hr/payroll/public schemas."
+      "note": "Implemented as tenant-scoped Gestao master-data in hr.act_classification and consumed by recrutamento.nomeacao through act_classification_id."
     },
     {
       "legacy_object": "dbo.classificacao_internacional_doenca",

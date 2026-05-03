@@ -1,4 +1,5 @@
 import { AuditWriterService } from './audit-writer.service';
+import { prometheusRegistry } from '../common/observability/prometheus.metrics';
 
 describe('AuditWriterService', () => {
   it('appends mutation metadata with request context and redaction', async () => {
@@ -49,6 +50,9 @@ describe('AuditWriterService', () => {
     expect(metadata['userAgent']).toBe('agent');
     expect(values[9]).toBe('127.0.0.1');
     expect(values[10]).toBe('agent');
+    expect(prometheusRegistry.collect()).toContain(
+      'sgp_audit_events_emitted_total{controller="unknown",route="/payroll/runs/1/status"} 1',
+    );
   });
 
   it('skips writes when the database is unavailable', async () => {

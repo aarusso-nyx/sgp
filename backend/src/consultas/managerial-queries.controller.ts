@@ -1,5 +1,10 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import {
@@ -18,6 +23,7 @@ export class ManagerialQueriesController {
     private readonly managerialQueriesService: ManagerialQueriesService,
   ) {}
 
+  @ApiOperation({ summary: 'GET ficha-financeira' })
   @Get('ficha-financeira')
   @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List employee financial records.' })
@@ -25,6 +31,7 @@ export class ManagerialQueriesController {
     return this.managerialQueriesService.listFinancialRecords(query);
   }
 
+  @ApiOperation({ summary: 'GET ficha-funcional' })
   @Get('ficha-funcional')
   @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List functional employee records.' })
@@ -32,6 +39,7 @@ export class ManagerialQueriesController {
     return this.managerialQueriesService.listFunctionalRecords(query);
   }
 
+  @ApiOperation({ summary: 'GET relatorios-situacao' })
   @Get('relatorios-situacao')
   @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List grouped personnel status totals.' })
@@ -39,6 +47,7 @@ export class ManagerialQueriesController {
     return this.managerialQueriesService.listSituationReports();
   }
 
+  @ApiOperation({ summary: 'GET pagamentos-bloqueados' })
   @Get('pagamentos-bloqueados')
   @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List blocked payments.' })
@@ -46,6 +55,7 @@ export class ManagerialQueriesController {
     return this.managerialQueriesService.listBlockedPayments(query);
   }
 
+  @ApiOperation({ summary: 'GET historico-operacional' })
   @Get('historico-operacional')
   @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'List operational audit history.' })
@@ -53,6 +63,7 @@ export class ManagerialQueriesController {
     return this.managerialQueriesService.listOperationalHistory(query);
   }
 
+  @ApiOperation({ summary: 'GET dashboards' })
   @Get('dashboards')
   @RequirePermission('consultas.read')
   @ApiOkResponse({ description: 'Return managerial dashboard totals.' })

@@ -1,5 +1,10 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import {
   Public,
@@ -13,6 +18,7 @@ import { NotaService } from './nota.service';
 export class NotaController {
   constructor(private readonly notaService: NotaService) {}
 
+  @ApiOperation({ summary: 'GET inscricoes/:inscricaoId' })
   @Get('inscricoes/:inscricaoId')
   @RequirePermission('recrutamento.avaliacao.read')
   @ApiOkResponse({ description: 'List notes for an application.' })
@@ -26,6 +32,7 @@ export class NotaController {
 export class PublicNotaController {
   constructor(private readonly notaService: NotaService) {}
 
+  @ApiOperation({ summary: 'GET Get' })
   @Get()
   @Public()
   @ApiOkResponse({

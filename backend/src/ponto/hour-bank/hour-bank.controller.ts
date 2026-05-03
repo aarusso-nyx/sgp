@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -31,6 +32,7 @@ export class HourBankController {
     private readonly settlementService: HourBankSettlementService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('ponto.hourbank.read')
   @ApiOkResponse({ description: 'Hour-bank balances.' })
@@ -38,6 +40,7 @@ export class HourBankController {
     return this.hourBankService.list();
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('ponto.hourbank.write')
   @AuditMutation({
@@ -50,6 +53,7 @@ export class HourBankController {
     return this.hourBankService.create(body);
   }
 
+  @ApiOperation({ summary: 'GET :hourBankId/movimentos' })
   @Get(':hourBankId/movimentos')
   @RequirePermission('ponto.hourbank.read')
   @ApiOkResponse({ description: 'Hour-bank movement ledger.' })
@@ -57,6 +61,7 @@ export class HourBankController {
     return this.hourBankService.movements(hourBankId);
   }
 
+  @ApiOperation({ summary: 'POST acumular-dia' })
   @Post('acumular-dia')
   @RequirePermission('ponto.hourbank.write')
   @AuditMutation({
@@ -69,6 +74,7 @@ export class HourBankController {
     return this.accrualService.accrueDay(body);
   }
 
+  @ApiOperation({ summary: 'POST compensar' })
   @Post('compensar')
   @RequirePermission('ponto.hourbank.write')
   @AuditMutation({
@@ -81,6 +87,7 @@ export class HourBankController {
     return this.compensationService.compensate(body);
   }
 
+  @ApiOperation({ summary: 'POST ajuste-manual' })
   @Post('ajuste-manual')
   @RequirePermission('ponto.hourbank.write')
   @AuditMutation({
@@ -93,6 +100,7 @@ export class HourBankController {
     return this.hourBankService.manualAdjustment(body);
   }
 
+  @ApiOperation({ summary: 'POST zerar-vencidos' })
   @Post('zerar-vencidos')
   @RequirePermission('ponto.hourbank.write')
   @AuditMutation({

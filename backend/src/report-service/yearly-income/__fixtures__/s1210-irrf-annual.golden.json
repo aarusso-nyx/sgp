@@ -1,0 +1,21 @@
+{
+  "source": "S-1210 accepted annual reconciliation",
+  "employeeId": "00000000-0000-4000-8000-000000000001",
+  "yearBase": 2025,
+  "incomeTotal": "60000.00",
+  "irrfTotal": "4200.00",
+  "competences": [
+    { "competence": "2025-01", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-02", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-03", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-04", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-05", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-06", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-07", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-08", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-09", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-10", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-11", "paidTotal": "5000.00", "irrfTotal": "350.00" },
+    { "competence": "2025-12", "paidTotal": "5000.00", "irrfTotal": "350.00" }
+  ]
+}

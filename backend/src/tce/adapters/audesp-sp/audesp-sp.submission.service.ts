@@ -99,7 +99,7 @@ export class AudespSpSubmissionService {
         payload.competenceMonth,
       ],
     );
-    return toAudespSubmissionDto(rows[0]);
+    return toAudespSubmissionDto(rows[0]!);
   }
 
   async validate(id: string): Promise<AudespSubmissionDto> {
@@ -133,7 +133,7 @@ export class AudespSpSubmissionService {
       `,
       [id, status, JSON.stringify(validationErrors)],
     );
-    return toAudespSubmissionDto(rows[0]);
+    return toAudespSubmissionDto(rows[0]!);
   }
 
   async submit(id: string, enqueue = true): Promise<AudespSubmissionDto> {
@@ -177,7 +177,7 @@ export class AudespSpSubmissionService {
         receipt.submittedAt,
       ],
     );
-    const dto = toAudespSubmissionDto(rows[0]);
+    const dto = toAudespSubmissionDto(rows[0]!);
     if (enqueue) {
       await this.queue.enqueueSubmission(dto.id, 'stub://audesp-sp');
     }

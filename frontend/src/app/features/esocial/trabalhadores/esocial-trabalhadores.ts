@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import {
@@ -10,6 +10,7 @@ import {
 } from './esocial-trabalhadores.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-esocial-trabalhadores',
   standalone: true,
   imports: [CommonModule],

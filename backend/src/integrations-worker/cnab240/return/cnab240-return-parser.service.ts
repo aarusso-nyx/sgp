@@ -32,7 +32,7 @@ export class Cnab240ReturnParserService {
 
     const text = buffer.toString('ascii');
     const lines = splitRecords(text);
-    const header = lines[0];
+    const header = lines[0]!;
     const bankCode = header.slice(0, 3);
     const details = lines
       .filter((line) => line.slice(7, 8) === '3' && line.slice(13, 14) === 'A')

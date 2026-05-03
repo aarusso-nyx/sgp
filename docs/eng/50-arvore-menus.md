@@ -344,15 +344,15 @@ sgp-admin
 
 #### 3.1.3 Subgrupo: Legais
 
-| Item de menu          | Rota                                | Papel                       | Feature Flag | Módulo NestJS | Comentário     |
-| --------------------- | ----------------------------------- | --------------------------- | ------------ | ------------- | -------------- |
-| Classificação de Atos | `/gestao/classificacao-ato/gestao`  | `CLASSIFICACAO_ATO.GESTAO`  | —            | `gestao`      | —              |
-| Legislação / Motivo   | `/gestao/motivo/gestao`             | `MOTIVO.GESTAO`             | —            | `gestao`      | Motivos gerais |
-| Tipo de Desligamento  | `/gestao/tipo-desligamento/gestao`  | `TIPO_DESLIGAMENTO.GESTAO`  | —            | `gestao`      | —              |
-| Causa de Afastamento  | `/gestao/causa-afastamento/gestao`  | `CAUSA_AFASTAMENTO.GESTAO`  | —            | `gestao`      | —              |
-| Motivo de Afastamento | `/gestao/motivo-afastamento/gestao` | `MOTIVO_AFASTAMENTO.GESTAO` | —            | `gestao`      | —              |
-| Tipo de Averbação     | `/gestao/tipo-averbacao/gestao`     | `TIPO_AVERBACAO.GESTAO`     | —            | `gestao`      | —              |
-| Tipo de Aposentadoria | `/gestao/tipo-aposentadoria/gestao` | `TIPO_APOSENTADORIA.GESTAO` | —            | `gestao`      | —              |
+| Item de menu          | Rota                                | Papel                       | Feature Flag | Módulo NestJS | Comentário                            |
+| --------------------- | ----------------------------------- | --------------------------- | ------------ | ------------- | ------------------------------------- |
+| Classificação de Atos | `/gestao/classificacao-ato/gestao`  | `CLASSIFICACAO_ATO.GESTAO`  | —            | `gestao`      | Catálogo consumido por nomeação/posse |
+| Legislação / Motivo   | `/gestao/motivo/gestao`             | `MOTIVO.GESTAO`             | —            | `gestao`      | Motivos gerais                        |
+| Tipo de Desligamento  | `/gestao/tipo-desligamento/gestao`  | `TIPO_DESLIGAMENTO.GESTAO`  | —            | `gestao`      | —                                     |
+| Causa de Afastamento  | `/gestao/causa-afastamento/gestao`  | `CAUSA_AFASTAMENTO.GESTAO`  | —            | `gestao`      | —                                     |
+| Motivo de Afastamento | `/gestao/motivo-afastamento/gestao` | `MOTIVO_AFASTAMENTO.GESTAO` | —            | `gestao`      | —                                     |
+| Tipo de Averbação     | `/gestao/tipo-averbacao/gestao`     | `TIPO_AVERBACAO.GESTAO`     | —            | `gestao`      | —                                     |
+| Tipo de Aposentadoria | `/gestao/tipo-aposentadoria/gestao` | `TIPO_APOSENTADORIA.GESTAO` | —            | `gestao`      | —                                     |
 
 ---
 

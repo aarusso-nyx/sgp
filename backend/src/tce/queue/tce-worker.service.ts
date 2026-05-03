@@ -198,7 +198,7 @@ export class TceWorkerService implements OnModuleInit, OnModuleDestroy {
       `,
       [rows[0].id],
     );
-    return mapQueueJob(queueRows[0]);
+    return mapQueueJob(queueRows[0]!);
   }
 
   private async claimJobs(limit: number): Promise<ClaimedQueueRow[]> {

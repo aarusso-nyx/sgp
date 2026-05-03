@@ -1,25 +1,25 @@
 <section class="portal-face">
   <header>
-    <h1>Reconhecimento facial</h1>
+    <h1 i18n>Reconhecimento facial</h1>
   </header>
 
   <form [formGroup]="form">
     <label>
-      Servidor
-      <input formControlName="employeeId" placeholder="UUID do empregado" />
+      <ng-container i18n>Servidor</ng-container>
+      <input formControlName="employeeId" placeholder="UUID do empregado" i18n-placeholder />
     </label>
-    <button type="button" (click)="load()">Consultar</button>
-    <button type="button" (click)="revoke()" [disabled]="saving">Solicitar exclusao</button>
+    <button type="button" (click)="load()" i18n>Consultar</button>
+    <button type="button" (click)="revoke()" [disabled]="saving" i18n>Solicitar exclusao</button>
   </form>
 
   <dl *ngIf="status">
-    <dt>Status</dt>
+    <dt i18n>Status</dt>
     <dd>{{ status['status'] || 'SEM TEMPLATE' }}</dd>
-    <dt>Captura</dt>
+    <dt i18n>Captura</dt>
     <dd>{{ status['capturedAt'] || '-' }}</dd>
-    <dt>Modelo</dt>
+    <dt i18n>Modelo</dt>
     <dd>{{ status['modelId'] || '-' }}</dd>
-    <dt>Versao</dt>
+    <dt i18n>Versao</dt>
     <dd>{{ status['modelVersion'] || '-' }}</dd>
   </dl>
 

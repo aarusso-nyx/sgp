@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import {
@@ -12,6 +12,7 @@ import {
 const EVENT_KINDS: S1xxxEventKind[] = ['S-1000', 'S-1005', 'S-1010', 'S-1020', 'S-1050', 'S-1070'];
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-esocial-tabelas',
   standalone: true,
   imports: [CommonModule],

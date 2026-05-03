@@ -1,38 +1,38 @@
 <section class="yearly-income-admin">
   <header class="page-header">
     <div>
-      <h1>Comprovantes de rendimentos</h1>
-      <p>Geracao anual por ano-base com PDFs e hash de integridade.</p>
+      <h1 i18n>Comprovantes de rendimentos</h1>
+      <p i18n>Geracao anual por ano-base com PDFs e hash de integridade.</p>
     </div>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline">
-      <mat-label>Ano-base</mat-label>
+      <mat-label i18n>Ano-base</mat-label>
       <input matInput type="number" formControlName="yearBase" />
     </mat-form-field>
 
     <button mat-flat-button color="primary" type="button" (click)="generate()" [disabled]="loading">
       <mat-icon>picture_as_pdf</mat-icon>
-      Gerar lote
+      <ng-container i18n>Gerar lote</ng-container>
     </button>
   </form>
 
   <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
   <section class="result" *ngIf="result">
-    <h2>Resultado</h2>
+    <h2 i18n>Resultado</h2>
     <dl>
       <div>
-        <dt>Status</dt>
+        <dt i18n>Status</dt>
         <dd>{{ result.status }}</dd>
       </div>
       <div>
-        <dt>Arquivos</dt>
+        <dt i18n>Arquivos</dt>
         <dd>{{ result.fileCount }}</dd>
       </div>
       <div>
-        <dt>Erros</dt>
+        <dt i18n>Erros</dt>
         <dd>{{ result.errorCount }}</dd>
       </div>
     </dl>
@@ -40,9 +40,9 @@
     <table>
       <thead>
         <tr>
-          <th>Servidor</th>
-          <th>Arquivo</th>
-          <th>Hash</th>
+          <th i18n>Servidor</th>
+          <th i18n>Arquivo</th>
+          <th i18n>Hash</th>
         </tr>
       </thead>
       <tbody>

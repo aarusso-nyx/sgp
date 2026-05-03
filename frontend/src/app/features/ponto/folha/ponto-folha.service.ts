@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface TimesheetPayrollAggregate {
   employeeId: string;
@@ -38,19 +38,19 @@ export interface PayrollBridgePreview {
 
 @Injectable({ providedIn: 'root' })
 export class PontoFolhaService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiClient);
 
   preview(payload: {
     payrollRunId: string;
     timesheetPeriodId: string;
   }): Observable<PayrollBridgePreview> {
-    return this.http.post<PayrollBridgePreview>('/api/v1/ponto/folha/preview', payload);
+    return this.api.post<PayrollBridgePreview>('/api/v1/ponto/folha/preview', payload);
   }
 
   apply(payload: {
     payrollRunId: string;
     timesheetPeriodId: string;
   }): Observable<PayrollBridgePreview> {
-    return this.http.post<PayrollBridgePreview>('/api/v1/ponto/folha/apply', payload);
+    return this.api.post<PayrollBridgePreview>('/api/v1/ponto/folha/apply', payload);
   }
 }

@@ -59,7 +59,7 @@ export class RetryPolicyService {
       this.upsertSql(),
       this.values(input),
     );
-    return mapRetrySchedule(rows[0]);
+    return mapRetrySchedule(rows[0]!);
   }
 
   async scheduleRetryInTransaction(
@@ -70,7 +70,7 @@ export class RetryPolicyService {
       this.upsertSql(),
       this.values(input),
     );
-    return mapRetrySchedule(rows.rows[0]);
+    return mapRetrySchedule(rows.rows[0]!);
   }
 
   async clearRetry(

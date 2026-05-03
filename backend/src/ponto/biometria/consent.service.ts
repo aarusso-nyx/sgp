@@ -38,7 +38,7 @@ export class PontoBiometricConsentService {
       [input.employeeId, input.consentVersion.trim(), input.consentAt ?? null],
     );
     AuditMutationContextStore.markMutationAudited();
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async withdraw(employeeId: string): Promise<Record<string, unknown>> {

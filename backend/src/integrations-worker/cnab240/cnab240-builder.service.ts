@@ -370,7 +370,7 @@ function line(fields: Array<[number, string]>): string {
       throw new Error(`CNAB field out of bounds at ${start}`);
     }
     for (let index = 0; index < value.length; index += 1) {
-      chars[offset + index] = value[index];
+      chars[offset + index] = value.charAt(index);
     }
   }
   return chars.join('');

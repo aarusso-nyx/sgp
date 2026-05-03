@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../../core/api/api-client';
 
 export type AtsParameterKey =
   | 'ATS_PERCENT_PER_YEAR'
@@ -24,10 +24,10 @@ export interface AtsParameterTable {
 export class AtsParametrosService {
   private readonly url = '/api/v1/admin/parametros/ats';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   list(): Observable<AtsParameterTable> {
-    return this.http.get<AtsParameterTable>(this.url);
+    return this.api.get<AtsParameterTable>(this.url);
   }
 
   upsert(payload: {
@@ -35,6 +35,6 @@ export class AtsParametrosService {
     value: string;
     description?: string;
   }): Observable<AtsParameterTable> {
-    return this.http.put<AtsParameterTable>(this.url, payload);
+    return this.api.put<AtsParameterTable>(this.url, payload);
   }
 }

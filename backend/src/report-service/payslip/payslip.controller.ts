@@ -9,6 +9,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -29,6 +30,7 @@ import { PayslipRenderService } from './payslip-render.service';
 export class PayslipController {
   constructor(private readonly payslipRenderService: PayslipRenderService) {}
 
+  @ApiOperation({ summary: 'GET v1/portal/payslips' })
   @Get('v1/portal/payslips')
   @RequirePermission('portal.paystub.read')
   @ApiOkResponse({
@@ -38,6 +40,7 @@ export class PayslipController {
     return this.payslipRenderService.listPortalFiles(actor);
   }
 
+  @ApiOperation({ summary: 'GET v1/portal/payslips/:id/pdf' })
   @Get('v1/portal/payslips/:id/pdf')
   @RequirePermission('portal.paystub.read')
   @Header('Content-Type', 'application/pdf')
@@ -61,6 +64,7 @@ export class PayslipController {
     return new StreamableFile(rendered.buffer);
   }
 
+  @ApiOperation({ summary: 'POST v1/admin/payslip-batches' })
   @Post('v1/admin/payslip-batches')
   @RequirePermission('report.payslip.write')
   @AuditMutation({

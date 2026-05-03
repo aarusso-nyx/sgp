@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Put, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -15,6 +20,7 @@ import { TaxRateService } from './tax-rate.service';
 export class TaxRateController {
   constructor(private readonly taxRateService: TaxRateService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('system.tax-rate.read')
   @ApiOkResponse({ description: 'List IRRF progressive tax-rate brackets.' })
@@ -22,6 +28,7 @@ export class TaxRateController {
     return this.taxRateService.listIrrfTables(competence);
   }
 
+  @ApiOperation({ summary: 'PUT Upsert' })
   @Put()
   @RequirePermission('system.tax-rate.write')
   @AuditMutation({
@@ -42,6 +49,7 @@ export class TaxRateController {
 export class RppsTaxRateController {
   constructor(private readonly taxRateService: TaxRateService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('system.tax-rate.read')
   @ApiOkResponse({ description: 'List RPPS progressive tax-rate brackets.' })
@@ -49,6 +57,7 @@ export class RppsTaxRateController {
     return this.taxRateService.listRppsTables(competence);
   }
 
+  @ApiOperation({ summary: 'PUT Upsert' })
   @Put()
   @RequirePermission('system.tax-rate.write')
   @AuditMutation({

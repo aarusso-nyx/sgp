@@ -1,12 +1,12 @@
 <section class="transfer">
   <header>
-    <p>Recursos Humanos</p>
-    <h1>Movimentacao e transferencia</h1>
+    <p i18n>Recursos Humanos</p>
+    <h1 i18n>Movimentacao e transferencia</h1>
   </header>
 
   <p *ngIf="message" class="message" role="status">{{ message }}</p>
   <p *ngIf="error" class="error" role="alert">{{ error }}</p>
-  <p *ngIf="loading">Carregando...</p>
+  <p *ngIf="loading" i18n>Carregando...</p>
 
   <div class="queue-grid">
     <article *ngFor="let status of statuses" class="queue">
@@ -14,11 +14,11 @@
       <table [attr.aria-label]="'Movimentacoes ' + status">
         <thead>
           <tr>
-            <th>Servidor</th>
-            <th>Tipo</th>
-            <th>Efeito</th>
-            <th>Destino</th>
-            <th>Acoes</th>
+            <th i18n>Servidor</th>
+            <th i18n>Tipo</th>
+            <th i18n>Efeito</th>
+            <th i18n>Destino</th>
+            <th i18n>Acoes</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +34,7 @@
                 mat-stroked-button
                 (click)="approve(item)"
                 [disabled]="savingId === item.id"
+                i18n
               >
                 Aprovar
               </button>
@@ -43,6 +44,7 @@
                 mat-stroked-button
                 (click)="effect(item)"
                 [disabled]="savingId === item.id"
+                i18n
               >
                 Efetivar
               </button>

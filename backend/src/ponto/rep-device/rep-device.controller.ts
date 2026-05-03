@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -17,6 +18,7 @@ import { RepDeviceService } from './rep-device.service';
 export class RepDeviceController {
   constructor(private readonly repDeviceService: RepDeviceService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('ponto.rep.read')
   @ApiOkResponse({ description: 'REP devices.' })
@@ -24,6 +26,7 @@ export class RepDeviceController {
     return this.repDeviceService.list();
   }
 
+  @ApiOperation({ summary: 'GET :repDeviceId' })
   @Get(':repDeviceId')
   @RequirePermission('ponto.rep.read')
   @ApiOkResponse({ description: 'REP device detail.' })
@@ -31,6 +34,7 @@ export class RepDeviceController {
     return this.repDeviceService.get(repDeviceId);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('ponto.rep.write')
   @AuditMutation({

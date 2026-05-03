@@ -88,6 +88,7 @@ describe('MasterDataService', () => {
     expect(keys).toEqual(
       expect.arrayContaining([
         'categoriaEconomica',
+        'classificacaoAto',
         'categoriaDoenca',
         'subCategoriaDoenca',
         'classificacaoAgenteNocivo',

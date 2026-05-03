@@ -149,7 +149,7 @@ export class CertificateStoreService {
         validTo.toISOString(),
       ],
     );
-    return this.toDto(rows[0]);
+    return this.toDto(rows[0]!);
   }
 
   async rotate(

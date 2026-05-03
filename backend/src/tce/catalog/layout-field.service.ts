@@ -54,7 +54,7 @@ export class LayoutFieldService {
         input.ordering,
       ],
     );
-    return toLayoutFieldDto(rows[0]);
+    return toLayoutFieldDto(rows[0]!);
   }
 
   async delete(id: string): Promise<{ id: string; deleted: true }> {

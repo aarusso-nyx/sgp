@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 interface PublicAppointment {
   concurso: string;
@@ -11,6 +11,7 @@ interface PublicAppointment {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-portal-publico-minhas-nomeacoes',
   standalone: true,
   imports: [CommonModule],

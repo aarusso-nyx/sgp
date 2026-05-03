@@ -58,7 +58,7 @@ export class TimesheetAggregatorService {
         formatDateOnlyUtc(period.period_end),
       ],
     );
-    return this.toAggregate(rows[0]);
+    return this.toAggregate(rows[0]!);
   }
 
   async loadClosedPeriod(

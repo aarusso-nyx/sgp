@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
@@ -16,6 +21,7 @@ class NotificationReadDto {
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'Paged user notifications.' })
@@ -23,6 +29,7 @@ export class NotificationsController {
     return this.notificationsService.list(query);
   }
 
+  @ApiOperation({ summary: 'GET stream' })
   @Get('stream')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'Notifications SSE stream.' })
@@ -35,6 +42,7 @@ export class NotificationsController {
     };
   }
 
+  @ApiOperation({ summary: 'GET unread-count' })
   @Get('unread-count')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'Unread notification count.' })
@@ -42,6 +50,7 @@ export class NotificationsController {
     return this.notificationsService.unreadCount();
   }
 
+  @ApiOperation({ summary: 'PATCH marcar-todas-lidas' })
   @Patch('marcar-todas-lidas')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'Mark all unread notifications as read.' })
@@ -49,6 +58,7 @@ export class NotificationsController {
     return this.notificationsService.markAllRead();
   }
 
+  @ApiOperation({ summary: 'PATCH :id' })
   @Patch(':id')
   @RequirePermission('auth.read')
   @ApiOkResponse({ description: 'Mark a notification read/unread.' })

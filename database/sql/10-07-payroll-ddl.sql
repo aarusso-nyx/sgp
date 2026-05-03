@@ -10,7 +10,10 @@ CREATE FUNCTION payroll.employee_payroll_item_idempotency_key(p_tenant_id uuid, 
     LANGUAGE sql IMMUTABLE
     AS $$
   SELECT CASE
-    WHEN p_source = 'CALCULATED'::public."PayrollEntrySource"
+    WHEN p_source IN (
+      'CALCULATED'::public."PayrollEntrySource",
+      'IMPORTED'::public."PayrollEntrySource"
+    )
       AND p_payroll_run_id IS NOT NULL
     THEN
       p_tenant_id::text || ':' ||
@@ -126,6 +129,7 @@ CREATE TABLE payroll.payroll_financial_record (
     functional_status_id uuid,
     competence_year integer NOT NULL,
     competence_month integer NOT NULL,
+    competence date NOT NULL,
     total_earnings numeric(16,2) DEFAULT 0 NOT NULL,
     total_deductions numeric(16,2) DEFAULT 0 NOT NULL,
     net_amount numeric(16,2) DEFAULT 0 NOT NULL,
@@ -133,8 +137,11 @@ CREATE TABLE payroll.payroll_financial_record (
     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
     CONSTRAINT payroll_financial_record_competence_month_check CHECK (((competence_month >= 1) AND (competence_month <= 12))),
+    CONSTRAINT payroll_financial_record_competence_check CHECK (((competence IS NULL) OR (competence = make_date(competence_year, competence_month, 1)))),
     CONSTRAINT payroll_financial_record_totals_nonnegative_check CHECK (((total_earnings >= (0)::numeric) AND (total_deductions >= (0)::numeric) AND (net_amount >= (0)::numeric)))
-);
+) PARTITION BY RANGE (competence);
+
+CREATE TABLE payroll.payroll_financial_record_default PARTITION OF payroll.payroll_financial_record DEFAULT;
 
 CREATE TABLE payroll.accounting_account (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
@@ -497,7 +504,7 @@ ALTER TABLE ONLY payroll.payroll_earning_deduction
     ADD CONSTRAINT payroll_earning_deduction_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY payroll.payroll_financial_record
-    ADD CONSTRAINT payroll_financial_record_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT payroll_financial_record_pkey PRIMARY KEY (id, competence);
 
 ALTER TABLE ONLY payroll.payroll_run
     ADD CONSTRAINT payroll_run_pkey PRIMARY KEY (id);

@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  PreconditionFailedException,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
@@ -35,6 +36,7 @@ export interface EmployeeSummary {
   abonoPermanenciaInicio: string | null;
   abonoPermanenciaFundamento: string | null;
   recruitmentOrigin: string | null;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -54,6 +56,7 @@ interface EmployeeListRow extends QueryResultRow {
   abono_permanencia_inicio?: Date | string | null;
   abono_permanencia_fundamento?: string | null;
   recruitment_origin?: string | null;
+  version?: number | string;
   created_at: Date | string;
   updated_at: Date | string;
 }
@@ -64,11 +67,16 @@ interface AbonoPermanenciaRow extends QueryResultRow {
   starts_on: Date | string | null;
   legal_basis: string | null;
   audit_event_id?: string;
+  version?: number | string;
   updated_at: Date | string;
 }
 
 interface IdRow extends QueryResultRow {
   id: string;
+}
+
+interface VersionedIdRow extends IdRow {
+  version: number | string;
 }
 
 interface AdmitRow extends EmployeeListRow {
@@ -86,6 +94,7 @@ interface EmployeeRegimeRow extends QueryResultRow {
   registration: string;
   name: string;
   functional_status_id: string | null;
+  version: number | string;
 }
 
 interface RegimeChangeRow extends QueryResultRow {
@@ -97,6 +106,12 @@ interface RegimeChangeRow extends QueryResultRow {
   end_date: Date | string | null;
   status_history_id: string;
   audit_event_id: string;
+  employee_version: number | string;
+  employment_link_version: number | string;
+}
+
+interface VersionRow extends QueryResultRow {
+  version: number | string;
 }
 
 export interface EmployeeTerminationResult {
@@ -120,6 +135,8 @@ export interface ContractRegimeChangeResult {
   endDate: string | null;
   statusHistoryId: string;
   auditEventId: string;
+  employeeVersion: number;
+  employmentLinkVersion: number;
 }
 
 export interface EmployeeDossier {
@@ -230,6 +247,7 @@ export class EmployeesService {
         e.abono_permanencia_ativo,
         e.abono_permanencia_inicio,
         e.abono_permanencia_fundamento,
+        e.version,
         CASE
           WHEN concurso.code IS NOT NULL THEN 'concurso ' || concurso.code
           WHEN e.recruitment_concurso_id IS NOT NULL THEN 'concurso ' || e.recruitment_concurso_id::text
@@ -393,7 +411,7 @@ export class EmployeesService {
       return approved.rows;
     });
 
-    return this.toCadastralChange(rows[0]);
+    return this.toCadastralChange(rows[0]!);
   }
 
   async rejectCadastralChange(
@@ -473,7 +491,7 @@ export class EmployeesService {
           input.active === false ? 'TERMINATED' : 'ACTIVE',
         ],
       );
-      return this.toSummary(rows[0]);
+      return this.toSummary(rows[0]!);
     } catch (error: unknown) {
       const code = (error as { code?: string }).code;
       if (code === '23505') {
@@ -671,6 +689,7 @@ export class EmployeesService {
             true AS active,
             e.created_at,
             e.updated_at,
+            e.version,
             c.id::text AS contract_id
           FROM created_employee e
           CROSS JOIN created_contract c
@@ -729,6 +748,7 @@ export class EmployeesService {
   async update(
     id: string,
     input: EmployeeMutationDto,
+    expectedVersion?: number,
   ): Promise<EmployeeSummary> {
     this.ensureDatabase();
     const rows = await this.databaseService.query<EmployeeListRow>(
@@ -742,6 +762,7 @@ export class EmployeesService {
         lifecycle_status = $6::"EmployeeLifecycleStatus",
         updated_at = now()
       WHERE id = $1::uuid
+        AND ($7::integer IS NULL OR version = $7::integer)
       RETURNING
         id,
         registration,
@@ -753,7 +774,8 @@ export class EmployeesService {
         NULL::text AS branch_name,
         (lifecycle_status <> 'TERMINATED'::"EmployeeLifecycleStatus") AS active,
         created_at,
-        updated_at
+        updated_at,
+        version
       `,
       [
         id,
@@ -762,10 +784,14 @@ export class EmployeesService {
         input.cpf?.trim() || null,
         input.email?.trim().toLowerCase() || null,
         input.active === false ? 'TERMINATED' : 'ACTIVE',
+        expectedVersion ?? null,
       ],
     );
 
     const row = rows[0];
+    if (!row && expectedVersion !== undefined) {
+      await this.assertEmployeeVersion(id, expectedVersion);
+    }
     if (!row) throw new NotFoundException('Employee not found');
     return this.toSummary(row);
   }
@@ -787,7 +813,8 @@ export class EmployeesService {
             b.name AS branch_name,
             (e.lifecycle_status <> 'TERMINATED'::"EmployeeLifecycleStatus") AS active,
             e.created_at,
-            e.updated_at
+            e.updated_at,
+            e.version
           FROM hr.employee e
           LEFT JOIN hr.functional_status fs ON fs.id = e.functional_status_id
           LEFT JOIN hr.branch b ON b.id = e.branch_id
@@ -1031,6 +1058,7 @@ export class EmployeesService {
         abono_permanencia_ativo AS active,
         abono_permanencia_inicio AS starts_on,
         abono_permanencia_fundamento AS legal_basis,
+        version,
         updated_at
       FROM hr.employee
       WHERE id = $1::uuid
@@ -1046,6 +1074,7 @@ export class EmployeesService {
   async updateAbonoPermanencia(
     id: string,
     input: UpdateAbonoPermanenciaDto,
+    expectedVersion?: number,
   ): Promise<Record<string, unknown>> {
     this.ensureDatabase();
     if (input.active && !input.startsOn) {
@@ -1060,6 +1089,9 @@ export class EmployeesService {
     }
 
     const row = await this.databaseService.transaction(async (client) => {
+      if (expectedVersion !== undefined) {
+        await this.assertEmployeeVersion(id, expectedVersion, client);
+      }
       const updated = await client.query<AbonoPermanenciaRow>(
         `
         WITH previous AS (
@@ -1088,6 +1120,7 @@ export class EmployeesService {
             employee.abono_permanencia_inicio,
             employee.abono_permanencia_fundamento,
             employee.updated_at,
+            employee.version,
             previous.abono_permanencia_ativo AS previous_active,
             previous.abono_permanencia_inicio AS previous_starts_on,
             previous.abono_permanencia_fundamento AS previous_legal_basis
@@ -1127,6 +1160,7 @@ export class EmployeesService {
           changed.abono_permanencia_inicio AS starts_on,
           changed.abono_permanencia_fundamento AS legal_basis,
           changed.updated_at,
+          changed.version,
           audit.id::text AS audit_event_id
         FROM changed
         CROSS JOIN audit
@@ -1149,6 +1183,7 @@ export class EmployeesService {
   async changeContractRegime(
     employeeId: string,
     input: ChangeContractRegimeDto,
+    expectedVersion?: number,
   ): Promise<ContractRegimeChangeResult> {
     this.ensureDatabase();
     this.validateContractRegime(input);
@@ -1161,7 +1196,8 @@ export class EmployeesService {
           tenant_id::text,
           registration,
           name,
-          functional_status_id::text
+          functional_status_id::text,
+          version
         FROM hr.employee
         WHERE id = $1::uuid
           AND tenant_id = public.sgp_current_tenant_uuid()
@@ -1171,6 +1207,9 @@ export class EmployeesService {
       );
       const employee = employeeRows.rows[0];
       if (!employee) throw new NotFoundException('Employee not found');
+      if (expectedVersion !== undefined) {
+        this.assertExpectedVersion(employee.version, expectedVersion);
+      }
 
       const functionalStatusId =
         input.functionalStatusId ??
@@ -1195,7 +1234,7 @@ export class EmployeesService {
         input.contractType.toUpperCase(),
         input.effectiveOn.replace(/[^0-9]/g, ''),
       ].join('-');
-      const linkRows = await client.query<IdRow>(
+      const linkRows = await client.query<VersionedIdRow>(
         `
         INSERT INTO hr.employment_link (
           tenant_id,
@@ -1229,7 +1268,7 @@ export class EmployeesService {
           functional_status_id = EXCLUDED.functional_status_id,
           status = 'ACTIVE'::"RecordStatus",
           updated_at = now()
-        RETURNING id::text
+        RETURNING id::text, version
         `,
         [
           code,
@@ -1241,7 +1280,7 @@ export class EmployeesService {
           functionalStatusId,
         ],
       );
-      const employmentLinkId = linkRows.rows[0].id;
+      const employmentLinkId = linkRows.rows[0]!.id;
 
       const changeRows = await client.query<RegimeChangeRow>(
         `
@@ -1263,7 +1302,7 @@ export class EmployeesService {
             updated_at = now()
           WHERE id = $1::uuid
             AND tenant_id = public.sgp_current_tenant_uuid()
-          RETURNING id, tenant_id
+          RETURNING id, tenant_id, version
         ),
         created_contract AS (
           INSERT INTO hr.employment_contract (
@@ -1338,7 +1377,9 @@ export class EmployeesService {
           $2::date AS effective_on,
           NULLIF($5, '')::date AS end_date,
           (SELECT id::text FROM history) AS status_history_id,
-          (SELECT id::text FROM audit) AS audit_event_id
+          (SELECT id::text FROM audit) AS audit_event_id,
+          (SELECT version FROM updated_employee) AS employee_version,
+          $10::integer AS employment_link_version
         `,
         [
           employeeId,
@@ -1350,10 +1391,11 @@ export class EmployeesService {
           functionalStatusId,
           input.contractType,
           input.justification?.trim() ?? '',
+          linkRows.rows[0]!.version ?? 0,
         ],
       );
 
-      const row = changeRows.rows[0];
+      const row = changeRows.rows[0]!;
       AuditMutationContextStore.markMutationAudited();
       return {
         employeeId: row.employee_id,
@@ -1364,8 +1406,39 @@ export class EmployeesService {
         endDate: row.end_date ? this.toIso(row.end_date) : null,
         statusHistoryId: row.status_history_id,
         auditEventId: row.audit_event_id,
+        employeeVersion: Number(row.employee_version),
+        employmentLinkVersion: Number(row.employment_link_version),
       };
     });
+  }
+
+  private async assertEmployeeVersion(
+    employeeId: string,
+    expectedVersion: number,
+    client?: PoolClient,
+  ): Promise<void> {
+    const sql = `
+      SELECT version
+      FROM hr.employee
+      WHERE id = $1::uuid
+        AND tenant_id = public.sgp_current_tenant_uuid()
+      FOR UPDATE
+      `;
+    const rows = client
+      ? (await client.query<VersionRow>(sql, [employeeId])).rows
+      : await this.databaseService.query<VersionRow>(sql, [employeeId]);
+    const row = rows[0];
+    if (!row) throw new NotFoundException('Employee not found');
+    this.assertExpectedVersion(row.version, expectedVersion);
+  }
+
+  private assertExpectedVersion(
+    currentVersion: number | string,
+    expectedVersion: number,
+  ): void {
+    if (Number(currentVersion) !== expectedVersion) {
+      throw new PreconditionFailedException('If-Match version does not match');
+    }
   }
 
   private validateContractRegime(input: ChangeContractRegimeDto): void {
@@ -1464,7 +1537,7 @@ export class EmployeesService {
         input.lifecycleStatus,
       ],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureEmploymentLink(
@@ -1482,7 +1555,7 @@ export class EmployeesService {
       `,
       [code, name],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureContractType(
@@ -1500,7 +1573,7 @@ export class EmployeesService {
       `,
       [code, name],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensurePayrollType(client: PoolClient): Promise<string> {
@@ -1513,7 +1586,7 @@ export class EmployeesService {
       RETURNING id::text
       `,
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private async ensureProcessingType(
@@ -1546,7 +1619,7 @@ export class EmployeesService {
       `,
       [payrollTypeId],
     );
-    return rows.rows[0].id;
+    return rows.rows[0]!.id;
   }
 
   private ensureDatabase(): void {
@@ -1662,6 +1735,7 @@ export class EmployeesService {
         : null,
       abonoPermanenciaFundamento: row.abono_permanencia_fundamento ?? null,
       recruitmentOrigin: row.recruitment_origin ?? null,
+      version: Number(row.version ?? 0),
       createdAt: this.toIso(row.created_at),
       updatedAt: this.toIso(row.updated_at),
     };
@@ -1676,6 +1750,7 @@ export class EmployeesService {
       startsOn: row.starts_on ? this.toIso(row.starts_on).slice(0, 10) : null,
       legalBasis: row.legal_basis,
       auditEventId: row.audit_event_id ?? null,
+      version: Number(row.version ?? 0),
       updatedAt: this.toIso(row.updated_at),
     };
   }

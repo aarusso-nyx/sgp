@@ -192,6 +192,29 @@ describe('DctfwebBuilderService', () => {
         payload: { rawXml: '<empty />' },
       }),
     ).toEqual([]);
+    expect(
+      target.itemsFromTotalizer({
+        kind: 'R-9015',
+        source_event_recibo: 'REINF-R9015',
+        payload: {
+          items: [
+            {
+              sourceRunId: '00000000-0000-4000-8000-000000004099',
+              debitCode: '0561',
+              baseAmount: '3500.00',
+              amount: '275.15',
+            },
+          ],
+        },
+      }),
+    ).toMatchObject([
+      {
+        sourceEvent: 'R9015',
+        debitCode: '0561',
+        baseAmount: '3500.00',
+        amount: '275.15',
+      },
+    ]);
     expect(() =>
       target.itemsFromTotalizer({
         kind: 'S-5011',

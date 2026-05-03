@@ -134,7 +134,7 @@ export class CatEmissionService {
       return insertResult.rows;
     });
 
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   deadlineFor(

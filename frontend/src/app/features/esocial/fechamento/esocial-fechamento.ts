@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Subject, finalize, takeUntil } from 'rxjs';
@@ -7,6 +7,7 @@ import { Subject, finalize, takeUntil } from 'rxjs';
 import { ESocialClosureState, ESocialFechamentoService } from './esocial-fechamento.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-esocial-fechamento',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],

@@ -11,7 +11,7 @@ import {
 } from './s1xxx-common';
 
 export interface S1299PendingPeriodic {
-  eventKind: 'S-1200' | 'S-1210';
+  eventKind: 'S-1200' | 'S-1202' | 'S-1210';
   payrollRunId: string | null;
   paymentBatchId: string | null;
   employeeId: string;
@@ -27,7 +27,7 @@ export interface S1299BuildResult {
 }
 
 interface PendingRow extends QueryResultRow {
-  event_kind: 'S-1200' | 'S-1210';
+  event_kind: 'S-1200' | 'S-1202' | 'S-1210';
   payroll_run_id: string | null;
   payment_batch_id: string | null;
   employee_id: string;
@@ -56,7 +56,7 @@ export class S1299Builder {
       throw new UnprocessableEntityException({
         code: 'ESOCIAL_S1299_PERIODICS_PENDING',
         message:
-          'S-1299 closure requires all S-1200/S-1210 periodics to have accepted receipts',
+          'S-1299 closure requires all S-1200/S-1202/S-1210 periodics to have accepted receipts',
         competence: normalizedCompetence,
         pending,
       });
@@ -76,7 +76,7 @@ export class S1299Builder {
     const [totals] = await this.databaseService.query<TotalsRow>(
       `
       SELECT
-        count(DISTINCT s1200.employee_id)::text AS remuneration_count,
+        count(DISTINCT COALESCE(s1200.employee_id, s1202.employee_id))::text AS remuneration_count,
         count(DISTINCT s1210.employee_id)::text AS payment_count
       FROM (SELECT $1::uuid AS tenant_id, $2::date AS competence) input
       LEFT JOIN esocial.s1200_emission_state s1200
@@ -87,6 +87,16 @@ export class S1299Builder {
          FROM payroll.payroll_run run
          WHERE run.tenant_id = s1200.tenant_id
            AND run.id = s1200.payroll_run_id
+           AND make_date(run.competence_year, run.competence_month, 1) = input.competence
+       )
+      LEFT JOIN esocial.s1202_emission_state s1202
+        ON s1202.tenant_id = input.tenant_id
+       AND NULLIF(btrim(s1202.recibo), '') IS NOT NULL
+       AND EXISTS (
+         SELECT 1
+         FROM payroll.payroll_run run
+         WHERE run.tenant_id = s1202.tenant_id
+           AND run.id = s1202.payroll_run_id
            AND make_date(run.competence_year, run.competence_month, 1) = input.competence
        )
       LEFT JOIN esocial.s1210_emission_state s1210
@@ -175,7 +185,7 @@ export function monthCompetence(value: string): string {
       'Competence must be a monthly YYYY-MM value',
     );
   }
-  return `${xmlEscape(match[1])}-${xmlEscape(match[2])}`;
+  return `${xmlEscape(match[1]!)}-${xmlEscape(match[2]!)}`;
 }
 
 export function dateCompetence(value: string): string {

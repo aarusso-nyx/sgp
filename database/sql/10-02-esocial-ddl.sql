@@ -47,20 +47,34 @@ CREATE TYPE esocial.s1xxx_event_kind AS ENUM (
     'S-1005',
     'S-1010',
     'S-1020',
+    'S-1030',
+    'S-1040',
     'S-1050',
+    'S-1060',
     'S-1070',
+    'S-1200',
+    'S-1202',
+    'S-1207',
+    'S-1210',
+    'S-1298',
+    'S-1299',
     'S-2200',
     'S-2205',
+    'S-2206',
     'S-2230',
-    'S-2299',
-    'S-3000',
-    'S-1200',
-    'S-1210',
-    'S-1299',
     'S-2220',
     'S-2210',
     'S-2240',
+    'S-2299',
+    'S-2300',
     'S-2306',
+    'S-2399',
+    'S-2400',
+    'S-2405',
+    'S-2410',
+    'S-2416',
+    'S-2501',
+    'S-3000',
     'S-2298'
 );
 
@@ -161,6 +175,17 @@ CREATE TABLE esocial.response_classification (
 );
 
 CREATE TABLE esocial.s1200_emission_state (
+    tenant_id uuid NOT NULL,
+    payroll_run_id uuid NOT NULL,
+    employee_id uuid NOT NULL,
+    recibo text,
+    payload_hash character(64) NOT NULL,
+    emitted_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+CREATE TABLE esocial.s1202_emission_state (
     tenant_id uuid NOT NULL,
     payroll_run_id uuid NOT NULL,
     employee_id uuid NOT NULL,
@@ -400,6 +425,9 @@ ALTER TABLE ONLY esocial.response_classification
 
 ALTER TABLE ONLY esocial.s1200_emission_state
     ADD CONSTRAINT s1200_emission_state_pkey PRIMARY KEY (tenant_id, payroll_run_id, employee_id);
+
+ALTER TABLE ONLY esocial.s1202_emission_state
+    ADD CONSTRAINT s1202_emission_state_pkey PRIMARY KEY (tenant_id, payroll_run_id, employee_id);
 
 ALTER TABLE ONLY esocial.s1210_emission_state
     ADD CONSTRAINT s1210_emission_state_pkey PRIMARY KEY (tenant_id, payment_batch_id, employee_id);

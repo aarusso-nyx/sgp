@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -38,6 +39,7 @@ export class CatalogController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET states' })
   @Get('states')
   @RequirePermission('tce.catalog.read')
   @ApiOkResponse({
@@ -47,6 +49,7 @@ export class CatalogController {
     return this.stateService.list();
   }
 
+  @ApiOperation({ summary: 'GET states/:code/layouts' })
   @Get('states/:code/layouts')
   @RequirePermission('tce.catalog.read')
   @ApiOkResponse({ description: 'List layout versions for a state code.' })
@@ -54,6 +57,7 @@ export class CatalogController {
     return this.layoutVersionService.listByStateCode(code);
   }
 
+  @ApiOperation({ summary: 'GET layouts/:id/fields' })
   @Get('layouts/:id/fields')
   @RequirePermission('tce.catalog.read')
   @ApiOkResponse({ description: 'List field metadata for a layout version.' })
@@ -61,6 +65,7 @@ export class CatalogController {
     return this.layoutFieldService.list(id);
   }
 
+  @ApiOperation({ summary: 'POST layouts' })
   @Post('layouts')
   @RequirePermission('tce.catalog.manage')
   @ApiCreatedResponse({ description: 'Create a draft layout version.' })
@@ -85,6 +90,7 @@ export class CatalogController {
     return created;
   }
 
+  @ApiOperation({ summary: 'PATCH layouts/:id/status' })
   @Patch('layouts/:id/status')
   @RequirePermission('tce.catalog.manage')
   @ApiOkResponse({ description: 'Transition a layout version status.' })
@@ -110,6 +116,7 @@ export class CatalogController {
     return updated;
   }
 
+  @ApiOperation({ summary: 'POST layout-fields' })
   @Post('layout-fields')
   @RequirePermission('tce.catalog.manage')
   @ApiCreatedResponse({ description: 'Create layout field metadata.' })
@@ -134,6 +141,7 @@ export class CatalogController {
     return created;
   }
 
+  @ApiOperation({ summary: 'DELETE layout-fields/:id' })
   @Delete('layout-fields/:id')
   @RequirePermission('tce.catalog.manage')
   @ApiOkResponse({ description: 'Delete layout field metadata.' })

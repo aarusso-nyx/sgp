@@ -9,7 +9,7 @@ import { QueryResultRow } from 'pg';
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../common/pagination/paged-response';
 import { DatabaseService } from '../../database/database.service';
-import { AgreementMutationDto } from './agreements.dto';
+import { AgreementMutationDto, AgreementPatchDto } from './agreements.dto';
 
 export interface AgreementSummary {
   id: string;
@@ -122,6 +122,8 @@ export class AgreementsService {
           description,
           institution_id,
           program_id,
+          starts_on,
+          ends_on,
           status
         )
         VALUES (
@@ -129,7 +131,9 @@ export class AgreementsService {
           $2,
           NULLIF($3, '')::uuid,
           NULLIF($4, '')::uuid,
-          'DRAFT'::"AgreementStatus"
+          NULLIF($5, '')::date,
+          NULLIF($6, '')::date,
+          $7::"AgreementStatus"
         )
         RETURNING
           id,
@@ -148,9 +152,12 @@ export class AgreementsService {
           input.description?.trim() ?? '',
           input.institutionId ?? '',
           input.programId ?? '',
+          input.startsOn ?? '',
+          input.endsOn ?? '',
+          input.status ?? 'DRAFT',
         ],
       );
-      return this.toSummary(rows[0]);
+      return this.toSummary(rows[0]!);
     } catch (error: unknown) {
       const code = (error as { code?: string }).code;
       if (code === '23505') {
@@ -162,17 +169,20 @@ export class AgreementsService {
 
   async update(
     id: string,
-    input: AgreementMutationDto,
+    input: AgreementPatchDto,
   ): Promise<AgreementSummary> {
     this.ensureDatabase();
     const rows = await this.databaseService.query<AgreementRow>(
       `
       UPDATE hr.agreement
       SET
-        code = $2,
-        description = $3,
-        institution_id = NULLIF($4, '')::uuid,
-        program_id = NULLIF($5, '')::uuid,
+        code = COALESCE($2, code),
+        description = COALESCE($3, description),
+        institution_id = CASE WHEN $4 = '__unchanged__' THEN institution_id ELSE NULLIF($4, '')::uuid END,
+        program_id = CASE WHEN $5 = '__unchanged__' THEN program_id ELSE NULLIF($5, '')::uuid END,
+        starts_on = CASE WHEN $6 = '__unchanged__' THEN starts_on ELSE NULLIF($6, '')::date END,
+        ends_on = CASE WHEN $7 = '__unchanged__' THEN ends_on ELSE NULLIF($7, '')::date END,
+        status = COALESCE($8::"AgreementStatus", status),
         updated_at = now()
       WHERE id = $1::uuid
       RETURNING
@@ -189,10 +199,13 @@ export class AgreementsService {
       `,
       [
         id,
-        input.code.trim(),
-        input.description?.trim() ?? '',
-        input.institutionId ?? '',
-        input.programId ?? '',
+        input.code?.trim() || null,
+        input.description?.trim() ?? null,
+        markerOrString(input, 'institutionId'),
+        markerOrString(input, 'programId'),
+        markerOrString(input, 'startsOn'),
+        markerOrString(input, 'endsOn'),
+        input.status ?? null,
       ],
     );
     const row = rows[0];
@@ -255,4 +268,17 @@ export class AgreementsService {
       ? value.toISOString()
       : new Date(value).toISOString();
   }
+}
+
+function markerOrString<T extends object>(input: T, key: keyof T): string {
+  if (!Object.prototype.hasOwnProperty.call(input, key)) {
+    return '__unchanged__';
+  }
+  const value = input[key] as unknown;
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string') return value.trim();
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value).trim();
+  }
+  return '';
 }

@@ -1,54 +1,54 @@
 <section class="tce-queue">
   <header class="page-header">
     <div>
-      <h1>Fila TCE</h1>
-      <p>Diagnostico operacional de envios, tentativas e circuitos.</p>
+      <h1 i18n>Fila TCE</h1>
+      <p i18n>Diagnostico operacional de envios, tentativas e circuitos.</p>
     </div>
     <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
       <mat-icon>refresh</mat-icon>
-      Atualizar
+      <ng-container i18n>Atualizar</ng-container>
     </button>
   </header>
 
   <form class="toolbar" (ngSubmit)="load()">
     <mat-form-field appearance="outline">
-      <mat-label>Adapter</mat-label>
+      <mat-label i18n>Adapter</mat-label>
       <input matInput name="adapter" [(ngModel)]="adapter" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>UF</mat-label>
+      <mat-label i18n>UF</mat-label>
       <input matInput name="stateCode" maxlength="2" [(ngModel)]="stateCode" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Status</mat-label>
+      <mat-label i18n>Status</mat-label>
       <mat-select name="status" [(ngModel)]="status">
-        <mat-option value="">Todos</mat-option>
+        <mat-option value="" i18n>Todos</mat-option>
         <mat-option *ngFor="let item of statuses" [value]="item">{{ item }}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Competencia</mat-label>
+      <mat-label i18n>Competencia</mat-label>
       <input matInput name="competence" placeholder="2026-05" [(ngModel)]="competence" />
     </mat-form-field>
     <button mat-flat-button color="primary" type="submit" [disabled]="loading">
       <mat-icon>filter_alt</mat-icon>
-      Filtrar
+      <ng-container i18n>Filtrar</ng-container>
     </button>
   </form>
 
   <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
   <section class="circuits">
-    <h2>Circuitos</h2>
+    <h2 i18n>Circuitos</h2>
     <table>
       <thead>
         <tr>
-          <th>Adapter</th>
-          <th>Endpoint</th>
-          <th>Estado</th>
-          <th>Falhas</th>
-          <th>Aberto em</th>
-          <th>Acoes</th>
+          <th i18n>Adapter</th>
+          <th i18n>Endpoint</th>
+          <th i18n>Estado</th>
+          <th i18n>Falhas</th>
+          <th i18n>Aberto em</th>
+          <th i18n>Acoes</th>
         </tr>
       </thead>
       <tbody>
@@ -67,6 +67,7 @@
               title="Resetar circuito"
               (click)="reset(circuit)"
               [disabled]="circuitBusy(circuit)"
+              i18n-title
             >
               <mat-icon>restart_alt</mat-icon>
             </button>
@@ -81,14 +82,14 @@
       <table>
         <thead>
           <tr>
-            <th>Competencia</th>
-            <th>Adapter</th>
-            <th>UF</th>
-            <th>Status</th>
-            <th>Tentativas</th>
-            <th>Proxima</th>
-            <th>Erro</th>
-            <th>Acoes</th>
+            <th i18n>Competencia</th>
+            <th i18n>Adapter</th>
+            <th i18n>UF</th>
+            <th i18n>Status</th>
+            <th i18n>Tentativas</th>
+            <th i18n>Proxima</th>
+            <th i18n>Erro</th>
+            <th i18n>Acoes</th>
           </tr>
         </thead>
         <tbody>
@@ -113,6 +114,7 @@
                 title="Reenviar"
                 (click)="replay(job); $event.stopPropagation()"
                 [disabled]="!canReplay(job) || busyId === job.id"
+                i18n-title
               >
                 <mat-icon>replay</mat-icon>
               </button>
@@ -123,31 +125,31 @@
     </section>
 
     <aside class="details" *ngIf="selected">
-      <h2>Drilldown</h2>
+      <h2 i18n>Drilldown</h2>
       <dl>
         <div>
-          <dt>Queue ID</dt>
+          <dt i18n>Queue ID</dt>
           <dd>{{ selected.id }}</dd>
         </div>
         <div>
-          <dt>Submission ID</dt>
+          <dt i18n>Submission ID</dt>
           <dd>{{ selected.submissionId }}</dd>
         </div>
         <div>
-          <dt>Lock</dt>
+          <dt i18n>Lock</dt>
           <dd>{{ selected.lockedBy || '-' }} {{ selected.lockedAt || '' }}</dd>
         </div>
       </dl>
-      <h3>Ultimo erro</h3>
+      <h3 i18n>Ultimo erro</h3>
       <pre>{{ errorPayload(selected) }}</pre>
-      <h3>Tentativas</h3>
+      <h3 i18n>Tentativas</h3>
       <table *ngIf="selected.attemptsHistory?.length">
         <thead>
           <tr>
             <th>#</th>
-            <th>Resultado</th>
-            <th>Inicio</th>
-            <th>Fim</th>
+            <th i18n>Resultado</th>
+            <th i18n>Inicio</th>
+            <th i18n>Fim</th>
           </tr>
         </thead>
         <tbody>
@@ -159,7 +161,7 @@
           </tr>
         </tbody>
       </table>
-      <p *ngIf="!selected.attemptsHistory?.length" class="empty">Sem tentativas.</p>
+      <p *ngIf="!selected.attemptsHistory?.length" class="empty" i18n>Sem tentativas.</p>
     </aside>
   </div>
 </section>

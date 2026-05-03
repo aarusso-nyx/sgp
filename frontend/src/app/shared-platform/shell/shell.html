@@ -1,4 +1,4 @@
-<a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
+<a class="skip-link" href="#main-content" i18n>Pular para o conteúdo principal</a>
 
 <mat-sidenav-container class="shell-layout">
   <mat-sidenav
@@ -8,20 +8,22 @@
     [opened]="!isMobile()"
     [fixedInViewport]="isMobile()"
     aria-label="Menu principal do SGP"
+    i18n-aria-label
   >
     <a
       class="shell-layout__brand"
       routerLink="/gestao"
       aria-label="Ir para a página inicial do SGP"
+      i18n-aria-label
     >
-      <span class="shell-layout__brand-mark">SGP</span>
+      <span class="shell-layout__brand-mark" i18n>SGP</span>
       <span class="shell-layout__brand-copy">
-        <strong>Sistema de Gestão de Pessoas</strong>
-        <span>Modernização Angular</span>
+        <strong i18n>Sistema de Gestão de Pessoas</strong>
+        <span i18n>Modernização Angular</span>
       </span>
     </a>
 
-    <nav class="shell-layout__menu" aria-label="Navegação principal">
+    <nav class="shell-layout__menu" aria-label="Navegação principal" i18n-aria-label>
       <mat-accordion multi displayMode="flat">
         <mat-expansion-panel
           class="shell-layout__section"
@@ -30,7 +32,7 @@
         >
           <mat-expansion-panel-header>
             <mat-panel-title>{{ section.moduleLabel }}</mat-panel-title>
-            <mat-panel-description>{{ section.items.length }} telas</mat-panel-description>
+            <mat-panel-description i18n>{{ section.items.length }} telas</mat-panel-description>
           </mat-expansion-panel-header>
 
           <mat-nav-list>
@@ -46,7 +48,7 @@
             >
               <span matListItemTitle>{{ item.label }}</span>
               <span matListItemLine class="shell-layout__route">{{ item.legacyRoute }}</span>
-              <span class="visually-hidden">Status: {{ statusLabel(item.status) }}</span>
+              <span class="visually-hidden" i18n>Status: {{ statusLabel(item.status) }}</span>
             </a>
           </mat-nav-list>
         </mat-expansion-panel>
@@ -63,13 +65,14 @@
         aria-label="Abrir menu"
         [attr.aria-expanded]="drawer.opened"
         (click)="drawer.toggle()"
+        i18n-aria-label
       >
         <mat-icon>menu</mat-icon>
       </button>
 
       <span class="shell-layout__title">
-        <span>SGP</span>
-        <small>Gestão pública de pessoas</small>
+        <span i18n>SGP</span>
+        <small i18n>Gestão pública de pessoas</small>
       </span>
       <span class="shell-layout__spacer"></span>
       <button
@@ -77,22 +80,24 @@
         mat-icon-button
         matTooltip="Notificações"
         aria-label="Abrir notificações"
+        i18n-aria-label
+        i18n-matTooltip
       >
         <mat-icon>notifications_none</mat-icon>
       </button>
-      <span class="shell-layout__user" aria-label="Usuário autenticado">
+      <span class="shell-layout__user" aria-label="Usuário autenticado" i18n-aria-label>
         {{ userDisplayName() }}
       </span>
-      <button type="button" mat-stroked-button class="shell-layout__logout" (click)="logout()">
+      <button type="button" mat-stroked-button class="shell-layout__logout" (click)="logout()" i18n>
         Sair
       </button>
     </mat-toolbar>
 
     <div class="shell-layout__content">
       <header class="shell-layout__page-context">
-        <nav class="shell-layout__breadcrumbs" aria-label="Caminho da página">
+        <nav class="shell-layout__breadcrumbs" aria-label="Caminho da página" i18n-aria-label>
           <ol>
-            <li>SGP</li>
+            <li i18n>SGP</li>
             <li>{{ pageModule() }}</li>
             <li aria-current="page">{{ pageTitle() }}</li>
           </ol>

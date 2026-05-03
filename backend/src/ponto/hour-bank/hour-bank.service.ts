@@ -58,7 +58,7 @@ export class HourBankService {
       `,
       [input.employeeId, input.regime, input.openedAt, input.expiresAt],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   async movements(hourBankId: string): Promise<HourBankMovement[]> {
@@ -91,7 +91,7 @@ export class HourBankService {
       `,
       [input.hourBankId, input.workDate, input.minutes],
     );
-    return this.toMovement(rows[0]);
+    return this.toMovement(rows[0]!);
   }
 
   toSummary(row: HourBankRow): HourBankSummary {

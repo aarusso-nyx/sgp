@@ -8,6 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -25,6 +26,7 @@ import { AdminMenusService } from './admin-menus.service';
 export class AdminMenusController {
   constructor(private readonly adminMenusService: AdminMenusService) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('gestao.read')
   @ApiOkResponse({ description: 'List admin menus.' })
@@ -32,6 +34,7 @@ export class AdminMenusController {
     return this.adminMenusService.listMenus();
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('gestao.write')
   @ApiCreatedResponse({ description: 'Create admin menu.' })
@@ -47,6 +50,7 @@ export class AdminMenusController {
     return this.adminMenusService.createMenu(body);
   }
 
+  @ApiOperation({ summary: 'PUT :id' })
   @Put(':id')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Update admin menu.' })
@@ -63,6 +67,7 @@ export class AdminMenusController {
     return this.adminMenusService.updateMenu(id, body);
   }
 
+  @ApiOperation({ summary: 'DELETE :id' })
   @Delete(':id')
   @RequirePermission('gestao.write')
   @ApiOkResponse({ description: 'Delete admin menu.' })

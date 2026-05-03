@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 export type ConfirmationDialogTone = 'default' | 'warning' | 'danger';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-confirmation-dialog',
   standalone: false,
   templateUrl: './confirmation-dialog.html',

@@ -8,6 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -26,6 +27,7 @@ import { RepIngestionService } from './rep-ingestion.service';
 export class RepIngestionController {
   constructor(private readonly repIngestionService: RepIngestionService) {}
 
+  @ApiOperation({ summary: 'GET batches' })
   @Get('batches')
   @RequirePermission('ponto.rep.read')
   @ApiOkResponse({ description: 'REP ingestion batches.' })
@@ -33,6 +35,7 @@ export class RepIngestionController {
     return this.repIngestionService.list();
   }
 
+  @ApiOperation({ summary: 'GET batches/:batchId/original' })
   @Get('batches/:batchId/original')
   @RequirePermission('ponto.rep.read')
   @Header('content-type', 'text/plain; charset=utf-8')
@@ -46,6 +49,7 @@ export class RepIngestionController {
     response.send(original.content);
   }
 
+  @ApiOperation({ summary: 'POST :repDeviceId/batches' })
   @Post(':repDeviceId/batches')
   @RequirePermission('ponto.rep.write')
   @AuditMutation({

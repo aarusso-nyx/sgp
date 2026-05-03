@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { PdfABuilderService } from './pdf-a-builder.service';
 import { PayslipDocument } from './payslip-template';
 
@@ -34,12 +37,25 @@ describe('PdfABuilderService', () => {
       },
     ],
   };
+  const goldenDir = join(
+    __dirname,
+    '../../../../tests/backend/golden/payslip-pdf-a-v01',
+  );
 
   it('creates binary PDF output with PDF/A-style validation metadata', async () => {
     const service = new PdfABuilderService();
     const buffer = await service.buildPayslip(document);
 
     expect(buffer.subarray(0, 5).toString('latin1')).toBe('%PDF-');
+    expect(decodeSignatureBlock(buffer)).toMatchObject({
+      format: 'PAdES',
+      profile: 'PAdES-B-B',
+      signerName: 'Municipio de Teste',
+      signedAt: '2026-05-01T00:00:00.000Z',
+      reason: 'Contracheque 2026-05',
+      verifyUrl:
+        '/v1/portal/payslips/00000000-0000-4000-8000-000000000001/2026-05/pdf',
+    });
     expect(service.validatePdfA1b(buffer)).toEqual({
       valid: true,
       reasons: [],
@@ -53,4 +69,27 @@ describe('PdfABuilderService', () => {
 
     expect(first.equals(second)).toBe(true);
   });
+
+  it('matches the payslip PDF/A PAdES golden fixture byte-for-byte', async () => {
+    const service = new PdfABuilderService();
+    const input = JSON.parse(
+      readFileSync(join(goldenDir, 'input.json'), 'utf8'),
+    ) as PayslipDocument;
+    const expected = readFileSync(join(goldenDir, 'expected.pdf'));
+
+    const actual = await service.buildPayslip(input);
+
+    expect(actual.equals(expected)).toBe(true);
+  });
 });
+
+function decodeSignatureBlock(buffer: Buffer): Record<string, unknown> {
+  const match = buffer
+    .toString('latin1')
+    .match(/%%SGP-PADES-SIGNATURE:([A-Za-z0-9+/=]+)/);
+  if (!match) throw new Error('missing SGP PAdES signature block');
+  return JSON.parse(Buffer.from(match[1], 'base64').toString('utf8')) as Record<
+    string,
+    unknown
+  >;
+}

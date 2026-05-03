@@ -45,6 +45,7 @@ export class S2306Service {
       [built.tenantId, built.changeId, built.xml],
     );
     const emitted = await this.transmitter.transmit(built);
+    const eventRow = rows[0]!;
     await this.databaseService.query(
       `
       UPDATE esocial.s2306_event
@@ -54,11 +55,11 @@ export class S2306Service {
       WHERE tenant_id = $1::uuid
         AND id = $2::uuid
       `,
-      [built.tenantId, rows[0].id, emitted.reference],
+      [built.tenantId, eventRow.id, emitted.reference],
     );
     return {
       changeId: built.changeId,
-      eventId: rows[0].id,
+      eventId: eventRow.id,
       emittedEventId: emitted.id,
       status: 'TRANSMITTED',
       xml: built.xml,

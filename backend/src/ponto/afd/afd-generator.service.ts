@@ -226,7 +226,7 @@ export class AfdGeneratorService {
       `,
       [input.repDeviceId, input.periodStart, input.periodEnd, actor?.sub ?? ''],
     );
-    return rows.rows[0].afd_export_id;
+    return rows.rows[0]!.afd_export_id;
   }
 
   private async getExportWithClient(
@@ -243,7 +243,7 @@ export class AfdGeneratorService {
       `,
       [exportId],
     );
-    return this.toExportSummary(rows.rows[0]);
+    return this.toExportSummary(rows.rows[0]!);
   }
 
   private async getDevice(

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subscription, forkJoin } from 'rxjs';
 
@@ -11,6 +11,7 @@ import {
 } from './rubricas.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-folha-rubricas',
   standalone: false,
   templateUrl: './rubricas.html',

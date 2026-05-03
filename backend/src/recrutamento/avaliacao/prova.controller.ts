@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ import { ProvaService } from './prova.service';
 export class ProvaController {
   constructor(private readonly provaService: ProvaService) {}
 
+  @ApiOperation({ summary: 'GET concursos/:concursoId' })
   @Get('concursos/:concursoId')
   @RequirePermission('recrutamento.avaliacao.read')
   @ApiOkResponse({ description: 'List evaluation exams for a contest.' })
@@ -28,6 +30,7 @@ export class ProvaController {
     return this.provaService.list(concursoId);
   }
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @RequirePermission('recrutamento.avaliacao.write')
   @AuditMutation({
@@ -40,6 +43,7 @@ export class ProvaController {
     return this.provaService.create(body);
   }
 
+  @ApiOperation({ summary: 'POST :provaId/questoes' })
   @Post(':provaId/questoes')
   @RequirePermission('recrutamento.avaliacao.write')
   @AuditMutation({
@@ -55,6 +59,7 @@ export class ProvaController {
     return this.provaService.addQuestao(provaId, body);
   }
 
+  @ApiOperation({ summary: 'POST :provaId/respostas' })
   @Post(':provaId/respostas')
   @RequirePermission('recrutamento.avaliacao.write')
   @AuditMutation({

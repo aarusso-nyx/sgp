@@ -1,3 +1,15 @@
+import {
+  TEST_DATE_2010_01_01,
+  TEST_DATE_2025_01_01,
+  TEST_DATE_2025_12_31,
+  TEST_DATE_2026_01_01,
+  TEST_DATE_2026_01_10,
+  TEST_DATE_2026_02_01,
+  TEST_DATE_2026_04_25,
+  TEST_INSTANT_2026_01_01_00_00_00_000Z,
+  TEST_INSTANT_2026_01_02_00_00_00_000Z,
+  TEST_INSTANT_2026_04_25_00_00_00_000Z,
+} from './../../../../tests/backend/helpers/date-fixtures';
 import { RhWorkflowsService } from './rh-workflows.service';
 
 describe('RhWorkflowsService', () => {
@@ -10,12 +22,12 @@ describe('RhWorkflowsService', () => {
     employee_name: 'Servidor',
     title: 'Titulo',
     subtitle: 'Subtitulo',
-    starts_on: '2026-01-01',
-    ends_on: '2026-01-10',
+    starts_on: TEST_DATE_2026_01_01,
+    ends_on: TEST_DATE_2026_01_10,
     status: 'ACTIVE',
     metadata: { source: 'spec' },
-    created_at: new Date('2026-01-01T00:00:00.000Z'),
-    updated_at: '2026-01-02T00:00:00.000Z',
+    created_at: new Date(TEST_INSTANT_2026_01_01_00_00_00_000Z),
+    updated_at: TEST_INSTANT_2026_01_02_00_00_00_000Z,
   };
 
   const mutation = {
@@ -26,8 +38,8 @@ describe('RhWorkflowsService', () => {
     incomeTaxDependent: true,
     employer: 'Empresa',
     roleTitle: 'Analista',
-    startsOn: '2026-01-01',
-    endsOn: '2026-01-10',
+    startsOn: TEST_DATE_2026_01_01,
+    endsOn: TEST_DATE_2026_01_10,
     functionalStatusId: relatedId,
     reasonId: relatedId,
     year: 2026,
@@ -36,7 +48,7 @@ describe('RhWorkflowsService', () => {
     workedDays: '20',
     source: 'RPPS',
     daysCount: 10,
-    effectiveOn: '2026-02-01',
+    effectiveOn: TEST_DATE_2026_02_01,
     salaryReferenceId: relatedId,
     levelCode: 'L1',
     levelDescription: 'Nivel 1',
@@ -56,7 +68,11 @@ describe('RhWorkflowsService', () => {
     toBranchId: relatedId,
     fromBranchId: relatedId,
     toWorkLocationId: relatedId,
+    workLocationId: relatedId,
     jobFunctionId: relatedId,
+    jobPositionId: relatedId,
+    vacanciesTotal: 3,
+    vacanciesFilled: 1,
     beneficiaryName: 'Beneficiario',
     beneficiaryCpf: '10987654321',
     courtProcessNumber: 'PROC-1',
@@ -68,9 +84,9 @@ describe('RhWorkflowsService', () => {
     processId: relatedId,
     notes: 'Observacao',
     metadata: {
-      birthDate: '2010-01-01',
-      accrualStartOn: '2025-01-01',
-      accrualEndOn: '2025-12-31',
+      birthDate: TEST_DATE_2010_01_01,
+      accrualStartOn: TEST_DATE_2025_01_01,
+      accrualEndOn: TEST_DATE_2025_12_31,
       address: { street: 'Rua A' },
       emergencyContact: { name: 'Contato' },
       code: 'ORG-1',
@@ -101,7 +117,7 @@ describe('RhWorkflowsService', () => {
           {
             id: 'request-1',
             status: 'REQUESTED',
-            requested_at: '2026-01-01T00:00:00.000Z',
+            requested_at: TEST_INSTANT_2026_01_01_00_00_00_000Z,
           },
         ];
       }
@@ -146,8 +162,8 @@ describe('RhWorkflowsService', () => {
           ends_on: null,
           status: 'ACTIVE',
           metadata: { relationship: 'Filho' },
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
-          updated_at: new Date('2026-01-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01_00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_01_01_00_00_00_000Z),
         },
       ]);
     const service = new RhWorkflowsService({
@@ -169,7 +185,7 @@ describe('RhWorkflowsService', () => {
       {
         id: 'req-1',
         status: 'REQUESTED',
-        requested_at: new Date('2026-01-01T00:00:00.000Z'),
+        requested_at: new Date(TEST_INSTANT_2026_01_01_00_00_00_000Z),
       },
     ]);
     const service = new RhWorkflowsService({
@@ -196,6 +212,34 @@ describe('RhWorkflowsService', () => {
     expect(result.id).toBe('req-1');
   });
 
+  it('defaults frequency worked days from the business-day calendar', async () => {
+    const query = createQuery();
+    const businessDays = {
+      countWorkingDaysInMonth: jest.fn().mockResolvedValue(22),
+    };
+    const service = new RhWorkflowsService(
+      {
+        configured: true,
+        query,
+      } as never,
+      businessDays as never,
+    );
+
+    await service.createWorkflowRecord('frequencies', {
+      employeeId,
+      year: 2026,
+      month: 4,
+      absenceDays: '2',
+      notes: 'Apuracao mensal',
+    });
+
+    expect(businessDays.countWorkingDaysInMonth).toHaveBeenCalledWith(2026, 4);
+    expect(query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO hr.employee_frequency'),
+      expect.arrayContaining(['20']),
+    );
+  });
+
   it('creates administrative process workflow records', async () => {
     const query = jest
       .fn()
@@ -208,15 +252,15 @@ describe('RhWorkflowsService', () => {
           employee_name: null,
           title: '001/2026',
           subtitle: 'Revisao funcional',
-          starts_on: new Date('2026-04-25'),
+          starts_on: new Date(TEST_DATE_2026_04_25),
           ends_on: null,
           status: 'ACTIVE',
           metadata: {
             processNumber: '001/2026',
             subject: 'Revisao funcional',
           },
-          created_at: new Date('2026-04-25T00:00:00.000Z'),
-          updated_at: new Date('2026-04-25T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_25_00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_25_00_00_00_000Z),
         },
       ]);
     const service = new RhWorkflowsService({
@@ -227,13 +271,13 @@ describe('RhWorkflowsService', () => {
     const result = await service.createWorkflowRecord('processes', {
       processNumber: '001/2026',
       subject: 'Revisao funcional',
-      startsOn: '2026-04-25',
+      startsOn: TEST_DATE_2026_04_25,
     });
 
     expect(query).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('INSERT INTO hr.administrative_process'),
-      ['001/2026', 'Revisao funcional', '2026-04-25', '', ''],
+      ['001/2026', 'Revisao funcional', TEST_DATE_2026_04_25, '', ''],
     );
     expect(result['title']).toBe('001/2026');
   });
@@ -308,7 +352,7 @@ describe('RhWorkflowsService', () => {
     });
 
     expect(lookup.items[0]?.name).toBe('Lookup');
-    expect(report.requestedAt).toBe('2026-01-01T00:00:00.000Z');
+    expect(report.requestedAt).toBe(TEST_INSTANT_2026_01_01_00_00_00_000Z);
     await expect(service.listLookup('unknown', {})).rejects.toThrow(
       'Lookup not found',
     );
@@ -337,38 +381,49 @@ describe('RhWorkflowsService', () => {
       'professional-experiences': { employer: 'Empresa' },
       'status-history': {
         functionalStatusId: relatedId,
-        startsOn: '2026-01-01',
+        startsOn: TEST_DATE_2026_01_01,
       },
       frequencies: { year: 2026 },
-      'service-time': { source: 'RPPS', startsOn: '2026-01-01' },
-      transfers: { effectiveOn: '2026-01-01' },
-      'salary-history': { effectiveOn: '2026-01-01' },
+      'service-time': { source: 'RPPS', startsOn: TEST_DATE_2026_01_01 },
+      transfers: { effectiveOn: TEST_DATE_2026_01_01 },
+      'salary-history': { effectiveOn: TEST_DATE_2026_01_01 },
       'complement-data': {},
-      vacations: { startsOn: '2026-01-01', endsOn: '2026-01-10' },
-      leaves: { startsOn: '2026-01-01' },
+      vacations: {
+        startsOn: TEST_DATE_2026_01_01,
+        endsOn: TEST_DATE_2026_01_10,
+      },
+      leaves: { startsOn: TEST_DATE_2026_01_01 },
       'benefit-dependents': {
         name: 'Dependente',
         benefitCode: 'BEN',
-        startsOn: '2026-01-01',
+        startsOn: TEST_DATE_2026_01_01,
       },
-      'union-contributions': { startsOn: '2026-01-01' },
-      exercises: { startsOn: '2026-01-01' },
-      alimonies: { beneficiaryName: 'Beneficiario', startsOn: '2026-01-01' },
+      'union-contributions': { startsOn: TEST_DATE_2026_01_01 },
+      exercises: { startsOn: TEST_DATE_2026_01_01 },
+      alimonies: {
+        beneficiaryName: 'Beneficiario',
+        startsOn: TEST_DATE_2026_01_01,
+      },
       'transit-benefits': {
         transitBenefitId: relatedId,
-        startsOn: '2026-01-01',
+        startsOn: TEST_DATE_2026_01_01,
       },
       processes: {
         processNumber: '001/2026',
         subject: 'Revisao',
-        startsOn: '2026-01-01',
+        startsOn: TEST_DATE_2026_01_01,
       },
       'process-functions': {
         processId: relatedId,
         jobFunctionId: relatedId,
-        startsOn: '2026-01-01',
+        startsOn: TEST_DATE_2026_01_01,
       },
-      'organic-definitions': { name: 'Organico' },
+      'organic-definitions': {
+        name: 'Organico',
+        workLocationId: relatedId,
+        jobPositionId: relatedId,
+        vacanciesTotal: 3,
+      },
     };
 
     for (const definition of service.listDefinitions()) {
@@ -388,7 +443,7 @@ describe('RhWorkflowsService', () => {
     await expect(
       service.createWorkflowRecord(
         'leaves',
-        { startsOn: '2026-01-10', endsOn: '2026-01-01' },
+        { startsOn: TEST_DATE_2026_01_10, endsOn: TEST_DATE_2026_01_01 },
         employeeId,
       ),
     ).rejects.toThrow('endsOn must be greater than startsOn');
@@ -402,7 +457,7 @@ describe('RhWorkflowsService', () => {
         }),
       } as never).createWorkflowRecord(
         'leaves',
-        { startsOn: '2026-01-01' },
+        { startsOn: TEST_DATE_2026_01_01 },
         employeeId,
       ),
     ).rejects.toThrow('already has an active leave');

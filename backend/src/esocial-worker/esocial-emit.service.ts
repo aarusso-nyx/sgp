@@ -169,7 +169,7 @@ export class ESocialEmitService {
       ],
     );
 
-    const event = rows[0];
+    const event = rows[0]!;
     await this.databaseService.query(
       `
       SELECT public.sgp_append_audit_event(

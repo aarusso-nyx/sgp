@@ -1,10 +1,10 @@
 <section class="rh-ferias" aria-labelledby="rh-ferias-title">
   <header class="rh-ferias__header">
     <div>
-      <p>Recursos Humanos</p>
-      <h1 id="rh-ferias-title">Ferias</h1>
+      <p i18n>Recursos Humanos</p>
+      <h1 id="rh-ferias-title" i18n>Ferias</h1>
     </div>
-    <button type="button" mat-stroked-button (click)="loadEmployees()">Atualizar</button>
+    <button type="button" mat-stroked-button (click)="loadEmployees()" i18n>Atualizar</button>
   </header>
 
   <p class="rh-ferias__message" *ngIf="message" role="status">{{ message }}</p>
@@ -12,14 +12,14 @@
 
   <div class="rh-ferias__layout">
     <section class="rh-ferias__panel">
-      <h2>Servidores</h2>
-      <p *ngIf="loading">Carregando...</p>
-      <table aria-label="Servidores com programacao de ferias">
+      <h2 i18n>Servidores</h2>
+      <p *ngIf="loading" i18n>Carregando...</p>
+      <table aria-label="Servidores com programacao de ferias" i18n-aria-label>
         <thead>
           <tr>
-            <th>Matricula</th>
-            <th>Nome</th>
-            <th>Situacao</th>
+            <th i18n>Matricula</th>
+            <th i18n>Nome</th>
+            <th i18n>Situacao</th>
           </tr>
         </thead>
         <tbody>
@@ -37,15 +37,17 @@
     </section>
 
     <section class="rh-ferias__panel">
-      <h2>Fila de aprovacao</h2>
+      <h2 i18n>Fila de aprovacao</h2>
       <form [formGroup]="approvalForm" (ngSubmit)="approve()">
         <label>
-          <span>Programacao</span>
-          <input formControlName="scheduleId" placeholder="UUID da programacao" />
+          <span i18n>Programacao</span>
+          <input formControlName="scheduleId" placeholder="UUID da programacao" i18n-placeholder />
         </label>
         <div class="rh-ferias__actions">
-          <button type="submit" mat-flat-button color="primary" [disabled]="saving">Aprovar</button>
-          <button type="button" mat-stroked-button (click)="cancel()" [disabled]="saving">
+          <button type="submit" mat-flat-button color="primary" [disabled]="saving" i18n>
+            Aprovar
+          </button>
+          <button type="button" mat-stroked-button (click)="cancel()" [disabled]="saving" i18n>
             Cancelar
           </button>
         </div>
@@ -54,25 +56,25 @@
   </div>
 
   <section class="rh-ferias__panel">
-    <h2>Atualizacoes</h2>
+    <h2 i18n>Atualizacoes</h2>
     <table>
       <thead>
         <tr>
-          <th>Programacao</th>
-          <th>Periodo</th>
-          <th>Dias</th>
-          <th>Status</th>
+          <th i18n>Programacao</th>
+          <th i18n>Periodo</th>
+          <th i18n>Dias</th>
+          <th i18n>Status</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of queue">
           <td>{{ item.id }}</td>
-          <td>{{ item.startsOn }} a {{ item.endsOn }}</td>
+          <td i18n>{{ item.startsOn }} a {{ item.endsOn }}</td>
           <td>{{ item.days }}</td>
           <td>{{ item.status }}</td>
         </tr>
         <tr *ngIf="!queue.length">
-          <td colspan="4">Nenhuma atualizacao nesta sessao.</td>
+          <td colspan="4" i18n>Nenhuma atualizacao nesta sessao.</td>
         </tr>
       </tbody>
     </table>

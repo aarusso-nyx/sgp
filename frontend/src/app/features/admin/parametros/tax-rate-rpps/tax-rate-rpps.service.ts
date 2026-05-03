@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiClient } from '../../../../core/api/api-client';
 
 export interface RppsTaxRateBracket {
   id: string;
@@ -41,15 +41,15 @@ export interface RppsTaxRateImport {
 export class TaxRateRppsService {
   private readonly url = '/api/v1/admin/parametros/tax-rate/rpps';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   list(competence?: string): Observable<RppsTaxRateTable> {
-    return this.http.get<RppsTaxRateTable>(
+    return this.api.get<RppsTaxRateTable>(
       competence ? `${this.url}?competence=${encodeURIComponent(competence)}` : this.url,
     );
   }
 
   importTable(payload: RppsTaxRateImport): Observable<RppsTaxRateTable> {
-    return this.http.put<RppsTaxRateTable>(this.url, payload);
+    return this.api.put<RppsTaxRateTable>(this.url, payload);
   }
 }

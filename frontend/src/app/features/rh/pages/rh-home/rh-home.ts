@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   UntypedFormBuilder,
@@ -239,6 +239,7 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
 ];
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-rh-home',
   standalone: false,
   templateUrl: './rh-home.html',

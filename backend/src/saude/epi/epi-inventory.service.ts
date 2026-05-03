@@ -55,7 +55,7 @@ export class EpiInventoryService {
         input.validityMonths,
       ],
     );
-    return this.toSummary(rows[0]);
+    return this.toSummary(rows[0]!);
   }
 
   private ensureDatabase(): void {

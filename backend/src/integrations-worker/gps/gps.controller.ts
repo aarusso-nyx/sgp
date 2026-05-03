@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -31,6 +32,7 @@ export class GpsController {
     private readonly auditService: AuditService,
   ) {}
 
+  @ApiOperation({ summary: 'GET List' })
   @Get()
   @RequirePermission('fiscal.gps.read')
   @ApiOkResponse({ description: 'List residual GPS remittances.' })
@@ -41,6 +43,7 @@ export class GpsController {
     );
   }
 
+  @ApiOperation({ summary: 'GET payment-codes' })
   @Get('payment-codes')
   @RequirePermission('fiscal.gps.read')
   @ApiOkResponse({ description: 'List active RFB GPS payment codes.' })
@@ -48,6 +51,7 @@ export class GpsController {
     return this.service.paymentCodes();
   }
 
+  @ApiOperation({ summary: 'GET :id' })
   @Get(':id')
   @RequirePermission('fiscal.gps.read')
   @ApiOkResponse({ description: 'Get residual GPS remittance details.' })
@@ -55,6 +59,7 @@ export class GpsController {
     return this.service.find(id);
   }
 
+  @ApiOperation({ summary: 'GET :id/txt' })
   @Get(':id/txt')
   @Header('Content-Type', 'text/plain; charset=utf-8')
   @RequirePermission('fiscal.gps.read')
@@ -64,6 +69,7 @@ export class GpsController {
     return result.txtContent;
   }
 
+  @ApiOperation({ summary: 'POST Generate' })
   @Post()
   @RequirePermission('fiscal.gps.write')
   @ApiCreatedResponse({ description: 'Generate residual GPS TXT.' })

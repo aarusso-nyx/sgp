@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -20,6 +21,7 @@ import { RecursoService } from './recurso.service';
 export class RecursoController {
   constructor(private readonly recursoService: RecursoService) {}
 
+  @ApiOperation({ summary: 'GET provas/:provaId' })
   @Get('provas/:provaId')
   @RequirePermission('recrutamento.avaliacao.read')
   @ApiOkResponse({ description: 'List candidate resources for an exam.' })
@@ -27,6 +29,7 @@ export class RecursoController {
     return this.recursoService.listOpen(provaId);
   }
 
+  @ApiOperation({ summary: 'POST :id/decisao' })
   @Post(':id/decisao')
   @RequirePermission('recrutamento.avaliacao.write')
   @AuditMutation({
@@ -45,6 +48,7 @@ export class RecursoController {
 export class PublicRecursoController {
   constructor(private readonly recursoService: RecursoService) {}
 
+  @ApiOperation({ summary: 'POST Create' })
   @Post()
   @Public()
   @AuditMutation({

@@ -32,6 +32,7 @@ interface CatSourceRow extends QueryResultRow {
   registration: string;
   cpf: string | null;
   cnpj: string | null;
+  work_environment_code: string | null;
   accident_at: Date | string;
   accident_type: string;
   location_text: string;
@@ -84,6 +85,7 @@ export class S2210Builder {
         employee.registration,
         employee.cpf,
         company.cnpj,
+        work_location.code AS work_environment_code,
         accident.accident_at,
         accident.accident_type::text,
         accident.location_text,
@@ -102,6 +104,8 @@ export class S2210Builder {
       FROM saude.cat_emission cat
       JOIN saude.work_accident accident ON accident.id = cat.work_accident_id
       JOIN hr.employee employee ON employee.id = accident.employee_id
+      LEFT JOIN hr.work_location work_location
+        ON work_location.id = employee.work_location_id
       LEFT JOIN LATERAL (
         SELECT cnpj
         FROM hr.company
@@ -178,11 +182,16 @@ export class S2210Builder {
         catEmissionId: source.cat_emission_id,
         workAccidentId: source.work_accident_id,
         catKind: source.cat_kind,
+        workEnvironmentCode: environmentCode(source.work_environment_code),
         tpCat,
         indCatObito,
       },
     };
   }
+}
+
+function environmentCode(value: string | null | undefined): string | null {
+  return value ? value.trim().slice(0, 30) : null;
 }
 
 function accidentTypeCode(value: string): string {

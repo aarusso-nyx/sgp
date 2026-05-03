@@ -4,6 +4,7 @@ import {
   IsDateString,
   IsIn,
   IsNotEmpty,
+  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -38,6 +39,19 @@ export const EXTERNAL_LIFE_PROOF_CHANNELS = [
   'GOV_BR',
 ] as const;
 
+export const RETIREMENT_GENDERS = ['FEMALE', 'MALE'] as const;
+export const EC103_TRANSITION_RULES = [
+  'EC103_PEDAGIO_100',
+  'EC103_PEDAGIO_50',
+  'EC103_PONTOS',
+  'EC103_IDADE_PROGRESSIVA',
+  'EC103_ATIVIDADE_RISCO_PROFESSOR',
+] as const;
+export const EC103_ATIVIDADE_RISCO_PROFESSOR_POPULATIONS = [
+  'RISK_ACTIVITY',
+  'TEACHER',
+] as const;
+
 export type PensionCompensationStatusInput =
   (typeof PENSION_COMPENSATION_STATUSES)[number];
 export type RecertificationTypeInput = (typeof RECERTIFICATION_TYPES)[number];
@@ -45,6 +59,10 @@ export type RecertificationStatusInput =
   (typeof RECERTIFICATION_STATUSES)[number];
 export type ExternalLifeProofChannelInput =
   (typeof EXTERNAL_LIFE_PROOF_CHANNELS)[number];
+export type RetirementGenderInput = (typeof RETIREMENT_GENDERS)[number];
+export type Ec103TransitionRuleInput = (typeof EC103_TRANSITION_RULES)[number];
+export type Ec103AtividadeRiscoProfessorPopulationInput =
+  (typeof EC103_ATIVIDADE_RISCO_PROFESSOR_POPULATIONS)[number];
 
 export class CreateRetirementRuleDto {
   @ApiProperty()
@@ -100,6 +118,279 @@ export class CreateRetirementSimulationDto {
   @ApiProperty({ format: 'date' })
   @IsDateString()
   dataReferencia!: string;
+
+  @ApiPropertyOptional({ enum: EC103_TRANSITION_RULES })
+  @IsOptional()
+  @IsIn(EC103_TRANSITION_RULES)
+  regraTransicao?: Ec103TransitionRuleInput;
+
+  @ApiPropertyOptional({ enum: RETIREMENT_GENDERS })
+  @IsOptional()
+  @IsIn(RETIREMENT_GENDERS)
+  sexo?: RetirementGenderInput;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataNascimento?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioContribuicao?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioServicoPublico?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioCargoAtual?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoContribuicaoReformaAnos?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoContribuicaoReferenciaAnos?: number;
+
+  @ApiPropertyOptional({ default: false })
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  professor?: boolean;
+
+  @ApiPropertyOptional({
+    enum: EC103_ATIVIDADE_RISCO_PROFESSOR_POPULATIONS,
+  })
+  @IsOptional()
+  @IsIn(EC103_ATIVIDADE_RISCO_PROFESSOR_POPULATIONS)
+  populacaoAtividadeRiscoProfessor?: Ec103AtividadeRiscoProfessorPopulationInput;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioCarreira?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioMagisterio?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoCarreiraReformaAnos?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  ingressoCarreiraAteReforma?: boolean;
+}
+
+export class SimulateEc103Pedagio100Dto {
+  @ApiProperty({ enum: RETIREMENT_GENDERS })
+  @IsIn(RETIREMENT_GENDERS)
+  sexo!: RetirementGenderInput;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataNascimento!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataInicioContribuicao!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataReferencia!: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioServicoPublico?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioCargoAtual?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoContribuicaoReformaAnos?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoContribuicaoReferenciaAnos?: number;
+
+  @ApiPropertyOptional({ default: false })
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  professor?: boolean;
+}
+
+export class SimulateEc103Pedagio50Dto {
+  @ApiProperty({ enum: RETIREMENT_GENDERS })
+  @IsIn(RETIREMENT_GENDERS)
+  sexo!: RetirementGenderInput;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataInicioContribuicao!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataReferencia!: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoContribuicaoReformaAnos?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoContribuicaoReferenciaAnos?: number;
+}
+
+export class SimulateEc103PontosDto {
+  @ApiProperty({ enum: RETIREMENT_GENDERS })
+  @IsIn(RETIREMENT_GENDERS)
+  sexo!: RetirementGenderInput;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataNascimento!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataInicioContribuicao!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataReferencia!: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioServicoPublico?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioCargoAtual?: string;
+
+  @ApiPropertyOptional({ default: false })
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  professor?: boolean;
+}
+
+export class SimulateEc103IdadeProgressivaDto {
+  @ApiProperty({ enum: RETIREMENT_GENDERS })
+  @IsIn(RETIREMENT_GENDERS)
+  sexo!: RetirementGenderInput;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataNascimento!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataInicioContribuicao!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataReferencia!: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoContribuicaoReferenciaAnos?: number;
+
+  @ApiPropertyOptional({ default: false })
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  professor?: boolean;
+}
+
+export class SimulateEc103AtividadeRiscoProfessorDto {
+  @ApiProperty({ enum: EC103_ATIVIDADE_RISCO_PROFESSOR_POPULATIONS })
+  @IsIn(EC103_ATIVIDADE_RISCO_PROFESSOR_POPULATIONS)
+  populacao!: Ec103AtividadeRiscoProfessorPopulationInput;
+
+  @ApiProperty({ enum: RETIREMENT_GENDERS })
+  @IsIn(RETIREMENT_GENDERS)
+  sexo!: RetirementGenderInput;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataNascimento!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataInicioContribuicao!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dataReferencia!: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioServicoPublico?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioCargoAtual?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioCarreira?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  dataInicioMagisterio?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoContribuicaoReformaAnos?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  tempoCarreiraReformaAnos?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  ingressoCarreiraAteReforma?: boolean;
 }
 
 export class CreateRetirementGrantDto {

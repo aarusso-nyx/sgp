@@ -8,6 +8,14 @@ import { ApiClient } from '../../core/api/api-client';
 
 type Section = 'cadastro' | 'endereco' | 'contato' | 'dependentes' | 'documentos';
 
+interface GovBrSignInitiation {
+  redirectUrl: string;
+  request: {
+    id: string;
+    status: string;
+  };
+}
+
 @Component({
   selector: 'app-meus-dados',
   standalone: true,
@@ -33,6 +41,7 @@ export class MeusDados implements OnInit, OnDestroy {
   rows: Record<string, unknown>[] = [];
   loading = false;
   saving = false;
+  signing = false;
   message = '';
   error = '';
 
@@ -113,6 +122,47 @@ export class MeusDados implements OnInit, OnDestroy {
       });
   }
 
+  startGovBrSignature(): void {
+    const payload = this.payload();
+    if (!this.diff.length) return;
+
+    this.signing = true;
+    this.error = '';
+    this.api
+      .post<
+        GovBrSignInitiation,
+        {
+          resourceType: string;
+          resourceId: string;
+          payload: Record<string, unknown>;
+          returnUrl: string;
+        }
+      >('portal/v1/auth/govbr/sign', {
+        resourceType: 'hr.cadastral_change_request',
+        resourceId: `draft-${this.section}`,
+        payload: {
+          section: this.section,
+          payload,
+          previousPayload: this.current,
+        },
+        returnUrl: `${window.location.origin}/govbr-sign/callback`,
+      })
+      .pipe(
+        finalize(() => {
+          this.signing = false;
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe({
+        next: (result) => {
+          window.location.assign(this.redirectUrl(result.redirectUrl));
+        },
+        error: () => {
+          this.error = 'Nao foi possivel iniciar a assinatura Gov.br.';
+        },
+      });
+  }
+
   private patchForm(): void {
     this.form.reset({
       fieldA: String(this.current[this.keys()[0]] ?? ''),
@@ -138,5 +188,12 @@ export class MeusDados implements OnInit, OnDestroy {
     if (this.section === 'contato') return ['email', 'phone', 'alternatePhone', 'preferredChannel'];
     if (this.section === 'cadastro') return ['socialName', 'rg', 'pisPasep', 'motherName'];
     return ['name', 'cpf', 'relationship', 'notes'];
+  }
+
+  private redirectUrl(path: string): string {
+    if (/^https?:\/\//.test(path)) return path;
+    const config = (window as unknown as { SGP_CONFIG?: Record<string, string> }).SGP_CONFIG;
+    const baseUrl = config?.['API_BASE_URL'] ?? '';
+    return `${baseUrl.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
   }
 }

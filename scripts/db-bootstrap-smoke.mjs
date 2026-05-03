@@ -72,6 +72,7 @@ DROP SCHEMA IF EXISTS avaliacao CASCADE;
 DROP SCHEMA IF EXISTS esocial CASCADE;
 DROP SCHEMA IF EXISTS fiscal CASCADE;
 DROP SCHEMA IF EXISTS hr CASCADE;
+DROP SCHEMA IF EXISTS lgpd CASCADE;
 DROP SCHEMA IF EXISTS payment CASCADE;
 DROP SCHEMA IF EXISTS payroll CASCADE;
 DROP SCHEMA IF EXISTS payroll_calc CASCADE;
@@ -119,6 +120,15 @@ $$;
     'ON_ERROR_STOP=1',
     '-f',
     resolve(sqlDir, 'checks/rls-coverage.sql'),
+  ]);
+
+  console.log('[db-smoke] checking hot-table partition coverage');
+  runCommand('psql', [
+    databaseUrl,
+    '-v',
+    'ON_ERROR_STOP=1',
+    '-f',
+    resolve(sqlDir, 'checks/hot-table-partitions.sql'),
   ]);
 
   console.log('[db-smoke] running deterministic seed');

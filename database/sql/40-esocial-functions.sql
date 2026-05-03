@@ -529,7 +529,7 @@ DECLARE
   v_tenant_id uuid;
   v_resource_id text;
 BEGIN
-  IF TG_TABLE_NAME = 's1200_emission_state' THEN
+  IF TG_TABLE_NAME IN ('s1200_emission_state', 's1202_emission_state') THEN
     v_tenant_id := COALESCE(NEW.tenant_id, OLD.tenant_id);
     v_resource_id := COALESCE(NEW.payroll_run_id, OLD.payroll_run_id)::text
       || ':' || COALESCE(NEW.employee_id, OLD.employee_id)::text;

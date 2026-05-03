@@ -2569,7 +2569,9 @@ CREATE FUNCTION payroll_calc.on_earning_after_delete() RETURNS trigger
     SET search_path TO 'payroll_calc', 'payroll', 'public', 'pg_catalog'
     AS $$
 BEGIN
-  IF OLD.formula_function_name IS NOT NULL THEN
+  IF OLD.formula_function_name IS NOT NULL
+    AND OLD.formula_function_ddl IS NOT NULL
+  THEN
     EXECUTE format(
       'DROP FUNCTION IF EXISTS %I.%I(uuid, integer, integer) CASCADE',
       'payroll_calc',
@@ -2610,6 +2612,7 @@ BEGIN
     SELECT ped.formula_function_name
     FROM payroll.payroll_earning_deduction ped
     WHERE ped.formula_function_name IS NOT NULL
+      AND ped.formula_function_ddl IS NOT NULL
   LOOP
     EXECUTE format(
       'DROP FUNCTION IF EXISTS %I.%I(uuid, integer, integer) CASCADE',

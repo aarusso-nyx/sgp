@@ -495,7 +495,11 @@ CREATE INDEX internship_record_program_id_idx ON hr.internship_record USING btre
 
 CREATE INDEX internship_record_status_idx ON hr.internship_record USING btree (status);
 
+CREATE INDEX internship_record_supervisor_employee_id_idx ON hr.internship_record USING btree (supervisor_employee_id);
+
 CREATE INDEX internship_record_tenant_employee_idx ON hr.internship_record USING btree (tenant_id, employee_id, starts_on DESC);
+
+CREATE UNIQUE INDEX internship_record_tsv_contract_id_key ON hr.internship_record USING btree (tsv_contract_id) WHERE (tsv_contract_id IS NOT NULL);
 
 CREATE UNIQUE INDEX job_function_code_key ON hr.job_function USING btree (tenant_id, code);
 
@@ -845,6 +849,20 @@ CREATE INDEX work_location_parent_id_idx ON hr.work_location USING btree (parent
 
 CREATE INDEX work_location_status_idx ON hr.work_location USING btree (status);
 
+CREATE UNIQUE INDEX organic_definition_code_key ON hr.organic_definition USING btree (tenant_id, code);
+
+CREATE UNIQUE INDEX organic_definition_location_position_effective_key ON hr.organic_definition USING btree (tenant_id, work_location_id, job_position_id, effective_from);
+
+CREATE INDEX organic_definition_job_position_idx ON hr.organic_definition USING btree (job_position_id);
+
+CREATE INDEX organic_definition_status_idx ON hr.organic_definition USING btree (status);
+
+CREATE INDEX organic_definition_tenant_id_idx ON hr.organic_definition USING btree (tenant_id);
+
+CREATE UNIQUE INDEX organic_definition_tenant_id_id_job_position_uq ON hr.organic_definition USING btree (tenant_id, id, job_position_id);
+
+CREATE INDEX organic_definition_work_location_idx ON hr.organic_definition USING btree (work_location_id);
+
 CREATE INDEX work_location_structure_assignment_function_idx ON hr.work_location_structure_assignment USING btree (job_function_id);
 
 CREATE UNIQUE INDEX work_location_structure_assignment_function_key ON hr.work_location_structure_assignment USING btree (tenant_id, work_location_id, job_function_id);
@@ -877,6 +895,8 @@ CREATE TRIGGER es03_leave_record_s2230 AFTER INSERT OR UPDATE ON hr.leave_record
 
 CREATE TRIGGER es03_vacation_record_s2230 AFTER INSERT OR UPDATE ON hr.vacation_record FOR EACH ROW EXECUTE FUNCTION esocial.sgp_enqueue_s2230_from_vacation();
 
+CREATE TRIGGER hr01_employee_optimistic_version BEFORE UPDATE ON hr.employee FOR EACH ROW EXECUTE FUNCTION hr.sgp_cadastro_optimistic_version();
+
 CREATE TRIGGER hr01_employee_timeline AFTER INSERT OR UPDATE OF functional_status_id, terminated_on, lifecycle_status ON hr.employee FOR EACH ROW EXECUTE FUNCTION hr.sgp_hr01_employee_timeline();
 
 CREATE TRIGGER hr01_employment_contract_updated_at BEFORE UPDATE ON hr.employment_contract FOR EACH ROW EXECUTE FUNCTION hr.sgp_hr01_set_updated_at();
@@ -884,6 +904,8 @@ CREATE TRIGGER hr01_employment_contract_updated_at BEFORE UPDATE ON hr.employmen
 CREATE TRIGGER hr01_status_history_immutable BEFORE DELETE OR UPDATE ON hr.employee_status_history FOR EACH ROW EXECUTE FUNCTION hr.sgp_hr01_status_history_immutable();
 
 CREATE TRIGGER hr02_employment_link_timeline AFTER UPDATE OF contract_type, functional_status_id ON hr.employment_link FOR EACH ROW EXECUTE FUNCTION hr.sgp_hr02_employment_link_timeline();
+
+CREATE TRIGGER hr02_employment_link_optimistic_version BEFORE UPDATE ON hr.employment_link FOR EACH ROW EXECUTE FUNCTION hr.sgp_cadastro_optimistic_version();
 
 CREATE TRIGGER hr03_vacation_record_audit AFTER INSERT OR DELETE OR UPDATE ON hr.vacation_record FOR EACH ROW EXECUTE FUNCTION hr.sgp_hr03_vacation_record_audit();
 
@@ -904,6 +926,8 @@ CREATE TRIGGER hr06_org_structure_audit BEFORE INSERT OR UPDATE ON hr.cost_cente
 CREATE TRIGGER hr06_org_structure_audit BEFORE INSERT OR UPDATE ON hr.job_function FOR EACH ROW EXECUTE FUNCTION hr.sgp_audit_hr06_org_structure();
 
 CREATE TRIGGER hr06_org_structure_audit BEFORE INSERT OR UPDATE ON hr.job_position FOR EACH ROW EXECUTE FUNCTION hr.sgp_audit_hr06_org_structure();
+
+CREATE TRIGGER hr06_org_structure_audit BEFORE INSERT OR UPDATE ON hr.organic_definition FOR EACH ROW EXECUTE FUNCTION hr.sgp_audit_hr06_org_structure();
 
 CREATE TRIGGER hr06_org_structure_audit BEFORE INSERT OR UPDATE ON hr.job_structure_employment_link FOR EACH ROW EXECUTE FUNCTION hr.sgp_audit_hr06_org_structure();
 
@@ -1279,6 +1303,9 @@ ALTER TABLE ONLY hr.job_function
 ALTER TABLE ONLY hr.job_position
     ADD CONSTRAINT hr_job_position_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
+ALTER TABLE ONLY hr.organic_definition
+    ADD CONSTRAINT hr_organic_definition_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
 ALTER TABLE ONLY hr.job_structure_employment_link
     ADD CONSTRAINT hr_job_structure_employment_link_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
@@ -1438,6 +1465,12 @@ ALTER TABLE ONLY hr.internship_record
 ALTER TABLE ONLY hr.internship_record
     ADD CONSTRAINT internship_record_program_id_fkey FOREIGN KEY (program_id) REFERENCES hr.internship_program(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
+ALTER TABLE ONLY hr.internship_record
+    ADD CONSTRAINT internship_record_supervisor_employee_id_fkey FOREIGN KEY (supervisor_employee_id) REFERENCES hr.employee(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+ALTER TABLE ONLY hr.internship_record
+    ADD CONSTRAINT internship_record_tsv_contract_id_fkey FOREIGN KEY (tsv_contract_id) REFERENCES hr.tsv_contract(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
 ALTER TABLE ONLY hr.job_function_legislation_history
     ADD CONSTRAINT job_function_legislation_history_function_id_fkey FOREIGN KEY (job_function_id) REFERENCES hr.job_function(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
@@ -1449,6 +1482,12 @@ ALTER TABLE ONLY hr.job_function
 
 ALTER TABLE ONLY hr.job_position
     ADD CONSTRAINT job_position_salary_range_fkey FOREIGN KEY (salary_range_id) REFERENCES hr.salary_range(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE ONLY hr.organic_definition
+    ADD CONSTRAINT organic_definition_job_position_fkey FOREIGN KEY (job_position_id) REFERENCES hr.job_position(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE ONLY hr.organic_definition
+    ADD CONSTRAINT organic_definition_work_location_fkey FOREIGN KEY (work_location_id) REFERENCES hr.work_location(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE ONLY hr.job_structure_employment_link
     ADD CONSTRAINT job_structure_employment_link_employment_link_id_fkey FOREIGN KEY (employment_link_id) REFERENCES hr.employment_link(id) ON UPDATE CASCADE ON DELETE CASCADE;
@@ -1813,6 +1852,8 @@ ALTER TABLE ONLY hr.job_function FORCE ROW LEVEL SECURITY;
 ALTER TABLE ONLY hr.job_function_legislation_history FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY hr.job_position FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY hr.organic_definition FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY hr.job_structure_employment_link FORCE ROW LEVEL SECURITY;
 
@@ -2230,6 +2271,8 @@ CREATE POLICY hr06_org_structure_delete ON hr.job_function FOR DELETE USING ((pu
 
 CREATE POLICY hr06_org_structure_delete ON hr.job_position FOR DELETE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
 
+CREATE POLICY hr06_org_structure_delete ON hr.organic_definition FOR DELETE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text, 'rh.write'::text])));
+
 CREATE POLICY hr06_org_structure_delete ON hr.job_structure_employment_link FOR DELETE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
 
 CREATE POLICY hr06_org_structure_delete ON hr.work_location FOR DELETE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
@@ -2241,6 +2284,8 @@ CREATE POLICY hr06_org_structure_read ON hr.cost_center FOR SELECT USING ((publi
 CREATE POLICY hr06_org_structure_read ON hr.job_function FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.read'::text, 'gestao.master_data.write'::text])));
 
 CREATE POLICY hr06_org_structure_read ON hr.job_position FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.read'::text, 'gestao.master_data.write'::text])));
+
+CREATE POLICY hr06_org_structure_read ON hr.organic_definition FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.read'::text, 'gestao.master_data.write'::text, 'rh.read'::text, 'rh.write'::text])));
 
 CREATE POLICY hr06_org_structure_read ON hr.job_structure_employment_link FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.read'::text, 'gestao.master_data.write'::text])));
 
@@ -2254,6 +2299,8 @@ CREATE POLICY hr06_org_structure_update ON hr.job_function FOR UPDATE USING ((pu
 
 CREATE POLICY hr06_org_structure_update ON hr.job_position FOR UPDATE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
 
+CREATE POLICY hr06_org_structure_update ON hr.organic_definition FOR UPDATE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text, 'rh.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text, 'rh.write'::text])));
+
 CREATE POLICY hr06_org_structure_update ON hr.job_structure_employment_link FOR UPDATE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
 
 CREATE POLICY hr06_org_structure_update ON hr.work_location FOR UPDATE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
@@ -2265,6 +2312,8 @@ CREATE POLICY hr06_org_structure_write ON hr.cost_center FOR INSERT WITH CHECK (
 CREATE POLICY hr06_org_structure_write ON hr.job_function FOR INSERT WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
 
 CREATE POLICY hr06_org_structure_write ON hr.job_position FOR INSERT WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
+
+CREATE POLICY hr06_org_structure_write ON hr.organic_definition FOR INSERT WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text, 'rh.write'::text])));
 
 CREATE POLICY hr06_org_structure_write ON hr.job_structure_employment_link FOR INSERT WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.master_data.write'::text])));
 
@@ -2301,6 +2350,12 @@ CREATE POLICY job_function_select ON hr.job_function FOR SELECT USING ((public.s
 CREATE POLICY job_function_write ON hr.job_function USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.write'::text])))) WITH CHECK ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.write'::text]))));
 
 ALTER TABLE hr.job_position ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE hr.organic_definition ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY organic_definition_select ON hr.organic_definition FOR SELECT USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.read'::text, 'gestao.write'::text, 'rh.read'::text, 'rh.write'::text, 'recrutamento.read'::text, 'recrutamento.write'::text, 'relatorio.read'::text, 'relatorio.generate'::text]))));
+
+CREATE POLICY organic_definition_write ON hr.organic_definition USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['rh.write'::text, 'gestao.write'::text])))) WITH CHECK ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['rh.write'::text, 'gestao.write'::text]))));
 
 ALTER TABLE hr.job_structure_employment_link ENABLE ROW LEVEL SECURITY;
 

@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { Public } from '../../iam/decorators/require-permission.decorator';
@@ -11,6 +16,7 @@ import { InscricaoService } from './inscricao.service';
 export class InscricaoController {
   constructor(private readonly inscricaoService: InscricaoService) {}
 
+  @ApiOperation({ summary: 'POST v1/publico/concursos/:slug/inscricoes' })
   @Post('v1/publico/concursos/:slug/inscricoes')
   @Public()
   @AuditMutation({
@@ -23,6 +29,7 @@ export class InscricaoController {
     return this.inscricaoService.create(slug, body);
   }
 
+  @ApiOperation({ summary: 'GET v1/publico/inscricoes/:id' })
   @Get('v1/publico/inscricoes/:id')
   @Public()
   @ApiOkResponse({

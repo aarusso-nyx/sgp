@@ -1,38 +1,38 @@
 <section class="dctfweb">
   <header class="page-header">
     <div>
-      <h1>DCTFWeb</h1>
-      <p>Declarações por competência com assinatura ICP-Brasil e recibo RFB.</p>
+      <h1 i18n>DCTFWeb</h1>
+      <p i18n>Declarações por competência com assinatura ICP-Brasil e recibo RFB.</p>
     </div>
   </header>
 
   <form [formGroup]="form" class="toolbar">
     <mat-form-field appearance="outline">
-      <mat-label>Ano</mat-label>
+      <mat-label i18n>Ano</mat-label>
       <input matInput type="number" formControlName="year" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Mês</mat-label>
+      <mat-label i18n>Mês</mat-label>
       <input matInput type="number" formControlName="month" min="1" max="12" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Tipo</mat-label>
+      <mat-label i18n>Tipo</mat-label>
       <mat-select formControlName="kind">
-        <mat-option value="ORIGINAL">Original</mat-option>
-        <mat-option value="RETIFICADORA">Retificadora</mat-option>
+        <mat-option value="ORIGINAL" i18n>Original</mat-option>
+        <mat-option value="RETIFICADORA" i18n>Retificadora</mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="wide">
-      <mat-label>Declaração original</mat-label>
+      <mat-label i18n>Declaração original</mat-label>
       <input matInput formControlName="originalDeclarationId" />
     </mat-form-field>
 
     <button mat-stroked-button type="button" (click)="load()" [disabled]="loading">
       <mat-icon>search</mat-icon>
-      Consultar
+      <ng-container i18n>Consultar</ng-container>
     </button>
 
     <button
@@ -43,7 +43,7 @@
       [disabled]="isBusy('generate')"
     >
       <mat-icon>add</mat-icon>
-      Gerar
+      <ng-container i18n>Gerar</ng-container>
     </button>
   </form>
 
@@ -54,12 +54,12 @@
       <table>
         <thead>
           <tr>
-            <th>Competência</th>
-            <th>Tipo</th>
-            <th>Status</th>
-            <th>Total</th>
-            <th>Recibo</th>
-            <th>Ações</th>
+            <th i18n>Competência</th>
+            <th i18n>Tipo</th>
+            <th i18n>Status</th>
+            <th i18n>Total</th>
+            <th i18n>Recibo</th>
+            <th i18n>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -82,6 +82,7 @@
                 title="Assinar"
                 (click)="sign(item); $event.stopPropagation()"
                 [disabled]="isBusy('sign', item) || item.status === 'ACCEPTED'"
+                i18n-title
               >
                 <mat-icon>draw</mat-icon>
               </button>
@@ -93,6 +94,7 @@
                 [disabled]="
                   isBusy('transmit', item) || !item.signedXmlHash || item.status === 'ACCEPTED'
                 "
+                i18n-title
               >
                 <mat-icon>send</mat-icon>
               </button>
@@ -103,38 +105,38 @@
     </section>
 
     <aside class="details" *ngIf="selected">
-      <h2>Recibo e integridade</h2>
+      <h2 i18n>Recibo e integridade</h2>
       <dl>
         <div>
-          <dt>Declaração</dt>
+          <dt i18n>Declaração</dt>
           <dd>{{ selected.id }}</dd>
         </div>
         <div>
-          <dt>Payload</dt>
+          <dt i18n>Payload</dt>
           <dd>{{ selected.payloadXmlHash }}</dd>
         </div>
         <div>
-          <dt>Assinado</dt>
+          <dt i18n>Assinado</dt>
           <dd>{{ selected.signedXmlHash || '-' }}</dd>
         </div>
         <div>
-          <dt>Transmitido</dt>
+          <dt i18n>Transmitido</dt>
           <dd>{{ selected.transmittedXmlHash || '-' }}</dd>
         </div>
         <div>
-          <dt>Data recibo</dt>
+          <dt i18n>Data recibo</dt>
           <dd>{{ selected.receiptAt || '-' }}</dd>
         </div>
       </dl>
 
-      <h2>Totalizadores</h2>
+      <h2 i18n>Totalizadores</h2>
       <table class="items">
         <thead>
           <tr>
-            <th>Evento</th>
-            <th>Código</th>
-            <th>Base</th>
-            <th>Valor</th>
+            <th i18n>Evento</th>
+            <th i18n>Código</th>
+            <th i18n>Base</th>
+            <th i18n>Valor</th>
           </tr>
         </thead>
         <tbody>

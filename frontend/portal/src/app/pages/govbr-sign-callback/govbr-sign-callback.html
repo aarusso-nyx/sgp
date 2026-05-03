@@ -1,0 +1,6 @@
+<section class="govbr-callback" [class.denied]="!signed">
+  <p>Gov.br</p>
+  <h1>{{ signed ? 'Assinatura registrada' : 'Assinatura nao concluida' }}</h1>
+  <span *ngIf="signatureRequestId">Protocolo {{ signatureRequestId }}</span>
+  <a routerLink="/meus-dados/cadastro">Voltar para Meus Dados</a>
+</section>

@@ -1,5 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -14,6 +19,7 @@ export class TimesheetPeriodController {
     private readonly timesheetPeriodService: TimesheetPeriodService,
   ) {}
 
+  @ApiOperation({ summary: 'POST Open' })
   @Post()
   @RequirePermission('ponto.schedule.write')
   @AuditMutation({

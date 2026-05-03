@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, map, Observable } from 'rxjs';
+import { ApiClient } from '../../../core/api/api-client';
 
 export interface ESocialPeriodicPayrollStatus {
   payrollRunId: string;
@@ -28,10 +28,10 @@ export interface ESocialPeriodicPayrollDispatchResult {
 
 @Injectable({ providedIn: 'root' })
 export class ESocialFolhaPeriodicaService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: ApiClient) {}
 
   status(year: number, month: number): Observable<ESocialPeriodicPayrollStatus[]> {
-    return this.http.get<ESocialPeriodicPayrollStatus[]>(
+    return this.api.get<ESocialPeriodicPayrollStatus[]>(
       `/api/v1/esocial/folha-periodica?year=${year}&month=${month}`,
     );
   }
@@ -41,7 +41,7 @@ export class ESocialFolhaPeriodicaService {
     employeeId?: string,
     force = false,
   ): Observable<ESocialPeriodicPayrollDispatchResult[]> {
-    return this.http.post<ESocialPeriodicPayrollDispatchResult[]>(
+    return this.api.post<ESocialPeriodicPayrollDispatchResult[]>(
       `/api/v1/esocial/folha-periodica/runs/${payrollRunId}/s1200/emitir`,
       { employeeId, force },
     );
@@ -52,7 +52,7 @@ export class ESocialFolhaPeriodicaService {
     employeeId?: string,
     force = false,
   ): Observable<ESocialPeriodicPayrollDispatchResult[]> {
-    return this.http.post<ESocialPeriodicPayrollDispatchResult[]>(
+    return this.api.post<ESocialPeriodicPayrollDispatchResult[]>(
       `/api/v1/esocial/folha-periodica/payments/${paymentBatchId}/s1210/emitir`,
       { employeeId, force },
     );

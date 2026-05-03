@@ -33,6 +33,7 @@ interface ExposureSourceRow extends QueryResultRow {
   cpf: string | null;
   employee_name: string;
   cnpj: string | null;
+  work_environment_code: string | null;
   work_location_name: string | null;
   responsible_cpf: string | null;
   harmful_agent_code: string;
@@ -87,6 +88,7 @@ export class S2240Builder {
         employee.cpf,
         employee.name AS employee_name,
         company.cnpj,
+        work_location.code AS work_environment_code,
         work_location.name AS work_location_name,
         responsible.cpf AS responsible_cpf,
         exposure.harmful_agent_code,
@@ -178,12 +180,17 @@ export class S2240Builder {
         environmentalExposureId: source.id,
         employeeId: source.employee_id,
         triggerEvent: pending.trigger_event,
+        workEnvironmentCode: environmentCode(source.work_environment_code),
         harmfulAgentCode: source.harmful_agent_code,
         intensityValue: source.intensity_value,
         epiCount: epiDocs.length,
       },
     };
   }
+}
+
+function environmentCode(value: string | null | undefined): string | null {
+  return value ? value.trim().slice(0, 30) : null;
 }
 
 function epcEpiXml(source: ExposureSourceRow, epiDocs: EpiDocRow[]): string {

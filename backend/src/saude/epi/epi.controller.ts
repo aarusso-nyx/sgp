@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import {
+  ApiOperation,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -21,6 +22,7 @@ export class EpiController {
     private readonly deliveryService: EpiDeliveryService,
   ) {}
 
+  @ApiOperation({ summary: 'GET inventario' })
   @Get('inventario')
   @RequirePermission('saude.epi.read')
   @ApiOkResponse({ description: 'EPI inventory records.' })
@@ -28,6 +30,7 @@ export class EpiController {
     return this.inventoryService.list();
   }
 
+  @ApiOperation({ summary: 'POST inventario' })
   @Post('inventario')
   @RequirePermission('saude.epi.write')
   @AuditMutation({
@@ -42,6 +45,7 @@ export class EpiController {
     return this.inventoryService.create(body);
   }
 
+  @ApiOperation({ summary: 'GET entregas' })
   @Get('entregas')
   @RequirePermission('saude.epi.read')
   @ApiOkResponse({ description: 'Signed EPI deliveries.' })
@@ -49,6 +53,7 @@ export class EpiController {
     return this.deliveryService.list();
   }
 
+  @ApiOperation({ summary: 'POST entregas' })
   @Post('entregas')
   @RequirePermission('saude.epi.write')
   @AuditMutation({
