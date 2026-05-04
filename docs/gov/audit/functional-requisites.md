@@ -14,11 +14,11 @@
 
 ## Source Inputs
 
-- docs/eng/99-implementation-status.md.
+- docs/gov/evidence/implementation-status.md.
 - docs/work/round-1/05-feature-matrix.md.
 - docs/work/round-2/05-feature-matrix.md.
 - docs/work/round-3/00-snapshot.md.
-- docs/eng/103-deferred-decision-ledger.md.
+- docs/gov/evidence/deferred-decision-ledger.md.
 - Regulatory anchors use the current docs/refs corpus.
 
 ## Domain Coverage

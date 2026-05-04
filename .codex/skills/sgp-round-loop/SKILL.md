@@ -9,15 +9,23 @@ description: Coordinate the full SGP outer loop of measure, plan, execute, compa
 
 Use this as the high-level router for SGP's round-based development cycle. It keeps the loop coherent while delegating detailed behavior to the narrower `sgp-*` skills when they are available.
 
+## Current Docs Routing
+
+- `docs/eng/` is authoritative for product and engineering behavior, acceptance, and developer facts.
+- `docs/gov/audit/` holds current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.
+- `docs/gov/prompts/` holds reusable B0-B3 round prompts; materialized per-round outputs stay under `docs/work/round-<n>/`.
+- `docs/gov/` holds governance controls, generated surfaces, retained evidence, compliance, health, and observability.
+- `docs/work/**` is scratch and never acceptance authority.
+
 ## Loop Phases
 
 1. Measure with `sgp-round-audit`:
    - Inspect the live repo first.
-   - Produce or refresh `docs/work/round-<n>/` audit artifacts.
+   - Refresh `docs/gov/audit/` current status and produce `docs/work/round-<n>/` scratch context.
    - Keep this phase read-only unless the user explicitly asks for implementation.
 2. Plan with `sgp-round-backlog`:
    - Convert the audit pack into a next-round backlog.
-   - Materialize `prompts/00-orchestration-plan.md`, wave launch files, worker prompts, and a round index.
+   - Use reusable `docs/gov/prompts/B2-materialize-plan-phase.md` semantics to materialize `prompts/00-orchestration-plan.md`, wave launch files, worker prompts, and a round index.
    - Route routine work to low/medium effort prompts and reserve high/xhigh effort for cross-cutting contracts, migrations, regulatory behavior, frontend gates, and owner-decision spikes.
 3. Execute with `sgp-round-orchestrator`:
    - Run the orchestration prompt or selected wave.
@@ -25,7 +33,7 @@ Use this as the high-level router for SGP's round-based development cycle. It ke
    - Run wave gates before advancing.
    - Write unavoidable decisions to `docs/work/round-<n>/QUESTIONS.md` and continue unrelated work when safe.
 4. Compare with `sgp-round-verify-publish`:
-   - Compare prompt acceptance criteria, audit baseline, current diff, and live gates.
+   - Compare prompt acceptance criteria, `docs/gov/audit/` current status, current diff, and live gates.
    - Fix current-round failures with focused loops or route to `sgp-fix-lint`, `sgp-fix-build`, or `sgp-fix-tests`.
    - Publish only when explicitly requested.
 
@@ -33,7 +41,7 @@ Use this as the high-level router for SGP's round-based development cycle. It ke
 
 - Verify current repo state before trusting prior prompts, memory, or scratch docs.
 - `docs/work/**` is ignored scratch and cannot override acceptance authority.
-- `docs/eng/` is authoritative for behavior; `docs/gov/` for governance; `docs/user/` for operator guidance; `docs/leg/` for legacy/archive evidence.
+- `docs/eng/` is authoritative for behavior; `docs/gov/audit/` for current status and compiled context; `docs/gov/` for governance and reusable prompts; `docs/user/` for operator guidance; `docs/leg/` for legacy/archive evidence.
 - Do not add compatibility shims for v0.0.1.
 - Use stubs, mocks, sandbox adapters, contract fixtures, or golden files for external services unless the user explicitly asks for real-service tests.
 - Stop for high-impact folia/spec payroll conflicts.

@@ -6,7 +6,7 @@ import {
   cleanupFixture,
   makeFixture,
   readMarkdownHeader,
-  runAuditScript,
+  runAuditCommand,
 } from './audit-test-helpers';
 
 const execFile = promisify(execFileCallback);
@@ -20,9 +20,9 @@ describe('audit-backlog-ledger', () => {
 
   it('updates a known backlog ledger idempotently', async () => {
     fixtureRoot = await makeFixture('audit-backlog-ledger');
-    await runAuditScript('audit-backlog-ledger.mjs', fixtureRoot);
+    await runAuditCommand('backlog', fixtureRoot);
     const first = await readMarkdownHeader(join(fixtureRoot, 'out', 'backlog-ledger.md'));
-    await runAuditScript('audit-backlog-ledger.mjs', fixtureRoot);
+    await runAuditCommand('backlog', fixtureRoot);
     const second = await readMarkdownHeader(join(fixtureRoot, 'out', 'backlog-ledger.md'));
 
     expect(second).toEqual(first);
@@ -34,7 +34,8 @@ describe('audit-backlog-ledger', () => {
     fixtureRoot = await makeFixture('audit-backlog-ledger');
     await expect(
       execFile(process.execPath, [
-        join(__dirname, '..', '..', 'scripts', 'audit-backlog-ledger.mjs'),
+        join(__dirname, '..', '..', 'scripts', 'audit.mjs'),
+        'backlog',
         '--repo-root',
         fixtureRoot,
         '--output-root',

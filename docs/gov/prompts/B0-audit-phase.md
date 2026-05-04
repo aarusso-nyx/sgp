@@ -92,7 +92,7 @@ Under docs/gov/audit/inv/round-<n>/ (some written by tooling, some by the agent)
 Under docs/gov/audit/diag/round-<n>/:
 
 - gaps.md — top 10 missing features by regulatory exposure; top 10 critical-path features at maturity ≤ 2; cross-cutting concerns (idempotency, retro-processing, money rounding, tz, RBAC, audit trail, concurrency, multi-tenant).
-- regulatory-adherence.md — score per docs/ref/<domain>/ set (eSocial / LGPD / TCE / Legal). Cite docs/ref/... for the obligation, path:line for the implementation.
+- regulatory-adherence.md — score per docs/refs/<domain>/ set (eSocial / LGPD / TCE / Legal). Cite docs/refs/... for the obligation, path:line for the implementation.
 - code-quality.md — repeats round-1 §08 schema (LOC per file, cyclomatic-complexity proxies, dependency-graph hotspots).
 - delta-from-round-<n-1>.md — feature-level matrix delta + global-completeness delta + readiness verdict update.
 - hotspots.md and promise-vs-delivery.md come from §4.2 tooling.
@@ -121,7 +121,7 @@ Write the audit-pack synthesis files (kept for continuity with rounds 1–3):
 - Cite path:line for every positive implementation claim.
 - Use not located only after listing the search surface (file globs, regex used).
 - No if present. The repo's parent paths are known; state them.
-- Anchor regulatory claims in docs/ref/<domain>/.... Do **not** re-fetch primary sources unless the user explicitly says "refresh ref".
+- Anchor regulatory claims in docs/refs/<domain>/.... Do **not** re-fetch primary sources unless the user explicitly says "refresh refs".
 - Pick the lower maturity score on uncertainty; justify in Notes.
 
 ---
@@ -171,6 +171,6 @@ At round-audit completion:
 - [ ] HEAD SHA recorded in 00-snapshot.md matches git rev-parse HEAD.
 - [ ] Every artifact in §8 exists and is non-empty.
 - [ ] path:line citations used; not located only with search surface.
-- [ ] Regulatory claims anchored in docs/ref/.
+- [ ] Regulatory claims anchored in docs/refs/.
 - [ ] MemPalace nodes present for every artifact + summary.
 - [ ] Governance check passes.

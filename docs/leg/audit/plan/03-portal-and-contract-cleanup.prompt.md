@@ -11,9 +11,9 @@ Fix frontend and contract drift identified by the reassessment:
 ## Read First
 
 - `AGENTS.md`
-- `docs/eng/10-uc-administracao-seguranca.md`
-- `docs/eng/40-divisao-modular.md`
-- `docs/eng/42-contratos-integracao.md`
+- `docs/eng/platform.md`
+- `docs/eng/platform.md`
+- `docs/eng/platform.md`
 - `docs/leg/audit/diag/portal-build-and-frontend-tests.md`
 - `docs/leg/audit/diag/compatibility-surface.md`
 - `docs/leg/audit/diag/raw-portal-build.log`

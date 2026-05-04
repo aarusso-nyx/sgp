@@ -1,6 +1,6 @@
 ---
 name: sgp-round-orchestrator
-description: Execute an SGP docs/work/round-N/prompts/00-orchestration-plan.md or wave launch prompt with worker fan-out, wave gates, fix-up loops, and blocker tracking. Use when the user asks to run an SGP orchestrator prompt, execute a round, launch a wave, spawn workers for SGP prompts, or continue the measure-plan-execute-compare loop after prompt materialization.
+description: Execute an SGP materialized docs/work/round-N/prompts/00-orchestration-plan.md or wave launch prompt produced from docs/gov/prompts with worker fan-out, wave gates, fix-up loops, and blocker tracking. Use when the user asks to run an SGP orchestrator prompt, execute a round, launch a wave, spawn workers for SGP prompts, or continue the measure-plan-execute-compare loop after prompt materialization.
 ---
 
 # SGP Round Orchestrator
@@ -9,10 +9,18 @@ description: Execute an SGP docs/work/round-N/prompts/00-orchestration-plan.md o
 
 Run materialized SGP prompt waves as an outer-loop executor. Use workers only when the user request or prompt explicitly calls for parallel agents; otherwise execute the prompt locally with the same gate discipline.
 
+## Current Docs Routing
+
+- `docs/eng/` is authoritative for product and engineering behavior, acceptance, and developer facts.
+- `docs/gov/audit/` holds current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.
+- `docs/gov/prompts/` holds reusable B0-B3 round prompts; materialized per-round outputs stay under `docs/work/round-<n>/`.
+- `docs/gov/` holds governance controls, generated surfaces, retained evidence, compliance, health, and observability.
+- `docs/work/**` is scratch and never acceptance authority.
+
 ## SGP Invariants
 
 - Verify live repo state before trusting scratch prompt claims.
-- `docs/work/**` is scratch context. Acceptance authority stays in `docs/eng/`, governance in `docs/gov/`, user/operator guidance in `docs/user/`, and legacy evidence in `docs/leg/`.
+- `docs/work/**` is scratch context. Acceptance authority stays in `docs/eng/`, current status and compiled context in `docs/gov/audit/`, governance and reusable prompts in `docs/gov/`, user/operator guidance in `docs/user/`, and legacy evidence in `docs/leg/`.
 - Do not revert user or worker changes unless explicitly asked.
 - Do not add v0.0.1 compatibility shims.
 - Use stubs, mocks, sandbox adapters, fixtures, and golden files for external services unless the user explicitly asks for real-service tests.

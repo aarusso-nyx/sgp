@@ -11,7 +11,7 @@
   },
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "ts-node ../scripts/gen-permissions.ts",
+    "prebuild": "node ../scripts/generate.mjs permissions",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"../tests/backend/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"../tests/backend/**/*.ts\"",

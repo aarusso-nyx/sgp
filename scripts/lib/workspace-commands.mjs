@@ -1,10 +1,4 @@
-import { userInfo } from 'node:os';
-
-function currentUserName() {
-  return process.env.USER || process.env.LOGNAME || userInfo().username;
-}
-
-export const localTestDatabaseUrl = `postgresql://${currentUserName()}@localhost:5432/sgp_test`;
+export { localTestDatabaseUrl } from './repo-paths.mjs';
 
 export const workspaceCommandDescriptions = {
   help: 'Show workspace orchestration help.',
@@ -14,13 +8,15 @@ export const workspaceCommandDescriptions = {
   format: 'Format workspace files and code.',
   typecheck: 'Run TypeScript checks across frontend and backend workspaces.',
   test: 'Run workspace tests; unit tests are the default subcommand.',
-  db: 'Run database helper commands (generate, migrate, seed, studio).',
+  check: 'Run cross-cutting check helpers.',
+  db: 'Run database lifecycle, alignment, FK coverage, and safety helpers.',
+  api: 'Run API alignment, decorator, OpenAPI, and client-generation helpers.',
   qa: 'Run QA helper commands.',
   audit: 'Run deterministic audit helper commands.',
-  evidence: 'Run the authoritative evidence gate sequence.',
   governance: 'Run governance validation.',
   health: 'Run non-destructive runtime topology and workspace health checks.',
   deploy: 'Run AWS deployment plan checks (dry-run by default).',
+  clean: 'Remove generated local build, cache, coverage, and dependency outputs.',
 };
 
 export const workspaceFormatTargets = [
@@ -145,7 +141,7 @@ export const evidenceSteps = [
   {
     name: 'qa-smoke-url-config',
     command: 'node',
-    args: ['scripts/qa-smoke-required-urls.mjs', '--check'],
+    args: ['scripts/qa.mjs', 'smoke-urls', '--check'],
     capturesOutput: true,
   },
   {

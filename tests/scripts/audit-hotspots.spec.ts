@@ -7,7 +7,7 @@ import {
   cleanupFixture,
   makeFixture,
   readMarkdownHeader,
-  runAuditScript,
+  runAuditCommand,
 } from './audit-test-helpers';
 
 const execFile = promisify(execFileCallback);
@@ -36,7 +36,7 @@ describe('audit-hotspots', () => {
     await execFile('git', ['add', '.'], { cwd: fixtureRoot });
     await execFile('git', ['commit', '-m', 'change'], { cwd: fixtureRoot });
 
-    await runAuditScript('audit-hotspots.mjs', fixtureRoot, ['--baseline', baseline]);
+    await runAuditCommand('hotspots', fixtureRoot, ['--baseline', baseline]);
     const header = await readMarkdownHeader(
       join(fixtureRoot, 'out', 'diag', 'round-7', 'hotspots.md'),
     );

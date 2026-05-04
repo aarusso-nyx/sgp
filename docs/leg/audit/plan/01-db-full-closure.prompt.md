@@ -9,15 +9,15 @@ The current audit snapshot reports `151` legacy objects with `canonicalized=50`,
 ## Read First
 
 - `AGENTS.md`
-- `docs/eng/64-database-alignment-matrix.json`
-- `docs/eng/64-alinhamento-banco-fase-1.md`
-- `docs/eng/65-alinhamento-banco-fase-2.md`
-- `docs/eng/66-alinhamento-banco-fase-4.md`
-- `docs/eng/67-alinhamento-banco-fase-3.md`
-- `docs/eng/68-alinhamento-banco-relatorio-fechamento.md`
+- `docs/gov/generated/database/alignment-matrix.json`
+- `docs/gov/evidence/database-alignment-phase-1.md`
+- `docs/gov/evidence/database-alignment-phase-2.md`
+- `docs/gov/evidence/database-alignment-phase-4.md`
+- `docs/gov/evidence/database-alignment-phase-3.md`
+- `docs/gov/evidence/database-alignment-closure.md`
 - `docs/leg/audit/inv/database-alignment-inventory.json`
 - `docs/leg/audit/diag/db-full-closure.md`
-- `docs/eng/64-alinhamento-banco-fase-1.md`
+- `docs/gov/evidence/database-alignment-phase-1.md`
 - `backend/prisma/schema.prisma`
 
 ## Current In-Scope Explicit Exclusions

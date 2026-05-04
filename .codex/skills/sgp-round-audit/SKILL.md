@@ -1,6 +1,6 @@
 ---
 name: sgp-round-audit
-description: Audit the live SGP repository into a new docs/work/round-N evidence pack. Use when the user asks to inspect, assess, measure, audit current SGP state, start a new round, compare claims to implementation, or produce the measurement side of the SGP measure-plan-execute-compare loop.
+description: Audit the live SGP repository into docs/gov/audit current status plus a docs/work/round-N scratch context pack. Use when the user asks to inspect, assess, measure, audit current SGP state, start a new round, compare claims to implementation, or produce the measurement side of the SGP measure-plan-execute-compare loop.
 ---
 
 # SGP Round Audit
@@ -12,10 +12,18 @@ Create a reproducible, evidence-backed assessment of the current SGP repo. Keep 
 ## SGP Invariants
 
 - Work from `/Users/aarusso/Development/stech/sgp` unless the user points elsewhere, and verify the cwd before acting.
-- Treat `docs/eng/` as acceptance authority, `docs/gov/` as governance controls, `docs/user/` as operator guidance, `docs/leg/sql-reference/` as legacy schema reference only, and `docs/leg/` as legacy evidence/archive.
+- Treat `docs/eng/` as acceptance authority, `docs/gov/audit/` as current status and compiled context, `docs/gov/` as governance controls, `docs/user/` as operator guidance, `docs/leg/sql-reference/` as legacy schema reference only, and `docs/leg/` as legacy evidence/archive.
 - Treat `docs/work/**` as ignored scratch. It can summarize evidence but cannot override `docs/eng/`.
 - Keep code artifacts in English. Do not add compatibility shims for v0.0.1.
 - If folia-first payroll behavior conflicts with authoritative specs in a high-impact way, record the conflict and stop for owner decision.
+
+## Current Docs Routing
+
+- `docs/eng/` is authoritative for product and engineering behavior, acceptance, and developer facts.
+- `docs/gov/audit/` holds current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.
+- `docs/gov/prompts/` holds reusable B0-B3 round prompts; materialized per-round outputs stay under `docs/work/round-<n>/`.
+- `docs/gov/` holds governance controls, generated surfaces, retained evidence, compliance, health, and observability.
+- `docs/work/**` is scratch and never acceptance authority.
 
 ## Workflow
 
@@ -24,7 +32,7 @@ Create a reproducible, evidence-backed assessment of the current SGP repo. Keep 
    - `git status --short --branch`
    - `git rev-parse HEAD`
    - `git ls-files docs/work | wc -l`
-   - Inspect `AGENTS.md`, `package.json`, `scripts/run.mjs`, `.gitignore`, `docs/eng/README.md`, `docs/gov/README.md`, and recent `docs/work/round-*` folders.
+   - Inspect `AGENTS.md`, `package.json`, `scripts/run.mjs`, `.gitignore`, `docs/eng/README.md`, `docs/gov/README.md`, `docs/gov/audit/README.md`, `docs/gov/prompts/`, and recent `docs/work/round-*` folders.
 2. Choose the audit round:
    - If the user names a round, use it.
    - Otherwise create or refresh the next `docs/work/round-<n>/` after the highest existing round.

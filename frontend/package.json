@@ -20,9 +20,9 @@
     "test:admin:e2e": "playwright test -c ../playwright.admin.config.ts",
     "test:portal:e2e": "playwright test -c ../playwright.portal.config.ts",
     "i18n:extract": "ng extract-i18n sgp-admin",
-    "i18n:check": "node ../scripts/check-frontend-i18n.mjs",
-    "lint": "node ../scripts/check-frontend-api-client.mjs && node ../scripts/check-frontend-modern-angular.mjs && node ../scripts/check-frontend-i18n.mjs",
-    "lint:check": "node ../scripts/check-frontend-api-client.mjs && node ../scripts/check-frontend-modern-angular.mjs && node ../scripts/check-frontend-i18n.mjs",
+    "i18n:check": "node ../scripts/check-frontend.mjs i18n",
+    "lint": "node ../scripts/check-frontend.mjs all",
+    "lint:check": "node ../scripts/check-frontend.mjs all",
     "format": "prettier --write --ignore-unknown portal/src src angular.json package.json tsconfig.app.json tsconfig.json tsconfig.portal.app.json tsconfig.portal.spec.json tsconfig.spec.json",
     "format:check": "prettier --check --ignore-unknown portal/src src angular.json package.json tsconfig.app.json tsconfig.json tsconfig.portal.app.json tsconfig.portal.spec.json tsconfig.spec.json",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.portal.app.json && tsc --noEmit -p tsconfig.spec.json && tsc --noEmit -p tsconfig.portal.spec.json"

@@ -5,7 +5,7 @@ import {
   makeFixture,
   readJson,
   readMarkdownHeader,
-  runAuditScript,
+  runAuditCommand,
 } from './audit-test-helpers';
 
 describe('audit-api-surface', () => {
@@ -17,7 +17,7 @@ describe('audit-api-surface', () => {
 
   it('renders route summaries and skips missing checker scripts', async () => {
     fixtureRoot = await makeFixture('audit-api-surface');
-    await runAuditScript('audit-api-surface.mjs', fixtureRoot);
+    await runAuditCommand('api', fixtureRoot);
 
     const json = await readJson<{
       routes: Array<{ path: string }>;

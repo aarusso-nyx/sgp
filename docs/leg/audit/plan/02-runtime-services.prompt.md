@@ -12,16 +12,16 @@ Replace scaffolded runtime entrypoints with implemented runtime services for:
 ## Read First
 
 - `AGENTS.md`
-- `docs/eng/BRIEF.md`
-- `docs/eng/40-divisao-modular.md`
-- `docs/eng/41-arquitetura-sistema.md`
-- `docs/eng/42-contratos-integracao.md`
-- `docs/eng/44-jobs-rotinas-assincronas.md`
-- `docs/eng/60-catalogo-saidas-oficiais.md`
-- `docs/eng/71-folia-engine-reconciliation.md`
+- `docs/eng/product.md`
+- `docs/eng/platform.md`
+- `docs/eng/platform.md`
+- `docs/eng/platform.md`
+- `docs/eng/platform.md`
+- `docs/eng/experience.md`
+- `docs/eng/domains/payroll-benefits.md`
 - `docs/leg/audit/inv/runtime-topology-inventory.json`
 - `docs/leg/audit/diag/runtime-and-worker-gap.md`
-- `docs/gov/runtime-topology.json`
+- `docs/gov/generated/runtime-topology.json`
 - `scripts/start-runtime-stub.mjs`
 
 ## Work Items

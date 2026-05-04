@@ -5,7 +5,7 @@ import {
   makeFixture,
   readJson,
   readMarkdownHeader,
-  runAuditScript,
+  runAuditCommand,
 } from './audit-test-helpers';
 
 describe('audit-test-coverage-map', () => {
@@ -17,7 +17,7 @@ describe('audit-test-coverage-map', () => {
 
   it('maps spec files to functional requisite IDs', async () => {
     fixtureRoot = await makeFixture('audit-test-coverage-map');
-    await runAuditScript('audit-test-coverage-map.mjs', fixtureRoot);
+    await runAuditCommand('tests', fixtureRoot);
 
     const json = await readJson<{ counts: { specs: number; mapped_requisites: number } }>(
       join(fixtureRoot, 'out', 'inv', 'round-7', 'test-coverage-map.json'),

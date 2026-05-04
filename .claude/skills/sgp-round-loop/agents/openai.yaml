@@ -1,4 +1,4 @@
 interface:
   display_name: "SGP Round Loop"
   short_description: "Run SGP measure-plan-execute loop"
-  default_prompt: "Use $sgp-round-loop to run the next SGP measure-plan-execute-compare cycle."
+  default_prompt: "Use $sgp-round-loop to run the next SGP cycle through reusable docs/gov/prompts B0-B3."

@@ -14,8 +14,8 @@
 
 ## Source and Check Inputs
 
-- Source of truth: docs/eng/69-api-route-alignment.json.
-- Reused checks: scripts/check-api-route-alignment.mjs --json; scripts/check-api-operation-decorators.mjs; scripts/sync-api-route-alignment.mjs as the runtime-route extraction contract.
+- Source of truth: docs/gov/generated/api/route-alignment.json.
+- Reused checks: scripts/check-api.mjs alignment check --json; scripts/check-api.mjs operation check; scripts/check-api.mjs alignment sync as the runtime-route extraction contract.
 
 ## Summary
 
@@ -801,4 +801,4 @@
 
 ## Routes Without ApiOperation
 
-None; scripts/check-api-operation-decorators.mjs reports all controller route handlers declare @ApiOperation.
+None; scripts/check-api.mjs operation check reports all controller route handlers declare @ApiOperation.

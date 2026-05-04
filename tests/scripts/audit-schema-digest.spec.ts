@@ -5,7 +5,7 @@ import {
   makeFixture,
   readJson,
   readMarkdownHeader,
-  runAuditScript,
+  runAuditCommand,
 } from './audit-test-helpers';
 
 describe('audit-schema-digest', () => {
@@ -17,7 +17,7 @@ describe('audit-schema-digest', () => {
 
   it('writes schema markdown and JSON from SQL fixtures', async () => {
     fixtureRoot = await makeFixture('audit-schema-digest');
-    await runAuditScript('audit-schema-digest.mjs', fixtureRoot);
+    await runAuditCommand('schema', fixtureRoot);
 
     const json = await readJson<{ counts: { tables: number; foreign_keys: number } }>(
       join(fixtureRoot, 'out', 'inv', 'round-7', 'schema-digest.json'),

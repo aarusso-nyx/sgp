@@ -89,7 +89,7 @@ npm run db:seed
 
 ## 7. Runtime Topology
 
-The documented runtime split is tracked in `docs/gov/runtime-topology.json`. Use the health gate to inspect the current deployable/runtime inventory and scaffold status:
+The documented runtime split is tracked in `docs/gov/generated/runtime-topology.json`. Use the health gate to inspect the current deployable/runtime inventory and scaffold status:
 
 ```bash
 npm run health:json

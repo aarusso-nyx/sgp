@@ -7,12 +7,12 @@ Make verification gates truthful for the current sprint:
 - backend e2e paths must match the global `/api` prefix;
 - DB smoke must not look green when `DATABASE_URL` is missing;
 - QA smoke skips must be explicit and not counted as passing e2e evidence;
-- backend coverage thresholds must match `docs/eng/62-estrategia-testes.md`.
+- backend coverage thresholds must match `docs/eng/quality-migration.md`.
 
 ## Read First
 
 - `AGENTS.md`
-- `docs/eng/62-estrategia-testes.md`
+- `docs/eng/quality-migration.md`
 - `docs/leg/audit/diag/backend-and-db-test-gates.md`
 - `docs/leg/audit/diag/raw-backend-e2e.log`
 - `docs/leg/audit/diag/raw-db-smoke.log`
@@ -31,7 +31,7 @@ Make verification gates truthful for the current sprint:
    - if `DATABASE_URL` is present, run the smoke test and fail on real defects;
    - if `DATABASE_URL` is absent, exit with a documented configuration skip that cannot be misread as proof of DB correctness.
 4. Make QA smoke skip semantics explicit for missing base URLs. Skipped suites must be reported as skipped or blocked, not green e2e coverage.
-5. Add or enforce Jest coverage thresholds according to `docs/eng/62-estrategia-testes.md`.
+5. Add or enforce Jest coverage thresholds according to `docs/eng/quality-migration.md`.
 6. Keep module thresholds realistic for currently implemented modules, but document any unavoidable temporary gap as a blocker rather than silently weakening acceptance.
 8. Update docs if command semantics or gate interpretation changes.
 

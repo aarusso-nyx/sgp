@@ -1,11 +1,19 @@
 #!/usr/bin/env node
 
 import { existsSync, readFileSync } from 'node:fs';
-import { spawn, spawnSync } from 'node:child_process';
 import { join } from 'node:path';
+import { hasFlag as argvHasFlag, optionValue } from './lib/cli.mjs';
+import {
+  runCommand,
+  runNpm,
+  runSequence,
+  runWorkspaceExec,
+  runWorkspaceScript,
+  spawnWorkspaceScript,
+} from './lib/command-runner.mjs';
+import { localTestDatabaseEnv } from './lib/repo-paths.mjs';
 import {
   evidenceSteps,
-  localTestDatabaseUrl,
   workspaceCommandDescriptions,
   workspaceFormatTargets,
 } from './lib/workspace-commands.mjs';
@@ -14,10 +22,9 @@ const argv = process.argv.slice(2);
 const command = argv[0] ?? 'help';
 const args = argv.slice(1);
 const cwd = process.cwd();
-const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 function loadRuntimeTopology() {
-  const path = join(cwd, 'docs', 'gov', 'runtime-topology.json');
+  const path = join(cwd, 'docs', 'gov', 'generated', 'runtime-topology.json');
   const content = readFileSync(path, 'utf8');
   return JSON.parse(content);
 }
@@ -40,88 +47,11 @@ function printHelp() {
 }
 
 function parseOption(optionName, defaultValue) {
-  const explicit = args.find((value) => value.startsWith(`--${optionName}=`));
-  if (explicit) {
-    return explicit.slice(optionName.length + 3);
-  }
-
-  const index = args.indexOf(`--${optionName}`);
-  if (index >= 0) {
-    return args[index + 1] ?? defaultValue;
-  }
-
-  return defaultValue;
+  return optionValue(args, optionName, defaultValue);
 }
 
 function hasFlag(flagName) {
-  return args.includes(`--${flagName}`);
-}
-
-function runCommand(commandName, commandArgs, options = {}) {
-  const result = spawnSync(commandName, commandArgs, {
-    stdio: options.stdio ?? 'inherit',
-    cwd: options.cwd ?? cwd,
-    env: options.env ?? process.env,
-    encoding: options.encoding,
-    shell: process.platform === 'win32',
-  });
-
-  if (typeof result.status === 'number') {
-    return result.status;
-  }
-
-  if (result.error) {
-    console.error(`[run] failed to execute ${commandName}: ${result.error.message}`);
-  }
-
-  return 1;
-}
-
-function localTestDatabaseEnv() {
-  return {
-    ...process.env,
-    DATABASE_URL: process.env.DATABASE_URL || localTestDatabaseUrl,
-  };
-}
-
-function runNpm(argsToRun, options = {}) {
-  return runCommand(npm, argsToRun, options);
-}
-
-function runNpmScript(scriptName, extraArgs = [], options = {}) {
-  const commandArgs = ['run', scriptName];
-  const passThroughArgs = stripPassThroughSeparator(extraArgs);
-  if (passThroughArgs.length > 0) {
-    commandArgs.push('--', ...passThroughArgs);
-  }
-  return runNpm(commandArgs, options);
-}
-
-function runSequence(steps) {
-  for (const step of steps) {
-    const status = step();
-    if (status !== 0) {
-      return status;
-    }
-  }
-  return 0;
-}
-
-function runWorkspaceScript(workspace, scriptName, extraArgs = [], options = {}) {
-  const commandArgs = ['--workspace', workspace, 'run', scriptName];
-  const passThroughArgs = stripPassThroughSeparator(extraArgs);
-  if (passThroughArgs.length > 0) {
-    commandArgs.push('--', ...passThroughArgs);
-  }
-  return runNpm(commandArgs, options);
-}
-
-function stripPassThroughSeparator(values) {
-  return values[0] === '--' ? values.slice(1) : values;
-}
-
-function runWorkspaceExec(workspace, execArgs, options = {}) {
-  return runNpm(['--workspace', workspace, 'exec', '--', ...execArgs], options);
+  return argvHasFlag(args, flagName);
 }
 
 function handleBuild() {
@@ -144,30 +74,6 @@ function handleBuild() {
   }
 
   return handlers[subcommand]();
-}
-
-function spawnNpmScript(scriptName, options = {}) {
-  return spawn(npm, ['run', scriptName], {
-    stdio: 'inherit',
-    cwd,
-    env: options.env ?? process.env,
-    shell: process.platform === 'win32',
-  });
-}
-
-function spawnWorkspaceScript(workspace, scriptName, extraArgs = [], options = {}) {
-  const commandArgs = ['--workspace', workspace, 'run', scriptName];
-  const passThroughArgs = stripPassThroughSeparator(extraArgs);
-  if (passThroughArgs.length > 0) {
-    commandArgs.push('--', ...passThroughArgs);
-  }
-
-  return spawn(npm, commandArgs, {
-    stdio: 'inherit',
-    cwd,
-    env: options.env ?? process.env,
-    shell: process.platform === 'win32',
-  });
 }
 
 function handleStart() {
@@ -247,9 +153,9 @@ function handleLint() {
   ];
   if (check) {
     steps.push(
-      () => runCommand(process.execPath, ['scripts/check-test-debt-coverage.mjs']),
-      () => runCommand(process.execPath, ['scripts/check-api-operation-decorators.mjs']),
-      () => runCommand(process.execPath, ['scripts/check-openapi-generated.mjs']),
+      () => runCommand(process.execPath, ['scripts/lib/checks/test-debt-coverage.mjs']),
+      () => runCommand(process.execPath, ['scripts/check-api.mjs', 'operation', 'check']),
+      () => runCommand(process.execPath, ['scripts/check-api.mjs', 'spec', 'check']),
     );
   }
   return runSequence(steps);
@@ -298,7 +204,7 @@ function handleTest() {
       ]),
     backend: () => runWorkspaceScript('backend', 'test', args.slice(1)),
     db: () =>
-      runCommand(process.execPath, ['scripts/db-bootstrap-smoke.mjs'], {
+      runCommand(process.execPath, ['scripts/db.mjs', 'bootstrap-smoke'], {
         env: localTestDatabaseEnv(),
       }),
     e2e: () =>
@@ -341,33 +247,156 @@ function handleDb() {
   const subcommand = args[0] ?? 'help';
   const dbHandlers = {
     help: () => {
-      console.log('Usage: node scripts/run.mjs db <generate|migrate|seed|smoke|studio>');
+      console.log(
+        'Usage: node scripts/run.mjs db <generate|migrate|seed|smoke|studio|alignment check|fk-coverage check|fk-coverage write|push-guard> [options]',
+      );
       return 0;
     },
     generate: () => runWorkspaceExec('backend', ['prisma', 'generate']),
-    migrate: () => runCommand(process.execPath, ['scripts/db-apply-sql.mjs']),
+    migrate: () => runCommand(process.execPath, ['scripts/db.mjs', 'apply-sql']),
     seed: () => runWorkspaceScript('backend', 'db:seed'),
     smoke: () =>
-      runCommand(process.execPath, ['scripts/db-bootstrap-smoke.mjs'], {
+      runCommand(process.execPath, ['scripts/db.mjs', 'bootstrap-smoke'], {
         env: localTestDatabaseEnv(),
       }),
     studio: () => runWorkspaceExec('backend', ['prisma', 'studio']),
+    alignment: () => {
+      const action = args[1] ?? 'check';
+      if (action !== 'check') {
+        console.error('[db alignment] valid subcommands: check');
+        return 1;
+      }
+      return runCommand(process.execPath, [
+        'scripts/check-db.mjs',
+        'alignment',
+        'check',
+        ...args.slice(2),
+      ]);
+    },
+    'fk-coverage': () => {
+      const action = args[1] ?? 'check';
+      if (action === 'check') {
+        return runCommand(process.execPath, [
+          'scripts/check-db.mjs',
+          'fk-coverage',
+          'check',
+          ...args.slice(2),
+        ]);
+      }
+      if (action === 'write') {
+        return runCommand(process.execPath, [
+          'scripts/check-db.mjs',
+          'fk-coverage',
+          'write',
+          ...args.slice(2),
+        ]);
+      }
+      console.error('[db fk-coverage] valid subcommands: check, write');
+      return 1;
+    },
+    'push-guard': () =>
+      runCommand(process.execPath, ['scripts/check-db.mjs', 'push-guard', ...args.slice(1)]),
   };
 
   if (!dbHandlers[subcommand]) {
-    console.error('[db] valid subcommands: help, generate, migrate, seed, smoke, studio');
+    console.error(
+      '[db] valid subcommands: help, generate, migrate, seed, smoke, studio, alignment, fk-coverage, push-guard',
+    );
     return 1;
   }
 
   return dbHandlers[subcommand]();
 }
 
+function handleApi() {
+  const family = args[0] ?? 'help';
+  const handlers = {
+    help: () => {
+      console.log(
+        'Usage: node scripts/run.mjs api <alignment sync|alignment check|operation check|spec check|client generate> [options]',
+      );
+      return 0;
+    },
+    alignment: () => {
+      const action = args[1] ?? 'check';
+      if (action === 'sync') {
+        return runCommand(process.execPath, [
+          'scripts/check-api.mjs',
+          'alignment',
+          'sync',
+          ...args.slice(2),
+        ]);
+      }
+      if (action === 'check') {
+        return runCommand(process.execPath, [
+          'scripts/check-api.mjs',
+          'alignment',
+          'check',
+          ...args.slice(2),
+        ]);
+      }
+      console.error('[api alignment] valid subcommands: sync, check');
+      return 1;
+    },
+    operation: () => {
+      const action = args[1] ?? 'check';
+      if (action !== 'check') {
+        console.error('[api operation] valid subcommands: check');
+        return 1;
+      }
+      return runCommand(process.execPath, [
+        'scripts/check-api.mjs',
+        'operation',
+        'check',
+        ...args.slice(2),
+      ]);
+    },
+    spec: () => {
+      const action = args[1] ?? 'check';
+      if (action !== 'check') {
+        console.error('[api spec] valid subcommands: check');
+        return 1;
+      }
+      return runCommand(process.execPath, [
+        'scripts/check-api.mjs',
+        'spec',
+        'check',
+        ...args.slice(2),
+      ]);
+    },
+    client: () => {
+      const action = args[1] ?? 'generate';
+      if (action !== 'generate') {
+        console.error('[api client] valid subcommands: generate');
+        return 1;
+      }
+      return runSequence([
+        () => runWorkspaceScript('backend', 'build'),
+        () =>
+          runCommand(process.execPath, [
+            'scripts/generate.mjs',
+            'openapi-client',
+            ...args.slice(2),
+          ]),
+      ]);
+    },
+  };
+
+  if (!handlers[family]) {
+    console.error('[api] valid subcommands: help, alignment, operation, spec, client');
+    return 1;
+  }
+
+  return handlers[family]();
+}
+
 function handleQa() {
   const subcommand = args[0] ?? 'bootstrap';
   const handlers = {
-    bootstrap: () => runCommand(process.execPath, ['scripts/qa-bootstrap.mjs', ...args.slice(1)]),
+    bootstrap: () =>
+      runCommand(process.execPath, ['scripts/qa.mjs', 'bootstrap', ...args.slice(1)]),
     'smoke:urls': () =>
-      runCommand(process.execPath, ['scripts/qa-smoke-required-urls.mjs', ...args.slice(1)]),
+      runCommand(process.execPath, ['scripts/qa.mjs', 'smoke-urls', ...args.slice(1)]),
   };
 
   if (!handlers[subcommand]) {
@@ -379,53 +408,29 @@ function handleQa() {
 }
 
 function runAuditSubcommand(subcommand, passThrough) {
-  const scriptBySubcommand = {
-    schema: 'scripts/audit-schema-digest.mjs',
-    api: 'scripts/audit-api-surface.mjs',
-    fr: 'scripts/audit-fr-ledger.mjs',
-    tests: 'scripts/audit-test-coverage-map.mjs',
-    hotspots: 'scripts/audit-hotspots.mjs',
-    backlog: 'scripts/audit-backlog-ledger.mjs',
-    pvd: 'scripts/audit-promise-vs-delivery.mjs',
-  };
-
   if (subcommand === 'help') {
     console.log(
-      'Usage: node scripts/run.mjs audit <schema|api|fr|tests|hotspots|backlog|pvd|all> [options]',
+      'Usage: node scripts/run.mjs audit <schema|api|fr|tests|hotspots|backlog|pvd|live-data|all> [options]',
     );
     return 0;
   }
 
   if (subcommand === 'all') {
-    const hasBaseline = passThrough.some(
-      (value, index) =>
-        value === '--prev-round' ||
-        value.startsWith('--baseline=') ||
-        (value === '--baseline' && passThrough[index + 1]),
-    );
-    return runSequence([
-      () => runCommand(process.execPath, [scriptBySubcommand.schema, ...passThrough]),
-      () => runCommand(process.execPath, [scriptBySubcommand.api, ...passThrough]),
-      () => runCommand(process.execPath, [scriptBySubcommand.fr, ...passThrough]),
-      () => runCommand(process.execPath, [scriptBySubcommand.tests, ...passThrough]),
-      () =>
-        runCommand(process.execPath, [
-          scriptBySubcommand.hotspots,
-          ...(hasBaseline ? passThrough : [...passThrough, '--prev-round']),
-        ]),
-      () => runCommand(process.execPath, [scriptBySubcommand.pvd, ...passThrough]),
-    ]);
+    return runCommand(process.execPath, ['scripts/audit.mjs', 'all', ...passThrough]);
   }
 
-  const script = scriptBySubcommand[subcommand];
-  if (!script) {
+  if (
+    !['schema', 'api', 'fr', 'tests', 'hotspots', 'backlog', 'pvd', 'live-data'].includes(
+      subcommand,
+    )
+  ) {
     console.error(
-      '[audit] valid subcommands: help, schema, api, fr, tests, hotspots, backlog, pvd, all',
+      '[audit] valid subcommands: help, schema, api, fr, tests, hotspots, backlog, pvd, live-data, all',
     );
     return 1;
   }
 
-  return runCommand(process.execPath, [script, ...passThrough]);
+  return runCommand(process.execPath, ['scripts/audit.mjs', subcommand, ...passThrough]);
 }
 
 function handleAudit() {
@@ -436,22 +441,17 @@ function handleAuditAlias(subcommand) {
   return runAuditSubcommand(subcommand, args);
 }
 
-function handleEvidence() {
-  const subcommand = args[0] ?? 'check';
-  if (subcommand !== 'check') {
-    console.error('[evidence] valid subcommands: check');
-    return 1;
-  }
-  return runCommand(process.execPath, ['scripts/evidence-check.mjs']);
-}
-
 function handleGovernance() {
   const subcommand = args[0] ?? 'check';
   if (subcommand !== 'check') {
     console.error('[governance] valid subcommands: check');
     return 1;
   }
-  return runCommand(process.execPath, ['scripts/governance-validate.mjs']);
+  return runCommand(process.execPath, ['scripts/lib/governance/validate.mjs']);
+}
+
+function handleCheck() {
+  return runCommand(process.execPath, ['scripts/check.mjs', ...args]);
 }
 
 function handleHealth() {
@@ -463,7 +463,7 @@ function handleHealth() {
     'frontend/portal/src/main.ts',
     'backend/package.json',
     'database/sql/00-extensions.sql',
-    'docs/eng/64-alinhamento-banco-fase-1.md',
+    'docs/gov/evidence/database-alignment-phase-1.md',
     'infra/README.md',
     'infra/aws/README.md',
     'scripts/run.mjs',
@@ -471,7 +471,7 @@ function handleHealth() {
     'backend/src/main-esocial-worker.ts',
     'backend/src/main-report-worker.ts',
     'backend/src/main-report-service.ts',
-    'docs/gov/runtime-topology.json',
+    'docs/gov/generated/runtime-topology.json',
   ];
 
   const checks = requiredPaths.map((relativePath) => ({
@@ -559,9 +559,7 @@ function runEvidenceStepByName(stepName) {
     console.error(`[evidence] unknown step: ${stepName}`);
     return 1;
   }
-  const commandName =
-    step.command === 'npm' ? npm : step.command === 'node' ? process.execPath : step.command;
-  return runCommand(commandName, step.args);
+  return runCommand(step.command, step.args);
 }
 
 const handlers = {
@@ -576,12 +574,14 @@ const handlers = {
   typecheck: handleTypecheck,
   test: handleTest,
   db: handleDb,
+  check: handleCheck,
+  api: handleApi,
   qa: handleQa,
   audit: handleAudit,
-  evidence: handleEvidence,
   governance: handleGovernance,
   health: handleHealth,
   deploy: handleDeploy,
+  clean: () => runCommand(process.execPath, ['scripts/clean.mjs', ...args]),
   'audit:schema': () => handleAuditAlias('schema'),
   'audit:api': () => handleAuditAlias('api'),
   'audit:fr': () => handleAuditAlias('fr'),

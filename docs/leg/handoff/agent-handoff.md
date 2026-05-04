@@ -4,7 +4,7 @@ Generated: 2026-04-19
 Workspace root used: `/Users/aarusso/Downloads/sgp`
 Implementation root: repository root
 
-> 2026-05-03 refresh: this handoff is legacy evidence, not current acceptance authority. Current implementation authority is `docs/eng/`, with runtime topology in `docs/gov/runtime-topology.json`, npm workspace commands in `scripts/run.mjs`, and ADR-011 reconciled in `docs/eng/70-adrs.md`.
+> 2026-05-03 refresh: this handoff is legacy evidence, not current acceptance authority. Current implementation authority is `docs/eng/`, with runtime topology in `docs/gov/generated/runtime-topology.json`, npm workspace commands in `scripts/run.mjs`, and ADR-011 reconciled in `docs/eng/platform.md`.
 
 This document preserves the current implementation context so another agent can resume from a different desktop without relying on chat history.
 
@@ -101,7 +101,7 @@ Key files:
 - `backend/src/rh/workflows/rh-workflows.dto.ts`
 - `frontend/src/app/features/rh/pages/rh-home/*`
 - `frontend/src/app/features/rh/services/rh-workflows.ts`
-- `docs/eng/98-rh-workflows.md`
+- `docs/eng/domains/people-recruitment.md`
 
 Known RH gaps:
 
@@ -156,8 +156,8 @@ Frontend supports:
 
 Docs:
 
-- `docs/eng/98-audit-implementation.md`
-- `docs/eng/99-implementation-status.md`
+- `docs/eng/domains/operations-observability.md`
+- `docs/gov/evidence/implementation-status.md`
 
 Known audit gaps:
 

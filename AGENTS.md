@@ -15,21 +15,24 @@ specs, with a folia-first payroll engine and no legacy compatibility runtime.
 Authority order for SGP:
 
 1. `docs/eng/` owns product behavior, architecture, domain scope, acceptance,
-   ADRs, route alignment, database alignment, test strategy, and implementation
-   status.
+   ADRs, test strategy, and developer-facing regulatory facts.
 2. Payroll-engine implementation decisions are folia-first. Use
-   `docs/eng/71-folia-engine-reconciliation.md` and the folia-derived design
+   `docs/eng/domains/payroll-benefits.md` and the folia-derived design
    when reconciling payroll behavior.
 3. Source code and executable tests prove whether an accepted behavior is
    actually implemented.
-4. `docs/gov/` owns governance controls, runtime topology, health/preflight
-   rules, retained evidence manifests, and compliance readiness notes.
-5. `docs/user/` owns user and operator instructions.
-6. `docs/leg/sql-reference/` is legacy schema reference only.
-7. `docs/leg/` is legacy, reverse-engineered, inventory, audit-history, and
+4. `docs/gov/audit/` owns current status, compiled audit context, functional and
+   non-functional ledgers, inventories, diagnostics, and backlog status.
+5. `docs/gov/` owns governance controls, generated surfaces, runtime topology,
+   health/preflight rules, retained evidence, observability config, compliance
+   readiness notes, and reusable round prompts under `docs/gov/prompts/`.
+6. `docs/user/` owns user and operator instructions.
+7. `docs/leg/sql-reference/` is legacy schema reference only.
+8. `docs/leg/` is legacy, reverse-engineered, inventory, audit-history, and
    evidence archive material. It can inform analysis but cannot override
    `docs/eng/`.
-8. `docs/work/` is ignored scratch space for prompts, audits, inventories, logs,
+9. `docs/work/` is ignored scratch space for materialized per-round prompts,
+   audits, inventories, logs,
    and temporary reports. It is never acceptance authority.
 
 When sources conflict:
@@ -81,6 +84,8 @@ SGP is the host Plant for devai-style governance. Keep the boundary clear:
 - Host adapter: `devai.config.json`. It maps SGP paths and commands into the
   governance/control-plane model. It is not itself product semantics.
 - Retained governance evidence: `docs/gov/**`.
+- Current status and compiled context: `docs/gov/audit/**`.
+- Reusable round prompts: `docs/gov/prompts/**`.
 - Scratch evidence: `docs/work/**`.
 
 devai concepts must not be used to rewrite SGP semantics silently. Constructor
@@ -100,13 +105,16 @@ claims require explicit owner authorization and retained evidence.
 | `tests/backend/` | Backend e2e and Jest configuration surfaces. |
 | `tests/rls/` | Executable tenant/RLS isolation specs. |
 | `.github/workflows/` | Repository CI workflows using the canonical root commands. |
-| `docs/eng/` | Product, engineering, architecture, ADR, acceptance, alignment, and implementation-status authority. |
-| `docs/gov/` | Governance controls, runtime topology, health/preflight, compliance, audit, and observability evidence. |
+| `docs/eng/` | Product, engineering, architecture, ADR, acceptance, domain behavior, and developer-fact authority. |
+| `docs/gov/audit/` | Current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking. |
+| `docs/gov/generated/` | Machine-generated governance surfaces such as runtime topology, governance manifest, route alignment, and database alignment. |
+| `docs/gov/prompts/` | Reusable B0-B3 phase prompts for the measure-plan-execute-compare loop. |
+| `docs/gov/` | Governance controls, health/preflight, compliance, observability config, generated surfaces, retained evidence, and reusable prompts. |
 | `docs/user/` | User/operator setup, environment, testing, and runtime guidance. |
 | `docs/leg/` | Legacy and reverse-evidence archive. |
 | `docs/work/` | Ignored scratch for audits, prompts, inventories, and temporary working notes. |
 
-Runtime topology is tracked in `docs/gov/runtime-topology.json`. Keep runtime
+Runtime topology is tracked in `docs/gov/generated/runtime-topology.json`. Keep runtime
 names aligned with that file and root commands.
 
 ## 5. Backend Rails
@@ -157,7 +165,7 @@ DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test
   feature boundaries, OnPush/signals where established, and generated API
   clients over hand-rolled HTTP contracts.
 - Route guards, role/permission checks, API clients, and user-visible flows must
-  stay aligned with backend contracts and `docs/eng/50-arvore-menus.md`.
+  stay aligned with backend contracts and `docs/eng/experience.md`.
 - User-facing behavior changes require relevant tests and docs/user updates when
   operator instructions change.
 - Do not hardcode secrets, tenant IDs, production URLs, or credentials in UI
@@ -249,8 +257,11 @@ Before diagnosing script failures, inspect `scripts/run.mjs`,
 ## 9. Documentation Policy
 
 - Behavior changes update `docs/eng/`.
+- Current status, implementation ledgers, compiled context, and audit snapshots
+  update `docs/gov/audit/`.
 - Governance control, topology, compliance, health, audit, or observability
   changes update `docs/gov/`.
+- Reusable round-loop prompt changes update `docs/gov/prompts/`.
 - Operator or user workflow changes update `docs/user/`.
 - Legacy, reverse-engineered, old-spec, crawler, audit-history, inventory, and
   diagnostic material stays under `docs/leg/`.

@@ -11,19 +11,20 @@
   },
   "authoritativeDocs": [
     "docs/eng/README.md",
-    "docs/eng/40-divisao-modular.md",
-    "docs/eng/43-maquinas-estado.md",
-    "docs/eng/50-arvore-menus.md",
-    "docs/eng/60-catalogo-saidas-oficiais.md",
-    "docs/eng/62-estrategia-testes.md",
-    "docs/eng/63-guia-migracao-legado.md",
-    "docs/eng/71-folia-engine-reconciliation.md"
+    "docs/eng/product.md",
+    "docs/eng/platform.md",
+    "docs/eng/experience.md",
+    "docs/eng/quality-migration.md",
+    "docs/eng/domains/payroll-benefits.md",
+    "docs/eng/domains/fiscal-integrations.md",
+    "docs/eng/domains/time-attendance-sst.md",
+    "docs/eng/domains/privacy-transparency.md"
   ],
   "generatedSurfaces": [
-    "docs/eng/69-api-route-alignment.json",
-    "docs/eng/64-database-alignment-matrix.json",
-    "docs/gov/runtime-topology.json",
-    "docs/gov/governance-manifest.json"
+    "docs/gov/generated/api/route-alignment.json",
+    "docs/gov/generated/database/alignment-matrix.json",
+    "docs/gov/generated/runtime-topology.json",
+    "docs/gov/generated/governance-manifest.json"
   ],
   "hardFailGates": [
     {

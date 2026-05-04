@@ -111,7 +111,7 @@ run_wave_gate([...])
 
 - docs/gov/audit/functional-requisites.md
 - docs/gov/audit/diag/round-<n>/<relevant>.md
-- docs/ref/<relevant>/...
+- docs/refs/<relevant>/...
 - docs/work/round-<n>/01a-round-<n-1>-digest.md
 
 ````
@@ -134,7 +134,7 @@ For every backlog item, write docs/work/round-<n>/prompts/<wave>-R<n+1>-<id>-<sl
 <one paragraph>.
 
 ## Authoritative context — read first
-- docs/ref/<domain>/<file>.md        # regulatory anchor
+- docs/refs/<domain>/<file>.md       # regulatory anchor
 - docs/eng/<file>.md                 # product behavior anchor
 - docs/gov/audit/functional-requisites.md
 - docs/gov/audit/api-surface.md      # only when route work is involved
@@ -165,13 +165,13 @@ MAY <…>. MUST DEFER <…>.
 
 ### 5.1 Required prompt-header anchors
 
-- docs/ref/<domain>/... for every regulatory item.
+- docs/refs/<domain>/... for every regulatory item.
 - docs/gov/audit/{schema-digest,api-surface,functional-requisites}.md instead of source-walk instructions.
 - docs/work/round-<n>/01a-round-<n-1>-digest.md as the round-context handoff.
 
 ### 5.2 What worker prompts must NOT do
 
-- Re-fetch primary regulatory sources (use docs/ref/).
+- Re-fetch primary regulatory sources (use docs/refs/).
 - Re-walk full schema or API (use docs/gov/audit/).
 - Redetect ORM/test runner/workspace shape (state as known).
 - Hedge with if present — every parent path is known.
@@ -225,7 +225,7 @@ After all worker prompts written:
 - [ ] All sections in §3 are present in 00-orchestration-plan.md.
 - [ ] Wave-launch file count == wave count from §2.2 table.
 - [ ] Worker prompt count == backlog item count.
-- [ ] Every worker prompt cites docs/ref/ for regulatory work.
+- [ ] Every worker prompt cites docs/refs/ for regulatory work.
 - [ ] No worker prompt instructs re-walking the schema or API surface.
 - [ ] No if present anywhere in generated prompts.
 - [ ] Governance check passes.

@@ -10,7 +10,11 @@ This folder tracks governance controls and operational readiness for SGP v0.0.1.
 
 ## Files
 
-- `governance-manifest.json`: machine-readable governance inventory.
+- `generated/governance-manifest.json`: machine-readable governance inventory.
+- `generated/runtime-topology.json`: machine-readable runtime topology consumed by health checks.
+- `generated/api/route-alignment.json`: generated API route-contract surface.
+- `generated/database/alignment-matrix.json`: generated database alignment matrix.
+- `evidence/`: persistent implementation status, closure ledgers, and gate evidence.
 - `compliance/scoring.md`: current control scoring and known gaps.
 - `health/preflight.md`: preflight checks before deploy or migration.
 - `audit/README.md`: audit logging model and retention notes.

@@ -1,27 +1,35 @@
 ---
 name: sgp-round-backlog
-description: Convert an SGP round audit pack into a prioritized backlog, wave plan, orchestration prompt, wave launch prompts, worker prompts, and backlog index under docs/work/round-N/prompts. Use when the user asks to plan the next SGP round, materialize backlog, split work into waves, generate orchestrator/worker prompts, or prepare low/medium/high effort agent tasks from audit findings.
+description: Convert SGP docs/gov/audit status plus round scratch context into a prioritized backlog and materialized docs/work/round-N/prompts package using reusable docs/gov/prompts guidance. Use when the user asks to plan the next SGP round, materialize backlog, split work into waves, generate orchestrator/worker prompts, or prepare low/medium/high effort agent tasks from audit findings.
 ---
 
 # SGP Round Backlog
 
 ## Overview
 
-Turn the measurement artifacts from `docs/work/round-<n>/` into a next-round execution package. The package stays in scratch space, but each worker prompt must point back to authoritative `docs/eng/`, `docs/gov/`, and live source verification.
+Turn the measurement artifacts from `docs/work/round-<n>/` into a next-round execution package. The package stays in scratch space, but each worker prompt must point back to authoritative `docs/eng/`, current `docs/gov/audit/` context, reusable `docs/gov/prompts/`, and live source verification.
 
 ## SGP Invariants
 
 - `docs/work/**` is scratch context, not acceptance authority.
 - `docs/eng/` is authoritative for product behavior and acceptance.
-- `docs/gov/` owns governance controls, `docs/user/` owns operator/user instructions, and `docs/leg/` is legacy/archive evidence.
+- `docs/gov/audit/` owns current status and compiled context, `docs/gov/` owns governance controls and reusable prompts under `docs/gov/prompts/`, `docs/user/` owns operator/user instructions, and `docs/leg/` is legacy/archive evidence.
 - Do not add backward compatibility shims for v0.0.1.
 - Payroll engine decisions are folia-first. Stop for owner input on high-impact folia/spec conflicts.
 - Postpone real external-service tests unless the user overrides this. Use stubs, mocks, sandbox adapters, contract fixtures, or golden files for eSocial, ICP-Brasil, GovBR, TCEs, banking, SIAFIC, and similar integrations.
 
+## Current Docs Routing
+
+- `docs/eng/` is authoritative for product and engineering behavior, acceptance, and developer facts.
+- `docs/gov/audit/` holds current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.
+- `docs/gov/prompts/` holds reusable B0-B3 round prompts; materialized per-round outputs stay under `docs/work/round-<n>/`.
+- `docs/gov/` holds governance controls, generated surfaces, retained evidence, compliance, health, and observability.
+- `docs/work/**` is scratch and never acceptance authority.
+
 ## Workflow
 
 1. Locate the audit source:
-   - Use the user-specified `docs/work/round-<n>/` when provided.
+   - Use the user-specified `docs/work/round-<n>/` when provided, and pair it with current `docs/gov/audit/` ledgers.
    - Otherwise use the latest round with audit files and no completed next-round prompt package.
    - Verify live repo status, current HEAD, `AGENTS.md`, `package.json`, `scripts/run.mjs`, and existing `docs/work/round-*` conventions.
 2. Read the audit pack:

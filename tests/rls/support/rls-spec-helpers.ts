@@ -19,7 +19,7 @@ const workspaceRoot = resolve(__dirname, '../../..');
 const qualifiedIdentifierPattern = /\b[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*\b/g;
 
 function readDbSmokeScript(): string {
-  return readFileSync(resolve(workspaceRoot, 'scripts/db-bootstrap-smoke.mjs'), 'utf8');
+  return readFileSync(resolve(workspaceRoot, 'scripts/lib/db/bootstrap-smoke.mjs'), 'utf8');
 }
 
 function readCanonicalDatabaseSql(): string {

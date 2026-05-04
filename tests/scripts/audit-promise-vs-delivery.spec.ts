@@ -4,7 +4,7 @@ import {
   cleanupFixture,
   makeFixture,
   readMarkdownHeader,
-  runAuditScript,
+  runAuditCommand,
 } from './audit-test-helpers';
 
 describe('audit-promise-vs-delivery', () => {
@@ -16,7 +16,7 @@ describe('audit-promise-vs-delivery', () => {
 
   it('validates evidence paths for DONE rows and reports PARTIAL dimensions', async () => {
     fixtureRoot = await makeFixture('audit-promise-vs-delivery');
-    await runAuditScript('audit-promise-vs-delivery.mjs', fixtureRoot);
+    await runAuditCommand('pvd', fixtureRoot);
 
     await expect(
       readMarkdownHeader(join(fixtureRoot, 'out', 'diag', 'round-7', 'promise-vs-delivery.md')),

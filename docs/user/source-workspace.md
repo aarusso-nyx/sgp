@@ -9,7 +9,7 @@ Reverse-engineered documents live under `docs/leg/rev-eng` as evidence archive.
 
 - `docs/user/local-setup.md`: local bootstrap workflow and daily commands.
 - `docs/user/environment.md`: environment variable catalog and usage notes.
-- `docs/eng/99-implementation-status.md`: implemented slices and known parity gaps.
+- `docs/gov/evidence/implementation-status.md`: implemented slices and known parity gaps.
 - `docs/user/testing.md`: test and QA harness usage.
 
 ## Rules

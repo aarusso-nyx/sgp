@@ -9,6 +9,14 @@ description: Reproduce and fix SGP build or typecheck failures until build gates
 
 Run the live SGP typecheck/build gates, fix root causes in the smallest owned scope, and verify the relevant builds are clean.
 
+## Current Docs Routing
+
+- `docs/eng/` is authoritative for product and engineering behavior, acceptance, and developer facts.
+- `docs/gov/audit/` holds current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.
+- `docs/gov/prompts/` holds reusable B0-B3 round prompts; materialized per-round outputs stay under `docs/work/round-<n>/`.
+- `docs/gov/` holds governance controls, generated surfaces, retained evidence, compliance, health, and observability.
+- `docs/work/**` is scratch and never acceptance authority.
+
 ## Workflow
 
 1. Inspect:

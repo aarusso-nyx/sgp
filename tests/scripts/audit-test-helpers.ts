@@ -19,15 +19,16 @@ export async function cleanupFixture(path: string): Promise<void> {
   await rm(path, { force: true, recursive: true });
 }
 
-export async function runAuditScript(
-  scriptName: string,
+export async function runAuditCommand(
+  subcommand: string,
   fixtureRoot: string,
   args: string[] = [],
 ): Promise<{ stdout: string; stderr: string }> {
-  const scriptPath = join(repoRoot, 'scripts', scriptName);
+  const scriptPath = join(repoRoot, 'scripts', 'audit.mjs');
   const outputRoot = join(fixtureRoot, 'out');
   return execFile(process.execPath, [
     scriptPath,
+    subcommand,
     '--repo-root',
     fixtureRoot,
     '--output-root',

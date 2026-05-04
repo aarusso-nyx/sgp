@@ -1,0 +1,76 @@
+{
+  "version": 2,
+  "status": "implemented",
+  "controls": [
+    {
+      "id": "docs.authority.docs-eng",
+      "status": "implemented",
+      "evidence": "docs/eng/README.md"
+    },
+    {
+      "id": "engine.payroll.folia-precedence",
+      "status": "implemented",
+      "evidence": "docs/eng/domains/payroll-benefits.md"
+    },
+    {
+      "id": "code.naming.english-authoritative",
+      "status": "implemented",
+      "evidence": "GOVERNANCE.md"
+    },
+    {
+      "id": "runtime.no-compat-shim",
+      "status": "implemented",
+      "evidence": "docs/gov/evidence/database-alignment-phase-1.md"
+    },
+    {
+      "id": "archive.legacy.non-authoritative",
+      "status": "implemented",
+      "evidence": "docs/leg/rev-eng/README.md"
+    },
+    {
+      "id": "archive.deprecation.coverage-tracker",
+      "status": "implemented",
+      "evidence": "docs/leg/rev-eng/deprecation-status.md"
+    },
+    {
+      "id": "archive.reverse-evidence-succession",
+      "status": "implemented",
+      "evidence": "docs/eng/README.md"
+    },
+    {
+      "id": "tooling.node24-npm-workspace",
+      "status": "implemented",
+      "evidence": "package.json"
+    },
+    {
+      "id": "tooling.single-source-lockfile",
+      "status": "implemented",
+      "evidence": "package-lock.json"
+    },
+    {
+      "id": "ci.source-baseline",
+      "status": "implemented",
+      "evidence": ".github/workflows/source-ci.yml"
+    },
+    {
+      "id": "governance.devai-config",
+      "status": "implemented",
+      "evidence": "devai.config.json"
+    },
+    {
+      "id": "governance.runtime-topology",
+      "status": "implemented",
+      "evidence": "docs/gov/generated/runtime-topology.json"
+    },
+    {
+      "id": "observability.audit-coverage-dashboard",
+      "status": "implemented",
+      "evidence": "docs/gov/observability/audit-worker-dashboard.json"
+    },
+    {
+      "id": "observability.audit-worker-alerts",
+      "status": "implemented",
+      "evidence": "docs/gov/observability/audit-worker-alerts.yml"
+    }
+  ]
+}

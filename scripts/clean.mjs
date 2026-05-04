@@ -3,6 +3,8 @@ import { rm } from 'node:fs/promises';
 import { relative, resolve } from 'node:path';
 import process from 'node:process';
 
+import { parseArgs } from './lib/cli.mjs';
+
 const workspaceRoot = process.cwd();
 
 const targetGroups = {
@@ -50,9 +52,9 @@ const aliases = {
   frontend: ['frontend'],
 };
 
-const args = process.argv.slice(2);
-const dryRun = args.includes('--dry-run');
-const requestedTargets = args.filter((arg) => arg !== '--dry-run');
+const options = parseArgs(process.argv.slice(2), { booleanFlags: ['dry-run'] });
+const dryRun = Boolean(options['dry-run']);
+const requestedTargets = options._;
 const selectedTargets = requestedTargets.length === 0 ? ['all'] : requestedTargets;
 const selectedGroups = new Set();
 

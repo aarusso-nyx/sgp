@@ -17,7 +17,7 @@
 - Canonical DDL: database/sql/\*_/_.sql.
 - Informational Prisma surface: backend/prisma/schema.prisma.
 - Machine inventory seed: docs/gov/audit/inv/round-3/schema-digest.json.
-- Reused checks: scripts/check-db-fk-coverage.mjs; scripts/check-db-alignment.mjs --json; scripts/refresh-live-data-inventory.mjs output docs/work/round-3/live-data-inventory.md.
+- Reused checks: scripts/check-db.mjs fk-coverage check; scripts/check-db.mjs alignment check --json; scripts/audit.mjs live-data output docs/work/round-3/live-data-inventory.md.
 
 ## Summary
 

@@ -13,9 +13,17 @@ Close an SGP execution cycle with evidence. Separate verification from publicati
 
 - Preserve user and worker changes. Never revert unrelated changes without explicit instruction.
 - `docs/work/**` can provide scratch baseline and logs but is not acceptance authority.
-- Keep behavior changes reflected in `docs/eng/`, governance controls in `docs/gov/`, and operator guidance in `docs/user/`.
+- Keep behavior changes reflected in `docs/eng/`, current status and compiled context in `docs/gov/audit/`, governance controls and reusable prompts in `docs/gov/`, and operator guidance in `docs/user/`.
 - Do not normalize byte-sensitive regulatory/golden fixtures just to satisfy whitespace checks unless the relevant tests/specs require that change.
 - Use explicit user authorization for full-tree staging, merge to `main`, push, or PR creation.
+
+## Current Docs Routing
+
+- `docs/eng/` is authoritative for product and engineering behavior, acceptance, and developer facts.
+- `docs/gov/audit/` holds current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.
+- `docs/gov/prompts/` holds reusable B0-B3 round prompts; materialized per-round outputs stay under `docs/work/round-<n>/`.
+- `docs/gov/` holds governance controls, generated surfaces, retained evidence, compliance, health, and observability.
+- `docs/work/**` is scratch and never acceptance authority.
 
 ## Verification Workflow
 
@@ -26,7 +34,8 @@ Close an SGP execution cycle with evidence. Separate verification from publicati
    - `git remote -v`
    - `git branch --show-current`
    - Identify dirty files that are assistant/worker-owned vs unrelated.
-2. Read the relevant round files:
+2. Read the relevant round files and reusable prompt context:
+   - `docs/gov/prompts/`
    - `docs/work/round-<n>/prompts/00-orchestration-plan.md`
    - `ROUND*-INDEX.md`
    - wave launch file and worker summaries when present.

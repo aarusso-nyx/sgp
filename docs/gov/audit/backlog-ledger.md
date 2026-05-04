@@ -17,7 +17,7 @@
 - docs/work/round-1/12-round-2-backlog.md.
 - docs/work/round-2/prompts/ROUND3-INDEX.md.
 - docs/work/round-3/00-snapshot.md.
-- docs/eng/103-deferred-decision-ledger.md.
+- docs/gov/evidence/deferred-decision-ledger.md.
 
 ## Summary
 

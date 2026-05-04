@@ -4,7 +4,7 @@ import {
   cleanupFixture,
   makeFixture,
   readMarkdownHeader,
-  runAuditScript,
+  runAuditCommand,
 } from './audit-test-helpers';
 
 describe('audit-fr-ledger', () => {
@@ -16,14 +16,14 @@ describe('audit-fr-ledger', () => {
 
   it('refreshes the functional requisite ledger and delta', async () => {
     fixtureRoot = await makeFixture('audit-fr-ledger');
-    await runAuditScript('audit-fr-ledger.mjs', fixtureRoot);
+    await runAuditCommand('fr', fixtureRoot);
 
     await expect(readMarkdownHeader(join(fixtureRoot, 'out', 'functional-requisites.md'))).resolves
       .toMatchInlineSnapshot(`
       [
         "# Functional Requisites",
         "",
-        "Last refreshed from \`docs/eng/99-implementation-status.md\` for round 7.",
+        "Last refreshed from \`docs/gov/evidence/implementation-status.md\` for round 7.",
         "",
       ]
     `);

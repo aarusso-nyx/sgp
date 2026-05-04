@@ -14,6 +14,8 @@ import { promisify } from 'node:util';
 import { dirname, extname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { parseArgs as parseCliArgs } from './cli.mjs';
+
 const execFileAsync = promisify(execFile);
 
 const ignoredPathParts = new Set(['.git', 'node_modules', 'dist', 'coverage', '.angular']);
@@ -21,35 +23,7 @@ const generatedFormatExtensions = new Set(['.json', '.md']);
 const localRepoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 export function parseArgs(argv) {
-  const options = { _: [] };
-  for (let index = 0; index < argv.length; index += 1) {
-    const value = argv[index];
-    if (!value.startsWith('--')) {
-      options._.push(value);
-      continue;
-    }
-
-    const [rawName, inlineValue] = value.slice(2).split('=', 2);
-    const booleanFlags = new Set(['help', 'dry-run', 'prev-round', 'json']);
-    if (booleanFlags.has(rawName)) {
-      options[rawName] = inlineValue === undefined ? true : inlineValue !== 'false';
-      continue;
-    }
-
-    if (inlineValue !== undefined) {
-      options[rawName] = inlineValue;
-      continue;
-    }
-
-    const next = argv[index + 1];
-    if (next && !next.startsWith('--')) {
-      options[rawName] = next;
-      index += 1;
-    } else {
-      options[rawName] = true;
-    }
-  }
-  return options;
+  return parseCliArgs(argv, { booleanFlags: ['help', 'dry-run', 'prev-round', 'json'] });
 }
 
 export async function createContext(argv, usage) {

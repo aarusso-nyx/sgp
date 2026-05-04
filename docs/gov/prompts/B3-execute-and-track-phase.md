@@ -217,7 +217,7 @@ Otherwise keep moving — log and continue.
 - Preserve user/worker changes. Never git checkout/git reset/git restore an unrelated dirty file.
 - Use stubs/mocks/sandbox/golden fixtures for external services unless the user explicitly requests real-service tests (eSocial, ICP-Brasil, GovBR, TCEs, banking, SIAFIC).
 - Do not add v0.0.1 backward-compatibility shims.
-- Worker prompts already loaded docs/ref/ for regulatory anchors and docs/gov/audit/ for distilled audit input — do not re-fetch or re-walk.
+- Worker prompts already loaded docs/refs/ for regulatory anchors and docs/gov/audit/ for distilled audit input — do not re-fetch or re-walk.
 - All progress visible via MemPalace queries on round:<n+1>, phase:execute.
 
 ---
