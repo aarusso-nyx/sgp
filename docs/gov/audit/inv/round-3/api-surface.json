@@ -1,0 +1,4517 @@
+{
+  "checks": [
+    {
+      "name": "check-api-route-alignment",
+      "ok": true,
+      "status": 0,
+      "stderr": "",
+      "stdout": {
+        "counts": {
+          "admin_menu_implemented": 0,
+          "admin_menu_missing": 0,
+          "admin_menu_routes": 182,
+          "admin_menu_routes_postponed": 182,
+          "deferred_documented": 78,
+          "deferred_runtime": 106,
+          "documented": 488,
+          "documented_candidates_total": 707,
+          "documented_missing": 0,
+          "documented_outside_runtime": 141,
+          "documented_total": 566,
+          "domain_modules": 11,
+          "domain_modules_implemented": 11,
+          "explicitly_excluded": 0,
+          "implemented": 488,
+          "portal_menu_missing": 0,
+          "portal_menu_routes": 34,
+          "runtime": 488,
+          "runtime_only": 0,
+          "runtime_outside_families": 0,
+          "runtime_total": 594
+        },
+        "findings": [
+          {
+            "level": "ok",
+            "message": "Route contract authority is limited to docs/eng/ documents."
+          },
+          {
+            "level": "ok",
+            "message": "Documentation semantics exclude governance, user, legacy, and scratch docs from route authority."
+          },
+          {
+            "level": "ok",
+            "message": "Route alignment contains 488 documented routes."
+          },
+          {
+            "level": "ok",
+            "message": "All route statuses are valid."
+          },
+          {
+            "level": "ok",
+            "message": "All explicitly excluded routes are approved out-of-scope exceptions."
+          },
+          {
+            "level": "ok",
+            "message": "Runtime covers all documented routes."
+          },
+          {
+            "level": "ok",
+            "message": "Runtime exposes only documented routes."
+          },
+          {
+            "level": "ok",
+            "message": "All runtime routes are in canonical /api path families."
+          },
+          {
+            "level": "ok",
+            "message": "Domain/workflow alignment covers 11 current SGP domain modules."
+          },
+          {
+            "level": "ok",
+            "message": "Portal menu alignment covers 31 implemented route(s) and 3 postponed identity route(s)."
+          },
+          {
+            "level": "ok",
+            "message": "Admin menu parity is postponed under ADMIN_INSTALL_LATER."
+          }
+        ],
+        "ok": true
+      }
+    },
+    {
+      "name": "check-api-operation-decorators",
+      "ok": true,
+      "status": 0,
+      "stderr": "",
+      "stdout": "[api-operation] all controller route handlers declare @ApiOperation"
+    }
+  ],
+  "counts": {
+    "admin_menu_implemented": 0,
+    "admin_menu_missing": 0,
+    "admin_menu_routes": 182,
+    "admin_menu_routes_postponed": 182,
+    "deferred_documented": 78,
+    "deferred_runtime": 106,
+    "documented": 488,
+    "documented_candidates_total": 707,
+    "documented_missing": 0,
+    "documented_outside_runtime": 141,
+    "documented_total": 566,
+    "domain_modules": 11,
+    "domain_modules_implemented": 11,
+    "explicitly_excluded": 0,
+    "implemented": 488,
+    "portal_menu_missing": 0,
+    "portal_menu_routes": 34,
+    "runtime": 488,
+    "runtime_only": 0,
+    "runtime_outside_families": 0,
+    "runtime_total": 594
+  },
+  "generated_by": "scripts/audit-api-surface.mjs",
+  "round": "3",
+  "routes": [
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/arquivos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/convenios/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/dependentes-beneficio/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/exercicios/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/pensoes-alimenticias/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/vales-transporte/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/employees/:id/alimonies/:alimonyId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/esocial/certificados/:certificateId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/folha/rubrica/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/folhas/catalogos/:resource/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/folhas/contabilidade/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/master-data/:resource/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/ponto/biometria/employees/:employeeId/consent",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/ponto/face/employees/:employeeId/consent",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/recrutamento/banco-talentos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/recrutamento/biometria/candidatos/:candidatoId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/artifacts",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/rh/afastamentos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/rh/organic-definitions/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/rh/processos-funcao/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/rh/processos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/rh/professional-experiences/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "DELETE",
+      "path": "/api/v1/tce/layout-fields/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/external/v1/dados",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/external/v1/dicionario/entidades",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/publico/v1/:tenant/transparencia/folha",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/arquivos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/arquivos/:id/download",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/auditoria/exportacoes/:job_id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/auditoria/logs",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/auditoria/logs/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/career-plan",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/career-plan/:id/trilha",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/desempenhos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/estagio-probatorio/a-vencer",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/planos-cargos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/progression",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/progression/eligibility",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/progressoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/salary-history/:salaryRangeLevelId/timeline",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/avaliacao/simulacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/cargos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/consultas/batimento",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/consultas/business-days",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/consultas/dashboards",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/consultas/ficha-financeira",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/consultas/ficha-funcional",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/consultas/historico-operacional",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/consultas/pagamentos-bloqueados",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/consultas/relatorios-situacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/convenios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/dependentes-beneficio",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/exercicios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/pensoes-alimenticias",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/vales-transporte",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:id/alimonies",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:id/bank-accounts",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:id/consignment-loans",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/employees/:id/consignment-margin",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/certificados",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/eventos-trabalhador",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/events/excludable",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/exclusions",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/fechamento",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/folha-periodica",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/retornos/eventos/:eventId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/retornos/falhas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/submissoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/submissoes/circuitos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/tabelas-iniciais",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/esocial/trabalhadores",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ferias/saldo/:employee_id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folha/:id/remessa",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folha/contracheques/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folha/remessa",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folha/rubrica",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folha/rubrica/links/job-positions",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folhas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folhas/catalogos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folhas/catalogos/:resource",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folhas/contabilidade",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/folhas/mensal/revisao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/funcionarios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id/abono-permanencia",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id/dossie",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id/historico",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:id/tempo-servico",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/gestao/cargos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/gestao/cargos/:id/tabela-salarial",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/gestao/faixas-salariais",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/gestao/faixas-salariais/:salaryRangeId/niveis",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/health",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/health/ready",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/licencas/:employee_id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/licencas/saude/:employee_id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/master-data",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/master-data/:resource",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/notificacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/notificacoes/stream",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/notificacoes/unread-count",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/payroll-engine/health",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/payroll-engine/status",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/pericia/prontuarios/:id/laudo/pdf",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/afd/exports",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/afd/exports/:afdExportId/download",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/afd/imports",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/atribuicoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/banco-horas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/banco-horas/:hourBankId/movimentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/biometria/templates",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/atribuicoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/padroes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/proximas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/rosters",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/escalas/rosters/projetar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/face/employees/:employeeId/status",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/face/templates",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/face/threshold",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/jornadas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/justifications",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/marcacoes/:employeeId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/rep",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/rep/:repDeviceId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/rep/batches",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/ponto/rep/batches/:batchId/original",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/aso",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/aso/proximo",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/contracheque/:competence",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/contracheques/ferias",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/cadastro",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/cargo",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/contato",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/dependentes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/documentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/meus-dados/endereco",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/minha-carreira",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/payslips",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/payslips/:id/pdf",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/termos-rescisao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/yearly-income",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/portal/yearly-income/:year/pdf",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/aposentadorias",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/certidoes-tempo",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/compensacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/declaracoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/pensoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/recadastramentos/beneficiarios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/recadastramentos/campanhas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/recadastramentos/historico",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/recadastramentos/pendencias",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/regras",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/previdenciario/simulacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/public/lai/:tenantId/requests/:protocol/status",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/public/lgpd/encarregado",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/public/transparency/:tenantId/payroll",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/public/transparency/:tenantId/payroll.csv",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/publico/banca/verify/:token",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/publico/concursos/:slug",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/publico/concursos/:slug/classificacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/publico/inscricoes/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/publico/inscricoes/:id/notas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recadastramento/:recadastramento_id/comprovante",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/avaliacao/notas/inscricoes/:inscricaoId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/gabaritos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/avaliacao/provas/concursos/:concursoId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/avaliacao/recursos/provas/:provaId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/banca/concursos/:concursoId/membros",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/banco-talentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/banco-talentos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/concursos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/estagios/estagiarios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/estagios/programas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/recrutamento/prova-online/review/sessions/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/relatorios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/report-service/health",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/report-service/status",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/rh/afastamentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/rh/employee-transfer",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/rh/employee-transfer/employee/:employeeId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/rh/organic-definitions",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/rh/processos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/rh/processos-funcao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/rh/professional-experiences",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/acidentes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/acidentes/prazos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/aso",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/aso/painel/vencimentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/epi/entregas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/epi/inventario",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/exames",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/exposicoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/exposicoes/folha",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/ppp",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/programas/pcmso",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/saude/programas/pgr",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/adapters",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/adapters/:id/events",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/audesp-sp/submissions",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/audesp-sp/submissions/:id/envelope.xml",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/circuits",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/layouts/:id/fields",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/queue",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/queue/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/states",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/tce/states/:code/layouts",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "GET",
+      "path": "/api/v1/usuarios/me/preferencias-notificacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/arquivos/:anexo_id/confirmar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/arquivos/:id/confirmar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/avaliacao/career-plan/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/avaliacao/desempenhos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/avaliacao/planos-cargos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/convenios/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/dependentes-beneficio/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/exercicios/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/pensoes-alimenticias/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/vales-transporte/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/employees/:id/alimonies/:alimonyId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/folha/rubrica/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/folhas/:folha_id/status",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/folhas/catalogos/:resource/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/folhas/contabilidade/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/gestao/cargos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/master-data/:resource/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/notificacoes/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/notificacoes/marcar-todas-lidas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/pericia/agendamentos/:agendamento_id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/pericia/prontuarios/:prontuario_id/validar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/ponto/escalas/atribuicoes/:shiftAssignmentId",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/previdenciario/compensacoes/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/previdenciario/regras/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/banco-talentos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/candidatos/:candidato_id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/candidatos/:candidato_id_2",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/candidatos/:candidato_id_3",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/concluir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/encaminhar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/rh/afastamentos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/rh/organic-definitions/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/rh/processos-funcao/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/rh/processos/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/rh/professional-experiences/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/saude/acidentes/:id/comunicar-obito",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/saude/acidentes/:id/encerrar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/saude/acidentes/:id/reabrir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/saude/aso/:id/arquivar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/saude/aso/:id/realizacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/saude/exposicoes/:id",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/saude/programas/pcmso/:id/ativar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/saude/programas/pgr/:id/ativar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PATCH",
+      "path": "/api/v1/tce/layouts/:id/status",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/portal/v1/lgpd/direitos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/arquivos/presigned-upload",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/auditoria/exportacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/career-plan",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/ciclos/:periodo/relatorio",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/desempenhos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/desempenhos/:id/ficha",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/estagio-probatorio",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/planos-cargos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/progression/:id/apply",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/progression/simulate",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/progressoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/salary-history/reajuste-massa",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/avaliacao/simulacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/cargos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/convenios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/convites/:token/aceitar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/contribuicoes-sindicais",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/dependentes-beneficio",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/exercicios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/pensoes-alimenticias",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:employeeId/rh-workflows/vales-transporte",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:id/alimonies",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:id/bank-accounts",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:id/bank-accounts/:accountId/revalidate",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/employees/:id/consignment-loans",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/certificados",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2210/:catEmissionId/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2220/:asoRecordId/retry",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2230/:pendingId/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2240/:environmentalExposureId/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/eventos-trabalhador/s2299/:pendingId/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/events/:id/exclude",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/exclusions/:requestId/accept",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/fechamento/fechar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/fechamento/reabrir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/fechamento/totalizadores",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/folha-periodica/payments/:paymentBatchId/s1210/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/folha-periodica/runs/:payrollRunId/s1200/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/folha-periodica/runs/:payrollRunId/s1202/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/retornos/eventos/:eventId/retry",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/retornos/eventos/:eventId/tratado",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/submissoes/:batchId/retry",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/tabelas-iniciais/:eventKind/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/tabelas-iniciais/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/trabalhadores/:employeeId/s2200/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/esocial/trabalhadores/:employeeId/s2205/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ferias/programacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ferias/programacao/:id/aprovar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ferias/programacao/:id/cancelar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folha/:id/remessa",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folha/:id/retorno",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica/:id/preview",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica/:id/recompile",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica/compile",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folha/rubrica/links/job-positions",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folha/simulacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/adiantamentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/calcular",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/importar/lancamento-manual",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/importar/pensionista",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/importar/servidor",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_id/massa",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/:folha_rescisao_id/calcular",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/catalogos/:resource",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/contabilidade",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/decimo-terceiro/adiantamento",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/decimo-terceiro/fechamento",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/abrir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/aprovar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/fechar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/folhas/mensal/gerar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/funcionarios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/funcionarios/:func_rescisao/desligamento",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/funcionarios/:id/abono-permanencia",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/funcionarios/:id/desligamento",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/funcionarios/:id/tempo-servico",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/funcionarios/:id/vinculos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/funcionarios/cadastral-changes/:id/approve",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/funcionarios/cadastral-changes/:id/reject",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/gestao/cargos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/gestao/faixas-salariais",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/gestao/faixas-salariais/:salaryRangeId/niveis",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/gfip/gerar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/licencas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/licencas/:id/aprovar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/licencas/:id/cancelar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/licencas/saude/agendamento",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/master-data/:resource",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/payment/consignment-portability",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/payment/consignment-portability/:id/process",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/payment/return-files",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/payment/return-files/:id/reprocess-rejected",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/payroll-engine/calculations",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/pericia/agendamentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/pericia/agendamentos/:agendamento_id/parecer",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/pericia/prontuarios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/pericia/prontuarios/:prontuario_id/replicar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/afd/acjef",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/afd/afdt",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/afd/exports",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/afd/imports",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/atribuicoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas/acumular-dia",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas/ajuste-manual",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas/compensar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/banco-horas/zerar-vencidos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/biometria/consents",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/biometria/matches",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/biometria/templates",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/atribuicoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/padroes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/rosters",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/rosters/:dutyRosterId/publicar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/escalas/rosters/:dutyRosterId/travar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/face/clock",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/face/consents",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/face/matches",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/face/templates",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/folha/apply",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/folha/preview",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/jornadas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/justifications",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/justifications/:id/cancel",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/justifications/:id/decide",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/marcacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/mobile/clock",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/mobile/consents",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/mobile/devices",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/mobile/geofences",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/periodos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/rep",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/ponto/rep/:repDeviceId/batches",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/aposentadorias",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/certidoes-tempo",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/certidoes-tempo/:id/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/compensacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/declaracoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/declaracoes/:id/emitir",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/pensoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/provas-vida",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/atos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/beneficiarios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/campanhas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/convocacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/historico",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/recadastramentos/relatorios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/regras",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/atividade-risco-professor",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/idade-progressiva",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/pedagio-100",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/pedagio-50",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/simulacoes/ec103/pontos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/previdenciario/transferencia-siprev/exportar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/public/lai/:tenantId/requests",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/public/transparency/:tenantId/publish",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/publico/concursos/:slug/inscricoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/publico/inscricoes/:id/recursos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/provas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/gabaritos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/questoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/provas/:provaId/respostas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/avaliacao/recursos/:id/decisao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/banca/documentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/banca/documentos/:id/publicacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/banca/documentos/:id/signatures",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/banca/membros",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/banco-talentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/biometria/capturas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/biometria/consentimentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/biometria/matching",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/concursos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/concursos/:id/editais",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/concursos/:id/editais/publish",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/:id/desligar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/:id/esocial/s2300",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/:id/prorrogacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/estagiarios",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/estagios/programas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/review/sessions/:id/accept",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/review/sessions/:id/void",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/ai/audio",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/ai/frame",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/artifacts",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/events",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/prova-online/sessions/:id/submit",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/requisicoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/requisicoes/:id/candidatos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/recrutamento/requisicoes/:requisicao_id/candidatos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/report-service/poll",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/report-service/requests",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/afastamentos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/employee-transfer",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/employee-transfer/:id/aprovar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/employee-transfer/:id/cancelar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/employee-transfer/:id/efetivar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/organic-definitions",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/processos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/processos-funcao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/rh/professional-experiences",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/acidentes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/acidentes/:id/cat",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/aso",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/aso/:id/anexos",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/epi/entregas",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/epi/inventario",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/exames",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/exposicoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/ppp/gerar",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pcmso",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pcmso/:id/exames",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pcmso/:id/revisoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pgr",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pgr/:id/revisoes",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/adapters/:id/disable",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/adapters/:id/enable",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/audesp-sp/submissions",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/audesp-sp/submissions/:id/submit",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/audesp-sp/submissions/:id/validate",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/circuits/:adapter_id/:endpoint/reset",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/layout-fields",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/layouts",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "POST",
+      "path": "/api/v1/tce/queue/:id/replay",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PUT",
+      "path": "/api/v1/esocial/certificados/:certificateId/rotacao",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PUT",
+      "path": "/api/v1/ponto/face/threshold",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PUT",
+      "path": "/api/v1/portal/meus-dados/:section",
+      "status": "implemented",
+      "tag": "untagged"
+    },
+    {
+      "authority": null,
+      "controller": null,
+      "handler": null,
+      "method": "PUT",
+      "path": "/api/v1/usuarios/me/preferencias-notificacao",
+      "status": "implemented",
+      "tag": "untagged"
+    }
+  ],
+  "source": "docs/eng/69-api-route-alignment.json",
+  "tags": [
+    {
+      "excluded": 0,
+      "implemented": 488,
+      "tag": "untagged",
+      "total": 488
+    }
+  ]
+}

@@ -378,6 +378,64 @@ function handleQa() {
   return handlers[subcommand]();
 }
 
+function runAuditSubcommand(subcommand, passThrough) {
+  const scriptBySubcommand = {
+    schema: 'scripts/audit-schema-digest.mjs',
+    api: 'scripts/audit-api-surface.mjs',
+    fr: 'scripts/audit-fr-ledger.mjs',
+    tests: 'scripts/audit-test-coverage-map.mjs',
+    hotspots: 'scripts/audit-hotspots.mjs',
+    backlog: 'scripts/audit-backlog-ledger.mjs',
+    pvd: 'scripts/audit-promise-vs-delivery.mjs',
+  };
+
+  if (subcommand === 'help') {
+    console.log(
+      'Usage: node scripts/run.mjs audit <schema|api|fr|tests|hotspots|backlog|pvd|all> [options]',
+    );
+    return 0;
+  }
+
+  if (subcommand === 'all') {
+    const hasBaseline = passThrough.some(
+      (value, index) =>
+        value === '--prev-round' ||
+        value.startsWith('--baseline=') ||
+        (value === '--baseline' && passThrough[index + 1]),
+    );
+    return runSequence([
+      () => runCommand(process.execPath, [scriptBySubcommand.schema, ...passThrough]),
+      () => runCommand(process.execPath, [scriptBySubcommand.api, ...passThrough]),
+      () => runCommand(process.execPath, [scriptBySubcommand.fr, ...passThrough]),
+      () => runCommand(process.execPath, [scriptBySubcommand.tests, ...passThrough]),
+      () =>
+        runCommand(process.execPath, [
+          scriptBySubcommand.hotspots,
+          ...(hasBaseline ? passThrough : [...passThrough, '--prev-round']),
+        ]),
+      () => runCommand(process.execPath, [scriptBySubcommand.pvd, ...passThrough]),
+    ]);
+  }
+
+  const script = scriptBySubcommand[subcommand];
+  if (!script) {
+    console.error(
+      '[audit] valid subcommands: help, schema, api, fr, tests, hotspots, backlog, pvd, all',
+    );
+    return 1;
+  }
+
+  return runCommand(process.execPath, [script, ...passThrough]);
+}
+
+function handleAudit() {
+  return runAuditSubcommand(args[0] ?? 'help', args.slice(1));
+}
+
+function handleAuditAlias(subcommand) {
+  return runAuditSubcommand(subcommand, args);
+}
+
 function handleEvidence() {
   const subcommand = args[0] ?? 'check';
   if (subcommand !== 'check') {
@@ -519,10 +577,19 @@ const handlers = {
   test: handleTest,
   db: handleDb,
   qa: handleQa,
+  audit: handleAudit,
   evidence: handleEvidence,
   governance: handleGovernance,
   health: handleHealth,
   deploy: handleDeploy,
+  'audit:schema': () => handleAuditAlias('schema'),
+  'audit:api': () => handleAuditAlias('api'),
+  'audit:fr': () => handleAuditAlias('fr'),
+  'audit:tests': () => handleAuditAlias('tests'),
+  'audit:hotspots': () => handleAuditAlias('hotspots'),
+  'audit:backlog': () => handleAuditAlias('backlog'),
+  'audit:pvd': () => handleAuditAlias('pvd'),
+  'audit:all': () => handleAuditAlias('all'),
   'evidence-step': () => runEvidenceStepByName(args[0]),
 };
 

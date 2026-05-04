@@ -1,0 +1,23 @@
+{
+  "counts": {
+    "routes": 2,
+    "implemented": 1,
+    "explicitly_excluded": 1
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/people",
+      "status": "implemented",
+      "tag": "People",
+      "controller": "PeopleController",
+      "handler": "list"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/legacy",
+      "status": "explicitly_excluded",
+      "tag": "Legacy"
+    }
+  ]
+}

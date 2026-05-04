@@ -74,14 +74,23 @@ graph TD
 Os contratos Jest do backend ficam fora de `backend/package.json` para evitar
 drift de threshold ou transform:
 
-- `tests/backend/jest-unit.json`: specs unitários em `backend/src/**/*.spec.ts`.
+- `tests/backend/jest-unit.json`: specs unitários em `backend/src/**/*.spec.ts`
+  e specs de tooling em `tests/scripts/**/*.spec.ts`.
 - `tests/backend/jest-e2e.json`: specs e2e em `tests/backend/*.e2e-spec.ts`.
 - `tests/backend/jest-coverage.json`: cobertura canônica com `coverageProvider`
   `v8`, specs unitários e e2e cobertos, `coverageThreshold.global` de 85 %
   para `lines`, `branches` e `functions`, e reporters `lcov`,
   `text-summary` e `cobertura`.
 
-No pacote backend, `npm run test:backend` permanece restrito aos specs unitários em `src/**/*.spec.ts`. O gate canônico de cobertura do workspace é `npm run test:coverage`; ele delega para o `test:cov` do backend, executa os specs unitários e e2e cobertos, aplica limiares globais de 85 % para linhas, branches e funções, e coleta cobertura de runtime em `src/**/*.ts`. DTOs, controllers, modules, bootstrap/config e artefatos de metadados Nest/Swagger ficam fora do gate global de branches porque são verificados por contrato/e2e e geram branches instrumentados sem decisão de negócio.
+No pacote backend, `npm run test:backend` executa specs unitários em
+`backend/src/**/*.spec.ts` e os specs determinísticos de tooling em
+`tests/scripts/**/*.spec.ts`. O gate canônico de cobertura do workspace é
+`npm run test:coverage`; ele delega para o `test:cov` do backend, executa os
+specs unitários e e2e cobertos, aplica limiares globais de 85 % para linhas,
+branches e funções, e coleta cobertura de runtime em `src/**/*.ts`. DTOs,
+controllers, modules, bootstrap/config e artefatos de metadados Nest/Swagger
+ficam fora do gate global de branches porque são verificados por contrato/e2e e
+geram branches instrumentados sem decisão de negócio.
 
 No pacote frontend, `npm run test:frontend:coverage` é o gate canônico de cobertura Angular. Ele delega para `frontend` e executa `sgp-admin` e `sgp-portal` com Vitest/V8, reporters `text-summary`, `json-summary` e `lcov`, e limiares de ratchet por aplicação em `frontend/angular.json`. O baseline inicial não exclui código ativo de forma ampla: `sgp-admin` exige 31 % statements, 35 % branches, 16 % functions e 31 % lines; `sgp-portal` exige 40 % statements, 44 % branches, 37 % functions e 42 % lines. O root declara `jsdom` como dependência de desenvolvimento porque o workspace npm hoista o Vitest usado pelo builder Angular para a raiz; sem essa resolução explícita, o ambiente jsdom falha de forma dependente do layout de `node_modules`.
 
