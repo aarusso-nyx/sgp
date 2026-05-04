@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { ESocialCertificate, ESocialCertificatesService } from './esocial-certificates.service';
 
@@ -13,10 +13,9 @@ import { ESocialCertificate, ESocialCertificatesService } from './esocial-certif
   templateUrl: './esocial-certificados.html',
   styleUrl: './esocial-certificados.scss',
 })
-export class ESocialCertificados implements OnInit, OnDestroy {
+export class ESocialCertificados implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly certificatesService = inject(ESocialCertificatesService);
-  private readonly destroy$ = new Subject<void>();
   private pkcs12Base64 = '';
   rotatingCertificateId = '';
   certificates: ESocialCertificate[] = [];
@@ -31,27 +30,19 @@ export class ESocialCertificados implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.error = '';
-    this.certificatesService
-      .list()
-      .pipe(
-        finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (certificates) => (this.certificates = certificates),
-        error: () => (this.error = 'Nao foi possivel carregar os certificados.'),
-      });
+    try {
+      this.certificates = await firstValueFrom(this.certificatesService.list());
+    } catch {
+      this.error = 'Nao foi possivel carregar os certificados.';
+    } finally {
+      this.loading = false;
+    }
   }
 
   selectFile(event: Event): void {
@@ -82,7 +73,7 @@ export class ESocialCertificados implements OnInit, OnDestroy {
     this.pkcs12Base64 = '';
   }
 
-  submit(): void {
+  async submit(): Promise<void> {
     if (this.form.invalid || !this.pkcs12Base64) {
       this.error = 'Informe alias, tipo e arquivo PKCS#12.';
       return;
@@ -101,17 +92,14 @@ export class ESocialCertificados implements OnInit, OnDestroy {
       ? this.certificatesService.rotate(this.rotatingCertificateId, payload)
       : this.certificatesService.upload(payload);
 
-    request
-      .pipe(
-        finalize(() => (this.saving = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => {
-          this.cancelRotation();
-          this.load();
-        },
-        error: () => (this.error = 'Nao foi possivel salvar o certificado.'),
-      });
+    try {
+      await firstValueFrom(request);
+      this.cancelRotation();
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel salvar o certificado.';
+    } finally {
+      this.saving = false;
+    }
   }
 }

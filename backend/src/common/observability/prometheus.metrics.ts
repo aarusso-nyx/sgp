@@ -257,6 +257,27 @@ export const dctfwebTransmissionsTotal = prometheusRegistry.register(
   ),
 );
 
+export const payrollOperationsTotal = prometheusRegistry.register(
+  new Counter(
+    'sgp_payroll_operations_total',
+    'Payroll operations by operation name and status.',
+  ),
+);
+
+export const workerPollsTotal = prometheusRegistry.register(
+  new Counter(
+    'sgp_worker_polls_total',
+    'Worker poll attempts by worker and status.',
+  ),
+);
+
+export const workerPollDurationSeconds = prometheusRegistry.register(
+  new Histogram(
+    'sgp_worker_poll_duration_seconds',
+    'Worker poll duration by worker and status.',
+  ),
+);
+
 export function recordQueueDepth(queue: string, depth: number): void {
   queueDepth.set({ queue }, depth);
 }
@@ -281,6 +302,23 @@ export function recordEsocialSubmission(
 
 export function recordDctfwebTransmission(status: string): void {
   dctfwebTransmissionsTotal.increment({ status });
+}
+
+export function recordPayrollOperation(
+  operation: string,
+  status: string,
+): void {
+  payrollOperationsTotal.increment({ operation, status });
+}
+
+export function recordWorkerPoll(
+  worker: string,
+  status: string,
+  durationSeconds: number,
+): void {
+  const labels = { worker, status };
+  workerPollsTotal.increment(labels);
+  workerPollDurationSeconds.observe(labels, durationSeconds);
 }
 
 export function configurePrometheusMetricsEntrypoint(

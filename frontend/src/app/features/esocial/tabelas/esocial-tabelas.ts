@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
 import {
   ESocialTabelasService,
@@ -19,9 +19,8 @@ const EVENT_KINDS: S1xxxEventKind[] = ['S-1000', 'S-1005', 'S-1010', 'S-1020', '
   templateUrl: './esocial-tabelas.html',
   styleUrl: './esocial-tabelas.scss',
 })
-export class ESocialTabelas implements OnInit, OnDestroy {
+export class ESocialTabelas implements OnInit {
   private readonly service = inject(ESocialTabelasService);
-  private readonly destroy$ = new Subject<void>();
   readonly eventKinds = EVENT_KINDS;
   statuses: S1xxxStatus[] = [];
   lastResults: S1xxxDispatchResult[] = [];
@@ -30,68 +29,47 @@ export class ESocialTabelas implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.error = '';
-    this.service
-      .status()
-      .pipe(
-        finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (statuses) => (this.statuses = statuses),
-        error: () => (this.error = 'Nao foi possivel carregar as tabelas iniciais.'),
-      });
+    try {
+      this.statuses = await firstValueFrom(this.service.status());
+    } catch {
+      this.error = 'Nao foi possivel carregar as tabelas iniciais.';
+    } finally {
+      this.loading = false;
+    }
   }
 
-  emitAll(): void {
-    this.emit('all');
-    this.service
-      .emitAll(true)
-      .pipe(
-        finalize(() => (this.emitting = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(this.resultObserver());
+  async emitAll(): Promise<void> {
+    await this.emit('all', () => this.service.emitAll(true));
   }
 
-  emitOne(eventKind: S1xxxEventKind): void {
-    this.emit(eventKind);
-    this.service
-      .emitOne(eventKind, true)
-      .pipe(
-        finalize(() => (this.emitting = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(this.resultObserver());
+  async emitOne(eventKind: S1xxxEventKind): Promise<void> {
+    await this.emit(eventKind, () => this.service.emitOne(eventKind, true));
   }
 
   statusFor(eventKind: S1xxxEventKind): S1xxxStatus | undefined {
     return this.statuses.find((status) => status.eventKind === eventKind);
   }
 
-  private emit(marker: string): void {
+  private async emit(
+    marker: string,
+    callback: () => ReturnType<ESocialTabelasService['emitAll']>,
+  ): Promise<void> {
     this.emitting = marker;
     this.error = '';
     this.lastResults = [];
-  }
-
-  private resultObserver() {
-    return {
-      next: (results: S1xxxDispatchResult[]) => {
-        this.lastResults = results;
-        this.load();
-      },
-      error: () => (this.error = 'Nao foi possivel emitir os deltas S-1xxx.'),
-    };
+    try {
+      this.lastResults = await firstValueFrom(callback());
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel emitir os deltas S-1xxx.';
+    } finally {
+      this.emitting = '';
+    }
   }
 }

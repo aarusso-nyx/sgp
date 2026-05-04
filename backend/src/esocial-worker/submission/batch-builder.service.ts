@@ -20,6 +20,8 @@ export interface SubmissionBatchWorkItem {
   environment: SubmissionEnvironment;
   endpointUrl: string;
   eventIds: string[];
+  eventTypes: string[];
+  eventXmlPayloads: string[];
   attempts: number;
   batchXml: string;
 }
@@ -282,6 +284,8 @@ export class BatchBuilderService {
       environment: batch.environment,
       endpointUrl: batch.endpoint_url,
       eventIds: batch.event_ids,
+      eventTypes: events.map((event) => event.event_type),
+      eventXmlPayloads: events.map((event) => event.xml_payload),
       attempts: batch.attempts,
       batchXml: this.buildBatchXml(events),
     };

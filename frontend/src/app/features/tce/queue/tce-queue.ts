@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 import {
   TceCircuitState,
@@ -45,71 +46,69 @@ export class TceQueue {
   readonly statuses = ['PENDING', 'LOCKED', 'SUCCEEDED', 'FAILED', 'RETRY', 'DEAD_LETTER'];
 
   constructor() {
-    this.load();
+    void this.load();
   }
 
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.errorMessage = '';
-    this.service
-      .list({
-        adapter: this.adapter.trim() || undefined,
-        stateCode: this.stateCode.trim() || undefined,
-        status: this.status || undefined,
-        competence: this.competence.trim() || undefined,
-      })
-      .subscribe({
-        next: (items) => {
-          this.jobs = items;
-          this.selected = this.keepSelection(items);
-          this.loading = false;
-        },
-        error: (error: unknown) => this.fail(error),
-      });
-    this.service.circuits().subscribe({
-      next: (items) => {
-        this.circuits = items;
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      const { jobs, circuits } = await firstValueFrom(
+        forkJoin({
+          jobs: this.service.list({
+            adapter: this.adapter.trim() || undefined,
+            stateCode: this.stateCode.trim() || undefined,
+            status: this.status || undefined,
+            competence: this.competence.trim() || undefined,
+          }),
+          circuits: this.service.circuits(),
+        }),
+      );
+      this.jobs = jobs;
+      this.selected = this.keepSelection(jobs);
+      this.circuits = circuits;
+      this.loading = false;
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  select(job: TceQueueJob): void {
+  async select(job: TceQueueJob): Promise<void> {
     this.busyId = job.id;
-    this.service.get(job.id).subscribe({
-      next: (details) => {
-        this.selected = details;
-        this.busyId = '';
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      this.selected = await firstValueFrom(this.service.get(job.id));
+      this.busyId = '';
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  replay(job: TceQueueJob): void {
+  async replay(job: TceQueueJob): Promise<void> {
     this.busyId = job.id;
-    this.service.replay(job.id).subscribe({
-      next: (updated) => {
-        this.upsert(updated);
-        this.busyId = '';
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      this.upsert(await firstValueFrom(this.service.replay(job.id)));
+      this.busyId = '';
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  reset(circuit: TceCircuitState): void {
+  async reset(circuit: TceCircuitState): Promise<void> {
     const key = `${circuit.adapterId}:${circuit.endpointUrl}`;
     this.busyId = key;
-    this.service.resetCircuit(circuit.adapterId, circuit.endpointUrl).subscribe({
-      next: (updated) => {
-        this.circuits = this.circuits.map((entry) =>
-          entry.adapterId === updated.adapterId && entry.endpointUrl === updated.endpointUrl
-            ? updated
-            : entry,
-        );
-        this.busyId = '';
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      const updated = await firstValueFrom(
+        this.service.resetCircuit(circuit.adapterId, circuit.endpointUrl),
+      );
+      this.circuits = this.circuits.map((entry) =>
+        entry.adapterId === updated.adapterId && entry.endpointUrl === updated.endpointUrl
+          ? updated
+          : entry,
+      );
+      this.busyId = '';
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
   canReplay(job: TceQueueJob): boolean {

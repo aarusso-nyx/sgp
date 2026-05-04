@@ -407,6 +407,29 @@ identity/banking columns from the live inventory:
 - `hr.employee_bank_account.holder_cpf` -> `hr.employee_bank_account.holder_cpf_cipher`
 - `hr.employee_dependent.cpf` -> `hr.employee_dependent.cpf_cipher`
 
+R4-20 completes the high/medium candidate set from the round-3 live inventory
+with ciphertext siblings for the remaining 19 CPF/CNPJ and contact columns:
+
+- `fiscal.dirf_beneficiario.cpf_cnpj` -> `fiscal.dirf_beneficiario.cpf_cnpj_cipher`
+- `hr.employee_alimony.beneficiary_cpf` -> `hr.employee_alimony.beneficiary_cpf_cipher`
+- `hr.employee_benefit_dependent.dependent_cpf` -> `hr.employee_benefit_dependent.dependent_cpf_cipher`
+- `hr.internship_record.intern_cpf` -> `hr.internship_record.intern_cpf_cipher`
+- `hr.legal_responsible.cpf` -> `hr.legal_responsible.cpf_cipher`
+- `hr.pension_grant.beneficiary_cpf` -> `hr.pension_grant.beneficiary_cpf_cipher`
+- `hr.service_provider.cpf_cnpj` -> `hr.service_provider.cpf_cnpj_cipher`
+- `public.user_account.cpf` -> `public.user_account.cpf_cipher`
+- `recrutamento.banca_membro.cpf` -> `recrutamento.banca_membro.cpf_cipher`
+- `recrutamento.candidato.cpf` -> `recrutamento.candidato.cpf_cipher`
+- `hr.employee.email` -> `hr.employee.email_cipher`
+- `hr.employee.phone` -> `hr.employee.phone_cipher`
+- `hr.employee_complement_data.emergency_contact` -> `hr.employee_complement_data.emergency_contact_cipher`
+- `hr.medical_appointment.contact_phone` -> `hr.medical_appointment.contact_phone_cipher`
+- `hr.service_provider.email` -> `hr.service_provider.email_cipher`
+- `hr.service_provider.phone` -> `hr.service_provider.phone_cipher`
+- `public.user_account.email` -> `public.user_account.email_cipher`
+- `recrutamento.candidato.email` -> `recrutamento.candidato.email_cipher`
+- `recrutamento.candidato.phone` -> `recrutamento.candidato.phone_cipher`
+
 The runtime supplies `SGP_PII_PGCRYPTO_KEY` and optional `SGP_PII_PGCRYPTO_KEY_ID`; the database session stores them as `app.pii_encryption_key` and `app.pii_encryption_key_id`. Decrypting views under `hr.v_*_pii_decrypted` preserve existing service contracts and append `PII_DECRYPT` audit events when ciphertext is decrypted.
 
 No destructive backfill is part of R2-206 or R3-032. Existing plaintext rows
@@ -417,6 +440,12 @@ covered plaintext columns populated for application compatibility while adding
 ciphertext siblings for new writes when a session key is present; if the key is
 absent, those non-destructive R3 fields keep plaintext and leave ciphertext
 empty rather than blocking seed/import workflows.
+
+R4-20 keeps the same non-destructive rule for the expanded batch. Existing rows
+are not bulk-updated, nullable plaintext columns are not tightened, and triggers
+encrypt only new writes or changed values when a session key is present. A future
+owner-approved backfill must define the freeze window, row-count parity evidence,
+key-retirement criteria, and rollback posture before plaintext retirement.
 
 ## LGPD treatment by public power
 

@@ -1,9 +1,81 @@
+CREATE TYPE lgpd.legal_basis_data_category AS ENUM (
+    'PERSONAL',
+    'SENSITIVE',
+    'MIXED'
+);
+
+CREATE TYPE lgpd.legal_basis_rule_status AS ENUM (
+    'ACTIVE',
+    'RETIRED'
+);
+
+CREATE TYPE lgpd.ropa_risk_level AS ENUM (
+    'LOW',
+    'MEDIUM',
+    'HIGH',
+    'CRITICAL'
+);
+
+CREATE TYPE lgpd.ropa_entry_status AS ENUM (
+    'ACTIVE',
+    'UNDER_REVIEW',
+    'RETIRED'
+);
+
+CREATE TYPE lgpd.public_power_treatment_status AS ENUM (
+    'REGISTERED',
+    'UNDER_REVIEW',
+    'SUSPENDED',
+    'RETIRED'
+);
+
+CREATE TYPE lgpd.data_subject_right_type AS ENUM (
+    'CONFIRMATION',
+    'ACCESS',
+    'CORRECTION',
+    'ANONYMIZATION_BLOCKING_DELETION',
+    'PORTABILITY',
+    'CONSENT_DELETION'
+);
+
+CREATE TYPE lgpd.data_subject_request_status AS ENUM (
+    'PENDING_TRIAGE',
+    'IN_PROGRESS',
+    'WAITING_CONTROLLER',
+    'ANSWERED',
+    'REJECTED',
+    'CANCELLED'
+);
+
+CREATE TYPE lgpd.data_subject_triage_outcome AS ENUM (
+    'PENDING',
+    'EXECUTABLE',
+    'RETENTION_RESTRICTED',
+    'LEGALLY_BLOCKED'
+);
+
+CREATE TYPE lgpd.security_incident_status AS ENUM (
+    'DETECTED',
+    'TRIAGED',
+    'REPORTED',
+    'COMPLEMENTED',
+    'CLOSED'
+);
+
+CREATE TYPE lgpd.security_incident_severity AS ENUM (
+    'LOW',
+    'MEDIUM',
+    'HIGH',
+    'CRITICAL'
+);
+
 CREATE TABLE lgpd.legal_basis_rule (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     flow_key text NOT NULL,
     flow_name text NOT NULL,
     controller_role text DEFAULT 'PUBLIC_AUTHORITY'::text NOT NULL,
-    data_category text NOT NULL,
+    -- R4-71: closed legal-basis data category converted from ANY ARRAY CHECK to enum.
+    data_category lgpd.legal_basis_data_category NOT NULL,
     legal_basis_code text NOT NULL,
     legal_basis_article text NOT NULL,
     sensitive_basis_code text,
@@ -18,17 +90,16 @@ CREATE TABLE lgpd.legal_basis_rule (
     requires_consent boolean DEFAULT false NOT NULL,
     requires_dpia boolean DEFAULT false NOT NULL,
     decision_record_anchor text NOT NULL,
-    status text DEFAULT 'ACTIVE'::text NOT NULL,
+    -- R4-71: closed legal-basis rule lifecycle converted from ANY ARRAY CHECK to enum.
+    status lgpd.legal_basis_rule_status DEFAULT 'ACTIVE'::lgpd.legal_basis_rule_status NOT NULL,
     effective_from date DEFAULT DATE '2026-05-02' NOT NULL,
     effective_until date,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT legal_basis_rule_pkey PRIMARY KEY (id),
-    CONSTRAINT legal_basis_rule_category_check CHECK (data_category = ANY (ARRAY['PERSONAL'::text, 'SENSITIVE'::text, 'MIXED'::text])),
-    CONSTRAINT legal_basis_rule_status_check CHECK (status = ANY (ARRAY['ACTIVE'::text, 'RETIRED'::text])),
     CONSTRAINT legal_basis_rule_sensitive_check CHECK (
-        (data_category = 'PERSONAL'::text AND sensitive_basis_code IS NULL AND sensitive_basis_article IS NULL)
-        OR (data_category <> 'PERSONAL'::text AND sensitive_basis_code IS NOT NULL AND sensitive_basis_article IS NOT NULL)
+        (data_category = 'PERSONAL'::lgpd.legal_basis_data_category AND sensitive_basis_code IS NULL AND sensitive_basis_article IS NULL)
+        OR (data_category <> 'PERSONAL'::lgpd.legal_basis_data_category AND sensitive_basis_code IS NOT NULL AND sensitive_basis_article IS NOT NULL)
     ),
     CONSTRAINT legal_basis_rule_validity_check CHECK (effective_until IS NULL OR effective_until >= effective_from)
 );
@@ -45,15 +116,15 @@ CREATE TABLE lgpd.ropa_entry (
     international_transfer boolean DEFAULT false NOT NULL,
     security_controls text[] DEFAULT ARRAY[]::text[] NOT NULL,
     lifecycle_evidence text[] DEFAULT ARRAY[]::text[] NOT NULL,
-    risk_level text DEFAULT 'MEDIUM'::text NOT NULL,
-    status text DEFAULT 'ACTIVE'::text NOT NULL,
+    -- R4-71: closed ROPA risk scale converted from ANY ARRAY CHECK to enum.
+    risk_level lgpd.ropa_risk_level DEFAULT 'MEDIUM'::lgpd.ropa_risk_level NOT NULL,
+    -- R4-71: closed ROPA lifecycle converted from ANY ARRAY CHECK to enum.
+    status lgpd.ropa_entry_status DEFAULT 'ACTIVE'::lgpd.ropa_entry_status NOT NULL,
     review_due_at date,
     notes text,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT ropa_entry_pkey PRIMARY KEY (id),
-    CONSTRAINT ropa_entry_risk_level_check CHECK (risk_level = ANY (ARRAY['LOW'::text, 'MEDIUM'::text, 'HIGH'::text, 'CRITICAL'::text])),
-    CONSTRAINT ropa_entry_status_check CHECK (status = ANY (ARRAY['ACTIVE'::text, 'UNDER_REVIEW'::text, 'RETIRED'::text]))
+    CONSTRAINT ropa_entry_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE lgpd.public_power_treatment (
@@ -66,14 +137,14 @@ CREATE TABLE lgpd.public_power_treatment (
     legal_basis_reference text NOT NULL,
     responsible_area text NOT NULL,
     evidence_refs text[] DEFAULT ARRAY[]::text[] NOT NULL,
-    status text DEFAULT 'REGISTERED'::text NOT NULL,
+    -- R4-71: closed public-power treatment lifecycle converted from ANY ARRAY CHECK to enum.
+    status lgpd.public_power_treatment_status DEFAULT 'REGISTERED'::lgpd.public_power_treatment_status NOT NULL,
     notes text,
     created_by_ref text,
     updated_by_ref text,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT public_power_treatment_pkey PRIMARY KEY (id),
-    CONSTRAINT public_power_treatment_status_check CHECK (status = ANY (ARRAY['REGISTERED'::text, 'UNDER_REVIEW'::text, 'SUSPENDED'::text, 'RETIRED'::text])),
     CONSTRAINT public_power_treatment_required_text_check CHECK (
         length(btrim(purpose)) > 0
         AND length(btrim(legal_basis_reference)) > 0
@@ -87,23 +158,23 @@ CREATE TABLE lgpd.data_subject_request (
     ropa_entry_id uuid NOT NULL,
     legal_basis_rule_id uuid NOT NULL,
     flow_key text NOT NULL,
-    right_type text NOT NULL,
-    status text DEFAULT 'PENDING_TRIAGE'::text NOT NULL,
+    -- R4-71: closed LGPD Art. 18 right type converted from ANY ARRAY CHECK to enum.
+    right_type lgpd.data_subject_right_type NOT NULL,
+    -- R4-71: closed data-subject request lifecycle converted from ANY ARRAY CHECK to enum.
+    status lgpd.data_subject_request_status DEFAULT 'PENDING_TRIAGE'::lgpd.data_subject_request_status NOT NULL,
     request_description text NOT NULL,
     requested_by_sub text NOT NULL,
     requested_by_login text NOT NULL,
     data_subject_employee_id uuid,
     sla_started_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     sla_due_at timestamp with time zone DEFAULT (CURRENT_TIMESTAMP + interval '90 days') NOT NULL,
-    triage_outcome text DEFAULT 'PENDING'::text NOT NULL,
+    -- R4-71: closed triage outcome set converted from ANY ARRAY CHECK to enum.
+    triage_outcome lgpd.data_subject_triage_outcome DEFAULT 'PENDING'::lgpd.data_subject_triage_outcome NOT NULL,
     retention_rule_snapshot text NOT NULL,
     sharing_scope_snapshot text NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT data_subject_request_pkey PRIMARY KEY (id),
-    CONSTRAINT data_subject_request_right_type_check CHECK (right_type = ANY (ARRAY['CONFIRMATION'::text, 'ACCESS'::text, 'CORRECTION'::text, 'ANONYMIZATION_BLOCKING_DELETION'::text, 'PORTABILITY'::text, 'CONSENT_DELETION'::text])),
-    CONSTRAINT data_subject_request_status_check CHECK (status = ANY (ARRAY['PENDING_TRIAGE'::text, 'IN_PROGRESS'::text, 'WAITING_CONTROLLER'::text, 'ANSWERED'::text, 'REJECTED'::text, 'CANCELLED'::text])),
-    CONSTRAINT data_subject_request_triage_outcome_check CHECK (triage_outcome = ANY (ARRAY['PENDING'::text, 'EXECUTABLE'::text, 'RETENTION_RESTRICTED'::text, 'LEGALLY_BLOCKED'::text]))
+    CONSTRAINT data_subject_request_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE lgpd.security_incident (
@@ -112,8 +183,10 @@ CREATE TABLE lgpd.security_incident (
     ropa_entry_id uuid,
     legal_basis_rule_id uuid,
     flow_key text,
-    status text DEFAULT 'DETECTED'::text NOT NULL,
-    severity text DEFAULT 'MEDIUM'::text NOT NULL,
+    -- R4-71: closed RCIS lifecycle converted from ANY ARRAY CHECK to enum.
+    status lgpd.security_incident_status DEFAULT 'DETECTED'::lgpd.security_incident_status NOT NULL,
+    -- R4-71: closed RCIS severity scale converted from ANY ARRAY CHECK to enum.
+    severity lgpd.security_incident_severity DEFAULT 'MEDIUM'::lgpd.security_incident_severity NOT NULL,
     summary text NOT NULL,
     detected_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     personal_data_confirmed_at timestamp with time zone,
@@ -144,19 +217,17 @@ CREATE TABLE lgpd.security_incident (
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT security_incident_pkey PRIMARY KEY (id),
-    CONSTRAINT security_incident_status_check CHECK (status = ANY (ARRAY['DETECTED'::text, 'TRIAGED'::text, 'REPORTED'::text, 'COMPLEMENTED'::text, 'CLOSED'::text])),
-    CONSTRAINT security_incident_severity_check CHECK (severity = ANY (ARRAY['LOW'::text, 'MEDIUM'::text, 'HIGH'::text, 'CRITICAL'::text])),
     CONSTRAINT security_incident_estimates_check CHECK (
         (affected_subjects_estimate IS NULL OR affected_subjects_estimate >= 0)
         AND (affected_children_estimate IS NULL OR affected_children_estimate >= 0)
         AND (affected_elderly_estimate IS NULL OR affected_elderly_estimate >= 0)
     ),
     CONSTRAINT security_incident_reported_check CHECK (
-        status NOT IN ('REPORTED'::text, 'COMPLEMENTED'::text, 'CLOSED'::text)
+        status NOT IN ('REPORTED'::lgpd.security_incident_status, 'COMPLEMENTED'::lgpd.security_incident_status, 'CLOSED'::lgpd.security_incident_status)
         OR (anpd_reported_at IS NOT NULL AND complement_due_at IS NOT NULL)
     ),
     CONSTRAINT security_incident_complemented_check CHECK (
-        status NOT IN ('COMPLEMENTED'::text, 'CLOSED'::text)
+        status NOT IN ('COMPLEMENTED'::lgpd.security_incident_status, 'CLOSED'::lgpd.security_incident_status)
         OR complemented_at IS NOT NULL
     )
 );

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -25,10 +25,9 @@ interface PppRecord {
   templateUrl: './ppp.html',
   styleUrl: './ppp.scss',
 })
-export class SaudePpp implements OnInit, OnDestroy {
+export class SaudePpp implements OnInit {
   private readonly api = inject(ApiClient);
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
   readonly form = this.formBuilder.group({
     employeeId: ['', [Validators.required]],
@@ -41,34 +40,26 @@ export class SaudePpp implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  async load(): Promise<void> {
+    this.rows = await firstValueFrom(this.api.get<PppRecord[]>('v1/saude/ppp'));
   }
 
-  load(): void {
-    this.api
-      .get<PppRecord[]>('v1/saude/ppp')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((rows) => (this.rows = rows));
-  }
-
-  generate(): void {
+  async generate(): Promise<void> {
     if (this.form.invalid) return this.form.markAllAsTouched();
     this.saving = true;
     this.error = '';
-    this.api
-      .post<PppRecord, Record<string, unknown>>('v1/saude/ppp/gerar', this.form.value)
-      .pipe(
-        finalize(() => (this.saving = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => this.load(),
-        error: () => (this.error = 'Nao foi possivel gerar o PPP.'),
-      });
+    try {
+      await firstValueFrom(
+        this.api.post<PppRecord, Record<string, unknown>>('v1/saude/ppp/gerar', this.form.value),
+      );
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel gerar o PPP.';
+    } finally {
+      this.saving = false;
+    }
   }
 }

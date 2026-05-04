@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -22,10 +22,9 @@ interface PcmsoProgram {
   templateUrl: './pcmso.html',
   styleUrl: './pcmso.scss',
 })
-export class SaudePcmso implements OnDestroy {
+export class SaudePcmso {
   private readonly api = inject(ApiClient);
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
   readonly form = this.formBuilder.group({
     workLocationId: ['', [Validators.required]],
@@ -45,52 +44,46 @@ export class SaudePcmso implements OnDestroy {
   programs: PcmsoProgram[] = [];
   saving = false;
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  async load(): Promise<void> {
+    this.programs = await firstValueFrom(this.api.get<PcmsoProgram[]>('v1/saude/programas/pcmso'));
   }
 
-  load(): void {
-    this.api
-      .get<PcmsoProgram[]>('v1/saude/programas/pcmso')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((programs) => {
-        this.programs = programs;
-      });
-  }
-
-  create(): void {
+  async create(): Promise<void> {
     if (this.form.invalid) return this.form.markAllAsTouched();
     this.saving = true;
-    this.api
-      .post<PcmsoProgram, Record<string, unknown>>('v1/saude/programas/pcmso', this.form.value)
-      .pipe(
-        finalize(() => (this.saving = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((program) => {
-        this.programs = [program, ...this.programs];
-        this.examForm.patchValue({ healthProgramId: program.id });
-      });
+    try {
+      const program = await firstValueFrom(
+        this.api.post<PcmsoProgram, Record<string, unknown>>(
+          'v1/saude/programas/pcmso',
+          this.form.value,
+        ),
+      );
+      this.programs = [program, ...this.programs];
+      this.examForm.patchValue({ healthProgramId: program.id });
+    } finally {
+      this.saving = false;
+    }
   }
 
-  activate(program: PcmsoProgram): void {
-    this.api
-      .patch<PcmsoProgram, Record<string, never>>(
+  async activate(program: PcmsoProgram): Promise<void> {
+    await firstValueFrom(
+      this.api.patch<PcmsoProgram, Record<string, never>>(
         `v1/saude/programas/pcmso/${program.id}/ativar`,
         {},
-      )
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.load());
+      ),
+    );
+    await this.load();
   }
 
-  addExam(): void {
+  async addExam(): Promise<void> {
     if (this.examForm.invalid) return this.examForm.markAllAsTouched();
     const id = String(this.examForm.value['healthProgramId']);
     const payload = { ...this.examForm.value, healthProgramId: undefined };
-    this.api
-      .post<unknown, Record<string, unknown>>(`v1/saude/programas/pcmso/${id}/exames`, payload)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
+    await firstValueFrom(
+      this.api.post<unknown, Record<string, unknown>>(
+        `v1/saude/programas/pcmso/${id}/exames`,
+        payload,
+      ),
+    );
   }
 }

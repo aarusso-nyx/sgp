@@ -20,9 +20,18 @@ const pollOnce = jest.fn(async () => ({
 const backpressureStatus = jest.fn(async () => ({
   activeClaims: 0,
   capacity: 1,
+  limit: 1,
   queueDepth: 0,
   skipped: false,
 }));
+const schedulerRunOnce = jest.fn(async () => {
+  const backpressure = await backpressureStatus();
+  if (!backpressure.skipped) {
+    await pollOnce(backpressure.limit);
+  }
+});
+const schedulerStart = jest.fn(async () => undefined);
+const schedulerStop = jest.fn();
 const create = jest.fn(async () => fakeApp());
 const createApplicationContext = jest.fn(async () => fakeApp());
 
@@ -52,6 +61,9 @@ describe('backend entrypoint smoke coverage', () => {
     jest.clearAllMocks();
     pollOnce.mockClear();
     backpressureStatus.mockClear();
+    schedulerRunOnce.mockClear();
+    schedulerStart.mockClear();
+    schedulerStop.mockClear();
     process.env.NODE_ENV = 'test';
     process.env.ESOCIAL_WORKER_ONESHOT = 'true';
     process.env.INTEGRATIONS_WORKER_ONESHOT = 'true';
@@ -100,6 +112,9 @@ function fakeApp(): FakeApp {
     enableCors: jest.fn(),
     get: jest.fn((token: unknown) => {
       if (token === Logger) return { logger: 'pino' };
+      if (providerName(token) === 'WorkerPollSchedulerService') {
+        return fakeScheduler();
+      }
       return { backpressureStatus, pollOnce };
     }),
     getHttpAdapter: jest.fn(() => ({
@@ -118,4 +133,19 @@ const createdApps: FakeApp[] = [];
 
 function lastCreatedApp(): FakeApp {
   return createdApps[createdApps.length - 1]!;
+}
+
+function fakeScheduler() {
+  return {
+    get oneshot() {
+      return true;
+    },
+    runOnce: schedulerRunOnce,
+    start: schedulerStart,
+    stop: schedulerStop,
+  };
+}
+
+function providerName(token: unknown): string | undefined {
+  return typeof token === 'function' ? token.name : undefined;
 }

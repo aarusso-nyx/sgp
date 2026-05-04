@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -26,10 +26,9 @@ interface AsoRecord {
   templateUrl: './aso.html',
   styleUrl: './aso.scss',
 })
-export class SaudeAso implements OnDestroy {
+export class SaudeAso {
   private readonly api = inject(ApiClient);
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
   readonly scheduleForm = this.formBuilder.group({
     employeeId: ['', [Validators.required]],
@@ -57,29 +56,20 @@ export class SaudeAso implements OnDestroy {
   dueSoon: AsoRecord[] = [];
   saving = false;
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
-    this.api
-      .get<AsoRecord[]>('v1/saude/aso')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((records) => {
-        this.records = records;
-      });
-    this.api
-      .get<AsoRecord[]>('v1/saude/aso/painel/vencimentos')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((records) => {
-        this.dueSoon = records;
-      });
+  async load(): Promise<void> {
+    const { records, dueSoon } = await firstValueFrom(
+      forkJoin({
+        records: this.api.get<AsoRecord[]>('v1/saude/aso'),
+        dueSoon: this.api.get<AsoRecord[]>('v1/saude/aso/painel/vencimentos'),
+      }),
+    );
+    this.records = records;
+    this.dueSoon = dueSoon;
   }
 
   schedule(): void {
     if (this.scheduleForm.invalid) return this.scheduleForm.markAllAsTouched();
-    this.save<AsoRecord>('v1/saude/aso', this.scheduleForm.value, (record) => {
+    void this.save<AsoRecord>('v1/saude/aso', this.scheduleForm.value, (record) => {
       this.records = [record, ...this.records];
       this.performForm.patchValue({ asoId: record.id });
       this.attachmentForm.patchValue({ asoId: record.id });
@@ -90,7 +80,7 @@ export class SaudeAso implements OnDestroy {
     if (this.performForm.invalid) return this.performForm.markAllAsTouched();
     const asoId = String(this.performForm.value['asoId']);
     const payload = { ...this.performForm.value, asoId: undefined };
-    this.patch<AsoRecord>(`v1/saude/aso/${asoId}/realizacao`, payload, (record) => {
+    void this.patch<AsoRecord>(`v1/saude/aso/${asoId}/realizacao`, payload, (record) => {
       this.records = this.records.map((item) => (item.id === record.id ? record : item));
     });
   }
@@ -99,38 +89,38 @@ export class SaudeAso implements OnDestroy {
     if (this.attachmentForm.invalid) return this.attachmentForm.markAllAsTouched();
     const asoId = String(this.attachmentForm.value['asoId']);
     const payload = { ...this.attachmentForm.value, asoId: undefined };
-    this.save<unknown>(`v1/saude/aso/${asoId}/anexos`, payload, () => this.load());
+    void this.save<unknown>(`v1/saude/aso/${asoId}/anexos`, payload, () => void this.load());
   }
 
   archive(record: AsoRecord): void {
-    this.patch<AsoRecord>(`v1/saude/aso/${record.id}/arquivar`, {}, (updated) => {
+    void this.patch<AsoRecord>(`v1/saude/aso/${record.id}/arquivar`, {}, (updated) => {
       this.records = this.records.map((item) => (item.id === updated.id ? updated : item));
     });
   }
 
-  private save<T>(path: string, payload: Record<string, unknown>, next: (value: T) => void): void {
+  private async save<T>(
+    path: string,
+    payload: Record<string, unknown>,
+    next: (value: T) => void,
+  ): Promise<void> {
     this.saving = true;
-    this.api
-      .post<T, Record<string, unknown>>(path, payload)
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(next);
+    try {
+      next(await firstValueFrom(this.api.post<T, Record<string, unknown>>(path, payload)));
+    } finally {
+      this.saving = false;
+    }
   }
 
-  private patch<T>(path: string, payload: Record<string, unknown>, next: (value: T) => void): void {
+  private async patch<T>(
+    path: string,
+    payload: Record<string, unknown>,
+    next: (value: T) => void,
+  ): Promise<void> {
     this.saving = true;
-    this.api
-      .patch<T, Record<string, unknown>>(path, payload)
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(next);
+    try {
+      next(await firstValueFrom(this.api.patch<T, Record<string, unknown>>(path, payload)));
+    } finally {
+      this.saving = false;
+    }
   }
 }

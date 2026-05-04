@@ -13,6 +13,14 @@ import {
   writeText,
 } from '../audit-utils.mjs';
 
+// Hotspots intentionally exclude cached regulatory references and regenerated JSON artefacts:
+// docs/refs/**, frontend/**/openapi-*.json, and docs/gov/audit/inv/round-*/*.json.
+const HOTSPOTS_EXCLUDED_PATHS = [
+  /^docs\/refs(?:\/|$)/,
+  /^frontend\/(?:.*\/)?openapi-[^/]+\.json$/,
+  /^docs\/gov\/audit\/inv\/round-[^/]+\/[^/]+\.json$/,
+];
+
 const usage = `
 Usage: node scripts/audit.mjs hotspots (--baseline <sha> | --prev-round) [--round <n>] [--dry-run] [--output-root <path>] [--repo-root <path>]
 
@@ -54,6 +62,7 @@ export async function buildHotspots(repoRoot, round, baseline) {
       const match = /^(?<added>-|\d+)\s+(?<deleted>-|\d+)\s+(?<file>.+)$/.exec(line);
       if (!match) continue;
       const file = match.groups.file;
+      if (isHotspotsExcludedPath(file)) continue;
       const entry = stats.get(file) ?? { file, commits: new Set(), added: 0, deleted: 0 };
       if (currentCommit) entry.commits.add(currentCommit);
       entry.added += match.groups.added === '-' ? 0 : Number(match.groups.added);
@@ -81,6 +90,11 @@ export async function buildHotspots(repoRoot, round, baseline) {
     range,
     top: rows.slice(0, 30),
   };
+}
+
+function isHotspotsExcludedPath(file) {
+  const normalized = file.replace(/\\/g, '/');
+  return HOTSPOTS_EXCLUDED_PATHS.some((pattern) => pattern.test(normalized));
 }
 
 async function resolveBaseline(ctx) {

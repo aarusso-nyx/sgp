@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { firstValueFrom } from 'rxjs';
 
 import {
   GpsPaymentCode,
@@ -55,47 +56,48 @@ export class FiscalGpsResidual implements OnInit {
   errorMessage = '';
 
   ngOnInit(): void {
-    this.loadPaymentCodes();
-    this.load();
+    void this.loadPaymentCodes();
+    void this.load();
   }
 
-  loadPaymentCodes(): void {
-    this.service.paymentCodes().subscribe({
-      next: (codes) => {
-        this.paymentCodes = codes;
-        if (!this.form.controls.paymentCodeId.value && codes[0]) {
-          this.form.controls.paymentCodeId.setValue(codes[0].id);
-        }
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+  async loadPaymentCodes(): Promise<void> {
+    try {
+      const codes = await firstValueFrom(this.service.paymentCodes());
+      this.paymentCodes = codes;
+      if (!this.form.controls.paymentCodeId.value && codes[0]) {
+        this.form.controls.paymentCodeId.setValue(codes[0].id);
+      }
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.errorMessage = '';
     const value = this.filter.getRawValue();
-    this.service.list(value.reason, value.status).subscribe({
-      next: (items) => {
-        this.remittances = items;
-        this.selected = items[0] ?? null;
-        this.loading = false;
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      const items = await firstValueFrom(this.service.list(value.reason, value.status));
+      this.remittances = items;
+      this.selected = items[0] ?? null;
+      this.loading = false;
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  generate(): void {
+  async generate(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     this.busy = true;
     this.errorMessage = '';
-    this.service.generate(this.form.getRawValue()).subscribe({
-      next: (created) => this.upsert(created),
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      this.upsert(await firstValueFrom(this.service.generate(this.form.getRawValue())));
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
   select(item: GpsRemittance): void {

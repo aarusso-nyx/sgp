@@ -353,6 +353,14 @@ As estrategias isolam convenio, agencia cedente e modalidade. Campos contratuais
 - `payroll.payment_remittance_file` guarda banco, versao de layout, contagem, total, hash SHA-256 e data de geracao.
 - `payroll.payment_remittance_detail` guarda a sequencia do segmento A por servidor para rastreio e retorno futuro.
 
+### Mock Relay
+
+`backend/src/integrations-worker/cnab240/adapters/queue-adapter.ts` envia a remessa CNAB 240 pelo contrato R4-95 `sgp.adapter.banking.request` e aguarda `sgp.adapter.banking.response`. O mock local `backend/src/external/mocks/banking-relay/` cobre BB, Caixa, Itau, Bradesco e Santander, reutiliza os fixtures de retorno existentes como templates determinísticos e devolve um retorno CNAB 240 sem acessar canais bancarios reais.
+
+O adapter valida hash, banco, correlacao e retorno byte-stable antes de materializar o estado conceitual do lote de pagamento. Implementacoes com banco persistem esse estado em `payroll.payment_remittance_file` e, quando todas as linhas retornam aceitas, promovem a folha relacionada para `PAID`.
+
+O `sgp-integrations-worker` usa esse adapter no job `FOLHA_CNAB_REMESSA`: depois de gerar e armazenar a remessa, publica o payload no mock relay bancario, processa o retorno CNAB 240 devolvido pela fila e deixa `payroll.payment_remittance_file.status` refletir o resultado conciliado. O job historico `FOLHA_CNAB_RETORNO` nao promove folha para `PAID` por relatorio sintetico; mutacao de estado de pagamento fica no processor de retorno CNAB 240.
+
 ### Campos posicionais principais
 
 | Registro        | Posicoes | Conteudo                             |
@@ -530,6 +538,34 @@ Novos consignantes devem adicionar adapter isolado em `backend/src/integrations-
 
 Todas as tabelas sao tenant-scoped com RLS forcado por `sgp_tenant_matches(tenant_id)` e permissao `payment.consignment.read` ou `payment.consignment.write`; mutacoes exigem `payment.consignment.write`. O processamento chama `public.sgp_append_audit_event(...)` por arquivo e por linha processada, preservando trilha imutavel file-by-file e line-by-line.
 
+## CF art. 37 XVI accumulation matrix
+
+R4-17 materializa a matriz operacional de acumulacao licita em
+`database/seed/cf-37-xvi-compatibility.json` e no servico
+`backend/src/rh/employees/accumulation.service.ts`. A decisao de v0.0.1 cobre
+somente as hipoteses explicitamente usadas pelo prompt regulatorio: dois cargos
+de professor, professor com cargo tecnico-cientifico e dois cargos privativos
+de profissionais de saude. Todas exigem compatibilidade de horarios.
+
+Comissionados e demais pares fora da matriz sao recusados com o erro de dominio
+`CF37_XVI_ACCUMULATION_NOT_ALLOWED`. Casos de borda nao cobertos pelo extrato
+regulatorio local devem ser registrados como decisao de dono antes de ampliar a
+matriz.
+
+## Folha idempotency adoption audit
+
+R4-21 fecha a cobertura de idempotencia como gate auditavel em
+`scripts/lib/audit/idempotency-coverage.mjs`. O script exige evidencia de
+reprocessamento idempotente para folha mensal, 13 salario, ferias, rescisao,
+importadores manual/servidor/pensionista, folha complementar e reintegracao
+retroativa.
+
+O resultado esperado para a rodada e 100% de cobertura e lista de excecoes
+vazia. Novas superficies mutantes de folha devem adicionar chave deterministica,
+`ON CONFLICT (idempotency_key)` ou uso do helper
+`isActivePayrollItemIdempotencyConflict(...)`, alem de teste focado, antes de
+serem aceitas.
+
 ## ADR 92 — Contracheque oficial PDF/A-1b
 
 ## ADR 92 — Contracheque oficial PDF/A-1b
@@ -554,3 +590,60 @@ O contracheque oficial passa a ser gerado em `backend/src/report-service/payslip
 - `public.generated_report_file` registra `report_kind = PAYSLIP`, `pdf_a_compliance = PDF_A_1B`, `signature_kind`, competência, servidor, folha e retenção.
 - O PDF/A renderizado recebe o bloco interno de evidência do `PadesAdapter` antes do cálculo do hash e da persistência do arquivo gerado; o registro preserva `signature_kind` e `signed_at` para auditoria interna.
 - A validação automatizada do slice verifica cabeçalho binário `%PDF-`, metadados, fontes, bloco `%%SGP-PADES-SIGNATURE`, golden PDF byte-estável e persistência do hash; validações externas veraPDF e PAdES real dependem dos gates de release quando disponíveis no ambiente.
+
+## Convencoes de fixtures XLSX dos importadores de folha
+
+**Status:** implemented
+**Data:** 2026-05-04
+
+F-FOL-007, F-FOL-008 e F-FOL-009 usam fixtures XLSX byte-estaveis em
+`tests/backend/golden/*-import-v01/` para fixar o contrato estrutural dos
+importadores de folha. Cada fixture representa uma planilha pequena, ficticia e
+deterministica, sem dados de producao, com uma linha aceita e cabecalho
+normalizado pelo parser atual de `backend/src/folha-pagamento/import/`.
+
+### Naming e conteudo
+
+| FR        | Importador            | Diretorio golden                                | Endpoint                                                   | Arquivo esperado |
+| --------- | --------------------- | ----------------------------------------------- | ---------------------------------------------------------- | ---------------- |
+| F-FOL-007 | Lancamento manual     | `tests/backend/golden/manual-entry-import-v01/` | `POST /api/v1/folhas/:folha_id/importar/lancamento-manual` | `expected.xlsx`  |
+| F-FOL-008 | Verbas de servidor    | `tests/backend/golden/servidor-import-v01/`     | `POST /api/v1/folhas/:folha_id/importar/servidor`          | `expected.xlsx`  |
+| F-FOL-009 | Verbas de pensionista | `tests/backend/golden/pensionista-import-v01/`  | `POST /api/v1/folhas/:folha_id/importar/pensionista`       | `expected.xlsx`  |
+
+Cada diretorio deve manter:
+
+- `input.json`: descricao humana e machine-readable do FR, endpoint, cabecalho,
+  linhas e observacoes de escopo.
+- `expected.xlsx`: binario OOXML deterministico usado como golden.
+- `expected.sha256`: hash SHA-256 do binario esperado, no formato
+  `sha256  expected.xlsx`.
+- `README.md`: resumo do contrato e instrucao de regeneracao.
+
+### Shape contratual
+
+Os fixtures preservam o formato aceito pelo parser atual: primeira worksheet,
+primeira linha como cabecalho, strings inline, e nomes de colunas normalizados
+sem acentos. Para F-FOL-007 e F-FOL-008, a linha minima aceita usa
+`matricula`, `verba_codigo`, `valor`, `quantidade`, `referencia` e
+`observacao`. Para F-FOL-009, a linha tambem exige `pensao_id` e identifica o
+beneficiario por `matricula_pensionista`.
+
+Valores monetarios devem ser serializados como texto decimal com ponto e duas
+casas, e quantidades como texto decimal com quatro casas quando presentes. UUIDs
+em fixtures devem ser sintaticos e ficticios. Matriculas, codigos de rubrica e
+observacoes devem deixar claro que sao exemplos de golden, nao amostras reais.
+
+### Estabilidade binaria
+
+O XLSX golden deve ser produzido por serializacao deterministica: entradas ZIP em
+ordem fixa, sem timestamp de arquivo, sem compressao variavel, XML UTF-8
+estavel e strings inline. Regeneracoes devem alterar `expected.xlsx` e
+`expected.sha256` juntas, com revisao explicita do diff binario/hash e do
+`input.json`.
+
+As fixtures de R4-16 sao goldens de paridade estrutural do SGP. Elas nao
+declaram byte-parity com o template legado porque nenhum artefato legado XLSX
+esta armazenado no repositorio. Se um owner fornecer o template legado de
+`/api/importadorVerbasFuncionario/template`, a comparacao byte-a-byte deve ser
+registrada como novo evento de governanca antes de qualquer afirmacao de
+compatibilidade de template legado.

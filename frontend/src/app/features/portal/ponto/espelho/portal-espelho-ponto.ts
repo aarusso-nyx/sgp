@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { finalize } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { PayrollBridgePreview, PontoFolhaService } from '../../../ponto/folha/ponto-folha.service';
 
@@ -26,26 +26,24 @@ export class PortalEspelhoPonto {
   loading = false;
   error = '';
 
-  load(): void {
+  async load(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     this.loading = true;
     this.error = '';
-    this.service
-      .preview({
-        payrollRunId: String(this.form.value.payrollRunId ?? ''),
-        timesheetPeriodId: String(this.form.value.timesheetPeriodId ?? ''),
-      })
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe({
-        next: (result) => {
-          this.result = result;
-        },
-        error: () => {
-          this.error = 'Nao foi possivel carregar o espelho de ponto.';
-        },
-      });
+    try {
+      this.result = await firstValueFrom(
+        this.service.preview({
+          payrollRunId: String(this.form.value.payrollRunId ?? ''),
+          timesheetPeriodId: String(this.form.value.timesheetPeriodId ?? ''),
+        }),
+      );
+    } catch {
+      this.error = 'Nao foi possivel carregar o espelho de ponto.';
+    } finally {
+      this.loading = false;
+    }
   }
 }

@@ -4997,7 +4997,7 @@ stateDiagram-v2
 
 `integrations-worker/consignment-portability` importa arquivos canonicos ou adaptados por consignante para portabilidade de consignados. O processamento concilia por CPF, contrato antigo e consignante origem, marca a averbação antiga como `TRANSFERRED`, cria a nova em `payment.consignment_loan` com referências cruzadas e mantém detalhe `MATCHED` ou `UNMATCHED` reprocessável por arquivo.
 
-`integrations-worker/dctfweb` gera a DCTFWeb a partir dos totalizadores eSocial S-5011, S-5012 e S-5013 aceitos para a competência, persiste a declaração em `fiscal.dctfweb_declaration`, grava os débitos em `fiscal.dctfweb_item`, assina o XML com o certificado ICP-Brasil ativo do tenant e transmite ao endpoint RFB configurado ou ao emissor sandbox local. Retificadoras são obrigadas a referenciar explicitamente a declaração original e o recibo guarda o hash do XML transmitido para conferir integridade com o XML assinado.
+`integrations-worker/dctfweb` gera a DCTFWeb a partir dos totalizadores eSocial S-5011, S-5012 e S-5013 aceitos para a competência, dos totalizadores EFD-Reinf R-9015 e dos débitos MIT/PGD-DCTF pendentes, persiste a declaração em `fiscal.dctfweb_declaration`, grava os débitos em `fiscal.dctfweb_item`, mantém o adicional de CSLL em `csll_adicional_amount`, assina o XML com o certificado ICP-Brasil ativo do tenant e transmite ao endpoint RFB configurado ou ao emissor sandbox local. Retificadoras são obrigadas a referenciar explicitamente a declaração original e o recibo guarda o hash do XML transmitido para conferir integridade com o XML assinado.
 
 `integrations-worker/gps` gera GPS residual RGPS somente quando explicitamente solicitado e quando `fiscal.assert_no_dctfweb_for_competence(...)` confirma que não existe DCTFWeb transmitida ou aceita para a competência. O módulo usa `fiscal.gps_payment_code`, grava `fiscal.gps_remittance`, emite TXT de transição IN 925/2009 e mantém FISC-01/DCTFWeb como fluxo principal.
 
@@ -5017,6 +5017,7 @@ stateDiagram-v2
 - `POST /api/admin/v1/integracoes/dirf/gerar`
 - `GET /api/v1/admin/fiscal/dctfweb` — listar declarações por competência
 - `POST /api/v1/admin/fiscal/dctfweb/gerar` — gerar original ou retificadora
+- `POST /api/v1/admin/fiscal/dctfweb/mit/gerar` — gerar XML interno de inclusão MIT com CSLL adicional separado quando presente
 - `POST /api/v1/admin/fiscal/dctfweb/:id/assinar` — assinar com ICP-Brasil
 - `POST /api/v1/admin/fiscal/dctfweb/:id/transmitir` — transmitir e registrar recibo
 - `GET /api/v1/tce/adapters` — listar adapters TCE/TCM/TCU registrados
@@ -15217,6 +15218,17 @@ Alíquotas e fatores usam escala 6 com a mesma regra de desempate. O helper `rou
 O caminho SQL oficial de rubricas é `payroll_calc.evaluate_earning_deduction(...)`, definido nos artefatos canônicos `database/sql/10-06-payroll_calc-ddl.sql`, `database/sql/40-payroll_calc-functions.sql` e `database/sql/70-payroll_calc-final.sql`, com retorno `numeric(14,2)`. O compilador em `backend/src/payroll-engine/formula-compiler.service.ts` emite funções `payroll_calc.f_<alias>(uuid, int, int)` que retornam nesse mesmo contorno decimal. Funções geradas por DSL só são gerenciadas automaticamente quando a rubrica mantém `formula_function_ddl`; funções canônicas versionadas no SQL não são removidas por limpeza de rubricas que apenas as referenciam. Caminhos TypeScript remanescentes, como rescisão, devem chamar `roundMoney(...)` somente na fronteira da rubrica para manter paridade centavo-a-centavo com o SQL.
 
 O ESLint local `sgp/no-math-round-money` falha qualquer uso de `Math.round` e `Number(...).toFixed(...)` em `src/folha-pagamento/**`, `src/payroll-engine/**` e `src/common/money/**`.
+
+O gate R4-22 adiciona `scripts/lib/audit/decimal-coverage.mjs` para varrer
+`backend/src/**/*.ts` e falhar campos, DTOs, parametros ou interfaces com nomes
+monetarios declarados como `number`. O caminho aceito para valores monetarios
+continua sendo `Decimal`/`numeric`; numeros permanecem permitidos para
+contadores, indices, competencias, minutos, percentuais, scores e quantidades
+que nao representam dinheiro.
+
+Lista de excecoes one-time da rodada: vazia. Se o script encontrar violacao,
+ela deve virar backlog de correcao de codigo; o gate nao autoriza converter
+silenciosamente regra monetaria ou reduzir cobertura de goldens.
 
 ### Matriz rubrica → modo
 

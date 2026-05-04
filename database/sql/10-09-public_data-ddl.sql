@@ -50,6 +50,7 @@ CREATE TABLE public_data.lai_request (
     closed_at timestamp with time zone,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    -- R4-71: deferred enum conversion; 40-public_data-functions.sql accepts/returns LAI status as text and owns transition validation.
     CONSTRAINT lai_request_status_check CHECK (status = ANY (ARRAY['RECEIVED'::text, 'IN_REVIEW'::text, 'AWAITING_CLARIFICATION'::text, 'EXTENDED'::text, 'ANSWERED'::text, 'DENIED'::text, 'CLOSED'::text]))
 );
 
@@ -63,7 +64,9 @@ CREATE TABLE public_data.lai_request_event (
     actor_id uuid,
     reason text,
     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    -- R4-71: deferred enum conversion; LAI event history mirrors public_data.transition_lai_request text parameters.
     CONSTRAINT lai_request_event_from_status_check CHECK ((from_status IS NULL) OR (from_status = ANY (ARRAY['RECEIVED'::text, 'IN_REVIEW'::text, 'AWAITING_CLARIFICATION'::text, 'EXTENDED'::text, 'ANSWERED'::text, 'DENIED'::text, 'CLOSED'::text]))),
+    -- R4-71: deferred enum conversion; LAI event history mirrors public_data.transition_lai_request text parameters.
     CONSTRAINT lai_request_event_to_status_check CHECK (to_status = ANY (ARRAY['RECEIVED'::text, 'IN_REVIEW'::text, 'AWAITING_CLARIFICATION'::text, 'EXTENDED'::text, 'ANSWERED'::text, 'DENIED'::text, 'CLOSED'::text]))
 );
 

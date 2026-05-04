@@ -73,6 +73,7 @@ import { ReportWorkerService } from './report-worker.service';
     PadesAdapter,
     PdfABuilderService,
     PayslipRenderService,
+    ReportWorkerService,
     YearlyIncomeRenderService,
     YearlyIncomeBatchService,
   ],

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -22,10 +22,9 @@ interface MedicalExam {
   templateUrl: './exames.html',
   styleUrl: './exames.scss',
 })
-export class SaudeExames implements OnDestroy {
+export class SaudeExames {
   private readonly api = inject(ApiClient);
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
   readonly form = this.formBuilder.group({
     code: ['', [Validators.required]],
@@ -41,42 +40,28 @@ export class SaudeExames implements OnDestroy {
   loading = false;
   saving = false;
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
-    this.api
-      .get<MedicalExam[]>('v1/saude/exames')
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((exams) => {
-        this.exams = exams;
-      });
+    try {
+      this.exams = await firstValueFrom(this.api.get<MedicalExam[]>('v1/saude/exames'));
+    } finally {
+      this.loading = false;
+    }
   }
 
-  create(): void {
+  async create(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     this.saving = true;
-    this.api
-      .post<MedicalExam, Record<string, unknown>>('v1/saude/exames', this.form.value)
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((exam) => {
-        this.exams = [exam, ...this.exams];
-      });
+    try {
+      const exam = await firstValueFrom(
+        this.api.post<MedicalExam, Record<string, unknown>>('v1/saude/exames', this.form.value),
+      );
+      this.exams = [exam, ...this.exams];
+    } finally {
+      this.saving = false;
+    }
   }
 }

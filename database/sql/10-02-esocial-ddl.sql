@@ -42,6 +42,12 @@ CREATE TYPE esocial.s1299_emission_status AS ENUM (
     'REJECTED'
 );
 
+CREATE TYPE esocial.s2205_pending_alteration_status AS ENUM (
+    'PENDING',
+    'EMITTED',
+    'SKIPPED'
+);
+
 CREATE TYPE esocial.s1xxx_event_kind AS ENUM (
     'S-1000',
     'S-1005',
@@ -100,6 +106,12 @@ CREATE TYPE esocial.s2298_event_status AS ENUM (
     'TRANSMITTED',
     'ACCEPTED',
     'REJECTED'
+);
+
+CREATE TYPE esocial.s2298_reint_type AS ENUM (
+    '1',
+    '2',
+    '9'
 );
 
 CREATE TYPE esocial.s2306_event_status AS ENUM (
@@ -248,11 +260,11 @@ CREATE TABLE esocial.s2205_pending_alteration (
     source_row_id uuid NOT NULL,
     previous_payload jsonb,
     current_payload jsonb,
-    status text DEFAULT 'PENDING'::text NOT NULL,
+    -- R4-71: closed S-2205 queue lifecycle converted from ANY ARRAY CHECK to enum.
+    status esocial.s2205_pending_alteration_status DEFAULT 'PENDING'::esocial.s2205_pending_alteration_status NOT NULL,
     emitted_event_id uuid,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    consumed_at timestamp with time zone,
-    CONSTRAINT s2205_pending_alteration_status_chk CHECK ((status = ANY (ARRAY['PENDING'::text, 'EMITTED'::text, 'SKIPPED'::text])))
+    consumed_at timestamp with time zone
 );
 
 CREATE TABLE esocial.s2205_trigger_field (
@@ -313,13 +325,13 @@ CREATE TABLE esocial.s2298_event (
     tenant_id uuid NOT NULL,
     reintegration_order_id uuid NOT NULL,
     original_s2299_receipt text NOT NULL,
-    reint_type character(1) NOT NULL,
+    -- R4-71: closed eSocial S-2298 reintType code set converted from ANY ARRAY CHECK to enum.
+    reint_type esocial.s2298_reint_type NOT NULL,
     payload_xml text NOT NULL,
     receipt text,
     status esocial.s2298_event_status DEFAULT 'DRAFT'::esocial.s2298_event_status NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT s2298_event_reint_type_valid CHECK ((reint_type = ANY (ARRAY['1'::bpchar, '2'::bpchar, '9'::bpchar])))
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 CREATE TABLE esocial.s2299_pending (

@@ -2688,3 +2688,5 @@ COMMENT ON COLUMN hr.employee.abono_permanencia_inicio IS 'Start date for perman
 COMMENT ON COLUMN hr.employee.abono_permanencia_fundamento IS 'Legal basis recorded when permanence allowance is changed.';
 
 COMMENT ON COLUMN hr.salary_reference.amount IS 'Monetary amount in BRL; numeric(14,2); round at payroll earning/deduction boundary.';
+
+COMMENT ON TABLE hr.cf37_xvi_accumulation_compatibility IS 'R4-72 global CF art. 37 XVI role-compatibility matrix. Non-tenant-scoped: rows are constitutional role-pair rules shared by every tenant and contain no tenant data or PII.';

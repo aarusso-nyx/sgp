@@ -8,6 +8,7 @@ import {
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../common/pagination/paged-response';
 import { roundMoney, toMoney } from '../../common/money/money';
+import { recordPayrollOperation } from '../../common/observability/prometheus.metrics';
 import { DatabaseService } from '../../database/database.service';
 import { PayrollEarningWriter } from './payroll-earning.writer';
 import { isActivePayrollItemIdempotencyConflict } from './payroll-idempotency';
@@ -97,7 +98,9 @@ export class PayrollService {
   async createRun(input: CreatePayrollRunDto): Promise<PayrollRunSummary> {
     this.ensureDatabase();
     try {
-      return this.toSummary(await this.itemReader.createRun(input));
+      const result = this.toSummary(await this.itemReader.createRun(input));
+      recordPayrollOperation('create_run', 'success');
+      return result;
     } catch (error: unknown) {
       const code = (error as { code?: string }).code;
       if (code === '23505') {
@@ -132,7 +135,9 @@ export class PayrollService {
     const rows = await this.lineWriter.updateRunStatus(id, input.status);
     const row = rows[0];
     if (!row) throw new NotFoundException('Payroll run not found');
-    return this.toSummary(row);
+    const result = this.toSummary(row);
+    recordPayrollOperation('update_run_status', 'success');
+    return result;
   }
 
   async populateRun(
@@ -180,7 +185,9 @@ export class PayrollService {
       }
 
       await this.refreshPayrollRunAggregates(run.id);
-      return this.toSummary(await this.itemReader.getSummary(run.id));
+      const result = this.toSummary(await this.itemReader.getSummary(run.id));
+      recordPayrollOperation('populate_run', 'success');
+      return result;
     } catch (error: unknown) {
       if (isActivePayrollItemIdempotencyConflict(error)) {
         throw new ConflictException(
@@ -231,6 +238,7 @@ export class PayrollService {
 
     await this.lineWriter.markAdvanceRequestProcessed(requestId);
     await this.refreshPayrollRunAggregates(payrollRunId);
+    recordPayrollOperation('create_advance_payment', 'success');
 
     return {
       requestId,
@@ -278,7 +286,9 @@ export class PayrollService {
       });
       await this.lineWriter.refreshWorkLocationRollups(id);
 
-      return this.toSummary(row);
+      const result = this.toSummary(row);
+      recordPayrollOperation('calculate_run', 'success');
+      return result;
     } catch (error: unknown) {
       if (isActivePayrollItemIdempotencyConflict(error)) {
         throw new ConflictException(

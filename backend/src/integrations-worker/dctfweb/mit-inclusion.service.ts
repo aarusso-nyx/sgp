@@ -25,6 +25,7 @@ interface PgdTaxDebitRow extends QueryResultRow {
   period: Date | string;
   base_amount: string;
   amount: string;
+  csll_adicional_amount: string | null;
   due_date: Date | string | null;
   mit_status: DctfwebMitStatus | null;
 }
@@ -66,6 +67,9 @@ export class MitInclusionService {
       debitCount: debits.length,
       totalBaseAmount: sumMoney(debits.map((debit) => debit.baseAmount)),
       totalAmount: sumMoney(debits.map((debit) => debit.amount)),
+      totalCsllAdicionalAmount: sumMoney(
+        debits.map((debit) => debit.csllAdicionalAmount),
+      ),
       xml,
       xmlHash: sha256(xml),
       debits: includedDebits,
@@ -98,6 +102,7 @@ export class MitInclusionService {
         period,
         base_amount::text,
         amount::text,
+        csll_adicional_amount::text,
         due_date,
         mit_status::text
       FROM fiscal.dctf_pgd_tax_debit
@@ -169,6 +174,9 @@ export function parseMitInclusionXml(xml: string): DctfwebMitDebitDto[] {
       period: requiredAttr(attrs, 'periodo'),
       baseAmount: requiredAttr(attrs, 'base'),
       amount: requiredAttr(attrs, 'valor'),
+      csllAdicionalAmount: attrs.csllAdicional
+        ? moneyText(attrs.csllAdicional)
+        : '0.00',
       dueDate: attrs.dueDate ?? null,
     };
   });
@@ -184,6 +192,7 @@ function toMitDebitDto(
   const period = dateText(row.period);
   const baseAmount = moneyText(row.base_amount);
   const amount = moneyText(row.amount);
+  const csllAdicionalAmount = moneyText(row.csll_adicional_amount ?? 0);
   const pgdDeclarationId = scalarText(
     row.pgd_declaration_id,
     'pgd_declaration_id',
@@ -207,11 +216,12 @@ function toMitDebitDto(
     period,
     baseAmount,
     amount,
+    csllAdicionalAmount,
     dueDate: row.due_date ? dateText(row.due_date) : null,
   };
 }
 
-function buildMitDebitId(input: {
+export function buildMitDebitId(input: {
   tenantId: string;
   competence: string;
   cnpjFilial: string;
@@ -225,6 +235,11 @@ function buildMitDebitId(input: {
 
 function debitXml(debit: DctfwebMitDebitDto): string {
   const dueDate = debit.dueDate ? ` dueDate="${xmlEscape(debit.dueDate)}"` : '';
+  const csllAdicionalAmount = debit.csllAdicionalAmount ?? '0.00';
+  const csllAdicional =
+    csllAdicionalAmount === '0.00'
+      ? ''
+      : ` csllAdicional="${xmlEscape(csllAdicionalAmount)}"`;
   return `      <debito sourceEvent="MIT" mitId="${xmlEscape(
     debit.mitDebitId,
   )}" status="${debit.mitStatus}" cnpjFilial="${debit.cnpjFilial}" pgdDeclarationId="${xmlEscape(
@@ -233,7 +248,7 @@ function debitXml(debit: DctfwebMitDebitDto): string {
     debit.taxCode,
   )}" periodo="${debit.period}" base="${debit.baseAmount}" valor="${
     debit.amount
-  }"${dueDate} />`;
+  }"${csllAdicional}${dueDate} />`;
 }
 
 function groupByBranch(

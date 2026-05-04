@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
 import {
   ConsignadosService,
@@ -24,22 +25,22 @@ export class PortalConsignados implements OnInit {
   errorMessage = '';
 
   ngOnInit(): void {
+    void this.load();
+  }
+
+  private async load(): Promise<void> {
     const employeeId = 'me';
-    this.service.margin(employeeId, this.competence).subscribe({
-      next: (margin) => {
-        this.margin = margin;
-      },
-      error: () => {
-        this.errorMessage = 'Nao foi possivel carregar a margem consignavel.';
-      },
-    });
-    this.service.loans(employeeId).subscribe({
-      next: (loans) => {
-        this.loans = loans;
-      },
-      error: () => {
-        this.loans = [];
-      },
-    });
+    const [margin, loans] = await Promise.allSettled([
+      firstValueFrom(this.service.margin(employeeId, this.competence)),
+      firstValueFrom(this.service.loans(employeeId)),
+    ]);
+
+    if (margin.status === 'fulfilled') {
+      this.margin = margin.value;
+    } else {
+      this.errorMessage = 'Nao foi possivel carregar a margem consignavel.';
+    }
+
+    this.loans = loans.status === 'fulfilled' ? loans.value : [];
   }
 }

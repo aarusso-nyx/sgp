@@ -421,3 +421,7 @@ ALTER TABLE esocial.xsd_validation_failure ENABLE ROW LEVEL SECURITY;
 CREATE POLICY xsd_validation_failure_select ON esocial.xsd_validation_failure FOR SELECT USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.certificate.read'::text, 'esocial.certificate.write'::text]))));
 
 CREATE POLICY xsd_validation_failure_write ON esocial.xsd_validation_failure USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.certificate.write'::text])))) WITH CHECK ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.certificate.write'::text]))));
+
+COMMENT ON TABLE esocial.response_classification IS 'R4-72 global eSocial response-code reference catalog. Non-tenant-scoped: rows are regulatory code classifications shared by every tenant and contain no tenant data or PII.';
+
+COMMENT ON TABLE esocial.s2205_trigger_field IS 'R4-72 global eSocial S-2205 trigger-field whitelist. Non-tenant-scoped: rows are static regulatory field paths shared by every tenant and contain no tenant data or PII.';

@@ -3,7 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 
 import { validateEnvironment } from '../config/environment';
 import { AuditModule } from '../audit/audit.module';
+import { InMemoryQueueTransport } from '../common/adapters';
 import { DatabaseModule } from '../database/database.module';
+import { DatabaseService } from '../database/database.service';
 import { DocumentsModule } from '../documents/documents.module';
 import { PisPasepModule } from '../folha-pagamento/pis-pasep/pis-pasep.module';
 import { CertificateStoreController } from './certificate-store/certificate-store.controller';
@@ -52,8 +54,10 @@ import { S22xxDispatchService } from './builders/s22xx-common';
 import { S22xxService } from './builders/s22xx.service';
 import { ESocialEmitService } from './esocial-emit.service';
 import { ESocialWorkerService } from './esocial-worker.service';
+import { EsocialQueueAdapter } from './adapters/queue-adapter';
 import { S3000Controller } from './exclusion/s3000.controller';
 import { S3000Service } from './exclusion/s3000.service';
+import { EsocialRelayMockResponder } from '../external/mocks/esocial-relay';
 import { ProcessingParser } from './parsers/processing.parser';
 import { ProtocolParser } from './parsers/protocol.parser';
 import { TotalizerParser } from './parsers/totalizer.parser';
@@ -77,6 +81,8 @@ import { RetornoService } from './sync/retorno.service';
 import { RetryPolicyService } from './sync/retry-policy.service';
 import { StatusSyncService } from './sync/status-sync.service';
 import { XsdValidatorService } from './xsd/xsd-validator.service';
+
+const ESOCIAL_QUEUE_TRANSPORT = 'ESOCIAL_QUEUE_TRANSPORT';
 
 @Module({
   imports: [
@@ -152,6 +158,35 @@ import { XsdValidatorService } from './xsd/xsd-validator.service';
     CircuitBreakerService,
     RetryStrategyService,
     SoapClientService,
+    {
+      provide: ESOCIAL_QUEUE_TRANSPORT,
+      useFactory: () => new InMemoryQueueTransport(),
+    },
+    {
+      provide: EsocialRelayMockResponder,
+      useFactory: (transport: InMemoryQueueTransport) =>
+        new EsocialRelayMockResponder({ transport }),
+      inject: [ESOCIAL_QUEUE_TRANSPORT],
+    },
+    {
+      provide: EsocialQueueAdapter,
+      useFactory: (
+        databaseService: DatabaseService,
+        transport: InMemoryQueueTransport,
+        relay: EsocialRelayMockResponder,
+      ) => {
+        void relay;
+        return new EsocialQueueAdapter({
+          databaseService,
+          transport,
+        });
+      },
+      inject: [
+        DatabaseService,
+        ESOCIAL_QUEUE_TRANSPORT,
+        EsocialRelayMockResponder,
+      ],
+    },
     SubmissionService,
     ProtocolParser,
     ProcessingParser,

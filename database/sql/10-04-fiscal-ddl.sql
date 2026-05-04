@@ -153,8 +153,10 @@ CREATE TABLE fiscal.dctfweb_item (
     debit_code text NOT NULL,
     base_amount numeric(14,2) NOT NULL,
     amount numeric(14,2) NOT NULL,
+    csll_adicional_amount numeric(14,2) DEFAULT 0 NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT dctfweb_item_amount_chk CHECK (((base_amount >= (0)::numeric) AND (amount >= (0)::numeric)))
+    CONSTRAINT dctfweb_item_amount_chk CHECK (((base_amount >= (0)::numeric) AND (amount >= (0)::numeric))),
+    CONSTRAINT dctfweb_item_csll_adicional_amount_chk CHECK ((csll_adicional_amount >= (0)::numeric))
 );
 
 CREATE TABLE fiscal.dctf_pgd_tax_debit (
@@ -167,6 +169,7 @@ CREATE TABLE fiscal.dctf_pgd_tax_debit (
     period date NOT NULL,
     base_amount numeric(14,2) DEFAULT 0 NOT NULL,
     amount numeric(14,2) NOT NULL,
+    csll_adicional_amount numeric(14,2) DEFAULT 0 NOT NULL,
     due_date date,
     mit_status fiscal.dctfweb_mit_status DEFAULT 'PENDING'::fiscal.dctfweb_mit_status,
     source_ref text,
@@ -174,6 +177,7 @@ CREATE TABLE fiscal.dctf_pgd_tax_debit (
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT dctf_pgd_tax_debit_amount_chk CHECK (((base_amount >= (0)::numeric) AND (amount >= (0)::numeric))),
     CONSTRAINT dctf_pgd_tax_debit_branch_chk CHECK ((cnpj_filial ~ '^[0-9]{14}$'::text)),
+    CONSTRAINT dctf_pgd_tax_debit_csll_adicional_amount_chk CHECK ((csll_adicional_amount >= (0)::numeric)),
     CONSTRAINT dctf_pgd_tax_debit_competence_chk CHECK ((competence = (date_trunc('month'::text, (competence)::timestamp with time zone))::date)),
     CONSTRAINT dctf_pgd_tax_debit_tax_code_chk CHECK ((length(TRIM(BOTH FROM tax_code)) > 0))
 );

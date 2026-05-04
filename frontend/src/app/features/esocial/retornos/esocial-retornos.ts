@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
 import {
   ESocialReturnFailure,
@@ -16,9 +16,8 @@ import {
   templateUrl: './esocial-retornos.html',
   styleUrl: './esocial-retornos.scss',
 })
-export class ESocialRetornos implements OnInit, OnDestroy {
+export class ESocialRetornos implements OnInit {
   private readonly service = inject(ESocialRetornosService);
-  private readonly destroy$ = new Subject<void>();
   failures: ESocialReturnFailure[] = [];
   selected: ESocialReturnFailure | null = null;
   loading = false;
@@ -27,68 +26,55 @@ export class ESocialRetornos implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(status: ESocialReturnStatus | '' = this.activeStatus): void {
+  async load(status: ESocialReturnStatus | '' = this.activeStatus): Promise<void> {
     this.loading = true;
     this.error = '';
     this.activeStatus = status;
-    this.service
-      .listFailures(status || undefined)
-      .pipe(
-        finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (failures) => {
-          this.failures = failures;
-          this.selected =
-            failures.find((failure) => failure.eventId === this.selected?.eventId) ??
-            failures[0] ??
-            null;
-        },
-        error: () => (this.error = 'Nao foi possivel carregar os retornos.'),
-      });
+    try {
+      const failures = await firstValueFrom(this.service.listFailures(status || undefined));
+      this.failures = failures;
+      this.selected =
+        failures.find((failure) => failure.eventId === this.selected?.eventId) ??
+        failures[0] ??
+        null;
+    } catch {
+      this.error = 'Nao foi possivel carregar os retornos.';
+    } finally {
+      this.loading = false;
+    }
   }
 
   select(failure: ESocialReturnFailure): void {
     this.selected = failure;
   }
 
-  forceRetry(failure: ESocialReturnFailure): void {
+  async forceRetry(failure: ESocialReturnFailure): Promise<void> {
     this.actionEventId = failure.eventId;
     this.error = '';
-    this.service
-      .forceRetry(failure.eventId)
-      .pipe(
-        finalize(() => (this.actionEventId = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => this.load(),
-        error: () => (this.error = 'Nao foi possivel forcar o retry.'),
-      });
+    try {
+      await firstValueFrom(this.service.forceRetry(failure.eventId));
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel forcar o retry.';
+    } finally {
+      this.actionEventId = '';
+    }
   }
 
-  markHandled(failure: ESocialReturnFailure): void {
+  async markHandled(failure: ESocialReturnFailure): Promise<void> {
     this.actionEventId = failure.eventId;
     this.error = '';
-    this.service
-      .markHandled(failure.eventId)
-      .pipe(
-        finalize(() => (this.actionEventId = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => this.load(),
-        error: () => (this.error = 'Nao foi possivel marcar como tratado.'),
-      });
+    try {
+      await firstValueFrom(this.service.markHandled(failure.eventId));
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel marcar como tratado.';
+    } finally {
+      this.actionEventId = '';
+    }
   }
 
   definitiveFailures(): ESocialReturnFailure[] {

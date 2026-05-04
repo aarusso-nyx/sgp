@@ -1,0 +1,51 @@
+[
+  {
+    "primaryRoleKind": "TEACHER",
+    "secondaryRoleKind": "TEACHER",
+    "allowed": true,
+    "scheduleCompatibilityRequired": true,
+    "legalBasis": "CF art. 37 XVI, a"
+  },
+  {
+    "primaryRoleKind": "TEACHER",
+    "secondaryRoleKind": "TECHNICAL_SCIENTIFIC",
+    "allowed": true,
+    "scheduleCompatibilityRequired": true,
+    "legalBasis": "CF art. 37 XVI, b"
+  },
+  {
+    "primaryRoleKind": "TECHNICAL_SCIENTIFIC",
+    "secondaryRoleKind": "TEACHER",
+    "allowed": true,
+    "scheduleCompatibilityRequired": true,
+    "legalBasis": "CF art. 37 XVI, b"
+  },
+  {
+    "primaryRoleKind": "HEALTH_PROFESSIONAL",
+    "secondaryRoleKind": "HEALTH_PROFESSIONAL",
+    "allowed": true,
+    "scheduleCompatibilityRequired": true,
+    "legalBasis": "CF art. 37 XVI, c"
+  },
+  {
+    "primaryRoleKind": "COMMISSIONED",
+    "secondaryRoleKind": "COMMISSIONED",
+    "allowed": false,
+    "scheduleCompatibilityRequired": true,
+    "legalBasis": "CF art. 37 XVI"
+  },
+  {
+    "primaryRoleKind": "COMMISSIONED",
+    "secondaryRoleKind": "TEACHER",
+    "allowed": false,
+    "scheduleCompatibilityRequired": true,
+    "legalBasis": "CF art. 37 XVI"
+  },
+  {
+    "primaryRoleKind": "COMMISSIONED",
+    "secondaryRoleKind": "HEALTH_PROFESSIONAL",
+    "allowed": false,
+    "scheduleCompatibilityRequired": true,
+    "legalBasis": "CF art. 37 XVI"
+  }
+]

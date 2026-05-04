@@ -127,6 +127,7 @@ CREATE TABLE saude.aso_record (
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     s2220_event_id uuid,
     CONSTRAINT aso_record_due_required_chk CHECK (((aso_kind <> ALL (ARRAY['PERIODICO'::saude.aso_kind, 'RETORNO_TRABALHO'::saude.aso_kind])) OR (next_exam_due_at IS NOT NULL))),
+    -- R4-71: kept as enum-typed state invariant; status is already saude.aso_status and this CHECK requires performed_at for non-scheduled outcomes.
     CONSTRAINT aso_record_performed_status_chk CHECK (((status = ANY (ARRAY['SCHEDULED'::saude.aso_status, 'CANCELLED'::saude.aso_status])) OR (performed_at IS NOT NULL)))
 );
 

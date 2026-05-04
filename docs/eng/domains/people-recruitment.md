@@ -11,6 +11,7 @@ Authored domain authority for people, recruitment, concursos, appointment, quota
 - Prazos de nomeacao e convocacao
 - Proctoring Online em Concursos Publicos
 - Assinatura Digital da Banca Examinadora — XAdES/PAdES
+- Frontend i18n posture roadmap
 - RH Workflows
 
 ## Concursos publicos
@@ -227,6 +228,25 @@ As tabelas são tenant-scoped e usam RLS com `sgp_tenant_matches(tenant_id) AND 
 ### Verificação Pública
 
 A verificação pública recalcula a cadeia sequencial de assinaturas a partir do payload assinado. Qualquer alteração posterior no PDF/XML ou no envelope de assinatura torna o resultado `valid=false`, mantendo a publicidade do ato e a impugnabilidade do concurso sem revelar dados pessoais sensíveis dos membros da banca.
+
+## Frontend i18n posture roadmap
+
+The Round 4 i18n posture is measurement-first. `scripts/audit.mjs fe-i18n --round 4`
+quantifies hard-coded user-facing string candidates across
+`frontend/src/app/features`, emits `docs/gov/audit/diag/round-4/fe-i18n-coverage.md`,
+and preserves the machine-readable inventory in
+`docs/gov/audit/inv/round-4/fe-i18n-coverage.json`.
+
+The roadmap sequence for en-US and es candidates is:
+
+1. Keep the current pt-BR source locale and Angular extraction contract as the
+   runtime baseline.
+2. Use the Round 4 audit output to prioritize recruitment, public portal, and
+   portal employee flows before administrative-only screens.
+3. Convert static templates and UI metadata to Angular i18n markers in feature
+   batches, preserving backend/business messages and dynamic domain text.
+4. Regenerate translation catalogs only after each feature batch has a reviewed
+   message-id namespace and accessibility attributes remain covered.
 
 ## RH Workflows
 

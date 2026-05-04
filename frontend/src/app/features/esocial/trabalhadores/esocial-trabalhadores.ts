@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 import {
   ESocialTrabalhadoresService,
@@ -17,9 +17,8 @@ import {
   templateUrl: './esocial-trabalhadores.html',
   styleUrl: './esocial-trabalhadores.scss',
 })
-export class ESocialTrabalhadores implements OnInit, OnDestroy {
+export class ESocialTrabalhadores implements OnInit {
   private readonly service = inject(ESocialTrabalhadoresService);
-  private readonly destroy$ = new Subject<void>();
   rows: ESocialWorkerStatus[] = [];
   eventRows: ESocialWorkerEventQueue[] = [];
   lastResult: ESocialWorkerDispatchResult | null = null;
@@ -28,51 +27,33 @@ export class ESocialTrabalhadores implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.error = '';
-    this.service
-      .status()
-      .pipe(
-        finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (rows) => (this.rows = rows),
-        error: () => (this.error = 'Nao foi possivel carregar o cadastro eSocial.'),
-      });
-    this.service
-      .eventQueue()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (rows) => (this.eventRows = rows),
-        error: () => (this.error = 'Nao foi possivel carregar os eventos de trabalhador.'),
-      });
+    try {
+      const { rows, eventRows } = await firstValueFrom(
+        forkJoin({
+          rows: this.service.status(),
+          eventRows: this.service.eventQueue(),
+        }),
+      );
+      this.rows = rows;
+      this.eventRows = eventRows;
+    } catch {
+      this.error = 'Nao foi possivel carregar o cadastro eSocial.';
+    } finally {
+      this.loading = false;
+    }
   }
 
   reemitS2200(row: ESocialWorkerStatus): void {
-    this.emitting = row.employeeId;
-    this.error = '';
-    this.service
-      .reemitS2200(row.employeeId)
-      .pipe(
-        finalize(() => (this.emitting = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(this.resultObserver());
+    void this.run(row.employeeId, () => this.service.reemitS2200(row.employeeId));
   }
 
   emitWorkerEvent(row: ESocialWorkerEventQueue): void {
-    this.emitting = row.id;
-    this.error = '';
     const request =
       row.eventKind === 'S-2210'
         ? this.service.emitS2210(row.catEmissionId ?? row.sourceId)
@@ -86,33 +67,26 @@ export class ESocialTrabalhadores implements OnInit, OnDestroy {
             : row.eventKind === 'S-2230'
               ? this.service.emitS2230(row.id)
               : this.service.emitS2299(row.id);
-    request
-      .pipe(
-        finalize(() => (this.emitting = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(this.resultObserver());
+    void this.run(row.id, () => request);
   }
 
   emitS2205(row: ESocialWorkerStatus): void {
-    this.emitting = row.employeeId;
-    this.error = '';
-    this.service
-      .emitS2205(row.employeeId)
-      .pipe(
-        finalize(() => (this.emitting = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(this.resultObserver());
+    void this.run(row.employeeId, () => this.service.emitS2205(row.employeeId));
   }
 
-  private resultObserver() {
-    return {
-      next: (result: ESocialWorkerDispatchResult) => {
-        this.lastResult = result;
-        this.load();
-      },
-      error: () => (this.error = 'Nao foi possivel emitir o evento eSocial.'),
-    };
+  private async run(
+    marker: string,
+    callback: () => ReturnType<ESocialTrabalhadoresService['emitS2205']>,
+  ): Promise<void> {
+    this.emitting = marker;
+    this.error = '';
+    try {
+      this.lastResult = await firstValueFrom(callback());
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel emitir o evento eSocial.';
+    } finally {
+      this.emitting = '';
+    }
   }
 }

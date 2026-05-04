@@ -1,0 +1,862 @@
+{
+  "byFeature": [
+    {
+      "feature": "rh",
+      "findings": 75
+    },
+    {
+      "feature": "ponto",
+      "findings": 46
+    },
+    {
+      "feature": "folha-pagamento",
+      "findings": 31
+    },
+    {
+      "feature": "esocial",
+      "findings": 18
+    },
+    {
+      "feature": "gestao",
+      "findings": 15
+    },
+    {
+      "feature": "avaliacao",
+      "findings": 13
+    },
+    {
+      "feature": "portal-empregado",
+      "findings": 13
+    },
+    {
+      "feature": "admin-feature",
+      "findings": 10
+    },
+    {
+      "feature": "saude",
+      "findings": 10
+    },
+    {
+      "feature": "portal",
+      "findings": 9
+    },
+    {
+      "feature": "tce",
+      "findings": 4
+    },
+    {
+      "feature": "fiscal",
+      "findings": 3
+    },
+    {
+      "feature": "security",
+      "findings": 3
+    },
+    {
+      "feature": "publico",
+      "findings": 1
+    }
+  ],
+  "byKind": [
+    {
+      "count": 251,
+      "key": "typescript-ui-literal"
+    }
+  ],
+  "checkedFiles": 268,
+  "exceptions": [
+    "Spec files are excluded.",
+    "mat-icon/code/pre/script/style text is excluded.",
+    "TypeScript findings are limited to literal strings in likely UI metadata contexts.",
+    "Dynamic backend/business messages are reported only when they appear in frontend UI metadata."
+  ],
+  "featureCount": 14,
+  "featuresRoot": "frontend/src/app/features",
+  "generated_by": "scripts/audit.mjs fe-i18n",
+  "round": "4",
+  "sampleFindings": [
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 119,
+      "text": "Código"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 122,
+      "text": "Responsável"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 123,
+      "text": "Atualização"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 131,
+      "text": "Editar registro"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 137,
+      "text": "Ver detalhes"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 145,
+      "text": "Código, registro ou responsável"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 153,
+      "text": "Em revisão"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 153,
+      "text": "Em revisão"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 309,
+      "text": "${feature.label} - revisão"
+    },
+    {
+      "feature": "admin-feature",
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts",
+      "kind": "typescript-ui-literal",
+      "line": 318,
+      "text": "${feature.label} - pendência"
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/estagio-probatorio/estagio-probatorio.ts",
+      "kind": "typescript-ui-literal",
+      "line": 74,
+      "text": "Nao foi possivel carregar o estagio probatorio."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/estagio-probatorio/estagio-probatorio.ts",
+      "kind": "typescript-ui-literal",
+      "line": 100,
+      "text": "Avaliacao registrada."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/estagio-probatorio/estagio-probatorio.ts",
+      "kind": "typescript-ui-literal",
+      "line": 105,
+      "text": "Nao foi possivel registrar a avaliacao."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/pccs/pccs.ts",
+      "kind": "typescript-ui-literal",
+      "line": 82,
+      "text": "Nao foi possivel carregar os PCCS."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/pccs/pccs.ts",
+      "kind": "typescript-ui-literal",
+      "line": 125,
+      "text": "PCCS salvo."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/pccs/pccs.ts",
+      "kind": "typescript-ui-literal",
+      "line": 129,
+      "text": "Nao foi possivel salvar o PCCS."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/pccs/pccs.ts",
+      "kind": "typescript-ui-literal",
+      "line": 155,
+      "text": "Reajuste aplicado."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/pccs/pccs.ts",
+      "kind": "typescript-ui-literal",
+      "line": 159,
+      "text": "Nao foi possivel aplicar o reajuste."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/progressoes/progressoes.ts",
+      "kind": "typescript-ui-literal",
+      "line": 82,
+      "text": "Nao foi possivel carregar as progressoes."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/progressoes/progressoes.ts",
+      "kind": "typescript-ui-literal",
+      "line": 109,
+      "text": "Simulacao registrada."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/progressoes/progressoes.ts",
+      "kind": "typescript-ui-literal",
+      "line": 113,
+      "text": "Nao foi possivel simular a progressao."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/progressoes/progressoes.ts",
+      "kind": "typescript-ui-literal",
+      "line": 129,
+      "text": "Progressao aplicada."
+    },
+    {
+      "feature": "avaliacao",
+      "file": "frontend/src/app/features/avaliacao/progressoes/progressoes.ts",
+      "kind": "typescript-ui-literal",
+      "line": 133,
+      "text": "Nao foi possivel aplicar a progressao."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/certificados/esocial-certificados.ts",
+      "kind": "typescript-ui-literal",
+      "line": 42,
+      "text": "Nao foi possivel carregar os certificados."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/certificados/esocial-certificados.ts",
+      "kind": "typescript-ui-literal",
+      "line": 78,
+      "text": "Informe alias, tipo e arquivo PKCS#12."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/certificados/esocial-certificados.ts",
+      "kind": "typescript-ui-literal",
+      "line": 100,
+      "text": "Nao foi possivel salvar o certificado."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/exclusao/esocial-exclusao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 48,
+      "text": "Nao foi possivel carregar eventos elegiveis."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/exclusao/esocial-exclusao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 74,
+      "text": "Nao foi possivel solicitar a exclusao S-3000."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/fechamento/esocial-fechamento.ts",
+      "kind": "typescript-ui-literal",
+      "line": 44,
+      "text": "Nao foi possivel carregar o fechamento."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/fechamento/esocial-fechamento.ts",
+      "kind": "typescript-ui-literal",
+      "line": 59,
+      "text": "Nao foi possivel fechar a competencia."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/folha-periodica/esocial-folha-periodica.ts",
+      "kind": "typescript-ui-literal",
+      "line": 43,
+      "text": "Nao foi possivel carregar a folha periodica."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/folha-periodica/esocial-folha-periodica.ts",
+      "kind": "typescript-ui-literal",
+      "line": 73,
+      "text": "Nao foi possivel emitir a folha periodica."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/retornos/esocial-retornos.ts",
+      "kind": "typescript-ui-literal",
+      "line": 44,
+      "text": "Nao foi possivel carregar os retornos."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/retornos/esocial-retornos.ts",
+      "kind": "typescript-ui-literal",
+      "line": 61,
+      "text": "Nao foi possivel forcar o retry."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/retornos/esocial-retornos.ts",
+      "kind": "typescript-ui-literal",
+      "line": 74,
+      "text": "Nao foi possivel marcar como tratado."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/submissao/esocial-submissao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 44,
+      "text": "Nao foi possivel carregar as submissoes."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/submissao/esocial-submissao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 57,
+      "text": "Nao foi possivel forcar o retry."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/tabelas/esocial-tabelas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 41,
+      "text": "Nao foi possivel carregar as tabelas iniciais."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/tabelas/esocial-tabelas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 70,
+      "text": "Nao foi possivel emitir os deltas S-1xxx."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/trabalhadores/esocial-trabalhadores.ts",
+      "kind": "typescript-ui-literal",
+      "line": 46,
+      "text": "Nao foi possivel carregar o cadastro eSocial."
+    },
+    {
+      "feature": "esocial",
+      "file": "frontend/src/app/features/esocial/trabalhadores/esocial-trabalhadores.ts",
+      "kind": "typescript-ui-literal",
+      "line": 87,
+      "text": "Nao foi possivel emitir o evento eSocial."
+    },
+    {
+      "feature": "fiscal",
+      "file": "frontend/src/app/features/fiscal/dctfweb/dctfweb.ts",
+      "kind": "typescript-ui-literal",
+      "line": 139,
+      "text": "Operacao DCTFWeb indisponivel."
+    },
+    {
+      "feature": "fiscal",
+      "file": "frontend/src/app/features/fiscal/dirf/dirf.ts",
+      "kind": "typescript-ui-literal",
+      "line": 126,
+      "text": "Operacao DIRF indisponivel."
+    },
+    {
+      "feature": "fiscal",
+      "file": "frontend/src/app/features/fiscal/gps-residual/gps-residual.ts",
+      "kind": "typescript-ui-literal",
+      "line": 131,
+      "text": "Operacao GPS indisponivel."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/competencia/folha-mensal.ts",
+      "kind": "typescript-ui-literal",
+      "line": 54,
+      "text": "Nao foi possivel processar a competencia."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/comprovantes-rendimentos/comprovantes-rendimentos.ts",
+      "kind": "typescript-ui-literal",
+      "line": 59,
+      "text": "Nao foi possivel gerar os comprovantes."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/fgts-remessas/fgts-remessas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 41,
+      "text": "Nao foi possivel gerar a GRF."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/fgts-remessas/fgts-remessas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 57,
+      "text": "Nao foi possivel gerar a GRRF."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/fgts-remessas/fgts-remessas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 71,
+      "text": "Nao foi possivel carregar a remessa."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/fgts/fgts.ts",
+      "kind": "typescript-ui-literal",
+      "line": 41,
+      "text": "Nao foi possivel carregar o FGTS."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/fgts/fgts.ts",
+      "kind": "typescript-ui-literal",
+      "line": 62,
+      "text": "Nao foi possivel reprocessar a competencia."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/pages/folha-pagamento-home/folha-pagamento-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 50,
+      "text": "Gerar 1a parcela 13o"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/pages/folha-pagamento-home/folha-pagamento-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 50,
+      "text": "Fechar 13o"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/pages/folha-pagamento-home/folha-pagamento-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 67,
+      "text": "Calcular folha de ferias"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/pages/folha-pagamento-home/folha-pagamento-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 98,
+      "text": "Nao foi possivel processar a folha."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/pis-pasep/pis-pasep.ts",
+      "kind": "typescript-ui-literal",
+      "line": 45,
+      "text": "Nao foi possivel carregar a base PIS/PASEP."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/processamentos/rescisao/rescisao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 18,
+      "text": "Sem justa causa"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/processamentos/rescisao/rescisao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 19,
+      "text": "Pedido de demissao"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/processamentos/rescisao/rescisao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 25,
+      "text": "Sem aviso"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/processamentos/rescisao/rescisao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 31,
+      "text": "Sem reducao"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/processamentos/rescisao/rescisao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 32,
+      "text": "Duas horas por dia"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/processamentos/rescisao/rescisao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 33,
+      "text": "Sete dias finais"
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/processamentos/rescisao/rescisao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 75,
+      "text": "Nao foi possivel calcular a rescisao."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 111,
+      "text": "Nao foi possivel carregar rubricas."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 186,
+      "text": "Formula valida."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 186,
+      "text": "Formula invalida."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 189,
+      "text": "Nao foi possivel validar a formula."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 198,
+      "text": "Formula recompilada."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 203,
+      "text": "Nao foi possivel recompilar a formula."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 219,
+      "text": "Rubrica salva."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 224,
+      "text": "Nao foi possivel salvar a rubrica."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 250,
+      "text": "Nao foi possivel executar o preview."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 271,
+      "text": "Cargo vinculado a rubrica."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 275,
+      "text": "Nao foi possivel vincular cargo e rubrica."
+    },
+    {
+      "feature": "folha-pagamento",
+      "file": "frontend/src/app/features/folha-pagamento/simulacao/simulacao.ts",
+      "kind": "typescript-ui-literal",
+      "line": 61,
+      "text": "Nao foi possivel simular a folha."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/cargos/cargos.ts",
+      "kind": "typescript-ui-literal",
+      "line": 64,
+      "text": "Nao foi possivel carregar cargos."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/cargos/cargos.ts",
+      "kind": "typescript-ui-literal",
+      "line": 81,
+      "text": "Codigo ja cadastrado para este tenant."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/cargos/cargos.ts",
+      "kind": "typescript-ui-literal",
+      "line": 107,
+      "text": "Nao foi possivel salvar o cargo."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/master-data/master-data.ts",
+      "kind": "typescript-ui-literal",
+      "line": 55,
+      "text": "Nao foi possivel carregar os cadastros de estrutura."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/master-data/master-data.ts",
+      "kind": "typescript-ui-literal",
+      "line": 85,
+      "text": "Nao foi possivel carregar todos os cadastros de estrutura."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 48,
+      "text": "Codigo, nome ou descricao"
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 57,
+      "text": "Editar registro"
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 63,
+      "text": "Desativar registro"
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 157,
+      "text": "Registro atualizado."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 157,
+      "text": "Registro criado."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 162,
+      "text": "Nao foi possivel salvar o registro."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 177,
+      "text": "Nao foi possivel carregar os recursos de Gestao."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 224,
+      "text": "Nao foi possivel carregar os registros."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 257,
+      "text": "Registro desativado."
+    },
+    {
+      "feature": "gestao",
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts",
+      "kind": "typescript-ui-literal",
+      "line": 261,
+      "text": "Nao foi possivel desativar o registro."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/afd/ponto-afd.ts",
+      "kind": "typescript-ui-literal",
+      "line": 66,
+      "text": "Nao foi possivel carregar historico AFD."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/afd/ponto-afd.ts",
+      "kind": "typescript-ui-literal",
+      "line": 93,
+      "text": "AFD ${entry.status}: ${entry.lineCount} linhas."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/afd/ponto-afd.ts",
+      "kind": "typescript-ui-literal",
+      "line": 97,
+      "text": "Nao foi possivel gerar o AFD."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/afd/ponto-afd.ts",
+      "kind": "typescript-ui-literal",
+      "line": 124,
+      "text": "Importacao ${entry.status}: ${entry.acceptedLines} aceitas."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/afd/ponto-afd.ts",
+      "kind": "typescript-ui-literal",
+      "line": 128,
+      "text": "Nao foi possivel importar o AFD."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/afd/ponto-afd.ts",
+      "kind": "typescript-ui-literal",
+      "line": 165,
+      "text": "Nao foi possivel carregar importacoes AFD."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/banco-horas/ponto-banco-horas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 63,
+      "text": "Nao foi possivel carregar bancos de horas."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/banco-horas/ponto-banco-horas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 79,
+      "text": "Nao foi possivel carregar o extrato."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/banco-horas/ponto-banco-horas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 109,
+      "text": "Ajuste registrado."
+    },
+    {
+      "feature": "ponto",
+      "file": "frontend/src/app/features/ponto/banco-horas/ponto-banco-horas.ts",
+      "kind": "typescript-ui-literal",
+      "line": 113,
+      "text": "Nao foi possivel registrar o ajuste."
+    }
+  ],
+  "topFiles": [
+    {
+      "count": 31,
+      "file": "frontend/src/app/features/rh/pages/rh-home/rh-home.ts"
+    },
+    {
+      "count": 11,
+      "file": "frontend/src/app/features/folha-pagamento/rubricas/rubricas.ts"
+    },
+    {
+      "count": 10,
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.ts"
+    },
+    {
+      "count": 10,
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts"
+    },
+    {
+      "count": 9,
+      "file": "frontend/src/app/features/ponto/escalas/ponto-escalas.ts"
+    },
+    {
+      "count": 8,
+      "file": "frontend/src/app/features/portal-empregado/ponto-mobile/ponto-mobile.ts"
+    },
+    {
+      "count": 7,
+      "file": "frontend/src/app/features/folha-pagamento/processamentos/rescisao/rescisao.ts"
+    },
+    {
+      "count": 6,
+      "file": "frontend/src/app/features/ponto/afd/ponto-afd.ts"
+    },
+    {
+      "count": 6,
+      "file": "frontend/src/app/features/ponto/face-admin/face-admin.ts"
+    },
+    {
+      "count": 6,
+      "file": "frontend/src/app/features/ponto/jornadas/ponto-jornadas.ts"
+    },
+    {
+      "count": 5,
+      "file": "frontend/src/app/features/avaliacao/pccs/pccs.ts"
+    },
+    {
+      "count": 5,
+      "file": "frontend/src/app/features/avaliacao/progressoes/progressoes.ts"
+    },
+    {
+      "count": 5,
+      "file": "frontend/src/app/features/ponto/rep/ponto-rep.ts"
+    },
+    {
+      "count": 5,
+      "file": "frontend/src/app/features/rh/cadastral-changes/cadastral-changes.ts"
+    },
+    {
+      "count": 5,
+      "file": "frontend/src/app/features/rh/employees/alimony/alimony.ts"
+    },
+    {
+      "count": 5,
+      "file": "frontend/src/app/features/rh/funcionarios/funcionarios.ts"
+    },
+    {
+      "count": 5,
+      "file": "frontend/src/app/features/saude/pericia/pericia.ts"
+    },
+    {
+      "count": 4,
+      "file": "frontend/src/app/features/folha-pagamento/pages/folha-pagamento-home/folha-pagamento-home.ts"
+    },
+    {
+      "count": 4,
+      "file": "frontend/src/app/features/ponto/banco-horas/ponto-banco-horas.ts"
+    },
+    {
+      "count": 4,
+      "file": "frontend/src/app/features/ponto/biometria/ponto-biometria.ts"
+    }
+  ],
+  "totalFindings": 251
+}

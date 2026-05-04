@@ -108,7 +108,7 @@ export const evidenceSteps = [
   {
     name: 'backend-e2e',
     command: 'npm',
-    args: ['run', 'test:e2e'],
+    args: ['run', 'test:e2e', '--', '--runInBand'],
     requiredEnv: ['DATABASE_URL'],
   },
   {
@@ -125,7 +125,7 @@ export const evidenceSteps = [
   {
     name: 'backend-coverage',
     command: 'npm',
-    args: ['run', 'test:coverage'],
+    args: ['run', 'test:coverage', '--', '--runInBand'],
     requiredEnv: ['DATABASE_URL'],
   },
   {

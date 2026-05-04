@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Subject, forkJoin, finalize, takeUntil } from 'rxjs';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 import {
   ESocialCircuitState,
@@ -16,9 +16,8 @@ import {
   templateUrl: './esocial-submissao.html',
   styleUrl: './esocial-submissao.scss',
 })
-export class ESocialSubmissao implements OnInit, OnDestroy {
+export class ESocialSubmissao implements OnInit {
   private readonly service = inject(ESocialSubmissaoService);
-  private readonly destroy$ = new Subject<void>();
   batches: ESocialSubmissionBatch[] = [];
   circuits: ESocialCircuitState[] = [];
   loading = false;
@@ -26,47 +25,39 @@ export class ESocialSubmissao implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.error = '';
-    forkJoin({
-      batches: this.service.listBatches(),
-      circuits: this.service.listCircuits(),
-    })
-      .pipe(
-        finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: ({ batches, circuits }) => {
-          this.batches = batches;
-          this.circuits = circuits;
-        },
-        error: () => (this.error = 'Nao foi possivel carregar as submissoes.'),
-      });
+    try {
+      const { batches, circuits } = await firstValueFrom(
+        forkJoin({
+          batches: this.service.listBatches(),
+          circuits: this.service.listCircuits(),
+        }),
+      );
+      this.batches = batches;
+      this.circuits = circuits;
+    } catch {
+      this.error = 'Nao foi possivel carregar as submissoes.';
+    } finally {
+      this.loading = false;
+    }
   }
 
-  forceRetry(batch: ESocialSubmissionBatch): void {
+  async forceRetry(batch: ESocialSubmissionBatch): Promise<void> {
     this.retryingBatchId = batch.batchId;
     this.error = '';
-    this.service
-      .forceRetry(batch.batchId)
-      .pipe(
-        finalize(() => (this.retryingBatchId = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => this.load(),
-        error: () => (this.error = 'Nao foi possivel forcar o retry.'),
-      });
+    try {
+      await firstValueFrom(this.service.forceRetry(batch.batchId));
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel forcar o retry.';
+    } finally {
+      this.retryingBatchId = '';
+    }
   }
 
   canRetry(batch: ESocialSubmissionBatch): boolean {

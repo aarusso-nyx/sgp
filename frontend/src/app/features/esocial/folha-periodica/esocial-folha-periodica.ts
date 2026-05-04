@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import {
   ESocialFolhaPeriodicaService,
@@ -17,9 +17,8 @@ import {
   templateUrl: './esocial-folha-periodica.html',
   styleUrl: './esocial-folha-periodica.scss',
 })
-export class ESocialFolhaPeriodica implements OnInit, OnDestroy {
+export class ESocialFolhaPeriodica implements OnInit {
   private readonly service = inject(ESocialFolhaPeriodicaService);
-  private readonly destroy$ = new Subject<void>();
   year = 2026;
   month = 1;
   rows: ESocialPeriodicPayrollStatus[] = [];
@@ -32,60 +31,48 @@ export class ESocialFolhaPeriodica implements OnInit, OnDestroy {
     const now = new Date();
     this.year = now.getFullYear();
     this.month = now.getMonth() + 1;
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.error = '';
-    this.service
-      .status(this.year, this.month)
-      .pipe(
-        finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (rows) => (this.rows = rows),
-        error: () => (this.error = 'Nao foi possivel carregar a folha periodica.'),
-      });
+    try {
+      this.rows = await firstValueFrom(this.service.status(this.year, this.month));
+    } catch {
+      this.error = 'Nao foi possivel carregar a folha periodica.';
+    } finally {
+      this.loading = false;
+    }
   }
 
   emitS1200(row: ESocialPeriodicPayrollStatus): void {
-    this.run(row.employeeId, () => this.service.emitS1200(row.payrollRunId, row.employeeId));
+    void this.run(row.employeeId, () => this.service.emitS1200(row.payrollRunId, row.employeeId));
   }
 
   emitS1210(row: ESocialPeriodicPayrollStatus): void {
     if (!row.paymentBatchId) return;
     const paymentBatchId = row.paymentBatchId;
-    this.run(row.employeeId, () => this.service.emitS1210(paymentBatchId, row.employeeId));
+    void this.run(row.employeeId, () => this.service.emitS1210(paymentBatchId, row.employeeId));
   }
 
   reemitWorker(row: ESocialPeriodicPayrollStatus): void {
-    this.run(row.employeeId, () => this.service.reemitWorker(row));
+    void this.run(row.employeeId, () => this.service.reemitWorker(row));
   }
 
-  private run(
+  private async run(
     marker: string,
     callback: () => ReturnType<ESocialFolhaPeriodicaService['emitS1200']>,
-  ): void {
+  ): Promise<void> {
     this.emitting = marker;
     this.error = '';
-    callback()
-      .pipe(
-        finalize(() => (this.emitting = '')),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (result) => {
-          this.lastResult = result;
-          this.load();
-        },
-        error: () => (this.error = 'Nao foi possivel emitir a folha periodica.'),
-      });
+    try {
+      this.lastResult = await firstValueFrom(callback());
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel emitir a folha periodica.';
+    } finally {
+      this.emitting = '';
+    }
   }
 }

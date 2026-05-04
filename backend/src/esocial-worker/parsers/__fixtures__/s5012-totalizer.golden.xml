@@ -4,8 +4,13 @@
     <ideEvento>
       <perApur>2026-01</perApur>
     </ideEvento>
+    <ideEmpregador>
+      <tpInsc>1</tpInsc>
+      <nrInsc>12345678000199</nrInsc>
+    </ideEmpregador>
     <infoIRRF>
       <nrRecArqBase>1.1.0000000000000001299</nrRecArqBase>
+      <indExistInfo>1</indExistInfo>
       <infoCRMen>
         <CRMen>056107</CRMen>
         <vrCRMen>4200.00</vrCRMen>

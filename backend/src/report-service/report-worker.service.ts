@@ -84,6 +84,8 @@ export interface ReportWorkerRunSummary {
   skipped: number;
 }
 
+type ReportWorkerJobOutcome = 'processed' | 'failed';
+
 type CanonicalReportCode =
   | 'F_FOL_013'
   | 'F_FOL_014'
@@ -122,6 +124,7 @@ const WORKER_PERMISSIONS = [
 export class ReportWorkerService {
   private readonly logger = new Logger(ReportWorkerService.name);
   private readonly workerName = 'sgp-report-worker';
+  private readonly reportGenerationLocks = new Map<string, Promise<void>>();
 
   constructor(
     private readonly databaseService: DatabaseService,
@@ -139,28 +142,41 @@ export class ReportWorkerService {
     };
 
     for (const job of jobs) {
-      try {
+      const outcome = await this.processClaimedJob(job);
+      if (outcome === 'processed') {
+        summary.processed += 1;
+      } else {
+        summary.failed += 1;
+      }
+    }
+
+    return summary;
+  }
+
+  private async processClaimedJob(
+    job: ReportJobRow,
+  ): Promise<ReportWorkerJobOutcome> {
+    try {
+      await this.runWithReportIsolation(job, async () => {
         const result = await this.runWithinTenant(job.tenant_id, () =>
           this.process(job),
         );
         await this.runWithinTenant(job.tenant_id, () =>
           this.complete(job, result),
         );
-        summary.processed += 1;
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'Unexpected report failure';
-        this.logger.error(
-          `failed to process ${job.definition_code} request ${job.id}: ${message}`,
-        );
-        await this.runWithinTenant(job.tenant_id, () =>
-          this.fail(job.id, message),
-        );
-        summary.failed += 1;
-      }
+      });
+      return 'processed';
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Unexpected report failure';
+      this.logger.error(
+        `failed to process ${job.definition_code} request ${job.id}: ${message}`,
+      );
+      await this.runWithinTenant(job.tenant_id, () =>
+        this.fail(job.id, message),
+      );
+      return 'failed';
     }
-
-    return summary;
   }
 
   async backpressureStatus(limit = 10): Promise<WorkerBackpressureDecision> {
@@ -646,6 +662,7 @@ export class ReportWorkerService {
       pathSegment,
       String(job.competence_year ?? 'unknown'),
       String(job.competence_month ?? 0).padStart(2, '0'),
+      job.id,
       artifact.fileName,
     ].join('/');
     const stored = await this.documentsStorageService.storeGeneratedObject({
@@ -930,6 +947,36 @@ export class ReportWorkerService {
       return 'F_FOL_017';
     }
     throw new Error(`Unsupported report worker definition: ${code}`);
+  }
+
+  private async runWithReportIsolation<T>(
+    job: ReportJobRow,
+    fn: () => Promise<T>,
+  ): Promise<T> {
+    const key = this.reportGenerationLockKey(job);
+    let releaseLock!: () => void;
+    const currentLock = new Promise<void>((resolve) => {
+      releaseLock = resolve;
+    });
+    const previousLock = this.reportGenerationLocks.get(key);
+    this.reportGenerationLocks.set(key, currentLock);
+
+    if (previousLock) {
+      await previousLock;
+    }
+
+    try {
+      return await fn();
+    } finally {
+      releaseLock();
+      if (this.reportGenerationLocks.get(key) === currentLock) {
+        this.reportGenerationLocks.delete(key);
+      }
+    }
+  }
+
+  private reportGenerationLockKey(job: ReportJobRow): string {
+    return [job.tenant_id, this.canonicalCode(job.definition_code)].join(':');
   }
 
   private fileName(

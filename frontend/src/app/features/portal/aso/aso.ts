@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -22,23 +22,12 @@ interface PortalAsoRecord {
   templateUrl: './aso.html',
   styleUrl: './aso.scss',
 })
-export class PortalAso implements OnDestroy {
+export class PortalAso {
   private readonly api = inject(ApiClient);
-  private readonly destroy$ = new Subject<void>();
 
   records: PortalAsoRecord[] = [];
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
-    this.api
-      .get<PortalAsoRecord[]>('v1/portal/aso')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((records) => {
-        this.records = records;
-      });
+  async load(): Promise<void> {
+    this.records = await firstValueFrom(this.api.get<PortalAsoRecord[]>('v1/portal/aso'));
   }
 }

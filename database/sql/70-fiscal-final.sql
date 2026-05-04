@@ -407,3 +407,5 @@ ALTER TABLE fiscal.yearly_income_aggregate ENABLE ROW LEVEL SECURITY;
 CREATE POLICY yearly_income_aggregate_select ON fiscal.yearly_income_aggregate FOR SELECT USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.yearly_income.read'::text, 'fiscal.yearly_income.write'::text, 'report.payslip.read'::text])) OR (public.sgp_tenant_matches(tenant_id) AND (employee_id = public.sgp_current_employee_id()) AND public.sgp_has_any_permission(ARRAY['portal.yearly_income.read'::text]))));
 
 CREATE POLICY yearly_income_aggregate_write ON fiscal.yearly_income_aggregate USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.yearly_income.write'::text])))) WITH CHECK ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['fiscal.yearly_income.write'::text]))));
+
+COMMENT ON TABLE fiscal.gps_payment_code IS 'R4-72 global GPS payment-code reference catalog. Non-tenant-scoped: rows are statutory payment-code definitions shared by every tenant and contain no tenant data or PII.';

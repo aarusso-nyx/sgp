@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ApiClient } from '../../../core/api/api-client';
 
 interface YearlyIncomeFile {
@@ -19,30 +19,24 @@ interface YearlyIncomeFile {
   templateUrl: './comprovante-rendimentos.html',
   styleUrl: './comprovante-rendimentos.scss',
 })
-export class PortalComprovanteRendimentos implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>();
+export class PortalComprovanteRendimentos implements OnInit {
   private readonly api = inject(ApiClient);
 
   files: YearlyIncomeFile[] = [];
   error = '';
 
   ngOnInit(): void {
-    this.api
-      .get<YearlyIncomeFile[]>('/api/v1/portal/yearly-income')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (files) => {
-          this.files = files;
-        },
-        error: () => {
-          this.error = 'Nao foi possivel carregar os comprovantes.';
-        },
-      });
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private async load(): Promise<void> {
+    try {
+      this.files = await firstValueFrom(
+        this.api.get<YearlyIncomeFile[]>('/api/v1/portal/yearly-income'),
+      );
+    } catch {
+      this.error = 'Nao foi possivel carregar os comprovantes.';
+    }
   }
 
   download(file: YearlyIncomeFile): void {

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { firstValueFrom } from 'rxjs';
 
 import { TceAdapterRegistry, TceAdaptersApiService } from './tce-adapters.service';
 
@@ -23,20 +24,20 @@ export class TceAdapters {
   errorMessage = '';
 
   constructor() {
-    this.load();
+    void this.load();
   }
 
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.errorMessage = '';
-    this.service.list().subscribe({
-      next: (items) => {
-        this.adapters = items;
-        this.selected = this.keepSelection(items);
-        this.loading = false;
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      const items = await firstValueFrom(this.service.list());
+      this.adapters = items;
+      this.selected = this.keepSelection(items);
+      this.loading = false;
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
   select(adapter: TceAdapterRegistry): void {
@@ -44,11 +45,11 @@ export class TceAdapters {
   }
 
   enable(adapter: TceAdapterRegistry): void {
-    this.transition(adapter, 'enable');
+    void this.transition(adapter, 'enable');
   }
 
   disable(adapter: TceAdapterRegistry): void {
-    this.transition(adapter, 'disable');
+    void this.transition(adapter, 'disable');
   }
 
   isBusy(adapter: TceAdapterRegistry): boolean {
@@ -72,17 +73,21 @@ export class TceAdapters {
     return JSON.stringify(payload);
   }
 
-  private transition(adapter: TceAdapterRegistry, action: 'enable' | 'disable'): void {
+  private async transition(
+    adapter: TceAdapterRegistry,
+    action: 'enable' | 'disable',
+  ): Promise<void> {
     this.busyId = adapter.adapterId;
     this.errorMessage = '';
     const request =
       action === 'enable'
         ? this.service.enable(adapter.adapterId)
         : this.service.disable(adapter.adapterId);
-    request.subscribe({
-      next: (updated) => this.upsert(updated),
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      this.upsert(await firstValueFrom(request));
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
   private upsert(adapter: TceAdapterRegistry): void {

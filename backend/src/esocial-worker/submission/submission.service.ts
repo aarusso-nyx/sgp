@@ -3,6 +3,8 @@ import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { SoftwarePadesPkcs7Signer } from '../../auth/govbr/software-pades-pkcs7.signer';
+import { EsocialQueueAdapter } from '../adapters/queue-adapter';
 import { CertificateStoreService } from '../certificate-store/certificate-store.service';
 import {
   BatchBuilderService,
@@ -85,6 +87,8 @@ const SUBMISSION_WORKER_PERMISSIONS = [
 
 @Injectable()
 export class SubmissionService {
+  private readonly padesSigner = new SoftwarePadesPkcs7Signer();
+
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly certificateStore: CertificateStoreService,
@@ -92,6 +96,7 @@ export class SubmissionService {
     private readonly soapClient: SoapClientService,
     private readonly retryStrategy: RetryStrategyService,
     private readonly circuitBreaker: CircuitBreakerService,
+    private readonly queueAdapter?: EsocialQueueAdapter,
   ) {}
 
   async submitPendingBatch(
@@ -175,6 +180,63 @@ export class SubmissionService {
   private async submitBatch(
     batch: SubmissionBatchWorkItem,
   ): Promise<SubmissionRunResult> {
+    if (this.queueAdapter) {
+      if (this.isR4_97QueueSupported(batch)) {
+        return this.submitBatchViaQueue(batch);
+      }
+      return this.markQueueUnsupported(batch);
+    }
+    return this.submitBatchViaSoap(batch);
+  }
+
+  private async submitBatchViaQueue(
+    batch: SubmissionBatchWorkItem,
+  ): Promise<SubmissionRunResult> {
+    const xml = batch.eventXmlPayloads[0];
+    if (!xml) {
+      throw new ServiceUnavailableException(
+        'Queue-backed eSocial submission requires an event XML payload',
+      );
+    }
+
+    try {
+      const result = await this.queueAdapter!.submitSignedEnvelope({
+        tenantId: batch.tenantId,
+        batchId: batch.batchId,
+        environment: batch.environment,
+        endpointUrl: batch.endpointUrl,
+        eventIds: batch.eventIds,
+        eventClass: 'S-1299',
+        signedEnvelope: this.padesSigner.signS1299({
+          tenantId: batch.tenantId,
+          xml,
+          signedAt: new Date().toISOString(),
+        }),
+        idempotencyKey: `${batch.tenantId}:${batch.batchId}:S-1299`,
+      });
+      return {
+        batchId: batch.batchId,
+        tenantId: batch.tenantId,
+        eventCount: batch.eventIds.length,
+        status: result.status,
+        attempts: batch.attempts + result.attempts,
+        endpointUrl: batch.endpointUrl,
+      };
+    } catch (error) {
+      return {
+        batchId: batch.batchId,
+        tenantId: batch.tenantId,
+        eventCount: batch.eventIds.length,
+        status: queueFailureStatus(error),
+        attempts: batch.attempts + queueFailureAttempts(error),
+        endpointUrl: batch.endpointUrl,
+      };
+    }
+  }
+
+  private async submitBatchViaSoap(
+    batch: SubmissionBatchWorkItem,
+  ): Promise<SubmissionRunResult> {
     try {
       await this.withWorkerBypassTenant(batch.tenantId, () =>
         this.circuitBreaker.assertCanSend(batch.endpointUrl),
@@ -231,6 +293,54 @@ export class SubmissionService {
         endpointUrl: batch.endpointUrl,
       };
     }
+  }
+
+  private isR4_97QueueSupported(batch: SubmissionBatchWorkItem): boolean {
+    return (
+      batch.eventIds.length === 1 &&
+      batch.eventTypes.length === 1 &&
+      batch.eventTypes[0] === 'S-1299'
+    );
+  }
+
+  private async markQueueUnsupported(
+    batch: SubmissionBatchWorkItem,
+  ): Promise<SubmissionRunResult> {
+    const message =
+      'R4-97 eSocial queue adapter currently supports only S-1299; broader S-1xxx/S-2xxx relay support is owner-blocked for R4-90.';
+    await this.databaseService.transaction(async (client) => {
+      await client.query(
+        `
+        UPDATE esocial.submission_batch
+        SET status = 'RETRY'::esocial.submission_batch_status,
+            next_attempt_at = now() + interval '1 day',
+            updated_at = now()
+        WHERE tenant_id = $1::uuid
+          AND batch_id = $2::uuid
+        `,
+        [batch.tenantId, batch.batchId],
+      );
+      await client.query(
+        `
+        UPDATE public.esocial_event
+        SET status = 'ERRO_TECNICO_RETENTAVEL'::public."ESocialEventStatus",
+            last_error_code = 'ESOCIAL_QUEUE_EVENT_UNSUPPORTED',
+            last_error_message = $3,
+            updated_at = now()
+        WHERE tenant_id = $1::uuid
+          AND id = ANY($2::uuid[])
+        `,
+        [batch.tenantId, batch.eventIds, message],
+      );
+    });
+    return {
+      batchId: batch.batchId,
+      tenantId: batch.tenantId,
+      eventCount: batch.eventIds.length,
+      status: 'RETRY',
+      attempts: batch.attempts,
+      endpointUrl: batch.endpointUrl,
+    };
   }
 
   private async markAccepted(
@@ -446,4 +556,40 @@ function protocolFromResponse(response: string): string | null {
     response.match(/<nrRecibo>([^<]+)<\/nrRecibo>/)?.[1] ??
     null
   );
+}
+
+function queueFailureStatus(error: unknown): SubmissionRunResult['status'] {
+  const responseStatus = queueResponseStatus(error);
+  if (responseStatus === 'DEAD_LETTER') return 'REJECTED';
+  return 'RETRY';
+}
+
+function queueFailureAttempts(error: unknown): number {
+  const record = errorRecord(error);
+  const responseAttempt = recordNumber(record?.response, 'attempt');
+  const requestAttempt = recordNumber(record?.request, 'attempt');
+  return responseAttempt ?? requestAttempt ?? 1;
+}
+
+function queueResponseStatus(error: unknown): string | null {
+  const record = errorRecord(error);
+  return recordString(record?.response, 'status');
+}
+
+function errorRecord(error: unknown): Record<string, unknown> | null {
+  return error && typeof error === 'object'
+    ? (error as Record<string, unknown>)
+    : null;
+}
+
+function recordNumber(value: unknown, key: string): number | null {
+  if (!value || typeof value !== 'object') return null;
+  const candidate = (value as Record<string, unknown>)[key];
+  return typeof candidate === 'number' ? candidate : null;
+}
+
+function recordString(value: unknown, key: string): string | null {
+  if (!value || typeof value !== 'object') return null;
+  const candidate = (value as Record<string, unknown>)[key];
+  return typeof candidate === 'string' ? candidate : null;
 }

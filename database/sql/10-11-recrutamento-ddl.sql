@@ -94,6 +94,11 @@ CREATE TYPE recrutamento.payment_charge_status AS ENUM (
     'CANCELLED'
 );
 
+CREATE TYPE recrutamento.candidato_pool_status AS ENUM (
+    'ACTIVE',
+    'ARCHIVED'
+);
+
 CREATE TYPE recrutamento.payment_gateway_kind AS ENUM (
     'BOLETO',
     'PIX',
@@ -237,11 +242,11 @@ CREATE TABLE recrutamento.candidato (
     curriculum_s3_key text,
     profile_summary text DEFAULT ''::text NOT NULL,
     skills text[] DEFAULT ARRAY[]::text[] NOT NULL,
-    pool_status text DEFAULT 'ACTIVE'::text NOT NULL,
+    -- R4-71: closed talent-pool status converted from ANY ARRAY CHECK to enum.
+    pool_status recrutamento.candidato_pool_status DEFAULT 'ACTIVE'::recrutamento.candidato_pool_status NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT candidato_cpf_digits_check CHECK ((cpf ~ '^[0-9]{11}$'::text)),
-    CONSTRAINT candidato_pool_status_check CHECK ((pool_status = ANY (ARRAY['ACTIVE'::text, 'ARCHIVED'::text])))
+    CONSTRAINT candidato_cpf_digits_check CHECK ((cpf ~ '^[0-9]{11}$'::text))
 );
 
 CREATE TABLE recrutamento.classificacao_item (
@@ -256,6 +261,7 @@ CREATE TABLE recrutamento.classificacao_item (
     call_order integer,
     allocation_bucket text DEFAULT 'GENERAL'::text NOT NULL,
     eliminated_reason text,
+    -- R4-71: deferred enum conversion; allocation_bucket is returned as text by 40-recrutamento-functions.sql public ranking helpers.
     CONSTRAINT classificacao_item_allocation_bucket_check CHECK ((allocation_bucket = ANY (ARRAY['GENERAL'::text, 'PCD'::text, 'RACIAL'::text, 'INDIGENOUS'::text]))),
     CONSTRAINT classificacao_item_rank_check CHECK ((((eliminated_reason IS NULL) AND (rank_general IS NOT NULL)) OR ((eliminated_reason IS NOT NULL) AND (call_order IS NULL))))
 );
@@ -384,6 +390,7 @@ CREATE TABLE recrutamento.online_exam_session (
     ip_address inet NOT NULL,
     user_agent text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
+    -- R4-71: kept as enum-typed state invariant; status is already recrutamento.online_exam_session_status and this CHECK ties status to timestamps.
     CONSTRAINT online_exam_session_status_time_check CHECK ((((status = 'SCHEDULED'::recrutamento.online_exam_session_status) AND (started_at IS NULL) AND (ended_at IS NULL)) OR ((status = 'IN_PROGRESS'::recrutamento.online_exam_session_status) AND (started_at IS NOT NULL) AND (ended_at IS NULL)) OR ((status = ANY (ARRAY['SUBMITTED'::recrutamento.online_exam_session_status, 'VOIDED'::recrutamento.online_exam_session_status, 'RESCHEDULED'::recrutamento.online_exam_session_status])) AND (started_at IS NOT NULL) AND (ended_at IS NOT NULL)))),
     CONSTRAINT online_exam_session_void_reason_check CHECK (((status <> 'VOIDED'::recrutamento.online_exam_session_status) OR (void_reason IS NOT NULL)))
 );
@@ -477,6 +484,7 @@ CREATE TABLE recrutamento.recurso (
     parecer text,
     decided_at timestamp with time zone,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
+    -- R4-71: kept as enum-typed state invariant; status is already recrutamento.recurso_status and this CHECK ties terminal decisions to parecer/decided_at.
     CONSTRAINT recurso_decision_check CHECK ((((status = 'OPEN'::recrutamento.recurso_status) AND (parecer IS NULL) AND (decided_at IS NULL)) OR ((status = ANY (ARRAY['UPHELD'::recrutamento.recurso_status, 'REJECTED'::recrutamento.recurso_status])) AND (parecer IS NOT NULL) AND (decided_at IS NOT NULL))))
 );
 

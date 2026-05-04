@@ -76,6 +76,34 @@ CREATE TYPE hr.salary_history_reason AS ENUM (
     'reestruturacao'
 );
 
+CREATE TYPE hr.cadastral_change_section AS ENUM (
+    'cadastro',
+    'endereco',
+    'contato',
+    'dependentes',
+    'documentos'
+);
+
+CREATE TYPE hr.employee_alimony_history_operation AS ENUM (
+    'UPDATE',
+    'DELETE'
+);
+
+CREATE TYPE hr.cf37_xvi_accumulation_role_kind AS ENUM (
+    'TEACHER',
+    'TECHNICAL_SCIENTIFIC',
+    'HEALTH_PROFESSIONAL',
+    'COMMISSIONED',
+    'OTHER'
+);
+
+CREATE TYPE hr.probation_evaluation_decision AS ENUM (
+    'pending',
+    'approved',
+    'rejected',
+    'extended'
+);
+
 CREATE TABLE hr.branch (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     company_id uuid NOT NULL,
@@ -170,6 +198,7 @@ CREATE TABLE hr.employment_link (
     functional_status_id uuid,
     termination_payroll_run_id uuid,
     CONSTRAINT employment_link_commissioned_position_check CHECK (((contract_type <> 'commissioned'::text) OR (commission_position_id IS NOT NULL))),
+    -- R4-71: deferred enum conversion; contract_type is still consumed as text by 40-payment-functions.sql, 40-hr-functions.sql, and 70-esocial-final.sql.
     CONSTRAINT employment_link_contract_type_check CHECK ((contract_type = ANY (ARRAY['statutory'::text, 'celetista'::text, 'commissioned'::text, 'temporary'::text]))),
     CONSTRAINT employment_link_statutory_law_check CHECK (((contract_type <> 'statutory'::text) OR (length(btrim(regime_law_reference)) > 0))),
     CONSTRAINT employment_link_temporary_end_date_check CHECK (((contract_type <> 'temporary'::text) OR (end_date IS NOT NULL)))
@@ -277,7 +306,8 @@ CREATE TABLE hr.cadastral_change_request (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
     employee_id uuid NOT NULL,
-    section text NOT NULL,
+    -- R4-71: closed portal profile section set converted from ANY ARRAY CHECK to enum.
+    section hr.cadastral_change_section NOT NULL,
     status public."CadastralChangeStatus" DEFAULT 'PENDING'::public."CadastralChangeStatus" NOT NULL,
     previous_payload jsonb DEFAULT '{}'::jsonb NOT NULL,
     requested_payload jsonb DEFAULT '{}'::jsonb NOT NULL,
@@ -289,8 +319,7 @@ CREATE TABLE hr.cadastral_change_request (
     decided_at timestamp(6) with time zone,
     decision_notes text,
     created_at timestamp(6) with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp(6) with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT cadastral_change_request_section_check CHECK ((section = ANY (ARRAY['cadastro'::text, 'endereco'::text, 'contato'::text, 'dependentes'::text, 'documentos'::text])))
+    updated_at timestamp(6) with time zone DEFAULT now() NOT NULL
 );
 
 CREATE TABLE hr.career_plan (
@@ -320,6 +349,7 @@ CREATE TABLE hr.competence_period (
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
     opened_at timestamp with time zone,
     closed_at timestamp with time zone,
+    -- R4-71: deferred enum conversion; 70-portal-final.sql compares competence status through text arrays in paystub views.
     CONSTRAINT competence_period_status_check CHECK ((status = ANY (ARRAY['OPEN'::text, 'CALCULATING'::text, 'CALCULATED'::text, 'APPROVED'::text, 'GENERATED'::text, 'CLOSED'::text])))
 );
 
@@ -432,11 +462,11 @@ CREATE TABLE hr.employee_alimony_history (
     tenant_id uuid NOT NULL,
     alimony_id uuid NOT NULL,
     employee_id uuid NOT NULL,
-    operation text NOT NULL,
+    -- R4-71: closed audit-history operation set converted from ANY ARRAY CHECK to enum.
+    operation hr.employee_alimony_history_operation NOT NULL,
     versioned_at timestamp with time zone DEFAULT now() NOT NULL,
     versioned_by text,
-    previous_record jsonb NOT NULL,
-    CONSTRAINT employee_alimony_history_operation_check CHECK ((operation = ANY (ARRAY['UPDATE'::text, 'DELETE'::text])))
+    previous_record jsonb NOT NULL
 );
 
 CREATE TABLE hr.employee_bank_account (
@@ -812,6 +842,22 @@ CREATE TABLE hr.job_position (
     CONSTRAINT job_position_vacancies_non_negative CHECK (((vacancies_total >= 0) AND (vacancies_filled >= 0) AND (vacancies_open >= 0)))
 );
 
+CREATE TABLE hr.cf37_xvi_accumulation_compatibility (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    -- R4-71: closed CF art. 37 XVI role-kind set converted from ANY ARRAY CHECK to enum.
+    primary_role_kind hr.cf37_xvi_accumulation_role_kind NOT NULL,
+    secondary_role_kind hr.cf37_xvi_accumulation_role_kind NOT NULL,
+    allowed boolean NOT NULL,
+    schedule_compatibility_required boolean DEFAULT true NOT NULL,
+    legal_basis text DEFAULT 'CF art. 37 XVI'::text NOT NULL,
+    notes text DEFAULT ''::text NOT NULL,
+    created_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT cf37_xvi_accumulation_compatibility_pkey PRIMARY KEY (id),
+    CONSTRAINT cf37_xvi_accumulation_compatibility_pair_uq UNIQUE (primary_role_kind, secondary_role_kind),
+    CONSTRAINT cf37_xvi_accumulation_compatibility_basis_chk CHECK ((length(btrim(legal_basis)) > 0))
+);
+
 CREATE TABLE hr.organic_definition (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
@@ -1004,6 +1050,7 @@ CREATE TABLE hr.medical_record (
     leave_ends_on date,
     cid_code text,
     cid_secondary text,
+    -- R4-71: deferred enum conversion; 70-hr-final.sql trigger predicates and HR-04 functions still bind decision as text.
     CONSTRAINT medical_record_decision_check CHECK (((decision IS NULL) OR (decision = ANY (ARRAY['granted'::text, 'denied'::text, 'pending'::text])))),
     CONSTRAINT medical_record_granted_days_check CHECK (((granted_days IS NULL) OR (granted_days > 0))),
     CONSTRAINT medical_record_leave_dates_check CHECK (((leave_starts_on IS NULL) OR (leave_ends_on IS NULL) OR (leave_ends_on >= leave_starts_on)))
@@ -1103,13 +1150,13 @@ CREATE TABLE hr.probation_evaluation (
     period_start date NOT NULL,
     period_end date NOT NULL,
     score numeric(5,2) NOT NULL,
-    decision text NOT NULL,
+    -- R4-71: closed probation decision set converted from ANY ARRAY CHECK to enum.
+    decision hr.probation_evaluation_decision NOT NULL,
     evaluator_id uuid,
     notes text DEFAULT ''::text NOT NULL,
     created_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT probation_evaluation_dates_check CHECK ((period_end >= period_start)),
-    CONSTRAINT probation_evaluation_decision_check CHECK ((decision = ANY (ARRAY['pending'::text, 'approved'::text, 'rejected'::text, 'extended'::text]))),
     CONSTRAINT probation_evaluation_score_check CHECK (((score >= (0)::numeric) AND (score <= (10)::numeric)))
 );
 
@@ -1598,6 +1645,7 @@ CREATE TABLE hr.vacation_record (
     CONSTRAINT vacation_record_dates_check CHECK (((ends_on >= starts_on) AND (days > 0))),
     CONSTRAINT vacation_record_installment_number_check CHECK (((installment_number >= 1) AND (installment_number <= 3))),
     CONSTRAINT vacation_record_pecuniary_bonus_days_check CHECK (((pecuniary_bonus_days >= 0) AND (pecuniary_bonus_days <= 10))),
+    -- R4-71: deferred enum conversion; 40-esocial-functions.sql and 70-hr-final.sql still use text predicates for vacation status.
     CONSTRAINT vacation_record_status_check CHECK ((status = ANY (ARRAY['programado'::text, 'aprovado'::text, 'gozado'::text, 'cancelado'::text, 'paid'::text])))
 );
 

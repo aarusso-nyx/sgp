@@ -6,6 +6,19 @@ CREATE TYPE payroll.formula_attribute_value_type AS ENUM (
     'text'
 );
 
+CREATE TYPE payroll.employee_payroll_item_payment_status AS ENUM (
+    'PROCESSED',
+    'REJECTED',
+    'RETURNED'
+);
+
+CREATE TYPE payroll.payment_return_detail_internal_status AS ENUM (
+    'ACCEPTED',
+    'REJECTED_INVALID_ACCOUNT',
+    'REJECTED_INSUFFICIENT_FUNDS',
+    'RETURNED_OTHER'
+);
+
 CREATE FUNCTION payroll.employee_payroll_item_idempotency_key(p_tenant_id uuid, p_competence_year integer, p_competence_month integer, p_payroll_run_id uuid, p_employee_id uuid, p_earning_deduction_id uuid, p_source public."PayrollEntrySource") RETURNS text
     LANGUAGE sql IMMUTABLE
     AS $$
@@ -45,10 +58,10 @@ CREATE TABLE payroll.employee_payroll_item (
     deleted_at timestamp with time zone,
     deleted_reason text,
     idempotency_key text GENERATED ALWAYS AS (payroll.employee_payroll_item_idempotency_key(tenant_id, competence_year, competence_month, payroll_run_id, employee_id, earning_deduction_id, source)) STORED,
-    payment_status text,
+    -- R4-71: closed CNAB reconciliation status converted from ANY ARRAY CHECK to enum.
+    payment_status payroll.employee_payroll_item_payment_status,
     CONSTRAINT employee_payroll_item_amount_nonnegative_check CHECK ((amount >= (0)::numeric)),
-    CONSTRAINT employee_payroll_item_competence_month_check CHECK (((competence_month >= 1) AND (competence_month <= 12))),
-    CONSTRAINT employee_payroll_item_payment_status_check CHECK (((payment_status IS NULL) OR (payment_status = ANY (ARRAY['PROCESSED'::text, 'REJECTED'::text, 'RETURNED'::text]))))
+    CONSTRAINT employee_payroll_item_competence_month_check CHECK (((competence_month >= 1) AND (competence_month <= 12)))
 );
 
 CREATE TABLE payroll.payment_remittance_detail (
@@ -303,13 +316,13 @@ CREATE TABLE payroll.payment_return_detail (
     sequence integer NOT NULL,
     remittance_detail_id uuid NOT NULL,
     occurrence_code text NOT NULL,
-    internal_status text NOT NULL,
+    -- R4-71: closed CNAB return classification converted from ANY ARRAY CHECK to enum.
+    internal_status payroll.payment_return_detail_internal_status NOT NULL,
     message text DEFAULT ''::text NOT NULL,
     employee_id uuid NOT NULL,
     amount numeric(14,2) NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT payment_return_detail_amount_nonnegative_check CHECK ((amount >= (0)::numeric)),
-    CONSTRAINT payment_return_detail_internal_status_check CHECK ((internal_status = ANY (ARRAY['ACCEPTED'::text, 'REJECTED_INVALID_ACCOUNT'::text, 'REJECTED_INSUFFICIENT_FUNDS'::text, 'RETURNED_OTHER'::text]))),
     CONSTRAINT payment_return_detail_sequence_positive_check CHECK ((sequence > 0))
 );
 

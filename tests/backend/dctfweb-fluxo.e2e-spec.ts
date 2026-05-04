@@ -48,6 +48,7 @@ describe('DCTFWeb flow (e2e)', () => {
             ),
           ]),
         ])
+        .mockResolvedValueOnce([])
         .mockResolvedValueOnce([declarationRow('314.00')])
         .mockResolvedValueOnce([
           itemRow('S5011', '1082-01', '1000.00', '200.00'),
@@ -92,6 +93,78 @@ describe('DCTFWeb flow (e2e)', () => {
     );
     expect(itemAmount).toBe(totalizersAmount);
     expect(result.totalAmount).toBe('314.00');
+  });
+
+  it('includes pending MIT tax debits with CSLL adicional in generated DCTFWeb', async () => {
+    const inserted: Array<{ amount: string; csllAdicionalAmount: string }> = [];
+    const db = {
+      configured: true,
+      query: jest
+        .fn()
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([
+          {
+            pgd_declaration_id: 'PGD-DECL-2026-01',
+            pgd_debit_id: 'PGD-DEBIT-001',
+            cnpj_filial: '12.345.678/0001-99',
+            tax_code: '0561',
+            base_amount: '900,00',
+            amount: '88,10',
+            csll_adicional_amount: '15,00',
+            mit_status: null,
+          },
+        ])
+        .mockResolvedValueOnce([declarationRow('103.10')])
+        .mockResolvedValueOnce([
+          itemRow('MIT', '0561', '900.00', '88.10', {
+            cnpj_filial: '12345678000199',
+            csll_adicional_amount: '15.00',
+            mit_debit_id: 'MIT-generated',
+            mit_status: 'PENDING',
+          }),
+        ]),
+      transaction: jest.fn(
+        async (callback: (client: TestDbClient) => Promise<unknown>) =>
+          callback({
+            query: jest.fn(async (sql: string, values: unknown[]) => {
+              if (sql.includes('INSERT INTO fiscal.dctfweb_declaration')) {
+                return { rows: [{ id: declarationId }] };
+              }
+              if (sql.includes('INSERT INTO fiscal.dctfweb_item')) {
+                inserted.push({
+                  amount: String(values[6]),
+                  csllAdicionalAmount: String(values[7]),
+                });
+              }
+              return { rows: [] };
+            }),
+          }),
+      ),
+    };
+    const service = new DctfwebBuilderService(db as never);
+
+    const result = await RequestContextStore.run(
+      {
+        tenantId,
+        permissions: ['fiscal.dctfweb.read', 'fiscal.dctfweb.write'],
+      },
+      () => service.generate({ year: 2026, month: 1 }),
+    );
+
+    expect(db.query).toHaveBeenCalledWith(
+      expect.stringContaining('FROM fiscal.dctf_pgd_tax_debit'),
+      [tenantId, '2026-01-01'],
+    );
+    expect(inserted).toEqual([
+      { amount: '88.10', csllAdicionalAmount: '15.00' },
+    ]);
+    expect(result.items[0]).toMatchObject({
+      sourceEvent: 'MIT',
+      amount: '88.10',
+      csllAdicionalAmount: '15.00',
+      mitStatus: 'PENDING',
+      cnpjFilial: '12345678000199',
+    });
   });
 
   it('returns 412 when no ICP-Brasil certificate is configured', async () => {
@@ -162,6 +235,7 @@ function itemRow(
   debitCode: string,
   baseAmount: string,
   amount: string,
+  overrides: Record<string, unknown> = {},
 ) {
   return {
     id: `00000000-0000-4000-8000-${debitCode.padEnd(12, '0').slice(0, 12)}`,
@@ -170,6 +244,11 @@ function itemRow(
     debit_code: debitCode,
     base_amount: baseAmount,
     amount,
+    csll_adicional_amount: null,
+    mit_status: null,
+    mit_debit_id: null,
+    cnpj_filial: null,
+    ...overrides,
   };
 }
 

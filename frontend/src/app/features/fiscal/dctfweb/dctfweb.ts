@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { firstValueFrom } from 'rxjs';
 
 import { DctfwebApiService, DctfwebDeclaration } from './dctfweb.service';
 
@@ -42,7 +43,7 @@ export class FiscalDctfweb {
   busyId = '';
   errorMessage = '';
 
-  load(): void {
+  async load(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -50,17 +51,17 @@ export class FiscalDctfweb {
     this.loading = true;
     this.errorMessage = '';
     const { year, month } = this.form.getRawValue();
-    this.service.list(year, month).subscribe({
-      next: (items) => {
-        this.declarations = items;
-        this.selected = items[0] ?? null;
-        this.loading = false;
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      const items = await firstValueFrom(this.service.list(year, month));
+      this.declarations = items;
+      this.selected = items[0] ?? null;
+      this.loading = false;
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  generate(): void {
+  async generate(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -72,35 +73,39 @@ export class FiscalDctfweb {
     }
     this.busyId = 'generate';
     this.errorMessage = '';
-    this.service
-      .generate({
-        year: value.year,
-        month: value.month,
-        kind: value.kind,
-        originalDeclarationId: value.originalDeclarationId || undefined,
-      })
-      .subscribe({
-        next: (created) => this.upsert(created),
-        error: (error: unknown) => this.fail(error),
-      });
+    try {
+      const created = await firstValueFrom(
+        this.service.generate({
+          year: value.year,
+          month: value.month,
+          kind: value.kind,
+          originalDeclarationId: value.originalDeclarationId || undefined,
+        }),
+      );
+      this.upsert(created);
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  sign(item: DctfwebDeclaration): void {
+  async sign(item: DctfwebDeclaration): Promise<void> {
     this.busyId = `sign:${item.id}`;
     this.errorMessage = '';
-    this.service.sign(item.id).subscribe({
-      next: (updated) => this.upsert(updated),
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      this.upsert(await firstValueFrom(this.service.sign(item.id)));
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  transmit(item: DctfwebDeclaration): void {
+  async transmit(item: DctfwebDeclaration): Promise<void> {
     this.busyId = `transmit:${item.id}`;
     this.errorMessage = '';
-    this.service.transmit(item.id).subscribe({
-      next: (updated) => this.upsert(updated),
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      this.upsert(await firstValueFrom(this.service.transmit(item.id)));
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
   select(item: DctfwebDeclaration): void {

@@ -3,14 +3,18 @@ import {
   auditEventsEmittedTotal,
   dctfwebTransmissionsTotal,
   esocialSubmissionsTotal,
+  payrollOperationsTotal,
   prometheusRegistry,
   queueDepth,
   recordAuditEvent,
   recordDctfwebTransmission,
   recordEsocialSubmission,
+  recordPayrollOperation,
   recordQueueDepth,
   recordWorkerActiveClaims,
+  recordWorkerPoll,
   workerActiveClaims,
+  workerPollsTotal,
 } from './prometheus.metrics';
 
 describe('Prometheus metrics registry', () => {
@@ -24,6 +28,9 @@ describe('Prometheus metrics registry', () => {
         'sgp_audit_events_emitted_total',
         'sgp_esocial_submissions_total',
         'sgp_dctfweb_transmissions_total',
+        'sgp_payroll_operations_total',
+        'sgp_worker_polls_total',
+        'sgp_worker_poll_duration_seconds',
       ]),
     );
     expect(queueDepth.type).toBe('gauge');
@@ -31,6 +38,8 @@ describe('Prometheus metrics registry', () => {
     expect(auditEventsEmittedTotal.type).toBe('counter');
     expect(esocialSubmissionsTotal.type).toBe('counter');
     expect(dctfwebTransmissionsTotal.type).toBe('counter');
+    expect(payrollOperationsTotal.type).toBe('counter');
+    expect(workerPollsTotal.type).toBe('counter');
   });
 
   it('exports Prometheus text for domain metric extension points', () => {
@@ -39,6 +48,8 @@ describe('Prometheus metrics registry', () => {
     recordAuditEvent('PayrollController', '/api/payroll/runs/:id');
     recordEsocialSubmission('accepted', 'S-1200');
     recordDctfwebTransmission('sent');
+    recordPayrollOperation('calculate_run', 'success');
+    recordWorkerPoll('sgp-integrations-worker', 'success', 0.5);
 
     const metrics = prometheusRegistry.collect();
 
@@ -54,6 +65,12 @@ describe('Prometheus metrics registry', () => {
     );
     expect(metrics).toContain(
       'sgp_dctfweb_transmissions_total{status="sent"} 1',
+    );
+    expect(metrics).toContain(
+      'sgp_payroll_operations_total{operation="calculate_run",status="success"} 1',
+    );
+    expect(metrics).toContain(
+      'sgp_worker_polls_total{status="success",worker="sgp-integrations-worker"} 1',
     );
   });
 

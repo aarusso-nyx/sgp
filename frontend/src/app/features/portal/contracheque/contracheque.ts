@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ApiClient } from '../../../core/api/api-client';
 
 interface PortalPayslipFile {
@@ -18,30 +18,24 @@ interface PortalPayslipFile {
   templateUrl: './contracheque.html',
   styleUrl: './contracheque.scss',
 })
-export class PortalContracheque implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>();
+export class PortalContracheque implements OnInit {
   private readonly api = inject(ApiClient);
 
   payslips: PortalPayslipFile[] = [];
   error = '';
 
   ngOnInit(): void {
-    this.api
-      .get<PortalPayslipFile[]>('/api/v1/portal/payslips')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (payslips) => {
-          this.payslips = payslips;
-        },
-        error: () => {
-          this.error = 'Nao foi possivel carregar os contracheques.';
-        },
-      });
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private async load(): Promise<void> {
+    try {
+      this.payslips = await firstValueFrom(
+        this.api.get<PortalPayslipFile[]>('/api/v1/portal/payslips'),
+      );
+    } catch {
+      this.error = 'Nao foi possivel carregar os contracheques.';
+    }
   }
 
   download(payslip: PortalPayslipFile): void {

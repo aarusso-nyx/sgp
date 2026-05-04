@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import noMathRoundMoneyRule from './backend/eslint-rules/no-math-round-money.js';
 import noHardcoded2025DateInSpecRule from './backend/eslint-rules/no-hardcoded-2025-date-in-spec.js';
 import noPontoDateToIsoRule from './backend/eslint-rules/no-ponto-date-to-iso.js';
+import noRawHandlerLoggingRule from './backend/eslint-rules/no-raw-handler-logging.js';
 import requirePermissionRule from './backend/eslint-rules/require-permission.js';
 
 const backendRequire = createRequire(new URL('./backend/package.json', import.meta.url));
@@ -40,6 +41,7 @@ export default tseslint.config(
           'no-math-round-money': noMathRoundMoneyRule,
           'no-hardcoded-2025-date-in-spec': noHardcoded2025DateInSpecRule,
           'no-ponto-date-to-iso': noPontoDateToIsoRule,
+          'no-raw-handler-logging': noRawHandlerLoggingRule,
           'require-permission': requirePermissionRule,
         },
       },
@@ -52,6 +54,7 @@ export default tseslint.config(
       'sgp/no-math-round-money': 'error',
       'sgp/no-hardcoded-2025-date-in-spec': 'error',
       'sgp/no-ponto-date-to-iso': 'error',
+      'sgp/no-raw-handler-logging': 'error',
       'sgp/require-permission': 'error',
     },
   },

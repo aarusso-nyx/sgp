@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import {
   PontoJustificativa,
@@ -16,8 +16,7 @@ import {
   templateUrl: './portal-justificativa.html',
   styleUrl: './portal-justificativa.scss',
 })
-export class PortalJustificativa implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>();
+export class PortalJustificativa implements OnInit {
   private readonly formBuilder = inject(UntypedFormBuilder);
   private readonly service = inject(PontoJustificativasService);
 
@@ -37,29 +36,18 @@ export class PortalJustificativa implements OnInit, OnDestroy {
   message = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  async load(): Promise<void> {
+    try {
+      this.requests = await firstValueFrom(this.service.list());
+    } catch {
+      this.error = 'Nao foi possivel carregar suas justificativas.';
+    }
   }
 
-  load(): void {
-    this.service
-      .list()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (requests) => {
-          this.requests = requests;
-        },
-        error: () => {
-          this.error = 'Nao foi possivel carregar suas justificativas.';
-        },
-      });
-  }
-
-  submit(): void {
+  async submit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -74,32 +62,26 @@ export class PortalJustificativa implements OnInit, OnDestroy {
       reason: string;
     };
     this.saving = true;
-    this.service
-      .request({
-        employeeId: value.employeeId,
-        requestedByUserId: value.requestedByUserId,
-        kind: value.kind,
-        absenceStart: value.absenceStart,
-        absenceEnd: value.absenceEnd,
-        attachmentId: value.attachmentId || undefined,
-        reason: value.reason,
-        payrollTreatment: 'PAID',
-      })
-      .pipe(
-        finalize(() => {
-          this.saving = false;
+    try {
+      await firstValueFrom(
+        this.service.request({
+          employeeId: value.employeeId,
+          requestedByUserId: value.requestedByUserId,
+          kind: value.kind,
+          absenceStart: value.absenceStart,
+          absenceEnd: value.absenceEnd,
+          attachmentId: value.attachmentId || undefined,
+          reason: value.reason,
+          payrollTreatment: 'PAID',
         }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => {
-          this.message = 'Justificativa enviada.';
-          this.form.patchValue({ reason: '', attachmentId: '' });
-          this.load();
-        },
-        error: () => {
-          this.error = 'Nao foi possivel enviar a justificativa.';
-        },
-      });
+      );
+      this.message = 'Justificativa enviada.';
+      this.form.patchValue({ reason: '', attachmentId: '' });
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel enviar a justificativa.';
+    } finally {
+      this.saving = false;
+    }
   }
 }

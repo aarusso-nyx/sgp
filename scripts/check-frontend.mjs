@@ -97,9 +97,12 @@ function checkApiClient() {
 
 function checkModernAngular() {
   const adminSrcRoot = join(frontendRoot, 'src');
+  const featureRoot = join(frontendRoot, 'src', 'app', 'features');
   const maxComponentSubscribeSites = 218;
+  const maxFeatureSubscribeFiles = 49;
   const componentFiles = [];
   let componentSubscribeSites = 0;
+  const featureSubscribeFiles = [];
   let writableSignalSites = 0;
   const missingOnPush = [];
 
@@ -120,6 +123,13 @@ function checkModernAngular() {
     }
   }
 
+  for (const file of walkFiles(featureRoot, (name) => name.endsWith('.ts'))) {
+    const content = readFileSync(file, 'utf8');
+    if (/\.subscribe\s*\(/.test(content)) {
+      featureSubscribeFiles.push(relative(root, file));
+    }
+  }
+
   const findings = [];
   if (missingOnPush.length > 0) {
     findings.push('Components missing ChangeDetectionStrategy.OnPush:');
@@ -130,6 +140,13 @@ function checkModernAngular() {
     findings.push(
       `Component .subscribe( sites increased to ${componentSubscribeSites}; maximum allowed is ${maxComponentSubscribeSites}.`,
     );
+  }
+
+  if (featureSubscribeFiles.length > maxFeatureSubscribeFiles) {
+    findings.push(
+      `Feature .subscribe( files increased to ${featureSubscribeFiles.length}; maximum allowed is ${maxFeatureSubscribeFiles}.`,
+    );
+    findings.push(...featureSubscribeFiles.slice(0, 20).map((file) => `  ${file}`));
   }
 
   if (writableSignalSites === 0) {
@@ -145,7 +162,7 @@ function checkModernAngular() {
   }
 
   console.log(
-    `[frontend-modern-angular] OK: ${componentFiles.length} components OnPush, ${componentSubscribeSites} component subscribe sites, ${writableSignalSites} writable signal sites`,
+    `[frontend-modern-angular] OK: ${componentFiles.length} components OnPush, ${componentSubscribeSites} component subscribe sites, ${featureSubscribeFiles.length} feature subscribe files, ${writableSignalSites} writable signal sites`,
   );
   return 0;
 }

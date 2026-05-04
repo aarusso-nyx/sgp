@@ -1,0 +1,4342 @@
+{
+  "counts": {
+    "functional_requisites": 1,
+    "mapped_requisites": 1,
+    "specs": 575
+  },
+  "feature_map": [
+    {
+      "fr_id": "FR-001",
+      "requirement": "Implementation status document is present but no bullet requirements were parsed.",
+      "status": "PARTIAL",
+      "test_count": 14,
+      "tests": [
+        "backend/src/common/dto-serialization.snapshots.spec.ts",
+        "backend/src/coverage-hardening.database-unavailable.spec.ts",
+        "backend/src/documents/documents-storage.service.spec.ts",
+        "backend/src/documents/documents.controller.spec.ts",
+        "backend/src/documents/documents.service.spec.ts",
+        "backend/src/esocial-worker/sync/status-sync.service.spec.ts",
+        "backend/src/recrutamento/banca/document-signing.service.spec.ts",
+        "backend/src/recrutamento/banca/verify.controller.spec.ts",
+        "tests/backend/app.e2e-spec.ts",
+        "tests/backend/es-09-retorno.e2e-spec.ts",
+        "tests/backend/lai-requests.e2e-spec.ts",
+        "tests/backend/rec-09-banca.e2e-spec.ts",
+        "tests/db/employee-status-history-immutable.spec.ts",
+        "tests/frontend/portal/portal-playwright.spec.ts"
+      ]
+    }
+  ],
+  "generated_by": "scripts/audit.mjs tests",
+  "round": "3",
+  "specs": [
+    {
+      "describes": ["AppController", "controller"],
+      "entity_references": ["AppController", "AppService", "TestingModule"],
+      "file": "backend/src/app.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AuditQueryService"],
+      "entity_references": ["AuditQueryService"],
+      "file": "backend/src/audit/audit-query.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AuditWriterService"],
+      "entity_references": ["AuditWriterService"],
+      "file": "backend/src/audit/audit-writer.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AuditController"],
+      "entity_references": ["AuditController"],
+      "file": "backend/src/audit/audit.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AuditService"],
+      "entity_references": ["AuditService"],
+      "file": "backend/src/audit/audit.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AuditSearchController"],
+      "entity_references": ["AuditSearchController"],
+      "file": "backend/src/auditoria/audit-search/audit-search.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AuditSearchService"],
+      "entity_references": ["AuditSearchService"],
+      "file": "backend/src/auditoria/audit-search/audit-search.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CognitoJwtService"],
+      "entity_references": ["CognitoJwtService"],
+      "file": "backend/src/auth/cognito-jwt.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["GovBrSignController"],
+      "entity_references": ["GovBrSignController"],
+      "file": "backend/src/auth/govbr/sign.controller.spec.ts",
+      "route_references": ["/api/portal/v1/auth/govbr/sign/callback?state=s"]
+    },
+    {
+      "describes": ["GovBrSignService"],
+      "entity_references": ["GovBrSignService"],
+      "file": "backend/src/auth/govbr/sign.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SessionService"],
+      "entity_references": ["SessionService"],
+      "file": "backend/src/auth/session/session.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AvaliacaoController"],
+      "entity_references": ["AvaliacaoController"],
+      "file": "backend/src/avaliacao/avaliacao.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AvaliacaoService"],
+      "entity_references": ["AvaliacaoService"],
+      "file": "backend/src/avaliacao/avaliacao.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CareerPlanService"],
+      "entity_references": ["CareerPlanService", "DatabaseService"],
+      "file": "backend/src/avaliacao/career-plan/career-plan.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ProbationService"],
+      "entity_references": ["ProbationService"],
+      "file": "backend/src/avaliacao/probation.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FOL-03 progression services"],
+      "entity_references": [
+        "EligibilityService",
+        "ProgressionApplyService",
+        "ProgressionSimulationService"
+      ],
+      "file": "backend/src/avaliacao/progression/progression.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SalaryHistoryService"],
+      "entity_references": ["SalaryHistoryService"],
+      "file": "backend/src/avaliacao/salary-history/salary-history.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AuditRequiredInterceptor"],
+      "entity_references": ["TestController"],
+      "file": "backend/src/common/audit/audit-required.interceptor.spec.ts",
+      "route_references": ["/api", "/api/fallback-path", "/api/sensitive?tab=audit"]
+    },
+    {
+      "describes": ["CORS entrypoint configuration"],
+      "entity_references": [],
+      "file": "backend/src/common/bootstrap/cors.config.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DTO serialization snapshots"],
+      "entity_references": [
+        "AdmitEmployeeDto",
+        "AuditEventQueryDto",
+        "CalculatePayrollRunDto",
+        "ChangeContractRegimeDto",
+        "ConcursoVagaDto",
+        "CreateAdvancePaymentDto",
+        "CreateConcursoDto",
+        "CreateConsignmentLoanDto",
+        "CreateEditalDto",
+        "CreatePayrollRunDto",
+        "EmployeeMutationDto",
+        "JobPositionMutationDto",
+        "PopulatePayrollRunDto",
+        "PublishEditalDto",
+        "RunDecimoTerceiroDto",
+        "RunFeriasPayrollDto",
+        "SalaryRangeLevelMutationDto",
+        "SalaryRangeMutationDto",
+        "TerminateEmployeeDto",
+        "UpdatePayrollRunStatusDto"
+      ],
+      "file": "backend/src/common/dto-serialization.snapshots.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["StandardExceptionFilter"],
+      "entity_references": [],
+      "file": "backend/src/common/errors/standard-exception.filter.spec.ts",
+      "route_references": ["/api/v1/pericia/agendamentos"]
+    },
+    {
+      "describes": ["LgpdLegalBasisService"],
+      "entity_references": ["LgpdLegalBasisService"],
+      "file": "backend/src/common/lgpd/legal-basis.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["pino logger redaction contract"],
+      "entity_references": [],
+      "file": "backend/src/common/logging/logging.config.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["money decimal policy properties"],
+      "entity_references": [],
+      "file": "backend/src/common/money/money.property.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["money decimal policy"],
+      "entity_references": [],
+      "file": "backend/src/common/money/money.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["OpenTelemetry request tracing hooks"],
+      "entity_references": [],
+      "file": "backend/src/common/observability/otel.tracing.spec.ts",
+      "route_references": ["/api/health", "/api/ping"]
+    },
+    {
+      "describes": ["Prometheus metrics registry"],
+      "entity_references": ["PayrollController"],
+      "file": "backend/src/common/observability/prometheus.metrics.spec.ts",
+      "route_references": ["/api/payroll/runs/:id"]
+    },
+    {
+      "describes": ["pagination helpers"],
+      "entity_references": [],
+      "file": "backend/src/common/pagination/paged-response.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["rate limit configuration"],
+      "entity_references": ["RateLimitTestController", "RateLimitTestModule", "ThrottlerModule"],
+      "file": "backend/src/common/rate-limit/rate-limit.config.spec.ts",
+      "route_references": ["/api/v1/rate-limit-test/ping"]
+    },
+    {
+      "describes": ["environment validator"],
+      "entity_references": [],
+      "file": "backend/src/config/config.validator.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BatimentoController"],
+      "entity_references": ["BatimentoController"],
+      "file": "backend/src/consultas/batimento.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BatimentoService"],
+      "entity_references": ["BatimentoService"],
+      "file": "backend/src/consultas/batimento.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BusinessDaysController"],
+      "entity_references": ["BusinessDaysController"],
+      "file": "backend/src/consultas/business-days.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BusinessDaysService"],
+      "entity_references": ["BusinessDaysService"],
+      "file": "backend/src/consultas/business-days.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ManagerialQueriesController"],
+      "entity_references": ["ManagerialQueriesController"],
+      "file": "backend/src/consultas/managerial-queries.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ManagerialQueriesService"],
+      "entity_references": ["ManagerialQueriesService"],
+      "file": "backend/src/consultas/managerial-queries.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AgreementsController"],
+      "entity_references": ["AgreementsController"],
+      "file": "backend/src/convenio/agreements/agreements.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AgreementsService"],
+      "entity_references": ["AgreementsService"],
+      "file": "backend/src/convenio/agreements/agreements.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["InternshipsController"],
+      "entity_references": ["InternshipsController"],
+      "file": "backend/src/convenio/internships/internships.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["InternshipsService"],
+      "entity_references": ["InternshipsService"],
+      "file": "backend/src/convenio/internships/internships.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["database unavailable hardening coverage"],
+      "entity_references": [
+        "AfdGeneratorService",
+        "AfdImporterService",
+        "AsoService",
+        "AudespSpSubmissionService",
+        "BankAccountService",
+        "BatchBuilderService",
+        "CareerPlanService",
+        "CertificateStoreService",
+        "ClassificacaoService",
+        "DirfBuilderService",
+        "DocumentsService",
+        "ES03Service",
+        "ES04Service",
+        "ES05Service",
+        "ESocialEmitService",
+        "EligibilityService",
+        "EmployeeAlimonyService",
+        "EmployeesService",
+        "FaceMatcherService",
+        "FolhaMensalService",
+        "FormulaCompilerService",
+        "GpsService",
+        "HourBankService",
+        "InscricaoService",
+        "IntegrationsWorkerService",
+        "JobPositionService",
+        "JustificationService",
+        "MarginCalculatorService",
+        "MasterDataService",
+        "MobileClockService",
+        "NomeacaoService",
+        "OnlineExamService",
+        "PayrollAccountingService",
+        "PayrollOperationsService",
+        "PayrollService",
+        "PericiaService",
+        "PortabilityParserService",
+        "PosseService",
+        "PrevidenciarioService",
+        "ReintegrationOrderService",
+        "RepDeviceService",
+        "RetornoService",
+        "RhWorkflowsService",
+        "RiskManagementProgramService",
+        "S22xxDispatchService",
+        "S3000Service",
+        "SalaryRangeService",
+        "SifgeService",
+        "SimulacaoService",
+        "SoapClientService",
+        "SubmissionService",
+        "TceWorkerService",
+        "TimeRecordHashService",
+        "TsvContractService",
+        "WorkAccidentService"
+      ],
+      "file": "backend/src/coverage-hardening.database-unavailable.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DatabaseService"],
+      "entity_references": ["DatabaseService"],
+      "file": "backend/src/database/database.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DocumentsStorageService"],
+      "entity_references": ["DocumentsStorageService"],
+      "file": "backend/src/documents/documents-storage.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DocumentsController"],
+      "entity_references": ["DocumentsController"],
+      "file": "backend/src/documents/documents.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DocumentsService"],
+      "entity_references": ["DocumentsService"],
+      "file": "backend/src/documents/documents.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1030Builder"],
+      "entity_references": [],
+      "file": "backend/src/esocial-worker/builders/s1030.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1040Builder"],
+      "entity_references": [],
+      "file": "backend/src/esocial-worker/builders/s1040.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-1060 builder"],
+      "entity_references": [],
+      "file": "backend/src/esocial-worker/builders/s1060.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-1200 retransmission idempotency"],
+      "entity_references": ["ES04Service"],
+      "file": "backend/src/esocial-worker/builders/s1200-retransmission-idempotency.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1200Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s1200.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1202Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s1202.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1207Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s1207.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1210Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s1210.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1298Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s1298.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1299Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s1299.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-1xxx builders"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s1xxx.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S1xxxService"],
+      "entity_references": ["S1xxxService"],
+      "file": "backend/src/esocial-worker/builders/s1xxx.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-2206 builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2206.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-2210 builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2210.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-2220 builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2220.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-2230 builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2230.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-2240 builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2240.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-2299 builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2299.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-2200 and S-2205 builders"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s22xx.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S-2300 and S-2399 TS-V builders"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2300-s2399.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2400Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2400.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2405Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2405.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2410Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2410.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2416Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2416.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2418Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2418.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2420Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2420.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2501Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s2501.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S3000Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/builders/s3000.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ESocialWorkerService"],
+      "entity_references": ["ESocialWorkerService"],
+      "file": "backend/src/esocial-worker/esocial-worker.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ProcessingParser"],
+      "entity_references": [],
+      "file": "backend/src/esocial-worker/parsers/processing.parser.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ProtocolParser"],
+      "entity_references": [],
+      "file": "backend/src/esocial-worker/parsers/protocol.parser.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TotalizerParser"],
+      "entity_references": [],
+      "file": "backend/src/esocial-worker/parsers/totalizer.parser.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2298Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/s2298/s2298.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["S2306Builder"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/s2306/s2306.builder.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["IcpSignerService"],
+      "entity_references": ["IcpSignerService"],
+      "file": "backend/src/esocial-worker/signature/icp-signer.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CircuitBreakerService"],
+      "entity_references": ["CircuitBreakerService"],
+      "file": "backend/src/esocial-worker/submission/circuit-breaker.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RetryStrategyService"],
+      "entity_references": ["RetryStrategyService"],
+      "file": "backend/src/esocial-worker/submission/retry-strategy.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SoapClientService"],
+      "entity_references": ["IcpSignerService", "SoapClientService"],
+      "file": "backend/src/esocial-worker/submission/soap-client.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RetryPolicyService"],
+      "entity_references": ["RetryPolicyService"],
+      "file": "backend/src/esocial-worker/sync/retry-policy.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["StatusSyncService"],
+      "entity_references": ["StatusSyncService"],
+      "file": "backend/src/esocial-worker/sync/status-sync.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["XsdValidatorService"],
+      "entity_references": ["XsdValidatorService"],
+      "file": "backend/src/esocial-worker/xsd-validator.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ExternalModule"],
+      "entity_references": [
+        "AuthModule",
+        "ExternalController",
+        "ExternalModule",
+        "ExternalService",
+        "IcpSignerService"
+      ],
+      "file": "backend/src/external/external.module.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollAccountingController"],
+      "entity_references": ["PayrollAccountingController"],
+      "file": "backend/src/folha-pagamento/accounting/payroll-accounting.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollAccountingService"],
+      "entity_references": ["PayrollAccountingService"],
+      "file": "backend/src/folha-pagamento/accounting/payroll-accounting.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RubricaController"],
+      "entity_references": ["RubricaController"],
+      "file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RubricaService"],
+      "entity_references": ["RubricaService"],
+      "file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ESocialService"],
+      "entity_references": ["ESocialService"],
+      "file": "backend/src/folha-pagamento/esocial/esocial.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FgtsService"],
+      "entity_references": ["FgtsService"],
+      "file": "backend/src/folha-pagamento/fgts/fgts.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FolhaPagamentoModule"],
+      "entity_references": [
+        "FolhaPagamentoModule",
+        "FormulaCacheService",
+        "FormulaCompilerService",
+        "PayrollEngineModule",
+        "PayrollEngineService"
+      ],
+      "file": "backend/src/folha-pagamento/folha-pagamento.module.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ManualEntryImportService"],
+      "entity_references": ["ManualEntryImportService"],
+      "file": "backend/src/folha-pagamento/import/manual-entry-import.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PensionistaImportService"],
+      "entity_references": ["PensionistaImportService"],
+      "file": "backend/src/folha-pagamento/import/pensionista-import.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ServidorImportService"],
+      "entity_references": ["ServidorImportService"],
+      "file": "backend/src/folha-pagamento/import/servidor-import.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AlimonyDeductionService"],
+      "entity_references": ["AlimonyDeductionService"],
+      "file": "backend/src/folha-pagamento/operations/alimony/alimony-deduction.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BankAccountValidatorService"],
+      "entity_references": ["BankAccountValidatorService"],
+      "file": "backend/src/folha-pagamento/operations/bank-account/bank-account-validator.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BankAccountService R2-206 encrypted storage path"],
+      "entity_references": ["BankAccountService"],
+      "file": "backend/src/folha-pagamento/operations/bank-account/bank-account.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MarginCalculatorService"],
+      "entity_references": ["MarginCalculatorService"],
+      "file": "backend/src/folha-pagamento/operations/consignment/margin-calculator.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollOperationsController", "PayrollGfipController"],
+      "entity_references": ["PayrollGfipController", "PayrollOperationsController"],
+      "file": "backend/src/folha-pagamento/operations/payroll-operations.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollOperationsService"],
+      "entity_references": ["PayrollOperationsService"],
+      "file": "backend/src/folha-pagamento/operations/payroll-operations.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CaixaSifgeV4Adapter"],
+      "entity_references": [],
+      "file": "backend/src/folha-pagamento/operations/sifge/caixa-sifge-v4.adapter.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SifgeService"],
+      "entity_references": ["SifgeService"],
+      "file": "backend/src/folha-pagamento/operations/sifge/sifge.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["decimo terceiro golden monetary fixture"],
+      "entity_references": [],
+      "file": "backend/src/folha-pagamento/payroll/decimo-terceiro.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ferias folha golden monetary fixture"],
+      "entity_references": [],
+      "file": "backend/src/folha-pagamento/payroll/ferias-payroll.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["folha mensal golden monetary fixture"],
+      "entity_references": [],
+      "file": "backend/src/folha-pagamento/payroll/folha-mensal.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["payroll idempotency helpers"],
+      "entity_references": [],
+      "file": "backend/src/folha-pagamento/payroll/payroll-idempotency.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollController"],
+      "entity_references": ["PayrollController"],
+      "file": "backend/src/folha-pagamento/payroll/payroll.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollService"],
+      "entity_references": ["PayrollService"],
+      "file": "backend/src/folha-pagamento/payroll/payroll.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PisPasepService"],
+      "entity_references": ["PisPasepService"],
+      "file": "backend/src/folha-pagamento/pis-pasep/pis-pasep.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RescisaoService"],
+      "entity_references": ["RescisaoService"],
+      "file": "backend/src/folha-pagamento/rescisao/rescisao.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["JobPositionService"],
+      "entity_references": ["JobPositionService"],
+      "file": "backend/src/gestao/master-data/job-position.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MasterDataController"],
+      "entity_references": ["JobPositionsController", "MasterDataController"],
+      "file": "backend/src/gestao/master-data/master-data.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MasterDataService"],
+      "entity_references": ["MasterDataService"],
+      "file": "backend/src/gestao/master-data/master-data.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SalaryRangeService"],
+      "entity_references": ["SalaryRangeService"],
+      "file": "backend/src/gestao/master-data/salary-range.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["HealthController"],
+      "entity_references": ["HealthController", "HealthService"],
+      "file": "backend/src/health/health/health.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["permission catalog drift"],
+      "entity_references": [],
+      "file": "backend/src/iam/permissions/catalog-drift.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PermissionsController"],
+      "entity_references": ["PermissionsController"],
+      "file": "backend/src/iam/permissions/permissions.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PermissionsService"],
+      "entity_references": ["PermissionsService"],
+      "file": "backend/src/iam/permissions/permissions.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Cnab240BuilderService"],
+      "entity_references": ["Cnab240BuilderService"],
+      "file": "backend/src/integrations-worker/cnab240/cnab240-builder.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Cnab240ReturnParserService"],
+      "entity_references": ["Cnab240ReturnParserService"],
+      "file": "backend/src/integrations-worker/cnab240/return/cnab240-return-parser.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["OccurrenceMapperService"],
+      "entity_references": ["OccurrenceMapperService"],
+      "file": "backend/src/integrations-worker/cnab240/return/occurrence-mapper.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PortabilityParserService"],
+      "entity_references": ["PortabilityParserService"],
+      "file": "backend/src/integrations-worker/consignment-portability/portability-parser.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DctfwebBuilderService"],
+      "entity_references": ["DctfwebBuilderService"],
+      "file": "backend/src/integrations-worker/dctfweb/dctfweb-builder.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MitInclusionService"],
+      "entity_references": ["DctfwebMitDebitDto", "MitInclusionService"],
+      "file": "backend/src/integrations-worker/dctfweb/dctfweb-mit.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DCTFWeb retransmission idempotency"],
+      "entity_references": ["ConfigService", "DctfwebTransmitterService"],
+      "file": "backend/src/integrations-worker/dctfweb/dctfweb-retransmission-idempotency.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DctfwebTransmitterService", "parseRfbResponse"],
+      "entity_references": ["ConfigService", "DctfwebTransmitterService"],
+      "file": "backend/src/integrations-worker/dctfweb/dctfweb-transmitter.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DirfFormatterService"],
+      "entity_references": ["DirfFormatterService"],
+      "file": "backend/src/integrations-worker/dirf/dirf-formatter.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["EfdReinfBuilderService"],
+      "entity_references": ["EfdReinfBuilderService"],
+      "file": "backend/src/integrations-worker/efd-reinf/efd-reinf-builder.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["EfdReinfTransmitterService", "parseEfdReinfRfbResponse"],
+      "entity_references": ["ConfigService", "EfdReinfTransmitterService"],
+      "file": "backend/src/integrations-worker/efd-reinf/efd-reinf-transmitter.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["GpsTxtSerializer"],
+      "entity_references": [],
+      "file": "backend/src/integrations-worker/gps/gps-txt.serializer.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["GpsService"],
+      "entity_references": ["GpsService"],
+      "file": "backend/src/integrations-worker/gps/gps.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["IntegrationsWorkerService"],
+      "entity_references": ["IntegrationsWorkerService"],
+      "file": "backend/src/integrations-worker/integrations-worker.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SiaficConnectorService"],
+      "entity_references": ["ConfigService", "SiaficConnectorService"],
+      "file": "backend/src/integrations-worker/siafic/siafic-connector.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SiconfiRreoRgfGenerator"],
+      "entity_references": [],
+      "file": "backend/src/integrations-worker/siconfi/rreo-rgf.generator.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SiopeExportGenerator"],
+      "entity_references": [],
+      "file": "backend/src/integrations-worker/siope/siope-export.generator.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SiopsExportGenerator"],
+      "entity_references": [],
+      "file": "backend/src/integrations-worker/siops/siops-export.generator.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdDpoAdminController"],
+      "entity_references": ["LgpdDpoAdminController"],
+      "file": "backend/src/lgpd/dpo.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdDpoAdminService"],
+      "entity_references": ["LgpdDpoAdminService"],
+      "file": "backend/src/lgpd/dpo.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdIncidentsController"],
+      "entity_references": ["LgpdIncidentsController"],
+      "file": "backend/src/lgpd/incidents.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdSecurityIncidentService"],
+      "entity_references": ["LgpdSecurityIncidentService"],
+      "file": "backend/src/lgpd/incidents.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["R2-204/R2-206 PII SQL contracts"],
+      "entity_references": [],
+      "file": "backend/src/lgpd/pii-sql-contract.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdPublicPowerTreatmentController"],
+      "entity_references": ["LgpdPublicPowerTreatmentController"],
+      "file": "backend/src/lgpd/public-power.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdPublicPowerTreatmentService"],
+      "entity_references": ["LgpdPublicPowerTreatmentService"],
+      "file": "backend/src/lgpd/public-power.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdRopaController"],
+      "entity_references": ["LgpdRopaController"],
+      "file": "backend/src/lgpd/ropa.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdRopaService"],
+      "entity_references": ["LgpdRopaService"],
+      "file": "backend/src/lgpd/ropa.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["NotificationsController"],
+      "entity_references": ["NotificationsController"],
+      "file": "backend/src/notifications/notifications.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["NotificationsService"],
+      "entity_references": ["NotificationsService"],
+      "file": "backend/src/notifications/notifications.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FormulaCompilerService"],
+      "entity_references": ["FormulaCompilerService"],
+      "file": "backend/src/payroll-engine/formula-compiler.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["payroll calculation properties"],
+      "entity_references": [],
+      "file": "backend/src/payroll-engine/payroll-calc.property.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollEngineService"],
+      "entity_references": ["PayrollEngineService"],
+      "file": "backend/src/payroll-engine/payroll-engine.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RPPS progressive calculation reference"],
+      "entity_references": [],
+      "file": "backend/src/payroll-engine/rpps-calc.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AfdGeneratorService"],
+      "entity_references": ["AfdGeneratorService"],
+      "file": "backend/src/ponto/afd/afd-generator.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AFD layout"],
+      "entity_references": [],
+      "file": "backend/src/ponto/afd/afd-layout.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AfdtAcjefGeneratorService"],
+      "entity_references": ["AfdtAcjefGeneratorService"],
+      "file": "backend/src/ponto/afd/afdt-acjef-generator.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PontoBiometricMatcherService"],
+      "entity_references": ["PontoBiometricMatcherService"],
+      "file": "backend/src/ponto/biometria/biometric-matcher.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-08 LGPD consent"],
+      "entity_references": ["PontoBiometricMatcherService"],
+      "file": "backend/src/ponto/biometria/ponto-bio-lgpd-consent.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-08 LGPD exclusion"],
+      "entity_references": ["PontoBiometricMatcherService"],
+      "file": "backend/src/ponto/biometria/ponto-bio-lgpd-exclusion.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TemplateEnrollmentService"],
+      "entity_references": ["TemplateEnrollmentService"],
+      "file": "backend/src/ponto/biometria/template-enrollment.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RosterProjectorService"],
+      "entity_references": ["RosterProjectorService"],
+      "file": "backend/src/ponto/duty-roster/roster-projector.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FaceEnrollmentService"],
+      "entity_references": [
+        "FaceConsentService",
+        "FaceEnrollmentService",
+        "FaceLivenessService",
+        "FaceThresholdAdminService"
+      ],
+      "file": "backend/src/ponto/face/face-enrollment.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-10 facial LGPD consent"],
+      "entity_references": [
+        "FaceConsentService",
+        "FaceLivenessService",
+        "FaceMatcherService",
+        "FaceThresholdAdminService"
+      ],
+      "file": "backend/src/ponto/face/face-lgpd-consent.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-10 facial LGPD exclusion"],
+      "entity_references": ["FaceConsentService"],
+      "file": "backend/src/ponto/face/face-lgpd-exclusion.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FaceMatcherService"],
+      "entity_references": [
+        "FaceConsentService",
+        "FaceLivenessService",
+        "FaceMatcherService",
+        "FaceThresholdAdminService",
+        "TimeRecordHashService"
+      ],
+      "file": "backend/src/ponto/face/face-matcher.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FaceLivenessService"],
+      "entity_references": ["FaceLivenessService"],
+      "file": "backend/src/ponto/face/liveness.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["HourBankAccrualService"],
+      "entity_references": ["HourBankAccrualService"],
+      "file": "backend/src/ponto/hour-bank/hour-bank-accrual.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["HourBankSettlementService"],
+      "entity_references": ["HourBankSettlementService"],
+      "file": "backend/src/ponto/hour-bank/hour-bank-settlement.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["JustificationPayrollBridgeService"],
+      "entity_references": ["JustificationPayrollBridgeService"],
+      "file": "backend/src/ponto/justification/justification-payroll-bridge.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["JustificationWorkflowService"],
+      "entity_references": ["JustificationWorkflowService"],
+      "file": "backend/src/ponto/justification/justification-workflow.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["GeofenceValidatorService"],
+      "entity_references": ["GeofenceValidatorService"],
+      "file": "backend/src/ponto/mobile/geofence-validator.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MobileClockService"],
+      "entity_references": ["MobileClockService"],
+      "file": "backend/src/ponto/mobile/mobile-clock.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MockLocationDetector"],
+      "entity_references": [],
+      "file": "backend/src/ponto/mobile/mock-location.detector.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MobileClockPlausibilityService"],
+      "entity_references": ["MobileClockPlausibilityService"],
+      "file": "backend/src/ponto/mobile/plausibility.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-09 mobile geolocation LGPD consent"],
+      "entity_references": ["MobileClockService"],
+      "file": "backend/src/ponto/mobile/ponto-mobile-lgpd-consent.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollLineBuilderService"],
+      "entity_references": ["PayrollLineBuilderService"],
+      "file": "backend/src/ponto/payroll-bridge/payroll-line-builder.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TimesheetAggregatorService"],
+      "entity_references": ["TimesheetAggregatorService"],
+      "file": "backend/src/ponto/payroll-bridge/timesheet-aggregator.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RepDeviceService"],
+      "entity_references": ["RepDeviceService"],
+      "file": "backend/src/ponto/rep-device/rep-device.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DedupService"],
+      "entity_references": ["DedupService"],
+      "file": "backend/src/ponto/rep-ingestion/dedup.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AftParserService"],
+      "entity_references": ["AftParserService"],
+      "file": "backend/src/ponto/rep-ingestion/parsers/aft-parser.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RepIngestionService"],
+      "entity_references": ["RepIngestionService"],
+      "file": "backend/src/ponto/rep-ingestion/rep-ingestion.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ShiftPatternService"],
+      "entity_references": ["ShiftPatternService"],
+      "file": "backend/src/ponto/shift-pattern/shift-pattern.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TimeRecordHashService"],
+      "entity_references": ["ConfigService", "DatabaseService", "TimeRecordHashService"],
+      "file": "backend/src/ponto/time-record/time-record-hash.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["WorkScheduleService"],
+      "entity_references": ["WorkScheduleService"],
+      "file": "backend/src/ponto/work-schedule/work-schedule.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PortalModule"],
+      "entity_references": [
+        "PayslipRenderService",
+        "PdfABuilderService",
+        "PortalModule",
+        "ReportServiceModule",
+        "YearlyIncomeBatchService",
+        "YearlyIncomeRenderService"
+      ],
+      "file": "backend/src/portal/portal.module.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PortalService"],
+      "entity_references": ["PortalService"],
+      "file": "backend/src/portal/portal.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AposentadoriaService"],
+      "entity_references": ["AposentadoriaService"],
+      "file": "backend/src/previdenciario/aposentadoria/aposentadoria.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CtcService"],
+      "entity_references": ["CtcService"],
+      "file": "backend/src/previdenciario/ctc/ctc.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DeclaracaoService"],
+      "entity_references": ["DeclaracaoService"],
+      "file": "backend/src/previdenciario/declaracao/declaracao.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PensaoService"],
+      "entity_references": ["PensaoService"],
+      "file": "backend/src/previdenciario/pensao/pensao.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PrevidenciarioController"],
+      "entity_references": ["PrevidenciarioController"],
+      "file": "backend/src/previdenciario/previdenciario.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PrevidenciarioService"],
+      "entity_references": ["PrevidenciarioService"],
+      "file": "backend/src/previdenciario/previdenciario.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RecadastramentoService"],
+      "entity_references": ["RecadastramentoService"],
+      "file": "backend/src/previdenciario/recadastramento/recadastramento.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RegrasSimulationService"],
+      "entity_references": ["RegrasSimulationService"],
+      "file": "backend/src/previdenciario/regras/regras-simulation.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RegrasService"],
+      "entity_references": ["RegrasService"],
+      "file": "backend/src/previdenciario/regras/regras.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AtividadeRiscoProfessorService"],
+      "entity_references": ["AtividadeRiscoProfessorService"],
+      "file": "backend/src/previdenciario/transition-rules/atividade-risco-professor.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["IdadeProgressivaService"],
+      "entity_references": ["IdadeProgressivaService"],
+      "file": "backend/src/previdenciario/transition-rules/idade-progressiva.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Pedagio100Service"],
+      "entity_references": ["Pedagio100Service"],
+      "file": "backend/src/previdenciario/transition-rules/pedagio100.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Pedagio50Service"],
+      "entity_references": ["Pedagio50Service"],
+      "file": "backend/src/previdenciario/transition-rules/pedagio50.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PontosService"],
+      "entity_references": ["PontosService"],
+      "file": "backend/src/previdenciario/transition-rules/pontos.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ProfilesService"],
+      "entity_references": ["ProfilesService"],
+      "file": "backend/src/profiles/profiles.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LaiRequestStateMachine"],
+      "entity_references": [],
+      "file": "backend/src/publico/lai/lai-request-state-machine.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LaiRequestsService"],
+      "entity_references": ["LaiRequestsService", "LaiSlaService"],
+      "file": "backend/src/publico/lai/lai-requests.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LAI request SQL contract"],
+      "entity_references": [],
+      "file": "backend/src/publico/lai/lai-schema.contract.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LaiSlaService"],
+      "entity_references": ["LaiSlaService"],
+      "file": "backend/src/publico/lai/lai-sla.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdDpoController"],
+      "entity_references": ["LgpdDpoController"],
+      "file": "backend/src/publico/lgpd-dpo.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LgpdDpoService"],
+      "entity_references": ["LgpdDpoService"],
+      "file": "backend/src/publico/lgpd-dpo.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PublicTransparencyService"],
+      "entity_references": ["PublicTransparencyService"],
+      "file": "backend/src/publico/public-transparency.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TransparencyCsvService"],
+      "entity_references": ["TransparencyCsvService"],
+      "file": "backend/src/publico/transparency/transparency-csv.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TransparencyPublishService"],
+      "entity_references": ["TransparencyPublishService"],
+      "file": "backend/src/publico/transparency/transparency-publish.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TransparencyQueryService"],
+      "entity_references": ["TransparencyQueryService"],
+      "file": "backend/src/publico/transparency/transparency-query.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["NotaService"],
+      "entity_references": ["NotaService"],
+      "file": "backend/src/recrutamento/avaliacao/nota.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DocumentSigningService"],
+      "entity_references": ["DocumentSigningService"],
+      "file": "backend/src/recrutamento/banca/document-signing.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PublicBancaVerifyController"],
+      "entity_references": ["DocumentSigningService", "PublicBancaVerifyController"],
+      "file": "backend/src/recrutamento/banca/verify.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BancoTalentosController"],
+      "entity_references": ["BancoTalentosController"],
+      "file": "backend/src/recrutamento/banco-talentos/banco-talentos.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BancoTalentosService"],
+      "entity_references": ["BancoTalentosService"],
+      "file": "backend/src/recrutamento/banco-talentos/banco-talentos.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BiometricCaptureService"],
+      "entity_references": ["BiometricCaptureService", "BiometricConsentService"],
+      "file": "backend/src/recrutamento/biometria/biometric-capture.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["BiometricMatcherService"],
+      "entity_references": ["BiometricMatcherService"],
+      "file": "backend/src/recrutamento/biometria/biometric-matcher.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ClassificacaoService golden ranking"],
+      "entity_references": ["ClassificacaoService"],
+      "file": "backend/src/recrutamento/classificacao/classificacao.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ConcursoService"],
+      "entity_references": ["ConcursoService", "DatabaseService"],
+      "file": "backend/src/recrutamento/concurso/concurso.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ExemptionService"],
+      "entity_references": ["ExemptionService"],
+      "file": "backend/src/recrutamento/inscricao/exemption.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["InscricaoService validation"],
+      "entity_references": ["ExemptionService", "InscricaoService"],
+      "file": "backend/src/recrutamento/inscricao/inscricao.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["NomeacaoService"],
+      "entity_references": ["NomeacaoService"],
+      "file": "backend/src/recrutamento/nomeacao/nomeacao.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PosseService"],
+      "entity_references": ["PosseService"],
+      "file": "backend/src/recrutamento/posse/posse.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AiFlagsService"],
+      "entity_references": ["AiFlagsService"],
+      "file": "backend/src/recrutamento/prova-online/ai-flags.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["OnlineExamService"],
+      "entity_references": ["BiometricMatcherService", "OnlineExamService"],
+      "file": "backend/src/recrutamento/prova-online/online-exam.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RecruitmentController"],
+      "entity_references": ["RecruitmentController"],
+      "file": "backend/src/recrutamento/recruitment.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RecruitmentService"],
+      "entity_references": ["RecruitmentService"],
+      "file": "backend/src/recrutamento/recruitment.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ReportCatalogController"],
+      "entity_references": ["ReportCatalogController"],
+      "file": "backend/src/relatorio/report-catalog/report-catalog.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ReportCatalogService"],
+      "entity_references": ["ReportCatalogService"],
+      "file": "backend/src/relatorio/report-catalog/report-catalog.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayslipRenderService"],
+      "entity_references": ["PayslipRenderService"],
+      "file": "backend/src/report-service/payslip/payslip-render.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayslipController"],
+      "entity_references": ["PayslipController"],
+      "file": "backend/src/report-service/payslip/payslip.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PdfABuilderService"],
+      "entity_references": ["PdfABuilderService"],
+      "file": "backend/src/report-service/payslip/pdf-a-builder.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ReportServiceController"],
+      "entity_references": ["ReportServiceController"],
+      "file": "backend/src/report-service/report-service.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ReportRuntimeService"],
+      "entity_references": ["ReportRuntimeService"],
+      "file": "backend/src/report-service/report-service.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ReportWorkerService"],
+      "entity_references": ["ReportWorkerService"],
+      "file": "backend/src/report-service/report-worker.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PdfABuilderService yearly income"],
+      "entity_references": ["PdfABuilderService"],
+      "file": "backend/src/report-service/yearly-income/pdf-a-yearly.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["YearlyIncomeRenderService"],
+      "entity_references": ["YearlyIncomeRenderService"],
+      "file": "backend/src/report-service/yearly-income/yearly-income-render.service.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["yearly income golden scenarios"],
+      "entity_references": [],
+      "file": "backend/src/report-service/yearly-income/yearly-income-render.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ReportsService"],
+      "entity_references": ["ReportsService"],
+      "file": "backend/src/reports/reports.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["EmployeeTransferService"],
+      "entity_references": ["EmployeeTransferService", "FakeDatabaseService"],
+      "file": "backend/src/rh/employee-transfer/employee-transfer.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["EmployeesController"],
+      "entity_references": ["EmployeesController"],
+      "file": "backend/src/rh/employees/employees.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["EmployeesService"],
+      "entity_references": ["EmployeesService"],
+      "file": "backend/src/rh/employees/employees.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["HistoryService"],
+      "entity_references": ["HistoryService"],
+      "file": "backend/src/rh/employees/history.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["OrganicDefinitionController"],
+      "entity_references": ["OrganicDefinitionController"],
+      "file": "backend/src/rh/organic-definitions/organic-definition.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["OrganicDefinitionService"],
+      "entity_references": ["OrganicDefinitionService"],
+      "file": "backend/src/rh/organic-definitions/organic-definition.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AdministrativeWorkflowService"],
+      "entity_references": ["AdministrativeWorkflowService"],
+      "file": "backend/src/rh/workflows/administrative-workflow.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AbsenceWorkflowService"],
+      "entity_references": ["AbsenceWorkflowService"],
+      "file": "backend/src/rh/workflows/afastamentos/absence-workflow.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["DependentsWorkflowService"],
+      "entity_references": ["DependentsWorkflowService"],
+      "file": "backend/src/rh/workflows/dependentes/dependents-workflow.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["EmploymentWorkflowService"],
+      "entity_references": ["EmploymentWorkflowService"],
+      "file": "backend/src/rh/workflows/employment-workflow.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LeavesController"],
+      "entity_references": ["LeavesController"],
+      "file": "backend/src/rh/workflows/leaves/leaves.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LeavesService"],
+      "entity_references": ["LeavesService"],
+      "file": "backend/src/rh/workflows/leaves/leaves.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MedicalLeaveService"],
+      "entity_references": ["MedicalLeaveService"],
+      "file": "backend/src/rh/workflows/medical-leave/medical-leave.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["JudicialAlimonyWorkflowService"],
+      "entity_references": ["JudicialAlimonyWorkflowService"],
+      "file": "backend/src/rh/workflows/pensao-judicial/judicial-alimony-workflow.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RhWorkflowsController"],
+      "entity_references": ["EmployeeRhWorkflowsController", "RhWorkflowsController"],
+      "file": "backend/src/rh/workflows/rh-workflows.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RhWorkflowsService"],
+      "entity_references": ["RhWorkflowsService"],
+      "file": "backend/src/rh/workflows/rh-workflows.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["UnionWorkflowService"],
+      "entity_references": ["UnionWorkflowService"],
+      "file": "backend/src/rh/workflows/sindicato/union-workflow.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["VacationController"],
+      "entity_references": ["VacationController"],
+      "file": "backend/src/rh/workflows/vacation/vacation.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["VacationService"],
+      "entity_references": ["VacationService"],
+      "file": "backend/src/rh/workflows/vacation/vacation.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TransitBenefitWorkflowService"],
+      "entity_references": ["TransitBenefitWorkflowService"],
+      "file": "backend/src/rh/workflows/vales/transit-benefit-workflow.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AsoService"],
+      "entity_references": ["AsoAttachmentService", "AsoService"],
+      "file": "backend/src/saude/aso/aso.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CatEmissionService deadline calculation"],
+      "entity_references": ["CatEmissionService"],
+      "file": "backend/src/saude/cat/cat-emission.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["EpiDeliveryService"],
+      "entity_references": ["EpiDeliveryService"],
+      "file": "backend/src/saude/epi/epi-delivery.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["EnvironmentalExposureService"],
+      "entity_references": ["EnvironmentalExposureService"],
+      "file": "backend/src/saude/exposure/environmental-exposure.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PericiaController"],
+      "entity_references": ["PericiaController"],
+      "file": "backend/src/saude/pericia.controller.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PericiaService"],
+      "entity_references": ["PericiaService"],
+      "file": "backend/src/saude/pericia.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PppService"],
+      "entity_references": ["PppService"],
+      "file": "backend/src/saude/ppp/ppp.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["HealthProgramService"],
+      "entity_references": ["HealthProgramService", "ProgramRevisionService"],
+      "file": "backend/src/saude/program/health-program.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ProgramRevisionService"],
+      "entity_references": ["ProgramRevisionService"],
+      "file": "backend/src/saude/program/program-revision.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AdminMenusService"],
+      "entity_references": ["AdminMenusService"],
+      "file": "backend/src/system-parameters/admin-menus.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AdminPlatformService"],
+      "entity_references": ["AdminPlatformService"],
+      "file": "backend/src/system-parameters/admin-platform.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["UpsertGlobalParameterDto"],
+      "entity_references": ["UpsertGlobalParameterDto"],
+      "file": "backend/src/system-parameters/system-parameters.dto.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SystemParametersService"],
+      "entity_references": ["SystemParametersService"],
+      "file": "backend/src/system-parameters/system-parameters.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TaxRateService"],
+      "entity_references": ["TaxRateService"],
+      "file": "backend/src/system-parameters/tax-rate/tax-rate.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AtosPessoalDraftSerializer"],
+      "entity_references": [],
+      "file": "backend/src/tce/adapters/atos-pessoal/atos-pessoal-draft.serializer.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AudespSpAdapter"],
+      "entity_references": ["AudespStubServerService", "ConfigService"],
+      "file": "backend/src/tce/adapters/audesp-sp/audesp-sp.adapter.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PayrollToAudespMapper"],
+      "entity_references": [],
+      "file": "backend/src/tce/adapters/audesp-sp/mapping/payroll-to-audesp.mapper.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AudespXmlSerializer"],
+      "entity_references": [],
+      "file": "backend/src/tce/adapters/audesp-sp/serializer/audesp-xml.serializer.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AudespStubServerService"],
+      "entity_references": ["AudespStubServerService", "ConfigService"],
+      "file": "backend/src/tce/adapters/audesp-sp/stub/audesp-stub-server.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AudespValidatorService"],
+      "entity_references": ["AudespValidatorService"],
+      "file": "backend/src/tce/adapters/audesp-sp/validator/audesp-validator.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["state payroll source-pending TCE adapters"],
+      "entity_references": [],
+      "file": "backend/src/tce/adapters/state-payroll/state-payroll-adapters.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LayoutFieldService"],
+      "entity_references": ["LayoutFieldService"],
+      "file": "backend/src/tce/catalog/layout-field.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LayoutVersionService"],
+      "entity_references": ["LayoutVersionService"],
+      "file": "backend/src/tce/catalog/layout-version.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["StateService"],
+      "entity_references": ["StateService"],
+      "file": "backend/src/tce/catalog/state.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TceAdapter contract"],
+      "entity_references": [],
+      "file": "backend/src/tce/contracts/tce-adapter.interface.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["NoopStubAdapter"],
+      "entity_references": [],
+      "file": "backend/src/tce/examples/noop-stub.adapter.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TceCircuitBreakerService"],
+      "entity_references": ["TceCircuitBreakerService"],
+      "file": "backend/src/tce/queue/circuit-breaker.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TceRetryStrategyService"],
+      "entity_references": ["TceRetryStrategyService"],
+      "file": "backend/src/tce/queue/retry-strategy.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TceWorkerService"],
+      "entity_references": [
+        "TceCircuitBreakerService",
+        "TceRetryStrategyService",
+        "TceWorkerService"
+      ],
+      "file": "backend/src/tce/queue/tce-worker.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AdapterLoaderService"],
+      "entity_references": ["AdapterLoaderService", "DiscoveryService"],
+      "file": "backend/src/tce/registry/adapter-loader.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AdapterRegistryService"],
+      "entity_references": ["AdapterRegistryService", "LifecycleEmitterService"],
+      "file": "backend/src/tce/registry/adapter-registry.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["InvitesService"],
+      "entity_references": ["InvitesService"],
+      "file": "backend/src/users/invites.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["UsersService"],
+      "entity_references": ["UsersService"],
+      "file": "backend/src/users/users.service.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["portal routes"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/app.routes.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Portal App"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/app.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Portal ApiClient"],
+      "entity_references": ["HttpTestingController"],
+      "file": "frontend/portal/src/app/core/api/api-client.spec.ts",
+      "route_references": ["/api/v1/auth/alterar-senha"]
+    },
+    {
+      "describes": ["portal authGuard"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/core/auth/auth-guard.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["portal authTokenInterceptor"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/core/http/auth-token-interceptor.spec.ts",
+      "route_references": ["/api/v1/portal/me"]
+    },
+    {
+      "describes": ["portal route endpoint wiring"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/core/portal/portal-route-endpoints.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Contracheque"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/pages/contracheque/contracheque.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Ferias"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/pages/ferias/ferias.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["GovBrSignCallback"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/pages/govbr-sign-callback/govbr-sign-callback.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Licencas"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/pages/licencas/licencas.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["LicencasSaude"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/pages/licencas/saude/saude.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MeusDados"],
+      "entity_references": [],
+      "file": "frontend/portal/src/app/pages/meus-dados/meus-dados.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["App"],
+      "entity_references": [],
+      "file": "frontend/src/app/app.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ApiClient"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/api/api-client.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ActionAudit"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/audit/action-audit.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["authGuard"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/auth/auth-guard.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CognitoAuth"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/auth/cognito-auth.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["permissionGuard"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/auth/permission-guard.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Permission"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/auth/permission.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["authTokenInterceptor"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/http/auth-token-interceptor.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["errorInterceptor"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/http/error-interceptor.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["admin feature catalog"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/navigation/admin-feature-catalog.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["legacy navigation manifest"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/navigation/legacy-navigation.manifest.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["NavigationFilter"],
+      "entity_references": [],
+      "file": "frontend/src/app/core/navigation/navigation-filter.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AdminFeaturePage"],
+      "entity_references": [],
+      "file": "frontend/src/app/features/admin-feature/pages/admin-feature-page/admin-feature-page.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["AuditEvents"],
+      "entity_references": [],
+      "file": "frontend/src/app/features/auditoria/services/audit-events.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FolhaMensal"],
+      "entity_references": [
+        "FolhaMensalService",
+        "MatButtonModule",
+        "MatFormFieldModule",
+        "MatIconModule",
+        "MatInputModule",
+        "ReactiveFormsModule"
+      ],
+      "file": "frontend/src/app/features/folha-pagamento/competencia/folha-mensal.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FolhaPagamentoHome"],
+      "entity_references": ["DecimoTerceiroProcessamentosService", "FolhaPagamentoModule"],
+      "file": "frontend/src/app/features/folha-pagamento/pages/folha-pagamento-home/folha-pagamento-home.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["GestaoMasterData"],
+      "entity_references": ["GestaoModule"],
+      "file": "frontend/src/app/features/gestao/master-data/master-data.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["GestaoHome"],
+      "entity_references": ["GestaoModule"],
+      "file": "frontend/src/app/features/gestao/pages/gestao-home/gestao-home.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["MasterData"],
+      "entity_references": ["HttpTestingController"],
+      "file": "frontend/src/app/features/gestao/services/master-data.spec.ts",
+      "route_references": ["/api/v1/master-data/adminMenus", "/api/v1/master-data/adminMenus/1"]
+    },
+    {
+      "describes": ["PublicoTransparencia"],
+      "entity_references": ["FormsModule", "TransparenciaService"],
+      "file": "frontend/src/app/features/publico/transparencia/transparencia.spec.ts",
+      "route_references": ["/api/v1/public/transparency/tenant/payroll.csv"]
+    },
+    {
+      "describes": ["RhFerias"],
+      "entity_references": ["ReactiveFormsModule"],
+      "file": "frontend/src/app/features/rh/ferias/ferias.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RhFuncionarios"],
+      "entity_references": [
+        "MatButtonModule",
+        "MatIconModule",
+        "ReactiveFormsModule",
+        "RouterModule"
+      ],
+      "file": "frontend/src/app/features/rh/funcionarios/funcionarios.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RhFuncionariosVinculos"],
+      "entity_references": ["CommonModule", "MatButtonModule", "ReactiveFormsModule"],
+      "file": "frontend/src/app/features/rh/funcionarios/vinculos/vinculos.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RhHome"],
+      "entity_references": ["RhModule"],
+      "file": "frontend/src/app/features/rh/pages/rh-home/rh-home.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["rhRoutes"],
+      "entity_references": [],
+      "file": "frontend/src/app/features/rh/rh-routes.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RhWorkflows"],
+      "entity_references": [],
+      "file": "frontend/src/app/features/rh/services/rh-workflows.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SaudePericia"],
+      "entity_references": [],
+      "file": "frontend/src/app/features/saude/pericia/pericia.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Report"],
+      "entity_references": [],
+      "file": "frontend/src/app/reports/report.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["ConfirmationDialog"],
+      "entity_references": [],
+      "file": "frontend/src/app/shared-platform/confirmation-dialog/confirmation-dialog.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CrudTable"],
+      "entity_references": [],
+      "file": "frontend/src/app/shared-platform/crud-table/crud-table.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Crud"],
+      "entity_references": [],
+      "file": "frontend/src/app/shared-platform/crud/crud.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FilterBar"],
+      "entity_references": [],
+      "file": "frontend/src/app/shared-platform/filter-bar/filter-bar.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Shell"],
+      "entity_references": [],
+      "file": "frontend/src/app/shared-platform/shell/shell.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/audit/immutable.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "BANK-04 alimony CNAB gate",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["Cnab240EmitService"],
+      "file": "tests/backend/alimony-cnab.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SGP backend foundation (e2e)"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "DocumentsStorageService",
+        "FakeDatabaseService",
+        "FakeDocumentsStorageService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/app.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/arquivos",
+        "/api/v1/arquivos/${presignBody.uploadSessionId}/confirmar",
+        "/api/v1/arquivos/doc-1/download",
+        "/api/v1/arquivos/presigned-upload",
+        "/api/v1/auditoria/logs",
+        "/api/v1/auth/me",
+        "/api/v1/convenios",
+        "/api/v1/folhas",
+        "/api/v1/health",
+        "/api/v1/health/ready",
+        "/api/v1/iam/permissions",
+        "/api/v1/master-data",
+        "/api/v1/master-data/cargo",
+        "/api/v1/master-data/cargo/${created.id}",
+        "/api/v1/master-data?page=0&pageSize=2",
+        "/api/v1/master-data?page=1&pageSize=2&search=gestao",
+        "/api/v1/notificacoes",
+        "/api/v1/notificacoes/unread-count",
+        "/api/v1/relatorios",
+        "/api/v1/rh/afastamentos",
+        "/api/v1/rh/processos"
+      ]
+    },
+    {
+      "describes": [
+        "audit coverage",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [],
+      "file": "tests/backend/audit-coverage.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "AuditRequiredInterceptor production enforcement",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AuditProdFixtureController", "AuditProdFixtureModule", "AuditService"],
+      "file": "tests/backend/audit-prod-enforcement.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "BANK-03 bank account create flow",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["BankAccountService", "BankAccountValidatorService"],
+      "file": "tests/backend/bank-account-create.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "BANK-05 FGTS GRRF remittance (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [],
+      "file": "tests/backend/bank-fgts-grrf.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-07 abono permanencia golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "EmployeesService"],
+      "file": "tests/backend/calc-abono-permanencia.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-07 ATS, trienio, quinquenio and sexta-parte golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService"],
+      "file": "tests/backend/calc-ats.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-04 decimo terceiro golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [],
+      "file": "tests/backend/calc-decimo-terceiro.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-05 vacation payroll golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ConfigService", "DatabaseService", "FeriasPayrollService"],
+      "file": "tests/backend/calc-ferias.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CALC-11 complete monthly payroll orchestration (e2e)"],
+      "entity_references": [
+        "CareerPlanService",
+        "ConfigService",
+        "DatabaseService",
+        "EligibilityService",
+        "FolhaMensalService",
+        "PortalService"
+      ],
+      "file": "tests/backend/calc-folha-mensal-e2e.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Wave 7 test debt guardrails", "403 negative path", "frozen clock"],
+      "entity_references": [],
+      "file": "tests/backend/calc-folha-mensal.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Wave 7 test debt guardrails", "403 negative path", "frozen clock"],
+      "entity_references": [],
+      "file": "tests/backend/calc-folha-validation.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["CALC-11 monthly payroll validation guard"],
+      "entity_references": ["ConfigService", "DatabaseService"],
+      "file": "tests/backend/calc-folha-validation.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-01 formula engine golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "FormulaCompilerService"],
+      "file": "tests/backend/calc-formula-engine.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-02 IRRF progressive table golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService"],
+      "file": "tests/backend/calc-irrf.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-08 SQL and TS money boundary parity",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [],
+      "file": "tests/backend/calc-paths-parity.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-09 concurrent payroll reprocessing idempotency (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [],
+      "file": "tests/backend/calc-reprocessamento-concorrente.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-09 payroll reprocessing idempotency (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ConfigService", "DatabaseService", "DecimoTerceiroService"],
+      "file": "tests/backend/calc-reprocessamento.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CLT-02 prior notice reflexes in termination payroll (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [],
+      "file": "tests/backend/calc-rescisao-aviso.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CLT-01 FGTS monthly deposits and termination fine (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [],
+      "file": "tests/backend/calc-rescisao-fgts.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-12 termination payroll golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [],
+      "file": "tests/backend/calc-rescisao.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-08 money rounding boundary (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "FormulaCompilerService"],
+      "file": "tests/backend/calc-rounding.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-03 RPPS progressive table golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService"],
+      "file": "tests/backend/calc-rpps.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-10 payroll simulation dry-run (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ConfigService", "DatabaseService", "SimulacaoService"],
+      "file": "tests/backend/calc-simulacao.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CALC-06 remuneration ceiling golden scenarios (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService"],
+      "file": "tests/backend/calc-teto.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Gestao cargos API (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "JobPositionAdminController", "JobPositionService"],
+      "file": "tests/backend/cargos.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "BANK-01 CNAB 240 emission gate",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["Cnab240EmitService"],
+      "file": "tests/backend/cnab240-emit.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "BANK-02 CNAB 240 return processing gate",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "Cnab240ReturnParserService",
+        "Cnab240ReturnProcessService",
+        "OccurrenceMapperService"
+      ],
+      "file": "tests/backend/cnab240-return-process.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["FISC-03 portal yearly income isolation (e2e contract)", "403 negative path"],
+      "entity_references": ["YearlyIncomeRenderService"],
+      "file": "tests/backend/comprovante-portal-download.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "concurso publish flow",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/concurso-publish.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/publico/concursos/rec-2026",
+        "/api/v1/recrutamento/concursos",
+        "/api/v1/recrutamento/concursos/00000000-0000-4000-8000-000000000050/editais",
+        "/api/v1/recrutamento/concursos/00000000-0000-4000-8000-000000000050/editais/publish"
+      ]
+    },
+    {
+      "describes": [
+        "Consignment loan creation (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AppModule", "DatabaseService", "FakeConsignmentDatabaseService"],
+      "file": "tests/backend/consignment-create-loan.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Convenio internships operational lifecycle (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "InternshipsService", "XsdValidatorService"],
+      "file": "tests/backend/convenio-internship-lifecycle.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "DCTFWeb flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DctfwebBuilderService", "DctfwebSignerService"],
+      "file": "tests/backend/dctfweb-fluxo.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "DCTFWeb totalizer reconciliation (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "ConfigService",
+        "DctfwebBuilderService",
+        "DctfwebDeclarationDetailsDto",
+        "DctfwebTransmitterService"
+      ],
+      "file": "tests/backend/dctfweb-totalizer-reconciliation.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "R2-51 decimo terceiro golden monetary fixture (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ConfigService", "DatabaseService", "DecimoTerceiroService"],
+      "file": "tests/backend/decimo-terceiro-golden.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "DIRF validation flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "DirfBuilderService",
+        "DirfController",
+        "DirfFormatterService",
+        "DirfValidatorService"
+      ],
+      "file": "tests/backend/dirf-validacao.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "EFD-Reinf R-4000 lifecycle (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["EfdReinfBuilderService", "EfdReinfReceiptService"],
+      "file": "tests/backend/efd-reinf-r4000-fluxo.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-01 S-1060 work environments (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["S1xxxDispatchService"],
+      "file": "tests/backend/es-01-s1060-ambientes.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-01 S-1xxx tables (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["S1xxxDispatchService", "XsdValidatorService"],
+      "file": "tests/backend/es-01-tabelas.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-02 S-2200/S-2205 cadastro flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "S22xxDispatchService", "XsdValidatorService"],
+      "file": "tests/backend/es-02-cadastro.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-03 S-2230/S-2299 flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["XsdValidatorService"],
+      "file": "tests/backend/es-03-afastamentos.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-04 periodic payroll flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["XsdValidatorService"],
+      "file": "tests/backend/es-04-folha-periodica.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-05 S-1299 closure flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ES05Service"],
+      "file": "tests/backend/es-05-fechamento.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-06 S-3000 exclusion flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "S3000Service"],
+      "file": "tests/backend/es-06-exclusao.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-08 SOAP submission (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "BatchBuilderService",
+        "CertificateStoreService",
+        "CircuitBreakerService",
+        "DatabaseService",
+        "IcpSignerService",
+        "RetryStrategyService",
+        "SoapClientService",
+        "SubmissionService"
+      ],
+      "file": "tests/backend/es-08-submission.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-09 retorno parser status sync (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "RetryPolicyService", "StatusSyncService"],
+      "file": "tests/backend/es-09-retorno.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-1030 Cargos publicos (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["S1xxxDispatchService"],
+      "file": "tests/backend/es-1030-cargos.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-01 S-1040 funcoes (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["S1xxxDispatchService"],
+      "file": "tests/backend/es-1040-funcoes.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-04 S-1202 RPPS remuneration flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ES04Service"],
+      "file": "tests/backend/es-1202-rpps-remuneration.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "S-1207 RPPS benefit periodic reporting (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["XsdValidatorService"],
+      "file": "tests/backend/es-1207-rpps-benefit.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES S-2206 alteracao contratual flow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "XsdValidatorService"],
+      "file": "tests/backend/es-2206-alteracao-contratual.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "eSocial TS-V S-2300/S-2399 builders (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["DatabaseService", "XsdValidatorService"],
+      "file": "tests/backend/es-2300-2399-tsv.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Previdenciario retirement grant S-2400 emission (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AtividadeRiscoProfessorService",
+        "AuditService",
+        "DatabaseService",
+        "ESocialEmitService",
+        "FakeDatabaseService",
+        "IdadeProgressivaService",
+        "Pedagio100Service",
+        "Pedagio50Service",
+        "PontosService",
+        "PrevidenciarioController",
+        "PrevidenciarioService",
+        "S2400FixtureModule"
+      ],
+      "file": "tests/backend/es-2400-aposentadoria.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Previdenciario recertification S-2405 emission (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AtividadeRiscoProfessorService",
+        "AuditService",
+        "DatabaseService",
+        "ESocialEmitService",
+        "FakeDatabaseService",
+        "IdadeProgressivaService",
+        "Pedagio100Service",
+        "Pedagio50Service",
+        "PontosService",
+        "PrevidenciarioController",
+        "PrevidenciarioService",
+        "S2405FixtureModule"
+      ],
+      "file": "tests/backend/es-2405-beneficiary-change.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Previdenciario benefit grant S-2410 emission (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AtividadeRiscoProfessorService",
+        "AuditService",
+        "DatabaseService",
+        "ESocialEmitService",
+        "FakeDatabaseService",
+        "IdadeProgressivaService",
+        "Pedagio100Service",
+        "Pedagio50Service",
+        "PontosService",
+        "PrevidenciarioController",
+        "PrevidenciarioService",
+        "S2410FixtureModule"
+      ],
+      "file": "tests/backend/es-2410-benefit-grant.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Previdenciario pension grant S-2416 emission (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AtividadeRiscoProfessorService",
+        "AuditService",
+        "DatabaseService",
+        "ESocialEmitService",
+        "FakeDatabaseService",
+        "IdadeProgressivaService",
+        "Pedagio100Service",
+        "Pedagio50Service",
+        "PontosService",
+        "PrevidenciarioController",
+        "PrevidenciarioService",
+        "S2416FixtureModule"
+      ],
+      "file": "tests/backend/es-2416-pension-founder.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Previdenciario benefit reactivation S-2418 emission (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AtividadeRiscoProfessorService",
+        "DatabaseService",
+        "ESocialEmitService",
+        "FakeDatabaseService",
+        "IdadeProgressivaService",
+        "Pedagio100Service",
+        "Pedagio50Service",
+        "PontosService",
+        "PrevidenciarioService",
+        "S2418FixtureModule"
+      ],
+      "file": "tests/backend/es-2418-benefit-reactivation.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Previdenciario benefit termination S-2420 emission (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AtividadeRiscoProfessorService",
+        "AuditService",
+        "DatabaseService",
+        "ESocialEmitService",
+        "FakeDatabaseService",
+        "IdadeProgressivaService",
+        "Pedagio100Service",
+        "Pedagio50Service",
+        "PontosService",
+        "PrevidenciarioController",
+        "PrevidenciarioService",
+        "S2420FixtureModule"
+      ],
+      "file": "tests/backend/es-2420-benefit-termination.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-2501 processo trabalhista submission (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["BatchBuilderService", "SubmissionService", "XsdValidatorService"],
+      "file": "tests/backend/es-2501-processo-trabalhista.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "ES-07 eSocial emit gate (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ESocialEmitService", "IcpSignerService", "XsdValidatorService"],
+      "file": "tests/backend/es-emit-gate.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "R2-52 ferias folha golden monetary fixture (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ConfigService", "DatabaseService", "FeriasPayrollService"],
+      "file": "tests/backend/ferias-folha-golden.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "FISC-04 GPS residual (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["GpsService"],
+      "file": "tests/backend/fiscal-gps-residual.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["folha complementar idempotency (e2e)", "403 negative path"],
+      "entity_references": [],
+      "file": "tests/backend/folha-complementar-idempotency.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Gestao master-data API (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AuditService",
+        "DatabaseService",
+        "JobPositionsController",
+        "MasterDataService"
+      ],
+      "file": "tests/backend/gestao-master-data.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "public inscricao flow",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/inscricao-public.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/publico/concursos/rec-2026/inscricoes",
+        "/api/v1/publico/inscricoes/${created.body.id}"
+      ]
+    },
+    {
+      "describes": [
+        "LAI request public workflow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AppModule", "DatabaseService"],
+      "file": "tests/backend/lai-requests.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/public/lai/00000000-0000-4000-8000-000000000001/requests",
+        "/api/v1/public/lai/00000000-0000-4000-8000-000000000001/requests/LAI-20260502-ABC12345/status"
+      ]
+    },
+    {
+      "describes": [
+        "General leaves workflow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeLeavesDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/leaves.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/licencas",
+        "/api/v1/licencas/00000000-0000-4000-8000-000000000020/aprovar"
+      ]
+    },
+    {
+      "describes": [
+        "LGPD titular rights portal API (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/lgpd-direitos-titular.e2e-spec.ts",
+      "route_references": ["/api/portal/v1/lgpd/direitos"]
+    },
+    {
+      "describes": [
+        "LGPD RCIS incident API (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/lgpd-rcis.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/admin/lgpd/incidents",
+        "/api/v1/admin/lgpd/incidents/${incidentId}/close",
+        "/api/v1/admin/lgpd/incidents/${incidentId}/complement",
+        "/api/v1/admin/lgpd/incidents/${incidentId}/report",
+        "/api/v1/admin/lgpd/incidents/${incidentId}/triage"
+      ]
+    },
+    {
+      "describes": [
+        "LGPD ROPA admin API (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/lgpd-ropa.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/admin/lgpd/ropa",
+        "/api/v1/admin/lgpd/ropa/${entryId}",
+        "/api/v1/admin/lgpd/ropa?flowKey=payroll.payslip_pdf"
+      ]
+    },
+    {
+      "describes": [
+        "Manual entry XLSX import API contract (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ManualEntryImportController"],
+      "file": "tests/backend/manual-entry-import.e2e-spec.ts",
+      "route_references": ["/api/v1/folhas/run-1/importar/lancamento-manual"]
+    },
+    {
+      "describes": [
+        "Medical leave workflow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeMedicalLeaveDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/medical-leave.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/licencas/saude/00000000-0000-4000-8000-000000000001",
+        "/api/v1/licencas/saude/agendamento"
+      ]
+    },
+    {
+      "describes": [
+        "Movimentacao workflow (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeTransferDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/movimentacao.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/rh/employee-transfer",
+        "/api/v1/rh/employee-transfer/00000000-0000-4000-8000-000000000020/aprovar",
+        "/api/v1/rh/employee-transfer/00000000-0000-4000-8000-000000000020/efetivar"
+      ]
+    },
+    {
+      "describes": [
+        "nomeacao prazo flow",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/nomeacao-prazo.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/admin/nomeacoes",
+        "/api/v1/admin/nomeacoes/${nomeacaoId}/convocacoes",
+        "/api/v1/admin/nomeacoes/${nomeacaoId}/expirar-prazo"
+      ]
+    },
+    {
+      "describes": [
+        "R2-50 monthly payroll golden monetary fixture (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["ConfigService", "DatabaseService", "FolhaMensalService"],
+      "file": "tests/backend/payroll-mensal-golden.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "PCCS career plan API contract (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["CareerPlanController", "CareerPlanService"],
+      "file": "tests/backend/pccs.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "Pensionista verba XLSX import API contract (e2e)",
+        "Wave 7 test debt guardrails",
+        "403 negative path",
+        "frozen clock"
+      ],
+      "entity_references": ["PensionistaImportController"],
+      "file": "tests/backend/pensionista-import.e2e-spec.ts",
+      "route_references": ["/api/v1/folhas/run-1/importar/pensionista"]
+    },
+    {
+      "describes": ["PermissionGuard deny behavior"],
+      "entity_references": [],
+      "file": "tests/backend/permission-guard.deny.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["permission guard route coverage"],
+      "entity_references": [],
+      "file": "tests/backend/permission-guard.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [
+        "CLT-03 PIS/PASEP annual base recompute after S-3000 (e2e)",
+        "403 negative path"
+      ],
+      "entity_references": ["DatabaseService", "PisPasepService", "S3000Service"],
+      "file": "tests/backend/pis-pasep-recompute-after-s3000.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-08 biometrico (e2e)", "403 negative path"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeDatabaseService",
+        "PontoBiometricConsentService",
+        "PontoBiometricMatcherService",
+        "TemplateEnrollmentService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/ponto-08-biometrico.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/ponto/biometria/consents",
+        "/api/v1/ponto/biometria/matches",
+        "/api/v1/ponto/biometria/templates"
+      ]
+    },
+    {
+      "describes": ["PONTO-09 mobile clock-in (e2e)", "403 negative path"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeDatabaseService",
+        "MobileClockService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/ponto-09-mobile.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/ponto/mobile/clock",
+        "/api/v1/ponto/mobile/consents",
+        "/api/v1/ponto/mobile/devices"
+      ]
+    },
+    {
+      "describes": ["PONTO-10 facial recognition (e2e)", "403 negative path"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FaceConsentService",
+        "FaceEnrollmentService",
+        "FaceMatcherService",
+        "FaceThresholdAdminService",
+        "FakeDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/ponto-10-face.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/ponto/face/clock",
+        "/api/v1/ponto/face/consents",
+        "/api/v1/ponto/face/employees/${employeeId}/consent",
+        "/api/v1/ponto/face/templates"
+      ]
+    },
+    {
+      "describes": ["PONTO-03 AFD round-trip (e2e)", "403 negative path"],
+      "entity_references": [
+        "AfdGeneratorService",
+        "AfdImporterService",
+        "AppModule",
+        "DatabaseService",
+        "FakeDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/ponto-afd-roundtrip.e2e-spec.ts",
+      "route_references": ["/api/v1/ponto/afd/exports", "/api/v1/ponto/afd/imports"]
+    },
+    {
+      "describes": ["PONTO-01 base flow (e2e)", "403 negative path"],
+      "entity_references": [
+        "AppModule",
+        "AssignmentService",
+        "DatabaseService",
+        "FakeDatabaseService",
+        "TestingModule",
+        "TimeRecordHashService",
+        "TimesheetPeriodService",
+        "WorkScheduleService"
+      ],
+      "file": "tests/backend/ponto-base.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/ponto/atribuicoes",
+        "/api/v1/ponto/jornadas",
+        "/api/v1/ponto/periodos"
+      ]
+    },
+    {
+      "describes": ["PONTO hour-bank golden scenarios (e2e)", "403 negative path"],
+      "entity_references": [
+        "HourBankAccrualService",
+        "HourBankCompensationService",
+        "HourBankSettlementService"
+      ],
+      "file": "tests/backend/ponto-hour-bank-cenarios.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-07 payroll bridge idempotency e2e contract", "403 negative path"],
+      "entity_references": ["PayrollBridgeService"],
+      "file": "tests/backend/ponto-payroll-bridge-idempotency.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-07 payroll bridge timezone e2e contract", "403 negative path"],
+      "entity_references": [
+        "DatabaseService",
+        "PayrollLineBuilderService",
+        "TimesheetAggregatorService"
+      ],
+      "file": "tests/backend/ponto-payroll-bridge-tz.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["PONTO-02 REP ingestion (e2e)", "403 negative path"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeDatabaseService",
+        "RepDeviceService",
+        "RepIngestionService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/ponto-rep-ingestao.e2e-spec.ts",
+      "route_references": ["/api/v1/ponto/rep", "/api/v1/ponto/rep/${repDeviceId}/batches"]
+    },
+    {
+      "describes": ["PONTO roster publish flow (e2e)", "403 negative path"],
+      "entity_references": ["DutyRosterService"],
+      "file": "tests/backend/ponto-roster-publish.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Consignment portability processing (e2e)", "403 negative path"],
+      "entity_references": ["AppModule", "DatabaseService", "FakePortabilityDatabaseService"],
+      "file": "tests/backend/portability-process.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["posse exercise handoff (e2e contract)", "403 negative path"],
+      "entity_references": ["PosseService"],
+      "file": "tests/backend/posse-cria-employee-e-s2200.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["posse deadline expiration (e2e contract)", "403 negative path"],
+      "entity_references": ["NomeacaoService"],
+      "file": "tests/backend/posse-prazo.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Probation e2e contract", "403 negative path"],
+      "entity_references": [],
+      "file": "tests/backend/probation.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Functional progression API contract (e2e)", "403 negative path"],
+      "entity_references": [
+        "EligibilityService",
+        "ProgressionApplyService",
+        "ProgressionController",
+        "ProgressionSimulationService"
+      ],
+      "file": "tests/backend/progression.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["REC-08 LGPD recording consent", "403 negative path"],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/prova-online-lgpd-consent.e2e-spec.ts",
+      "route_references": ["/api/v1/recrutamento/prova-online/sessions"]
+    },
+    {
+      "describes": ["REC-08 LGPD artifact exclusion", "403 negative path"],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/prova-online-lgpd-exclusion.e2e-spec.ts",
+      "route_references": ["/api/v1/recrutamento/prova-online/sessions/${sessionId}/artifacts"]
+    },
+    {
+      "describes": ["REC-07 biometria e2e", "403 negative path"],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/rec-07-biometria.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/recrutamento/biometria/candidatos/${candidatoId}",
+        "/api/v1/recrutamento/biometria/capturas",
+        "/api/v1/recrutamento/biometria/consentimentos",
+        "/api/v1/recrutamento/biometria/matching"
+      ]
+    },
+    {
+      "describes": ["REC-08 prova online com proctoring", "403 negative path"],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/rec-08-prova-online.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/recrutamento/prova-online/review/sessions/${sessionId}/void",
+        "/api/v1/recrutamento/prova-online/sessions",
+        "/api/v1/recrutamento/prova-online/sessions/${sessionId}/events",
+        "/api/v1/recrutamento/prova-online/sessions/${sessionId}/submit"
+      ]
+    },
+    {
+      "describes": ["REC-09 certificacao digital da banca", "403 negative path"],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/rec-09-banca.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/publico/banca/verify/${database.document.public_verify_token}",
+        "/api/v1/recrutamento/banca/documentos",
+        "/api/v1/recrutamento/banca/documentos/${documentId}/publicacao",
+        "/api/v1/recrutamento/banca/documentos/${documentId}/signatures"
+      ]
+    },
+    {
+      "describes": ["REC-03 answer key republication and resources"],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/recurso-republica-gabarito.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/publico/inscricoes/00000000-0000-4000-8000-000000000402/recursos",
+        "/api/v1/recrutamento/avaliacao/provas/00000000-0000-4000-8000-000000000302/gabaritos"
+      ]
+    },
+    {
+      "describes": ["Reintegracao future date validation (e2e)"],
+      "entity_references": ["DatabaseService", "ReintegrationOrderService"],
+      "file": "tests/backend/reintegracao-data-futura-rejeitada.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Reintegracao retroativa S-2298 golden flow (e2e)"],
+      "entity_references": [
+        "DatabaseService",
+        "FormulaCompilerService",
+        "ReintegrationOrderService",
+        "S2298Service",
+        "XsdValidatorService"
+      ],
+      "file": "tests/backend/reintegracao-retroativa-6m.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["R2-53 termination payroll golden monetary fixture (e2e)"],
+      "entity_references": ["ConfigService", "DatabaseService", "FgtsService", "RescisaoService"],
+      "file": "tests/backend/rescisao-golden.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["RH employees lifecycle (e2e)", "403 negative path"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeRhEmployeeDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/rh-employees.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/funcionarios",
+        "/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/abono-permanencia",
+        "/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/desligamento",
+        "/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/dossie"
+      ]
+    },
+    {
+      "describes": ["rh organic definition flow"],
+      "entity_references": ["AppModule", "CognitoJwtService", "DatabaseService"],
+      "file": "tests/backend/rh-organic-definition.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/rh/organic-definitions",
+        "/api/v1/rh/organic-definitions?search=educacao"
+      ]
+    },
+    {
+      "describes": ["RH vinculos legal regime (e2e)"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeRhVinculosDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/rh-vinculos.e2e-spec.ts",
+      "route_references": ["/api/v1/funcionarios/00000000-0000-4000-8000-000000000001/vinculos"]
+    },
+    {
+      "describes": ["Rubrica API contract (e2e)"],
+      "entity_references": ["RubricaController", "RubricaService"],
+      "file": "tests/backend/rubrica.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Salary history API contract (e2e)"],
+      "entity_references": ["SalaryHistoryController", "SalaryHistoryService"],
+      "file": "tests/backend/salary-history.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Servidor verba XLSX import API contract (e2e)"],
+      "entity_references": ["ServidorImportController"],
+      "file": "tests/backend/servidor-import.e2e-spec.ts",
+      "route_references": ["/api/v1/folhas/run-1/importar/servidor"]
+    },
+    {
+      "describes": ["SIAFIC payroll accounting sync (e2e)"],
+      "entity_references": ["ConfigService", "SiaficConnectorService", "SiaficSyncService"],
+      "file": "tests/backend/siafic-integration.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SST-01 ASO flow (e2e)", "403 negative path"],
+      "entity_references": [
+        "AppModule",
+        "AsoAttachmentService",
+        "AsoService",
+        "DatabaseService",
+        "FakeDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/sst-01-aso.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/portal/aso",
+        "/api/v1/saude/aso",
+        "/api/v1/saude/aso/${asoRecord.id}/anexos",
+        "/api/v1/saude/aso/${asoRecord.id}/arquivar",
+        "/api/v1/saude/aso/${asoRecord.id}/realizacao"
+      ]
+    },
+    {
+      "describes": ["SST-02 PCMSO/PGR flow (e2e)"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeDatabaseService",
+        "HealthProgramService",
+        "RiskManagementProgramService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/sst-02-pcmso-pgr.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/saude/programas/pcmso",
+        "/api/v1/saude/programas/pcmso/${pcmso.id}/ativar",
+        "/api/v1/saude/programas/pcmso/${pcmso.id}/exames",
+        "/api/v1/saude/programas/pgr",
+        "/api/v1/saude/programas/pgr/${pgr.id}/ativar"
+      ]
+    },
+    {
+      "describes": ["SST-03 CAT S-2210 flow (e2e)"],
+      "entity_references": ["ES03Service", "XsdValidatorService"],
+      "file": "tests/backend/sst-03-cat.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SST-04 S-2220 flow (e2e)"],
+      "entity_references": ["ES03Service", "XsdValidatorService"],
+      "file": "tests/backend/sst-04-s2220.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SST-05 S-2240, EPI, PPP, and CALC-07 flow (e2e)"],
+      "entity_references": [
+        "ES03Service",
+        "EnvironmentalExposureService",
+        "EpiDeliveryService",
+        "PppService",
+        "XsdValidatorService"
+      ],
+      "file": "tests/backend/sst-05-s2240.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TCE-01 adapter contract (e2e)"],
+      "entity_references": ["AuditService", "ConfigModule", "DatabaseService", "TceModule"],
+      "file": "tests/backend/tce-01-adapter-contract.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TCE-02 catalog (e2e)"],
+      "entity_references": ["AuditService", "ConfigModule", "DatabaseService", "TceModule"],
+      "file": "tests/backend/tce-02-catalog.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TCE-03 AUDESP/SP stub adapter (e2e)"],
+      "entity_references": ["AuditService", "ConfigModule", "DatabaseService", "TceModule"],
+      "file": "tests/backend/tce-03-audesp-sp.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TCE-04 queue retry and admin controls (e2e)"],
+      "entity_references": [
+        "FlakyAudespSubmissionService",
+        "TceCircuitStateDto",
+        "TceQueueController",
+        "TceRetryStrategyService",
+        "TceWorkerService"
+      ],
+      "file": "tests/backend/tce-04-queue-retry.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["R3-016 TCE golden fixture (e2e)"],
+      "entity_references": [],
+      "file": "tests/backend/tce-golden.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["public transparency endpoints"],
+      "entity_references": ["DatabaseService", "PublicoModule"],
+      "file": "tests/backend/transparency-public.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/public/transparency/${transparencyFixture.tenantId}/payroll",
+        "/api/v1/public/transparency/${transparencyFixture.tenantId}/payroll.csv"
+      ]
+    },
+    {
+      "describes": ["TS-V no-op contractual change rejection"],
+      "entity_references": ["TsvContractService"],
+      "file": "tests/backend/tsv-alteracao-sem-mudanca-rejeitada.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["TS-V contractual change S-2306 golden flow (e2e)"],
+      "entity_references": [
+        "DatabaseService",
+        "S2306Service",
+        "TsvContractService",
+        "XsdValidatorService"
+      ],
+      "file": "tests/backend/tsv-contrato-alteracao-1m.e2e-spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Vacation workflow (e2e)"],
+      "entity_references": [
+        "AppModule",
+        "DatabaseService",
+        "FakeVacationDatabaseService",
+        "TestingModule"
+      ],
+      "file": "tests/backend/vacation.e2e-spec.ts",
+      "route_references": [
+        "/api/v1/ferias/programacao",
+        "/api/v1/ferias/programacao/00000000-0000-4000-8000-000000000090/aprovar",
+        "/api/v1/ferias/saldo/00000000-0000-4000-8000-000000000001"
+      ]
+    },
+    {
+      "describes": ["backend entrypoint smoke coverage"],
+      "entity_references": ["SwaggerModule"],
+      "file": "tests/backend/worker-smoke.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/employee-status-history-immutable.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/employee-transfer-trigger.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/formula-compile.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/hot-table-partitioning.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/leave-eligibility.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/medical-leave-trigger.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/ponto-time-record-immutability.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/progression-trigger.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/salary-history.overlap.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/db/vacation-balance.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/e2e/avaliacao/pccs.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/e2e/avaliacao/progressao.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/e2e/avaliacao/reajuste.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/e2e/folha/rubrica.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/e2e/rh/movimentacao.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["SGP admin Playwright e2e"],
+      "entity_references": [],
+      "file": "tests/frontend/admin/admin-playwright.spec.ts",
+      "route_references": [
+        "/api",
+        "/api/v1/esocial/submissoes/${currentBatchId}/retry",
+        "/api/v1/ponto/afd/exports/afd-ready/download"
+      ]
+    },
+    {
+      "describes": ["SGP portal Playwright e2e"],
+      "entity_references": [],
+      "file": "tests/frontend/portal/portal-playwright.spec.ts",
+      "route_references": ["/api", "/portal/v1/auth/govbr/status", "/portal/v1/auth/me"]
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/abono-permanencia-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/afd-export-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/aso-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/aso-self-only.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/avaliacao-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/banca-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/candidate-biometric-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/career-plan.cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/classificacao-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/concurso-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/consignment-loan-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/consignment-portability-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/dctfweb-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/dirf-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/duty-roster-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/efd-reinf-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/employee-alimony-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/employee-bank-account-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/employee-biometric-template-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/employee-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/employee-dependent.cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/employee-face-template-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/employee-transfer.cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/employment-link-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/environmental-exposure-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/esocial-event-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/esocial-totalizer-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/event-retry-schedule-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/fgts-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/fgts-remittance-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/formula-cache-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/formula-cache.cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/gestao-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/gps-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/health-program-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/hour-bank-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/inscricao-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/job-position.cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/justification-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/leave-record-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/medical-leave-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/mobile-clock-in-attempt-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/nomeacao-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/online-exam-session-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/payment-remittance-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/payment-return-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/payroll-bridge-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/payroll-run-decimo-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/payroll-run-line-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/payroll-run-rescisao-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/pis-pasep-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/ponto-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/portal-paystub-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/posse-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/prior-notice-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/probation-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/reintegration-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/rep-device-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/rubrica.cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/s1200-emission-state-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/s2200-emission-state-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/s2220-pending-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/s2230-pending-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/s3000-request-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/submission-batch-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/system-parameter-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tax-rate-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tax-rate-rpps-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tce-adapter-registry-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tce-catalog-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tce-queue-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tce-submission-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tenant-certificate-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tenant-fk.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/transparency-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/tsv-contract-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/vacation-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/vacation-payroll-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/work-accident-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/rls/yearly-income-cross-tenant.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["audit-api-surface"],
+      "entity_references": [],
+      "file": "tests/scripts/audit-api-surface.spec.ts",
+      "route_references": ["/api/v1/people"]
+    },
+    {
+      "describes": ["audit-backlog-ledger"],
+      "entity_references": [],
+      "file": "tests/scripts/audit-backlog-ledger.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["audit-fr-ledger"],
+      "entity_references": [],
+      "file": "tests/scripts/audit-fr-ledger.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["audit-hotspots"],
+      "entity_references": [],
+      "file": "tests/scripts/audit-hotspots.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["audit-promise-vs-delivery"],
+      "entity_references": [],
+      "file": "tests/scripts/audit-promise-vs-delivery.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["audit-schema-digest"],
+      "entity_references": [],
+      "file": "tests/scripts/audit-schema-digest.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["audit-test-coverage-map"],
+      "entity_references": [],
+      "file": "tests/scripts/audit-test-coverage-map.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["workspace dispatcher surface"],
+      "entity_references": [],
+      "file": "tests/scripts/dispatcher-surface.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["Payroll calculation helper coverage"],
+      "entity_references": ["PayrollService"],
+      "file": "tests/scripts/fixtures/audit-test-coverage-map/backend/src/payroll.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": [],
+      "entity_references": [],
+      "file": "tests/scripts/fixtures/audit-test-coverage-map/tests/backend/empty.spec.ts",
+      "route_references": []
+    },
+    {
+      "describes": ["People API route surface"],
+      "entity_references": [],
+      "file": "tests/scripts/fixtures/audit-test-coverage-map/tests/backend/people.e2e-spec.ts",
+      "route_references": ["/api/v1/people"]
+    }
+  ]
+}

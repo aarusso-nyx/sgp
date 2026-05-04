@@ -31,7 +31,7 @@ describe('SaudePericia', () => {
     fixture.detectChanges();
   });
 
-  it('schedules an appointment and fills the opinion form', () => {
+  it('schedules an appointment and fills the opinion form', async () => {
     const component = fixture.componentInstance;
     component.scheduleForm.patchValue({
       employeeId: 'employee-1',
@@ -40,7 +40,7 @@ describe('SaudePericia', () => {
       scheduledTime: '09:00',
     });
 
-    component.schedule();
+    await component.schedule();
 
     expect(api.post).toHaveBeenCalledWith(
       'v1/licencas/saude/agendamento',
@@ -49,11 +49,11 @@ describe('SaudePericia', () => {
     expect(component.opinionForm.value['appointmentId']).toBe('appointment-1');
   });
 
-  it('loads medical leaves for an employee', () => {
+  it('loads medical leaves for an employee', async () => {
     const component = fixture.componentInstance;
     component.lookupForm.patchValue({ employeeId: 'employee-1' });
 
-    component.loadLeaves();
+    await component.loadLeaves();
 
     expect(api.get).toHaveBeenCalledWith('v1/licencas/saude/employee-1');
   });

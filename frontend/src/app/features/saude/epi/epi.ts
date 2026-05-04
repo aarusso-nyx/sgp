@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -32,10 +32,9 @@ interface EpiDelivery {
   templateUrl: './epi.html',
   styleUrl: './epi.scss',
 })
-export class SaudeEpi implements OnInit, OnDestroy {
+export class SaudeEpi implements OnInit {
   private readonly api = inject(ApiClient);
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
   readonly inventoryForm = this.formBuilder.group({
     caNumber: ['', [Validators.required]],
@@ -60,48 +59,41 @@ export class SaudeEpi implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
-    this.api
-      .get<EpiInventory[]>('v1/saude/epi/inventario')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((rows) => (this.inventory = rows));
-    this.api
-      .get<EpiDelivery[]>('v1/saude/epi/entregas')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((rows) => (this.deliveries = rows));
+  async load(): Promise<void> {
+    const { inventory, deliveries } = await firstValueFrom(
+      forkJoin({
+        inventory: this.api.get<EpiInventory[]>('v1/saude/epi/inventario'),
+        deliveries: this.api.get<EpiDelivery[]>('v1/saude/epi/entregas'),
+      }),
+    );
+    this.inventory = inventory;
+    this.deliveries = deliveries;
   }
 
   createInventory(): void {
     if (this.inventoryForm.invalid) return this.inventoryForm.markAllAsTouched();
-    this.save('v1/saude/epi/inventario', this.inventoryForm.value);
+    void this.save('v1/saude/epi/inventario', this.inventoryForm.value);
   }
 
   registerDelivery(): void {
     if (this.deliveryForm.invalid) return this.deliveryForm.markAllAsTouched();
-    this.save('v1/saude/epi/entregas', this.compact(this.deliveryForm.value));
+    void this.save('v1/saude/epi/entregas', this.compact(this.deliveryForm.value));
   }
 
-  private save(path: string, payload: Record<string, unknown>): void {
+  private async save(path: string, payload: Record<string, unknown>): Promise<void> {
     this.saving = true;
     this.error = '';
-    this.api
-      .post<unknown, Record<string, unknown>>(path, payload)
-      .pipe(
-        finalize(() => (this.saving = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => this.load(),
-        error: () => (this.error = 'Nao foi possivel salvar o EPI.'),
-      });
+    try {
+      await firstValueFrom(this.api.post<unknown, Record<string, unknown>>(path, payload));
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel salvar o EPI.';
+    } finally {
+      this.saving = false;
+    }
   }
 
   private compact(value: Record<string, unknown>): Record<string, unknown> {

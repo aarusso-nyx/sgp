@@ -61,6 +61,7 @@ export interface DctfwebItemDto {
   debitCode: string;
   baseAmount: string;
   amount: string;
+  csllAdicionalAmount: string;
   mitStatus?: DctfwebMitStatus;
   mitDebitId?: string;
   cnpjFilial?: string;
@@ -102,6 +103,7 @@ export interface DctfwebMitDebitDto {
   period: string;
   baseAmount: string;
   amount: string;
+  csllAdicionalAmount: string;
   dueDate: string | null;
 }
 
@@ -111,6 +113,7 @@ export interface DctfwebMitInclusionDto {
   debitCount: number;
   totalBaseAmount: string;
   totalAmount: string;
+  totalCsllAdicionalAmount: string;
   xml: string;
   xmlHash: string;
   debits: DctfwebMitDebitDto[];

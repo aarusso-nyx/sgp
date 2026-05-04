@@ -16,9 +16,11 @@ import {
   DctfwebDeclarationDto,
   DctfwebDeclarationKind,
   DctfwebItemDto,
+  DctfwebMitStatus,
   DctfwebSourceEvent,
   GenerateDctfwebDto,
 } from './dctfweb.dto';
+import { buildMitDebitId } from './mit-inclusion.service';
 
 interface TotalizerRow extends QueryResultRow {
   kind: 'S-5011' | 'S-5012' | 'S-5013' | 'R-9015';
@@ -55,6 +57,21 @@ interface ItemRow extends QueryResultRow {
   debit_code: string;
   base_amount: string;
   amount: string;
+  csll_adicional_amount: string | null;
+  mit_status: DctfwebMitStatus | null;
+  mit_debit_id: string | null;
+  cnpj_filial: string | null;
+}
+
+interface PgdTaxDebitRow extends QueryResultRow {
+  pgd_declaration_id: string;
+  pgd_debit_id: string;
+  cnpj_filial: string;
+  tax_code: string;
+  base_amount: string;
+  amount: string;
+  csll_adicional_amount: string | null;
+  mit_status: DctfwebMitStatus | null;
 }
 
 interface SourceItem {
@@ -63,7 +80,8 @@ interface SourceItem {
   debitCode: string;
   baseAmount: string;
   amount: string;
-  mitStatus?: string;
+  csllAdicionalAmount: string;
+  mitStatus?: DctfwebMitStatus;
   mitDebitId?: string;
   cnpjFilial?: string;
 }
@@ -136,7 +154,11 @@ export class DctfwebBuilderService {
         source_run_id::text,
         debit_code,
         base_amount::text,
-        amount::text
+        amount::text,
+        csll_adicional_amount::text,
+        NULL::text AS mit_status,
+        NULL::text AS mit_debit_id,
+        NULL::text AS cnpj_filial
       FROM fiscal.dctfweb_item
       WHERE declaracao_id = $1::uuid
       ORDER BY source_event, debit_code
@@ -164,10 +186,16 @@ export class DctfwebBuilderService {
     }
     const competence = competenceDate(input.year, input.month);
     const totalizers = await this.loadPublishedTotalizers(tenantId, competence);
-    const items = totalizers.flatMap((row) => this.itemsFromTotalizer(row));
+    const mitDebits = await this.loadPendingMitDebits(tenantId, competence);
+    const items = [
+      ...totalizers.flatMap((row) => this.itemsFromTotalizer(row)),
+      ...mitDebits.map((row) =>
+        this.itemFromMitDebit(tenantId, competence, row),
+      ),
+    ];
     if (!items.length) {
       throw new PreconditionFailedException(
-        'DCTFWeb generation requires accepted S-5011, S-5012, S-5013, or EFD-Reinf R-9015 totalizers for the competence',
+        'DCTFWeb generation requires accepted S-5011, S-5012, S-5013, EFD-Reinf R-9015 totalizers, or pending MIT tax debits for the competence',
       );
     }
 
@@ -234,7 +262,8 @@ export class DctfwebBuilderService {
             source_run_id,
             debit_code,
             base_amount,
-            amount
+            amount,
+            csll_adicional_amount
           )
           VALUES (
             $1::uuid,
@@ -243,7 +272,8 @@ export class DctfwebBuilderService {
             $4::uuid,
             $5,
             $6::numeric(14,2),
-            $7::numeric(14,2)
+            $7::numeric(14,2),
+            $8::numeric(14,2)
           )
           `,
           [
@@ -254,6 +284,7 @@ export class DctfwebBuilderService {
             item.debitCode,
             item.baseAmount,
             item.amount,
+            item.csllAdicionalAmount,
           ],
         );
       }
@@ -301,6 +332,31 @@ export class DctfwebBuilderService {
     );
   }
 
+  private async loadPendingMitDebits(
+    tenantId: string,
+    competence: string,
+  ): Promise<PgdTaxDebitRow[]> {
+    return this.databaseService.query<PgdTaxDebitRow>(
+      `
+      SELECT
+        pgd_declaration_id::text,
+        pgd_debit_id::text,
+        cnpj_filial,
+        tax_code,
+        base_amount::text,
+        amount::text,
+        csll_adicional_amount::text,
+        mit_status::text
+      FROM fiscal.dctf_pgd_tax_debit
+      WHERE tenant_id = $1::uuid
+        AND competence = $2::date
+        AND COALESCE(mit_status::text, 'PENDING') IN ('PENDING', 'REJECTED')
+      ORDER BY cnpj_filial, tax_code, pgd_debit_id
+      `,
+      [tenantId, competence],
+    );
+  }
+
   private itemsFromTotalizer(row: TotalizerRow): SourceItem[] {
     const payload =
       typeof row.payload === 'string'
@@ -330,6 +386,39 @@ export class DctfwebBuilderService {
       sourceEvent,
       row.source_event_recibo,
     );
+  }
+
+  private itemFromMitDebit(
+    tenantId: string,
+    competence: string,
+    row: PgdTaxDebitRow,
+  ): SourceItem {
+    const cnpjFilial = scalarText(row.cnpj_filial, '').replace(/\D/g, '');
+    const debitCode = scalarText(row.tax_code, 'MIT');
+    const baseAmount = moneyText(row.base_amount);
+    const amount = moneyText(row.amount);
+    const csllAdicionalAmount = moneyText(row.csll_adicional_amount ?? 0);
+    const pgdDeclarationId = scalarText(row.pgd_declaration_id, '');
+    const pgdDebitId = scalarText(row.pgd_debit_id, '');
+    return {
+      sourceEvent: 'MIT',
+      sourceRunId: uuidText(pgdDebitId, `MIT:${pgdDeclarationId}:${debitCode}`),
+      debitCode,
+      baseAmount,
+      amount,
+      csllAdicionalAmount,
+      mitStatus: row.mit_status ?? 'PENDING',
+      mitDebitId: buildMitDebitId({
+        tenantId,
+        competence,
+        cnpjFilial,
+        pgdDeclarationId,
+        pgdDebitId,
+        taxCode: debitCode,
+        amount,
+      }),
+      cnpjFilial,
+    };
   }
 
   private async assertOriginalExists(
@@ -409,7 +498,7 @@ export function buildDctfwebXml(input: {
       (item) =>
         `    <debito sourceEvent="${item.sourceEvent}"${mitAttributes(
           item,
-        )} sourceRunId="${item.sourceRunId}" codigo="${xmlEscape(
+        )}${csllAdicionalAttribute(item)} sourceRunId="${item.sourceRunId}" codigo="${xmlEscape(
           item.debitCode,
         )}" base="${item.baseAmount}" valor="${item.amount}" />`,
     )
@@ -440,6 +529,13 @@ function mitAttributes(item: SourceItem): string {
   return attrs.length ? ` ${attrs.join(' ')}` : '';
 }
 
+function csllAdicionalAttribute(item: SourceItem): string {
+  if (!item.csllAdicionalAmount || item.csllAdicionalAmount === '0.00') {
+    return '';
+  }
+  return ` csllAdicional="${xmlEscape(item.csllAdicionalAmount)}"`;
+}
+
 function normalizePayloadItem(
   value: unknown,
   sourceEvent: DctfwebSourceEvent,
@@ -458,11 +554,28 @@ function normalizePayloadItem(
     item.baseAmount ?? item.base ?? item.base_amount ?? 0,
   );
   const amount = moneyText(item.amount ?? item.valor ?? item.value ?? 0);
+  const csllAdicionalAmount = moneyText(
+    item.csllAdicionalAmount ??
+      item.csllAdicional ??
+      item.csll_adicional_amount ??
+      item.valorCsllAdicional ??
+      item.vrCsllAdicional ??
+      item.vrAdicionalCsll ??
+      item.adicionalCsll ??
+      0,
+  );
   const sourceRunId = uuidText(
     item.sourceRunId ?? item.source_run_id,
     `${sourceEvent}:${receipt}:${debitCode}:${index}`,
   );
-  return { sourceEvent, sourceRunId, debitCode, baseAmount, amount };
+  return {
+    sourceEvent,
+    sourceRunId,
+    debitCode,
+    baseAmount,
+    amount,
+    csllAdicionalAmount,
+  };
 }
 
 function extractItemsFromTotalizerXml(
@@ -496,6 +609,13 @@ function extractItemsFromTotalizerXml(
         'vrFGTSProcTrab',
         'valor',
       ]);
+      const csllAdicionalAmount = firstMoney(node, [
+        'csllAdicional',
+        'valorCsllAdicional',
+        'vrCsllAdicional',
+        'vrAdicionalCsll',
+        'adicionalCsll',
+      ]);
       if (amount === null && baseAmount === null) return null;
       return {
         sourceEvent,
@@ -505,6 +625,7 @@ function extractItemsFromTotalizerXml(
         debitCode,
         baseAmount: moneyText(baseAmount ?? 0),
         amount: moneyText(amount ?? 0),
+        csllAdicionalAmount: moneyText(csllAdicionalAmount ?? 0),
       };
     })
     .filter((item): item is SourceItem => Boolean(item));
@@ -564,6 +685,10 @@ function toItemDto(row: ItemRow): DctfwebItemDto {
     debitCode: row.debit_code,
     baseAmount: row.base_amount,
     amount: row.amount,
+    csllAdicionalAmount: row.csll_adicional_amount ?? '0.00',
+    mitStatus: row.mit_status ?? undefined,
+    mitDebitId: row.mit_debit_id ?? undefined,
+    cnpjFilial: row.cnpj_filial ?? undefined,
   };
 }
 

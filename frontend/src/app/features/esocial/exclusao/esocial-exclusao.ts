@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 import {
   ESocialExcludableEvent,
@@ -17,9 +17,8 @@ import {
   templateUrl: './esocial-exclusao.html',
   styleUrl: './esocial-exclusao.scss',
 })
-export class ESocialExclusao implements OnInit, OnDestroy {
+export class ESocialExclusao implements OnInit {
   private readonly service = inject(ESocialExclusaoService);
-  private readonly destroy$ = new Subject<void>();
 
   events: ESocialExcludableEvent[] = [];
   requests: S3000RequestStatus[] = [];
@@ -30,34 +29,26 @@ export class ESocialExclusao implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.error = '';
-    this.service
-      .events()
-      .pipe(
-        finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (rows) => (this.events = rows),
-        error: () => (this.error = 'Nao foi possivel carregar eventos elegiveis.'),
-      });
-    this.service
-      .requests()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (rows) => (this.requests = rows),
-        error: () => (this.error = 'Nao foi possivel carregar solicitacoes S-3000.'),
-      });
+    try {
+      const { events, requests } = await firstValueFrom(
+        forkJoin({
+          events: this.service.events(),
+          requests: this.service.requests(),
+        }),
+      );
+      this.events = events;
+      this.requests = requests;
+    } catch {
+      this.error = 'Nao foi possivel carregar eventos elegiveis.';
+    } finally {
+      this.loading = false;
+    }
   }
 
   open(event: ESocialExcludableEvent): void {
@@ -71,22 +62,18 @@ export class ESocialExclusao implements OnInit, OnDestroy {
     this.justification = '';
   }
 
-  submit(): void {
+  async submit(): Promise<void> {
     if (!this.selected || this.justification.trim().length < 30) return;
     this.submitting = true;
     this.error = '';
-    this.service
-      .exclude(this.selected.id, this.justification.trim())
-      .pipe(
-        finalize(() => (this.submitting = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => {
-          this.close();
-          this.load();
-        },
-        error: () => (this.error = 'Nao foi possivel solicitar a exclusao S-3000.'),
-      });
+    try {
+      await firstValueFrom(this.service.exclude(this.selected.id, this.justification.trim()));
+      this.close();
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel solicitar a exclusao S-3000.';
+    } finally {
+      this.submitting = false;
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 import { DiscoveryModule } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { AuditModule } from '../audit/audit.module';
 import { DatabaseModule } from '../database/database.module';
@@ -33,6 +34,7 @@ import { TceQueueController } from './queue/tce-queue.controller';
 import { TceWorkerService } from './queue/tce-worker.service';
 import { AdapterLoaderService } from './registry/adapter-loader.service';
 import { AdapterRegistryService } from './registry/adapter-registry.service';
+import { TceStateSubmissionService } from './submission';
 import { TceController } from './tce.controller';
 
 export interface TceModuleOptions {
@@ -60,7 +62,12 @@ export class TceModule {
         ];
     return {
       module: TceModule,
-      imports: [AuditModule, DatabaseModule, DiscoveryModule],
+      imports: [
+        AuditModule,
+        DatabaseModule,
+        DiscoveryModule,
+        ScheduleModule.forRoot(),
+      ],
       controllers: [
         TceController,
         CatalogController,
@@ -83,6 +90,7 @@ export class TceModule {
         TceRetryStrategyService,
         TceCircuitBreakerService,
         TceWorkerService,
+        TceStateSubmissionService,
         ...adapterProviders,
       ],
       exports: [
@@ -91,6 +99,7 @@ export class TceModule {
         LifecycleEmitterService,
         TceQueueEnqueueService,
         TceWorkerService,
+        TceStateSubmissionService,
       ],
     };
   }

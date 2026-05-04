@@ -131,6 +131,145 @@ $$;
     resolve(sqlDir, 'checks/hot-table-partitions.sql'),
   ]);
 
+  await runSqlSnippet(
+    '97-assert-rls-posture-parity.sql',
+    `
+DO $$
+DECLARE
+  expected text[] := ARRAY[
+    'esocial.response_classification',
+    'esocial.s2205_trigger_field',
+    'fiscal.gps_payment_code',
+    'hr.cf37_xvi_accumulation_compatibility',
+    'lgpd.legal_basis_rule',
+    'public.permission',
+    'public.profile_permission',
+    'public.tenant'
+  ];
+  actual text[];
+  undocumented text[];
+BEGIN
+  SELECT COALESCE(array_agg(format('%I.%I', namespace.nspname, class.relname) ORDER BY namespace.nspname, class.relname), ARRAY[]::text[])
+    INTO actual
+  FROM pg_class class
+  JOIN pg_namespace namespace
+    ON namespace.oid = class.relnamespace
+  WHERE class.relkind IN ('r', 'p')
+    AND namespace.nspname <> 'information_schema'
+    AND namespace.nspname <> 'postgis'
+    AND namespace.nspname NOT LIKE 'pg_%'
+    AND NOT EXISTS (
+      SELECT 1
+      FROM pg_inherits inherits
+      WHERE inherits.inhrelid = class.oid
+    )
+    AND NOT class.relrowsecurity;
+
+  IF actual <> expected THEN
+    RAISE EXCEPTION 'R4-72 unprotected table set changed. Expected %, found %', expected, actual;
+  END IF;
+
+  SELECT COALESCE(array_agg(table_name ORDER BY table_name), ARRAY[]::text[])
+    INTO undocumented
+  FROM unnest(expected) AS expected_table(table_name)
+  JOIN pg_class class
+    ON class.oid = table_name::regclass
+  WHERE COALESCE(obj_description(class.oid, 'pg_class'), '') !~ 'R4-72|Non-tenant-scoped|Non-RLS';
+
+  IF undocumented <> ARRAY[]::text[] THEN
+    RAISE EXCEPTION 'R4-72 unprotected tables missing non-tenant comments: %', undocumented;
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated R4-72 unprotected reference-catalog parity');
+
+  await runSqlSnippet(
+    '98-assert-enum-check-conversions.sql',
+    `
+DO $$
+DECLARE
+  expected record;
+BEGIN
+  FOR expected IN
+    SELECT *
+    FROM (
+      VALUES
+        ('esocial', 's2205_pending_alteration', 'status', 'esocial', 's2205_pending_alteration_status'),
+        ('esocial', 's2298_event', 'reint_type', 'esocial', 's2298_reint_type'),
+        ('hr', 'cadastral_change_request', 'section', 'hr', 'cadastral_change_section'),
+        ('hr', 'employee_alimony_history', 'operation', 'hr', 'employee_alimony_history_operation'),
+        ('hr', 'cf37_xvi_accumulation_compatibility', 'primary_role_kind', 'hr', 'cf37_xvi_accumulation_role_kind'),
+        ('hr', 'cf37_xvi_accumulation_compatibility', 'secondary_role_kind', 'hr', 'cf37_xvi_accumulation_role_kind'),
+        ('hr', 'probation_evaluation', 'decision', 'hr', 'probation_evaluation_decision'),
+        ('lgpd', 'legal_basis_rule', 'data_category', 'lgpd', 'legal_basis_data_category'),
+        ('lgpd', 'legal_basis_rule', 'status', 'lgpd', 'legal_basis_rule_status'),
+        ('lgpd', 'ropa_entry', 'risk_level', 'lgpd', 'ropa_risk_level'),
+        ('lgpd', 'ropa_entry', 'status', 'lgpd', 'ropa_entry_status'),
+        ('lgpd', 'public_power_treatment', 'status', 'lgpd', 'public_power_treatment_status'),
+        ('lgpd', 'data_subject_request', 'right_type', 'lgpd', 'data_subject_right_type'),
+        ('lgpd', 'data_subject_request', 'status', 'lgpd', 'data_subject_request_status'),
+        ('lgpd', 'data_subject_request', 'triage_outcome', 'lgpd', 'data_subject_triage_outcome'),
+        ('lgpd', 'security_incident', 'status', 'lgpd', 'security_incident_status'),
+        ('lgpd', 'security_incident', 'severity', 'lgpd', 'security_incident_severity'),
+        ('payroll', 'employee_payroll_item', 'payment_status', 'payroll', 'employee_payroll_item_payment_status'),
+        ('payroll', 'payment_return_detail', 'internal_status', 'payroll', 'payment_return_detail_internal_status'),
+        ('recrutamento', 'candidato', 'pool_status', 'recrutamento', 'candidato_pool_status')
+    ) AS converted(table_schema, table_name, column_name, udt_schema, udt_name)
+  LOOP
+    IF NOT EXISTS (
+      SELECT 1
+      FROM information_schema.columns columns
+      WHERE columns.table_schema = expected.table_schema
+        AND columns.table_name = expected.table_name
+        AND columns.column_name = expected.column_name
+        AND columns.udt_schema = expected.udt_schema
+        AND columns.udt_name = expected.udt_name
+    ) THEN
+      RAISE EXCEPTION 'Expected %.%.% to use enum %.%',
+        expected.table_schema,
+        expected.table_name,
+        expected.column_name,
+        expected.udt_schema,
+        expected.udt_name;
+    END IF;
+  END LOOP;
+
+  IF EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = ANY (ARRAY[
+      's2205_pending_alteration_status_chk',
+      's2298_event_reint_type_valid',
+      'cadastral_change_request_section_check',
+      'employee_alimony_history_operation_check',
+      'cf37_xvi_accumulation_compatibility_primary_role_chk',
+      'cf37_xvi_accumulation_compatibility_secondary_role_chk',
+      'probation_evaluation_decision_check',
+      'legal_basis_rule_category_check',
+      'legal_basis_rule_status_check',
+      'ropa_entry_risk_level_check',
+      'ropa_entry_status_check',
+      'public_power_treatment_status_check',
+      'data_subject_request_right_type_check',
+      'data_subject_request_status_check',
+      'data_subject_request_triage_outcome_check',
+      'security_incident_status_check',
+      'security_incident_severity_check',
+      'employee_payroll_item_payment_status_check',
+      'payment_return_detail_internal_status_check',
+      'candidato_pool_status_check'
+    ])
+  ) THEN
+    RAISE EXCEPTION 'Expected R4-71 converted ANY ARRAY CHECK constraints to be absent';
+  END IF;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated R4-71 enum conversions');
+
   console.log('[db-smoke] running deterministic seed');
   runCommand('npm', ['run', 'db:seed'], backendDir);
 

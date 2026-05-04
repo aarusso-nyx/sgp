@@ -76,14 +76,14 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 578,
-    "documented_candidates_total": 719,
+    "documented_total": 579,
+    "documented_candidates_total": 720,
     "documented_outside_runtime": 141,
     "documented": 488,
-    "runtime_total": 594,
+    "runtime_total": 595,
     "runtime": 488,
-    "deferred_documented": 90,
-    "deferred_runtime": 106,
+    "deferred_documented": 91,
+    "deferred_runtime": 107,
     "implemented": 488,
     "explicitly_excluded": 0,
     "documented_missing": 0,
@@ -603,6 +603,14 @@
       "path": "/api/v1/admin/fiscal/dctfweb/gerar",
       "source_doc": "docs/eng/domains/fiscal-integrations.md",
       "source_docs": ["docs/eng/domains/fiscal-integrations.md", "docs/eng/platform.md"],
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/dctfweb/mit/gerar",
+      "source_doc": "docs/eng/platform.md",
       "evidence": "explicit_method",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
@@ -2335,6 +2343,13 @@
     {
       "method": "POST",
       "path": "/api/v1/admin/fiscal/dctfweb/gerar",
+      "source_file": "backend/src/integrations-worker/dctfweb/dctfweb.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/fiscal/dctfweb/mit/gerar",
       "source_file": "backend/src/integrations-worker/dctfweb/dctfweb.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
@@ -8088,8 +8103,8 @@
       "method": "POST",
       "path": "/api/v1/folhas/:folha_id/importar/lancamento-manual",
       "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "source_docs": ["docs/eng/platform.md"],
+      "source_doc": "docs/eng/domains/payroll-benefits.md",
+      "source_docs": ["docs/eng/domains/payroll-benefits.md", "docs/eng/platform.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -8097,8 +8112,8 @@
       "method": "POST",
       "path": "/api/v1/folhas/:folha_id/importar/pensionista",
       "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "source_docs": ["docs/eng/platform.md"],
+      "source_doc": "docs/eng/domains/payroll-benefits.md",
+      "source_docs": ["docs/eng/domains/payroll-benefits.md", "docs/eng/platform.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -8106,8 +8121,12 @@
       "method": "POST",
       "path": "/api/v1/folhas/:folha_id/importar/servidor",
       "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "source_docs": ["docs/eng/platform.md", "docs/eng/quality-migration.md"],
+      "source_doc": "docs/eng/domains/payroll-benefits.md",
+      "source_docs": [
+        "docs/eng/domains/payroll-benefits.md",
+        "docs/eng/platform.md",
+        "docs/eng/quality-migration.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },

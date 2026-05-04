@@ -17,6 +17,17 @@ describe('R2-204/R2-206 PII SQL contracts', () => {
   });
 
   it('encrypts the high-priority HR PII new-write paths at rest', () => {
+    const r4Columns = [
+      'cpf_cnpj_cipher',
+      'beneficiary_cpf_cipher',
+      'dependent_cpf_cipher',
+      'intern_cpf_cipher',
+      'email_cipher',
+      'phone_cipher',
+      'emergency_contact_cipher',
+      'contact_phone_cipher',
+    ];
+
     expect(piiEncryptionSql).toContain(
       'CREATE FUNCTION hr.sgp_encrypt_pii_text',
     );
@@ -33,10 +44,22 @@ describe('R2-204/R2-206 PII SQL contracts', () => {
     expect(piiEncryptionSql).toContain('bank_agency_cipher');
     expect(piiEncryptionSql).toContain('holder_cpf_cipher');
     expect(piiEncryptionSql).toContain('voter_registration_cipher');
+    for (const column of r4Columns) {
+      expect(piiEncryptionSql).toContain(column);
+    }
     expect(piiEncryptionSql).toContain(
       'CREATE TRIGGER employee_dependent_pii_encrypt',
     );
     expect(piiEncryptionSql).toContain('CREATE TRIGGER employee_pii_encrypt');
+    expect(piiEncryptionSql).toContain(
+      'CREATE TRIGGER fiscal_dirf_beneficiario_pii_encrypt',
+    );
+    expect(piiEncryptionSql).toContain(
+      'CREATE TRIGGER recrutamento_candidato_pii_encrypt',
+    );
+    expect(piiEncryptionSql).toContain(
+      'CREATE TRIGGER user_account_pii_encrypt',
+    );
     expect(piiEncryptionSql).toContain(
       'CREATE VIEW hr.v_employee_bank_account_pii_decrypted',
     );
@@ -45,7 +68,7 @@ describe('R2-204/R2-206 PII SQL contracts', () => {
 
   it('leaves existing plaintext rows for owner-approved migration instead of bulk rewriting them', () => {
     expect(piiEncryptionSql).not.toMatch(
-      /UPDATE\s+hr\.(employee|employee_bank_account|employee_complement_data)\s+SET/i,
+      /UPDATE\s+(?:hr|fiscal|public|recrutamento)\.[a-z_]+\s+SET/i,
     );
     expect(piiEncryptionSql).not.toMatch(
       /ALTER\s+TABLE\s+hr\.[\s\S]+ALTER\s+COLUMN[\s\S]+DROP\s+NOT\s+NULL/i,

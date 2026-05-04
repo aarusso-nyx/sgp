@@ -4,6 +4,7 @@
   "moduleDirectories": ["node_modules", "<rootDir>/backend/node_modules"],
   "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
   "testEnvironment": "node",
+  "testPathIgnorePatterns": ["<rootDir>/tests/scripts/fixtures/"],
   "testRegex": "(backend/src/.*\\.spec\\.ts|tests/backend/.*\\.(e2e-)?spec\\.ts|tests/rls/.*\\.spec\\.ts)$",
   "transform": {
     "^.+\\.ts$": [

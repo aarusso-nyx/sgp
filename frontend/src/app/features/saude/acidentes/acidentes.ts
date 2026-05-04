@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -36,10 +36,9 @@ interface CatDeadlineAlert {
   templateUrl: './acidentes.html',
   styleUrl: './acidentes.scss',
 })
-export class SaudeAcidentes implements OnInit, OnDestroy {
+export class SaudeAcidentes implements OnInit {
   private readonly api = inject(ApiClient);
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
   readonly accidentForm = this.formBuilder.group({
     employeeId: ['', [Validators.required]],
@@ -68,68 +67,64 @@ export class SaudeAcidentes implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  load(): void {
-    this.api
-      .get<WorkAccident[]>('v1/saude/acidentes')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((rows) => (this.accidents = rows));
-    this.api
-      .get<CatDeadlineAlert[]>('v1/saude/acidentes/prazos')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((rows) => (this.alerts = rows));
+  async load(): Promise<void> {
+    const { accidents, alerts } = await firstValueFrom(
+      forkJoin({
+        accidents: this.api.get<WorkAccident[]>('v1/saude/acidentes'),
+        alerts: this.api.get<CatDeadlineAlert[]>('v1/saude/acidentes/prazos'),
+      }),
+    );
+    this.accidents = accidents;
+    this.alerts = alerts;
   }
 
   register(): void {
     if (this.accidentForm.invalid) return this.accidentForm.markAllAsTouched();
-    this.save('v1/saude/acidentes', this.compact(this.accidentForm.value));
+    void this.save('v1/saude/acidentes', this.compact(this.accidentForm.value));
   }
 
   emitCat(): void {
     if (this.catForm.invalid) return this.catForm.markAllAsTouched();
     const workAccidentId = String(this.catForm.value['workAccidentId']);
     const payload = this.compact({ ...this.catForm.value, workAccidentId: undefined });
-    this.save(`v1/saude/acidentes/${workAccidentId}/cat`, payload);
+    void this.save(`v1/saude/acidentes/${workAccidentId}/cat`, payload);
   }
 
-  close(record: WorkAccident): void {
+  async close(record: WorkAccident): Promise<void> {
     this.saving = true;
-    this.api
-      .patch<WorkAccident, Record<string, never>>(`v1/saude/acidentes/${record.id}/encerrar`, {})
-      .pipe(
-        finalize(() => (this.saving = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => this.load(),
-        error: () => (this.error = 'Nao foi possivel encerrar o acidente.'),
-      });
+    try {
+      await firstValueFrom(
+        this.api.patch<WorkAccident, Record<string, never>>(
+          `v1/saude/acidentes/${record.id}/encerrar`,
+          {},
+        ),
+      );
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel encerrar o acidente.';
+    } finally {
+      this.saving = false;
+    }
   }
 
   select(record: WorkAccident, catKind = 'INICIAL'): void {
     this.catForm.patchValue({ workAccidentId: record.id, catKind });
   }
 
-  private save(path: string, payload: Record<string, unknown>): void {
+  private async save(path: string, payload: Record<string, unknown>): Promise<void> {
     this.saving = true;
     this.error = '';
-    this.api
-      .post<unknown, Record<string, unknown>>(path, payload)
-      .pipe(
-        finalize(() => (this.saving = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => this.load(),
-        error: () => (this.error = 'Nao foi possivel salvar a CAT.'),
-      });
+    try {
+      await firstValueFrom(this.api.post<unknown, Record<string, unknown>>(path, payload));
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel salvar a CAT.';
+    } finally {
+      this.saving = false;
+    }
   }
 
   private compact(value: Record<string, unknown>): Record<string, unknown> {

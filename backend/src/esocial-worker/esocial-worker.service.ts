@@ -6,6 +6,7 @@ import {
   decideWorkerBackpressure,
   WorkerBackpressureDecision,
 } from '../common/observability/worker-backpressure';
+import { recordEsocialSubmission } from '../common/observability/prometheus.metrics';
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
 import { SubmissionService } from './submission/submission.service';
@@ -40,7 +41,7 @@ export class ESocialWorkerService {
       status: 'implemented',
       databaseConfigured: this.databaseService.configured,
       schemaVersion: 'S-1.3',
-      dispatchAdapter: 'soap-ws-security-mtls',
+      dispatchAdapter: 'queue-adapter-esocial-relay',
       timestamp: new Date().toISOString(),
     };
   }
@@ -94,6 +95,7 @@ export class ESocialWorkerService {
         skipped: 0,
       };
     }
+    recordEsocialSubmission(result.status, 'batch');
     const failed = result.status === 'ACCEPTED' ? 0 : result.eventCount;
     return {
       discovered: result.eventCount + dueRetries.consumed,

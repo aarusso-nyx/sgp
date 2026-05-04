@@ -35,6 +35,10 @@ const BUILDER_XSD_REFERENCES: Record<string, string[]> = {
   's2306/s2306.builder.ts': ['evtTSVAltContr.xsd'],
 };
 
+const PARSER_XSD_REFERENCES: Record<string, string[]> = {
+  'parsers/totalizer.parser.ts': ['evtIrrfBenef.xsd'],
+};
+
 const FUTURE_EVENT_STUB_XSDS = new Set([
   'evtAdmPrelim.xsd',
   'evtAnotJud.xsd',
@@ -51,7 +55,6 @@ const FUTURE_EVENT_STUB_XSDS = new Set([
   'evtFGTSProcTrab.xsd',
   'evtInfoComplPer.xsd',
   'evtIrrf.xsd',
-  'evtIrrfBenef.xsd',
   'evtProcTrab.xsd',
   'evtRmnRPPS.xsd',
   'evtToxic.xsd',
@@ -88,35 +91,36 @@ describe('XsdValidatorService', () => {
     ).toThrow('failed XSD validation');
   });
 
-  it('classifies each committed XSD as one builder reference or a future-event-stub', () => {
+  it('classifies each committed XSD as one source reference or a future-event-stub', () => {
     const service = new XsdValidatorService();
-    const builderReferences = new Map<string, string[]>();
+    const sourceReferences = new Map<string, string[]>();
 
-    for (const [builderPath, xsdFiles] of Object.entries(
-      BUILDER_XSD_REFERENCES,
-    )) {
+    for (const [sourcePath, xsdFiles] of Object.entries({
+      ...BUILDER_XSD_REFERENCES,
+      ...PARSER_XSD_REFERENCES,
+    })) {
       for (const xsdFile of xsdFiles) {
-        builderReferences.set(xsdFile, [
-          ...(builderReferences.get(xsdFile) ?? []),
-          builderPath,
+        sourceReferences.set(xsdFile, [
+          ...(sourceReferences.get(xsdFile) ?? []),
+          sourcePath,
         ]);
       }
     }
 
-    const duplicateBuilderReferences = [...builderReferences.entries()]
-      .filter(([, builderPaths]) => builderPaths.length !== 1)
-      .map(([xsdFile, builderPaths]) => ({ xsdFile, builderPaths }));
+    const duplicateSourceReferences = [...sourceReferences.entries()]
+      .filter(([, sourcePaths]) => sourcePaths.length !== 1)
+      .map(([xsdFile, sourcePaths]) => ({ xsdFile, sourcePaths }));
     const manifestCoverage = service.xsdFileNames().map((xsdFile) => ({
       xsdFile,
-      builderPaths: builderReferences.get(xsdFile) ?? [],
+      sourcePaths: sourceReferences.get(xsdFile) ?? [],
       futureEventStub: FUTURE_EVENT_STUB_XSDS.has(xsdFile),
     }));
 
-    expect(duplicateBuilderReferences).toEqual([]);
+    expect(duplicateSourceReferences).toEqual([]);
     expect(
       manifestCoverage.filter(
-        ({ builderPaths, futureEventStub }) =>
-          builderPaths.length + Number(futureEventStub) !== 1,
+        ({ sourcePaths, futureEventStub }) =>
+          sourcePaths.length + Number(futureEventStub) !== 1,
       ),
     ).toEqual([]);
   });

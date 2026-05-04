@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { firstValueFrom } from 'rxjs';
 
 import { DirfApiService, DirfArquivo } from './dirf.service';
 
@@ -43,24 +44,24 @@ export class FiscalDirf {
   busy = false;
   errorMessage = '';
 
-  load(): void {
+  async load(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     this.loading = true;
     this.errorMessage = '';
-    this.service.list(this.form.getRawValue().yearBase).subscribe({
-      next: (items) => {
-        this.arquivos = items;
-        this.selected = items[0] ?? null;
-        this.loading = false;
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      const items = await firstValueFrom(this.service.list(this.form.getRawValue().yearBase));
+      this.arquivos = items;
+      this.selected = items[0] ?? null;
+      this.loading = false;
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  generate(): void {
+  async generate(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -75,16 +76,18 @@ export class FiscalDirf {
     }
     this.busy = true;
     this.errorMessage = '';
-    this.service
-      .generate({
-        yearBase: value.yearBase,
-        kind: value.kind,
-        originalArquivoId: value.originalArquivoId || undefined,
-      })
-      .subscribe({
-        next: (created) => this.upsert(created),
-        error: (error: unknown) => this.fail(error),
-      });
+    try {
+      const created = await firstValueFrom(
+        this.service.generate({
+          yearBase: value.yearBase,
+          kind: value.kind,
+          originalArquivoId: value.originalArquivoId || undefined,
+        }),
+      );
+      this.upsert(created);
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
   select(item: DirfArquivo): void {

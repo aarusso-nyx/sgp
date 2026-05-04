@@ -5,7 +5,7 @@ import { runCommand, runSequence } from './lib/command-runner.mjs';
 import { defaultRepoRoot } from './lib/repo-paths.mjs';
 
 const usage = `
-Usage: node scripts/audit.mjs <schema|api|fr|tests|hotspots|backlog|pvd|live-data|all> [options]
+Usage: node scripts/audit.mjs <schema|api|fr|tests|hotspots|backlog|pvd|live-data|idempotency|decimal|fe-i18n|all> [options]
 
 Run deterministic audit helpers through one stable entrypoint.
 `;
@@ -19,6 +19,9 @@ const scriptBySubcommand = {
   backlog: 'scripts/lib/audit/backlog-ledger.mjs',
   pvd: 'scripts/lib/audit/promise-vs-delivery.mjs',
   'live-data': 'scripts/lib/audit/live-data-inventory.mjs',
+  idempotency: 'scripts/lib/audit/idempotency-coverage.mjs',
+  decimal: 'scripts/lib/audit/decimal-coverage.mjs',
+  'fe-i18n': 'scripts/lib/audit/fe-i18n-coverage.mjs',
 };
 
 const options = parseArgs(process.argv.slice(2), { booleanFlags: ['help'] });
@@ -54,7 +57,7 @@ function runAuditScript(name, args) {
   const script = scriptBySubcommand[name];
   if (!script) {
     console.error(
-      '[audit] valid subcommands: schema, api, fr, tests, hotspots, backlog, pvd, live-data, all',
+      '[audit] valid subcommands: schema, api, fr, tests, hotspots, backlog, pvd, live-data, idempotency, decimal, fe-i18n, all',
     );
     return 1;
   }

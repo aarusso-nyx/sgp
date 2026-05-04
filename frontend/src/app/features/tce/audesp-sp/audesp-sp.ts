@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { firstValueFrom } from 'rxjs';
 
 import { AudespSpApiService, AudespSubmission } from './audesp-sp.service';
 
@@ -36,31 +37,32 @@ export class AudespSp {
   errorMessage = '';
 
   constructor() {
-    this.load();
+    void this.load();
   }
 
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.errorMessage = '';
-    this.service.list(this.year, this.month).subscribe({
-      next: (items) => {
-        this.submissions = items;
-        this.selected = this.keepSelection(items);
-        this.loading = false;
-      },
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      const items = await firstValueFrom(this.service.list(this.year, this.month));
+      this.submissions = items;
+      this.selected = this.keepSelection(items);
+      this.loading = false;
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
-  create(): void {
+  async create(): Promise<void> {
     const payrollRunId = this.payrollRunId.trim();
     if (!payrollRunId) return;
     this.loading = true;
     this.errorMessage = '';
-    this.service.create(payrollRunId).subscribe({
-      next: (submission) => this.upsert(submission),
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      this.upsert(await firstValueFrom(this.service.create(payrollRunId)));
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
   select(submission: AudespSubmission): void {
@@ -68,11 +70,11 @@ export class AudespSp {
   }
 
   validate(submission: AudespSubmission): void {
-    this.transition(submission, 'validate');
+    void this.transition(submission, 'validate');
   }
 
   submit(submission: AudespSubmission): void {
-    this.transition(submission, 'submit');
+    void this.transition(submission, 'submit');
   }
 
   downloadXml(submission: AudespSubmission): void {
@@ -87,17 +89,21 @@ export class AudespSp {
     return JSON.stringify(submission.responsePayload);
   }
 
-  private transition(submission: AudespSubmission, action: 'validate' | 'submit'): void {
+  private async transition(
+    submission: AudespSubmission,
+    action: 'validate' | 'submit',
+  ): Promise<void> {
     this.busyId = submission.id;
     this.errorMessage = '';
     const request =
       action === 'validate'
         ? this.service.validate(submission.id)
         : this.service.submit(submission.id);
-    request.subscribe({
-      next: (updated) => this.upsert(updated),
-      error: (error: unknown) => this.fail(error),
-    });
+    try {
+      this.upsert(await firstValueFrom(request));
+    } catch (error: unknown) {
+      this.fail(error);
+    }
   }
 
   private upsert(submission: AudespSubmission): void {

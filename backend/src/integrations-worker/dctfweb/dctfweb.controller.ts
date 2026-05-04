@@ -17,12 +17,14 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
+import { recordDctfwebTransmission } from '../../common/observability/prometheus.metrics';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { DctfwebBuilderService } from './dctfweb-builder.service';
-import { GenerateDctfwebDto } from './dctfweb.dto';
+import { GenerateDctfwebDto, GenerateDctfwebMitDto } from './dctfweb.dto';
 import { DctfwebSignerService } from './dctfweb-signer.service';
 import { DctfwebTransmitterService } from './dctfweb-transmitter.service';
+import { MitInclusionService } from './mit-inclusion.service';
 
 @ApiTags('fiscal-dctfweb')
 @ApiBearerAuth()
@@ -32,6 +34,7 @@ export class DctfwebController {
     private readonly builder: DctfwebBuilderService,
     private readonly signer: DctfwebSignerService,
     private readonly transmitter: DctfwebTransmitterService,
+    private readonly mitInclusion: MitInclusionService,
     private readonly auditService: AuditService,
   ) {}
 
@@ -83,6 +86,35 @@ export class DctfwebController {
     return result;
   }
 
+  @ApiOperation({ summary: 'POST mit/gerar' })
+  @Post('mit/gerar')
+  @RequirePermission('fiscal.dctfweb.write')
+  @ApiCreatedResponse({
+    description:
+      'Generate DCTFWeb MIT inclusion XML from pending PGD-DCTF tax debits.',
+  })
+  async generateMit(
+    @Req() request: RequestWithContext,
+    @Body() body: GenerateDctfwebMitDto,
+  ) {
+    const result = await this.mitInclusion.generate(body);
+    await this.auditService.auditMutation(
+      request,
+      'PROCESS',
+      'fiscal.dctfweb.mit',
+      {
+        tableName: 'fiscal.dctf_pgd_tax_debit',
+        metadata: {
+          competence: result.competence,
+          debitCount: result.debitCount,
+          totalAmount: result.totalAmount,
+          totalCsllAdicionalAmount: result.totalCsllAdicionalAmount,
+        },
+      },
+    );
+    return result;
+  }
+
   @ApiOperation({ summary: 'POST :id/assinar' })
   @Post(':id/assinar')
   @RequirePermission('fiscal.dctfweb.write')
@@ -114,6 +146,7 @@ export class DctfwebController {
   })
   async transmit(@Req() request: RequestWithContext, @Param('id') id: string) {
     const result = await this.transmitter.transmit(id);
+    recordDctfwebTransmission(result.status);
     await this.auditService.auditMutation(
       request,
       'PROCESS',

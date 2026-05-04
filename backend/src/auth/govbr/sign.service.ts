@@ -6,9 +6,20 @@ import {
   GovBrSignatureSandboxAdapter,
 } from './govbr-signature-sandbox.adapter';
 import { GovBrSignCallbackQueryDto, GovBrSignRequestDto } from './sign.dto';
+import {
+  EsocialPadesPkcs7Envelope,
+  EsocialPadesSignInput,
+  EsocialPadesSoapStub,
+  SoftwarePadesPkcs7Signer,
+} from './software-pades-pkcs7.signer';
 
 @Injectable()
 export class GovBrSignService {
+  private readonly esocialPadesSigner = new SoftwarePadesPkcs7Signer();
+  private readonly esocialPadesSoapStub = new EsocialPadesSoapStub(
+    this.esocialPadesSigner,
+  );
+
   constructor(private readonly adapter: GovBrSignatureSandboxAdapter) {}
 
   initiate(actor: AuthenticatedActor | undefined, input: GovBrSignRequestDto) {
@@ -41,6 +52,18 @@ export class GovBrSignService {
     >,
   ): boolean {
     return this.adapter.verifyEnvelope(payload, signature);
+  }
+
+  signEsocialS1299SoftwareCertificate(input: EsocialPadesSignInput) {
+    return this.esocialPadesSigner.signS1299(input);
+  }
+
+  verifyEsocialS1299Envelope(envelope: EsocialPadesPkcs7Envelope): boolean {
+    return this.esocialPadesSigner.verifyEnvelope(envelope);
+  }
+
+  transmitEsocialS1299Sandbox(envelope: EsocialPadesPkcs7Envelope) {
+    return this.esocialPadesSoapStub.transmit(envelope);
   }
 
   private parseDecision(value?: string): GovBrSignatureDecision {

@@ -28,6 +28,7 @@ describe('MitInclusionService', () => {
         pgdDebitId: 'PGD-DEBIT-001',
         taxCode: '0561',
         amount: '88.10',
+        csllAdicionalAmount: '15.00',
       }),
     ];
 
@@ -41,12 +42,14 @@ describe('MitInclusionService', () => {
     expect(xml).toContain('<filial cnpj="12345678000270">');
     expect(xml).toContain('sourceEvent="MIT"');
     expect(xml).toContain('status="INCLUDED"');
+    expect(xml).toContain('csllAdicional="15.00"');
     expect(parseMitInclusionXml(xml)).toEqual([
       expect.objectContaining({
         cnpjFilial: '12345678000199',
         pgdDebitId: 'PGD-DEBIT-001',
         taxCode: '0561',
         amount: '88.10',
+        csllAdicionalAmount: '15.00',
       }),
       expect.objectContaining({
         cnpjFilial: '12345678000270',
@@ -70,6 +73,7 @@ describe('MitInclusionService', () => {
           debitCode: '0561',
           baseAmount: '900.00',
           amount: '88.10',
+          csllAdicionalAmount: '15.00',
           mitStatus: 'INCLUDED',
           mitDebitId: 'MIT-abc123',
           cnpjFilial: '12345678000199',
@@ -81,6 +85,7 @@ describe('MitInclusionService', () => {
     expect(xml).toContain('mitStatus="INCLUDED"');
     expect(xml).toContain('mitId="MIT-abc123"');
     expect(xml).toContain('cnpjFilial="12345678000199"');
+    expect(xml).toContain('csllAdicional="15.00"');
   });
 
   it('reads pending PGD-DCTF tax debits and emits MIT inclusion XML', async () => {
@@ -90,6 +95,7 @@ describe('MitInclusionService', () => {
         pgd_debit_id: 'PGD-DEBIT-001',
         tax_code: '0561',
         amount: '88,10',
+        csll_adicional_amount: '15,00',
         mit_status: 'PENDING',
       }),
       pgdRow({
@@ -122,6 +128,7 @@ describe('MitInclusionService', () => {
       mitStatus: 'INCLUDED',
       debitCount: 2,
       totalAmount: '213.40',
+      totalCsllAdicionalAmount: '15.00',
     });
     expect(result.xmlHash).toMatch(/^[0-9a-f]{64}$/);
     expect(result.debits).toEqual([
@@ -129,6 +136,7 @@ describe('MitInclusionService', () => {
         mitStatus: 'INCLUDED',
         cnpjFilial: '12345678000199',
         amount: '88.10',
+        csllAdicionalAmount: '15.00',
       }),
       expect.objectContaining({
         mitStatus: 'INCLUDED',
@@ -197,6 +205,7 @@ function mitDebit(overrides: Partial<DctfwebMitDebitDto> = {}) {
     period: '2026-01-01',
     baseAmount: '900.00',
     amount: '88.10',
+    csllAdicionalAmount: '0.00',
     dueDate: '2026-02-25',
     ...overrides,
   };

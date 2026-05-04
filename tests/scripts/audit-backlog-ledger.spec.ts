@@ -1,13 +1,9 @@
 import { execFile as execFileCallback } from 'node:child_process';
 import { join } from 'node:path';
+import { readFile } from 'node:fs/promises';
 import { promisify } from 'node:util';
 
-import {
-  cleanupFixture,
-  makeFixture,
-  readMarkdownHeader,
-  runAuditCommand,
-} from './audit-test-helpers';
+import { cleanupFixture, makeFixture, runAuditCommand } from './audit-test-helpers';
 
 const execFile = promisify(execFileCallback);
 
@@ -20,14 +16,17 @@ describe('audit-backlog-ledger', () => {
 
   it('updates a known backlog ledger idempotently', async () => {
     fixtureRoot = await makeFixture('audit-backlog-ledger');
-    await runAuditCommand('backlog', fixtureRoot);
-    const first = await readMarkdownHeader(join(fixtureRoot, 'out', 'backlog-ledger.md'));
-    await runAuditCommand('backlog', fixtureRoot);
-    const second = await readMarkdownHeader(join(fixtureRoot, 'out', 'backlog-ledger.md'));
+    await runExistingLedgerCommand(fixtureRoot);
+    const ledgerPath = join(fixtureRoot, 'docs', 'gov', 'audit', 'backlog-ledger.md');
+    const first = await readFile(ledgerPath, 'utf8');
+    await runExistingLedgerCommand(fixtureRoot);
+    const second = await readFile(ledgerPath, 'utf8');
 
     expect(second).toEqual(first);
-    expect(first.slice(0, 2)).toEqual(['# Backlog Ledger', '']);
-    expect(first[2]).toContain('closure.json');
+    expect(first).toContain('## Summary');
+    expect(first).toContain('| total rows | 1     |');
+    expect(first).toContain('| R3-001     | People route | done | done           |');
+    expect(first).not.toContain('Round 8');
   });
 
   it('flags unknown closure IDs when a ledger already exists', async () => {
@@ -48,3 +47,18 @@ describe('audit-backlog-ledger', () => {
     ).rejects.toMatchObject({ code: 1 });
   });
 });
+
+function runExistingLedgerCommand(
+  fixtureRoot: string,
+): Promise<{ stdout: string; stderr: string }> {
+  return execFile(process.execPath, [
+    join(__dirname, '..', '..', 'scripts', 'audit.mjs'),
+    'backlog',
+    '--repo-root',
+    fixtureRoot,
+    '--output-root',
+    join(fixtureRoot, 'docs', 'gov', 'audit'),
+    '--round',
+    '7',
+  ]);
+}

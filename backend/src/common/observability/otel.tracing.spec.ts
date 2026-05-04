@@ -4,6 +4,7 @@ import type { AddressInfo } from 'node:net';
 
 import {
   configureOpenTelemetryTracingEntrypoint,
+  createOtelTraceExporter,
   type RequestSpan,
 } from './otel.tracing';
 
@@ -163,6 +164,218 @@ describe('OpenTelemetry request tracing hooks', () => {
       expect.objectContaining({
         name: 'POST /api/ping',
       }),
+    );
+  });
+
+  it('handles route edge cases and skips metrics spans', () => {
+    const spans: RequestSpan[] = [];
+    const app = { use: jest.fn() };
+
+    configureOpenTelemetryTracingEntrypoint(app as never, 'sgp-portal-api', {
+      now: () => 3_000_000n,
+      exporter: {
+        exportSpan: (span) => {
+          spans.push(span);
+        },
+      },
+    });
+
+    const middleware = app.use.mock.calls[0]?.[0] as (
+      request: {
+        method?: string;
+        path?: string;
+        originalUrl?: string;
+        baseUrl?: string;
+        route?: { path?: string };
+        headers?: Record<string, string | string[] | undefined>;
+      },
+      response: TestResponse,
+      next: () => void,
+    ) => void;
+
+    const routedResponse = new TestResponse();
+    routedResponse.statusCode = 503;
+    middleware(
+      {
+        baseUrl: '/api',
+        route: { path: '/avaliacoes/:id' },
+        headers: {
+          traceparent: [
+            '00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01',
+          ],
+        },
+      },
+      routedResponse,
+      jest.fn(),
+    );
+    routedResponse.emit('finish');
+
+    const fallbackResponse = new TestResponse();
+    middleware(
+      {
+        originalUrl: '/api/fallback?debug=true',
+        headers: { traceparent: 'invalid' },
+      },
+      fallbackResponse,
+      jest.fn(),
+    );
+    fallbackResponse.emit('finish');
+
+    const metricsResponse = new TestResponse();
+    middleware(
+      { method: 'GET', path: '/metrics', headers: {} },
+      metricsResponse,
+      jest.fn(),
+    );
+    metricsResponse.emit('finish');
+
+    expect(spans).toHaveLength(2);
+    expect(spans[0]).toEqual(
+      expect.objectContaining({
+        traceId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        parentSpanId: 'bbbbbbbbbbbbbbbb',
+        name: 'UNKNOWN /api/avaliacoes/:id',
+        status: 'error',
+      }),
+    );
+    expect(spans[1]).toEqual(
+      expect.objectContaining({
+        name: 'UNKNOWN /api/fallback',
+        status: 'ok',
+      }),
+    );
+  });
+
+  it('honors exporter environment switches', () => {
+    delete process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
+    delete process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT;
+    delete process.env.OTEL_TRACES_EXPORTER;
+
+    process.env.OTEL_SDK_DISABLED = 'true';
+    expect(createOtelTraceExporter('sgp-core-api')).toBeUndefined();
+
+    process.env.OTEL_SDK_DISABLED = 'false';
+    process.env.OTEL_TRACES_EXPORTER = 'none';
+    expect(createOtelTraceExporter('sgp-core-api')).toBeUndefined();
+
+    delete process.env.OTEL_TRACES_EXPORTER;
+    expect(createOtelTraceExporter('sgp-core-api')).toBeUndefined();
+  });
+
+  it('derives base OTLP endpoints and serializes resource/span attributes', async () => {
+    const received = new Promise<string>((resolve) => {
+      const server = createServer((request, response) => {
+        expect(request.url).toBe('/v1/traces');
+        let body = '';
+        request.setEncoding('utf8');
+        request.on('data', (chunk) => {
+          body += chunk;
+        });
+        request.on('end', () => {
+          response.writeHead(200).end();
+          server.close();
+          resolve(body);
+        });
+      });
+
+      server.listen(0, '127.0.0.1', () => {
+        const { port } = server.address() as AddressInfo;
+        process.env.OTEL_EXPORTER_OTLP_ENDPOINT = `http://127.0.0.1:${port}/collector`;
+        process.env.OTEL_RESOURCE_ATTRIBUTES =
+          'deployment.environment=test,service.version=1=2,ignored=';
+        delete process.env.OTEL_SERVICE_NAME;
+        delete process.env.OTEL_TRACES_EXPORTER;
+
+        const exporter = createOtelTraceExporter('sgp-report-service');
+        void exporter?.exportSpan({
+          traceId: 'cccccccccccccccccccccccccccccccc',
+          spanId: 'dddddddddddddddd',
+          name: 'POST /api/reports',
+          entrypoint: 'sgp-report-service',
+          startTimeUnixNano: '1',
+          endTimeUnixNano: '2',
+          attributes: {
+            'http.request.method': 'POST',
+            'http.response.status_code': 201,
+            'sgp.test.enabled': true,
+            'sgp.test.ratio': 1.5,
+          },
+          status: 'error',
+        });
+      });
+    });
+
+    const payload = JSON.parse(await received) as {
+      resourceSpans: Array<{
+        resource: {
+          attributes: Array<{
+            key: string;
+            value: { stringValue?: string; intValue?: number };
+          }>;
+        };
+        scopeSpans: Array<{
+          spans: Array<{
+            status: { code: number };
+            attributes: Array<{
+              key: string;
+              value: {
+                stringValue?: string;
+                intValue?: number;
+                doubleValue?: number;
+                boolValue?: boolean;
+              };
+            }>;
+          }>;
+        }>;
+      }>;
+    };
+    const resourceAttributes = payload.resourceSpans[0]?.resource.attributes;
+    const span = payload.resourceSpans[0]?.scopeSpans[0]?.spans[0];
+
+    expect(resourceAttributes).toEqual(
+      expect.arrayContaining([
+        {
+          key: 'service.name',
+          value: { stringValue: 'sgp-report-service' },
+        },
+        {
+          key: 'deployment.environment',
+          value: { stringValue: 'test' },
+        },
+        {
+          key: 'service.version',
+          value: { stringValue: '1=2' },
+        },
+      ]),
+    );
+    expect(resourceAttributes).not.toEqual(
+      expect.arrayContaining([
+        {
+          key: 'ignored',
+          value: expect.anything(),
+        },
+      ]),
+    );
+    expect(span).toEqual(expect.objectContaining({ status: { code: 2 } }));
+    expect(span?.attributes).toEqual(
+      expect.arrayContaining([
+        {
+          key: 'http.request.method',
+          value: { stringValue: 'POST' },
+        },
+        {
+          key: 'http.response.status_code',
+          value: { intValue: 201 },
+        },
+        {
+          key: 'sgp.test.enabled',
+          value: { boolValue: true },
+        },
+        {
+          key: 'sgp.test.ratio',
+          value: { doubleValue: 1.5 },
+        },
+      ]),
     );
   });
 });

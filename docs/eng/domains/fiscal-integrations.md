@@ -18,9 +18,278 @@ Authored domain authority for eSocial, EFD-Reinf, DCTFWeb, DIRF, SIAFIC, TCE, si
 - Catálogo de Estados e Leiautes TCE
 - TCE-03 — Adapter de Referencia AUDESP/SP
 - TCE-04 Fila de Submissao
+- TCE RREO/RGF Fiscal Report Builders
 - Gov.br Advanced Signature Sandbox
 - TCE State Source-Pending Adapters
 - Official Fiscal Export Primitives
+- Adapter Mock Queue Contract
+- Mock TCE Relay
+- Mock eSocial Relay
+
+## Regulatory References Cross-Reference
+
+This table closes the Round 3 regulatory-adherence recommendation by mapping
+each obligation-level cached reference under `docs/refs/**` to implementation
+or retained decision evidence. Raw primary-source dumps under
+`docs/refs/**/law/**` are intentionally excluded from the orphan check because
+they are cited through the obligation summaries below.
+
+### eSocial and RFB cluster
+
+| Reference                                         | Obligation cluster                                                                        | Implementation / evidence path:line                                   | Current posture                                                                   |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `docs/refs/esocial/00-index.md`                   | eSocial S-1.3 family index                                                                | backend/src/esocial-worker/esocial-worker.service.ts:1                | Implemented local worker family; official homologation remains downstream.        |
+| `docs/refs/esocial/events-periodicos.md`          | S-1200/S-1202/S-1207/S-1210/S-1298/S-1299 periodic events                                 | backend/src/esocial-worker/builders/s1200.builder.ts:1                | Implemented builders and golden fixtures.                                         |
+| `docs/refs/esocial/events-nao-periodicos.md`      | S-2200/S-2205/S-2206/S-2210/S-2220/S-2230/S-2240/S-2298/S-2299/S-2306 non-periodic events | backend/src/esocial-worker/builders/s2200.builder.ts:1                | Implemented builders and database-backed state.                                   |
+| `docs/refs/esocial/events-tabelas.md`             | S-1000/S-1005/S-1010/S-1020 table events                                                  | backend/src/esocial-worker/builders/s1xxx.service.ts:1                | Implemented table-event emission surface.                                         |
+| `docs/refs/esocial/events-totalizadores.md`       | S-5001/S-5002/S-5012 totalizer returns                                                    | backend/src/esocial-worker/parsers/totalizer.parser.ts:1              | Implemented parser promotion with golden XML coverage.                            |
+| `docs/refs/esocial/events-exclusao-fechamento.md` | S-3000 exclusion and S-1298/S-1299 reopening/closure                                      | backend/src/esocial-worker/builders/s1299.builder.ts:1                | Implemented local closure/exclusion state and queue relay for S-1299.             |
+| `docs/refs/esocial/transmission-soap-ws.md`       | SOAP WS transmission and production-restricted boundary                                   | backend/src/esocial-worker/submission/submission.service.ts:1         | Sandbox/local adapter implemented; production homologation deferred.              |
+| `docs/refs/esocial/xsd-and-signing.md`            | XSD validation and PAdES/PKCS#7 sandbox evidence                                          | backend/src/auth/govbr/software-pades-pkcs7.signer.ts:1               | Local sandbox signer/validator implemented; real certificate validation deferred. |
+| `docs/refs/esocial/dctfweb-mit.md`                | DCTFWeb, MIT, CSLL adicional                                                              | backend/src/integrations-worker/dctfweb/dctfweb-builder.service.ts:1  | Implemented CSLL/MIT builder and golden fixture.                                  |
+| `docs/refs/esocial/efd-reinf.md`                  | EFD-Reinf R-2000/R-2055                                                                   | backend/src/integrations-worker/efd-reinf/builders/r2055.builder.ts:1 | Implemented R-2055/R-2000 builders and goldens.                                   |
+
+### Payroll, HR, legal, and procurement cluster
+
+| Reference                                          | Obligation cluster                              | Implementation / evidence path:line                                 | Current posture                                                      |
+| -------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `docs/refs/legal/clt-rescisao-aviso-fgts.md`       | CLT termination, proportional notice, FGTS/GRRF | tests/backend/golden/rescisao-v01/input.json:1                      | Implemented payroll termination goldens and FGTS/GRRF coverage.      |
+| `docs/refs/legal/pensao-alimenticia.md`            | Alimony/pension food discounts                  | backend/src/folha-pagamento/operations/alimony/alimony.service.ts:1 | Implemented employee alimony management and payroll integration.     |
+| `docs/refs/legal/consignacoes-margem-lei-14509.md` | Consignment margin caps                         | tests/backend/margin-calculator.golden.spec.ts:45                   | Implemented golden margin calculator coverage.                       |
+| `docs/refs/legal/decimo-terceiro-ferias.md`        | 13th salary and vacation payroll                | tests/backend/decimo-terceiro-golden.e2e-spec.ts:1                  | Implemented 13th salary and vacation payroll goldens.                |
+| `docs/refs/legal/ec-103-previdencia.md`            | Constitutional pension reform                   | backend/src/previdenciario/previdenciario.service.ts:47             | Implemented previdenciario service/policy surface.                   |
+| `docs/refs/legal/rpps-vs-rgps.md`                  | RPPS/RGPS regime distinction                    | backend/src/previdenciario/regras/regras.service.ts:34              | Implemented pension-rule service surface.                            |
+| `docs/refs/legal/previdenciario-irrf.md`           | Previdenciario and IRRF calculations            | backend/src/previdenciario/declaracao/declaracao.service.ts:18      | Implemented declaration/calculation surfaces.                        |
+| `docs/refs/legal/concursos-publicos.md`            | Public concurso flow, appointment, quotas       | database/sql/10-11-recrutamento-ddl.sql:1                           | Implemented recruitment schema and portal/admin flow surfaces.       |
+| `docs/refs/legal/licencas-estatutarias.md`         | Statutory leave workflows                       | backend/src/rh/workflows/leaves/leaves.service.ts:1                 | Implemented leave surface with remaining policy breadth tracked.     |
+| `docs/refs/legal/teto-acumulacao.md`               | CF art. 37 XVI lawful accumulation              | backend/src/rh/employees/accumulation.service.ts:1                  | Implemented compatibility matrix and deterministic seed.             |
+| `docs/refs/legal/portaria-671-ponto.md`            | Time-attendance, AFD, REP/biometric posture     | database/sql/10-08-ponto-ddl.sql:1                                  | Implemented ponto schema and frontend/admin surfaces.                |
+| `docs/refs/legal/lei-14133-licitacoes.md`          | Procurement law reference                       | docs/gov/evidence/deferred-decision-ledger.md:22                    | Reference-only for v0.0.1; procurement runtime remains out of scope. |
+
+### LGPD cluster
+
+| Reference                                    | Obligation cluster                        | Implementation / evidence path:line              | Current posture                                                  |
+| -------------------------------------------- | ----------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------- |
+| `docs/refs/lgpd/lei-13709.md`                | LGPD umbrella obligations                 | database/sql/15-pii-encryption.sql:1             | Implemented PII tagging/encryption and protected route surfaces. |
+| `docs/refs/lgpd/anpd-guidelines.md`          | ANPD operational guidance                 | backend/src/common/lgpd/legal-basis.service.ts:1 | Implemented legal-basis service and audit evidence.              |
+| `docs/refs/lgpd/dpo-dsar.md`                 | DPO designation and DSAR channel          | backend/src/lgpd/dpo.controller.ts:1             | Implemented public DPO/DSAR endpoints.                           |
+| `docs/refs/lgpd/pii-categorias-cpf-bio.md`   | CPF/biometric/sensitive category handling | database/sql/13-pii-comments.sql:1               | Implemented PII comments plus Round 4 encryption closure.        |
+| `docs/refs/lgpd/ropa-rcis.md`                | ROPA/RCIS records                         | backend/src/lgpd/ropa.controller.ts:1            | Implemented ROPA/RCIS controller surface.                        |
+| `docs/refs/lgpd/tratamento-poder-publico.md` | Public-power treatment basis              | backend/src/lgpd/public-power.controller.ts:1    | Implemented public-power LGPD route surface.                     |
+
+### TCE, transparency, SIAFIC, and official exports cluster
+
+| Reference                                   | Obligation cluster                               | Implementation / evidence path:line                               | Current posture                                                      |
+| ------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `docs/refs/tce/00-pluggable-contract.md`    | Pluggable TCE/TCM/TCU adapter contract           | backend/src/tce/adapters/queue-adapter.ts:1                       | Implemented local queue-backed adapter contract.                     |
+| `docs/refs/tce/state-catalog.md`            | State catalog and source-pending layout registry | tests/backend/tce-02-catalog.e2e-spec.ts:1                        | Implemented state catalog evidence and source-pending posture.       |
+| `docs/refs/tce/lai-portal-transparencia.md` | LAI/transparency publication                     | tests/backend/golden/transparency/public-payroll-v01/input.json:1 | Implemented transparency golden outputs.                             |
+| `docs/refs/tce/rreo-rgf.md`                 | RREO/RGF fiscal reports                          | tests/backend/golden/tce/rreo-v01/sp/input.json:1                 | Implemented SP/MG source-pending RREO/RGF goldens and local relay.   |
+| `docs/refs/tce/siafic.md`                   | SIAFIC integration                               | tests/backend/siafic-sync.e2e-spec.ts:1                           | Implemented neutral SIAFIC sync contract; official layout deferred.  |
+| `docs/refs/tce/siope-siops.md`              | SICONFI/SIOPE/SIOPS export primitives            | tests/backend/fixtures/official-exports/siope.golden.csv:1        | Implemented official export primitives with source-pending branding. |
+
+## Adapter Mock Queue Contract
+
+**Status:** Implemented as dependency-free reference contract
+**Scope:** SGP boundary architecture for fiscal, banking, eSocial, TCE, and other
+external integrations.
+
+### Decision
+
+SGP v0.0.1 terminates at adapters. Adapters exchange messages with local mock
+relay services through a two-way queue contract: one request topic, one response
+topic, and one dead-letter topic per integration kind. Real homologation and
+production transmission remain outside SGP runtime scope unless a future owner
+decision explicitly authorizes an ente-specific relay.
+
+The production transport recommendation is BullMQ over Redis because it has an
+MIT license and established retry/DLQ semantics. R4-95 does not add BullMQ as a
+dependency; the accepted runtime contract lives behind `QueueAdapterTransport`,
+with an in-memory reference transport for tests and local mock relays. Later
+workers can replace the transport without changing the envelope or adapter
+surface.
+
+### Topics
+
+For each `kind`, the canonical topics are:
+
+- request: `sgp.adapter.<kind>.request`
+- response: `sgp.adapter.<kind>.response`
+- dead letter: `sgp.adapter.<kind>.dlq`
+
+The `kind` is a stable lowercase integration family such as `tce`, `esocial`,
+`banking`, `siafic`, or a narrower worker-owned derivative. R4-96/R4-97/R4-98
+instantiate concrete relay kinds without changing the cross-cutting contract.
+
+### Request envelope
+
+Every request message MUST carry:
+
+- `request-id`: unique UUID or equivalent stable identifier.
+- `correlation-id`: trace value propagated across adapter, mock relay, logs,
+  metrics, retries, and final response.
+- `idempotency-key`: deterministic key for the legal fact or artifact being
+  relayed.
+- `tenant_id`: tenant boundary for the source fact.
+- `kind`: integration family.
+- `payload`: integration-owned JSON payload.
+- `attempt`: current one-based delivery attempt.
+- `max-attempts`: retry budget for this request.
+- `reply-to`: response topic.
+- `dead-letter-topic`: DLQ topic.
+- `created-at`: ISO timestamp.
+
+### Response envelope
+
+Every response message MUST carry:
+
+- `request-id`, `correlation-id`, `tenant_id`, and `kind` copied from the
+  request.
+- `status`: `OK`, `RETRY`, or `DEAD_LETTER`.
+- `attempt`: attempt that produced the response.
+- `payload`: response payload when `status=OK`.
+- `error`: structured error with `kind`, `code`, `message`, and optional
+  `details` when `status` is not `OK`.
+- `created-at`: ISO timestamp.
+
+Adapters MUST reject responses whose `correlation-id` does not match the
+pending request. Mock relays MUST be deterministic in CI and MUST NOT call real
+eSocial, TCE, banking, RFB, GovBR, or SIAFIC endpoints.
+
+### Retry and dead-letter rules
+
+`RETRY` means the mock relay saw a transient condition and the adapter may
+re-publish the same request with `attempt + 1`, preserving `request-id`,
+`correlation-id`, `idempotency-key`, `tenant_id`, and `kind`. When `attempt`
+reaches `max-attempts`, the adapter publishes one dead-letter envelope to
+`sgp.adapter.<kind>.dlq` and fails the caller with a delivery error. A relay may
+also return `DEAD_LETTER` directly for definitive failures.
+
+DLQ entries retain the final request, final response when present, reason, and
+dead-letter timestamp. Replays are future operator workflows; this contract only
+defines the durable message shape.
+
+### Observability hooks
+
+Adapters expose hooks for request publication, response receipt, retry
+scheduling, and DLQ publication. Implementations should bind those hooks to the
+existing worker observability posture: structured logs include `request-id`,
+`correlation-id`, `tenant_id`, `kind`, `attempt`, and `status`; metrics update
+queue depth, active claims, retry counts, and dead letters by queue/kind.
+
+### Reference implementation
+
+The reference implementation is:
+
+- `backend/src/common/adapters/queue-adapter.ts`: generic `SgpQueueAdapter`,
+  envelope types, topic derivation, in-memory transport, retry, correlation, and
+  DLQ behavior.
+- `backend/src/external/mocks/_reference/reference-mock-responder.ts`: mock
+  responder side with deterministic happy, transient retry, DLQ, and concurrent
+  response behavior.
+- `backend/src/common/adapters/queue-adapter.spec.ts`: contract tests for
+  happy path, retry, DLQ, and concurrent correlation.
+
+## Mock TCE Relay
+
+**Status:** Implemented for local SP/MG RREO/RGF queue evidence.
+
+**Scope:** R4-96 mock relay and TCE queue adapter for the R4-95 adapter
+contract. Production TCE/AUDESP/SICOM homologation, official state endpoint
+submission, credential custody, and tribunal acceptance evidence remain outside
+this implementation.
+
+### Decision
+
+The TCE mock relay runs as a deterministic local queue consumer for `kind=tce`.
+The adapter publishes a queue request with the persisted `tce.submission` id and
+one R4-15 fiscal report envelope. The relay accepts the current source-pending
+SP/MG envelopes for `RREO` and `RGF`, preserves `officialConformance=false`,
+and returns state-shaped local acknowledgement payloads:
+
+- SP receives an AUDESP-shaped acknowledgement with `protocoloAudesp`,
+  `situacao`, and `reciboLocal`.
+- MG receives a SICOM/TCE-MG-shaped acknowledgement with `numeroProtocolo`,
+  `situacao`, and `hashPacote`.
+
+The adapter persists the mock round trip into the live `tce.submission` table by
+setting `status=STUB_OK`, request size, response payload, response hash,
+submission timestamp, and response timestamp. The prompt phrase
+`tce.submission_state` maps to this live table in the current schema; no
+parallel state table or legacy compatibility layer is introduced.
+
+### Boundaries
+
+- Supported report schemas in R4-96: `tce-rreo-v01` and `tce-rgf-v01`.
+- Supported states in R4-96: `SP` and `MG`.
+- Supported transport in tests: `InMemoryQueueTransport` over the R4-95
+  `SgpQueueAdapter` contract.
+- Unsupported by design: real TCE/AUDESP/SICOM endpoints, production
+  homologation, official layout conformance, credential custody, and tribunal
+  acceptance evidence.
+
+### Implementation
+
+- `backend/src/external/mocks/tce-relay/`: deterministic local TCE relay
+  responder.
+- `backend/src/tce/adapters/queue-adapter.ts`: adapter-side TCE queue bridge
+  and `tce.submission` state writer.
+- `backend/src/tce/submission/`: state fiscal-report submission service that
+  wires persisted SP/MG source-pending RREO/RGF reports through the local relay
+  queue and returns acknowledgement state for downstream workers/controllers.
+- `tests/backend/tce-queue-adapter.e2e-spec.ts`: focused queue proof for SP
+  RREO and MG RGF acknowledgement round trips and state persistence.
+- `tests/backend/tce-state-submission.e2e-spec.ts`: R4-81 queue proof for the
+  additional MG RREO and SP RGF state-shaped acknowledgement round trips.
+
+## Mock eSocial Relay
+
+**Status:** Implemented for the local S-1299 queue boundary.
+
+**Scope:** R4-97 mock relay and worker adapter for the eSocial queue contract.
+Production homologation, national eSocial endpoint calls, production
+certificates, and HSM/A3 custody remain outside this implementation.
+
+### Decision
+
+The eSocial mock relay runs as a deterministic local queue consumer for
+`kind=esocial`. The worker-side adapter publishes a queue request containing the
+R4-01 software-certificate PAdES/PKCS#7 envelope, tenant id, batch id, event ids,
+environment, endpoint label, and idempotency metadata. The relay verifies that
+the envelope belongs to the queue tenant, revalidates the detached PKCS#7
+sandbox envelope, validates the contained S-1299 XML against the bundled S-1.3
+XSD, then returns a SOAP-shaped local acknowledgement and recibo payload.
+
+The adapter persists the accepted mock round trip into
+`esocial.submission_batch` by storing request/response hashes, HTTP status,
+attempt count, and response timestamps. It also records the mock protocol and
+receipt on `public.esocial_event` for the events in the batch. Definitive relay
+rejections are written as `REJECTED` submission batches and
+`ERRO_DEFINITIVO` events.
+
+### Boundaries
+
+- Supported event class in R4-97: `S-1299`.
+- Supported signature source: the R4-01 local A1 software-certificate sandbox
+  envelope.
+- Supported transport in tests: `InMemoryQueueTransport` over the R4-95
+  `SgpQueueAdapter` contract.
+- Unsupported by design: real eSocial SOAP endpoints, real production
+  homologation, official external certificate validation, HSM/A3 operations, and
+  national-environment acceptance evidence.
+
+### Implementation
+
+- `backend/src/external/mocks/esocial-relay/`: deterministic local eSocial
+  relay responder.
+- `backend/src/esocial-worker/adapters/queue-adapter.ts`: worker-side eSocial
+  queue adapter and persistence bridge.
+- `tests/backend/esocial-queue-adapter.e2e-spec.ts`: focused DB-backed proof for
+  send, acknowledgement, recibo persistence, and definitive signature rejection.
+- `tests/backend/esocial-submission-via-queue.e2e-spec.ts`: R4-90 runtime
+  submission proof that the worker submission service uses the R4-97 queue
+  adapter for the supported `S-1299` class and blocks unsupported classes rather
+  than falling back to direct SOAP dispatch when queue mode is active.
 
 ## DCTFWeb
 
@@ -30,9 +299,9 @@ Authored domain authority for eSocial, EFD-Reinf, DCTFWeb, DIRF, SIAFIC, TCE, si
 
 ### Decisão
 
-A DCTFWeb do SGP é gerada no `integrations-worker/dctfweb` a partir de totalizadores aceitos na competência. O módulo consome `esocial.esocial_totalizer` para S-5011, S-5012 e S-5013, exige que o S-1299 de origem esteja `ACCEPTED`, consome `fiscal.efd_reinf_totalizer` para R-9015 quando houver fechamento EFD-Reinf R-4099 aceito, grava a declaração em `fiscal.dctfweb_declaration` e materializa cada débito em `fiscal.dctfweb_item`.
+A DCTFWeb do SGP é gerada no `integrations-worker/dctfweb` a partir de totalizadores aceitos na competência. O módulo consome `esocial.esocial_totalizer` para S-5011, S-5012 e S-5013, exige que o S-1299 de origem esteja `ACCEPTED`, consome `fiscal.efd_reinf_totalizer` para R-9015 quando houver fechamento EFD-Reinf R-4099 aceito, grava a declaração em `fiscal.dctfweb_declaration` e materializa cada débito em `fiscal.dctfweb_item`. Quando a origem MIT/PGD-DCTF traz adicional de CSLL, o valor fica separado em `fiscal.dctfweb_item.csll_adicional_amount` e no atributo XML interno `csllAdicional`, sem misturar o adicional ao valor principal do débito.
 
-Para fatos geradores a partir de 2025, `MitInclusionService` emite o XML de inclusão MIT para débitos que antes eram declarados via DCTF PGD. A origem operacional esperada é `fiscal.dctf_pgd_tax_debit`, com uma linha por débito, `cnpj_filial` de 14 dígitos, código de tributo, período, base, valor, vencimento e status MIT. O XML MIT agrupa débitos por `cnpj_filial`, preserva identificadores PGD por débito e gera `mitDebitId` determinístico para rastrear a inclusão dentro da DCTFWeb.
+Para fatos geradores a partir de 2025, `MitInclusionService` emite o XML de inclusão MIT para débitos que antes eram declarados via DCTF PGD. A origem operacional esperada é `fiscal.dctf_pgd_tax_debit`, com uma linha por débito, `cnpj_filial` de 14 dígitos, código de tributo, período, base, valor, adicional de CSLL quando aplicável, vencimento e status MIT. O XML MIT agrupa débitos por `cnpj_filial`, preserva identificadores PGD por débito e gera `mitDebitId` determinístico para rastrear a inclusão dentro da DCTFWeb.
 
 ### Pré-requisitos
 
@@ -52,7 +321,7 @@ Para fatos geradores a partir de 2025, `MitInclusionService` emite o XML de incl
 
 ### MIT
 
-O MIT é tratado como origem `sourceEvent="MIT"` nos DTOs e no XML interno. Cada débito possui `mitStatus`, `mitDebitId` e `cnpjFilial`; o status de emissão do serviço é `INCLUDED` quando o XML MIT é produzido. O serviço aceita filtro opcional por `cnpj_filial` para que unidades gestoras inscritas como filiais apresentem DCTFWeb própria, sem misturar débitos de outra filial na mesma inclusão.
+O MIT é tratado como origem `sourceEvent="MIT"` nos DTOs e no XML interno. Cada débito possui `mitStatus`, `mitDebitId`, `cnpjFilial` e `csllAdicionalAmount`; o status de emissão do serviço é `INCLUDED` quando o XML MIT é produzido. O serviço aceita filtro opcional por `cnpj_filial` para que unidades gestoras inscritas como filiais apresentem DCTFWeb própria, sem misturar débitos de outra filial na mesma inclusão.
 
 O layout regulatório final importável pela Receita ainda é uma fronteira externa: o SGP preserva os campos e identificadores necessários no XML interno e nos testes de contrato, sem escolher versão de leiaute pública nova fora dos documentos oficiais.
 
@@ -160,7 +429,7 @@ O ES-03 adiciona eventos de afastamento e desligamento ao mesmo hub. S-2230 e en
 
 O ES-04 cobre a folha periodica. S-1200 e gerado por trabalhador RGPS a partir de `payroll.payroll_run` somente quando `status = GENERATED`, agrupando rubricas da folha por trabalhador e registrando `public.esocial_event.payroll_run_id` para reconciliacao posterior com totalizadores. S-1202 cobre servidores RPPS com `hr.employment_link.contract_type` `statutory` ou `commissioned`, usa o XSD local S-1.3 `evtRmnRPPS.xsd`, categorias `301` e `302`, e grava estado proprio em `esocial.s1202_emission_state`. S-1207 usa o XSD local S-1.3 `evtBenPrRP.xsd` para beneficios previdenciarios RPPS; o builder agrupa rubricas de `payroll.employee_payroll_item` somente quando a linha pode ser reconciliada a um beneficio S-2410 ativo por `hr.retirement_grant` ou `hr.pension_grant`, reutilizando `sourceKind` e `nrBeneficio` deterministico. S-1210 usa `payroll.payment_remittance_file` e `payroll.payment_remittance_detail` de BANK-01 somente depois da confirmacao bancaria materializada como `status = PAID`; os `vrLiq` emitidos reconciliam com a soma confirmada dos detalhes aceitos da remessa. Os estados ficam em `esocial.s1200_emission_state`, `esocial.s1202_emission_state` e `esocial.s1210_emission_state`, com `payload_hash` por trabalhador para bloquear duplicidades sem mudanca real.
 
-O ES-05 implementa o fechamento S-1299 da competencia e a reabertura S-1298. O builder S-1299 consulta `esocial.v_competence_periodics_pending` antes de montar o XML e bloqueia a emissao se houver trabalhador com S-1200, S-1202 ou S-1210 sem recibo. O builder S-1298 exige fechamento S-1299 aceito com recibo para a competencia antes de emitir `evtReabreEvPer`; apos a emissao, o estado local volta para `PENDING` e limpa `recibo`, `emitted_at` e `accepted_at`. O estado fica em `esocial.s1299_emission_state`, por tenant e competencia mensal, com `recibo`, `emitted_at`, `accepted_at` e status `PENDING`, `EMITTED`, `ACCEPTED` ou `REJECTED`. Os totalizadores S-5001, S-5002, S-5003, S-5011, S-5012 e S-5013 sao apenas consumidos do retorno gov.br; o parser identifica o tipo pelo evento XML, extrai a competencia e o recibo de origem, persiste o payload bruto em `esocial.esocial_totalizer` e estrutura S-5001/S-5002 para reconciliacao de bases RPPS, contribuicao segurado e IRRF.
+O ES-05 implementa o fechamento S-1299 da competencia e a reabertura S-1298. O builder S-1299 consulta `esocial.v_competence_periodics_pending` antes de montar o XML e bloqueia a emissao se houver trabalhador com S-1200, S-1202 ou S-1210 sem recibo. O builder S-1298 exige fechamento S-1299 aceito com recibo para a competencia antes de emitir `evtReabreEvPer`; apos a emissao, o estado local volta para `PENDING` e limpa `recibo`, `emitted_at` e `accepted_at`. O estado fica em `esocial.s1299_emission_state`, por tenant e competencia mensal, com `recibo`, `emitted_at`, `accepted_at` e status `PENDING`, `EMITTED`, `ACCEPTED` ou `REJECTED`. Os totalizadores S-5001, S-5002, S-5003, S-5011, S-5012 e S-5013 sao apenas consumidos do retorno gov.br; o parser identifica o tipo pelo evento XML, extrai a competencia e o recibo de origem, persiste o payload bruto em `esocial.esocial_totalizer` e estrutura S-5001/S-5002/S-5012 para reconciliacao de bases RPPS, contribuicao segurado e IRRF consolidado por codigo de receita.
 
 O ES-06 implementa exclusao de eventos por S-3000. O usuario com permissao `esocial.event.exclude` solicita a retratacao de um `public.esocial_event` aceito, informa justificativa minima de 30 caracteres e gera uma linha auditada em `esocial.s3000_request`. O builder `s3000.builder.ts` monta `evtExclusao` referenciando `nrRecEvt` do evento original e envia pelo hub ES-07. Ao receber aceite do S-3000, o worker marca a solicitacao como `ACCEPTED` e muda o evento original para `EXCLUIDO`.
 
@@ -271,7 +540,22 @@ homologation evidence remain deferred under
 
 ### Decisao
 
-O `sgp-esocial-worker` deixa de usar adapter sandbox para submissao e passa a operar pelo submodulo `backend/src/esocial-worker/submission/`. O fluxo oficial agrupa eventos `public.esocial_event` ja validados e assinados pelo ES-07, cria uma linha em `esocial.submission_batch`, monta o lote `EnviarLoteEventos`, assina o envelope SOAP com WS-Security e transmite por mTLS usando o PKCS#12 ativo do tenant em `esocial.tenant_certificate`.
+O `sgp-esocial-worker` usa o submodulo `backend/src/esocial-worker/submission/`
+para agrupar eventos `public.esocial_event` ja validados e assinados pelo ES-07
+em `esocial.submission_batch`. No runtime atual, o servico de submissao injeta o
+adapter de fila R4-97 e encaminha o evento `S-1299` pelo mock eSocial relay
+`kind=esocial`, persistindo protocolo, recibo, hashes de request/response e
+status final sem chamada direta ao cliente SOAP. Quando o adapter de fila esta
+ativo, classes ainda nao cobertas pelo contrato R4-97 sao bloqueadas com
+`ESOCIAL_QUEUE_EVENT_UNSUPPORTED` e permanecem retentaveis; o worker nao faz
+fallback silencioso para SOAP direto nesses casos.
+
+O fluxo SOAP WS-Security/mTLS anterior permanece como implementacao local
+testavel para ES-08 e como referencia tecnica para a futura ampliacao do
+contrato de relay, mas nao e o caminho de envio usado pelo worker quando o
+adapter R4-97 esta configurado. A migracao completa de todos os S-1xxx/S-2xxx
+implementados depende da expansao owner-autorizada do contrato R4-97 para alem
+de `S-1299`.
 
 ### Endpoints
 
@@ -397,6 +681,19 @@ Circuit state is keyed by ente code. When the failure threshold is reached, the 
 ### Regulatory assumptions
 
 The implementation treats Decreto 10.540/2020 plus Decreto 11.453/2023 as requiring outbound interoperability for payroll expense accounting facts, but it does not select a vendor-specific SIAFI, SIAFEM, or municipal SIAFIC layout. The payload is a neutral JSON contract containing competence, ente code, payroll run, stage, account code/type, rubric code/description, and amount. A production adapter may map that contract to the ente's official SIAFIC endpoint without changing payroll accounting source semantics.
+
+### Golden conformance
+
+R4-14 pins this boundary in `tests/backend/golden/siafic-v01/` and
+`tests/backend/siafic-sync.e2e-spec.ts`. The golden traverses active payroll
+accounting lines through `SiaficSyncService`, posts the neutral JSON payload for
+`EMPENHO`, `LIQUIDACAO`, and `PAGAMENTO`, and verifies the persisted
+`fiscal.siafic_sync_*` state shape.
+
+Because `docs/refs/tce/siafic.md` does not select a Decreto 11.453/2023 layout
+version, the golden records `layoutSelection=DEFERRED_OWNER_DECISION`,
+`officialConformance=false`, and `productionHomologation=OUT_OF_SCOPE`.
+Production SIAFIC homologation remains outside this runtime slice.
 
 ## TS-V - Alteração Contratual S-2306
 
@@ -581,6 +878,52 @@ Leitura exige `tce.submission.read`; mutacao exige `tce.submission.manage`.
 ### UI
 
 A tela `frontend/src/app/features/tce/queue/` fica em `#!/tce/queue`. Ela mostra filtros por UF/adapter/status/competencia, lista jobs com tentativas, proximo retry e ultimo erro, abre drilldown com historico e payload, e exibe circuitos com acao de reset.
+
+## TCE RREO/RGF Fiscal Report Builders
+
+**Status:** Implementado como esqueleto LRF neutro e source-pending por UF.
+
+### Escopo
+
+`backend/src/tce/builders/rreo.builder.ts` e
+`backend/src/tce/builders/rgf.builder.ts` produzem envelopes JSON
+deterministicos para relatórios fiscais RREO e RGF. O core e agnostico ao
+estado, mas o envelope carrega perfil-alvo de UF para permitir que o relay TCE
+mockado e futuros adapters estaduais preservem o contexto de tribunal, sistema,
+transporte e URL de fonte.
+
+### Contrato
+
+Todo envelope RREO/RGF inclui:
+
+- tipo do relatorio, versao de schema, fonte legal e edicao de leiaute;
+- ente, responsavel, periodo legal, prazo, data de geracao e evidencia de
+  publicacao;
+- ponto de fechamento do livro de origem, hash da fonte e folhas associadas;
+- perfil de UF (`SP`/`MG` neste corte), `layoutStatus=UNVERIFIED_LAYOUT` e
+  `officialConformance=false`;
+- hash de evidencia e chave de idempotencia deterministica para fila.
+
+RREO exige periodo `BIMESTER` e linhas de demonstrativo com valores do periodo e
+acumulados. RGF exige periodo `QUADRIMESTER`, Receita Corrente Liquida, despesa
+total com pessoal e percentuais de limite legal, prudencial e alerta. Valores
+monetarios usam `Decimal` e escala 2; percentuais usam escala 4.
+
+### Limite de conformidade
+
+O esqueleto atende ao contrato de periodo, responsavel, publicacao e fechamento
+exigido pela LRF em `docs/eng/facts/law-tce.md`, mas nao declara conformidade
+oficial com layout estadual. A promocao para leiaute oficial exige URL/edicao
+aprovada em `tce.layout_version`, dicionario de campos, goldens do manual
+selecionado e decisao de owner.
+
+### Evidencia
+
+- `backend/src/tce/builders/rreo.builder.ts`
+- `backend/src/tce/builders/rgf.builder.ts`
+- `backend/src/tce/builders/rreo-rgf.builder.spec.ts`
+- `tests/backend/golden/tce/rreo-v01/`
+- `tests/backend/golden/tce/rgf-v01/`
 
 ## Gov.br Advanced Signature Sandbox
 

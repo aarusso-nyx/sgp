@@ -23004,6 +23004,111 @@
         "tags": ["fiscal-dctfweb"]
       }
     },
+    "/api/v1/admin/fiscal/dctfweb/mit/gerar": {
+      "post": {
+        "operationId": "DctfwebController_generateMit",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateDctfwebMitDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate DCTFWeb MIT inclusion XML from pending PGD-DCTF tax debits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST mit/gerar",
+        "tags": ["fiscal-dctfweb"]
+      }
+    },
     "/api/v1/admin/fiscal/dctfweb/{id}/assinar": {
       "post": {
         "operationId": "DctfwebController_sign",
@@ -64198,6 +64303,10 @@
         "required": ["remittanceFileId", "content", "remittanceFileHash"]
       },
       "GenerateDctfwebDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "GenerateDctfwebMitDto": {
         "type": "object",
         "properties": {}
       },

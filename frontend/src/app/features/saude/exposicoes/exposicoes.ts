@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -27,10 +27,9 @@ interface EnvironmentalExposure {
   templateUrl: './exposicoes.html',
   styleUrl: './exposicoes.scss',
 })
-export class SaudeExposicoes implements OnInit, OnDestroy {
+export class SaudeExposicoes implements OnInit {
   private readonly api = inject(ApiClient);
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
   readonly form = this.formBuilder.group({
     employeeId: ['', [Validators.required]],
@@ -51,48 +50,43 @@ export class SaudeExposicoes implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.load();
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  async load(): Promise<void> {
+    this.rows = await firstValueFrom(this.api.get<EnvironmentalExposure[]>('v1/saude/exposicoes'));
   }
 
-  load(): void {
-    this.api
-      .get<EnvironmentalExposure[]>('v1/saude/exposicoes')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((rows) => (this.rows = rows));
-  }
-
-  create(): void {
+  async create(): Promise<void> {
     if (this.form.invalid) return this.form.markAllAsTouched();
     this.saving = true;
     this.error = '';
-    this.api
-      .post<EnvironmentalExposure, Record<string, unknown>>(
-        'v1/saude/exposicoes',
-        this.compact(this.form.value),
-      )
-      .pipe(
-        finalize(() => (this.saving = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => this.load(),
-        error: () => (this.error = 'Nao foi possivel salvar a exposicao.'),
-      });
+    try {
+      await firstValueFrom(
+        this.api.post<EnvironmentalExposure, Record<string, unknown>>(
+          'v1/saude/exposicoes',
+          this.compact(this.form.value),
+        ),
+      );
+      await this.load();
+    } catch {
+      this.error = 'Nao foi possivel salvar a exposicao.';
+    } finally {
+      this.saving = false;
+    }
   }
 
-  close(row: EnvironmentalExposure): void {
+  async close(row: EnvironmentalExposure): Promise<void> {
     const today = new Date().toISOString().slice(0, 10);
-    this.api
-      .patch<EnvironmentalExposure, Record<string, string>>(`v1/saude/exposicoes/${row.id}`, {
-        exposureEnd: today,
-      })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.load());
+    await firstValueFrom(
+      this.api.patch<EnvironmentalExposure, Record<string, string>>(
+        `v1/saude/exposicoes/${row.id}`,
+        {
+          exposureEnd: today,
+        },
+      ),
+    );
+    await this.load();
   }
 
   private compact(value: Record<string, unknown>): Record<string, unknown> {

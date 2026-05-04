@@ -8,7 +8,11 @@ ALTER TABLE hr.employee
     ADD COLUMN rg_cipher bytea,
     ADD COLUMN rg_cipher_key_id text,
     ADD COLUMN bank_agency_cipher bytea,
-    ADD COLUMN bank_agency_cipher_key_id text;
+    ADD COLUMN bank_agency_cipher_key_id text,
+    ADD COLUMN email_cipher bytea,
+    ADD COLUMN email_cipher_key_id text,
+    ADD COLUMN phone_cipher bytea,
+    ADD COLUMN phone_cipher_key_id text;
 
 ALTER TABLE hr.employee_complement_data
     ADD COLUMN pis_pasep_cipher bytea,
@@ -16,7 +20,9 @@ ALTER TABLE hr.employee_complement_data
     ADD COLUMN rg_cipher bytea,
     ADD COLUMN rg_cipher_key_id text,
     ADD COLUMN voter_registration_cipher bytea,
-    ADD COLUMN voter_registration_cipher_key_id text;
+    ADD COLUMN voter_registration_cipher_key_id text,
+    ADD COLUMN emergency_contact_cipher bytea,
+    ADD COLUMN emergency_contact_cipher_key_id text;
 
 ALTER TABLE hr.employee_bank_account
     ADD COLUMN account_number_cipher bytea,
@@ -28,17 +34,90 @@ ALTER TABLE hr.employee_dependent
     ADD COLUMN cpf_cipher bytea,
     ADD COLUMN cpf_cipher_key_id text;
 
+ALTER TABLE fiscal.dirf_beneficiario
+    ADD COLUMN cpf_cnpj_cipher bytea,
+    ADD COLUMN cpf_cnpj_cipher_key_id text;
+
+ALTER TABLE hr.employee_alimony
+    ADD COLUMN beneficiary_cpf_cipher bytea,
+    ADD COLUMN beneficiary_cpf_cipher_key_id text;
+
+ALTER TABLE hr.employee_benefit_dependent
+    ADD COLUMN dependent_cpf_cipher bytea,
+    ADD COLUMN dependent_cpf_cipher_key_id text;
+
+ALTER TABLE hr.internship_record
+    ADD COLUMN intern_cpf_cipher bytea,
+    ADD COLUMN intern_cpf_cipher_key_id text;
+
+ALTER TABLE hr.legal_responsible
+    ADD COLUMN cpf_cipher bytea,
+    ADD COLUMN cpf_cipher_key_id text;
+
+ALTER TABLE hr.medical_appointment
+    ADD COLUMN contact_phone_cipher bytea,
+    ADD COLUMN contact_phone_cipher_key_id text;
+
+ALTER TABLE hr.pension_grant
+    ADD COLUMN beneficiary_cpf_cipher bytea,
+    ADD COLUMN beneficiary_cpf_cipher_key_id text;
+
+ALTER TABLE hr.service_provider
+    ADD COLUMN cpf_cnpj_cipher bytea,
+    ADD COLUMN cpf_cnpj_cipher_key_id text,
+    ADD COLUMN email_cipher bytea,
+    ADD COLUMN email_cipher_key_id text,
+    ADD COLUMN phone_cipher bytea,
+    ADD COLUMN phone_cipher_key_id text;
+
+ALTER TABLE public.user_account
+    ADD COLUMN cpf_cipher bytea,
+    ADD COLUMN cpf_cipher_key_id text,
+    ADD COLUMN email_cipher bytea,
+    ADD COLUMN email_cipher_key_id text;
+
+ALTER TABLE recrutamento.banca_membro
+    ADD COLUMN cpf_cipher bytea,
+    ADD COLUMN cpf_cipher_key_id text;
+
+ALTER TABLE recrutamento.candidato
+    ADD COLUMN cpf_cipher bytea,
+    ADD COLUMN cpf_cipher_key_id text,
+    ADD COLUMN email_cipher bytea,
+    ADD COLUMN email_cipher_key_id text,
+    ADD COLUMN phone_cipher bytea,
+    ADD COLUMN phone_cipher_key_id text;
+
 COMMENT ON COLUMN hr.employee.bank_account_cipher IS 'encrypted_personal_data=true;classification=banking;source=R2-206';
 COMMENT ON COLUMN hr.employee.pis_pasep_cipher IS 'encrypted_personal_data=true;classification=social_program_identifier;source=R2-206';
 COMMENT ON COLUMN hr.employee.cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R3-032';
 COMMENT ON COLUMN hr.employee.rg_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R3-032';
 COMMENT ON COLUMN hr.employee.bank_agency_cipher IS 'encrypted_personal_data=true;classification=banking;source=R3-032';
+COMMENT ON COLUMN hr.employee.email_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
+COMMENT ON COLUMN hr.employee.phone_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
 COMMENT ON COLUMN hr.employee_complement_data.pis_pasep_cipher IS 'encrypted_personal_data=true;classification=social_program_identifier;source=R2-206';
 COMMENT ON COLUMN hr.employee_complement_data.rg_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R3-032';
 COMMENT ON COLUMN hr.employee_complement_data.voter_registration_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R3-032';
+COMMENT ON COLUMN hr.employee_complement_data.emergency_contact_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
 COMMENT ON COLUMN hr.employee_bank_account.account_number_cipher IS 'encrypted_personal_data=true;classification=banking;source=R2-206';
 COMMENT ON COLUMN hr.employee_bank_account.holder_cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R3-032';
 COMMENT ON COLUMN hr.employee_dependent.cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R3-032';
+COMMENT ON COLUMN fiscal.dirf_beneficiario.cpf_cnpj_cipher IS 'encrypted_personal_data=true;classification=tax_identifier;source=R4-20';
+COMMENT ON COLUMN hr.employee_alimony.beneficiary_cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R4-20';
+COMMENT ON COLUMN hr.employee_benefit_dependent.dependent_cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R4-20';
+COMMENT ON COLUMN hr.internship_record.intern_cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R4-20';
+COMMENT ON COLUMN hr.legal_responsible.cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R4-20';
+COMMENT ON COLUMN hr.medical_appointment.contact_phone_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
+COMMENT ON COLUMN hr.pension_grant.beneficiary_cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R4-20';
+COMMENT ON COLUMN hr.service_provider.cpf_cnpj_cipher IS 'encrypted_personal_data=true;classification=tax_identifier;source=R4-20';
+COMMENT ON COLUMN hr.service_provider.email_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
+COMMENT ON COLUMN hr.service_provider.phone_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
+COMMENT ON COLUMN public.user_account.cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R4-20';
+COMMENT ON COLUMN public.user_account.email_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
+COMMENT ON COLUMN recrutamento.banca_membro.cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R4-20';
+COMMENT ON COLUMN recrutamento.candidato.cpf_cipher IS 'encrypted_personal_data=true;classification=national_identifier;source=R4-20';
+COMMENT ON COLUMN recrutamento.candidato.email_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
+COMMENT ON COLUMN recrutamento.candidato.phone_cipher IS 'encrypted_personal_data=true;classification=contact;source=R4-20';
 
 CREATE FUNCTION hr.sgp_pii_encryption_key() RETURNS text
     LANGUAGE plpgsql
@@ -120,7 +199,7 @@ BEGIN
     jsonb_build_object(
       'column', p_column_name,
       'encrypted_at_rest', true,
-      'source', 'R2-206,R3-032'
+      'source', 'R2-206,R3-032,R4-20'
     )
   );
 
@@ -164,6 +243,18 @@ BEGIN
     NEW.bank_agency_cipher_key_id := CASE WHEN NEW.bank_agency_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
   END IF;
 
+  IF NEW.email IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.email IS DISTINCT FROM OLD.email OR NEW.email_cipher IS NULL) THEN
+    NEW.email_cipher := hr.sgp_try_encrypt_pii_text(NEW.email);
+    NEW.email_cipher_key_id := CASE WHEN NEW.email_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  IF NEW.phone IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.phone IS DISTINCT FROM OLD.phone OR NEW.phone_cipher IS NULL) THEN
+    NEW.phone_cipher := hr.sgp_try_encrypt_pii_text(NEW.phone);
+    NEW.phone_cipher_key_id := CASE WHEN NEW.phone_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
   RETURN NEW;
 END;
 $$;
@@ -189,6 +280,12 @@ BEGIN
      AND (TG_OP = 'INSERT' OR NEW.voter_registration IS DISTINCT FROM OLD.voter_registration OR NEW.voter_registration_cipher IS NULL) THEN
     NEW.voter_registration_cipher := hr.sgp_try_encrypt_pii_text(NEW.voter_registration);
     NEW.voter_registration_cipher_key_id := CASE WHEN NEW.voter_registration_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  IF NEW.emergency_contact IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.emergency_contact IS DISTINCT FROM OLD.emergency_contact OR NEW.emergency_contact_cipher IS NULL) THEN
+    NEW.emergency_contact_cipher := hr.sgp_try_encrypt_pii_text(NEW.emergency_contact::text);
+    NEW.emergency_contact_cipher_key_id := CASE WHEN NEW.emergency_contact_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
   END IF;
 
   RETURN NEW;
@@ -231,12 +328,196 @@ BEGIN
 END;
 $$;
 
+CREATE FUNCTION hr.sgp_encrypt_fiscal_dirf_beneficiario_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.cpf_cnpj IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.cpf_cnpj IS DISTINCT FROM OLD.cpf_cnpj OR NEW.cpf_cnpj_cipher IS NULL) THEN
+    NEW.cpf_cnpj_cipher := hr.sgp_try_encrypt_pii_text(NEW.cpf_cnpj);
+    NEW.cpf_cnpj_cipher_key_id := CASE WHEN NEW.cpf_cnpj_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_employee_alimony_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.beneficiary_cpf IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.beneficiary_cpf IS DISTINCT FROM OLD.beneficiary_cpf OR NEW.beneficiary_cpf_cipher IS NULL) THEN
+    NEW.beneficiary_cpf_cipher := hr.sgp_try_encrypt_pii_text(NEW.beneficiary_cpf);
+    NEW.beneficiary_cpf_cipher_key_id := CASE WHEN NEW.beneficiary_cpf_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_employee_benefit_dependent_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.dependent_cpf IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.dependent_cpf IS DISTINCT FROM OLD.dependent_cpf OR NEW.dependent_cpf_cipher IS NULL) THEN
+    NEW.dependent_cpf_cipher := hr.sgp_try_encrypt_pii_text(NEW.dependent_cpf);
+    NEW.dependent_cpf_cipher_key_id := CASE WHEN NEW.dependent_cpf_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_internship_record_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.intern_cpf IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.intern_cpf IS DISTINCT FROM OLD.intern_cpf OR NEW.intern_cpf_cipher IS NULL) THEN
+    NEW.intern_cpf_cipher := hr.sgp_try_encrypt_pii_text(NEW.intern_cpf);
+    NEW.intern_cpf_cipher_key_id := CASE WHEN NEW.intern_cpf_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_legal_responsible_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.cpf IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.cpf IS DISTINCT FROM OLD.cpf OR NEW.cpf_cipher IS NULL) THEN
+    NEW.cpf_cipher := hr.sgp_try_encrypt_pii_text(NEW.cpf);
+    NEW.cpf_cipher_key_id := CASE WHEN NEW.cpf_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_medical_appointment_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.contact_phone IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.contact_phone IS DISTINCT FROM OLD.contact_phone OR NEW.contact_phone_cipher IS NULL) THEN
+    NEW.contact_phone_cipher := hr.sgp_try_encrypt_pii_text(NEW.contact_phone);
+    NEW.contact_phone_cipher_key_id := CASE WHEN NEW.contact_phone_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_pension_grant_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.beneficiary_cpf IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.beneficiary_cpf IS DISTINCT FROM OLD.beneficiary_cpf OR NEW.beneficiary_cpf_cipher IS NULL) THEN
+    NEW.beneficiary_cpf_cipher := hr.sgp_try_encrypt_pii_text(NEW.beneficiary_cpf);
+    NEW.beneficiary_cpf_cipher_key_id := CASE WHEN NEW.beneficiary_cpf_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_service_provider_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.cpf_cnpj IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.cpf_cnpj IS DISTINCT FROM OLD.cpf_cnpj OR NEW.cpf_cnpj_cipher IS NULL) THEN
+    NEW.cpf_cnpj_cipher := hr.sgp_try_encrypt_pii_text(NEW.cpf_cnpj);
+    NEW.cpf_cnpj_cipher_key_id := CASE WHEN NEW.cpf_cnpj_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  IF NEW.email IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.email IS DISTINCT FROM OLD.email OR NEW.email_cipher IS NULL) THEN
+    NEW.email_cipher := hr.sgp_try_encrypt_pii_text(NEW.email);
+    NEW.email_cipher_key_id := CASE WHEN NEW.email_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  IF NEW.phone IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.phone IS DISTINCT FROM OLD.phone OR NEW.phone_cipher IS NULL) THEN
+    NEW.phone_cipher := hr.sgp_try_encrypt_pii_text(NEW.phone);
+    NEW.phone_cipher_key_id := CASE WHEN NEW.phone_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_user_account_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.cpf IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.cpf IS DISTINCT FROM OLD.cpf OR NEW.cpf_cipher IS NULL) THEN
+    NEW.cpf_cipher := hr.sgp_try_encrypt_pii_text(NEW.cpf);
+    NEW.cpf_cipher_key_id := CASE WHEN NEW.cpf_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  IF NEW.email IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.email IS DISTINCT FROM OLD.email OR NEW.email_cipher IS NULL) THEN
+    NEW.email_cipher := hr.sgp_try_encrypt_pii_text(NEW.email);
+    NEW.email_cipher_key_id := CASE WHEN NEW.email_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_recrutamento_banca_membro_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.cpf IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.cpf IS DISTINCT FROM OLD.cpf OR NEW.cpf_cipher IS NULL) THEN
+    NEW.cpf_cipher := hr.sgp_try_encrypt_pii_text(NEW.cpf);
+    NEW.cpf_cipher_key_id := CASE WHEN NEW.cpf_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE FUNCTION hr.sgp_encrypt_recrutamento_candidato_pii() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF NEW.cpf IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.cpf IS DISTINCT FROM OLD.cpf OR NEW.cpf_cipher IS NULL) THEN
+    NEW.cpf_cipher := hr.sgp_try_encrypt_pii_text(NEW.cpf);
+    NEW.cpf_cipher_key_id := CASE WHEN NEW.cpf_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  IF NEW.email IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.email IS DISTINCT FROM OLD.email OR NEW.email_cipher IS NULL) THEN
+    NEW.email_cipher := hr.sgp_try_encrypt_pii_text(NEW.email);
+    NEW.email_cipher_key_id := CASE WHEN NEW.email_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  IF NEW.phone IS NOT NULL
+     AND (TG_OP = 'INSERT' OR NEW.phone IS DISTINCT FROM OLD.phone OR NEW.phone_cipher IS NULL) THEN
+    NEW.phone_cipher := hr.sgp_try_encrypt_pii_text(NEW.phone);
+    NEW.phone_cipher_key_id := CASE WHEN NEW.phone_cipher IS NULL THEN NULL ELSE hr.sgp_pii_encryption_key_id() END;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
 CREATE TRIGGER employee_pii_encrypt
-    BEFORE INSERT OR UPDATE OF bank_account, pis_pasep, cpf, rg, bank_agency ON hr.employee
+    BEFORE INSERT OR UPDATE OF bank_account, pis_pasep, cpf, rg, bank_agency, email, phone ON hr.employee
     FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_employee_pii();
 
 CREATE TRIGGER employee_complement_pii_encrypt
-    BEFORE INSERT OR UPDATE OF pis_pasep, rg, voter_registration ON hr.employee_complement_data
+    BEFORE INSERT OR UPDATE OF pis_pasep, rg, voter_registration, emergency_contact ON hr.employee_complement_data
     FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_employee_complement_pii();
 
 CREATE TRIGGER employee_bank_account_pii_encrypt
@@ -246,6 +527,50 @@ CREATE TRIGGER employee_bank_account_pii_encrypt
 CREATE TRIGGER employee_dependent_pii_encrypt
     BEFORE INSERT OR UPDATE OF cpf ON hr.employee_dependent
     FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_employee_dependent_pii();
+
+CREATE TRIGGER fiscal_dirf_beneficiario_pii_encrypt
+    BEFORE INSERT OR UPDATE OF cpf_cnpj ON fiscal.dirf_beneficiario
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_fiscal_dirf_beneficiario_pii();
+
+CREATE TRIGGER employee_alimony_pii_encrypt
+    BEFORE INSERT OR UPDATE OF beneficiary_cpf ON hr.employee_alimony
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_employee_alimony_pii();
+
+CREATE TRIGGER employee_benefit_dependent_pii_encrypt
+    BEFORE INSERT OR UPDATE OF dependent_cpf ON hr.employee_benefit_dependent
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_employee_benefit_dependent_pii();
+
+CREATE TRIGGER internship_record_pii_encrypt
+    BEFORE INSERT OR UPDATE OF intern_cpf ON hr.internship_record
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_internship_record_pii();
+
+CREATE TRIGGER legal_responsible_pii_encrypt
+    BEFORE INSERT OR UPDATE OF cpf ON hr.legal_responsible
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_legal_responsible_pii();
+
+CREATE TRIGGER medical_appointment_pii_encrypt
+    BEFORE INSERT OR UPDATE OF contact_phone ON hr.medical_appointment
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_medical_appointment_pii();
+
+CREATE TRIGGER pension_grant_pii_encrypt
+    BEFORE INSERT OR UPDATE OF beneficiary_cpf ON hr.pension_grant
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_pension_grant_pii();
+
+CREATE TRIGGER service_provider_pii_encrypt
+    BEFORE INSERT OR UPDATE OF cpf_cnpj, email, phone ON hr.service_provider
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_service_provider_pii();
+
+CREATE TRIGGER user_account_pii_encrypt
+    BEFORE INSERT OR UPDATE OF cpf, email ON public.user_account
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_user_account_pii();
+
+CREATE TRIGGER recrutamento_banca_membro_pii_encrypt
+    BEFORE INSERT OR UPDATE OF cpf ON recrutamento.banca_membro
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_recrutamento_banca_membro_pii();
+
+CREATE TRIGGER recrutamento_candidato_pii_encrypt
+    BEFORE INSERT OR UPDATE OF cpf, email, phone ON recrutamento.candidato
+    FOR EACH ROW EXECUTE FUNCTION hr.sgp_encrypt_recrutamento_candidato_pii();
 
 CREATE VIEW hr.v_employee_pii_decrypted WITH (security_invoker='true') AS
 SELECT

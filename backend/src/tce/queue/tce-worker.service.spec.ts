@@ -3,6 +3,19 @@ import { TceRetryStrategyService } from './retry-strategy.service';
 import { TceWorkerService } from './tce-worker.service';
 
 describe('TceWorkerService', () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2026-05-04T00:00:00.000Z'));
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+    jest.useRealTimers();
+  });
+
   it('claims eligible jobs with FOR UPDATE SKIP LOCKED and marks success', async () => {
     const database = new FakeWorkerDatabase([
       {
@@ -54,6 +67,50 @@ describe('TceWorkerService', () => {
 
     await expect(service.runOnce(1)).resolves.toEqual([]);
     expect(database.claimSql).toContain('FOR UPDATE SKIP LOCKED');
+  });
+
+  it('uses the Nest schedule tick without overlapping TCE queue runs', async () => {
+    process.env.TCE_WORKER_POLL_MS = '5000';
+    const database = new FakeWorkerDatabase([]);
+    let releaseRun: (() => void) | undefined;
+    const service = new TceWorkerService(
+      database as never,
+      { submit: jest.fn() } as never,
+      new TceRetryStrategyService(),
+      {
+        assertCanSend: jest.fn(),
+        recordSuccess: jest.fn(),
+      } as unknown as TceCircuitBreakerService,
+      {
+        get: (key: string) =>
+          key === 'TCE_WORKER_ENABLED' ? 'true' : process.env[key],
+      } as never,
+    );
+    const runSpy = jest.spyOn(service, 'runOnce').mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          releaseRun = () => resolve([]);
+        }),
+    );
+
+    service.onModuleInit();
+    expect(runSpy).toHaveBeenCalledTimes(1);
+
+    await service.handleScheduleTick();
+    expect(runSpy).toHaveBeenCalledTimes(1);
+
+    releaseRun?.();
+    await Promise.resolve();
+
+    jest.advanceTimersByTime(4999);
+    await service.handleScheduleTick();
+    expect(runSpy).toHaveBeenCalledTimes(1);
+
+    jest.advanceTimersByTime(1);
+    const secondTick = service.handleScheduleTick();
+    expect(runSpy).toHaveBeenCalledTimes(2);
+    releaseRun?.();
+    await secondTick;
   });
 });
 

@@ -1,7 +1,7 @@
 import { ESocialWorkerService } from './esocial-worker.service';
 
 describe('ESocialWorkerService', () => {
-  it('processes pending events through the SOAP submission service', async () => {
+  it('processes pending events through the queue-backed submission service', async () => {
     const submitPendingBatch = jest.fn().mockResolvedValue({
       batchId: '00000000-0000-4000-8000-000000000001',
       tenantId: '00000000-0000-0000-0000-000000000100',
@@ -51,7 +51,7 @@ describe('ESocialWorkerService', () => {
     });
   });
 
-  it('reports retryable SOAP failures as failed discovered work', async () => {
+  it('reports retryable queue submission failures as failed discovered work', async () => {
     const service = new ESocialWorkerService(
       { configured: true, query: jest.fn() } as never,
       {
@@ -85,7 +85,7 @@ describe('ESocialWorkerService', () => {
         { consumeDue: jest.fn() } as never,
       ).status(),
     ).resolves.toMatchObject({
-      dispatchAdapter: 'soap-ws-security-mtls',
+      dispatchAdapter: 'queue-adapter-esocial-relay',
       checks: {
         database: 'not_configured',
         eventsByStatus: {},

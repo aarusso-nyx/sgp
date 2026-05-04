@@ -7,6 +7,7 @@ import { DatabaseModule } from '../database/database.module';
 import { DocumentsModule } from '../documents/documents.module';
 import { NomeacaoService } from '../recrutamento/nomeacao/nomeacao.service';
 import { Cnab240EmitService } from './cnab240/cnab240-emit.service';
+import { Cnab240RelayDispatchService } from './cnab240/cnab240-relay-dispatch.service';
 import { Cnab240ReturnController } from './cnab240/return/cnab240-return.controller';
 import { Cnab240ReturnParserService } from './cnab240/return/cnab240-return-parser.service';
 import { Cnab240ReturnProcessService } from './cnab240/return/cnab240-return-process.service';
@@ -37,6 +38,7 @@ import { SiaficModule } from './siafic/siafic.module';
   providers: [
     IntegrationsWorkerService,
     Cnab240EmitService,
+    Cnab240RelayDispatchService,
     Cnab240ReturnParserService,
     Cnab240ReturnProcessService,
     OccurrenceMapperService,

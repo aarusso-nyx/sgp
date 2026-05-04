@@ -91,6 +91,8 @@ Wave 7 worker runtimes expose queue and active-claim pressure before each long-r
 - `sgp_queue_depth{queue}` records queued work by worker name.
 - `sgp_worker_active_claims{worker}` records work already claimed or running by worker name.
 - `sgp_audit_events_emitted_total{controller,route}` records persisted audit events for mutation coverage.
+- `sgp_worker_polls_total{worker,status}` and `sgp_worker_poll_duration_seconds{worker,status}` record every scheduled worker poll.
+- `sgp_payroll_operations_total{operation,status}`, `sgp_esocial_submissions_total{event_type,status}`, and `sgp_dctfweb_transmissions_total{status}` cover the first payroll, eSocial, and fiscal domain operation counters promoted in R4-31.
 
 ### Worker Poll Policy
 
@@ -100,11 +102,30 @@ The long-running `sgp-esocial-worker`, `sgp-integrations-worker`, and `sgp-repor
 
 If queue depth is zero or active claims consume the configured capacity, the loop logs `poll skipped` and does not claim more work on that interval. One-shot and HTTP-triggered `pollOnce()` keep their existing behavior for operator-initiated drains and tests.
 
+Worker entrypoint cadence is owned by the shared NestJS `@nestjs/schedule` poll scheduler instead of ad hoc Node timers. Each runtime imports `ScheduleModule.forRoot()`, runs one immediate poll on startup, then evaluates the configured cadence on scheduled ticks while preventing overlapping polls inside a process. Multi-instance safety remains delegated to each worker's backpressure and database claim semantics.
+
+`sgp-report-worker` serializes claimed report generation per tenant and canonical report definition inside each worker process. Generated report object keys also include the `report_request.id`, so simultaneous same-tenant, same-definition requests write independent artifacts even when they target the same competence and output filename. Database claiming remains the `FOR UPDATE SKIP LOCKED` boundary for cross-process workers; no report-worker schema extension is required for this isolation model.
+
+R4-30 gives each long-running worker a local readiness probe at `/ready` and
+`/health/ready`. Default local ports are `3303` for `sgp-esocial-worker`, `3304`
+for `sgp-integrations-worker`, and `3306` for `sgp-report-worker`; the
+`*_READY_PORT` variables listed below override them. The probe is intentionally
+process-local and is disabled in Jest unless a spec enables it.
+
+R4-31 routes scheduled worker polls through the same dependency-free OTLP/HTTP
+exporter contract used by HTTP entrypoints. Sampling-rate and collector routing
+remain deployment configuration decisions; code only emits spans when the
+existing OTEL environment variables enable export.
+
 ### Configuration
 
 - `ESOCIAL_WORKER_POLL_LIMIT` defaults to `10`.
 - `INTEGRATIONS_WORKER_POLL_LIMIT` defaults to `10`.
 - `REPORT_WORKER_POLL_LIMIT` defaults to `10`.
+- `ESOCIAL_WORKER_READY_PORT` defaults to `3303`.
+- `INTEGRATIONS_WORKER_READY_PORT` defaults to `3304`.
+- `REPORT_WORKER_READY_PORT` defaults to `3306`.
+- `WORKER_READINESS_DISABLED=true` disables local worker readiness probes.
 
 The dashboard and alert configuration for audit coverage and worker pressure are governed under `docs/gov/observability/`.
 
@@ -124,7 +145,7 @@ Workers run as independently deployable NestJS entrypoints and must be observabl
 - `sgp-payroll-engine`: folia-first calculation runtime.
 - `tce-worker`: Postgres-backed TCE submission queue and circuit breaker.
 
-Each worker exposes Prometheus metrics through its runtime when an HTTP entrypoint is present. Polling workers must emit structured logs with `worker`, `tenant_id`, `job_id`, `attempt`, `status`, `duration_ms`, and `trace_id` when available.
+Each worker exposes Prometheus metrics through its runtime when an HTTP entrypoint is present. Polling workers must emit structured logs with `worker`, `tenant_id`, `job_id`, `attempt`, `status`, `duration_ms`, and `trace_id` when available. R4-30 enforces a handler lint rule that rejects raw `console.*` calls in backend runtime code and rejects default Nest `Logger` imports in request handlers; bootstrap-only logging remains centralized through `nestjs-pino`.
 
 ### SLAs
 

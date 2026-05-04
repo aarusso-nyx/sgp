@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { ESocialClosureState, ESocialFechamentoService } from './esocial-fechamento.service';
 
@@ -14,9 +14,8 @@ import { ESocialClosureState, ESocialFechamentoService } from './esocial-fechame
   templateUrl: './esocial-fechamento.html',
   styleUrl: './esocial-fechamento.scss',
 })
-export class ESocialFechamento implements OnInit, OnDestroy {
+export class ESocialFechamento implements OnInit {
   private readonly service = inject(ESocialFechamentoService);
-  private readonly destroy$ = new Subject<void>();
   year = 2026;
   month = 1;
   state: ESocialClosureState | null = null;
@@ -29,49 +28,37 @@ export class ESocialFechamento implements OnInit, OnDestroy {
     const now = new Date();
     this.year = now.getFullYear();
     this.month = now.getMonth() + 1;
-    this.load();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    void this.load();
   }
 
   get canClose(): boolean {
     return Boolean(this.state && this.state.pending.length === 0 && !this.closing);
   }
 
-  load(): void {
+  async load(): Promise<void> {
     this.loading = true;
     this.error = '';
-    this.service
-      .status(this.year, this.month)
-      .pipe(
-        finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (state) => (this.state = state),
-        error: () => (this.error = 'Nao foi possivel carregar o fechamento.'),
-      });
+    try {
+      this.state = await firstValueFrom(this.service.status(this.year, this.month));
+    } catch {
+      this.error = 'Nao foi possivel carregar o fechamento.';
+    } finally {
+      this.loading = false;
+    }
   }
 
-  close(): void {
+  async close(): Promise<void> {
     if (!this.canClose) return;
     this.closing = true;
     this.error = '';
-    this.service
-      .close(this.year, this.month)
-      .pipe(
-        finalize(() => (this.closing = false)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (result) => {
-          this.lastHash = result.xmlHash;
-          this.state = result.state;
-        },
-        error: () => (this.error = 'Nao foi possivel fechar a competencia.'),
-      });
+    try {
+      const result = await firstValueFrom(this.service.close(this.year, this.month));
+      this.lastHash = result.xmlHash;
+      this.state = result.state;
+    } catch {
+      this.error = 'Nao foi possivel fechar a competencia.';
+    } finally {
+      this.closing = false;
+    }
   }
 }

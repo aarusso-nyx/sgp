@@ -1,0 +1,37 @@
+# Hotspots
+
+Round: 3
+Baseline: `c66a7b9`
+
+| File                                                                                                                         | Commits | +LOC  | -LOC  | Current LOC | Owner module                                                  |
+| ---------------------------------------------------------------------------------------------------------------------------- | ------- | ----- | ----- | ----------- | ------------------------------------------------------------- |
+| docs/gov/audit/inv/round-3/schema-digest.json                                                                                | 2       | 40050 | 40050 | 40051       | docs/gov/audit                                                |
+| frontend/src/app/core/api/generated/openapi-core.json                                                                        | 1       | 51217 | 4976  | 67297       | frontend/admin                                                |
+| docs/refs/legal/law/09-www-planalto-gov-br-ccivil-03-constituicao-constituicaocompilado.md                                   | 1       | 26871 | 0     | 26872       | docs/refs/legal                                               |
+| docs/refs/tce/law/05-www-planalto-gov-br-ccivil-03-constituicao-constituicaocompilado.md                                     | 1       | 26871 | 0     | 26872       | docs/refs/tce                                                 |
+| docs/refs/legal/law/01-www-planalto-gov-br-ccivil-03-decreto-lei-del5452compilado.md                                         | 1       | 25554 | 0     | 25555       | docs/refs/legal                                               |
+| docs/refs/esocial/law/03-www-gov-br-esocial-pt-br-documentacao-tecnica-leiautes-esocial-versao-s-1-3-nt-06-2026-tabelas.md   | 1       | 22030 | 0     | 22031       | docs/refs/esocial                                             |
+| docs/eng/platform.md                                                                                                         | 1       | 15228 | 0     | 15229       | docs/eng/platform.md                                          |
+| docs/refs/esocial/law/02-www-gov-br-esocial-pt-br-documentacao-tecnica-manuais-mos-s-1-3-consolidada-ate-a-no-s-1-3-08-20.md | 1       | 14810 | 0     | 14811       | docs/refs/esocial                                             |
+| docs/gov/audit/inv/round-3/test-coverage-map.json                                                                            | 2       | 6405  | 6405  | 4343        | docs/gov/audit                                                |
+| docs/refs/legal/law/16-www-planalto-gov-br-ccivil-03-ato2019-2022-2021-lei-l14133.md                                         | 1       | 12489 | 0     | 12490       | docs/refs/legal                                               |
+| docs/refs/legal/law/10-www-planalto-gov-br-ccivil-03-ato2015-2018-2015-lei-l13105compilada.md                                | 1       | 10826 | 0     | 10827       | docs/refs/legal                                               |
+| docs/gov/audit/inv/round-3/api-surface.json                                                                                  | 2       | 4517  | 4517  | 4518        | docs/gov/audit                                                |
+| docs/refs/legal/law/13-www-gov-br-trabalho-e-emprego-pt-br-assuntos-legislacao-portarias-1-portarias-vigentes-3-pdfport.md   | 1       | 8962  | 0     | 8963        | docs/refs/legal                                               |
+| docs/refs/legal/law/04-www-planalto-gov-br-ccivil-03-leis-l8112compilado.md                                                  | 1       | 7465  | 0     | 7466        | docs/refs/legal                                               |
+| frontend/portal/src/app/core/api/generated/openapi-portal.json                                                               | 1       | 5383  | 92    | 7588        | frontend/portal                                               |
+| frontend/src/app/core/api/generated/openapi-portal.json                                                                      | 1       | 5383  | 92    | 7588        | frontend/admin                                                |
+| docs/refs/tce/law/02-www-planalto-gov-br-ccivil-03-leis-lcp-lcp101.md                                                        | 1       | 4513  | 0     | 4514        | docs/refs/tce                                                 |
+| docs/eng/experience.md                                                                                                       | 1       | 4402  | 0     | 4403        | docs/eng/experience.md                                        |
+| package-lock.json                                                                                                            | 1       | 2570  | 1117  | 19348       | package-lock.json                                             |
+| docs/refs/legal/law/03-www-planalto-gov-br-ccivil-03-leis-l8036compilada.md                                                  | 1       | 3527  | 0     | 3528        | docs/refs/legal                                               |
+| docs/refs/legal/law/11-www-planalto-gov-br-ccivil-03-constituicao-emendas-emc-emc103.md                                      | 1       | 2981  | 0     | 2982        | docs/refs/legal                                               |
+| docs/eng/{63-guia-migracao-legado.md => quality-migration.md}                                                                | 1       | 2464  | 131   | 0           | docs/eng/{63-guia-migracao-legado.md => quality-migration.md} |
+| docs/eng/62-estrategia-testes.md                                                                                             | 3       | 27    | 2323  | 0           | docs/eng/62-estrategia-testes.md                              |
+| docs/{eng/69-api-route-alignment.json => gov/generated/api/route-alignment.json}                                             | 1       | 1015  | 1162  | 0           | docs/{eng/69-api-route-alignment.json => gov                  |
+| docs/eng/32-diagramas-er.md                                                                                                  | 1       | 0     | 2171  | 0           | docs/eng/32-diagramas-er.md                                   |
+| docs/refs/tce/law/03-www-planalto-gov-br-ccivil-03-ato2019-2022-2020-decreto-d10540.md                                       | 1       | 2037  | 0     | 2038        | docs/refs/tce                                                 |
+| docs/eng/41-arquitetura-sistema.md                                                                                           | 1       | 0     | 2033  | 0           | docs/eng/41-arquitetura-sistema.md                            |
+| docs/refs/lgpd/law/06-www-planalto-gov-br-ccivil-03-ato2015-2018-2018-lei-l13709compilado.md                                 | 1       | 1997  | 0     | 1998        | docs/refs/lgpd                                                |
+| docs/eng/52-manual-usuario.md                                                                                                | 1       | 0     | 1914  | 0           | docs/eng/52-manual-usuario.md                                 |
+| docs/eng/10-uc-administracao-seguranca.md                                                                                    | 1       | 0     | 1794  | 0           | docs/eng/10-uc-administracao-seguranca.md                     |

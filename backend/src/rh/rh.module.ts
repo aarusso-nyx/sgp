@@ -5,6 +5,14 @@ import { AuthModule } from '../auth/auth.module';
 import { ConsultasModule } from '../consultas/consultas.module';
 import { DatabaseModule } from '../database/database.module';
 import { EmployeesController } from './employees/employees.controller';
+import { AccumulationService } from './employees/accumulation.service';
+import { EmployeeAbonoPermanenciaService } from './employees/employee-abono-permanencia.service';
+import { EmployeeCadastralChangesService } from './employees/employee-cadastral-changes.service';
+import { EmployeeContractRegimeService } from './employees/employee-contract-regime.service';
+import { EmployeeLifecycleService } from './employees/employee-lifecycle.service';
+import { EmployeeReferenceDataService } from './employees/employee-reference-data.service';
+import { EmployeeRegistryService } from './employees/employee-registry.service';
+import { EmployeeVersionService } from './employees/employee-version.service';
 import { EmployeesService } from './employees/employees.service';
 import { HistoryService } from './employees/history.service';
 import { ServiceTimeService } from './employees/service-time.service';
@@ -38,6 +46,14 @@ import { OrganicDefinitionService } from './organic-definitions/organic-definiti
   ],
   providers: [
     EmployeesService,
+    AccumulationService,
+    EmployeeAbonoPermanenciaService,
+    EmployeeCadastralChangesService,
+    EmployeeContractRegimeService,
+    EmployeeLifecycleService,
+    EmployeeReferenceDataService,
+    EmployeeRegistryService,
+    EmployeeVersionService,
     HistoryService,
     ServiceTimeService,
     RhWorkflowsService,

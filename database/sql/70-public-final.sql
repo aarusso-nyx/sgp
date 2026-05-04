@@ -527,4 +527,10 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 
 COMMENT ON TABLE public.audit_event IS 'Immutable audit trail for all mutating SGP transactions. Events are append-only, protected from UPDATE/DELETE, and partitioned monthly by occurred_at. Destructive retention/drop/detach policy is owner-decision gated.';
 
+COMMENT ON TABLE public.tenant IS 'R4-72 global tenant registry. Non-RLS by design: this table is the tenant boundary anchor used by tenant-scoped foreign keys and bootstrap context, not tenant-owned row data.';
+
+COMMENT ON TABLE public.permission IS 'R4-72 global RBAC permission catalog. Non-tenant-scoped: rows define application permission keys shared by every tenant and contain no tenant data or PII.';
+
+COMMENT ON TABLE public.profile_permission IS 'R4-72 global RBAC profile-permission catalog. Non-tenant-scoped: rows define permission grants for shared baseline profiles and contain no tenant data or PII.';
+
 COMMENT ON COLUMN public.tax_rate.rate_percent IS 'Legal rate/factor value; numeric(18,6); rounded half-away-from-zero only at policy boundary.';

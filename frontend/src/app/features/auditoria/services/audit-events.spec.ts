@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { vi } from 'vitest';
 
 import { OpenApiClient } from '../../../core/api/generated/openapi-client';
@@ -26,8 +26,8 @@ describe('AuditEvents', () => {
     service = TestBed.inject(AuditEvents);
   });
 
-  it('lists audit events with filters', () => {
-    service.list({ actor: 'tester', action: 'UPDATE' }).subscribe();
+  it('lists audit events with filters', async () => {
+    await firstValueFrom(service.list({ actor: 'tester', action: 'UPDATE' }));
 
     expect(api.getApiV1AuditoriaLogs).toHaveBeenCalledWith({
       actor: 'tester',
@@ -35,11 +35,11 @@ describe('AuditEvents', () => {
     });
   });
 
-  it('loads derived facets and requests reports', () => {
-    service.actionFacets({ tableName: 'employee' }).subscribe();
-    service.tableFacets().subscribe();
-    service.userFacets().subscribe();
-    service.requestReport({ actor: 'tester' }).subscribe();
+  it('loads derived facets and requests reports', async () => {
+    await firstValueFrom(service.actionFacets({ tableName: 'employee' }));
+    await firstValueFrom(service.tableFacets());
+    await firstValueFrom(service.userFacets());
+    await firstValueFrom(service.requestReport({ actor: 'tester' }));
 
     expect(api.getApiV1AuditoriaLogs).toHaveBeenCalled();
     expect(api.postApiV1AuditoriaExportacoes).toHaveBeenCalledWith({

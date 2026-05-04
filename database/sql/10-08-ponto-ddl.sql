@@ -170,6 +170,7 @@ CREATE TABLE ponto.absence_justification (
     medical_leave_id uuid,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    -- R4-71: kept as enum-typed state invariant; status is already ponto.absence_justification_status and this CHECK ties terminal decisions to approver metadata.
     CONSTRAINT absence_justification_decision_chk CHECK ((((status = ANY (ARRAY['APPROVED'::ponto.absence_justification_status, 'REJECTED'::ponto.absence_justification_status])) AND (approved_by_user_id IS NOT NULL) AND (decided_at IS NOT NULL)) OR (status = ANY (ARRAY['REQUESTED'::ponto.absence_justification_status, 'CANCELLED'::ponto.absence_justification_status])))),
     CONSTRAINT absence_justification_period_chk CHECK ((absence_end >= absence_start))
 );

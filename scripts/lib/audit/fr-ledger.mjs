@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { createHash } from 'node:crypto';
+import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import {
@@ -16,8 +18,72 @@ import {
 const usage = `
 Usage: node scripts/audit.mjs fr [--round <n>] [--dry-run] [--output-root <path>] [--repo-root <path>]
 
-Refresh docs/gov/audit/functional-requisites.md from docs/gov/evidence/implementation-status.md and emit the round FR delta.
+Refresh docs/gov/audit/functional-requisites.md from docs/eng/domains/*.md and emit the round FR delta.
 `;
+
+const keywordStopwords = new Set([
+  'about',
+  'above',
+  'admin',
+  'after',
+  'ainda',
+  'antes',
+  'api',
+  'apis',
+  'app',
+  'application',
+  'assim',
+  'authority',
+  'backend',
+  'cada',
+  'caso',
+  'como',
+  'comum',
+  'contra',
+  'controller',
+  'data',
+  'deve',
+  'devem',
+  'docs',
+  'domain',
+  'endpoint',
+  'endpoints',
+  'entity',
+  'esse',
+  'esta',
+  'este',
+  'frontend',
+  'gestao',
+  'http',
+  'local',
+  'model',
+  'modelo',
+  'module',
+  'modulo',
+  'operacional',
+  'para',
+  'portal',
+  'publico',
+  'quando',
+  'read',
+  'regra',
+  'regras',
+  'request',
+  'response',
+  'route',
+  'schema',
+  'service',
+  'status',
+  'table',
+  'tenant',
+  'tests',
+  'tipo',
+  'toda',
+  'todo',
+  'todos',
+  'uses',
+  'write',
+]);
 
 const context = await createContext(process.argv.slice(2), usage);
 const refresh = await buildFunctionalRequisites(context.repoRoot, context.auditRoot, context.round);
@@ -33,20 +99,19 @@ await writeText(join(context.auditRoot, 'functional-requisites.md'), refresh.led
 });
 
 export async function buildFunctionalRequisites(repoRoot, auditRoot, round) {
-  const statusPath = join(repoRoot, 'docs', 'eng', '99-implementation-status.md');
-  const currentStatus = await readText(statusPath);
-  const currentFacts = extractStatusFacts(currentStatus);
+  const currentFacts = await extractDomainFacts(repoRoot);
   const ledgerPath = join(auditRoot, 'functional-requisites.md');
   const existingLedger = await readText(ledgerPath);
   const existingRows = normalizeLedgerRows(firstTableRows(existingLedger));
   const existingBySlug = new Map(existingRows.map((row) => [slug(row.requirement), row]));
+  const existingById = new Map(existingRows.map((row) => [row.id, row]));
 
-  const rows = currentFacts.map((fact, index) => {
-    const prior = existingBySlug.get(slug(fact.requirement));
+  const rows = currentFacts.map((fact) => {
+    const prior = existingById.get(fact.id) ?? existingBySlug.get(slug(fact.requirement));
     return {
-      id: prior?.id || `FR-${String(index + 1).padStart(3, '0')}`,
+      id: fact.id,
       requirement: fact.requirement,
-      status: fact.status,
+      status: prior?.status || fact.status,
       evidence: fact.evidence,
       notes: prior?.notes || fact.notes || '-',
     };
@@ -72,6 +137,162 @@ export async function buildFunctionalRequisites(repoRoot, auditRoot, round) {
     ledgerMarkdown: renderLedger(round, rows),
     deltaMarkdown: renderDelta(round, deltaRows),
   };
+}
+
+async function extractDomainFacts(repoRoot) {
+  const domainsRoot = join(repoRoot, 'docs', 'eng', 'domains');
+  let entries;
+  try {
+    entries = await readdir(domainsRoot, { withFileTypes: true });
+  } catch {
+    return fallbackStatusFacts(repoRoot);
+  }
+
+  const facts = [];
+  const usedIds = new Set();
+  const domainFiles = entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .map((entry) => entry.name)
+    .sort((left, right) => left.localeCompare(right));
+
+  for (const fileName of domainFiles) {
+    const path = join(domainsRoot, fileName);
+    const markdown = await readText(path);
+    facts.push(...extractDomainHeadingFacts(repoRoot, path, fileName, markdown, usedIds));
+  }
+
+  return facts.length > 0 ? facts : fallbackStatusFacts(repoRoot);
+}
+
+function extractDomainHeadingFacts(repoRoot, path, fileName, markdown, usedIds) {
+  const lines = markdown.split(/\r?\n/);
+  const domainTitle = extractDomainTitle(lines, fileName);
+  const seenHeadings = new Set();
+  const facts = [];
+
+  lines.forEach((line, index) => {
+    const match = /^##\s+(.+?)\s*$/.exec(line);
+    if (!match) return;
+
+    const heading = stripMarkdown(match[1].replace(/\s+#+$/, '').trim());
+    if (!heading || heading === 'Merged Artifact Index') return;
+
+    const headingSlug = slug(heading);
+    if (!headingSlug || seenHeadings.has(headingSlug)) return;
+    seenHeadings.add(headingSlug);
+
+    const sectionMarkdown = sectionAfterHeading(lines, index, headingSlug);
+    const keywords = extractSectionKeywords(sectionMarkdown, `${domainTitle} ${heading}`);
+    const keywordSuffix = keywords.length > 0 ? ` (${keywords.join(' ')})` : '';
+    facts.push({
+      id: stableFrId(fileName, headingSlug, usedIds),
+      requirement: `${domainTitle}: ${heading}${keywordSuffix}`,
+      status: 'TODO',
+      evidence: `${repoRelativePath(repoRoot, path)}:${index + 1}`,
+      notes: 'Generated from docs/eng domain heading.',
+    });
+  });
+
+  return facts;
+}
+
+function sectionAfterHeading(lines, headingIndex, headingSlug) {
+  const body = [];
+  for (let index = headingIndex + 1; index < lines.length; index += 1) {
+    const headingMatch = /^##\s+(.+?)\s*$/.exec(lines[index]);
+    if (headingMatch) {
+      const nextHeadingSlug = slug(stripMarkdown(headingMatch[1].replace(/\s+#+$/, '').trim()));
+      if (nextHeadingSlug === headingSlug) continue;
+      break;
+    }
+    body.push(lines[index]);
+  }
+  return body.join('\n');
+}
+
+function extractSectionKeywords(markdown, existingText) {
+  const existingTerms = new Set(identifierTokens(existingText));
+  const candidates = [];
+
+  for (const match of markdown.matchAll(/`([^`]+)`/g)) {
+    candidates.push(...identifierTokens(match[1]));
+  }
+  for (const match of markdown.matchAll(/[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9_.:/#-]{3,}/g)) {
+    candidates.push(...identifierTokens(match[0]));
+  }
+
+  const keywords = [];
+  for (const candidate of candidates) {
+    if (
+      candidate.length < 4 ||
+      existingTerms.has(candidate) ||
+      keywordStopwords.has(candidate) ||
+      keywords.includes(candidate)
+    ) {
+      continue;
+    }
+    keywords.push(candidate);
+    if (keywords.length >= 6) break;
+  }
+
+  return keywords;
+}
+
+function identifierTokens(value) {
+  return String(value ?? '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .split(/[^A-Za-z0-9]+/)
+    .map((part) => part.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+async function fallbackStatusFacts(repoRoot) {
+  const statusPath = join(repoRoot, 'docs', 'eng', '99-implementation-status.md');
+  return extractStatusFacts(await readText(statusPath));
+}
+
+function extractDomainTitle(lines, fileName) {
+  const titleLine = lines.find((line) => /^#\s+/.test(line));
+  const title = titleLine
+    ? stripMarkdown(
+        titleLine
+          .replace(/^#\s+/, '')
+          .replace(/\s+Domain Authority$/i, '')
+          .trim(),
+      )
+    : '';
+  if (title) return title;
+  return fileName
+    .replace(/\.md$/i, '')
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function stableFrId(fileName, headingSlug, usedIds) {
+  const domainCode = domainCodeFor(fileName);
+  const seed = `${fileName}:${headingSlug}`;
+  const digest = createHash('sha1').update(seed).digest('hex').toUpperCase();
+  for (const length of [6, 8, 10, 12]) {
+    const id = `FR-${domainCode}-${digest.slice(0, length)}`;
+    if (!usedIds.has(id)) {
+      usedIds.add(id);
+      return id;
+    }
+  }
+  throw new Error(`Could not assign a unique FR-ID for ${seed}`);
+}
+
+function domainCodeFor(fileName) {
+  const words = slug(fileName.replace(/\.md$/i, '')).split('-').filter(Boolean);
+  const initials = words.map((word) => word[0]).join('');
+  return (initials || 'GEN').toUpperCase().slice(0, 4);
+}
+
+function repoRelativePath(repoRoot, path) {
+  return path.replace(`${repoRoot}/`, '');
 }
 
 function extractStatusFacts(markdown) {
@@ -139,7 +360,13 @@ function normalizeLedgerRows(rows) {
   return rows
     .map((row) => ({
       id: row['FR-ID'] || row.ID || row.id || '',
-      requirement: row.Requirement || row.Requisite || row.requirement || '',
+      requirement:
+        row.Requirement ||
+        row.Description ||
+        row.description ||
+        row.Requisite ||
+        row.requirement ||
+        '',
       status: (row.Status || row.status || '').toUpperCase(),
       evidence: row.Evidence || row.evidence || '',
       notes: row.Notes || row.notes || '-',
@@ -156,7 +383,7 @@ function renderLedger(round, rows) {
   return [
     '# Functional Requisites',
     '',
-    `Last refreshed from \`docs/gov/evidence/implementation-status.md\` for round ${round}.`,
+    `Last refreshed from \`docs/eng/domains/*.md\` for round ${round}.`,
     '',
     markdownTable(
       ['FR-ID', 'Requirement', 'Status', 'Evidence', 'Notes'],

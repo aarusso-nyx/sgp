@@ -6,6 +6,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Interval } from '@nestjs/schedule';
 import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../../common/request-context/request-context.store';
@@ -42,7 +43,9 @@ export interface TceWorkerRunResult {
 @Injectable()
 export class TceWorkerService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(TceWorkerService.name);
-  private timer?: NodeJS.Timeout;
+  private running = false;
+  private started = false;
+  private nextRunAt = 0;
 
   constructor(
     private readonly databaseService: DatabaseService,
@@ -53,18 +56,19 @@ export class TceWorkerService implements OnModuleInit, OnModuleDestroy {
   ) {}
 
   onModuleInit(): void {
-    if (this.configService.get<string>('TCE_WORKER_ENABLED') !== 'true') return;
-    this.timer = setInterval(() => {
-      this.runOnce().catch((error: unknown) => {
-        const message = error instanceof Error ? error.message : String(error);
-        this.logger.warn(`TCE worker run failed: ${message}`);
-      });
-    }, this.pollIntervalMs());
-    this.timer.unref?.();
+    this.started =
+      this.configService.get<string>('TCE_WORKER_ENABLED') === 'true';
+    if (this.started) void this.runScheduled(Date.now());
   }
 
   onModuleDestroy(): void {
-    if (this.timer) clearInterval(this.timer);
+    this.started = false;
+  }
+
+  @Interval(250)
+  async handleScheduleTick(): Promise<void> {
+    if (!this.started) return;
+    await this.runScheduled(Date.now());
   }
 
   async runOnce(limit = this.claimLimit()): Promise<TceWorkerRunResult[]> {
@@ -428,6 +432,20 @@ export class TceWorkerService implements OnModuleInit, OnModuleDestroy {
       this.configService.get<string>('TCE_WORKER_POLL_MS') ?? 10_000,
     );
     return Number.isInteger(configured) && configured > 0 ? configured : 10_000;
+  }
+
+  private async runScheduled(now: number): Promise<void> {
+    if (this.running || now < this.nextRunAt) return;
+    this.running = true;
+    this.nextRunAt = now + this.pollIntervalMs();
+    try {
+      await this.runOnce();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.warn(`TCE worker run failed: ${message}`);
+    } finally {
+      this.running = false;
+    }
   }
 
   private workerId(): string {

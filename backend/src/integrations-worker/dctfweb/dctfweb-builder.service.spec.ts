@@ -1,4 +1,7 @@
 /* eslint-disable */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import {
   PreconditionFailedException,
   ServiceUnavailableException,
@@ -10,6 +13,11 @@ import {
   buildDctfwebXml,
   DctfwebBuilderService,
 } from './dctfweb-builder.service';
+
+const DCTFWEB_CSLL_GOLDEN_ROOT = join(
+  __dirname,
+  '../../../../tests/backend/golden/dctfweb-csll-v01',
+);
 
 describe('DctfwebBuilderService', () => {
   it('builds the DCTFWeb XML golden for a fictitious competence', () => {
@@ -36,8 +44,7 @@ describe('DctfwebBuilderService', () => {
       ],
     });
 
-    expect(xml).toMatchInlineSnapshot(`
-"<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml).toBe(`<?xml version="1.0" encoding="UTF-8"?>
 <DCTFWeb xmlns="urn:br:gov:rfb:dctfweb:sgp:v1">
   <declaracao Id="DCTFb11abd46b6ac6a2cb8d7b5bfb4bdb429">
     <tenantId>00000000-0000-0000-0000-00000000f501</tenantId>
@@ -48,8 +55,19 @@ describe('DctfwebBuilderService', () => {
     <debito sourceEvent="S5012" sourceRunId="00000000-0000-4000-8000-000000005012" codigo="0561" base="500.00" valor="50.00" />
     </totalizadores>
   </declaracao>
-</DCTFWeb>"
-`);
+</DCTFWeb>`);
+  });
+
+  it('matches the CSLL adicional DCTFWeb golden fixture byte-for-byte', () => {
+    const input = JSON.parse(
+      readFileSync(join(DCTFWEB_CSLL_GOLDEN_ROOT, 'input.json'), 'utf8'),
+    ) as Parameters<typeof buildDctfwebXml>[0];
+    const expectedXml = readFileSync(
+      join(DCTFWEB_CSLL_GOLDEN_ROOT, 'expected.xml'),
+      'utf8',
+    ).trimEnd();
+
+    expect(buildDctfwebXml(input)).toBe(expectedXml);
   });
 
   it('requires retificadora to reference the original declaration', () => {
@@ -155,6 +173,7 @@ describe('DctfwebBuilderService', () => {
               codigo: '1082-01',
               base: '1000,50',
               valor: '200.25',
+              csllAdicionalAmount: '12,34',
               source_run_id: 'bad-id',
             },
           ],
@@ -166,6 +185,7 @@ describe('DctfwebBuilderService', () => {
         debitCode: '1082-01',
         baseAmount: '1000.50',
         amount: '200.25',
+        csllAdicionalAmount: '12.34',
       },
     ]);
     expect(
@@ -174,7 +194,7 @@ describe('DctfwebBuilderService', () => {
         source_event_recibo: 'rec-2',
         payload: {
           rawXml:
-            '<infoCRIRRF><tpCR>0561</tpCR><vrBcCP>500.00</vrBcCP><vrCR>50.00</vrCR></infoCRIRRF>',
+            '<infoCRIRRF><tpCR>0561</tpCR><vrBcCP>500.00</vrBcCP><vrCR>50.00</vrCR><vrCsllAdicional>5.25</vrCsllAdicional></infoCRIRRF>',
         },
       }),
     ).toMatchObject([
@@ -183,6 +203,7 @@ describe('DctfwebBuilderService', () => {
         debitCode: '0561',
         baseAmount: '500.00',
         amount: '50.00',
+        csllAdicionalAmount: '5.25',
       },
     ]);
     expect(
@@ -231,21 +252,25 @@ describe('DctfwebBuilderService', () => {
         .mockResolvedValueOnce({ rows: [{ id: 'decl-1' }] })
         .mockResolvedValueOnce({ rows: [] }),
     };
-    const query = jest.fn().mockResolvedValueOnce([
-      {
-        kind: 'S-5011',
-        source_event_recibo: 'rec-1',
-        payload: {
-          items: [
-            {
-              debitCode: '1082-01',
-              baseAmount: '1000.00',
-              amount: '200.00',
-            },
-          ],
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          kind: 'S-5011',
+          source_event_recibo: 'rec-1',
+          payload: {
+            items: [
+              {
+                debitCode: '1082-01',
+                baseAmount: '1000.00',
+                amount: '200.00',
+                csllAdicionalAmount: '10.00',
+              },
+            ],
+          },
         },
-      },
-    ]);
+      ])
+      .mockResolvedValueOnce([]);
     const service = new DctfwebBuilderService({
       configured: true,
       query,
@@ -260,6 +285,10 @@ describe('DctfwebBuilderService', () => {
       ),
     ).resolves.toEqual({ id: 'decl-1' });
     expect(client.query).toHaveBeenCalledTimes(2);
+    expect(client.query).toHaveBeenLastCalledWith(
+      expect.stringContaining('csll_adicional_amount'),
+      expect.arrayContaining(['10.00']),
+    );
 
     await expect(
       RequestContextStore.run(

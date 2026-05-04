@@ -10,8 +10,17 @@ import { AuthCallback } from './features/security/pages/auth-callback/auth-callb
 import { Forbidden } from './features/security/pages/forbidden/forbidden';
 import { Shell } from './shared-platform/shell/shell';
 
+const explicitModuleRouteKeys = new Set<LegacyModuleKey>([
+  'gestao',
+  'rh',
+  // R4-50: convenio and relatorios are accepted docs/eng surfaces, so their
+  // feature directories stay as thin route stubs over the shared admin page.
+  'convenio',
+  'relatorios',
+]);
+
 const adminFeatureRoutes = ADMIN_MODULES.filter(
-  (module) => module.key !== 'gestao' && module.key !== 'rh',
+  (module) => !explicitModuleRouteKeys.has(module.key),
 ).map((module) => ({
   path: module.routePath.replace(/^\//, ''),
   children: buildModuleRouteGroup(module.key as LegacyModuleKey, AdminFeaturePage, {
@@ -109,6 +118,16 @@ export const routes: Routes = [
       {
         path: 'rh',
         loadChildren: () => import('./features/rh/rh-module').then((m) => m.RhModule),
+      },
+      {
+        path: 'convenio',
+        loadChildren: () =>
+          import('./features/convenio/convenio-module').then((m) => m.ConvenioModule),
+      },
+      {
+        path: 'relatorios',
+        loadChildren: () =>
+          import('./features/relatorio/relatorio-module').then((m) => m.RelatorioModule),
       },
       {
         path: 'recrutamento/concursos',

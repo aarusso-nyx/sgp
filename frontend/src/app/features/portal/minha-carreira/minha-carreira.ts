@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ApiClient } from '../../../core/api/api-client';
 
 interface CareerTrailStep {
@@ -63,8 +63,7 @@ interface TerminationTerm {
   templateUrl: './minha-carreira.html',
   styleUrl: './minha-carreira.scss',
 })
-export class PortalMinhaCarreira implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>();
+export class PortalMinhaCarreira implements OnInit {
   private readonly api = inject(ApiClient);
 
   trail?: CareerTrail;
@@ -73,43 +72,23 @@ export class PortalMinhaCarreira implements OnInit, OnDestroy {
   error = '';
 
   ngOnInit(): void {
-    this.api
-      .get<CareerTrail>('/api/v1/portal/minha-carreira')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (trail) => {
-          this.trail = trail;
-        },
-        error: () => {
-          this.error = 'Nao foi possivel carregar a trilha de carreira.';
-        },
-      });
-    this.api
-      .get<VacationPayslip[]>('/api/v1/portal/contracheques/ferias')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (payslips) => {
-          this.vacationPayslips = payslips;
-        },
-        error: () => {
-          this.vacationPayslips = [];
-        },
-      });
-    this.api
-      .get<TerminationTerm[]>('/api/v1/portal/termos-rescisao')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (terms) => {
-          this.terminationTerms = terms;
-        },
-        error: () => {
-          this.terminationTerms = [];
-        },
-      });
+    void this.load();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private async load(): Promise<void> {
+    const [trail, vacationPayslips, terminationTerms] = await Promise.allSettled([
+      firstValueFrom(this.api.get<CareerTrail>('/api/v1/portal/minha-carreira')),
+      firstValueFrom(this.api.get<VacationPayslip[]>('/api/v1/portal/contracheques/ferias')),
+      firstValueFrom(this.api.get<TerminationTerm[]>('/api/v1/portal/termos-rescisao')),
+    ]);
+
+    if (trail.status === 'fulfilled') {
+      this.trail = trail.value;
+    } else {
+      this.error = 'Nao foi possivel carregar a trilha de carreira.';
+    }
+
+    this.vacationPayslips = vacationPayslips.status === 'fulfilled' ? vacationPayslips.value : [];
+    this.terminationTerms = terminationTerms.status === 'fulfilled' ? terminationTerms.value : [];
   }
 }

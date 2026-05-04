@@ -101,7 +101,7 @@ CREATE POLICY security_incident_select ON lgpd.security_incident FOR SELECT USIN
 
 CREATE POLICY security_incident_write ON lgpd.security_incident USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.write'::text])));
 
-COMMENT ON TABLE lgpd.legal_basis_rule IS 'R2-40 LGPD legal-basis registry for PII-bearing SGP data flows. ROPA entries are implemented separately in R2-39.';
+COMMENT ON TABLE lgpd.legal_basis_rule IS 'R2-40/R4-72 LGPD legal-basis registry for PII-bearing SGP data flows. Non-tenant-scoped: rows are shared legal-basis rules; tenant-specific processing records remain in RLS-protected lgpd.ropa_entry.';
 
 COMMENT ON TABLE lgpd.ropa_entry IS 'R2-39 LGPD Record of Processing Activities entries linked to lgpd.legal_basis_rule.';
 

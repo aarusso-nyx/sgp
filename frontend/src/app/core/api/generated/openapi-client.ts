@@ -1898,6 +1898,10 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/dctfweb/gerar', body);
   }
 
+  postApiV1AdminFiscalDctfwebMitGerar(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/dctfweb/mit/gerar', body);
+  }
+
   postApiV1AdminFiscalDirfGerar(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/fiscal/dirf/gerar', body);
   }

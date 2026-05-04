@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -30,10 +30,9 @@ interface ScheduledMedicalAppointment {
   templateUrl: './pericia.html',
   styleUrl: './pericia.scss',
 })
-export class SaudePericia implements OnDestroy {
+export class SaudePericia {
   private readonly api = inject(ApiClient);
   private readonly formBuilder = inject(UntypedFormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
   readonly scheduleForm = this.formBuilder.group({
     employeeId: ['', [Validators.required]],
@@ -67,42 +66,31 @@ export class SaudePericia implements OnDestroy {
   message = '';
   error = '';
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  schedule(): void {
+  async schedule(): Promise<void> {
     if (this.scheduleForm.invalid) {
       this.scheduleForm.markAllAsTouched();
       return;
     }
     this.saving = true;
     this.error = '';
-    this.api
-      .post<ScheduledMedicalAppointment, Record<string, unknown>>(
-        'v1/licencas/saude/agendamento',
-        this.scheduleForm.value,
-      )
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (appointment) => {
-          this.appointments = [appointment, ...this.appointments];
-          this.opinionForm.patchValue({ appointmentId: appointment.appointment_id });
-          this.message = 'Agendamento registrado.';
-        },
-        error: () => {
-          this.error = 'Nao foi possivel registrar o agendamento.';
-        },
-      });
+    try {
+      const appointment = await firstValueFrom(
+        this.api.post<ScheduledMedicalAppointment, Record<string, unknown>>(
+          'v1/licencas/saude/agendamento',
+          this.scheduleForm.value,
+        ),
+      );
+      this.appointments = [appointment, ...this.appointments];
+      this.opinionForm.patchValue({ appointmentId: appointment.appointment_id });
+      this.message = 'Agendamento registrado.';
+    } catch {
+      this.error = 'Nao foi possivel registrar o agendamento.';
+    } finally {
+      this.saving = false;
+    }
   }
 
-  recordOpinion(): void {
+  async recordOpinion(): Promise<void> {
     if (this.opinionForm.invalid) {
       this.opinionForm.markAllAsTouched();
       return;
@@ -110,33 +98,30 @@ export class SaudePericia implements OnDestroy {
     const appointmentId = String(this.opinionForm.value['appointmentId']);
     this.saving = true;
     this.error = '';
-    this.api
-      .post<unknown, Record<string, unknown>>(`v1/pericia/agendamentos/${appointmentId}/parecer`, {
-        ...this.opinionForm.value,
-        appointmentId: undefined,
-      })
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: () => {
-          this.message = 'Parecer pericial registrado.';
-          const employeeId = String(this.scheduleForm.value['employeeId'] || '').trim();
-          if (employeeId) {
-            this.lookupForm.patchValue({ employeeId });
-            this.loadLeaves();
-          }
-        },
-        error: () => {
-          this.error = 'Nao foi possivel registrar o parecer.';
-        },
-      });
+    try {
+      await firstValueFrom(
+        this.api.post<unknown, Record<string, unknown>>(
+          `v1/pericia/agendamentos/${appointmentId}/parecer`,
+          {
+            ...this.opinionForm.value,
+            appointmentId: undefined,
+          },
+        ),
+      );
+      this.message = 'Parecer pericial registrado.';
+      const employeeId = String(this.scheduleForm.value['employeeId'] || '').trim();
+      if (employeeId) {
+        this.lookupForm.patchValue({ employeeId });
+        await this.loadLeaves();
+      }
+    } catch {
+      this.error = 'Nao foi possivel registrar o parecer.';
+    } finally {
+      this.saving = false;
+    }
   }
 
-  loadLeaves(): void {
+  async loadLeaves(): Promise<void> {
     const employeeId = String(this.lookupForm.value['employeeId'] ?? '').trim();
     if (!employeeId) {
       this.lookupForm.markAllAsTouched();
@@ -144,21 +129,14 @@ export class SaudePericia implements OnDestroy {
     }
     this.loading = true;
     this.error = '';
-    this.api
-      .get<MedicalLeave[]>(`v1/licencas/saude/${employeeId}`)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (leaves) => {
-          this.leaves = leaves;
-        },
-        error: () => {
-          this.error = 'Nao foi possivel carregar as licencas de saude.';
-        },
-      });
+    try {
+      this.leaves = await firstValueFrom(
+        this.api.get<MedicalLeave[]>(`v1/licencas/saude/${employeeId}`),
+      );
+    } catch {
+      this.error = 'Nao foi possivel carregar as licencas de saude.';
+    } finally {
+      this.loading = false;
+    }
   }
 }

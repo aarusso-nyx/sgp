@@ -1,75 +1,55 @@
-import { Logger } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 
+import { startWorkerReadinessProbe } from './common/bootstrap/worker-readiness-probe';
+import { usePinoLogger } from './common/logging/bootstrap-logger';
+import { createLoggingModule } from './common/logging/logging.config';
+import {
+  createWorkerPollSchedulerProviders,
+  registerWorkerShutdown,
+  WorkerPollSchedulerService,
+} from './common/worker-scheduling/worker-poll-scheduler.service';
 import { ReportServiceModule } from './report-service/report-service.module';
 import { ReportWorkerService } from './report-service/report-worker.service';
 
+@Module({
+  imports: [
+    createLoggingModule('sgp-report-worker'),
+    ScheduleModule.forRoot(),
+    ReportServiceModule,
+  ],
+  providers: createWorkerPollSchedulerProviders(ReportWorkerService, {
+    workerName: 'sgp-report-worker',
+    pollIntervalEnv: 'REPORT_WORKER_POLL_MS',
+    pollLimitEnv: 'REPORT_WORKER_POLL_LIMIT',
+    oneshotEnv: 'REPORT_WORKER_ONESHOT',
+  }),
+})
+class ReportWorkerRuntimeModule {}
+
 export async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(ReportServiceModule, {
-    logger: ['log', 'error', 'warn'],
-  });
-  const logger = new Logger('sgp-report-worker');
-  const worker = app.get(ReportWorkerService);
-  const pollIntervalMs = Number(process.env.REPORT_WORKER_POLL_MS ?? 5000);
-  const pollLimit = Number(process.env.REPORT_WORKER_POLL_LIMIT ?? 10);
-  const oneshot = ['1', 'true', 'yes', 'on'].includes(
-    (process.env.REPORT_WORKER_ONESHOT ?? '').toLowerCase(),
+  const app = await NestFactory.createApplicationContext(
+    ReportWorkerRuntimeModule,
+    { bufferLogs: true },
   );
+  usePinoLogger(app);
+  const scheduler = app.get(WorkerPollSchedulerService);
+  const readiness = await startWorkerReadinessProbe({
+    workerName: 'sgp-report-worker',
+    portEnv: 'REPORT_WORKER_READY_PORT',
+    defaultPort: 3306,
+  });
 
-  const run = async () => {
-    const backpressure = await worker.backpressureStatus(pollLimit);
-    if (backpressure.skipped) {
-      logger.warn(
-        `poll skipped: queueDepth=${backpressure.queueDepth} activeClaims=${backpressure.activeClaims} capacity=${backpressure.capacity}`,
-      );
-      return;
-    }
-
-    const summary = await worker.pollOnce(backpressure.limit);
-    logger.log(
-      `poll complete: discovered=${summary.discovered} processed=${summary.processed} failed=${summary.failed} skipped=${summary.skipped}`,
-    );
-  };
-
-  if (oneshot) {
-    await run();
+  if (scheduler.oneshot) {
+    await scheduler.runOnce();
+    await readiness.close();
     await app.close();
     return;
   }
 
-  let running = false;
-  const timer = setInterval(() => {
-    if (running) return;
-    running = true;
-    void (async () => {
-      try {
-        await run();
-      } catch (error) {
-        const message =
-          error instanceof Error
-            ? (error.stack ?? error.message)
-            : String(error);
-        logger.error(message);
-      } finally {
-        running = false;
-      }
-    })();
-  }, pollIntervalMs);
-
-  timer.unref();
-  await run();
-
-  const shutdown = async () => {
-    clearInterval(timer);
-    await app.close();
-  };
-
-  process.on('SIGINT', () => {
-    void shutdown();
-  });
-  process.on('SIGTERM', () => {
-    void shutdown();
-  });
+  await scheduler.start();
+  registerWorkerShutdown(app, scheduler, () => readiness.close());
 }
 
 if (process.env.NODE_ENV !== 'test') {
