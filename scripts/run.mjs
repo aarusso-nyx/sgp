@@ -451,7 +451,7 @@ function handleGovernance() {
 }
 
 function handleCheck() {
-  return runCommand(process.execPath, ['scripts/check.mjs', ...args]);
+  return runCommand(process.execPath, ['scripts/check-evidence.mjs', ...args]);
 }
 
 function handleHealth() {

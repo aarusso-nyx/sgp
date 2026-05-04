@@ -51,6 +51,7 @@ describe('workspace dispatcher surface', () => {
       'check-api-route-alignment.mjs',
       'check-db-alignment.mjs',
       'check-db-fk-coverage.mjs',
+      'check.mjs',
       'check-openapi-generated.mjs',
       'check-prisma-db-push-guard.mjs',
       'check-rls-specs.mjs',
@@ -90,6 +91,6 @@ describe('workspace dispatcher surface', () => {
     expect(db.stdout).toContain(
       'db <generate|migrate|seed|smoke|studio|alignment check|fk-coverage check|fk-coverage write|push-guard>',
     );
-    expect(check.stdout).toContain('check.mjs <evidence>');
+    expect(check.stdout).toContain('check-evidence.mjs');
   });
 });

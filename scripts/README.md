@@ -47,7 +47,7 @@ behavior to `run.mjs` and the shared registry under `scripts/lib/`.
   test database environment.
 - `scripts/lib/command-runner.mjs` owns process, npm, workspace, and sequence
   execution helpers.
-- `scripts/audit.mjs`, `scripts/check.mjs`, `scripts/check-api.mjs`,
+- `scripts/audit.mjs`, `scripts/check-evidence.mjs`, `scripts/check-api.mjs`,
   `scripts/check-db.mjs`, `scripts/check-frontend.mjs`, `scripts/db.mjs`,
   `scripts/qa.mjs`, and `scripts/generate.mjs` are family entrypoints;
   implementation helpers live under `scripts/lib/**`.

@@ -5,9 +5,9 @@ import { runCommand } from './lib/command-runner.mjs';
 import { defaultRepoRoot } from './lib/repo-paths.mjs';
 
 const usage = `
-Usage: node scripts/check.mjs <evidence> [options]
+Usage: node scripts/check-evidence.mjs <evidence> [options]
 
-Run cross-cutting check helpers that do not belong to a narrower API, DB, or frontend family.
+Run the cross-cutting evidence gate helper.
 `;
 
 const options = parseArgs(process.argv.slice(2), { booleanFlags: ['help'] });
@@ -24,7 +24,7 @@ const handlers = {
 };
 
 if (!handlers[subcommand]) {
-  console.error('[check] valid subcommands: evidence');
+  console.error('[check-evidence] valid subcommands: evidence');
   process.exit(1);
 }
 
