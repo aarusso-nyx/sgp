@@ -4,7 +4,7 @@ const port = Number(process.env['SGP_PORTAL_E2E_PORT'] ?? '4310');
 const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
-  testDir: './tests/frontend/portal',
+  testDir: './frontend/portal',
   testMatch: /.*\.spec\.ts/,
   fullyParallel: false,
   reporter: [['list']],

@@ -4,7 +4,7 @@ const port = Number(process.env['SGP_ADMIN_E2E_PORT'] ?? '4210');
 const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
-  testDir: './tests/frontend/admin',
+  testDir: './frontend/admin',
   testMatch: /.*\.spec\.ts/,
   fullyParallel: false,
   reporter: [['list']],

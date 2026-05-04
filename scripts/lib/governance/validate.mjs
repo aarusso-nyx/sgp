@@ -44,7 +44,6 @@ function validatePackagePins() {
   }
 
   assertPath('.nvmrc');
-  assertPath('.node-version');
 }
 
 function validateSingleLockfile() {
