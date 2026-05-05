@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface ProgressionRecord {
   id: string;
@@ -79,7 +80,7 @@ export class AvaliacaoProgressoes implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar as progressoes.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m018;
           this.loading = false;
         },
       });
@@ -106,11 +107,11 @@ export class AvaliacaoProgressoes implements OnInit, OnDestroy {
       .subscribe({
         next: (result) => {
           this.simulation = result;
-          this.message = 'Simulacao registrada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m019;
           this.load('simulated');
         },
         error: () => {
-          this.error = 'Nao foi possivel simular a progressao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m020;
         },
       });
   }
@@ -126,11 +127,11 @@ export class AvaliacaoProgressoes implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.message = 'Progressao aplicada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m021;
           this.load(this.selectedStatus);
         },
         error: () => {
-          this.error = 'Nao foi possivel aplicar a progressao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m022;
         },
       });
   }

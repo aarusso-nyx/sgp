@@ -8,6 +8,7 @@ import {
   ESocialWorkerDispatchResult,
   ESocialWorkerStatus,
 } from './esocial-trabalhadores.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,7 +44,7 @@ export class ESocialTrabalhadores implements OnInit {
       this.rows = rows;
       this.eventRows = eventRows;
     } catch {
-      this.error = 'Nao foi possivel carregar o cadastro eSocial.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m038;
     } finally {
       this.loading = false;
     }
@@ -84,7 +85,7 @@ export class ESocialTrabalhadores implements OnInit {
       this.lastResult = await firstValueFrom(callback());
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel emitir o evento eSocial.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m039;
     } finally {
       this.emitting = '';
     }

@@ -4,9 +4,10 @@
 -- reference catalogs are loaded with INSERT ... VALUES and no column list; the
 -- audit timestamp columns must be added after those reference rows are seeded.
 --
--- Reference/static catalogs use the shared generic audit trigger below instead
--- of domain-specific business audit functions. That includes PostGIS spatial
--- references, public permission/menu/report catalogs, eSocial/fiscal code
+-- Reference/static catalogs and additive canonical records use the shared
+-- generic audit trigger below instead of domain-specific business audit
+-- functions. That includes PostGIS spatial references, public
+-- permission/menu/report catalogs, public.esocial_spool, eSocial/fiscal code
 -- catalogs, HR/payroll lookup catalogs, and TCE layout catalogs.
 --
 -- Immutable audit-event partitions keep occurred_at as the event-time authority.
@@ -99,3 +100,10 @@ BEGIN
   END LOOP;
 END
 $$;
+
+ALTER TABLE public.audit_event
+  ADD COLUMN IF NOT EXISTS correlation_id text;
+
+CREATE INDEX IF NOT EXISTS audit_event_correlation_action_idx
+  ON public.audit_event USING btree (correlation_id, action)
+  WHERE correlation_id IS NOT NULL;

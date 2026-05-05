@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { AuditModule } from '../audit/audit.module';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
-import { ESocialWorkerModule } from '../esocial-worker/esocial-worker.module';
+import { StynxEsocialModule } from '../integrations/stynx-esocial';
 import { AposentadoriaService } from './aposentadoria/aposentadoria.service';
 import { CtcService } from './ctc/ctc.service';
 import { DeclaracaoService } from './declaracao/declaracao.service';
@@ -20,7 +20,7 @@ import { Pedagio50Service } from './transition-rules/pedagio50.service';
 import { PontosService } from './transition-rules/pontos.service';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule, ESocialWorkerModule],
+  imports: [AuthModule, DatabaseModule, AuditModule, StynxEsocialModule],
   controllers: [PrevidenciarioController],
   providers: [
     PrevidenciarioService,

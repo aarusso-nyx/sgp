@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { PontoRepService, RepBatchSummary, RepDeviceSummary } from './ponto-rep.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,7 +70,7 @@ export class PontoRep implements OnInit, OnDestroy {
           this.loadBatches();
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar equipamentos REP.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m129;
         },
       });
   }
@@ -99,12 +100,12 @@ export class PontoRep implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (device) => {
-          this.message = `Equipamento ${device.kind} cadastrado.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m130(device.kind);
           this.batchForm.patchValue({ repDeviceId: device.repDeviceId });
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel cadastrar o equipamento REP.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m131;
         },
       });
   }
@@ -130,7 +131,7 @@ export class PontoRep implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (batch) => {
-          this.message = `Lote ${batch.status}: ${batch.createdTimeRecords} marcacoes criadas.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m132(batch.status, batch.createdTimeRecords);
           this.loadBatches();
         },
         error: (response) => {
@@ -154,7 +155,7 @@ export class PontoRep implements OnInit, OnDestroy {
           this.batches = batches;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar lotes REP.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m133;
         },
       });
   }

@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { RescisaoFolhaService, RescisaoResult } from './rescisao.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,22 +16,22 @@ export class RescisaoFolha {
   private readonly service = inject(RescisaoFolhaService);
 
   readonly causes = [
-    { code: 'SEM_JUSTA_CAUSA', label: 'Sem justa causa' },
-    { code: 'PEDIDO_DEMISSAO', label: 'Pedido de demissao' },
+    { code: 'SEM_JUSTA_CAUSA', label: SGP_FEATURE_I18N_MESSAGES.m055 },
+    { code: 'PEDIDO_DEMISSAO', label: SGP_FEATURE_I18N_MESSAGES.m056 },
     { code: 'APOSENTADORIA', label: 'Aposentadoria' },
     { code: 'OUTRA', label: 'Outra' },
   ];
 
   readonly priorNoticeKinds = [
-    { code: 'NONE', label: 'Sem aviso' },
+    { code: 'NONE', label: SGP_FEATURE_I18N_MESSAGES.m057 },
     { code: 'WORKED', label: 'Trabalhado' },
     { code: 'INDEMNIFIED', label: 'Indenizado' },
   ];
 
   readonly reductionModes = [
-    { code: 'NONE', label: 'Sem reducao' },
-    { code: 'TWO_HOURS_DAY', label: 'Duas horas por dia' },
-    { code: 'SEVEN_FINAL_DAYS', label: 'Sete dias finais' },
+    { code: 'NONE', label: SGP_FEATURE_I18N_MESSAGES.m058 },
+    { code: 'TWO_HOURS_DAY', label: SGP_FEATURE_I18N_MESSAGES.m059 },
+    { code: 'SEVEN_FINAL_DAYS', label: SGP_FEATURE_I18N_MESSAGES.m060 },
   ];
 
   readonly form = this.fb.nonNullable.group({
@@ -71,8 +72,7 @@ export class RescisaoFolha {
         this.loading = false;
       },
       error: (error: unknown) => {
-        this.errorMessage =
-          error instanceof Error ? error.message : 'Nao foi possivel calcular a rescisao.';
+        this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m061;
         this.loading = false;
       },
     });

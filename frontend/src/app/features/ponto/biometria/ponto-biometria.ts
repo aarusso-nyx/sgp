@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { BiometricTemplateSummary, PontoBiometriaService } from './ponto-biometria.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,7 +59,7 @@ export class PontoBiometria implements OnInit, OnDestroy {
           this.templates = templates;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar biometria.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m098;
         },
       });
   }
@@ -81,7 +82,7 @@ export class PontoBiometria implements OnInit, OnDestroy {
         next: () => this.captureTemplate(),
         error: () => {
           this.saving = false;
-          this.error = 'Nao foi possivel registrar consentimento biometrico.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m099;
         },
       });
   }
@@ -104,11 +105,11 @@ export class PontoBiometria implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (template) => {
-          this.message = `Template ${template.kind} cadastrado com qualidade ${template.qualityScore}.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m100(template.kind, template.qualityScore);
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel cadastrar o template biometrico.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m101;
         },
       });
   }

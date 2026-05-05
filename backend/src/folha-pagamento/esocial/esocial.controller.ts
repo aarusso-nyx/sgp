@@ -30,9 +30,9 @@ export class ESocialController {
     @Body() body: CreateESocialEventDto,
   ) {
     const created = await this.eSocialService.createEvent(body);
-    await this.auditService.auditMutation(request, 'CREATE', 'esocial_event', {
+    await this.auditService.auditMutation(request, 'CREATE', 'esocial_spool', {
       resourceId: created.id,
-      tableName: 'esocial_event',
+      tableName: 'public.esocial_spool',
       metadata: { tipo: created.tipo, competencia: created.competencia },
     });
     return created;

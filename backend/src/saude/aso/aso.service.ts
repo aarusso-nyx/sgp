@@ -7,6 +7,7 @@ import {
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 import { CreateMedicalExamDto, PerformAsoDto, ScheduleAsoDto } from './aso.dto';
 
 interface AsoRecordRow extends QueryResultRow {
@@ -23,6 +24,7 @@ interface AsoRecordRow extends QueryResultRow {
   next_exam_due_at: Date | string | null;
   status: string;
   attachment_count?: string;
+  s2220_spool_message_id?: string | null;
 }
 
 interface MedicalExamRow extends QueryResultRow {
@@ -76,7 +78,10 @@ export interface MedicalExamSummary {
 
 @Injectable()
 export class AsoService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly stynxEsocialClient: StynxEsocialClient,
+  ) {}
 
   async listMedicalExams(): Promise<MedicalExamSummary[]> {
     this.ensureDatabase();
@@ -295,11 +300,56 @@ export class AsoService {
         restriction_text,
         next_exam_due_at,
         status::text,
+        s2220_spool_message_id::text,
         '0'::text AS attachment_count
       `,
       [id],
     );
-    return this.toAsoRecord(rows[0]!);
+    const archived = rows[0]!;
+    const queued = await this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2220',
+      sourceRef: {
+        sourceEntityKind: 'saude.aso_record',
+        sourceEntityId: archived.id,
+        asoRecordId: archived.id,
+        employeeId: archived.employee_id,
+        asoKind: archived.aso_kind,
+      },
+      payload: {
+        asoRecordId: archived.id,
+        employeeId: archived.employee_id,
+        asoKind: archived.aso_kind,
+        performedAt: archived.performed_at
+          ? new Date(archived.performed_at).toISOString()
+          : null,
+        conclusion: archived.conclusion,
+      },
+    });
+    const updated = await this.databaseService.query<AsoRecordRow>(
+      `
+      UPDATE saude.aso_record
+      SET s2220_spool_message_id = $2::uuid
+      WHERE id = $1::uuid
+      RETURNING
+        id::text,
+        employee_id::text,
+        NULL::text AS employee_name,
+        aso_kind::text,
+        scheduled_at,
+        performed_at,
+        doctor_crm,
+        doctor_name,
+        conclusion::text,
+        restriction_text,
+        next_exam_due_at,
+        status::text,
+        s2220_spool_message_id::text,
+        '0'::text AS attachment_count
+      `,
+      [id, queued.messageId],
+    );
+    return this.toAsoRecord(updated[0] ?? archived);
   }
 
   async findRecord(id: string): Promise<AsoRecordSummary> {

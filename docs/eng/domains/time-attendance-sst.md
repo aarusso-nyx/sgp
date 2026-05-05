@@ -19,6 +19,17 @@ Authored domain authority for Portaria 671 time capture, REP/AFD, banked hours, 
 - PONTO-07 - Integracao entre ponto e folha
 - Politica de fuso horario para jornada
 
+## Regulatory References Cross-Reference
+
+This table maps time-attendance and SST references to current implementation or
+retained decision evidence.
+
+| Reference                                  | Obligation cluster                        | Implementation / evidence path:line              | Current posture                                               |
+| ------------------------------------------ | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------- |
+| `docs/refs/legal/portaria-671-ponto.md`    | Portaria 671 time capture, REP, AFD       | database/sql/10-08-ponto-ddl.sql:1               | Implemented ponto schema and frontend/admin surfaces.         |
+| `docs/refs/lgpd/pii-categorias-cpf-bio.md` | Biometric and geolocation sensitive data  | backend/src/ponto/biometria/consent.service.ts:1 | Implemented biometric consent and encrypted template posture. |
+| `docs/refs/lgpd/anpd-guidelines.md`        | ANPD guidance for sensitive data handling | backend/src/ponto/face/consent.service.ts:1      | Implemented face-recognition consent and local-only matching. |
+
 ## Ponto biometrico: Portaria 671 e LGPD
 
 ## Ponto biometrico: Portaria 671 e LGPD
@@ -219,11 +230,14 @@ As tabelas `ponto.afd_export`, `ponto.afd_import` e `ponto.afd_import_line` forc
 
 ### Decisao
 
-O SGP registra acidentes de trabalho em `saude.work_accident` e emite CATs em `saude.cat_emission`. Cada emissao gera automaticamente uma pendencia `esocial.s2210_pending`, consumida pelo builder `backend/src/esocial-worker/builders/s2210.builder.ts` e enviada ao hub ES-07 por `ESocialEmitService.emit(...)`.
+O SGP registra acidentes de trabalho em `saude.work_accident` e emite CATs em
+`saude.cat_emission`. Cada emissão gera automaticamente uma mensagem S-2210 em
+`public.esocial_spool`, enviada ao gateway stynx-esocial para validação,
+assinatura e transmissão.
 
 ### Prazos
 
-CAT inicial e de reabertura usam `deadline_at` no proximo dia util apos `accident_at`. CAT de obito usa prazo imediato: `deadline_at = emitted_at`. O painel `/api/v1/saude/acidentes/prazos` lista CATs sem `esocial_event_id` com vencimento em ate 4 horas, permitindo alerta operacional antes da multa prevista na Lei 8.213/1991 art. 22.
+CAT inicial e de reabertura usam `deadline_at` no proximo dia util apos `accident_at`. CAT de obito usa prazo imediato: `deadline_at = emitted_at`. O painel `/api/v1/saude/acidentes/prazos` lista CATs sem `esocial_spool_message_id` com vencimento em ate 4 horas, permitindo alerta operacional antes da multa prevista na Lei 8.213/1991 art. 22.
 
 ### Maquina de Estados
 
@@ -240,7 +254,12 @@ Tentativas de pular `REGISTRADO -> COMUNICACAO_OBITO` sao rejeitadas. Acidente f
 
 ### Permissoes e RLS
 
-As tabelas `saude.work_accident`, `saude.cat_emission` e `esocial.s2210_pending` usam RLS forçado por tenant com `sgp_tenant_matches(tenant_id)`. Leitura aceita `saude.cat.read`, `saude.cat.write`, `esocial.event.read` ou `esocial.event.write`; mutacao exige `saude.cat.write` ou `esocial.event.write`. Todas as mutacoes passam por `sgp_append_audit_event(...)`.
+As tabelas `saude.work_accident`, `saude.cat_emission` e
+`public.esocial_spool` usam RLS forçado por tenant com
+`sgp_tenant_matches(tenant_id)`. Leitura aceita `saude.cat.read`,
+`saude.cat.write`, `esocial.event.read` ou `esocial.event.write`; mutacao exige
+`saude.cat.write` ou `esocial.event.write`. Todas as mutacoes passam por
+`sgp_append_audit_event(...)`.
 
 ## PONTO-04 — Escalas, Plantões e Turnos
 
@@ -295,11 +314,16 @@ O SGP v0.0.1 registra exposicoes ambientais em `saude.environmental_exposure`, s
 
 ### S-2240
 
-Cada insercao de exposicao cria pendencia `START` em `esocial.s2240_pending`. Alteracoes de agente, intensidade, periodo ou mitigacoes criam `CHANGE`; preenchimento de `exposure_end` cria `END`. O builder `backend/src/esocial-worker/builders/s2240.builder.ts` gera `evtExpRisco` S-1.3 e envia pelo hub ES-07, sem escrita direta em `public.esocial_event`.
+Cada insercao de exposicao cria mensagem `START` em `public.esocial_spool`.
+Alteracoes de agente, intensidade, periodo ou mitigacoes criam `CHANGE`;
+preenchimento de `exposure_end` cria `END`. Stynx-esocial gera o `evtExpRisco`
+S-1.3 e executa validação/transmissão fora do SGP.
 
 ### S-1060
 
-`hr.work_location` e a fonte canonica dos codigos de ambiente de trabalho para o cluster SST. O builder `backend/src/esocial-worker/builders/s1060.builder.ts` emite `evtTabAmbiente` a partir de lotacoes ativas e propaga `workEnvironmentCode` para os payloads S-2210, S-2220 e S-2240. A validacao XSD compartilhada ainda depende da reconciliacao do bundle pelo orchestrator, pois o bundle S-1.3 corrente nao inclui `evtTabAmbiente.xsd`.
+`hr.work_location` e a fonte canonica dos codigos de ambiente de trabalho para o
+cluster SST. O SGP envia esses códigos nos payloads S-2210, S-2220 e S-2240 por
+`public.esocial_spool`; stynx-esocial decide a emissão S-1060 e a validação XSD.
 
 ### EPI
 

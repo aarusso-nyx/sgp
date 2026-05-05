@@ -41,7 +41,6 @@ function printHelp() {
   console.log('');
   console.log('Examples:');
   console.log('  node scripts/run.mjs health --json');
-  console.log('  node scripts/run.mjs db generate');
   console.log('  node scripts/run.mjs test db');
   console.log('  node scripts/run.mjs deploy --target stage --dry-run');
 }
@@ -82,7 +81,6 @@ function handleStart() {
     'core-api': { APP_SERVICE_NAME: 'sgp-core-api' },
     'portal-api': { APP_SERVICE_NAME: 'sgp-portal-api' },
     'payroll-engine': { APP_SERVICE_NAME: 'sgp-payroll-engine', PAYROLL_ENGINE_PORT: '3302' },
-    'esocial-worker': { APP_SERVICE_NAME: 'sgp-esocial-worker' },
     'integrations-worker': { APP_SERVICE_NAME: 'sgp-integrations-worker' },
     'report-worker': { APP_SERVICE_NAME: 'sgp-report-worker' },
     'report-service': { APP_SERVICE_NAME: 'sgp-report-service', REPORT_SERVICE_PORT: '3305' },
@@ -93,7 +91,6 @@ function handleStart() {
     'core-api': { workspace: 'backend', script: ['start', 'dev'].join(':') },
     'portal-api': { workspace: 'backend', script: 'start:portal:dev' },
     'payroll-engine': { workspace: 'backend', script: 'start:payroll-engine' },
-    'esocial-worker': { workspace: 'backend', script: 'start:esocial-worker' },
     'integrations-worker': { workspace: 'backend', script: 'start:integrations-worker' },
     'report-worker': { workspace: 'backend', script: 'start:report-worker' },
     'report-service': { workspace: 'backend', script: 'start:report-service' },
@@ -103,7 +100,7 @@ function handleStart() {
     const target = targetByRuntime[subcommand];
     if (!target) {
       console.error(
-        '[start] valid subcommands: all, admin, portal, core-api, portal-api, payroll-engine, esocial-worker, integrations-worker, report-worker, report-service',
+        '[start] valid subcommands: all, admin, portal, core-api, portal-api, payroll-engine, integrations-worker, report-worker, report-service',
       );
       return 1;
     }
@@ -191,7 +188,10 @@ function handleTest() {
       runSequence([
         () => runWorkspaceScript('frontend', 'test:admin'),
         () => runWorkspaceScript('frontend', 'test:portal'),
-        () => runWorkspaceScript('backend', 'test'),
+        () =>
+          runWorkspaceScript('backend', 'test', [], {
+            env: localTestDatabaseEnv(),
+          }),
       ]),
     admin: () => runWorkspaceScript('frontend', 'test:admin', args.slice(1)),
     'admin-e2e': () => runWorkspaceScript('frontend', 'test:admin:e2e', args.slice(1)),
@@ -202,7 +202,10 @@ function handleTest() {
         () => runWorkspaceScript('frontend', 'test:admin:e2e', args.slice(1)),
         () => runWorkspaceScript('frontend', 'test:portal:e2e', args.slice(1)),
       ]),
-    backend: () => runWorkspaceScript('backend', 'test', args.slice(1)),
+    backend: () =>
+      runWorkspaceScript('backend', 'test', args.slice(1), {
+        env: localTestDatabaseEnv(),
+      }),
     db: () =>
       runCommand(process.execPath, ['scripts/db.mjs', 'bootstrap-smoke'], {
         env: localTestDatabaseEnv(),
@@ -248,18 +251,16 @@ function handleDb() {
   const dbHandlers = {
     help: () => {
       console.log(
-        'Usage: node scripts/run.mjs db <generate|migrate|seed|smoke|studio|alignment check|fk-coverage check|fk-coverage write|push-guard> [options]',
+        'Usage: node scripts/run.mjs db <migrate|seed|smoke|alignment check|fk-coverage check|fk-coverage write|push-guard> [options]',
       );
       return 0;
     },
-    generate: () => runWorkspaceExec('backend', ['prisma', 'generate']),
     migrate: () => runCommand(process.execPath, ['scripts/db.mjs', 'apply-sql']),
     seed: () => runWorkspaceScript('backend', 'db:seed'),
     smoke: () =>
       runCommand(process.execPath, ['scripts/db.mjs', 'bootstrap-smoke'], {
         env: localTestDatabaseEnv(),
       }),
-    studio: () => runWorkspaceExec('backend', ['prisma', 'studio']),
     alignment: () => {
       const action = args[1] ?? 'check';
       if (action !== 'check') {
@@ -300,7 +301,7 @@ function handleDb() {
 
   if (!dbHandlers[subcommand]) {
     console.error(
-      '[db] valid subcommands: help, generate, migrate, seed, smoke, studio, alignment, fk-coverage, push-guard',
+      '[db] valid subcommands: help, migrate, seed, smoke, alignment, fk-coverage, push-guard',
     );
     return 1;
   }
@@ -410,7 +411,7 @@ function handleQa() {
 function runAuditSubcommand(subcommand, passThrough) {
   if (subcommand === 'help') {
     console.log(
-      'Usage: node scripts/run.mjs audit <schema|api|fr|tests|hotspots|backlog|pvd|live-data|all> [options]',
+      'Usage: node scripts/run.mjs audit <schema|api|fr|tests|hotspots|backlog|pvd|live-data|rls-spec-coverage|all> [options]',
     );
     return 0;
   }
@@ -420,12 +421,20 @@ function runAuditSubcommand(subcommand, passThrough) {
   }
 
   if (
-    !['schema', 'api', 'fr', 'tests', 'hotspots', 'backlog', 'pvd', 'live-data'].includes(
-      subcommand,
-    )
+    ![
+      'schema',
+      'api',
+      'fr',
+      'tests',
+      'hotspots',
+      'backlog',
+      'pvd',
+      'live-data',
+      'rls-spec-coverage',
+    ].includes(subcommand)
   ) {
     console.error(
-      '[audit] valid subcommands: help, schema, api, fr, tests, hotspots, backlog, pvd, live-data, all',
+      '[audit] valid subcommands: help, schema, api, fr, tests, hotspots, backlog, pvd, live-data, rls-spec-coverage, all',
     );
     return 1;
   }
@@ -468,7 +477,6 @@ function handleHealth() {
     'infra/aws/README.md',
     'scripts/run.mjs',
     'backend/src/main-payroll-engine.ts',
-    'backend/src/main-esocial-worker.ts',
     'backend/src/main-report-worker.ts',
     'backend/src/main-report-service.ts',
     'docs/gov/generated/runtime-topology.json',
@@ -589,6 +597,7 @@ const handlers = {
   'audit:hotspots': () => handleAuditAlias('hotspots'),
   'audit:backlog': () => handleAuditAlias('backlog'),
   'audit:pvd': () => handleAuditAlias('pvd'),
+  'audit:rls-spec-coverage': () => handleAuditAlias('rls-spec-coverage'),
   'audit:all': () => handleAuditAlias('all'),
   'evidence-step': () => runEvidenceStepByName(args[0]),
 };

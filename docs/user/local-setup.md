@@ -50,7 +50,6 @@ npm run health:json
 - Start only the portal API: `npm run start:portal-api`
 - Start split service/worker runtimes:
   - `npm run start:payroll-engine`
-  - `npm run start:esocial-worker`
   - `npm run start:integrations-worker`
   - `npm run start:report-service`
 - Build all workspaces: `npm run build`

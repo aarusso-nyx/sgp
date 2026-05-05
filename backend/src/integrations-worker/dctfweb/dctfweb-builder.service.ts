@@ -301,22 +301,18 @@ export class DctfwebBuilderService {
     return this.databaseService.query<TotalizerRow>(
       `
       SELECT
-        totalizer.kind::text AS kind,
-        totalizer.source_event_recibo,
-        totalizer.payload
-      FROM esocial.esocial_totalizer totalizer
-      JOIN esocial.s1299_emission_state state
-        ON state.tenant_id = totalizer.tenant_id
-       AND state.competence = totalizer.competence
-       AND state.recibo = totalizer.source_event_recibo
-       AND state.status = 'ACCEPTED'::esocial.s1299_emission_status
-      WHERE totalizer.tenant_id = $1::uuid
-        AND totalizer.competence = $2::date
-        AND totalizer.kind IN (
-          'S-5011'::esocial.esocial_totalizer_kind,
-          'S-5012'::esocial.esocial_totalizer_kind,
-          'S-5013'::esocial.esocial_totalizer_kind
-        )
+        spool.event_class AS kind,
+        COALESCE(
+          spool.response->'receipt'->>'receiptNumber',
+          spool.response->>'receiptNumber',
+          spool.message_id::text
+        ) AS source_event_recibo,
+        COALESCE(spool.response->'payload', spool.response, spool.payload) AS payload
+      FROM public.esocial_spool spool
+      WHERE spool.tenant_id = $1::uuid
+        AND COALESCE(spool.source_ref->>'competence', spool.payload->>'competence') = $2
+        AND spool.status = 'ACCEPTED'::public.esocial_spool_status
+        AND spool.event_class IN ('S-5011', 'S-5012', 'S-5013')
       UNION ALL
       SELECT
         totalizer.kind::text AS kind,

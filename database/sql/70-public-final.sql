@@ -69,22 +69,6 @@ CREATE INDEX document_upload_session_status_expires_at_idx ON public.document_up
 
 CREATE INDEX document_upload_session_tenant_expires_at_idx ON public.document_upload_session USING btree (tenant_id, expires_at DESC);
 
-CREATE INDEX esocial_event_last_response_idx ON public.esocial_event USING btree (tenant_id, last_response_at DESC) WHERE (last_response_at IS NOT NULL);
-
-CREATE INDEX esocial_event_payment_batch_idx ON public.esocial_event USING btree (tenant_id, payment_batch_id) WHERE (payment_batch_id IS NOT NULL);
-
-CREATE INDEX esocial_event_payroll_run_idx ON public.esocial_event USING btree (tenant_id, payroll_run_id) WHERE (payroll_run_id IS NOT NULL);
-
-CREATE INDEX esocial_event_response_code_idx ON public.esocial_event USING btree (tenant_id, response_code) WHERE (response_code IS NOT NULL);
-
-CREATE INDEX esocial_event_s1xxx_source_idx ON public.esocial_event USING btree (tenant_id, event_kind, source_entity_kind, source_entity_id);
-
-CREATE INDEX esocial_event_status_created_at_idx ON public.esocial_event USING btree (status, created_at);
-
-CREATE INDEX esocial_event_type_competence_idx ON public.esocial_event USING btree (event_type, competence);
-
-CREATE INDEX esocial_event_xml_hash_idx ON public.esocial_event USING btree (tenant_id, xml_hash) WHERE (xml_hash IS NOT NULL);
-
 CREATE INDEX generated_report_file_attachment_id_idx ON public.generated_report_file USING btree (attachment_id);
 
 CREATE INDEX generated_report_file_hash_idx ON public.generated_report_file USING btree (file_hash);
@@ -319,9 +303,6 @@ ALTER TABLE ONLY public.document_type
 ALTER TABLE ONLY public.document_upload_session
     ADD CONSTRAINT public_document_upload_session_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
-ALTER TABLE ONLY public.esocial_event
-    ADD CONSTRAINT public_esocial_event_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
-
 ALTER TABLE ONLY public.generated_report_file
     ADD CONSTRAINT public_generated_report_file_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
@@ -372,8 +353,6 @@ ALTER TABLE ONLY public.system_parameter
 
 ALTER TABLE ONLY public.user_group_snapshot
     ADD CONSTRAINT user_group_snapshot_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.user_account(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-ALTER TABLE ONLY public.esocial_event FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY public.system_parameter FORCE ROW LEVEL SECURITY;
 
@@ -446,12 +425,6 @@ ALTER TABLE public.document_upload_session ENABLE ROW LEVEL SECURITY;
 CREATE POLICY document_upload_session_select ON public.document_upload_session FOR SELECT USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['documents.upload'::text, 'documents.register'::text, 'auditoria.read'::text]))));
 
 CREATE POLICY document_upload_session_write ON public.document_upload_session USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['documents.upload'::text, 'documents.register'::text])))) WITH CHECK ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['documents.upload'::text, 'documents.register'::text]))));
-
-ALTER TABLE public.esocial_event ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY esocial_event_select ON public.esocial_event FOR SELECT USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.read'::text, 'esocial.event.write'::text]))));
-
-CREATE POLICY esocial_event_write ON public.esocial_event USING ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.write'::text])))) WITH CHECK ((public.sgp_bypass_rls() OR (public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['esocial.event.write'::text]))));
 
 ALTER TABLE public.generated_report_file ENABLE ROW LEVEL SECURITY;
 

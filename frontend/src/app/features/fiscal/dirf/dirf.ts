@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { firstValueFrom } from 'rxjs';
 
 import { DirfApiService, DirfArquivo } from './dirf.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 const DIRF_DEPRECATED_FROM_YEAR_BASE = 2025;
 
@@ -123,7 +124,7 @@ export class FiscalDirf {
   }
 
   private fail(error: unknown): void {
-    this.errorMessage = error instanceof Error ? error.message : 'Operacao DIRF indisponivel.';
+    this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m041;
     this.busy = false;
     this.loading = false;
   }

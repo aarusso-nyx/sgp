@@ -20,6 +20,16 @@ const gestaoRoutes = buildModuleRouteGroup('gestao', GestaoHome, {
   if (route.path === 'cargo/gestao' || route.path === 'cargos') {
     return { ...route, component: Cargos };
   }
+  if (route.path === 'tipo-ferias/gestao') {
+    return {
+      ...route,
+      data: {
+        ...route.data,
+        legacyChildPath: 'tipo-ferias/gestao',
+        permissions: ['gestao.master_data.read', 'gestao.master_data.write'],
+      },
+    };
+  }
   if (route.path === 'parametros/irrf') {
     return { ...route, component: TaxRateIrrf };
   }

@@ -13,7 +13,7 @@ describe('GovBrSignService', () => {
     claims: { cpf: '00011122233', email: 'servidor@example.test' },
   };
 
-  it('creates and applies an advanced signature evidence envelope', () => {
+  it('creates and applies an advanced signature evidence envelope', async () => {
     const service = new GovBrSignService(new GovBrSignatureSandboxAdapter());
     const payload = {
       section: 'contato',
@@ -21,7 +21,7 @@ describe('GovBrSignService', () => {
       previousPayload: { email: 'antigo@example.test' },
     };
 
-    const initiated = service.initiate(actor, {
+    const initiated = await service.initiate(actor, {
       resourceType: 'hr.cadastral_change_request',
       resourceId: 'draft-contato',
       payload,
@@ -29,7 +29,7 @@ describe('GovBrSignService', () => {
     });
     const callbackUrl = new URL(`http://localhost${initiated.redirectUrl}`);
 
-    const completed = service.complete({
+    const completed = await service.complete({
       state: callbackUrl.searchParams.get('state') ?? '',
       decision: 'approved',
       challenge: callbackUrl.searchParams.get('challenge') ?? '',
@@ -57,15 +57,15 @@ describe('GovBrSignService', () => {
     ).toBe(false);
   });
 
-  it('closes the request without signature evidence when gov.br denies it', () => {
+  it('closes the request without signature evidence when gov.br denies it', async () => {
     const service = new GovBrSignService(new GovBrSignatureSandboxAdapter());
-    const initiated = service.initiate(actor, {
+    const initiated = await service.initiate(actor, {
       resourceType: 'hr.cadastral_change_request',
       payload: { section: 'cadastro' },
     });
     const callbackUrl = new URL(`http://localhost${initiated.redirectUrl}`);
 
-    const completed = service.complete({
+    const completed = await service.complete({
       state: callbackUrl.searchParams.get('state') ?? '',
       decision: 'denied',
     });
@@ -76,23 +76,23 @@ describe('GovBrSignService', () => {
     expect(completed.redirectUrl).toContain('status=denied');
   });
 
-  it('rejects malformed initiation and callback requests', () => {
+  it('rejects malformed initiation and callback requests', async () => {
     const service = new GovBrSignService(new GovBrSignatureSandboxAdapter());
 
-    expect(() =>
+    await expect(
       service.initiate(undefined, {
         resourceType: 'hr.cadastral_change_request',
         payload: {},
       }),
-    ).toThrow(BadRequestException);
-    expect(() =>
+    ).rejects.toThrow(BadRequestException);
+    await expect(
       service.initiate(actor, {
         resourceType: '',
         payload: {},
       }),
-    ).toThrow(BadRequestException);
-    expect(() =>
+    ).rejects.toThrow(BadRequestException);
+    await expect(
       service.complete({ state: 'missing', decision: 'approved' }),
-    ).toThrow(BadRequestException);
+    ).rejects.toThrow(BadRequestException);
   });
 });

@@ -36,7 +36,7 @@ export class GovBrSignController {
   @ApiCreatedResponse({
     description: 'Create a local gov.br advanced signature sandbox request.',
   })
-  initiate(
+  async initiate(
     @CurrentActor() actor: AuthenticatedActor | undefined,
     @Body() body: GovBrSignRequestDto,
   ) {
@@ -51,8 +51,8 @@ export class GovBrSignController {
     description:
       'Apply the local sandbox gov.br decision and redirect back to the portal callback route.',
   })
-  callback(@Query() query: GovBrSignCallbackQueryDto) {
-    const result = this.signService.complete(query);
+  async callback(@Query() query: GovBrSignCallbackQueryDto) {
+    const result = await this.signService.complete(query);
     return { url: result.redirectUrl, statusCode: 302 };
   }
 }

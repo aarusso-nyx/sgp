@@ -9,6 +9,7 @@ import {
   RosterEntry,
   ShiftPattern,
 } from './ponto-escalas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,7 +68,7 @@ export class PontoEscalas implements OnInit, OnDestroy {
           this.loadRosters();
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar escalas.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m102;
         },
       });
   }
@@ -84,11 +85,11 @@ export class PontoEscalas implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (pattern) => {
-          this.message = `Escala ${pattern.code} criada.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m103(pattern.code);
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel criar a escala.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m104;
         },
       });
   }
@@ -117,11 +118,11 @@ export class PontoEscalas implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (roster) => {
-          this.message = `Roster ${roster.status} gerado.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m105(roster.status);
           this.loadRosters();
         },
         error: () => {
-          this.error = 'Nao foi possivel gerar o roster.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m106;
         },
       });
   }
@@ -133,7 +134,7 @@ export class PontoEscalas implements OnInit, OnDestroy {
       .subscribe({
         next: () => this.loadRosters(),
         error: () => {
-          this.error = 'Nao foi possivel publicar o roster.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m107;
         },
       });
   }
@@ -145,7 +146,7 @@ export class PontoEscalas implements OnInit, OnDestroy {
       .subscribe({
         next: () => this.loadRosters(),
         error: () => {
-          this.error = 'Nao foi possivel travar o roster.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m108;
         },
       });
   }
@@ -164,7 +165,7 @@ export class PontoEscalas implements OnInit, OnDestroy {
           this.upcoming = entries;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar proximas escalas.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m109;
         },
       });
   }
@@ -178,7 +179,7 @@ export class PontoEscalas implements OnInit, OnDestroy {
           this.rosters = rosters;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar rosters.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m110;
         },
       });
   }

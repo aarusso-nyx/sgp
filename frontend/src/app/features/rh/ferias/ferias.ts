@@ -4,6 +4,7 @@ import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 import { RhEmployeeRecord, RhWorkflows } from '../services/rh-workflows';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface VacationRecord {
   id: string;
@@ -72,7 +73,7 @@ export class RhFerias implements OnInit, OnDestroy {
           }
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar os servidores.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m172;
         },
       });
   }
@@ -129,7 +130,7 @@ export class RhFerias implements OnInit, OnDestroy {
           this.queue = [record, ...this.queue.filter((item) => item.id !== record.id)];
         },
         error: () => {
-          this.error = 'Nao foi possivel atualizar a programacao de ferias.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m173;
         },
       });
   }

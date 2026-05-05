@@ -24,7 +24,11 @@ describe('EnvironmentalExposureService', () => {
         },
       ],
     ]);
-    const service = new EnvironmentalExposureService(database as never);
+    const stynxEsocial = { enqueue: jest.fn().mockResolvedValue({}) };
+    const service = new EnvironmentalExposureService(
+      database as never,
+      stynxEsocial as never,
+    );
 
     const result = await service.create({
       employeeId: 'employee-1',
@@ -40,10 +44,36 @@ describe('EnvironmentalExposureService', () => {
     expect(result.pendingEvents).toEqual(['START']);
     expect(database.sql()).toContain('risk_management_program_id');
     expect(database.sql()).toContain('saude.environmental_exposure');
+    expect(stynxEsocial.enqueue).toHaveBeenCalledWith({
+      kind: 'trabalhador',
+      eventClass: 'S-2240',
+      sourceRef: {
+        sourceEntityKind: 'saude.environmental_exposure',
+        sourceEntityId: 'exposure-1',
+        environmentalExposureId: 'exposure-1',
+        employeeId: 'employee-1',
+        triggerEvent: 'START',
+      },
+      payload: {
+        environmentalExposureId: 'exposure-1',
+        employeeId: 'employee-1',
+        harmfulAgentCode: '01.01.001',
+        agentKind: 'FISICO',
+        exposureStart: '2026-05-02',
+        exposureEnd: null,
+        mitigatedByEpi: false,
+        mitigatedByEpc: false,
+        specialRetirementEligible: true,
+        triggerEvent: 'START',
+      },
+    });
   });
 
   it('rejects inverted periods before hitting the database', async () => {
-    const service = new EnvironmentalExposureService(databaseStub([]) as never);
+    const service = new EnvironmentalExposureService(
+      databaseStub([]) as never,
+      { enqueue: jest.fn() } as never,
+    );
 
     await expect(
       service.create({

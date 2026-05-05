@@ -7,6 +7,7 @@ import {
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 import { EmitCatDto } from './cat.dto';
 
 export type CatKind = 'INICIAL' | 'REABERTURA' | 'OBITO';
@@ -17,7 +18,7 @@ interface CatEmissionRow extends QueryResultRow {
   cat_kind: CatKind;
   emitted_at: Date | string;
   deadline_at: Date | string;
-  esocial_event_id: string | null;
+  esocial_spool_message_id: string | null;
   doctor_crm: string;
   doctor_name: string;
   internment: boolean;
@@ -47,7 +48,10 @@ export interface CatEmissionSummary {
 
 @Injectable()
 export class CatEmissionService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly stynxEsocialClient: StynxEsocialClient,
+  ) {}
 
   async emit(
     workAccidentId: string,
@@ -114,7 +118,7 @@ export class CatEmissionService {
           cat_kind::text,
           emitted_at,
           deadline_at,
-          esocial_event_id::text,
+          esocial_spool_message_id::text,
           doctor_crm,
           doctor_name,
           internment,
@@ -134,7 +138,47 @@ export class CatEmissionService {
       return insertResult.rows;
     });
 
-    return this.toSummary(rows[0]!);
+    const emission = rows[0]!;
+    const queued = await this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2210',
+      sourceRef: {
+        sourceEntityKind: 'saude.cat_emission',
+        sourceEntityId: emission.id,
+        catEmissionId: emission.id,
+        workAccidentId: emission.work_accident_id,
+        catKind: emission.cat_kind,
+      },
+      payload: {
+        catEmissionId: emission.id,
+        workAccidentId: emission.work_accident_id,
+        catKind: emission.cat_kind,
+        emittedAt: new Date(emission.emitted_at).toISOString(),
+        deadlineAt: new Date(emission.deadline_at).toISOString(),
+      },
+    });
+
+    const updated = await this.databaseService.query<CatEmissionRow>(
+      `
+      UPDATE saude.cat_emission
+      SET esocial_spool_message_id = $2::uuid
+      WHERE id = $1::uuid
+      RETURNING
+        id::text,
+        work_accident_id::text,
+        cat_kind::text,
+        emitted_at,
+        deadline_at,
+        esocial_spool_message_id::text,
+        doctor_crm,
+        doctor_name,
+        internment,
+        leave_until
+      `,
+      [emission.id, queued.messageId],
+    );
+
+    return this.toSummary(updated[0] ?? emission);
   }
 
   deadlineFor(
@@ -159,7 +203,7 @@ export class CatEmissionService {
       catKind: row.cat_kind,
       emittedAt: new Date(row.emitted_at).toISOString(),
       deadlineAt: new Date(row.deadline_at).toISOString(),
-      esocialEventId: row.esocial_event_id,
+      esocialEventId: row.esocial_spool_message_id,
       doctorCrm: row.doctor_crm,
       doctorName: row.doctor_name,
       internment: row.internment,

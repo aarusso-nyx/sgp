@@ -9,8 +9,8 @@ import {
 import { SignedXml } from 'xml-crypto';
 
 import { DatabaseService } from '../../database/database.service';
-import { CertificateStoreService } from '../../esocial-worker/certificate-store/certificate-store.service';
-import { IcpSignerService } from '../../esocial-worker/signature/icp-signer.service';
+import { IcpSignerService } from '../../external/signature/icp-signer.service';
+import { TenantFiscalCertificateService } from '../../external/signature/tenant-fiscal-certificate.service';
 import { EfdReinfBuilderService } from './efd-reinf-builder.service';
 import { EfdReinfEventDetailsDto } from './efd-reinf.dto';
 
@@ -19,7 +19,7 @@ export class EfdReinfSignerService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly events: EfdReinfBuilderService,
-    private readonly certificateStore: CertificateStoreService,
+    private readonly certificateStore: TenantFiscalCertificateService,
     private readonly icpSigner: IcpSignerService,
   ) {}
 
@@ -33,7 +33,7 @@ export class EfdReinfSignerService {
     }
 
     let certificate: Awaited<
-      ReturnType<CertificateStoreService['activeCertificate']>
+      ReturnType<TenantFiscalCertificateService['activeCertificate']>
     >;
     try {
       certificate = await this.certificateStore.activeCertificate();
@@ -45,7 +45,10 @@ export class EfdReinfSignerService {
       );
     }
 
-    const material = this.icpSigner.readPkcs12(certificate.pkcs12);
+    const material = this.icpSigner.readPkcs12(
+      certificate.pkcs12,
+      certificate.password,
+    );
     const signedXml = signEfdReinfXml(
       event.payloadXml,
       material.privateKeyPem,

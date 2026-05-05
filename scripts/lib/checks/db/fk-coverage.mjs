@@ -14,10 +14,7 @@ const asJson = argv.has('--json');
 const minCoverage = 0.95;
 
 const promotedInferredForeignKeys = new Set([
-  'esocial.s2299_pending.employee_id->hr.employee.id',
-  'esocial.s2299_pending.employment_link_id->hr.employment_link.id',
   'hr.merit_progression.administrative_process_id->hr.administrative_process.id',
-  'public.esocial_event.payroll_run_id->payroll.payroll_run.id',
 ]);
 
 const ignoredSqlFiles = new Set([
@@ -28,7 +25,6 @@ const ignoredSqlFiles = new Set([
 
 const schemaAllowList = new Set([
   'avaliacao',
-  'esocial',
   'fiscal',
   'hr',
   'lgpd',
@@ -219,11 +215,7 @@ function renderIndexSql(missingColumns) {
 }
 
 function inferredForeignKeyDeleteClause(foreignKey) {
-  const deleteClauses = new Map([
-    ['esocial.s2299_pending.employee_id->hr.employee.id', ' ON DELETE CASCADE'],
-    ['esocial.s2299_pending.employment_link_id->hr.employment_link.id', ' ON DELETE CASCADE'],
-    ['public.esocial_event.payroll_run_id->payroll.payroll_run.id', ' ON DELETE SET NULL'],
-  ]);
+  const deleteClauses = new Map([]);
 
   return deleteClauses.get(inferredForeignKeyKey(foreignKey)) ?? '';
 }

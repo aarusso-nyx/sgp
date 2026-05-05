@@ -17,9 +17,16 @@ import { validateEnvironment } from '../config/environment';
 import { DatabaseModule } from '../database/database.module';
 import { DocumentsModule } from '../documents/documents.module';
 import { PadesAdapter } from '../external/signature/pades.adapter';
+import { BlockedPaymentsReportService } from './blocked-payments-report.service';
+import { FinancialReportService } from './financial-report.service';
+import { ManagerialReportService } from './managerial-report.service';
 import { PdfABuilderService } from './payslip/pdf-a-builder.service';
 import { PayslipController } from './payslip/payslip.controller';
 import { PayslipRenderService } from './payslip/payslip-render.service';
+import { PayrollSummaryReportService } from './payroll-summary-report.service';
+import { ReconciliationReportService } from './reconciliation-report.service';
+import { ReportWorkerArtifactsService } from './report-worker-artifacts.service';
+import { ReportWorkerDataService } from './report-worker-data.service';
 import { YearlyIncomeBatchService } from './yearly-income/yearly-income-batch.service';
 import { YearlyIncomeController } from './yearly-income/yearly-income.controller';
 import { YearlyIncomeRenderService } from './yearly-income/yearly-income-render.service';
@@ -50,6 +57,13 @@ import { ReportWorkerService } from './report-worker.service';
     PayslipRenderService,
     YearlyIncomeRenderService,
     YearlyIncomeBatchService,
+    ReportWorkerDataService,
+    ReportWorkerArtifactsService,
+    PayrollSummaryReportService,
+    ManagerialReportService,
+    BlockedPaymentsReportService,
+    ReconciliationReportService,
+    FinancialReportService,
     ReportWorkerService,
     {
       provide: APP_PIPE,

@@ -1,0 +1,301 @@
+import { createHash } from 'node:crypto';
+
+import {
+  SgpQueueAdapter,
+  type QueueAdapterResponseEnvelope,
+  type QueueAdapterTransport,
+} from '../../../common/adapters';
+import type { AuthenticatedActor } from '../../auth.types';
+import {
+  GOVBR_RELAY_QUEUE_KIND,
+  type GovBrRelayAck,
+  type GovBrRelayCompleteRequestPayload,
+  type GovBrRelayCreateRequestPayload,
+  type GovBrRelayKind,
+  type GovBrRelayRequestPayload,
+  type GovBrRelayResponsePayload,
+  type GovBrRelayScenario,
+  type GovBrRelaySignatureRequestResponse,
+} from '../../../external/mocks/govbr-relay';
+import type {
+  GovBrAdvancedSignatureEnvelope,
+  GovBrSignatureDecision,
+} from '../govbr-signature-sandbox.adapter';
+import type { GovBrSignRequestDto } from '../sign.dto';
+
+export type GovBrQueueRequestOptions = Readonly<{
+  requestId?: string;
+  correlationId?: string;
+  idempotencyKey?: string;
+  maxAttempts?: number;
+  scenario?: GovBrRelayScenario;
+}>;
+
+export type GovBrQueueCreateInput = GovBrQueueRequestOptions &
+  Readonly<{
+    actor: AuthenticatedActor;
+    request: GovBrSignRequestDto;
+  }>;
+
+export type GovBrQueueCompleteInput = GovBrQueueRequestOptions &
+  Readonly<{
+    state: string;
+    decision: GovBrSignatureDecision;
+    challenge?: string;
+    tenantId?: string;
+  }>;
+
+export type GovBrQueueAdapterResult = Readonly<{
+  queueResponse: QueueAdapterResponseEnvelope<
+    GovBrRelayKind,
+    GovBrRelayResponsePayload
+  >;
+  relay: GovBrRelayResponsePayload;
+  request: GovBrRelaySignatureRequestResponse;
+  ack: GovBrRelayAck;
+  provider: 'govbr-local-sandbox';
+  redirectUrl: string | null;
+}>;
+
+export type GovBrQueueAdapterOptions = Readonly<{
+  transport?: QueueAdapterTransport;
+  queue?: SgpQueueAdapter<GovBrRelayKind>;
+  maxAttempts?: number;
+  responseTimeoutMs?: number;
+  retryDelayMs?: (attempt: number) => number;
+  now?: () => Date;
+  idFactory?: () => string;
+}>;
+
+export class GovBrQueueAdapter {
+  private readonly queue: SgpQueueAdapter<GovBrRelayKind>;
+  private readonly ownsQueue: boolean;
+  private readonly stateTenants = new Map<string, string>();
+
+  constructor(options: GovBrQueueAdapterOptions) {
+    if (options.queue) {
+      this.queue = options.queue;
+      this.ownsQueue = false;
+      return;
+    }
+
+    if (!options.transport) {
+      throw new Error(
+        'GovBrQueueAdapter requires either a queue or a queue transport.',
+      );
+    }
+    this.queue = new SgpQueueAdapter({
+      kind: GOVBR_RELAY_QUEUE_KIND,
+      transport: options.transport,
+      maxAttempts: options.maxAttempts,
+      responseTimeoutMs: options.responseTimeoutMs,
+      retryDelayMs: options.retryDelayMs,
+      now: options.now,
+      idFactory: options.idFactory,
+    });
+    this.ownsQueue = true;
+  }
+
+  close(): void {
+    if (this.ownsQueue) {
+      this.queue.close();
+    }
+  }
+
+  onModuleDestroy(): void {
+    this.close();
+  }
+
+  async createRequest(
+    actor: AuthenticatedActor,
+    request: GovBrSignRequestDto,
+    options: GovBrQueueRequestOptions = {},
+  ): Promise<GovBrQueueAdapterResult> {
+    return this.submitCreateRequest({ actor, request, ...options });
+  }
+
+  async complete(
+    state: string,
+    decision: GovBrSignatureDecision,
+    challenge?: string,
+    options: GovBrQueueRequestOptions & { tenantId?: string } = {},
+  ): Promise<GovBrRelaySignatureRequestResponse> {
+    const result = await this.completeRequest({
+      state,
+      decision,
+      challenge,
+      ...options,
+    });
+    return result.request;
+  }
+
+  async submitCreateRequest(
+    input: GovBrQueueCreateInput,
+  ): Promise<GovBrQueueAdapterResult> {
+    const payload = this.buildCreatePayload(input);
+    const result = await this.requestRelay(input.actor.tenantId, payload, {
+      requestId: input.requestId,
+      correlationId: input.correlationId,
+      idempotencyKey:
+        input.idempotencyKey ?? this.createIdempotencyKey(input, payload),
+      maxAttempts: input.maxAttempts,
+    });
+    this.stateTenants.set(result.request.state, input.actor.tenantId);
+    return result;
+  }
+
+  async completeRequest(
+    input: GovBrQueueCompleteInput,
+  ): Promise<GovBrQueueAdapterResult> {
+    const tenantId = input.tenantId ?? this.stateTenants.get(input.state);
+    if (!tenantId) {
+      throw new Error(
+        'GovBrQueueAdapter cannot complete an unknown state without tenantId.',
+      );
+    }
+    const payload = this.buildCompletePayload(input);
+    const result = await this.requestRelay(tenantId, payload, {
+      requestId: input.requestId,
+      correlationId: input.correlationId,
+      idempotencyKey:
+        input.idempotencyKey ??
+        `${tenantId}:govbr-sign:complete:${input.state}:${input.decision}`,
+      maxAttempts: input.maxAttempts,
+    });
+    this.stateTenants.set(result.request.state, tenantId);
+    return result;
+  }
+
+  verifyEnvelope(
+    payload: Record<string, unknown>,
+    envelope: GovBrAdvancedSignatureEnvelope,
+  ): boolean {
+    const payloadHash = sha256(canonical(payload));
+    if (payloadHash !== envelope.payloadHash) return false;
+    const tamperEvidentHash = sha256(
+      canonical({
+        payloadHash: envelope.payloadHash,
+        signatureHash: envelope.signatureHash,
+        signerUniqueKey: envelope.signerUniqueKey,
+        signedAt: envelope.signedAt,
+      }),
+    );
+    return tamperEvidentHash === envelope.tamperEvidentHash;
+  }
+
+  private buildCreatePayload(
+    input: GovBrQueueCreateInput,
+  ): GovBrRelayCreateRequestPayload {
+    if (!input.request.payload || typeof input.request.payload !== 'object') {
+      throw new Error('GovBrQueueAdapter requires an object payload.');
+    }
+
+    return {
+      action: 'CREATE_SIGNATURE_REQUEST',
+      actor: input.actor,
+      resourceType: input.request.resourceType,
+      resourceId: input.request.resourceId,
+      payload: input.request.payload,
+      returnUrl: input.request.returnUrl,
+      scenario: input.scenario,
+    };
+  }
+
+  private buildCompletePayload(
+    input: GovBrQueueCompleteInput,
+  ): GovBrRelayCompleteRequestPayload {
+    return {
+      action: 'COMPLETE_SIGNATURE_REQUEST',
+      state: input.state,
+      decision: input.decision,
+      challenge: input.challenge,
+      scenario: input.scenario,
+    };
+  }
+
+  private async requestRelay(
+    tenantId: string,
+    payload: GovBrRelayRequestPayload,
+    options: GovBrQueueRequestOptions,
+  ): Promise<GovBrQueueAdapterResult> {
+    const queueResponse = await this.queue.request<
+      GovBrRelayRequestPayload,
+      GovBrRelayResponsePayload
+    >({
+      tenantId,
+      requestId: options.requestId,
+      correlationId: options.correlationId,
+      idempotencyKey: options.idempotencyKey,
+      maxAttempts: options.maxAttempts,
+      payload,
+    });
+
+    const relay = queueResponse.payload;
+    if (!relay) {
+      throw new Error('GovBR relay returned an OK response without payload.');
+    }
+    this.assertRelayPayload(payload, relay);
+
+    return {
+      queueResponse,
+      relay,
+      request: relay.request,
+      ack: relay.ack,
+      provider: relay.provider,
+      redirectUrl: relay.redirectUrl,
+    };
+  }
+
+  private assertRelayPayload(
+    payload: GovBrRelayRequestPayload,
+    relay: GovBrRelayResponsePayload,
+  ): void {
+    if (relay.relay !== 'govbr-relay') {
+      throw new Error('GovBR relay returned an unexpected relay identifier.');
+    }
+    if (relay.action !== payload.action) {
+      throw new Error('GovBR relay returned a different action.');
+    }
+    if (payload.action === 'COMPLETE_SIGNATURE_REQUEST') {
+      if (relay.request.state !== payload.state) {
+        throw new Error('GovBR relay returned a different signature state.');
+      }
+    }
+  }
+
+  private createIdempotencyKey(
+    input: GovBrQueueCreateInput,
+    payload: GovBrRelayCreateRequestPayload,
+  ): string {
+    return [
+      input.actor.tenantId,
+      'govbr-sign',
+      'create',
+      payload.resourceType,
+      payload.resourceId ?? 'none',
+      sha256(canonical(payload.payload)),
+    ].join(':');
+  }
+}
+
+function sha256(value: string): string {
+  return createHash('sha256').update(value, 'utf8').digest('hex');
+}
+
+function canonical(value: unknown): string {
+  if (Array.isArray(value)) {
+    return `[${value.map((item) => canonical(item)).join(',')}]`;
+  }
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value as Record<string, unknown>)
+      .sort()
+      .map(
+        (key) =>
+          `${JSON.stringify(key)}:${canonical(
+            (value as Record<string, unknown>)[key],
+          )}`,
+      )
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
+}

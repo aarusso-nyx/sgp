@@ -3,6 +3,7 @@ import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { RhEmployeeRecord, RhWorkflows } from '../services/rh-workflows';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,7 +77,7 @@ export class RhFuncionarios implements OnInit, OnDestroy {
             : (result.items[0] ?? null);
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar os servidores.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m172;
         },
       });
   }
@@ -98,13 +99,13 @@ export class RhFuncionarios implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (employee) => {
-          this.message = `Servidor ${employee.registration} admitido.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m177(employee.registration);
           this.admissionForm.reset();
           this.selected = employee;
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel admitir o servidor.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m178;
         },
       });
   }
@@ -128,12 +129,12 @@ export class RhFuncionarios implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Desligamento registrado.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m179;
           this.terminationForm.reset();
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel registrar o desligamento.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m180;
         },
       });
   }

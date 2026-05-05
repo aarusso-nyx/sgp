@@ -62,20 +62,6 @@
       ]
     },
     {
-      "name": "sgp-esocial-worker",
-      "kind": "worker",
-      "status": "implemented",
-      "workspace": "backend",
-      "entry_file": "main-esocial-worker.ts",
-      "dev_port": 3303,
-      "required_paths": [
-        "backend/src/main-esocial-worker.ts",
-        "backend/src/esocial-worker/esocial-worker.module.ts",
-        "backend/src/esocial-worker/esocial-worker.service.ts",
-        "docs/eng/platform.md"
-      ]
-    },
-    {
       "name": "sgp-integrations-worker",
       "kind": "worker",
       "status": "implemented",

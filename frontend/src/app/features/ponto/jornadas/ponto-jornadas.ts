@@ -8,6 +8,7 @@ import {
   PontoJornadasService,
   WorkScheduleSummary,
 } from './ponto-jornadas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,7 +66,7 @@ export class PontoJornadas implements OnInit, OnDestroy {
           this.loadAssignments();
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar jornadas.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m121;
         },
       });
   }
@@ -83,12 +84,12 @@ export class PontoJornadas implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (schedule) => {
-          this.message = `Jornada ${schedule.code} criada.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m122(schedule.code);
           this.assignmentForm.patchValue({ workScheduleId: schedule.workScheduleId });
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel criar a jornada.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m123;
         },
       });
   }
@@ -116,11 +117,11 @@ export class PontoJornadas implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Atribuicao registrada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m124;
           this.loadAssignments();
         },
         error: () => {
-          this.error = 'Nao foi possivel atribuir a jornada.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m125;
         },
       });
   }
@@ -134,7 +135,7 @@ export class PontoJornadas implements OnInit, OnDestroy {
           this.assignments = assignments;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar atribuicoes.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m126;
         },
       });
   }

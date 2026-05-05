@@ -61,7 +61,7 @@ Authored product authority: mission, scope, glossary, domain map, and binding de
   - `sgp-core-api` — API principal administrativa (staff).
   - `sgp-portal-api` — API do portal (somente leitura, privilégios mínimos no banco).
   - `sgp-payroll-engine` — implementação separada de cálculo de folha.
-  - `sgp-esocial-worker` — worker assíncrono eSocial S-1.2.
+  - `stynx-esocial` — worker assíncrono eSocial S-1.2.
   - `sgp-integrations-worker` — workers de remessa/retorno bancário, SIPREV e DIRF.
 - **Frontend:** Angular (última LTS) em monorepo nx, duas SPAs:
   - `sgp-admin` — aplicação administrativa (back-office).
@@ -414,7 +414,7 @@ PARAMETRIZAR (especialidade + médico + agenda) → AGENDAR (PENDENTE/AGENDADO) 
 - `folha.calculo.solicitada` → `sgp-payroll-engine` consome.
 - `folha.calculo.concluida` → `sgp-core-api` atualiza UI.
 - `contracheque.gerar.pdf` → `sgp-report-service`.
-- `esocial.evento.pendente` → `sgp-esocial-worker` (retry até 3, backoff exponencial).
+- `public.esocial_spool` → `stynx-esocial` (retry até 3, backoff exponencial).
 - `remessa.gerar` / `retorno.processar` → `sgp-integrations-worker`.
 - `audit.evento.criado` → consumidor grava em `audit_log`.
 
@@ -1244,8 +1244,8 @@ Esta seção define as regras editoriais obrigatórias para todos os artefatos d
 - Nomes de menus são citados em **negrito** com capitalização do legado, exatamente como aparecem no sistema: **Folha de Pagamento**, **Módulo RH**, **Área de Saúde**.
 - Nomes de módulos NestJS são citados em `backtick` minúsculos: `folha`, `rh`, `saude`, `previdenciario`.
 - Libs Angular são citadas com namespace `@sgp/`: `@sgp/folha`, `@sgp/rh`, `@sgp/saude`.
-- Apps NestJS e Angular são citados em `backtick` com prefixo `sgp-`: `sgp-core-api`, `sgp-payroll-engine`, `sgp-esocial-worker`, `sgp-integrations-worker`, `sgp-admin`, `sgp-portal`.
-- Workers especializados: `sgp-esocial-worker`, `sgp-integrations-worker`, `sgp-report-service`.
+- Apps NestJS e Angular são citados em `backtick` com prefixo `sgp-`: `sgp-core-api`, `sgp-payroll-engine`, `stynx-esocial`, `sgp-integrations-worker`, `sgp-admin`, `sgp-portal`.
+- Workers especializados: `stynx-esocial`, `sgp-integrations-worker`, `sgp-report-service`.
 
 #### 7.4 Citação de Entidades de Banco de Dados
 
@@ -1542,7 +1542,7 @@ sequenceDiagram
 
 #### Decisão 7 — eSocial Apenas Leiaute S-1.2
 
-**Decisão:** O SGP implementa exclusivamente o leiaute eSocial S-1.2. Eventos assíncronos são processados por Lambda + Step Functions (`sgp-esocial-worker`). Leiautes anteriores (S-1.0, S-1.1) não são suportados.
+**Decisão:** O SGP implementa exclusivamente o leiaute eSocial S-1.2. Eventos assíncronos são processados por Lambda + Step Functions (`stynx-esocial`). Leiautes anteriores (S-1.0, S-1.1) não são suportados.
 
 **Contexto:** O legado suporta o leiaute S-1.0, que está em processo de descontinuação pelo Governo Federal. Manter compatibilidade com múltiplos leiautes aumentaria o custo de manutenção e o risco de inconsistência.
 
@@ -1695,13 +1695,13 @@ SQL:    SELECT f.nivel_salarial_valor * (t.dias_trab / t.dias_mes)
 
 #### Observabilidade
 
-| Dimensão            | Ferramenta                                | Detalhes                                                                             |
-| ------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------ |
-| Logs                | CloudWatch Logs                           | Estruturado JSON; campos obrigatórios: `tenant_id`, `request_id`, `service`, `level` |
-| Traces              | AWS X-Ray via OpenTelemetry               | Span por request HTTP, span por query DB, span por evento SQS                        |
-| Métricas de negócio | CloudWatch Custom Metrics                 | `folhas_fechadas_mes`, `contracheques_emitidos_mes`, `esocial_eventos_enviados`      |
-| Alertas             | CloudWatch Alarms → SNS → PagerDuty/Slack | SLA: p99 API < 2s; erro 5xx < 0.1%; fila SQS > 1000 msgs                             |
-| Dashboards          | CloudWatch Dashboards                     | Por ambiente (staging, prod) e por serviço                                           |
+| Dimensão            | Ferramenta                                | Detalhes                                                                                |
+| ------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------- |
+| Logs                | CloudWatch Logs                           | Estruturado JSON; campos obrigatórios: `tenant_id`, `request_id`, `service`, `level`    |
+| Traces              | AWS X-Ray via OpenTelemetry               | Span por request HTTP, span por query DB, span por evento SQS                           |
+| Métricas de negócio | CloudWatch Custom Metrics                 | `folhas_fechadas_mes`, `contracheques_emitidos_mes`, `esocial_spool_mensagens_enviadas` |
+| Alertas             | CloudWatch Alarms → SNS → PagerDuty/Slack | SLA: p99 API < 2s; erro 5xx < 0.1%; fila SQS > 1000 msgs                                |
+| Dashboards          | CloudWatch Dashboards                     | Por ambiente (staging, prod) e por serviço                                              |
 
 #### Testes
 

@@ -288,12 +288,12 @@ export const LGPD_LEGAL_BASIS_RULES: readonly LgpdLegalBasisRule[] = [
       'SST data when required',
     ],
     sourceTables: [
-      'public.esocial_event',
+      'public.esocial_spool',
       'fiscal.dctfweb_debit',
       'payroll.payroll_financial_record',
       'hr.employee',
     ],
-    readSurfaces: ['esocial-worker', 'integrations-worker', 'TCE adapters'],
+    readSurfaces: ['stynx-esocial', 'integrations-worker', 'TCE adapters'],
     retentionRule:
       'Retain according to official layouts, Receita Federal, eSocial, and courts of accounts.',
     sharingScope: 'government_regulators',

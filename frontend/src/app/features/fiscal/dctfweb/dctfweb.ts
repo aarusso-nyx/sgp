@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { firstValueFrom } from 'rxjs';
 
 import { DctfwebApiService, DctfwebDeclaration } from './dctfweb.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -136,7 +137,7 @@ export class FiscalDctfweb {
   }
 
   private fail(error: unknown): void {
-    this.errorMessage = error instanceof Error ? error.message : 'Operacao DCTFWeb indisponivel.';
+    this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m040;
     this.busyId = '';
     this.loading = false;
   }

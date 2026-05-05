@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { HourBank, HourBankMovement, PontoBancoHorasService } from './ponto-banco-horas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,7 +61,7 @@ export class PontoBancoHoras implements OnInit, OnDestroy {
           }
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar bancos de horas.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m094;
         },
       });
   }
@@ -76,7 +77,7 @@ export class PontoBancoHoras implements OnInit, OnDestroy {
           this.movements = movements;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar o extrato.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m095;
         },
       });
   }
@@ -106,11 +107,11 @@ export class PontoBancoHoras implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Ajuste registrado.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m096;
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel registrar o ajuste.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m097;
         },
       });
   }

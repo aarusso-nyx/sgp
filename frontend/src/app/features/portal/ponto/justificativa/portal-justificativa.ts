@@ -7,6 +7,7 @@ import {
   PontoJustificativa,
   PontoJustificativasService,
 } from '../../../ponto/justificativas/ponto-justificativas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,7 +44,7 @@ export class PortalJustificativa implements OnInit {
     try {
       this.requests = await firstValueFrom(this.service.list());
     } catch {
-      this.error = 'Nao foi possivel carregar suas justificativas.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m153;
     }
   }
 
@@ -75,11 +76,11 @@ export class PortalJustificativa implements OnInit {
           payrollTreatment: 'PAID',
         }),
       );
-      this.message = 'Justificativa enviada.';
+      this.message = SGP_FEATURE_I18N_MESSAGES.m154;
       this.form.patchValue({ reason: '', attachmentId: '' });
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel enviar a justificativa.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m155;
     } finally {
       this.saving = false;
     }

@@ -1,8 +1,7 @@
 import { Injectable, Optional } from '@nestjs/common';
 
 import { DatabaseService } from '../../database/database.service';
-import { S2405Builder } from '../../esocial-worker/builders/s2405.builder';
-import { ESocialEmitService } from '../../esocial-worker/esocial-emit.service';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 import {
   CreateBeneficiaryContactHistoryDto,
   CreateExternalLifeProofDto,
@@ -37,8 +36,7 @@ import {
 export class RecadastramentoService {
   constructor(
     private readonly databaseService: DatabaseService,
-    @Optional() private readonly s2405Builder?: S2405Builder,
-    @Optional() private readonly esocialEmitService?: ESocialEmitService,
+    @Optional() private readonly stynxEsocialClient?: StynxEsocialClient,
   ) {}
 
   async listCampaigns() {
@@ -370,7 +368,7 @@ export class RecadastramentoService {
   private async emitS2405ForRecertificationRecord(
     recertificationRecordId: string,
   ) {
-    if (!this.s2405Builder || !this.esocialEmitService) return;
+    if (!this.stynxEsocialClient) return;
     const eligible = await this.databaseService.query<S2405EligibilityRow>(
       `
       SELECT grant_row.id::text AS retirement_grant_id
@@ -390,16 +388,17 @@ export class RecadastramentoService {
     );
     if (!eligible[0]) return;
 
-    const record = await this.s2405Builder.build(recertificationRecordId);
-    await this.esocialEmitService.emit({
-      tenantId: record.tenantId,
-      eventKind: record.eventKind,
-      xml: record.xml,
-      reference: record.reference,
-      competence: record.competence,
-      sourceEntityKind: 'hr.recertification_record',
-      sourceEntityId: record.recertificationRecordId,
-      payload: record.payload,
+    await this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2405',
+      sourceRef: {
+        sourceEntityKind: 'hr.recertification_record',
+        sourceEntityId: recertificationRecordId,
+      },
+      payload: {
+        recertificationRecordId,
+        retirementGrantId: eligible[0].retirement_grant_id,
+      },
     });
   }
 }

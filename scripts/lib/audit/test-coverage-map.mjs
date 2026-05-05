@@ -53,10 +53,12 @@ export async function buildTestCoverageMap(repoRoot, auditRoot, round) {
   );
   const featureMap = frRows.map((fr) => {
     const terms = termsFor(fr.requirement);
-    const matches = specs.filter((spec) =>
-      terms.some(
-        (term) => spec.search_text.includes(term) || spec.file.toLowerCase().includes(term),
-      ),
+    const matches = specs.filter(
+      (spec) =>
+        spec.explicit_fr_ids.includes(fr.id) ||
+        terms.some(
+          (term) => spec.search_text.includes(term) || spec.file.toLowerCase().includes(term),
+        ),
     );
     return {
       fr_id: fr.id,
@@ -110,12 +112,21 @@ function inspectSpec(repoRoot, file, content) {
       ].map((match) => match[1]),
     ),
   ].sort();
+  const explicitFrIds = [
+    ...new Set(
+      [...content.matchAll(/(?:@sgp-fr|SGP-FR:)\s+([A-Z0-9-]+(?:\s*,\s*[A-Z0-9-]+)*)/gi)]
+        .flatMap((match) => match[1].split(/\s*,\s*/))
+        .map((id) => id.trim().toUpperCase())
+        .filter(Boolean),
+    ),
+  ].sort();
   const fileRelative = repoRelative(repoRoot, file);
   return {
     file: fileRelative,
     describes,
     route_references: routeReferences,
     entity_references: entityReferences,
+    explicit_fr_ids: explicitFrIds,
     search_text:
       `${fileRelative} ${describes.join(' ')} ${routeReferences.join(' ')} ${entityReferences.join(' ')}`.toLowerCase(),
   };
@@ -164,10 +175,11 @@ function renderMarkdown(map) {
     '## Specs',
     '',
     markdownTable(
-      ['Spec', 'Describe blocks', 'Routes', 'Entities'],
+      ['Spec', 'Describe blocks', 'FR tags', 'Routes', 'Entities'],
       map.specs.map((spec) => [
         spec.file,
         spec.describes.join('<br>') || '-',
+        spec.explicit_fr_ids.join('<br>') || '-',
         spec.route_references.join('<br>') || '-',
         spec.entity_references.join('<br>') || '-',
       ]),

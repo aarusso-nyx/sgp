@@ -1,10 +1,7 @@
 import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 
 import { DatabaseService } from '../../database/database.service';
-import { S2410Builder } from '../../esocial-worker/builders/s2410.builder';
-import { S2416Builder } from '../../esocial-worker/builders/s2416.builder';
-import { S2420Builder } from '../../esocial-worker/builders/s2420.builder';
-import { ESocialEmitService } from '../../esocial-worker/esocial-emit.service';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 import {
   CreatePensionCompensationDto,
   CreatePensionGrantDto,
@@ -27,10 +24,7 @@ import {
 export class PensaoService {
   constructor(
     private readonly databaseService: DatabaseService,
-    @Optional() private readonly s2410Builder?: S2410Builder,
-    @Optional() private readonly s2416Builder?: S2416Builder,
-    @Optional() private readonly s2420Builder?: S2420Builder,
-    @Optional() private readonly esocialEmitService?: ESocialEmitService,
+    @Optional() private readonly stynxEsocialClient?: StynxEsocialClient,
   ) {}
 
   async listPensions() {
@@ -251,47 +245,41 @@ export class PensaoService {
   }
 
   private async emitS2410ForPensionGrant(pensionGrantId: string) {
-    if (!this.s2410Builder || !this.esocialEmitService) return;
-    const record = await this.s2410Builder.buildPensionGrant(pensionGrantId);
-    await this.esocialEmitService.emit({
-      tenantId: record.tenantId,
-      eventKind: record.eventKind,
-      xml: record.xml,
-      reference: record.reference,
-      competence: record.competence,
-      sourceEntityKind: record.sourceEntityKind,
-      sourceEntityId: record.sourceId,
-      payload: record.payload,
+    if (!this.stynxEsocialClient) return;
+    await this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2410',
+      sourceRef: {
+        sourceEntityKind: 'hr.pension_grant',
+        sourceEntityId: pensionGrantId,
+      },
+      payload: { pensionGrantId },
     });
   }
 
   private async emitS2416ForPensionGrant(pensionGrantId: string) {
-    if (!this.s2416Builder || !this.esocialEmitService) return;
-    const record = await this.s2416Builder.buildPensionGrant(pensionGrantId);
-    await this.esocialEmitService.emit({
-      tenantId: record.tenantId,
-      eventKind: record.eventKind,
-      xml: record.xml,
-      reference: record.reference,
-      competence: record.competence,
-      sourceEntityKind: record.sourceEntityKind,
-      sourceEntityId: record.pensionGrantId,
-      payload: record.payload,
+    if (!this.stynxEsocialClient) return;
+    await this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2416',
+      sourceRef: {
+        sourceEntityKind: 'hr.pension_grant',
+        sourceEntityId: pensionGrantId,
+      },
+      payload: { pensionGrantId },
     });
   }
 
   private async emitS2420ForPensionGrant(pensionGrantId: string) {
-    if (!this.s2420Builder || !this.esocialEmitService) return;
-    const record = await this.s2420Builder.buildPensionGrant(pensionGrantId);
-    await this.esocialEmitService.emit({
-      tenantId: record.tenantId,
-      eventKind: record.eventKind,
-      xml: record.xml,
-      reference: record.reference,
-      competence: record.competence,
-      sourceEntityKind: record.sourceEntityKind,
-      sourceEntityId: record.sourceId,
-      payload: record.payload,
+    if (!this.stynxEsocialClient) return;
+    await this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2420',
+      sourceRef: {
+        sourceEntityKind: 'hr.pension_grant',
+        sourceEntityId: pensionGrantId,
+      },
+      payload: { pensionGrantId },
     });
   }
 }

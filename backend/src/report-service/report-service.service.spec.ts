@@ -1,11 +1,9 @@
-import { BadRequestException } from '@nestjs/common';
-
 import { ReportRuntimeService } from './report-service.service';
 
 describe('ReportRuntimeService', () => {
   const tenantId = '22222222-2222-4222-8222-222222222222';
 
-  it('rejects eSocial definitions in the report-service runtime', () => {
+  it('rejects unsupported definitions in the report-service runtime', () => {
     const service = new ReportRuntimeService(
       { configured: false } as never,
       { pollOnce: jest.fn() } as never,
@@ -14,9 +12,11 @@ describe('ReportRuntimeService', () => {
     expect(() =>
       service.validateRequest({
         tenantId,
-        definitionCode: 'ESOCIAL_EVENTO_PROCESSAR',
+        definitionCode: 'ESOCIAL_LEGACY_PROCESSOR',
       }),
-    ).toThrow(BadRequestException);
+    ).toThrow(
+      'eSocial report processing belongs to stynx-esocial: ESOCIAL_LEGACY_PROCESSOR',
+    );
   });
 
   it('queues a concrete report request with tenant scope', async () => {

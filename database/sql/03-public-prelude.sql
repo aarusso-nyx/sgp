@@ -63,19 +63,6 @@ CREATE TYPE public."DocumentUploadStatus" AS ENUM (
     'ABORTED'
 );
 
-CREATE TYPE public."ESocialEventStatus" AS ENUM (
-    'PENDENTE',
-    'GERANDO_XML',
-    'ASSINANDO',
-    'ENVIANDO',
-    'AGUARDANDO_RETORNO',
-    'PROCESSADO_COM_SUCESSO',
-    'PROCESSADO_COM_ERROS',
-    'ERRO_TECNICO_RETENTAVEL',
-    'ERRO_DEFINITIVO',
-    'EXCLUIDO'
-);
-
 CREATE TYPE public."EmployeeLifecycleStatus" AS ENUM (
     'ACTIVE',
     'ON_LEAVE',

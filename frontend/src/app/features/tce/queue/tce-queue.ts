@@ -13,6 +13,7 @@ import {
   TceQueueJob,
   TceSubmissionAttempt,
 } from './tce-queue.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -155,7 +156,7 @@ export class TceQueue {
   }
 
   private fail(error: unknown): void {
-    this.errorMessage = error instanceof Error ? error.message : 'Fila TCE indisponivel.';
+    this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m240;
     this.busyId = '';
     this.loading = false;
   }

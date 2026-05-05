@@ -7,6 +7,7 @@ import {
   ESocialSubmissionBatch,
   ESocialSubmissaoService,
 } from './esocial-submissao.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +42,7 @@ export class ESocialSubmissao implements OnInit {
       this.batches = batches;
       this.circuits = circuits;
     } catch {
-      this.error = 'Nao foi possivel carregar as submissoes.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m035;
     } finally {
       this.loading = false;
     }
@@ -54,7 +55,7 @@ export class ESocialSubmissao implements OnInit {
       await firstValueFrom(this.service.forceRetry(batch.batchId));
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel forcar o retry.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m033;
     } finally {
       this.retryingBatchId = '';
     }

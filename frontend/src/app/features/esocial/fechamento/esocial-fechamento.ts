@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { ESocialClosureState, ESocialFechamentoService } from './esocial-fechamento.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +42,7 @@ export class ESocialFechamento implements OnInit {
     try {
       this.state = await firstValueFrom(this.service.status(this.year, this.month));
     } catch {
-      this.error = 'Nao foi possivel carregar o fechamento.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m028;
     } finally {
       this.loading = false;
     }
@@ -56,7 +57,7 @@ export class ESocialFechamento implements OnInit {
       this.lastHash = result.xmlHash;
       this.state = result.state;
     } catch {
-      this.error = 'Nao foi possivel fechar a competencia.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m029;
     } finally {
       this.closing = false;
     }

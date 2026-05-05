@@ -3,6 +3,7 @@ import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface EmployeeTransfer {
   id: string;
@@ -60,7 +61,7 @@ export class RhPortalEmployeeTransfer implements OnDestroy {
           this.history = items;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar o historico.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m215;
         },
       });
   }
@@ -82,11 +83,11 @@ export class RhPortalEmployeeTransfer implements OnDestroy {
       )
       .subscribe({
         next: (item) => {
-          this.message = 'Solicitacao registrada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m134;
           this.history = [item, ...this.history];
         },
         error: () => {
-          this.error = 'Nao foi possivel registrar a solicitacao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m135;
         },
       });
   }

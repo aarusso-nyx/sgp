@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ApiClient } from '../../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 interface AlimonyRow {
   id: string;
@@ -64,7 +65,7 @@ export class RhEmployeeAlimony {
           this.loading = false;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar as ordens de pensao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m164;
           this.loading = false;
         },
       });
@@ -82,11 +83,11 @@ export class RhEmployeeAlimony {
     };
     this.api.post<AlimonyRow>(`/api/v1/employees/${this.employeeId}/alimonies`, body).subscribe({
       next: () => {
-        this.message = 'Ordem de pensao cadastrada.';
+        this.message = SGP_FEATURE_I18N_MESSAGES.m165;
         this.load();
       },
       error: () => {
-        this.error = 'Nao foi possivel cadastrar a ordem de pensao.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m166;
       },
     });
   }
@@ -110,11 +111,11 @@ export class RhEmployeeAlimony {
       .patch<AlimonyRow>(`/api/v1/employees/${this.employeeId}/alimonies/${row.id}`, body)
       .subscribe({
         next: () => {
-          this.message = 'Ordem suspensa.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m167;
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel suspender a ordem.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m168;
         },
       });
   }

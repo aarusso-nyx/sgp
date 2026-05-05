@@ -76,6 +76,7 @@ Gestão|Estrutura de Pessoal|Grupo Salarial|/gestao/grupo-salarial/gestao|GRUPO_
 Gestão|Estrutura de Pessoal|Vínculo|/gestao/vinculo/gestao|VINCULO.GESTAO||gestao|Tipos de vínculo (efetivo, comissionado…)
 Gestão|Estrutura de Pessoal|Tipo de Contrato|/gestao/tipo-contrato/gestao|TIPO_CONTRATO.GESTAO||gestao|
 Gestão|Estrutura de Pessoal|Tipo de Folha|/gestao/tipo-folha/gestao|TIPO_FOLHA.GESTAO||gestao|
+Gestão|Estrutura de Pessoal|Tipo de Ferias|/gestao/tipo-ferias/gestao|TIPO_FERIAS.GESTAO||gestao|Cadastro mestre de tipos de ferias
 Gestão|Estrutura de Pessoal|Tipo de Processamento|/gestao/tipo-processamento/gestao|TIPO_PROCESSAMENTO.GESTAO||gestao|MENSAL, 13º, FÉRIAS…
 Gestão|Estrutura de Pessoal|Verba / Rubrica|/gestao/verba/gestao|VERBA.GESTAO||folha|Cadastro de verbas e fórmulas DSL
 Gestão|Estrutura de Pessoal|Evento|/gestao/evento/gestao|EVENTO.GESTAO||gestao|Eventos de eSocial

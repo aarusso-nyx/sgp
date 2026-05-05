@@ -33,8 +33,7 @@ This file documents variables used by `sgp-admin`, `sgp-portal`, the Nest APIs, 
 - `SGP_RATE_LIMIT_TENANT_LIMIT`: requests allowed per tenant window; must be higher than `SGP_RATE_LIMIT_IP_LIMIT` (default `600`).
 - `SGP_RATE_LIMIT_TENANT_TTL_MS`: per-tenant rate-limit window in milliseconds (default matches `SGP_RATE_LIMIT_IP_TTL_MS`).
 - `SGP_RATE_LIMIT_TRUST_PROXY`: set to `true` only behind a trusted proxy so Express uses forwarded client IP metadata.
-- `/metrics`: Prometheus text endpoint exposed by `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, and `sgp-report-service`. The endpoint includes HTTP request counters/histograms plus queue depth, worker poll, payroll operation, eSocial submission, and DCTFWeb transmission metric objects for worker/domain instrumentation.
-- `ESOCIAL_WORKER_READY_PORT`: local readiness probe port for `sgp-esocial-worker` (default `3303`).
+- `/metrics`: Prometheus text endpoint exposed by `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, and `sgp-report-service`. The endpoint includes HTTP request counters/histograms plus queue depth, worker poll, payroll operation, eSocial spool, and DCTFWeb transmission metric objects for worker/domain instrumentation.
 - `INTEGRATIONS_WORKER_READY_PORT`: local readiness probe port for `sgp-integrations-worker` (default `3304`).
 - `REPORT_WORKER_READY_PORT`: local readiness probe port for `sgp-report-worker` (default `3306`).
 - `WORKER_READINESS_DISABLED`: set to `true` to disable local worker readiness probes.

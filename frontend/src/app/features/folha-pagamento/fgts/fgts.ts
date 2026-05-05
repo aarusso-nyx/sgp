@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { FgtsAccount, FgtsApiService } from './fgts.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,8 +38,7 @@ export class Fgts {
         this.loading = false;
       },
       error: (error: unknown) => {
-        this.errorMessage =
-          error instanceof Error ? error.message : 'Nao foi possivel carregar o FGTS.';
+        this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m048;
         this.loading = false;
       },
     });
@@ -58,8 +58,7 @@ export class Fgts {
         this.load();
       },
       error: (error: unknown) => {
-        this.errorMessage =
-          error instanceof Error ? error.message : 'Nao foi possivel reprocessar a competencia.';
+        this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m049;
         this.reprocessing = false;
       },
     });

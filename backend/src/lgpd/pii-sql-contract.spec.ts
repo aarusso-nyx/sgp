@@ -5,12 +5,13 @@ describe('R2-204/R2-206 PII SQL contracts', () => {
   const piiCommentsSql = readSql('database/sql/13-pii-comments.sql');
   const piiEncryptionSql = readSql('database/sql/15-pii-encryption.sql');
 
-  it('tags exactly 53 PII columns and exposes them for ROPA export', () => {
-    const commentTags = piiCommentsSql.match(
-      /COMMENT ON COLUMN .* IS 'pii=true;/g,
-    );
+  it('tags the complete PII column catalog and exposes it for ROPA export', () => {
+    const commentTags =
+      piiCommentsSql.match(/COMMENT ON COLUMN .* IS 'pii=true;/g) ?? [];
+    const r5LowPriorityTags = piiCommentsSql.match(/source=R5-70/g) ?? [];
 
-    expect(commentTags).toHaveLength(53);
+    expect(commentTags).toHaveLength(83);
+    expect(r5LowPriorityTags).toHaveLength(30);
     expect(piiCommentsSql).toContain('CREATE VIEW lgpd.v_pii_column_catalog');
     expect(piiCommentsSql).toContain('rule.source_tables');
     expect(piiCommentsSql).toContain('ropa_flow_keys');

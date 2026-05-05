@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { finalize } from 'rxjs';
 
 import { PayrollBridgePreview, PontoFolhaService } from './ponto-folha.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,7 +45,7 @@ export class PontoFolha {
           this.previewResult = result;
         },
         error: () => {
-          this.error = 'Nao foi possivel gerar a pre-visualizacao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m117;
         },
       });
   }
@@ -67,7 +68,7 @@ export class PontoFolha {
             : 'Linhas aplicadas a folha.';
         },
         error: () => {
-          this.error = 'Nao foi possivel aplicar as linhas a folha.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m118;
         },
       });
   }

@@ -2,8 +2,6 @@ export const rlsPostureParitySpec = `
 -- Exercised by npm run db:smoke in R4-72 bootstrap assertions.
 -- Assertions:
 -- The exact non-RLS table set is:
---   esocial.response_classification
---   esocial.s2205_trigger_field
 --   fiscal.gps_payment_code
 --   hr.cf37_xvi_accumulation_compatibility
 --   lgpd.legal_basis_rule

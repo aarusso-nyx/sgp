@@ -36,24 +36,41 @@ describe('PosseService', () => {
 
     const result = await service.iniciarExercicio(posseId);
 
-    expect(s22xx.emitS2200).toHaveBeenCalledWith(employeeId);
+    expect(s22xx.enqueue).toHaveBeenCalledWith({
+      kind: 'trabalhador',
+      eventClass: 'S-2200',
+      sourceRef: {
+        sourceEntityKind: 'hr.employee',
+        sourceEntityId: employeeId,
+      },
+      payload: {
+        posseId,
+        nomeacaoId,
+        employeeId,
+      },
+    });
     expect(result).toMatchObject({
       employeeId,
       status: 'EXERCICIO',
       s2200EventCount: 1,
-      s2200: { emitted: true, eventKind: 'S-2200' },
+      s2200: { status: 'PENDING', eventClass: 'S-2200' },
     });
   });
 });
 
 function fakeS22xx() {
   return {
-    emitS2200: jest.fn(async () => ({
-      eventKind: 'S-2200',
-      employeeId,
-      emitted: true,
-      xmlHash: 'hash',
-      event: { id: 'event-1' },
+    enqueue: jest.fn(async () => ({
+      messageId: 'message-1',
+      tenantId,
+      kind: 'trabalhador',
+      eventClass: 'S-2200',
+      status: 'PENDING',
+      sourceRef: {
+        sourceEntityKind: 'hr.employee',
+        sourceEntityId: employeeId,
+      },
+      createdAt: '2026-05-01T00:00:00.000Z',
     })),
   };
 }

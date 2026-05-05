@@ -8,6 +8,7 @@ import {
   TransparencyFilters,
   TransparencyPayrollRow,
 } from './transparencia.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,7 +59,7 @@ export class PublicoTransparencia implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar a transparencia remuneratoria.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m156;
           this.loading = false;
         },
       });

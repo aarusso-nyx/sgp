@@ -3,6 +3,7 @@ import { Observable, map, of } from 'rxjs';
 
 import { OpenApiClient } from '../../../core/api/generated/openapi-client';
 import { PagedResult } from '../../../core/models/paged-result';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 export interface RhWorkflowDefinition {
   key: string;
@@ -91,19 +92,19 @@ export class RhWorkflows {
     return of([
       {
         key: 'employee-dossier',
-        label: 'Dossie do Funcionario',
+        label: SGP_FEATURE_I18N_MESSAGES.m219,
         legacyRoute: '#!/funcionario/dossie',
         employeeScoped: true,
       },
       {
         key: 'medical-report',
-        label: 'Laudo de Prontuario',
+        label: SGP_FEATURE_I18N_MESSAGES.m220,
         legacyRoute: '#!/pericia/prontuario/laudo',
         employeeScoped: true,
       },
       {
         key: 'recadastramento-receipt',
-        label: 'Comprovante de Recadastramento',
+        label: SGP_FEATURE_I18N_MESSAGES.m221,
         legacyRoute: '#!/recadastramento/comprovante',
         employeeScoped: true,
       },

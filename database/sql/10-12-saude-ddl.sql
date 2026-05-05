@@ -125,7 +125,7 @@ CREATE TABLE saude.aso_record (
     status saude.aso_status DEFAULT 'SCHEDULED'::saude.aso_status NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    s2220_event_id uuid,
+    s2220_spool_message_id uuid,
     CONSTRAINT aso_record_due_required_chk CHECK (((aso_kind <> ALL (ARRAY['PERIODICO'::saude.aso_kind, 'RETORNO_TRABALHO'::saude.aso_kind])) OR (next_exam_due_at IS NOT NULL))),
     -- R4-71: kept as enum-typed state invariant; status is already saude.aso_status and this CHECK requires performed_at for non-scheduled outcomes.
     CONSTRAINT aso_record_performed_status_chk CHECK (((status = ANY (ARRAY['SCHEDULED'::saude.aso_status, 'CANCELLED'::saude.aso_status])) OR (performed_at IS NOT NULL)))
@@ -138,7 +138,7 @@ CREATE TABLE saude.cat_emission (
     cat_kind saude.cat_kind NOT NULL,
     emitted_at timestamp with time zone DEFAULT now() NOT NULL,
     deadline_at timestamp with time zone NOT NULL,
-    esocial_event_id uuid,
+    esocial_spool_message_id uuid,
     doctor_crm text NOT NULL,
     doctor_name text NOT NULL,
     internment boolean DEFAULT false NOT NULL,

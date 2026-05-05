@@ -485,23 +485,18 @@ BEGIN
       ON run.tenant_id = p_tenant_id
      AND run.competence_year = p_year_base
      AND run.competence_month = months.month_no
-    LEFT JOIN esocial.s1200_emission_state state
-      ON state.tenant_id = run.tenant_id
-     AND state.payroll_run_id = run.id
-     AND state.employee_id = p_employee_id
-    LEFT JOIN public.esocial_event event
+    LEFT JOIN public.esocial_spool event
       ON event.tenant_id = run.tenant_id
-     AND event.payroll_run_id = run.id
-     AND event.event_type = 'S-1200'
-     AND event.payload->>'employeeId' = p_employee_id::text
-     AND event.status <> 'EXCLUIDO'::public."ESocialEventStatus"
+     AND event.event_class = 'S-1200'
+     AND COALESCE(event.payload->>'payrollRunId', event.source_ref->>'payrollRunId') = run.id::text
+     AND COALESCE(event.payload->>'employeeId', event.source_ref->>'employeeId') = p_employee_id::text
+     AND event.status NOT IN ('REJECTED'::public.esocial_spool_status, 'DLQ'::public.esocial_spool_status)
     LEFT JOIN payroll.employee_payroll_item item
       ON item.tenant_id = run.tenant_id
      AND item.payroll_run_id = run.id
      AND item.employee_id = p_employee_id
      AND item.deleted_at IS NULL
-     AND state.employee_id IS NOT NULL
-     AND event.id IS NOT NULL
+     AND event.message_id IS NOT NULL
     LEFT JOIN payroll.payroll_earning_deduction earning
       ON earning.tenant_id = item.tenant_id
      AND earning.id = item.earning_deduction_id

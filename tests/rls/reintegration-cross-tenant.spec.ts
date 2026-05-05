@@ -14,10 +14,10 @@ describeRlsSmokeSpec({
     "await client.query('SET LOCAL row_security = on')",
     'await client.query(',
     "\"SELECT set_config('app.current_tenant_id', '00000000-0000-0000-0000-000000077011', true)\"",
-    "\"SELECT set_config('app.current_permissions', 'esocial.event.read', true)\"",
+    "\"SELECT set_config('app.current_permissions', 'hr.employment.write', true)\"",
     "await client.query(\"SELECT set_config('app.authenticated', 'true', true)\")",
     'const result = await client.query<{ count: string }>(',
     'SELECT count(*)::text',
-    'Direct table assertions: hr.reintegration_order and esocial.s2298_event force RLS.',
+    'Direct table assertions: hr.reintegration_order and public.esocial_spool force RLS.',
   ],
 });

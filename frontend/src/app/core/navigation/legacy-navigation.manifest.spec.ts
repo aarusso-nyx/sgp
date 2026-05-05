@@ -36,6 +36,7 @@ describe('legacy navigation manifest', () => {
 
   it('keeps module route catalogs available for route-group generation', () => {
     expect(LEGACY_MODULE_ROUTES['folha'].length).toBeGreaterThan(0);
+    expect(moduleChildPaths('gestao')).toContain('tipo-ferias/gestao');
     expect(moduleChildPaths('convenio')).toContain('beneficiario/gestao');
   });
 });

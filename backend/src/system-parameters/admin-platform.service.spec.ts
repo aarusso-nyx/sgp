@@ -33,9 +33,7 @@ describe('AdminPlatformService', () => {
       status: 'REPROCESS_QUEUED',
     });
 
-    const query = jest.fn(async (sql: string) =>
-      sql.includes('RETURNING id::text') ? [{ id: 'definition-1' }] : [],
-    );
+    const query = jest.fn(async () => []);
     const service = new AdminPlatformService({
       configured: true,
       query,
@@ -51,8 +49,12 @@ describe('AdminPlatformService', () => {
       service.updateEsocialCertificate({ serial: '123', password: 'secret' }),
     ).resolves.toMatchObject({ updated: true, serial: '123' });
     expect(query).toHaveBeenCalledWith(
-      expect.stringContaining('INSERT INTO public.report_request'),
-      ['definition-1', JSON.stringify({ eventId: 'event-1', format: 'XML' })],
+      expect.stringContaining('UPDATE public.esocial_spool'),
+      ['event-1'],
+    );
+    expect(query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO public.system_parameter'),
+      [JSON.stringify({ serial: '123', password: 'secret' })],
     );
   });
 

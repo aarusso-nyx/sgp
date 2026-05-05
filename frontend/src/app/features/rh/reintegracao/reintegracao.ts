@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { ReintegrationOrder, ReintegracaoService } from './reintegracao.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,7 +81,7 @@ export class RhReintegracao {
           this.saving = false;
         },
         error: (error: { message?: string }) => {
-          this.error = error.message ?? 'Falha ao registrar reintegracao.';
+          this.error = error.message ?? SGP_FEATURE_I18N_MESSAGES.m216;
           this.saving = false;
         },
       });
@@ -97,7 +98,7 @@ export class RhReintegracao {
         this.applying = false;
       },
       error: (error: { message?: string }) => {
-        this.error = error.message ?? 'Falha ao aplicar reintegracao.';
+        this.error = error.message ?? SGP_FEATURE_I18N_MESSAGES.m217;
         this.applying = false;
       },
     });
@@ -114,7 +115,7 @@ export class RhReintegracao {
         this.transmitting = false;
       },
       error: (error: { message?: string }) => {
-        this.error = error.message ?? 'Falha ao transmitir S-2298.';
+        this.error = error.message ?? SGP_FEATURE_I18N_MESSAGES.m218;
         this.transmitting = false;
       },
     });

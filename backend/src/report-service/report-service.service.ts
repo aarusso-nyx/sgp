@@ -94,9 +94,9 @@ export class ReportRuntimeService {
     if (!definitionCode) {
       throw new BadRequestException('definitionCode is required');
     }
-    if (definitionCode === 'ESOCIAL_EVENTO_PROCESSAR') {
+    if (definitionCode.includes('ESOCIAL')) {
       throw new BadRequestException(
-        'eSocial event XML processing belongs to sgp-esocial-worker',
+        `eSocial report processing belongs to stynx-esocial: ${definitionCode}`,
       );
     }
 

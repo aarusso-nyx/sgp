@@ -198,7 +198,7 @@ CREATE TABLE hr.employment_link (
     functional_status_id uuid,
     termination_payroll_run_id uuid,
     CONSTRAINT employment_link_commissioned_position_check CHECK (((contract_type <> 'commissioned'::text) OR (commission_position_id IS NOT NULL))),
-    -- R4-71: deferred enum conversion; contract_type is still consumed as text by 40-payment-functions.sql, 40-hr-functions.sql, and 70-esocial-final.sql.
+    -- R4-71: deferred enum conversion; contract_type is still consumed as text by 40-payment-functions.sql and 40-hr-functions.sql.
     CONSTRAINT employment_link_contract_type_check CHECK ((contract_type = ANY (ARRAY['statutory'::text, 'celetista'::text, 'commissioned'::text, 'temporary'::text]))),
     CONSTRAINT employment_link_statutory_law_check CHECK (((contract_type <> 'statutory'::text) OR (length(btrim(regime_law_reference)) > 0))),
     CONSTRAINT employment_link_temporary_end_date_check CHECK (((contract_type <> 'temporary'::text) OR (end_date IS NOT NULL)))
@@ -1645,7 +1645,7 @@ CREATE TABLE hr.vacation_record (
     CONSTRAINT vacation_record_dates_check CHECK (((ends_on >= starts_on) AND (days > 0))),
     CONSTRAINT vacation_record_installment_number_check CHECK (((installment_number >= 1) AND (installment_number <= 3))),
     CONSTRAINT vacation_record_pecuniary_bonus_days_check CHECK (((pecuniary_bonus_days >= 0) AND (pecuniary_bonus_days <= 10))),
-    -- R4-71: deferred enum conversion; 40-esocial-functions.sql and 70-hr-final.sql still use text predicates for vacation status.
+    -- R4-71: deferred enum conversion; 70-hr-final.sql still uses text predicates for vacation status.
     CONSTRAINT vacation_record_status_check CHECK ((status = ANY (ARRAY['programado'::text, 'aprovado'::text, 'gozado'::text, 'cancelado'::text, 'paid'::text])))
 );
 

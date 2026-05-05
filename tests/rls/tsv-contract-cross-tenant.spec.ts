@@ -6,12 +6,12 @@ describeRlsSmokeSpec({
   tenantAInsertEvidence: ['INSERT INTO '],
   tenantBZeroRowEvidence: ['Expected tenant B to see 0'],
   assertionSummary: [
-    'Exercised by npm run db:smoke after ES-11 migration.',
+    'Exercised by npm run db:smoke after stynx-esocial lift-out.',
     'Assertions:',
     '1. tenant A can read and mutate its own hr.tsv_contract and hr.tsv_contract_change rows',
     'with hr.employment.write.',
     '2. tenant B cannot read tenant A TS-V contracts because RLS uses',
     'sgp_tenant_matches(tenant_id).',
-    '3. esocial.s2306_event is tenant-scoped and requires eSocial event permissions.',
+    '3. S-2306 requests leave SGP through public.esocial_spool and stynx-esocial.',
   ],
 });

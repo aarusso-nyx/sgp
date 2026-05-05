@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { MasterData, MasterDataRecord, MasterDataResource } from '../services/master-data';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface LocationNode extends MasterDataRecord {
   children: LocationNode[];
@@ -52,7 +53,7 @@ export class GestaoMasterData implements OnInit, OnDestroy {
         },
         error: () => {
           this.loading = false;
-          this.error = 'Nao foi possivel carregar os cadastros de estrutura.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m077;
         },
       });
   }
@@ -82,7 +83,7 @@ export class GestaoMasterData implements OnInit, OnDestroy {
         .subscribe({
           next: (result) => assign(result.items),
           error: () => {
-            this.error = 'Nao foi possivel carregar todos os cadastros de estrutura.';
+            this.error = SGP_FEATURE_I18N_MESSAGES.m078;
           },
         });
     }

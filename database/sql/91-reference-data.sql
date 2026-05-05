@@ -10,28 +10,6 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-INSERT INTO esocial.response_classification VALUES
-	('101', 'RECOVERABLE', 'Lote Aguardando Processamento.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('201', 'ACCEPTED', 'Sucesso.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('202', 'ACCEPTED', 'Sucesso com advertencia.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('301', 'RECOVERABLE', 'Erro servidor.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('401', 'DEFINITIVE', 'Erro no conteudo do evento.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('402', 'DEFINITIVE', 'Schema invalido.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('403', 'DEFINITIVE', 'Leiaute invalido.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('404', 'DEFINITIVE', 'Erro do certificado digital da assinatura do evento.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('405', 'DEFINITIVE', 'Erro na assinatura evento.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('406', 'DEFINITIVE', 'Evento nao pertence ao grupo especificado no lote de eventos.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('407', 'RECOVERABLE', 'Regra de precedencia na transmissao de eventos nao seguida.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('408', 'RECOVERABLE', 'Erro na integracao com o sistema CNPJ / CPF.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('409', 'RECOVERABLE', 'Erro na integracao com o sistema Procuracao Eletronica RFB.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('410', 'RECOVERABLE', 'Erro na integracao com o sistema Procuracao Eletronica Caixa.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('411', 'DEFINITIVE', 'Assinante invalido ou sem perfil de procuracao eletronica.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('501', 'DEFINITIVE', 'Solicitacao de Consulta Incorreta - Erro Preenchimento.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('502', 'DEFINITIVE', 'Solicitacao de Consulta Incorreta - Schema Invalido.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('503', 'DEFINITIVE', 'Solicitacao de Consulta Incorreta - Versao do Schema Nao Permitida.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('504', 'DEFINITIVE', 'Solicitacao de Consulta Incorreta - Erro Certificado.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03'),
-	('505', 'DEFINITIVE', 'Solicitacao de Consulta Incorreta - Consulta nula ou vazia.', '2026-05-02 11:00:31.302578-03', '2026-05-02 11:00:31.302578-03');
-
 INSERT INTO lgpd.legal_basis_rule (
     flow_key,
     flow_name,
@@ -195,8 +173,8 @@ INSERT INTO lgpd.legal_basis_rule (
         'Cumprir obrigacoes trabalhistas, previdenciarias, fiscais e de controle externo com dados funcionais e remuneratorios.',
         ARRAY['Servidor ou empregado publico', 'beneficiario', 'candidato quando nomeado'],
         ARRAY['CPF', 'matricula', 'remuneracao', 'tributos', 'vinculo', 'dados SST quando exigidos'],
-        ARRAY['public.esocial_event', 'fiscal.dctfweb_debit', 'payroll.payroll_financial_record', 'hr.employee'],
-        ARRAY['esocial-worker', 'integrations-worker', 'TCE adapters'],
+        ARRAY['public.esocial_spool', 'fiscal.dctfweb_debit', 'payroll.payroll_financial_record', 'hr.employee'],
+        ARRAY['stynx-esocial gateway', 'integrations-worker', 'TCE adapters'],
         'Retencao conforme leiautes oficiais, Receita Federal, eSocial e tribunais de contas.',
         'government_regulators',
         false,
@@ -242,15 +220,6 @@ SET flow_name = EXCLUDED.flow_name,
     status = 'ACTIVE',
     effective_until = NULL,
     updated_at = CURRENT_TIMESTAMP;
-
-INSERT INTO esocial.s2205_trigger_field VALUES
-	('address.zip', '2026-05-01 23:04:30.910522-03'),
-	('address.street', '2026-05-01 23:04:30.910522-03'),
-	('contact.email', '2026-05-01 23:04:30.910522-03'),
-	('contact.phone', '2026-05-01 23:04:30.910522-03'),
-	('marital_status', '2026-05-01 23:04:30.910522-03'),
-	('education_level', '2026-05-01 23:04:30.910522-03'),
-	('dependent.*', '2026-05-01 23:04:30.910522-03');
 
 INSERT INTO fiscal.gps_payment_code VALUES
 	('4ae3aaa7-5f66-4164-9ec8-e10746c90a20', '2100', 'Empresas em geral - CNPJ - recolhimento RGPS residual', 'BOTH', true, '1999-01-01', NULL, '2026-05-02 05:30:09.951875-03', '2026-05-02 05:30:09.951875-03'),

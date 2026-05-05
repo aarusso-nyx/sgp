@@ -4,7 +4,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
-const minimumForbiddenE2eFiles = 100;
+const minimumForbiddenE2eCoverageRatio = 0.7;
 const minimumFakeTimerSpecFiles = 50;
 const minimumDtoSnapshots = 20;
 const assertionPattern = /\bexpect\s*\(/;
@@ -25,6 +25,7 @@ function read(path) {
 
 const e2eFiles = walk(join(root, 'tests', 'backend'), (path) => path.endsWith('.e2e-spec.ts'));
 const forbiddenE2eFiles = e2eFiles.filter((path) => /\b403\b|Forbidden|forbidden/.test(read(path)));
+const minimumForbiddenE2eFiles = Math.ceil(e2eFiles.length * minimumForbiddenE2eCoverageRatio);
 
 const specFiles = [
   ...walk(join(root, 'backend', 'src'), (path) => path.endsWith('.spec.ts')),

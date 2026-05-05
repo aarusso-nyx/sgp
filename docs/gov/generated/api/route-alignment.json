@@ -76,15 +76,15 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 579,
-    "documented_candidates_total": 720,
+    "documented_total": 580,
+    "documented_candidates_total": 721,
     "documented_outside_runtime": 141,
-    "documented": 488,
-    "runtime_total": 595,
-    "runtime": 488,
+    "documented": 489,
+    "runtime_total": 596,
+    "runtime": 489,
     "deferred_documented": 91,
     "deferred_runtime": 107,
-    "implemented": 488,
+    "implemented": 489,
     "explicitly_excluded": 0,
     "documented_missing": 0,
     "runtime_only": 0,
@@ -2301,14 +2301,14 @@
     {
       "method": "POST",
       "path": "/api/v1/admin/esocial/s2298/:orderId",
-      "source_file": "backend/src/esocial-worker/s2298/s2298.controller.ts",
+      "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
     {
       "method": "POST",
       "path": "/api/v1/admin/esocial/s2306/:changeId",
-      "source_file": "backend/src/esocial-worker/s2306/s2306.controller.ts",
+      "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2702,12 +2702,12 @@
         },
         {
           "method": "GET",
-          "path": "/api/v1/funcionarios/:id/abono-permanencia",
-          "source_file": "backend/src/rh/employees/employees.controller.ts"
+          "path": "/api/v1/funcionarios/:employeeId/licenca-premio/balance",
+          "source_file": "backend/src/rh/employees/employee-merit-leave.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/funcionarios/:id/dossie",
+          "path": "/api/v1/funcionarios/:id/abono-permanencia",
           "source_file": "backend/src/rh/employees/employees.controller.ts"
         }
       ],
@@ -2731,7 +2731,7 @@
         {
           "method": "DELETE",
           "path": "/api/v1/esocial/certificados/:certificateId",
-          "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
         },
         {
           "method": "DELETE",
@@ -2751,22 +2751,22 @@
         {
           "method": "GET",
           "path": "/api/v1/esocial/certificados",
-          "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
         },
         {
           "method": "GET",
           "path": "/api/v1/esocial/eventos-trabalhador",
-          "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
+          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
         },
         {
           "method": "GET",
           "path": "/api/v1/esocial/events/excludable",
-          "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
+          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
         },
         {
           "method": "GET",
           "path": "/api/v1/esocial/exclusions",
-          "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
+          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
         }
       ],
       "source_evidence": [
@@ -3279,12 +3279,12 @@
           },
           {
             "method": "GET",
-            "path": "/api/v1/funcionarios/:id/abono-permanencia",
-            "source_file": "backend/src/rh/employees/employees.controller.ts"
+            "path": "/api/v1/funcionarios/:employeeId/licenca-premio/balance",
+            "source_file": "backend/src/rh/employees/employee-merit-leave.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/funcionarios/:id/dossie",
+            "path": "/api/v1/funcionarios/:id/abono-permanencia",
             "source_file": "backend/src/rh/employees/employees.controller.ts"
           }
         ],
@@ -3308,7 +3308,7 @@
           {
             "method": "DELETE",
             "path": "/api/v1/esocial/certificados/:certificateId",
-            "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
           },
           {
             "method": "DELETE",
@@ -3328,22 +3328,22 @@
           {
             "method": "GET",
             "path": "/api/v1/esocial/certificados",
-            "source_file": "backend/src/esocial-worker/certificate-store/certificate-store.controller.ts"
+            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
           },
           {
             "method": "GET",
             "path": "/api/v1/esocial/eventos-trabalhador",
-            "source_file": "backend/src/esocial-worker/builders/es03.controller.ts"
+            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
           },
           {
             "method": "GET",
             "path": "/api/v1/esocial/events/excludable",
-            "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
+            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
           },
           {
             "method": "GET",
             "path": "/api/v1/esocial/exclusions",
-            "source_file": "backend/src/esocial-worker/exclusion/s3000.controller.ts"
+            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
           }
         ],
         "source_evidence": [
@@ -6201,6 +6201,14 @@
       "path": "/api/v1/funcionarios",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/funcionarios/:employeeId/licenca-premio/balance",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },

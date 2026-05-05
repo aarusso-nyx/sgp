@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { firstValueFrom } from 'rxjs';
 
 import { PayrollBridgePreview, PontoFolhaService } from '../../../ponto/folha/ponto-folha.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +42,7 @@ export class PortalEspelhoPonto {
         }),
       );
     } catch {
-      this.error = 'Nao foi possivel carregar o espelho de ponto.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m152;
     } finally {
       this.loading = false;
     }

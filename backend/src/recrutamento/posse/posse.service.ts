@@ -8,7 +8,7 @@ import type { PoolClient, QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
-import { S22xxService } from '../../esocial-worker/builders/s22xx.service';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 
 interface PosseRow extends QueryResultRow {
   id: string;
@@ -35,7 +35,7 @@ interface EffectRow extends QueryResultRow {
 export class PosseService {
   constructor(
     private readonly database: DatabaseService,
-    private readonly s22xxService: S22xxService,
+    private readonly stynxEsocialClient: StynxEsocialClient,
   ) {}
 
   async agendar(
@@ -157,7 +157,20 @@ export class PosseService {
           'rh.dependent.read',
         ],
       },
-      () => this.s22xxService.emitS2200(effect.employee_id),
+      () =>
+        this.stynxEsocialClient.enqueue({
+          kind: 'trabalhador',
+          eventClass: 'S-2200',
+          sourceRef: {
+            sourceEntityKind: 'hr.employee',
+            sourceEntityId: effect.employee_id,
+          },
+          payload: {
+            posseId: effect.posse_id,
+            nomeacaoId: effect.nomeacao_id,
+            employeeId: effect.employee_id,
+          },
+        }),
     );
 
     return {
@@ -219,10 +232,10 @@ export class PosseService {
       SELECT ${this.returningColumns()},
         (
           SELECT count(*)::text
-          FROM public.esocial_event event
-          WHERE event.tenant_id = posse.tenant_id
-            AND event.event_type = 'S-2200'
-            AND event.source_entity_id = posse.employee_id::text
+          FROM public.esocial_spool spool
+          WHERE spool.tenant_id = posse.tenant_id
+            AND spool.event_class = 'S-2200'
+            AND spool.source_ref->>'sourceEntityId' = posse.employee_id::text
         ) AS s2200_event_count
       FROM recrutamento.posse posse
       WHERE id = $1::uuid

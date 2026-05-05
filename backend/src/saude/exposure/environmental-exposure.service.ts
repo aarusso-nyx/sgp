@@ -7,6 +7,7 @@ import {
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 import {
   CreateEnvironmentalExposureDto,
   UpdateEnvironmentalExposureDto,
@@ -44,7 +45,10 @@ interface PayrollExposureRow extends QueryResultRow {
 
 @Injectable()
 export class EnvironmentalExposureService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly stynxEsocialClient: StynxEsocialClient,
+  ) {}
 
   async list(): Promise<ReturnType<typeof this.toSummary>[]> {
     this.ensureDatabase();
@@ -64,12 +68,13 @@ export class EnvironmentalExposureService {
         exposure.mitigated_by_epi,
         exposure.mitigated_by_epc,
         exposure.special_retirement_eligible,
-        string_agg(pending.trigger_event::text, ',' ORDER BY pending.trigger_event::text) AS pending_events
+        string_agg(COALESCE(pending.source_ref->>'triggerEvent', pending.event_class), ',' ORDER BY COALESCE(pending.source_ref->>'triggerEvent', pending.event_class)) AS pending_events
       FROM saude.environmental_exposure exposure
       JOIN hr.employee employee ON employee.id = exposure.employee_id
-      LEFT JOIN esocial.s2240_pending pending
+      LEFT JOIN public.esocial_spool pending
         ON pending.tenant_id = exposure.tenant_id
-       AND pending.environmental_exposure_id = exposure.id
+       AND pending.event_class = 'S-2240'
+       AND pending.source_ref->>'environmentalExposureId' = exposure.id::text
       GROUP BY exposure.id, employee.name
       ORDER BY exposure.exposure_start DESC, employee.name
       `,
@@ -138,7 +143,9 @@ export class EnvironmentalExposureService {
         input.specialRetirementEligible ?? false,
       ],
     );
-    return this.toSummary(rows[0]!);
+    const created = rows[0]!;
+    await this.enqueueS2240(created, 'START');
+    return this.toSummary(created);
   }
 
   async update(id: string, input: UpdateEnvironmentalExposureDto) {
@@ -194,6 +201,10 @@ export class EnvironmentalExposureService {
     );
     const row = rows[0];
     if (!row) throw new NotFoundException('Environmental exposure not found');
+    await this.enqueueS2240(
+      row,
+      input.exposureEnd !== undefined && input.exposureEnd ? 'END' : 'CHANGE',
+    );
     return this.toSummary(row);
   }
 
@@ -243,6 +254,35 @@ export class EnvironmentalExposureService {
         'exposureEnd must be on or after exposureStart',
       );
     }
+  }
+
+  private enqueueS2240(
+    row: EnvironmentalExposureRow,
+    triggerEvent: 'START' | 'CHANGE' | 'END',
+  ) {
+    return this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2240',
+      sourceRef: {
+        sourceEntityKind: 'saude.environmental_exposure',
+        sourceEntityId: row.id,
+        environmentalExposureId: row.id,
+        employeeId: row.employee_id,
+        triggerEvent,
+      },
+      payload: {
+        environmentalExposureId: row.id,
+        employeeId: row.employee_id,
+        harmfulAgentCode: row.harmful_agent_code,
+        agentKind: row.agent_kind,
+        exposureStart: this.dateValue(row.exposure_start),
+        exposureEnd: row.exposure_end ? this.dateValue(row.exposure_end) : null,
+        mitigatedByEpi: row.mitigated_by_epi,
+        mitigatedByEpc: row.mitigated_by_epc,
+        specialRetirementEligible: row.special_retirement_eligible,
+        triggerEvent,
+      },
+    });
   }
 
   private toSummary(row: EnvironmentalExposureRow) {

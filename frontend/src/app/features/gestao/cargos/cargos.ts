@@ -8,6 +8,7 @@ import {
   SalaryRangeLevelRecord,
   SalaryRangeRecord,
 } from '../services/master-data';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,7 +62,7 @@ export class Cargos implements OnInit {
       },
       error: () => {
         this.loading = false;
-        this.error = 'Nao foi possivel carregar cargos.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m074;
       },
     });
   }
@@ -78,7 +79,7 @@ export class Cargos implements OnInit {
     }
     const value = this.form.getRawValue();
     if (this.cargos.some((cargo) => cargo.code === value.code)) {
-      this.error = 'Codigo ja cadastrado para este tenant.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m075;
       return;
     }
     this.masterData
@@ -104,7 +105,7 @@ export class Cargos implements OnInit {
           this.loadSalaryTable();
         },
         error: () => {
-          this.error = 'Nao foi possivel salvar o cargo.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m076;
         },
       });
   }

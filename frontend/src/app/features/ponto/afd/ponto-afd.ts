@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { AfdExportSummary, AfdImportSummary, PontoAfdService } from './ponto-afd.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,7 +64,7 @@ export class PontoAfd implements OnInit, OnDestroy {
           this.loadImports();
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar historico AFD.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m088;
         },
       });
   }
@@ -90,11 +91,11 @@ export class PontoAfd implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (entry) => {
-          this.message = `AFD ${entry.status}: ${entry.lineCount} linhas.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m089(entry.status, entry.lineCount);
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel gerar o AFD.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m090;
         },
       });
   }
@@ -121,11 +122,11 @@ export class PontoAfd implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (entry) => {
-          this.message = `Importacao ${entry.status}: ${entry.acceptedLines} aceitas.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m091(entry.status, entry.acceptedLines);
           this.loadImports();
         },
         error: () => {
-          this.error = 'Nao foi possivel importar o AFD.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m092;
         },
       });
   }
@@ -162,7 +163,7 @@ export class PontoAfd implements OnInit, OnDestroy {
           this.imports = imports;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar importacoes AFD.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m093;
         },
       });
   }

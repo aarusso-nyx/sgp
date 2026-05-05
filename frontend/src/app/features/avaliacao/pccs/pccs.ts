@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface CareerPlan {
   id: string;
@@ -79,7 +80,7 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
           this.selected = plans[0];
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar os PCCS.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m013;
         },
       });
   }
@@ -122,11 +123,11 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
       : this.api.post<unknown, typeof payload>('v1/avaliacao/career-plan', payload);
     request.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.message = 'PCCS salvo.';
+        this.message = SGP_FEATURE_I18N_MESSAGES.m014;
         this.load();
       },
       error: () => {
-        this.error = 'Nao foi possivel salvar o PCCS.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m015;
       },
     });
   }
@@ -152,11 +153,11 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
       .subscribe({
         next: (result) => {
           this.adjustment = result;
-          this.message = 'Reajuste aplicado.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m016;
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel aplicar o reajuste.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m017;
         },
       });
   }

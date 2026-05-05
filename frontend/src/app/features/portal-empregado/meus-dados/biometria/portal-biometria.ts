@@ -3,6 +3,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 
 import { PontoBiometriaService } from '../../../ponto/biometria/ponto-biometria.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,11 +35,11 @@ export class PortalBiometria {
     this.service.withdraw(this.form.value.employeeId).subscribe({
       next: () => {
         this.saving = false;
-        this.message = 'Solicitacao registrada.';
+        this.message = SGP_FEATURE_I18N_MESSAGES.m134;
       },
       error: () => {
         this.saving = false;
-        this.error = 'Nao foi possivel registrar a solicitacao.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m135;
       },
     });
   }

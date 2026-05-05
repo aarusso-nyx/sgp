@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { FaceAdminService, FaceTemplateSummary } from './face-admin.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -78,10 +79,10 @@ export class FaceAdmin implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Threshold atualizado.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m111;
         },
         error: () => {
-          this.error = 'Nao foi possivel atualizar o threshold.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m112;
         },
       });
   }
@@ -102,7 +103,7 @@ export class FaceAdmin implements OnInit, OnDestroy {
           this.templates = templates;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar os templates faciais.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m113;
         },
       });
   }
@@ -125,7 +126,7 @@ export class FaceAdmin implements OnInit, OnDestroy {
         next: () => this.captureTemplate(),
         error: () => {
           this.saving = false;
-          this.error = 'Nao foi possivel registrar consentimento facial.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m114;
         },
       });
   }
@@ -157,11 +158,11 @@ export class FaceAdmin implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (template) => {
-          this.message = `Template facial ${template.modelVersion} cadastrado.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m115(template.modelVersion);
           this.loadTemplates();
         },
         error: () => {
-          this.error = 'Nao foi possivel cadastrar o template facial.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m116;
         },
       });
   }

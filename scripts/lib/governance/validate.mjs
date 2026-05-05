@@ -182,7 +182,11 @@ function listMarkdownFiles(relativeDir) {
 }
 
 function validateLiveDocPaths() {
-  const liveDocFiles = ['docs/eng', 'docs/gov', 'docs/user'].flatMap(listMarkdownFiles);
+  const liveDocFiles = ['docs/eng', 'docs/gov', 'docs/user']
+    .flatMap(listMarkdownFiles)
+    .filter(
+      (file) => !file.startsWith('docs/gov/audit/diag/') && !file.startsWith('docs/gov/audit/inv/'),
+    );
   const pathPattern =
     /`((?:backend|frontend|database|scripts|docs|infra|\.github|tests|package\.json|devai\.config\.json|GOVERNANCE\.md)[^`\s]*)`/g;
   const missing = [];

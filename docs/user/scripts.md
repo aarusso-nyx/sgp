@@ -165,11 +165,10 @@ npm run start:portal -- [ng serve args]
 npm run start:core-api
 npm run start:portal-api
 npm run start:payroll-engine
-npm run start:esocial-worker
 npm run start:integrations-worker
 npm run start:report-worker
 npm run start:report-service
-node scripts/run.mjs start [all|admin|portal|core-api|portal-api|payroll-engine|esocial-worker|integrations-worker|report-worker|report-service] [args]
+node scripts/run.mjs start [all|admin|portal|core-api|portal-api|payroll-engine|integrations-worker|report-worker|report-service] [args]
 ```
 
 ### Actions
@@ -182,7 +181,6 @@ node scripts/run.mjs start [all|admin|portal|core-api|portal-api|payroll-engine|
 | `core-api`            | `npm run start:core-api`            | Starts backend core API with `APP_SERVICE_NAME=sgp-core-api`.                                    |
 | `portal-api`          | `npm run start:portal-api`          | Starts backend portal API with `APP_SERVICE_NAME=sgp-portal-api`.                                |
 | `payroll-engine`      | `npm run start:payroll-engine`      | Starts payroll engine with `APP_SERVICE_NAME=sgp-payroll-engine` and `PAYROLL_ENGINE_PORT=3302`. |
-| `esocial-worker`      | `npm run start:esocial-worker`      | Starts eSocial worker.                                                                           |
 | `integrations-worker` | `npm run start:integrations-worker` | Starts integrations worker.                                                                      |
 | `report-worker`       | `npm run start:report-worker`       | Starts report worker.                                                                            |
 | `report-service`      | `npm run start:report-service`      | Starts report service with `REPORT_SERVICE_PORT=3305`.                                           |
@@ -601,7 +599,6 @@ npm run clean -- --dry-run backend
 | `start:core-api`            | `node scripts/run.mjs start core-api`                               |
 | `start:portal-api`          | `node scripts/run.mjs start portal-api`                             |
 | `start:payroll-engine`      | `node scripts/run.mjs start payroll-engine`                         |
-| `start:esocial-worker`      | `node scripts/run.mjs start esocial-worker`                         |
 | `start:integrations-worker` | `node scripts/run.mjs start integrations-worker`                    |
 | `start:report-worker`       | `node scripts/run.mjs start report-worker`                          |
 | `start:report-service`      | `node scripts/run.mjs start report-service`                         |

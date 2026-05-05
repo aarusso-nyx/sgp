@@ -152,13 +152,13 @@ describe('InternshipsService', () => {
         weekly_hours: '30.000000',
       },
     ]);
-    const build = jest.fn().mockResolvedValue({
-      eventKind: 'S-2300',
-      contractId: 'tsv-1',
+    const enqueue = jest.fn().mockResolvedValue({
+      messageId: 'message-1',
+      status: 'PENDING',
     });
     const service = new InternshipsService(
       { configured: true, query } as never,
-      { build } as never,
+      { enqueue } as never,
     );
 
     await expect(
@@ -167,8 +167,18 @@ describe('InternshipsService', () => {
       ),
     ).resolves.toMatchObject({
       eventKind: 'S-2300',
-      contractId: 'tsv-1',
+      tsvContractId: 'tsv-1',
+      messageId: 'message-1',
+      status: 'PENDING',
     });
-    expect(build).toHaveBeenCalledWith('tsv-1');
+    expect(enqueue).toHaveBeenCalledWith({
+      kind: 'trabalhador',
+      eventClass: 'S-2300',
+      sourceRef: {
+        sourceEntityKind: 'hr.tsv_contract',
+        sourceEntityId: 'tsv-1',
+      },
+      payload: { tsvContractId: 'tsv-1', internshipId: 'internship-1' },
+    });
   });
 });

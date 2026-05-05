@@ -16,7 +16,6 @@ dist/
 frontend/.angular/
 frontend/dist/
 backend/dist/
-backend/generated/
 
 # Test artifacts
 test-results/

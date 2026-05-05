@@ -10,6 +10,7 @@ import {
   ComprovantesRendimentosService,
   YearlyIncomeBatchResult,
 } from './comprovantes-rendimentos.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,8 +56,7 @@ export class ComprovantesRendimentos {
         this.loading = false;
       },
       error: (error: unknown) => {
-        this.errorMessage =
-          error instanceof Error ? error.message : 'Nao foi possivel gerar os comprovantes.';
+        this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m044;
         this.loading = false;
       },
     });

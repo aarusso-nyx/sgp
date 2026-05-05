@@ -7,7 +7,7 @@ import { defaultRepoRoot } from './lib/repo-paths.mjs';
 const usage = `
 Usage: node scripts/check-db.mjs <alignment check|fk-coverage check|fk-coverage write|push-guard> [options]
 
-Run database alignment, FK coverage, and Prisma safety checks.
+Run database alignment, FK coverage, and retired Prisma force-reset checks.
 `;
 
 const options = parseArgs(process.argv.slice(2), { booleanFlags: ['help'] });

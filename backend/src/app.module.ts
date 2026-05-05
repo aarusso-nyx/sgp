@@ -23,12 +23,12 @@ import { ConsultasModule } from './consultas/consultas.module';
 import { DatabaseModule } from './database/database.module';
 import { DocumentsModule } from './documents/documents.module';
 import { ExternalModule } from './external/external.module';
-import { ESocialWorkerModule } from './esocial-worker/esocial-worker.module';
 import { FolhaPagamentoModule } from './folha-pagamento/folha-pagamento.module';
 import { GestaoModule } from './gestao/gestao.module';
 import { HealthModule } from './health/health.module';
 import { IamModule } from './iam/iam.module';
 import { PermissionGuard } from './iam/guards/permission.guard';
+import { StynxEsocialModule } from './integrations/stynx-esocial';
 import { IntegrationsWorkerModule } from './integrations-worker/integrations-worker.module';
 import { LgpdAdminModule } from './lgpd/lgpd-admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
@@ -66,7 +66,7 @@ import { AppService } from './app.service';
     PortalModule,
     PontoModule,
     ExternalModule,
-    ESocialWorkerModule,
+    StynxEsocialModule,
     IntegrationsWorkerModule,
     LgpdAdminModule,
     PublicoModule,

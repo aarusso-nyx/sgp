@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 
 import { AuthenticatedActor } from '../auth.types';
 import {
   GovBrSignatureDecision,
-  GovBrSignatureSandboxAdapter,
+  GovBrAdvancedSignatureEnvelope,
 } from './govbr-signature-sandbox.adapter';
+import { GovBrQueueAdapter } from './adapters/queue-adapter';
 import { GovBrSignCallbackQueryDto, GovBrSignRequestDto } from './sign.dto';
 import {
   EsocialPadesPkcs7Envelope,
@@ -13,6 +14,34 @@ import {
   SoftwarePadesPkcs7Signer,
 } from './software-pades-pkcs7.signer';
 
+type GovBrSignRequestLike = {
+  id: string;
+  status: string;
+  signature: GovBrAdvancedSignatureEnvelope | null;
+};
+
+type GovBrSignInitiation = {
+  request: GovBrSignRequestLike;
+  redirectUrl: string | null;
+  provider: string;
+};
+
+type GovBrSignatureAdapterPort = {
+  createRequest(
+    actor: AuthenticatedActor,
+    input: GovBrSignRequestDto,
+  ): GovBrSignInitiation | Promise<GovBrSignInitiation>;
+  complete(
+    state: string,
+    decision: GovBrSignatureDecision,
+    challenge?: string,
+  ): GovBrSignRequestLike | Promise<GovBrSignRequestLike>;
+  verifyEnvelope(
+    payload: Record<string, unknown>,
+    envelope: GovBrAdvancedSignatureEnvelope,
+  ): boolean;
+};
+
 @Injectable()
 export class GovBrSignService {
   private readonly esocialPadesSigner = new SoftwarePadesPkcs7Signer();
@@ -20,21 +49,27 @@ export class GovBrSignService {
     this.esocialPadesSigner,
   );
 
-  constructor(private readonly adapter: GovBrSignatureSandboxAdapter) {}
+  constructor(
+    @Inject(GovBrQueueAdapter)
+    private readonly adapter: GovBrSignatureAdapterPort,
+  ) {}
 
-  initiate(actor: AuthenticatedActor | undefined, input: GovBrSignRequestDto) {
+  async initiate(
+    actor: AuthenticatedActor | undefined,
+    input: GovBrSignRequestDto,
+  ) {
     if (!actor) {
       throw new BadRequestException('Authenticated actor is required');
     }
     return this.adapter.createRequest(actor, input);
   }
 
-  complete(query: GovBrSignCallbackQueryDto) {
+  async complete(query: GovBrSignCallbackQueryDto) {
     if (!query.state) {
       throw new BadRequestException('state is required');
     }
     const decision = this.parseDecision(query.decision);
-    const request = this.adapter.complete(
+    const request = await this.adapter.complete(
       query.state,
       decision,
       query.challenge,
@@ -47,9 +82,7 @@ export class GovBrSignService {
 
   verifyPayload(
     payload: Record<string, unknown>,
-    signature: NonNullable<
-      ReturnType<GovBrSignService['complete']>['request']['signature']
-    >,
+    signature: GovBrAdvancedSignatureEnvelope,
   ): boolean {
     return this.adapter.verifyEnvelope(payload, signature);
   }

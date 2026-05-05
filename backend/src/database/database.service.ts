@@ -9,11 +9,7 @@ const SENSITIVE_RLS_TABLES = [
   /\bpayroll_calc\.formula_cache\b/i,
 ];
 
-const BYPASS_RLS_ALLOWLIST = new Set([
-  'payroll-engine',
-  'esocial-worker',
-  'integrations-worker',
-]);
+const BYPASS_RLS_ALLOWLIST = new Set(['payroll-engine', 'integrations-worker']);
 
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {

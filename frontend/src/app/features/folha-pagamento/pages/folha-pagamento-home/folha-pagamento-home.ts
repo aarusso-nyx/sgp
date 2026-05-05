@@ -8,6 +8,7 @@ import {
   FeriasRunResult,
   PayrollRunExecutionHistory,
 } from '../../processamentos/decimo-terceiro.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +48,8 @@ export class FolhaPagamentoHome {
     this.preview = {
       action,
       year,
-      label: action === 'adiantamento' ? 'Gerar 1a parcela 13o' : 'Fechar 13o',
+      label:
+        action === 'adiantamento' ? SGP_FEATURE_I18N_MESSAGES.m050 : SGP_FEATURE_I18N_MESSAGES.m051,
     };
     this.result = null;
     this.feriasResult = null;
@@ -64,7 +66,7 @@ export class FolhaPagamentoHome {
     this.preview = {
       action: 'ferias',
       year: Number(this.form.controls.year.value),
-      label: 'Calcular folha de ferias',
+      label: SGP_FEATURE_I18N_MESSAGES.m052,
       vacationRecordId,
     };
     this.result = null;
@@ -94,8 +96,7 @@ export class FolhaPagamentoHome {
         this.loading = false;
       },
       error: (error: unknown) => {
-        this.errorMessage =
-          error instanceof Error ? error.message : 'Nao foi possivel processar a folha.';
+        this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m053;
         this.loading = false;
       },
     });

@@ -1,18 +1,8 @@
-import {
-  BadRequestException,
-  Injectable,
-  ServiceUnavailableException,
-} from '@nestjs/common';
-import { QueryResultRow } from 'pg';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { RequestContextStore } from '../../common/request-context/request-context.store';
-import { DatabaseService } from '../../database/database.service';
-import { ESocialEmitService } from '../../esocial-worker/esocial-emit.service';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 import { CreateESocialEventDto } from './esocial.dto';
-
-interface DefinitionRow extends QueryResultRow {
-  id: string;
-}
 
 export interface ESocialEventSummary {
   id: string;
@@ -25,105 +15,41 @@ export interface ESocialEventSummary {
 
 @Injectable()
 export class ESocialService {
-  constructor(
-    private readonly databaseService: DatabaseService,
-    private readonly emitService: ESocialEmitService,
-  ) {}
+  constructor(private readonly stynxEsocialClient: StynxEsocialClient) {}
 
   async createEvent(
     input: CreateESocialEventDto,
   ): Promise<ESocialEventSummary> {
-    this.ensureDatabase();
-    const definitionId = await this.ensureDefinition();
-    const { year, month } = this.parseCompetence(input.competencia);
-    const emitted = await this.emitService.emit({
+    const emitted = await this.stynxEsocialClient.enqueue({
       tenantId: this.currentTenantId(),
-      eventKind: input.tipo,
-      xml: this.eventXml(input),
-      reference: input.referencia.trim(),
-      competence: input.competencia,
-      payload: input.dados ?? {},
+      kind: 'submit',
+      eventClass: input.tipo,
+      sourceRef: {
+        reference: input.referencia.trim(),
+        competence: input.competencia,
+      },
+      payload: {
+        reference: input.referencia.trim(),
+        competence: input.competencia,
+        xml: this.eventXml(input),
+        data: input.dados ?? {},
+      },
     });
 
-    await this.databaseService.query(
-      `
-      INSERT INTO public.report_request (
-        definition_id,
-        competence_year,
-        competence_month,
-        parameters
-      )
-      VALUES ($1::uuid, $2, $3, $4::jsonb)
-      `,
-      [
-        definitionId,
-        year,
-        month,
-        JSON.stringify({
-          eventId: emitted.id,
-          eventType: emitted.eventKind,
-          competence: emitted.competence,
-          format: 'XML',
-        }),
-      ],
-    );
-
     return {
-      id: emitted.id,
-      tipo: emitted.eventKind,
-      referencia: emitted.reference,
-      competencia: emitted.competence,
+      id: emitted.messageId,
+      tipo: emitted.eventClass,
+      referencia: input.referencia.trim(),
+      competencia: input.competencia,
       status: this.toApiStatus(emitted.status),
       createdAt: emitted.createdAt,
     };
   }
 
-  private async ensureDefinition(): Promise<string> {
-    const rows = await this.databaseService.query<DefinitionRow>(
-      `
-      INSERT INTO public.report_definition (
-        code,
-        module_key,
-        name,
-        description
-      )
-      VALUES (
-        'ESOCIAL_EVENTO_PROCESSAR',
-        'FOLHA',
-        'Processar evento eSocial',
-        'Gera XML, simula assinatura e encaminha evento eSocial para processamento assíncrono.'
-      )
-      ON CONFLICT (tenant_id, code) DO UPDATE
-      SET module_key = EXCLUDED.module_key,
-          name = EXCLUDED.name,
-          description = EXCLUDED.description,
-          updated_at = now()
-      RETURNING id::text
-      `,
-    );
-    return rows[0]!.id;
-  }
-
-  private parseCompetence(competence: string): { year: number; month: number } {
-    const [year, month] = competence
-      .split('-')
-      .map((value) => Number(value)) as [number, number];
-    return {
-      year,
-      month,
-    };
-  }
-
   private toApiStatus(status: string): string {
-    return status === 'PENDENTE' ? 'PENDENTE_ENVIO' : status;
-  }
-
-  private ensureDatabase(): void {
-    if (!this.databaseService.configured) {
-      throw new ServiceUnavailableException(
-        'DATABASE_URL is required for eSocial operations',
-      );
-    }
+    return status === 'PENDENTE' || status === 'PENDING'
+      ? 'PENDENTE_ENVIO'
+      : status;
   }
 
   private eventXml(input: CreateESocialEventDto): string {

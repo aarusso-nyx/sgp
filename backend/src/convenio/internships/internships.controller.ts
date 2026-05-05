@@ -99,7 +99,7 @@ export class InternshipsController {
   @RequirePermission('convenio.write')
   @AuditMutation({
     action: 'GENERATE',
-    resourceType: 'esocial.s2300',
+    resourceType: 'stynx_esocial.s2300',
     tableName: 'hr.internship_record',
   })
   @ApiOkResponse({ description: 'Build the S-2300 XML for an internship.' })

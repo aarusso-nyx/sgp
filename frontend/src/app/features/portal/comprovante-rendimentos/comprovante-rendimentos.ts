@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface YearlyIncomeFile {
   yearBase: number;
@@ -35,7 +36,7 @@ export class PortalComprovanteRendimentos implements OnInit {
         this.api.get<YearlyIncomeFile[]>('/api/v1/portal/yearly-income'),
       );
     } catch {
-      this.error = 'Nao foi possivel carregar os comprovantes.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m147;
     }
   }
 

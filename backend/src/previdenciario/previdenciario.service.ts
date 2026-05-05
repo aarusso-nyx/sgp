@@ -1,13 +1,7 @@
 import { Injectable, Optional } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
-import { S2400Builder } from '../esocial-worker/builders/s2400.builder';
-import { S2405Builder } from '../esocial-worker/builders/s2405.builder';
-import { S2410Builder } from '../esocial-worker/builders/s2410.builder';
-import { S2416Builder } from '../esocial-worker/builders/s2416.builder';
-import { S2418Builder } from '../esocial-worker/builders/s2418.builder';
-import { S2420Builder } from '../esocial-worker/builders/s2420.builder';
-import { ESocialEmitService } from '../esocial-worker/esocial-emit.service';
+import { StynxEsocialClient } from '../integrations/stynx-esocial';
 import { AposentadoriaService } from './aposentadoria/aposentadoria.service';
 import { CtcService } from './ctc/ctc.service';
 import { DeclaracaoService } from './declaracao/declaracao.service';
@@ -65,13 +59,7 @@ export class PrevidenciarioService {
     @Optional() pontosService?: PontosService,
     @Optional() idadeProgressivaService?: IdadeProgressivaService,
     @Optional() atividadeRiscoProfessorService?: AtividadeRiscoProfessorService,
-    @Optional() s2400Builder?: S2400Builder,
-    @Optional() s2405Builder?: S2405Builder,
-    @Optional() s2410Builder?: S2410Builder,
-    @Optional() s2416Builder?: S2416Builder,
-    @Optional() s2418Builder?: S2418Builder,
-    @Optional() s2420Builder?: S2420Builder,
-    @Optional() esocialEmitService?: ESocialEmitService,
+    @Optional() stynxEsocialClient?: StynxEsocialClient,
   ) {
     this.regras =
       regrasService ??
@@ -89,30 +77,17 @@ export class PrevidenciarioService {
       new AposentadoriaService(
         this.databaseService,
         this.regras,
-        s2400Builder,
-        s2410Builder,
-        s2418Builder,
-        esocialEmitService,
+        stynxEsocialClient,
       );
     this.pensao =
       pensaoService ??
-      new PensaoService(
-        this.databaseService,
-        s2410Builder,
-        s2416Builder,
-        s2420Builder,
-        esocialEmitService,
-      );
+      new PensaoService(this.databaseService, stynxEsocialClient);
     this.ctc = ctcService ?? new CtcService(this.databaseService);
     this.declaracao =
       declaracaoService ?? new DeclaracaoService(this.databaseService);
     this.recadastramento =
       recadastramentoService ??
-      new RecadastramentoService(
-        this.databaseService,
-        s2405Builder,
-        esocialEmitService,
-      );
+      new RecadastramentoService(this.databaseService, stynxEsocialClient);
   }
 
   listRules() {

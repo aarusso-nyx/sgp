@@ -3,23 +3,19 @@ import { RequestContextStore } from '../../common/request-context/request-contex
 
 describe('ESocialService', () => {
   it('creates an event and queues a worker request', async () => {
-    const query = jest.fn();
-    query.mockResolvedValueOnce([{ id: 'def-1' }]).mockResolvedValueOnce([]);
-
-    const emit = {
-      emit: jest.fn(async () => ({
-        id: 'evt-1',
-        eventKind: 'S-2299',
-        reference: 'funcionario/emp-1',
-        competence: '2026-04',
-        status: 'PENDENTE',
+    const stynx = {
+      enqueue: jest.fn(async () => ({
+        messageId: 'evt-1',
+        eventClass: 'S-2299',
+        sourceRef: {
+          reference: 'funcionario/emp-1',
+          competence: '2026-04',
+        },
+        status: 'PENDING',
         createdAt: '2026-04-25T00:00:00.000Z',
       })),
     };
-    const service = new ESocialService(
-      { configured: true, query } as never,
-      emit as never,
-    );
+    const service = new ESocialService(stynx as never);
 
     const result = await RequestContextStore.run(
       {
@@ -42,15 +38,11 @@ describe('ESocialService', () => {
       status: 'PENDENTE_ENVIO',
       createdAt: '2026-04-25T00:00:00.000Z',
     });
-    expect(query).toHaveBeenCalledWith(
-      expect.stringContaining('INSERT INTO public.report_request'),
-      expect.arrayContaining(['def-1', 2026, 4, expect.any(String)]),
-    );
-    expect(emit.emit).toHaveBeenCalledWith(
+    expect(stynx.enqueue).toHaveBeenCalledWith(
       expect.objectContaining({
         tenantId: '00000000-0000-0000-0000-000000000100',
-        eventKind: 'S-2299',
-        xml: '<eSocial />',
+        kind: 'submit',
+        eventClass: 'S-2299',
       }),
     );
   });

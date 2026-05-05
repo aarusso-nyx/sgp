@@ -2,25 +2,10 @@
 -- Non-destructive orphan report for inferred foreign keys.
 
 WITH orphan_counts AS (
-  SELECT 'esocial.s2299_pending.employee_id' AS check_name, count(*)::bigint AS orphan_count
-  FROM esocial.s2299_pending child
-  LEFT JOIN hr.employee parent ON parent.id = child.employee_id
-  WHERE child.employee_id IS NOT NULL AND parent.id IS NULL
-  UNION ALL
-  SELECT 'esocial.s2299_pending.employment_link_id' AS check_name, count(*)::bigint AS orphan_count
-  FROM esocial.s2299_pending child
-  LEFT JOIN hr.employment_link parent ON parent.id = child.employment_link_id
-  WHERE child.employment_link_id IS NOT NULL AND parent.id IS NULL
-  UNION ALL
   SELECT 'hr.merit_progression.administrative_process_id' AS check_name, count(*)::bigint AS orphan_count
   FROM hr.merit_progression child
   LEFT JOIN hr.administrative_process parent ON parent.id = child.administrative_process_id
   WHERE child.administrative_process_id IS NOT NULL AND parent.id IS NULL
-  UNION ALL
-  SELECT 'public.esocial_event.payroll_run_id' AS check_name, count(*)::bigint AS orphan_count
-  FROM public.esocial_event child
-  LEFT JOIN payroll.payroll_run parent ON parent.id = child.payroll_run_id
-  WHERE child.payroll_run_id IS NOT NULL AND parent.id IS NULL
 )
 SELECT * FROM orphan_counts WHERE orphan_count > 0 ORDER BY check_name;
 
@@ -30,24 +15,9 @@ DECLARE
 BEGIN
   WITH orphan_counts AS (
     SELECT count(*)::bigint AS orphan_count
-    FROM esocial.s2299_pending child
-    LEFT JOIN hr.employee parent ON parent.id = child.employee_id
-    WHERE child.employee_id IS NOT NULL AND parent.id IS NULL
-    UNION ALL
-    SELECT count(*)::bigint AS orphan_count
-    FROM esocial.s2299_pending child
-    LEFT JOIN hr.employment_link parent ON parent.id = child.employment_link_id
-    WHERE child.employment_link_id IS NOT NULL AND parent.id IS NULL
-    UNION ALL
-    SELECT count(*)::bigint AS orphan_count
     FROM hr.merit_progression child
     LEFT JOIN hr.administrative_process parent ON parent.id = child.administrative_process_id
     WHERE child.administrative_process_id IS NOT NULL AND parent.id IS NULL
-    UNION ALL
-    SELECT count(*)::bigint AS orphan_count
-    FROM public.esocial_event child
-    LEFT JOIN payroll.payroll_run parent ON parent.id = child.payroll_run_id
-    WHERE child.payroll_run_id IS NOT NULL AND parent.id IS NULL
   )
   SELECT coalesce(sum(orphan_count), 0) INTO orphan_total FROM orphan_counts;
 

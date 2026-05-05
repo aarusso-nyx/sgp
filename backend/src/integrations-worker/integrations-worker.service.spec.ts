@@ -233,64 +233,6 @@ describe('IntegrationsWorkerService', () => {
     );
   });
 
-  it('processes an esocial event request into generated xml', async () => {
-    const query = jest.fn();
-    query
-      .mockResolvedValueOnce([
-        {
-          id: 'req-5',
-          tenant_id: 'tenant-5',
-          definition_code: 'ESOCIAL_EVENTO_PROCESSAR',
-          parameters: {
-            eventId: 'evt-1',
-            format: 'XML',
-          },
-          payroll_run_id: null,
-          competence_year: 2026,
-          competence_month: 4,
-        },
-      ])
-      .mockResolvedValueOnce([{ id: 'req-5' }])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([
-        {
-          id: 'evt-1',
-          event_type: 'S-2230',
-          reference: 'funcionario/emp-1',
-          competence: '2026-04',
-          payload: { licencaId: 'lic-1' },
-          schema_version: 'S-1.2',
-          retry_count: 1,
-        },
-      ])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([{ id: 'doc-5' }])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([]);
-
-    const storeGeneratedObject = jest.fn().mockResolvedValue({
-      storageKind: 'LOCAL',
-      storageKey: 'tenant-5/outputs/esocial/s-2230/esocial-s-2230-evt-1.xml',
-      sizeBytes: 2048,
-      checksum: 'xmlesocial123',
-    });
-
-    const service = new IntegrationsWorkerService(
-      { query } as never,
-      { storeGeneratedObject } as never,
-    );
-
-    const result = await service.pollOnce(5);
-
-    expect(result.processed).toBe(1);
-    expect(storeGeneratedObject).toHaveBeenCalledWith(
-      expect.objectContaining({
-        storageKey: 'tenant-5/outputs/esocial/s-2230/esocial-s-2230-evt-1.xml',
-        contentType: 'application/xml',
-      }),
-    );
-  });
-
   it('processes the remaining report definition builders', async () => {
     const jobs = [
       {
@@ -614,15 +556,6 @@ describe('IntegrationsWorkerService', () => {
         competence_year: 2026,
         competence_month: 7,
       },
-      {
-        id: 'req-missing-event',
-        tenant_id: 'tenant-fallback',
-        definition_code: 'ESOCIAL_EVENTO_PROCESSAR',
-        parameters: { eventId: 'missing' },
-        payroll_run_id: null,
-        competence_year: 2026,
-        competence_month: 7,
-      },
     ];
     const query = jest.fn(async (sql: string, values?: unknown[]) => {
       if (sql.includes('FROM public.report_request rr')) return jobs;
@@ -639,7 +572,7 @@ describe('IntegrationsWorkerService', () => {
         return [{ id: 'doc-fallback' }];
       }
       if (sql.includes('FROM payroll.payment_remittance_file')) return [];
-      if (sql.includes('FROM public.esocial_event')) return [];
+      if (sql.includes('FROM public.esocial_spool')) return [];
       if (sql.includes('FROM hr.recertification_campaign')) {
         return [
           {
@@ -668,7 +601,7 @@ describe('IntegrationsWorkerService', () => {
     await expect(service.pollOnce()).resolves.toMatchObject({
       discovered: jobs.length,
       processed: 3,
-      failed: 3,
+      failed: 2,
       skipped: 0,
     });
     expect(storeGeneratedObject).toHaveBeenCalledWith(
@@ -686,10 +619,6 @@ describe('IntegrationsWorkerService', () => {
     expect(query).toHaveBeenCalledWith(
       expect.stringContaining("SET status = 'FAILED'"),
       ['req-missing-remittance', 'Remittance record not found'],
-    );
-    expect(query).toHaveBeenCalledWith(
-      expect.stringContaining("SET status = 'FAILED'"),
-      ['req-missing-event', 'eSocial event not found'],
     );
   });
 });

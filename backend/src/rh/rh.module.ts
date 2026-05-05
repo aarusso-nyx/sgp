@@ -10,6 +10,8 @@ import { EmployeeAbonoPermanenciaService } from './employees/employee-abono-perm
 import { EmployeeCadastralChangesService } from './employees/employee-cadastral-changes.service';
 import { EmployeeContractRegimeService } from './employees/employee-contract-regime.service';
 import { EmployeeLifecycleService } from './employees/employee-lifecycle.service';
+import { EmployeeMeritLeaveController } from './employees/employee-merit-leave.controller';
+import { EmployeeMeritLeaveService } from './employees/employee-merit-leave.service';
 import { EmployeeReferenceDataService } from './employees/employee-reference-data.service';
 import { EmployeeRegistryService } from './employees/employee-registry.service';
 import { EmployeeVersionService } from './employees/employee-version.service';
@@ -41,6 +43,7 @@ import { OrganicDefinitionService } from './organic-definitions/organic-definiti
     VacationController,
     MedicalLeaveController,
     LeavesController,
+    EmployeeMeritLeaveController,
     EmployeeTransferController,
     OrganicDefinitionController,
   ],
@@ -60,6 +63,7 @@ import { OrganicDefinitionService } from './organic-definitions/organic-definiti
     VacationService,
     MedicalLeaveService,
     LeavesService,
+    EmployeeMeritLeaveService,
     EmployeeTransferService,
     OrganicDefinitionService,
   ],

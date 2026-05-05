@@ -126,20 +126,12 @@ export class PisPasepService {
     const rows = await this.databaseService.query<ExcludedEventRow>(
       `
       SELECT
-        COALESCE(event.payload->>'employeeId', state.employee_id::text) AS employee_id,
-        run.competence_year
-      FROM public.esocial_event event
-      JOIN payroll.payroll_run run
-        ON run.tenant_id = event.tenant_id
-       AND run.id = event.payroll_run_id
-      JOIN esocial.s1200_emission_state state
-        ON state.tenant_id = event.tenant_id
-       AND state.payroll_run_id = event.payroll_run_id
-       AND state.employee_id::text = COALESCE(event.payload->>'employeeId', state.employee_id::text)
+        COALESCE(event.payload->>'employeeId', event.source_ref->>'employeeId') AS employee_id,
+        NULLIF(COALESCE(event.payload->>'competenceYear', event.source_ref->>'competenceYear'), '')::integer AS competence_year
+      FROM public.esocial_spool event
       WHERE event.tenant_id = $1::uuid
-        AND event.id = $2::uuid
-        AND event.event_type = 'S-1200'
-      ORDER BY state.employee_id::text
+        AND event.message_id = $2::uuid
+        AND event.event_class = 'S-1200'
       LIMIT 1
       `,
       [tenantId, targetEventId],

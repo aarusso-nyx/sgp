@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface CadastralChange {
   id: string;
@@ -55,7 +56,7 @@ export class RhCadastralChanges implements OnInit, OnDestroy {
           this.changes = items;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar pendencias cadastrais.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m157;
         },
       });
   }
@@ -75,11 +76,11 @@ export class RhCadastralChanges implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Solicitacao aprovada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m158;
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel aprovar a solicitacao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m159;
         },
       });
   }
@@ -99,11 +100,11 @@ export class RhCadastralChanges implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Solicitacao rejeitada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m160;
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel rejeitar a solicitacao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m161;
         },
       });
   }

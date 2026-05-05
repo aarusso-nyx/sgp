@@ -16,6 +16,21 @@ Authored domain authority for LGPD, biometrics, transparency portal, LAI, ROPA, 
 - LGPD ROPA registry
 - LGPD titular-rights portal tickets
 
+## Regulatory References Cross-Reference
+
+This table maps privacy, transparency, and LGPD references to implementation or
+retained decision evidence.
+
+| Reference                                    | Obligation cluster                           | Implementation / evidence path:line               | Current posture                                                  |
+| -------------------------------------------- | -------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------- |
+| `docs/refs/lgpd/anpd-guidelines.md`          | ANPD operational guidance                    | docs/user/lgpd.md:1                               | Operator-facing LGPD procedure retained.                         |
+| `docs/refs/lgpd/dpo-dsar.md`                 | DPO designation and data-subject requests    | backend/src/lgpd/dpo.controller.ts:1              | Implemented public DPO/DSAR endpoints.                           |
+| `docs/refs/lgpd/lei-13709.md`                | LGPD umbrella obligations                    | database/sql/15-pii-encryption.sql:1              | Implemented PII tagging/encryption and protected route surfaces. |
+| `docs/refs/lgpd/pii-categorias-cpf-bio.md`   | CPF, health, photo, and biometric categories | database/sql/13-pii-comments.sql:1                | Implemented PII classification comments and encryption scope.    |
+| `docs/refs/lgpd/ropa-rcis.md`                | ROPA and security incident records           | backend/src/lgpd/ropa.controller.ts:1             | Implemented ROPA/RCIS controller surfaces.                       |
+| `docs/refs/lgpd/tratamento-poder-publico.md` | Public-power treatment basis                 | backend/src/lgpd/public-power.controller.ts:1     | Implemented public-power LGPD route surface.                     |
+| `docs/refs/tce/lai-portal-transparencia.md`  | LAI and transparency publication             | backend/src/publico/lai/lai-requests.service.ts:1 | Implemented LAI request and transparency surfaces.               |
+
 ## Biometria de Candidato e LGPD Art. 11
 
 ## Biometria de Candidato e LGPD Art. 11
@@ -304,6 +319,54 @@ Sensitive or mixed flows set `requires_dpia = true` as a planning flag for R2-39
 | ADR-LGPD-007 | `health.medical_record`                 | Prontuario, ASO e PCMSO/PGR                     | Sensitive     | Art. 7, II     | Art. 11, II, f  | No               | Saude/pericia reads must bind to this key before ROPA closure                      |
 | ADR-LGPD-008 | `regulatory.esocial_reporting`          | eSocial, DCTFWeb, DIRF/Reinf e TCE              | Mixed         | Art. 7, II     | Art. 11, II, a  | No               | Worker/regulatory submissions must bind to this key before ROPA closure            |
 | ADR-LGPD-009 | `transparency.remuneration_publication` | Transparencia ativa de remuneracao              | Personal      | Art. 7, III    | n/a             | No               | Transparency output keeps minimization with `employee_public_id`                   |
+
+### Production gate: legal-basis and ROPA checklist for `@stynx/privacy`
+
+R2-40 is production-gating for every PII-touching flow. The SGP legal-basis
+registry remains the product authority, while `@stynx/privacy` consumes the
+field set needed to generate ROPA, export, erasure, and retention evidence for
+live and archive data. New PII flows cannot go to production until they have a
+row in this checklist, matching active `lgpd.legal_basis_rule` data and the PII
+column map consumed by stynx.
+
+Required fields for each flow:
+
+| Field                   | Acceptance criterion                                                                                                                                                                                |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `flow_id`               | Stable `lgpd.legal_basis_rule.flow_key`; no route, report, worker, or export may invent a second flow key.                                                                                          |
+| `legal_basis`           | One stynx-facing tag from `consent`, `legitimate-interest`, `legal-obligation`, `vital-interests`, `contract`, or `public-task`, plus the canonical LGPD Art. 7 and Art. 11 codes where applicable. |
+| `data_subject_category` | Human category whose data is processed, such as public employee, beneficiary, candidate, requester, or external-system contact.                                                                     |
+| `retention_horizon`     | Operational horizon from the rule's `retention_rule`, expressed as a policy trigger or legal/control period rather than "forever".                                                                  |
+| `pii_map`               | Source tables and columns have parseable PII metadata with category, subject link, erasure strategy, and live/archive retention target for `@stynx/privacy`.                                        |
+| `ropa_owner`            | ROPA entry identifies controller area, processors/receivers, safeguards, lifecycle evidence, status, and risk classification.                                                                       |
+| `consent_evidence`      | Required only when the product flow records highlighted consent or acknowledgement; consent evidence never replaces statutory bases for mandatory public-controller duties.                         |
+| `production_gate`       | The flow has at least one focused test or generated evidence path proving the legal-basis lookup before PII read or the ROPA linkage before titular-rights/incident handling.                       |
+
+Current accepted PII-flow checklist:
+
+| flow_id                                 | legal_basis        | Canonical LGPD basis       | data_subject_category                             | retention_horizon                                                                       | Production gate                                                                                          |
+| --------------------------------------- | ------------------ | -------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `payroll.payslip_pdf`                   | `legal-obligation` | Art. 7, II; Art. 11, II, a | Public employee                                   | Functional, fiscal, and external-control period applicable to official payslips         | `report-service/payslip` must call `LgpdLegalBasisService.assertPiiReadAllowed` before source PII reads. |
+| `fiscal.yearly_income_pdf`              | `legal-obligation` | Art. 7, II; Art. 11, II, a | Public employee; fiscal beneficiary               | At least 10 years for generated official fiscal files                                   | `report-service/yearly-income` must call the legal-basis service before aggregate PII reads.             |
+| `time.attendance_register`              | `legal-obligation` | Art. 7, II                 | Public employee                                   | Portaria MTP 671/2021 and labor/administrative limitation periods                       | Ponto reads and payroll integration must bind to this flow key before ROPA closure.                      |
+| `time.biometric_clock`                  | `legal-obligation` | Art. 7, II; Art. 11, II, a | Public employee                                   | Active template only while employment relationship and time-clock purpose remain active | Ponto biometric/face consent records remain required operational evidence; DPIA remains required.        |
+| `recruitment.public_application`        | `contract`         | Art. 7, V; Art. 11, II, d  | Candidate                                         | Edital lifecycle, appeal period, and administrative-control limitation period           | Public application intake must preserve consent/exemption/quota evidence and route through the registry. |
+| `recruitment.online_exam_proctoring`    | `public-task`      | Art. 7, VI; Art. 11, II, d | Candidate                                         | Recruitment process, appeal window, and control period                                  | Online exam artifacts and biometric/proctoring records require DPIA and ROPA linkage before production.  |
+| `health.medical_record`                 | `legal-obligation` | Art. 7, II; Art. 11, II, f | Public employee; occupational-health subject      | PCMSO/PGR, eSocial SST, and medical-legal periods                                       | Saude/pericia reads must bind to this key before ROPA closure; access is restricted to health staff.     |
+| `regulatory.esocial_reporting`          | `legal-obligation` | Art. 7, II; Art. 11, II, a | Public employee; beneficiary; appointed candidate | Official layouts, Receita Federal, eSocial, and courts-of-accounts periods              | stynx-esocial, integrations-worker, and TCE adapters must bind regulatory submissions to this key.       |
+| `transparency.remuneration_publication` | `public-task`      | Art. 7, III                | Public employee                                   | LAI, Transparency Law, and active-publicity policy                                      | Transparency output must keep minimization and exclude CPF, bank, contact, and sensitive fields.         |
+
+Acceptance for `@stynx/privacy` adoption:
+
+- `stynx privacy ropa` output must be derivable from SGP PII annotations plus
+  this legal-basis/ROPA field set; generated ROPA cannot depend on free-form
+  prose only.
+- Erasure/export policy must cover both live tables and archive mirrors. Where
+  deletion is legally restricted, the flow must declare the retention horizon
+  and use nullification, hash-with-salt, tombstone, or denial evidence instead
+  of silent hard delete.
+- A route, worker, report, or public export touching PII without a known
+  `flow_id` is a production blocker, even if RBAC/RLS tests pass.
 
 ### ADR-LGPD-001: Contracheque oficial PDF/A
 

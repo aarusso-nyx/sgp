@@ -1,12 +1,14 @@
 import { MODULE_METADATA } from '@nestjs/common/constants';
 
 import { AuthModule } from '../auth/auth.module';
+import { DatabaseModule } from '../database/database.module';
 import { REQUIRED_PERMISSIONS } from '../iam/decorators/require-permission.decorator';
 import { ExternalController } from './external.controller';
 import { ExternalModule } from './external.module';
 import { ExternalService } from './external.service';
 import { IcpSignerService } from './signature/icp-signer.service';
 import { PadesAdapter } from './signature/pades.adapter';
+import { TenantFiscalCertificateService } from './signature/tenant-fiscal-certificate.service';
 
 function metadataTarget(method: string) {
   const descriptor = Object.getOwnPropertyDescriptor(
@@ -23,16 +25,25 @@ describe('ExternalModule', () => {
   it('wires the external M2M API controller and signature providers', () => {
     expect(
       Reflect.getMetadata(MODULE_METADATA.IMPORTS, ExternalModule),
-    ).toEqual([AuthModule]);
+    ).toEqual([AuthModule, DatabaseModule]);
     expect(
       Reflect.getMetadata(MODULE_METADATA.CONTROLLERS, ExternalModule),
     ).toEqual([ExternalController]);
     expect(
       Reflect.getMetadata(MODULE_METADATA.PROVIDERS, ExternalModule),
-    ).toEqual([ExternalService, IcpSignerService, PadesAdapter]);
+    ).toEqual([
+      ExternalService,
+      IcpSignerService,
+      PadesAdapter,
+      TenantFiscalCertificateService,
+    ]);
     expect(
       Reflect.getMetadata(MODULE_METADATA.EXPORTS, ExternalModule),
-    ).toEqual([IcpSignerService, PadesAdapter]);
+    ).toEqual([
+      IcpSignerService,
+      PadesAdapter,
+      TenantFiscalCertificateService,
+    ]);
   });
 
   it('keeps external M2M endpoints behind auth.read', () => {

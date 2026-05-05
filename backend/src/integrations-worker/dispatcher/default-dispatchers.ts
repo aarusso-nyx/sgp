@@ -5,7 +5,6 @@ import {
   Cnab240RelayDispatcher,
   createCnab240Emitter,
 } from './cnab240.dispatcher';
-import { ESocialEventIntegrationDispatcher } from './esocial-event.dispatcher';
 import { EvaluationIntegrationDispatcher } from './evaluation.dispatcher';
 import { GfipIntegrationDispatcher } from './gfip.dispatcher';
 import type { IntegrationJobDispatcher } from './integration-job-dispatcher';
@@ -28,6 +27,5 @@ export function createIntegrationJobDispatchers(
     new GfipIntegrationDispatcher(),
     new EvaluationIntegrationDispatcher(),
     new PrevidentiaryIntegrationDispatcher(),
-    new ESocialEventIntegrationDispatcher(),
   ];
 }

@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { PayrollSimulationResult, SimulacaoFolhaService } from './simulacao.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,7 +59,7 @@ export class SimulacaoFolha {
         },
         error: (error: unknown) => {
           this.errorMessage =
-            error instanceof Error ? error.message : 'Nao foi possivel simular a folha.';
+            error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m073;
           this.loading = false;
         },
       });

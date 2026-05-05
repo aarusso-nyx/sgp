@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface CareerTrailStep {
   jobPositionName: string | null;
@@ -85,7 +86,7 @@ export class PortalMinhaCarreira implements OnInit {
     if (trail.status === 'fulfilled') {
       this.trail = trail.value;
     } else {
-      this.error = 'Nao foi possivel carregar a trilha de carreira.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m150;
     }
 
     this.vacationPayslips = vacationPayslips.status === 'fulfilled' ? vacationPayslips.value : [];

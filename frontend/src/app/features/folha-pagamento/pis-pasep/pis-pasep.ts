@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { PisPasepApiService, PisPasepYear } from './pis-pasep.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +43,7 @@ export class PisPasep {
         },
         error: (error: unknown) => {
           this.errorMessage =
-            error instanceof Error ? error.message : 'Nao foi possivel carregar a base PIS/PASEP.';
+            error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m054;
           this.loading = false;
         },
       });

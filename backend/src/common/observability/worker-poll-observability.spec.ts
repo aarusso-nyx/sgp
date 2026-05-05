@@ -10,7 +10,7 @@ describe('worker poll observability', () => {
     const spans: RequestSpan[] = [];
 
     const result = await observeWorkerPoll(
-      'sgp-esocial-worker',
+      'sgp-integrations-worker',
       async () => ({
         discovered: 2,
         processed: 2,
@@ -30,8 +30,8 @@ describe('worker poll observability', () => {
     expect(result.processed).toBe(2);
     expect(spans[0]).toEqual(
       expect.objectContaining({
-        name: 'sgp-esocial-worker poll',
-        entrypoint: 'sgp-esocial-worker',
+        name: 'sgp-integrations-worker poll',
+        entrypoint: 'sgp-integrations-worker',
         status: 'ok',
       }),
     );
@@ -42,7 +42,7 @@ describe('worker poll observability', () => {
       }),
     );
     expect(prometheusRegistry.collect()).toContain(
-      'sgp_worker_polls_total{status="success",worker="sgp-esocial-worker"} 1',
+      'sgp_worker_polls_total{status="success",worker="sgp-integrations-worker"} 1',
     );
   });
 

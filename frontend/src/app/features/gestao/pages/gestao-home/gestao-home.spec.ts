@@ -27,7 +27,7 @@ describe('GestaoHome', () => {
       of({
         page: 1,
         pageSize: 100,
-        total: 1,
+        total: 2,
         totalPages: 1,
         items: [
           {
@@ -43,30 +43,55 @@ describe('GestaoHome', () => {
               { key: 'name', label: 'Nome' },
             ],
           },
-        ],
-      }),
-    );
-    masterData.listRecords.mockReturnValue(
-      of({
-        page: 1,
-        pageSize: 25,
-        total: 1,
-        totalPages: 1,
-        items: [
           {
-            id: 'cargo-1',
-            code: 'ANL',
-            name: 'Analista',
-            description: '',
-            active: true,
-            status: 'inferred',
-            metadata: {},
-            createdAt: '2026-04-16T00:00:00.000Z',
-            updatedAt: '2026-04-16T00:00:00.000Z',
+            key: 'tipoFerias',
+            label: 'Tipos de Ferias',
+            route: '#!/tipoFerias/gestao',
+            module: 'Gestao',
+            status: 'observed',
+            observedActions: ['create', 'edit', 'deactivate'],
+            fields: [],
+            columns: [
+              { key: 'code', label: 'Codigo' },
+              { key: 'name', label: 'Descricao' },
+            ],
           },
         ],
       }),
     );
+    masterData.listRecords.mockImplementation((resource: string) => {
+      const record =
+        resource === 'tipoFerias'
+          ? {
+              id: 'ferias-1',
+              code: 'REG',
+              name: 'Ferias regulares',
+              description: 'Ferias regulares',
+              active: true,
+              status: 'observed',
+              metadata: {},
+              createdAt: '2026-05-04T00:00:00.000Z',
+              updatedAt: '2026-05-04T00:00:00.000Z',
+            }
+          : {
+              id: 'cargo-1',
+              code: 'ANL',
+              name: 'Analista',
+              description: '',
+              active: true,
+              status: 'inferred',
+              metadata: {},
+              createdAt: '2026-04-16T00:00:00.000Z',
+              updatedAt: '2026-04-16T00:00:00.000Z',
+            };
+      return of({
+        page: 1,
+        pageSize: 25,
+        total: 1,
+        totalPages: 1,
+        items: [record],
+      });
+    });
     masterData.createRecord.mockReturnValue(of({ id: 'cargo-2' }));
 
     await TestBed.configureTestingModule({
@@ -105,5 +130,16 @@ describe('GestaoHome', () => {
       description: 'Teste',
       active: true,
     });
+  });
+
+  it('maps the Tipos de Ferias route to the tipoFerias master-data resource', () => {
+    routeData$.next({ legacyChildPath: 'tipo-ferias/gestao' });
+
+    expect(component.currentResource?.key).toBe('tipoFerias');
+    expect(component.records[0]['name']).toBe('Ferias regulares');
+    expect(masterData.listRecords).toHaveBeenLastCalledWith(
+      'tipoFerias',
+      expect.objectContaining({ page: 1, pageSize: 25 }),
+    );
   });
 });

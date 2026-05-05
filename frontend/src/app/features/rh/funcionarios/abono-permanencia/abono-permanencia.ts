@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiClient } from '../../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 interface AbonoPermanenciaState {
   employeeId: string;
@@ -67,7 +68,7 @@ export class RhAbonoPermanencia implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar o abono permanencia.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m174;
           this.loading = false;
         },
       });
@@ -80,7 +81,7 @@ export class RhAbonoPermanencia implements OnInit, OnDestroy {
     }
     const value = this.form.value;
     if (value.active && (!value.startsOn || !value.legalBasis)) {
-      this.error = 'Informe inicio e fundamento legal para ativar o abono.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m175;
       return;
     }
 
@@ -102,7 +103,7 @@ export class RhAbonoPermanencia implements OnInit, OnDestroy {
           this.saving = false;
         },
         error: () => {
-          this.error = 'Nao foi possivel salvar o abono permanencia.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m176;
           this.saving = false;
         },
       });

@@ -8,6 +8,7 @@ import {
   S1xxxEventKind,
   S1xxxStatus,
 } from './esocial-tabelas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 const EVENT_KINDS: S1xxxEventKind[] = ['S-1000', 'S-1005', 'S-1010', 'S-1020', 'S-1050', 'S-1070'];
 
@@ -38,7 +39,7 @@ export class ESocialTabelas implements OnInit {
     try {
       this.statuses = await firstValueFrom(this.service.status());
     } catch {
-      this.error = 'Nao foi possivel carregar as tabelas iniciais.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m036;
     } finally {
       this.loading = false;
     }
@@ -67,7 +68,7 @@ export class ESocialTabelas implements OnInit {
       this.lastResults = await firstValueFrom(callback());
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel emitir os deltas S-1xxx.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m037;
     } finally {
       this.emitting = '';
     }

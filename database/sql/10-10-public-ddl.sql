@@ -1,35 +1,3 @@
-CREATE TABLE public.esocial_event (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
-    event_type text NOT NULL,
-    reference text NOT NULL,
-    competence text NOT NULL,
-    payload jsonb DEFAULT '{}'::jsonb NOT NULL,
-    xml_payload text,
-    schema_version text DEFAULT 'S-1.2'::text NOT NULL,
-    status public."ESocialEventStatus" DEFAULT 'PENDENTE'::public."ESocialEventStatus" NOT NULL,
-    receipt_number text,
-    protocol_number text,
-    retry_count integer DEFAULT 0 NOT NULL,
-    last_error_code text,
-    last_error_message text,
-    generated_at timestamp(6) with time zone,
-    processed_at timestamp(6) with time zone,
-    created_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    event_kind esocial.s1xxx_event_kind,
-    source_entity_kind text,
-    source_entity_id text,
-    xml_signed bytea,
-    xml_hash character(64),
-    payroll_run_id uuid,
-    payment_batch_id uuid,
-    response_code text,
-    response_description text,
-    response_errors jsonb DEFAULT '[]'::jsonb NOT NULL,
-    last_response_at timestamp with time zone
-);
-
 CREATE TABLE public.system_parameter (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     key text NOT NULL,
@@ -332,9 +300,6 @@ ALTER TABLE ONLY public.document_type
 
 ALTER TABLE ONLY public.document_upload_session
     ADD CONSTRAINT document_upload_session_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY public.esocial_event
-    ADD CONSTRAINT esocial_event_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY public.generated_report_file
     ADD CONSTRAINT generated_report_file_pkey PRIMARY KEY (id);

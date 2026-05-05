@@ -52,8 +52,8 @@ When sources conflict:
 - Preserve user and worker changes. Never revert unrelated dirty files unless
   explicitly asked.
 - Keep diffs focused on the requested scope. Avoid opportunistic refactors.
-- Keep code artifacts in English, including database physical names, Prisma
-  models, API/runtime artifacts, TypeScript identifiers, scripts, and tests.
+- Keep code artifacts in English, including database physical names,
+  API/runtime artifacts, TypeScript identifiers, scripts, and tests.
 - Do not commit secrets, credentials, private keys, `.env` files with real
   values, or production data.
 - Do not add backward-compatibility shims, legacy compatibility schemas, or
@@ -97,7 +97,7 @@ claims require explicit owner authorization and retained evidence.
 
 | Path | Responsibility |
 | --- | --- |
-| `backend/` | NestJS backend workspace for core API, portal API, services, workers, Prisma, backend tests, and runtime entrypoints. |
+| `backend/` | NestJS backend workspace for core API, portal API, services, workers, backend tests, and runtime entrypoints. |
 | `frontend/` | Angular workspace for `sgp-admin` and `sgp-portal`, frontend API clients, UI tests, and Playwright surfaces. |
 | `database/sql/` | Canonical SQL packs for schemas, RLS, functions, grants, seeds, FK/index hardening, and PII/audit data controls. |
 | `database/seed/` | Deterministic non-secret seed fixtures and seed documentation. |
@@ -122,8 +122,9 @@ names aligned with that file and root commands.
 - Backend runtime is NestJS. Keep controllers thin and put business behavior in
   services/providers.
 - Entry surfaces include `sgp-core-api`, `sgp-portal-api`,
-  `sgp-payroll-engine`, `sgp-esocial-worker`, `sgp-integrations-worker`,
-  `sgp-report-worker`, and `sgp-report-service`.
+  `sgp-payroll-engine`, `sgp-integrations-worker`, `sgp-report-worker`, and
+  `sgp-report-service`. eSocial processing runs outside SGP in
+  `stynx-esocial`; SGP keeps only the `public.esocial_spool` gateway boundary.
 - Preserve tenant context, RLS posture, RBAC decorators/guards, audit events,
   request IDs, and PII redaction when touching protected routes or services.
 - DTOs and validation live at API boundaries. Avoid `any`; use precise types or
@@ -142,8 +143,9 @@ names aligned with that file and root commands.
 
 - Canonical SQL lives under `database/sql`. Do not create alternate legacy
   schemas or compatibility database layers.
-- Prisma models must remain aligned with accepted SQL/runtime behavior; use the
-  canonical DB alignment scripts before claiming parity.
+- Canonical SQL and database-facing runtime code must remain aligned with
+  accepted behavior; use the canonical DB alignment scripts before claiming
+  parity.
 - Local DB-backed tests and smoke checks use:
 
 ```bash
@@ -190,7 +192,6 @@ npm run start:portal
 npm run start:core-api
 npm run start:portal-api
 npm run start:payroll-engine
-npm run start:esocial-worker
 npm run start:integrations-worker
 npm run start:report-worker
 npm run start:report-service
@@ -231,11 +232,9 @@ Database, alignment, governance, and operations:
 
 ```bash
 npm run db -- help
-npm run db:generate
 npm run db:migrate
 npm run db:seed
 npm run db:smoke
-npm run db:studio
 npm run db:alignment:check -- --json
 npm run db:fk-coverage:check
 npm run db:push:guard

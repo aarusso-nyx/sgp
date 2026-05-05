@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,7 +38,7 @@ export class GeofenceAdmin {
       })
       .filter((point) => Number.isFinite(point.lat) && Number.isFinite(point.lon));
     this.points.set(points);
-    this.message = this.valid() ? 'Poligono valido para salvar.' : 'Poligono invalido.';
+    this.message = this.valid() ? SGP_FEATURE_I18N_MESSAGES.m119 : SGP_FEATURE_I18N_MESSAGES.m120;
   }
 
   private hasSelfIntersection(points: Array<{ lat: number; lon: number }>): boolean {

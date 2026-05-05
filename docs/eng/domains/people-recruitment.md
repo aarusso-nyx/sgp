@@ -14,6 +14,19 @@ Authored domain authority for people, recruitment, concursos, appointment, quota
 - Frontend i18n posture roadmap
 - RH Workflows
 
+## Regulatory References Cross-Reference
+
+This table maps people and recruitment references to current implementation or
+retained decision evidence.
+
+| Reference                                  | Obligation cluster                                  | Implementation / evidence path:line                               | Current posture                                                 |
+| ------------------------------------------ | --------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------- |
+| `docs/refs/legal/concursos-publicos.md`    | Concurso, temporary hiring, nomination, possession  | database/sql/10-11-recrutamento-ddl.sql:1                         | Implemented recruitment schema and portal/admin surfaces.       |
+| `docs/refs/legal/licencas-estatutarias.md` | Statutory leaves and service-time workflows         | backend/src/rh/workflows/leaves/leaves.service.ts:1               | Implemented leave surface with policy breadth tracked.          |
+| `docs/refs/legal/lei-14133-licitacoes.md`  | Procurement reference for outsourced HR contracting | docs/gov/evidence/deferred-decision-ledger.md:1                   | Reference-only for v0.0.1; procurement runtime is out of scope. |
+| `docs/refs/lgpd/lei-13709.md`              | Candidate and employee personal-data handling       | backend/src/recrutamento/inscricao/inscricao.service.ts:1         | Implemented explicit consent in public recruitment flow.        |
+| `docs/refs/lgpd/pii-categorias-cpf-bio.md` | Sensitive candidate biometrics                      | backend/src/recrutamento/biometria/biometric-capture.service.ts:1 | Implemented local biometric capture and consent controls.       |
+
 ## Concursos publicos
 
 ## Concursos publicos
@@ -279,7 +292,7 @@ The modern RH slice implements the legacy SGP RH route family as PostgreSQL-back
 - Mutating operations require `rh.write`.
 - Professional-experience record management is exposed through `GET /api/v1/rh/professional-experiences`, `POST /api/v1/rh/professional-experiences`, `PATCH /api/v1/rh/professional-experiences/:id`, and `DELETE /api/v1/rh/professional-experiences/:id`; it reuses the workflow service, `hr.professional_experience`, and RH mutation audit records.
 - Licença-prêmio uses the general leave surface `POST /api/v1/licencas` with reason `premio`, defaults to 90 paid days, and calls `hr.f_validate_leave_eligibility` before inserting `hr.leave_record`.
-- Licença-prêmio accrual, unused-balance tracking, and pecuniary conversion on termination/retirement are payroll-impacting policy and remain deferred in `docs/gov/evidence/deferred-decision-ledger.md`.
+- Licença-prêmio balance is exposed through `GET /api/v1/funcionarios/:employeeId/licenca-premio/balance`; it uses `hr.service_time_record` and consumed `hr.leave_record` rows with reason `premio` to compute 5-year cycles, 90-day entitlements, consumed days, available days, and next-cycle remaining service days. Pecuniary conversion on termination/retirement remains payroll-impacting policy and is deferred in `docs/gov/evidence/deferred-decision-ledger.md`.
 - Business-day queries are exposed as `GET /api/v1/consultas/business-days?startDate=yyyy-mm-dd&endDate=yyyy-mm-dd`; the service treats Monday-Friday as the default workweek and applies active `hr.business_day` rows as tenant-scoped overrides, so configured holidays can make weekdays non-working and configured compensations can make weekends working.
 - Frequency creation defaults `worked_days` from the business-day calendar for the submitted year/month when the caller does not provide `workedDays`; explicit caller values still win.
 - Vacation scheduling resolves omitted installment `days` through the same business-day calendar before persisting `hr.vacation_record`.

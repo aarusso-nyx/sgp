@@ -89,7 +89,6 @@ describe('backend entrypoint smoke coverage', () => {
   });
 
   it.each([
-    ['eSocial worker', () => import('../../backend/src/main-esocial-worker')],
     [
       'integrations worker',
       () => import('../../backend/src/main-integrations-worker'),

@@ -7,6 +7,7 @@ import {
   MonthlyPayrollCompetence,
   MonthlyPayrollResult,
 } from './folha-mensal.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 type MonthlyAction = 'open' | 'calculate' | 'approve' | 'generate' | 'close' | 'review';
 
@@ -50,8 +51,7 @@ export class FolhaMensal {
         this.loadingAction = null;
       },
       error: (error: unknown) => {
-        this.errorMessage =
-          error instanceof Error ? error.message : 'Nao foi possivel processar a competencia.';
+        this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m043;
         this.loadingAction = null;
       },
     });

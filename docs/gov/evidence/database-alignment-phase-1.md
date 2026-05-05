@@ -22,7 +22,8 @@ Sem camadas de compatibilidade (`shim`, `dual-write`, `schema legado`).
 
 ### Artefatos Implementados
 
-1. Prisma multi-schema em `backend/prisma/schema.prisma` com mapeamento explícito por modelo para geração de cliente.
+1. SQL canônico multi-schema em `database/sql/` como autoridade física e
+   contratual do banco.
 2. SQL canônico de split físico e schema runtime: `database/sql/`.
 3. SQL de suporte consolidado nos artefatos canônicos em `database/sql`.
 4. Projeções do portal convertidas para materialized views em `portal`:
@@ -34,8 +35,8 @@ Sem camadas de compatibilidade (`shim`, `dual-write`, `schema legado`).
 ### SQL Canônico
 
 PostgreSQL é o banco-alvo. O v0.0.1 usa SQL canônico em `database/sql` para
-bootstrap de bancos novos; Prisma mantém geração de client e metadados de tipo
-por `backend/prisma/schema.prisma`, não por migrations Prisma.
+bootstrap de bancos novos; Prisma foi removido do runtime e dos artefatos de
+alinhamento.
 
 Ordem e responsabilidade dos artefatos:
 

@@ -32,6 +32,7 @@ import {
   CrudTableColumn,
 } from '../../../../shared-platform/crud-table/crud-table';
 import { FilterBar, FilterField } from '../../../../shared-platform/filter-bar/filter-bar';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 interface WorkspaceRecord {
   [key: string]: unknown;
@@ -116,11 +117,11 @@ export class AdminFeaturePage {
   });
 
   readonly columns: CrudTableColumn[] = [
-    { key: 'code', header: 'Código' },
+    { key: 'code', header: SGP_FEATURE_I18N_MESSAGES.m001 },
     { key: 'title', header: 'Registro' },
     { key: 'status', header: 'Status' },
-    { key: 'owner', header: 'Responsável' },
-    { key: 'updatedAt', header: 'Atualização' },
+    { key: 'owner', header: SGP_FEATURE_I18N_MESSAGES.m002 },
+    { key: 'updatedAt', header: SGP_FEATURE_I18N_MESSAGES.m003 },
   ];
 
   readonly rowActions: CrudTableAction[] = [
@@ -128,13 +129,13 @@ export class AdminFeaturePage {
       id: 'edit',
       label: 'Editar',
       icon: 'edit',
-      description: 'Editar registro',
+      description: SGP_FEATURE_I18N_MESSAGES.m004,
     },
     {
       id: 'details',
       label: 'Detalhes',
       icon: 'visibility',
-      description: 'Ver detalhes',
+      description: SGP_FEATURE_I18N_MESSAGES.m005,
     },
   ];
 
@@ -142,7 +143,7 @@ export class AdminFeaturePage {
     {
       key: 'search',
       label: 'Pesquisar',
-      placeholder: 'Código, registro ou responsável',
+      placeholder: SGP_FEATURE_I18N_MESSAGES.m006,
     },
     {
       key: 'status',
@@ -150,7 +151,7 @@ export class AdminFeaturePage {
       type: 'select',
       options: [
         { label: 'Ativo', value: 'Ativo' },
-        { label: 'Em revisão', value: 'Em revisão' },
+        { label: SGP_FEATURE_I18N_MESSAGES.m007, value: SGP_FEATURE_I18N_MESSAGES.m007 },
         { label: 'Pendente', value: 'Pendente' },
       ],
     },
@@ -306,7 +307,7 @@ export class AdminFeaturePage {
       {
         id: `${feature.id}-2`,
         code: `${prefix}-002`,
-        title: `${feature.label} - revisão`,
+        title: SGP_FEATURE_I18N_MESSAGES.m008(feature.label),
         status: 'Em revisão',
         owner: 'Gestor do módulo',
         updatedAt: '2026-04-25',
@@ -315,7 +316,7 @@ export class AdminFeaturePage {
       {
         id: `${feature.id}-3`,
         code: `${prefix}-003`,
-        title: `${feature.label} - pendência`,
+        title: SGP_FEATURE_I18N_MESSAGES.m009(feature.label),
         status: 'Pendente',
         owner: 'Analista responsável',
         updatedAt: '2026-04-24',

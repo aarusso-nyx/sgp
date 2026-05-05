@@ -11205,6 +11205,1686 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m001" datatype="html">
+        <source>Código</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m002" datatype="html">
+        <source>Responsável</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m003" datatype="html">
+        <source>Atualização</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m004" datatype="html">
+        <source>Editar registro</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m005" datatype="html">
+        <source>Ver detalhes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m006" datatype="html">
+        <source>Código, registro ou responsável</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m007" datatype="html">
+        <source>Em revisão</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m008" datatype="html">
+        <source><x id="PH" equiv-text="${value0}"/> - revisão</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m009" datatype="html">
+        <source><x id="PH" equiv-text="${value0}"/> - pendência</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m010" datatype="html">
+        <source>Nao foi possivel carregar o estagio probatorio.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m011" datatype="html">
+        <source>Avaliacao registrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m012" datatype="html">
+        <source>Nao foi possivel registrar a avaliacao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m013" datatype="html">
+        <source>Nao foi possivel carregar os PCCS.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m014" datatype="html">
+        <source>PCCS salvo.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m015" datatype="html">
+        <source>Nao foi possivel salvar o PCCS.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m016" datatype="html">
+        <source>Reajuste aplicado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m017" datatype="html">
+        <source>Nao foi possivel aplicar o reajuste.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m018" datatype="html">
+        <source>Nao foi possivel carregar as progressoes.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m019" datatype="html">
+        <source>Simulacao registrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m020" datatype="html">
+        <source>Nao foi possivel simular a progressao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m021" datatype="html">
+        <source>Progressao aplicada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m022" datatype="html">
+        <source>Nao foi possivel aplicar a progressao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m023" datatype="html">
+        <source>Nao foi possivel carregar os certificados.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m024" datatype="html">
+        <source>Informe alias, tipo e arquivo PKCS#12.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m025" datatype="html">
+        <source>Nao foi possivel salvar o certificado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m026" datatype="html">
+        <source>Nao foi possivel carregar eventos elegiveis.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m027" datatype="html">
+        <source>Nao foi possivel solicitar a exclusao S-3000.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m028" datatype="html">
+        <source>Nao foi possivel carregar o fechamento.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m029" datatype="html">
+        <source>Nao foi possivel fechar a competencia.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m030" datatype="html">
+        <source>Nao foi possivel carregar a folha periodica.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m031" datatype="html">
+        <source>Nao foi possivel emitir a folha periodica.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m032" datatype="html">
+        <source>Nao foi possivel carregar os retornos.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m033" datatype="html">
+        <source>Nao foi possivel forcar o retry.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m034" datatype="html">
+        <source>Nao foi possivel marcar como tratado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m035" datatype="html">
+        <source>Nao foi possivel carregar as submissoes.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m036" datatype="html">
+        <source>Nao foi possivel carregar as tabelas iniciais.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m037" datatype="html">
+        <source>Nao foi possivel emitir os deltas S-1xxx.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m038" datatype="html">
+        <source>Nao foi possivel carregar o cadastro eSocial.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m039" datatype="html">
+        <source>Nao foi possivel emitir o evento eSocial.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m040" datatype="html">
+        <source>Operacao DCTFWeb indisponivel.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m041" datatype="html">
+        <source>Operacao DIRF indisponivel.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m042" datatype="html">
+        <source>Operacao GPS indisponivel.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m043" datatype="html">
+        <source>Nao foi possivel processar a competencia.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m044" datatype="html">
+        <source>Nao foi possivel gerar os comprovantes.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m045" datatype="html">
+        <source>Nao foi possivel gerar a GRF.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m046" datatype="html">
+        <source>Nao foi possivel gerar a GRRF.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m047" datatype="html">
+        <source>Nao foi possivel carregar a remessa.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m048" datatype="html">
+        <source>Nao foi possivel carregar o FGTS.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m049" datatype="html">
+        <source>Nao foi possivel reprocessar a competencia.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m050" datatype="html">
+        <source>Gerar 1a parcela 13o</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m051" datatype="html">
+        <source>Fechar 13o</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m052" datatype="html">
+        <source>Calcular folha de ferias</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m053" datatype="html">
+        <source>Nao foi possivel processar a folha.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m054" datatype="html">
+        <source>Nao foi possivel carregar a base PIS/PASEP.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m055" datatype="html">
+        <source>Sem justa causa</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m056" datatype="html">
+        <source>Pedido de demissao</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m057" datatype="html">
+        <source>Sem aviso</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m058" datatype="html">
+        <source>Sem reducao</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m059" datatype="html">
+        <source>Duas horas por dia</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m060" datatype="html">
+        <source>Sete dias finais</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m061" datatype="html">
+        <source>Nao foi possivel calcular a rescisao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m062" datatype="html">
+        <source>Nao foi possivel carregar rubricas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m063" datatype="html">
+        <source>Formula valida.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m064" datatype="html">
+        <source>Formula invalida.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m065" datatype="html">
+        <source>Nao foi possivel validar a formula.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m066" datatype="html">
+        <source>Formula recompilada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m067" datatype="html">
+        <source>Nao foi possivel recompilar a formula.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m068" datatype="html">
+        <source>Rubrica salva.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m069" datatype="html">
+        <source>Nao foi possivel salvar a rubrica.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m070" datatype="html">
+        <source>Nao foi possivel executar o preview.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m071" datatype="html">
+        <source>Cargo vinculado a rubrica.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m072" datatype="html">
+        <source>Nao foi possivel vincular cargo e rubrica.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m073" datatype="html">
+        <source>Nao foi possivel simular a folha.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m074" datatype="html">
+        <source>Nao foi possivel carregar cargos.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m075" datatype="html">
+        <source>Codigo ja cadastrado para este tenant.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m076" datatype="html">
+        <source>Nao foi possivel salvar o cargo.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m077" datatype="html">
+        <source>Nao foi possivel carregar os cadastros de estrutura.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m078" datatype="html">
+        <source>Nao foi possivel carregar todos os cadastros de estrutura.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m079" datatype="html">
+        <source>Codigo, nome ou descricao</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m080" datatype="html">
+        <source>Desativar registro</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m081" datatype="html">
+        <source>Registro atualizado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m082" datatype="html">
+        <source>Registro criado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m083" datatype="html">
+        <source>Nao foi possivel salvar o registro.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m084" datatype="html">
+        <source>Nao foi possivel carregar os recursos de Gestao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m085" datatype="html">
+        <source>Nao foi possivel carregar os registros.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m086" datatype="html">
+        <source>Registro desativado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m087" datatype="html">
+        <source>Nao foi possivel desativar o registro.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m088" datatype="html">
+        <source>Nao foi possivel carregar historico AFD.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m089" datatype="html">
+        <source>AFD <x id="PH" equiv-text="${value0}"/>: <x id="PH_1" equiv-text="${value1}"/> linhas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m090" datatype="html">
+        <source>Nao foi possivel gerar o AFD.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m091" datatype="html">
+        <source>Importacao <x id="PH" equiv-text="${value0}"/>: <x id="PH_1" equiv-text="${value1}"/> aceitas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m092" datatype="html">
+        <source>Nao foi possivel importar o AFD.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m093" datatype="html">
+        <source>Nao foi possivel carregar importacoes AFD.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m094" datatype="html">
+        <source>Nao foi possivel carregar bancos de horas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m095" datatype="html">
+        <source>Nao foi possivel carregar o extrato.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">106</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m096" datatype="html">
+        <source>Ajuste registrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m097" datatype="html">
+        <source>Nao foi possivel registrar o ajuste.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m098" datatype="html">
+        <source>Nao foi possivel carregar biometria.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m099" datatype="html">
+        <source>Nao foi possivel registrar consentimento biometrico.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m100" datatype="html">
+        <source>Template <x id="PH" equiv-text="${value0}"/> cadastrado com qualidade <x id="PH_1" equiv-text="${value1}"/>.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m101" datatype="html">
+        <source>Nao foi possivel cadastrar o template biometrico.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m102" datatype="html">
+        <source>Nao foi possivel carregar escalas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m103" datatype="html">
+        <source>Escala <x id="PH" equiv-text="${value0}"/> criada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m104" datatype="html">
+        <source>Nao foi possivel criar a escala.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m105" datatype="html">
+        <source>Roster <x id="PH" equiv-text="${value0}"/> gerado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m106" datatype="html">
+        <source>Nao foi possivel gerar o roster.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m107" datatype="html">
+        <source>Nao foi possivel publicar o roster.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m108" datatype="html">
+        <source>Nao foi possivel travar o roster.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m109" datatype="html">
+        <source>Nao foi possivel carregar proximas escalas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m110" datatype="html">
+        <source>Nao foi possivel carregar rosters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m111" datatype="html">
+        <source>Threshold atualizado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">128</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m112" datatype="html">
+        <source>Nao foi possivel atualizar o threshold.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m113" datatype="html">
+        <source>Nao foi possivel carregar os templates faciais.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m114" datatype="html">
+        <source>Nao foi possivel registrar consentimento facial.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m115" datatype="html">
+        <source>Template facial <x id="PH" equiv-text="${value0}"/> cadastrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m116" datatype="html">
+        <source>Nao foi possivel cadastrar o template facial.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m117" datatype="html">
+        <source>Nao foi possivel gerar a pre-visualizacao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">136</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m118" datatype="html">
+        <source>Nao foi possivel aplicar as linhas a folha.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m119" datatype="html">
+        <source>Poligono valido para salvar.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m120" datatype="html">
+        <source>Poligono invalido.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m121" datatype="html">
+        <source>Nao foi possivel carregar jornadas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">140</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m122" datatype="html">
+        <source>Jornada <x id="PH" equiv-text="${value0}"/> criada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m123" datatype="html">
+        <source>Nao foi possivel criar a jornada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">144</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m124" datatype="html">
+        <source>Atribuicao registrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m125" datatype="html">
+        <source>Nao foi possivel atribuir a jornada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">146</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m126" datatype="html">
+        <source>Nao foi possivel carregar atribuicoes.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">147</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m127" datatype="html">
+        <source>Nao foi possivel carregar justificativas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">148</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m128" datatype="html">
+        <source>Nao foi possivel decidir a justificativa.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m129" datatype="html">
+        <source>Nao foi possivel carregar equipamentos REP.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">150</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m130" datatype="html">
+        <source>Equipamento <x id="PH" equiv-text="${value0}"/> cadastrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">151</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m131" datatype="html">
+        <source>Nao foi possivel cadastrar o equipamento REP.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">154</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m132" datatype="html">
+        <source>Lote <x id="PH" equiv-text="${value0}"/>: <x id="PH_1" equiv-text="${value1}"/> marcacoes criadas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m133" datatype="html">
+        <source>Nao foi possivel carregar lotes REP.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">158</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m134" datatype="html">
+        <source>Solicitacao registrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m135" datatype="html">
+        <source>Nao foi possivel registrar a solicitacao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">160</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m136" datatype="html">
+        <source>Nao foi possivel carregar o status facial.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">161</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m137" datatype="html">
+        <source>Solicitacao de exclusao registrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">162</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m138" datatype="html">
+        <source>Nao foi possivel registrar a exclusao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">163</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m139" datatype="html">
+        <source>Dispositivo registrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">164</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m140" datatype="html">
+        <source>Nao foi possivel registrar o dispositivo.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">165</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m141" datatype="html">
+        <source>Consentimento registrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">166</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m142" datatype="html">
+        <source>Nao foi possivel registrar o consentimento.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m143" datatype="html">
+        <source>Geolocalizacao indisponivel neste navegador.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m144" datatype="html">
+        <source>Nao foi possivel capturar a localizacao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m145" datatype="html">
+        <source>Resultado <x id="PH" equiv-text="${value0}"/>; protocolo <x id="PH_1" equiv-text="${value1}"/>.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">170</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m146" datatype="html">
+        <source>Nao foi possivel registrar a batida.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">173</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m147" datatype="html">
+        <source>Nao foi possivel carregar os comprovantes.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">174</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m148" datatype="html">
+        <source>Nao foi possivel carregar os contracheques.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m149" datatype="html">
+        <source>Nao foi possivel carregar o contato do encarregado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">176</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m150" datatype="html">
+        <source>Nao foi possivel carregar a trilha de carreira.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">177</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m151" datatype="html">
+        <source>Nao foi possivel carregar o banco de horas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">178</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m152" datatype="html">
+        <source>Nao foi possivel carregar o espelho de ponto.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">179</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m153" datatype="html">
+        <source>Nao foi possivel carregar suas justificativas.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">180</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m154" datatype="html">
+        <source>Justificativa enviada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">181</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m155" datatype="html">
+        <source>Nao foi possivel enviar a justificativa.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">182</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m156" datatype="html">
+        <source>Nao foi possivel carregar a transparencia remuneratoria.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">183</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m157" datatype="html">
+        <source>Nao foi possivel carregar pendencias cadastrais.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">184</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m158" datatype="html">
+        <source>Solicitacao aprovada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">185</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m159" datatype="html">
+        <source>Nao foi possivel aprovar a solicitacao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">186</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m160" datatype="html">
+        <source>Solicitacao rejeitada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">187</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m161" datatype="html">
+        <source>Nao foi possivel rejeitar a solicitacao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">188</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m162" datatype="html">
+        <source>Nao foi possivel carregar as movimentacoes.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">189</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m163" datatype="html">
+        <source>Nao foi possivel atualizar a movimentacao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">190</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m164" datatype="html">
+        <source>Nao foi possivel carregar as ordens de pensao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">191</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m165" datatype="html">
+        <source>Ordem de pensao cadastrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">192</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m166" datatype="html">
+        <source>Nao foi possivel cadastrar a ordem de pensao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">193</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m167" datatype="html">
+        <source>Ordem suspensa.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">194</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m168" datatype="html">
+        <source>Nao foi possivel suspender a ordem.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">195</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m169" datatype="html">
+        <source>Nao foi possivel carregar os dados bancarios.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">196</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m170" datatype="html">
+        <source>Conta revalidada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">197</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m171" datatype="html">
+        <source>Nao foi possivel revalidar a conta.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m172" datatype="html">
+        <source>Nao foi possivel carregar os servidores.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">199</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m173" datatype="html">
+        <source>Nao foi possivel atualizar a programacao de ferias.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">200</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m174" datatype="html">
+        <source>Nao foi possivel carregar o abono permanencia.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">201</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m175" datatype="html">
+        <source>Informe inicio e fundamento legal para ativar o abono.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">202</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m176" datatype="html">
+        <source>Nao foi possivel salvar o abono permanencia.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">203</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m177" datatype="html">
+        <source>Servidor <x id="PH" equiv-text="${value0}"/> admitido.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">204</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m178" datatype="html">
+        <source>Nao foi possivel admitir o servidor.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">207</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m179" datatype="html">
+        <source>Desligamento registrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m180" datatype="html">
+        <source>Nao foi possivel registrar o desligamento.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">209</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m181" datatype="html">
+        <source>Nao foi possivel carregar o historico funcional.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">210</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m182" datatype="html">
+        <source>Alteracao de regime registrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">211</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m183" datatype="html">
+        <source>Nao foi possivel alterar o regime juridico.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">212</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m184" datatype="html">
+        <source>Licenca aprovada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">213</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m185" datatype="html">
+        <source>Licenca cancelada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m186" datatype="html">
+        <source>Nao foi possivel atualizar a licenca.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">215</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m187" datatype="html">
+        <source>UUID do funcionario</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">216</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m188" datatype="html">
+        <source>Dependente IR</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m189" datatype="html">
+        <source>Cargo/Função</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">218</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m190" datatype="html">
+        <source>Situacao funcional</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">219</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m191" datatype="html">
+        <source>Dias de falta</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">220</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m192" datatype="html">
+        <source>Dias trabalhados</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">221</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m193" datatype="html">
+        <source>Referencia salarial</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">222</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m194" datatype="html">
+        <source>Valor do ajuste</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">223</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m195" datatype="html">
+        <source>Lotacao destino</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m196" datatype="html">
+        <source>Data da transferencia</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">225</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m197" datatype="html">
+        <source>Orgao emissor</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">226</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m198" datatype="html">
+        <source>PIS/PASEP</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m199" datatype="html">
+        <source>Titulo eleitoral</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">228</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m200" datatype="html">
+        <source>Orgao/filial</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">229</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m201" datatype="html">
+        <source>Organico superior</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">230</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m202" datatype="html">
+        <source>Tipo de ferias</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">231</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m203" datatype="html">
+        <source>Inicio aquisitivo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">232</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m204" datatype="html">
+        <source>Fim aquisitivo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">233</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m205" datatype="html">
+        <source>Motivo de afastamento</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">234</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m206" datatype="html">
+        <source>Matricula, nome, CPF, status ou observacao</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">235</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m207" datatype="html">
+        <source>Excluir ou inativar registro</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">236</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m208" datatype="html">
+        <source>Nao foi possivel salvar o registro de RH.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">237</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m209" datatype="html">
+        <source>Solicitacao de importacao registrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">238</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m210" datatype="html">
+        <source>Nao foi possivel registrar a importacao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">239</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m211" datatype="html">
+        <source>Solicitacao de relatorio registrada.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">240</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m212" datatype="html">
+        <source>Nao foi possivel registrar o relatorio.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">241</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m213" datatype="html">
+        <source>Nao foi possivel carregar os registros de RH.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">242</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m214" datatype="html">
+        <source>Nao foi possivel excluir o registro.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">243</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m215" datatype="html">
+        <source>Nao foi possivel carregar o historico.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">244</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m216" datatype="html">
+        <source>Falha ao registrar reintegracao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">245</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m217" datatype="html">
+        <source>Falha ao aplicar reintegracao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">246</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m218" datatype="html">
+        <source>Falha ao transmitir S-2298.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m219" datatype="html">
+        <source>Dossie do Funcionario</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">248</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m220" datatype="html">
+        <source>Laudo de Prontuario</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">249</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m221" datatype="html">
+        <source>Comprovante de Recadastramento</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">250</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m222" datatype="html">
+        <source>Falha ao salvar alteração TS-V.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">251</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m223" datatype="html">
+        <source>Falha ao transmitir S-2306.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">252</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m224" datatype="html">
+        <source>Nao foi possivel encerrar o acidente.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">253</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m225" datatype="html">
+        <source>Nao foi possivel salvar a CAT.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">254</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m226" datatype="html">
+        <source>Nao foi possivel salvar o EPI.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m227" datatype="html">
+        <source>Nao foi possivel salvar a exposicao.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">256</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m228" datatype="html">
+        <source>Agendamento registrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">257</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m229" datatype="html">
+        <source>Nao foi possivel registrar o agendamento.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">258</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m230" datatype="html">
+        <source>Parecer pericial registrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">259</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m231" datatype="html">
+        <source>Nao foi possivel registrar o parecer.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">260</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m232" datatype="html">
+        <source>Nao foi possivel carregar as licencas de saude.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">261</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m233" datatype="html">
+        <source>Nao foi possivel gerar o PPP.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">262</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m234" datatype="html">
+        <source>Processando retorno da autenticação...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">263</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m235" datatype="html">
+        <source>Não foi possível concluir a autenticação. Tente acessar novamente.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">264</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m236" datatype="html">
+        <source>Callback recebido sem código OAuth2. Fluxo ainda em modo placeholder.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">265</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m237" datatype="html">
+        <source>Registro TCE indisponivel.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">266</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m238" datatype="html">
+        <source>Submissao AUDESP indisponivel.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">267</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m239" datatype="html">
+        <source>Catalogo TCE indisponivel.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">268</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sgp.feature.r5_31.m240" datatype="html">
+        <source>Fila TCE indisponivel.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/i18n/feature-messages.ts</context>
+          <context context-type="linenumber">269</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

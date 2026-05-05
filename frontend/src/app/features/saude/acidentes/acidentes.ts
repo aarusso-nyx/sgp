@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { firstValueFrom, forkJoin } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface WorkAccident {
   id: string;
@@ -104,7 +105,7 @@ export class SaudeAcidentes implements OnInit {
       );
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel encerrar o acidente.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m224;
     } finally {
       this.saving = false;
     }
@@ -121,7 +122,7 @@ export class SaudeAcidentes implements OnInit {
       await firstValueFrom(this.api.post<unknown, Record<string, unknown>>(path, payload));
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel salvar a CAT.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m225;
     } finally {
       this.saving = false;
     }

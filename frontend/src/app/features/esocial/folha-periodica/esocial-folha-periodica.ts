@@ -8,6 +8,7 @@ import {
   ESocialPeriodicPayrollDispatchResult,
   ESocialPeriodicPayrollStatus,
 } from './esocial-folha-periodica.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,7 +41,7 @@ export class ESocialFolhaPeriodica implements OnInit {
     try {
       this.rows = await firstValueFrom(this.service.status(this.year, this.month));
     } catch {
-      this.error = 'Nao foi possivel carregar a folha periodica.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m030;
     } finally {
       this.loading = false;
     }
@@ -70,7 +71,7 @@ export class ESocialFolhaPeriodica implements OnInit {
       this.lastResult = await firstValueFrom(callback());
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel emitir a folha periodica.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m031;
     } finally {
       this.emitting = '';
     }

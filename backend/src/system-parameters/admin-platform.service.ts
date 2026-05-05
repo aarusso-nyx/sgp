@@ -3,10 +3,6 @@ import { randomUUID } from 'node:crypto';
 
 import { DatabaseService } from '../database/database.service';
 
-interface IdRow {
-  id: string;
-}
-
 @Injectable()
 export class AdminPlatformService {
   private readonly importJobs = new Map<
@@ -77,29 +73,19 @@ export class AdminPlatformService {
       };
     }
 
-    const definitionId = await this.ensureEsocialDefinition();
     await this.databaseService.query(
       `
-      UPDATE public.esocial_event
+      UPDATE public.esocial_spool
       SET
-        status = 'PENDENTE'::"ESocialEventStatus",
-        retry_count = retry_count + 1,
-        last_error_code = NULL,
-        last_error_message = NULL,
-        updated_at = now()
-      WHERE id = $1::uuid
+        status = 'PENDING'::public.esocial_spool_status,
+        attempt = 0,
+        error = NULL,
+        tstamp_sent = NULL,
+        tstamp_recv = NULL,
+        tstamp_terminal = NULL
+      WHERE message_id = $1::uuid
       `,
       [id],
-    );
-    await this.databaseService.query(
-      `
-      INSERT INTO public.report_request (
-        definition_id,
-        parameters
-      )
-      VALUES ($1::uuid, $2::jsonb)
-      `,
-      [definitionId, JSON.stringify({ eventId: id, format: 'XML' })],
     );
     return {
       eventId: id,
@@ -119,9 +105,9 @@ export class AdminPlatformService {
           module_key
         )
         VALUES (
-          'esocial.certificate',
+          'fiscal.icp_certificate',
           $1::jsonb,
-          'eSocial certificate configuration',
+          'Fiscal ICP-Brasil certificate configuration',
           'integracoes'
         )
         ON CONFLICT (tenant_id, key) DO UPDATE
@@ -138,31 +124,5 @@ export class AdminPlatformService {
       updatedAt: new Date().toISOString(),
       ...input,
     };
-  }
-
-  private async ensureEsocialDefinition(): Promise<string> {
-    const rows = await this.databaseService.query<IdRow>(
-      `
-      INSERT INTO public.report_definition (
-        code,
-        module_key,
-        name,
-        description
-      )
-      VALUES (
-        'ESOCIAL_EVENTO_PROCESSAR',
-        'FOLHA',
-        'Processar evento eSocial',
-        'Gera XML, simula assinatura e encaminha evento eSocial para processamento assíncrono.'
-      )
-      ON CONFLICT (tenant_id, code) DO UPDATE
-      SET module_key = EXCLUDED.module_key,
-          name = EXCLUDED.name,
-          description = EXCLUDED.description,
-          updated_at = now()
-      RETURNING id::text
-      `,
-    );
-    return rows[0]!.id;
   }
 }

@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { TsvContractChange, TsvContratosService } from './tsv-contratos.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -70,7 +71,7 @@ export class RhTsvContratos {
           this.saving = false;
         },
         error: (error: { message?: string }) => {
-          this.error = error.message ?? 'Falha ao salvar alteração TS-V.';
+          this.error = error.message ?? SGP_FEATURE_I18N_MESSAGES.m222;
           this.saving = false;
         },
       });
@@ -86,7 +87,7 @@ export class RhTsvContratos {
         this.transmitting = false;
       },
       error: (error: { message?: string }) => {
-        this.error = error.message ?? 'Falha ao transmitir S-2306.';
+        this.error = error.message ?? SGP_FEATURE_I18N_MESSAGES.m223;
         this.transmitting = false;
       },
     });

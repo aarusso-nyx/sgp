@@ -11,10 +11,7 @@ import { RequestContextStore } from '../../common/request-context/request-contex
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../common/pagination/paged-response';
 import { DatabaseService } from '../../database/database.service';
-import {
-  S2300Builder,
-  S2300BuildResult,
-} from '../../esocial-worker/builders/s2300.builder';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 import {
   CreateInternshipDto,
   CreateInternshipProgramDto,
@@ -55,6 +52,13 @@ export interface InternshipSummary {
     eventKind: 'S-2300';
     tsvContractId: string;
   } | null;
+}
+
+export interface S2300BuildResult {
+  eventKind: 'S-2300';
+  tsvContractId: string;
+  messageId: string;
+  status: string;
 }
 
 interface CountRow extends QueryResultRow {
@@ -101,7 +105,7 @@ interface ProgramLookupRow extends QueryResultRow {
 export class InternshipsService {
   constructor(
     private readonly databaseService: DatabaseService,
-    private readonly s2300Builder: S2300Builder,
+    private readonly stynxEsocialClient: StynxEsocialClient,
   ) {}
 
   async listPrograms(
@@ -434,9 +438,25 @@ export class InternshipsService {
       throw new NotFoundException('Internship S-2300 source not found');
     }
     const tsvContractId = current.tsv_contract_id;
-    return this.runWithOperationalPermissions(this.currentTenantId(), () =>
-      this.s2300Builder.build(tsvContractId),
+    const queued = await this.runWithOperationalPermissions(
+      this.currentTenantId(),
+      () =>
+        this.stynxEsocialClient.enqueue({
+          kind: 'trabalhador',
+          eventClass: 'S-2300',
+          sourceRef: {
+            sourceEntityKind: 'hr.tsv_contract',
+            sourceEntityId: tsvContractId,
+          },
+          payload: { tsvContractId, internshipId: id },
+        }),
     );
+    return {
+      eventKind: 'S-2300',
+      tsvContractId,
+      messageId: queued.messageId,
+      status: queued.status,
+    };
   }
 
   private async loadProgram(

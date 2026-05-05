@@ -9,6 +9,7 @@ import {
   RubricaRecord,
   RubricasService,
 } from './rubricas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -108,7 +109,7 @@ export class Rubricas implements OnDestroy, OnInit {
         }
       },
       error: () => {
-        this.error = 'Nao foi possivel carregar rubricas.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m062;
       },
     });
   }
@@ -183,10 +184,12 @@ export class Rubricas implements OnDestroy, OnInit {
     const expression = this.form.getRawValue().formulaExpression;
     this.rubricasService.validateFormula(expression).subscribe({
       next: (result) => {
-        this.message = result.ready ? 'Formula valida.' : result.error || 'Formula invalida.';
+        this.message = result.ready
+          ? SGP_FEATURE_I18N_MESSAGES.m063
+          : result.error || SGP_FEATURE_I18N_MESSAGES.m064;
       },
       error: () => {
-        this.error = 'Nao foi possivel validar a formula.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m065;
       },
     });
   }
@@ -195,12 +198,12 @@ export class Rubricas implements OnDestroy, OnInit {
     if (!this.selected) return;
     this.rubricasService.recompile(this.selected.id).subscribe({
       next: (rubrica) => {
-        this.message = 'Formula recompilada.';
+        this.message = SGP_FEATURE_I18N_MESSAGES.m066;
         this.selected = rubrica;
         this.load();
       },
       error: () => {
-        this.error = 'Nao foi possivel recompilar a formula.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m067;
       },
     });
   }
@@ -216,12 +219,12 @@ export class Rubricas implements OnDestroy, OnInit {
       : this.rubricasService.create(payload);
     request.subscribe({
       next: (rubrica) => {
-        this.message = 'Rubrica salva.';
+        this.message = SGP_FEATURE_I18N_MESSAGES.m068;
         this.selected = rubrica;
         this.load();
       },
       error: () => {
-        this.error = 'Nao foi possivel salvar a rubrica.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m069;
       },
     });
   }
@@ -247,7 +250,7 @@ export class Rubricas implements OnDestroy, OnInit {
           this.previewAmount = result.amount ?? 'sem valor';
         },
         error: () => {
-          this.error = 'Nao foi possivel executar o preview.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m070;
         },
       });
   }
@@ -268,11 +271,11 @@ export class Rubricas implements OnDestroy, OnInit {
       })
       .subscribe({
         next: () => {
-          this.message = 'Cargo vinculado a rubrica.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m071;
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel vincular cargo e rubrica.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m072;
         },
       });
   }

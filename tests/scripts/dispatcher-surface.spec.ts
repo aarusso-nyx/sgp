@@ -89,7 +89,7 @@ describe('workspace dispatcher surface', () => {
       'api <alignment sync|alignment check|operation check|spec check|client generate>',
     );
     expect(db.stdout).toContain(
-      'db <generate|migrate|seed|smoke|studio|alignment check|fk-coverage check|fk-coverage write|push-guard>',
+      'db <migrate|seed|smoke|alignment check|fk-coverage check|fk-coverage write|push-guard>',
     );
     expect(check.stdout).toContain('check-evidence.mjs');
   });

@@ -4,11 +4,11 @@ CREATE INDEX aso_exam_item_record_idx ON saude.aso_exam_item USING btree (tenant
 
 CREATE INDEX aso_record_employee_due_idx ON saude.aso_record USING btree (tenant_id, employee_id, next_exam_due_at);
 
-CREATE INDEX aso_record_s2220_missing_idx ON saude.aso_record USING btree (tenant_id, status, s2220_event_id) WHERE (status = 'ARCHIVED'::saude.aso_status);
+CREATE INDEX aso_record_s2220_missing_idx ON saude.aso_record USING btree (tenant_id, status, s2220_spool_message_id) WHERE (status = 'ARCHIVED'::saude.aso_status);
 
 CREATE INDEX aso_record_status_due_idx ON saude.aso_record USING btree (tenant_id, status, next_exam_due_at);
 
-CREATE INDEX cat_emission_deadline_idx ON saude.cat_emission USING btree (tenant_id, deadline_at, esocial_event_id);
+CREATE INDEX cat_emission_deadline_idx ON saude.cat_emission USING btree (tenant_id, deadline_at, esocial_spool_message_id);
 
 CREATE INDEX environmental_exposure_employee_period_idx ON saude.environmental_exposure USING btree (tenant_id, employee_id, exposure_start, exposure_end);
 
@@ -96,12 +96,6 @@ CREATE TRIGGER risk_management_program_audit AFTER INSERT OR DELETE OR UPDATE ON
 
 CREATE TRIGGER risk_management_program_touch_updated_at BEFORE UPDATE ON saude.risk_management_program FOR EACH ROW EXECUTE FUNCTION saude.sst01_touch_updated_at();
 
-CREATE TRIGGER sst03_cat_emission_s2210 AFTER INSERT ON saude.cat_emission FOR EACH ROW EXECUTE FUNCTION esocial.sgp_enqueue_s2210_from_cat();
-
-CREATE TRIGGER sst04_aso_record_s2220 AFTER UPDATE ON saude.aso_record FOR EACH ROW EXECUTE FUNCTION esocial.sgp_enqueue_s2220_from_aso();
-
-CREATE TRIGGER sst05_environmental_exposure_s2240 AFTER INSERT OR UPDATE ON saude.environmental_exposure FOR EACH ROW EXECUTE FUNCTION esocial.sgp_enqueue_s2240_from_exposure();
-
 CREATE TRIGGER work_accident_audit AFTER INSERT OR DELETE OR UPDATE ON saude.work_accident FOR EACH ROW EXECUTE FUNCTION saude.sst01_audit_row();
 
 CREATE TRIGGER work_accident_state_machine BEFORE UPDATE ON saude.work_accident FOR EACH ROW EXECUTE FUNCTION saude.sst03_validate_work_accident_state();
@@ -127,13 +121,13 @@ ALTER TABLE ONLY saude.aso_record
     ADD CONSTRAINT aso_record_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES hr.employee(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY saude.aso_record
-    ADD CONSTRAINT aso_record_s2220_event_id_fkey FOREIGN KEY (s2220_event_id) REFERENCES public.esocial_event(id);
+    ADD CONSTRAINT aso_record_s2220_spool_message_id_fkey FOREIGN KEY (s2220_spool_message_id) REFERENCES public.esocial_spool(message_id);
 
 ALTER TABLE ONLY saude.aso_record
     ADD CONSTRAINT aso_record_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
 ALTER TABLE ONLY saude.cat_emission
-    ADD CONSTRAINT cat_emission_esocial_event_id_fkey FOREIGN KEY (esocial_event_id) REFERENCES public.esocial_event(id);
+    ADD CONSTRAINT cat_emission_esocial_spool_message_id_fkey FOREIGN KEY (esocial_spool_message_id) REFERENCES public.esocial_spool(message_id);
 
 ALTER TABLE ONLY saude.cat_emission
     ADD CONSTRAINT cat_emission_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
@@ -259,19 +253,19 @@ CREATE POLICY aso_record_write ON saude.aso_record USING ((public.sgp_tenant_mat
 
 ALTER TABLE saude.cat_emission ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY cat_emission_rw ON saude.cat_emission USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.cat.read'::text, 'saude.cat.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.cat.write'::text, 'esocial.event.write'::text])));
+CREATE POLICY cat_emission_rw ON saude.cat_emission USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.cat.read'::text, 'saude.cat.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.cat.write'::text])));
 
 ALTER TABLE saude.environmental_exposure ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY environmental_exposure_rw ON saude.environmental_exposure USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.read'::text, 'saude.exposure.write'::text, 'saude.epi.read'::text, 'saude.epi.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.write'::text, 'esocial.event.write'::text])));
+CREATE POLICY environmental_exposure_rw ON saude.environmental_exposure USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.read'::text, 'saude.exposure.write'::text, 'saude.epi.read'::text, 'saude.epi.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.write'::text])));
 
 ALTER TABLE saude.epi_delivery ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY epi_delivery_rw ON saude.epi_delivery USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.read'::text, 'saude.exposure.write'::text, 'saude.epi.read'::text, 'saude.epi.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.epi.write'::text])));
+CREATE POLICY epi_delivery_rw ON saude.epi_delivery USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.read'::text, 'saude.exposure.write'::text, 'saude.epi.read'::text, 'saude.epi.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.epi.write'::text])));
 
 ALTER TABLE saude.epi_inventory ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY epi_inventory_rw ON saude.epi_inventory USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.read'::text, 'saude.exposure.write'::text, 'saude.epi.read'::text, 'saude.epi.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.epi.write'::text])));
+CREATE POLICY epi_inventory_rw ON saude.epi_inventory USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.read'::text, 'saude.exposure.write'::text, 'saude.epi.read'::text, 'saude.epi.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.epi.write'::text])));
 
 ALTER TABLE saude.health_program ENABLE ROW LEVEL SECURITY;
 
@@ -287,7 +281,7 @@ CREATE POLICY pcmso_required_exam_rw ON saude.pcmso_required_exam USING ((public
 
 ALTER TABLE saude.ppp_record ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY ppp_record_rw ON saude.ppp_record USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.read'::text, 'saude.exposure.write'::text, 'saude.epi.read'::text, 'saude.epi.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.write'::text])));
+CREATE POLICY ppp_record_rw ON saude.ppp_record USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.read'::text, 'saude.exposure.write'::text, 'saude.epi.read'::text, 'saude.epi.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.exposure.write'::text])));
 
 ALTER TABLE saude.program_revision ENABLE ROW LEVEL SECURITY;
 
@@ -299,4 +293,4 @@ CREATE POLICY risk_management_program_rw ON saude.risk_management_program USING 
 
 ALTER TABLE saude.work_accident ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY work_accident_rw ON saude.work_accident USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.cat.read'::text, 'saude.cat.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.cat.write'::text, 'esocial.event.write'::text])));
+CREATE POLICY work_accident_rw ON saude.work_accident USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.cat.read'::text, 'saude.cat.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.cat.write'::text])));

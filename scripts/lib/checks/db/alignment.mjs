@@ -6,7 +6,6 @@ import { execSync } from 'node:child_process';
 
 const cwd = process.cwd();
 const matrixPath = resolve(cwd, 'docs/gov/generated/database/alignment-matrix.json');
-const prismaSchemaPath = resolve(cwd, 'backend/prisma/schema.prisma');
 const sqlSupportPath = resolve(cwd, 'database/sql');
 const authJwtServicePath = resolve(cwd, 'backend/src/auth/cognito-jwt.service.ts');
 const databaseServicePath = resolve(cwd, 'backend/src/database/database.service.ts');
@@ -18,6 +17,9 @@ const publicTransparencyServicePath = resolve(
 const backendSrcPath = resolve(cwd, 'backend/src');
 const optionalSqlFiles = new Set(['40-seed-loader.sql']);
 
+// DB alignment is SQL-only: database/sql plus runtime source are the contract.
+// Prisma schema/client artifacts were removed from SGP and must not be
+// reintroduced as alignment authority.
 const argv = process.argv.slice(2);
 const asJson = argv.includes('--json');
 
@@ -52,7 +54,7 @@ const TENANT_SCOPED_TABLES = [
   ['public', 'tax_rate'],
   ['public', 'document_attachment'],
   ['public', 'document_upload_session'],
-  ['public', 'esocial_event'],
+  ['public', 'esocial_spool'],
   ['public', 'report_definition'],
   ['public', 'report_request'],
   ['public', 'generated_report_file'],
@@ -398,13 +400,7 @@ function main() {
     );
   }
 
-  const prismaSchema = readFileSync(prismaSchemaPath, 'utf8');
   const canonicalSchema = readCanonicalSql();
-  if (includesAny(prismaSchema, ['model NotificationCounter', '@@map("notification_counter")'])) {
-    fail('Prisma schema still contains retired notification_counter contract.');
-  } else {
-    ok('Prisma schema does not contain retired notification_counter model.');
-  }
 
   const rlsPolicies = canonicalSchema;
   const rlsContext = canonicalSchema;
@@ -488,7 +484,7 @@ function main() {
   }
 
   const runtimeFilePaths = execSync(
-    `rg --files ${backendSrcPath} ${sqlSupportPath} backend/prisma/seed.mjs`,
+    `rg --files ${backendSrcPath} ${sqlSupportPath} database/seed/run.mjs`,
     { encoding: 'utf8' },
   )
     .split('\n')

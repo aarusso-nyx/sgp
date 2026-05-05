@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { finalize } from 'rxjs';
 
 import { PontoMobileService } from './ponto-mobile.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,8 +49,8 @@ export class PontoMobile {
       })
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
-        next: () => (this.message = 'Dispositivo registrado.'),
-        error: () => (this.error = 'Nao foi possivel registrar o dispositivo.'),
+        next: () => (this.message = SGP_FEATURE_I18N_MESSAGES.m139),
+        error: () => (this.error = SGP_FEATURE_I18N_MESSAGES.m140),
       });
   }
 
@@ -68,8 +69,8 @@ export class PontoMobile {
       })
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
-        next: () => (this.message = 'Consentimento registrado.'),
-        error: () => (this.error = 'Nao foi possivel registrar o consentimento.'),
+        next: () => (this.message = SGP_FEATURE_I18N_MESSAGES.m141),
+        error: () => (this.error = SGP_FEATURE_I18N_MESSAGES.m142),
       });
   }
 
@@ -79,7 +80,7 @@ export class PontoMobile {
       return;
     }
     if (!navigator.geolocation) {
-      this.error = 'Geolocalizacao indisponivel neste navegador.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m143;
       return;
     }
     this.clocking = true;
@@ -88,7 +89,7 @@ export class PontoMobile {
       (position) => this.submitClock(position),
       () => {
         this.clocking = false;
-        this.error = 'Nao foi possivel capturar a localizacao.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m144;
       },
       { enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 },
     );
@@ -111,9 +112,9 @@ export class PontoMobile {
       .subscribe({
         next: (result) => {
           this.distanceM = result.distanceM ?? null;
-          this.message = `Resultado ${result.result}; protocolo ${result.attemptId}.`;
+          this.message = SGP_FEATURE_I18N_MESSAGES.m145(result.result, result.attemptId);
         },
-        error: () => (this.error = 'Nao foi possivel registrar a batida.'),
+        error: () => (this.error = SGP_FEATURE_I18N_MESSAGES.m146),
       });
   }
 }

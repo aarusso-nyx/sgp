@@ -36,18 +36,18 @@ they are cited through the obligation summaries below.
 
 ### eSocial and RFB cluster
 
-| Reference                                         | Obligation cluster                                                                        | Implementation / evidence path:line                                   | Current posture                                                                   |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `docs/refs/esocial/00-index.md`                   | eSocial S-1.3 family index                                                                | backend/src/esocial-worker/esocial-worker.service.ts:1                | Implemented local worker family; official homologation remains downstream.        |
-| `docs/refs/esocial/events-periodicos.md`          | S-1200/S-1202/S-1207/S-1210/S-1298/S-1299 periodic events                                 | backend/src/esocial-worker/builders/s1200.builder.ts:1                | Implemented builders and golden fixtures.                                         |
-| `docs/refs/esocial/events-nao-periodicos.md`      | S-2200/S-2205/S-2206/S-2210/S-2220/S-2230/S-2240/S-2298/S-2299/S-2306 non-periodic events | backend/src/esocial-worker/builders/s2200.builder.ts:1                | Implemented builders and database-backed state.                                   |
-| `docs/refs/esocial/events-tabelas.md`             | S-1000/S-1005/S-1010/S-1020 table events                                                  | backend/src/esocial-worker/builders/s1xxx.service.ts:1                | Implemented table-event emission surface.                                         |
-| `docs/refs/esocial/events-totalizadores.md`       | S-5001/S-5002/S-5012 totalizer returns                                                    | backend/src/esocial-worker/parsers/totalizer.parser.ts:1              | Implemented parser promotion with golden XML coverage.                            |
-| `docs/refs/esocial/events-exclusao-fechamento.md` | S-3000 exclusion and S-1298/S-1299 reopening/closure                                      | backend/src/esocial-worker/builders/s1299.builder.ts:1                | Implemented local closure/exclusion state and queue relay for S-1299.             |
-| `docs/refs/esocial/transmission-soap-ws.md`       | SOAP WS transmission and production-restricted boundary                                   | backend/src/esocial-worker/submission/submission.service.ts:1         | Sandbox/local adapter implemented; production homologation deferred.              |
-| `docs/refs/esocial/xsd-and-signing.md`            | XSD validation and PAdES/PKCS#7 sandbox evidence                                          | backend/src/auth/govbr/software-pades-pkcs7.signer.ts:1               | Local sandbox signer/validator implemented; real certificate validation deferred. |
-| `docs/refs/esocial/dctfweb-mit.md`                | DCTFWeb, MIT, CSLL adicional                                                              | backend/src/integrations-worker/dctfweb/dctfweb-builder.service.ts:1  | Implemented CSLL/MIT builder and golden fixture.                                  |
-| `docs/refs/esocial/efd-reinf.md`                  | EFD-Reinf R-2000/R-2055                                                                   | backend/src/integrations-worker/efd-reinf/builders/r2055.builder.ts:1 | Implemented R-2055/R-2000 builders and goldens.                                   |
+| Reference                                         | Obligation cluster                                                                        | Implementation / evidence path:line                                          | Current posture                                                                   |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `docs/refs/esocial/00-index.md`                   | eSocial S-1.3 family index                                                                | backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts:1 | SGP exposes only the API/spool gateway; worker ownership is in stynx-esocial.     |
+| `docs/refs/esocial/events-periodicos.md`          | S-1200/S-1202/S-1207/S-1210/S-1298/S-1299 periodic events                                 | backend/src/integrations/stynx-esocial/contracts/payloads/folha.ts:1         | SGP enqueues periodic requests into `public.esocial_spool`.                       |
+| `docs/refs/esocial/events-nao-periodicos.md`      | S-2200/S-2205/S-2206/S-2210/S-2220/S-2230/S-2240/S-2298/S-2299/S-2306 non-periodic events | backend/src/integrations/stynx-esocial/contracts/payloads/trabalhador.ts:1   | SGP enqueues non-periodic requests and stores receipts in the spool.              |
+| `docs/refs/esocial/events-tabelas.md`             | S-1000/S-1005/S-1010/S-1020 table events                                                  | backend/src/integrations/stynx-esocial/contracts/payloads/tabelas.ts:1       | SGP keeps the browser-facing table-event routes as stynx-esocial enqueue calls.   |
+| `docs/refs/esocial/events-totalizadores.md`       | S-5001/S-5002/S-5012 totalizer returns                                                    | backend/src/integrations/stynx-esocial/spool-update-consumer.service.ts:1    | Return/totalizer promotion arrives through spool updates.                         |
+| `docs/refs/esocial/events-exclusao-fechamento.md` | S-3000 exclusion and S-1298/S-1299 reopening/closure                                      | backend/src/integrations/stynx-esocial/contracts/payloads/fechamento.ts:1    | Closure/exclusion requests cross the service boundary through contracts.          |
+| `docs/refs/esocial/transmission-soap-ws.md`       | SOAP WS transmission and production-restricted boundary                                   | backend/src/integrations/stynx-esocial/stynx-esocial.client.ts:1             | SGP does not perform SOAP transmission; it calls the stynx-esocial boundary.      |
+| `docs/refs/esocial/xsd-and-signing.md`            | XSD validation and PAdES/PKCS#7 sandbox evidence                                          | backend/src/auth/govbr/software-pades-pkcs7.signer.ts:1                      | Local sandbox signer/validator implemented; real certificate validation deferred. |
+| `docs/refs/esocial/dctfweb-mit.md`                | DCTFWeb, MIT, CSLL adicional                                                              | backend/src/integrations-worker/dctfweb/dctfweb-builder.service.ts:1         | Implemented CSLL/MIT builder and golden fixture.                                  |
+| `docs/refs/esocial/efd-reinf.md`                  | EFD-Reinf R-2000/R-2055                                                                   | backend/src/integrations-worker/efd-reinf/builders/r2055.builder.ts:1        | Implemented R-2055/R-2000 builders and goldens.                                   |
 
 ### Payroll, HR, legal, and procurement cluster
 
@@ -239,57 +239,44 @@ parallel state table or legacy compatibility layer is introduced.
   queue and returns acknowledgement state for downstream workers/controllers.
 - `tests/backend/tce-queue-adapter.e2e-spec.ts`: focused queue proof for SP
   RREO and MG RGF acknowledgement round trips and state persistence.
-- `tests/backend/tce-state-submission.e2e-spec.ts`: R4-81 queue proof for the
-  additional MG RREO and SP RGF state-shaped acknowledgement round trips.
+- `tests/backend/tce-queue-adapter.e2e-spec.ts`: R4-81 queue proof for state
+  shaped acknowledgement round trips.
 
-## Mock eSocial Relay
+## Stynx eSocial Boundary
 
-**Status:** Implemented for the local S-1299 queue boundary.
+**Status:** Implemented for the SGP-side spool/API boundary.
 
-**Scope:** R4-97 mock relay and worker adapter for the eSocial queue contract.
+**Scope:** SGP gateway, contracts, spool, audit mirror, and callback consumers.
 Production homologation, national eSocial endpoint calls, production
-certificates, and HSM/A3 custody remain outside this implementation.
+certificates, XSD bundles, and HSM/A3 custody are owned by stynx-esocial.
 
 ### Decision
 
-The eSocial mock relay runs as a deterministic local queue consumer for
-`kind=esocial`. The worker-side adapter publishes a queue request containing the
-R4-01 software-certificate PAdES/PKCS#7 envelope, tenant id, batch id, event ids,
-environment, endpoint label, and idempotency metadata. The relay verifies that
-the envelope belongs to the queue tenant, revalidates the detached PKCS#7
-sandbox envelope, validates the contained S-1299 XML against the bundled S-1.3
-XSD, then returns a SOAP-shaped local acknowledgement and recibo payload.
-
-The adapter persists the accepted mock round trip into
-`esocial.submission_batch` by storing request/response hashes, HTTP status,
-attempt count, and response timestamps. It also records the mock protocol and
-receipt on `public.esocial_event` for the events in the batch. Definitive relay
-rejections are written as `REJECTED` submission batches and
-`ERRO_DEFINITIVO` events.
+The eSocial relay no longer runs in SGP. SGP publishes tenant-scoped spool
+messages and stynx-esocial returns protocol, receipt, retry, rejection, and audit
+updates through the SGP gateway. SGP stores only request/response hashes,
+operator metadata, status, and receipt fields needed by product screens and
+reports.
 
 ### Boundaries
 
-- Supported event class in R4-97: `S-1299`.
-- Supported signature source: the R4-01 local A1 software-certificate sandbox
-  envelope.
-- Supported transport in tests: `InMemoryQueueTransport` over the R4-95
-  `SgpQueueAdapter` contract.
-- Unsupported by design: real eSocial SOAP endpoints, real production
-  homologation, official external certificate validation, HSM/A3 operations, and
-  national-environment acceptance evidence.
+- Supported event classes: all SGP-originating S-xxxx classes represented in
+  `backend/src/integrations/stynx-esocial/contracts/payloads/`.
+- Supported SGP transport: HTTP/queue client plus `public.esocial_spool`.
+- Unsupported by design in SGP: XML builders, XSD validation, eSocial SOAP,
+  national-environment homologation, certificate custody, and direct SQL into
+  the stynx-esocial database.
 
 ### Implementation
 
-- `backend/src/external/mocks/esocial-relay/`: deterministic local eSocial
-  relay responder.
-- `backend/src/esocial-worker/adapters/queue-adapter.ts`: worker-side eSocial
-  queue adapter and persistence bridge.
-- `tests/backend/esocial-queue-adapter.e2e-spec.ts`: focused DB-backed proof for
-  send, acknowledgement, recibo persistence, and definitive signature rejection.
-- `tests/backend/esocial-submission-via-queue.e2e-spec.ts`: R4-90 runtime
-  submission proof that the worker submission service uses the R4-97 queue
-  adapter for the supported `S-1299` class and blocks unsupported classes rather
-  than falling back to direct SOAP dispatch when queue mode is active.
+- `backend/src/integrations/stynx-esocial/`: SGP-side HTTP/queue gateway,
+  contracts, audit consumer, and spool update consumer for the lifted service.
+- `backend/src/esocial-spool/`: tenant-scoped spool writer/reader used by SGP
+  modules that need eSocial receipts, statuses, and report evidence.
+- `tests/backend/esocial-spool.spec.ts`: focused proof for spool enqueue and
+  status persistence.
+- `tests/backend/stynx-esocial-spool-update-consumer.spec.ts`: proof that
+  stynx-esocial callbacks update the SGP spool without direct database coupling.
 
 ## DCTFWeb
 
@@ -308,7 +295,8 @@ Para fatos geradores a partir de 2025, `MitInclusionService` emite o XML de incl
 - S-1299 aceito para a competência.
 - Totalizadores S-5011, S-5012 e/ou S-5013 persistidos com recibo de origem.
 - Débitos PGD-DCTF pendentes em `fiscal.dctf_pgd_tax_debit` quando houver obrigação MIT para a competência.
-- Certificado ICP-Brasil A1/A3 ativo no tenant, mantido por `esocial.tenant_certificate`.
+- Certificado fiscal ICP-Brasil A1/A3 ativo no tenant, exposto ao módulo por
+  `backend/src/external/signature/tenant-fiscal-certificate.service.ts`.
 - Permissões `fiscal.dctfweb.read` e `fiscal.dctfweb.write` no catálogo canônico.
 
 ### Fluxo
@@ -390,27 +378,40 @@ As tabelas DIRF sao tenant-scoped, usam RLS forcado por `tenant_id` com `sgp_ten
 
 ### Decisão
 
-O SGP v0.0.1 passa a ter um hub obrigatório para emissão eSocial: `ESocialEmitService.emit(tenantId, eventKind, xml)`. Nenhum builder ES-01..ES-06 deve inserir diretamente na fila; o XML deve ser entregue ao hub, que valida contra XSD S-1.3, assina com XML-DSig enveloped usando certificado ICP-Brasil do tenant e grava somente o XML assinado em `public.esocial_event`.
+O SGP v0.0.1 não constrói, valida, assina, transmite, consulta ou classifica XML
+eSocial em processo. O limite SGP é o gateway `backend/src/integrations/stynx-esocial/`
+e a tabela `public.esocial_spool`. Builders, bundle XSD, certificados
+operacionais, SOAP, parser de retorno, totalizadores e política de retry
+pertencem ao serviço separado stynx-esocial.
 
-### Bundle XSD
+### Spool e contratos
 
-O bundle oficial está commitado em `backend/src/esocial-worker/xsd/`, baixado da página oficial de documentação técnica do eSocial em 2026-05-02. O pacote usado é **Leiautes v. S-1.3 até NT 06/2026 rev. 09/04/2026, produção em 27/04/2026**. O manifesto `xsd-bundle.manifest.json` registra a URL oficial, hash SHA-256 do zip e hashes dos arquivos críticos `evtInfoEmpregador.xsd`, `tipos.xsd` e `xmldsig-core-schema.xsd`.
+Cada emissão eSocial que nasce no SGP grava uma mensagem em `public.esocial_spool`
+por meio de `backend/src/esocial-spool/` ou do client stynx-esocial. A mensagem
+carrega tenant, classe do evento, referência de origem, payload normalizado,
+hashes, status e metadados de auditoria. O retorno de stynx-esocial atualiza o
+mesmo registro; relatórios, recibos e telas SGP leem apenas esse spool.
 
-### Assinatura
+### Certificados e assinatura
 
-`backend/src/esocial-worker/signature/icp-signer.service.ts` lê PKCS#12 com `node-forge` e assina com `xml-crypto`, usando canonicalização C14N, RSA-SHA256 e transform enveloped-signature. Não há uso de `child_process`, OpenSSL externo ou download em runtime.
-
-### Certificados
-
-`esocial.tenant_certificate` armazena certificados A1/A3 por tenant com blob PKCS#12 cifrado em repouso, `blob_kms_key_id`, vigência, status e `rotation_due_at = valid_to - 30 dias`. A API administrativa fica em `/api/v1/esocial/certificados` e exige `esocial.certificate.read` para leitura e `esocial.certificate.write` para upload, rotação e revogação.
+A API `/api/v1/esocial/certificados` permanece browser-facing no SGP por
+compatibilidade de produto, mas atua como gateway para stynx-esocial. O SGP não
+armazena PKCS#12 e não executa XML-DSig eSocial; certificados fiscais usados por
+DCTFWeb/EFD-Reinf ficam no serviço genérico de assinatura externa do SGP, fora
+do runtime eSocial.
 
 ### Falhas e auditoria
 
-Falhas XSD são persistidas em `esocial.xsd_validation_failure` e impedem inserção na fila. As tabelas ES-07 têm RLS forçado por `tenant_id` e permissões eSocial; mutações disparam `public.sgp_append_audit_event(...)` por trigger, preservando a política de auditoria imutável.
+Falhas XSD, SOAP, ambiente nacional e classificação de retorno são persistidas
+no stynx-esocial e espelhadas no SGP como atualização de spool. Auditoria SGP
+registra a ação do operador e a transição do spool, sem FK, FDW, schema
+compartilhado ou conexão SQL para o banco isolado de stynx-esocial.
 
 ### Frontend
 
-O painel administrativo fica em `frontend/src/app/features/esocial/certificados/` e permite upload PKCS#12, listagem de validade, destaque de expiração em até 30 dias e ação de rotação. Não há página de portal para este recurso.
+O painel administrativo continua em `frontend/src/app/features/esocial/` e chama
+somente `/api/v1/esocial/*`. Nenhum cliente browser-facing fala diretamente com
+stynx-esocial.
 
 ## Eventos de Tabelas e Cadastro eSocial
 
@@ -421,69 +422,31 @@ O painel administrativo fica em `frontend/src/app/features/esocial/certificados/
 
 ### Decisao
 
-Os eventos S-1xxx iniciais sao gerados por builders dedicados em `backend/src/esocial-worker/builders/` e sempre enviados ao `ESocialEmitService.emit(...)`. Nenhum builder escreve diretamente na fila. O controle de delta fica em `esocial.s1xxx_dispatch_state`, por `tenant_id`, tipo de evento e entidade de origem, comparando o hash SHA-256 do XML nao assinado.
+Os eventos eSocial são solicitações de integração no SGP. O runtime SGP
+normaliza a origem funcional, grava `public.esocial_spool`, publica a mensagem
+para stynx-esocial e depois consome atualizações de status/recibo pelo mesmo
+spool. O SGP não possui builders XML, schema `esocial`, tabelas de estado
+S-xxxx, certificado eSocial, parser de retorno ou submissão SOAP.
 
-Os eventos de cadastro de trabalhador seguem o mesmo hub ES-07. O S-2200 usa `esocial.s2200_emission_state` para bloquear reemissao sem alteracao real por `payload_hash`. O S-2205 e disparado apenas por campos de whitelist materializada em `esocial.s2205_trigger_field`: `address.zip`, `address.street`, `contact.email`, `contact.phone`, `marital_status`, `education_level` e `dependent.*`. Alteracoes fora dessa lista nao entram na fila `esocial.s2205_pending_alteration`. O S-2206 usa `s2206.builder.ts` para montar `evtAltContratual` a partir do estado atual de `hr.employee`, `hr.employment_link`, `hr.employment_contract`, cargo e local de trabalho, cobrindo promocao, transferencia e alteracao de regime sem criar rota publica nova nesta etapa.
-
-O ES-03 adiciona eventos de afastamento e desligamento ao mesmo hub. S-2230 e enfileirado em `esocial.s2230_pending` quando `hr.leave_record` fica `ACTIVE` ou quando `hr.vacation_record` passa para `aprovado`/`gozado`; ferias sempre saem com `codMotAfast=15` e periodo aquisitivo quando disponivel. S-2299 e enfileirado em `esocial.s2299_pending` apenas depois que o vinculo possui `termination_payroll_run_id` apontando para `payroll.payroll_run.status = GENERATED`, preservando a dependencia CALC-12 antes de montar verbas rescisorias. As filas ES-03 carregam `created_at`/`updated_at`, auditoria por trigger e FKs validadas para servidor, vinculo e folha gerada.
-
-O ES-04 cobre a folha periodica. S-1200 e gerado por trabalhador RGPS a partir de `payroll.payroll_run` somente quando `status = GENERATED`, agrupando rubricas da folha por trabalhador e registrando `public.esocial_event.payroll_run_id` para reconciliacao posterior com totalizadores. S-1202 cobre servidores RPPS com `hr.employment_link.contract_type` `statutory` ou `commissioned`, usa o XSD local S-1.3 `evtRmnRPPS.xsd`, categorias `301` e `302`, e grava estado proprio em `esocial.s1202_emission_state`. S-1207 usa o XSD local S-1.3 `evtBenPrRP.xsd` para beneficios previdenciarios RPPS; o builder agrupa rubricas de `payroll.employee_payroll_item` somente quando a linha pode ser reconciliada a um beneficio S-2410 ativo por `hr.retirement_grant` ou `hr.pension_grant`, reutilizando `sourceKind` e `nrBeneficio` deterministico. S-1210 usa `payroll.payment_remittance_file` e `payroll.payment_remittance_detail` de BANK-01 somente depois da confirmacao bancaria materializada como `status = PAID`; os `vrLiq` emitidos reconciliam com a soma confirmada dos detalhes aceitos da remessa. Os estados ficam em `esocial.s1200_emission_state`, `esocial.s1202_emission_state` e `esocial.s1210_emission_state`, com `payload_hash` por trabalhador para bloquear duplicidades sem mudanca real.
-
-O ES-05 implementa o fechamento S-1299 da competencia e a reabertura S-1298. O builder S-1299 consulta `esocial.v_competence_periodics_pending` antes de montar o XML e bloqueia a emissao se houver trabalhador com S-1200, S-1202 ou S-1210 sem recibo. O builder S-1298 exige fechamento S-1299 aceito com recibo para a competencia antes de emitir `evtReabreEvPer`; apos a emissao, o estado local volta para `PENDING` e limpa `recibo`, `emitted_at` e `accepted_at`. O estado fica em `esocial.s1299_emission_state`, por tenant e competencia mensal, com `recibo`, `emitted_at`, `accepted_at` e status `PENDING`, `EMITTED`, `ACCEPTED` ou `REJECTED`. Os totalizadores S-5001, S-5002, S-5003, S-5011, S-5012 e S-5013 sao apenas consumidos do retorno gov.br; o parser identifica o tipo pelo evento XML, extrai a competencia e o recibo de origem, persiste o payload bruto em `esocial.esocial_totalizer` e estrutura S-5001/S-5002/S-5012 para reconciliacao de bases RPPS, contribuicao segurado e IRRF consolidado por codigo de receita.
-
-O ES-06 implementa exclusao de eventos por S-3000. O usuario com permissao `esocial.event.exclude` solicita a retratacao de um `public.esocial_event` aceito, informa justificativa minima de 30 caracteres e gera uma linha auditada em `esocial.s3000_request`. O builder `s3000.builder.ts` monta `evtExclusao` referenciando `nrRecEvt` do evento original e envia pelo hub ES-07. Ao receber aceite do S-3000, o worker marca a solicitacao como `ACCEPTED` e muda o evento original para `EXCLUIDO`.
-
-O bloco RPPS inicia com S-2400. Quando `POST /v1/previdenciario/aposentadorias` concede uma aposentadoria em `hr.retirement_grant`, o `s2400.builder.ts` monta `evtCdBenefIn` a partir do cadastro atual de `hr.employee`, dependentes de `hr.employee_dependent`, endereco cadastral e CNPJ ativo do tenant em `hr.company`; a emissao passa pelo mesmo `ESocialEmitService.emit(...)`, valida contra `evtCdBenefIn.xsd` do bundle S-1.3 local e grava `public.esocial_event` com `source_entity_kind = 'hr.retirement_grant'`.
-
-O S-2405 cobre alteracao cadastral posterior do beneficiario RPPS. Quando `POST /v1/previdenciario/recadastramentos/atos` registra um ato de recadastramento para beneficiario `RETIREE` com aposentadoria concedida, o `s2405.builder.ts` monta `evtCdBenefAlt` com CPF do beneficiario, data da alteracao posterior ao S-2400, nome, sexo, raca/cor, estado civil, incapacidade fisica/mental e endereco cadastral corrente. A emissao usa o hub `ESocialEmitService.emit(...)`, valida contra `evtCdBenefAlt.xsd` do bundle S-1.3 local e grava `public.esocial_event` com `source_entity_kind = 'hr.recertification_record'`.
-
-O S-2410 cobre o cadastro de beneficio previdenciario concedido pelo ente publico. O `s2410.builder.ts` usa o XSD local S-1.3 `evtCdBenIn.xsd` e emite `evtCdBenIn` depois da concessao de aposentadoria em `hr.retirement_grant` ou da criacao de pensao em `hr.pension_grant`. A aposentadoria reutiliza CPF e matricula do servidor beneficiario; a pensao usa CPF do beneficiario, matricula do instituidor quando existente, tipo de beneficio e dados de pensao por morte. Ambos geram `nrBeneficio` deterministico a partir do ID da concessao para servir como chave reutilizavel por S-2416, S-2418, S-2420 e S-1207.
-
-O S-2416 usa o XSD local S-1.3 `evtCdBenAlt.xsd`, identificado no bundle como "Cadastro de Beneficio - Entes Publicos - Alteracao". Na criacao de pensao por `POST /v1/previdenciario/pensoes`, o `s2416.builder.ts` reutiliza o `nrBeneficio` deterministico de S-2410, CPF do beneficiario, `tpBeneficio`, `tpPlanRP`, data de concessao e dados de pensao por morte para registrar o tipo de dependente do instituidor. O XSD local nao possui campo para CPF ou data de obito do instituidor nesse evento; esses valores ficam preservados no payload e no S-2410 quando disponiveis.
-
-O S-2418 cobre a reativacao de beneficio previdenciario RPPS pelo XSD local S-1.3 `evtReativBen.xsd`. O `s2418.builder.ts` usa o mesmo `nrBeneficio` deterministico estabelecido no S-2410 para aposentadoria (`RET...`) e pensao (`PEN...`), monta `evtReativBen` com CPF do beneficiario, data efetiva de reativacao e data de inicio dos efeitos financeiros, e emite pelo hub `ESocialEmitService.emit(...)`. Para pensao, a emissao exige `hr.pension_grant.ceased_on` e valida que as datas de reativacao sejam posteriores a cessacao registrada; para aposentadoria, a emissao exige que `hr.retirement_grant.status` indique beneficio suspenso ou cessado porque o modelo atual ainda nao possui data propria de cessacao da aposentadoria.
-
-O S-2420 cobre a cessacao de beneficio previdenciario RPPS com o XSD local S-1.3 `evtCdBenTerm.xsd`. No modelo atual, a emissao automatica fica limitada a `hr.pension_grant` quando a concessao ja possui `ceased_on`, reutilizando o mesmo `nrBeneficio` deterministico `PEN` gerado pelo S-2410, com competencia pela data de cessacao. Como o cadastro atual ainda nao possui campo especifico para o motivo eSocial da Tabela 26, a cessacao originada de `dataCessacao` usa `mtvTermino=05` (termino do prazo do beneficio) ate a modelagem explicita dos demais motivos regulatorios.
-
-O SST-04 implementa o monitoramento da saude S-2220 a partir de `saude.aso_record`. Quando um ASO muda para `ARCHIVED`, o trigger `esocial.sgp_enqueue_s2220_from_aso()` insere `esocial.s2220_pending`. O builder `s2220.builder.ts` monta `evtMonit` com tipo do ASO, data, conclusao, exames complementares em ordem e medico emitente, valida pelo XSD S-1.3 via ES-07 e grava `saude.aso_record.s2220_event_id` em caso de sucesso. Falha XSD incrementa `attempts`, persiste `last_error` e mantem a entrada para retentativa manual.
-
-O SST-03 implementa a CAT S-2210 a partir de `saude.work_accident` e `saude.cat_emission`. Cada CAT inicial, reabertura ou comunicacao de obito gera uma entrada em `esocial.s2210_pending`; o builder `s2210.builder.ts` monta `evtCAT` com `tpCat` 1, 2 ou 3, valida no XSD S-1.3 pelo hub ES-07 e grava `saude.cat_emission.esocial_event_id` quando a emissao e aceita pelo hub. Reabertura e obito referenciam a CAT anterior pelo recibo quando disponivel; falhas de validacao mantem a pendencia com `attempts` e `last_error`.
-
-O SST-05 implementa as condicoes ambientais do trabalho S-2240 a partir de `saude.environmental_exposure`, vinculada a PGR ativo de SST-02. Insercoes geram pendencia `START`; alteracoes materiais geram `CHANGE`; encerramento por `exposure_end` gera `END`. O builder `s2240.builder.ts` monta `evtExpRisco` por exposicao, inclui EPI/EPC quando aplicavel, valida no XSD S-1.3 pelo hub ES-07 e remove a linha de `esocial.s2240_pending` quando a emissao e aceita. Falhas mantem a pendencia com `attempts` e `last_error`.
+As regras funcionais que disparam eventos continuam pertencendo aos módulos de
+origem: folha, RH, previdenciário, recrutamento, convênio e SST. Cada módulo
+chama `backend/src/integrations/stynx-esocial/stynx-esocial.client.ts` ou
+`backend/src/esocial-spool/esocial-spool.service.ts` com a classe do evento,
+referência de origem e payload de negócio. Stynx-esocial é responsável por
+delta, XSD, assinatura, transmissão, reabertura/fechamento, exclusão,
+totalizadores e reconciliação com recibos oficiais.
 
 ### Mapa Entidade para Evento
 
-| Evento | Entidade fonte                                                                | Builder            |
-| ------ | ----------------------------------------------------------------------------- | ------------------ |
-| S-1000 | `hr.company` ou tenant quando ainda nao ha empresa ativa                      | `s1000.builder.ts` |
-| S-1005 | `hr.branch`                                                                   | `s1005.builder.ts` |
-| S-1010 | `payroll.payroll_earning_deduction`                                           | `s1010.builder.ts` |
-| S-1020 | `hr.work_location`                                                            | `s1020.builder.ts` |
-| S-1030 | `hr.job_position` + vinculo CBO em `hr.job_structure_reference_link`          | `s1030.builder.ts` |
-| S-1040 | `hr.job_function`                                                             | `s1040.builder.ts` |
-| S-1050 | `hr.shift`                                                                    | `s1050.builder.ts` |
-| S-1070 | `hr.administrative_process`                                                   | `s1070.builder.ts` |
-| S-1200 | `payroll.payroll_run` gerado + itens da folha                                 | `s1200.builder.ts` |
-| S-1202 | `payroll.payroll_run` gerado + itens de servidores RPPS                       | `s1202.builder.ts` |
-| S-1207 | `payroll.payroll_run` gerado + beneficio RPPS ativo de S-2410                 | `s1207.builder.ts` |
-| S-1210 | `payroll.payment_remittance_file` pago + detalhes confirmados                 | `s1210.builder.ts` |
-| S-1298 | `esocial.s1299_emission_state` aceito para reabertura da competencia          | `s1298.builder.ts` |
-| S-1299 | `esocial.s1299_emission_state` + guarda de periodicos da competencia          | `s1299.builder.ts` |
-| S-2200 | `hr.employee` + `hr.employment_contract` + dependentes                        | `s2200.builder.ts` |
-| S-2205 | `esocial.s2205_pending_alteration` + cadastro atual                           | `s2205.builder.ts` |
-| S-2206 | `hr.employee` + `hr.employment_link` + contrato/cargo/local atuais            | `s2206.builder.ts` |
-| S-2210 | `esocial.s2210_pending` + `saude.cat_emission`/`saude.work_accident`          | `s2210.builder.ts` |
-| S-2220 | `esocial.s2220_pending` + `saude.aso_record`/`saude.aso_exam_item`            | `s2220.builder.ts` |
-| S-2230 | `esocial.s2230_pending` + `hr.leave_record`/`hr.vacation_record`              | `s2230.builder.ts` |
-| S-2240 | `esocial.s2240_pending` + `saude.environmental_exposure`                      | `s2240.builder.ts` |
-| S-2299 | `esocial.s2299_pending` + `hr.employment_link` + `payroll.payroll_run` gerado | `s2299.builder.ts` |
-| S-2400 | `hr.retirement_grant` + cadastro/dependentes do beneficiario RPPS             | `s2400.builder.ts` |
-| S-2405 | `hr.recertification_record` + cadastro atual do beneficiario RPPS             | `s2405.builder.ts` |
-| S-2410 | `hr.retirement_grant` ou `hr.pension_grant` + beneficio previdenciario RPPS   | `s2410.builder.ts` |
-| S-2416 | `hr.pension_grant` + dados de pensao por morte e instituidor                  | `s2416.builder.ts` |
-| S-2418 | `hr.retirement_grant` ou `hr.pension_grant` + reativacao de beneficio RPPS    | `s2418.builder.ts` |
-| S-2420 | `hr.pension_grant.ceased_on` + beneficio previdenciario RPPS cessado          | `s2420.builder.ts` |
-| S-3000 | `esocial.s3000_request` + `public.esocial_event` alvo                         | `s3000.builder.ts` |
+| Evento                                                         | Entidade fonte SGP                                                                              | Transporte SGP         |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------- |
+| S-1000/S-1005/S-1010/S-1020/S-1030/S-1040/S-1050/S-1060/S-1070 | Cadastros de gestão, empresa, lotação, rubricas, cargos, funções e jornadas                     | `public.esocial_spool` |
+| S-1200/S-1202/S-1207/S-1210                                    | Folha gerada, itens da folha, benefícios RPPS e remessas pagas                                  | `public.esocial_spool` |
+| S-1298/S-1299/S-3000                                           | Fechamento, reabertura e exclusão solicitados pela operação                                     | `public.esocial_spool` |
+| S-2200/S-2205/S-2206/S-2230/S-2298/S-2299                      | Servidor, vínculo, alterações cadastrais/contratuais, afastamentos, reintegração e desligamento | `public.esocial_spool` |
+| S-2210/S-2220/S-2240                                           | CAT, ASO arquivado e exposição ambiental                                                        | `public.esocial_spool` |
+| S-2300/S-2306/S-2399                                           | TS-V, estágio, conselheiro, autônomo e alterações contratuais                                   | `public.esocial_spool` |
+| S-2400/S-2405/S-2410/S-2416/S-2418/S-2420                      | Aposentadoria, pensão, recadastramento, alteração, reativação e cessação de benefício           | `public.esocial_spool` |
 
 ### Operacao
 
@@ -497,11 +460,19 @@ O painel de folha periodica fica em `frontend/src/app/features/esocial/folha-per
 
 O painel de fechamento fica em `frontend/src/app/features/esocial/fechamento/` e consulta `/api/v1/esocial/fechamento?year=AAAA&month=MM`. Ele mostra pendencias de S-1200/S-1202/S-1210, habilita "Fechar competencia" somente quando a guarda esta limpa, e lista totalizadores S-5xxx recebidos. A emissao usa `POST /api/v1/esocial/fechamento/fechar`; a ingestao tecnica de retorno usa `POST /api/v1/esocial/fechamento/totalizadores`. A reabertura S-1298 usa `POST /api/v1/esocial/fechamento/reabrir` com ano e mes da competencia ja aceita por S-1299.
 
-O painel de exclusao fica em `frontend/src/app/features/esocial/exclusao/`, lista eventos aceitos com recibo e acompanha `esocial.s3000_request`. A rota `POST /api/v1/esocial/events/:id/exclude` exige `esocial.event.exclude` e rejeita justificativas curtas. Eventos periodicos (`S-1200`, `S-1202`, `S-1207`, `S-1210`, `S-1280`, `S-1300`) sao bloqueados se existir `esocial.s1299_emission_state.status = ACCEPTED` para a mesma competencia; o bloqueio grava `block_reason = periodic_competence_closed_by_s1299` e nao chama o hub de emissao.
+O painel de exclusao fica em `frontend/src/app/features/esocial/exclusao/`,
+lista eventos aceitos com recibo via spool e chama
+`POST /api/v1/esocial/events/:id/exclude`. A validação regulatória da exclusão
+fica em stynx-esocial; o SGP registra a solicitação, auditoria e status recebido.
 
 ### Auditoria e RLS
 
-`public.esocial_event`, `esocial.s1xxx_dispatch_state`, `esocial.s1200_emission_state`, `esocial.s1202_emission_state`, `esocial.s1210_emission_state`, `esocial.s2200_emission_state`, `esocial.s2205_pending_alteration`, `esocial.s2210_pending`, `esocial.s2220_pending`, `esocial.s2230_pending`, `esocial.s2240_pending`, `esocial.s2299_pending`, `esocial.s1299_emission_state`, `esocial.esocial_totalizer` e `esocial.s3000_request` usam RLS forçado por tenant com `sgp_tenant_matches(tenant_id)`. Leitura usa `esocial.event.read`; emissoes usam `esocial.event.write`; retratacoes S-3000 usam `esocial.event.exclude`. A emissao grava `public.esocial_event` e `public.audit_event`; a atualizacao de estado tambem usa `sgp_append_audit_event(...)` por trigger ou servico, incluindo `requested_by_user_id` e `justification` da retratacao. As FKs inferidas para `esocial.s2299_pending.employee_id`, `esocial.s2299_pending.employment_link_id`, `hr.merit_progression.administrative_process_id` e `public.esocial_event.payroll_run_id` sao validadas apos relatório de órfãos limpo no banco de teste.
+`public.esocial_spool` usa RLS forçado por tenant com
+`sgp_tenant_matches(tenant_id)`. Leitura usa `esocial.event.read`; emissões e
+retentativas usam `esocial.event.write`; submissão usa
+`esocial.submission.read`/`esocial.submission.retry`; certificados usam
+`esocial.certificate.read`/`esocial.certificate.write`. Toda mutação SGP grava
+auditoria local e nunca escreve em schema ou banco stynx-esocial.
 
 ## EFD-Reinf R-4000
 
@@ -529,59 +500,59 @@ A DCTFWeb passa a consumir totalizadores Reinf R-9015 junto dos totalizadores eS
 
 ## Submissao eSocial SOAP
 
-**Versao:** 1.0 | **Data:** 2026-05-02 | **Status:** Implementado
-**Escopo:** ES-08, envio de lotes SOAP, WS-Security, mTLS e circuit breaker.
+**Versao:** 2.0 | **Data:** 2026-05-04 | **Status:** Lifted out
+**Escopo:** ES-08 no SGP agora é apenas contrato de submissão para stynx-esocial.
 
-**Truth banner:** ES-08 has internal SOAP client plumbing, persistence,
-WS-Security/mTLS code paths, circuit-breaker behavior, and local stub tests.
-Production certificates, national-environment transmission, and external
-homologation evidence remain deferred under
-`103-deferred-decision-ledger.md#deferred-decision-ledger`.
+**Truth banner:** SGP no longer owns SOAP client plumbing, WS-Security/mTLS,
+XSD bundles, circuit breakers, production certificates, or national eSocial
+homologation. Those responsibilities are outside this repository and are
+represented in SGP by `public.esocial_spool` plus gateway contracts.
 
 ### Decisao
 
-O `sgp-esocial-worker` usa o submodulo `backend/src/esocial-worker/submission/`
-para agrupar eventos `public.esocial_event` ja validados e assinados pelo ES-07
-em `esocial.submission_batch`. No runtime atual, o servico de submissao injeta o
-adapter de fila R4-97 e encaminha o evento `S-1299` pelo mock eSocial relay
-`kind=esocial`, persistindo protocolo, recibo, hashes de request/response e
-status final sem chamada direta ao cliente SOAP. Quando o adapter de fila esta
-ativo, classes ainda nao cobertas pelo contrato R4-97 sao bloqueadas com
-`ESOCIAL_QUEUE_EVENT_UNSUPPORTED` e permanecem retentaveis; o worker nao faz
-fallback silencioso para SOAP direto nesses casos.
-
-O fluxo SOAP WS-Security/mTLS anterior permanece como implementacao local
-testavel para ES-08 e como referencia tecnica para a futura ampliacao do
-contrato de relay, mas nao e o caminho de envio usado pelo worker quando o
-adapter R4-97 esta configurado. A migracao completa de todos os S-1xxx/S-2xxx
-implementados depende da expansao owner-autorizada do contrato R4-97 para alem
-de `S-1299`.
+O frontend e os módulos SGP continuam chamando somente rotas SGP
+`/api/v1/esocial/*`. Cada ação cria uma mensagem em `public.esocial_spool` e a
+entrega ao client stynx-esocial. O serviço externo decide lote, assinatura,
+ambiente, retry, protocolo, recibo, rejeição definitiva e totalizadores.
 
 ### Endpoints
 
-O ambiente e controlado por `ESOCIAL_ENV=QUALIFICATION|PRODUCTION`. `ESOCIAL_ENDPOINT_ENVIO` aponta para o WSDL/endpoint de envio de lotes e `ESOCIAL_ENDPOINT_CONSULTA` fica reservado para ES-09. O repositorio commita somente valores de qualificacao em `backend/.env.example`; endpoints ou credenciais de producao devem vir de secret manager/runtime.
+SGP não configura WSDL ou endpoint eSocial nacional. O único endpoint eSocial
+externo do SGP é o destino stynx-esocial configurado para o gateway.
 
 ### Seguranca SOAP
 
-Ha duas assinaturas distintas. O XML interno do evento continua assinado pelo ES-07 com XML-DSig enveloped. O ES-08 assina o envelope SOAP com WS-Security, incluindo `Timestamp`, `BinarySecurityToken` X.509 e referencias assinadas ao `Body` e ao `Timestamp`. A camada TLS usa `https.Agent({ pfx, passphrase })` com o PKCS#12 recuperado pelo `CertificateStoreService`.
+SGP não assina XML eSocial nem envelope SOAP. Assinatura, mTLS, A1/A3 e
+custódia de certificado pertencem ao stynx-esocial.
 
 ### Persistencia
 
-`esocial.submission_batch` registra tenant, lote, ambiente, endpoint, ids dos eventos, hashes SHA-256 de request/response, status HTTP, status operacional, tentativas e proximo retry. A tabela forca RLS por `tenant_id` com `sgp_tenant_matches(tenant_id)` e permissoes `esocial.submission.read`/`esocial.submission.retry`. `esocial.endpoint_circuit_state` e global, legivel por operadores de submissao e mutavel apenas pelo worker via bypass RLS.
+`public.esocial_spool` e o registro canonico SGP de cada mensagem enviada ou
+recebida no limite com `stynx-esocial`. A tabela fica no banco SGP, forca RLS por
+tenant, armazena hashes SHA-256 de payload/resposta, status
+`PENDING|SENT|RECEIVED|ACCEPTED|REJECTED|RETRY|DLQ`, metadados de ator e
+request, e e a fonte para recibos e relatorios SGP. O banco isolado
+`stynx-esocial` nao tem FK, FDW, peering, replicacao, callback SQL ou connection
+string compartilhada com SGP.
 
 ### Retry e Circuit Breaker
 
-Falhas de timeout, HTTP 429/5xx e faults transitorios de processamento entram em `RETRY`/`TIMEOUT` com backoff exponencial e jitter. Faults definitivos entram em `REJECTED`. O circuit breaker abre apos falhas consecutivas configuradas por endpoint e passa para `HALF_OPEN` apos cooldown antes de permitir nova tentativa.
+Falhas de transporte entre SGP e stynx-esocial entram no spool como `RETRY` ou
+`DLQ`. Falhas do Ambiente Nacional são traduzidas por stynx-esocial e espelhadas
+como `ACCEPTED`, `REJECTED` ou `RETRY`.
 
 ### Testes
 
-Os testes usam WSDL stub commitado em `backend/src/esocial-worker/submission/__fixtures__/ws-enviar-lote-eventos.wsdl` e servidor local. O cliente bloqueia endpoints `gov.br` quando executado em Jest, garantindo que CI nao faca chamada real ao Ambiente Nacional.
+Os testes SGP usam `tests/backend/esocial-spool.spec.ts`,
+`tests/backend/stynx-esocial-spool-update-consumer.spec.ts` e
+`tests/backend/stynx-esocial-audit-consumer.spec.ts`. Eles não dependem de WSDL,
+SOAP ou endpoint `gov.br`.
 
 ### Apendice ES-09: classificacao de retorno
 
-O retorno do envio apenas confirma a recepcao do lote e grava `public.esocial_event.protocol_number`. A sincronizacao final ocorre no ES-09 ao parsear `ConsultarLoteEventos`: cada `cdResposta` e consultado em `esocial.response_classification` e roteado para `ACCEPTED`, `RECOVERABLE` ou `DEFINITIVE`.
-
-Codigos `201` e `202` atualizam o evento para `PROCESSADO_COM_SUCESSO`, gravam `receipt_number`, `response_code`, `response_description`, `response_errors` e `last_response_at`, e removem qualquer retry pendente. Codigos recuperaveis (`101`, `301`, `407`, `408`, `409`, `410`) mantem o evento em `ERRO_TECNICO_RETENTAVEL` e criam `esocial.event_retry_schedule` com backoff exponencial. Codigos definitivos (`401` a `406`, `411`, `501` a `505`) marcam `ERRO_DEFINITIVO`, preservam as ocorrencias para a fila administrativa e nao geram retry automatico.
+O retorno recebido pelo SGP já vem classificado por stynx-esocial. O SGP
+atualiza `public.esocial_spool` e publica evidência de auditoria, sem parser de
+XML oficial.
 
 ## Reintegracao S-2298
 
@@ -605,39 +576,52 @@ A aplicação usa a infraestrutura idempotente de reprocessamento de folha: para
 
 ### Mapeamento S-2298
 
-`esocial.s2298_event` guarda o XML, o recibo do S-2299 original e o tipo de reintegração. O builder gera `evtReintegr` no leiaute S-1.3 local: `tpReint = 1` para judicial, `tpReint = 2` para anistia e `tpReint = 9` para anulação administrativa. `dtEfetRetorno` e `dtEfeito` recebem a data de reintegração. Em reintegração judicial, `nrProcJud` recebe o número do processo com 20 dígitos. O XML é validado contra `evtReintegr.xsd` antes da transmissão pelo hub eSocial.
+Ao aplicar a reintegração, o SGP grava uma mensagem S-2298 em
+`public.esocial_spool` por meio do gateway stynx-esocial. O payload contém o
+tipo de reintegração, recibo de desligamento original quando disponível, datas
+funcionais e processo judicial quando houver. Stynx-esocial monta, valida,
+assina e transmite `evtReintegr`.
 
 ## Parser de Retorno eSocial
 
 ## Parser de Retorno eSocial
 
-**Versao:** 1.0 | **Data:** 2026-05-02 | **Status:** Implementado
-**Escopo:** ES-09, retorno de lote, status de evento, recibos e fila administrativa.
+**Versao:** 2.0 | **Data:** 2026-05-04 | **Status:** Lifted out
+**Escopo:** ES-09 no SGP é espelhamento de retorno via spool.
 
-**Truth banner:** ES-09 implements local retorno parsing, status
-classification, persistence, and retry scheduling. It does not prove accepted
-national eSocial processing or homologation; that remains tracked in
-`103-deferred-decision-ledger.md#deferred-decision-ledger`.
+**Truth banner:** ES-09 parsing and official status classification are owned by
+stynx-esocial. SGP stores classified return evidence in `public.esocial_spool`
+and does not parse official eSocial XML.
 
 ### Decisao
 
-O parser de retorno usa `backend/src/esocial-worker/parsers/` para ler as mensagens oficiais `RetornoEnvioLoteEventos` e `RetornoProcessamentoLoteEventos`. A tabela canonical de eventos permanece `public.esocial_event`; nao ha schema de compatibilidade. Os campos de sincronizacao sao fisicamente em ingles: `receipt_number`, `protocol_number`, `response_code`, `response_description`, `response_errors` e `last_response_at`.
+O SGP recebe de stynx-esocial retorno já classificado, com protocolo, recibo,
+código, descrição, erros normalizados e timestamps. A tabela canônica local é
+`public.esocial_spool`; não existe schema de compatibilidade eSocial dentro do
+banco SGP.
 
 ### Fluxo
 
-`ProtocolParser` extrai `protocoloEnvio` do retorno de envio. `ProcessingParser` extrai o status do lote, `ideEmpregador`, `ideTransmissor`, cada evento retornado, recibo individual e ocorrencias. `StatusSyncService` resolve cada evento por `id` ou `reference`, consulta `esocial.response_classification` e atualiza `public.esocial_event.status`. Retornos aceitos viram `PROCESSADO_COM_SUCESSO`; retornos recuperaveis viram `ERRO_TECNICO_RETENTAVEL`; retornos definitivos viram `ERRO_DEFINITIVO`.
+`backend/src/integrations/stynx-esocial/spool-update-consumer.service.ts`
+resolve a mensagem por `message_id`/referência de origem e atualiza status,
+recibo, erros, hashes e timestamps no spool.
 
 ### Retry
 
-`esocial.event_retry_schedule` guarda `tenant_id`, `event_id`, `attempt`, `next_at` e `last_error`. O backoff e exponencial, limitado a uma hora, com jitter. O scheduler do worker consome linhas com `next_at <= now()`, recoloca os eventos em `PENDENTE` e remove a linha de retry para permitir nova submissao.
+Retry oficial pertence a stynx-esocial. SGP exibe `RETRY`/`DLQ` a partir do
+spool e pode solicitar retentativa pelo gateway.
 
 ### UI Administrativa
 
-`frontend/src/app/features/esocial/retornos/` mostra a fila de retornos definitivos e recuperaveis a partir de `esocial.v_event_failures`. Erros definitivos exibem `cdResposta` traduzido e o botao "Tratado" para uso apos a correcao do dado de origem. Erros recuperaveis mostram a proxima tentativa e permitem retry imediato. Nao ha pagina portal neste fluxo.
+`frontend/src/app/features/esocial/retornos/` mostra a fila de retornos
+definitivos e recuperáveis a partir de `public.esocial_spool`. Erros
+recuperáveis permitem retentativa via `/api/v1/esocial/retornos/eventos/:eventId/retry`.
 
 ### Seguranca
 
-`esocial.event_retry_schedule` e tenant-scoped, forca RLS e usa `sgp_tenant_matches(tenant_id)` com `sgp_has_any_permission(...)`. Leituras exigem `esocial.event.read` ou `esocial.event.retry`; mutacoes exigem `esocial.event.retry`. Mutacoes da agenda appendam auditoria via `sgp_append_audit_event(...)`.
+`public.esocial_spool` é tenant-scoped, força RLS e usa
+`sgp_tenant_matches(tenant_id)`. Leituras exigem `esocial.event.read`;
+retentativas exigem `esocial.event.write` ou `esocial.submission.retry`.
 
 ## SIAFIC integration
 
@@ -695,21 +679,36 @@ version, the golden records `layoutSelection=DEFERRED_OWNER_DECISION`,
 `officialConformance=false`, and `productionHomologation=OUT_OF_SCOPE`.
 Production SIAFIC homologation remains outside this runtime slice.
 
-## TS-V - Alteração Contratual S-2306
+The 2026-05-04 owner decision makes that boundary permanent for SGP v0.0.1:
+SIAFIC official-layout selection, field dictionaries, and homologation fixtures
+are ente-side responsibilities downstream of the neutral JSON mock-relay
+contract. SGP must preserve the neutral accounting payload semantics and must not
+claim vendor-layout conformance without a future boundary-changing decision.
 
 ## TS-V - Alteração Contratual S-2306
 
-O ES-11 implementa a alteração contratual de trabalhador sem vínculo de emprego/estatutário (TS-V) pelo evento eSocial S-2306. O ciclo TS-V tambem possui builders para S-2300 (inicio) e S-2399 (termino), gerados a partir de `hr.tsv_contract` para estagiario, conselheiro e autonomo. Este corte de alteracao cobre somente mudanças posteriores de contrato, como função, bolsa mensal, jornada, lotação, supervisor e dados de estágio.
+## TS-V - Alteração Contratual S-2306
 
-Os builders `backend/src/esocial-worker/builders/s2300.builder.ts` e `backend/src/esocial-worker/builders/s2399.builder.ts` produzem `evtTSVInicio` e `evtTSVTermino` no leiaute S-1.3 e sao protegidos por fixtures golden para as categorias 901, 410 e 701. O S-2300 inclui dados cadastrais do trabalhador, categoria, matricula, data de inicio e complementos especificos; o S-2399 identifica o TS-V por CPF/matricula e emite a data de termino. Ambos validam contra `evtTSVInicio.xsd` e `evtTSVTermino.xsd`.
+O ES-11 implementa a alteração contratual de trabalhador sem vínculo de
+emprego/estatutário (TS-V) pelo evento eSocial S-2306. O ciclo TS-V também
+gera solicitações S-2300 (início) e S-2399 (término) a partir de
+`hr.tsv_contract` para estagiário, conselheiro e autônomo. O SGP grava essas
+solicitações em `public.esocial_spool`; stynx-esocial monta e transmite os XMLs.
 
 As categorias TS-V seguem o MOS eSocial, incluindo estagiários regidos pela Lei 11.788/2008, conselheiros tutelares, agentes políticos sem vínculo CLT/RPPS e demais trabalhadores sem vínculo enquadráveis no RET. Para estagiários, o fluxo operacional R2-76 cria `hr.internship_record` com TCE, data de assinatura, plano de atividades, supervisor, curso, bolsa e jornada, e grava `hr.tsv_contract` categoria 901 como fonte do S-2300. O corte ordinário limita a jornada a 30 horas semanais; casos excepcionais de alternância teoria/prática que peçam 40 horas semanais exigem decisão de produto antes de alterar a validação.
 
-O endpoint `POST /api/v1/recrutamento/estagios/:id/esocial/s2300` constrói o XML S-2300 a partir do `tsv_contract_id` ligado ao estágio e valida o payload contra `evtTSVInicio.xsd`. A criação de estágio exige termo de compromisso e plano de atividades porque a Lei 11.788/2008 trata o plano como parte incorporada ao termo e o convênio entre concedente e instituição de ensino não dispensa o termo.
+O endpoint `POST /api/v1/recrutamento/estagios/:id/esocial/s2300` cria a
+mensagem de spool S-2300 a partir do `tsv_contract_id` ligado ao estágio. A
+criação de estágio exige termo de compromisso e plano de atividades porque a
+Lei 11.788/2008 trata o plano como parte incorporada ao termo e o convênio entre
+concedente e instituição de ensino não dispensa o termo.
 
 O modelo físico novo fica em `hr.tsv_contract` e `hr.tsv_contract_change`. A alteração administrativa usa `PATCH /api/v1/admin/hr/tsv-contracts/:id`, exige `hr.employment.write`, valida `effectiveDate >= start_date` e rejeita patches sem mudança real. `fields_changed`, `previous_values` e `new_values` são JSONB com apenas os campos que diferem do snapshot atual; campos ausentes no patch não entram no delta.
 
-O builder `backend/src/esocial-worker/s2306` lê o delta e gera `evtTSVAltContr` com somente os grupos afetados. Alteração de `monthly_amount` emite `remuneracao/vrSalFx`; alteração de `role` emite `cargoFuncao`; alteração de dados de estágio emite `infoEstagiario`; alteração de `workplace_id` emite `localTrabGeral`. O XML é validado contra `evtTSVAltContr.xsd` do bundle oficial S-1.3 antes da transmissão pelo hub ES-07.
+Ao registrar `hr.tsv_contract_change`, o SGP cria a mensagem S-2306 com o delta
+funcional. Alteração de `monthly_amount`, `role`, dados de estágio ou
+`workplace_id` é enviada como payload de negócio; stynx-esocial decide os grupos
+XML, valida contra o bundle oficial e transmite.
 
 As tabelas são tenant-scoped, forçam RLS por `sgp_tenant_matches(tenant_id)` e permissões `hr.employment.read`, `hr.employment.write`, `esocial.event.read` e `esocial.event.write`. Toda mutação dispara `public.sgp_append_audit_event(...)`; valores monetários usam `numeric(14,2)`, jornadas usam `numeric(18,6)` e o código não usa `Math.round` para valores monetários.
 
@@ -1056,6 +1055,8 @@ The generators produce deterministic CSV goldens and require the caller to provi
 ### Safety boundary
 
 These generators are contract primitives, not final government transmitters. They are safe to use for internal evidence packages when the caller records the official layout source. They must not be branded as accepted Siconfi, SIOPE, or SIOPS transmissions until the target system import/export contract is verified and covered by an official-layout golden.
+
+R5-40 adds local queue-backed mock relays for SICONFI, SIOPE, and SIOPS. Those relays emit deterministic sandbox acknowledgements through the R4-95 queue contract only. Real federal transmission, import automation, credentials, homologation, production acceptance, and official receipt polling remain OUT of the SGP v0.0.1 runtime boundary unless a later owner decision authorizes a specific connector.
 
 ### Evidence
 

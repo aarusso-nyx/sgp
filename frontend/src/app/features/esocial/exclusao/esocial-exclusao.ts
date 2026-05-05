@@ -8,6 +8,7 @@ import {
   ESocialExclusaoService,
   S3000RequestStatus,
 } from './esocial-exclusao.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,7 +46,7 @@ export class ESocialExclusao implements OnInit {
       this.events = events;
       this.requests = requests;
     } catch {
-      this.error = 'Nao foi possivel carregar eventos elegiveis.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m026;
     } finally {
       this.loading = false;
     }
@@ -71,7 +72,7 @@ export class ESocialExclusao implements OnInit {
       this.close();
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel solicitar a exclusao S-3000.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m027;
     } finally {
       this.submitting = false;
     }

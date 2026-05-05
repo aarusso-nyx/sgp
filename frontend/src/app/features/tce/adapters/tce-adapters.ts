@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { firstValueFrom } from 'rxjs';
 
 import { TceAdapterRegistry, TceAdaptersApiService } from './tce-adapters.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -108,7 +109,7 @@ export class TceAdapters {
   }
 
   private fail(error: unknown): void {
-    this.errorMessage = error instanceof Error ? error.message : 'Registro TCE indisponivel.';
+    this.errorMessage = error instanceof Error ? error.message : SGP_FEATURE_I18N_MESSAGES.m237;
     this.busyId = '';
     this.loading = false;
   }

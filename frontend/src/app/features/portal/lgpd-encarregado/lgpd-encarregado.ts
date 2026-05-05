@@ -3,6 +3,7 @@ import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/cor
 import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface LgpdDpoContact {
   email: string;
@@ -43,7 +44,7 @@ export class LgpdEncarregado implements OnInit {
     try {
       this.info = await firstValueFrom(this.api.get<LgpdDpoInfo>('v1/public/lgpd/encarregado'));
     } catch {
-      this.error = 'Nao foi possivel carregar o contato do encarregado.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m149;
     } finally {
       this.loading = false;
     }

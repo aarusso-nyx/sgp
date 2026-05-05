@@ -1,7 +1,17 @@
+import { execFile as execFileCallback } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
+import { promisify } from 'node:util';
 
-import { cleanupFixture, makeFixture, readJson, runAuditCommand } from './audit-test-helpers';
+import {
+  cleanupFixture,
+  makeFixture,
+  readJson,
+  repoRoot,
+  runAuditCommand,
+} from './audit-test-helpers';
+
+const execFile = promisify(execFileCallback);
 
 describe('audit-fe-i18n-coverage', () => {
   let fixtureRoot: string;
@@ -73,6 +83,17 @@ describe('audit-fe-i18n-coverage', () => {
     expect(jsonReport.totalFindings).toBe(1);
     expect(markdown).toContain('# Frontend i18n Coverage Baseline');
     expect(markdown).toContain('frontend/src/app/features/portal/home/home.html');
+  });
+
+  it('keeps the live feature i18n hard-coded string ratchet at or below R5 target', async () => {
+    const result = await execFile(
+      process.execPath,
+      [join(repoRoot, 'scripts/audit.mjs'), 'fe-i18n', '--round', '5', '--json'],
+      { cwd: repoRoot, maxBuffer: 10 * 1024 * 1024 },
+    );
+    const report = JSON.parse(result.stdout) as { totalFindings: number };
+
+    expect(report.totalFindings).toBeLessThanOrEqual(100);
   });
 });
 

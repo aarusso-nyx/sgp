@@ -4,6 +4,7 @@ import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
 import { RhEmployeeRecord, RhWorkflows } from '../services/rh-workflows';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface LeaveRecord {
   id: string;
@@ -73,7 +74,7 @@ export class RhLicencas implements OnInit, OnDestroy {
           }
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar os servidores.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m172;
         },
       });
   }
@@ -128,12 +129,13 @@ export class RhLicencas implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (record) => {
-          this.message = action === 'aprovar' ? 'Licenca aprovada.' : 'Licenca cancelada.';
+          this.message =
+            action === 'aprovar' ? SGP_FEATURE_I18N_MESSAGES.m184 : SGP_FEATURE_I18N_MESSAGES.m185;
           this.queue = [record, ...this.queue.filter((item) => item.id !== record.id)];
           this.applyFilter();
         },
         error: () => {
-          this.error = 'Nao foi possivel atualizar a licenca.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m186;
         },
       });
   }

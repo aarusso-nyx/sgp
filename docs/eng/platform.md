@@ -967,6 +967,54 @@ flowchart TD
 
 **Requisitos não-funcionais:** Overhead total dos guards < 10ms por requisição.
 
+#### Production gate — route classes for `@stynx/ratelimit`
+
+The generic API Gateway rate limit is not enough for production. Before any SGP
+HTTP route can be promoted to production, the route alignment surface must carry
+one SGP route class that maps to `@stynx/ratelimit` metadata after the stynx
+adoption wave. This is a production-gating acceptance criterion for R2-03.
+
+SGP must publish the classification as route metadata rather than leaving it in
+operator notes. The future stynx adapter consumes the class as the default
+`scope`, resolves the concrete `bucket`, `cost`, `limit`, and `windowSeconds`,
+and still allows tenant-specific overrides through the stynx policy resolver.
+The effective limiter remains four-dimensional as specified by stynx: IP,
+tenant, user, and route-tenant scopes with Redis sliding-window enforcement.
+
+| SGP route class    | Examples                                                                                 | Default stynx bucket/scope       | Default policy                               | Production acceptance                                                                                                          |
+| ------------------ | ---------------------------------------------------------------------------------------- | -------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `read-public`      | Transparency, LAI status, public DPO contact, public recruitment catalog                 | `ip` / `read-public`             | cost 1, 300 requests / 60 s                  | Route is `@Public()`, response is data-minimized, pagination has an upper bound, and no direct tenant PII is returned.         |
+| `read-tenant`      | Admin/portal lists, detail reads, dashboards, generated-file metadata                    | `user` / `read-tenant`           | cost 1, 120 requests / 60 s                  | Route requires tenant context, RBAC, RLS posture, and a bounded page/window.                                                   |
+| `mutation-tenant`  | Employee self-service updates, point justifications, ordinary tenant-scoped admin writes | `user` / `mutation-tenant`       | cost 5, 30 requests / 60 s                   | Route requires RBAC, tenant context, audit on state change, and idempotency where retry can duplicate side effects.            |
+| `mutation-admin`   | Payroll approval, parameter changes, ROPA edits, fiscal/regulatory dispatch commands     | `user` / `mutation-admin`        | cost 10, 10 requests / 60 s                  | Route requires privileged permission, mutation audit, explicit business preconditions, and operator-visible failure semantics. |
+| `export-report`    | Payslip batch, annual income, reconciliation, transparency CSV, report-service downloads | `route` / `export-report`        | cost 20, 5 requests / 300 s                  | Route requires async job or streaming guardrails, generated artifact retention, and PII/legal-basis classification where used. |
+| `auth-session`     | Login callback, refresh, logout, password recovery, invite acceptance                    | `ip` / `auth-session`            | cost 5, 20 requests / 300 s                  | Route must not reveal account enumeration hints and must emit authentication/security audit where applicable.                  |
+| `webhook-external` | stynx-esocial callbacks, bank return callbacks, GovBR/Cognito callbacks, TCE adapters    | `route` / `webhook-external`     | cost 10, 60 requests / 60 s                  | Route requires signature or system-token verification, replay protection, source allowlist where feasible, and audit linkage.  |
+| `external-api`     | `/api/external/v1/*` client-credentials APIs                                             | `tenant` / `external-api`        | cost 1, tenant override default applies      | Route must bind to OAuth client scope, tenant throttling, and the tenant's configured external API limit.                      |
+| `health-metadata`  | `/healthz`, `/readyz`, `/metrics`, `/info`                                               | none or `ip` / `health-metadata` | excluded for local health; 60 / 60 s at edge | Route returns no tenant data or secrets and is covered by edge/WAF controls when internet-facing.                              |
+
+Acceptance rules:
+
+- Every controller route must have exactly one class, including public,
+  external, portal, callback, and health routes. Unclassified routes fail the
+  production gate.
+- The class must map to a stynx-compatible metadata object with `bucket`,
+  `scope`, optional `cost`, and explicit default limits. Route-local overrides
+  can tighten but cannot relax the class default without a retained owner
+  decision.
+- `read-public`, `auth-session`, and `webhook-external` routes require
+  IP-scoped protection even when no tenant or user is present.
+- `read-tenant`, `mutation-tenant`, and `mutation-admin` routes require tenant
+  and user context before rate-limit keys are evaluated; missing tenant context
+  is a request failure, not a shared anonymous bucket.
+- `export-report` and other high-cost routes must have at least one focused
+  rate-limit test before production. The test can use the stynx test harness or
+  an SGP adapter fixture, but it must assert a 429 path and exported
+  `X-RateLimit-*` headers.
+- Tenant overrides are allowed only for scopes that remain at least as strict as
+  the platform minimum for public/auth/webhook classes. Operator-configurable
+  external API limits continue to apply through `api_externa_rate_limit`.
+
 ---
 
 #### UC-ADM-022 — Cadastrar Novo Item de Menu
@@ -3486,7 +3534,7 @@ Gerencia o ciclo de vida dos eventos eSocial S-1.2: geração do XML, envio ass�
 
 ```mermaid
 erDiagram
-    esocial_evento {
+    esocial_spool {
         UUID id PK
         UUID tenant_id FK
         VARCHAR tipo_evento
@@ -3540,7 +3588,7 @@ erDiagram
     }
 
     esocial_lote ||--o{ esocial_lote_evento : "agrupa eventos"
-    esocial_evento ||--o{ esocial_lote_evento : "incluído em lotes"
+    esocial_spool ||--o{ esocial_lote_evento : "incluído em lotes"
     esocial_lote ||--o{ esocial_transmissao : "transmitido via"
 ```
 
@@ -3646,7 +3694,7 @@ erDiagram
         JSONB conteudo_json
     }
 
-    esocial_evento {
+    esocial_spool {
         UUID id PK
         VARCHAR tipo_evento
         UUID entidade_origem_id
@@ -3664,7 +3712,7 @@ erDiagram
     contracheque ||--o{ lancamento : "possui"
     verba ||--o{ lancamento : "lançada"
     competencia ||--o| relatorio_financeiro : "resulta em"
-    folha_pagamento ||--o{ esocial_evento : "origina eventos"
+    folha_pagamento ||--o{ esocial_spool : "origina eventos"
 ```
 
 ---
@@ -4075,7 +4123,7 @@ Os módulos NestJS **não importam diretamente** módulos de outros contextos de
   assíncronas ou de deployment.
 - Via HTTP interno ou comandos de worker quando o contrato cruza runtimes como
   `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`,
-  `sgp-esocial-worker`, `sgp-integrations-worker` e `sgp-report-service`.
+  `stynx-esocial`, `sgp-integrations-worker` e `sgp-report-service`.
 
 #### 1.3 Monorepo npm Workspace
 
@@ -4200,7 +4248,7 @@ sgp/
 │   │   ├── project.json
 │   │   └── Dockerfile
 │   │
-│   ├── sgp-esocial-worker/              (NestJS worker — eSocial S-1.2)
+│   ├── stynx-esocial/              (NestJS worker — eSocial S-1.2)
 │   │   ├── src/
 │   │   │   ├── main.ts
 │   │   │   ├── app.module.ts
@@ -4848,11 +4896,11 @@ stateDiagram-v2
 
 - `PATCH /api/v1/admin/hr/tsv-contracts/:id`
 
-**Eventos publicados:** nenhum evento de domínio separado neste corte; a alteração registrada habilita emissão S-2306 pelo `esocial-worker/s2306`.
+**Eventos publicados:** nenhum evento de domínio separado neste corte; a alteração registrada habilita emissão S-2306 pelo `stynx-esocial S-2306`.
 
 **Eventos consumidos:** nenhum.
 
-**Dependências cross-module:** `rh.employment_link` para o vínculo TS-V; `hr.work_location` para lotação; `esocial-worker/s2306` para XML e transmissão; auditoria imutável via `sgp_append_audit_event(...)`.
+**Dependências cross-module:** `rh.employment_link` para o vínculo TS-V; `hr.work_location` para lotação; `stynx-esocial S-2306` para XML e transmissão; auditoria imutável via `sgp_append_audit_event(...)`.
 
 ---
 
@@ -4869,11 +4917,11 @@ stateDiagram-v2
 - `POST /api/v1/admin/hr/reintegrations`
 - `POST /api/v1/admin/hr/reintegrations/:id/apply`
 
-**Eventos publicados:** nenhum evento de domínio separado neste corte; a ordem aplicada habilita emissão S-2298 pelo `esocial-worker/s2298`.
+**Eventos publicados:** nenhum evento de domínio separado neste corte; a ordem aplicada habilita emissão S-2298 pelo `stynx-esocial S-2298`.
 
-**Eventos consumidos:** recibo e rastreabilidade do S-2299 original em `public.esocial_event`.
+**Eventos consumidos:** recibo e rastreabilidade do S-2299 original em `public.esocial_spool`.
 
-**Dependências cross-module:** `rh.employment_link` e `hr.employee` para vínculo e servidor; `payroll_calc` para cálculo retroativo idempotente; `esocial-worker/s2298` para XML e transmissão; auditoria imutável via `sgp_append_audit_event(...)`.
+**Dependências cross-module:** `rh.employment_link` e `hr.employee` para vínculo e servidor; `payroll_calc` para cálculo retroativo idempotente; `stynx-esocial S-2298` para XML e transmissão; auditoria imutável via `sgp_append_audit_event(...)`.
 
 ---
 
@@ -5160,54 +5208,47 @@ stateDiagram-v2
 
 ### 5. Workers Assíncronos
 
-#### 5.1 `sgp-esocial-worker`
+#### 5.1 `stynx-esocial` boundary
 
-**Tecnologia:** NestJS standalone para o worker e serviços compartilhados importados pelo `sgp-core-api`; consome fila SQS `esocial.evento.pendente`; orquestra envio via AWS Step Functions `esocial-envio`.
+**Tecnologia:** serviço separado fora deste repositório. O SGP expõe o gateway
+`backend/src/integrations/stynx-esocial/` e a tabela canônica
+`public.esocial_spool`.
 
-**Gate ES-07:** toda emissão real deve passar pelo hub `backend/src/esocial-worker/esocial-emit.service.ts` antes de entrar em `public.esocial_event`. O hub valida o XML contra o bundle oficial XSD S-1.3 commitado em `backend/src/esocial-worker/xsd/`, assina com XML-DSig enveloped em `backend/src/esocial-worker/signature/` usando certificado ICP-Brasil A1/A3 do tenant, registra falhas em `esocial.xsd_validation_failure` e só então persiste o XML assinado na fila. O cadastro e rotação de certificados ficam em `backend/src/esocial-worker/certificate-store/`, com blobs PKCS#12 cifrados em repouso e RLS por tenant.
+**Gate ES-07:** toda emissão eSocial que nasce no SGP deve virar mensagem de
+spool antes de atravessar o limite para stynx-esocial. O SGP não constrói XML,
+não valida XSD, não assina XML-DSig, não transmite SOAP e não mantém certificado
+eSocial. Recibos, protocolos, rejeições e totalizadores voltam como atualização
+de `public.esocial_spool`.
 
-**Submódulo ES-11:** `backend/src/esocial-worker/s2306` gera e transmite S-2306 para alteração contratual de TS-V a partir de `hr.tsv_contract_change`. O builder inclui apenas os grupos correspondentes aos campos presentes em `fields_changed`, valida contra `evtTSVAltContr.xsd` pelo bundle S-1.3 e persiste a rastreabilidade em `esocial.s2306_event`.
-
-**Submódulo ES-10:** `backend/src/esocial-worker/s2298` gera e transmite S-2298 para reintegração a partir de `hr.reintegration_order`. O builder referencia o recibo S-2299 original mantido em `esocial.s2298_event`, mapeia `tpReint`, `nrProcJud`, `dtEfetRetorno` e `dtEfeito`, valida contra `evtReintegr.xsd` pelo bundle S-1.3 e persiste rastreabilidade em `esocial.s2298_event`.
+**Submódulos ES-10/ES-11:** reintegração S-2298 e alteração TS-V S-2306 são
+payloads de negócio emitidos pelo SGP e processados por stynx-esocial. A
+rastreabilidade local fica no spool e nos registros funcionais de origem.
 
 **Fluxo de processamento:**
 
 ```mermaid
 sequenceDiagram
     participant C as sgp-core-api
-    participant Q as SQS esocial.evento.pendente
-    participant W as sgp-esocial-worker
-    participant X as libs/integrations/esocial-s12
-    participant SF as Step Functions esocial-envio
-    participant E as WebService eSocial (SOAP)
-    participant S as S3
+    participant S as public.esocial_spool
+    participant X as stynx-esocial
 
-    C->>Q: Publicar evento pendente (tipo S-xxxx, payload JSON)
-    Q->>W: Consumir mensagem (max 3 tentativas, backoff exp.)
-    W->>X: Construir XML do evento
-    X-->>W: XML estruturado
-    W->>SF: Iniciar execução (XML + metadados)
-    SF->>W: Assinar XML (certificado A1/A3 do tenant)
-    W->>E: Enviar (SOAP enviarLoteEventos)
-    E-->>W: Protocolo de recebimento
-    W->>SF: Poll status (consultarLoteEventos)
-    SF-->>W: Recibo final
-    W->>S: Persistir XML enviado + recibo
-    W->>C: Publicar esocial.recibo.recebido
+    C->>S: Gravar mensagem S-xxxx tenant-scoped
+    C->>X: Enviar envelope HTTP/queue
+    X-->>C: Ack de recebimento
+    X-->>C: Callback de protocolo/recibo/status
+    C->>S: Atualizar status, recibo e auditoria
 ```
 
 **Módulos internos:**
 
-- `evento-consumer`: deserializa mensagem SQS, valida schema, roteia por tipo de evento.
-- `builders`: `backend/src/esocial-worker/builders/` contém os builders ES-01 para S-1000, S-1005, S-1010, S-1020, S-1050 e S-1070. Eles leem empresa/estabelecimento, rubricas, lotações, jornadas e processos via `DatabaseService`, passam obrigatoriamente pelo hub ES-07 e usam `esocial.s1xxx_dispatch_state` para idempotência por hash.
-- `xml-builder`: invoca `libs/integrations/esocial-s12` para construção dos demais XML S-2.xxx e S-3.xxx ainda fora de ES-01.
-- `xsd`: mantém o bundle oficial S-1.3 local, verifica hash de arquivos críticos e rejeita mutações antes da fila.
-- `signature`: assina XML eSocial com XML-DSig enveloped via `xml-crypto` e material ICP-Brasil lido de PKCS#12 via `node-forge`, sem shell-out para OpenSSL.
-- `certificate-store`: lista, cadastra, rotaciona e revoga certificados A1/A3 por tenant, com alerta de rotação 30 dias antes da expiração.
-- `submission`: agrupa eventos assinados em `esocial.submission_batch`, monta o lote oficial `EnviarLoteEventos`, assina o envelope SOAP com WS-Security, usa mTLS com o PKCS#12 ativo do tenant, registra hash de request/response e controla retry/circuit breaker por endpoint. O envio real usa somente endpoints configurados por `ESOCIAL_ENDPOINT_ENVIO`; testes e CI usam WSDL stub local sem chamada a `gov.br`.
-- `assinatura`: legado conceitual substituído pelo par `signature` + `certificate-store`; futuras integrações KMS devem preservar o contrato do hub ES-07.
-- `envio`: substituído pelo submódulo `submission` para envio SOAP real em lote.
-- `recibo`: persiste protocolo e recibo em `esocial_envio` e `esocial_recibo` no schema do core.
+- `gateway`: `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+  preserva as rotas browser-facing `/api/v1/esocial/*`.
+- `client`: `backend/src/integrations/stynx-esocial/stynx-esocial.client.ts`
+  publica envelopes para stynx-esocial.
+- `spool`: `backend/src/esocial-spool/` guarda mensagem, status, recibo,
+  hashes, erro e metadados de auditoria.
+- `callbacks`: consumidores em `backend/src/integrations/stynx-esocial/`
+  atualizam o spool e espelham auditoria recebida.
 
 **Políticas de retry:** máximo 3 tentativas com backoff exponencial (1s, 4s, 16s); mensagem move para DLQ `esocial.evento.pendente.dlq` após falha.
 
@@ -5535,7 +5576,7 @@ interface SgpDomainEvent<T> {
 | ------------------------- | ----------------------- | ----------------------------------------------------------------------- |
 | `sgp-core-api`            | Sim                     | Deploy mais frequente; cobre maioria dos módulos de negócio             |
 | `sgp-payroll-engine`      | Sim                     | Deploy independente; evolução do compilador SQL separada                |
-| `sgp-esocial-worker`      | Sim                     | Deploy quando leiaute eSocial é atualizado ou há mudança de certificado |
+| `stynx-esocial`           | Sim                     | Deploy quando leiaute eSocial é atualizado ou há mudança de certificado |
 | `sgp-integrations-worker` | Sim                     | Deploy quando novos bancos CNAB são suportados                          |
 | `sgp-report-service`      | Sim                     | Deploy quando templates de relatório são alterados                      |
 | `sgp-admin`               | Sim                     | Deploy via CDN/CloudFront; versionamento de assets                      |
@@ -5596,7 +5637,7 @@ Cada app possui seu conjunto de variáveis de ambiente gerenciadas no **AWS Secr
 | `SQS_*_URL`                | workers                        | URLs das filas SQS             |
 | `SNS_*_ARN`                | sgp-core-api                   | ARNs dos tópicos SNS           |
 | `AWS_COGNITO_USER_POOL_ID` | sgp-core-api                   | Pool ID do Cognito             |
-| `STEP_FUNCTIONS_*_ARN`     | payroll-engine, esocial-worker | ARNs das State Machines        |
+| `STEP_FUNCTIONS_*_ARN`     | payroll-engine                 | ARNs das State Machines        |
 | `S3_BUCKET_*`              | todos com arquivos             | Buckets por tenant/tipo        |
 
 ---
@@ -5659,7 +5700,7 @@ graph TD
 
     subgraph integracoes_squad["Squad Integrações"]
         G1[integracoes - facade]
-        G2[sgp-esocial-worker]
+        G2[stynx-esocial]
         G3[sgp-integrations-worker]
         G5[libs/integrations/*]
     end
@@ -5674,7 +5715,7 @@ graph TD
 | **Saúde**             | Perícia médica, licenças, agenda, SST, acidente de trabalho                                           | `saude`                                                                                                                             | `@sgp/ui-admin/saude`, `@sgp/ui-portal/pericia-agendada`                                        | —                                                            |
 | **RH**                | Vida funcional, cadastro de funcionários, gestão de parametrizações, avaliação, progressão, convênios | `rh`, `gestao`, `avaliacao`, `convenio`                                                                                             | `@sgp/ui-admin/rh`, `@sgp/ui-admin/gestao`, `@sgp/ui-admin/avaliacao`, `@sgp/ui-admin/convenio` | —                                                            |
 | **Recrutamento**      | Requisições de pessoal, banco de talentos, estágio                                                    | `recrutamento`                                                                                                                      | `@sgp/ui-admin/recrutamento`, `@sgp/ui-portal/curriculo`                                        | —                                                            |
-| **Integrações**       | Obrigações fiscais, eSocial, bancos, TCE/TCM/TCU e adapters externos                                  | `integracoes`, `tce`                                                                                                                | `@sgp/ui-admin/fiscal`, `@sgp/ui-admin/tce`                                                     | `sgp-esocial-worker`, `sgp-integrations-worker`              |
+| **Integrações**       | Obrigações fiscais, eSocial, bancos, TCE/TCM/TCU e adapters externos                                  | `integracoes`, `tce`                                                                                                                | `@sgp/ui-admin/fiscal`, `@sgp/ui-admin/tce`                                                     | `stynx-esocial`, `sgp-integrations-worker`                   |
 
 #### 10.3 Interfaces Entre Squads
 
@@ -5810,7 +5851,7 @@ Comunicação inter-serviço produtiva (API → payroll-engine, API → workers,
 
 #### 2.7 Observabilidade First-Class
 
-Observabilidade produtiva continua objetivo arquitetural: cada serviço deve emitir **logs estruturados JSON**, **traces distribuídos** via OpenTelemetry e **métricas customizadas** de negócio. No backend atual, os entrypoints `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, `sgp-esocial-worker`, `sgp-integrations-worker` e `sgp-report-service` inicializam `nestjs-pino` por meio de `backend/src/common/logging/logging.config.ts` e aplicam o logger no bootstrap com `backend/src/common/logging/bootstrap-logger.ts`.
+Observabilidade produtiva continua objetivo arquitetural: cada serviço deve emitir **logs estruturados JSON**, **traces distribuídos** via OpenTelemetry e **métricas customizadas** de negócio. No backend atual, os entrypoints `sgp-core-api`, `sgp-portal-api`, `sgp-payroll-engine`, `stynx-esocial`, `sgp-integrations-worker` e `sgp-report-service` inicializam `nestjs-pino` por meio de `backend/src/common/logging/logging.config.ts` e aplicam o logger no bootstrap com `backend/src/common/logging/bootstrap-logger.ts`.
 
 O contrato de redaction de logs usa o censor literal `[redacted]` para os caminhos `cpf`, `pis_pasep`, `bank_account`, `email` e cabeçalhos `authorization`/`Authorization` em objetos HTTP ou payloads estruturados aninhados até cinco níveis. Esse contrato é preventivo para triagem operacional e resposta a incidentes: dados pessoais de folha/RH não devem aparecer em logs de aplicação, inclusive quando serviços fazem `Logger.log(...)` com objetos estruturados.
 
@@ -5933,7 +5974,7 @@ flowchart TB
     subgraph AWS_Compute["AWS Compute — ECS Fargate"]
         CORE["sgp-core-api\nNestJS\n(API REST principal)"]
         PAY["sgp-payroll-engine\nNestJS Microservice\n(cálculo de folha)"]
-        ESW["sgp-esocial-worker\nNestJS\n(eventos S-1.2)"]
+        ESW["stynx-esocial\nNestJS\n(eventos S-1.2)"]
         IGW["sgp-integrations-worker\nNestJS\n(CNAB, SIPREV)"]
         RPT["sgp-report-service\nNestJS + Headless Chrome\n(PDF, XLSX)"]
     end
@@ -6043,7 +6084,7 @@ flowchart TB
 | **sgp-core-api**            | NestJS 10+ / TypeScript, ECS Fargate                    | API REST administrativa com os bounded contexts do core. Expõe `/api/v1/...`, `/api/external/v1/...` e `/api/admin/v1/...`.                                                                   |
 | **sgp-portal-api**          | NestJS 10+ / TypeScript, ECS Fargate                    | Backend exclusivo do portal, com credenciais de banco read-only e escopo de autoatendimento. Expõe `/api/portal/v1/...`.                                                                      |
 | **sgp-payroll-engine**      | NestJS 10+ / TypeScript, ECS Fargate (ou host dedicado) | Implementação separada de cálculo de folha. Permite execução por cron e sob demanda, com acompanhamento de progresso por lote/in-lote. Camada fina sobre procedures `plpgsql` parametrizadas. |
-| **sgp-esocial-worker**      | NestJS 10+ / TypeScript, ECS Fargate                    | Worker assíncrono para geração, assinatura e envio de eventos eSocial S-1.2. Consome fila SQS `esocial.evento.pendente`. Gerencia retry, polling de recibo e DLQ.                             |
+| **stynx-esocial**           | NestJS 10+ / TypeScript, ECS Fargate                    | Worker assíncrono para geração, assinatura e envio de eventos eSocial S-1.2. Consome fila SQS `public.esocial_spool`. Gerencia retry, polling de recibo e DLQ.                                |
 | **sgp-integrations-worker** | NestJS 10+ / TypeScript, ECS Fargate                    | Worker para integrações batch: remessa/retorno CNAB bancário, exportação SIPREV e geração DIRF. Consome filas SQS `remessa.gerar` e `retorno.processar`.                                      |
 | **sgp-report-service**      | NestJS + Puppeteer (Headless Chrome), ECS Fargate       | Serviço dedicado à geração de PDFs e XLSX. Consome fila `contracheque.gerar.pdf`. Templates em Handlebars. Persiste arquivos finalizados no S3.                                               |
 | **RDS PostgreSQL 16**       | AWS RDS Multi-AZ + Read Replicas                        | Banco relacional principal. Multi-AZ para HA (failover automático). Read Replicas para leitura pesada. RLS por tenant. Particionamento por competência em tabelas de folha.                   |
@@ -6466,7 +6507,7 @@ flowchart TB
             subgraph Private_Subnets["Subnets Privadas — Compute (AZ-a, AZ-b)"]
                 ECS_CORE["ECS Fargate\nsgp-core-api\n(2–20 tasks, CPU auto-scale)"]
                 ECS_PAY["ECS Fargate\nsgp-payroll-engine\n(1–50 tasks, queue-depth scale)"]
-                ECS_ESW["ECS Fargate\nsgp-esocial-worker\n(1–10 tasks)"]
+                ECS_ESW["ECS Fargate\nstynx-esocial\n(1–10 tasks)"]
                 ECS_IGW["ECS Fargate\nsgp-integrations-worker\n(1–5 tasks)"]
                 ECS_RPT["ECS Fargate\nsgp-report-service\n(1–10 tasks)"]
             end
@@ -6578,7 +6619,7 @@ flowchart TB
 | ------------------------- | -------- | ------- | --------- | --------- | -------------------- |
 | `sgp-core-api`            | 1 vCPU   | 2 GB    | 2         | 20        | CPU > 70% por 3 min  |
 | `sgp-payroll-engine`      | 2 vCPU   | 4 GB    | 1         | 50        | SQS depth > 100 msgs |
-| `sgp-esocial-worker`      | 0.5 vCPU | 1 GB    | 1         | 10        | SQS depth > 20 msgs  |
+| `stynx-esocial`           | 0.5 vCPU | 1 GB    | 1         | 10        | SQS depth > 20 msgs  |
 | `sgp-integrations-worker` | 0.5 vCPU | 1 GB    | 1         | 5         | SQS depth > 10 msgs  |
 | `sgp-report-service`      | 2 vCPU   | 4 GB    | 1         | 10        | SQS depth > 5 msgs   |
 
@@ -6652,7 +6693,7 @@ sequenceDiagram
     participant EVB as EventBridge
     participant SFN as Step Functions<br/>(esocial-envio)
     participant SQS as SQS<br/>esocial.evento.pendente
-    participant ESW as sgp-esocial-worker
+    participant ESW as stynx-esocial
     participant SM as Secrets Manager
     participant S3 as S3 Buckets
     participant ESOCIAL as eSocial / Receita<br/>(WebService SOAP)
@@ -7229,7 +7270,7 @@ Spans customizados são criados para operações críticas:
 | --------------------------------- | ----------- | --------------------------------------- |
 | `folhas_fechadas_mes`             | Mensal      | —                                       |
 | `contracheques_gerados`           | Diário      | —                                       |
-| `esocial_eventos_pendentes`       | Tempo real  | > 50 eventos pendentes > 1h → alerta P2 |
+| `esocial_spool_pendente`          | Tempo real  | > 50 eventos pendentes > 1h → alerta P2 |
 | `pericias_agendadas_hoje`         | Diário      | —                                       |
 | `integracao_bancaria_falha_count` | Por remessa | > 0 falhas → alerta P1                  |
 | `folha_calculo_duracao_minutos`   | Por lote    | > 120 min → alerta P1 (folha travada)   |
@@ -7304,8 +7345,8 @@ flowchart LR
 | `sgp-core-api`                | Latência p95 > 2s por 5 min         | P2         | Verificar RDS slow queries; Redis hit rate           |
 | `sgp-payroll-engine`          | Lote em EM_CALCULO > 120 min        | P1         | Runbook folha travada (seção 12.4)                   |
 | `sgp-payroll-engine`          | Task exit code != 0                 | P1         | Logs CW; restart automático ECS                      |
-| `sgp-esocial-worker`          | DLQ depth > 0                       | P1         | Eventos fiscais não enviados; acionar operador       |
-| `sgp-esocial-worker`          | Fila pendente > 50 msgs por > 1h    | P2         | Verificar conectividade com eSocial (SOAP)           |
+| `stynx-esocial`               | DLQ depth > 0                       | P1         | Eventos fiscais não enviados; acionar operador       |
+| `stynx-esocial`               | Fila pendente > 50 msgs por > 1h    | P2         | Verificar conectividade com eSocial (SOAP)           |
 | `sgp-integrations-worker`     | Falha remessa bancária              | P1         | Acionar operador financeiro; reprocessar             |
 | `RDS Primary`                 | Unreachable / failover em andamento | P1         | RDS Multi-AZ: failover automático ~60s; monitorar    |
 | `RDS Primary`                 | CPU > 80% por 10 min                | P2         | Verificar slow queries; avaliar scale up             |
@@ -7366,7 +7407,7 @@ Implementados via biblioteca `nestjs-opossum` ou equivalente entre:
 
 - `sgp-core-api` → `sgp-payroll-engine` (API síncrona de cálculo pontual).
 - Workers → RDS (failover para read replica em leituras em caso de falha da primária).
-- `sgp-esocial-worker` → WebService eSocial (circuit breaker com half-open probe a cada 5 min).
+- `stynx-esocial` → WebService eSocial (circuit breaker com half-open probe a cada 5 min).
 
 **Retry com Backoff Exponencial:**
 
@@ -7730,13 +7771,13 @@ Os itens a seguir foram decididos formalmente e não estão mais em aberto. Cada
 
 Cada decisão pendente tem impacto direto em artefatos de documentação e código ainda não finalizados:
 
-| Decisão                        | Artefatos bloqueados ou impactados                                                     | Estado atual                                                        |
-| ------------------------------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| ORM/runtime database ownership | `backend/prisma/schema.prisma`, `database/sql`, `scripts/check-db.mjs alignment check` | PostgreSQL canônico em `database/sql`; Prisma para client/metadados |
-| State Management Angular       | Arquitetura de módulo frontend e componentes compartilhados                            | Angular local sem lib `@sgp/shared-state` dedicada                  |
-| Estratégia final de infra      | `infra/aws/templates`, pipeline de deploy, segregação por ambiente                     | AWS templates locais e deploy dry-run; produção postergada          |
-| Gov.br SSO                     | Fluxo de federação Cognito/Gov.br e testes de integração                               | `IDENTITY_INSTALL_LATER`                                            |
-| Estratégia final de migrations | Bootstrap, rollback e release DB                                                       | SQL canônico em `database/sql`; gates locais ativos                 |
+| Decisão                        | Artefatos bloqueados ou impactados                                 | Estado atual                                                          |
+| ------------------------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Runtime database ownership     | `database/sql`, `scripts/check-db.mjs alignment check`             | PostgreSQL canônico em `database/sql`; Prisma schema/client removidos |
+| State Management Angular       | Arquitetura de módulo frontend e componentes compartilhados        | Angular local sem lib `@sgp/shared-state` dedicada                    |
+| Estratégia final de infra      | `infra/aws/templates`, pipeline de deploy, segregação por ambiente | AWS templates locais e deploy dry-run; produção postergada            |
+| Gov.br SSO                     | Fluxo de federação Cognito/Gov.br e testes de integração           | `IDENTITY_INSTALL_LATER`                                              |
+| Estratégia final de migrations | Bootstrap, rollback e release DB                                   | SQL canônico em `database/sql`; gates locais ativos                   |
 
 #### 15.2 Roadmap Técnico Resumido
 
@@ -7752,7 +7793,7 @@ gantt
     section MVP Backend
     sgp-core-api (módulos GESTAO/RH/FOLHA)  :active, be1, 2026-03, 2026-07
     sgp-payroll-engine                       :active, be2, 2026-04, 2026-07
-    sgp-esocial-worker                       :        be3, 2026-05, 2026-08
+    stynx-esocial                       :        be3, 2026-05, 2026-08
     sgp-integrations-worker                  :        be4, 2026-05, 2026-08
 
     section MVP Frontend
@@ -7778,7 +7819,7 @@ _Fim do documento. Próximos artefatos relacionados: `42-modelo-dados-fisico.md`
 ## Contratos de Integração — SGP Moderno
 
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
-**Escopo:** `integracoes`, `sgp-esocial-worker`, `sgp-integrations-worker`, `sgp-payroll-engine`, `sgp-core-api`, `sgp-portal`
+**Escopo:** `integracoes`, `stynx-esocial`, `sgp-integrations-worker`, `sgp-payroll-engine`, `sgp-core-api`, `sgp-portal`
 **Depende de:** BRIEF.md, 34-rotinas-operacionais-jobs-e-integracoes.md, 59-integracoes-e-contratos-estaticos.md, 33-catalogo-de-saidas-oficiais-e-arquivos.md
 
 ---
@@ -7905,7 +7946,7 @@ Feature flag: `esocial.enabled` — quando `false`, menus e workers estão desat
 sequenceDiagram
     participant Core as sgp-core-api
     participant SQS as SQS esocial.evento.pendente
-    participant Worker as sgp-esocial-worker
+    participant Worker as stynx-esocial
     participant SF as Step Function esocial-envio
     participant WS as eSocial WebService
 
@@ -8836,7 +8877,7 @@ EventBridge Bus: sgp-{env}
 | Bus / Tópico / Fila          | Produtor                             | Consumidor                                                            | Uso                            |
 | ---------------------------- | ------------------------------------ | --------------------------------------------------------------------- | ------------------------------ |
 | `sgp-folha-events` SNS       | `sgp-core-api`                       | `sgp-payroll-engine`, `sgp-report-service`, `sgp-integrations-worker` | Eventos de ciclo de folha      |
-| `sgp-esocial-queue` SQS      | `sgp-core-api`                       | `sgp-esocial-worker`                                                  | Envio de eventos eSocial       |
+| `sgp-esocial-queue` SQS      | `sgp-core-api`                       | `stynx-esocial`                                                       | Envio de eventos eSocial       |
 | `sgp-integrações-queue` SQS  | `sgp-core-api`                       | `sgp-integrations-worker`                                             | Remessas, SIPREV, DIRF         |
 | `sgp-relatorios-queue` SQS   | `sgp-core-api`, `sgp-payroll-engine` | `sgp-report-service`                                                  | Geração de PDF/XLSX            |
 | `sgp-audit-queue` SQS        | `sgp-core-api`, `sgp-payroll-engine` | `sgp-core-api` (audit writer)                                         | Trilha de auditoria assíncrona |
@@ -8974,7 +9015,7 @@ EventBridge Bus: sgp-{env}
 
 // esocial.evento.processado
 {
-  "source": "sgp.esocial-worker",
+  "source": "stynx.esocial",
   "detail-type": "esocial.evento.processado",
   "detail": {
     "tenantId": "uuid",
@@ -8987,7 +9028,7 @@ EventBridge Bus: sgp-{env}
 
 // esocial.falha.definitiva
 {
-  "source": "sgp.esocial-worker",
+  "source": "stynx.esocial",
   "detail-type": "esocial.falha.definitiva",
   "detail": {
     "tenantId": "uuid",
@@ -9219,7 +9260,7 @@ async listarFiliais() { ... }
 Esta seção é autoridade viva para rotas já expostas pelo runtime atual e usadas pelo gate `npm run api:alignment:check`. Rotas planejadas em outros documentos de `docs/eng` continuam como especificação de produto, mas só entram no hard-fail de alinhamento quando possuem cobertura runtime ou escopo diferido explícito.
 
 - `DELETE /api/v1/employees/:id/alimonies/:alimonyId` - `backend/src/folha-pagamento/operations/alimony/alimony.controller.ts`
-- `DELETE /api/v1/esocial/certificados/:certificateId` - `backend/src/esocial-worker/certificate-store/certificate-store.controller.ts`
+- `DELETE /api/v1/esocial/certificados/:certificateId` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
 - `DELETE /api/v1/folha/rubrica/:id` - `backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts`
 - `DELETE /api/v1/recrutamento/prova-online/sessions/:id/artifacts` - `backend/src/recrutamento/prova-online/online-exam.controller.ts`
 - `GET /api/v1/avaliacao/career-plan` - `backend/src/avaliacao/career-plan/career-plan.controller.ts`
@@ -9230,12 +9271,12 @@ Esta seção é autoridade viva para rotas já expostas pelo runtime atual e usa
 - `POST /api/v1/avaliacao/salary-history/reajuste-massa` - `backend/src/avaliacao/salary-history/salary-history.controller.ts`
 - `GET /api/v1/cargos` - `backend/src/gestao/master-data/master-data.controller.ts`
 - `GET /api/v1/employees/:id/bank-accounts` - `backend/src/folha-pagamento/operations/bank-account/bank-account.controller.ts`
-- `GET /api/v1/esocial/events/excludable` - `backend/src/esocial-worker/exclusion/s3000.controller.ts`
-- `GET /api/v1/esocial/exclusions` - `backend/src/esocial-worker/exclusion/s3000.controller.ts`
-- `GET /api/v1/esocial/retornos/eventos/:eventId` - `backend/src/esocial-worker/sync/retorno.controller.ts`
-- `GET /api/v1/esocial/retornos/falhas` - `backend/src/esocial-worker/sync/retorno.controller.ts`
-- `GET /api/v1/esocial/submissoes` - `backend/src/esocial-worker/submission/submission.controller.ts`
-- `GET /api/v1/esocial/submissoes/circuitos` - `backend/src/esocial-worker/submission/submission.controller.ts`
+- `GET /api/v1/esocial/events/excludable` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `GET /api/v1/esocial/exclusions` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `GET /api/v1/esocial/retornos/eventos/:eventId` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `GET /api/v1/esocial/retornos/falhas` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `GET /api/v1/esocial/submissoes` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `GET /api/v1/esocial/submissoes/circuitos` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
 - `GET /api/v1/folha/remessa` - `backend/src/folha-pagamento/operations/payroll-operations.controller.ts`
 - `GET /api/v1/folha/rubrica` - `backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts`
 - `GET /api/v1/folha/rubrica/links/job-positions` - `backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts`
@@ -9317,18 +9358,18 @@ Esta seção é autoridade viva para rotas já expostas pelo runtime atual e usa
 - `POST /api/v1/avaliacao/progression/simulate` - `backend/src/avaliacao/progression/progression.controller.ts`
 - `POST /api/v1/employees/:id/bank-accounts` - `backend/src/folha-pagamento/operations/bank-account/bank-account.controller.ts`
 - `POST /api/v1/employees/:id/bank-accounts/:accountId/revalidate` - `backend/src/folha-pagamento/operations/bank-account/bank-account.controller.ts`
-- `POST /api/v1/esocial/eventos-trabalhador/s2230/:pendingId/emitir` - `backend/src/esocial-worker/builders/es03.controller.ts`
-- `POST /api/v1/esocial/eventos-trabalhador/s2299/:pendingId/emitir` - `backend/src/esocial-worker/builders/es03.controller.ts`
-- `POST /api/v1/esocial/exclusions/:requestId/accept` - `backend/src/esocial-worker/exclusion/s3000.controller.ts`
-- `POST /api/v1/esocial/folha-periodica/payments/:paymentBatchId/s1210/emitir` - `backend/src/esocial-worker/builders/es04.controller.ts`
-- `POST /api/v1/esocial/folha-periodica/runs/:payrollRunId/s1200/emitir` - `backend/src/esocial-worker/builders/es04.controller.ts`
-- `POST /api/v1/esocial/retornos/eventos/:eventId/retry` - `backend/src/esocial-worker/sync/retorno.controller.ts`
-- `POST /api/v1/esocial/retornos/eventos/:eventId/tratado` - `backend/src/esocial-worker/sync/retorno.controller.ts`
-- `POST /api/v1/esocial/submissoes/:batchId/retry` - `backend/src/esocial-worker/submission/submission.controller.ts`
-- `POST /api/v1/esocial/tabelas-iniciais/:eventKind/emitir` - `backend/src/esocial-worker/builders/s1xxx.controller.ts`
-- `POST /api/v1/esocial/tabelas-iniciais/emitir` - `backend/src/esocial-worker/builders/s1xxx.controller.ts`
-- `POST /api/v1/esocial/trabalhadores/:employeeId/s2200/emitir` - `backend/src/esocial-worker/builders/s22xx.controller.ts`
-- `POST /api/v1/esocial/trabalhadores/:employeeId/s2205/emitir` - `backend/src/esocial-worker/builders/s22xx.controller.ts`
+- `POST /api/v1/esocial/eventos-trabalhador/s2230/:pendingId/emitir` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/eventos-trabalhador/s2299/:pendingId/emitir` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/exclusions/:requestId/accept` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/folha-periodica/payments/:paymentBatchId/s1210/emitir` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/folha-periodica/runs/:payrollRunId/s1200/emitir` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/retornos/eventos/:eventId/retry` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/retornos/eventos/:eventId/tratado` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/submissoes/:batchId/retry` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/tabelas-iniciais/:eventKind/emitir` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/tabelas-iniciais/emitir` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/trabalhadores/:employeeId/s2200/emitir` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
+- `POST /api/v1/esocial/trabalhadores/:employeeId/s2205/emitir` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
 - `POST /api/v1/folha/rubrica` - `backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts`
 - `POST /api/v1/folha/rubrica/:id/preview` - `backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts`
 - `POST /api/v1/folha/rubrica/:id/recompile` - `backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts`
@@ -9413,7 +9454,7 @@ Esta seção é autoridade viva para rotas já expostas pelo runtime atual e usa
 - `POST /api/v1/saude/programas/pcmso/:id/revisoes` - `backend/src/saude/program/program.controller.ts`
 - `POST /api/v1/saude/programas/pgr` - `backend/src/saude/program/program.controller.ts`
 - `POST /api/v1/saude/programas/pgr/:id/revisoes` - `backend/src/saude/program/program.controller.ts`
-- `PUT /api/v1/esocial/certificados/:certificateId/rotacao` - `backend/src/esocial-worker/certificate-store/certificate-store.controller.ts`
+- `PUT /api/v1/esocial/certificados/:certificateId/rotacao` - `backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts`
 - `PUT /api/v1/portal/meus-dados/:section` - `backend/src/portal/portal.controller.ts`
 
 ---
@@ -10058,7 +10099,7 @@ stateDiagram-v2
 ### 6. Evento eSocial
 
 **Agregado:** `evento_esocial` (tipo_evento, referencia_id, versao_leiaute = S-1.2)
-**Bounded context:** `integracoes` / `sgp-esocial-worker`
+**Bounded context:** `integracoes` / `stynx-esocial`
 
 #### 6.1 Estados
 
@@ -10075,7 +10116,7 @@ stateDiagram-v2
 
 | #   | De                      | Evento                            | Guarda                                  | Efeito                                              | Para        |
 | --- | ----------------------- | --------------------------------- | --------------------------------------- | --------------------------------------------------- | ----------- |
-| T1  | _(geração)_             | `GERAR_EVENTO`                    | `esocial.enabled = true`; dados válidos | persiste XML; emite `esocial.evento.pendente`       | `pendente`  |
+| T1  | _(geração)_             | `GERAR_EVENTO`                    | `esocial.enabled = true`; dados válidos | persiste XML; emite `public.esocial_spool`          | `pendente`  |
 | T2  | `pendente`              | `INICIAR_ENVIO` _(SIS)_           | —                                       | Step Function inicia; assina XML com certificado A1 | `em_envio`  |
 | T3  | `em_envio`              | `retorno_aceito` _(SIS)_          | recibo válido                           | persiste `numero_recibo`; emite `esocial.aceito`    | `aceito`    |
 | T4  | `em_envio`              | `retorno_rejeitado` _(SIS)_       | ocorrências de erro                     | persiste erros; emite `esocial.rejeitado`; retry ≤3 | `rejeitado` |
@@ -10892,9 +10933,9 @@ A tabela abaixo cruza as 18 máquinas de estado com os papéis que disparam tran
 | **Lançamento**             | Estornar              | GF      | `lancamento.estornado`                     | SNS `audit-eventos` → `audit_log`                                               |
 | **Lote Importação**        | Aprovar e processar   | GF      | `importacao.processada`                    | SQS `importacao.processar`                                                      |
 | **Lote Importação**        | Rejeitar              | GF      | `importacao.rejeitada`                     | interno                                                                         |
-| **Evento eSocial**         | Gerar                 | SIS     | `esocial.evento.pendente`                  | SQS `esocial.evento.pendente` → `sgp-esocial-worker`                            |
+| **Evento eSocial**         | Gerar                 | SIS     | `public.esocial_spool`                     | `public.esocial_spool` → `stynx-esocial`                                        |
 | **Evento eSocial**         | Aceito                | SIS     | `esocial.aceito`                           | SNS `esocial-eventos`                                                           |
-| **Evento eSocial**         | Rejeitado             | SIS     | `esocial.rejeitado`                        | SQS `esocial.evento.pendente` (retry ≤3)                                        |
+| **Evento eSocial**         | Rejeitado             | SIS     | `esocial.rejeitado`                        | SQS `public.esocial_spool` (retry ≤3)                                           |
 | **Requisição Pessoal**     | Encaminhar            | SOL     | `requisicao.encaminhada`                   | SNS `recrutamento-eventos` + e-mail                                             |
 | **Requisição Pessoal**     | Aprovar               | GRH     | `requisicao.aprovada`                      | SNS `recrutamento-eventos` + e-mail SOL                                         |
 | **Requisição Pessoal**     | Concluir análise      | GRH     | `requisicao.concluida`                     | SNS `recrutamento-eventos` + e-mail SOL                                         |
@@ -11030,7 +11071,7 @@ _Fim do documento. Para refinamentos ou ADRs decorrentes deste artefato, criar `
 ## Jobs e Rotinas Assíncronas — SGP Moderno
 
 **Versão:** 1.0 | **Data:** 2026-04-21 | **Status:** Draft
-**Escopo:** todos os serviços (`sgp-core-api`, `sgp-payroll-engine`, `sgp-esocial-worker`, `sgp-integrations-worker`, `sgp-report-service`) | **Depende de:** BRIEF.md, `34-rotinas-operacionais-jobs-e-integracoes.md`, `58-importacoes-exportacoes-e-documentos-estaticos.md`.
+**Escopo:** todos os serviços (`sgp-core-api`, `sgp-payroll-engine`, `stynx-esocial`, `sgp-integrations-worker`, `sgp-report-service`) | **Depende de:** BRIEF.md, `34-rotinas-operacionais-jobs-e-integracoes.md`, `58-importacoes-exportacoes-e-documentos-estaticos.md`.
 
 ---
 
@@ -11255,14 +11296,14 @@ Pré-condições: vínculo `statutory`, contrato ativo e `exercise_on` preenchid
 
 | Campo               | Valor                                                                                                                                                                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Owner**           | `sgp-esocial-worker`                                                                                                                                                                                                            |
+| **Owner**           | `stynx-esocial`                                                                                                                                                                                                                 |
 | **Trigger**         | Evento de domínio publicado por aspect (ex: posse registrada, folha fechada, desligamento) → EventBridge `sgp.esocial.evento.pendente` → SQS `sgp-esocial-envio-queue`; também cron `*/10 * * * *` para varredura de pendências |
 | **Input**           | `{ tenant_id, evento_id, tipo_evento (S-1000…S-2399), xml_assinado_s3_key }`                                                                                                                                                    |
-| **Output**          | Protocolo de recibo eSocial gravado em `esocial_evento`; `esocial_evento.status = ENVIADO` ou `ERRO`; evento `esocial.enviado` ou `esocial.erro`                                                                                |
+| **Output**          | Protocolo de recibo eSocial gravado em `esocial_spool`; `esocial_spool.status = ENVIADO` ou `ERRO`; evento `esocial.enviado` ou `esocial.erro`                                                                                  |
 | **Retry policy**    | 3 tentativas; backoff exponencial (2/8/30 min); DLQ `sgp-esocial-dlq`                                                                                                                                                           |
 | **Idempotency key** | `{tenant_id}#{evento_id}`                                                                                                                                                                                                       |
 | **Timeout**         | 5 min por evento                                                                                                                                                                                                                |
-| **Observabilidade** | Log stream `/sgp/esocial-worker/envio`; métricas `EventosESocialEnviados`, `EventosESocialErro`; X-Ray trace                                                                                                                    |
+| **Observabilidade** | Log stream `/stynx/esocial/envio`; métricas `EventosESocialEnviados`, `EventosESocialErro`; X-Ray trace                                                                                                                         |
 | **Alertas**         | DLQ visível > 0 → PagerDuty P1; `EventosESocialErro > 10` → PagerDuty P2                                                                                                                                                        |
 
 Implementado como Step Functions `esocial-envio` — ver §3.3.
@@ -11271,17 +11312,17 @@ Implementado como Step Functions `esocial-envio` — ver §3.3.
 
 ##### `JOB_ESOCIAL_CONSULTA_PROTOCOLOS`
 
-| Campo               | Valor                                                                                                                                          |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Owner**           | `sgp-esocial-worker`                                                                                                                           |
-| **Trigger**         | Cron `*/15 * * * *` via EventBridge Scheduler                                                                                                  |
-| **Input**           | `{ tenant_id }` — busca todos os eventos com `status = AGUARDANDO_RETORNO`                                                                     |
-| **Output**          | Tabela `esocial_evento` atualizada com resultado (APROVADO, REPROVADO, PENDENTE); eventos `esocial.aprovado` ou `esocial.reprovado` publicados |
-| **Retry policy**    | Sem retry individual (próximo ciclo cron resolve); DLQ `sgp-esocial-consulta-dlq`                                                              |
-| **Idempotency key** | `{tenant_id}#CONSULTA#{timestamp_ciclo}`                                                                                                       |
-| **Timeout**         | 10 min                                                                                                                                         |
-| **Observabilidade** | Log stream `/sgp/esocial-worker/consulta`; métrica `ProtocolosConsultados`                                                                     |
-| **Alertas**         | `ProtocolosPendentes > 100` → SNS alerta operador                                                                                              |
+| Campo               | Valor                                                                                                                                         |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Owner**           | `stynx-esocial`                                                                                                                               |
+| **Trigger**         | Cron `*/15 * * * *` via EventBridge Scheduler                                                                                                 |
+| **Input**           | `{ tenant_id }` — busca todos os eventos com `status = AGUARDANDO_RETORNO`                                                                    |
+| **Output**          | Tabela `esocial_spool` atualizada com resultado (APROVADO, REPROVADO, PENDENTE); eventos `esocial.aprovado` ou `esocial.reprovado` publicados |
+| **Retry policy**    | Sem retry individual (próximo ciclo cron resolve); DLQ `sgp-esocial-consulta-dlq`                                                             |
+| **Idempotency key** | `{tenant_id}#CONSULTA#{timestamp_ciclo}`                                                                                                      |
+| **Timeout**         | 10 min                                                                                                                                        |
+| **Observabilidade** | Log stream `/stynx/esocial/consulta`; métrica `ProtocolosConsultados`                                                                         |
+| **Alertas**         | `ProtocolosPendentes > 100` → SNS alerta operador                                                                                             |
 
 ---
 
@@ -11289,14 +11330,14 @@ Implementado como Step Functions `esocial-envio` — ver §3.3.
 
 | Campo               | Valor                                                                                        |
 | ------------------- | -------------------------------------------------------------------------------------------- |
-| **Owner**           | `sgp-esocial-worker`                                                                         |
+| **Owner**           | `stynx-esocial`                                                                              |
 | **Trigger**         | Manual via `POST /api/admin/v1/esocial/dlq/reenviar`; ou cron semanal `0 6 * * 1`            |
 | **Input**           | `{ tenant_id, evento_ids[] (opcional — se vazio, reprocessa toda DLQ) }`                     |
 | **Output**          | Mensagens movidas da DLQ de volta para `sgp-esocial-envio-queue`; registro em `job_execucao` |
 | **Retry policy**    | Único disparo; reentrada controlada por idempotency key                                      |
 | **Idempotency key** | `{tenant_id}#DLQ_REENVIO#{timestamp}`                                                        |
 | **Timeout**         | 5 min                                                                                        |
-| **Observabilidade** | Log stream `/sgp/esocial-worker/dlq-reenvio`; métrica `DLQMensagensReenviadas`               |
+| **Observabilidade** | Log stream `/stynx/esocial/dlq-reenvio`; métrica `DLQMensagensReenviadas`                    |
 | **Alertas**         | N/A (operação manual)                                                                        |
 
 ---
@@ -11305,14 +11346,14 @@ Implementado como Step Functions `esocial-envio` — ver §3.3.
 
 | Campo               | Valor                                                                                                              |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **Owner**           | `sgp-esocial-worker`                                                                                               |
+| **Owner**           | `stynx-esocial`                                                                                                    |
 | **Trigger**         | Evento `folha.competencia.fechada` → EventBridge → SQS `sgp-esocial-periodico-queue`                               |
 | **Input**           | `{ tenant_id, competencia_id }`                                                                                    |
 | **Output**          | Geração e envio dos eventos S-5001 (IRRF), S-5002 (INSS/RPPS), S-5003 (FGTS); protocolo gravado; arquivo XML em S3 |
 | **Retry policy**    | 3 tentativas; backoff 5/15/30 min; DLQ `sgp-esocial-periodico-dlq`                                                 |
 | **Idempotency key** | `{tenant_id}#{competencia_id}#S5XXX`                                                                               |
 | **Timeout**         | 20 min                                                                                                             |
-| **Observabilidade** | Log stream `/sgp/esocial-worker/periodico`; métrica `EventosPeriodicos`                                            |
+| **Observabilidade** | Log stream `/stynx/esocial/periodico`; métrica `EventosPeriodicos`                                                 |
 | **Alertas**         | DLQ visível > 0 → PagerDuty P1                                                                                     |
 
 ---
@@ -11321,14 +11362,14 @@ Implementado como Step Functions `esocial-envio` — ver §3.3.
 
 | Campo               | Valor                                                                                   |
 | ------------------- | --------------------------------------------------------------------------------------- |
-| **Owner**           | `sgp-esocial-worker`                                                                    |
+| **Owner**           | `stynx-esocial`                                                                         |
 | **Trigger**         | `POST /api/v1/esocial/fechamento/folha` (manual, após validação dos eventos periódicos) |
 | **Input**           | `{ tenant_id, competencia_id, tipo_fechamento: S-1299 }`                                |
 | **Output**          | Evento S-1299 gerado, assinado e enviado; `esocial_competencia.status_folha = FECHADO`  |
 | **Retry policy**    | 3 tentativas; backoff 5/15/30 min; DLQ `sgp-esocial-periodico-dlq`                      |
 | **Idempotency key** | `{tenant_id}#{competencia_id}#S1299`                                                    |
 | **Timeout**         | 15 min                                                                                  |
-| **Observabilidade** | Log stream `/sgp/esocial-worker/fechamento`; métrica `FechamentosS1299`                 |
+| **Observabilidade** | Log stream `/stynx/esocial/fechamento`; métrica `FechamentosS1299`                      |
 | **Alertas**         | DLQ visível > 0 → PagerDuty P1                                                          |
 
 ---
@@ -11337,14 +11378,14 @@ Implementado como Step Functions `esocial-envio` — ver §3.3.
 
 | Campo               | Valor                                                                                |
 | ------------------- | ------------------------------------------------------------------------------------ |
-| **Owner**           | `sgp-esocial-worker`                                                                 |
+| **Owner**           | `stynx-esocial`                                                                      |
 | **Trigger**         | Evento `funcionario.desligado` → EventBridge → SQS `sgp-esocial-envio-queue`         |
 | **Input**           | `{ tenant_id, funcionario_id, vinculo_id, competencia_id, tipo_fechamento: S-2299 }` |
-| **Output**          | Evento S-2299 gerado, assinado e enviado; `esocial_evento.status = ENVIADO`          |
+| **Output**          | Evento S-2299 gerado, assinado e enviado; `esocial_spool.status = ENVIADO`           |
 | **Retry policy**    | 3 tentativas; backoff 2/8/30 min; DLQ `sgp-esocial-dlq`                              |
 | **Idempotency key** | `{tenant_id}#{funcionario_id}#{vinculo_id}#S2299`                                    |
 | **Timeout**         | 10 min                                                                               |
-| **Observabilidade** | Log stream `/sgp/esocial-worker/s2299`; métrica `EventosS2299`                       |
+| **Observabilidade** | Log stream `/stynx/esocial/s2299`; métrica `EventosS2299`                            |
 | **Alertas**         | DLQ visível > 0 → PagerDuty P1                                                       |
 
 ---
@@ -11505,14 +11546,14 @@ Implementado como Step Functions `esocial-envio` — ver §3.3.
 
 | Campo               | Valor                                                                                                                                                                                  |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Owner**           | `sgp-esocial-worker`                                                                                                                                                                   |
+| **Owner**           | `stynx-esocial`                                                                                                                                                                        |
 | **Trigger**         | Eventos de domínio: `acidente_trabalho.registrado` → S-2210; `licenca_medica.emitida` → S-2220; `condicao_ambiental.alterada` → S-2240 — via EventBridge → SQS `sgp-esocial-sst-queue` |
 | **Input**           | `{ tenant_id, entidade_id, tipo_evento, dados_sst }`                                                                                                                                   |
 | **Output**          | Evento eSocial gerado, assinado e enviado; protocolo gravado                                                                                                                           |
 | **Retry policy**    | 3 tentativas; backoff 2/8/30 min; DLQ `sgp-esocial-sst-dlq`                                                                                                                            |
 | **Idempotency key** | `{tenant_id}#{entidade_id}#{tipo_evento}`                                                                                                                                              |
 | **Timeout**         | 10 min                                                                                                                                                                                 |
-| **Observabilidade** | Log stream `/sgp/esocial-worker/sst`; métrica `EventosSSTEnviados`                                                                                                                     |
+| **Observabilidade** | Log stream `/stynx/esocial/sst`; métrica `EventosSSTEnviados`                                                                                                                          |
 | **Alertas**         | DLQ visível > 0 → PagerDuty P2                                                                                                                                                         |
 
 ---
@@ -11937,7 +11978,7 @@ sequenceDiagram
     SF->>Lambda_Assina: Buscar XML draft do S3
     Lambda_Assina->>Lambda_Assina: Validar XSD leiaute S-1.2
     alt XSD inválido
-        Lambda_Assina->>DB: esocial_evento.status = ERRO_VALIDACAO
+        Lambda_Assina->>DB: esocial_spool.status = ERRO_VALIDACAO
         Lambda_Assina->>SNS: Notificar operador
         SF->>SF: Fail
     else XSD válido
@@ -11945,7 +11986,7 @@ sequenceDiagram
         Lambda_Assina->>SF: XML assinado (S3 key)
         SF->>WS: EnviarLoteEventos (SOAP)
         WS-->>SF: protocolo_envio
-        SF->>DB: esocial_evento.status = AGUARDANDO_RETORNO\n         protocolo = ...
+        SF->>DB: esocial_spool.status = AGUARDANDO_RETORNO\n         protocolo = ...
         SF->>SF: Wait (callback / waitForTaskToken)
         Note over SF: Aguarda até 30min (poll a cada 15min)
         loop Poll de resultado (até 3x)
@@ -11956,14 +11997,14 @@ sequenceDiagram
             end
         end
         alt PROCESSADO (aprovado)
-            SF->>DB: esocial_evento.status = APROVADO
+            SF->>DB: esocial_spool.status = APROVADO
             SF->>SF: Success
         else PROCESSADO (reprovado)
-            SF->>DB: esocial_evento.status = REPROVADO\n         descricao_erro = ...
+            SF->>DB: esocial_spool.status = REPROVADO\n         descricao_erro = ...
             SF->>SNS: Notificar operador (detalhe do erro)
             SF->>SF: Fail
         else Timeout
-            SF->>DB: esocial_evento.status = TIMEOUT_CONSULTA
+            SF->>DB: esocial_spool.status = TIMEOUT_CONSULTA
             SF->>SNS: Alerta P1 — consulta sem retorno
             SF->>SF: Fail
         end
@@ -11992,10 +12033,10 @@ sequenceDiagram
 | `sgp-dirf-queue`                  | `sgp-dirf-dlq`                  | 3                 | 45 min             | 30 dias      | 45 min               | `sgp-integrations-worker` |
 | `sgp-gfip-queue`                  | `sgp-gfip-dlq`                  | 3                 | 15 min             | 14 dias      | 15 min               | `sgp-integrations-worker` |
 | `sgp-siprev-queue`                | `sgp-siprev-dlq`                | 3                 | 20 min             | 14 dias      | 20 min               | `sgp-integrations-worker` |
-| `sgp-esocial-envio-queue`         | `sgp-esocial-dlq`               | 3                 | 5 min              | 14 dias      | 5 min/evento         | `sgp-esocial-worker`      |
-| `sgp-esocial-periodico-queue`     | `sgp-esocial-periodico-dlq`     | 3                 | 20 min             | 14 dias      | 20 min               | `sgp-esocial-worker`      |
-| `sgp-esocial-sst-queue`           | `sgp-esocial-sst-dlq`           | 3                 | 10 min             | 14 dias      | 10 min               | `sgp-esocial-worker`      |
-| `sgp-esocial-consulta-queue`      | `sgp-esocial-consulta-dlq`      | 1                 | 10 min             | 7 dias       | —                    | `sgp-esocial-worker`      |
+| `sgp-esocial-envio-queue`         | `sgp-esocial-dlq`               | 3                 | 5 min              | 14 dias      | 5 min/evento         | `stynx-esocial`           |
+| `sgp-esocial-periodico-queue`     | `sgp-esocial-periodico-dlq`     | 3                 | 20 min             | 14 dias      | 20 min               | `stynx-esocial`           |
+| `sgp-esocial-sst-queue`           | `sgp-esocial-sst-dlq`           | 3                 | 10 min             | 14 dias      | 10 min               | `stynx-esocial`           |
+| `sgp-esocial-consulta-queue`      | `sgp-esocial-consulta-dlq`      | 1                 | 10 min             | 7 dias       | —                    | `stynx-esocial`           |
 | `sgp-previdenciario-queue`        | `sgp-previdenciario-dlq`        | 2                 | 5 min              | 14 dias      | 5 min                | `sgp-core-api`            |
 | `sgp-pensao-queue`                | `sgp-pensao-dlq`                | 3                 | 5 min              | 14 dias      | 5 min                | `sgp-payroll-engine`      |
 | `sgp-recadastramento-queue`       | `sgp-recadastramento-dlq`       | 3                 | 15 min             | 14 dias      | 15 min               | `sgp-core-api`            |
@@ -12156,7 +12197,7 @@ aws cloudwatch put-metric-alarm \
 | Grupo          | Filtro                                           | Propósito                                         |
 | -------------- | ------------------------------------------------ | ------------------------------------------------- |
 | `payroll`      | `annotation.service = "sgp-payroll-engine"`      | Rastrear tempo de cálculo por lote e contracheque |
-| `esocial`      | `annotation.service = "sgp-esocial-worker"`      | Rastrear latência de envio/retorno eSocial        |
+| `esocial`      | `annotation.service = "stynx-esocial"`           | Rastrear latência de envio/retorno eSocial        |
 | `integrations` | `annotation.service = "sgp-integrations-worker"` | Rastrear geração de arquivos (CNAB, DIRF, SIPREV) |
 | `http-jobs`    | `annotation.job_id EXISTS`                       | Rastrear jobs background iniciados por HTTP       |
 
@@ -12202,12 +12243,12 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A([Alerta: DLQ esocial com mensagens\nou eventos pendentes acumulando]) --> B[Verificar log /sgp/esocial-worker/envio]
+    A([Alerta: DLQ esocial com mensagens\nou eventos pendentes acumulando]) --> B[Verificar log /stynx/esocial/envio]
     B --> C{Tipo de erro?}
     C -- XSD inválido --> D[Identificar evento e tipo\nrever dados de origem no módulo correspondente\nCorrigir na fonte]
     C -- Certificado expirado --> E[🔴 EMERGÊNCIA\nRenovar certificado A1 no eSocial gov\nAtualizar s3_key em ParametroSistema\nReinjectar segredo no Secrets Manager]
     C -- Timeout/HTTP503 --> F[Verificar status do WebService eSocial\nhttps://esocial.fazenda.gov.br/Esocial/\nAguardar ou reenviar após janela]
-    C -- REPROVADO pelo eSocial --> G[Ler descrição_erro no esocial_evento\nIdentificar código de erro RFB\nCorrigir dados e gerar novo evento]
+    C -- REPROVADO pelo eSocial --> G[Ler descrição_erro no esocial_spool\nIdentificar código de erro RFB\nCorrigir dados e gerar novo evento]
     D --> H[Corrigir evento na origem\nGerir reenvio via POST /api/admin/v1/esocial/dlq/reenviar]
     E --> H
     F --> H
@@ -12219,7 +12260,7 @@ flowchart TD
 
 **Ações rápidas:**
 
-1. `SELECT id, tipo_evento, status, descricao_erro FROM esocial_evento WHERE tenant_id = '...' AND status IN ('ERRO', 'REPROVADO', 'TIMEOUT_CONSULTA') ORDER BY updated_at DESC LIMIT 20;`
+1. `SELECT id, tipo_evento, status, descricao_erro FROM esocial_spool WHERE tenant_id = '...' AND status IN ('ERRO', 'REPROVADO', 'TIMEOUT_CONSULTA') ORDER BY updated_at DESC LIMIT 20;`
 2. Verificar validade do certificado: `SELECT valor FROM parametro_sistema WHERE chave = 'esocial_certificado_validade' AND tenant_id = '...';`
 3. Reenvio manual da DLQ: `POST /api/admin/v1/esocial/dlq/reenviar { "tenant_id": "...", "evento_ids": ["..."] }`
 
@@ -12305,7 +12346,7 @@ flowchart TD
     A([S-1299 não enviado\nou reprovado]) --> B[Verificar pré-condições:\nTodos os eventos S-5001/S-5002/S-5003\nestão APROVADOS?]
     B --> C{Pré-condições?}
     C -- Eventos periódicos pendentes --> D[Aguardar aprovação dos eventos S-5xxx\nou resolver DLQ sgp-esocial-periodico-dlq]
-    C -- Todos aprovados --> E[Verificar esocial_evento\nwhere tipo = S-1299 e status]
+    C -- Todos aprovados --> E[Verificar esocial_spool\nwhere tipo = S-1299 e status]
     E --> F{Status S-1299?}
     F -- ERRO_VALIDACAO --> G[Ler descricao_erro\nverificar totalizadores contra\nvalores da folha]
     F -- REPROVADO --> H[Identificar código de erro RFB\nno portal do empregador eSocial\ncorrigir e reenviar]
@@ -12323,7 +12364,7 @@ flowchart TD
 
 **Ações rápidas:**
 
-1. `SELECT tipo_evento, status, protocolo, descricao_erro FROM esocial_evento WHERE tenant_id = '...' AND competencia_id = '...' AND tipo_evento IN ('S-5001','S-5002','S-5003','S-1299') ORDER BY tipo_evento;`
+1. `SELECT tipo_evento, status, protocolo, descricao_erro FROM esocial_spool WHERE tenant_id = '...' AND competencia_id = '...' AND tipo_evento IN ('S-5001','S-5002','S-5003','S-1299') ORDER BY tipo_evento;`
 2. Verificar se o cron de consulta está ativo: console EventBridge → Rules → `sgp-esocial-consulta-cron`.
 3. Contato suporte eSocial: https://www.gov.br/esocial/pt-br/canais_atendimento — informar CNPJ do empregador e número do protocolo.
 
@@ -14302,7 +14343,7 @@ Eventos implementados (S-1.2):
 **Arquitetura de envio**:
 
 - Lambda de geração XML → Step Function `esocial-envio` → assinatura A1/A3 via KMS → WebService SOAP → poll de status → gravação de recibo.
-- Fila SQS `esocial.evento.pendente` com retry até 3, backoff exponencial.
+- Fila SQS `public.esocial_spool` com retry até 3, backoff exponencial.
 - Certificado digital A1 armazenado cifrado no S3 + Secrets Manager para senha.
 
 **Plano para S-1.3**:
@@ -14341,7 +14382,7 @@ Eventos implementados (S-1.2):
 
 - BRIEF.md §2, decisão #7 — eSocial apenas S-1.2.
 - BRIEF.md §6 — Tabela de integrações externas (eSocial).
-- BRIEF.md §8 — Fila SQS `esocial.evento.pendente`, Step Function `esocial-envio`.
+- BRIEF.md §8 — Fila SQS `public.esocial_spool`, Step Function `esocial-envio`.
 
 ---
 
@@ -14693,7 +14734,7 @@ Runtimes NestJS são entrypoints dentro de `backend/src/`:
 - `main.ts` para `sgp-core-api`;
 - `main-portal.ts` para `sgp-portal-api`;
 - `main-payroll-engine.ts` para `sgp-payroll-engine`;
-- `main-esocial-worker.ts` para `sgp-esocial-worker`;
+- `stynx-esocial service` para `stynx-esocial`;
 - `main-integrations-worker.ts` para `sgp-integrations-worker`;
 - `main-report-worker.ts` para `sgp-report-worker`;
 - `main-report-service.ts` para `sgp-report-service`.
@@ -14837,7 +14878,7 @@ Esses processos precisam de: filas com dead-letter queue, retry com backoff, orq
 - `folha.calculo.solicitada` (padrão, visibilidade 30min, DLQ após 3 tentativas).
 - `folha.calculo.concluida` (padrão).
 - `contracheque.gerar.pdf` (padrão, visibilidade 10min).
-- `esocial.evento.pendente` (FIFO por evento para garantir ordem dentro do mesmo empregador, DLQ após 3 tentativas com backoff exponencial).
+- `public.esocial_spool` (FIFO por evento para garantir ordem dentro do mesmo empregador, DLQ após 3 tentativas com backoff exponencial).
 - `remessa.gerar` / `retorno.processar` (padrão).
 - `audit.evento.criado` (padrão, high throughput, DLQ).
 
@@ -14990,7 +15031,7 @@ O SGP expõe APIs consumidas por:
 
 1. **Frontend interno** (`sgp-admin`, `sgp-portal-ui`) — controlado pelo time SGP, pode ser atualizado junto com a API.
 2. **Sistemas externos de tenants** (prefeituras, consignatárias, portais de transparência) — integrados via `ROLE_EXTERNAL_SYSTEM`; atualizações são custosas e exigem coordenação com o cliente.
-3. **Integrações próprias** (`sgp-payroll-engine`, `sgp-esocial-worker`) — controladas pelo time SGP, mas comunicação via contratos explícitos.
+3. **Integrações próprias** (`sgp-payroll-engine`, `stynx-esocial`) — controladas pelo time SGP, mas comunicação via contratos explícitos.
 
 Breaking changes sem versionamento adequado causam: falhas silenciosas em sistemas de terceiros, janelas de manutenção emergenciais, erosão de confiança dos clientes. O SGP legado não tinha política formal de API — mudanças eram feitas sem comunicação antecipada.
 
@@ -15202,7 +15243,7 @@ Esta política é obrigatória para cálculo de folha, rubricas, rescisão, cach
 
 ### Tipos
 
-- Valores monetários unitários usam `numeric(14,2)` no PostgreSQL e `Decimal @db.Decimal(14, 2)` no Prisma.
+- Valores monetários unitários usam `numeric(14,2)` no PostgreSQL e `Decimal` no runtime TypeScript.
 - Agregados de folha usam `numeric(16,2)` / `Decimal(16, 2)`.
 - Alíquotas, percentuais legais e fatores usam `numeric(18,6)` / `Decimal(18, 6)`.
 - Código TypeScript de cálculo deve usar `Decimal` por meio de `backend/src/common/money/money.ts`; valores monetários não podem ser calculados com `Float`, `Int`, `number` como representação persistente, nem `Math.round`.

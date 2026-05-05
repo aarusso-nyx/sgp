@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface MedicalLeave {
   id: string;
@@ -82,9 +83,9 @@ export class SaudePericia {
       );
       this.appointments = [appointment, ...this.appointments];
       this.opinionForm.patchValue({ appointmentId: appointment.appointment_id });
-      this.message = 'Agendamento registrado.';
+      this.message = SGP_FEATURE_I18N_MESSAGES.m228;
     } catch {
-      this.error = 'Nao foi possivel registrar o agendamento.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m229;
     } finally {
       this.saving = false;
     }
@@ -108,14 +109,14 @@ export class SaudePericia {
           },
         ),
       );
-      this.message = 'Parecer pericial registrado.';
+      this.message = SGP_FEATURE_I18N_MESSAGES.m230;
       const employeeId = String(this.scheduleForm.value['employeeId'] || '').trim();
       if (employeeId) {
         this.lookupForm.patchValue({ employeeId });
         await this.loadLeaves();
       }
     } catch {
-      this.error = 'Nao foi possivel registrar o parecer.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m231;
     } finally {
       this.saving = false;
     }
@@ -134,7 +135,7 @@ export class SaudePericia {
         this.api.get<MedicalLeave[]>(`v1/licencas/saude/${employeeId}`),
       );
     } catch {
-      this.error = 'Nao foi possivel carregar as licencas de saude.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m232;
     } finally {
       this.loading = false;
     }

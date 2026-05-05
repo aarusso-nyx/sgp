@@ -7,6 +7,7 @@ import {
   HourBankMovement,
   PontoBancoHorasService,
 } from '../../../ponto/banco-horas/ponto-banco-horas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,7 +36,7 @@ export class PortalBancoHoras implements OnInit {
         ? (await firstValueFrom(this.service.movements(this.bank.hourBankId))).slice(0, 90)
         : [];
     } catch {
-      this.error = 'Nao foi possivel carregar o banco de horas.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m151;
     }
   }
 }

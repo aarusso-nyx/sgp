@@ -3,6 +3,7 @@ import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { RhEmployeeRecord, RhStatusHistoryRecord, RhWorkflows } from '../../services/rh-workflows';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 type ContractType = 'statutory' | 'celetista' | 'commissioned' | 'temporary';
 
@@ -76,7 +77,7 @@ export class RhFuncionariosVinculos implements OnInit, OnDestroy {
           }
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar os servidores.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m172;
         },
       });
   }
@@ -121,7 +122,7 @@ export class RhFuncionariosVinculos implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Alteracao de regime registrada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m182;
           this.regimeForm.patchValue({
             endDate: '',
             commissionPositionId: '',
@@ -132,7 +133,7 @@ export class RhFuncionariosVinculos implements OnInit, OnDestroy {
           if (this.selected) this.select(this.selected);
         },
         error: () => {
-          this.error = 'Nao foi possivel alterar o regime juridico.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m183;
         },
       });
   }

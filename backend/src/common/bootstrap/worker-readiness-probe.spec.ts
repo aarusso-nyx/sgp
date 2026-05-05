@@ -5,8 +5,8 @@ import { startWorkerReadinessProbe } from './worker-readiness-probe';
 describe('worker readiness probe', () => {
   it('serves a JSON readiness response for worker entrypoints', async () => {
     const probe = await startWorkerReadinessProbe({
-      workerName: 'sgp-esocial-worker',
-      portEnv: 'ESOCIAL_WORKER_READY_PORT',
+      workerName: 'sgp-integrations-worker',
+      portEnv: 'INTEGRATIONS_WORKER_READY_PORT',
       defaultPort: 0,
       enabledInTests: true,
       port: 0,
@@ -17,7 +17,7 @@ describe('worker readiness probe', () => {
       expect(JSON.parse(body)).toEqual(
         expect.objectContaining({
           status: 'ready',
-          worker: 'sgp-esocial-worker',
+          worker: 'sgp-integrations-worker',
         }),
       );
     } finally {

@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { FgtsRemessasService, FgtsRemittance } from './fgts-remessas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,7 +39,7 @@ export class FgtsRemessas {
     this.errorMessage = '';
     this.service.generateMonthly(this.form.controls.competence.value).subscribe({
       next: (remittance) => this.setRemittance(remittance),
-      error: (error: unknown) => this.setError(error, 'Nao foi possivel gerar a GRF.'),
+      error: (error: unknown) => this.setError(error, SGP_FEATURE_I18N_MESSAGES.m045),
     });
   }
 
@@ -54,7 +55,7 @@ export class FgtsRemessas {
     this.errorMessage = '';
     this.service.generateTermination({ employmentLinkId, terminationId }).subscribe({
       next: (remittance) => this.setRemittance(remittance),
-      error: (error: unknown) => this.setError(error, 'Nao foi possivel gerar a GRRF.'),
+      error: (error: unknown) => this.setError(error, SGP_FEATURE_I18N_MESSAGES.m046),
     });
   }
 
@@ -68,7 +69,7 @@ export class FgtsRemessas {
     this.errorMessage = '';
     this.service.find(id).subscribe({
       next: (remittance) => this.setRemittance(remittance),
-      error: (error: unknown) => this.setError(error, 'Nao foi possivel carregar a remessa.'),
+      error: (error: unknown) => this.setError(error, SGP_FEATURE_I18N_MESSAGES.m047),
     });
   }
 

@@ -44,7 +44,7 @@ describe('Prometheus metrics registry', () => {
 
   it('exports Prometheus text for domain metric extension points', () => {
     recordQueueDepth('esocial-submissions', 7);
-    recordWorkerActiveClaims('sgp-esocial-worker', 2);
+    recordWorkerActiveClaims('sgp-integrations-worker', 2);
     recordAuditEvent('PayrollController', '/api/payroll/runs/:id');
     recordEsocialSubmission('accepted', 'S-1200');
     recordDctfwebTransmission('sent');
@@ -55,7 +55,7 @@ describe('Prometheus metrics registry', () => {
 
     expect(metrics).toContain('sgp_queue_depth{queue="esocial-submissions"} 7');
     expect(metrics).toContain(
-      'sgp_worker_active_claims{worker="sgp-esocial-worker"} 2',
+      'sgp_worker_active_claims{worker="sgp-integrations-worker"} 2',
     );
     expect(metrics).toContain(
       'sgp_audit_events_emitted_total{controller="PayrollController",route="/api/payroll/runs/:id"} 1',

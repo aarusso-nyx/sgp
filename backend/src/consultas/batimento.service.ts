@@ -111,15 +111,17 @@ export class BatimentoService {
       ),
       esocial_totals AS (
         SELECT
-          coalesce(sum(NULLIF(totalizer.payload->>'seguradoContributionTotal', '')::numeric) FILTER (
-            WHERE totalizer.kind IN ('S-5001'::esocial.esocial_totalizer_kind, 'S-5011'::esocial.esocial_totalizer_kind)
+          coalesce(sum(NULLIF((COALESCE(totalizer.response->'payload', totalizer.response, totalizer.payload))->>'seguradoContributionTotal', '')::numeric) FILTER (
+            WHERE totalizer.event_class IN ('S-5001', 'S-5011')
           ), 0)::numeric(16, 2) AS social_security,
-          coalesce(sum(NULLIF(totalizer.payload->>'irrfTotal', '')::numeric) FILTER (
-            WHERE totalizer.kind IN ('S-5002'::esocial.esocial_totalizer_kind, 'S-5012'::esocial.esocial_totalizer_kind)
+          coalesce(sum(NULLIF((COALESCE(totalizer.response->'payload', totalizer.response, totalizer.payload))->>'irrfTotal', '')::numeric) FILTER (
+            WHERE totalizer.event_class IN ('S-5002', 'S-5012')
           ), 0)::numeric(16, 2) AS irrf
         FROM run
-        LEFT JOIN esocial.esocial_totalizer totalizer
-          ON totalizer.competence = make_date(run.competence_year, run.competence_month, 1)
+        LEFT JOIN public.esocial_spool totalizer
+          ON totalizer.tenant_id = run.tenant_id
+         AND COALESCE(totalizer.source_ref->>'competence', totalizer.payload->>'competence') = make_date(run.competence_year, run.competence_month, 1)::text
+         AND totalizer.status = 'ACCEPTED'::public.esocial_spool_status
       )
       SELECT metric, source_total::text, recomputed_total::text, difference::text
       FROM (

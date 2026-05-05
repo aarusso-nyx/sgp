@@ -73,14 +73,14 @@ export type QueueSubscription = Readonly<{
   unsubscribe: () => void;
 }>;
 
-export type QueueAdapterTransport = {
+export interface QueueAdapterTransport {
   publish<TMessage>(topic: string, message: TMessage): Promise<void>;
   subscribe<TMessage>(
     topic: string,
     handler: QueueMessageHandler<TMessage>,
     options?: { concurrency?: number },
   ): QueueSubscription;
-};
+}
 
 export type QueueAdapterObservability<TKind extends string> = Readonly<{
   onRequestPublished?: (
@@ -109,6 +109,9 @@ export type QueueAdapterRequestInput<TPayload> = Readonly<{
   correlationId?: string;
   requestId?: string;
   maxAttempts?: number;
+  onPublished?: (
+    request: QueueAdapterRequestEnvelope<string, TPayload>,
+  ) => void | Promise<void>;
 }>;
 
 export type SgpQueueAdapterOptions<TKind extends string> = Readonly<{
@@ -289,6 +292,9 @@ export class SgpQueueAdapter<TKind extends string> {
     });
 
     await this.publishRequest(request);
+    await input.onPublished?.(
+      request as QueueAdapterRequestEnvelope<string, TPayload>,
+    );
     return responsePromise as Promise<
       QueueAdapterResponseEnvelope<TKind, TResponse>
     >;
@@ -332,8 +338,8 @@ export class SgpQueueAdapter<TKind extends string> {
   private async publishRequest(
     request: QueueAdapterRequestEnvelope<TKind, unknown>,
   ): Promise<void> {
-    this.observability?.onRequestPublished?.(request, this.topics);
     await this.transport.publish(this.topics.request, request);
+    this.observability?.onRequestPublished?.(request, this.topics);
   }
 
   private handleResponse(

@@ -10,6 +10,7 @@ import {
   FeatureFlagsController,
   SystemParametersController,
 } from './system-parameters.controller';
+import { EsocialQueueTransportFlag } from './esocial-queue-transport-flag';
 import { SystemParametersService } from './system-parameters.service';
 import {
   RppsTaxRateController,
@@ -29,9 +30,11 @@ import { TaxRateService } from './tax-rate/tax-rate.service';
   ],
   providers: [
     SystemParametersService,
+    EsocialQueueTransportFlag,
     AdminMenusService,
     AdminPlatformService,
     TaxRateService,
   ],
+  exports: [SystemParametersService, EsocialQueueTransportFlag],
 })
 export class SystemParametersModule {}

@@ -8,12 +8,6 @@ import {
 
 const workerSchedules: WorkerPollScheduleOptions[] = [
   {
-    workerName: 'sgp-esocial-worker',
-    pollIntervalEnv: 'ESOCIAL_WORKER_POLL_MS',
-    pollLimitEnv: 'ESOCIAL_WORKER_POLL_LIMIT',
-    oneshotEnv: 'ESOCIAL_WORKER_ONESHOT',
-  },
-  {
     workerName: 'sgp-integrations-worker',
     pollIntervalEnv: 'INTEGRATIONS_WORKER_POLL_MS',
     pollLimitEnv: 'INTEGRATIONS_WORKER_POLL_LIMIT',

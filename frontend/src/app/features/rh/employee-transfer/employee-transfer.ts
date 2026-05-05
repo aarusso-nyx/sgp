@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface EmployeeTransfer {
   id: string;
@@ -63,7 +64,7 @@ export class RhEmployeeTransfer implements OnInit, OnDestroy {
           }
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar as movimentacoes.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m162;
         },
       });
   }
@@ -99,7 +100,7 @@ export class RhEmployeeTransfer implements OnInit, OnDestroy {
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel atualizar a movimentacao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m163;
         },
       });
   }

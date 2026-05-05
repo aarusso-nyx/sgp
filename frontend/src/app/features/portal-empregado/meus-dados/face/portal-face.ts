@@ -3,6 +3,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 
 import { FaceAdminService } from '../../../ponto/face-admin/face-admin.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,7 +37,7 @@ export class PortalFace {
         this.status = status as Record<string, unknown>;
       },
       error: () => {
-        this.error = 'Nao foi possivel carregar o status facial.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m136;
       },
     });
   }
@@ -51,12 +52,12 @@ export class PortalFace {
     this.service.withdraw(this.form.value.employeeId).subscribe({
       next: () => {
         this.saving = false;
-        this.message = 'Solicitacao de exclusao registrada.';
+        this.message = SGP_FEATURE_I18N_MESSAGES.m137;
         this.load();
       },
       error: () => {
         this.saving = false;
-        this.error = 'Nao foi possivel registrar a exclusao.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m138;
       },
     });
   }

@@ -7,6 +7,7 @@ import {
   ESocialReturnStatus,
   ESocialRetornosService,
 } from './esocial-retornos.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +42,7 @@ export class ESocialRetornos implements OnInit {
         failures[0] ??
         null;
     } catch {
-      this.error = 'Nao foi possivel carregar os retornos.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m032;
     } finally {
       this.loading = false;
     }
@@ -58,7 +59,7 @@ export class ESocialRetornos implements OnInit {
       await firstValueFrom(this.service.forceRetry(failure.eventId));
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel forcar o retry.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m033;
     } finally {
       this.actionEventId = '';
     }
@@ -71,7 +72,7 @@ export class ESocialRetornos implements OnInit {
       await firstValueFrom(this.service.markHandled(failure.eventId));
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel marcar como tratado.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m034;
     } finally {
       this.actionEventId = '';
     }

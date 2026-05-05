@@ -19,6 +19,24 @@ Authored domain authority for folia-first payroll, benefits, FGTS, CNAB, payslip
 - Portabilidade de consignados
 - ADR 92 — Contracheque oficial PDF/A-1b
 
+## Regulatory References Cross-Reference
+
+This table maps payroll and benefits obligation references to the current SGP
+implementation or retained decision evidence. Cached references under
+`docs/refs/**` are evidence anchors; behavior authority remains in this file and
+the executable code/tests.
+
+| Reference                                          | Obligation cluster                             | Implementation / evidence path:line                                               | Current posture                                                  |
+| -------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `docs/refs/legal/clt-rescisao-aviso-fgts.md`       | CLT termination, proportional notice, and FGTS | backend/src/folha-pagamento/rescisao/rescisao.service.ts:1                        | Implemented termination, notice, and FGTS calculation surfaces.  |
+| `docs/refs/legal/consignacoes-margem-lei-14509.md` | Consignment margin caps                        | backend/src/folha-pagamento/operations/consignment/margin-calculator.service.ts:1 | Implemented margin calculator golden coverage.                   |
+| `docs/refs/legal/decimo-terceiro-ferias.md`        | 13th salary, vacation payroll, and allowances  | backend/src/folha-pagamento/payroll/decimo-terceiro.service.ts:1                  | Implemented payroll calculation and vacation golden surfaces.    |
+| `docs/refs/legal/ec-103-previdencia.md`            | EC 103/2019 transition rules                   | backend/src/previdenciario/previdenciario.service.ts:1                            | Implemented pension and retirement-rule service surface.         |
+| `docs/refs/legal/pensao-alimenticia.md`            | Alimony deductions                             | backend/src/folha-pagamento/operations/alimony/alimony.service.ts:1               | Implemented employee alimony management and payroll integration. |
+| `docs/refs/legal/previdenciario-irrf.md`           | Previdenciario and IRRF calculation facts      | backend/src/previdenciario/declaracao/declaracao.service.ts:1                     | Implemented declaration/calculation surfaces.                    |
+| `docs/refs/legal/rpps-vs-rgps.md`                  | RPPS/RGPS regime distinction                   | backend/src/previdenciario/regras/regras.service.ts:1                             | Implemented pension-rule service surface.                        |
+| `docs/refs/legal/teto-acumulacao.md`               | Remuneration ceiling and lawful accumulation   | backend/src/rh/employees/accumulation.service.ts:1                                | Implemented CF art. 37 XVI compatibility matrix.                 |
+
 ## Folia Payroll Engine Reconciliation
 
 ## Folia Payroll Engine Reconciliation
@@ -188,7 +206,7 @@ O programa e derivado do regime juridico atual do vinculo em `hr.employment_link
 
 ### Recomposicao
 
-`payment.recompute_pis_pasep_base(tenant_id, employee_id, year_base)` recompõe o ano inteiro a partir dos S-1200 publicados. A funcao soma, por competencia, os itens de folha do empregado cujo `payroll_run` possui `esocial.s1200_emission_state` e evento `public.esocial_event` S-1200 nao excluido.
+`payment.recompute_pis_pasep_base(tenant_id, employee_id, year_base)` recompõe o ano inteiro a partir dos S-1200 publicados. A funcao soma, por competencia, os itens de folha do empregado cujo `payroll_run` possui `public.esocial_spool` e evento `public.esocial_spool` S-1200 nao excluido.
 
 Rubricas com `incidences.codIncPisPasep` ou equivalentes `pisPasep`/`pis_pasep` controlam a inclusao. Valores `00`, `0`, `false`, `none` e `nao_base` excluem a rubrica; valores `11`, `12`, `base`, `monthly` e `mensal` incluem. Na ausencia de classificacao explicita, rubricas `EARNING` e `BASE` entram na base para manter a folha publicada conferivel ate a classificacao refinada no S-1010.
 
@@ -196,7 +214,7 @@ O resultado persistido contem `monthly_base` como mapa de meses `01` a `12`, `to
 
 ### Integracao eSocial
 
-S-1010 passa a expor `codIncPisPasep` conforme a classificacao da rubrica, mantendo `00` para rubricas excluidas da base. A publicacao de S-1200 chama a recomposicao anual apos gravar `esocial.s1200_emission_state`.
+S-1010 passa a expor `codIncPisPasep` conforme a classificacao da rubrica, mantendo `00` para rubricas excluidas da base. A publicacao de S-1200 chama a recomposicao anual apos gravar `public.esocial_spool`.
 
 A aceitacao de S-3000 marca o evento alvo como `EXCLUIDO` e aciona recomposicao para o empregado/ano do S-1200 excluido. Como a funcao recompõe o ano completo, retroativos, reemissoes e reclassificacoes de rubrica ficam idempotentes: a linha anual e atualizada em vez de acumulada incrementalmente.
 
@@ -647,3 +665,8 @@ esta armazenado no repositorio. Se um owner fornecer o template legado de
 `/api/importadorVerbasFuncionario/template`, a comparacao byte-a-byte deve ser
 registrada como novo evento de governanca antes de qualquer afirmacao de
 compatibilidade de template legado.
+
+Owner decision R5-16b (2026-05-04) waives legacy XLSX byte-parity for v0.0.1.
+F-FOL-007, F-FOL-008 and F-FOL-009 therefore remain capped at maturity 3 by
+design: the structural goldens are the accepted SGP regression contract, and the
+legacy template presentation layout is not a compatibility target.

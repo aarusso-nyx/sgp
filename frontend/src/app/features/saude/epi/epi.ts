@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { firstValueFrom, forkJoin } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface EpiInventory {
   id: string;
@@ -90,7 +91,7 @@ export class SaudeEpi implements OnInit {
       await firstValueFrom(this.api.post<unknown, Record<string, unknown>>(path, payload));
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel salvar o EPI.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m226;
     } finally {
       this.saving = false;
     }

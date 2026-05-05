@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { RhCareerHistoryEvent, RhWorkflows } from '../../services/rh-workflows';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,7 +56,7 @@ export class RhFuncionariosHistorico implements OnInit, OnDestroy {
           this.events = events;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar o historico funcional.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m181;
         },
       });
   }

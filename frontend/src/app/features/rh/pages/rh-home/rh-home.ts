@@ -20,6 +20,7 @@ import {
   RhWorkflowRecord,
   RhWorkflows,
 } from '../../services/rh-workflows';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 type RhFieldType = 'text' | 'textarea' | 'date' | 'number' | 'checkbox';
 type RhMode = 'employees' | 'workflow';
@@ -54,7 +55,7 @@ const EMPLOYEE_ID_FIELD: RhField = {
   label: 'Funcionario',
   type: 'text',
   required: true,
-  placeholder: 'UUID do funcionario',
+  placeholder: SGP_FEATURE_I18N_MESSAGES.m187,
 };
 
 const RH_CONFIGS: RhWorkflowUiConfig[] = [
@@ -90,7 +91,7 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     { key: 'cpf', label: 'CPF', type: 'text', maxLength: 14 },
     { key: 'relationship', label: 'Parentesco', type: 'text', required: true, maxLength: 120 },
     { key: 'birthDate', label: 'Nascimento', type: 'date' },
-    { key: 'incomeTaxDependent', label: 'Dependente IR', type: 'checkbox' },
+    { key: 'incomeTaxDependent', label: SGP_FEATURE_I18N_MESSAGES.m188, type: 'checkbox' },
   ]),
   workflowConfig(
     'experienciaProfissional',
@@ -100,7 +101,7 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     [
       EMPLOYEE_ID_FIELD,
       { key: 'employer', label: 'Empregador', type: 'text', required: true, maxLength: 180 },
-      { key: 'roleTitle', label: 'Cargo/Função', type: 'text', maxLength: 120 },
+      { key: 'roleTitle', label: SGP_FEATURE_I18N_MESSAGES.m189, type: 'text', maxLength: 120 },
       { key: 'startsOn', label: 'Inicio', type: 'date' },
       { key: 'endsOn', label: 'Fim', type: 'date' },
       { key: 'notes', label: 'Descricao', type: 'textarea', maxLength: 500 },
@@ -113,7 +114,12 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     '#!/historicoSituacaoFuncional/gestao',
     [
       EMPLOYEE_ID_FIELD,
-      { key: 'functionalStatusId', label: 'Situacao funcional', type: 'text', required: true },
+      {
+        key: 'functionalStatusId',
+        label: SGP_FEATURE_I18N_MESSAGES.m190,
+        type: 'text',
+        required: true,
+      },
       { key: 'reasonId', label: 'Motivo', type: 'text' },
       { key: 'startsOn', label: 'Inicio', type: 'date', required: true },
       { key: 'endsOn', label: 'Fim', type: 'date' },
@@ -129,8 +135,8 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
       EMPLOYEE_ID_FIELD,
       { key: 'year', label: 'Ano', type: 'number', required: true },
       { key: 'month', label: 'Mes', type: 'number' },
-      { key: 'absenceDays', label: 'Dias de falta', type: 'number' },
-      { key: 'workedDays', label: 'Dias trabalhados', type: 'number' },
+      { key: 'absenceDays', label: SGP_FEATURE_I18N_MESSAGES.m191, type: 'number' },
+      { key: 'workedDays', label: SGP_FEATURE_I18N_MESSAGES.m192, type: 'number' },
       { key: 'notes', label: 'Observacao', type: 'textarea', maxLength: 500 },
     ],
     'frequencies',
@@ -142,10 +148,10 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     '#!/nivelSalarialHistorico/gestao',
     [
       EMPLOYEE_ID_FIELD,
-      { key: 'salaryReferenceId', label: 'Referencia salarial', type: 'text' },
+      { key: 'salaryReferenceId', label: SGP_FEATURE_I18N_MESSAGES.m193, type: 'text' },
       { key: 'levelCode', label: 'Nivel', type: 'text', maxLength: 80 },
       { key: 'levelDescription', label: 'Descricao', type: 'text', maxLength: 180 },
-      { key: 'adjustmentAmount', label: 'Valor do ajuste', type: 'number' },
+      { key: 'adjustmentAmount', label: SGP_FEATURE_I18N_MESSAGES.m194, type: 'number' },
       { key: 'effectiveOn', label: 'Vigencia', type: 'date', required: true },
     ],
   ),
@@ -166,9 +172,9 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
       EMPLOYEE_ID_FIELD,
       { key: 'fromBranchId', label: 'Origem', type: 'text' },
       { key: 'toBranchId', label: 'Destino', type: 'text' },
-      { key: 'toWorkLocationId', label: 'Lotacao destino', type: 'text' },
+      { key: 'toWorkLocationId', label: SGP_FEATURE_I18N_MESSAGES.m195, type: 'text' },
       { key: 'reasonId', label: 'Motivo', type: 'text' },
-      { key: 'effectiveOn', label: 'Data da transferencia', type: 'date', required: true },
+      { key: 'effectiveOn', label: SGP_FEATURE_I18N_MESSAGES.m196, type: 'date', required: true },
       { key: 'notes', label: 'Observacao', type: 'textarea', maxLength: 500 },
     ],
   ),
@@ -180,9 +186,14 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     [
       EMPLOYEE_ID_FIELD,
       { key: 'rg', label: 'RG', type: 'text', maxLength: 40 },
-      { key: 'rgIssuer', label: 'Orgao emissor', type: 'text', maxLength: 40 },
-      { key: 'pisPasep', label: 'PIS/PASEP', type: 'text', maxLength: 40 },
-      { key: 'voterRegistration', label: 'Titulo eleitoral', type: 'text', maxLength: 60 },
+      { key: 'rgIssuer', label: SGP_FEATURE_I18N_MESSAGES.m197, type: 'text', maxLength: 40 },
+      { key: 'pisPasep', label: SGP_FEATURE_I18N_MESSAGES.m198, type: 'text', maxLength: 40 },
+      {
+        key: 'voterRegistration',
+        label: SGP_FEATURE_I18N_MESSAGES.m199,
+        type: 'text',
+        maxLength: 60,
+      },
       { key: 'notes', label: 'Observacao', type: 'textarea', maxLength: 500 },
     ],
     undefined,
@@ -196,8 +207,8 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     [
       { key: 'code', label: 'Codigo', type: 'text', maxLength: 40 },
       { key: 'name', label: 'Nome', type: 'text', required: true, maxLength: 180 },
-      { key: 'branchId', label: 'Orgao/filial', type: 'text' },
-      { key: 'parentId', label: 'Organico superior', type: 'text' },
+      { key: 'branchId', label: SGP_FEATURE_I18N_MESSAGES.m200, type: 'text' },
+      { key: 'parentId', label: SGP_FEATURE_I18N_MESSAGES.m201, type: 'text' },
       { key: 'notes', label: 'Descricao', type: 'textarea', maxLength: 500 },
     ],
     undefined,
@@ -210,9 +221,9 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     '#!/feriasProgramacao/gestao',
     [
       EMPLOYEE_ID_FIELD,
-      { key: 'vacationTypeId', label: 'Tipo de ferias', type: 'text' },
-      { key: 'accrualStartOn', label: 'Inicio aquisitivo', type: 'date' },
-      { key: 'accrualEndOn', label: 'Fim aquisitivo', type: 'date' },
+      { key: 'vacationTypeId', label: SGP_FEATURE_I18N_MESSAGES.m202, type: 'text' },
+      { key: 'accrualStartOn', label: SGP_FEATURE_I18N_MESSAGES.m203, type: 'date' },
+      { key: 'accrualEndOn', label: SGP_FEATURE_I18N_MESSAGES.m204, type: 'date' },
       { key: 'startsOn', label: 'Inicio', type: 'date', required: true },
       { key: 'endsOn', label: 'Fim', type: 'date', required: true },
       { key: 'days', label: 'Dias', type: 'number', required: true },
@@ -227,7 +238,7 @@ const RH_CONFIGS: RhWorkflowUiConfig[] = [
     '#!/licencaPremio/gestao',
     [
       EMPLOYEE_ID_FIELD,
-      { key: 'absenceReasonId', label: 'Motivo de afastamento', type: 'text' },
+      { key: 'absenceReasonId', label: SGP_FEATURE_I18N_MESSAGES.m205, type: 'text' },
       { key: 'startsOn', label: 'Inicio', type: 'date', required: true },
       { key: 'endsOn', label: 'Fim', type: 'date' },
       { key: 'days', label: 'Dias', type: 'number' },
@@ -253,17 +264,17 @@ export class RhHome implements OnInit, OnDestroy {
     {
       key: 'search',
       label: 'Pesquisar',
-      placeholder: 'Matricula, nome, CPF, status ou observacao',
+      placeholder: SGP_FEATURE_I18N_MESSAGES.m206,
     },
   ];
 
   readonly rowActions: CrudTableAction[] = [
-    { id: 'edit', label: 'Editar', icon: 'edit', description: 'Editar registro' },
+    { id: 'edit', label: 'Editar', icon: 'edit', description: SGP_FEATURE_I18N_MESSAGES.m004 },
     {
       id: 'delete',
       label: 'Excluir',
       icon: 'delete',
-      description: 'Excluir ou inativar registro',
+      description: SGP_FEATURE_I18N_MESSAGES.m207,
       disabled: (row) => row['active'] === false || row['status'] === 'INACTIVE',
     },
   ];
@@ -360,12 +371,14 @@ export class RhHome implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = this.editingRecord ? 'Registro atualizado.' : 'Registro criado.';
+          this.message = this.editingRecord
+            ? SGP_FEATURE_I18N_MESSAGES.m081
+            : SGP_FEATURE_I18N_MESSAGES.m082;
           this.cancelForm();
           this.loadRecords();
         },
         error: () => {
-          this.error = 'Nao foi possivel salvar o registro de RH.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m208;
         },
       });
   }
@@ -384,10 +397,10 @@ export class RhHome implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Solicitacao de importacao registrada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m209;
         },
         error: () => {
-          this.error = 'Nao foi possivel registrar a importacao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m210;
         },
       });
   }
@@ -406,10 +419,10 @@ export class RhHome implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Solicitacao de relatorio registrada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m211;
         },
         error: () => {
-          this.error = 'Nao foi possivel registrar o relatorio.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m212;
         },
       });
   }
@@ -479,7 +492,7 @@ export class RhHome implements OnInit, OnDestroy {
         },
         error: () => {
           this.records = [];
-          this.error = 'Nao foi possivel carregar os registros de RH.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m213;
         },
       });
   }
@@ -535,7 +548,7 @@ export class RhHome implements OnInit, OnDestroy {
           this.loadRecords();
         },
         error: () => {
-          this.error = 'Nao foi possivel excluir o registro.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m214;
         },
       });
   }

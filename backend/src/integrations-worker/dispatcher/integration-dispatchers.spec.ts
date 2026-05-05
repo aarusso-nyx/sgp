@@ -4,7 +4,6 @@ import {
   type Cnab240Emitter,
 } from './cnab240.dispatcher';
 import { createIntegrationJobDispatchers } from './default-dispatchers';
-import { ESocialEventIntegrationDispatcher } from './esocial-event.dispatcher';
 import { EvaluationIntegrationDispatcher } from './evaluation.dispatcher';
 import { GfipIntegrationDispatcher } from './gfip.dispatcher';
 import {
@@ -257,50 +256,6 @@ describe('integration worker dispatchers', () => {
         operation: 'previdenciario.siprev.exportado',
         retirements: 1,
         pensions: 1,
-      }),
-    );
-  });
-
-  it('dispatches eSocial event XML generation and state updates', async () => {
-    const { context, query, persistDocumentResult } = makeContext();
-    query
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([
-        {
-          id: 'event-123456789',
-          event_type: 'S-2230',
-          reference: 'funcionario/emp-1',
-          competence: '2026-04',
-          payload: { licencaId: 'lic-1' },
-          schema_version: 'S-1.2',
-          retry_count: 1,
-        },
-      ])
-      .mockResolvedValueOnce([]);
-
-    await new ESocialEventIntegrationDispatcher().process(
-      makeJob('ESOCIAL_EVENTO_PROCESSAR', { eventId: 'event-123456789' }),
-      context,
-    );
-
-    expect(query).toHaveBeenCalledWith(
-      expect.stringContaining("SET status = 'GERANDO_XML'"),
-      ['event-123456789'],
-    );
-    expect(query).toHaveBeenCalledWith(
-      expect.stringContaining("status = 'AGUARDANDO_RETORNO'"),
-      expect.arrayContaining([
-        'event-123456789',
-        expect.stringContaining('<eSocial'),
-      ]),
-    );
-    expect(persistDocumentResult).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({ fileName: expect.stringContaining('s-2230') }),
-      'tenant-1/outputs/esocial/s-2230/esocial-s-2230-event-123456789.xml',
-      expect.objectContaining({
-        operation: 'esocial.evento.processado',
-        receiptNumber: 'REC-S-2230-event-12',
       }),
     );
   });

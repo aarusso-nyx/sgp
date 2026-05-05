@@ -8,6 +8,21 @@ Authored domain authority for audit implementation, workers, queues, backpressur
 - Observability Worker Backpressure
 - Worker Operations Runbook
 
+## Regulatory References Cross-Reference
+
+This table maps TCE and operations-boundary references to implementation or
+retained decision evidence. External homologation remains downstream of the SGP
+adapter/mock-relay boundary unless a future owner decision changes `docs/eng`.
+
+| Reference                                   | Obligation cluster                               | Implementation / evidence path:line                                | Current posture                                                    |
+| ------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| `docs/refs/tce/00-pluggable-contract.md`    | Pluggable TCE/TCM/TCU adapter contract           | backend/src/tce/adapters/queue-adapter.ts:1                        | Implemented local queue-backed adapter contract.                   |
+| `docs/refs/tce/state-catalog.md`            | State catalog and source-pending layout registry | tests/backend/tce-02-catalog.e2e-spec.ts:1                         | Implemented state catalog evidence and source-pending posture.     |
+| `docs/refs/tce/rreo-rgf.md`                 | RREO/RGF fiscal reports                          | tests/backend/golden/tce/rreo-v01/sp/input.json:1                  | Implemented SP/MG source-pending RREO/RGF goldens and local relay. |
+| `docs/refs/tce/siafic.md`                   | SIAFIC accounting integration                    | tests/backend/siafic-sync.e2e-spec.ts:1                            | Neutral JSON SGP boundary; official layout is ente-side.           |
+| `docs/refs/tce/siope-siops.md`              | SICONFI/SIOPE/SIOPS export primitives            | backend/src/integrations-worker/siope/siope-export.generator.ts:1  | Implemented source-pending official export primitives.             |
+| `docs/refs/tce/lai-portal-transparencia.md` | LAI/transparency publication                     | backend/src/publico/transparency/transparency-publish.service.ts:1 | Implemented transparency publication surfaces.                     |
+
 ## Audit Implementation
 
 ## Audit Implementation
@@ -96,7 +111,7 @@ Wave 7 worker runtimes expose queue and active-claim pressure before each long-r
 
 ### Worker Poll Policy
 
-The long-running `sgp-esocial-worker`, `sgp-integrations-worker`, and `sgp-report-worker` entrypoints call `backpressureStatus()` before `pollOnce()`. A poll proceeds only when available capacity is positive:
+The long-running `stynx-esocial`, `sgp-integrations-worker`, and `sgp-report-worker` entrypoints call `backpressureStatus()` before `pollOnce()`. A poll proceeds only when available capacity is positive:
 
 `available_capacity = poll_limit - active_claims`
 
@@ -107,7 +122,7 @@ Worker entrypoint cadence is owned by the shared NestJS `@nestjs/schedule` poll 
 `sgp-report-worker` serializes claimed report generation per tenant and canonical report definition inside each worker process. Generated report object keys also include the `report_request.id`, so simultaneous same-tenant, same-definition requests write independent artifacts even when they target the same competence and output filename. Database claiming remains the `FOR UPDATE SKIP LOCKED` boundary for cross-process workers; no report-worker schema extension is required for this isolation model.
 
 R4-30 gives each long-running worker a local readiness probe at `/ready` and
-`/health/ready`. Default local ports are `3303` for `sgp-esocial-worker`, `3304`
+`/health/ready`. Default local ports are `3303` for `stynx-esocial`, `3304`
 for `sgp-integrations-worker`, and `3306` for `sgp-report-worker`; the
 `*_READY_PORT` variables listed below override them. The probe is intentionally
 process-local and is disabled in Jest unless a spec enables it.
@@ -129,6 +144,9 @@ existing OTEL environment variables enable export.
 
 The dashboard and alert configuration for audit coverage and worker pressure are governed under `docs/gov/observability/`.
 
+Operator guidance for connecting downstream ente-owned real integrations to the
+SGP adapter/mock-relay boundary lives in `docs/user/sgp-boundary-runbook.md`.
+
 ## Worker Operations Runbook
 
 ## Worker Operations Runbook
@@ -139,7 +157,7 @@ The dashboard and alert configuration for audit coverage and worker pressure are
 
 Workers run as independently deployable NestJS entrypoints and must be observable through the same runtime controls as synchronous APIs:
 
-- `sgp-esocial-worker`: eSocial build, sign, submit, retorno sync, totalizers.
+- `stynx-esocial`: eSocial build, sign, submit, retorno sync, totalizers.
 - `sgp-integrations-worker`: DCTFWeb, DIRF, EFD-Reinf, CNAB, SIAFIC, Siconfi/SIOPE/SIOPS export primitives.
 - `sgp-report-worker`: batch report and PDF/PDF-A generation.
 - `sgp-payroll-engine`: folia-first calculation runtime.
@@ -185,4 +203,4 @@ The operational gate is:
 - `npm run governance:check`
 - `DATABASE_URL=... npm run db:smoke`
 
-The worker smoke test is `tests/backend/worker-smoke.spec.ts`. TCE queue behavior is covered by `tests/backend/tce-04-queue-retry.e2e-spec.ts`.
+The worker smoke test is `tests/backend/worker-smoke.spec.ts`. TCE queue behavior is covered by `tests/backend/tce-queue-adapter.e2e-spec.ts`.

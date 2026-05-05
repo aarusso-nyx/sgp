@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 
 import { ESocialCertificate, ESocialCertificatesService } from './esocial-certificates.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +40,7 @@ export class ESocialCertificados implements OnInit {
     try {
       this.certificates = await firstValueFrom(this.certificatesService.list());
     } catch {
-      this.error = 'Nao foi possivel carregar os certificados.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m023;
     } finally {
       this.loading = false;
     }
@@ -75,7 +76,7 @@ export class ESocialCertificados implements OnInit {
 
   async submit(): Promise<void> {
     if (this.form.invalid || !this.pkcs12Base64) {
-      this.error = 'Informe alias, tipo e arquivo PKCS#12.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m024;
       return;
     }
 
@@ -97,7 +98,7 @@ export class ESocialCertificados implements OnInit {
       this.cancelRotation();
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel salvar o certificado.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m025;
     } finally {
       this.saving = false;
     }

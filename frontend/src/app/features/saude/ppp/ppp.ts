@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface PppRecord {
   id: string;
@@ -57,7 +58,7 @@ export class SaudePpp implements OnInit {
       );
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel gerar o PPP.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m233;
     } finally {
       this.saving = false;
     }

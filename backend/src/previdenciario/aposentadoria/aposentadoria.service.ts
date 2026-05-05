@@ -1,10 +1,7 @@
 import { BadRequestException, Injectable, Optional } from '@nestjs/common';
 
 import { DatabaseService } from '../../database/database.service';
-import { S2400Builder } from '../../esocial-worker/builders/s2400.builder';
-import { S2410Builder } from '../../esocial-worker/builders/s2410.builder';
-import { S2418Builder } from '../../esocial-worker/builders/s2418.builder';
-import { ESocialEmitService } from '../../esocial-worker/esocial-emit.service';
+import { StynxEsocialClient } from '../../integrations/stynx-esocial';
 import {
   CreateRetirementGrantDto,
   CreateRetirementSimulationDto,
@@ -28,10 +25,7 @@ export class AposentadoriaService {
   constructor(
     private readonly databaseService: DatabaseService,
     @Optional() regrasService?: RegrasService,
-    @Optional() private readonly s2400Builder?: S2400Builder,
-    @Optional() private readonly s2410Builder?: S2410Builder,
-    @Optional() private readonly s2418Builder?: S2418Builder,
-    @Optional() private readonly esocialEmitService?: ESocialEmitService,
+    @Optional() private readonly stynxEsocialClient?: StynxEsocialClient,
   ) {
     this.regrasService =
       regrasService ?? new RegrasService(this.databaseService);
@@ -176,51 +170,49 @@ export class AposentadoriaService {
   }
 
   async emitS2418ForBenefitReactivation(input: S2418ReactivationEmissionInput) {
-    if (!this.s2418Builder || !this.esocialEmitService) return;
-    const record =
-      input.sourceKind === 'RETIREMENT'
-        ? await this.s2418Builder.buildRetirementReactivation(input)
-        : await this.s2418Builder.buildPensionReactivation(input);
-    return this.esocialEmitService.emit({
-      tenantId: record.tenantId,
-      eventKind: record.eventKind,
-      xml: record.xml,
-      reference: record.reference,
-      competence: record.competence,
-      sourceEntityKind: record.sourceEntityKind,
-      sourceEntityId: record.sourceId,
-      payload: record.payload,
+    if (!this.stynxEsocialClient) return;
+    return this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2418',
+      sourceRef: {
+        sourceEntityKind:
+          input.sourceKind === 'RETIREMENT'
+            ? 'hr.retirement_grant'
+            : 'hr.pension_grant',
+        sourceEntityId: input.sourceId,
+      },
+      payload: {
+        sourceKind: input.sourceKind,
+        sourceId: input.sourceId,
+        effectiveReactivationOn: input.effectiveReactivationOn,
+        financialEffectOn: input.financialEffectOn,
+      },
     });
   }
 
   private async emitS2400ForRetirementGrant(retirementGrantId: string) {
-    if (!this.s2400Builder || !this.esocialEmitService) return;
-    const record = await this.s2400Builder.build(retirementGrantId);
-    await this.esocialEmitService.emit({
-      tenantId: record.tenantId,
-      eventKind: record.eventKind,
-      xml: record.xml,
-      reference: record.reference,
-      competence: record.competence,
-      sourceEntityKind: 'hr.retirement_grant',
-      sourceEntityId: record.retirementGrantId,
-      payload: record.payload,
+    if (!this.stynxEsocialClient) return;
+    await this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2400',
+      sourceRef: {
+        sourceEntityKind: 'hr.retirement_grant',
+        sourceEntityId: retirementGrantId,
+      },
+      payload: { retirementGrantId },
     });
   }
 
   private async emitS2410ForRetirementGrant(retirementGrantId: string) {
-    if (!this.s2410Builder || !this.esocialEmitService) return;
-    const record =
-      await this.s2410Builder.buildRetirementGrant(retirementGrantId);
-    await this.esocialEmitService.emit({
-      tenantId: record.tenantId,
-      eventKind: record.eventKind,
-      xml: record.xml,
-      reference: record.reference,
-      competence: record.competence,
-      sourceEntityKind: record.sourceEntityKind,
-      sourceEntityId: record.sourceId,
-      payload: record.payload,
+    if (!this.stynxEsocialClient) return;
+    await this.stynxEsocialClient.enqueue({
+      kind: 'trabalhador',
+      eventClass: 'S-2410',
+      sourceRef: {
+        sourceEntityKind: 'hr.retirement_grant',
+        sourceEntityId: retirementGrantId,
+      },
+      payload: { retirementGrantId },
     });
   }
 }

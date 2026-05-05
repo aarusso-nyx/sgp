@@ -11,5 +11,7 @@ workspace.
 - `testing.md`: test, QA, and smoke command usage.
 - `source-workspace.md`: workspace orientation for contributors and operators.
 - `lgpd.md`: LGPD DPO designation and data-subject request operations.
+- `sgp-boundary-runbook.md`: operator guidance for the adapter/mock-relay
+  boundary and downstream ente-owned real integrations.
 
 Keep these docs free of secrets and environment-specific credentials.

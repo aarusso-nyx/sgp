@@ -6,7 +6,7 @@ import {
 
 describe('admin feature catalog', () => {
   it('covers every documented sgp-admin route from the menu spec', () => {
-    expect(ADMIN_FEATURES.length).toBe(192);
+    expect(ADMIN_FEATURES.length).toBe(193);
     expect(ADMIN_NAVIGATION_SECTIONS.length).toBe(13);
     expect(ADMIN_NAVIGATION_SECTIONS.every((section) => section.items.length > 0)).toBe(true);
   });
@@ -22,5 +22,14 @@ describe('admin feature catalog', () => {
     expect(
       findAdminFeatureByRoutePath('/previdenciario/regra-aposentadoria/formulario/:id')?.label,
     ).toBe('Regra — editar');
+  });
+
+  it('exposes Tipos de Ferias through the Gestao master-data route', () => {
+    expect(findAdminFeatureByRoutePath('/gestao/tipo-ferias/gestao')).toEqual(
+      expect.objectContaining({
+        label: 'Tipo de Ferias',
+        moduleKey: 'gestao',
+      }),
+    );
   });
 });

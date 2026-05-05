@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface PortalPayslipFile {
   id: string;
@@ -34,7 +35,7 @@ export class PortalContracheque implements OnInit {
         this.api.get<PortalPayslipFile[]>('/api/v1/portal/payslips'),
       );
     } catch {
-      this.error = 'Nao foi possivel carregar os contracheques.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m148;
     }
   }
 

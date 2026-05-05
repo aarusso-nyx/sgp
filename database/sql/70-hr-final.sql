@@ -889,12 +889,6 @@ CREATE TRIGGER employee_bank_account_audit AFTER INSERT OR DELETE OR UPDATE ON h
 
 CREATE TRIGGER employee_transfer_effect_after_update AFTER UPDATE ON hr.employee_transfer FOR EACH ROW EXECUTE FUNCTION hr.sgp_effect_employee_transfer();
 
-CREATE TRIGGER es03_employment_link_s2299 AFTER UPDATE ON hr.employment_link FOR EACH ROW EXECUTE FUNCTION esocial.sgp_enqueue_s2299_from_employment_link();
-
-CREATE TRIGGER es03_leave_record_s2230 AFTER INSERT OR UPDATE ON hr.leave_record FOR EACH ROW EXECUTE FUNCTION esocial.sgp_enqueue_s2230_from_leave();
-
-CREATE TRIGGER es03_vacation_record_s2230 AFTER INSERT OR UPDATE ON hr.vacation_record FOR EACH ROW EXECUTE FUNCTION esocial.sgp_enqueue_s2230_from_vacation();
-
 CREATE TRIGGER hr01_employee_optimistic_version BEFORE UPDATE ON hr.employee FOR EACH ROW EXECUTE FUNCTION hr.sgp_cadastro_optimistic_version();
 
 CREATE TRIGGER hr01_employee_timeline AFTER INSERT OR UPDATE OF functional_status_id, terminated_on, lifecycle_status ON hr.employee FOR EACH ROW EXECUTE FUNCTION hr.sgp_hr01_employee_timeline();
@@ -944,10 +938,6 @@ CREATE TRIGGER hr08_probation_statutory_only BEFORE INSERT OR UPDATE ON hr.proba
 CREATE TRIGGER hr08_status_history_immutable BEFORE DELETE OR UPDATE ON hr.employee_status_history FOR EACH ROW EXECUTE FUNCTION hr.sgp_hr08_status_history_immutable();
 
 CREATE TRIGGER trg_apply_merit_progression BEFORE UPDATE OF status ON hr.merit_progression FOR EACH ROW EXECUTE FUNCTION avaliacao.apply_merit_progression();
-
-CREATE TRIGGER trg_employee_dependent_s2205_pending AFTER INSERT OR DELETE OR UPDATE ON hr.employee_dependent FOR EACH ROW EXECUTE FUNCTION esocial.trg_employee_dependent_s2205_pending();
-
-CREATE TRIGGER trg_employee_s2205_pending AFTER UPDATE ON hr.employee FOR EACH ROW EXECUTE FUNCTION esocial.trg_employee_s2205_pending();
 
 ALTER TABLE ONLY hr.administrative_process_function
     ADD CONSTRAINT administrative_process_function_branch_id_fkey FOREIGN KEY (branch_id) REFERENCES hr.branch(id) ON UPDATE CASCADE ON DELETE SET NULL;
@@ -1619,7 +1609,7 @@ ALTER TABLE ONLY hr.reintegration_order
     ADD CONSTRAINT reintegration_order_employment_link_id_fkey FOREIGN KEY (employment_link_id) REFERENCES hr.employment_link(id);
 
 ALTER TABLE ONLY hr.reintegration_order
-    ADD CONSTRAINT reintegration_order_original_termination_event_id_fkey FOREIGN KEY (original_termination_event_id) REFERENCES public.esocial_event(id);
+    ADD CONSTRAINT reintegration_order_original_termination_event_id_fkey FOREIGN KEY (original_termination_event_id) REFERENCES public.esocial_spool(message_id);
 
 ALTER TABLE ONLY hr.reintegration_order
     ADD CONSTRAINT reintegration_order_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
@@ -2529,9 +2519,9 @@ CREATE POLICY reference_catalog_entry_write ON hr.reference_catalog_entry USING 
 
 ALTER TABLE hr.reintegration_order ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY reintegration_order_read ON hr.reintegration_order FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text])));
+CREATE POLICY reintegration_order_read ON hr.reintegration_order FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text])));
 
-CREATE POLICY reintegration_order_write ON hr.reintegration_order USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text])));
+CREATE POLICY reintegration_order_write ON hr.reintegration_order USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text])));
 
 ALTER TABLE hr.retirement_grant ENABLE ROW LEVEL SECURITY;
 
@@ -2641,13 +2631,13 @@ ALTER TABLE hr.tsv_contract ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE hr.tsv_contract_change ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY tsv_contract_change_read ON hr.tsv_contract_change FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.read'::text, 'hr.employment.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text])));
+CREATE POLICY tsv_contract_change_read ON hr.tsv_contract_change FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.read'::text, 'hr.employment.write'::text])));
 
-CREATE POLICY tsv_contract_change_write ON hr.tsv_contract_change USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text, 'esocial.event.write'::text])));
+CREATE POLICY tsv_contract_change_write ON hr.tsv_contract_change USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text])));
 
-CREATE POLICY tsv_contract_read ON hr.tsv_contract FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.read'::text, 'hr.employment.write'::text, 'esocial.event.read'::text, 'esocial.event.write'::text])));
+CREATE POLICY tsv_contract_read ON hr.tsv_contract FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.read'::text, 'hr.employment.write'::text])));
 
-CREATE POLICY tsv_contract_write ON hr.tsv_contract USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text, 'esocial.event.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text, 'esocial.event.write'::text])));
+CREATE POLICY tsv_contract_write ON hr.tsv_contract USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['hr.employment.write'::text])));
 
 ALTER TABLE hr.union_entity ENABLE ROW LEVEL SECURITY;
 

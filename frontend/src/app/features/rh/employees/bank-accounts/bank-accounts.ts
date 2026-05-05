@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ApiClient } from '../../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 interface BankAccountRow {
   id: string;
@@ -38,7 +39,7 @@ export class RhEmployeeBankAccounts {
       },
       error: () => {
         this.loading = false;
-        this.error = 'Nao foi possivel carregar os dados bancarios.';
+        this.error = SGP_FEATURE_I18N_MESSAGES.m169;
       },
     });
   }
@@ -51,11 +52,11 @@ export class RhEmployeeBankAccounts {
       )
       .subscribe({
         next: () => {
-          this.message = 'Conta revalidada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m170;
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel revalidar a conta.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m171;
         },
       });
   }

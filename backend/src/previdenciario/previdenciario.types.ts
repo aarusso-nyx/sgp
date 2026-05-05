@@ -1,6 +1,10 @@
 import { QueryResultRow } from 'pg';
 
-import { S2418BuildInput } from '../esocial-worker/builders/s2418.builder';
+export interface S2418BuildInput {
+  sourceId: string;
+  effectiveReactivationOn: Date | string;
+  financialEffectOn: Date | string;
+}
 
 export interface EmployeeRetirementRow extends QueryResultRow {
   id: string;

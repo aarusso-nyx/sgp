@@ -371,11 +371,13 @@ export class ReintegrationOrderService {
     if (input.originalTerminationEventId) {
       const rows = await client.query<TerminationEventRow>(
         `
-        SELECT id::text, COALESCE(receipt_number, reference, $3)::text AS receipt
-        FROM public.esocial_event
+        SELECT
+          message_id::text AS id,
+          COALESCE(response->'receipt'->>'receiptNumber', source_ref->>'reference', $3)::text AS receipt
+        FROM public.esocial_spool
         WHERE tenant_id = $1::uuid
-          AND id = $2::uuid
-          AND event_type = 'S-2299'
+          AND message_id = $2::uuid
+          AND event_class = 'S-2299'
         `,
         [
           tenantId,
@@ -388,16 +390,18 @@ export class ReintegrationOrderService {
 
     const rows = await client.query<TerminationEventRow>(
       `
-      SELECT id::text, COALESCE(receipt_number, reference, $3)::text AS receipt
-      FROM public.esocial_event
+      SELECT
+        message_id::text AS id,
+        COALESCE(response->'receipt'->>'receiptNumber', source_ref->>'reference', $3)::text AS receipt
+      FROM public.esocial_spool
       WHERE tenant_id = $1::uuid
-        AND event_type = 'S-2299'
+        AND event_class = 'S-2299'
         AND (
-          source_entity_id = $2
+          source_ref->>'sourceEntityId' = $2
           OR payload->>'employmentLinkId' = $2
           OR payload->>'employment_link_id' = $2
         )
-      ORDER BY generated_at DESC, created_at DESC
+      ORDER BY tstamp_terminal DESC NULLS LAST, tstamp_created DESC
       LIMIT 1
       `,
       [tenantId, employmentLinkId, input.originalS2299Receipt ?? ''],
@@ -430,11 +434,11 @@ export class ReintegrationOrderService {
         order_row.status::text,
         order_row.applied_at,
         order_row.created_at,
-        COALESCE(event.receipt_number, event.reference) AS original_s2299_receipt
+        COALESCE(event.response->'receipt'->>'receiptNumber', event.source_ref->>'reference') AS original_s2299_receipt
       FROM hr.reintegration_order order_row
-      JOIN public.esocial_event event
+      JOIN public.esocial_spool event
         ON event.tenant_id = order_row.tenant_id
-       AND event.id = order_row.original_termination_event_id
+       AND event.message_id = order_row.original_termination_event_id
       WHERE order_row.tenant_id = $1::uuid
         AND order_row.id = $2::uuid
       `,

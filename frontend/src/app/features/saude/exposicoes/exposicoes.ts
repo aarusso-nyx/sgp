@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { firstValueFrom } from 'rxjs';
 
 import { ApiClient } from '../../../core/api/api-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface EnvironmentalExposure {
   id: string;
@@ -70,7 +71,7 @@ export class SaudeExposicoes implements OnInit {
       );
       await this.load();
     } catch {
-      this.error = 'Nao foi possivel salvar a exposicao.';
+      this.error = SGP_FEATURE_I18N_MESSAGES.m227;
     } finally {
       this.saving = false;
     }

@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Subject, finalize, map, takeUntil } from 'rxjs';
 
 import { OpenApiClient } from '../../../core/api/generated/openapi-client';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface ProbationDueEmployee {
   funcionarioId: string;
@@ -71,7 +72,7 @@ export class AvaliacaoEstagioProbatorio implements OnInit, OnDestroy {
           this.employees = employees;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar o estagio probatorio.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m010;
         },
       });
   }
@@ -97,12 +98,12 @@ export class AvaliacaoEstagioProbatorio implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Avaliacao registrada.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m011;
           this.evaluationForm.reset({ decisao: 'pending' });
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel registrar a avaliacao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m012;
         },
       });
   }

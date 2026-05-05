@@ -4,6 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { PontoJustificativa, PontoJustificativasService } from './ponto-justificativas.service';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,7 +57,7 @@ export class PontoJustificativas implements OnInit, OnDestroy {
           this.requests = requests;
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar justificativas.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m127;
         },
       });
   }
@@ -87,7 +88,7 @@ export class PontoJustificativas implements OnInit, OnDestroy {
           this.load();
         },
         error: () => {
-          this.error = 'Nao foi possivel decidir a justificativa.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m128;
         },
       });
   }

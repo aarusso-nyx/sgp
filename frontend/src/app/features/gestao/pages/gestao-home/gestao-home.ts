@@ -14,6 +14,7 @@ import {
   MasterDataRecord,
   MasterDataResource,
 } from '../../services/master-data';
+import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 type ViewRecord = Record<string, unknown> & MasterDataRecord;
 
@@ -28,6 +29,7 @@ export class GestaoHome implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly defaultResourceKey = 'adminMenus';
   private readonly formBuilder = inject(FormBuilder);
+  private requestedResourceKey = this.defaultResourceKey;
 
   resources: MasterDataResource[] = [];
   currentResource: MasterDataResource | null = null;
@@ -45,7 +47,7 @@ export class GestaoHome implements OnInit, OnDestroy {
     {
       key: 'search',
       label: 'Pesquisar',
-      placeholder: 'Codigo, nome ou descricao',
+      placeholder: SGP_FEATURE_I18N_MESSAGES.m079,
     },
   ];
 
@@ -54,13 +56,13 @@ export class GestaoHome implements OnInit, OnDestroy {
       id: 'edit',
       label: 'Editar',
       icon: 'edit',
-      description: 'Editar registro',
+      description: SGP_FEATURE_I18N_MESSAGES.m004,
     },
     {
       id: 'deactivate',
       label: 'Desativar',
       icon: 'block',
-      description: 'Desativar registro',
+      description: SGP_FEATURE_I18N_MESSAGES.m080,
       disabled: (row) => row['active'] === false,
     },
   ];
@@ -83,6 +85,7 @@ export class GestaoHome implements OnInit, OnDestroy {
     this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       const resourceKey =
         (data['legacyChildPath'] as string | undefined) ?? this.defaultResourceKey;
+      this.requestedResourceKey = resourceKey;
       this.selectResource(resourceKey);
     });
   }
@@ -154,12 +157,14 @@ export class GestaoHome implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = this.editingRecord ? 'Registro atualizado.' : 'Registro criado.';
+          this.message = this.editingRecord
+            ? SGP_FEATURE_I18N_MESSAGES.m081
+            : SGP_FEATURE_I18N_MESSAGES.m082;
           this.cancelForm();
           this.loadRecords();
         },
         error: () => {
-          this.error = 'Nao foi possivel salvar o registro.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m083;
         },
       });
   }
@@ -171,19 +176,16 @@ export class GestaoHome implements OnInit, OnDestroy {
       .subscribe({
         next: (result) => {
           this.resources = result.items;
-          this.selectResource(this.currentResource?.key ?? this.defaultResourceKey);
+          this.selectResource(this.currentResource?.key ?? this.requestedResourceKey);
         },
         error: () => {
-          this.error = 'Nao foi possivel carregar os recursos de Gestao.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m084;
         },
       });
   }
 
   private selectResource(resourceKey: string): void {
-    const found =
-      this.resources.find((resource) => resource.key === resourceKey) ??
-      this.currentResource ??
-      null;
+    const found = this.findResource(resourceKey) ?? this.currentResource ?? null;
     this.currentResource = found;
     this.columns = this.columnsFor(found);
     this.formOpen = false;
@@ -221,7 +223,7 @@ export class GestaoHome implements OnInit, OnDestroy {
         },
         error: () => {
           this.records = [];
-          this.error = 'Nao foi possivel carregar os registros.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m085;
         },
       });
   }
@@ -254,11 +256,11 @@ export class GestaoHome implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.message = 'Registro desativado.';
+          this.message = SGP_FEATURE_I18N_MESSAGES.m086;
           this.loadRecords();
         },
         error: () => {
-          this.error = 'Nao foi possivel desativar o registro.';
+          this.error = SGP_FEATURE_I18N_MESSAGES.m087;
         },
       });
   }
@@ -282,5 +284,22 @@ export class GestaoHome implements OnInit, OnDestroy {
         header: 'Ativo',
       },
     ];
+  }
+
+  private findResource(resourceKey: string): MasterDataResource | undefined {
+    const requested = this.normalizeResourceToken(resourceKey);
+    return this.resources.find((resource) =>
+      [resource.key, resource.route].some(
+        (candidate) => this.normalizeResourceToken(candidate) === requested,
+      ),
+    );
+  }
+
+  private normalizeResourceToken(value: string): string {
+    return value
+      .replace(/^#!\/?/, '')
+      .replace(/^\/?gestao\//, '')
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .toLowerCase();
   }
 }

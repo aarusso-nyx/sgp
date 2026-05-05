@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { AuditModule } from '../audit/audit.module';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
-import { ESocialWorkerModule } from '../esocial-worker/esocial-worker.module';
 import { PayrollAccountingController } from './accounting/payroll-accounting.controller';
 import { PayrollAccountingService } from './accounting/payroll-accounting.service';
 import { RubricaController } from './accounting/rubrica/rubrica.controller';
@@ -42,6 +41,7 @@ import { PriorNoticeService } from './rescisao/prior-notice/prior-notice.service
 import { SimulacaoController } from './simulacao/simulacao.controller';
 import { SimulacaoService } from './simulacao/simulacao.service';
 import { PayrollEngineModule } from '../payroll-engine/payroll-engine.module';
+import { StynxEsocialModule } from '../integrations/stynx-esocial';
 import { FgtsModule } from './fgts/fgts.module';
 import { PisPasepModule } from './pis-pasep/pis-pasep.module';
 import { ReintegrationOrderController } from './operations/reintegration/reintegration-order.controller';
@@ -55,7 +55,7 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     AuthModule,
     DatabaseModule,
     AuditModule,
-    ESocialWorkerModule,
+    StynxEsocialModule,
     PayrollEngineModule,
     FgtsModule,
     PisPasepModule,
