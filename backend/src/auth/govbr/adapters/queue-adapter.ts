@@ -5,7 +5,7 @@ import {
   type QueueAdapterResponseEnvelope,
   type QueueAdapterTransport,
 } from '../../../common/adapters';
-import type { AuthenticatedActor } from '../../auth.types';
+import type { AuthenticatedActor } from '../../actor.types';
 import {
   GOVBR_RELAY_QUEUE_KIND,
   type GovBrRelayAck,

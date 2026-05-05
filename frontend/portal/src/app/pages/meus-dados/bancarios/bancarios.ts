@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ApiClient } from '../../../core/api/api-client';
@@ -8,6 +8,7 @@ import { ApiClient } from '../../../core/api/api-client';
 const BANKS = ['001', '033', '041', '104', '237', '341', '748', '756'];
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-meus-dados-bancarios',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
@@ -16,6 +17,7 @@ const BANKS = ['001', '033', '041', '104', '237', '341', '748', '756'];
 })
 export class MeusDadosBancarios {
   private readonly api = inject(ApiClient);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly formBuilder = inject(FormBuilder);
 
   readonly banks = BANKS;
@@ -55,12 +57,14 @@ export class MeusDadosBancarios {
         next: () => {
           this.saving = false;
           this.message = 'Dados bancarios validados.';
+          this.cdr.markForCheck();
         },
         error: (response: HttpErrorResponse) => {
           this.saving = false;
           const code = String(response.error?.validation_error_code ?? '');
           this.invalidField = this.fieldFor(code);
           this.error = code || 'Nao foi possivel validar os dados bancarios.';
+          this.cdr.markForCheck();
         },
       });
   }

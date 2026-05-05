@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { AuthenticatedActor } from '../auth.types';
+import { AuthenticatedActor } from '../actor.types';
 
 @Injectable()
 export class SessionService {

@@ -189,14 +189,14 @@ async function bootPortal(
         COGNITO_CLIENT_ID: 'portal-client',
         COGNITO_DOMAIN: 'https://idp.test',
         COGNITO_REDIRECT_URI: 'http://127.0.0.1:4310/auth/callback',
+        STYNX_E2E: 'true',
+        TENANT_ID: sessionEmployeeId,
       };
 
       if (isAuthenticated) {
-        sessionStorage.setItem(
-          'sgp.session',
-          JSON.stringify({ actor: 'portal.e2e', employeeId: sessionEmployeeId }),
-        );
-        sessionStorage.setItem('sgp.access_token', 'portal-e2e-token');
+        (
+          window as unknown as { SGP_CONFIG: Record<string, string> }
+        ).SGP_CONFIG.STYNX_E2E_ACCESS_TOKEN = 'portal-e2e-token';
       } else {
         sessionStorage.clear();
       }
@@ -233,6 +233,7 @@ async function bootPortal(
 }
 
 async function catalogLinks(page: Page): Promise<CatalogLink[]> {
+  await expect(page.locator('.section-grid a').first()).toBeVisible();
   return page.locator('.section-grid a').evaluateAll((anchors) =>
     anchors.map((anchor) => {
       const link = anchor as HTMLAnchorElement;

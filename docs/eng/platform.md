@@ -12400,7 +12400,7 @@ O modelo de segurança do SGP é construído sobre quatro princípios inegociáv
                            │ JWT verificado
 ┌──────────────────────────▼──────────────────────────────────────────┐
 │  AUTORIZAÇÃO — NestJS APP_GUARD global                              │
-│  PermissionGuard → JWT Cognito → @RequirePermission/default-deny    │
+│  Stynx guards → JWT Cognito → @RequirePermission/default-deny       │
 └──────────────────────────┬──────────────────────────────────────────┘
                            │ tenant_id + papeis
 ┌──────────────────────────▼──────────────────────────────────────────┐
@@ -12664,7 +12664,7 @@ O catálogo canônico de permissões é `database/seed/permission-catalog.json`;
 | `documents.download`   | Download de anexos                                                              |
 | `auditoria.read`       | Trilha de auditoria e exportações                                               |
 
-O backend registra `PermissionGuard` como `APP_GUARD` nos módulos `AppModule` e `AppPortalModule`. Toda rota é negada por padrão quando não possui `@RequirePermission(...)`; endpoints públicos precisam declarar `@Public()` explicitamente. O guard valida o bearer token Cognito, resolve grupos Cognito contra `public.access_profile`/`public.profile_permission`/`public.permission` com cache curto e propaga `tenant_id` e permissões ao contexto de banco usado pelas políticas RLS.
+O backend registra `SgpStynxAuthGuard` e `SgpStynxAuthorizationGuard` como `APP_GUARD` nos módulos `AppModule` e `AppPortalModule`. Toda rota é negada por padrão quando não possui `@RequirePermission(...)`; endpoints públicos precisam declarar `@Public()` explicitamente. Os guards delegam o contexto de autenticação e autorização para Stynx, validam o bearer token Cognito por `SgpStynxTokenVerifier`, resolvem grupos Cognito contra `public.access_profile`/`public.profile_permission`/`public.permission` com cache curto e propagam `tenant_id` e permissões ao contexto de banco usado pelas políticas RLS.
 
 #### 4.1 Quatro Camadas
 

@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
@@ -12,6 +19,7 @@ import {
 } from '../../core/portal/portal-route-endpoints';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sgp-portal-feature-page',
   imports: [CommonModule, RouterLink],
   templateUrl: './portal-feature-page.html',
@@ -19,6 +27,7 @@ import {
 })
 export class PortalFeaturePage implements OnInit, OnDestroy {
   private readonly api = inject(ApiClient);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly openApi = inject(OpenApiClient);
   private readonly route = inject(ActivatedRoute);
   private readonly destroy$ = new Subject<void>();
@@ -58,12 +67,14 @@ export class PortalFeaturePage implements OnInit, OnDestroy {
     this.error = '';
     this.response = null;
     this.rows = [];
+    this.cdr.markForCheck();
 
     this.endpoint
       .load({ api: this.api, openApi: this.openApi })
       .pipe(
         finalize(() => {
           this.loading = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )

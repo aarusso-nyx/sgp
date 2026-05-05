@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
-import { AuthenticatedActor } from '../../auth/auth.types';
+import { AuthenticatedActor } from '../../auth/actor.types';
 import { DatabaseService } from '../../database/database.service';
 import { CareerPlanMutationDto } from './career-plan.dto';
 

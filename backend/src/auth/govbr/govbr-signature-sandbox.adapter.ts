@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { createHash, randomUUID } from 'node:crypto';
 
-import { AuthenticatedActor } from '../auth.types';
+import { AuthenticatedActor } from '../actor.types';
 import { GovBrSignRequestDto } from './sign.dto';
 
 export type GovBrSignatureDecision = 'APPROVED' | 'DENIED';

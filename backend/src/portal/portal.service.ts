@@ -7,7 +7,7 @@ import { QueryResultRow } from 'pg';
 
 import { CareerPlanService } from '../avaliacao/career-plan/career-plan.service';
 import { EligibilityService } from '../avaliacao/progression/progression.service';
-import { AuthenticatedActor } from '../auth/auth.types';
+import { AuthenticatedActor } from '../auth/actor.types';
 import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../common/pagination/paged-response';
 import { DatabaseService } from '../database/database.service';

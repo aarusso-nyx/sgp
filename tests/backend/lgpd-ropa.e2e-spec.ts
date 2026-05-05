@@ -8,7 +8,7 @@ import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
-import { CognitoJwtService } from '../../backend/src/auth/cognito-jwt.service';
+import { SgpStynxTokenVerifier } from '../../backend/src/auth/sgp-stynx-token-verifier.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
 
 const tenantId = '00000000-0000-0000-0000-000000000100';
@@ -50,7 +50,7 @@ describe('LGPD ROPA admin API (e2e)', () => {
   beforeAll(async () => {
     database = new FakeRopaDatabase();
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
-      .overrideProvider(CognitoJwtService)
+      .overrideProvider(SgpStynxTokenVerifier)
       .useValue({
         verifyAuthorizationHeader: jest.fn(async () => ({
           sub: 'admin',

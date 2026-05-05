@@ -6,6 +6,7 @@
 
 - Root files: human-authored product and engineering authority. These files define scope, architecture, user experience, quality, migration rules, and domain behavior.
 - `domains/`: dense human-authored domain authority packs.
+- `decisions/`: standalone ADRs for accepted decisions that should remain easy to link from status ledgers and operator docs.
 - `facts/`: authoritative developer facts derived from primary regulatory references. Raw legal and regulatory text stays under `docs/refs/**/law/`; `facts/` contains only implementation-facing semantic facts.
 
 ## Authored Specs
@@ -14,6 +15,7 @@
 - `platform.md`: architecture, modularity, integration contracts, async jobs, authorization, parameters, ADRs, and money policy.
 - `experience.md`: menu tree, operator workflows, manual guidance, and official outputs.
 - `quality-migration.md`: test strategy, migration rules, and acceptance gates.
+- `decisions/adr-021-icp-signer-software-certificate.md`: accepted ICP signer boundary for software certificates and out-of-scope HSM/A3 ownership.
 - `domains/people-recruitment.md`: people, recruitment, concursos, appointment, quotas, and related workflows.
 - `domains/payroll-benefits.md`: folia-first payroll, benefits, FGTS, CNAB, payslip, consignments, and payment policies.
 - `domains/fiscal-integrations.md`: eSocial, EFD-Reinf, DCTFWeb, DIRF, SIAFIC, TCE, signatures, queues, and official exports.

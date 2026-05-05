@@ -5,7 +5,7 @@ import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
-import { CognitoJwtService } from '../../backend/src/auth/cognito-jwt.service';
+import { SgpStynxTokenVerifier } from '../../backend/src/auth/sgp-stynx-token-verifier.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
 import { TEST_INSTANT_2031_05_02T00_00_00_000Z } from './helpers/date-fixtures';
 
@@ -51,7 +51,7 @@ class FakeExclusionDatabase {
 describe('REC-08 LGPD artifact exclusion', () => {
   async function createApp(retentionOpen: boolean) {
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
-      .overrideProvider(CognitoJwtService)
+      .overrideProvider(SgpStynxTokenVerifier)
       .useValue({
         verifyAuthorizationHeader: jest.fn(async () => ({
           sub: 'candidate',

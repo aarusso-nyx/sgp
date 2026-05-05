@@ -8,7 +8,7 @@ import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
-import { CognitoJwtService } from '../../backend/src/auth/cognito-jwt.service';
+import { SgpStynxTokenVerifier } from '../../backend/src/auth/sgp-stynx-token-verifier.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
 import {
   LGPD_RIGHT_TYPES,
@@ -86,7 +86,7 @@ describe('LGPD titular rights portal API (e2e)', () => {
   beforeAll(async () => {
     database = new FakeLgpdRightsDatabase();
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
-      .overrideProvider(CognitoJwtService)
+      .overrideProvider(SgpStynxTokenVerifier)
       .useValue({
         verifyAuthorizationHeader: jest.fn(async () => ({
           sub: 'employee-sub',

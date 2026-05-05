@@ -1,25 +1,34 @@
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { AuthorizationGuard, STYNX_AUTHZ_METADATA } from '@stynx/backend';
 
-import { PermissionGuard } from '../../backend/src/iam/guards/permission.guard';
+import {
+  SgpStynxAuthGuard,
+  SgpStynxAuthorizationGuard,
+} from '../../backend/src/auth/sgp-stynx-auth.guard';
+import { REQUIRED_PERMISSIONS } from '../../backend/src/iam/decorators/require-permission.decorator';
 
-function executionContext(authorization?: string) {
+function executionContext(authorization?: string, requestOverrides = {}) {
   return {
     getHandler: () => Symbol('handler'),
     getClass: () => Symbol('class'),
     switchToHttp: () => ({
       getRequest: () => ({
         headers: authorization ? { authorization } : {},
+        ...requestOverrides,
       }),
     }),
   } as never;
 }
 
-describe('PermissionGuard deny behavior', () => {
+describe('SGP Stynx auth deny behavior', () => {
   it('returns 403 when a route has no @RequirePermission or @Public metadata', async () => {
-    const guard = new PermissionGuard(
-      { getAllAndOverride: jest.fn().mockReturnValue(undefined) } as never,
-      { verifyAuthorizationHeader: jest.fn() } as never,
+    const reflector = {
+      getAllAndOverride: jest.fn().mockReturnValue(undefined),
+    } as never as Reflector;
+    const guard = new SgpStynxAuthorizationGuard(
+      reflector,
+      new AuthorizationGuard(reflector),
     );
 
     await expect(
@@ -30,11 +39,11 @@ describe('PermissionGuard deny behavior', () => {
   it('returns 401 when a protected route receives no token', async () => {
     const reflector = new Reflector();
     jest.spyOn(reflector, 'getAllAndOverride').mockImplementation((key) => {
-      if (key === 'requiredPermissions') return ['gestao.read'];
+      if (key === REQUIRED_PERMISSIONS) return ['gestao.read'];
       return undefined;
     });
-    const guard = new PermissionGuard(reflector, {
-      verifyAuthorizationHeader: jest
+    const guard = new SgpStynxAuthGuard(reflector, {
+      canActivate: jest
         .fn()
         .mockRejectedValue(new UnauthorizedException('Missing bearer token')),
     } as never);
@@ -47,21 +56,29 @@ describe('PermissionGuard deny behavior', () => {
   it('returns 403 when the token has the wrong permission', async () => {
     const reflector = new Reflector();
     jest.spyOn(reflector, 'getAllAndOverride').mockImplementation((key) => {
-      if (key === 'requiredPermissions') return ['gestao.write'];
+      if (key === REQUIRED_PERMISSIONS) return ['gestao.write'];
+      if (key === STYNX_AUTHZ_METADATA) {
+        return { permissions: { permissions: ['gestao.write'] } };
+      }
       return undefined;
     });
-    const guard = new PermissionGuard(reflector, {
-      verifyAuthorizationHeader: jest.fn().mockResolvedValue({
-        sub: 'user-1',
-        username: 'user-1',
-        tenantId: '00000000-0000-0000-0000-000000000100',
-        groups: ['RH'],
-        permissions: ['gestao.read'],
-      }),
-    } as never);
+    const guard = new SgpStynxAuthorizationGuard(
+      reflector,
+      new AuthorizationGuard(reflector),
+    );
 
     await expect(
-      guard.canActivate(executionContext('Bearer token')),
+      guard.canActivate(
+        executionContext('Bearer token', {
+          principal: {
+            id: 'user-1',
+            roles: ['RH'],
+            permissions: ['gestao.read'],
+            tenants: ['00000000-0000-0000-0000-000000000100'],
+            claims: {},
+          },
+        }),
+      ),
     ).rejects.toBeInstanceOf(ForbiddenException);
   });
 });

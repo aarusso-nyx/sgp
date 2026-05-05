@@ -8,7 +8,7 @@ import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
-import { CognitoJwtService } from '../../backend/src/auth/cognito-jwt.service';
+import { SgpStynxTokenVerifier } from '../../backend/src/auth/sgp-stynx-token-verifier.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
 
 class FakeInscricaoDatabase {
@@ -81,7 +81,7 @@ describe('public inscricao flow', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
-      .overrideProvider(CognitoJwtService)
+      .overrideProvider(SgpStynxTokenVerifier)
       .useValue({ verifyAuthorizationHeader: jest.fn() })
       .overrideProvider(DatabaseService)
       .useValue(new FakeInscricaoDatabase())

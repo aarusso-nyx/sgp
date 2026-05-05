@@ -5,7 +5,7 @@ import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
-import { CognitoJwtService } from '../../backend/src/auth/cognito-jwt.service';
+import { SgpStynxTokenVerifier } from '../../backend/src/auth/sgp-stynx-token-verifier.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
 
 class FakeConsentDatabase {
@@ -28,7 +28,7 @@ describe('REC-08 LGPD recording consent', () => {
   it('does not start a session without specific audio/video consent', async () => {
     const database = new FakeConsentDatabase();
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
-      .overrideProvider(CognitoJwtService)
+      .overrideProvider(SgpStynxTokenVerifier)
       .useValue({
         verifyAuthorizationHeader: jest.fn(async () => ({
           sub: 'candidate',

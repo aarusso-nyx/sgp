@@ -7,7 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { CurrentActor } from '../auth/current-actor.decorator';
-import { AuthenticatedActor } from '../auth/auth.types';
+import { AuthenticatedActor } from '../auth/actor.types';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { CreateLgpdRightsRequestDto } from './lgpd-rights.dto';

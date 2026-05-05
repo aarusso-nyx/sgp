@@ -33,7 +33,7 @@ From the repository root:
 - Tests: `npm run test`, `npm run test:admin`, `npm run test:portal`, `npm run test:backend`, `npm run test:db`, `npm run test:e2e`, `npm run test:coverage`, `npm run test:qa`
 - Audit helpers: `npm run audit:schema`, `npm run audit:api`, `npm run audit:fr`, `npm run audit:tests`, `npm run audit:hotspots -- --baseline <sha>`, `npm run audit:backlog -- --closure <path>`, `npm run audit:pvd`, `npm run audit:all`
 - Database: `npm run db -- help`, `npm run db:migrate`, `npm run db:seed`, `npm run db:smoke`
-- Governance/evidence: `npm run api:alignment:sync`, `npm run api:alignment:check -- --json`, `npm run api:operation:check`, `npm run api:spec:check`, `npm run db:alignment:check -- --json`, `npm run db:fk-coverage:check`, `npm run db:push:guard`, `npm run health:json`, `npm run governance:check`, `npm run evidence:check`
+- Governance/evidence: `npm run api:alignment:sync`, `npm run api:alignment:check -- --json`, `npm run api:operation:check`, `npm run api:spec:check`, `npm run db:alignment:check -- --json`, `npm run db:fk-coverage:check`, `npm run db:push:guard`, `npm run health:json`, `npm run governance:check`, `npm run evidence:check`. DB alignment includes RLS, tenant coverage, SECURITY DEFINER search paths, PII cipher coverage, and runtime grants.
 - Operations: `npm run qa:bootstrap`, `npm run qa:smoke:urls`, `npm run deploy -- --dry-run`, `npm run clean`
 - Generators: `node scripts/generate.mjs openapi-client`, `node scripts/generate.mjs permissions`
 

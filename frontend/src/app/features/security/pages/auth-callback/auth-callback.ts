@@ -3,6 +3,8 @@ import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/cor
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { StynxSessionService } from '@stynx-web/angular-auth';
+
 import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 @Component({
@@ -15,10 +17,15 @@ import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-message
 export class AuthCallback implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly session = inject(StynxSessionService);
 
   message = SGP_FEATURE_I18N_MESSAGES.m234;
 
   ngOnInit(): void {
+    void this.completeLogin();
+  }
+
+  private async completeLogin(): Promise<void> {
     const error = this.route.snapshot.queryParamMap.get('error');
     const code = this.route.snapshot.queryParamMap.get('code');
 
@@ -32,11 +39,13 @@ export class AuthCallback implements OnInit {
       return;
     }
 
-    this.message =
-      'Código de autorização recebido. A troca por token será implementada nesta rota.';
+    this.message = SGP_FEATURE_I18N_MESSAGES.m234;
 
-    setTimeout(() => {
-      void this.router.navigateByUrl('/gestao');
-    }, 1200);
+    try {
+      await this.session.completeLogin(window.location.href);
+      await this.router.navigateByUrl('/gestao');
+    } catch {
+      this.message = SGP_FEATURE_I18N_MESSAGES.m235;
+    }
   }
 }

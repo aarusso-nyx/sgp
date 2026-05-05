@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { ConfigService } from '@nestjs/config';
 import { Pool, PoolClient, QueryResultRow } from 'pg';
 
-import type { AuthenticatedActor } from '../../backend/src/auth/auth.types';
+import type { AuthenticatedActor } from '../../backend/src/auth/actor.types';
 import { RequestContextStore } from '../../backend/src/common/request-context/request-context.store';
 import { DatabaseService } from '../../backend/src/database/database.service';
 import { FgtsService } from '../../backend/src/folha-pagamento/fgts/fgts.service';

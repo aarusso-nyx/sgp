@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 import type { RequestWithContext } from '../common/request-id/request-with-context';
-import { AuthenticatedActor } from './auth.types';
+import { AuthenticatedActor } from './actor.types';
 
 export const CurrentActor = createParamDecorator(
   (

@@ -12,7 +12,7 @@ import {
   Public,
   RequirePermission,
 } from '../../iam/decorators/require-permission.decorator';
-import type { AuthenticatedActor } from '../auth.types';
+import type { AuthenticatedActor } from '../actor.types';
 import { CurrentActor } from '../current-actor.decorator';
 import type {
   GovBrSignCallbackQueryDto,

@@ -2,6 +2,7 @@ import { Route, Routes } from '@angular/router';
 
 import { authGuard } from './core/auth/auth-guard';
 import { PORTAL_FEATURE_CATALOG } from './core/portal/portal-feature-catalog';
+import { PortalAuthCallback } from './pages/auth-callback/auth-callback';
 import { Contracheque } from './pages/contracheque/contracheque';
 import { Ferias } from './pages/ferias/ferias';
 import { GovBrSignCallback } from './pages/govbr-sign-callback/govbr-sign-callback';
@@ -100,4 +101,10 @@ const portalRoutes: Routes = [
   },
 ];
 
-export const routes: Routes = portalRoutes.map(withAuthGuard);
+export const routes: Routes = [
+  {
+    path: 'auth/callback',
+    component: PortalAuthCallback,
+  },
+  ...portalRoutes.map(withAuthGuard),
+];

@@ -10,6 +10,10 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
+import {
+  SgpStynxAuthGuard,
+  SgpStynxAuthorizationGuard,
+} from './auth/sgp-stynx-auth.guard';
 import { AuditRequiredInterceptor } from './common/audit/audit-required.interceptor';
 import { StandardExceptionFilter } from './common/errors/standard-exception.filter';
 import { createLoggingModule } from './common/logging/logging.config';
@@ -18,7 +22,6 @@ import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { validateEnvironment } from './config/environment';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
-import { PermissionGuard } from './iam/guards/permission.guard';
 import { PortalModule } from './portal/portal.module';
 
 @Module({
@@ -58,7 +61,11 @@ import { PortalModule } from './portal/portal.module';
     },
     {
       provide: APP_GUARD,
-      useClass: PermissionGuard,
+      useClass: SgpStynxAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: SgpStynxAuthorizationGuard,
     },
   ],
 })

@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, finalize, takeUntil } from 'rxjs';
@@ -18,6 +25,7 @@ interface MedicalLeave {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-licencas-saude',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
@@ -26,6 +34,7 @@ interface MedicalLeave {
 })
 export class LicencasSaude implements OnInit, OnDestroy {
   private readonly api = inject(ApiClient);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly route = inject(ActivatedRoute);
   private readonly formBuilder = inject(UntypedFormBuilder);
   private readonly destroy$ = new Subject<void>();
@@ -53,6 +62,7 @@ export class LicencasSaude implements OnInit, OnDestroy {
       if (this.section !== 'solicitar') {
         this.load();
       }
+      this.cdr.markForCheck();
     });
   }
 
@@ -68,11 +78,13 @@ export class LicencasSaude implements OnInit, OnDestroy {
     }
     this.saving = true;
     this.error = '';
+    this.cdr.markForCheck();
     this.api
       .post<unknown, Record<string, unknown>>('v1/licencas/saude/agendamento', this.form.value)
       .pipe(
         finalize(() => {
           this.saving = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )
@@ -91,11 +103,13 @@ export class LicencasSaude implements OnInit, OnDestroy {
     if (!employeeId) return;
     this.loading = true;
     this.error = '';
+    this.cdr.markForCheck();
     this.api
       .get<MedicalLeave[]>(`v1/licencas/saude/${employeeId}`)
       .pipe(
         finalize(() => {
           this.loading = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )

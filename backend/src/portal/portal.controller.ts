@@ -11,7 +11,7 @@ import { CurrentActor } from '../auth/current-actor.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { CadastralChangeRequestDto } from '../rh/employees/employees.dto';
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
-import { AuthenticatedActor } from '../auth/auth.types';
+import { AuthenticatedActor } from '../auth/actor.types';
 import { PortalService } from './portal.service';
 
 @ApiTags('portal')

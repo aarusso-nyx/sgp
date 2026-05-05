@@ -5,12 +5,13 @@ import { resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 
 import { checkDefinerSearchPaths } from './definer-search-path.mjs';
+import { checkGrantsAlignment } from './grants-alignment.mjs';
 import { checkPiiCipherCoverage } from './pii-cipher-coverage.mjs';
 
 const cwd = process.cwd();
 const matrixPath = resolve(cwd, 'docs/gov/generated/database/alignment-matrix.json');
 const sqlSupportPath = resolve(cwd, 'database/sql');
-const authJwtServicePath = resolve(cwd, 'backend/src/auth/cognito-jwt.service.ts');
+const authTokenVerifierPath = resolve(cwd, 'backend/src/auth/sgp-stynx-token-verifier.service.ts');
 const databaseServicePath = resolve(cwd, 'backend/src/database/database.service.ts');
 const portalServicePath = resolve(cwd, 'backend/src/portal/portal.service.ts');
 const publicTransparencyServicePath = resolve(
@@ -408,7 +409,7 @@ function main() {
   const rlsPolicies = canonicalSchema;
   const rlsContext = canonicalSchema;
   const portalProjectionSql = canonicalSchema;
-  const authJwtService = readFileSync(authJwtServicePath, 'utf8');
+  const authTokenVerifier = readFileSync(authTokenVerifierPath, 'utf8');
   const databaseService = readFileSync(databaseServicePath, 'utf8');
   const portalService = readFileSync(portalServicePath, 'utf8');
   const publicTransparencyService = readFileSync(publicTransparencyServicePath, 'utf8');
@@ -418,10 +419,10 @@ function main() {
     ok('RLS policy file has no notification_counter policy references.');
   }
 
-  if (!includesAny(authJwtService, ["'custom:tenant_id'", 'tenant_id'])) {
-    fail('Auth JWT service does not enforce tenant claims.');
+  if (!includesAny(authTokenVerifier, ["'custom:tenant_id'", 'tenant_id'])) {
+    fail('SGP Stynx token verifier does not enforce tenant claims.');
   } else {
-    ok('Auth JWT service enforces JWT tenant claims.');
+    ok('SGP Stynx token verifier enforces JWT tenant claims.');
   }
 
   if (!includesAny(databaseService, ['app.current_tenant_id', 'app.current_tenant'])) {
@@ -498,6 +499,13 @@ function main() {
     fail(`PII cipher coverage gaps: ${piiCipherCoverage.violations.join('; ')}`);
   } else {
     ok(`All ${piiCipherCoverage.highRiskCount} high-risk PII columns have cipher siblings.`);
+  }
+
+  const grantsAlignment = checkGrantsAlignment(cwd);
+  if (!grantsAlignment.ok) {
+    fail(`Runtime grant alignment violations: ${grantsAlignment.violations.join('; ')}`);
+  } else {
+    ok(`Runtime grants match ${grantsAlignment.baselineCount} least-privilege baseline entries.`);
   }
 
   const runtimeFilePaths = execSync(

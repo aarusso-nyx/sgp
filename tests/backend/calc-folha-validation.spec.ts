@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
 import { Pool, PoolClient } from 'pg';
 
-import type { AuthenticatedActor } from '../../backend/src/auth/auth.types';
+import type { AuthenticatedActor } from '../../backend/src/auth/actor.types';
 import { RequestContextStore } from '../../backend/src/common/request-context/request-context.store';
 import { DatabaseService } from '../../backend/src/database/database.service';
 

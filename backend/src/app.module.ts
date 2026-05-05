@@ -12,6 +12,10 @@ import { AuditModule } from './audit/audit.module';
 import { AuditoriaModule } from './auditoria/auditoria.module';
 import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { AuthModule } from './auth/auth.module';
+import {
+  SgpStynxAuthGuard,
+  SgpStynxAuthorizationGuard,
+} from './auth/sgp-stynx-auth.guard';
 import { StandardExceptionFilter } from './common/errors/standard-exception.filter';
 import { AuditRequiredInterceptor } from './common/audit/audit-required.interceptor';
 import { createLoggingModule } from './common/logging/logging.config';
@@ -27,7 +31,6 @@ import { FolhaPagamentoModule } from './folha-pagamento/folha-pagamento.module';
 import { GestaoModule } from './gestao/gestao.module';
 import { HealthModule } from './health/health.module';
 import { IamModule } from './iam/iam.module';
-import { PermissionGuard } from './iam/guards/permission.guard';
 import { StynxEsocialModule } from './integrations/stynx-esocial';
 import { IntegrationsWorkerModule } from './integrations-worker/integrations-worker.module';
 import { LgpdAdminModule } from './lgpd/lgpd-admin.module';
@@ -112,7 +115,11 @@ import { AppService } from './app.service';
     },
     {
       provide: APP_GUARD,
-      useClass: PermissionGuard,
+      useClass: SgpStynxAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: SgpStynxAuthorizationGuard,
     },
   ],
 })

@@ -5,7 +5,7 @@ import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
-import { CognitoJwtService } from '../../backend/src/auth/cognito-jwt.service';
+import { SgpStynxTokenVerifier } from '../../backend/src/auth/sgp-stynx-token-verifier.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
 import {
   TEST_INSTANT_2026_05_02T13_00_00_000Z,
@@ -135,7 +135,7 @@ describe('REC-09 certificacao digital da banca', () => {
   beforeEach(async () => {
     database = new FakeRec09Database();
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
-      .overrideProvider(CognitoJwtService)
+      .overrideProvider(SgpStynxTokenVerifier)
       .useValue({
         verifyAuthorizationHeader: jest.fn(async () => ({
           sub: 'banca-user',

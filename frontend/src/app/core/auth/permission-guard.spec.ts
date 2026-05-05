@@ -1,16 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn, Router, UrlTree, provideRouter } from '@angular/router';
+import { StynxSessionService } from '@stynx-web/angular-auth';
 import { vi } from 'vitest';
 
 import { permissionGuard } from './permission-guard';
-import { Permission } from './permission';
 
 describe('permissionGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() => permissionGuard(...guardParameters));
 
-  const permission = {
-    allows: vi.fn(),
+  const session = {
+    hasAllPermissions: vi.fn(),
+    snapshot: vi.fn(),
   };
 
   let router: Router;
@@ -19,26 +20,25 @@ describe('permissionGuard', () => {
     vi.clearAllMocks();
 
     TestBed.configureTestingModule({
-      providers: [provideRouter([]), { provide: Permission, useValue: permission }],
+      providers: [provideRouter([]), { provide: StynxSessionService, useValue: session }],
     });
 
     router = TestBed.inject(Router);
   });
 
   it('allows navigation when requirements pass', () => {
-    permission.allows.mockReturnValue(true);
+    session.hasAllPermissions.mockReturnValue(true);
+    session.snapshot.mockReturnValue({ claims: { groups: [] } });
 
     const result = executeGuard({ data: { permissions: ['x'] } } as never, {} as never);
 
     expect(result).toBe(true);
-    expect(permission.allows).toHaveBeenCalledWith({
-      requiredPermissions: ['x'],
-      requiredGroups: [],
-    });
+    expect(session.hasAllPermissions).toHaveBeenCalledWith(['x']);
   });
 
   it('redirects to forbidden when requirements fail', () => {
-    permission.allows.mockReturnValue(false);
+    session.hasAllPermissions.mockReturnValue(true);
+    session.snapshot.mockReturnValue({ claims: { groups: ['auditor'] } });
 
     const result = executeGuard({ data: { groups: ['admins'] } } as never, {} as never) as UrlTree;
 

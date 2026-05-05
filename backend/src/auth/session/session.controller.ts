@@ -7,7 +7,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { AuthenticatedActor } from '../auth.types';
+import { AuthenticatedActor } from '../actor.types';
 import { CurrentActor } from '../current-actor.decorator';
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import {

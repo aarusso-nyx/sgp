@@ -1,17 +1,22 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-
-import { CognitoAuth } from '../auth/cognito-auth';
+import { StynxSessionService } from '@stynx-web/angular-auth';
+import { from, switchMap } from 'rxjs';
 
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = inject(CognitoAuth).accessToken();
-  if (!token) return next(req);
+  const session = inject(StynxSessionService);
 
-  return next(
-    req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+  return from(session.getAccessToken()).pipe(
+    switchMap((token) => {
+      if (!token) return next(req);
+
+      return next(
+        req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token}`,
+          },
+        }),
+      );
     }),
   );
 };

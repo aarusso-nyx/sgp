@@ -6,7 +6,7 @@ import Decimal from 'decimal.js';
 import { ConfigService } from '@nestjs/config';
 import { Pool, PoolClient, QueryResultRow } from 'pg';
 
-import type { AuthenticatedActor } from '../../backend/src/auth/auth.types';
+import type { AuthenticatedActor } from '../../backend/src/auth/actor.types';
 import type { CareerPlanService } from '../../backend/src/avaliacao/career-plan/career-plan.service';
 import type { EligibilityService } from '../../backend/src/avaliacao/progression/progression.service';
 import { RequestContextStore } from '../../backend/src/common/request-context/request-context.store';

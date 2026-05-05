@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, finalize, takeUntil } from 'rxjs';
@@ -19,6 +26,7 @@ interface LeaveRecord {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-licencas',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
@@ -27,6 +35,7 @@ interface LeaveRecord {
 })
 export class Licencas implements OnInit, OnDestroy {
   private readonly api = inject(ApiClient);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly route = inject(ActivatedRoute);
   private readonly formBuilder = inject(FormBuilder);
   private readonly destroy$ = new Subject<void>();
@@ -68,6 +77,7 @@ export class Licencas implements OnInit, OnDestroy {
       this.section = (segments.at(-1)?.path ?? 'solicitacoes') as LicencasSection;
       this.message = '';
       this.error = '';
+      this.cdr.markForCheck();
     });
   }
 
@@ -84,11 +94,13 @@ export class Licencas implements OnInit, OnDestroy {
     }
     this.loading = true;
     this.error = '';
+    this.cdr.markForCheck();
     this.api
       .get<LeaveRecord[]>(`v1/licencas/${employeeId}`)
       .pipe(
         finalize(() => {
           this.loading = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )
@@ -110,11 +122,13 @@ export class Licencas implements OnInit, OnDestroy {
     const payload = this.form.getRawValue();
     this.saving = true;
     this.error = '';
+    this.cdr.markForCheck();
     this.api
       .post<LeaveRecord, Record<string, unknown>>('v1/licencas', payload)
       .pipe(
         finalize(() => {
           this.saving = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )

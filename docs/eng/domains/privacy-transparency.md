@@ -518,6 +518,30 @@ encrypt only new writes or changed values when a session key is present. A futur
 owner-approved backfill must define the freeze window, row-count parity evidence,
 key-retirement criteria, and rollback posture before plaintext retirement.
 
+### Key rotation and backfill boundary
+
+`database/sql/15a-pii-encryption-rotation.sql` adds the non-mutating rotation
+primitive `hr.sgp_rotate_pii_cipher(...)` and the reviewed manifest
+`hr.sgp_pii_cipher_rotation_manifest()`. The manifest is the operator checklist
+for every high-risk plaintext/cipher/key-id triplet covered by
+`scripts/lib/checks/db/pii-cipher-coverage.mjs`.
+
+Rotation uses a dual-key window:
+
+1. Load the old and new pgcrypto keys through the deployment secret boundary.
+2. Run an operator-reviewed batch script generated from
+   `hr.sgp_pii_cipher_rotation_manifest()`.
+3. For each row, decrypt with the old key, re-encrypt with the new key through
+   `hr.sgp_rotate_pii_cipher(...)`, and update the paired `_cipher_key_id`.
+4. Verify row-count parity, non-null cipher count parity, and a sampled
+   decrypt-read through the existing `hr.v_*_pii_decrypted` views.
+5. Retire the old key only after rollback evidence and audit export are retained.
+
+Backfill of existing plaintext into ciphertext remains owner-approved operator
+work. SGP code and SQL may provide primitives and manifests, but automated
+backfill execution, plaintext column tightening, and old-key retirement are not
+part of normal migrations.
+
 ## LGPD treatment by public power
 
 ## LGPD treatment by public power

@@ -18,7 +18,7 @@ import {
 import type { Response } from 'express';
 
 import { CurrentActor } from '../../auth/current-actor.decorator';
-import type { AuthenticatedActor } from '../../auth/auth.types';
+import type { AuthenticatedActor } from '../../auth/actor.types';
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { PayslipBatchRequestDto } from './payslip.dto';

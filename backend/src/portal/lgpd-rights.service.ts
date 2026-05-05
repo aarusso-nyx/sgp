@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
-import { AuthenticatedActor } from '../auth/auth.types';
+import { AuthenticatedActor } from '../auth/actor.types';
 import { LgpdLegalBasisService } from '../common/lgpd/legal-basis.service';
 import { DatabaseService } from '../database/database.service';
 import { CreateLgpdRightsRequestDto, LgpdRightType } from './lgpd-rights.dto';

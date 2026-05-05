@@ -1,6 +1,6 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 
-import type { AuthenticatedActor } from '../../auth/auth.types';
+import type { AuthenticatedActor } from '../../auth/actor.types';
 
 export interface RequestContextSnapshot {
   requestId?: string;

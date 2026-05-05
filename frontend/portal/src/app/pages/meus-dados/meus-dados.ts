@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, finalize, takeUntil } from 'rxjs';
@@ -17,6 +24,7 @@ interface GovBrSignInitiation {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-meus-dados',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
@@ -25,6 +33,7 @@ interface GovBrSignInitiation {
 })
 export class MeusDados implements OnInit, OnDestroy {
   private readonly api = inject(ApiClient);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly route = inject(ActivatedRoute);
   private readonly formBuilder = inject(FormBuilder);
   private readonly destroy$ = new Subject<void>();
@@ -67,11 +76,13 @@ export class MeusDados implements OnInit, OnDestroy {
   load(): void {
     this.loading = true;
     this.error = '';
+    this.cdr.markForCheck();
     this.api
       .get<unknown>(`v1/portal/meus-dados/${this.section}`)
       .pipe(
         finalize(() => {
           this.loading = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )
@@ -96,6 +107,7 @@ export class MeusDados implements OnInit, OnDestroy {
     const payload = this.payload();
     this.saving = true;
     this.error = '';
+    this.cdr.markForCheck();
     this.api
       .put<Record<string, unknown>, Record<string, unknown>>(
         `v1/portal/meus-dados/${this.section}`,
@@ -108,6 +120,7 @@ export class MeusDados implements OnInit, OnDestroy {
       .pipe(
         finalize(() => {
           this.saving = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )
@@ -128,6 +141,7 @@ export class MeusDados implements OnInit, OnDestroy {
 
     this.signing = true;
     this.error = '';
+    this.cdr.markForCheck();
     this.api
       .post<
         GovBrSignInitiation,
@@ -150,6 +164,7 @@ export class MeusDados implements OnInit, OnDestroy {
       .pipe(
         finalize(() => {
           this.signing = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )

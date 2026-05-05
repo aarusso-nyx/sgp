@@ -1,22 +1,25 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { StynxSessionService } from '@stynx-web/angular-auth';
 import { vi } from 'vitest';
 
-import { CognitoAuth } from '../../core/auth/cognito-auth';
 import { NavigationFilter } from '../../core/navigation/navigation-filter';
 import { Shell } from './shell';
 
 describe('Shell', () => {
   beforeEach(async () => {
-    const auth = {
-      currentSession: vi.fn(),
-      clearSession: vi.fn(),
+    const session = {
+      snapshot: vi.fn(),
+      logout: vi.fn().mockResolvedValue(undefined),
     };
-    auth.currentSession.mockReturnValue({
-      subject: '1',
-      login: 'admin',
-      displayName: 'Administrador',
-      groups: [],
+    session.snapshot.mockReturnValue({
+      active: true,
+      claims: {
+        sub: '1',
+        username: 'admin',
+        name: 'Administrador',
+        groups: [],
+      },
       permissions: [],
     });
 
@@ -49,7 +52,7 @@ describe('Shell', () => {
       imports: [Shell],
       providers: [
         provideRouter([]),
-        { provide: CognitoAuth, useValue: auth },
+        { provide: StynxSessionService, useValue: session },
         { provide: NavigationFilter, useValue: filter },
       ],
     }).compileComponents();

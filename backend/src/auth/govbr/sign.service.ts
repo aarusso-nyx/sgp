@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 
-import { AuthenticatedActor } from '../auth.types';
+import { AuthenticatedActor } from '../actor.types';
 import {
   GovBrSignatureDecision,
   GovBrAdvancedSignatureEnvelope,

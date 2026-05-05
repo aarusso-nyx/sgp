@@ -1,53 +1,49 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
+import { StynxSessionService } from '@stynx-web/angular-auth';
 import { vi } from 'vitest';
 
 import { authGuard } from './auth-guard';
-import { CognitoAuth } from './cognito-auth';
 
 describe('authGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() => authGuard(...guardParameters));
 
-  const auth = {
-    currentSession: vi.fn(),
-    accessToken: vi.fn(),
-    startLogin: vi.fn(),
+  const session = {
+    snapshot: vi.fn(),
+    login: vi.fn(),
+    refresh: vi.fn(),
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
 
     TestBed.configureTestingModule({
-      providers: [{ provide: CognitoAuth, useValue: auth }],
+      providers: [{ provide: StynxSessionService, useValue: session }],
     });
   });
 
-  it('allows navigation for an active session', () => {
-    auth.currentSession.mockReturnValue({
-      subject: '1',
-      login: 'user',
-      displayName: 'User',
-      groups: [],
-      permissions: [],
-    });
+  it('allows navigation for an active session', async () => {
+    session.snapshot.mockReturnValue({ active: true });
 
-    expect(executeGuard({} as never, {} as never)).toBe(true);
-    expect(auth.startLogin).not.toHaveBeenCalled();
+    await expect(executeGuard({} as never, {} as never)).resolves.toBe(true);
+    expect(session.refresh).not.toHaveBeenCalled();
+    expect(session.login).not.toHaveBeenCalled();
   });
 
-  it('allows navigation when an access token exists', () => {
-    auth.currentSession.mockReturnValue(null);
-    auth.accessToken.mockReturnValue('jwt');
+  it('allows navigation after refreshing a stored Stynx session', async () => {
+    session.snapshot.mockReturnValue({ active: false });
+    session.refresh.mockResolvedValue('admin-token');
 
-    expect(executeGuard({} as never, {} as never)).toBe(true);
+    await expect(executeGuard({} as never, {} as never)).resolves.toBe(true);
+    expect(session.login).not.toHaveBeenCalled();
   });
 
-  it('starts login and blocks navigation without session state', () => {
-    auth.currentSession.mockReturnValue(null);
-    auth.accessToken.mockReturnValue(null);
+  it('starts login and blocks navigation without session state', async () => {
+    session.snapshot.mockReturnValue({ active: false });
+    session.refresh.mockResolvedValue(null);
 
-    expect(executeGuard({} as never, {} as never)).toBe(false);
-    expect(auth.startLogin).toHaveBeenCalled();
+    await expect(executeGuard({} as never, {} as never)).resolves.toBe(false);
+    expect(session.login).toHaveBeenCalled();
   });
 });

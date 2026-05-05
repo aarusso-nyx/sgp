@@ -276,17 +276,17 @@ node scripts/db.mjs <apply-sql|bootstrap-smoke>
 
 ### Actions
 
-| Subcommand          | Npm Alias                      | Behavior                                                                                                                      |
-| ------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `generate`          | `npm run db:generate`          | Runs Prisma generate in backend workspace.                                                                                    |
-| `migrate`           | `npm run db:migrate`           | Applies Prisma migrations, then canonical SQL files from `database/sql/`. Requires `DATABASE_URL`.                            |
-| `seed`              | `npm run db:seed`              | Runs backend deterministic seed.                                                                                              |
-| `smoke`             | `npm run db:smoke`             | Runs DB bootstrap smoke. Uses local `sgp_test` by default when no `DATABASE_URL` is set by the dispatcher.                    |
-| `studio`            | `npm run db:studio`            | Opens Prisma Studio in backend workspace.                                                                                     |
-| `alignment check`   | `npm run db:alignment:check`   | Validates generated database alignment matrix, Prisma/schema posture, RLS, tenant coverage, and forbidden runtime references. |
-| `fk-coverage check` | `npm run db:fk-coverage:check` | Validates FK and leading-column index coverage from canonical SQL.                                                            |
-| `fk-coverage write` | `npm run db:fk-coverage:write` | Rewrites generated FK/index SQL support files. Review generated SQL diffs intentionally.                                      |
-| `push-guard`        | `npm run db:push:guard`        | Scans added diff lines for forbidden `prisma db push --force-reset`.                                                          |
+| Subcommand          | Npm Alias                      | Behavior                                                                                                                                                                                            |
+| ------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `generate`          | `npm run db:generate`          | Runs Prisma generate in backend workspace.                                                                                                                                                          |
+| `migrate`           | `npm run db:migrate`           | Applies Prisma migrations, then canonical SQL files from `database/sql/`. Requires `DATABASE_URL`.                                                                                                  |
+| `seed`              | `npm run db:seed`              | Runs backend deterministic seed.                                                                                                                                                                    |
+| `smoke`             | `npm run db:smoke`             | Runs DB bootstrap smoke. Uses local `sgp_test` by default when no `DATABASE_URL` is set by the dispatcher.                                                                                          |
+| `studio`            | `npm run db:studio`            | Opens Prisma Studio in backend workspace.                                                                                                                                                           |
+| `alignment check`   | `npm run db:alignment:check`   | Validates generated database alignment matrix, SQL-only schema posture, RLS, tenant coverage, runtime grants, PII cipher coverage, SECURITY DEFINER search paths, and forbidden runtime references. |
+| `fk-coverage check` | `npm run db:fk-coverage:check` | Validates FK and leading-column index coverage from canonical SQL.                                                                                                                                  |
+| `fk-coverage write` | `npm run db:fk-coverage:write` | Rewrites generated FK/index SQL support files. Review generated SQL diffs intentionally.                                                                                                            |
+| `push-guard`        | `npm run db:push:guard`        | Scans added diff lines for forbidden `prisma db push --force-reset`.                                                                                                                                |
 
 ### Parameters
 
@@ -296,6 +296,11 @@ node scripts/db.mjs <apply-sql|bootstrap-smoke>
 | `--range <git-range>` | `db:push:guard`                              | Explicit git diff range to scan. |
 
 ### Notes
+
+`db:alignment:check` is static and non-mutating. Its grant baseline is
+implemented by `scripts/lib/checks/db/grants-alignment.mjs`, which accepts only
+the current least-privilege runtime grants for `sgp_app_role` and
+`sgp_portal_api`; unexpected grants fail the alignment gate.
 
 `db:smoke` is destructive only for a local disposable database whose URL path is
 `/sgp_test` and whose host is localhost, 127.0.0.1, or ::1. It resets schemas,

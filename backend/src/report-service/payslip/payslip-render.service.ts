@@ -8,7 +8,7 @@ import {
 import { createHash } from 'node:crypto';
 import { PoolClient, QueryResultRow } from 'pg';
 
-import type { AuthenticatedActor } from '../../auth/auth.types';
+import type { AuthenticatedActor } from '../../auth/actor.types';
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { LGPD_DATA_FLOWS } from '../../common/lgpd/legal-basis.registry';
 import { LgpdLegalBasisService } from '../../common/lgpd/legal-basis.service';

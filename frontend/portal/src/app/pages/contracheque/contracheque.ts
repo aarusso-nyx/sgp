@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, finalize, takeUntil } from 'rxjs';
@@ -31,6 +38,7 @@ interface Paystub {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sgp-contracheque',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
@@ -39,6 +47,7 @@ interface Paystub {
 })
 export class Contracheque implements OnInit, OnDestroy {
   private readonly api = inject(ApiClient);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly destroy$ = new Subject<void>();
@@ -74,12 +83,14 @@ export class Contracheque implements OnInit, OnDestroy {
     }
     this.loading = true;
     this.error = '';
+    this.cdr.markForCheck();
     const competence = this.form.controls.competence.value;
     this.api
       .get<Paystub>(`v1/portal/contracheque/${competence}`)
       .pipe(
         finalize(() => {
           this.loading = false;
+          this.cdr.markForCheck();
         }),
         takeUntil(this.destroy$),
       )

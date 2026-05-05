@@ -10,9 +10,10 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { StynxSessionService } from '@stynx-web/angular-auth';
 import { filter, map, startWith } from 'rxjs';
 
-import { CognitoAuth } from '../../core/auth/cognito-auth';
+import { UserSession } from '../../core/models/user-session';
 import { NavigationFilter } from '../../core/navigation/navigation-filter';
 import {
   LegacyNavigationItem,
@@ -39,7 +40,7 @@ import {
   styleUrl: './shell.scss',
 })
 export class Shell {
-  private readonly auth = inject(CognitoAuth);
+  private readonly session = inject(StynxSessionService);
   private readonly navigationFilter = inject(NavigationFilter);
   private readonly router = inject(Router);
   private readonly breakpointObserver = inject(BreakpointObserver);
@@ -59,11 +60,11 @@ export class Shell {
   );
 
   readonly menuSections = computed(() =>
-    this.navigationFilter.visibleSections(this.auth.currentSession()),
+    this.navigationFilter.visibleSections(this.currentSession()),
   );
 
   readonly userDisplayName = computed(() => {
-    const session = this.auth.currentSession();
+    const session = this.currentSession();
     return session?.displayName || session?.login || 'Sessão autenticada';
   });
 
@@ -135,8 +136,33 @@ export class Shell {
   }
 
   logout(): void {
-    this.auth.clearSession();
-    this.router.navigateByUrl('/');
+    void this.session.logout().finally(() => this.router.navigateByUrl('/'));
+  }
+
+  private currentSession(): UserSession | null {
+    const snapshot = this.session.snapshot();
+    if (!snapshot.active) return null;
+    const claims = snapshot.claims ?? {};
+    const login =
+      this.stringClaim(claims, 'username') ?? this.stringClaim(claims, 'email') ?? 'stynx-session';
+    return {
+      subject: this.stringClaim(claims, 'sub') ?? login,
+      login,
+      displayName: this.stringClaim(claims, 'name') ?? login,
+      groups: this.arrayClaim(claims, 'groups') ?? this.arrayClaim(claims, 'cognito:groups') ?? [],
+      permissions: snapshot.permissions,
+    };
+  }
+
+  private stringClaim(claims: Record<string, unknown>, key: string): string | null {
+    const value = claims[key];
+    return typeof value === 'string' && value.trim() ? value : null;
+  }
+
+  private arrayClaim(claims: Record<string, unknown>, key: string): string[] | null {
+    const value = claims[key];
+    if (!Array.isArray(value)) return null;
+    return value.filter((entry): entry is string => typeof entry === 'string');
   }
 
   private normalizedUrl(): string {

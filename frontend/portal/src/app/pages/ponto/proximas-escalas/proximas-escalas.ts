@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 
 import { ApiClient } from '../../../core/api/api-client';
 
@@ -13,6 +19,7 @@ interface UpcomingRosterEntry {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-proximas-escalas',
   standalone: true,
   imports: [CommonModule],
@@ -21,6 +28,7 @@ interface UpcomingRosterEntry {
 })
 export class ProximasEscalas implements OnInit {
   private readonly api = inject(ApiClient);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   entries: UpcomingRosterEntry[] = [];
   error = '';
@@ -29,9 +37,11 @@ export class ProximasEscalas implements OnInit {
     this.api.get<UpcomingRosterEntry[]>('v1/ponto/escalas/proximas').subscribe({
       next: (entries) => {
         this.entries = entries;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.error = 'Nao foi possivel carregar suas proximas escalas.';
+        this.cdr.markForCheck();
       },
     });
   }
