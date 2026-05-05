@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  Optional,
+  Inject,
   Param,
   Patch,
   Post,
@@ -45,7 +45,10 @@ import { AposentadoriaService } from './aposentadoria/aposentadoria.service';
 import { CtcService } from './ctc/ctc.service';
 import { DeclaracaoService } from './declaracao/declaracao.service';
 import { PensaoService } from './pensao/pensao.service';
-import { PrevidenciarioService } from './previdenciario.service';
+import {
+  PREVIDENCIARIO_SERVICE_REGISTRY,
+  type PrevidenciarioServiceRegistry,
+} from './previdenciario.tokens';
 import { RecadastramentoService } from './recadastramento/recadastramento.service';
 import { RegrasService } from './regras/regras.service';
 
@@ -61,30 +64,16 @@ export class PrevidenciarioController {
   private readonly recadastramentoService: RecadastramentoService;
 
   constructor(
-    private readonly previdenciarioService: PrevidenciarioService,
     private readonly auditService: AuditService,
-    @Optional() regrasService?: RegrasService,
-    @Optional() aposentadoriaService?: AposentadoriaService,
-    @Optional() pensaoService?: PensaoService,
-    @Optional() ctcService?: CtcService,
-    @Optional() declaracaoService?: DeclaracaoService,
-    @Optional() recadastramentoService?: RecadastramentoService,
+    @Inject(PREVIDENCIARIO_SERVICE_REGISTRY)
+    registry: PrevidenciarioServiceRegistry,
   ) {
-    this.regrasService =
-      regrasService ?? (this.previdenciarioService as unknown as RegrasService);
-    this.aposentadoriaService =
-      aposentadoriaService ??
-      (this.previdenciarioService as unknown as AposentadoriaService);
-    this.pensaoService =
-      pensaoService ?? (this.previdenciarioService as unknown as PensaoService);
-    this.ctcService =
-      ctcService ?? (this.previdenciarioService as unknown as CtcService);
-    this.declaracaoService =
-      declaracaoService ??
-      (this.previdenciarioService as unknown as DeclaracaoService);
-    this.recadastramentoService =
-      recadastramentoService ??
-      (this.previdenciarioService as unknown as RecadastramentoService);
+    this.regrasService = registry.regras;
+    this.aposentadoriaService = registry.aposentadoria;
+    this.pensaoService = registry.pensao;
+    this.ctcService = registry.ctc;
+    this.declaracaoService = registry.declaracao;
+    this.recadastramentoService = registry.recadastramento;
   }
 
   @ApiOperation({ summary: 'GET regras' })

@@ -9,9 +9,10 @@ import {
   type GovBrRelayRequestPayload,
 } from '../../backend/src/external/mocks/govbr-relay';
 import { GovBrQueueAdapter } from '../../backend/src/auth/govbr/adapters/queue-adapter';
+import { TEST_INSTANT_2026_05_04T14_10_00_000Z } from './helpers/date-fixtures';
 
 const tenantId = '00000000-0000-0000-0000-000000054100';
-const relayNow = () => new Date('2026-05-04T14:10:00.000Z');
+const relayNow = () => new Date(TEST_INSTANT_2026_05_04T14_10_00_000Z);
 
 describe('R5-41 GovBR sign mock relay queue adapter (e2e)', () => {
   let transport: InMemoryQueueTransport;

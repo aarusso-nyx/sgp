@@ -1,13 +1,14 @@
 import { TceCircuitBreakerService } from './circuit-breaker.service';
 import { TceRetryStrategyService } from './retry-strategy.service';
 import { TceWorkerService } from './tce-worker.service';
+import { TEST_INSTANT_2026_05_04T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('TceWorkerService', () => {
   const originalEnv = { ...process.env };
 
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.setSystemTime(new Date('2026-05-04T00:00:00.000Z'));
+    jest.setSystemTime(new Date(TEST_INSTANT_2026_05_04T00_00_00_000Z));
     process.env = { ...originalEnv };
   });
 

@@ -82,26 +82,26 @@ COMMENT ON COLUMN saude.cat_emission.doctor_name IS 'pii=true;classification=per
 COMMENT ON COLUMN saude.health_program.responsible_doctor_crm IS 'pii=true;classification=professional_identifier;category=CRM;ropa_export=true;source=R5-70';
 COMMENT ON COLUMN saude.health_program.responsible_doctor_name IS 'pii=true;classification=personal_name;category=health_professional_identity;ropa_export=true;source=R5-70';
 
-CREATE OR REPLACE FUNCTION public.sgp_apply_esocial_spool_pii_comments()
+CREATE OR REPLACE FUNCTION public.sgp_apply_esocial_events_pii_comments()
 RETURNS void
 LANGUAGE plpgsql
 AS $$
 BEGIN
-  IF to_regclass('public.esocial_spool') IS NULL THEN
+  IF to_regclass('public.esocial_events') IS NULL THEN
     RETURN;
   END IF;
 
-  COMMENT ON COLUMN public.esocial_spool.source_ref IS
+  COMMENT ON COLUMN public.esocial_events.source_ref IS
     'pii=true;classification=pseudonymous_identifier;category=esocial_source_reference;ropa_export=true;source=R6-06';
-  COMMENT ON COLUMN public.esocial_spool.payload IS
+  COMMENT ON COLUMN public.esocial_events.payload IS
     'pii=true;classification=regulatory_payload;category=esocial_message_payload;ropa_export=true;source=R6-06';
-  COMMENT ON COLUMN public.esocial_spool.response IS
+  COMMENT ON COLUMN public.esocial_events.response IS
     'pii=true;classification=regulatory_payload;category=esocial_message_response;ropa_export=true;source=R6-06';
-  COMMENT ON COLUMN public.esocial_spool.error IS
+  COMMENT ON COLUMN public.esocial_events.error IS
     'pii=true;classification=operational_error;category=esocial_transport_error;ropa_export=true;source=R6-06';
-  COMMENT ON COLUMN public.esocial_spool.actor_sub IS
+  COMMENT ON COLUMN public.esocial_events.actor_sub IS
     'pii=true;classification=pseudonymous_identifier;category=actor_subject;ropa_export=true;source=R6-06';
-  COMMENT ON COLUMN public.esocial_spool.actor_login IS
+  COMMENT ON COLUMN public.esocial_events.actor_login IS
     'pii=true;classification=login_identifier;category=actor_login;ropa_export=true;source=R6-06';
 END;
 $$;

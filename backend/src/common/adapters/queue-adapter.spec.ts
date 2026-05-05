@@ -1,10 +1,13 @@
 import {
   adapterQueueTopics,
+  cappedExponentialJitterRetryStrategy,
   InMemoryQueueTransport,
+  linearRetryStrategy,
   QueueAdapterDeliveryError,
   type QueueAdapterDeadLetterEnvelope,
   type QueueAdapterRequestEnvelope,
   type QueueAdapterResponseEnvelope,
+  type QueueRetryStrategy,
   SgpQueueAdapter,
 } from './queue-adapter';
 import {
@@ -12,11 +15,51 @@ import {
   type ReferenceMockPayload,
   type ReferenceMockResponsePayload,
 } from '../../external/mocks/_reference';
+import { TEST_INSTANT_2026_05_04T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
+
+describe('queue retry strategies', () => {
+  it('keeps capped exponential jitter inside the configured floor and range', () => {
+    expect(
+      cappedExponentialJitterRetryStrategy(2, {
+        jitterUnit: 0,
+      }),
+    ).toBe(250);
+    expect(
+      cappedExponentialJitterRetryStrategy(2, {
+        jitterUnit: 0.5,
+      }),
+    ).toBe(275);
+    expect(
+      cappedExponentialJitterRetryStrategy(2, {
+        jitterUnit: 1,
+      }),
+    ).toBe(300);
+  });
+
+  it('caps high retry attempts at the configured maximum delay', () => {
+    expect(
+      cappedExponentialJitterRetryStrategy(20, {
+        jitterUnit: 0,
+      }),
+    ).toBe(30_000);
+    expect(
+      cappedExponentialJitterRetryStrategy(20, {
+        jitterUnit: 1,
+      }),
+    ).toBe(30_000);
+  });
+
+  it('keeps the deterministic linear retry strategy available for injection', () => {
+    expect(linearRetryStrategy(0)).toBe(0);
+    expect(linearRetryStrategy(2)).toBe(200);
+    expect(linearRetryStrategy(5)).toBe(500);
+  });
+});
 
 describe('SGP adapter mock queue contract', () => {
   const kind = 'reference' as const;
   const topics = adapterQueueTopics(kind);
-  const fixedNow = () => new Date('2026-05-04T00:00:00.000Z');
+  const fixedNow = () => new Date(TEST_INSTANT_2026_05_04T00_00_00_000Z);
 
   let transport: InMemoryQueueTransport;
   let adapter: SgpQueueAdapter<typeof kind>;
@@ -27,7 +70,10 @@ describe('SGP adapter mock queue contract', () => {
     responder?.close();
   });
 
-  function setup(transientFailuresBeforeSuccess = 1): void {
+  function setup(
+    transientFailuresBeforeSuccess = 1,
+    retryDelayMs: QueueRetryStrategy = () => 0,
+  ): void {
     transport = new InMemoryQueueTransport();
     responder = new ReferenceMockResponder({
       kind,
@@ -39,7 +85,7 @@ describe('SGP adapter mock queue contract', () => {
     adapter = new SgpQueueAdapter({
       kind,
       transport,
-      retryDelayMs: () => 0,
+      retryDelayMs,
       responseTimeoutMs: 1_000,
       now: fixedNow,
     });
@@ -132,6 +178,25 @@ describe('SGP adapter mock queue contract', () => {
       'RETRY',
       'OK',
     ]);
+  });
+
+  it('uses an injected deterministic strategy when scheduling retries', async () => {
+    const retryDelayMs = jest.fn(() => 0);
+    setup(1, retryDelayMs);
+
+    const response = await adapter.request<
+      ReferenceMockPayload,
+      ReferenceMockResponsePayload
+    >({
+      tenantId: 'tenant-a',
+      idempotencyKey: 'tenant-a:deterministic-retry:1',
+      correlationId: 'corr-deterministic-retry-1',
+      payload: { action: 'transient-then-ok', value: 'accepted' },
+    });
+
+    expect(response.status).toBe('OK');
+    expect(retryDelayMs).toHaveBeenCalledTimes(1);
+    expect(retryDelayMs).toHaveBeenCalledWith(2);
   });
 
   it('moves exhausted retry requests to the dead-letter topic', async () => {

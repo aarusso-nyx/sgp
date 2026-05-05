@@ -10,6 +10,7 @@ import {
   Permission,
 } from '../../backend/src/iam/permissions/permission-catalog.generated';
 import { AppModule } from './../../backend/src/app.module';
+import { TEST_INSTANT_2026_04_16T00_00_00_000Z } from './helpers/date-fixtures';
 
 interface FakeJobPositionRow {
   id: string;
@@ -74,7 +75,7 @@ class FakeDatabaseService {
       size_bytes: 20,
       storage_kind: 'S3',
       storage_key: 'documents/report_request/doc-1-report.pdf',
-      created_at: new Date('2026-04-16T00:00:00.000Z'),
+      created_at: new Date(TEST_INSTANT_2026_04_16T00_00_00_000Z),
     },
   ];
 
@@ -151,7 +152,7 @@ class FakeDatabaseService {
         size_bytes: Number(values[5] ?? 0),
         storage_kind: 'S3',
         storage_key: this.valueAsString(values[6]),
-        created_at: new Date('2026-04-16T00:00:00.000Z'),
+        created_at: new Date(TEST_INSTANT_2026_04_16T00_00_00_000Z),
       };
       this.documentAttachments.unshift(created);
       return Promise.resolve([created] as T[]);
@@ -278,7 +279,7 @@ class FakeDatabaseService {
     description: string,
     active = true,
   ): FakeJobPositionRow {
-    const now = new Date('2026-04-16T00:00:00.000Z');
+    const now = new Date(TEST_INSTANT_2026_04_16T00_00_00_000Z);
     return {
       id,
       code,

@@ -6,6 +6,7 @@ import {
   decryptTemplate,
   extractBiometricTemplate,
 } from './biometric-template';
+import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const candidatoId = '00000000-0000-4000-8000-000000000701';
 
@@ -27,7 +28,7 @@ class FakeCaptureDatabase {
               {
                 id: '00000000-0000-4000-8000-000000000702',
                 quality_score: values[4],
-                captured_at: new Date('2026-05-02T12:00:00.000Z'),
+                captured_at: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
                 retention_until: values[6],
               },
             ],

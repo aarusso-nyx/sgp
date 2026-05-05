@@ -232,7 +232,7 @@ export class PosseService {
       SELECT ${this.returningColumns()},
         (
           SELECT count(*)::text
-          FROM public.esocial_spool spool
+          FROM public.esocial_events spool
           WHERE spool.tenant_id = posse.tenant_id
             AND spool.event_class = 'S-2200'
             AND spool.source_ref->>'sourceEntityId' = posse.employee_id::text

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 
@@ -13,8 +13,16 @@ const nodePath = [
 ]
   .filter(Boolean)
   .join(':');
-const backendDistMain = resolve(sourceRoot, 'backend/dist/src/main.js');
-const backendDistPortalMain = resolve(sourceRoot, 'backend/dist/src/main-portal.js');
+function resolveBuiltEntry(entryName) {
+  const flatPath = resolve(sourceRoot, 'backend/dist', entryName);
+  if (existsSync(flatPath)) {
+    return flatPath;
+  }
+  return resolve(sourceRoot, 'backend/dist/src', entryName);
+}
+
+const backendDistMain = resolveBuiltEntry('main.js');
+const backendDistPortalMain = resolveBuiltEntry('main-portal.js');
 
 const adminOutDir = resolve(sourceRoot, 'frontend/src/app/core/api/generated');
 const portalOutDir = resolve(sourceRoot, 'frontend/portal/src/app/core/api/generated');

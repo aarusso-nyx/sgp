@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { DocumentsService } from './documents.service';
+import { TEST_INSTANT_2026_01_01T00_00_00_000Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('DocumentsService', () => {
   const documentRow = {
@@ -11,7 +12,7 @@ describe('DocumentsService', () => {
     size_bytes: 42,
     storage_kind: 'S3',
     storage_key: 'documents/report/doc-1-file.pdf',
-    created_at: new Date('2026-01-01T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
   };
 
   it('returns paged document metadata', async () => {
@@ -28,7 +29,7 @@ describe('DocumentsService', () => {
           size_bytes: 20,
           storage_kind: 'S3',
           storage_key: 'documents/report/doc-1-a.pdf',
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
         },
       ]);
     const service = new DocumentsService(
@@ -167,7 +168,7 @@ describe('DocumentsService', () => {
           size_bytes: 42,
           storage_kind: 'S3',
           storage_key: 'documents/report/doc-1-file.pdf',
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
         },
       ])
       .mockResolvedValueOnce([]);
@@ -261,7 +262,7 @@ describe('DocumentsService', () => {
           size_bytes: 42,
           storage_kind: 'S3',
           storage_key: 'documents/report/doc-1-file.pdf',
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
         },
       ])
       .mockResolvedValueOnce([]);

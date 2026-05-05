@@ -11,8 +11,9 @@ import {
   SiopsExportGenerator,
   type SiopsExportInput,
 } from '../../backend/src/integrations-worker/siops/siops-export.generator';
+import { TEST_INSTANT_2026_05_04T14_10_00_000Z } from './helpers/date-fixtures';
 
-const fixedNow = () => new Date('2026-05-04T14:10:00.000Z');
+const fixedNow = () => new Date(TEST_INSTANT_2026_05_04T14_10_00_000Z);
 
 describe('R5-40 SIOPS mock relay queue adapter (e2e)', () => {
   let transport: InMemoryQueueTransport;

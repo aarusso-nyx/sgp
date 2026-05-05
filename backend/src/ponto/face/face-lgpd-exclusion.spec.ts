@@ -1,4 +1,8 @@
 import { FaceConsentService } from './consent.service';
+import {
+  TEST_INSTANT_2026_05_02T12_00_00_000Z,
+  TEST_INSTANT_2026_05_02T13_00_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 const employeeId = '00000000-0000-4000-8000-000000000531';
 
@@ -18,8 +22,8 @@ class FakeExclusionDatabase {
                 id: '00000000-0000-4000-8000-000000000532',
                 employee_id: employeeId,
                 consent_version: 'ponto-face-v1',
-                consent_at: new Date('2026-05-02T12:00:00.000Z'),
-                withdrawn_at: new Date('2026-05-02T13:00:00.000Z'),
+                consent_at: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
+                withdrawn_at: new Date(TEST_INSTANT_2026_05_02T13_00_00_000Z),
               },
             ],
           };

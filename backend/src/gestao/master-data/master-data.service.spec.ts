@@ -1,4 +1,5 @@
 import { MasterDataService } from './master-data.service';
+import { TEST_INSTANT_2026_01_01T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('MasterDataService', () => {
   const uuid = '11111111-1111-4111-8111-111111111111';
@@ -9,7 +10,7 @@ describe('MasterDataService', () => {
     description: 'Description',
     active: true,
     metadata: { source: 'spec' },
-    created_at: new Date('2026-01-01T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
     updated_at: '2026-01-02T00:00:00.000Z',
   };
 

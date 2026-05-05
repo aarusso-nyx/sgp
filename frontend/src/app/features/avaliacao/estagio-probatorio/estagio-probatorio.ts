@@ -4,7 +4,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { MatButtonModule } from '@angular/material/button';
 import { Subject, finalize, map, takeUntil } from 'rxjs';
 
-import { OpenApiClient } from '../../../core/api/generated/openapi-client';
+import { OpenApiClient } from '../../../core/api/openapi-client';
 import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 
 interface ProbationDueEmployee {

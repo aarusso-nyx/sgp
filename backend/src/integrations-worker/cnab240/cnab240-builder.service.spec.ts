@@ -5,6 +5,7 @@ import {
   Cnab240BuilderService,
   Cnab240BuildInput,
 } from './cnab240-builder.service';
+import { TEST_INSTANT_2026_04_20T12_34_56_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 interface Cnab240GoldenCase {
   slug: string;
@@ -89,7 +90,7 @@ describe('Cnab240BuilderService', () => {
         companyName: 'Municipio Teste',
         companyRegistration: '12345678000199',
         paymentDate: '2026-04-25',
-        generatedAt: new Date('2026-04-20T12:34:56.000Z'),
+        generatedAt: new Date(TEST_INSTANT_2026_04_20T12_34_56_000Z),
         remittanceNumber: 7,
         payments: readGoldenFixture('bb').input.payments.map((payment) => ({
           ...payment,

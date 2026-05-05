@@ -3,6 +3,7 @@ import { GPSDuplicatesDCTFWebError } from './gps.errors';
 import { calculateGpsLateCharges } from './gps-late-charges';
 import { GpsService } from './gps.service';
 import { GpsTxtSerializer } from './gps-txt.serializer';
+import { TEST_INSTANT_2026_04_30T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const tenantId = '00000000-0000-0000-0000-00000000f504';
 const paymentCodeId = '00000000-0000-4000-8000-000000002402';
@@ -14,7 +15,9 @@ interface TestDbClient {
 
 describe('GpsService', () => {
   beforeEach(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2026-04-30T00:00:00.000Z'));
+    jest
+      .useFakeTimers()
+      .setSystemTime(new Date(TEST_INSTANT_2026_04_30T00_00_00_000Z));
   });
 
   afterEach(() => {
@@ -125,7 +128,7 @@ describe('GpsService', () => {
       calculateGpsLateCharges({
         competence: '2026-03-01',
         amount: '100.00',
-        paidAt: new Date('2026-04-30T00:00:00.000Z'),
+        paidAt: new Date(TEST_INSTANT_2026_04_30T00_00_00_000Z),
       }),
     ).toEqual({
       interestAmount: '0.33',

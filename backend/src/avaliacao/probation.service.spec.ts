@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { ProbationService } from './probation.service';
+import { TEST_INSTANT_2026_05_01T00_00_00Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('ProbationService', () => {
   it('creates a statutory probation evaluation for a 36 month period', async () => {
@@ -68,7 +69,7 @@ describe('ProbationService', () => {
     const service = new ProbationService({ configured: true, query } as never);
 
     await expect(
-      service.listDueForCompletion(new Date('2026-05-01T00:00:00Z')),
+      service.listDueForCompletion(new Date(TEST_INSTANT_2026_05_01T00_00_00Z)),
     ).resolves.toEqual([
       expect.objectContaining({
         funcionarioId: 'emp-1',

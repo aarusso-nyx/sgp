@@ -473,53 +473,6 @@ export const routes: Routes = [
           moduleLabel: 'Folha de Pgt',
         },
       },
-      {
-        path: 'esocial/tabelas',
-        loadComponent: () =>
-          import('./features/esocial/tabelas/esocial-tabelas').then((m) => m.ESocialTabelas),
-      },
-      {
-        path: 'esocial/trabalhadores',
-        loadComponent: () =>
-          import('./features/esocial/trabalhadores/esocial-trabalhadores').then(
-            (m) => m.ESocialTrabalhadores,
-          ),
-      },
-      {
-        path: 'esocial/folha-periodica',
-        loadComponent: () =>
-          import('./features/esocial/folha-periodica/esocial-folha-periodica').then(
-            (m) => m.ESocialFolhaPeriodica,
-          ),
-      },
-      {
-        path: 'esocial/fechamento',
-        loadComponent: () =>
-          import('./features/esocial/fechamento/esocial-fechamento').then(
-            (m) => m.ESocialFechamento,
-          ),
-      },
-      {
-        path: 'esocial/exclusao',
-        loadComponent: () =>
-          import('./features/esocial/exclusao/esocial-exclusao').then((m) => m.ESocialExclusao),
-      },
-      {
-        path: 'esocial/submissao',
-        loadComponent: () =>
-          import('./features/esocial/submissao/esocial-submissao').then((m) => m.ESocialSubmissao),
-      },
-      {
-        path: 'esocial/retornos',
-        loadComponent: () =>
-          import('./features/esocial/retornos/esocial-retornos').then((m) => m.ESocialRetornos),
-        canActivate: [permissionGuard],
-        data: {
-          moduleKey: 'esocial',
-          permissions: ['esocial.event.read'],
-          moduleLabel: 'eSocial',
-        },
-      },
       ...adminFeatureRoutes,
     ],
   },

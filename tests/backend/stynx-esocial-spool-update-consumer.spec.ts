@@ -1,17 +1,19 @@
-import { StynxEsocialSpoolUpdateConsumer } from '../../backend/src/integrations/stynx-esocial/spool-update-consumer.service';
+import { StynxEsocialEventsUpdateConsumer } from '../../backend/src/integrations/stynx-esocial/spool-update-consumer.service';
 
 const tenantId = '00000000-0000-4000-8000-000000060801';
 const messageId = '00000000-0000-4000-8000-000000060802';
 
-describe('StynxEsocialSpoolUpdateConsumer', () => {
-  it('applies ACCEPTED spool updates through EsocialSpoolService', async () => {
+describe('StynxEsocialEventsUpdateConsumer', () => {
+  it('applies ACCEPTED spool updates through EsocialEventsService', async () => {
     const spoolService = {
       findById: jest.fn().mockResolvedValue({ status: 'SENT' }),
       recordResponse: jest.fn().mockResolvedValue({ status: 'ACCEPTED' }),
       recordSent: jest.fn(),
       recordError: jest.fn(),
     };
-    const consumer = new StynxEsocialSpoolUpdateConsumer(spoolService as never);
+    const consumer = new StynxEsocialEventsUpdateConsumer(
+      spoolService as never,
+    );
 
     await expect(
       consumer.handle({
@@ -49,7 +51,9 @@ describe('StynxEsocialSpoolUpdateConsumer', () => {
       recordSent: jest.fn(),
       recordError: jest.fn(),
     };
-    const consumer = new StynxEsocialSpoolUpdateConsumer(spoolService as never);
+    const consumer = new StynxEsocialEventsUpdateConsumer(
+      spoolService as never,
+    );
 
     await expect(
       consumer.handle({

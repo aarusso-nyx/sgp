@@ -452,6 +452,14 @@ Acceptance for `@stynx/privacy` adoption:
 
 R2-204 tags PII-bearing database columns with `COMMENT ON COLUMN` metadata in `database/sql/13-pii-comments.sql`. The metadata uses `pii=true`, a classification, and `ropa_export=true`; `lgpd.v_pii_column_catalog` exposes those tags with active ROPA flow keys derived from `lgpd.legal_basis_rule.source_tables`.
 
+`npm run db:alignment:check` treats the following PII classifications as
+high-risk and requires both `<column>_cipher` and `<column>_cipher_key_id`
+siblings for each tagged column: `banking`, `contact`, `national_identifier`,
+`social_program_identifier`, and `tax_identifier`. This is the v0.0.1
+machine-enforced scope for `scripts/lib/checks/db/pii-cipher-coverage.mjs`;
+broader PII categories can be promoted only by updating this authority section
+and the checker together.
+
 R2-206 uses PostgreSQL `pgcrypto` for new writes to the highest-sensitivity payroll/RH identifiers:
 
 - `hr.employee.bank_account` -> `hr.employee.bank_account_cipher`

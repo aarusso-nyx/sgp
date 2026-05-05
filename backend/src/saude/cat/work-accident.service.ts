@@ -29,7 +29,7 @@ interface WorkAccidentRow extends QueryResultRow {
   status: string;
   latest_cat_kind: string | null;
   latest_deadline_at: Date | string | null;
-  latest_esocial_spool_message_id: string | null;
+  latest_esocial_events_message_id: string | null;
 }
 
 interface DeadlineRow extends QueryResultRow {
@@ -39,7 +39,7 @@ interface DeadlineRow extends QueryResultRow {
   cat_kind: string;
   deadline_at: Date | string;
   enqueued_at: Date | string | null;
-  esocial_spool_message_id: string | null;
+  esocial_events_message_id: string | null;
 }
 
 export interface WorkAccidentSummary {
@@ -96,11 +96,11 @@ export class WorkAccidentService {
         accident.status::text,
         cat.cat_kind::text AS latest_cat_kind,
         cat.deadline_at AS latest_deadline_at,
-        cat.esocial_spool_message_id::text AS latest_esocial_spool_message_id
+        cat.esocial_events_message_id::text AS latest_esocial_events_message_id
       FROM saude.work_accident accident
       JOIN hr.employee employee ON employee.id = accident.employee_id
       LEFT JOIN LATERAL (
-        SELECT cat_kind, deadline_at, esocial_spool_message_id
+        SELECT cat_kind, deadline_at, esocial_events_message_id
         FROM saude.cat_emission
         WHERE work_accident_id = accident.id
           AND tenant_id = accident.tenant_id
@@ -158,7 +158,7 @@ export class WorkAccidentService {
         status::text,
         NULL::text AS latest_cat_kind,
         NULL::timestamptz AS latest_deadline_at,
-        NULL::text AS latest_esocial_spool_message_id
+        NULL::text AS latest_esocial_events_message_id
       `,
       [
         input.employeeId,
@@ -238,7 +238,7 @@ export class WorkAccidentService {
         status::text,
         NULL::text AS latest_cat_kind,
         NULL::timestamptz AS latest_deadline_at,
-        NULL::text AS latest_esocial_spool_message_id
+        NULL::text AS latest_esocial_events_message_id
       `,
       [workAccidentId],
     );
@@ -259,15 +259,15 @@ export class WorkAccidentService {
         cat.cat_kind::text,
         cat.deadline_at,
         pending.tstamp_created AS enqueued_at,
-        cat.esocial_spool_message_id::text
+        cat.esocial_events_message_id::text
       FROM saude.cat_emission cat
       JOIN saude.work_accident accident ON accident.id = cat.work_accident_id
       JOIN hr.employee employee ON employee.id = accident.employee_id
-      LEFT JOIN public.esocial_spool pending
+      LEFT JOIN public.esocial_events pending
         ON pending.tenant_id = cat.tenant_id
        AND pending.event_class = 'S-2210'
        AND pending.source_ref->>'catEmissionId' = cat.id::text
-      WHERE cat.esocial_spool_message_id IS NULL
+      WHERE cat.esocial_events_message_id IS NULL
         AND cat.deadline_at <= ($1::timestamptz + interval '4 hours')
       ORDER BY cat.deadline_at ASC
       `,
@@ -282,7 +282,7 @@ export class WorkAccidentService {
       enqueuedAt: row.enqueued_at
         ? new Date(row.enqueued_at).toISOString()
         : null,
-      esocialEventId: row.esocial_spool_message_id,
+      esocialEventId: row.esocial_events_message_id,
     }));
   }
 
@@ -312,7 +312,7 @@ export class WorkAccidentService {
       latestDeadlineAt: row.latest_deadline_at
         ? new Date(row.latest_deadline_at).toISOString()
         : null,
-      latestESocialEventId: row.latest_esocial_spool_message_id,
+      latestESocialEventId: row.latest_esocial_events_message_id,
     };
   }
 

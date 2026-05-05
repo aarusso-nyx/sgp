@@ -1,4 +1,5 @@
 import { ReportsService } from './reports.service';
+import { TEST_INSTANT_2026_04_25T10_00_00_000Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('ReportsService', () => {
   const row = {
@@ -6,7 +7,7 @@ describe('ReportsService', () => {
     definition_code: 'RELATORIO',
     definition_name: 'Relatorio',
     status: 'COMPLETED',
-    requested_at: new Date('2026-04-25T10:00:00.000Z'),
+    requested_at: new Date(TEST_INSTANT_2026_04_25T10_00_00_000Z),
     completed_at: '2026-04-25T10:05:00.000Z',
     files_count: '2',
     error_message: null,

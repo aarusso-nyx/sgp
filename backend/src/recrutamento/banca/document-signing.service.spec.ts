@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 
 import { PadesAdapter } from '../../external/signature/pades.adapter';
 import { DocumentSigningService } from './document-signing.service';
+import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const tenantId = '00000000-0000-4000-8000-000000000001';
 const concursoId = '00000000-0000-4000-8000-000000000901';
@@ -80,7 +81,7 @@ class FakeBancaDatabase {
           this.signatures.push({
             id: `signature-${this.signatures.length + 1}`,
             banca_membro_id: values[2],
-            signed_at: new Date('2026-05-02T12:00:00.000Z'),
+            signed_at: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
             signature_value: values[3],
             signature_order: values[6],
           });

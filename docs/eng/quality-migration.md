@@ -187,7 +187,7 @@ export async function setupTestInfra() {
 | Consumer                 | Provider                  | Ferramenta                    | Eventos / endpoints                                             |
 | ------------------------ | ------------------------- | ----------------------------- | --------------------------------------------------------------- |
 | `sgp-core-api`           | `sgp-payroll-engine`      | **Pact** (HTTP)               | `POST /v1/folha/calcular`, `POST /v1/folha/lote`                |
-| `sgp-core-api`           | `stynx-esocial`           | **Pact** (mensagem SNS)       | `public.esocial_spool` (S-2200, S-2299, S-2230)                 |
+| `sgp-core-api`           | `stynx-esocial`           | **Pact** (mensagem SNS)       | `public.esocial_events` (S-2200, S-2299, S-2230)                |
 | `sgp-core-api`           | `sgp-integrations-worker` | **Pact** (mensagem SQS)       | `remessa.gerar`, `retorno.processar`                            |
 | `sgp-portal`             | `sgp-core-api`            | **JSON Schema**               | `/api/portal/v1/contracheque`, `/api/portal/v1/recadastramento` |
 | API externa / prefeitura | `sgp-core-api`            | **OpenAPI 3.1 + JSON Schema** | `/api/external/v1/*`, `/publico/prefeitura/*`                   |
@@ -599,7 +599,7 @@ export default function () {
 | `sgp-admin` (Angular)  | Postergado     | —                  | Postergado      | Postergado     | Postergado | —          | `ADMIN_INSTALL_LATER`; árvore admin não bloqueia o pacote atual |
 | `sgp-portal` (Angular) | ✅ Jest (unit) | —                  | C JSON Schema   | ✅ 10 jornadas | ✅ C, F    | —          | Playwright + Axe; Gov.br mock                                   |
 
-R2-76 acrescenta cobertura operacional para convênio/estágio: os specs `backend/src/convenio/agreements/*.spec.ts` cobrem POST/PATCH/DELETE de convênios, `backend/src/convenio/internships/*.spec.ts` cobre programa, TCE, plano e vínculo TS-V, e a integração eSocial agora é protegida no SGP por `tests/backend/esocial-spool.spec.ts` e `tests/backend/stynx-esocial-spool-update-consumer.spec.ts`. A validação XSD/golden S-2300 foi retirada para stynx-esocial.
+R2-76 acrescenta cobertura operacional para convênio/estágio: os specs `backend/src/convenio/agreements/*.spec.ts` cobrem POST/PATCH/DELETE de convênios, `backend/src/convenio/internships/*.spec.ts` cobre programa, TCE, plano e vínculo TS-V, e a integração eSocial agora é protegida no SGP por `tests/backend/esocial-events.spec.ts` e `tests/backend/stynx-esocial-spool-update-consumer.spec.ts`. A validação XSD/golden S-2300 foi retirada para stynx-esocial.
 
 #### 2.2 Métricas de qualidade de pipeline por módulo
 
@@ -982,22 +982,14 @@ POST /api/v1/folhas/{folha_rescisao_id}/calcular
 
 ##### C.3 Gerar evento eSocial S-2299
 
-Rota contratual: `POST /api/v1/esocial/eventos`
-
-```http
-POST /api/v1/esocial/eventos
-{
-  "tipo": "S-2299",
-  "referencia": "funcionario/{func_rescisao}",
-  "competencia": "2026-04"
-}
-```
+Contrato interno: a aprovação da rescisão grava `public.esocial_events` com
+`event_class = 'S-2299'` e referência de origem do desligamento.
 
 **Assert:**
 
 - Evento `S-2299` gerado com status `PENDENTE_ENVIO`.
 - XML validado contra schema XSD oficial S-1.2.
-- Evento publicado em fila `public.esocial_spool` (SQS LocalStack verificado).
+- Evento publicado em fila `public.esocial_events` (SQS LocalStack verificado).
 - Após processamento do worker stubado: status `STUBBED`/`AGUARDANDO_RETORNO` sem transmissão externa real.
 - `audit_log` registra geração do evento.
 
@@ -1283,16 +1275,8 @@ PATCH /api/v1/pericia/prontuarios/{prontuario_id}/validar
 
 ##### F.5 Gerar evento S-2230
 
-Rota contratual: `POST /api/v1/esocial/eventos`
-
-```http
-POST /api/v1/esocial/eventos
-{
-  "tipo": "S-2230",
-  "referencia": "licenca_medica/{licenca_id}",
-  "competencia": "2026-04"
-}
-```
+Contrato interno: a aprovação do afastamento grava `public.esocial_events` com
+`event_class = 'S-2230'` e referência de origem da licença médica.
 
 **Assert:**
 

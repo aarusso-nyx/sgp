@@ -21,6 +21,7 @@ import {
 } from '../../backend/src/integrations-worker/cnab240/adapters/queue-adapter';
 import { Cnab240ReturnParserService } from '../../backend/src/integrations-worker/cnab240/return/cnab240-return-parser.service';
 import { OccurrenceMapperService } from '../../backend/src/integrations-worker/cnab240/return/occurrence-mapper.service';
+import { TEST_INSTANT_2026_05_04T00_00_00_000Z } from './helpers/date-fixtures';
 
 type SerializedCnab240BuildInput = Omit<Cnab240BuildInput, 'generatedAt'> & {
   generatedAt: string;
@@ -39,7 +40,7 @@ describe('R4-98 banking mock relay queue adapter', () => {
   const builder = new Cnab240BuilderService();
   const parser = new Cnab240ReturnParserService();
   const mapper = new OccurrenceMapperService();
-  const fixedNow = () => new Date('2026-05-04T00:00:00.000Z');
+  const fixedNow = () => new Date(TEST_INSTANT_2026_05_04T00_00_00_000Z);
 
   let transport: InMemoryQueueTransport;
   let relay: BankingRelayMockResponder;

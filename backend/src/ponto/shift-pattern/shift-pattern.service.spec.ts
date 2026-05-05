@@ -2,6 +2,7 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { ShiftPatternService } from './shift-pattern.service';
+import { TEST_INSTANT_2026_05_01T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('ShiftPatternService', () => {
   const service = new ShiftPatternService({ configured: true } as never);
@@ -156,7 +157,7 @@ describe('ShiftPatternService', () => {
           shift_assignment_id: 'assign-1',
           employee_id: 'employee-1',
           shift_pattern_id: 'pattern-1',
-          anchor_date: new Date('2026-05-01T00:00:00.000Z'),
+          anchor_date: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
           valid_from: '2026-05-01',
           valid_to: null,
         },

@@ -7,7 +7,7 @@
 -- Reference/static catalogs and additive canonical records use the shared
 -- generic audit trigger below instead of domain-specific business audit
 -- functions. That includes PostGIS spatial references, public
--- permission/menu/report catalogs, public.esocial_spool, eSocial/fiscal code
+-- permission/menu/report catalogs, public.esocial_events, eSocial/fiscal code
 -- catalogs, HR/payroll lookup catalogs, and TCE layout catalogs.
 --
 -- Immutable audit-event partitions keep occurred_at as the event-time authority.

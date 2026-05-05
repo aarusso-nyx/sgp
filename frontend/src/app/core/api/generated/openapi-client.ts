@@ -90,14 +90,6 @@ export class OpenApiClient {
     );
   }
 
-  deleteApiV1EsocialCertificadosByCertificateId(params: {
-    certificateId: string;
-  }): Observable<unknown> {
-    return this.api.delete<unknown>(
-      `/v1/esocial/certificados/${encodeURIComponent(params.certificateId)}`,
-    );
-  }
-
   deleteApiV1FolhaRubricaById(params: { id: string }): Observable<unknown> {
     return this.api.delete<unknown>(`/v1/folha/rubrica/${encodeURIComponent(params.id)}`);
   }
@@ -546,56 +538,6 @@ export class OpenApiClient {
     );
   }
 
-  getApiV1EsocialCertificados(): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/certificados');
-  }
-
-  getApiV1EsocialEventosTrabalhador(): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/eventos-trabalhador');
-  }
-
-  getApiV1EsocialEventsExcludable(): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/events/excludable');
-  }
-
-  getApiV1EsocialExclusions(): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/exclusions');
-  }
-
-  getApiV1EsocialFechamento(query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/fechamento', query);
-  }
-
-  getApiV1EsocialFolhaPeriodica(query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/folha-periodica', query);
-  }
-
-  getApiV1EsocialRetornosEventosByEventId(params: { eventId: string }): Observable<unknown> {
-    return this.api.get<unknown>(
-      `/v1/esocial/retornos/eventos/${encodeURIComponent(params.eventId)}`,
-    );
-  }
-
-  getApiV1EsocialRetornosFalhas(query: ApiQuery = {}): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/retornos/falhas', query);
-  }
-
-  getApiV1EsocialSubmissoes(): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/submissoes');
-  }
-
-  getApiV1EsocialSubmissoesCircuitos(): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/submissoes/circuitos');
-  }
-
-  getApiV1EsocialTabelasIniciais(): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/tabelas-iniciais');
-  }
-
-  getApiV1EsocialTrabalhadores(): Observable<unknown> {
-    return this.api.get<unknown>('/v1/esocial/trabalhadores');
-  }
-
   getApiV1FeriasSaldoByEmployeeId(
     params: { employee_id: string },
     query: ApiQuery = {},
@@ -658,6 +600,16 @@ export class OpenApiClient {
 
   getApiV1Funcionarios(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/funcionarios', query);
+  }
+
+  getApiV1FuncionariosLicencaPremioBalanceByEmployeeId(
+    params: { employeeId: string },
+    query: ApiQuery = {},
+  ): Observable<unknown> {
+    return this.api.get<unknown>(
+      `/v1/funcionarios/${encodeURIComponent(params.employeeId)}/licenca-premio/balance`,
+      query,
+    );
   }
 
   getApiV1FuncionariosAbonoPermanenciaById(params: { id: string }): Observable<unknown> {
@@ -1794,16 +1746,6 @@ export class OpenApiClient {
     );
   }
 
-  postApiAdminV1EsocialEventosReprocessarById(
-    params: { id: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/admin/v1/esocial/eventos/${encodeURIComponent(params.id)}/reprocessar`,
-      body,
-    );
-  }
-
   postApiAdminV1Tenants(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/admin/v1/tenants', body);
   }
@@ -2199,190 +2141,6 @@ export class OpenApiClient {
   ): Observable<unknown> {
     return this.api.post<unknown, ApiBody>(
       `/v1/employees/${encodeURIComponent(params.id)}/consignment-loans`,
-      body,
-    );
-  }
-
-  postApiV1EsocialCertificados(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/esocial/certificados', body);
-  }
-
-  postApiV1EsocialEventos(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/esocial/eventos', body);
-  }
-
-  postApiV1EsocialEventosTrabalhadorS2210EmitirByCatEmissionId(
-    params: { catEmissionId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/eventos-trabalhador/s2210/${encodeURIComponent(params.catEmissionId)}/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialEventosTrabalhadorS2220RetryByAsoRecordId(
-    params: { asoRecordId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/eventos-trabalhador/s2220/${encodeURIComponent(params.asoRecordId)}/retry`,
-      body,
-    );
-  }
-
-  postApiV1EsocialEventosTrabalhadorS2230EmitirByPendingId(
-    params: { pendingId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/eventos-trabalhador/s2230/${encodeURIComponent(params.pendingId)}/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialEventosTrabalhadorS2240EmitirByEnvironmentalExposureId(
-    params: { environmentalExposureId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/eventos-trabalhador/s2240/${encodeURIComponent(params.environmentalExposureId)}/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialEventosTrabalhadorS2299EmitirByPendingId(
-    params: { pendingId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/eventos-trabalhador/s2299/${encodeURIComponent(params.pendingId)}/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialEventsExcludeById(
-    params: { id: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/events/${encodeURIComponent(params.id)}/exclude`,
-      body,
-    );
-  }
-
-  postApiV1EsocialExclusionsAcceptByRequestId(
-    params: { requestId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/exclusions/${encodeURIComponent(params.requestId)}/accept`,
-      body,
-    );
-  }
-
-  postApiV1EsocialFechamentoFechar(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/esocial/fechamento/fechar', body);
-  }
-
-  postApiV1EsocialFechamentoReabrir(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/esocial/fechamento/reabrir', body);
-  }
-
-  postApiV1EsocialFechamentoTotalizadores(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/esocial/fechamento/totalizadores', body);
-  }
-
-  postApiV1EsocialFolhaPeriodicaPaymentsS1210EmitirByPaymentBatchId(
-    params: { paymentBatchId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/folha-periodica/payments/${encodeURIComponent(params.paymentBatchId)}/s1210/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialFolhaPeriodicaRunsS1200EmitirByPayrollRunId(
-    params: { payrollRunId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/folha-periodica/runs/${encodeURIComponent(params.payrollRunId)}/s1200/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialFolhaPeriodicaRunsS1202EmitirByPayrollRunId(
-    params: { payrollRunId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/folha-periodica/runs/${encodeURIComponent(params.payrollRunId)}/s1202/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialRetornosEventosRetryByEventId(
-    params: { eventId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/retornos/eventos/${encodeURIComponent(params.eventId)}/retry`,
-      body,
-    );
-  }
-
-  postApiV1EsocialRetornosEventosTratadoByEventId(
-    params: { eventId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/retornos/eventos/${encodeURIComponent(params.eventId)}/tratado`,
-      body,
-    );
-  }
-
-  postApiV1EsocialSubmissoesRetryByBatchId(
-    params: { batchId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/submissoes/${encodeURIComponent(params.batchId)}/retry`,
-      body,
-    );
-  }
-
-  postApiV1EsocialTabelasIniciaisEmitirByEventKind(
-    params: { eventKind: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/tabelas-iniciais/${encodeURIComponent(params.eventKind)}/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialTabelasIniciaisEmitir(body: ApiBody = {}): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>('/v1/esocial/tabelas-iniciais/emitir', body);
-  }
-
-  postApiV1EsocialTrabalhadoresS2200EmitirByEmployeeId(
-    params: { employeeId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/trabalhadores/${encodeURIComponent(params.employeeId)}/s2200/emitir`,
-      body,
-    );
-  }
-
-  postApiV1EsocialTrabalhadoresS2205EmitirByEmployeeId(
-    params: { employeeId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.post<unknown, ApiBody>(
-      `/v1/esocial/trabalhadores/${encodeURIComponent(params.employeeId)}/s2205/emitir`,
       body,
     );
   }
@@ -3524,10 +3282,6 @@ export class OpenApiClient {
     );
   }
 
-  putApiAdminV1EsocialCertificado(body: ApiBody = {}): Observable<unknown> {
-    return this.api.put<unknown, ApiBody>('/admin/v1/esocial/certificado', body);
-  }
-
   putApiV1AdminMenusById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.put<unknown, ApiBody>(`/v1/admin/menus/${encodeURIComponent(params.id)}`, body);
   }
@@ -3595,16 +3349,6 @@ export class OpenApiClient {
 
   putApiV1AuthAlterarSenha(body: ApiBody = {}): Observable<unknown> {
     return this.api.put<unknown, ApiBody>('/v1/auth/alterar-senha', body);
-  }
-
-  putApiV1EsocialCertificadosRotacaoByCertificateId(
-    params: { certificateId: string },
-    body: ApiBody = {},
-  ): Observable<unknown> {
-    return this.api.put<unknown, ApiBody>(
-      `/v1/esocial/certificados/${encodeURIComponent(params.certificateId)}/rotacao`,
-      body,
-    );
   }
 
   putApiV1PontoFaceThreshold(body: ApiBody = {}): Observable<unknown> {

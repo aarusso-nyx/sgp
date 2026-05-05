@@ -1,4 +1,5 @@
 import { NotificationsService } from './notifications.service';
+import { TEST_INSTANT_2026_01_01T00_00_00_000Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('NotificationsService', () => {
   it('returns paged notifications', async () => {
@@ -12,7 +13,7 @@ describe('NotificationsService', () => {
           body: 'Mensagem',
           module_key: 'rh',
           read_at: null,
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
           metadata: {},
         },
       ]);

@@ -183,6 +183,11 @@ function handleTypecheck() {
 
 function handleTest() {
   const subcommand = args[0] ?? 'unit';
+  const e2eArgs = args.slice(1);
+  const serialE2eArgs =
+    e2eArgs.includes('--runInBand') || e2eArgs.some((arg) => arg.startsWith('--maxWorkers'))
+      ? e2eArgs
+      : ['--runInBand', ...e2eArgs];
   const handlers = {
     unit: () =>
       runSequence([
@@ -211,7 +216,7 @@ function handleTest() {
         env: localTestDatabaseEnv(),
       }),
     e2e: () =>
-      runWorkspaceScript('backend', 'test:e2e', args.slice(1), {
+      runWorkspaceScript('backend', 'test:e2e', serialE2eArgs, {
         env: localTestDatabaseEnv(),
       }),
     coverage: () =>

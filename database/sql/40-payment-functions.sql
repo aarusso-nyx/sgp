@@ -485,12 +485,12 @@ BEGIN
       ON run.tenant_id = p_tenant_id
      AND run.competence_year = p_year_base
      AND run.competence_month = months.month_no
-    LEFT JOIN public.esocial_spool event
+    LEFT JOIN public.esocial_events event
       ON event.tenant_id = run.tenant_id
      AND event.event_class = 'S-1200'
      AND COALESCE(event.payload->>'payrollRunId', event.source_ref->>'payrollRunId') = run.id::text
      AND COALESCE(event.payload->>'employeeId', event.source_ref->>'employeeId') = p_employee_id::text
-     AND event.status NOT IN ('REJECTED'::public.esocial_spool_status, 'DLQ'::public.esocial_spool_status)
+     AND event.status NOT IN ('REJECTED'::public.esocial_events_status, 'DLQ'::public.esocial_events_status)
     LEFT JOIN payroll.employee_payroll_item item
       ON item.tenant_id = run.tenant_id
      AND item.payroll_run_id = run.id

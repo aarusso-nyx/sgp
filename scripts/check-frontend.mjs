@@ -2,6 +2,7 @@
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { parseTemplate } from '@angular/compiler';
 
@@ -11,7 +12,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const frontendRoot = join(root, 'frontend');
 
 const usage = `
-Usage: node scripts/check-frontend.mjs [all|api-client|modern-angular|i18n] [--help]
+Usage: node scripts/check-frontend.mjs [all|eslint|api-client|modern-angular|i18n] [--help]
 
 Run frontend policy checks through one stable entrypoint.
 `;
@@ -23,6 +24,7 @@ if (options.help) {
 }
 
 const checkByName = {
+  eslint: checkEslint,
   'api-client': checkApiClient,
   'modern-angular': checkModernAngular,
   i18n: checkI18n,
@@ -34,7 +36,7 @@ const unknown = checks.filter((check) => !(check in checkByName));
 
 if (unknown.length > 0) {
   console.error(`[frontend-check] unknown check: ${unknown.join(', ')}`);
-  console.error('Valid checks: all, api-client, modern-angular, i18n');
+  console.error('Valid checks: all, eslint, api-client, modern-angular, i18n');
   process.exit(1);
 }
 
@@ -59,6 +61,38 @@ function walkFiles(directory, predicate) {
 
 function lineForIndex(content, index) {
   return content.slice(0, index).split(/\r?\n/).length;
+}
+
+function checkEslint() {
+  const eslintBin = join(root, 'backend', 'node_modules', 'eslint', 'bin', 'eslint.js');
+
+  if (!existsSync(eslintBin)) {
+    console.error(
+      '[frontend-eslint] Missing backend/node_modules/eslint/bin/eslint.js. Run npm install before linting.',
+    );
+    return 1;
+  }
+
+  const result = spawnSync(
+    process.execPath,
+    [eslintBin, 'src/**/*.ts', 'portal/src/**/*.ts', '--max-warnings=0'],
+    {
+      cwd: frontendRoot,
+      stdio: 'inherit',
+    },
+  );
+
+  if (result.error) {
+    console.error(`[frontend-eslint] ${result.error.message}`);
+    return 1;
+  }
+
+  if (result.status !== 0) {
+    return result.status ?? 1;
+  }
+
+  console.log('[frontend-eslint] OK');
+  return 0;
 }
 
 function checkApiClient() {

@@ -1,4 +1,5 @@
 import { TceRetryStrategyService } from './retry-strategy.service';
+import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('TceRetryStrategyService', () => {
   const service = new TceRetryStrategyService();
@@ -37,7 +38,7 @@ describe('TceRetryStrategyService', () => {
   });
 
   it('computes exponential retry delay with bounded jitter', () => {
-    const now = new Date('2026-05-02T12:00:00.000Z');
+    const now = new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z);
 
     expect(service.nextAttemptAt(1, now, 0).toISOString()).toBe(
       '2026-05-02T12:00:01.000Z',

@@ -1,9 +1,13 @@
 import { AuditQueryService } from './audit-query.service';
+import {
+  TEST_INSTANT_2026_01_02T03_04_05_000Z,
+  TEST_INSTANT_2026_01_02T03_05_05_000Z,
+} from '../../../tests/backend/helpers/date-fixtures';
 
 describe('AuditQueryService', () => {
   const eventRow = {
     id: 'evt-1',
-    occurred_at: new Date('2026-01-02T03:04:05.000Z'),
+    occurred_at: new Date(TEST_INSTANT_2026_01_02T03_04_05_000Z),
     actor_login: 'tester',
     actor_sub: 'sub-1',
     action: 'CREATE',
@@ -110,7 +114,7 @@ describe('AuditQueryService', () => {
       {
         id: 'report-1',
         status: 'REQUESTED',
-        requested_at: new Date('2026-01-02T03:04:05.000Z'),
+        requested_at: new Date(TEST_INSTANT_2026_01_02T03_04_05_000Z),
       },
     ]);
     const service = new AuditQueryService({ configured: true, query } as never);
@@ -134,7 +138,7 @@ describe('AuditQueryService', () => {
           id: 'report-1',
           status: 'COMPLETED',
           requested_at: '2026-01-02T03:04:05.000Z',
-          completed_at: new Date('2026-01-02T03:05:05.000Z'),
+          completed_at: new Date(TEST_INSTANT_2026_01_02T03_05_05_000Z),
           error_message: null,
         },
       ])

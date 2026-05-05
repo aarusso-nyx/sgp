@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { RequestContextStore } from '../../backend/src/common/request-context/request-context.store';
 import { EfdReinfBuilderService } from '../../backend/src/integrations-worker/efd-reinf/efd-reinf-builder.service';
 import { EfdReinfReceiptService } from '../../backend/src/integrations-worker/efd-reinf/efd-reinf-receipt.service';
+import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from './helpers/date-fixtures';
 
 const tenantId = '00000000-0000-0000-0000-00000000f501';
 const eventId = '00000000-0000-4000-8000-000000004010';
@@ -107,7 +108,7 @@ describe('EFD-Reinf R-4000 lifecycle (e2e)', () => {
       eventId: closureId,
       accepted: true,
       receiptNumber: 'REINF-R9015-1',
-      receiptAt: new Date('2026-05-02T12:00:00.000Z'),
+      receiptAt: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
       transmittedXml: signedXml,
       responsePayload: { status: 'ACCEPTED' },
     });

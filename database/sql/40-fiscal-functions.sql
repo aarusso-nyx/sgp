@@ -17,6 +17,7 @@ $$;
 
 CREATE FUNCTION fiscal.recompute_yearly_income(p_tenant_id uuid, p_employee_id uuid, p_year_base integer) RETURNS fiscal.yearly_income_aggregate
     LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'fiscal', 'payroll', 'hr', 'public', 'pg_catalog'
     AS $$
 DECLARE
   v_tenant_id uuid;

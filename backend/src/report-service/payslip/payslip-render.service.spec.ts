@@ -12,6 +12,7 @@ const {
 } = require('../../../../tests/backend/support/mock-db.cjs');
 import { LGPD_DATA_FLOWS } from '../../common/lgpd/legal-basis.registry';
 import { PayslipRenderService } from './payslip-render.service';
+import { TEST_INSTANT_2026_05_02T10_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const actor = {
   sub: 'sub-1',
@@ -79,7 +80,7 @@ describe('PayslipRenderService', () => {
           competence: '2026-05-01',
           file_hash: 'hash-1',
           payroll_run_id: 'run-1',
-          generated_at: new Date('2026-05-02T10:00:00.000Z'),
+          generated_at: new Date(TEST_INSTANT_2026_05_02T10_00_00_000Z),
         },
       ])
       .mockResolvedValueOnce([]);

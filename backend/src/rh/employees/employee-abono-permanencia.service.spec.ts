@@ -1,5 +1,6 @@
 import { EmployeeAbonoPermanenciaService } from './employee-abono-permanencia.service';
 import { EmployeeVersionService } from './employee-version.service';
+import { TEST_INSTANT_2026_01_02T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('EmployeeAbonoPermanenciaService', () => {
   it('returns the permanence allowance state', async () => {
@@ -10,7 +11,7 @@ describe('EmployeeAbonoPermanenciaService', () => {
         starts_on: '2026-01-01',
         legal_basis: 'EC 103/2019',
         version: 7,
-        updated_at: new Date('2026-01-02T00:00:00.000Z'),
+        updated_at: new Date(TEST_INSTANT_2026_01_02T00_00_00_000Z),
       },
     ]);
     const database = { configured: true, query };

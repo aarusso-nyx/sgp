@@ -1,6 +1,10 @@
 /* eslint-disable */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import {
+  TEST_INSTANT_2026_05_02T10_00_00_000Z,
+  TEST_INSTANT_2026_12_31T00_00_00_000Z,
+} from '../../tests/backend/helpers/date-fixtures';
 
 const fakeDependency = new Proxy(
   { configured: false },
@@ -47,7 +51,7 @@ const populatedRow = new Proxy(
       if (key.includes('year')) return 2026;
       if (key.includes('month')) return 5;
       if (key.includes('date') || key.endsWith('_at') || key.endsWith('_on')) {
-        return new Date('2026-05-02T10:00:00.000Z');
+        return new Date(TEST_INSTANT_2026_05_02T10_00_00_000Z);
       }
       if (
         key.includes('active') ||
@@ -742,7 +746,7 @@ describe('database unavailable hardening coverage', () => {
                 signature: 'signature',
               },
               '00000000-0000-4000-8000-000000000002',
-              new Date('2026-12-31T00:00:00.000Z'),
+              new Date(TEST_INSTANT_2026_12_31T00_00_00_000Z),
             ],
             [
               [

@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { Mock } from 'vitest';
 
 import { ApiClient } from '../api/api-client';
-import { OpenApiClient } from '../api/generated/openapi-client';
+import { OpenApiClient } from '../api/openapi-client';
 import { PORTAL_FEATURE_CATALOG } from './portal-feature-catalog';
 import { PORTAL_ROUTE_ENDPOINTS, portalEndpointForPath } from './portal-route-endpoints';
 

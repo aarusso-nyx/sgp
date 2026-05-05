@@ -11,6 +11,7 @@ import type { App as SupertestApp } from 'supertest/types';
 import { DatabaseService } from '../../backend/src/database/database.service';
 import { JobPositionAdminController } from '../../backend/src/gestao/master-data/job-position.controller';
 import { JobPositionService } from '../../backend/src/gestao/master-data/job-position.service';
+import { TEST_INSTANT_2026_05_01T00_00_00Z } from './helpers/date-fixtures';
 
 describe('Gestao cargos API (e2e)', () => {
   let app: INestApplication;
@@ -43,8 +44,8 @@ describe('Gestao cargos API (e2e)', () => {
             vacancies_count: 2,
             salary_range_id: '22222222-2222-4222-8222-222222222222',
             salary_range_code: null,
-            created_at: new Date('2026-05-01T00:00:00Z'),
-            updated_at: new Date('2026-05-01T00:00:00Z'),
+            created_at: new Date(TEST_INSTANT_2026_05_01T00_00_00Z),
+            updated_at: new Date(TEST_INSTANT_2026_05_01T00_00_00Z),
           },
         ],
       })

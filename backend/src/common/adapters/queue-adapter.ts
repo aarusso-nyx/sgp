@@ -114,12 +114,22 @@ export type QueueAdapterRequestInput<TPayload> = Readonly<{
   ) => void | Promise<void>;
 }>;
 
+export type QueueRetryStrategy = (attempt: number) => number;
+
+export type QueueJitterRetryStrategyOptions = Readonly<{
+  baseDelayMs?: number;
+  maxDelayMs?: number;
+  jitterUnit?: number;
+}>;
+
 export type SgpQueueAdapterOptions<TKind extends string> = Readonly<{
   kind: TKind;
   transport: QueueAdapterTransport;
   maxAttempts?: number;
   responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
+  retryDelayMs?: QueueRetryStrategy;
+  baseDelayMs?: number;
+  maxDelayMs?: number;
   now?: () => Date;
   idFactory?: () => string;
   observability?: QueueAdapterObservability<TKind>;
@@ -148,6 +158,30 @@ export class QueueAdapterDeliveryError<TKind extends string> extends Error {
   ) {
     super(deadLetter.reason);
   }
+}
+
+export function linearRetryStrategy(attempt: number): number {
+  return Math.max(0, Math.trunc(attempt)) * 100;
+}
+
+export function cappedExponentialJitterRetryStrategy(
+  attempt: number,
+  options: QueueJitterRetryStrategyOptions = {},
+): number {
+  const baseDelayMs = normalizeDelayMs(options.baseDelayMs ?? 250);
+  const maxDelayMs = normalizeDelayMs(options.maxDelayMs ?? 30_000);
+  const boundedAttempt = Number.isFinite(attempt) ? Math.trunc(attempt) : 1;
+  const retryIndex = Math.max(0, boundedAttempt - 2);
+  const exponentialDelayMs =
+    baseDelayMs === 0 ? 0 : baseDelayMs * 2 ** retryIndex;
+  const floorDelayMs = Math.min(exponentialDelayMs, maxDelayMs);
+  const jitterRangeMs = Math.max(
+    0,
+    Math.min(maxDelayMs - floorDelayMs, Math.trunc(floorDelayMs * 0.2)),
+  );
+  const jitterUnit = normalizeJitterUnit(options.jitterUnit ?? Math.random());
+
+  return floorDelayMs + Math.trunc(jitterRangeMs * jitterUnit);
 }
 
 export function adapterQueueTopics<TKind extends string>(
@@ -244,7 +278,7 @@ export class SgpQueueAdapter<TKind extends string> {
   private readonly transport: QueueAdapterTransport;
   private readonly maxAttempts: number;
   private readonly responseTimeoutMs: number;
-  private readonly retryDelayMs: (attempt: number) => number;
+  private readonly retryDelayMs: QueueRetryStrategy;
   private readonly now: () => Date;
   private readonly idFactory: () => string;
   private readonly observability?: QueueAdapterObservability<TKind>;
@@ -256,7 +290,13 @@ export class SgpQueueAdapter<TKind extends string> {
     this.topics = adapterQueueTopics(options.kind);
     this.maxAttempts = options.maxAttempts ?? 3;
     this.responseTimeoutMs = options.responseTimeoutMs ?? 5_000;
-    this.retryDelayMs = options.retryDelayMs ?? ((attempt) => attempt * 100);
+    this.retryDelayMs =
+      options.retryDelayMs ??
+      ((attempt) =>
+        cappedExponentialJitterRetryStrategy(attempt, {
+          baseDelayMs: options.baseDelayMs,
+          maxDelayMs: options.maxDelayMs,
+        }));
     this.now = options.now ?? (() => new Date());
     this.idFactory = options.idFactory ?? randomUUID;
     this.observability = options.observability;
@@ -429,4 +469,14 @@ export class SgpQueueAdapter<TKind extends string> {
       new QueueAdapterDeliveryError(pending.request, response, deadLetter),
     );
   }
+}
+
+function normalizeDelayMs(value: number): number {
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.trunc(value));
+}
+
+function normalizeJitterUnit(value: number): number {
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(value, 1));
 }

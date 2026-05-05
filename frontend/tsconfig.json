@@ -12,6 +12,13 @@
     "isolatedModules": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "baseUrl": ".",
+    "paths": {
+      "@sgp/shared": ["src/app/shared/index.ts"],
+      "@sgp/shared/*": ["src/app/shared/*"],
+      "@sgp/shared-platform": ["src/app/shared-platform/index.ts"],
+      "@sgp/shared-platform/*": ["src/app/shared-platform/*"]
+    },
     "target": "ES2022",
     "module": "preserve"
   },

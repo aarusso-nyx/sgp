@@ -11,6 +11,11 @@ import {
   encryptTemplate,
   extractBiometricTemplate,
 } from '../../backend/src/recrutamento/biometria/biometric-template';
+import {
+  TEST_INSTANT_2026_05_02T12_00_00_000Z,
+  TEST_INSTANT_2026_05_02T13_00_00_000Z,
+  TEST_INSTANT_2031_04_01T00_00_00_000Z,
+} from './helpers/date-fixtures';
 
 const tenantId = '00000000-0000-4000-8000-000000000001';
 const applicationId = '00000000-0000-4000-8000-000000000821';
@@ -43,8 +48,8 @@ class FakeRec08Database {
           id: sessionId,
           application_id: applicationId,
           prova_id: provaId,
-          started_at: new Date('2026-05-02T12:00:00.000Z'),
-          ended_at: new Date('2026-05-02T13:00:00.000Z'),
+          started_at: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
+          ended_at: new Date(TEST_INSTANT_2026_05_02T13_00_00_000Z),
           status: 'SUBMITTED',
         },
       ] as T[];
@@ -53,7 +58,7 @@ class FakeRec08Database {
       return [
         {
           id: 'artifact',
-          retention_until: new Date('2031-04-01T00:00:00.000Z'),
+          retention_until: new Date(TEST_INSTANT_2031_04_01T00_00_00_000Z),
         },
       ] as T[];
     }
@@ -115,7 +120,7 @@ class FakeRec08Database {
                 id: sessionId,
                 application_id: applicationId,
                 prova_id: provaId,
-                started_at: new Date('2026-05-02T12:00:00.000Z'),
+                started_at: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
                 ended_at: null,
                 status: 'IN_PROGRESS',
               },

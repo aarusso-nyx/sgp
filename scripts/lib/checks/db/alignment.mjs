@@ -4,6 +4,9 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 
+import { checkDefinerSearchPaths } from './definer-search-path.mjs';
+import { checkPiiCipherCoverage } from './pii-cipher-coverage.mjs';
+
 const cwd = process.cwd();
 const matrixPath = resolve(cwd, 'docs/gov/generated/database/alignment-matrix.json');
 const sqlSupportPath = resolve(cwd, 'database/sql');
@@ -54,7 +57,7 @@ const TENANT_SCOPED_TABLES = [
   ['public', 'tax_rate'],
   ['public', 'document_attachment'],
   ['public', 'document_upload_session'],
-  ['public', 'esocial_spool'],
+  ['public', 'esocial_events'],
   ['public', 'report_definition'],
   ['public', 'report_request'],
   ['public', 'generated_report_file'],
@@ -481,6 +484,20 @@ function main() {
     );
   } else {
     ok(`Tenant coverage is declared for ${TENANT_SCOPED_TABLES.length} scoped tables.`);
+  }
+
+  const definerSearchPath = checkDefinerSearchPaths(cwd);
+  if (!definerSearchPath.ok) {
+    fail(`SECURITY DEFINER search_path violations: ${definerSearchPath.violations.join('; ')}`);
+  } else {
+    ok(`All ${definerSearchPath.definerCount} SECURITY DEFINER functions pin search_path.`);
+  }
+
+  const piiCipherCoverage = checkPiiCipherCoverage(cwd);
+  if (!piiCipherCoverage.ok) {
+    fail(`PII cipher coverage gaps: ${piiCipherCoverage.violations.join('; ')}`);
+  } else {
+    ok(`All ${piiCipherCoverage.highRiskCount} high-risk PII columns have cipher siblings.`);
   }
 
   const runtimeFilePaths = execSync(

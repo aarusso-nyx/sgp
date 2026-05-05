@@ -1609,7 +1609,7 @@ ALTER TABLE ONLY hr.reintegration_order
     ADD CONSTRAINT reintegration_order_employment_link_id_fkey FOREIGN KEY (employment_link_id) REFERENCES hr.employment_link(id);
 
 ALTER TABLE ONLY hr.reintegration_order
-    ADD CONSTRAINT reintegration_order_original_termination_event_id_fkey FOREIGN KEY (original_termination_event_id) REFERENCES public.esocial_spool(message_id);
+    ADD CONSTRAINT reintegration_order_original_termination_event_id_fkey FOREIGN KEY (original_termination_event_id) REFERENCES public.esocial_events(message_id);
 
 ALTER TABLE ONLY hr.reintegration_order
     ADD CONSTRAINT reintegration_order_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);

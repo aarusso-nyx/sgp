@@ -7,6 +7,7 @@ import type { App as SupertestApp } from 'supertest/types';
 import { AppModule } from '../../backend/src/app.module';
 import { CognitoJwtService } from '../../backend/src/auth/cognito-jwt.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
+import { TEST_INSTANT_2031_05_02T00_00_00_000Z } from './helpers/date-fixtures';
 
 const sessionId = '00000000-0000-4000-8000-000000000841';
 
@@ -27,7 +28,13 @@ class FakeExclusionDatabase {
         if (sql.includes('retention_until >')) {
           return {
             rows: this.retentionOpen
-              ? [{ retention_until: new Date('2031-05-02T00:00:00.000Z') }]
+              ? [
+                  {
+                    retention_until: new Date(
+                      TEST_INSTANT_2031_05_02T00_00_00_000Z,
+                    ),
+                  },
+                ]
               : [],
           };
         }

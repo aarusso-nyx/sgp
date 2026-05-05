@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import type { EsocialSpoolStatus, SpoolUpdateEnvelope } from './contracts';
-import { EsocialSpoolService } from '../../esocial-spool';
+import type { EsocialEventsStatus, SpoolUpdateEnvelope } from './contracts';
+import { EsocialEventsService } from '../../esocial-events';
 
 type SpoolUpdateConsumerResult = Readonly<{
   applied: boolean;
@@ -9,8 +9,8 @@ type SpoolUpdateConsumerResult = Readonly<{
 }>;
 
 @Injectable()
-export class StynxEsocialSpoolUpdateConsumer {
-  constructor(private readonly spoolService: EsocialSpoolService) {}
+export class StynxEsocialEventsUpdateConsumer {
+  constructor(private readonly spoolService: EsocialEventsService) {}
 
   async handle(
     envelope: SpoolUpdateEnvelope,
@@ -72,8 +72,8 @@ export class StynxEsocialSpoolUpdateConsumer {
 }
 
 function transitionKey(
-  from: EsocialSpoolStatus | undefined,
-  to: EsocialSpoolStatus,
+  from: EsocialEventsStatus | undefined,
+  to: EsocialEventsStatus,
 ): string {
   return `${from ?? 'NONE'}>${to}`;
 }

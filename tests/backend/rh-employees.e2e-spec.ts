@@ -6,6 +6,11 @@ import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
 import { DatabaseService } from '../../backend/src/database/database.service';
+import {
+  TEST_INSTANT_2026_05_01T00_00_00_000Z,
+  TEST_INSTANT_2026_05_01T00_01_00_000Z,
+  TEST_INSTANT_2026_05_20T00_00_00_000Z,
+} from './helpers/date-fixtures';
 
 function encodePart(value: unknown): string {
   return Buffer.from(JSON.stringify(value)).toString('base64url');
@@ -40,8 +45,8 @@ class FakeRhEmployeeDatabaseService {
     abono_permanencia_inicio: null as Date | null,
     abono_permanencia_fundamento: null as string | null,
     version: 0,
-    created_at: new Date('2026-05-01T00:00:00.000Z'),
-    updated_at: new Date('2026-05-01T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
+    updated_at: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
   };
 
   query<T>(sql: string, values: readonly unknown[] = []): Promise<T[]> {
@@ -138,7 +143,7 @@ class FakeRhEmployeeDatabaseService {
           abono_permanencia_fundamento:
             typeof _values[3] === 'string' && _values[3] ? _values[3] : null,
           version: this.employee.version + 1,
-          updated_at: new Date('2026-05-01T00:01:00.000Z'),
+          updated_at: new Date(TEST_INSTANT_2026_05_01T00_01_00_000Z),
         };
         return Promise.resolve({
           rows: [
@@ -174,7 +179,7 @@ class FakeRhEmployeeDatabaseService {
           {
             id: 'history-1',
             functional_status: this.employee.functional_status,
-            starts_on: new Date('2026-05-01T00:00:00.000Z'),
+            starts_on: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
             ends_on: null,
             notes: 'HR01',
           },
@@ -186,10 +191,10 @@ class FakeRhEmployeeDatabaseService {
         rows: [
           {
             id: 'contract-1',
-            starts_on: new Date('2026-05-01T00:00:00.000Z'),
+            starts_on: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
             ends_on: this.employee.active
               ? null
-              : new Date('2026-05-20T00:00:00.000Z'),
+              : new Date(TEST_INSTANT_2026_05_20T00_00_00_000Z),
             status: this.employee.active ? 'ACTIVE' : 'INACTIVE',
           },
         ] as T[],

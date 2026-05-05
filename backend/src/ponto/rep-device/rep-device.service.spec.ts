@@ -2,6 +2,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 import { RepDeviceService } from './rep-device.service';
+import { TEST_INSTANT_2026_05_02T10_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const row = {
   rep_device_id: 'rep-1',
@@ -11,7 +12,7 @@ const row = {
   manufacturer: null,
   model: null,
   program_hash: null,
-  registered_at: new Date('2026-05-02T10:00:00.000Z'),
+  registered_at: new Date(TEST_INSTANT_2026_05_02T10_00_00_000Z),
   status: 'ACTIVE',
 };
 

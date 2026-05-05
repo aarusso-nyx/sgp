@@ -19,6 +19,7 @@ import {
   type RgfBuilderInput,
   type RgfFiscalReportEnvelope,
 } from './rgf.builder';
+import { TEST_INSTANT_2026_05_04T10_30_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const goldenRoot = join(__dirname, '../../../../tests/backend/golden/tce');
 const updateGoldens = process.env.SGP_UPDATE_R4_15_GOLDENS === '1';
@@ -101,7 +102,7 @@ describe('TCE RREO/RGF builders', () => {
       transport,
       retryDelayMs: () => 0,
       responseTimeoutMs: 1_000,
-      now: () => new Date('2026-05-04T10:30:00.000Z'),
+      now: () => new Date(TEST_INSTANT_2026_05_04T10_30_00_000Z),
     });
 
     const subscription: QueueSubscription = transport.subscribe<

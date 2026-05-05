@@ -1,4 +1,5 @@
 import { SystemParametersService } from './system-parameters.service';
+import { TEST_INSTANT_2026_04_25T12_00_00_000Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('SystemParametersService', () => {
   it('persists global parameter updates from the canonical value field', async () => {
@@ -49,7 +50,7 @@ describe('SystemParametersService', () => {
         key: 'system:language',
         value: 'pt-BR',
         description: 'Language',
-        updated_at: new Date('2026-04-25T12:00:00.000Z'),
+        updated_at: new Date(TEST_INSTANT_2026_04_25T12_00_00_000Z),
       },
     ];
     const query = jest.fn(async (sql: string) => {

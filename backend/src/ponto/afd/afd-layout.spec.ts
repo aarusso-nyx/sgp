@@ -9,6 +9,11 @@ import {
   serializeAfd,
   trailerHashForLines,
 } from './afd-layout';
+import {
+  TEST_INSTANT_2026_05_01T00_00_00_000Z,
+  TEST_INSTANT_2026_05_02T12_00_00_000Z,
+  TEST_INSTANT_2026_05_31T00_00_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('AFD layout', () => {
   it('encodes and decodes all AFD record types with fixed width', () => {
@@ -152,16 +157,16 @@ describe('AFD layout', () => {
       nsr: 0,
       employerTaxId: 'not-a-cnpj',
       employerName: 'Prefeitura Municipal',
-      generatedAt: new Date('2026-05-02T12:00:00.000Z'),
-      periodStart: new Date('2026-05-01T00:00:00.000Z'),
-      periodEnd: new Date('2026-05-31T00:00:00.000Z'),
+      generatedAt: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
+      periodStart: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
+      periodEnd: new Date(TEST_INSTANT_2026_05_31T00_00_00_000Z),
     });
     const generic = encodeGenericRecord('8', 1, 'payload');
     const bodyLines = [header, generic];
     const trailer = encodeType9({
       nsr: 2,
-      periodStart: new Date('2026-05-01T00:00:00.000Z'),
-      periodEnd: new Date('2026-05-31T00:00:00.000Z'),
+      periodStart: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
+      periodEnd: new Date(TEST_INSTANT_2026_05_31T00_00_00_000Z),
       lineCount: 3,
       trailerHash: trailerHashForLines(bodyLines),
     });

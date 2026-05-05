@@ -9,6 +9,7 @@ $$;
 
 CREATE FUNCTION public.sgp_r4_70_generic_audit_event() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public', 'pg_catalog'
     AS $$
 DECLARE
   v_action text;

@@ -1,4 +1,5 @@
 import { AgreementsService } from './agreements.service';
+import { TEST_INSTANT_2026_01_01T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('AgreementsService', () => {
   const row = {
@@ -10,8 +11,8 @@ describe('AgreementsService', () => {
     starts_on: null,
     ends_on: null,
     status: 'ACTIVE',
-    created_at: new Date('2026-01-01T00:00:00.000Z'),
-    updated_at: new Date('2026-01-01T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
+    updated_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
   };
 
   it('returns paged agreements', async () => {

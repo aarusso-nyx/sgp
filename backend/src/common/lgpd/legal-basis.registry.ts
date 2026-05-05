@@ -288,7 +288,7 @@ export const LGPD_LEGAL_BASIS_RULES: readonly LgpdLegalBasisRule[] = [
       'SST data when required',
     ],
     sourceTables: [
-      'public.esocial_spool',
+      'public.esocial_events',
       'fiscal.dctfweb_debit',
       'payroll.payroll_financial_record',
       'hr.employee',

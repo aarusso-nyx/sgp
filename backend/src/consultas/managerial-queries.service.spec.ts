@@ -1,4 +1,8 @@
 import { ManagerialQueriesService } from './managerial-queries.service';
+import {
+  TEST_INSTANT_2020_01_01T00_00_00_000Z,
+  TEST_INSTANT_2026_04_25T10_00_00_000Z,
+} from '../../../tests/backend/helpers/date-fixtures';
 
 describe('ManagerialQueriesService', () => {
   const createQuery = () =>
@@ -42,7 +46,7 @@ describe('ManagerialQueriesService', () => {
             job_function_name: 'Gestora',
             functional_status_name: 'Ativo',
             lifecycle_status: 'ACTIVE',
-            hired_on: new Date('2020-01-01T00:00:00.000Z'),
+            hired_on: new Date(TEST_INSTANT_2020_01_01T00_00_00_000Z),
             terminated_on: '2026-01-01',
           },
         ];
@@ -57,7 +61,7 @@ describe('ManagerialQueriesService', () => {
             employee_name: 'Maria',
             competence_year: 2026,
             competence_month: 4,
-            blocked_at: new Date('2026-04-25T10:00:00.000Z'),
+            blocked_at: new Date(TEST_INSTANT_2026_04_25T10_00_00_000Z),
             released_at: null,
             notes: 'Bloqueio',
             reason_name: 'Judicial',

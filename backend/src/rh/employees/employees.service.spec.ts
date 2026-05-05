@@ -1,4 +1,8 @@
 import { EmployeesService } from './employees.service';
+import {
+  TEST_INSTANT_2026_01_01T00_00_00_000Z,
+  TEST_INSTANT_2026_04_15T00_00_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('EmployeesService', () => {
   const employeeRow = {
@@ -11,7 +15,7 @@ describe('EmployeesService', () => {
     functional_status: 'Ativo',
     branch_name: 'Matriz',
     active: true,
-    created_at: new Date('2026-01-01T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
     updated_at: '2026-01-02T00:00:00.000Z',
   };
 
@@ -44,8 +48,8 @@ describe('EmployeesService', () => {
           functional_status: 'Ativo',
           branch_name: 'Matriz',
           active: true,
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
-          updated_at: new Date('2026-01-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
         },
       ]);
     const service = new EmployeesService({ configured: true, query } as never);
@@ -71,8 +75,8 @@ describe('EmployeesService', () => {
           branch_name: null,
           branch_id: 'branch-1',
           active: false,
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
-          updated_at: new Date('2026-04-15T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_15T00_00_00_000Z),
         },
       ],
       [],

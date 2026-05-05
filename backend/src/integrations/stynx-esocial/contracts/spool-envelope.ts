@@ -1,6 +1,6 @@
 import type { EsocialClass } from './kinds';
 
-export type EsocialSpoolStatus =
+export type EsocialEventsStatus =
   | 'PENDING'
   | 'SENT'
   | 'RECEIVED'
@@ -9,16 +9,16 @@ export type EsocialSpoolStatus =
   | 'RETRY'
   | 'DLQ';
 
-export type EsocialSpoolStatusTransition = Readonly<{
-  from?: EsocialSpoolStatus;
-  to: EsocialSpoolStatus;
+export type EsocialEventsStatusTransition = Readonly<{
+  from?: EsocialEventsStatus;
+  to: EsocialEventsStatus;
 }>;
 
 export type SpoolUpdateEnvelope = Readonly<{
   message_id: string;
   tenant_id: string;
   kind: EsocialClass;
-  status_transition: EsocialSpoolStatusTransition;
+  status_transition: EsocialEventsStatusTransition;
   response_payload?: unknown;
   response_hash?: string;
   error?: {

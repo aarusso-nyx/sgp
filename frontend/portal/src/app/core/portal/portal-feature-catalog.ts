@@ -1,18 +1,18 @@
 export interface PortalFeatureItem {
-  label: string;
-  path: string;
-  capability: string;
-  module: string;
-  description: string;
+  readonly label: string;
+  readonly path: string;
+  readonly capability: string;
+  readonly module: string;
+  readonly description: string;
 }
 
 export interface PortalFeatureSection {
-  label: string;
-  summary: string;
-  items: PortalFeatureItem[];
+  readonly label: string;
+  readonly summary: string;
+  readonly items: readonly PortalFeatureItem[];
 }
 
-export const PORTAL_FEATURE_CATALOG: PortalFeatureSection[] = [
+export const PORTAL_FEATURE_CATALOG = [
   {
     label: 'Meus Dados',
     summary: 'Self-service access to identity, contact, and dependent records.',
@@ -330,4 +330,4 @@ export const PORTAL_FEATURE_CATALOG: PortalFeatureSection[] = [
       },
     ],
   },
-];
+] as const satisfies readonly PortalFeatureSection[];

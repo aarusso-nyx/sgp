@@ -78,6 +78,16 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
+            "runnerConfig": "vitest.admin.config.ts",
+            "coverageInclude": [
+              "src/app/features/folha-pagamento/**/*.ts",
+              "src/app/features/recrutamento/**/*.ts",
+              "src/app/features/fiscal/**/*.ts",
+              "src/app/features/portal/lgpd-encarregado/**/*.ts",
+              "src/app/features/portal-publico/concursos/inscricao/**/*.ts",
+              "src/app/features/auditoria/**/*.ts",
+              "src/app/core/audit/**/*.ts"
+            ],
             "coverageReporters": ["text-summary", "json-summary", "lcov"],
             "coverageThresholds": {
               "statements": 31,
@@ -168,6 +178,12 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "tsconfig.portal.spec.json",
+            "runnerConfig": "vitest.portal.config.ts",
+            "coverageInclude": [
+              "portal/src/app/pages/contracheque/**/*.ts",
+              "portal/src/app/core/portal/portal-feature-catalog.ts",
+              "portal/src/app/core/portal/portal-route-endpoints.ts"
+            ],
             "coverageReporters": ["text-summary", "json-summary", "lcov"],
             "coverageThresholds": {
               "statements": 40,

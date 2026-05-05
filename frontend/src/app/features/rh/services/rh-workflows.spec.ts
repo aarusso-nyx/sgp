@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 
-import { OpenApiClient } from '../../../core/api/generated/openapi-client';
+import { OpenApiClient } from '../../../core/api/openapi-client';
 import { RhWorkflows } from './rh-workflows';
 
 describe('RhWorkflows', () => {

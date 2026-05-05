@@ -138,7 +138,7 @@ CREATE TABLE saude.cat_emission (
     cat_kind saude.cat_kind NOT NULL,
     emitted_at timestamp with time zone DEFAULT now() NOT NULL,
     deadline_at timestamp with time zone NOT NULL,
-    esocial_spool_message_id uuid,
+    esocial_events_message_id uuid,
     doctor_crm text NOT NULL,
     doctor_name text NOT NULL,
     internment boolean DEFAULT false NOT NULL,

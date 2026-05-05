@@ -1,6 +1,12 @@
 {
-  "generated_at": "2026-05-04",
+  "generated_at": "2026-05-05",
   "authority": [
+    "docs/eng/Banking/00-cnab-overview.md",
+    "docs/eng/Banking/01-cnab240-structure.md",
+    "docs/eng/Banking/02-cnab240-bank-variations.md",
+    "docs/eng/Banking/03-cnab240-return-processing.md",
+    "docs/eng/Banking/04-cnab240-alternative-formats.md",
+    "docs/eng/Banking/05-sgp-implementation-matrix.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -13,6 +19,12 @@
     "docs/eng/quality-migration.md"
   ],
   "route_contract_authority": [
+    "docs/eng/Banking/00-cnab-overview.md",
+    "docs/eng/Banking/01-cnab240-structure.md",
+    "docs/eng/Banking/02-cnab240-bank-variations.md",
+    "docs/eng/Banking/03-cnab240-return-processing.md",
+    "docs/eng/Banking/04-cnab240-alternative-formats.md",
+    "docs/eng/Banking/05-sgp-implementation-matrix.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -76,15 +88,15 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 580,
-    "documented_candidates_total": 721,
-    "documented_outside_runtime": 141,
-    "documented": 489,
-    "runtime_total": 596,
-    "runtime": 489,
-    "deferred_documented": 91,
-    "deferred_runtime": 107,
-    "implemented": 489,
+    "documented_total": 541,
+    "documented_candidates_total": 681,
+    "documented_outside_runtime": 140,
+    "documented": 453,
+    "runtime_total": 558,
+    "runtime": 453,
+    "deferred_documented": 88,
+    "deferred_runtime": 105,
+    "implemented": 453,
     "explicitly_excluded": 0,
     "documented_missing": 0,
     "runtime_only": 0,
@@ -93,10 +105,10 @@
     "domain_modules_implemented": 11,
     "portal_menu_routes": 34,
     "portal_menu_missing": 0,
-    "admin_menu_routes": 182,
+    "admin_menu_routes": 181,
     "admin_menu_implemented": 0,
     "admin_menu_missing": 0,
-    "admin_menu_routes_postponed": 182
+    "admin_menu_routes_postponed": 181
   },
   "deferred_documented_routes": [
     {
@@ -474,23 +486,6 @@
     },
     {
       "method": "POST",
-      "path": "/api/admin/v1/esocial/dlq/reenviar",
-      "source_doc": "docs/eng/platform.md",
-      "source_docs": ["docs/eng/platform.md"],
-      "evidence": "explicit_method",
-      "deferred_scope": "ADMIN_INSTALL_LATER",
-      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
-    },
-    {
-      "method": "POST",
-      "path": "/api/admin/v1/esocial/eventos/:id/reprocessar",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "deferred_scope": "ADMIN_INSTALL_LATER",
-      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
-    },
-    {
-      "method": "POST",
       "path": "/api/admin/v1/integracoes/cnab/gerar",
       "source_doc": "docs/eng/platform.md",
       "evidence": "explicit_method",
@@ -751,14 +746,6 @@
       "evidence": "explicit_method",
       "deferred_scope": "IDENTITY_INSTALL_LATER",
       "reason": "OAuth/Cognito and account-management paths are intentionally installed later with the corporate identity framework."
-    },
-    {
-      "method": "PUT",
-      "path": "/api/admin/v1/esocial/certificado",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "deferred_scope": "ADMIN_INSTALL_LATER",
-      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
     {
       "method": "PUT",
@@ -1472,13 +1459,6 @@
     {
       "method": "POST",
       "path": "/api/v1/dirf/gerar",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/fechamento/folha",
       "source_doc": "docs/eng/platform.md",
       "evidence": "explicit_method",
       "note": "Mentioned in docs/eng but not part of the current runtime-backed route gate."
@@ -2258,13 +2238,6 @@
     },
     {
       "method": "POST",
-      "path": "/api/admin/v1/esocial/eventos/:id/reprocessar",
-      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
-      "deferred_scope": "ADMIN_INSTALL_LATER",
-      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
-    },
-    {
-      "method": "POST",
       "path": "/api/admin/v1/tenants",
       "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2524,13 +2497,6 @@
     },
     {
       "method": "PUT",
-      "path": "/api/admin/v1/esocial/certificado",
-      "source_file": "backend/src/system-parameters/admin-platform.controller.ts",
-      "deferred_scope": "ADMIN_INSTALL_LATER",
-      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
-    },
-    {
-      "method": "PUT",
       "path": "/api/v1/admin/menus/:id",
       "source_file": "backend/src/system-parameters/admin-menus.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2730,11 +2696,6 @@
       "route_evidence": [
         {
           "method": "DELETE",
-          "path": "/api/v1/esocial/certificados/:certificateId",
-          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
-        },
-        {
-          "method": "DELETE",
           "path": "/api/v1/folha/rubrica/:id",
           "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
         },
@@ -2750,23 +2711,28 @@
         },
         {
           "method": "GET",
-          "path": "/api/v1/esocial/certificados",
-          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
+          "path": "/api/v1/folha/:id/remessa",
+          "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/esocial/eventos-trabalhador",
-          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
+          "path": "/api/v1/folha/remessa",
+          "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/esocial/events/excludable",
-          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
+          "path": "/api/v1/folha/rubrica",
+          "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
         },
         {
           "method": "GET",
-          "path": "/api/v1/esocial/exclusions",
-          "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
+          "path": "/api/v1/folha/rubrica/:id",
+          "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/folha/rubrica/links/job-positions",
+          "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
         }
       ],
       "source_evidence": [
@@ -3307,11 +3273,6 @@
         "route_evidence": [
           {
             "method": "DELETE",
-            "path": "/api/v1/esocial/certificados/:certificateId",
-            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
-          },
-          {
-            "method": "DELETE",
             "path": "/api/v1/folha/rubrica/:id",
             "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
           },
@@ -3327,23 +3288,28 @@
           },
           {
             "method": "GET",
-            "path": "/api/v1/esocial/certificados",
-            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
+            "path": "/api/v1/folha/:id/remessa",
+            "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/esocial/eventos-trabalhador",
-            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
+            "path": "/api/v1/folha/remessa",
+            "source_file": "backend/src/folha-pagamento/operations/payroll-operations.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/esocial/events/excludable",
-            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
+            "path": "/api/v1/folha/rubrica",
+            "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
           },
           {
             "method": "GET",
-            "path": "/api/v1/esocial/exclusions",
-            "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts"
+            "path": "/api/v1/folha/rubrica/:id",
+            "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
+          },
+          {
+            "method": "GET",
+            "path": "/api/v1/folha/rubrica/links/job-positions",
+            "source_file": "backend/src/folha-pagamento/accounting/rubrica/rubrica.controller.ts"
           }
         ],
         "source_evidence": [
@@ -3990,9 +3956,9 @@
     "admin": {
       "status": "postponed",
       "deferred_scope": "ADMIN_INSTALL_LATER",
-      "documented_routes": 182,
+      "documented_routes": 181,
       "implemented": 0,
-      "postponed": 182,
+      "postponed": 181,
       "missing": [],
       "routes": [
         {
@@ -4642,13 +4608,6 @@
         {
           "label": "Batimento de Folha / `/folha/batimento/gestao`",
           "path": "/folha/batimento/gestao",
-          "module": "folha",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
-        },
-        {
-          "label": "eSocial / `/folha/esocial/gestao`",
-          "path": "/folha/esocial/gestao",
           "module": "folha",
           "status": "postponed",
           "deferred_scope": "ADMIN_INSTALL_LATER"
@@ -5557,14 +5516,6 @@
     },
     {
       "method": "DELETE",
-      "path": "/api/v1/esocial/certificados/:certificateId",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "DELETE",
       "path": "/api/v1/folha/rubrica/:id",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
@@ -6009,102 +5960,6 @@
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
       "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/certificados",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "runtime_backed_path_mention",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/eventos-trabalhador",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "runtime_backed_path_mention",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/events/excludable",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/exclusions",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/fechamento",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "runtime_backed_path_mention",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/folha-periodica",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "runtime_backed_path_mention",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/retornos/eventos/:eventId",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/retornos/falhas",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/submissoes",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/submissoes/circuitos",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/tabelas-iniciais",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "runtime_backed_path_mention",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/esocial/trabalhadores",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "runtime_backed_path_mention",
       "note": "Implemented in runtime route map."
     },
     {
@@ -7815,185 +7670,6 @@
     },
     {
       "method": "POST",
-      "path": "/api/v1/esocial/certificados",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "runtime_backed_path_mention",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/eventos",
-      "status": "implemented",
-      "source_doc": "docs/eng/quality-migration.md",
-      "source_docs": ["docs/eng/quality-migration.md"],
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/eventos-trabalhador/s2210/:catEmissionId/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/eventos-trabalhador/s2220/:asoRecordId/retry",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/eventos-trabalhador/s2230/:pendingId/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/eventos-trabalhador/s2240/:environmentalExposureId/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/eventos-trabalhador/s2299/:pendingId/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/events/:id/exclude",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/exclusions/:requestId/accept",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/fechamento/fechar",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/fechamento/reabrir",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/fechamento/totalizadores",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/folha-periodica/payments/:paymentBatchId/s1210/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "source_docs": ["docs/eng/domains/fiscal-integrations.md", "docs/eng/platform.md"],
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/folha-periodica/runs/:payrollRunId/s1200/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "source_docs": ["docs/eng/domains/fiscal-integrations.md", "docs/eng/platform.md"],
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/folha-periodica/runs/:payrollRunId/s1202/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/retornos/eventos/:eventId/retry",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/retornos/eventos/:eventId/tratado",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/submissoes/:batchId/retry",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/tabelas-iniciais/:eventKind/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/tabelas-iniciais/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/trabalhadores/:employeeId/s2200/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/esocial/trabalhadores/:employeeId/s2205/emitir",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "POST",
       "path": "/api/v1/ferias/programacao",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
@@ -9485,14 +9161,6 @@
       "path": "/api/v1/tce/queue/:id/replay",
       "status": "implemented",
       "source_doc": "docs/eng/domains/fiscal-integrations.md",
-      "evidence": "explicit_method",
-      "note": "Implemented in runtime route map."
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/esocial/certificados/:certificateId/rotacao",
-      "status": "implemented",
-      "source_doc": "docs/eng/platform.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },

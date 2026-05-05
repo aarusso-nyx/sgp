@@ -173,7 +173,7 @@ INSERT INTO lgpd.legal_basis_rule (
         'Cumprir obrigacoes trabalhistas, previdenciarias, fiscais e de controle externo com dados funcionais e remuneratorios.',
         ARRAY['Servidor ou empregado publico', 'beneficiario', 'candidato quando nomeado'],
         ARRAY['CPF', 'matricula', 'remuneracao', 'tributos', 'vinculo', 'dados SST quando exigidos'],
-        ARRAY['public.esocial_spool', 'fiscal.dctfweb_debit', 'payroll.payroll_financial_record', 'hr.employee'],
+        ARRAY['public.esocial_events', 'fiscal.dctfweb_debit', 'payroll.payroll_financial_record', 'hr.employee'],
         ARRAY['stynx-esocial gateway', 'integrations-worker', 'TCE adapters'],
         'Retencao conforme leiautes oficiais, Receita Federal, eSocial e tribunais de contas.',
         'government_regulators',

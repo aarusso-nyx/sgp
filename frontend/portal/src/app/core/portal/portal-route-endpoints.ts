@@ -1,7 +1,7 @@
 import { Observable, forkJoin, map, switchMap } from 'rxjs';
 
 import { ApiClient } from '../api/api-client';
-import { OpenApiClient } from '../api/generated/openapi-client';
+import { OpenApiClient } from '../api/openapi-client';
 
 export interface PortalRouteClients {
   api: ApiClient;

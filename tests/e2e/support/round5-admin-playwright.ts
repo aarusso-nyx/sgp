@@ -26,11 +26,6 @@ const tceJobId = 'tce-job-1';
 
 const round5AdminPermissions = [
   'auditoria.read',
-  'esocial.event.read',
-  'esocial.event.retry',
-  'esocial.event.write',
-  'esocial.submission.read',
-  'esocial.submission.retry',
   'fiscal.dctfweb.read',
   'fiscal.dctfweb.write',
   'ponto.hourbank.read',
@@ -137,24 +132,6 @@ function responseFor(method: string, path: string): ApiResponse {
     return ok([{ id: 'admin', label: 'Admin' }]);
   }
 
-  if (method === 'GET' && path === '/v1/esocial/tabelas-iniciais') {
-    return ok([
-      s1xxxStatus('S-1000'),
-      s1xxxStatus('S-1005'),
-      s1xxxStatus('S-1010'),
-      s1xxxStatus('S-1020'),
-      s1xxxStatus('S-1050'),
-      s1xxxStatus('S-1070'),
-    ]);
-  }
-  if (method === 'POST' && path === '/v1/esocial/tabelas-iniciais/emitir') {
-    return ok([s1xxxDispatch('S-1000'), s1xxxDispatch('S-1010')]);
-  }
-  if (method === 'POST' && path.startsWith('/v1/esocial/tabelas-iniciais/')) {
-    const eventKind = path.split('/').at(-2) ?? 'S-1000';
-    return ok([s1xxxDispatch(eventKind)]);
-  }
-
   if (method === 'GET' && path === '/v1/admin/fiscal/dctfweb') {
     return ok([dctfwebDeclaration('dctf-ready', 'GENERATED')]);
   }
@@ -227,25 +204,6 @@ function responseFor(method: string, path: string): ApiResponse {
 
 function ok(body: unknown): ApiResponse {
   return { status: 200, body };
-}
-
-function s1xxxStatus(eventKind: string): Record<string, unknown> {
-  return {
-    eventKind,
-    sourceEntityId: `${eventKind.toLowerCase()}-source`,
-    lastEmittedAt: '2026-05-04T12:00:00.000Z',
-    lastPayloadHash: `hash-${eventKind}`,
-  };
-}
-
-function s1xxxDispatch(eventKind: string): Record<string, unknown> {
-  return {
-    eventKind,
-    sourceEntityId: `${eventKind.toLowerCase()}-source`,
-    sourceEntityKind: 'MASTER_DATA',
-    xmlHash: `xml-${eventKind}`,
-    emitted: true,
-  };
 }
 
 function dctfwebDeclaration(id: string, status: string): Record<string, unknown> {

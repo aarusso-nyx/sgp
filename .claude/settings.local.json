@@ -20,7 +20,9 @@
       "Bash(git -C /Users/aarusso/Development/stech/sgp diff c66a7b9..HEAD -- database/sql/15-pii-encryption.sql)",
       "Bash(grep '\\\\.spec\\\\.ts$')",
       "Bash(mkdir -p /Users/aarusso/Development/stech/sgp/.claude/skills)",
-      "Bash(cp -r /Users/aarusso/Development/stech/sgp/.codex/skills/sgp-* /Users/aarusso/Development/stech/sgp/.claude/skills/)"
+      "Bash(cp -r /Users/aarusso/Development/stech/sgp/.codex/skills/sgp-* /Users/aarusso/Development/stech/sgp/.claude/skills/)",
+      "WebSearch",
+      "Bash(npm run *)"
     ]
   }
 }

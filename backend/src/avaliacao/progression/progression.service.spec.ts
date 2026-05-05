@@ -6,6 +6,7 @@ import {
   ProgressionApplyService,
   ProgressionSimulationService,
 } from './progression.service';
+import { TEST_INSTANT_2026_05_01T12_00_00Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const eligibleRow = {
   employee_id: '11111111-1111-4111-8111-111111111111',
@@ -146,7 +147,7 @@ describe('FOL-03 progression services', () => {
             id: 'progression-1',
             employee_id: eligibleRow.employee_id,
             status: 'applied',
-            applied_at: new Date('2026-05-01T12:00:00Z'),
+            applied_at: new Date(TEST_INSTANT_2026_05_01T12_00_00Z),
           },
         ],
       })

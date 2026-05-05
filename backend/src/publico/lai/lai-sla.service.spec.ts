@@ -3,12 +3,19 @@ import {
   LAI_INITIAL_RESPONSE_DAYS,
   LaiSlaService,
 } from './lai-sla.service';
+import {
+  TEST_INSTANT_2026_05_01T00_00_00_000Z,
+  TEST_INSTANT_2026_05_01T10_00_00_000Z,
+  TEST_INSTANT_2026_05_10T00_00_00_000Z,
+  TEST_INSTANT_2026_05_21T00_00_00_000Z,
+  TEST_INSTANT_2026_06_01T00_00_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('LaiSlaService', () => {
   const service = new LaiSlaService();
 
   it('computes the statutory initial and extension calendar deadlines', () => {
-    const submittedAt = new Date('2026-05-01T10:00:00.000Z');
+    const submittedAt = new Date(TEST_INSTANT_2026_05_01T10_00_00_000Z);
     const dueAt = service.initialDueAt(submittedAt);
     const extendedDueAt = service.extendedDueAt(dueAt);
 
@@ -20,10 +27,10 @@ describe('LaiSlaService', () => {
 
   it('marks finished requests independently from the deadline clock', () => {
     const summary = service.summarize({
-      submittedAt: new Date('2026-05-01T00:00:00.000Z'),
-      dueAt: new Date('2026-05-21T00:00:00.000Z'),
-      finishedAt: new Date('2026-05-10T00:00:00.000Z'),
-      now: new Date('2026-06-01T00:00:00.000Z'),
+      submittedAt: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
+      dueAt: new Date(TEST_INSTANT_2026_05_21T00_00_00_000Z),
+      finishedAt: new Date(TEST_INSTANT_2026_05_10T00_00_00_000Z),
+      now: new Date(TEST_INSTANT_2026_06_01T00_00_00_000Z),
     });
 
     expect(summary.status).toBe('FINISHED');

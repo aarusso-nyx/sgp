@@ -5,6 +5,7 @@ import { AuditModule } from '../audit/audit.module';
 import { validateEnvironment } from '../config/environment';
 import { DatabaseModule } from '../database/database.module';
 import { DocumentsModule } from '../documents/documents.module';
+import { CompanyBankAccountModule } from '../folha-pagamento/operations/company-bank-account/company-bank-account.module';
 import { NomeacaoService } from '../recrutamento/nomeacao/nomeacao.service';
 import { Cnab240EmitService } from './cnab240/cnab240-emit.service';
 import { Cnab240RelayDispatchService } from './cnab240/cnab240-relay-dispatch.service';
@@ -33,6 +34,7 @@ import { SiaficModule } from './siafic/siafic.module';
     EfdReinfModule,
     GpsModule,
     SiaficModule,
+    CompanyBankAccountModule,
   ],
   controllers: [PortabilityController, Cnab240ReturnController],
   providers: [

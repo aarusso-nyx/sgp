@@ -1,6 +1,7 @@
 import { NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 
 import { AvaliacaoDataAccessService } from './avaliacao-data-access.service';
+import { TEST_INSTANT_2026_05_01T13_30_00_000Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('AvaliacaoDataAccessService', () => {
   const employeeRow = {
@@ -128,7 +129,7 @@ describe('AvaliacaoDataAccessService', () => {
     expect(service.asObject(null)).toEqual({});
 
     expect(service.toIsoDate('2026-05-01T13:30:00.000Z')).toBe('2026-05-01');
-    expect(service.toIso(new Date('2026-05-01T13:30:00.000Z'))).toBe(
+    expect(service.toIso(new Date(TEST_INSTANT_2026_05_01T13_30_00_000Z))).toBe(
       '2026-05-01T13:30:00.000Z',
     );
     expect(service.toMoney(123.456)).toBe('123.46');

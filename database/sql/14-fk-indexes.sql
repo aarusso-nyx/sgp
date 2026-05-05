@@ -207,7 +207,7 @@ CREATE INDEX IF NOT EXISTS idx_saude_aso_attachment_aso_record_id_fk ON saude.as
 CREATE INDEX IF NOT EXISTS idx_saude_aso_exam_item_medical_exam_id_fk ON saude.aso_exam_item (medical_exam_id);
 CREATE INDEX IF NOT EXISTS idx_saude_aso_record_employee_id_fk ON saude.aso_record (employee_id);
 CREATE INDEX IF NOT EXISTS idx_saude_aso_record_s2220_spool_message_id_fk ON saude.aso_record (s2220_spool_message_id);
-CREATE INDEX IF NOT EXISTS idx_saude_cat_emission_esocial_spool_message_id_fk ON saude.cat_emission (esocial_spool_message_id);
+CREATE INDEX IF NOT EXISTS idx_saude_cat_emission_esocial_events_message_id_fk ON saude.cat_emission (esocial_events_message_id);
 CREATE INDEX IF NOT EXISTS idx_saude_cat_emission_work_accident_id_fk ON saude.cat_emission (work_accident_id);
 CREATE INDEX IF NOT EXISTS idx_saude_environmental_exposure_employee_id_fk ON saude.environmental_exposure (employee_id);
 CREATE INDEX IF NOT EXISTS idx_saude_environmental_exposure_risk_management_program_id_fk ON saude.environmental_exposure (risk_management_program_id);

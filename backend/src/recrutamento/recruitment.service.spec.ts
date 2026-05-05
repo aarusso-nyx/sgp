@@ -1,4 +1,5 @@
 import { RecruitmentService } from './recruitment.service';
+import { TEST_INSTANT_2026_04_21T00_00_00_000Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('RecruitmentService', () => {
   const requestRow = (status = 'DRAFT') => ({
@@ -8,7 +9,7 @@ describe('RecruitmentService', () => {
     work_location_id: 'lotacao-1',
     reason: 'AUMENTO_QUADRO',
     justification: 'Demanda crescente',
-    request_date: new Date('2026-04-21T00:00:00.000Z'),
+    request_date: new Date(TEST_INSTANT_2026_04_21T00_00_00_000Z),
     due_date: status === 'CANCELED' ? null : '2026-05-30',
     status,
     completed_at: status === 'COMPLETED' ? '2026-06-01T10:00:00.000Z' : null,

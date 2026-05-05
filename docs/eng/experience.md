@@ -445,14 +445,13 @@ sgp-admin
 
 ##### 3.3.3 Subgrupo: Fechamentos e Obrigações
 
-| Item de menu       | Rota                             | Papel                              | Feature Flag      | Módulo NestJS | Comentário                          |
-| ------------------ | -------------------------------- | ---------------------------------- | ----------------- | ------------- | ----------------------------------- |
-| DIRF               | `/folha/dirf/gestao`             | `DIRF.GESTAO`                      | —                 | `folha`       | Geração arquivo TXT RFB             |
-| SEFIP              | `/folha/sefip/gestao`            | `SEFIP.GESTAO`                     | —                 | `folha`       | —                                   |
-| Remessa Bancária   | `/folha/remessa-bancaria/gestao` | `ARQUIVO_REMESSA.GESTAO`           | —                 | `folha`       | CNAB 240/400 por banco              |
-| Retorno Bancário   | `/folha/retorno-bancario/gestao` | `ARQUIVO_REMESSA.GESTAO`           | —                 | `folha`       | —                                   |
-| Batimento de Folha | `/folha/batimento/gestao`        | `RELATORIO_BATIMENTO_FOLHA.GESTAO` | —                 | `folha`       | Conferência de totais               |
-| eSocial            | `/folha/esocial/gestao`          | `ESOCIAL.GESTAO`                   | `esocial.enabled` | `folha`       | Leiaute S-1.2; oculto se flag false |
+| Item de menu       | Rota                             | Papel                              | Feature Flag | Módulo NestJS | Comentário              |
+| ------------------ | -------------------------------- | ---------------------------------- | ------------ | ------------- | ----------------------- |
+| DIRF               | `/folha/dirf/gestao`             | `DIRF.GESTAO`                      | —            | `folha`       | Geração arquivo TXT RFB |
+| SEFIP              | `/folha/sefip/gestao`            | `SEFIP.GESTAO`                     | —            | `folha`       | —                       |
+| Remessa Bancária   | `/folha/remessa-bancaria/gestao` | `ARQUIVO_REMESSA.GESTAO`           | —            | `folha`       | CNAB 240/400 por banco  |
+| Retorno Bancário   | `/folha/retorno-bancario/gestao` | `ARQUIVO_REMESSA.GESTAO`           | —            | `folha`       | —                       |
+| Batimento de Folha | `/folha/batimento/gestao`        | `RELATORIO_BATIMENTO_FOLHA.GESTAO` | —            | `folha`       | Conferência de totais   |
 
 ##### 3.3.4 Subgrupo: Relatórios de Folha
 
@@ -897,7 +896,6 @@ CREATE TABLE menu (
 | `FOLHA_FOLHA`             | Folha de Pagamento              | Folha de Pagamento            | `FOLHA_PAGAMENTO`       | `/folha/folha-pagamento/gestao`              | 20    | `receipt_long`        | true  | `ROLE_FOLHA_DE_PGT_GESTAO`          | —                               |
 | `FOLHA_CONTRACHEQUE`      | Contracheque                    | Contracheque                  | `FOLHA_PAGAMENTO`       | `/folha/contracheque/gestao`                 | 30    | `receipt`             | true  | `ROLE_FOLHA_DE_PGT_GESTAO`          | —                               |
 | `FOLHA_DIRF`              | DIRF                            | DIRF                          | `FOLHA_PAGAMENTO`       | `/folha/dirf/gestao`                         | 60    | `description`         | true  | `ROLE_DIRF_GESTAO`                  | —                               |
-| `FOLHA_ESOCIAL`           | eSocial                         | eSocial                       | `FOLHA_PAGAMENTO`       | `/folha/esocial/gestao`                      | 70    | `cloud_sync`          | true  | `ROLE_ESOCIAL_GESTAO`               | `esocial.enabled`               |
 | `FOLHA_REMESSA`           | Remessa Bancária                | Remessa Bancaria              | `FOLHA_PAGAMENTO`       | `/folha/remessa-bancaria/gestao`             | 65    | `send`                | true  | `ROLE_ARQUIVO_REMESSA_GESTAO`       | —                               |
 | `AVALIACAO_DESEMPENHO`    | Avaliação de Desempenho         | Avaliacao de Desempenho       | `MODULO_AVALIACAO`      | `/avaliacao/avaliacao-desempenho/gestao`     | 10    | `star`                | true  | `ROLE_AVALIACAO_DESEMPENHO_GESTAO`  | —                               |
 | `AVALIACAO_PLANO_CARGOS`  | Plano de Cargos e Carreira      | Plano de Cargos e Carreira    | `MODULO_AVALIACAO`      | `/avaliacao/plano-cargos-carreira/gestao`    | 60    | `layers`              | true  | `ROLE_PLANO_CARGOS_CARREIRA_GESTAO` | —                               |
@@ -3985,7 +3983,7 @@ s3://<bucket-tenant>/{dominio}/{ano}/{mes}/{tipo}/{uuid}.{ext}
 | **Formato**               | XML (leiautes S-1000, S-1005, S-1010, S-1020, S-1030, S-1035, S-1040, S-1050, S-1060, S-1070, S-1080, S-2200, S-2205, S-2206, S-2210, S-2220, S-2230, S-2240, S-2299, S-2300, S-2399, S-1200, S-1202, S-1210, S-1299, S-2501, S-5001 a S-5013, S-3000) |
 | **Gatilho**               | `[E]` (evento de domínio interno) ou `[M]` (reenvio manual)                                                                                                                                                                                            |
 | **Dados de entrada**      | Entidade de origem (funcionario, folha, acidente, etc.), `competencia_id`                                                                                                                                                                              |
-| **Template**              | Montado em stynx-esocial; SGP envia payload e lê `public.esocial_spool`                                                                                                                                                                                |
+| **Template**              | Montado em stynx-esocial; SGP envia payload e lê `public.esocial_events`                                                                                                                                                                               |
 | **Variáveis expostas**    | Conforme XSD eSocial S-1.2                                                                                                                                                                                                                             |
 | **Base legal**            | Resolução CG-eSocial n.º 19/2022; IN RFB n.º 2.043/2021; leiautes S-1.2                                                                                                                                                                                |
 | **Assinatura digital**    | ICP-Brasil A1 (e-CNPJ) — obrigatório para transmissão                                                                                                                                                                                                  |

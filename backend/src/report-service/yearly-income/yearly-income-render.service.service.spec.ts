@@ -12,6 +12,7 @@ import {
 } from '../../../../tests/backend/support/mock-db.cjs';
 import { LGPD_DATA_FLOWS } from '../../common/lgpd/legal-basis.registry';
 import { YearlyIncomeRenderService } from './yearly-income-render.service';
+import { TEST_INSTANT_2026_02_28T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const actor = {
   sub: 'sub-1',
@@ -42,7 +43,7 @@ const aggregate = {
   dependents_count: '1',
   s1210_total: '60000.00',
   s1210_irrf_total: '4000.00',
-  recomputed_at: new Date('2026-02-28T00:00:00.000Z'),
+  recomputed_at: new Date(TEST_INSTANT_2026_02_28T00_00_00_000Z),
 };
 
 describe('YearlyIncomeRenderService', () => {

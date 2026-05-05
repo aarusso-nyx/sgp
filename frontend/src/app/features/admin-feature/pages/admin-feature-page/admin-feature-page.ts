@@ -26,12 +26,8 @@ import type {
   AdminFeature,
   AdminFeatureMode,
 } from '../../../../core/navigation/admin-feature-catalog';
-import {
-  CrudTable,
-  CrudTableAction,
-  CrudTableColumn,
-} from '../../../../shared-platform/crud-table/crud-table';
-import { FilterBar, FilterField } from '../../../../shared-platform/filter-bar/filter-bar';
+import { CrudTable, CrudTableAction, CrudTableColumn } from '@sgp/shared-platform/crud-table';
+import { FilterBar, FilterField } from '@sgp/shared-platform/filter-bar';
 import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 
 interface WorkspaceRecord {

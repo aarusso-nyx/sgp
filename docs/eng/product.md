@@ -414,7 +414,7 @@ PARAMETRIZAR (especialidade + médico + agenda) → AGENDAR (PENDENTE/AGENDADO) 
 - `folha.calculo.solicitada` → `sgp-payroll-engine` consome.
 - `folha.calculo.concluida` → `sgp-core-api` atualiza UI.
 - `contracheque.gerar.pdf` → `sgp-report-service`.
-- `public.esocial_spool` → `stynx-esocial` (retry até 3, backoff exponencial).
+- `public.esocial_events` → `stynx-esocial` (retry até 3, backoff exponencial).
 - `remessa.gerar` / `retorno.processar` → `sgp-integrations-worker`.
 - `audit.evento.criado` → consumidor grava em `audit_log`.
 
@@ -1695,13 +1695,13 @@ SQL:    SELECT f.nivel_salarial_valor * (t.dias_trab / t.dias_mes)
 
 #### Observabilidade
 
-| Dimensão            | Ferramenta                                | Detalhes                                                                                |
-| ------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------- |
-| Logs                | CloudWatch Logs                           | Estruturado JSON; campos obrigatórios: `tenant_id`, `request_id`, `service`, `level`    |
-| Traces              | AWS X-Ray via OpenTelemetry               | Span por request HTTP, span por query DB, span por evento SQS                           |
-| Métricas de negócio | CloudWatch Custom Metrics                 | `folhas_fechadas_mes`, `contracheques_emitidos_mes`, `esocial_spool_mensagens_enviadas` |
-| Alertas             | CloudWatch Alarms → SNS → PagerDuty/Slack | SLA: p99 API < 2s; erro 5xx < 0.1%; fila SQS > 1000 msgs                                |
-| Dashboards          | CloudWatch Dashboards                     | Por ambiente (staging, prod) e por serviço                                              |
+| Dimensão            | Ferramenta                                | Detalhes                                                                                 |
+| ------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Logs                | CloudWatch Logs                           | Estruturado JSON; campos obrigatórios: `tenant_id`, `request_id`, `service`, `level`     |
+| Traces              | AWS X-Ray via OpenTelemetry               | Span por request HTTP, span por query DB, span por evento SQS                            |
+| Métricas de negócio | CloudWatch Custom Metrics                 | `folhas_fechadas_mes`, `contracheques_emitidos_mes`, `esocial_events_mensagens_enviadas` |
+| Alertas             | CloudWatch Alarms → SNS → PagerDuty/Slack | SLA: p99 API < 2s; erro 5xx < 0.1%; fila SQS > 1000 msgs                                 |
+| Dashboards          | CloudWatch Dashboards                     | Por ambiente (staging, prod) e por serviço                                               |
 
 #### Testes
 

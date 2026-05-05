@@ -13,6 +13,7 @@ import {
   buildDctfwebXml,
   DctfwebBuilderService,
 } from './dctfweb-builder.service';
+import { TEST_INSTANT_2026_05_01T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const DCTFWEB_CSLL_GOLDEN_ROOT = join(
   __dirname,
@@ -107,7 +108,7 @@ describe('DctfwebBuilderService', () => {
   it('lists, finds, and maps declaration details with date variants', async () => {
     const declaration = {
       id: 'decl-1',
-      competence: new Date('2026-05-01T00:00:00.000Z'),
+      competence: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
       kind: 'ORIGINAL',
       status: 'DRAFT',
       original_declaration_id: null,

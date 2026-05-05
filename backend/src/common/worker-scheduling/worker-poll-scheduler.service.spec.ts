@@ -5,6 +5,7 @@ import {
   WorkerPollScheduleOptions,
   WorkerPollSchedulerService,
 } from './worker-poll-scheduler.service';
+import { TEST_INSTANT_2026_05_04T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const workerSchedules: WorkerPollScheduleOptions[] = [
   {
@@ -29,7 +30,7 @@ describe('WorkerPollSchedulerService', () => {
 
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.setSystemTime(new Date('2026-05-04T00:00:00.000Z'));
+    jest.setSystemTime(new Date(TEST_INSTANT_2026_05_04T00_00_00_000Z));
     process.env = { ...originalEnv };
     logSpy = jest.spyOn(Logger.prototype, 'log').mockImplementation();
     warnSpy = jest.spyOn(Logger.prototype, 'warn').mockImplementation();

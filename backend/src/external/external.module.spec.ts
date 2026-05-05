@@ -39,11 +39,7 @@ describe('ExternalModule', () => {
     ]);
     expect(
       Reflect.getMetadata(MODULE_METADATA.EXPORTS, ExternalModule),
-    ).toEqual([
-      IcpSignerService,
-      PadesAdapter,
-      TenantFiscalCertificateService,
-    ]);
+    ).toEqual([IcpSignerService, PadesAdapter, TenantFiscalCertificateService]);
   });
 
   it('keeps external M2M endpoints behind auth.read', () => {

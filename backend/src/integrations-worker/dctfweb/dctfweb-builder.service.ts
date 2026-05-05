@@ -308,10 +308,10 @@ export class DctfwebBuilderService {
           spool.message_id::text
         ) AS source_event_recibo,
         COALESCE(spool.response->'payload', spool.response, spool.payload) AS payload
-      FROM public.esocial_spool spool
+      FROM public.esocial_events spool
       WHERE spool.tenant_id = $1::uuid
         AND COALESCE(spool.source_ref->>'competence', spool.payload->>'competence') = $2
-        AND spool.status = 'ACCEPTED'::public.esocial_spool_status
+        AND spool.status = 'ACCEPTED'::public.esocial_events_status
         AND spool.event_class IN ('S-5011', 'S-5012', 'S-5013')
       UNION ALL
       SELECT

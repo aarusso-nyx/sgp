@@ -1,5 +1,9 @@
 import { EmployeeRegistryService } from './employee-registry.service';
 import { EmployeeVersionService } from './employee-version.service';
+import {
+  TEST_INSTANT_2026_01_01T00_00_00_000Z,
+  TEST_INSTANT_2026_01_02T00_00_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('EmployeeRegistryService', () => {
   it('lists paged employees through the registry surface', async () => {
@@ -17,8 +21,8 @@ describe('EmployeeRegistryService', () => {
           functional_status: 'Ativo',
           branch_name: 'Matriz',
           active: true,
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
-          updated_at: new Date('2026-01-02T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_01_02T00_00_00_000Z),
         },
       ]);
     const database = { configured: true, query };

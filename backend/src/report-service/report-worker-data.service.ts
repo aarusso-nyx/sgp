@@ -205,10 +205,10 @@ export class ReportWorkerDataService {
             WHERE totalizer.event_class IN ('S-5002', 'S-5012')
           ), 0)::numeric(16, 2) AS irrf
         FROM run
-        LEFT JOIN public.esocial_spool totalizer
+        LEFT JOIN public.esocial_events totalizer
           ON totalizer.tenant_id = run.tenant_id
          AND COALESCE(totalizer.source_ref->>'competence', totalizer.payload->>'competence') = make_date(run.competence_year, run.competence_month, 1)::text
-         AND totalizer.status = 'ACCEPTED'::public.esocial_spool_status
+         AND totalizer.status = 'ACCEPTED'::public.esocial_events_status
       )
       SELECT metric, source_total::text, recomputed_total::text, difference::text
       FROM (

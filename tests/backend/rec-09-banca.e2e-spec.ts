@@ -7,6 +7,10 @@ import type { App as SupertestApp } from 'supertest/types';
 import { AppModule } from '../../backend/src/app.module';
 import { CognitoJwtService } from '../../backend/src/auth/cognito-jwt.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
+import {
+  TEST_INSTANT_2026_05_02T13_00_00_000Z,
+  TEST_INSTANT_2026_05_02T14_00_00_000Z,
+} from './helpers/date-fixtures';
 
 const tenantId = '00000000-0000-4000-8000-000000000001';
 const concursoId = '00000000-0000-4000-8000-000000000911';
@@ -60,7 +64,7 @@ class FakeRec09Database {
       this.document = {
         ...this.document,
         status: 'PUBLISHED',
-        published_at: new Date('2026-05-02T14:00:00.000Z'),
+        published_at: new Date(TEST_INSTANT_2026_05_02T14_00_00_000Z),
       };
       return [this.document] as T[];
     }
@@ -93,7 +97,7 @@ class FakeRec09Database {
           this.signatures.push({
             id: `sig-${this.signatures.length + 1}`,
             banca_membro_id: values[2],
-            signed_at: new Date('2026-05-02T13:00:00.000Z'),
+            signed_at: new Date(TEST_INSTANT_2026_05_02T13_00_00_000Z),
             signature_value: values[3],
             signature_order: values[6],
           });

@@ -1,4 +1,8 @@
 import { PayrollAccountingService } from './payroll-accounting.service';
+import {
+  TEST_INSTANT_2026_04_26T00_00_00_000Z,
+  TEST_INSTANT_2026_04_27T00_00_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('PayrollAccountingService', () => {
   const catalogRow = {
@@ -7,7 +11,7 @@ describe('PayrollAccountingService', () => {
     description: 'Catalogo',
     active: true,
     metadata: { type: 'CATEGORIA' },
-    created_at: new Date('2026-04-26T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
     updated_at: '2026-04-27T00:00:00.000Z',
   };
   const accountRow = {
@@ -23,7 +27,7 @@ describe('PayrollAccountingService', () => {
       workLocationIds: ['loc-1'],
     },
     created_at: '2026-04-26T00:00:00.000Z',
-    updated_at: new Date('2026-04-27T00:00:00.000Z'),
+    updated_at: new Date(TEST_INSTANT_2026_04_27T00_00_00_000Z),
   };
 
   const createQuery = () =>
@@ -62,8 +66,8 @@ describe('PayrollAccountingService', () => {
         description: 'Categoria trabalhador',
         active: true,
         metadata: { type: 'CATEGORIA' },
-        created_at: new Date('2026-04-26T00:00:00.000Z'),
-        updated_at: new Date('2026-04-26T00:00:00.000Z'),
+        created_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
+        updated_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
       },
     ]);
     const service = new PayrollAccountingService({
@@ -94,8 +98,8 @@ describe('PayrollAccountingService', () => {
           description: 'EMPENHO',
           active: true,
           metadata: {},
-          created_at: new Date('2026-04-26T00:00:00.000Z'),
-          updated_at: new Date('2026-04-26T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
         },
       ])
       .mockResolvedValueOnce([])
@@ -109,8 +113,8 @@ describe('PayrollAccountingService', () => {
           metadata: {
             workLocationIds: ['loc-1'],
           },
-          created_at: new Date('2026-04-26T00:00:00.000Z'),
-          updated_at: new Date('2026-04-26T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
         },
       ]);
     const service = new PayrollAccountingService({

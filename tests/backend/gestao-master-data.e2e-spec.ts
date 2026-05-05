@@ -11,6 +11,7 @@ import { AuditService } from '../../backend/src/audit/audit.service';
 import { DatabaseService } from '../../backend/src/database/database.service';
 import { JobPositionsController } from '../../backend/src/gestao/master-data/master-data.controller';
 import { MasterDataService } from '../../backend/src/gestao/master-data/master-data.service';
+import { TEST_INSTANT_2026_04_30T00_00_00_000Z } from './helpers/date-fixtures';
 
 describe('Gestao master-data API (e2e)', () => {
   let app: INestApplication;
@@ -28,8 +29,8 @@ describe('Gestao master-data API (e2e)', () => {
         description: 'Cargo efetivo',
         active: true,
         metadata: { vacanciesTotal: 2, vacanciesFilled: 1, vacanciesOpen: 1 },
-        created_at: new Date('2026-04-30T00:00:00.000Z'),
-        updated_at: new Date('2026-04-30T00:00:00.000Z'),
+        created_at: new Date(TEST_INSTANT_2026_04_30T00_00_00_000Z),
+        updated_at: new Date(TEST_INSTANT_2026_04_30T00_00_00_000Z),
       },
     ]);
 

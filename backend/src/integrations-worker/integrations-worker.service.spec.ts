@@ -1,4 +1,8 @@
 import { IntegrationsWorkerService } from './integrations-worker.service';
+import {
+  TEST_INSTANT_2000_01_01T00_00_00_000Z,
+  TEST_INSTANT_2026_04_25T00_00_00_000Z,
+} from '../../../tests/backend/helpers/date-fixtures';
 
 describe('IntegrationsWorkerService', () => {
   it('processes a remittance request into a generated attachment', async () => {
@@ -374,7 +378,7 @@ describe('IntegrationsWorkerService', () => {
             certificate_id: 'ctc-1',
             employee_name: 'Servidor CTC',
             registration: '0002',
-            period_start: new Date('2000-01-01T00:00:00.000Z'),
+            period_start: new Date(TEST_INSTANT_2000_01_01T00_00_00_000Z),
             period_end: '2026-01-01',
             issuing_agency: 'RPPS',
             issuance_act: 'Ato CTC',
@@ -388,7 +392,7 @@ describe('IntegrationsWorkerService', () => {
             employee_name: 'Servidor Declaracao',
             registration: '0003',
             type: 'TEMPO',
-            issued_at: new Date('2026-04-25T00:00:00.000Z'),
+            issued_at: new Date(TEST_INSTANT_2026_04_25T00_00_00_000Z),
           },
         ];
       }
@@ -572,7 +576,7 @@ describe('IntegrationsWorkerService', () => {
         return [{ id: 'doc-fallback' }];
       }
       if (sql.includes('FROM payroll.payment_remittance_file')) return [];
-      if (sql.includes('FROM public.esocial_spool')) return [];
+      if (sql.includes('FROM public.esocial_events')) return [];
       if (sql.includes('FROM hr.recertification_campaign')) {
         return [
           {

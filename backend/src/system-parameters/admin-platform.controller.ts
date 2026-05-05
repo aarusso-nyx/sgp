@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import {
   ApiOperation,
   ApiBearerAuth,
@@ -64,21 +64,5 @@ export class AdminPlatformController {
   @ApiOkResponse({ description: 'Tenant import progress.' })
   importProgress(@Param('id') id: string, @Param('job_id') jobId: string) {
     return this.adminPlatformService.importProgress(id, jobId);
-  }
-
-  @ApiOperation({ summary: 'POST esocial/eventos/:id/reprocessar' })
-  @Post('esocial/eventos/:id/reprocessar')
-  @RequirePermission('gestao.write')
-  @ApiCreatedResponse({ description: 'Reprocess eSocial event.' })
-  reprocessEsocialEvent(@Param('id') id: string) {
-    return this.adminPlatformService.reprocessEsocialEvent(id);
-  }
-
-  @ApiOperation({ summary: 'PUT esocial/certificado' })
-  @Put('esocial/certificado')
-  @RequirePermission('gestao.write')
-  @ApiOkResponse({ description: 'Update eSocial certificate.' })
-  updateEsocialCertificate(@Body() body: Record<string, unknown>) {
-    return this.adminPlatformService.updateEsocialCertificate(body);
   }
 }

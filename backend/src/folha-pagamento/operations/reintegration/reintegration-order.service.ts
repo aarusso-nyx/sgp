@@ -374,7 +374,7 @@ export class ReintegrationOrderService {
         SELECT
           message_id::text AS id,
           COALESCE(response->'receipt'->>'receiptNumber', source_ref->>'reference', $3)::text AS receipt
-        FROM public.esocial_spool
+        FROM public.esocial_events
         WHERE tenant_id = $1::uuid
           AND message_id = $2::uuid
           AND event_class = 'S-2299'
@@ -393,7 +393,7 @@ export class ReintegrationOrderService {
       SELECT
         message_id::text AS id,
         COALESCE(response->'receipt'->>'receiptNumber', source_ref->>'reference', $3)::text AS receipt
-      FROM public.esocial_spool
+      FROM public.esocial_events
       WHERE tenant_id = $1::uuid
         AND event_class = 'S-2299'
         AND (
@@ -436,7 +436,7 @@ export class ReintegrationOrderService {
         order_row.created_at,
         COALESCE(event.response->'receipt'->>'receiptNumber', event.source_ref->>'reference') AS original_s2299_receipt
       FROM hr.reintegration_order order_row
-      JOIN public.esocial_spool event
+      JOIN public.esocial_events event
         ON event.tenant_id = order_row.tenant_id
        AND event.message_id = order_row.original_termination_event_id
       WHERE order_row.tenant_id = $1::uuid

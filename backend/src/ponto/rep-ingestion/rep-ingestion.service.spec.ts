@@ -3,6 +3,10 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 import { queryResult } from '../../../../tests/backend/support/mock-db.cjs';
 import { RepIngestionService } from './rep-ingestion.service';
+import {
+  TEST_INSTANT_2026_05_02T10_00_00_000Z,
+  TEST_INSTANT_2026_05_02T10_01_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 const line = {
   lineNo: 1,
@@ -215,8 +219,8 @@ describe('RepIngestionService', () => {
             kind: 'REP_C',
             file_name: 'afdt.txt',
             file_sha256: 'hash',
-            received_at: new Date('2026-05-02T10:00:00.000Z'),
-            processed_at: new Date('2026-05-02T10:01:00.000Z'),
+            received_at: new Date(TEST_INSTANT_2026_05_02T10_00_00_000Z),
+            processed_at: new Date(TEST_INSTANT_2026_05_02T10_01_00_000Z),
             status: 'REJECTED',
             error_summary: { rejected: true },
             accepted_lines: 0,

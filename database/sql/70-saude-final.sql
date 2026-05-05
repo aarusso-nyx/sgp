@@ -8,7 +8,7 @@ CREATE INDEX aso_record_s2220_missing_idx ON saude.aso_record USING btree (tenan
 
 CREATE INDEX aso_record_status_due_idx ON saude.aso_record USING btree (tenant_id, status, next_exam_due_at);
 
-CREATE INDEX cat_emission_deadline_idx ON saude.cat_emission USING btree (tenant_id, deadline_at, esocial_spool_message_id);
+CREATE INDEX cat_emission_deadline_idx ON saude.cat_emission USING btree (tenant_id, deadline_at, esocial_events_message_id);
 
 CREATE INDEX environmental_exposure_employee_period_idx ON saude.environmental_exposure USING btree (tenant_id, employee_id, exposure_start, exposure_end);
 
@@ -121,13 +121,13 @@ ALTER TABLE ONLY saude.aso_record
     ADD CONSTRAINT aso_record_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES hr.employee(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY saude.aso_record
-    ADD CONSTRAINT aso_record_s2220_spool_message_id_fkey FOREIGN KEY (s2220_spool_message_id) REFERENCES public.esocial_spool(message_id);
+    ADD CONSTRAINT aso_record_s2220_spool_message_id_fkey FOREIGN KEY (s2220_spool_message_id) REFERENCES public.esocial_events(message_id);
 
 ALTER TABLE ONLY saude.aso_record
     ADD CONSTRAINT aso_record_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
 ALTER TABLE ONLY saude.cat_emission
-    ADD CONSTRAINT cat_emission_esocial_spool_message_id_fkey FOREIGN KEY (esocial_spool_message_id) REFERENCES public.esocial_spool(message_id);
+    ADD CONSTRAINT cat_emission_esocial_events_message_id_fkey FOREIGN KEY (esocial_events_message_id) REFERENCES public.esocial_events(message_id);
 
 ALTER TABLE ONLY saude.cat_emission
     ADD CONSTRAINT cat_emission_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);

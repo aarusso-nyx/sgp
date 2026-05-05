@@ -22,15 +22,10 @@ interface BootOptions {
 }
 
 const employeeId = '11111111-1111-4111-8111-111111111111';
-const batchId = '22222222-2222-4222-8222-222222222222';
 const repDeviceId = '33333333-3333-4333-8333-333333333333';
 
 const adminPermissions = [
   'auditoria.read',
-  'esocial.event.read',
-  'esocial.event.write',
-  'esocial.submission.read',
-  'esocial.submission.retry',
   'folha.read',
   'folha.write',
   'gestao.read',
@@ -241,58 +236,6 @@ test.describe('SGP admin Playwright e2e', () => {
       terminationDate: '2026-05-31',
       terminationReasonId: '44444444-4444-4444-8444-444444444444',
     });
-  });
-
-  test('loads the eSocial submission dashboard endpoints', async ({ page }) => {
-    const hits: ApiHit[] = [];
-    await bootAdmin(page, { hits });
-
-    await page.goto('/esocial/submissao');
-
-    await expect(page.getByRole('heading', { name: 'Submissao SOAP' }).first()).toBeVisible();
-    await waitForHit(hits, (candidate) => candidate.path === '/v1/esocial/submissoes');
-    await waitForHit(hits, (candidate) => candidate.path === '/v1/esocial/submissoes/circuitos');
-  });
-
-  test('keeps the eSocial submission dashboard action visible after endpoint loading', async ({
-    page,
-  }) => {
-    const hits: ApiHit[] = [];
-    await bootAdmin(page, { hits });
-
-    await page.goto('/esocial/submissao');
-    await waitForHit(hits, (candidate) => candidate.path === '/v1/esocial/submissoes');
-
-    await expect(page.getByRole('button', { name: 'Atualizar' })).toBeVisible();
-    expect(hits.filter((candidate) => candidate.path === '/v1/esocial/submissoes')).toHaveLength(1);
-  });
-
-  test('stubs the eSocial submission retry endpoint used by retry-capable batches', async ({
-    page,
-  }) => {
-    const hits: ApiHit[] = [];
-    await bootAdmin(page, { hits });
-
-    await page.goto('/esocial/submissao');
-    const result = await page.evaluate(async (currentBatchId) => {
-      const response = await fetch(`/api/v1/esocial/submissoes/${currentBatchId}/retry`, {
-        method: 'POST',
-        headers: {
-          authorization: 'Bearer admin-e2e-token',
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({}),
-      });
-      return response.json();
-    }, batchId);
-
-    expect(result).toMatchObject({ batchId, status: 'RETRY' });
-    const hit = await waitForHit(
-      hits,
-      (candidate) =>
-        candidate.method === 'POST' && candidate.path === `/v1/esocial/submissoes/${batchId}/retry`,
-    );
-    expect(hit.authorization).toBe('Bearer admin-e2e-token');
   });
 
   test('loads the Ponto AFD export and import histories', async ({ page }) => {
@@ -518,56 +461,6 @@ function responseFor(method: string, path: string): ApiResponse {
         lifecycleStatus: 'TERMINATED',
         functionalStatus: 'DESLIGADO',
       },
-    });
-  }
-
-  if (method === 'GET' && path === '/v1/esocial/submissoes') {
-    return ok([
-      {
-        batchId,
-        environment: 'PRODUCTION',
-        endpointUrl: 'https://esocial.test/servicos/empregador/enviar',
-        eventIds: ['S-1200', 'S-1210'],
-        soapRequestHash: 'abcdef0123456789',
-        soapResponseHash: null,
-        httpStatus: 202,
-        status: 'PENDING',
-        attempts: 1,
-        nextAttemptAt: '2026-05-03T14:30:00.000Z',
-        sentAt: null,
-        responseAt: null,
-        createdAt: '2026-05-03T13:00:00.000Z',
-        updatedAt: '2026-05-03T13:00:00.000Z',
-      },
-    ]);
-  }
-  if (method === 'GET' && path === '/v1/esocial/submissoes/circuitos') {
-    return ok([
-      {
-        endpointUrl: 'https://esocial.test/servicos/empregador/enviar',
-        openedAt: null,
-        lastFailureAt: null,
-        failureCount: 0,
-        state: 'CLOSED',
-      },
-    ]);
-  }
-  if (method === 'POST' && path === `/v1/esocial/submissoes/${batchId}/retry`) {
-    return ok({
-      batchId,
-      environment: 'PRODUCTION',
-      endpointUrl: 'https://esocial.test/servicos/empregador/enviar',
-      eventIds: ['S-1200'],
-      soapRequestHash: 'abcdef0123456789',
-      soapResponseHash: null,
-      httpStatus: null,
-      status: 'RETRY',
-      attempts: 2,
-      nextAttemptAt: null,
-      sentAt: null,
-      responseAt: null,
-      createdAt: '2026-05-03T13:00:00.000Z',
-      updatedAt: '2026-05-03T14:00:00.000Z',
     });
   }
 

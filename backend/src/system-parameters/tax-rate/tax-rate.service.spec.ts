@@ -2,6 +2,7 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { TaxRateService } from './tax-rate.service';
+import { TEST_INSTANT_2026_01_01T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('TaxRateService', () => {
   const service = new TaxRateService({ configured: false } as never);
@@ -83,7 +84,7 @@ describe('TaxRateService', () => {
           id: 'rate-1',
           code: 'IRRF-1',
           name: 'IRRF faixa 1',
-          competence_start: new Date('2026-01-01T00:00:00.000Z'),
+          competence_start: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
           competence_end: '2026-12-31',
           reference_year: 2026,
           bracket_min: '0.00',

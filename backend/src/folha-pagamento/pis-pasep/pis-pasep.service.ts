@@ -128,7 +128,7 @@ export class PisPasepService {
       SELECT
         COALESCE(event.payload->>'employeeId', event.source_ref->>'employeeId') AS employee_id,
         NULLIF(COALESCE(event.payload->>'competenceYear', event.source_ref->>'competenceYear'), '')::integer AS competence_year
-      FROM public.esocial_spool event
+      FROM public.esocial_events event
       WHERE event.tenant_id = $1::uuid
         AND event.message_id = $2::uuid
         AND event.event_class = 'S-1200'

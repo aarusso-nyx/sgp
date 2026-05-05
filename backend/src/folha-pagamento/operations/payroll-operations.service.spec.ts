@@ -1,4 +1,5 @@
 import { PayrollOperationsService } from './payroll-operations.service';
+import { TEST_INSTANT_2026_04_26T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('PayrollOperationsService', () => {
   const runRow = {
@@ -33,7 +34,7 @@ describe('PayrollOperationsService', () => {
         {
           id: 'req-1',
           status: 'REQUESTED',
-          requested_at: new Date('2026-04-26T00:00:00.000Z'),
+          requested_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
         },
       ]);
     const service = new PayrollOperationsService({
@@ -139,7 +140,7 @@ describe('PayrollOperationsService', () => {
         {
           id: 'req-2',
           status: 'REQUESTED',
-          requested_at: new Date('2026-04-26T00:00:00.000Z'),
+          requested_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
         },
       ]);
     const service = new PayrollOperationsService({
@@ -168,7 +169,7 @@ describe('PayrollOperationsService', () => {
         {
           id: 'req-3',
           status: 'REQUESTED',
-          requested_at: new Date('2026-04-26T00:00:00.000Z'),
+          requested_at: new Date(TEST_INSTANT_2026_04_26T00_00_00_000Z),
         },
       ]);
     const service = new PayrollOperationsService({

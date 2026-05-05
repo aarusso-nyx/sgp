@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { AfdtAcjefGeneratorService } from './afdt-acjef-generator.service';
+import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('AfdtAcjefGeneratorService', () => {
   const input = {
@@ -11,7 +12,9 @@ describe('AfdtAcjefGeneratorService', () => {
   };
 
   beforeEach(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2026-05-02T12:00:00.000Z'));
+    jest
+      .useFakeTimers()
+      .setSystemTime(new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z));
   });
 
   afterEach(() => {

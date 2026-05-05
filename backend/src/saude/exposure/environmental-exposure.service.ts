@@ -71,7 +71,7 @@ export class EnvironmentalExposureService {
         string_agg(COALESCE(pending.source_ref->>'triggerEvent', pending.event_class), ',' ORDER BY COALESCE(pending.source_ref->>'triggerEvent', pending.event_class)) AS pending_events
       FROM saude.environmental_exposure exposure
       JOIN hr.employee employee ON employee.id = exposure.employee_id
-      LEFT JOIN public.esocial_spool pending
+      LEFT JOIN public.esocial_events pending
         ON pending.tenant_id = exposure.tenant_id
        AND pending.event_class = 'S-2240'
        AND pending.source_ref->>'environmentalExposureId' = exposure.id::text

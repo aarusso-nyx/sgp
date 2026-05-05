@@ -1,4 +1,10 @@
 import { PayrollService } from './payroll.service';
+import {
+  TEST_INSTANT_2024_01_01T00_00_00_000Z,
+  TEST_INSTANT_2026_04_01T00_00_00_000Z,
+  TEST_INSTANT_2026_04_15T00_00_00_000Z,
+  TEST_INSTANT_2026_04_25T00_00_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('PayrollService', () => {
   const runRow = {
@@ -12,7 +18,7 @@ describe('PayrollService', () => {
     status: 'DRAFT',
     employee_count: 0,
     total_net: '0.00',
-    created_at: new Date('2026-04-01T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
     updated_at: '2026-04-25T00:00:00.000Z',
     branch_id: null,
     payroll_type_id: 'type-1',
@@ -37,8 +43,8 @@ describe('PayrollService', () => {
           status: 'DRAFT',
           employee_count: 2,
           total_net: '1000.00',
-          created_at: new Date('2026-04-01T00:00:00.000Z'),
-          updated_at: new Date('2026-04-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
         },
       ]);
     const service = new PayrollService({ configured: true, query } as never);
@@ -118,8 +124,8 @@ describe('PayrollService', () => {
           status: 'DRAFT',
           employee_count: 0,
           total_net: '0.00',
-          created_at: new Date('2026-04-01T00:00:00.000Z'),
-          updated_at: new Date('2026-04-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
           branch_id: null,
           payroll_type_id: 'type-1',
           payroll_type_code: 'RESCISAO',
@@ -139,8 +145,8 @@ describe('PayrollService', () => {
           functional_status_id: 'status-1',
           branch_id: null,
           salary_amount: '5800.00',
-          hired_on: new Date('2024-01-01T00:00:00.000Z'),
-          terminated_on: new Date('2026-04-15T00:00:00.000Z'),
+          hired_on: new Date(TEST_INSTANT_2024_01_01T00_00_00_000Z),
+          terminated_on: new Date(TEST_INSTANT_2026_04_15T00_00_00_000Z),
         },
       ])
       .mockResolvedValueOnce([])
@@ -169,8 +175,8 @@ describe('PayrollService', () => {
           status: 'GENERATED',
           employee_count: 1,
           total_net: '6766.67',
-          created_at: new Date('2026-04-01T00:00:00.000Z'),
-          updated_at: new Date('2026-04-25T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_25T00_00_00_000Z),
         },
       ])
       .mockResolvedValueOnce([]);
@@ -200,8 +206,8 @@ describe('PayrollService', () => {
           status: 'DRAFT',
           employee_count: 0,
           total_net: '0.00',
-          created_at: new Date('2026-04-01T00:00:00.000Z'),
-          updated_at: new Date('2026-04-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
           branch_id: null,
           payroll_type_id: 'type-1',
           payroll_type_code: 'MENSAL',
@@ -257,8 +263,8 @@ describe('PayrollService', () => {
           status: 'DRAFT',
           employee_count: 1,
           total_net: '5800.00',
-          created_at: new Date('2026-04-01T00:00:00.000Z'),
-          updated_at: new Date('2026-04-25T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_25T00_00_00_000Z),
         },
       ]);
     const service = new PayrollService({ configured: true, query } as never);
@@ -404,8 +410,8 @@ describe('PayrollService', () => {
           status: 'DRAFT',
           employee_count: 0,
           total_net: '0.00',
-          created_at: new Date('2026-04-01T00:00:00.000Z'),
-          updated_at: new Date('2026-04-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_04_01T00_00_00_000Z),
           branch_id: null,
           payroll_type_id: 'type-1',
           payroll_type_code: 'MENSAL',

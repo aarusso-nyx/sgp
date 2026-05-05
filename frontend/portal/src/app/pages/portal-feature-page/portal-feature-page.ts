@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { ApiClient } from '../../core/api/api-client';
-import { OpenApiClient } from '../../core/api/generated/openapi-client';
+import { OpenApiClient } from '../../core/api/openapi-client';
 import { PortalFeatureItem } from '../../core/portal/portal-feature-catalog';
 import {
   PortalRouteEndpoint,

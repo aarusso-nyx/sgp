@@ -11,8 +11,9 @@ import {
   SiconfiRreoRgfGenerator,
   type SiconfiFiscalStatementInput,
 } from '../../backend/src/integrations-worker/siconfi/rreo-rgf.generator';
+import { TEST_INSTANT_2026_05_04T14_00_00_000Z } from './helpers/date-fixtures';
 
-const fixedNow = () => new Date('2026-05-04T14:00:00.000Z');
+const fixedNow = () => new Date(TEST_INSTANT_2026_05_04T14_00_00_000Z);
 
 describe('R5-40 SICONFI mock relay queue adapter (e2e)', () => {
   let transport: InMemoryQueueTransport;

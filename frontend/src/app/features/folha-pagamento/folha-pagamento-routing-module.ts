@@ -150,52 +150,6 @@ import { SimulacaoFolha } from './simulacao/simulacao';
           moduleLabel: 'Folha de Pgt',
         },
       },
-      {
-        path: 'esocial/certificados',
-        loadComponent: () =>
-          import('../esocial/certificados/esocial-certificados').then((m) => m.ESocialCertificados),
-        canActivate: [permissionGuard],
-        data: {
-          moduleKey: 'folha',
-          permissions: ['esocial.certificate.read'],
-          moduleLabel: 'Folha de Pgt',
-        },
-      },
-      {
-        path: 'esocial/submissao',
-        loadComponent: () =>
-          import('../esocial/submissao/esocial-submissao').then((m) => m.ESocialSubmissao),
-        canActivate: [permissionGuard],
-        data: {
-          moduleKey: 'folha',
-          permissions: ['esocial.submission.read'],
-          moduleLabel: 'Folha de Pgt',
-        },
-      },
-      {
-        path: 'esocial/folha-periodica',
-        loadComponent: () =>
-          import('../esocial/folha-periodica/esocial-folha-periodica').then(
-            (m) => m.ESocialFolhaPeriodica,
-          ),
-        canActivate: [permissionGuard],
-        data: {
-          moduleKey: 'folha',
-          permissions: ['esocial.event.read'],
-          moduleLabel: 'Folha de Pgt',
-        },
-      },
-      {
-        path: 'esocial/fechamento',
-        loadComponent: () =>
-          import('../esocial/fechamento/esocial-fechamento').then((m) => m.ESocialFechamento),
-        canActivate: [permissionGuard],
-        data: {
-          moduleKey: 'folha',
-          permissions: ['esocial.event.read'],
-          moduleLabel: 'Folha de Pgt',
-        },
-      },
       ...buildModuleRouteGroup('folha', FolhaPagamentoHome, {
         moduleLabel: 'Folha de Pgt',
       }),

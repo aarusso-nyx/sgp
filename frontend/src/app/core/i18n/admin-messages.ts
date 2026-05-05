@@ -4,7 +4,6 @@ export const ADMIN_I18N_MESSAGES = {
   gestao: $localize`:@@sgp.admin.module.gestao:Gestao`,
   rh: $localize`:@@sgp.admin.module.rh:Recursos humanos`,
   folha: $localize`:@@sgp.admin.module.folha:Folha de pagamento`,
-  esocial: $localize`:@@sgp.admin.module.esocial:eSocial`,
   fiscal: $localize`:@@sgp.admin.module.fiscal:Fiscal`,
   ponto: $localize`:@@sgp.admin.module.ponto:Ponto`,
   saude: $localize`:@@sgp.admin.module.saude:Saude ocupacional`,

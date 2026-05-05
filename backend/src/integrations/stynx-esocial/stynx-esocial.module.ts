@@ -1,24 +1,19 @@
 import { Module } from '@nestjs/common';
 
-import { EsocialSpoolModule } from '../../esocial-spool';
+import { DatabaseModule } from '../../database/database.module';
+import { EsocialEventsModule } from '../../esocial-events';
 import { StynxEsocialAuditConsumer } from './audit-consumer.service';
-import { StynxEsocialSpoolUpdateConsumer } from './spool-update-consumer.service';
+import { StynxEsocialEventsUpdateConsumer } from './spool-update-consumer.service';
 import { StynxEsocialClient } from './stynx-esocial.client';
-import {
-  StynxEsocialAdminGatewayController,
-  StynxEsocialGatewayController,
-} from './stynx-esocial-gateway.controller';
+import { StynxEsocialAdminGatewayController } from './stynx-esocial-gateway.controller';
 
 @Module({
-  imports: [EsocialSpoolModule],
-  controllers: [
-    StynxEsocialGatewayController,
-    StynxEsocialAdminGatewayController,
-  ],
+  imports: [DatabaseModule, EsocialEventsModule],
+  controllers: [StynxEsocialAdminGatewayController],
   providers: [
     StynxEsocialClient,
     StynxEsocialAuditConsumer,
-    StynxEsocialSpoolUpdateConsumer,
+    StynxEsocialEventsUpdateConsumer,
   ],
   exports: [StynxEsocialClient],
 })

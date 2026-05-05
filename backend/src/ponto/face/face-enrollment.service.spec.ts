@@ -6,6 +6,7 @@ import {
 } from './face-template';
 import { FaceLivenessService } from './liveness.service';
 import { FaceThresholdAdminService } from './threshold-admin.service';
+import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const employeeId = '00000000-0000-4000-8000-000000000501';
 
@@ -33,7 +34,7 @@ class FakeEnrollmentDatabase {
                 employee_id: values[0],
                 model_id: values[3],
                 model_version: values[4],
-                captured_at: new Date('2026-05-02T12:00:00.000Z'),
+                captured_at: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
                 status: 'ACTIVE',
                 encrypted_differs: true,
               },

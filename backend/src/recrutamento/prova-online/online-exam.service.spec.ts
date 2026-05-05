@@ -2,6 +2,7 @@ import { ForbiddenException } from '@nestjs/common';
 
 import { BiometricMatcherService } from '../biometria/biometric-matcher.service';
 import { OnlineExamService } from './online-exam.service';
+import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 const applicationId = '00000000-0000-4000-8000-000000000801';
 const provaId = '00000000-0000-4000-8000-000000000802';
@@ -47,7 +48,7 @@ class FakeOnlineExamDatabase {
                 id: '00000000-0000-4000-8000-000000000805',
                 application_id: applicationId,
                 prova_id: provaId,
-                started_at: new Date('2026-05-02T12:00:00.000Z'),
+                started_at: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
                 ended_at: null,
                 status: 'IN_PROGRESS',
               },

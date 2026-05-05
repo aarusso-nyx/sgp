@@ -7,8 +7,6 @@ import { PayrollAccountingController } from './accounting/payroll-accounting.con
 import { PayrollAccountingService } from './accounting/payroll-accounting.service';
 import { RubricaController } from './accounting/rubrica/rubrica.controller';
 import { RubricaService } from './accounting/rubrica/rubrica.service';
-import { ESocialController } from './esocial/esocial.controller';
-import { ESocialService } from './esocial/esocial.service';
 import { ManualEntryImportController } from './import/manual-entry-import.controller';
 import { ManualEntryImportService } from './import/manual-entry-import.service';
 import { PensionistaImportController } from './import/pensionista-import.controller';
@@ -23,6 +21,7 @@ import { PayrollOperationsService } from './operations/payroll-operations.servic
 import { BankAccountController } from './operations/bank-account/bank-account.controller';
 import { BankAccountService } from './operations/bank-account/bank-account.service';
 import { BankAccountValidatorService } from './operations/bank-account/bank-account-validator.service';
+import { CompanyBankAccountModule } from './operations/company-bank-account/company-bank-account.module';
 import { EmployeeAlimonyController } from './operations/alimony/alimony.controller';
 import { AlimonyDeductionService } from './operations/alimony/alimony-deduction.service';
 import { EmployeeAlimonyService } from './operations/alimony/alimony.service';
@@ -60,12 +59,12 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     FgtsModule,
     PisPasepModule,
     SifgeModule,
+    CompanyBankAccountModule,
   ],
   controllers: [
     PayrollController,
     PayrollAccountingController,
     RubricaController,
-    ESocialController,
     ManualEntryImportController,
     PensionistaImportController,
     ServidorImportController,
@@ -97,7 +96,6 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     MarginCalculatorService,
     ConsignmentLoanService,
     ConsignmentDeductionService,
-    ESocialService,
     ManualEntryImportService,
     PensionistaImportService,
     ServidorImportService,

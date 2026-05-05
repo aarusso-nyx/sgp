@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
-import { OpenApiClient } from '../../../core/api/generated/openapi-client';
+import { OpenApiClient } from '../../../core/api/openapi-client';
 import { PagedResult } from '../../../core/models/paged-result';
 
 export interface AuditEventRecord {

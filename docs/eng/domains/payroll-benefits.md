@@ -206,7 +206,7 @@ O programa e derivado do regime juridico atual do vinculo em `hr.employment_link
 
 ### Recomposicao
 
-`payment.recompute_pis_pasep_base(tenant_id, employee_id, year_base)` recompõe o ano inteiro a partir dos S-1200 publicados. A funcao soma, por competencia, os itens de folha do empregado cujo `payroll_run` possui `public.esocial_spool` e evento `public.esocial_spool` S-1200 nao excluido.
+`payment.recompute_pis_pasep_base(tenant_id, employee_id, year_base)` recompõe o ano inteiro a partir dos S-1200 publicados. A funcao soma, por competencia, os itens de folha do empregado cujo `payroll_run` possui `public.esocial_events` e evento `public.esocial_events` S-1200 nao excluido.
 
 Rubricas com `incidences.codIncPisPasep` ou equivalentes `pisPasep`/`pis_pasep` controlam a inclusao. Valores `00`, `0`, `false`, `none` e `nao_base` excluem a rubrica; valores `11`, `12`, `base`, `monthly` e `mensal` incluem. Na ausencia de classificacao explicita, rubricas `EARNING` e `BASE` entram na base para manter a folha publicada conferivel ate a classificacao refinada no S-1010.
 
@@ -214,7 +214,7 @@ O resultado persistido contem `monthly_base` como mapa de meses `01` a `12`, `to
 
 ### Integracao eSocial
 
-S-1010 passa a expor `codIncPisPasep` conforme a classificacao da rubrica, mantendo `00` para rubricas excluidas da base. A publicacao de S-1200 chama a recomposicao anual apos gravar `public.esocial_spool`.
+S-1010 passa a expor `codIncPisPasep` conforme a classificacao da rubrica, mantendo `00` para rubricas excluidas da base. A publicacao de S-1200 chama a recomposicao anual apos gravar `public.esocial_events`.
 
 A aceitacao de S-3000 marca o evento alvo como `EXCLUIDO` e aciona recomposicao para o empregado/ano do S-1200 excluido. Como a funcao recompõe o ano completo, retroativos, reemissoes e reclassificacoes de rubrica ficam idempotentes: a linha anual e atualizada em vez de acumulada incrementalmente.
 

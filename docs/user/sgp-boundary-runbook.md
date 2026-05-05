@@ -32,14 +32,14 @@ semantics remain unchanged.
 SGP-side runtime:
 
 - `backend/src/integrations/stynx-esocial/`
-- `backend/src/esocial-spool/`
-- `public.esocial_spool`
+- `backend/src/esocial-events/`
+- `public.esocial_events`
 
 SGP no longer owns the eSocial worker, builders, XSD bundle, certificate store,
-SOAP client, return parser, or eSocial schema tables. API callers continue to
-use `/api/v1/esocial/*` on SGP; SGP records each request/response in
-`public.esocial_spool` and exchanges HTTP/queue envelopes with the separate
-`stynx-esocial` service.
+SOAP client, return parser, or eSocial schema tables. SGP does not expose the
+legacy browser-facing eSocial route family; domain actions enqueue internal
+events into `public.esocial_events` and exchange HTTP/queue envelopes with the
+separate `stynx-esocial` service.
 
 Official endpoint custody, certificates, national-environment homologation,
 payload construction, signing, retries, and return parsing are outside the SGP

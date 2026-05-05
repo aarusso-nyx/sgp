@@ -69,18 +69,36 @@ describe('PrevidenciarioController', () => {
       requestSiprevExport: jest.fn(async () => ({ id: 'siprev-1' })),
     };
     const audit = { auditMutation: jest.fn(async () => undefined) };
+    const registry = {
+      regras: service,
+      aposentadoria: service,
+      pensao: service,
+      ctc: service,
+      declaracao: service,
+      recadastramento: service,
+    };
     return {
       service,
       audit,
       controller: new PrevidenciarioController(
-        service as never,
         audit as never,
+        registry as never,
       ),
     };
   };
 
   it('is defined', () => {
-    const controller = new PrevidenciarioController({} as never, {} as never);
+    const controller = new PrevidenciarioController(
+      {} as never,
+      {
+        regras: {},
+        aposentadoria: {},
+        pensao: {},
+        ctc: {},
+        declaracao: {},
+        recadastramento: {},
+      } as never,
+    );
     expect(controller).toBeDefined();
   });
 

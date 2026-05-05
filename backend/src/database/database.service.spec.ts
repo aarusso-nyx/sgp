@@ -2,6 +2,7 @@ import { Pool } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from './database.service';
+import { TenantContextMissingError } from './tenant-context-missing.error';
 
 const mockConnect = jest.fn();
 const mockEnd = jest.fn();
@@ -103,6 +104,39 @@ describe('DatabaseService', () => {
     expect(client.release).toHaveBeenCalledTimes(1);
   });
 
+  it('sets the session tenant from the actor tenant', async () => {
+    const client = {
+      query: jest.fn(async () => ({ rows: [] })),
+      release: jest.fn(),
+    };
+    mockConnect.mockResolvedValue(client);
+    const service = createService('postgresql://localhost/sgp-test');
+
+    await RequestContextStore.run(
+      {
+        actor: {
+          sub: 'sub-tenant',
+          username: 'tenant-user',
+          tenantId: 'tenant-from-actor',
+          groups: [],
+          permissions: [],
+        },
+      },
+      () => service.query('SELECT 1'),
+    );
+
+    expect(client.query).toHaveBeenCalledWith(
+      'SELECT set_config($1, $2, true)',
+      ['app.current_tenant_id', 'tenant-from-actor'],
+    );
+    expect(client.query).toHaveBeenCalledWith(
+      'SELECT set_config($1, $2, true)',
+      ['app.current_tenant', 'tenant-from-actor'],
+    );
+    expect(client.query).toHaveBeenCalledWith('COMMIT');
+    expect(client.release).toHaveBeenCalledTimes(1);
+  });
+
   it('uses fallback context values, rolls back failed queries, and ends the pool', async () => {
     const error = new Error('query failed');
     const client = {
@@ -174,6 +208,30 @@ describe('DatabaseService', () => {
     );
 
     expect(client.query).toHaveBeenCalledWith('COMMIT');
+    expect(client.query).toHaveBeenCalledWith(
+      'SELECT set_config($1, $2, true)',
+      ['app.current_tenant_id', ''],
+    );
+    expect(client.release).toHaveBeenCalledTimes(1);
+  });
+
+  it('throws TenantContextMissingError when no tenant context is available', async () => {
+    const client = {
+      query: jest.fn(async () => ({ rows: [] })),
+      release: jest.fn(),
+    };
+    mockConnect.mockResolvedValue(client);
+    const service = createService('postgresql://localhost/sgp-test');
+
+    await expect(
+      RequestContextStore.run({ requestId: 'req-no-tenant' }, () =>
+        service.query('SELECT 1'),
+      ),
+    ).rejects.toBeInstanceOf(TenantContextMissingError);
+
+    expect(client.query).toHaveBeenCalledWith('BEGIN');
+    expect(client.query).toHaveBeenCalledWith('ROLLBACK');
+    expect(client.query).not.toHaveBeenCalledWith('SELECT 1', []);
     expect(client.release).toHaveBeenCalledTimes(1);
   });
 });

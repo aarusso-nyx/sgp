@@ -8,8 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { CrudTable } from '../../shared-platform/crud-table/crud-table';
-import { FilterBar } from '../../shared-platform/filter-bar/filter-bar';
+import { CrudTable } from '@sgp/shared-platform/crud-table';
+import { FilterBar } from '@sgp/shared-platform/filter-bar';
 import { RhCadastralChanges } from './cadastral-changes/cadastral-changes';
 import { RhFerias } from './ferias/ferias';
 import { RhFuncionarios } from './funcionarios/funcionarios';

@@ -29,11 +29,17 @@ describe('posse exercise handoff (e2e contract)', () => {
         ],
       } as never,
       {
-        emitS2200: jest.fn(async () => ({
-          eventKind: 'S-2200',
-          employeeId: '00000000-0000-4000-8000-000000000703',
-          emitted: true,
-          xmlHash: 'hash',
+        enqueue: jest.fn(async () => ({
+          messageId: '00000000-0000-4000-8000-000000002200',
+          tenantId: '00000000-0000-4000-8000-000000000001',
+          kind: 'trabalhador',
+          eventClass: 'S-2200',
+          status: 'PENDING',
+          sourceRef: {
+            sourceEntityKind: 'hr.employee',
+            sourceEntityId: '00000000-0000-4000-8000-000000000703',
+          },
+          createdAt: '2026-06-05T09:00:00.000Z',
         })),
       } as never,
     );
@@ -43,7 +49,7 @@ describe('posse exercise handoff (e2e contract)', () => {
     ).resolves.toMatchObject({
       employeeId: '00000000-0000-4000-8000-000000000703',
       s2200EventCount: 1,
-      s2200: { eventKind: 'S-2200', emitted: true },
+      s2200: { eventClass: 'S-2200', status: 'PENDING' },
     });
   });
 });

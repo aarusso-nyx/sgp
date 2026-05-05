@@ -22,9 +22,10 @@ import {
   TceSubmissionSqlStateWriter,
   type TceQueueDatabase,
 } from '../../backend/src/tce/adapters/queue-adapter';
+import { TEST_INSTANT_2026_05_04T13_00_00_000Z } from './helpers/date-fixtures';
 
 const GOLDEN_ROOT = join(__dirname, 'golden/tce');
-const relayNow = () => new Date('2026-05-04T13:00:00.000Z');
+const relayNow = () => new Date(TEST_INSTANT_2026_05_04T13_00_00_000Z);
 
 describe('R4-96 TCE mock relay queue adapter (e2e)', () => {
   let transport: InMemoryQueueTransport;

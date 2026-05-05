@@ -1,4 +1,5 @@
 import { EmployeeCadastralChangesService } from './employee-cadastral-changes.service';
+import { TEST_INSTANT_2026_01_01T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('EmployeeCadastralChangesService', () => {
   it('lists cadastral changes using the requested status', async () => {
@@ -17,7 +18,7 @@ describe('EmployeeCadastralChangesService', () => {
         requested_by_login: 'login-1',
         decided_by_sub: null,
         decided_by_login: null,
-        requested_at: new Date('2026-01-01T00:00:00.000Z'),
+        requested_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
         decided_at: null,
       },
     ]);

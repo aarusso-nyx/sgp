@@ -18,7 +18,7 @@ interface CatEmissionRow extends QueryResultRow {
   cat_kind: CatKind;
   emitted_at: Date | string;
   deadline_at: Date | string;
-  esocial_spool_message_id: string | null;
+  esocial_events_message_id: string | null;
   doctor_crm: string;
   doctor_name: string;
   internment: boolean;
@@ -118,7 +118,7 @@ export class CatEmissionService {
           cat_kind::text,
           emitted_at,
           deadline_at,
-          esocial_spool_message_id::text,
+          esocial_events_message_id::text,
           doctor_crm,
           doctor_name,
           internment,
@@ -161,7 +161,7 @@ export class CatEmissionService {
     const updated = await this.databaseService.query<CatEmissionRow>(
       `
       UPDATE saude.cat_emission
-      SET esocial_spool_message_id = $2::uuid
+      SET esocial_events_message_id = $2::uuid
       WHERE id = $1::uuid
       RETURNING
         id::text,
@@ -169,7 +169,7 @@ export class CatEmissionService {
         cat_kind::text,
         emitted_at,
         deadline_at,
-        esocial_spool_message_id::text,
+        esocial_events_message_id::text,
         doctor_crm,
         doctor_name,
         internment,
@@ -203,7 +203,7 @@ export class CatEmissionService {
       catKind: row.cat_kind,
       emittedAt: new Date(row.emitted_at).toISOString(),
       deadlineAt: new Date(row.deadline_at).toISOString(),
-      esocialEventId: row.esocial_spool_message_id,
+      esocialEventId: row.esocial_events_message_id,
       doctorCrm: row.doctor_crm,
       doctorName: row.doctor_name,
       internment: row.internment,

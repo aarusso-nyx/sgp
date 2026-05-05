@@ -1,4 +1,8 @@
 import { ReportCatalogService } from './report-catalog.service';
+import {
+  TEST_INSTANT_2026_01_01T00_00_00_000Z,
+  TEST_INSTANT_2026_04_25T12_00_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('ReportCatalogService', () => {
   it('returns paged report definitions', async () => {
@@ -13,8 +17,8 @@ describe('ReportCatalogService', () => {
           description: '',
           module_key: 'relatorio',
           status: 'ACTIVE',
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
-          updated_at: new Date('2026-01-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
         },
       ]);
     const service = new ReportCatalogService({
@@ -44,7 +48,7 @@ describe('ReportCatalogService', () => {
         {
           id: 'request-2',
           status: 'REQUESTED',
-          requested_at: new Date('2026-04-25T12:00:00.000Z'),
+          requested_at: new Date(TEST_INSTANT_2026_04_25T12_00_00_000Z),
         },
       ]);
     const service = new ReportCatalogService({

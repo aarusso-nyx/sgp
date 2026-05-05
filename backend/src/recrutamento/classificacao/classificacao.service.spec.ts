@@ -3,8 +3,9 @@ import type {
   ClassificationCandidateInput,
   ClassificationVagaInput,
 } from './classificacao.service';
+import { TEST_INSTANT_2026_05_02T00_00_00Z } from '../../../../tests/backend/helpers/date-fixtures';
 
-const referenceDate = new Date('2026-05-02T00:00:00Z');
+const referenceDate = new Date(TEST_INSTANT_2026_05_02T00_00_00Z);
 const vaga: ClassificationVagaInput = {
   vagaId: 'vaga-analista',
   totalSeats: 10,

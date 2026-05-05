@@ -41,9 +41,9 @@ const backendSpecFilesWithoutAssertions = backendAssertionFiles.filter(
   (path) => !assertionPattern.test(read(path)),
 );
 const fakeTimerSpecFiles = specFiles.filter((path) => read(path).includes('useFakeTimers'));
-const hardcoded2025Dates = specFiles.flatMap((path) => {
+const hardcodedDateLiterals = specFiles.flatMap((path) => {
   const content = read(path);
-  return [...content.matchAll(/new Date\(['"]2025-[^'"]+['"]\)/g)].map(
+  return [...content.matchAll(/new Date\(['"]20\d{2}-[^'"]+['"]\)/g)].map(
     (match) => `${path.replace(`${root}/`, '')}:${match.index ?? 0}:${match[0]}`,
   );
 });
@@ -63,8 +63,8 @@ if (forbiddenE2eFiles.length < minimumForbiddenE2eFiles) {
 if (fakeTimerSpecFiles.length < minimumFakeTimerSpecFiles) {
   failures.push(`useFakeTimers specs: ${fakeTimerSpecFiles.length}/${minimumFakeTimerSpecFiles}`);
 }
-if (hardcoded2025Dates.length > 0) {
-  failures.push(`hard-coded new Date('2025-...') in specs:\n${hardcoded2025Dates.join('\n')}`);
+if (hardcodedDateLiterals.length > 0) {
+  failures.push(`hard-coded new Date('20XX-...') in specs:\n${hardcodedDateLiterals.join('\n')}`);
 }
 if (dtoSnapshots < minimumDtoSnapshots) {
   failures.push(`DTO snapshots: ${dtoSnapshots}/${minimumDtoSnapshots}`);
@@ -81,7 +81,7 @@ console.log(
   [
     `[test-debt] e2e files with 403 negative path: ${forbiddenE2eFiles.length}/${e2eFiles.length}`,
     `[test-debt] specs using useFakeTimers: ${fakeTimerSpecFiles.length}/${specFiles.length}`,
-    `[test-debt] hard-coded new Date('2025-...') in specs: ${hardcoded2025Dates.length}`,
+    `[test-debt] hard-coded new Date('20XX-...') in specs: ${hardcodedDateLiterals.length}`,
     `[test-debt] backend specs without assertions: ${backendSpecFilesWithoutAssertions.length}`,
     `[test-debt] stable DTO snapshots: ${dtoSnapshots}`,
   ].join('\n'),

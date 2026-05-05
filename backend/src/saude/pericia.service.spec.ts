@@ -1,13 +1,14 @@
 import { HttpStatus } from '@nestjs/common';
 
 import { PericiaService } from './pericia.service';
+import { TEST_INSTANT_2026_04_22T00_00_00_000Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('PericiaService', () => {
   const appointment = (status = 'SCHEDULED') => ({
     id: 'appt-1',
     employee_id: 'emp-1',
     slot_ref: 'janela-20260422-0900',
-    scheduled_on: new Date('2026-04-22T00:00:00.000Z'),
+    scheduled_on: new Date(TEST_INSTANT_2026_04_22T00_00_00_000Z),
     scheduled_time: '09:00',
     contact_phone: '(11) 99000-0001',
     status,

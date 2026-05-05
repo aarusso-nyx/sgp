@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Pool, PoolClient, QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
+import { TenantContextMissingError } from './tenant-context-missing.error';
 
 const SENSITIVE_RLS_TABLES = [
   /\bhr\.employee_dependent\b/i,
@@ -77,7 +78,10 @@ export class DatabaseService implements OnModuleDestroy {
   private async applySessionContext(client: PoolClient): Promise<void> {
     const context = RequestContextStore.get();
     const actor = context?.actor;
-    const tenantId = actor?.tenantId ?? context?.tenantId ?? '';
+    const tenantId =
+      actor?.tenantId ??
+      context?.tenantId ??
+      this.resolveBypassTenantFallback(context);
     const permissions = (actor?.permissions ?? context?.permissions ?? [])
       .map((entry) => String(entry ?? '').trim())
       .filter(Boolean);
@@ -152,6 +156,19 @@ export class DatabaseService implements OnModuleDestroy {
     throw new Error(
       `app.bypass_rls=true is not allowed for sensitive RLS tables without an allowlisted job reason: ${reason || 'unspecified'}`,
     );
+  }
+
+  private resolveBypassTenantFallback(
+    context: ReturnType<typeof RequestContextStore.get>,
+  ): string {
+    if (
+      context?.bypassRls &&
+      BYPASS_RLS_ALLOWLIST.has(context.bypassRlsReason ?? '')
+    ) {
+      return '';
+    }
+
+    throw new TenantContextMissingError();
   }
 
   private getPool(): Pool {

@@ -1,6 +1,7 @@
 import type { PoolClient } from 'pg';
 
 import { JobPositionService } from './job-position.service';
+import { TEST_INSTANT_2026_01_01T00_00_00Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('JobPositionService', () => {
   it('creates a job position and appends before/after audit metadata', async () => {
@@ -20,8 +21,8 @@ describe('JobPositionService', () => {
             vacancies_count: 4,
             salary_range_id: 'range-1',
             salary_range_code: null,
-            created_at: new Date('2026-01-01T00:00:00Z'),
-            updated_at: new Date('2026-01-01T00:00:00Z'),
+            created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00Z),
+            updated_at: new Date(TEST_INSTANT_2026_01_01T00_00_00Z),
           },
         ],
       })

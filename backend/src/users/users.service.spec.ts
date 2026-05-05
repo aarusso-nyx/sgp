@@ -1,4 +1,5 @@
 import { UsersService } from './users.service';
+import { TEST_INSTANT_2026_01_01T00_00_00_000Z } from '../../../tests/backend/helpers/date-fixtures';
 
 describe('UsersService', () => {
   const userRow = {
@@ -8,7 +9,7 @@ describe('UsersService', () => {
     email: 'maria@example.test',
     cpf: '00011122233',
     status: 'ACTIVE',
-    created_at: new Date('2026-01-01T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
     updated_at: '2026-01-02T00:00:00.000Z',
     profile_codes: ['ADMIN'],
   };

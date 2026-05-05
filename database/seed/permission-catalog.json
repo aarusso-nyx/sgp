@@ -552,64 +552,56 @@
       "moduleKey": "esocial",
       "resourceKey": "certificate",
       "actionKey": "read",
-      "routePattern": "/api/v1/esocial/certificados/**",
-      "description": "Read current-tenant ICP-Brasil certificate metadata for eSocial."
+      "description": "Read mirrored eSocial certificate custody status from stynx-esocial."
     },
     {
       "key": "esocial.certificate.write",
       "moduleKey": "esocial",
       "resourceKey": "certificate",
       "actionKey": "write",
-      "routePattern": "/api/v1/esocial/certificados/**",
-      "description": "Upload, rotate, and revoke current-tenant ICP-Brasil certificates for eSocial."
+      "description": "Request eSocial certificate custody changes through stynx-esocial."
     },
     {
       "key": "esocial.event.read",
       "moduleKey": "esocial",
       "resourceKey": "event",
       "actionKey": "read",
-      "routePattern": "#!/esocial/**",
-      "description": "Read eSocial event queue and table/worker dispatch status."
+      "description": "Read internal eSocial event projection and mirrored stynx-esocial status."
     },
     {
       "key": "esocial.event.write",
       "moduleKey": "esocial",
       "resourceKey": "event",
       "actionKey": "write",
-      "routePattern": "#!/esocial/**",
-      "description": "Emit eSocial XML events after XSD validation and XML-DSig signature."
+      "description": "Request internal eSocial event enqueue from SGP domain actions."
     },
     {
       "key": "esocial.event.exclude",
       "moduleKey": "esocial",
       "resourceKey": "event",
       "actionKey": "exclude",
-      "routePattern": "#!/esocial/**",
-      "description": "Request, emit, and track S-3000 eSocial event exclusions."
+      "description": "Request and track S-3000 eSocial exclusions through stynx-esocial."
     },
     {
       "key": "esocial.event.retry",
       "moduleKey": "esocial",
       "resourceKey": "event",
       "actionKey": "retry",
-      "routePattern": "#!/esocial/**",
-      "description": "Force retry and clear handled eSocial return failures."
+      "description": "Request retry handling for mirrored eSocial return failures."
     },
     {
       "key": "esocial.submission.read",
       "moduleKey": "esocial",
       "resourceKey": "submission",
       "actionKey": "read",
-      "routePattern": "#!/esocial/**",
-      "description": "Read eSocial SOAP submission batches, attempts, and circuit state."
+      "description": "Read mirrored eSocial submission batch, attempt, and circuit state."
     },
     {
       "key": "esocial.submission.retry",
       "moduleKey": "esocial",
       "resourceKey": "submission",
       "actionKey": "retry",
-      "routePattern": "#!/esocial/**",
-      "description": "Force retry for eSocial SOAP submission batches."
+      "description": "Request retry for mirrored eSocial SOAP submission batches."
     },
     {
       "key": "fiscal.dctfweb.read",

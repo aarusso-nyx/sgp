@@ -1,6 +1,10 @@
 import { ServiceUnavailableException } from '@nestjs/common';
 
 import { PortalService } from './portal.service';
+import {
+  TEST_INSTANT_2026_04_01T10_00_00_000Z,
+  TEST_INSTANT_2026_05_02T10_00_00_000Z,
+} from '../../../tests/backend/helpers/date-fixtures';
 
 describe('PortalService', () => {
   const actor = {
@@ -60,7 +64,7 @@ describe('PortalService', () => {
           total_earnings: '1000.00',
           total_deductions: '100.00',
           total_net: '900.00',
-          created_at: new Date('2026-04-01T10:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_04_01T10_00_00_000Z),
           closed_at: '2026-04-30T20:00:00.000Z',
         },
       ]);
@@ -139,7 +143,7 @@ describe('PortalService', () => {
           content_type: null,
           size_bytes: null,
           checksum: null,
-          created_at: new Date('2026-05-02T10:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_05_02T10_00_00_000Z),
         },
       ])
       .mockResolvedValueOnce([employee])

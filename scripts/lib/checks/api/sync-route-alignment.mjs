@@ -85,13 +85,7 @@ const DOMAIN_RUNTIME_HINTS = {
     source_prefixes: ['backend/src/rh/'],
   },
   folha: {
-    route_prefixes: [
-      '/api/v1/folha',
-      '/api/v1/folhas',
-      '/api/v1/gfip',
-      '/api/v1/esocial',
-      '/api/v1/payroll-engine',
-    ],
+    route_prefixes: ['/api/v1/folha', '/api/v1/folhas', '/api/v1/gfip', '/api/v1/payroll-engine'],
     source_prefixes: ['backend/src/folha-pagamento/', 'backend/src/payroll-engine/'],
   },
   avaliacao: {

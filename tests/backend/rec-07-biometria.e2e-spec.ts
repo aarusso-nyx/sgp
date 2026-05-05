@@ -11,6 +11,7 @@ import {
   encryptTemplate,
   extractBiometricTemplate,
 } from '../../backend/src/recrutamento/biometria/biometric-template';
+import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from './helpers/date-fixtures';
 
 const tenantId = '00000000-0000-4000-8000-000000000001';
 const candidatoId = '00000000-0000-4000-8000-000000000721';
@@ -52,7 +53,7 @@ class FakeBiometriaDatabase {
               {
                 id: '00000000-0000-4000-8000-000000000723',
                 quality_score: values[4],
-                captured_at: new Date('2026-05-02T12:00:00.000Z'),
+                captured_at: new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z),
                 retention_until: values[6],
               },
             ],

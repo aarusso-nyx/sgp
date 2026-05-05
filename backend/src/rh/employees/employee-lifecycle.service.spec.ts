@@ -1,4 +1,5 @@
 import { EmployeeLifecycleService } from './employee-lifecycle.service';
+import { TEST_INSTANT_2026_01_01T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('EmployeeLifecycleService', () => {
   it('admits an employee and returns the created contract id', async () => {
@@ -14,8 +15,8 @@ describe('EmployeeLifecycleService', () => {
           functional_status: 'Em exercicio',
           branch_name: null,
           active: true,
-          created_at: new Date('2026-01-01T00:00:00.000Z'),
-          updated_at: new Date('2026-01-01T00:00:00.000Z'),
+          created_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
+          updated_at: new Date(TEST_INSTANT_2026_01_01T00_00_00_000Z),
           contract_id: 'contract-1',
         },
       ],

@@ -12,6 +12,6 @@ describeRlsSmokeSpec({
     'with hr.employment.write.',
     '2. tenant B cannot read tenant A TS-V contracts because RLS uses',
     'sgp_tenant_matches(tenant_id).',
-    '3. S-2306 requests leave SGP through public.esocial_spool and stynx-esocial.',
+    '3. S-2306 requests leave SGP through public.esocial_events and stynx-esocial.',
   ],
 });

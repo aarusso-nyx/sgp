@@ -1,4 +1,8 @@
 import { TceCircuitBreakerService } from './circuit-breaker.service';
+import {
+  TEST_INSTANT_2026_05_02T10_00_00_000Z,
+  TEST_INSTANT_2026_05_02T10_02_00_000Z,
+} from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('TceCircuitBreakerService', () => {
   it('opens after configured failures and blocks during cooldown', async () => {
@@ -45,14 +49,16 @@ describe('TceCircuitBreakerService', () => {
           endpoint_url: 'stub://audesp-sp',
           state: 'OPEN',
           failure_count: 3,
-          opened_at: new Date('2026-05-02T10:00:00.000Z'),
+          opened_at: new Date(TEST_INSTANT_2026_05_02T10_00_00_000Z),
         },
       ])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([]);
     const now = jest
       .spyOn(Date, 'now')
-      .mockReturnValue(new Date('2026-05-02T10:02:00.000Z').getTime());
+      .mockReturnValue(
+        new Date(TEST_INSTANT_2026_05_02T10_02_00_000Z).getTime(),
+      );
     const service = new TceCircuitBreakerService(
       { query } as never,
       { get: () => '60000' } as never,

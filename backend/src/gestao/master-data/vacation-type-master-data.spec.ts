@@ -1,4 +1,5 @@
 import { MasterDataService } from './master-data.service';
+import { TEST_INSTANT_2026_05_04T00_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('Vacation type master-data resource', () => {
   const row = {
@@ -8,8 +9,8 @@ describe('Vacation type master-data resource', () => {
     description: 'Ferias regulares',
     active: true,
     metadata: {},
-    created_at: new Date('2026-05-04T00:00:00.000Z'),
-    updated_at: new Date('2026-05-04T00:00:00.000Z'),
+    created_at: new Date(TEST_INSTANT_2026_05_04T00_00_00_000Z),
+    updated_at: new Date(TEST_INSTANT_2026_05_04T00_00_00_000Z),
   };
 
   it('lists, creates, updates, and deactivates hr.vacation_type through tipoFerias', async () => {

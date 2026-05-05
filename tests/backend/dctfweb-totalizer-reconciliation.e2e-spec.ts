@@ -61,7 +61,7 @@ describe('DCTFWeb totalizer reconciliation (e2e)', () => {
     const database = {
       configured: true,
       query: jest.fn(async (sql: string, values: unknown[]) => {
-        if (sql.includes('FROM esocial.esocial_totalizer')) {
+        if (sql.includes('FROM public.esocial_events')) {
           expect(values).toEqual([tenantId, competence]);
           return totalizers;
         }
@@ -267,6 +267,10 @@ function itemRow(item: InsertedItem) {
     debit_code: item.debitCode,
     base_amount: item.baseAmount,
     amount: item.amount,
+    csll_adicional_amount: '0.00',
+    mit_status: null,
+    mit_debit_id: null,
+    cnpj_filial: null,
   };
 }
 

@@ -232,12 +232,12 @@ As tabelas `ponto.afd_export`, `ponto.afd_import` e `ponto.afd_import_line` forc
 
 O SGP registra acidentes de trabalho em `saude.work_accident` e emite CATs em
 `saude.cat_emission`. Cada emissão gera automaticamente uma mensagem S-2210 em
-`public.esocial_spool`, enviada ao gateway stynx-esocial para validação,
+`public.esocial_events`, enviada ao gateway stynx-esocial para validação,
 assinatura e transmissão.
 
 ### Prazos
 
-CAT inicial e de reabertura usam `deadline_at` no proximo dia util apos `accident_at`. CAT de obito usa prazo imediato: `deadline_at = emitted_at`. O painel `/api/v1/saude/acidentes/prazos` lista CATs sem `esocial_spool_message_id` com vencimento em ate 4 horas, permitindo alerta operacional antes da multa prevista na Lei 8.213/1991 art. 22.
+CAT inicial e de reabertura usam `deadline_at` no proximo dia util apos `accident_at`. CAT de obito usa prazo imediato: `deadline_at = emitted_at`. O painel `/api/v1/saude/acidentes/prazos` lista CATs sem `esocial_events_message_id` com vencimento em ate 4 horas, permitindo alerta operacional antes da multa prevista na Lei 8.213/1991 art. 22.
 
 ### Maquina de Estados
 
@@ -255,7 +255,7 @@ Tentativas de pular `REGISTRADO -> COMUNICACAO_OBITO` sao rejeitadas. Acidente f
 ### Permissoes e RLS
 
 As tabelas `saude.work_accident`, `saude.cat_emission` e
-`public.esocial_spool` usam RLS forçado por tenant com
+`public.esocial_events` usam RLS forçado por tenant com
 `sgp_tenant_matches(tenant_id)`. Leitura aceita `saude.cat.read`,
 `saude.cat.write`, `esocial.event.read` ou `esocial.event.write`; mutacao exige
 `saude.cat.write` ou `esocial.event.write`. Todas as mutacoes passam por
@@ -314,7 +314,7 @@ O SGP v0.0.1 registra exposicoes ambientais em `saude.environmental_exposure`, s
 
 ### S-2240
 
-Cada insercao de exposicao cria mensagem `START` em `public.esocial_spool`.
+Cada insercao de exposicao cria mensagem `START` em `public.esocial_events`.
 Alteracoes de agente, intensidade, periodo ou mitigacoes criam `CHANGE`;
 preenchimento de `exposure_end` cria `END`. Stynx-esocial gera o `evtExpRisco`
 S-1.3 e executa validação/transmissão fora do SGP.
@@ -323,7 +323,7 @@ S-1.3 e executa validação/transmissão fora do SGP.
 
 `hr.work_location` e a fonte canonica dos codigos de ambiente de trabalho para o
 cluster SST. O SGP envia esses códigos nos payloads S-2210, S-2220 e S-2240 por
-`public.esocial_spool`; stynx-esocial decide a emissão S-1060 e a validação XSD.
+`public.esocial_events`; stynx-esocial decide a emissão S-1060 e a validação XSD.
 
 ### EPI
 

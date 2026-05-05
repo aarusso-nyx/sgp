@@ -14,12 +14,16 @@ import {
   LGPD_RIGHT_TYPES,
   LgpdRightType,
 } from '../../backend/src/portal/lgpd-rights.dto';
+import {
+  TEST_INSTANT_2026_05_02T12_00_00_000Z,
+  TEST_INSTANT_2026_07_31T12_00_00_000Z,
+} from './helpers/date-fixtures';
 
 const tenantId = '00000000-0000-0000-0000-000000000100';
 const employeeId = '00000000-0000-4000-8000-000000000043';
 const flowKey = 'payroll.payslip_pdf';
-const createdAt = new Date('2026-05-02T12:00:00.000Z');
-const dueAt = new Date('2026-07-31T12:00:00.000Z');
+const createdAt = new Date(TEST_INSTANT_2026_05_02T12_00_00_000Z);
+const dueAt = new Date(TEST_INSTANT_2026_07_31T12_00_00_000Z);
 
 class FakeLgpdRightsDatabase {
   readonly configured = true;
