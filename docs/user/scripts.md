@@ -237,22 +237,22 @@ node scripts/run.mjs test <subcommand> [args]
 
 ### Actions
 
-| Subcommand        | Npm Alias                        | Behavior                                                                           |
-| ----------------- | -------------------------------- | ---------------------------------------------------------------------------------- |
-| `unit`            | `npm run test`                   | Runs frontend admin tests, frontend portal tests, then backend Jest unit tests.    |
-| `admin`           | `npm run test:admin`             | Runs frontend admin tests.                                                         |
-| `portal`          | `npm run test:portal`            | Runs frontend portal tests.                                                        |
-| `admin-e2e`       | `npm run test:admin:e2e`         | Runs admin Playwright suite.                                                       |
-| `portal-e2e`      | `npm run test:portal:e2e`        | Runs portal Playwright suite.                                                      |
-| frontend-e2e      | `npm run test:frontend:e2e`      | Runs admin and portal Playwright suites.                                           |
-| `backend`         | `npm run test:backend`           | Runs backend Jest unit tests. Extra args are passed to Jest.                       |
-| `db`              | `npm run test:db`                | Runs DB bootstrap smoke via `scripts/db.mjs bootstrap-smoke`.                      |
-| `e2e`             | `npm run test:e2e`               | Runs backend Jest e2e tests with local test database env defaulting to `sgp_test`. |
-| `coverage`        | `npm run test:coverage`          | Runs backend coverage with local test database env defaulting to `sgp_test`.       |
-| frontend-coverage | `npm run test:frontend:coverage` | Runs Angular coverage for admin and portal.                                        |
-| `qa`              | `npm run test:qa`                | Runs black-box API and frontend QA smoke suites.                                   |
-| `qa-api`          | `npm run test:qa:api`            | Runs `tests/backend/api` and `tests/backend/e2e` Node tests.                       |
-| `qa-frontend`     | `npm run test:qa:frontend`       | Runs `tests/frontend/e2e` Node tests.                                              |
+| Subcommand        | Npm Alias                        | Behavior                                                                                |
+| ----------------- | -------------------------------- | --------------------------------------------------------------------------------------- |
+| `unit`            | `npm run test`                   | Runs frontend admin tests, frontend portal tests, then backend Jest unit tests.         |
+| `admin`           | `npm run test:admin`             | Runs frontend admin tests.                                                              |
+| `portal`          | `npm run test:portal`            | Runs frontend portal tests.                                                             |
+| `admin-e2e`       | `npm run test:admin:e2e`         | Runs admin Playwright suite.                                                            |
+| `portal-e2e`      | `npm run test:portal:e2e`        | Runs portal Playwright suite.                                                           |
+| frontend-e2e      | `npm run test:frontend:e2e`      | Runs admin and portal Playwright suites.                                                |
+| `backend`         | `npm run test:backend`           | Runs backend Jest unit tests. Extra args are passed to Jest.                            |
+| `db`              | `npm run test:db`                | Runs DB bootstrap smoke via `scripts/db.mjs bootstrap-smoke`.                           |
+| `e2e`             | `npm run test:e2e`               | Runs backend Jest e2e tests with local test database env defaulting to `sgp_test`.      |
+| `coverage`        | `npm run test:coverage`          | Runs backend coverage with local test database env defaulting to `sgp_test`.            |
+| frontend-coverage | `npm run test:frontend:coverage` | Runs Angular coverage for SGP-owned frontend surfaces. Admin coverage belongs to Stynx. |
+| `qa`              | `npm run test:qa`                | Runs black-box API and frontend QA smoke suites.                                        |
+| `qa-api`          | `npm run test:qa:api`            | Runs `tests/backend/api` and `tests/backend/e2e` Node tests.                            |
+| `qa-frontend`     | `npm run test:qa:frontend`       | Runs `tests/frontend/e2e` Node tests.                                                   |
 
 ## Database Commands
 

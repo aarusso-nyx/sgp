@@ -49,17 +49,16 @@ Run the existing backend in-process Nest e2e suite:
 npm run test:e2e
 ```
 
-Run the frontend coverage ratchet for both Angular apps:
+Run the frontend coverage ratchet for SGP-owned frontend surfaces:
 
 ```bash
 npm run test:frontend:coverage
 ```
 
-The coverage reports are written to `frontend/coverage/sgp-admin/` and
-`frontend/coverage/sgp-portal/`. The current ratchet is intentionally a
-measured frontend baseline, not the backend 85 % target: admin requires 31 %
-statements, 35 % branches, 16 % functions, and 31 % lines; portal requires 40 %
-statements, 44 % branches, 37 % functions, and 42 % lines.
+The SGP aggregate coverage gate writes portal coverage under
+`frontend/coverage/sgp-portal/`. Admin coverage belongs to Stynx and is not
+counted as SGP delivery evidence. The current portal ratchet is intentionally a
+measured frontend baseline, not the backend 85 % target.
 
 Run the canonical Playwright browser gate for both Angular apps:
 
