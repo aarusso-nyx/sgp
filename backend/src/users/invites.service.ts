@@ -4,10 +4,10 @@ import { randomUUID } from 'node:crypto';
 @Injectable()
 export class InvitesService {
   createInvite(input: {
-    email?: string;
-    login?: string;
-    perfis?: string[];
-    expiresAt?: string;
+    email?: string | undefined;
+    login?: string | undefined;
+    perfis?: string[] | undefined;
+    expiresAt?: string | undefined;
   }) {
     return {
       id: randomUUID(),

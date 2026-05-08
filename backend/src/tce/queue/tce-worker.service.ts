@@ -86,10 +86,10 @@ export class TceWorkerService implements OnModuleInit, OnModuleDestroy {
   }
 
   async listJobs(filters: {
-    adapter?: string;
-    stateCode?: string;
-    status?: string;
-    competence?: string;
+    adapter?: string | undefined;
+    stateCode?: string | undefined;
+    status?: string | undefined;
+    competence?: string | undefined;
   }): Promise<TceQueueJobDto[]> {
     const values: unknown[] = [];
     const where: string[] = [];

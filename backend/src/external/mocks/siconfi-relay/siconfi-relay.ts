@@ -27,7 +27,7 @@ export type SiconfiRelayRequestPayload = Readonly<{
   period: string;
   contentHash: string;
   contentBase64: string;
-  scenario?: SiconfiRelayScenario;
+  scenario?: SiconfiRelayScenario | undefined;
 }>;
 
 export type SiconfiRelayResponsePayload = Readonly<{
@@ -69,8 +69,8 @@ type RelayDecision =
 
 export type SiconfiRelayMockResponderOptions = Readonly<{
   transport: QueueAdapterTransport;
-  concurrency?: number;
-  now?: () => Date;
+  concurrency?: number | undefined;
+  now?: (() => Date) | undefined;
 }>;
 
 export class SiconfiRelayMockResponder {

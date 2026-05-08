@@ -53,7 +53,7 @@ interface FileRow extends QueryResultRow {
   competence: string;
   file_hash: string;
   payroll_run_id: string;
-  generated_at?: Date | string;
+  generated_at?: Date | string | undefined;
 }
 
 interface IdRow extends QueryResultRow {

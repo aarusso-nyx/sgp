@@ -10,7 +10,7 @@ export type EsocialEventsStatus =
   | 'DLQ';
 
 export type EsocialEventsStatusTransition = Readonly<{
-  from?: EsocialEventsStatus;
+  from?: EsocialEventsStatus | undefined;
   to: EsocialEventsStatus;
 }>;
 
@@ -20,9 +20,9 @@ export type SpoolUpdateEnvelope = Readonly<{
   kind: EsocialClass;
   status_transition: EsocialEventsStatusTransition;
   response_payload?: unknown;
-  response_hash?: string;
+  response_hash?: string | undefined;
   error?: {
-    code?: string;
+    code?: string | undefined;
     message: string;
     details?: unknown;
   };

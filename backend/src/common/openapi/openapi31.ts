@@ -10,12 +10,12 @@ type OpenApi31Document = OpenAPIObject & {
 };
 
 type OpenApiResponse = {
-  description?: string;
-  content?: Record<string, { schema?: unknown }>;
+  description?: string | undefined;
+  content?: Record<string, { schema?: unknown }> | undefined;
 };
 
 type OpenApiOperation = {
-  responses?: Record<string, OpenApiResponse>;
+  responses?: Record<string, OpenApiResponse> | undefined;
 };
 
 const methods = new Set([

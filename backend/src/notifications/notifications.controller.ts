@@ -11,7 +11,7 @@ import { DomainListQueryDto } from '../common/pagination/domain-list-query.dto';
 import { NotificationsService } from './notifications.service';
 
 class NotificationReadDto {
-  lida?: boolean;
+  lida?: boolean | undefined;
 }
 
 @ApiTags('notifications')

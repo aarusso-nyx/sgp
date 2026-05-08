@@ -171,7 +171,7 @@ export class PayrollLineWriter {
     requestedAmount: string;
     approvedAmount: string;
     requestedOn: string;
-    notes?: string;
+    notes?: string | undefined;
   }): Promise<string> {
     const requestRows = await this.databaseService.query<AdvanceInsertRow>(
       `
@@ -217,7 +217,7 @@ export class PayrollLineWriter {
     payrollRunId: string;
     approvedAmount: string;
     requestedOn: string;
-    notes?: string;
+    notes?: string | undefined;
   }): Promise<string> {
     const paymentRows = await this.databaseService.query<AdvanceInsertRow>(
       `

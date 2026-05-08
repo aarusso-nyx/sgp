@@ -35,9 +35,9 @@ type ReturnFixtureTemplate = Readonly<{
 
 export type BankingRelayMockResponderOptions = Readonly<{
   transport: QueueAdapterTransport;
-  fixturesRoot?: string;
-  concurrency?: number;
-  now?: () => Date;
+  fixturesRoot?: string | undefined;
+  concurrency?: number | undefined;
+  now?: (() => Date) | undefined;
 }>;
 
 export class BankingRelayMockResponder {

@@ -211,6 +211,10 @@ function handleTest() {
       runWorkspaceScript('backend', 'test', args.slice(1), {
         env: localTestDatabaseEnv(),
       }),
+    'backend-exception-filter': () =>
+      runWorkspaceScript('backend', 'test:exception-filter', args.slice(1), {
+        env: localTestDatabaseEnv(),
+      }),
     db: () =>
       runCommand(process.execPath, ['scripts/db.mjs', 'bootstrap-smoke'], {
         env: localTestDatabaseEnv(),
@@ -231,7 +235,7 @@ function handleTest() {
 
   if (!handlers[subcommand]) {
     console.error(
-      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, frontend-e2e, backend, db, e2e, coverage, frontend-coverage, qa, qa-api, qa-frontend',
+      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, frontend-e2e, backend, backend-exception-filter, db, e2e, coverage, frontend-coverage, qa, qa-api, qa-frontend',
     );
     return 1;
   }
@@ -465,6 +469,21 @@ function handleGovernance() {
 }
 
 function handleCheck() {
+  if (args[0] === 'circular') {
+    const target = args[1] ?? 'help';
+    const handlers = {
+      backend: () => runCommand('madge', ['--circular', 'backend/src', ...args.slice(2)]),
+      frontend: () => runCommand('madge', ['--circular', 'frontend/src', ...args.slice(2)]),
+    };
+
+    if (!handlers[target]) {
+      console.error('[check circular] valid targets: backend, frontend');
+      return 1;
+    }
+
+    return handlers[target]();
+  }
+
   return runCommand(process.execPath, ['scripts/check-evidence.mjs', ...args]);
 }
 
@@ -594,6 +613,7 @@ const handlers = {
   governance: handleGovernance,
   health: handleHealth,
   deploy: handleDeploy,
+  prepare: () => runCommand('husky', args),
   clean: () => runCommand(process.execPath, ['scripts/clean.mjs', ...args]),
   'audit:schema': () => handleAuditAlias('schema'),
   'audit:api': () => handleAuditAlias('api'),

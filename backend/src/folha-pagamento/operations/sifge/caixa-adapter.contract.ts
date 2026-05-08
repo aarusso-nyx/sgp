@@ -23,8 +23,8 @@ export interface SifgeRecord {
   rate: string;
   amount: string;
   movementId: string | null;
-  terminationDate?: string;
-  noticeAmount?: string;
+  terminationDate?: string | undefined;
+  noticeAmount?: string | undefined;
 }
 
 export interface SifgePayload {

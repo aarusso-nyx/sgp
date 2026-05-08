@@ -4,9 +4,9 @@ export const AUDIT_MUTATION_METADATA = 'sgp:audit-mutation';
 
 export interface AuditMutationMetadata {
   resourceType: string;
-  tableName?: string;
-  action?: 'CREATE' | 'UPDATE' | 'DELETE' | 'PROCESS' | 'GENERATE';
-  reasonRequired?: boolean;
+  tableName?: string | undefined;
+  action?: 'CREATE' | 'UPDATE' | 'DELETE' | 'PROCESS' | 'GENERATE' | undefined;
+  reasonRequired?: boolean | undefined;
 }
 
 export const AuditMutation = (metadata: AuditMutationMetadata) =>

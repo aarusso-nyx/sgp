@@ -69,9 +69,9 @@ export class NomeacaoService {
     vagaId: string;
     count: number;
     atoAdministrativo: string;
-    actClassificationId?: string;
-    actClassificationCode?: string;
-    publishedAt?: string;
+    actClassificationId?: string | undefined;
+    actClassificationCode?: string | undefined;
+    publishedAt?: string | undefined;
   }): Promise<Record<string, unknown>> {
     this.ensureDatabase();
     return this.database.transaction(async (client) => {
@@ -162,7 +162,7 @@ export class NomeacaoService {
 
   async convocar(
     nomeacaoId: string,
-    input: { channel: ConvocacaoChannel; evidenceRef?: string },
+    input: { channel: ConvocacaoChannel; evidenceRef?: string | undefined },
   ): Promise<Record<string, unknown>> {
     this.ensureDatabase();
     return this.database.transaction(async (client) => {
@@ -280,7 +280,7 @@ export class NomeacaoService {
       inscricaoId: string;
       callOrder: number;
       allocationBucket: string;
-      alreadyCalled?: boolean;
+      alreadyCalled?: boolean | undefined;
     }>,
   ): string | null {
     const next = [...candidates]
@@ -449,7 +449,11 @@ export class NomeacaoService {
 
   private async resolveActClassification(
     client: PoolClient,
-    input: { tenantId: string; id?: string; code?: string },
+    input: {
+      tenantId: string;
+      id?: string | undefined;
+      code?: string | undefined;
+    },
   ): Promise<ActClassificationRow> {
     const code = input.code?.trim() || 'NOMEACAO';
     const rows = await client.query<ActClassificationRow>(

@@ -17,9 +17,9 @@ export interface PaginationWindow {
 }
 
 export interface PaginationOptions {
-  defaultPage?: number;
-  defaultPageSize?: number;
-  maxPageSize?: number;
+  defaultPage?: number | undefined;
+  defaultPageSize?: number | undefined;
+  maxPageSize?: number | undefined;
 }
 
 const DEFAULT_PAGE = 1;

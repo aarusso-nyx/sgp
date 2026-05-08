@@ -74,7 +74,7 @@ export interface TceFiscalReportBaseInput {
   responsible: TceFiscalReportResponsible;
   period: TceFiscalReportPeriod;
   sourceLedger: TceFiscalReportSourceLedger;
-  publicationEvidence?: TceFiscalReportPublicationEvidence;
+  publicationEvidence?: TceFiscalReportPublicationEvidence | undefined;
 }
 
 export interface TceFiscalReportEnvelope<
@@ -111,7 +111,7 @@ export interface RreoStatementLineInput {
   table: string;
   accountCode: string;
   label: string;
-  budgetFunction?: string;
+  budgetFunction?: string | undefined;
   currentPeriodAmount: string;
   yearToDateAmount: string;
   sourceLedgerRef: string;

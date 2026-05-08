@@ -33,8 +33,8 @@ export class ProgramRevisionService {
       parentProgramId: string;
       parentProgramKind: 'PCMSO' | 'PGR';
       revisionReason: string;
-      signedPdfUri?: string | null;
-      sha256?: string | null;
+      signedPdfUri?: string | null | undefined;
+      sha256?: string | null | undefined;
       snapshotJson: Record<string, unknown>;
     },
   ): Promise<ProgramRevisionSummary> {

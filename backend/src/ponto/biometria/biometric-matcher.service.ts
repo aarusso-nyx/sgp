@@ -17,7 +17,7 @@ interface StoredTemplateRow extends QueryResultRow {
 }
 
 export interface PontoBiometricMatchResult {
-  id?: string;
+  id?: string | undefined;
   matched: boolean;
   score: string;
   threshold: string;
@@ -29,7 +29,7 @@ export interface IngestionBiometricInput {
   kind: 'FINGERPRINT' | 'PALM_VEIN';
   sampleBase64: string;
   deviceId: string;
-  threshold?: number;
+  threshold?: number | undefined;
 }
 
 @Injectable()
@@ -78,7 +78,7 @@ export class PontoBiometricMatcherService {
       kind: 'FINGERPRINT' | 'PALM_VEIN';
       sampleBase64: string;
       deviceId: string | null;
-      threshold?: number;
+      threshold?: number | undefined;
       persistWithoutConsent: boolean;
     },
   ): Promise<PontoBiometricMatchResult | null> {

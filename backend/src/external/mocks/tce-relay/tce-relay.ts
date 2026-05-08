@@ -29,7 +29,7 @@ export type TceRelayFiscalReportEnvelope =
 export type TceRelayRequestPayload = Readonly<{
   submissionId: string;
   report: TceRelayFiscalReportEnvelope;
-  scenario?: TceRelayScenario;
+  scenario?: TceRelayScenario | undefined;
 }>;
 
 export type TceRelaySpAck = Readonly<{
@@ -90,8 +90,8 @@ type RelayDecision =
 
 export type TceRelayMockResponderOptions = Readonly<{
   transport: QueueAdapterTransport;
-  concurrency?: number;
-  now?: () => Date;
+  concurrency?: number | undefined;
+  now?: (() => Date) | undefined;
 }>;
 
 export class TceRelayMockResponder {

@@ -15,12 +15,12 @@ export interface ClassificationCandidateInput {
   birthDate: string;
   scores: Record<string, number>;
   requiredProvas: string[];
-  minimumScores?: Record<string, number>;
-  minimumTotalScore?: number;
+  minimumScores?: Record<string, number> | undefined;
+  minimumTotalScore?: number | undefined;
   quotas?: {
-    pcd?: boolean;
-    racial?: boolean;
-    indigenous?: boolean;
+    pcd?: boolean | undefined;
+    racial?: boolean | undefined;
+    indigenous?: boolean | undefined;
   };
 }
 
@@ -29,7 +29,7 @@ export interface ClassificationVagaInput {
   totalSeats: number;
   pcdSeats: number;
   racialSeats: number;
-  indigenousSeats?: number;
+  indigenousSeats?: number | undefined;
 }
 
 export interface ClassificationItem {

@@ -182,11 +182,11 @@ describe('OpenTelemetry request tracing hooks', () => {
 
     const middleware = app.use.mock.calls[0]?.[0] as (
       request: {
-        method?: string;
-        path?: string;
-        originalUrl?: string;
-        baseUrl?: string;
-        route?: { path?: string };
+        method?: string | undefined;
+        path?: string | undefined;
+        originalUrl?: string | undefined;
+        baseUrl?: string | undefined;
+        route?: { path?: string } | undefined;
         headers?: Record<string, string | string[] | undefined>;
       },
       response: TestResponse,
@@ -319,10 +319,10 @@ describe('OpenTelemetry request tracing hooks', () => {
             attributes: Array<{
               key: string;
               value: {
-                stringValue?: string;
-                intValue?: number;
-                doubleValue?: number;
-                boolValue?: boolean;
+                stringValue?: string | undefined;
+                intValue?: number | undefined;
+                doubleValue?: number | undefined;
+                boolValue?: boolean | undefined;
               };
             }>;
           }>;

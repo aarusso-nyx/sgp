@@ -19,7 +19,7 @@ export function buildReportPdf(input: {
   title: string;
   subtitle: string;
   lines: string[];
-  tables?: ReportTable[];
+  tables?: ReportTable[] | undefined;
   recordCount: number;
 }): ReportArtifact {
   const textLines = [

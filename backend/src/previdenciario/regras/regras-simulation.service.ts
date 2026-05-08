@@ -24,7 +24,7 @@ import { PontosService } from '../transition-rules/pontos.service';
 export interface Ec103SimulationResult {
   eligible: boolean;
   observed: {
-    ageYears?: number;
+    ageYears?: number | undefined;
     contributionYears: number;
   };
   rule: string;

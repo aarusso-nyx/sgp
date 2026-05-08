@@ -9,13 +9,13 @@ export interface AtividadeRiscoProfessorInput {
   birthDate: Date | string | null;
   referenceDate: Date | string;
   contributionStartDate: Date | string | null;
-  publicServiceStartDate?: Date | string | null;
-  currentPositionStartDate?: Date | string | null;
-  careerStartDate?: Date | string | null;
-  teachingStartDate?: Date | string | null;
-  contributionYearsAtReform?: number;
-  careerYearsAtReform?: number;
-  enteredCareerByReform?: boolean;
+  publicServiceStartDate?: Date | string | null | undefined;
+  currentPositionStartDate?: Date | string | null | undefined;
+  careerStartDate?: Date | string | null | undefined;
+  teachingStartDate?: Date | string | null | undefined;
+  contributionYearsAtReform?: number | undefined;
+  careerYearsAtReform?: number | undefined;
+  enteredCareerByReform?: boolean | undefined;
 }
 
 export interface AtividadeRiscoProfessorResult {

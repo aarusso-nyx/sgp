@@ -1,0 +1,29 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "../..",
+  "moduleDirectories": ["node_modules", "<rootDir>/backend/node_modules"],
+  "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
+  "testEnvironment": "node",
+  "testRegex": "backend/src/common/errors/standard-exception\\.filter\\.spec\\.ts$",
+  "transform": {
+    "^.+\\.ts$": [
+      "<rootDir>/backend/node_modules/ts-jest",
+      {
+        "tsconfig": "<rootDir>/tests/backend/tsconfig.json"
+      }
+    ]
+  },
+  "collectCoverage": true,
+  "coverageProvider": "v8",
+  "collectCoverageFrom": ["backend/src/common/errors/standard-exception.filter.ts"],
+  "coverageDirectory": "backend/coverage/exception-filter",
+  "coverageThreshold": {
+    "src/common/errors/standard-exception.filter.ts": {
+      "lines": 100,
+      "branches": 90,
+      "functions": 100,
+      "statements": 100
+    }
+  },
+  "coverageReporters": ["text-summary", "json-summary"]
+}

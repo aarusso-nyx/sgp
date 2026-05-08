@@ -7,7 +7,7 @@ type Bracket = {
   min: string;
   max: string | null;
   rate: string;
-  deduction?: string;
+  deduction?: string | undefined;
 };
 
 const irrfBrackets: Bracket[] = [

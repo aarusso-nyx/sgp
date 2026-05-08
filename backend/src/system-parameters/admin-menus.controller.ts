@@ -44,7 +44,7 @@ export class AdminMenusController {
       codigo: string;
       nome: string;
       rota: string;
-      ativo?: boolean;
+      ativo?: boolean | undefined;
     },
   ) {
     return this.adminMenusService.createMenu(body);
@@ -58,10 +58,10 @@ export class AdminMenusController {
     @Param('id') id: string,
     @Body()
     body: {
-      codigo?: string;
-      nome?: string;
-      rota?: string;
-      ativo?: boolean;
+      codigo?: string | undefined;
+      nome?: string | undefined;
+      rota?: string | undefined;
+      ativo?: boolean | undefined;
     },
   ) {
     return this.adminMenusService.updateMenu(id, body);

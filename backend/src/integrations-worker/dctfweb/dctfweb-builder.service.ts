@@ -81,9 +81,9 @@ interface SourceItem {
   baseAmount: string;
   amount: string;
   csllAdicionalAmount: string;
-  mitStatus?: DctfwebMitStatus;
-  mitDebitId?: string;
-  cnpjFilial?: string;
+  mitStatus?: DctfwebMitStatus | undefined;
+  mitDebitId?: string | undefined;
+  cnpjFilial?: string | undefined;
 }
 
 const EVENT_MAP: Record<TotalizerRow['kind'], DctfwebSourceEvent> = {
@@ -674,7 +674,7 @@ function declarationSelectSql(where: string): string {
 }
 
 function toItemDto(row: ItemRow): DctfwebItemDto {
-  return {
+  const item: DctfwebItemDto = {
     id: row.id,
     sourceEvent: row.source_event,
     sourceRunId: row.source_run_id,
@@ -682,10 +682,11 @@ function toItemDto(row: ItemRow): DctfwebItemDto {
     baseAmount: row.base_amount,
     amount: row.amount,
     csllAdicionalAmount: row.csll_adicional_amount ?? '0.00',
-    mitStatus: row.mit_status ?? undefined,
-    mitDebitId: row.mit_debit_id ?? undefined,
-    cnpjFilial: row.cnpj_filial ?? undefined,
   };
+  if (row.mit_status) item.mitStatus = row.mit_status;
+  if (row.mit_debit_id) item.mitDebitId = row.mit_debit_id;
+  if (row.cnpj_filial) item.cnpjFilial = row.cnpj_filial;
+  return item;
 }
 
 function competenceDate(year: number, month: number): string {

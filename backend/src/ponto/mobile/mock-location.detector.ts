@@ -4,7 +4,7 @@ import type { MobileClockInDto, MobileClockInResult } from './mobile-clock.dto';
 
 export interface MockLocationDecision {
   blocked: boolean;
-  result?: MobileClockInResult;
+  result?: MobileClockInResult | undefined;
 }
 
 @Injectable()

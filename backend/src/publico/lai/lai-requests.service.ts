@@ -46,10 +46,10 @@ export interface LaiRequestStatusResponse {
   status: LaiRequestStatus;
   submittedAt: string;
   dueAt: string;
-  extendedDueAt?: string;
+  extendedDueAt?: string | undefined;
   effectiveDueAt: string;
-  answeredAt?: string;
-  closedAt?: string;
+  answeredAt?: string | undefined;
+  closedAt?: string | undefined;
   remainingDays: number;
   slaStatus: LaiSlaStatus;
 }

@@ -11,7 +11,7 @@ export type BankAccountErrorCode =
 export interface BankAccountValidationInput {
   bankCode: string;
   agency: string;
-  agencyDigit?: string | null;
+  agencyDigit?: string | null | undefined;
   accountNumber: string;
   accountDigit: string;
   holderCpf: string;
@@ -26,7 +26,7 @@ interface BankRule {
   bankCode: string;
   agencyLength: number;
   accountLength: number;
-  agencyDigit?: boolean;
+  agencyDigit?: boolean | undefined;
   accountWeights: number[];
   modulus: 10 | 11;
 }

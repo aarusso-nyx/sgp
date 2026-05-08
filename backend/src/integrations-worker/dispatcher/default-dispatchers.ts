@@ -12,8 +12,8 @@ import { PrevidentiaryIntegrationDispatcher } from './previdentiary.dispatcher';
 
 export interface CreateIntegrationJobDispatchersInput {
   databaseService: DatabaseService;
-  cnab240EmitService?: Cnab240Emitter;
-  cnab240RelayDispatchService?: Cnab240RelayDispatcher;
+  cnab240EmitService?: Cnab240Emitter | undefined;
+  cnab240RelayDispatchService?: Cnab240RelayDispatcher | undefined;
 }
 
 export function createIntegrationJobDispatchers(

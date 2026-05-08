@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a product, platform, or governance improvement.
+title: '[Feature]: '
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: What user, operator, compliance, or engineering need does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the desired behavior, boundary, or acceptance criteria.
+    validations:
+      required: true
+  - type: textarea
+    id: authority
+    attributes:
+      label: Authority and evidence
+      description: Link the relevant docs/eng source, audit finding, ADR, or owner decision.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: Which tests, gates, docs, or generated artifacts should change?
+    validations:
+      required: false

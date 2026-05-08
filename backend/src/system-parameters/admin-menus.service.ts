@@ -24,7 +24,7 @@ export class AdminMenusService {
     codigo: string;
     nome: string;
     rota: string;
-    ativo?: boolean;
+    ativo?: boolean | undefined;
   }) {
     const menu: MenuItem = {
       id: randomUUID(),
@@ -40,10 +40,10 @@ export class AdminMenusService {
   updateMenu(
     id: string,
     input: {
-      codigo?: string;
-      nome?: string;
-      rota?: string;
-      ativo?: boolean;
+      codigo?: string | undefined;
+      nome?: string | undefined;
+      rota?: string | undefined;
+      ativo?: boolean | undefined;
     },
   ) {
     const current = this.menus.get(id) ?? {
@@ -55,8 +55,11 @@ export class AdminMenusService {
     };
 
     const next: MenuItem = {
-      ...current,
-      ...input,
+      id: current.id,
+      codigo: input.codigo ?? current.codigo,
+      nome: input.nome ?? current.nome,
+      rota: input.rota ?? current.rota,
+      ativo: input.ativo ?? current.ativo,
     };
     this.menus.set(id, next);
     return next;

@@ -6,7 +6,7 @@ export interface SimplePdfInput {
   fileName: string;
   title: string;
   lines: string[];
-  recordCount?: number;
+  recordCount?: number | undefined;
 }
 
 function escapePdfText(value: string): string {

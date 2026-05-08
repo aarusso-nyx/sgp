@@ -12,9 +12,9 @@ import { parseFirstWorksheet, XlsxTableRow } from './xlsx-table.parser';
 
 export interface UploadedXlsxFile {
   buffer: Buffer;
-  originalname?: string;
-  mimetype?: string;
-  size?: number;
+  originalname?: string | undefined;
+  mimetype?: string | undefined;
+  size?: number | undefined;
 }
 
 export interface ServidorImportAcceptedRow {

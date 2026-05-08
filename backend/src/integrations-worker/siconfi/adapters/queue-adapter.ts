@@ -15,13 +15,13 @@ import {
 import type { SiconfiFiscalStatementInput } from '../rreo-rgf.generator';
 
 export type SiconfiQueueAdapterOptions = Readonly<{
-  transport?: QueueAdapterTransport;
-  queue?: SgpQueueAdapter<SiconfiRelayKind>;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  transport?: QueueAdapterTransport | undefined;
+  queue?: SgpQueueAdapter<SiconfiRelayKind> | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export type SubmitSiconfiFiscalStatementInput = Readonly<{
@@ -29,11 +29,11 @@ export type SubmitSiconfiFiscalStatementInput = Readonly<{
   submissionId: string;
   statement: SiconfiFiscalStatementInput;
   content: string;
-  scenario?: SiconfiRelayScenario;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  scenario?: SiconfiRelayScenario | undefined;
+  idempotencyKey?: string | undefined;
+  correlationId?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type SiconfiQueueDispatchState = Readonly<{

@@ -6,7 +6,7 @@ export interface CnabReturnBuildInput {
   remittanceId: string;
   sourceKey: string;
   format: string;
-  fileName?: string | null;
+  fileName?: string | null | undefined;
   employeeCount: number;
   totalAmount: string;
 }

@@ -9,11 +9,11 @@ const DEFAULT_IP_LIMIT = 120;
 const DEFAULT_TENANT_LIMIT = 600;
 
 type RequestLike = {
-  actor?: { tenantId?: string | null } | null;
-  tenantId?: string | null;
-  ip?: string;
-  ips?: string[];
-  socket?: { remoteAddress?: string };
+  actor?: { tenantId?: string | null } | null | undefined;
+  tenantId?: string | null | undefined;
+  ip?: string | undefined;
+  ips?: string[] | undefined;
+  socket?: { remoteAddress?: string } | undefined;
   headers?: Record<string, string | string[] | undefined>;
 };
 

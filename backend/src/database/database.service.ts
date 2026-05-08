@@ -14,7 +14,7 @@ const BYPASS_RLS_ALLOWLIST = new Set(['payroll-engine', 'integrations-worker']);
 
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {
-  private pool?: Pool;
+  private pool?: Pool | undefined;
 
   constructor(private readonly configService: ConfigService) {}
 

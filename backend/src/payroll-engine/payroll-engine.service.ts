@@ -53,10 +53,10 @@ interface PayrollRunSummaryRow extends QueryResultRow {
 interface NormalizedCalculationRequest {
   payrollRunId: string;
   mode: PayrollCalculationMode;
-  competenceYear?: number;
-  competenceMonth?: number;
+  competenceYear?: number | undefined;
+  competenceMonth?: number | undefined;
   dryRun: boolean;
-  requestedBy?: string;
+  requestedBy?: string | undefined;
 }
 
 const UUID_PATTERN =

@@ -1,31 +1,31 @@
 export interface ValidatedEnvironment {
   NODE_ENV: string;
   PORT: number;
-  CORS_ORIGIN?: string;
+  CORS_ORIGIN?: string | undefined;
   AUTH_ALLOW_UNSIGNED_TEST_TOKENS: boolean;
-  DATABASE_URL?: string;
-  COGNITO_REGION?: string;
-  COGNITO_USER_POOL_ID?: string;
-  COGNITO_CLIENT_ID?: string;
-  COGNITO_ISSUER?: string;
-  COGNITO_JWKS_URI?: string;
-  COGNITO_TOKEN_USE?: 'access' | 'id';
-  AWS_REGION?: string;
-  S3_REGION?: string;
-  S3_ENDPOINT?: string;
+  DATABASE_URL?: string | undefined;
+  COGNITO_REGION?: string | undefined;
+  COGNITO_USER_POOL_ID?: string | undefined;
+  COGNITO_CLIENT_ID?: string | undefined;
+  COGNITO_ISSUER?: string | undefined;
+  COGNITO_JWKS_URI?: string | undefined;
+  COGNITO_TOKEN_USE?: 'access' | 'id' | undefined;
+  AWS_REGION?: string | undefined;
+  S3_REGION?: string | undefined;
+  S3_ENDPOINT?: string | undefined;
   S3_FORCE_PATH_STYLE: boolean;
-  S3_DOCUMENTS_BUCKET?: string;
+  S3_DOCUMENTS_BUCKET?: string | undefined;
   S3_DOCUMENTS_PRESIGN_EXPIRES_SECONDS: number;
   S3_DOCUMENTS_DOWNLOAD_EXPIRES_SECONDS: number;
   S3_DOCUMENTS_KEY_PREFIX: string;
   MINIO_TEST_STORAGE_ENABLED: boolean;
-  MINIO_ENDPOINT?: string;
-  MINIO_REGION?: string;
-  MINIO_DOCUMENTS_BUCKET?: string;
-  MINIO_ACCESS_KEY?: string;
-  MINIO_SECRET_KEY?: string;
-  SGP_PII_PGCRYPTO_KEY?: string;
-  SGP_PII_PGCRYPTO_KEY_ID?: string;
+  MINIO_ENDPOINT?: string | undefined;
+  MINIO_REGION?: string | undefined;
+  MINIO_DOCUMENTS_BUCKET?: string | undefined;
+  MINIO_ACCESS_KEY?: string | undefined;
+  MINIO_SECRET_KEY?: string | undefined;
+  SGP_PII_PGCRYPTO_KEY?: string | undefined;
+  SGP_PII_PGCRYPTO_KEY_ID?: string | undefined;
 }
 
 function optionalUrl(

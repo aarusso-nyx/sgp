@@ -177,11 +177,11 @@ export function parseSiaficResponse(
 ): SiaficConnectorResponse {
   try {
     const parsed = JSON.parse(body) as {
-      accepted?: boolean;
-      receiptNumber?: string;
-      receipt_number?: string;
-      protocolo?: string;
-      status?: string;
+      accepted?: boolean | undefined;
+      receiptNumber?: string | undefined;
+      receipt_number?: string | undefined;
+      protocolo?: string | undefined;
+      status?: string | undefined;
     };
     const accepted =
       parsed.accepted ??

@@ -119,10 +119,10 @@ export class DctfwebTransmitterService {
 export function parseRfbResponse(body: string, httpStatus = 200): RfbResponse {
   try {
     const parsed = JSON.parse(body) as {
-      accepted?: boolean;
-      receiptNumber?: string;
-      receipt_number?: string;
-      status?: string;
+      accepted?: boolean | undefined;
+      receiptNumber?: string | undefined;
+      receipt_number?: string | undefined;
+      status?: string | undefined;
     };
     const accepted =
       parsed.accepted ??

@@ -6,7 +6,7 @@ import forge from 'node-forge';
 export interface EsocialPadesSignInput {
   xml: string;
   tenantId: string;
-  signedAt?: string;
+  signedAt?: string | undefined;
 }
 
 export interface EsocialPadesCertificateValidation {

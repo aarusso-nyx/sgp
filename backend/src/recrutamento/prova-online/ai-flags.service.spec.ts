@@ -2,7 +2,7 @@ import { AiFlagsService } from './ai-flags.service';
 
 class FakeAiDatabase {
   readonly configured = true;
-  insertedKind?: string;
+  insertedKind?: string | undefined;
 
   async query<T>(sql: string, values: unknown[] = []): Promise<T[]> {
     if (sql.includes('INSERT INTO recrutamento.proctoring_event')) {

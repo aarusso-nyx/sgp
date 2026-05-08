@@ -31,10 +31,13 @@
     "format": "node scripts/run.mjs format",
     "format:check": "node scripts/run.mjs format check",
     "typecheck": "node scripts/run.mjs typecheck",
+    "check:circular:backend": "node scripts/run.mjs check circular backend",
+    "check:circular:frontend": "node scripts/run.mjs check circular frontend",
     "test": "node scripts/run.mjs test",
     "test:admin": "node scripts/run.mjs test admin",
     "test:portal": "node scripts/run.mjs test portal",
     "test:backend": "node scripts/run.mjs test backend",
+    "test:backend:exception-filter": "node scripts/run.mjs test backend-exception-filter",
     "test:db": "node scripts/run.mjs test db",
     "test:e2e": "node scripts/run.mjs test e2e",
     "test:admin:e2e": "node scripts/run.mjs test admin-e2e",
@@ -77,14 +80,20 @@
     "deploy:prod": "node scripts/run.mjs deploy --target prod --stack all --dry-run",
     "health": "node scripts/run.mjs health",
     "health:json": "node scripts/run.mjs health --json",
-    "clean": "node scripts/run.mjs clean"
+    "clean": "node scripts/run.mjs clean",
+    "prepare": "node scripts/run.mjs prepare"
   },
   "keywords": [],
-  "author": "",
+  "author": "Antonio A. Russo <aarusso@nyxk.com.br>",
   "license": "UNLICENSED",
   "type": "module",
   "devDependencies": {
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
+    "husky": "^9.1.7",
     "jsdom": "^28.1.0",
+    "lint-staged": "^17.0.2",
+    "madge": "^8.0.0",
     "typescript": "~5.9.2"
   },
   "dependencies": {

@@ -27,16 +27,16 @@ export interface BatchHeader {
 export interface SegmentA {
   sequence: number;
   employeeId: string;
-  alimonyId?: string | null;
+  alimonyId?: string | null | undefined;
   beneficiaryName: string;
   bankCode: string;
   branch: string;
-  branchDigit?: string | null;
+  branchDigit?: string | null | undefined;
   account: string;
   accountDigit: string;
   amount: string;
   paymentDate: string;
-  purposeCode?: string | null;
+  purposeCode?: string | null | undefined;
 }
 
 export interface SegmentB {
@@ -57,16 +57,16 @@ export interface FileTrailer {
 
 export interface Cnab240PaymentInput {
   employeeId: string;
-  alimonyId?: string | null;
+  alimonyId?: string | null | undefined;
   employeeName: string;
   employeeDocument: string;
   bankCode: string;
   branch: string;
-  branchDigit?: string | null;
+  branchDigit?: string | null | undefined;
   account: string;
   accountDigit: string;
   amount: string;
-  purposeCode?: string | null;
+  purposeCode?: string | null | undefined;
 }
 
 export interface Cnab240BuildInput {
@@ -74,7 +74,7 @@ export interface Cnab240BuildInput {
   companyName: string;
   companyRegistration: string;
   paymentDate: string;
-  generatedAt?: Date;
+  generatedAt?: Date | undefined;
   remittanceNumber: number;
   payments: Cnab240PaymentInput[];
 }

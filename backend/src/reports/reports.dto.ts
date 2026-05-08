@@ -9,7 +9,13 @@ export class ReportRequestsQueryDto extends DomainListQueryDto {
   })
   @IsOptional()
   @IsIn(['REQUESTED', 'RUNNING', 'COMPLETED', 'FAILED', 'EXPIRED'])
-  status?: 'REQUESTED' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
+  status?:
+    | 'REQUESTED'
+    | 'RUNNING'
+    | 'COMPLETED'
+    | 'FAILED'
+    | 'EXPIRED'
+    | undefined;
 
   @ApiPropertyOptional()
   @IsOptional()

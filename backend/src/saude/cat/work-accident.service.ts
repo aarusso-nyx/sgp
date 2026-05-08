@@ -211,8 +211,10 @@ export class WorkAccidentService {
       emittedAt: input.deathAt,
       doctorCrm: input.doctorCrm,
       doctorName: input.doctorName,
-      internment: input.internment,
-      leaveUntil: input.leaveUntil,
+      ...(input.internment !== undefined
+        ? { internment: input.internment }
+        : {}),
+      ...(input.leaveUntil ? { leaveUntil: input.leaveUntil } : {}),
     });
   }
 

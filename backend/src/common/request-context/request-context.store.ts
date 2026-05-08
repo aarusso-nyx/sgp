@@ -3,13 +3,13 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import type { AuthenticatedActor } from '../../auth/actor.types';
 
 export interface RequestContextSnapshot {
-  requestId?: string;
-  tenantId?: string;
-  actor?: AuthenticatedActor;
-  permissions?: string[];
-  groups?: string[];
-  bypassRls?: boolean;
-  bypassRlsReason?: string;
+  requestId?: string | undefined;
+  tenantId?: string | undefined;
+  actor?: AuthenticatedActor | undefined;
+  permissions?: string[] | undefined;
+  groups?: string[] | undefined;
+  bypassRls?: boolean | undefined;
+  bypassRlsReason?: string | undefined;
 }
 
 const store = new AsyncLocalStorage<RequestContextSnapshot>();

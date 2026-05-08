@@ -13,10 +13,10 @@ import { isDomainError } from './domain-error';
 type ExceptionResponse =
   | string
   | {
-      error?: string;
-      message?: string | string[];
-      statusCode?: number;
-      code?: string;
+      error?: string | undefined;
+      message?: string | string[] | undefined;
+      statusCode?: number | undefined;
+      code?: string | undefined;
     };
 
 @Catch()
@@ -52,9 +52,9 @@ export class StandardExceptionFilter implements ExceptionFilter {
         message,
         status,
         method: request.method,
-        path: request.originalUrl ?? request.url,
-        requestId: request.requestId,
+        path: request.originalUrl || request.url,
         timestamp: new Date().toISOString(),
+        ...(request.requestId ? { requestId: request.requestId } : {}),
         ...(details ? { details } : {}),
       },
     });

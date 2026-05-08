@@ -81,6 +81,6 @@ export interface FolhaMensalResult {
   totalEarnings: string;
   totalDeductions: string;
   totalNet: string;
-  validation?: Record<string, unknown>;
+  validation?: Record<string, unknown> | undefined;
   review: FolhaMensalReviewLine[];
 }

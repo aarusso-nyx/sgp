@@ -23,8 +23,7 @@
     "!backend/src/**/*.dto.ts",
     "!backend/src/**/*.module.ts",
     "!backend/src/config/environment.ts",
-    "!backend/src/common/pagination/paged-response.ts",
-    "!backend/src/common/errors/standard-exception.filter.ts"
+    "!backend/src/common/pagination/paged-response.ts"
   ],
   "coverageDirectory": "backend/coverage",
   "coverageThreshold": {

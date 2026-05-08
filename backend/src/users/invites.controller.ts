@@ -28,10 +28,10 @@ export class InvitesController {
   createInvite(
     @Body()
     body: {
-      email?: string;
-      login?: string;
-      perfis?: string[];
-      expiresAt?: string;
+      email?: string | undefined;
+      login?: string | undefined;
+      perfis?: string[] | undefined;
+      expiresAt?: string | undefined;
     },
   ) {
     return this.invitesService.createInvite(body);

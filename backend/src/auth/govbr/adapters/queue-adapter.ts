@@ -24,11 +24,11 @@ import type {
 import type { GovBrSignRequestDto } from '../sign.dto';
 
 export type GovBrQueueRequestOptions = Readonly<{
-  requestId?: string;
-  correlationId?: string;
-  idempotencyKey?: string;
-  maxAttempts?: number;
-  scenario?: GovBrRelayScenario;
+  requestId?: string | undefined;
+  correlationId?: string | undefined;
+  idempotencyKey?: string | undefined;
+  maxAttempts?: number | undefined;
+  scenario?: GovBrRelayScenario | undefined;
 }>;
 
 export type GovBrQueueCreateInput = GovBrQueueRequestOptions &
@@ -41,8 +41,8 @@ export type GovBrQueueCompleteInput = GovBrQueueRequestOptions &
   Readonly<{
     state: string;
     decision: GovBrSignatureDecision;
-    challenge?: string;
-    tenantId?: string;
+    challenge?: string | undefined;
+    tenantId?: string | undefined;
   }>;
 
 export type GovBrQueueAdapterResult = Readonly<{
@@ -58,13 +58,13 @@ export type GovBrQueueAdapterResult = Readonly<{
 }>;
 
 export type GovBrQueueAdapterOptions = Readonly<{
-  transport?: QueueAdapterTransport;
-  queue?: SgpQueueAdapter<GovBrRelayKind>;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  transport?: QueueAdapterTransport | undefined;
+  queue?: SgpQueueAdapter<GovBrRelayKind> | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export class GovBrQueueAdapter {

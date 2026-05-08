@@ -6,8 +6,8 @@ export interface Pedagio50Input {
   gender: Pedagio50Gender;
   referenceDate: Date | string;
   contributionStartDate: Date | string | null;
-  contributionYearsAtReform?: number;
-  contributionYearsAtReference?: number;
+  contributionYearsAtReform?: number | undefined;
+  contributionYearsAtReference?: number | undefined;
 }
 
 export interface Pedagio50Result {

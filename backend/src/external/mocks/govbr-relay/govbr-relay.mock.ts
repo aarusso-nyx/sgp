@@ -31,27 +31,27 @@ export type GovBrRelayActor = Readonly<{
   sub: string;
   username: string;
   tenantId: string;
-  groups?: readonly string[];
-  permissions?: readonly string[];
-  claims?: Record<string, unknown>;
+  groups?: readonly string[] | undefined;
+  permissions?: readonly string[] | undefined;
+  claims?: Record<string, unknown> | undefined;
 }>;
 
 export type GovBrRelayCreateRequestPayload = Readonly<{
   action: 'CREATE_SIGNATURE_REQUEST';
   actor: GovBrRelayActor;
   resourceType: string;
-  resourceId?: string;
+  resourceId?: string | undefined;
   payload: Record<string, unknown>;
-  returnUrl?: string;
-  scenario?: GovBrRelayScenario;
+  returnUrl?: string | undefined;
+  scenario?: GovBrRelayScenario | undefined;
 }>;
 
 export type GovBrRelayCompleteRequestPayload = Readonly<{
   action: 'COMPLETE_SIGNATURE_REQUEST';
   state: string;
   decision: GovBrSignatureDecision;
-  challenge?: string;
-  scenario?: GovBrRelayScenario;
+  challenge?: string | undefined;
+  scenario?: GovBrRelayScenario | undefined;
 }>;
 
 export type GovBrRelayRequestPayload =
@@ -112,8 +112,8 @@ type StoredGovBrSignatureRequest = GovBrSignatureRequestRecord;
 
 export type GovBrRelayMockResponderOptions = Readonly<{
   transport: QueueAdapterTransport;
-  concurrency?: number;
-  now?: () => Date;
+  concurrency?: number | undefined;
+  now?: (() => Date) | undefined;
 }>;
 
 export class GovBrRelayMockResponder {

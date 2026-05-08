@@ -29,13 +29,13 @@ interface UsedRow extends QueryResultRow {
 export interface MarginCalculationInput {
   employeeId: string;
   competence: string;
-  netBase?: string;
-  generalPercent?: string;
-  creditCardPercent?: string;
-  benefitCardPercent?: string;
-  usedGeneral?: string;
-  usedCreditCard?: string;
-  usedBenefitCard?: string;
+  netBase?: string | undefined;
+  generalPercent?: string | undefined;
+  creditCardPercent?: string | undefined;
+  benefitCardPercent?: string | undefined;
+  usedGeneral?: string | undefined;
+  usedCreditCard?: string | undefined;
+  usedBenefitCard?: string | undefined;
 }
 
 export interface ConsignmentMargin {

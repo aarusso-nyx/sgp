@@ -15,7 +15,7 @@ export interface ObservedWorkerPollSummary {
 }
 
 interface WorkerPollObservabilityOptions {
-  exporter?: RequestSpanExporter;
+  exporter?: RequestSpanExporter | undefined;
   now?: () => bigint;
 }
 

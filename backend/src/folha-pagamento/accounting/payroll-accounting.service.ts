@@ -59,8 +59,8 @@ interface CatalogMapping {
   label: string;
   route: string;
   searchExpression: string;
-  metadataExpression?: string;
-  typeColumn?: string;
+  metadataExpression?: string | undefined;
+  typeColumn?: string | undefined;
 }
 
 const CATALOGS: Record<string, CatalogMapping> = {

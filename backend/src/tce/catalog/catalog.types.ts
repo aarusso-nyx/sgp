@@ -93,22 +93,22 @@ export interface LayoutVersionMutationDto {
   systemName: string;
   version: string;
   effectiveFrom: string;
-  effectiveTo?: string | null;
-  status?: TceLayoutStatus;
+  effectiveTo?: string | null | undefined;
+  status?: TceLayoutStatus | undefined;
   publicationUrl: string;
-  notes?: string | null;
+  notes?: string | null | undefined;
 }
 
 export interface LayoutFieldMutationDto {
   layoutVersionId: string;
   fieldPath: string;
   dataType: TceLayoutFieldDataType;
-  required?: boolean;
-  maxLength?: number | null;
-  decimalPrecision?: number | null;
-  decimalScale?: number | null;
-  transformRule?: string | null;
-  sourceHint?: string | null;
+  required?: boolean | undefined;
+  maxLength?: number | null | undefined;
+  decimalPrecision?: number | null | undefined;
+  decimalScale?: number | null | undefined;
+  transformRule?: string | null | undefined;
+  sourceHint?: string | null | undefined;
   ordering: number;
 }
 

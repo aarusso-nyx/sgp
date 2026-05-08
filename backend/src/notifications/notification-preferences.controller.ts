@@ -12,15 +12,15 @@ import { NotificationsService } from './notifications.service';
 
 class NotificationPreferencesDto {
   canais?: {
-    email?: boolean;
-    push?: boolean;
-    sms?: boolean;
+    email?: boolean | undefined;
+    push?: boolean | undefined;
+    sms?: boolean | undefined;
   };
   categorias?: {
-    sistema?: boolean;
-    folha?: boolean;
-    rh?: boolean;
-    auditoria?: boolean;
+    sistema?: boolean | undefined;
+    folha?: boolean | undefined;
+    rh?: boolean | undefined;
+    auditoria?: boolean | undefined;
   };
 }
 

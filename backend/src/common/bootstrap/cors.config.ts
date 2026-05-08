@@ -3,8 +3,8 @@ import type { INestApplication } from '@nestjs/common';
 const LOCAL_DEVELOPMENT_ORIGIN = 'http://localhost:4200';
 
 type CorsEnvironment = {
-  CORS_ORIGIN?: string;
-  NODE_ENV?: string;
+  CORS_ORIGIN?: string | undefined;
+  NODE_ENV?: string | undefined;
 };
 
 type CorsConfiguration = {

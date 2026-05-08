@@ -35,7 +35,7 @@ export interface StoredGeneratedObject {
 interface StorageRuntimeConfig {
   bucket: string;
   region: string;
-  endpoint?: string;
+  endpoint?: string | undefined;
   forcePathStyle: boolean;
   credentials?: {
     accessKeyId: string;

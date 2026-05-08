@@ -12,9 +12,9 @@ export interface WorkerReadinessProbeOptions {
   workerName: string;
   portEnv: string;
   defaultPort: number;
-  env?: NodeJS.ProcessEnv;
-  enabledInTests?: boolean;
-  port?: number;
+  env?: NodeJS.ProcessEnv | undefined;
+  enabledInTests?: boolean | undefined;
+  port?: number | undefined;
 }
 
 const READY_PATHS = new Set(['/ready', '/health/ready']);

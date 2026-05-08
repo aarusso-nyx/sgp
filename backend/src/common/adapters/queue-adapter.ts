@@ -50,8 +50,8 @@ export type QueueAdapterResponseEnvelope<
   kind: TKind;
   status: QueueAdapterResponseStatus;
   attempt: number;
-  payload?: TPayload;
-  error?: QueueAdapterErrorEnvelope;
+  payload?: TPayload | undefined;
+  error?: QueueAdapterErrorEnvelope | undefined;
 }>;
 
 export type QueueAdapterDeadLetterEnvelope<
@@ -59,7 +59,7 @@ export type QueueAdapterDeadLetterEnvelope<
   TPayload = unknown,
 > = Readonly<{
   request: QueueAdapterRequestEnvelope<TKind, TPayload>;
-  response?: QueueAdapterResponseEnvelope<TKind, unknown>;
+  response?: QueueAdapterResponseEnvelope<TKind, unknown> | undefined;
   reason: string;
   'dead-lettered-at': string;
 }>;
@@ -105,10 +105,10 @@ export type QueueAdapterObservability<TKind extends string> = Readonly<{
 export type QueueAdapterRequestInput<TPayload> = Readonly<{
   tenantId: string;
   payload: TPayload;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  idempotencyKey?: string | undefined;
+  correlationId?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
   onPublished?: (
     request: QueueAdapterRequestEnvelope<string, TPayload>,
   ) => void | Promise<void>;
@@ -117,22 +117,22 @@ export type QueueAdapterRequestInput<TPayload> = Readonly<{
 export type QueueRetryStrategy = (attempt: number) => number;
 
 export type QueueJitterRetryStrategyOptions = Readonly<{
-  baseDelayMs?: number;
-  maxDelayMs?: number;
-  jitterUnit?: number;
+  baseDelayMs?: number | undefined;
+  maxDelayMs?: number | undefined;
+  jitterUnit?: number | undefined;
 }>;
 
 export type SgpQueueAdapterOptions<TKind extends string> = Readonly<{
   kind: TKind;
   transport: QueueAdapterTransport;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: QueueRetryStrategy;
-  baseDelayMs?: number;
-  maxDelayMs?: number;
-  now?: () => Date;
-  idFactory?: () => string;
-  observability?: QueueAdapterObservability<TKind>;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: QueueRetryStrategy | undefined;
+  baseDelayMs?: number | undefined;
+  maxDelayMs?: number | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
+  observability?: QueueAdapterObservability<TKind> | undefined;
 }>;
 
 type PendingRequest<TKind extends string> = {
@@ -281,7 +281,7 @@ export class SgpQueueAdapter<TKind extends string> {
   private readonly retryDelayMs: QueueRetryStrategy;
   private readonly now: () => Date;
   private readonly idFactory: () => string;
-  private readonly observability?: QueueAdapterObservability<TKind>;
+  private readonly observability?: QueueAdapterObservability<TKind> | undefined;
   private readonly pending = new Map<string, PendingRequest<TKind>>();
   private readonly responseSubscription: QueueSubscription;
 

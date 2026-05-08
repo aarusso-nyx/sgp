@@ -60,7 +60,13 @@ export default tseslint.config(
   },
   {
     files: ['backend/src/**/*.spec.ts', 'tests/backend/**/*.ts'],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+      },
+    },
     rules: {
+      ...tseslint.configs.disableTypeChecked.rules,
       '@typescript-eslint/no-base-to-string': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',

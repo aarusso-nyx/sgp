@@ -43,7 +43,9 @@ export class StynxEsocialEventsUpdateConsumer {
         messageId: envelope.message_id,
         status: targetStatus,
         response: envelope.response_payload ?? {},
-        responseHash: envelope.response_hash,
+        ...(envelope.response_hash
+          ? { responseHash: envelope.response_hash }
+          : {}),
       });
       return { applied: true, idempotencyKey };
     }
@@ -61,8 +63,12 @@ export class StynxEsocialEventsUpdateConsumer {
           code: `STYNX_ESOCIAL_${targetStatus}`,
           message: `stynx-esocial transitioned message to ${targetStatus}`,
         },
-        response: envelope.response_payload,
-        responseHash: envelope.response_hash,
+        ...(envelope.response_payload !== undefined
+          ? { response: envelope.response_payload }
+          : {}),
+        ...(envelope.response_hash
+          ? { responseHash: envelope.response_hash }
+          : {}),
       });
       return { applied: true, idempotencyKey };
     }

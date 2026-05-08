@@ -5,8 +5,8 @@ import { DatabaseService } from '../../database/database.service';
 
 export type TenantFiscalCertificate = Readonly<{
   pkcs12: Buffer;
-  password?: string;
-  alias?: string;
+  password?: string | undefined;
+  alias?: string | undefined;
 }>;
 
 type SystemParameterRow = QueryResultRow & {

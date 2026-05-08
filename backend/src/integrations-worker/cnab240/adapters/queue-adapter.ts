@@ -49,7 +49,7 @@ export type BankingCnab240ReturnProcessingInput = Readonly<{
   content: string;
   encoding: 'base64';
   remittanceFileHash: string;
-  processedBy?: string | null;
+  processedBy?: string | null | undefined;
 }>;
 
 export type BankingCnab240ReturnProcessingResult = Readonly<{
@@ -77,27 +77,27 @@ export type BankingQueueDatabase = Readonly<{
 
 export type BankingCnab240QueueAdapterOptions = Readonly<{
   transport: QueueAdapterTransport;
-  returnProcessor?: BankingCnab240ReturnProcessor;
-  paymentBatchStateWriter?: BankingPaymentBatchStateWriter;
-  parser?: Cnab240ReturnParserService;
-  mapper?: OccurrenceMapperService;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  returnProcessor?: BankingCnab240ReturnProcessor | undefined;
+  paymentBatchStateWriter?: BankingPaymentBatchStateWriter | undefined;
+  parser?: Cnab240ReturnParserService | undefined;
+  mapper?: OccurrenceMapperService | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export type SubmitBankingRemittanceInput = Readonly<{
   tenantId: string;
   remittanceFileId: string;
   artifact: Cnab240BuildResult;
-  bankCode?: string | number;
-  processedBy?: string | null;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  bankCode?: string | number | undefined;
+  processedBy?: string | null | undefined;
+  idempotencyKey?: string | undefined;
+  correlationId?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type SubmitBankingRemittanceResult = Readonly<{
@@ -113,8 +113,10 @@ export type SubmitBankingRemittanceResult = Readonly<{
 
 export class BankingCnab240QueueAdapter {
   private readonly queue: SgpQueueAdapter<typeof BANKING_RELAY_KIND>;
-  private readonly returnProcessor?: BankingCnab240ReturnProcessor;
-  private readonly paymentBatchStateWriter?: BankingPaymentBatchStateWriter;
+  private readonly returnProcessor?: BankingCnab240ReturnProcessor | undefined;
+  private readonly paymentBatchStateWriter?:
+    | BankingPaymentBatchStateWriter
+    | undefined;
   private readonly parser: Cnab240ReturnParserService;
   private readonly mapper: OccurrenceMapperService;
 

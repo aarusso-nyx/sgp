@@ -17,14 +17,14 @@ export interface R2000ContributorInput {
 }
 
 export interface R2000BaseEventInput {
-  eventId?: string;
+  eventId?: string | undefined;
   eventCode: R2000EventCode;
   reportingCompetence: string;
-  environment?: ReinfEnvironment;
-  emissionProcess?: ReinfEmissionProcess;
-  processVersion?: string;
-  kind?: R2000EventKind;
-  originalReceiptNumber?: string;
+  environment?: ReinfEnvironment | undefined;
+  emissionProcess?: ReinfEmissionProcess | undefined;
+  processVersion?: string | undefined;
+  kind?: R2000EventKind | undefined;
+  originalReceiptNumber?: string | undefined;
   contributor: R2000ContributorInput;
 }
 
@@ -39,7 +39,7 @@ export interface R2000EnvelopeInput {
 export interface R2000EstablishmentInput {
   registrationType: ReinfRegistrationType;
   registrationNumber: string;
-  constructionIndicator?: '0' | '1' | '2';
+  constructionIndicator?: '0' | '1' | '2' | undefined;
 }
 
 export interface R2000ServiceCounterpartyInput {
@@ -49,17 +49,17 @@ export interface R2000ServiceCounterpartyInput {
 }
 
 export interface R2000ServiceInvoiceInput {
-  sourceRunId?: string;
-  series?: string;
+  sourceRunId?: string | undefined;
+  series?: string | undefined;
   number: string;
   issuedOn: string;
   grossAmount: string;
   retentionBaseAmount: string;
   principalRetainedAmount: string;
-  additionalRetainedAmount?: string;
-  principalNotRetainedAmount?: string;
-  additionalNotRetainedAmount?: string;
-  cprbIndicator?: 'S' | 'N';
+  additionalRetainedAmount?: string | undefined;
+  principalNotRetainedAmount?: string | undefined;
+  additionalNotRetainedAmount?: string | undefined;
+  cprbIndicator?: 'S' | 'N' | undefined;
 }
 
 export interface R2000ServiceRetentionInput extends R2000BaseEventInput {

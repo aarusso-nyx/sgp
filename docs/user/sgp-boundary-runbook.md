@@ -166,3 +166,6 @@ and circuit state must remain visible before a real relay is enabled.
 - Audit events remain append-oriented and redacted.
 - Real-service traffic is forbidden in CI unless explicitly authorized by the
   owner for a separate homologation run.
+
+See also: `docs/eng/runbooks/incident-response.md` and
+`docs/eng/runbooks/secret-rotation.md`.

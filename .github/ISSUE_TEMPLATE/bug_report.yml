@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a reproducible defect in SGP.
+title: '[Bug]: '
+labels:
+  - bug
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What failed, and what behavior did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: List the smallest sequence of commands or UI actions that reproduces the issue.
+      placeholder: |
+        1. Run ...
+        2. Open ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: What should have happened?
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include branch, commit SHA, OS, Node/npm versions, database target, and relevant service names.
+    validations:
+      required: true

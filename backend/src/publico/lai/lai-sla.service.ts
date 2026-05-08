@@ -7,7 +7,7 @@ export type LaiSlaStatus = 'OPEN' | 'DUE_TODAY' | 'OVERDUE' | 'FINISHED';
 
 export interface LaiSlaSummary {
   dueAt: Date;
-  extendedDueAt?: Date;
+  extendedDueAt?: Date | undefined;
   effectiveDueAt: Date;
   remainingDays: number;
   status: LaiSlaStatus;
@@ -25,10 +25,10 @@ export class LaiSlaService {
 
   summarize(input: {
     submittedAt: Date;
-    dueAt?: Date;
-    extendedDueAt?: Date | null;
-    finishedAt?: Date | null;
-    now?: Date;
+    dueAt?: Date | undefined;
+    extendedDueAt?: Date | null | undefined;
+    finishedAt?: Date | null | undefined;
+    now?: Date | undefined;
   }): LaiSlaSummary {
     const dueAt = input.dueAt ?? this.initialDueAt(input.submittedAt);
     const effectiveDueAt = input.extendedDueAt ?? dueAt;

@@ -40,26 +40,26 @@ export type TceQueueDatabase = Readonly<{
 }>;
 
 export type TceQueueAdapterOptions = Readonly<{
-  transport?: QueueAdapterTransport;
-  queue?: SgpQueueAdapter<TceRelayKind>;
-  stateWriter?: TceSubmissionStateWriter;
-  database?: TceQueueDatabase;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  transport?: QueueAdapterTransport | undefined;
+  queue?: SgpQueueAdapter<TceRelayKind> | undefined;
+  stateWriter?: TceSubmissionStateWriter | undefined;
+  database?: TceQueueDatabase | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export type SubmitTceFiscalReportInput = Readonly<{
   tenantId: string;
   submissionId: string;
   report: TceRelayFiscalReportEnvelope;
-  scenario?: TceRelayScenario;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  scenario?: TceRelayScenario | undefined;
+  idempotencyKey?: string | undefined;
+  correlationId?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type SubmitTceFiscalReportResult = Readonly<{
@@ -79,7 +79,7 @@ const TCE_QUEUE_WORKER_PERMISSIONS = [
 export class TceQueueAdapter {
   private readonly queue: SgpQueueAdapter<TceRelayKind>;
   private readonly ownsQueue: boolean;
-  private readonly stateWriter?: TceSubmissionStateWriter;
+  private readonly stateWriter?: TceSubmissionStateWriter | undefined;
 
   constructor(options: TceQueueAdapterOptions) {
     if (options.queue) {

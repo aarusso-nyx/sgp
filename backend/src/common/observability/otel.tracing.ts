@@ -7,16 +7,16 @@ import { URL } from 'node:url';
 type AttributeValue = string | number | boolean;
 
 type HttpRequestLike = {
-  method?: string;
-  originalUrl?: string;
-  path?: string;
-  baseUrl?: string;
-  route?: { path?: string | RegExp };
+  method?: string | undefined;
+  originalUrl?: string | undefined;
+  path?: string | undefined;
+  baseUrl?: string | undefined;
+  route?: { path?: string | RegExp } | undefined;
   headers?: Record<string, string | string[] | undefined>;
 };
 
 type HttpResponseLike = {
-  statusCode?: number;
+  statusCode?: number | undefined;
   once: (event: 'finish', listener: () => void) => void;
 };
 
@@ -27,7 +27,7 @@ type SpanStatus = 'ok' | 'error';
 export type RequestSpan = {
   traceId: string;
   spanId: string;
-  parentSpanId?: string;
+  parentSpanId?: string | undefined;
   name: string;
   entrypoint: string;
   startTimeUnixNano: string;
@@ -41,7 +41,7 @@ export type RequestSpanExporter = {
 };
 
 type TracingOptions = {
-  exporter?: RequestSpanExporter;
+  exporter?: RequestSpanExporter | undefined;
   now?: () => bigint;
 };
 
@@ -95,7 +95,7 @@ function headerValue(
 
 function traceContext(request: HttpRequestLike): {
   traceId: string;
-  parentSpanId?: string;
+  parentSpanId?: string | undefined;
 } {
   const traceparent = headerValue(request.headers, 'traceparent');
   const match = traceparent?.match(TRACEPARENT_PATTERN);

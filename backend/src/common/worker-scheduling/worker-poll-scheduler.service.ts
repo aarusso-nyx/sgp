@@ -37,8 +37,8 @@ export interface WorkerPollScheduleOptions {
   pollIntervalEnv: string;
   pollLimitEnv: string;
   oneshotEnv: string;
-  defaultPollIntervalMs?: number;
-  defaultPollLimit?: number;
+  defaultPollIntervalMs?: number | undefined;
+  defaultPollLimit?: number | undefined;
 }
 
 @Injectable()

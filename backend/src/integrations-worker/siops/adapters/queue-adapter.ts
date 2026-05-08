@@ -15,13 +15,13 @@ import {
 import type { SiopsExportInput } from '../siops-export.generator';
 
 export type SiopsQueueAdapterOptions = Readonly<{
-  transport?: QueueAdapterTransport;
-  queue?: SgpQueueAdapter<SiopsRelayKind>;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  transport?: QueueAdapterTransport | undefined;
+  queue?: SgpQueueAdapter<SiopsRelayKind> | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export type SubmitSiopsExportInput = Readonly<{
@@ -29,11 +29,11 @@ export type SubmitSiopsExportInput = Readonly<{
   exportId: string;
   export: SiopsExportInput;
   content: string;
-  scenario?: SiopsRelayScenario;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  scenario?: SiopsRelayScenario | undefined;
+  idempotencyKey?: string | undefined;
+  correlationId?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type SiopsQueueDispatchState = Readonly<{

@@ -18,15 +18,15 @@ import type {
 type SqsClientLike = Pick<SQSClient, 'send'>;
 
 export type SqsQueueTransportOptions = Readonly<{
-  client?: SqsClientLike;
-  clientConfig?: SQSClientConfig;
-  queueUrls?: Readonly<Record<string, string>>;
-  topicToQueueName?: (topic: string) => string;
-  messageGroupId?: (topic: string, message: unknown) => string;
-  pollIntervalMs?: number;
-  receiveWaitTimeSeconds?: number;
-  visibilityTimeoutSeconds?: number;
-  maxMessages?: number;
+  client?: SqsClientLike | undefined;
+  clientConfig?: SQSClientConfig | undefined;
+  queueUrls?: Readonly<Record<string, string>> | undefined;
+  topicToQueueName?: ((topic: string) => string) | undefined;
+  messageGroupId?: ((topic: string, message: unknown) => string) | undefined;
+  pollIntervalMs?: number | undefined;
+  receiveWaitTimeSeconds?: number | undefined;
+  visibilityTimeoutSeconds?: number | undefined;
+  maxMessages?: number | undefined;
 }>;
 
 type InternalSubscription = {
@@ -40,7 +40,7 @@ export class SqsQueueTransport implements QueueAdapterTransport {
   private readonly messageGroupId: (topic: string, message: unknown) => string;
   private readonly pollIntervalMs: number;
   private readonly receiveWaitTimeSeconds: number;
-  private readonly visibilityTimeoutSeconds?: number;
+  private readonly visibilityTimeoutSeconds?: number | undefined;
   private readonly maxMessages: number;
   private readonly resolvedQueueUrls = new Map<string, string>();
 

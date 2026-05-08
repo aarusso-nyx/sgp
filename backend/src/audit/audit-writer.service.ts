@@ -8,11 +8,11 @@ import { AuditActionValue } from './audit.dto';
 import { redactAuditMetadata } from './audit-redaction.util';
 
 export interface AuditAppendOptions {
-  resourceId?: string;
-  tableName?: string;
-  metadata?: Record<string, unknown>;
-  statusCode?: number;
-  reason?: string;
+  resourceId?: string | undefined;
+  tableName?: string | undefined;
+  metadata?: Record<string, unknown> | undefined;
+  statusCode?: number | undefined;
+  reason?: string | undefined;
 }
 
 @Injectable()

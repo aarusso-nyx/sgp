@@ -13,7 +13,7 @@ interface LastMobileRecordRow extends QueryResultRow {
 
 export interface PlausibilityDecision {
   accepted: boolean;
-  result?: MobileClockInResult;
+  result?: MobileClockInResult | undefined;
 }
 
 @Injectable()
