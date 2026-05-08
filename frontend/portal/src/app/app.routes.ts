@@ -32,10 +32,11 @@ const featureRoutes: Routes = PORTAL_FEATURE_CATALOG.flatMap((section) =>
 );
 
 function withAuthGuard(route: Route): Route {
+  const children = route.children?.map(withAuthGuard);
   return {
     ...route,
     canActivate: [authGuard, ...(route.canActivate ?? [])],
-    children: route.children?.map(withAuthGuard),
+    ...(children ? { children } : {}),
   };
 }
 

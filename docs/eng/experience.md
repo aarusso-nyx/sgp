@@ -974,7 +974,11 @@ A evidência reversa de 2026-04-26 confirma superfícies de navegação e APIs f
 | `modules/recrutamento/mapa-fino.md`              | `3.5 Recrutamento e Seleção`                                                 | Demanda, gestão de requisições, banco de talentos, currículo, análise curricular e estágio ficam no ramo de R&S.                                                           |
 | `data-archaeology/dumps-superficies-provadas.md` | §§3.1 a 3.11                                                                 | Superfícies provadas pelos dumps validam rastreabilidade, mas não adicionam novos itens obrigatórios ao escopo v0.0.1.                                                     |
 
-Rotas administrativas completas continuam sob `ADMIN_INSTALL_LATER`; esta seção define o alvo de produto, não muda o gate corrente.
+Rotas administrativas completas continuam sob `ADMIN_INSTALL_LATER`; esta seção
+define o alvo de produto, não muda o gate corrente. O Round 11 instalou somente
+o grupo **Auditoria** como primeira fatia provada de menu administrativo; os
+demais grupos permanecem postergados até receberem prova equivalente de rota,
+permissão, rótulo e teste.
 
 ---
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Reinf xmlns="urn:br:gov:rfb:reinf:sgp:r4000">
+  <evtRetRec Id="IDR408089925208dd943c22d0a97a14f73d740d">
+    <ideEvento>
+      <perApur>2025-01</perApur>
+      <tpAmb>2</tpAmb>
+      <procEmi>1</procEmi>
+      <indRetif>1</indRetif>
+    </ideEvento>
+    <ideContri>
+      <nrInsc>00000000-0000-0000-0000-00000000f501</nrInsc>
+    </ideContri>
+    <infoR4000>
+      <pagamento sourceRunId="00000000-0000-4000-8000-000000004080">
+        <beneficiario tipo="CNPJ">
+          <cpfCnpj>44555666000177</cpfCnpj>
+          <nome>Operadora Cartao Exemplo SA</nome>
+        </beneficiario>
+        <codReceita>5944</codReceita>
+        <vlrBruto>6000.00</vlrBruto>
+        <vlrRetencao>90.00</vlrRetencao>
+      </pagamento>
+    </infoR4000>
+  </evtRetRec>
+</Reinf>

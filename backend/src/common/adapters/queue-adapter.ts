@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
+import { requestId, RequestId, tenantId, TenantId } from '../types/branded-ids';
+
 export type QueueAdapterResponseStatus = 'OK' | 'RETRY' | 'DEAD_LETTER';
 
 export type QueueAdapterErrorKind =
@@ -26,13 +28,13 @@ export type QueueAdapterRequestEnvelope<
   TKind extends string = string,
   TPayload = unknown,
 > = Readonly<{
-  'request-id': string;
-  'correlation-id': string;
+  'request-id': RequestId;
+  'correlation-id': RequestId;
   'idempotency-key': string;
   'reply-to': string;
   'dead-letter-topic': string;
   'created-at': string;
-  tenant_id: string;
+  tenant_id: TenantId;
   kind: TKind;
   payload: TPayload;
   attempt: number;
@@ -43,10 +45,10 @@ export type QueueAdapterResponseEnvelope<
   TKind extends string = string,
   TPayload = unknown,
 > = Readonly<{
-  'request-id': string;
-  'correlation-id': string;
+  'request-id': RequestId;
+  'correlation-id': RequestId;
   'created-at': string;
-  tenant_id: string;
+  tenant_id: TenantId;
   kind: TKind;
   status: QueueAdapterResponseStatus;
   attempt: number;
@@ -103,11 +105,11 @@ export type QueueAdapterObservability<TKind extends string> = Readonly<{
 }>;
 
 export type QueueAdapterRequestInput<TPayload> = Readonly<{
-  tenantId: string;
+  tenantId: TenantId | string;
   payload: TPayload;
   idempotencyKey?: string | undefined;
-  correlationId?: string | undefined;
-  requestId?: string | undefined;
+  correlationId?: RequestId | string | undefined;
+  requestId?: RequestId | string | undefined;
   maxAttempts?: number | undefined;
   onPublished?: (
     request: QueueAdapterRequestEnvelope<string, TPayload>,
@@ -262,7 +264,8 @@ export class InMemoryQueueTransport implements QueueAdapterTransport {
       if (!next) return;
 
       subscriber.active += 1;
-      Promise.resolve(subscriber.handler(next.message, next.topic))
+      Promise.resolve()
+        .then(() => subscriber.handler(next.message, next.topic))
         .catch(() => undefined)
         .finally(() => {
           subscriber.active -= 1;
@@ -354,20 +357,20 @@ export class SgpQueueAdapter<TKind extends string> {
   private buildRequest<TPayload>(
     input: QueueAdapterRequestInput<TPayload>,
   ): QueueAdapterRequestEnvelope<TKind, TPayload> {
-    const requestId = input.requestId ?? this.idFactory();
+    const nextRequestId = requestId(input.requestId ?? this.idFactory());
     const maxAttempts = input.maxAttempts ?? this.maxAttempts;
     if (maxAttempts < 1) {
       throw new Error('Queue adapter maxAttempts must be at least 1.');
     }
 
     return {
-      'request-id': requestId,
-      'correlation-id': input.correlationId ?? requestId,
-      'idempotency-key': input.idempotencyKey ?? requestId,
+      'request-id': nextRequestId,
+      'correlation-id': requestId(input.correlationId ?? nextRequestId),
+      'idempotency-key': input.idempotencyKey ?? nextRequestId,
       'reply-to': this.topics.response,
       'dead-letter-topic': this.topics.deadLetter,
       'created-at': this.now().toISOString(),
-      tenant_id: input.tenantId,
+      tenant_id: tenantId(input.tenantId),
       kind: this.topics.kind,
       payload: input.payload,
       attempt: 1,

@@ -56,6 +56,15 @@ Query MemPalace for:
 - project:sgp, round:<n+1>, phase:execute, wave:<k> — partial wave state.
 - project:sgp, round:<n+1>, r<n+1>-id:<ID> — per-item prior outcomes.
 - outcome:blocked — items already blocked.
+- If MCP lookup fails or the palace index is untrusted, use the non-destructive
+  CLI fallback against `~/.mempalace/palace-coding`:
+  `PATH="$HOME/Library/Python/3.9/bin:$PATH" mempalace --palace ~/.mempalace/palace-coding search --results 5 "<query>"`.
+- If CLI search succeeds, mirror per-item completion notes under
+  `docs/work/round-<n+1>/mempalace/` and continue with a blocker note for MCP
+  recovery. If both MCP and CLI are unavailable, write a blocker in
+  `docs/work/round-<n+1>/QUESTIONS.md` and continue with file-backed evidence only.
+- Do not run `mempalace repair`, restore backups, or rebuild indexes inside B3;
+  those are owner-controlled recovery actions.
 
 Resume idempotently: skip items with outcome:success for this round; retry partial and blocked items only when their blocker is now resolved.
 
@@ -227,6 +236,9 @@ Otherwise keep moving — log and continue.
 Before starting (also covered in §4):
 
 - Query project:sgp, round:<n+1>, phase:execute.
+- Use the non-destructive CLI/file-backed fallback from §4 when MCP is unavailable
+  or untrusted. Never run MemPalace repair or backup restore as part of the B3
+  wave loop.
 
 Per item (worker is responsible per its prompt header; orchestrator verifies):
 

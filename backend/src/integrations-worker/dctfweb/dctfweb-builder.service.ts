@@ -165,11 +165,16 @@ export class DctfwebBuilderService {
       `,
       [id],
     );
+    const xmlItemMetadata = parseDctfwebXmlItemMetadata(
+      declaration.payload_xml,
+    );
     return {
       ...this.toDto(declaration),
       payloadXml: declaration.payload_xml,
       signedXml: declaration.signed_xml,
-      items: items.map(toItemDto),
+      items: items.map((item) =>
+        toItemDto(item, xmlItemMetadata.get(itemMetadataKey(item))),
+      ),
     };
   }
 
@@ -673,7 +678,16 @@ function declarationSelectSql(where: string): string {
   `;
 }
 
-function toItemDto(row: ItemRow): DctfwebItemDto {
+interface XmlItemMetadata {
+  mitStatus?: DctfwebMitStatus;
+  mitDebitId?: string;
+  cnpjFilial?: string;
+}
+
+function toItemDto(
+  row: ItemRow,
+  metadata: XmlItemMetadata = {},
+): DctfwebItemDto {
   const item: DctfwebItemDto = {
     id: row.id,
     sourceEvent: row.source_event,
@@ -683,10 +697,57 @@ function toItemDto(row: ItemRow): DctfwebItemDto {
     amount: row.amount,
     csllAdicionalAmount: row.csll_adicional_amount ?? '0.00',
   };
-  if (row.mit_status) item.mitStatus = row.mit_status;
-  if (row.mit_debit_id) item.mitDebitId = row.mit_debit_id;
-  if (row.cnpj_filial) item.cnpjFilial = row.cnpj_filial;
+  const mitStatus = row.mit_status ?? metadata.mitStatus;
+  const mitDebitId = row.mit_debit_id ?? metadata.mitDebitId;
+  const cnpjFilial = row.cnpj_filial ?? metadata.cnpjFilial;
+  if (mitStatus) item.mitStatus = mitStatus;
+  if (mitDebitId) item.mitDebitId = mitDebitId;
+  if (cnpjFilial) item.cnpjFilial = cnpjFilial;
   return item;
+}
+
+function parseDctfwebXmlItemMetadata(
+  xml: string,
+): Map<string, XmlItemMetadata> {
+  const metadata = new Map<string, XmlItemMetadata>();
+  for (const match of xml.matchAll(/<debito\b([^>]*)\/>/g)) {
+    const attrs = parseXmlAttributes(match[1]!);
+    const sourceEvent = attrs.sourceEvent;
+    const sourceRunId = attrs.sourceRunId;
+    const debitCode = attrs.codigo;
+    if (!sourceEvent || !sourceRunId || !debitCode) continue;
+    const itemMetadata: XmlItemMetadata = {};
+    if (isDctfwebMitStatus(attrs.mitStatus)) {
+      itemMetadata.mitStatus = attrs.mitStatus;
+    }
+    if (attrs.mitId) itemMetadata.mitDebitId = attrs.mitId;
+    if (attrs.cnpjFilial) itemMetadata.cnpjFilial = attrs.cnpjFilial;
+    metadata.set(`${sourceEvent}:${sourceRunId}:${debitCode}`, itemMetadata);
+  }
+  return metadata;
+}
+
+function parseXmlAttributes(input: string): Record<string, string> {
+  const attrs: Record<string, string> = {};
+  for (const match of input.matchAll(/([A-Za-z0-9_:-]+)="([^"]*)"/g)) {
+    attrs[match[1]!] = xmlUnescape(match[2]!);
+  }
+  return attrs;
+}
+
+function itemMetadataKey(row: ItemRow): string {
+  return `${row.source_event}:${row.source_run_id}:${row.debit_code}`;
+}
+
+function isDctfwebMitStatus(
+  value: string | undefined,
+): value is DctfwebMitStatus {
+  return (
+    value === 'PENDING' ||
+    value === 'INCLUDED' ||
+    value === 'ACCEPTED' ||
+    value === 'REJECTED'
+  );
 }
 
 function competenceDate(year: number, month: number): string {
@@ -742,4 +803,12 @@ function xmlEscape(value: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+function xmlUnescape(value: string): string {
+  return value
+    .replace(/&quot;/g, '"')
+    .replace(/&gt;/g, '>')
+    .replace(/&lt;/g, '<')
+    .replace(/&amp;/g, '&');
 }

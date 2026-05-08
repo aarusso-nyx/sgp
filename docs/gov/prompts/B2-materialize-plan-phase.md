@@ -197,6 +197,15 @@ Write docs/work/round-<n>/prompts/ROUND<n+1>-INDEX.md:
 Before starting:
 
 - Query MemPalace for project:sgp, round:<n+1>, phase:backlog (load B1 closing context).
+- If MCP lookup fails or the palace index is untrusted, use the non-destructive
+  CLI fallback against `~/.mempalace/palace-coding`:
+  `PATH="$HOME/Library/Python/3.9/bin:$PATH" mempalace --palace ~/.mempalace/palace-coding search --results 5 "<query>"`.
+- If CLI search succeeds, mirror materialization notes under
+  `docs/work/round-<n>/mempalace-materialize/` and continue with a blocker note.
+  If both MCP and CLI are unavailable, write a blocker in
+  `docs/work/round-<n>/QUESTIONS.md` and continue with file-backed evidence only.
+- Do not run `mempalace repair`, restore backups, or rebuild indexes inside B2;
+  those are owner-controlled recovery actions.
 
 After orchestration plan + each wave-launch:
 

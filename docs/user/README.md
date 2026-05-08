@@ -5,6 +5,8 @@ workspace.
 
 ## Contents
 
+- `operator-readiness.md`: current operator entrypoint for setup, topology,
+  health, LGPD, security, evidence, and readiness gates.
 - `local-setup.md`: local bootstrap and common workspace commands.
 - `environment.md`: environment variable catalog and placeholder conventions.
 - `docs/user/scripts.md`: root script, dispatcher, action, argument, and environment reference.

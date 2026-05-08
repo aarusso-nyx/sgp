@@ -45,8 +45,8 @@ describe('GestaoMasterData', () => {
   it('loads a three-level work-location hierarchy without using AdminFeaturePage', () => {
     const component = fixture.componentInstance;
 
-    expect(component.locationTree[0].children[0].children[0].code).toBe('DEP');
-    expect(component.jobPositions[0].metadata['vacanciesTotal']).toBe(3);
+    expect(component.locationTree[0]!.children[0]!.children[0]!.code).toBe('DEP');
+    expect(component.jobPositions[0]!.metadata['vacanciesTotal']).toBe(3);
   });
 });
 

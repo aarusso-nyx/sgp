@@ -56,8 +56,8 @@ export class AvaliacaoPccs implements OnInit, OnDestroy {
   });
 
   plans: CareerPlan[] = [];
-  selected?: CareerPlan;
-  adjustment?: SalaryAdjustmentResult;
+  selected: CareerPlan | undefined;
+  adjustment: SalaryAdjustmentResult | undefined;
   error = '';
   message = '';
 

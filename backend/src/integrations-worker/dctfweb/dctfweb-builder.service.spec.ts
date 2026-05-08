@@ -106,6 +106,25 @@ describe('DctfwebBuilderService', () => {
   });
 
   it('lists, finds, and maps declaration details with date variants', async () => {
+    const payloadXml = buildDctfwebXml({
+      tenantId: '00000000-0000-0000-0000-00000000f501',
+      competence: '2026-05-01',
+      kind: 'ORIGINAL',
+      originalDeclarationId: null,
+      items: [
+        {
+          sourceEvent: 'MIT',
+          sourceRunId: '00000000-0000-4000-8000-00000000feed',
+          debitCode: '0561',
+          baseAmount: '900.00',
+          amount: '88.10',
+          csllAdicionalAmount: '15.00',
+          mitStatus: 'INCLUDED',
+          mitDebitId: 'MIT-xml-retained',
+          cnpjFilial: '12345678000199',
+        },
+      ],
+    });
     const declaration = {
       id: 'decl-1',
       competence: new Date(TEST_INSTANT_2026_05_01T00_00_00_000Z),
@@ -113,7 +132,7 @@ describe('DctfwebBuilderService', () => {
       status: 'DRAFT',
       original_declaration_id: null,
       payload_xml_ref: 's3://payload',
-      payload_xml: '<xml/>',
+      payload_xml: payloadXml,
       payload_xml_hash: 'payload-hash',
       signed_xml_ref: null,
       signed_xml: null,
@@ -134,11 +153,15 @@ describe('DctfwebBuilderService', () => {
       .mockResolvedValueOnce([
         {
           id: 'item-1',
-          source_event: 'S5011',
-          source_run_id: 'run-1',
-          debit_code: '1082-01',
-          base_amount: '1000.00',
-          amount: '200.00',
+          source_event: 'MIT',
+          source_run_id: '00000000-0000-4000-8000-00000000feed',
+          debit_code: '0561',
+          base_amount: '900.00',
+          amount: '88.10',
+          csll_adicional_amount: '15.00',
+          mit_status: null,
+          mit_debit_id: null,
+          cnpj_filial: null,
         },
       ])
       .mockResolvedValueOnce([]);
@@ -152,8 +175,17 @@ describe('DctfwebBuilderService', () => {
     ]);
     await expect(service.find('decl-1')).resolves.toMatchObject({
       id: 'decl-1',
-      payloadXml: '<xml/>',
-      items: [{ id: 'item-1', sourceEvent: 'S5011' }],
+      payloadXml,
+      items: [
+        {
+          id: 'item-1',
+          sourceEvent: 'MIT',
+          mitStatus: 'INCLUDED',
+          mitDebitId: 'MIT-xml-retained',
+          cnpjFilial: '12345678000199',
+          csllAdicionalAmount: '15.00',
+        },
+      ],
     });
     await expect(service.find('missing')).rejects.toThrow(
       'DCTFWeb declaration not found',

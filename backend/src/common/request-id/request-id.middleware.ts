@@ -3,6 +3,7 @@ import { NextFunction, Response } from 'express';
 import { randomUUID } from 'node:crypto';
 
 import { RequestContextStore } from '../request-context/request-context.store';
+import { requestId as brandRequestId } from '../types/branded-ids';
 import type { RequestWithContext } from './request-with-context';
 
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9._:-]{8,128}$/;
@@ -14,8 +15,9 @@ export class RequestIdMiddleware implements NestMiddleware {
     const requestId =
       incoming && REQUEST_ID_PATTERN.test(incoming) ? incoming : randomUUID();
 
-    RequestContextStore.run({ requestId }, () => {
-      request.requestId = requestId;
+    const brandedRequestId = brandRequestId(requestId);
+    RequestContextStore.run({ requestId: brandedRequestId }, () => {
+      request.requestId = brandedRequestId;
       response.setHeader('x-request-id', requestId);
       next();
     });

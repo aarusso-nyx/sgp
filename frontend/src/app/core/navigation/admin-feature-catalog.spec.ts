@@ -1,4 +1,5 @@
 import {
+  ADMIN_FEATURES_BY_MODULE,
   ADMIN_FEATURES,
   ADMIN_NAVIGATION_SECTIONS,
   findAdminFeatureByRoutePath,
@@ -34,6 +35,22 @@ describe('admin feature catalog', () => {
         requiredPermissions: expect.arrayContaining(['auditoria.read']),
       }),
     );
+  });
+
+  it('installs the Auditoria menu group with stable labels and permissions', () => {
+    expect(ADMIN_FEATURES_BY_MODULE.auditoria.map((feature) => feature.label)).toEqual([
+      'Consulta de Trilha',
+      'Detalhe de Evento',
+      'Relatório de Auditoria',
+      'Filtros por Entidade',
+      'Filtros por Usuário',
+      'Filtros por Período',
+    ]);
+    expect(
+      ADMIN_FEATURES_BY_MODULE.auditoria.every((feature) =>
+        feature.requiredPermissions.includes('auditoria.read'),
+      ),
+    ).toBe(true);
   });
 
   it('exposes Tipos de Ferias through the Gestao master-data route', () => {

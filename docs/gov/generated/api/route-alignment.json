@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-05",
+  "generated_at": "2026-05-08",
   "authority": [
     "docs/eng/Banking/00-cnab-overview.md",
     "docs/eng/Banking/01-cnab240-structure.md",
@@ -7,6 +7,8 @@
     "docs/eng/Banking/03-cnab240-return-processing.md",
     "docs/eng/Banking/04-cnab240-alternative-formats.md",
     "docs/eng/Banking/05-sgp-implementation-matrix.md",
+    "docs/eng/decisions/adr-021-icp-signer-software-certificate.md",
+    "docs/eng/decisions/adr-022-aws-iac-stack.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -16,7 +18,12 @@
     "docs/eng/experience.md",
     "docs/eng/platform.md",
     "docs/eng/product.md",
-    "docs/eng/quality-migration.md"
+    "docs/eng/quality-migration.md",
+    "docs/eng/runbooks/backup-restore.md",
+    "docs/eng/runbooks/db-migration.md",
+    "docs/eng/runbooks/deploy-rollback.md",
+    "docs/eng/runbooks/incident-response.md",
+    "docs/eng/runbooks/secret-rotation.md"
   ],
   "route_contract_authority": [
     "docs/eng/Banking/00-cnab-overview.md",
@@ -25,6 +32,8 @@
     "docs/eng/Banking/03-cnab240-return-processing.md",
     "docs/eng/Banking/04-cnab240-alternative-formats.md",
     "docs/eng/Banking/05-sgp-implementation-matrix.md",
+    "docs/eng/decisions/adr-021-icp-signer-software-certificate.md",
+    "docs/eng/decisions/adr-022-aws-iac-stack.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -34,7 +43,12 @@
     "docs/eng/experience.md",
     "docs/eng/platform.md",
     "docs/eng/product.md",
-    "docs/eng/quality-migration.md"
+    "docs/eng/quality-migration.md",
+    "docs/eng/runbooks/backup-restore.md",
+    "docs/eng/runbooks/db-migration.md",
+    "docs/eng/runbooks/deploy-rollback.md",
+    "docs/eng/runbooks/incident-response.md",
+    "docs/eng/runbooks/secret-rotation.md"
   ],
   "documentation_semantics": {
     "route_contract_authority_roots": ["docs/eng"],
@@ -88,14 +102,14 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 541,
-    "documented_candidates_total": 681,
+    "documented_total": 543,
+    "documented_candidates_total": 683,
     "documented_outside_runtime": 140,
     "documented": 453,
-    "runtime_total": 558,
+    "runtime_total": 560,
     "runtime": 453,
-    "deferred_documented": 88,
-    "deferred_runtime": 105,
+    "deferred_documented": 90,
+    "deferred_runtime": 107,
     "implemented": 453,
     "explicitly_excluded": 0,
     "documented_missing": 0,
@@ -106,9 +120,9 @@
     "portal_menu_routes": 34,
     "portal_menu_missing": 0,
     "admin_menu_routes": 181,
-    "admin_menu_implemented": 0,
+    "admin_menu_implemented": 6,
     "admin_menu_missing": 0,
-    "admin_menu_routes_postponed": 181
+    "admin_menu_routes_postponed": 175
   },
   "deferred_documented_routes": [
     {
@@ -280,6 +294,14 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/lgpd/dsar",
+      "source_doc": "docs/eng/domains/privacy-transparency.md",
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/lgpd/incidents",
       "source_doc": "docs/eng/domains/privacy-transparency.md",
       "source_docs": ["docs/eng/domains/privacy-transparency.md"],
@@ -422,6 +444,14 @@
     {
       "method": "PATCH",
       "path": "/api/v1/admin/lgpd/dpo",
+      "source_doc": "docs/eng/domains/privacy-transparency.md",
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/dsar/:id",
       "source_doc": "docs/eng/domains/privacy-transparency.md",
       "evidence": "explicit_method",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -1993,6 +2023,13 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/lgpd/dsar",
+      "source_file": "backend/src/lgpd/dsar.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/lgpd/incidents",
       "source_file": "backend/src/lgpd/incidents.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2142,6 +2179,13 @@
       "method": "PATCH",
       "path": "/api/v1/admin/lgpd/dpo",
       "source_file": "backend/src/lgpd/dpo.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/dsar/:id",
+      "source_file": "backend/src/lgpd/dsar.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -3954,11 +3998,11 @@
   },
   "menu_alignment": {
     "admin": {
-      "status": "postponed",
+      "status": "partial",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "documented_routes": 181,
-      "implemented": 0,
-      "postponed": 181,
+      "implemented": 6,
+      "postponed": 175,
       "missing": [],
       "routes": [
         {
@@ -5008,43 +5052,43 @@
           "label": "Consulta de Trilha / `/auditoria/trilha/gestao`",
           "path": "/auditoria/trilha/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Detalhe de Evento / `/auditoria/trilha/detalhes/:id`",
           "path": "/auditoria/trilha/detalhes/:id",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Relatório de Auditoria / `/auditoria/relatorio/gestao`",
           "path": "/auditoria/relatorio/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Filtros por Entidade / `/auditoria/entidade/gestao`",
           "path": "/auditoria/entidade/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Filtros por Usuário / `/auditoria/usuario/gestao`",
           "path": "/auditoria/usuario/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Filtros por Período / `/auditoria/periodo/gestao`",
           "path": "/auditoria/periodo/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Configurar Agenda Médica / `/saude/agenda-medica/formulario`",

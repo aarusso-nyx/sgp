@@ -179,6 +179,101 @@ describe('R4-96 TCE mock relay queue adapter (e2e)', () => {
       }),
     );
   });
+
+  it('covers TCE relay retry, definitive, and validation branches', async () => {
+    const spRreo = buildRreoFiscalReport(
+      readJson<RreoBuilderInput>('rreo-v01/sp/input.json'),
+    );
+
+    await expect(
+      adapter.submitFiscalReport({
+        tenantId: spRreo.entity.tenantId,
+        submissionId: 'transient-tce',
+        report: spRreo,
+        scenario: 'TRANSIENT_ERROR',
+        maxAttempts: 2,
+      }),
+    ).rejects.toThrow('Adapter request exceeded 2 attempts.');
+
+    await expect(
+      adapter.submitFiscalReport({
+        tenantId: spRreo.entity.tenantId,
+        submissionId: 'definitive-tce',
+        report: spRreo,
+        scenario: 'DEFINITIVE_ERROR',
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow('Mock TCE relay requested adapter retry.');
+
+    await expect(
+      adapter.submitFiscalReport({
+        tenantId: spRreo.entity.tenantId,
+        submissionId: '',
+        report: spRreo,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'TCE relay requests must carry the persisted submission id.',
+    );
+
+    await expect(
+      adapter.submitFiscalReport({
+        tenantId: '00000000-0000-4000-8000-000000009999',
+        submissionId: 'tenant-mismatch-tce',
+        report: spRreo,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'Fiscal report tenant does not match queue envelope tenant.',
+    );
+
+    await expect(
+      adapter.submitFiscalReport({
+        tenantId: spRreo.entity.tenantId,
+        submissionId: 'official-conformance-tce',
+        report: { ...spRreo, officialConformance: true } as never,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'Mock TCE relay only accepts source-pending local envelopes.',
+    );
+
+    await expect(
+      adapter.submitFiscalReport({
+        tenantId: spRreo.entity.tenantId,
+        submissionId: 'unsupported-state-tce',
+        report: {
+          ...spRreo,
+          target: { ...spRreo.target, stateCode: 'RJ' },
+        } as never,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'Mock TCE relay currently accepts SP and MG fiscal report payloads.',
+    );
+
+    await expect(
+      adapter.submitFiscalReport({
+        tenantId: spRreo.entity.tenantId,
+        submissionId: 'bad-schema-tce',
+        report: { ...spRreo, schemaVersion: 'bad-schema' } as never,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'Mock TCE relay only accepts R4-15 fiscal report schema versions.',
+    );
+
+    await expect(
+      adapter.submitFiscalReport({
+        tenantId: spRreo.entity.tenantId,
+        submissionId: 'empty-report-tce',
+        report: { ...spRreo, statements: [] } as never,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'TCE fiscal report relay requests must carry statement lines.',
+    );
+  });
 });
 
 class FakeTceSubmissionDatabase implements TceQueueDatabase {

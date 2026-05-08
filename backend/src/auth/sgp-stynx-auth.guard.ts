@@ -11,6 +11,7 @@ import type { AuthVerificationResult, Principal } from '@stynx/contracts';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
+import { tenantId as brandTenantId } from '../common/types/branded-ids';
 import {
   IS_PUBLIC_ROUTE,
   REQUIRED_PERMISSIONS,
@@ -36,16 +37,16 @@ export class SgpStynxAuthGuard implements CanActivate {
       );
     }
 
-    const tenantId = request.tenantId ?? principal.tenants[0];
-    if (!tenantId) {
+    const resolvedTenantId = request.tenantId ?? principal.tenants[0];
+    if (!resolvedTenantId) {
       throw new UnauthorizedException('Token tenant is missing');
     }
 
-    const actor = this.toActor(principal, tenantId);
-    request.tenantId = tenantId;
+    const actor = this.toActor(principal, resolvedTenantId);
+    request.tenantId = brandTenantId(resolvedTenantId);
     request.actor = actor;
     RequestContextStore.setActor(actor);
-    RequestContextStore.setTenantId(tenantId);
+    RequestContextStore.setTenantId(resolvedTenantId);
 
     return allowed;
   }

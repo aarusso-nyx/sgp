@@ -29,6 +29,26 @@ describe('LgpdEncarregado', () => {
     expect(component.loading).toBe(false);
   });
 
+  it('starts loading DPO contact information from ngOnInit', async () => {
+    const result = of({
+      name: 'DPO',
+      contact: {
+        email: 'dpo@example.test',
+        phone: '5555-0000',
+        channelUrl: 'https://example.test/lgpd',
+        officeHours: '09:00-18:00',
+        postalAddress: 'Rua Um',
+      },
+      updatedAt: '2026-05-08T00:00:00Z',
+    });
+    const component = createComponent(result);
+
+    component.ngOnInit();
+    await Promise.resolve();
+
+    expect(component.info?.updatedAt).toBe('2026-05-08T00:00:00Z');
+  });
+
   it('sets an error message when DPO contact loading fails', async () => {
     const component = createComponent(throwError(() => new Error('offline')));
 

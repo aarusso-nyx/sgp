@@ -166,7 +166,7 @@ export class Shell {
   }
 
   private normalizedUrl(): string {
-    const normalized = this.currentUrl().split('?')[0].split('#')[0] || '/';
+    const normalized = (this.currentUrl().split('?')[0] ?? '').split('#')[0] || '/';
     return normalized.length > 1 ? normalized.replace(/\/$/, '') : normalized;
   }
 

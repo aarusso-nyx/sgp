@@ -1,13 +1,13 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "../..",
-  "moduleDirectories": ["node_modules", "<rootDir>/backend/node_modules"],
+  "moduleDirectories": ["node_modules", "<rootDir>/node_modules", "<rootDir>/backend/node_modules"],
   "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
   "testEnvironment": "node",
   "testRegex": "backend/src/common/errors/standard-exception\\.filter\\.spec\\.ts$",
   "transform": {
     "^.+\\.ts$": [
-      "<rootDir>/backend/node_modules/ts-jest",
+      "<rootDir>/node_modules/ts-jest",
       {
         "tsconfig": "<rootDir>/tests/backend/tsconfig.json"
       }

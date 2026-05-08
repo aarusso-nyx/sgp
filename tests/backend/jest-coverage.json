@@ -1,14 +1,14 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "../..",
-  "moduleDirectories": ["node_modules", "<rootDir>/backend/node_modules"],
+  "moduleDirectories": ["node_modules", "<rootDir>/node_modules", "<rootDir>/backend/node_modules"],
   "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
   "testEnvironment": "node",
   "testPathIgnorePatterns": ["<rootDir>/tests/scripts/fixtures/"],
   "testRegex": "(backend/src/.*\\.spec\\.ts|tests/backend/.*\\.(e2e-)?spec\\.ts|tests/rls/.*\\.spec\\.ts)$",
   "transform": {
     "^.+\\.ts$": [
-      "<rootDir>/backend/node_modules/ts-jest",
+      "<rootDir>/node_modules/ts-jest",
       {
         "tsconfig": "<rootDir>/tests/backend/tsconfig.json"
       }
@@ -28,9 +28,10 @@
   "coverageDirectory": "backend/coverage",
   "coverageThreshold": {
     "global": {
-      "lines": 85,
-      "branches": 85,
-      "functions": 85
+      "statements": 90,
+      "lines": 90,
+      "branches": 80,
+      "functions": 90
     }
   },
   "coverageReporters": ["lcov", "text-summary", "cobertura"]

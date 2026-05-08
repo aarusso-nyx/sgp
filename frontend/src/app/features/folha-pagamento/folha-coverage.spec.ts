@@ -420,6 +420,108 @@ describe('folha coverage flows', () => {
     expect(rubricasService.update).toHaveBeenCalled();
   });
 
+  it('covers rubrica validation guards, fallback values, and service errors', () => {
+    const rubricasService = {
+      list: vi.fn(() => of({ items: [], page: 1, pageSize: 100, total: 0, totalPages: 0 })),
+      listJobPositionLinks: vi.fn(() => of([])),
+      validateFormula: vi
+        .fn()
+        .mockReturnValueOnce(of({ ready: false, error: 'syntax error' }))
+        .mockReturnValueOnce(of({ ready: false, error: null }))
+        .mockReturnValueOnce(throwError(() => 'raw')),
+      recompile: vi.fn(() => throwError(() => 'raw')),
+      update: vi.fn(() => throwError(() => 'raw')),
+      create: vi.fn(() => throwError(() => 'raw')),
+      preview: vi.fn(() => throwError(() => 'raw')),
+      linkJobPosition: vi.fn(() => throwError(() => 'raw')),
+    };
+    const component = createWithProviders(Rubricas, [
+      FormBuilder,
+      { provide: RubricasService, useValue: rubricasService },
+      {
+        provide: MasterData,
+        useValue: {
+          listJobPositions: vi.fn(() => throwError(() => 'raw')),
+        },
+      },
+    ]);
+
+    component.ngOnInit();
+    expect(component.error).toBeTruthy();
+
+    component.attributeForm.controls.name.setValue('');
+    component.addAttribute();
+    expect(component.attributeForm.controls.name.touched).toBe(true);
+
+    component.attributeForm.patchValue({
+      name: 'EMPTY_DEFAULT',
+      type: 'decimal',
+      defaultValue: '',
+    });
+    component.addAttribute();
+    expect(component.attributes[0]?.defaultValue).toBeNull();
+
+    const nullableRubrica = {
+      ...rubricaRecord(),
+      endsOn: '2026-12-31',
+      formulaAlias: 'BASE_ALIAS',
+      formulaExpression: null,
+      incidences: {
+        irrf: false,
+        inss: false,
+        fgts: true,
+        rpps: true,
+        employerContribution: true,
+      },
+      attributes: [
+        { name: 'OPTIONAL', type: 'text' as const, defaultValue: null, required: false },
+      ],
+    };
+    component.select(nullableRubrica);
+    expect(component.form.controls.formulaExpression.value).toBe('');
+
+    component.form.controls.formulaExpression.setValue('UNKNOWN_A');
+    component.validateFormula();
+    expect(component.message).toBe('syntax error');
+    component.validateFormula();
+    expect(component.message).toBeTruthy();
+    component.validateFormula();
+    expect(component.error).toBeTruthy();
+
+    component.recompileNow();
+    component.form.patchValue({
+      code: '100',
+      description: 'Base',
+      formulaExpression: '',
+      formulaAlias: '',
+      esocialCode: '',
+      officialRubricCode: '',
+      startsOn: '2026-05-01',
+    });
+    component.save();
+
+    component.previewForm.patchValue({
+      employeeId: 'employee-1',
+      competenceYear: 2026,
+      competenceMonth: 5,
+    });
+    component.preview();
+    component.linkForm.patchValue({ jobPositionId: 'job-1', startsOn: '2026-05-01' });
+    component.linkJobPosition();
+
+    component.selected = undefined;
+    component.recompileNow();
+    component.preview();
+    component.linkJobPosition();
+    component.form.controls.code.setValue('');
+    component.save();
+    component.ngOnDestroy();
+
+    expect(component.error).toBeTruthy();
+    expect(component.previewForm.controls.employeeId.touched).toBe(true);
+    expect(component.linkForm.controls.jobPositionId.touched).toBe(true);
+  });
+
   it('covers FGTS remittance, account, payslip, PIS, income, and rescission components', () => {
     const fgtsRemessas = createWithProviders(FgtsRemessas, [
       FormBuilder,

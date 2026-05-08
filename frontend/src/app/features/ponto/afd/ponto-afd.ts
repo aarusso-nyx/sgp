@@ -74,14 +74,18 @@ export class PontoAfd implements OnInit, OnDestroy {
       this.exportForm.markAllAsTouched();
       return;
     }
-    const value = this.exportForm.value as Record<string, string>;
+    const value = this.exportForm.getRawValue() as {
+      repDeviceId: string;
+      periodStart: string;
+      periodEnd: string;
+    };
     this.saving = true;
     this.error = '';
     this.service
       .createExport({
-        repDeviceId: value['repDeviceId'],
-        periodStart: value['periodStart'],
-        periodEnd: value['periodEnd'],
+        repDeviceId: value.repDeviceId,
+        periodStart: value.periodStart,
+        periodEnd: value.periodEnd,
       })
       .pipe(
         finalize(() => {
@@ -105,14 +109,18 @@ export class PontoAfd implements OnInit, OnDestroy {
       this.importForm.markAllAsTouched();
       return;
     }
-    const value = this.importForm.value as Record<string, string>;
+    const value = this.importForm.getRawValue() as {
+      repDeviceId: string;
+      fileName: string;
+      content: string;
+    };
     this.saving = true;
     this.error = '';
     this.service
       .importAfd({
-        repDeviceId: value['repDeviceId'],
-        fileName: value['fileName'],
-        content: value['content'],
+        repDeviceId: value.repDeviceId,
+        fileName: value.fileName,
+        content: value.content,
       })
       .pipe(
         finalize(() => {

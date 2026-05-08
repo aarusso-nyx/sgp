@@ -57,7 +57,7 @@ export class PontoBancoHoras implements OnInit, OnDestroy {
         next: (banks) => {
           this.banks = banks;
           if (banks.length > 0 && !this.selectedBankId) {
-            this.select(banks[0]);
+            this.select(banks[0]!);
           }
         },
         error: () => {

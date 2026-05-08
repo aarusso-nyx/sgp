@@ -179,22 +179,23 @@ export class MeusDados implements OnInit, OnDestroy {
   }
 
   private patchForm(): void {
+    const [fieldA = '', fieldB = '', fieldC = '', fieldD = ''] = this.keys();
     this.form.reset({
-      fieldA: String(this.current[this.keys()[0]] ?? ''),
-      fieldB: String(this.current[this.keys()[1]] ?? ''),
-      fieldC: String(this.current[this.keys()[2]] ?? ''),
-      fieldD: String(this.current[this.keys()[3]] ?? ''),
+      fieldA: String(this.current[fieldA] ?? ''),
+      fieldB: String(this.current[fieldB] ?? ''),
+      fieldC: String(this.current[fieldC] ?? ''),
+      fieldD: String(this.current[fieldD] ?? ''),
     });
   }
 
   private payload(): Record<string, unknown> {
     const value = this.form.getRawValue();
-    const keys = this.keys();
+    const [fieldA = '', fieldB = '', fieldC = '', fieldD = ''] = this.keys();
     return {
-      [keys[0]]: value.fieldA,
-      [keys[1]]: value.fieldB,
-      [keys[2]]: value.fieldC,
-      [keys[3]]: value.fieldD,
+      [fieldA]: value.fieldA,
+      [fieldB]: value.fieldB,
+      [fieldC]: value.fieldC,
+      [fieldD]: value.fieldD,
     };
   }
 

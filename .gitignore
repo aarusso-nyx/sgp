@@ -62,3 +62,5 @@ pnpm-debug.log*
 
 # Local work archives
 docs/work/**
+
+.stryker-tmp/

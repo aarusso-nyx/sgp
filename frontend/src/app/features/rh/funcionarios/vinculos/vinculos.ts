@@ -73,7 +73,7 @@ export class RhFuncionariosVinculos implements OnInit, OnDestroy {
         next: (result) => {
           this.employees = result.items;
           if (!this.selected && result.items.length > 0) {
-            this.select(result.items[0]);
+            this.select(result.items[0]!);
           }
         },
         error: () => {

@@ -1,3 +1,4 @@
+import { LGPD_DATA_FLOWS } from '../common/lgpd/legal-basis.registry';
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { LgpdRopaService } from './ropa.service';
 
@@ -75,6 +76,82 @@ describe('LgpdRopaService', () => {
       null,
     ]);
     expect(created.flowKey).toBe('time.attendance_register');
+  });
+
+  it('creates representative payroll, recruitment, time, and regulatory entries from the legal-basis registry', async () => {
+    const representativeFlows = [
+      {
+        flowKey: LGPD_DATA_FLOWS.PAYROLL_PAYSLIP_PDF,
+        operationName: 'Payroll payslip generation',
+        controllerArea: 'Payroll',
+        riskLevel: 'HIGH' as const,
+      },
+      {
+        flowKey: LGPD_DATA_FLOWS.RECRUITMENT_PUBLIC_APPLICATION,
+        operationName: 'Recruitment public application intake',
+        controllerArea: 'Recruitment',
+        riskLevel: 'HIGH' as const,
+      },
+      {
+        flowKey: LGPD_DATA_FLOWS.TIME_ATTENDANCE_REGISTER,
+        operationName: 'Attendance register and time-bank processing',
+        controllerArea: 'Time operations',
+        riskLevel: 'MEDIUM' as const,
+      },
+      {
+        flowKey: LGPD_DATA_FLOWS.REGULATORY_ESOCIAL_REPORTING,
+        operationName: 'Regulatory reporting gateway',
+        controllerArea: 'Regulatory integrations',
+        riskLevel: 'HIGH' as const,
+      },
+    ];
+    const assertPiiReadAllowed = jest.fn().mockResolvedValue({});
+    const query = jest.fn();
+    for (const flow of representativeFlows) {
+      query.mockResolvedValueOnce([{ id: entryId }]).mockResolvedValueOnce([
+        ropaRow({
+          flow_key: flow.flowKey,
+          operation_name: flow.operationName,
+          controller_area: flow.controllerArea,
+          risk_level: flow.riskLevel,
+        }),
+      ]);
+    }
+    const service = new LgpdRopaService(
+      { configured: true, query } as never,
+      { assertPiiReadAllowed } as never,
+    );
+
+    const created = await RequestContextStore.run({ tenantId }, async () => {
+      const entries = [];
+      for (const flow of representativeFlows) {
+        entries.push(
+          await service.create({
+            flowKey: flow.flowKey,
+            operationName: flow.operationName,
+            controllerArea: flow.controllerArea,
+            riskLevel: flow.riskLevel,
+            lifecycleEvidence: ['docs/eng/domains/privacy-transparency.md'],
+          }),
+        );
+      }
+      return entries;
+    });
+
+    expect(assertPiiReadAllowed).toHaveBeenCalledTimes(
+      representativeFlows.length,
+    );
+    expect(assertPiiReadAllowed.mock.calls.map(([flowKey]) => flowKey)).toEqual(
+      representativeFlows.map((flow) => flow.flowKey),
+    );
+    expect(created.map((entry) => entry.flowKey)).toEqual(
+      representativeFlows.map((flow) => flow.flowKey),
+    );
+    expect(
+      query.mock.calls
+        .filter(([sql]) => String(sql).includes('INSERT INTO lgpd.ropa_entry'))
+        .map(([, values]) => values[0]),
+    ).toEqual(representativeFlows.map((flow) => flow.flowKey));
   });
 
   it('patches mutable ROPA operation fields and keeps the same entry id', async () => {

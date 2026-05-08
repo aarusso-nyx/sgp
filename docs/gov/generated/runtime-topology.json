@@ -86,6 +86,19 @@
         "docs/eng/platform.md",
         "docs/eng/experience.md"
       ]
+    },
+    {
+      "name": "sgp-report-worker",
+      "kind": "worker",
+      "status": "implemented",
+      "workspace": "backend",
+      "entry_file": "main-report-worker.ts",
+      "dev_port": 3306,
+      "required_paths": [
+        "backend/src/main-report-worker.ts",
+        "backend/src/report-service/report-service.module.ts",
+        "backend/src/report-service/report-worker.service.ts"
+      ]
     }
   ]
 }

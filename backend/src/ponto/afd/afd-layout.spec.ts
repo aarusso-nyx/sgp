@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import {
   AFD_LINE_WIDTH,
   decodeLine,
@@ -16,6 +19,10 @@ import {
 } from '../../../../tests/backend/helpers/date-fixtures';
 
 describe('AFD layout', () => {
+  function fixture(fileName: string): string {
+    return readFileSync(join(__dirname, '__fixtures__', fileName), 'utf8');
+  }
+
   it('encodes and decodes all AFD record types with fixed width', () => {
     const bodyLines = [
       encodeType1({
@@ -185,5 +192,58 @@ describe('AFD layout', () => {
         trailerHash: trailerHashForLines(bodyLines),
       }),
     ).toThrow('Invalid AFD date: bad-date');
+  });
+
+  it('parses the Portaria 671 REP-P, REP-A, and REP-C AFD golden fixture', () => {
+    const parsed = parseAfd(fixture('portaria-671-rep-kinds.golden.afd'));
+
+    expect(parsed.lines).toHaveLength(5);
+    expect(parsed.lines.every((line) => line.length === AFD_LINE_WIDTH)).toBe(
+      true,
+    );
+    expect(parsed.records.map((record) => record.type)).toEqual([
+      '1',
+      '4',
+      '4',
+      '4',
+      '9',
+    ]);
+    expect(
+      parsed.records
+        .filter((record) => record.type === '4')
+        .map((record) => ({
+          nsr: record.nsr,
+          employeeIdentifier: record.fields['employeeIdentifier'],
+          source: record.fields['source'],
+          repDeviceId: record.fields['repDeviceId'],
+          recordHash: record.fields['recordHash'],
+        })),
+    ).toEqual([
+      {
+        nsr: 10,
+        employeeIdentifier: 'MAT-REP-P-001',
+        source: 'REP_P',
+        repDeviceId: '00000000-0000-4000-8000-000000000061',
+        recordHash: '1'.repeat(64),
+      },
+      {
+        nsr: 11,
+        employeeIdentifier: 'MAT-REP-A-001',
+        source: 'REP_A',
+        repDeviceId: '00000000-0000-4000-8000-000000000062',
+        recordHash: '2'.repeat(64),
+      },
+      {
+        nsr: 12,
+        employeeIdentifier: 'MAT-REP-C-001',
+        source: 'REP_C',
+        repDeviceId: '00000000-0000-4000-8000-000000000063',
+        recordHash: '3'.repeat(64),
+      },
+    ]);
+    expect(parsed.trailer.fields['lineCount']).toBe(5);
+    expect(parsed.trailer.fields['trailerHash']).toBe(
+      trailerHashForLines(parsed.bodyLines),
+    );
   });
 });

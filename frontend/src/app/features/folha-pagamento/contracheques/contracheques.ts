@@ -23,7 +23,7 @@ export class Contracheques {
     payrollRunId: ['', Validators.required],
   });
 
-  result?: PayslipBatchResult;
+  result: PayslipBatchResult | undefined;
   errorMessage = '';
   loading = false;
 

@@ -13,6 +13,8 @@
 
 - `product.md`: mission, glossary, scope, domain map, and binding decisions.
 - `platform.md`: architecture, modularity, integration contracts, async jobs, authorization, parameters, ADRs, and money policy.
+- `architecture.md`: live layout map, runtime entrypoints, layout waivers, and boundary rules.
+- `api/README.md`: OpenAPI generation, client drift gate, route alignment gate, and generated API artifact locations.
 - `experience.md`: menu tree, operator workflows, manual guidance, and official outputs.
 - `quality-migration.md`: test strategy, migration rules, and acceptance gates.
 - `decisions/adr-021-icp-signer-software-certificate.md`: accepted ICP signer boundary for software certificates and out-of-scope HSM/A3 ownership.
@@ -39,5 +41,6 @@
 
 - Behavior changes update root specs, `domains/`, or `facts/`, depending on whether the source is product/engineering intent or external regulation.
 - Generated JSON under `docs/gov/generated/` is refreshed through the canonical root commands, especially `npm run api:alignment:sync`, `npm run api:alignment:check -- --json`, and `npm run db:alignment:check -- --json`.
+- API contract drift is governed through `docs/eng/api/README.md`, generated frontend artifacts, and `docs/gov/generated/api/route-alignment.json`.
 - Evidence/status updates go under `docs/gov/evidence/` and must not introduce new product obligations that are absent from `docs/eng` authority.
 - Backticked live paths in `docs/eng`, `docs/gov`, and `docs/user` must resolve in the repository and are checked by `npm run governance:check`.

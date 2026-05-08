@@ -23,7 +23,7 @@ export class PortalHome {
   readonly sections = PORTAL_FEATURE_CATALOG;
   readonly totalSections = this.sections.length;
   readonly totalItems = this.sections.reduce((count, section) => count + section.items.length, 0);
-  myJob?: MyJobCard;
+  myJob: MyJobCard | undefined;
 
   constructor(
     private readonly api: ApiClient,

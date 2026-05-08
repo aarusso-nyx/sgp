@@ -132,8 +132,6 @@ Snapshots devem ser retidos pelo prazo definido na politica arquivistica municip
 
 ## LGPD Encarregado e Direitos do Titular
 
-## LGPD Encarregado e Direitos do Titular
-
 R2-42 expõe o contato público do encarregado pelo tratamento de dados pessoais.
 R2-43 adiciona o canal público de direitos do titular vinculado ao ROPA vigente
 do tenant.
@@ -219,6 +217,24 @@ Solicitações de apagamento, bloqueio ou eliminação sao classificadas como
 `RETENTION_RESTRICTED` quando a base ROPA vigente indicar retenção legal ou
 operacional; as demais entram como `EXECUTABLE`. O endpoint nao decide mérito
 jurídico nem executa alteração automática de dados pessoais.
+
+### Administração DSAR
+
+Operadores consultam tickets em `GET /api/v1/admin/lgpd/dsar`, com filtros
+opcionais `status` e `flowKey`. A leitura exige `auditoria.read` e retorna
+somente metadados de triagem: identificador do ticket, fluxo, tipo de direito,
+estado, prévia da descrição, referências estáveis em hash para solicitante e
+vínculo funcional, SLA (`OPEN`, `DUE_SOON`, `OVERDUE`, `CLOSED`) e snapshots de
+retenção/compartilhamento. A resposta nao expõe `tenantId`, login bruto,
+`sub` bruto nem identificador funcional bruto.
+
+Operadores com `gestao.write` atualizam o ciclo em
+`PATCH /api/v1/admin/lgpd/dsar/:id`, restrito a `status` e `triageOutcome`.
+Cada atualização grava `lgpd.data_subject_request`, respeita RLS por tenant,
+emite auditoria HTTP com `resourceType=lgpd_data_subject_request` e nao cria
+novo identificador RBAC. A API nao altera dados pessoais de origem nem redefine
+política de retenção; decisões materiais continuam fora do runtime até owner
+decision específica.
 
 ## LAI - pedidos de acesso a informacao
 
@@ -670,8 +686,8 @@ Focused coverage:
 
 | Test                                            | Evidence                                                                                                           |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `backend/src/lgpd/incidents.service.spec.ts`    | business-day deadlines, ROPA linkage, transition ordering, 3-day ANPD timer, 20-day complementation timer          |
-| `backend/src/lgpd/incidents.controller.spec.ts` | audit calls for creation and every state transition                                                                |
+| `backend/src/lgpd/incidents.service.spec.ts`    | business-day deadlines, ROPA linkage, transition ordering, closure, timer windows, and structured-log minimization |
+| `backend/src/lgpd/incidents.controller.spec.ts` | audit calls for creation and every state transition without raw PII or free-text incident details                  |
 | `tests/backend/lgpd-rcis.e2e-spec.ts`           | HTTP contract for `DETECTED -> TRIAGED -> REPORTED -> COMPLEMENTED -> CLOSED` under `/api/v1/admin/lgpd/incidents` |
 
 ## LGPD ROPA registry
@@ -723,11 +739,11 @@ The table references `public.tenant` and `lgpd.legal_basis_rule`, with a uniquen
 
 Focused coverage:
 
-| Test                                       | Evidence                                                                                     |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `backend/src/lgpd/ropa.service.spec.ts`    | joins ROPA with legal-basis rules, creates only for active flow keys, patches mutable fields |
-| `backend/src/lgpd/ropa.controller.spec.ts` | verifies audit calls for POST/PATCH                                                          |
-| `tests/backend/lgpd-ropa.e2e-spec.ts`      | exercises GET/POST/PATCH under `/api/v1/admin/lgpd/ropa` with RBAC and mutation audit        |
+| Test                                       | Evidence                                                                                                                                |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `backend/src/lgpd/ropa.service.spec.ts`    | joins ROPA with legal-basis rules, creates only for active payroll, recruitment, time, and regulatory flow keys, patches mutable fields |
+| `backend/src/lgpd/ropa.controller.spec.ts` | verifies audit calls for POST/PATCH                                                                                                     |
+| `tests/backend/lgpd-ropa.e2e-spec.ts`      | exercises GET/POST/PATCH under `/api/v1/admin/lgpd/ropa` with RBAC and mutation audit                                                   |
 
 ## LGPD titular-rights portal tickets
 
@@ -767,3 +783,7 @@ new RBAC permission; the portal endpoint uses the existing
 `tests/backend/lgpd-direitos-titular.e2e-spec.ts` exercises the six accepted
 right types through `POST /api/portal/v1/lgpd/direitos`, verifies ticket
 creation, SLA timestamps, ROPA/legal-basis snapshots, and mutation audit.
+`tests/backend/lgpd-dpo-dsar.e2e-spec.ts` proves public DPO exposure, DPO
+designation mutation audit, portal DSAR submission, protected DSAR
+administration, negative authorization, tenant-scoped RLS posture, and redacted
+operator envelopes.

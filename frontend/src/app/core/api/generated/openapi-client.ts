@@ -281,6 +281,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/admin/lgpd/dpo');
   }
 
+  getApiV1AdminLgpdDsar(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/lgpd/dsar');
+  }
+
   getApiV1AdminLgpdIncidents(): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/lgpd/incidents');
   }
@@ -1239,6 +1243,13 @@ export class OpenApiClient {
 
   patchApiV1AdminLgpdDpo(body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>('/v1/admin/lgpd/dpo', body);
+  }
+
+  patchApiV1AdminLgpdDsarById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/dsar/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
   patchApiV1AdminLgpdIncidentsCloseById(

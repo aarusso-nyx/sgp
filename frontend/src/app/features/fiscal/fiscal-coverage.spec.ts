@@ -50,9 +50,9 @@ describe('fiscal coverage flows', () => {
 
     await component.load();
     await component.generate();
-    await component.sign(component.declarations[0]);
-    await component.transmit(component.declarations[0]);
-    component.select(component.declarations[0]);
+    await component.sign(component.declarations[0]!);
+    await component.transmit(component.declarations[0]!);
+    component.select(component.declarations[0]!);
 
     component.form.patchValue({ kind: 'RETIFICADORA', originalDeclarationId: '' });
     await component.generate();
@@ -103,7 +103,7 @@ describe('fiscal coverage flows', () => {
     component.form.patchValue({ yearBase: 2024 });
     await component.load();
     await component.generate();
-    component.select(component.arquivos[0]);
+    component.select(component.arquivos[0]!);
 
     component.form.patchValue({ yearBase: 2026, kind: 'RETIFICADORA', originalArquivoId: '' });
     await component.generate();
@@ -111,7 +111,7 @@ describe('fiscal coverage flows', () => {
     await component.generate();
 
     expect(component.selected?.id).toBe('dirf-2');
-    expect(component.downloadUrl(component.arquivos[0])).toBe(
+    expect(component.downloadUrl(component.arquivos[0]!)).toBe(
       '/api/v1/admin/fiscal/dirf/dirf-2/txt',
     );
     expect(component.canGenerateDirf(2026)).toBe(false);
@@ -128,6 +128,7 @@ describe('fiscal coverage flows', () => {
 
     await firstValueFrom(service.paymentCodes());
     await firstValueFrom(service.list('', ''));
+    await firstValueFrom(service.list('RETROACTIVE', 'GENERATED'));
     await firstValueFrom(
       service.generate({
         competence: '2018-06-01',
@@ -164,11 +165,12 @@ describe('fiscal coverage flows', () => {
     await component.load();
     component.form.controls.reasonDetail.setValue('retroactive contribution');
     await component.generate();
-    component.select(component.remittances[0]);
+    await component.generate();
+    component.select(component.remittances[0]!);
 
     expect(component.form.controls.paymentCodeId.value).toBe('code-1');
     expect(component.selected?.id).toBe('gps-2');
-    expect(component.downloadUrl(component.remittances[0])).toBe(
+    expect(component.downloadUrl(component.remittances[0]!)).toBe(
       '/api/v1/admin/fiscal/gps/gps-2/txt',
     );
   });
@@ -207,6 +209,76 @@ describe('fiscal coverage flows', () => {
     expect(dirf.errorMessage).toBeTruthy();
     expect(gps.errorMessage).toBeTruthy();
     expect(gps.busy).toBe(false);
+  });
+
+  it('covers fiscal invalid, empty, update, and fallback branches', async () => {
+    const dctfweb = createWithProviders(FiscalDctfweb, [
+      FormBuilder,
+      {
+        provide: DctfwebApiService,
+        useValue: {
+          list: vi.fn(() => of([])),
+          generate: vi.fn(() => of(dctfwebDeclaration('decl-1', 'GENERATED'))),
+          sign: vi.fn(() => throwError(() => 'raw')),
+          transmit: vi.fn(() => throwError(() => new Error('transmit failed'))),
+        },
+      },
+    ]);
+    dctfweb.form.controls.month.setValue(13);
+    await dctfweb.load();
+    dctfweb.form.controls.month.setValue(5);
+    await dctfweb.load();
+    dctfweb.form.patchValue({
+      kind: 'RETIFICADORA',
+      originalDeclarationId: 'decl-original',
+    });
+    dctfweb.declarations = [dctfwebDeclaration('decl-1', 'DRAFT')];
+    await dctfweb.generate();
+    dctfweb.busyId = 'sign:decl-1';
+    expect(dctfweb.isBusy('sign', dctfweb.declarations[0])).toBe(true);
+    await dctfweb.sign(dctfweb.declarations[0]!);
+    await dctfweb.transmit(dctfweb.declarations[0]!);
+
+    const dirf = createWithProviders(FiscalDirf, [
+      FormBuilder,
+      {
+        provide: DirfApiService,
+        useValue: {
+          list: vi.fn(() => of([])),
+          generate: vi.fn(() => of(dirfArquivo('dirf-1'))),
+        },
+      },
+    ]);
+    dirf.form.controls.yearBase.setValue(1999);
+    await dirf.load();
+    dirf.form.patchValue({ yearBase: 2024, kind: 'RETIFICADORA', originalArquivoId: 'dirf-0' });
+    await dirf.load();
+    dirf.arquivos = [dirfArquivo('dirf-1')];
+    await dirf.generate();
+    expect(dirf.money('123.45')).toContain('123');
+
+    const gps = createWithProviders(FiscalGpsResidual, [
+      FormBuilder,
+      {
+        provide: GpsResidualApiService,
+        useValue: {
+          paymentCodes: vi.fn(() => of([])),
+          list: vi.fn(() => of([])),
+          generate: vi.fn(() => of(gpsRemittance('gps-1'))),
+        },
+      },
+    ]);
+    await gps.loadPaymentCodes();
+    await gps.load();
+    await gps.generate();
+    gps.form.patchValue({ paymentCodeId: 'code-1', reasonDetail: 'detail' });
+    gps.remittances = [gpsRemittance('gps-1')];
+    await gps.generate();
+    expect(gps.money('456.78')).toContain('456');
+
+    expect(dctfweb.errorMessage).toBeTruthy();
+    expect(dirf.selected).toBeTruthy();
+    expect(gps.selected?.id).toBe('gps-1');
   });
 });
 

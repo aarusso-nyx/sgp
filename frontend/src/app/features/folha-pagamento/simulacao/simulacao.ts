@@ -45,11 +45,11 @@ export class SimulacaoFolha {
         employmentLinkId: value.employmentLinkId,
         competence: value.competence,
         overrides: {
-          baseSalary: value.baseSalary || undefined,
-          dependentCount: value.dependentCount ? Number(value.dependentCount) : undefined,
-          rubricId: value.rubricId || undefined,
-          rubricAmount: value.rubricAmount || undefined,
-          rubricQuantity: value.rubricQuantity || undefined,
+          ...(value.baseSalary ? { baseSalary: value.baseSalary } : {}),
+          ...(value.dependentCount ? { dependentCount: Number(value.dependentCount) } : {}),
+          ...(value.rubricId ? { rubricId: value.rubricId } : {}),
+          ...(value.rubricAmount ? { rubricAmount: value.rubricAmount } : {}),
+          ...(value.rubricQuantity ? { rubricQuantity: value.rubricQuantity } : {}),
         },
       })
       .subscribe({

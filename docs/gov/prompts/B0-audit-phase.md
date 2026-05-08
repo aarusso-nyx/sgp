@@ -49,8 +49,21 @@ The assessment-prompt.md rule "detect ORM empirically" is **superseded** by this
 Write docs/work/round-<n>/00-snapshot.md with:
 
 - Current HEAD SHA, branch.
-- Previous-round baseline SHA (read from docs/work/round-<n-1>/00-snapshot.md).
-- Commits + diff stats since baseline (git rev-list --count, git diff --shortstat).
+- Previous-round baseline SHA and source. Prefer the previous round's recorded
+  `HEAD at audit start` value from docs/work/round-<n-1>/00-snapshot.md. If that
+  line is absent, use another explicit commit SHA recorded in the previous
+  snapshot only when the line unambiguously describes the previous audit HEAD or
+  previous-round baseline for this round.
+- Hotspot baseline SHA. This must be the previous-round baseline SHA selected
+  above, with a `source:` note naming the file and line/field used.
+- Baseline fallback, when no previous scratch snapshot or unambiguous previous
+  commit SHA exists: record `Previous-round baseline SHA: unavailable`, record
+  `Hotspot baseline SHA: <current HEAD> (fallback; no meaningful delta)`, and
+  add a caveat that hotspot output is a command-execution check only. Do not
+  claim a meaningful code delta when the baseline equals current HEAD.
+- Commits + diff stats since baseline (git rev-list --count, git diff --shortstat)
+  only when the selected baseline is a real previous-round commit. If fallback
+  uses current HEAD, state that counts are intentionally not meaningful.
 - Commits-in-window table (SHA, date, subject).
 - git status --porcelain output.
 - Stack delta vs previous round (LOC by surface area).
@@ -68,6 +81,21 @@ npm run audit:tests     -- --round <n>
 npm run audit:hotspots  -- --round <n> --baseline <prev-sha>
 npm run audit:pvd       -- --round <n>
 ```
+
+Use the real previous-round commit selected in §4.1 for `<prev-sha>`. For round
+11 after the round 10 fallback, retain this command in the next round context so
+the B0 runner must choose a real baseline before generating hotspot deltas:
+
+```bash
+npm run audit:hotspots -- --round 11 --baseline <previous-sha>
+```
+
+If no real previous-round commit is available, run the hotspots command with the
+current HEAD only as an explicit fallback and document the caveat in
+docs/work/round-<n>/00-snapshot.md and
+docs/gov/audit/diag/round-<n>/delta-from-round-<n-1>.md. The generated
+hotspots.md may be retained as tool evidence, but the round must not summarize it
+as a meaningful churn delta.
 
 These (built by A2) refresh:
 

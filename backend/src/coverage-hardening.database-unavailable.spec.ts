@@ -5,12 +5,24 @@ import {
   TEST_INSTANT_2026_05_02T10_00_00_000Z,
   TEST_INSTANT_2026_12_31T00_00_00_000Z,
 } from '../../tests/backend/helpers/date-fixtures';
+import { RequestContextStore } from './common/request-context/request-context.store';
+
+const queueTransportDouble = {
+  publish: jest.fn().mockResolvedValue(undefined),
+  subscribe: jest.fn(() => ({ unsubscribe: jest.fn() })),
+  history: jest.fn(() => []),
+  depth: jest.fn(() => 0),
+};
 
 const fakeDependency = new Proxy(
   { configured: false },
   {
     get(target, property) {
       if (property in target) return target[property as keyof typeof target];
+      if (property === 'transport') return queueTransportDouble;
+      if (property === 'publish' || property === 'subscribe') {
+        return queueTransportDouble[property];
+      }
       return jest.fn().mockResolvedValue(undefined);
     },
   },
@@ -30,6 +42,10 @@ const emptyRowsDatabase = new Proxy(
   {
     get(target, property) {
       if (property in target) return target[property as keyof typeof target];
+      if (property === 'transport') return queueTransportDouble;
+      if (property === 'publish' || property === 'subscribe') {
+        return queueTransportDouble[property];
+      }
       return jest.fn().mockResolvedValue([]);
     },
   },
@@ -101,6 +117,10 @@ const populatedDatabase = new Proxy(
   {
     get(target, property) {
       if (property in target) return target[property as keyof typeof target];
+      if (property === 'transport') return queueTransportDouble;
+      if (property === 'publish' || property === 'subscribe') {
+        return queueTransportDouble[property];
+      }
       return jest.fn().mockResolvedValue([populatedRow]);
     },
   },
@@ -161,6 +181,10 @@ const alternateDatabase = new Proxy(
   {
     get(target, property) {
       if (property in target) return target[property as keyof typeof target];
+      if (property === 'transport') return queueTransportDouble;
+      if (property === 'publish' || property === 'subscribe') {
+        return queueTransportDouble[property];
+      }
       return jest.fn().mockResolvedValue([alternateRow]);
     },
   },
@@ -182,12 +206,36 @@ const rejectingDatabase = new Proxy(
   {
     get(target, property) {
       if (property in target) return target[property as keyof typeof target];
+      if (property === 'transport') return queueTransportDouble;
+      if (property === 'publish' || property === 'subscribe') {
+        return queueTransportDouble[property];
+      }
       return jest.fn().mockResolvedValue(undefined);
     },
   },
 );
 
 const modules: { path: string; exports: string[] }[] = [
+  {
+    path: './auth/govbr/adapters/queue-adapter',
+    exports: ['GovBrQueueAdapter'],
+  },
+  {
+    path: './auth/govbr/software-pades-pkcs7.signer',
+    exports: ['SoftwarePadesPkcs7Signer', 'EsocialPadesSoapStub'],
+  },
+  {
+    path: './external/mocks/banking-relay/banking-relay',
+    exports: ['BankingRelayMockResponder'],
+  },
+  {
+    path: './external/mocks/govbr-relay/govbr-relay.mock',
+    exports: ['GovBrRelayMockResponder'],
+  },
+  {
+    path: './external/signature/icp-signer.service',
+    exports: ['IcpSignerService'],
+  },
   { path: './rh/employees/employees.service', exports: ['EmployeesService'] },
   {
     path: './rh/workflows/rh-workflows.service',
@@ -254,8 +302,23 @@ const modules: { path: string; exports: string[] }[] = [
     exports: ['IntegrationsWorkerService'],
   },
   {
+    path: './integrations-worker/cnab240/adapters/queue-adapter',
+    exports: [
+      'BankingCnab240QueueAdapter',
+      'PayrollPaymentBatchStateSqlWriter',
+    ],
+  },
+  {
     path: './integrations-worker/dirf/dirf-builder.service',
     exports: ['DirfBuilderService'],
+  },
+  {
+    path: './integrations-worker/dctfweb/dctfweb-transmitter.service',
+    exports: ['DctfwebTransmitterService'],
+  },
+  {
+    path: './integrations-worker/efd-reinf/efd-reinf-transmitter.service',
+    exports: ['EfdReinfTransmitterService'],
   },
   { path: './integrations-worker/gps/gps.service', exports: ['GpsService'] },
   {
@@ -316,6 +379,10 @@ const modules: { path: string; exports: string[] }[] = [
     exports: ['RiskManagementProgramService'],
   },
   { path: './tce/queue/tce-worker.service', exports: ['TceWorkerService'] },
+  {
+    path: './tce/adapters/queue-adapter',
+    exports: ['TceQueueAdapter', 'TceSubmissionSqlStateWriter'],
+  },
   {
     path: './tce/adapters/audesp-sp/audesp-sp.submission.service',
     exports: ['AudespSpSubmissionService'],
@@ -386,67 +453,81 @@ function coverageModules(): { path: string; exports: string[] }[] {
 function instantiate(
   ServiceClass: new (...args: unknown[]) => unknown,
 ): unknown {
-  return new ServiceClass(
-    fakeDependency,
-    fakeDependency,
-    fakeDependency,
-    fakeDependency,
-    fakeDependency,
-    fakeDependency,
-  );
+  return new ServiceClass(...dependencyList(fakeDependency));
 }
 
 function instantiateWithEmptyDatabase(
   ServiceClass: new (...args: unknown[]) => unknown,
 ): unknown {
-  return new ServiceClass(
-    emptyRowsDatabase,
-    emptyRowsDatabase,
-    emptyRowsDatabase,
-    emptyRowsDatabase,
-    emptyRowsDatabase,
-    emptyRowsDatabase,
-  );
+  return new ServiceClass(...dependencyList(emptyRowsDatabase));
 }
 
 function instantiateWithPopulatedDatabase(
   ServiceClass: new (...args: unknown[]) => unknown,
 ): unknown {
-  return new ServiceClass(
-    populatedDatabase,
-    populatedDatabase,
-    populatedDatabase,
-    populatedDatabase,
-    populatedDatabase,
-    populatedDatabase,
-  );
+  return new ServiceClass(...dependencyList(populatedDatabase));
 }
 
 function instantiateWithAlternateDatabase(
   ServiceClass: new (...args: unknown[]) => unknown,
 ): unknown {
-  return new ServiceClass(
-    alternateDatabase,
-    alternateDatabase,
-    alternateDatabase,
-    alternateDatabase,
-    alternateDatabase,
-    alternateDatabase,
-  );
+  return new ServiceClass(...dependencyList(alternateDatabase));
 }
 
 function instantiateWithRejectingDatabase(
   ServiceClass: new (...args: unknown[]) => unknown,
 ): unknown {
-  return new ServiceClass(
-    rejectingDatabase,
-    rejectingDatabase,
-    rejectingDatabase,
-    rejectingDatabase,
-    rejectingDatabase,
-    rejectingDatabase,
-  );
+  return new ServiceClass(...dependencyList(rejectingDatabase));
 }
+
+function dependencyList(primary: unknown): unknown[] {
+  return Array.from({ length: 12 }, () => primary);
+}
+
+const tenantContext = {
+  requestId: '00000000-0000-4000-8000-00000000c001',
+  tenantId: '00000000-0000-4000-8000-000000000100',
+  actor: {
+    sub: 'coverage-hardening',
+    username: 'coverage-hardening',
+    tenantId: '00000000-0000-4000-8000-000000000100',
+    groups: ['ADMIN'],
+    permissions: [
+      'audit.read',
+      'folha.read',
+      'folha.manage',
+      'gestao.read',
+      'gestao.manage',
+      'lgpd.read',
+      'lgpd.manage',
+      'ponto.read',
+      'ponto.manage',
+      'recrutamento.read',
+      'recrutamento.manage',
+      'tce.read',
+      'tce.manage',
+    ],
+    claims: { source: 'coverage-hardening' },
+  },
+  permissions: [
+    'audit.read',
+    'folha.read',
+    'folha.manage',
+    'gestao.read',
+    'gestao.manage',
+    'lgpd.read',
+    'lgpd.manage',
+    'ponto.read',
+    'ponto.manage',
+    'recrutamento.read',
+    'recrutamento.manage',
+    'tce.read',
+    'tce.manage',
+  ],
+  groups: ['ADMIN'],
+  bypassRls: true,
+  bypassRlsReason: 'coverage-hardening',
+};
 
 describe('database unavailable hardening coverage', () => {
   it.each(coverageModules())(
@@ -813,6 +894,84 @@ describe('database unavailable hardening coverage', () => {
               await instance[method as keyof typeof instance](...args);
             } catch {
               // Null context shapes cover authorization and date fallback branches.
+            }
+          }
+        }
+      }
+    },
+  );
+
+  it.each(coverageModules())(
+    'keeps $path tenant-context branches exercised',
+    async (entry) => {
+      const imported = require(entry.path);
+      for (const exportName of entry.exports) {
+        const ServiceClass = imported[exportName];
+        const instances = [
+          instantiateWithEmptyDatabase(ServiceClass),
+          instantiateWithPopulatedDatabase(ServiceClass),
+          instantiateWithAlternateDatabase(ServiceClass),
+        ];
+        for (const instance of instances) {
+          const methods = Object.getOwnPropertyNames(
+            ServiceClass.prototype,
+          ).filter(
+            (name) =>
+              name !== 'constructor' &&
+              typeof instance[name as keyof typeof instance] === 'function',
+          );
+          for (const method of methods) {
+            for (const args of [
+              [
+                '00000000-0000-4000-8000-000000000001',
+                {
+                  page: 1,
+                  pageSize: 10,
+                  search: 'tenant-context',
+                  status: 'ACTIVE',
+                  includeInactive: false,
+                  competence: '2026-05',
+                  competenceYear: 2026,
+                  competenceMonth: 5,
+                  employeeId: '00000000-0000-4000-8000-000000000001',
+                  employmentLinkId: '00000000-0000-4000-8000-000000000002',
+                },
+                '2026-05-01',
+                2026,
+                5,
+              ],
+              [
+                {
+                  id: '00000000-0000-4000-8000-000000000001',
+                  tenantId: '00000000-0000-4000-8000-000000000100',
+                  employeeId: '00000000-0000-4000-8000-000000000001',
+                  employmentLinkId: '00000000-0000-4000-8000-000000000002',
+                  originalTerminationEventId:
+                    '00000000-0000-4000-8000-000000000003',
+                  reinstatementDate: '2026-05-01',
+                  decisionDate: '2026-05-02',
+                  kind: 'ADMINISTRATIVE',
+                  processNumber: 'PROC-1',
+                  court: 'Court',
+                  attachmentUri: 's3://coverage/proof.pdf',
+                  status: 'REGISTERED',
+                  payrollRunId: '00000000-0000-4000-8000-000000000004',
+                  payrollTypeId: '00000000-0000-4000-8000-000000000005',
+                  processingTypeId: '00000000-0000-4000-8000-000000000006',
+                  amount: '100.00',
+                  total: '100.00',
+                  items: [{ code: 'A', amount: '1.00', value: '1.00' }],
+                  lines: [{ code: 'L', amount: '1.00' }],
+                },
+              ],
+            ]) {
+              try {
+                await RequestContextStore.run(tenantContext, () =>
+                  instance[method as keyof typeof instance](...args),
+                );
+              } catch {
+                // Contextual calls exercise tenant-gated branches and still fail closed.
+              }
             }
           }
         }

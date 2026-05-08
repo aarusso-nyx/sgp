@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import { AuditModule } from '../audit/audit.module';
 import { LgpdModule } from '../common/lgpd/lgpd.module';
 import { DatabaseModule } from '../database/database.module';
+import { LgpdDsarAdminController } from './dsar.controller';
+import { LgpdDsarAdminService } from './dsar.service';
 import { LgpdDpoAdminController } from './dpo.controller';
 import { LgpdDpoAdminService } from './dpo.service';
 import { LgpdIncidentsController } from './incidents.controller';
@@ -18,12 +20,14 @@ import { LgpdRopaService } from './ropa.service';
     LgpdRopaController,
     LgpdIncidentsController,
     LgpdDpoAdminController,
+    LgpdDsarAdminController,
     LgpdPublicPowerTreatmentController,
   ],
   providers: [
     LgpdRopaService,
     LgpdSecurityIncidentService,
     LgpdDpoAdminService,
+    LgpdDsarAdminService,
     LgpdPublicPowerTreatmentService,
   ],
 })

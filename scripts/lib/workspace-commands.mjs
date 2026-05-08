@@ -49,6 +49,8 @@ export const hardFailGateCommands = [
   'npm run lint:check',
   'npm run format:check',
   'npm run typecheck',
+  'npm run test:types',
+  'npm run test:mutation',
   'npm run api:alignment:check -- --json',
   'npm run db:alignment:check -- --json',
   'npm run health:json',

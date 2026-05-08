@@ -100,7 +100,7 @@ describe('RhHome', () => {
     routeData$.next({ legacyChildPath: 'funcionario' });
 
     expect(component.currentConfig.key).toBe('employees');
-    expect(component.records[0]['name']).toBe('Servidor');
+    expect(component.records[0]!['name']).toBe('Servidor');
   });
 
   it('maps legacy dependent route to RH workflow API', () => {

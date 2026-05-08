@@ -62,4 +62,47 @@ describe('StynxEsocialAuditConsumer', () => {
     ).resolves.toMatchObject({ inserted: false });
     expect(query).toHaveBeenCalledTimes(1);
   });
+
+  it('falls back action, idempotency, and optional audit metadata fields', async () => {
+    const query = jest.fn().mockResolvedValue([]);
+    const consumer = new StynxEsocialAuditConsumer({
+      query,
+      configured: true,
+    } as never);
+
+    await expect(
+      consumer.handle({
+        tenant_id: tenantId,
+        action: 'UNKNOWN_ACTION',
+        target: { type: 'submission_message' },
+        before: { status: 'QUEUED' },
+        occurred_at: '2026-05-04T12:00:00.000Z',
+      }),
+    ).resolves.toEqual({
+      inserted: true,
+      idempotencyKey: 'audit:none:PROCESS',
+    });
+
+    expect(query).toHaveBeenCalledTimes(1);
+    expect(query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO public.audit_event'),
+      expect.arrayContaining([
+        tenantId,
+        '2026-05-04T12:00:00.000Z',
+        null,
+        'PROCESS',
+        'submission_message',
+        null,
+        'stynx_esocial.submission_message',
+        null,
+      ]),
+    );
+    expect(JSON.parse(query.mock.calls[0][1][8])).toEqual(
+      expect.objectContaining({
+        before: { status: 'QUEUED' },
+        after: null,
+        idempotencyKey: 'audit:none:PROCESS',
+      }),
+    );
+  });
 });

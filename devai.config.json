@@ -40,6 +40,14 @@
       "command": "npm run typecheck"
     },
     {
+      "id": "type-contracts",
+      "command": "npm run test:types"
+    },
+    {
+      "id": "mutation",
+      "command": "npm run test:mutation"
+    },
+    {
       "id": "api-alignment",
       "command": "npm run api:alignment:check -- --json"
     },

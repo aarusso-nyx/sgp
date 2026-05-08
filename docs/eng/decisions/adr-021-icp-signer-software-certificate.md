@@ -1,6 +1,6 @@
 # ADR-021: ICP-Brasil signer uses software certificates inside SGP
 
-Status: accepted
+Status: Accepted
 
 Date: 2026-05-05
 

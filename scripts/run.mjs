@@ -211,6 +211,8 @@ function handleTest() {
       runWorkspaceScript('backend', 'test', args.slice(1), {
         env: localTestDatabaseEnv(),
       }),
+    types: () => runCommand('npx', ['tsc', '--noEmit', '-p', 'tests/types/tsconfig.json']),
+    mutation: () => runCommand('npx', ['stryker', 'run', ...args.slice(1)]),
     'backend-exception-filter': () =>
       runWorkspaceScript('backend', 'test:exception-filter', args.slice(1), {
         env: localTestDatabaseEnv(),
@@ -235,7 +237,7 @@ function handleTest() {
 
   if (!handlers[subcommand]) {
     console.error(
-      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, frontend-e2e, backend, backend-exception-filter, db, e2e, coverage, frontend-coverage, qa, qa-api, qa-frontend',
+      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, frontend-e2e, backend, backend-exception-filter, types, mutation, db, e2e, coverage, frontend-coverage, qa, qa-api, qa-frontend',
     );
     return 1;
   }

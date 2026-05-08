@@ -37,30 +37,44 @@ const round5AdminPermissions = [
   'tce.submission.read',
   'tce.submission.manage',
 ];
+export const round5AdminAccessToken = e2eJwt({
+  sub: 'admin-round5-sub',
+  username: 'admin.round5',
+  name: 'Admin Round 5',
+  groups: ['ADMIN'],
+  permissions: round5AdminPermissions,
+  tenant_id: 'tenant-e2e',
+});
 
 export async function bootRound5Admin(page: Page, options: BootOptions = {}): Promise<void> {
   const permissions = options.permissions ?? round5AdminPermissions;
 
-  await page.addInitScript((sessionPermissions) => {
-    (window as unknown as { SGP_CONFIG: Record<string, string> }).SGP_CONFIG = {
-      API_BASE_PATH: '/api',
-      COGNITO_CLIENT_ID: 'admin-client',
-      COGNITO_DOMAIN: 'https://idp.test',
-      COGNITO_REDIRECT_URI: 'http://127.0.0.1:4210/auth/callback',
-    };
+  await page.addInitScript(
+    (accessToken) => {
+      (window as unknown as { SGP_CONFIG: Record<string, string> }).SGP_CONFIG = {
+        API_BASE_PATH: '/api',
+        COGNITO_CLIENT_ID: 'admin-client',
+        COGNITO_DOMAIN: 'https://idp.test',
+        COGNITO_REDIRECT_URI: 'http://127.0.0.1:4210/auth/callback',
+        DEFAULT_TENANT_ID: 'tenant-e2e',
+        STYNX_E2E: 'true',
+        STYNX_E2E_ACCESS_TOKEN: accessToken,
+        TENANT_ID: 'tenant-e2e',
+      };
 
-    sessionStorage.setItem(
-      'sgp.session',
-      JSON.stringify({
-        subject: 'admin-round5-sub',
-        login: 'admin.round5',
-        displayName: 'Admin Round 5',
-        groups: ['ADMIN'],
-        permissions: sessionPermissions,
-      }),
-    );
-    sessionStorage.setItem('sgp.access_token', 'admin-round5-token');
-  }, permissions);
+      sessionStorage.setItem('sgp.access_token', accessToken);
+    },
+    permissions === round5AdminPermissions
+      ? round5AdminAccessToken
+      : e2eJwt({
+          sub: 'admin-round5-sub',
+          username: 'admin.round5',
+          name: 'Admin Round 5',
+          groups: ['ADMIN'],
+          permissions,
+          tenant_id: 'tenant-e2e',
+        }),
+  );
 
   await page.route('https://idp.test/**', async (route) => {
     await route.fulfill({
@@ -122,6 +136,22 @@ function requestBody(request: Request): unknown {
   } catch {
     return data;
   }
+}
+
+function e2eJwt(claims: Record<string, unknown>): string {
+  const payload = {
+    exp: Math.floor(Date.now() / 1000) + 3600,
+    ...claims,
+  };
+  return ['e2e', base64Url(JSON.stringify(payload)), 'signature'].join('.');
+}
+
+function base64Url(value: string): string {
+  return Buffer.from(value, 'utf8')
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/g, '');
 }
 
 function responseFor(method: string, path: string): ApiResponse {

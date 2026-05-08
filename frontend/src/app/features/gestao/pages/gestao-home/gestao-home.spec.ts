@@ -110,7 +110,7 @@ describe('GestaoHome', () => {
 
   it('loads the selected master-data resource and records', () => {
     expect(component.currentResource?.key).toBe('cargo');
-    expect(component.records[0]['name']).toBe('Analista');
+    expect(component.records[0]!['name']).toBe('Analista');
     expect(component.columns.map((column) => column.key)).toContain('activeLabel');
   });
 
@@ -136,7 +136,7 @@ describe('GestaoHome', () => {
     routeData$.next({ legacyChildPath: 'tipo-ferias/gestao' });
 
     expect(component.currentResource?.key).toBe('tipoFerias');
-    expect(component.records[0]['name']).toBe('Ferias regulares');
+    expect(component.records[0]!['name']).toBe('Ferias regulares');
     expect(masterData.listRecords).toHaveBeenLastCalledWith(
       'tipoFerias',
       expect.objectContaining({ page: 1, pageSize: 25 }),

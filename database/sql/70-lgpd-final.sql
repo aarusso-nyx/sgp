@@ -97,6 +97,8 @@ CREATE POLICY data_subject_request_select ON lgpd.data_subject_request FOR SELEC
 
 CREATE POLICY data_subject_request_insert ON lgpd.data_subject_request FOR INSERT WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['portal.profile.write'::text])));
 
+CREATE POLICY data_subject_request_update ON lgpd.data_subject_request FOR UPDATE USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.write'::text])));
+
 CREATE POLICY security_incident_select ON lgpd.security_incident FOR SELECT USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['auditoria.read'::text, 'gestao.read'::text, 'gestao.write'::text])));
 
 CREATE POLICY security_incident_write ON lgpd.security_incident USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['gestao.write'::text])));

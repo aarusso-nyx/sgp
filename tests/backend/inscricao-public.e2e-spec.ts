@@ -13,10 +13,22 @@ import { DatabaseService } from '../../backend/src/database/database.service';
 
 class FakeInscricaoDatabase {
   readonly configured = true;
-  private tokenHash = '';
+  readonly insertedConsentVersions: string[] = [];
+  readonly insertedQuotaDeclarations: Record<string, unknown>[] = [];
+  private readonly applications: Array<{
+    id: string;
+    tenantId: string;
+    tokenHash: string;
+    status: string;
+    exemptionKind: string;
+    fullName: string;
+  }> = [];
 
-  async query<T>(sql: string): Promise<T[]> {
+  async query<T>(sql: string, values: unknown[] = []): Promise<T[]> {
     if (sql.includes('recrutamento.get_public_concurso')) {
+      if (values[0] !== 'rec-2026') {
+        return [{ concurso: null }] as T[];
+      }
       return [
         {
           concurso: {
@@ -40,33 +52,53 @@ class FakeInscricaoDatabase {
     const client = {
       query: async (sql: string, values: unknown[] = []) => {
         if (sql.includes('INSERT INTO recrutamento.inscricao')) {
-          this.tokenHash = String(values[12]);
+          const index = this.applications.length + 53;
+          const id = `00000000-0000-4000-8000-${String(index).padStart(12, '0')}`;
+          const status = String(values[9]);
+          const exemptionKind = String(values[10]);
+          const fullName = String(values[1]);
+          const tokenHash = String(values[12]);
+          this.insertedConsentVersions.push(String(values[6]));
+          this.insertedQuotaDeclarations.push(
+            JSON.parse(String(values[13])) as Record<string, unknown>,
+          );
+          this.applications.push({
+            id,
+            tenantId: '00000000-0000-4000-8000-000000000001',
+            tokenHash,
+            status,
+            exemptionKind,
+            fullName,
+          });
           return {
             rows: [
               {
-                id: '00000000-0000-4000-8000-000000000053',
-                status: 'EXEMPT',
+                id,
+                status,
                 candidato_id: '00000000-0000-4000-8000-000000000054',
               },
             ],
           };
         }
         if (sql.includes('FROM recrutamento.inscricao')) {
+          const application = this.applications.find(
+            (item) => item.id === values[0] && item.tokenHash === values[1],
+          );
           return {
-            rows:
-              values[1] === this.tokenHash
-                ? [
-                    {
-                      id: '00000000-0000-4000-8000-000000000053',
-                      status: 'EXEMPT',
-                      exemption_kind: 'CADUNICO',
-                      full_name: 'Maria Silva',
-                      payment_charge_id: null,
-                      gateway: null,
-                      external_id: null,
-                    },
-                  ]
-                : [],
+            rows: application
+              ? [
+                  {
+                    id: application.id,
+                    tenant_id: application.tenantId,
+                    status: application.status,
+                    exemption_kind: application.exemptionKind,
+                    full_name: application.fullName,
+                    payment_charge_id: null,
+                    gateway: null,
+                    external_id: null,
+                  },
+                ]
+              : [],
           };
         }
         return { rows: [] };
@@ -78,13 +110,24 @@ class FakeInscricaoDatabase {
 
 describe('public inscricao flow', () => {
   let app: INestApplication<SupertestApp>;
+  let database: FakeInscricaoDatabase;
 
   beforeEach(async () => {
+    database = new FakeInscricaoDatabase();
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
       .overrideProvider(SgpStynxTokenVerifier)
-      .useValue({ verifyAuthorizationHeader: jest.fn() })
+      .useValue({
+        verifyAuthorizationHeader: jest.fn(async () => ({
+          sub: '00000000-0000-4000-8000-000000000090',
+          username: 'rec-readonly',
+          tenantId: '00000000-0000-4000-8000-000000000001',
+          groups: [],
+          permissions: ['recrutamento.concurso.read'],
+          claims: {},
+        })),
+      })
       .overrideProvider(DatabaseService)
-      .useValue(new FakeInscricaoDatabase())
+      .useValue(database)
       .compile();
 
     app = moduleRef.createNestApplication();
@@ -111,6 +154,55 @@ describe('public inscricao flow', () => {
       .expect(200);
 
     expect(confirmed.body.exemptionKind).toBe('CADUNICO');
+    expect(database.insertedConsentVersions).toEqual(['rec-02-v1']);
+    expect(database.insertedQuotaDeclarations).toEqual([{ pcd: true }]);
+  });
+
+  it('rejects invalid slugs and quota self-declarations before inserting', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/publico/concursos/unknown-slug/inscricoes')
+      .send(validPayload())
+      .expect(404);
+
+    await request(app.getHttpServer())
+      .post('/api/v1/publico/concursos/rec-2026/inscricoes')
+      .send({
+        ...validPayload(),
+        quotaSelfDeclaration: { racial: false },
+      })
+      .expect(422);
+
+    expect(database.insertedConsentVersions).toHaveLength(0);
+  });
+
+  it('scopes public follow-up to the matching id and access token only', async () => {
+    const first = await request(app.getHttpServer())
+      .post('/api/v1/publico/concursos/rec-2026/inscricoes')
+      .send(validPayload())
+      .expect(201);
+    const second = await request(app.getHttpServer())
+      .post('/api/v1/publico/concursos/rec-2026/inscricoes')
+      .send({
+        ...validPayload(),
+        candidate: {
+          ...validPayload().candidate,
+          cpf: '39053344705',
+          fullName: 'Joao Santos',
+        },
+      })
+      .expect(201);
+
+    await request(app.getHttpServer())
+      .get(`/api/v1/publico/inscricoes/${second.body.id}`)
+      .query({ token: first.body.token })
+      .expect(404);
+
+    const matched = await request(app.getHttpServer())
+      .get(`/api/v1/publico/inscricoes/${second.body.id}`)
+      .query({ token: second.body.token })
+      .expect(200);
+
+    expect(matched.body.candidateName).toBe('Joao Santos');
   });
 
   it('returns 422 when LGPD consent is missing', async () => {
@@ -136,6 +228,28 @@ describe('public inscricao flow', () => {
         candidate: { ...validPayload().candidate, birthDate: '2015-01-01' },
       })
       .expect(422);
+  });
+
+  it('keeps administrative concurso creation protected from read-only actors', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/recrutamento/concursos')
+      .set('Authorization', 'Bearer readonly-recruitment-token')
+      .send({
+        code: 'rec-2026',
+        name: 'Concurso 2026',
+        validUntil: '2026-06-30',
+        vagas: [
+          {
+            positionId: '00000000-0000-4000-8000-000000000001',
+            totalSeats: 10,
+            pcdSeats: 1,
+            racialSeats: 2,
+            indigenousSeats: 0,
+            baseSalary: '5000.00',
+          },
+        ],
+      })
+      .expect(403);
   });
 });
 

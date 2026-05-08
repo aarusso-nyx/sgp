@@ -282,10 +282,10 @@ export class RhHome implements OnInit, OnDestroy {
   readonly form: UntypedFormGroup = this.formBuilder.group({});
   readonly configs = RH_CONFIGS;
 
-  currentConfig: RhWorkflowUiConfig = RH_CONFIGS[0];
+  currentConfig: RhWorkflowUiConfig = RH_CONFIGS[0]!;
   records: RhRow[] = [];
-  columns: CrudTableColumn[] = RH_CONFIGS[0].columns;
-  formFields: RhField[] = RH_CONFIGS[0].fields;
+  columns: CrudTableColumn[] = RH_CONFIGS[0]!.columns;
+  formFields: RhField[] = RH_CONFIGS[0]!.fields;
   loading = false;
   saving = false;
   message = '';
@@ -451,7 +451,7 @@ export class RhHome implements OnInit, OnDestroy {
 
   private selectConfig(childPath: string): void {
     this.currentConfig =
-      this.configs.find((config) => config.childPath === childPath) ?? this.configs[0];
+      this.configs.find((config) => config.childPath === childPath) ?? this.configs[0]!;
     this.columns = this.currentConfig.columns;
     this.formFields = this.currentConfig.fields;
     this.cancelForm();
@@ -656,7 +656,7 @@ function workflowConfig(
       { key: 'periodLabel', header: 'Periodo' },
       { key: 'status', header: 'Status' },
     ],
-    importKind,
+    ...(importKind ? { importKind } : {}),
     reportKey: key,
   };
 }

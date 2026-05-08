@@ -38,6 +38,8 @@
     "test:portal": "node scripts/run.mjs test portal",
     "test:backend": "node scripts/run.mjs test backend",
     "test:backend:exception-filter": "node scripts/run.mjs test backend-exception-filter",
+    "test:types": "node scripts/run.mjs test types",
+    "test:mutation": "node scripts/run.mjs test mutation",
     "test:db": "node scripts/run.mjs test db",
     "test:e2e": "node scripts/run.mjs test e2e",
     "test:admin:e2e": "node scripts/run.mjs test admin-e2e",
@@ -90,10 +92,15 @@
   "devDependencies": {
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
+    "@stryker-mutator/core": "^9.6.1",
+    "@stryker-mutator/jest-runner": "^9.6.1",
+    "@types/jest": "^30.0.0",
     "husky": "^9.1.7",
+    "jest": "^30.4.1",
     "jsdom": "^28.1.0",
     "lint-staged": "^17.0.2",
     "madge": "^8.0.0",
+    "ts-jest": "^29.4.9",
     "typescript": "~5.9.2"
   },
   "dependencies": {

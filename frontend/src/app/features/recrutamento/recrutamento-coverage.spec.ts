@@ -13,6 +13,7 @@ describe('recrutamento coverage flows', () => {
   it('advances concurso setup steps and appends seat drafts', () => {
     const component = new RecrutamentoConcursos();
 
+    component.previous();
     component.next();
     component.next();
     component.next();
@@ -25,12 +26,27 @@ describe('recrutamento coverage flows', () => {
     expect(component.seats[1]).toMatchObject({ totalSeats: 1, baseSalary: '0.00' });
   });
 
+  it('keeps concurso wizard navigation bounded at both edges', () => {
+    const component = new RecrutamentoConcursos();
+
+    component.previous();
+    expect(component.step).toBe('general');
+
+    component.next();
+    component.next();
+    component.next();
+    component.next();
+    component.next();
+
+    expect(component.step).toBe('publish');
+  });
+
   it('builds evaluation answer previews and switches board views', () => {
     const avaliacao = new RecrutamentoAvaliacao();
     const banca = new RecrutamentoBanca();
 
     avaliacao.addQuestion();
-    avaliacao.questions[2].answer = 'C';
+    avaliacao.questions[2]!.answer = 'C';
     banca.setView('signing');
     banca.setView('publish');
 
@@ -56,7 +72,7 @@ describe('recrutamento coverage flows', () => {
     const component = new RecrutamentoClassificacao();
 
     component.generate();
-    component.publish(component.versions[0]);
+    component.publish(component.versions[0]!);
 
     expect(component.versions[0]).toMatchObject({ status: 'PUBLISHED', published: true });
     expect(component.versions.some((item) => item.status === 'SUPERSEDED')).toBe(true);
@@ -65,16 +81,16 @@ describe('recrutamento coverage flows', () => {
 
   it('creates appointment notices and handles withdrawals', () => {
     const component = new RecrutamentoNomeacao();
-    const call = component.nextCalls[0];
+    const call = component.nextCalls[0]!;
 
     component.appoint(call);
-    component.withdraw(component.notices[0]);
+    component.withdraw(component.notices[0]!);
     component.emailEnabled = false;
-    component.appoint(component.nextCalls[0]);
+    component.appoint(component.nextCalls[0]!);
 
     expect(component.nextCalls).not.toContain(call);
-    expect(component.notices[0].channel).toBe('PUBLICACAO_OFICIAL');
-    expect(component.notices[1].status).toBe('DESISTENTE');
+    expect(component.notices[0]!.channel).toBe('PUBLICACAO_OFICIAL');
+    expect(component.notices[1]!.status).toBe('DESISTENTE');
   });
 
   it('drives possession scheduling through terminal states', () => {
@@ -86,19 +102,41 @@ describe('recrutamento coverage flows', () => {
     component.nomeacaoId = '00000000-0000-4000-8000-000000000503';
     component.lotacaoId = 'lotacao-1';
     component.schedule();
-    const scheduled = component.agenda[0];
+    const scheduled = component.agenda[0]!;
     component.markPossession(scheduled);
     component.startExercise(scheduled);
 
     expect(scheduled.status).toBe('EXERCICIO');
     expect(scheduled.employeeRegistration).toBe('REC-00000000');
 
-    const prorogued = component.agenda[1];
+    const prorogued = component.agenda[1]!;
     component.prorogue(prorogued);
     component.reason = 'candidate withdrew';
     component.cancel(prorogued);
 
     expect(prorogued.status).toBe('CANCELADA');
+  });
+
+  it('keeps possession terminal and invalid transitions inert', () => {
+    const component = new RecrutamentoPosse();
+    const item = component.agenda[0]!;
+
+    component.markPossession({ ...item, status: 'EXERCICIO' });
+    component.startExercise({ ...item, status: 'AGENDADA' });
+    component.reason = '';
+    component.cancel(item);
+    expect(item.status).toBe('AGENDADA');
+
+    item.status = 'EXERCICIO';
+    component.prorogue(item);
+    component.reason = 'late documents';
+    component.cancel(item);
+    expect(item.status).toBe('EXERCICIO');
+
+    const prorrogada = { ...item, status: 'PRORROGADA' as const };
+    component.markPossession(prorrogada);
+    component.prorogue({ ...item, status: 'CANCELADA' });
+    expect(prorrogada.status).toBe('POSSE_REALIZADA');
   });
 
   it('accepts and rejects online proof sessions', () => {

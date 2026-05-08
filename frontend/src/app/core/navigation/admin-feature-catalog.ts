@@ -2212,7 +2212,7 @@ export const ADMIN_FEATURES_BY_MODULE: Record<AdminModuleKey, AdminFeature[]> =
   );
 
 export function findAdminFeatureByRoutePath(routePath: string): AdminFeature | undefined {
-  const normalizedPath = routePath.split('?')[0].split('#')[0].replace(/\/$/, '');
+  const normalizedPath = (routePath.split('?')[0] ?? '').split('#')[0]?.replace(/\/$/, '') ?? '';
   return ADMIN_FEATURES.find((feature) => feature.routePath === normalizedPath);
 }
 

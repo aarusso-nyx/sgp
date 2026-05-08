@@ -6,7 +6,7 @@ import {
   TEST_INSTANT_2026_05_20_10_00_00_000Z,
   TEST_INSTANT_2026_06_03_10_00_00_000Z,
 } from './../../../tests/backend/helpers/date-fixtures';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Logger } from '@nestjs/common';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import {
@@ -186,6 +186,108 @@ describe('LgpdSecurityIncidentService', () => {
       TEST_INSTANT_2026_06_03_10_00_00_000Z,
     );
     expect(complemented.status).toBe('COMPLEMENTED');
+  });
+
+  it('closes a complemented incident with closure evidence', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([
+        incidentRow({
+          status: 'COMPLEMENTED',
+          complement_due_at: TEST_INSTANT_2026_06_03_10_00_00_000Z,
+        }),
+      ])
+      .mockResolvedValueOnce([{ id: incidentId }])
+      .mockResolvedValueOnce([
+        incidentRow({
+          status: 'CLOSED',
+          complement_due_at: TEST_INSTANT_2026_06_03_10_00_00_000Z,
+          closed_at: TEST_INSTANT_2026_05_20_10_00_00_000Z,
+          closure_reason: 'ANPD communication and mitigation evidence closed.',
+          closed_by_ref: 'admin.local',
+        }),
+      ]);
+    const service = new LgpdSecurityIncidentService({
+      configured: true,
+      query,
+    } as never);
+
+    const closed = await RequestContextStore.run(
+      {
+        tenantId,
+        actor: {
+          sub: 'admin',
+          username: 'admin.local',
+          tenantId,
+          groups: [],
+          permissions: ['gestao.write'],
+        },
+      },
+      () =>
+        service.close(incidentId, {
+          closedAt: TEST_INSTANT_2026_05_20_10_00_00_000Z,
+          closureReason: 'ANPD communication and mitigation evidence closed.',
+        }),
+    );
+
+    expect(query.mock.calls[1][0]).toContain('UPDATE lgpd.security_incident');
+    expect(query.mock.calls[1][1]).toEqual([
+      incidentId,
+      'CLOSED',
+      'COMPLEMENTED',
+      TEST_INSTANT_2026_05_20_10_00_00_000Z,
+      'ANPD communication and mitigation evidence closed.',
+      'admin.local',
+    ]);
+    expect(closed.status).toBe('CLOSED');
+    expect(closed.closedAt).toBe(TEST_INSTANT_2026_05_20_10_00_00_000Z);
+  });
+
+  it('keeps structured RCIS logs free of raw PII and incident narratives', async () => {
+    const log = jest.spyOn(Logger.prototype, 'log').mockImplementation();
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([incidentRow()])
+      .mockResolvedValueOnce([{ id: incidentId }])
+      .mockResolvedValueOnce([
+        incidentRow({
+          status: 'TRIAGED',
+          personal_data_confirmed_at: TEST_INSTANT_2026_05_01_10_00_00_000Z,
+          anpd_due_at: TEST_INSTANT_2026_05_06_10_00_00_000Z,
+          anpd_alert_at: TEST_INSTANT_2026_05_05_10_00_00_000Z,
+          affected_data_nature: 'MIXED',
+          affected_data_categories: ['CPF', 'bank_account'],
+          risk_relevant: true,
+          risk_assessment: 'John Doe CPF 123.456.789-00 bank account leaked',
+          mitigation_measures: ['credential rotation'],
+        }),
+      ]);
+    const service = new LgpdSecurityIncidentService({
+      configured: true,
+      query,
+    } as never);
+
+    await RequestContextStore.run({ tenantId }, () =>
+      service.triage(incidentId, {
+        riskRelevant: true,
+        personalDataConfirmedAt: TEST_INSTANT_2026_05_01_10_00_00_000Z,
+        affectedDataNature: 'MIXED',
+        affectedDataCategories: ['CPF', 'bank_account'],
+        affectedSubjectsEstimate: 42,
+        severity: 'HIGH',
+        riskAssessment: 'John Doe CPF 123.456.789-00 bank account leaked',
+        mitigationMeasures: ['credential rotation'],
+      }),
+    );
+
+    const serializedLogs = JSON.stringify(log.mock.calls);
+    log.mockRestore();
+    expect(serializedLogs).toContain('lgpd_rcis_security_incident');
+    expect(serializedLogs).toContain('TRIAGED');
+    expect(serializedLogs).not.toContain('John Doe');
+    expect(serializedLogs).not.toContain('123.456.789-00');
+    expect(serializedLogs).not.toContain('bank_account');
+    expect(serializedLogs).not.toContain('credential rotation');
   });
 
   it('rejects out-of-order state transitions', async () => {

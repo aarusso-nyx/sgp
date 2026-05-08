@@ -46,7 +46,7 @@ describe('AdminFeaturePage', () => {
     });
     component.save();
 
-    expect(component.records()[0].code).toBe('AVD-010');
+    expect(component.records()[0]!.code).toBe('AVD-010');
     expect(component.message()).toContain('incluído');
   });
 });

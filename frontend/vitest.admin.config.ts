@@ -41,10 +41,10 @@ const angularPeerAliases = [
 }));
 
 const featureThreshold = {
-  statements: 70,
+  statements: 85,
   branches: 70,
-  functions: 70,
-  lines: 70,
+  functions: 75,
+  lines: 90,
 };
 
 export default defineConfig({

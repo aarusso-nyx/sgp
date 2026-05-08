@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Reinf xmlns="urn:br:gov:rfb:reinf:sgp:r4000">
+  <evtBenefNId Id="IDR40408ffbf13551a68e936e4cec053001928c">
+    <ideEvento>
+      <perApur>2025-01</perApur>
+      <tpAmb>2</tpAmb>
+      <procEmi>1</procEmi>
+      <indRetif>1</indRetif>
+    </ideEvento>
+    <ideContri>
+      <nrInsc>00000000-0000-0000-0000-00000000f501</nrInsc>
+    </ideContri>
+    <infoR4000>
+      <pagamento sourceRunId="00000000-0000-4000-8000-000000004040">
+        <beneficiario tipo="EXTERIOR">
+          <cpfCnpj>EXT-0001</cpfCnpj>
+          <nome>Beneficiario Exterior &amp; Cia</nome>
+        </beneficiario>
+        <codReceita>8045</codReceita>
+        <vlrBruto>12500.00</vlrBruto>
+        <vlrRetencao>1875.00</vlrRetencao>
+      </pagamento>
+    </infoR4000>
+  </evtBenefNId>
+</Reinf>

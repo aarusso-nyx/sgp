@@ -1,6 +1,6 @@
 # Functional Requisites
 
-| FR-ID  | Requirement                                   | Status  | Evidence                        | Notes |
-| ------ | --------------------------------------------- | ------- | ------------------------------- | ----- |
-| FR-001 | People API route surface with audit evidence. | DONE    | docs/gov/evidence/evidence.md:1 | -     |
-| FR-002 | Payroll calculation helper coverage.          | PARTIAL | backend/src/payroll.ts          | -     |
+| FR-ID  | Requirement                                   | Status  | Evidence                        | Notes                                                                                                                                                                                                                                                                                      |
+| ------ | --------------------------------------------- | ------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| FR-001 | People API route surface with audit evidence. | DONE    | docs/gov/evidence/evidence.md:1 | Proof: source=backend/src/people.ts:1; test=tests/backend/golden/people-proof/expected.json:1; command=npm run test:backend -- --runInBand; audit=docs/gov/audit/fr-promotion-proof.md:1; rationale=People route source, focused e2e, command, and audit note prove the accepted behavior. |
+| FR-002 | Payroll calculation helper coverage.          | PARTIAL | backend/src/payroll.ts          | -                                                                                                                                                                                                                                                                                          |

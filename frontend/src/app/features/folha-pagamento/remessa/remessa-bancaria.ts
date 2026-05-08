@@ -68,7 +68,9 @@ export class RemessaBancaria {
       .generate({
         payrollRunId: this.form.controls.payrollRunId.value.trim(),
         bankId: this.form.controls.bankId.value.trim(),
-        paymentDate: this.form.controls.paymentDate.value.trim() || undefined,
+        ...(this.form.controls.paymentDate.value.trim()
+          ? { paymentDate: this.form.controls.paymentDate.value.trim() }
+          : {}),
       })
       .subscribe({
         next: (result) => {

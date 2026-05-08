@@ -65,7 +65,7 @@ export class AtsParametros implements OnInit {
         this.service.upsert({
           key: this.form.value.key as AtsParameterKey,
           value: String(this.form.value.value),
-          description: this.form.value.description || undefined,
+          ...(this.form.value.description ? { description: this.form.value.description } : {}),
         }),
       );
       this.items.set(table.items);

@@ -77,7 +77,7 @@ export class TetoRemuneratorio implements OnInit {
         this.service.upsert({
           key: this.form.value.key as RemunerationCeilingKey,
           amount: String(this.form.value.amount),
-          description: this.form.value.description || undefined,
+          ...(this.form.value.description ? { description: this.form.value.description } : {}),
         }),
       );
       this.ceilings.set(table.items);

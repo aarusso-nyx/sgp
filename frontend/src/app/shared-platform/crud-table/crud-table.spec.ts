@@ -31,16 +31,16 @@ describe('CrudTable', () => {
   it('emits action event with row payload', () => {
     const emitSpy = vi.spyOn(component.actionTriggered, 'emit');
 
-    component.trigger('edit', component.rows[0]);
+    component.trigger('edit', component.rows[0]!);
 
     expect(emitSpy).toHaveBeenCalledWith({
       actionId: 'edit',
-      row: component.rows[0],
+      row: component.rows[0]!,
     });
   });
 
   it('builds accessible action labels with the row label', () => {
-    expect(component.actionAriaLabel(component.actions[0], component.rows[0])).toBe(
+    expect(component.actionAriaLabel(component.actions[0]!, component.rows[0]!)).toBe(
       'Editar: Maria',
     );
   });

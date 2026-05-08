@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import { readFile } from 'node:fs/promises';
 
 import {
   cleanupFixture,
@@ -28,5 +29,15 @@ describe('audit-promise-vs-delivery', () => {
         "",
       ]
     `);
+
+    const report = await readFile(
+      join(fixtureRoot, 'out', 'diag', 'round-7', 'promise-vs-delivery.md'),
+      'utf8',
+    );
+    expect(report).toMatch(
+      /\|\s+FR-001\s+\|\s+DONE\s+\|\s+ok\s+\|\s+People route source, focused e2e, command, and audit note prove the accepted behavior\.\s+\|/,
+    );
+    expect(report).toMatch(/\|\s+FR-002\s+\|\s+PARTIAL\s+\|\s+missing-proof-metadata\s+\|/);
+    expect(report).toContain('test, command, audit, rationale');
   });
 });

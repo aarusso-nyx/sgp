@@ -37,6 +37,14 @@ const adminPermissions = [
   'rh.employee.terminate',
   'rh.employee.write',
 ];
+const adminAccessToken = e2eJwt({
+  sub: 'admin-e2e-sub',
+  username: 'admin.e2e',
+  name: 'Admin E2E',
+  groups: ['ADMIN'],
+  permissions: adminPermissions,
+  tenant_id: 'tenant-e2e',
+});
 
 test.describe('SGP admin Playwright e2e', () => {
   test('redirects anonymous admin users to the Cognito login boundary', async ({ page }) => {
@@ -138,7 +146,7 @@ test.describe('SGP admin Playwright e2e', () => {
       (candidate) => candidate.path === '/v1/folhas/mensal/fechar',
     );
     expect(hit.method).toBe('POST');
-    expect(hit.authorization).toBe('Bearer admin-e2e-token');
+    expect(hit.authorization).toBe(`Bearer ${adminAccessToken}`);
     expect(hit.body).toMatchObject({ year: 2026, month: 5 });
   });
 
@@ -186,7 +194,7 @@ test.describe('SGP admin Playwright e2e', () => {
       (candidate) =>
         candidate.path === '/v1/funcionarios' && candidate.query.search === 'Ana Admin',
     );
-    expect(hit.authorization).toBe('Bearer admin-e2e-token');
+    expect(hit.authorization).toBe(`Bearer ${adminAccessToken}`);
   });
 
   test('admits an employee through the current employee create command', async ({ page }) => {
@@ -326,31 +334,38 @@ async function bootAdmin(page: Page, options: BootOptions = {}): Promise<void> {
   const permissions = options.permissions ?? adminPermissions;
 
   await page.addInitScript(
-    ({ isAuthenticated, sessionPermissions }) => {
+    ({ accessToken, isAuthenticated }) => {
       (window as unknown as { SGP_CONFIG: Record<string, string> }).SGP_CONFIG = {
         API_BASE_PATH: '/api',
         COGNITO_CLIENT_ID: 'admin-client',
         COGNITO_DOMAIN: 'https://idp.test',
         COGNITO_REDIRECT_URI: 'http://127.0.0.1:4210/auth/callback',
+        DEFAULT_TENANT_ID: 'tenant-e2e',
+        STYNX_E2E: 'true',
+        STYNX_E2E_ACCESS_TOKEN: isAuthenticated ? accessToken : '',
+        TENANT_ID: 'tenant-e2e',
       };
 
       if (isAuthenticated) {
-        sessionStorage.setItem(
-          'sgp.session',
-          JSON.stringify({
-            subject: 'admin-e2e-sub',
-            login: 'admin.e2e',
-            displayName: 'Admin E2E',
-            groups: ['ADMIN'],
-            permissions: sessionPermissions,
-          }),
-        );
-        sessionStorage.setItem('sgp.access_token', 'admin-e2e-token');
+        sessionStorage.setItem('sgp.access_token', accessToken);
       } else {
         sessionStorage.clear();
       }
     },
-    { isAuthenticated: authenticated, sessionPermissions: permissions },
+    {
+      accessToken:
+        permissions === adminPermissions
+          ? adminAccessToken
+          : e2eJwt({
+              sub: 'admin-e2e-sub',
+              username: 'admin.e2e',
+              name: 'Admin E2E',
+              groups: ['ADMIN'],
+              permissions,
+              tenant_id: 'tenant-e2e',
+            }),
+      isAuthenticated: authenticated,
+    },
   );
 
   await page.route('https://idp.test/**', async (route) => {
@@ -417,6 +432,22 @@ function requestBody(request: Request): unknown {
   } catch {
     return data;
   }
+}
+
+function e2eJwt(claims: Record<string, unknown>): string {
+  const payload = {
+    exp: Math.floor(Date.now() / 1000) + 3600,
+    ...claims,
+  };
+  return ['e2e', base64Url(JSON.stringify(payload)), 'signature'].join('.');
+}
+
+function base64Url(value: string): string {
+  return Buffer.from(value, 'utf8')
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/g, '');
 }
 
 function responseFor(method: string, path: string): ApiResponse {
