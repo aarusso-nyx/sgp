@@ -1,7 +1,7 @@
 # SGP Architecture and Layout Map
 
 Status: current architecture map for v0.0.1
-Last updated: 2026-05-08
+Last updated: 2026-05-09
 
 This map records the live SGP implementation shape used by governance and QA
 scorecard evidence. It complements `docs/gov/generated/runtime-topology.json`;
@@ -47,9 +47,20 @@ The OpenTelemetry tracing middleware (`backend/src/common/observability/otel.tra
 ## Boundary Rules
 
 - `ADMIN_INSTALL_LATER` remains owner-accepted scope reduction: full admin menu
-  parity, admin identity management, and broad administrative coverage are not
-  SGP v0.0.1 acceptance blockers unless a future owner decision reopens a
-  concrete route or surface.
+  parity, admin identity management, broad administrative coverage, and generic
+  admin backend/db/frontend surfaces are delegated to the `../stynx` framework
+  and are not SGP v0.0.1 acceptance blockers unless a future owner decision
+  reopens a concrete product-domain route or surface in `docs/eng`.
+- eSocial implementation is outside SGP runtime ownership. SGP owns source-data
+  mappings, producer DTO/projection contracts, `public.esocial_events` gateway
+  state, local status/audit consumers, and operator display; XML/XSD builders,
+  signing, SOAP transmission, returns, totalizers, retry/DLQ, and official
+  homologation belong to `../stynx-esocial`.
+- DET implementation is outside SGP runtime ownership. SGP owns local DET inbox
+  projection, annotations, typed request/status envelopes, and acknowledgement
+  request status; government polling, certificates, acknowledgement protocol,
+  normalization, retry/DLQ, and external audit publication belong to an external
+  DET service boundary rather than this repository.
 - SGP may call Stynx-owned integrations through explicit package or adapter
   boundaries, but backend code must not import from `frontend/`, frontend code
   must not import from `backend/`, and generated/client artifacts must remain
