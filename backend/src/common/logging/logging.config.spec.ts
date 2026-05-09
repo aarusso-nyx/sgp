@@ -70,10 +70,15 @@ describe('pino logger redaction contract', () => {
         contact: {
           email: 'person@example.test',
           bankAccount: '00012345-6',
+          banking: {
+            accountNumber: '999888777',
+            agencyNumber: '1234',
+          },
         },
       },
       req: {
         headers: {
+          authorization: 'Bearer lower-case-secret',
           Authorization: 'Bearer secret-token',
         },
       },
@@ -88,6 +93,9 @@ describe('pino logger redaction contract', () => {
     expect(serialized).not.toContain('12345678901234');
     expect(serialized).not.toContain('person@example.test');
     expect(serialized).not.toContain('00012345-6');
+    expect(serialized).not.toContain('999888777');
+    expect(serialized).not.toContain('1234');
+    expect(serialized).not.toContain('Bearer lower-case-secret');
     expect(serialized).not.toContain('Bearer secret-token');
   });
 });

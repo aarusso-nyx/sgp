@@ -72,4 +72,35 @@ describe('runtime entrypoint contract', () => {
       expect(source).toContain('scheduler.start()');
     }
   });
+
+  it('wires every runtime to the retained pino redaction policy module', () => {
+    const runtimeLoggingModules = new Map([
+      ['backend/src/app.module.ts', "createLoggingModule('sgp-core-api')"],
+      [
+        'backend/src/app-portal.module.ts',
+        "createLoggingModule('sgp-portal-api')",
+      ],
+      [
+        'backend/src/payroll-engine/payroll-engine.module.ts',
+        "createLoggingModule('sgp-payroll-engine')",
+      ],
+      [
+        'backend/src/report-service/report-service.module.ts',
+        "createLoggingModule('sgp-report-service')",
+      ],
+      [
+        'backend/src/main-integrations-worker.ts',
+        "createLoggingModule('sgp-integrations-worker')",
+      ],
+      [
+        'backend/src/main-report-worker.ts',
+        "createLoggingModule('sgp-report-worker')",
+      ],
+    ]);
+
+    for (const [entrypoint, loggingModuleCall] of runtimeLoggingModules) {
+      const source = readFileSync(repoPath(entrypoint), 'utf8');
+      expect(source).toContain(loggingModuleCall);
+    }
+  });
 });

@@ -2,6 +2,7 @@ import { Injectable, PreconditionFailedException } from '@nestjs/common';
 import type { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { IcpSignerService } from './icp-signer.service';
 
 export type TenantFiscalCertificate = Readonly<{
   pkcs12: Buffer;
@@ -9,13 +10,29 @@ export type TenantFiscalCertificate = Readonly<{
   alias?: string | undefined;
 }>;
 
+export type TenantFiscalCertificateStatus = Readonly<{
+  alias: string | null;
+  subject: string;
+  validFrom: string;
+  validTo: string;
+  daysUntilExpiry: number;
+  expired: boolean;
+  nearExpiry: boolean;
+}>;
+
 type SystemParameterRow = QueryResultRow & {
   value: unknown;
 };
 
+const certificateExpiryWarningDays = 30;
+const millisecondsPerDay = 24 * 60 * 60 * 1000;
+
 @Injectable()
 export class TenantFiscalCertificateService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly icpSigner: IcpSignerService,
+  ) {}
 
   async activeCertificate(): Promise<TenantFiscalCertificate> {
     const [row] = await this.databaseService.query<SystemParameterRow>(
@@ -33,6 +50,30 @@ export class TenantFiscalCertificateService {
       );
     }
     return this.parse(row.value);
+  }
+
+  async activeCertificateStatus(
+    now = new Date(),
+  ): Promise<TenantFiscalCertificateStatus> {
+    const certificate = await this.activeCertificate();
+    const material = this.icpSigner.readPkcs12(
+      certificate.pkcs12,
+      certificate.password,
+    );
+    const daysUntilExpiry = Math.floor(
+      (material.validTo.getTime() - now.getTime()) / millisecondsPerDay,
+    );
+    const expired = material.validTo.getTime() <= now.getTime();
+
+    return {
+      alias: certificate.alias ?? null,
+      subject: material.subject,
+      validFrom: material.validFrom.toISOString(),
+      validTo: material.validTo.toISOString(),
+      daysUntilExpiry,
+      expired,
+      nearExpiry: !expired && daysUntilExpiry <= certificateExpiryWarningDays,
+    };
   }
 
   private parse(value: unknown): TenantFiscalCertificate {

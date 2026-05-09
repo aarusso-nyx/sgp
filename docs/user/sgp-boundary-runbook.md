@@ -103,6 +103,12 @@ The SGP-side signing default is the local software-certificate path. HSM/A3 is a
 per-ente downstream concern because provider, custody, certificate chain,
 onboarding, SLA, and cost are deployment-specific.
 
+Software A1/PKCS#12 certificate material and passwords enter SGP only through
+the deployment secret boundary. Runtime and audit status surfaces may expose
+alias, subject, validity dates, days until expiry, and expired/near-expiry
+flags, but must never return PKCS#12 bytes, passwords, private keys, or raw
+certificate PEM values.
+
 Production installations that need HSM/A3 should attach it through a
 config-driven signer strategy/factory:
 
