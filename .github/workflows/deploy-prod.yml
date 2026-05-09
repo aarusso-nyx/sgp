@@ -1,0 +1,70 @@
+name: Deploy (prod)
+
+# Triggered by a release-please-generated tag or manual workflow_dispatch.
+# Gated on the `prod` GitHub Environment, which must require reviewer
+# approval and restrict the AWS_DEPLOY_ROLE_PROD secret to that
+# environment. While ADR-022 (AWS IaC stack) remains Postponed, this
+# workflow runs in dry-run/plan mode only — the deploy dispatcher in
+# scripts/run.mjs intentionally blocks --apply until infra/aws/templates
+# are parameterized.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: 'Stack to deploy (cognito|rds|backend|frontend|all)'
+        required: true
+        default: 'all'
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy-prod:
+    name: Plan prod stack (dry-run; --apply blocked until ADR-022)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: prod
+      url: ${{ vars.PROD_DEPLOY_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install workspace dependencies
+        run: npm ci
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_PROD }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+          role-session-name: sgp-deploy-prod-${{ github.run_id }}
+
+      - name: Plan prod deployment
+        run: npm run deploy -- --target prod --stack ${{ github.event.inputs.stack || 'all' }} --dry-run
+
+      - name: Upload plan artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-prod-plan-${{ github.ref_name }}
+          path: |
+            cdk.out
+            *.tfplan
+          if-no-files-found: ignore

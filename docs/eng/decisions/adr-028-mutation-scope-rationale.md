@@ -35,13 +35,59 @@ decision, not by accident.** Specifically:
 - Expansion of the scope is done deliberately, one logical surface at a
   time, with a `break:` threshold appropriate to the new surface's spec
   density.
-- Wave 2 of the QA scorecard lift (per `docs/work/qa/report.md` §13) commits
-  to expanding the scope to **payroll engine money paths**
-  (`backend/src/folha-pagamento/**/*.service.ts`) and **IAM enforcement**
-  (`backend/src/iam/permissions/**/*.ts`) with `break: 60` initially. The
-  threshold ratchets upward as the spec corpus catches up to the new mutants.
 - Further expansion requires a new ADR or an amendment to this one,
   identifying the new surface, the rationale, and the initial threshold.
+
+## Amendment 2026-05-08 — bulk-glob expansion experiment, then targeted re-expansion
+
+A first attempt expanded `mutate` to
+`backend/src/folha-pagamento/**/*.service.ts` and
+`backend/src/iam/permissions/**/*.ts` and measured a global mutation
+score of **34.49 %**, far below the configured floor. The per-file
+breakdown showed many services at **0 %** because those services rely
+exclusively on e2e tests against a real PostgreSQL, and the
+`tests/backend/jest-mutation.json` runner (intentionally narrow for cost
+reasons) did not pick them up. Bulk-glob expansion was therefore
+reverted.
+
+A second, targeted expansion was attempted: include the three folha-pagamento
+services whose existing specs DIRECTLY import the service so Stryker's
+`enableFindRelatedTests` correctly maps mutations to runnable tests:
+
+| Service                                                                               | Mapping spec                                                |            Per-file score |
+| ------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------: |
+| `backend/src/folha-pagamento/operations/consignment/margin-calculator.service.ts`     | `tests/backend/margin-calculator.golden.spec.ts`            | 43.33 % (76.47 % covered) |
+| `backend/src/folha-pagamento/operations/reintegration/reintegration-order.service.ts` | `tests/backend/reintegration-order-branch-coverage.spec.ts` | 20.33 % (60.49 % covered) |
+
+The targeted expansion ran in 49 seconds (vs the bulk-glob's 5 minutes —
+`enableFindRelatedTests` worked), demonstrating the architectural
+mechanism is sound: the spec imports the service, Stryker maps mutants
+to the spec, the spec runs and kills mutants. **Total mutation score
+came in at 36.02 %**, still well below the 70 % bar.
+
+The data shows why: the existing service-importing specs cover only
+60–76 % of the file, and Stryker's mutation score is computed as
+`killed / total mutants` (uncovered code regions count against the
+total). Even with the best-case targeted expansion, every additional
+service drags the total down.
+
+Both experiments are therefore reverted. The mutation scope returns to
+the original `money.ts` + `standard-exception.filter.ts` pair, where
+the dedicated specs reliably clear 70 %. Future expansion requires
+either:
+
+1. Promoting a comprehensive service-importing spec that covers
+   substantially all of the target service (≥ 90 % line coverage), so
+   the mutation-score math has a chance of clearing 70 %, or
+2. Adopting a per-file `break` threshold (Stryker supports this via
+   the dashboard, not via the local CLI gate), which lets the global
+   gate stay strict while individual files report their own floors, or
+3. Treating mutation as advisory-only on the broader scope — drop the
+   `break` to a measured floor and surface the score in
+   `docs/gov/audit/test-confidence-proof.md` rather than failing CI.
+
+None of these are in scope for the current QA-lift wave; each is a
+separate accepted-decision question.
 
 ## Options Considered
 

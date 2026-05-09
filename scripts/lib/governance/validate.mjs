@@ -604,14 +604,16 @@ function validateCoverageAndMutationGates() {
       sourceCi.includes('npm run test:mutation'),
     'package.json + source-ci',
   );
-  // ADR-028 (mutation-scope-rationale) accepts a transitional threshold
-  // floor of 60 while new logical surfaces (folha-pagamento services,
-  // iam/permissions) ratchet upward.
+  // ADR-028 (mutation-scope-rationale): mutation scope is curated.
+  // Two W3 expansion experiments (bulk-glob 34.49%, targeted 36.02%) were
+  // reverted because the existing service-importing specs cover too
+  // little of the target files to clear the 70% bar. Scope returns to
+  // the dedicated-spec pair.
   const breakMatch = strykerConfig.match(/break:\s*(\d+)/);
   const breakThreshold = breakMatch ? Number(breakMatch[1]) : 0;
   record(
     'mutation:scoped-break-threshold',
-    breakThreshold >= 60 &&
+    breakThreshold >= 70 &&
       strykerConfig.includes('backend/src/common/money/money.ts') &&
       strykerConfig.includes('backend/src/common/errors/standard-exception.filter.ts'),
     `break=${breakThreshold} stryker.conf.cjs`,
@@ -765,6 +767,45 @@ function validateCanonicalOpenApi() {
   }
 }
 
+function validateDeployPipelineAndProvenance() {
+  const deployDevPath = '.github/workflows/deploy-dev.yml';
+  const deployProdPath = '.github/workflows/deploy-prod.yml';
+  const sourceCiPath = '.github/workflows/source-ci.yml';
+
+  record('cicd:deploy-dev-workflow-present', pathExists(deployDevPath), deployDevPath);
+  record('cicd:deploy-prod-workflow-present', pathExists(deployProdPath), deployProdPath);
+
+  if (pathExists(deployDevPath) && pathExists(deployProdPath)) {
+    const dev = readFileSync(resolve(repoRoot, deployDevPath), 'utf8');
+    const prod = readFileSync(resolve(repoRoot, deployProdPath), 'utf8');
+    record(
+      'cicd:deploy-uses-oidc',
+      dev.includes('id-token: write') &&
+        prod.includes('id-token: write') &&
+        dev.includes('aws-actions/configure-aws-credentials') &&
+        prod.includes('aws-actions/configure-aws-credentials') &&
+        !/\$\{\{\s*secrets\.AWS_ACCESS_KEY_ID\s*\}\}/.test(dev) &&
+        !/\$\{\{\s*secrets\.AWS_ACCESS_KEY_ID\s*\}\}/.test(prod),
+      'OIDC role-assumption with no long-lived AWS keys',
+    );
+    record(
+      'cicd:deploy-prod-environment-gated',
+      /^\s*environment:\s*\n\s*name:\s*prod/m.test(prod),
+      'prod GitHub Environment gate present',
+    );
+  }
+
+  if (pathExists(sourceCiPath)) {
+    const sourceCi = readFileSync(resolve(repoRoot, sourceCiPath), 'utf8');
+    record(
+      'cicd:slsa-provenance-attested',
+      sourceCi.includes('actions/attest-build-provenance') &&
+        sourceCi.includes('attestations: write'),
+      'attest-build-provenance + attestations: write',
+    );
+  }
+}
+
 function validatePostponedAdrAge() {
   const decisionFiles = listMarkdownFiles('docs/eng/decisions').filter((file) =>
     /^docs\/eng\/decisions\/adr-\d{3}-.+\.md$/.test(file),
@@ -823,6 +864,7 @@ function main() {
   validateRoadmapAutoBlock();
   validateCanonicalOpenApi();
   validatePostponedAdrAge();
+  validateDeployPipelineAndProvenance();
 
   const failures = checks.filter((check) => !check.ok);
   for (const check of checks) {

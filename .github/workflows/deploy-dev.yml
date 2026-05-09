@@ -1,0 +1,64 @@
+name: Deploy (dev)
+
+# Triggered after Workspace CI succeeds on main. While the IaC choice from
+# ADR-022 is Postponed, this workflow runs in dry-run/plan mode only — the
+# deploy dispatcher in scripts/run.mjs intentionally blocks --apply until
+# infra/aws/templates are parameterized. When the IaC stack is accepted,
+# the only change here is to drop --dry-run; the OIDC trust, environment
+# gate, and CI dependency stay in place.
+
+on:
+  workflow_run:
+    workflows: ['Workspace CI']
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: false
+
+jobs:
+  deploy-dev:
+    name: Plan dev stack (dry-run; --apply blocked until ADR-022)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install workspace dependencies
+        run: npm ci
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_DEV }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+          role-session-name: sgp-deploy-dev-${{ github.run_id }}
+
+      - name: Plan dev deployment
+        run: npm run deploy -- --target stage --stack all --dry-run
+
+      - name: Upload plan artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-dev-plan
+          path: |
+            cdk.out
+            *.tfplan
+          if-no-files-found: ignore
