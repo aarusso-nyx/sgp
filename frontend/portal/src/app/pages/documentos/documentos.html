@@ -1,0 +1,64 @@
+<section class="documentos">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Documentos</h1>
+  </header>
+
+  <nav aria-label="Documentos">
+    <a href="/documentos/solicitar" [class.active]="section === 'solicitar'">Solicitar</a>
+    <a href="/documentos/ficha-funcional" [class.active]="section === 'ficha-funcional'">
+      Ficha funcional
+    </a>
+    <a href="/documentos/declaracoes" [class.active]="section === 'declaracoes'">Declaracoes</a>
+    <a href="/documentos/certidoes" [class.active]="section === 'certidoes'">Certidoes</a>
+  </nav>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <form *ngIf="section === 'solicitar'" [formGroup]="form" (ngSubmit)="submit()" class="panel">
+    <label>
+      <span>Documento</span>
+      <select formControlName="documentKind">
+        <option *ngFor="let kind of documentKinds" [value]="kind.value">{{ kind.label }}</option>
+      </select>
+    </label>
+    <label class="wide">
+      <span>Finalidade</span>
+      <textarea rows="3" formControlName="purpose"></textarea>
+    </label>
+    <label class="wide">
+      <span>Observacoes</span>
+      <textarea rows="3" formControlName="notes"></textarea>
+    </label>
+    <button type="submit" [disabled]="saving">Registrar solicitacao</button>
+  </form>
+
+  <section class="panel">
+    <div class="toolbar">
+      <h2>Solicitacoes</h2>
+      <button type="button" (click)="loadRequests()" [disabled]="loading">Atualizar</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Documento</th>
+          <th>Status</th>
+          <th>Prazo</th>
+          <th>Solicitado em</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of requests">
+          <td>{{ request.documentKind }}</td>
+          <td>{{ request.status }}</td>
+          <td>{{ request.dueAt || 'A definir' }}</td>
+          <td>{{ request.createdAt | date: 'short' }}</td>
+        </tr>
+        <tr *ngIf="!requests.length">
+          <td colspan="4">Nenhuma solicitacao registrada.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

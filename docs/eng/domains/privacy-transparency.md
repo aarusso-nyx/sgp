@@ -15,21 +15,23 @@ Authored domain authority for LGPD, biometrics, transparency portal, LAI, ROPA, 
 - LGPD RCIS security-incident workflow
 - LGPD ROPA registry
 - LGPD titular-rights portal tickets
+- LGPD international transfer mechanism registry
 
 ## Regulatory References Cross-Reference
 
 This table maps privacy, transparency, and LGPD references to implementation or
 retained decision evidence.
 
-| Reference                                    | Obligation cluster                           | Implementation / evidence path:line               | Current posture                                                  |
-| -------------------------------------------- | -------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------- |
-| `docs/refs/lgpd/anpd-guidelines.md`          | ANPD operational guidance                    | docs/user/lgpd.md:1                               | Operator-facing LGPD procedure retained.                         |
-| `docs/refs/lgpd/dpo-dsar.md`                 | DPO designation and data-subject requests    | backend/src/lgpd/dpo.controller.ts:1              | Implemented public DPO/DSAR endpoints.                           |
-| `docs/refs/lgpd/lei-13709.md`                | LGPD umbrella obligations                    | database/sql/15-pii-encryption.sql:1              | Implemented PII tagging/encryption and protected route surfaces. |
-| `docs/refs/lgpd/pii-categorias-cpf-bio.md`   | CPF, health, photo, and biometric categories | database/sql/13-pii-comments.sql:1                | Implemented PII classification comments and encryption scope.    |
-| `docs/refs/lgpd/ropa-rcis.md`                | ROPA and security incident records           | backend/src/lgpd/ropa.controller.ts:1             | Implemented ROPA/RCIS controller surfaces.                       |
-| `docs/refs/lgpd/tratamento-poder-publico.md` | Public-power treatment basis                 | backend/src/lgpd/public-power.controller.ts:1     | Implemented public-power LGPD route surface.                     |
-| `docs/refs/tce/lai-portal-transparencia.md`  | LAI and transparency publication             | backend/src/publico/lai/lai-requests.service.ts:1 | Implemented LAI request and transparency surfaces.               |
+| Reference                                    | Obligation cluster                           | Implementation / evidence path:line                     | Current posture                                                  |
+| -------------------------------------------- | -------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| `docs/refs/lgpd/anpd-guidelines.md`          | ANPD operational guidance                    | docs/user/lgpd.md:1                                     | Operator-facing LGPD procedure retained.                         |
+| `docs/refs/lgpd/dpo-dsar.md`                 | DPO designation and data-subject requests    | backend/src/lgpd/dpo.controller.ts:1                    | Implemented public DPO/DSAR endpoints.                           |
+| `docs/refs/lgpd/lei-13709.md`                | LGPD umbrella obligations                    | database/sql/15-pii-encryption.sql:1                    | Implemented PII tagging/encryption and protected route surfaces. |
+| `docs/refs/lgpd/pii-categorias-cpf-bio.md`   | CPF, health, photo, and biometric categories | database/sql/13-pii-comments.sql:1                      | Implemented PII classification comments and encryption scope.    |
+| `docs/refs/lgpd/ropa-rcis.md`                | ROPA and security incident records           | backend/src/lgpd/ropa.controller.ts:1                   | Implemented ROPA/RCIS controller surfaces.                       |
+| `docs/refs/lgpd/international-transfers.md`  | LGPD art. 33 transfer mechanisms             | backend/src/lgpd/international-transfer.controller.ts:1 | Implemented P.12 transfer approval and public registry.          |
+| `docs/refs/lgpd/tratamento-poder-publico.md` | Public-power treatment basis                 | backend/src/lgpd/public-power.controller.ts:1           | Implemented public-power LGPD route surface.                     |
+| `docs/refs/tce/lai-portal-transparencia.md`  | LAI and transparency publication             | backend/src/publico/lai/lai-requests.service.ts:1       | Implemented LAI request and transparency surfaces.               |
 
 ## Biometria de Candidato e LGPD Art. 11
 
@@ -217,6 +219,57 @@ Solicitações de apagamento, bloqueio ou eliminação sao classificadas como
 `RETENTION_RESTRICTED` quando a base ROPA vigente indicar retenção legal ou
 operacional; as demais entram como `EXECUTABLE`. O endpoint nao decide mérito
 jurídico nem executa alteração automática de dados pessoais.
+
+## Transferencia Internacional de Dados Pessoais
+
+P.12 implementa o registro de mecanismos de transferência internacional exigido
+pela Lei 13.709/2018, art. 33, e pela Resolução CD/ANPD 19/2024. A base
+operacional fica em `lgpd.international_transfer`, com eventos detectados em
+`lgpd.international_transfer_event` e referência de adequação em
+`lgpd.international_transfer_country_adequacy`.
+
+### Mecanismos aceitos
+
+O campo `mechanism` aceita os mecanismos previstos para transferência
+internacional, incluindo decisão de adequação, cláusulas-padrão contratuais,
+cláusulas específicas, normas corporativas globais, cooperação jurídica,
+política pública, consentimento específico, execução contratual, exercício de
+direitos, proteção da vida e autorização da ANPD.
+
+Decisão de adequação exige referência normativa. A União Europeia é registrada
+como adequada com `Resolução CD/ANPD 32/2026`; países do EEE que nao sejam
+Estados-membros da UE permanecem com cláusulas-padrão como mecanismo default
+até reconhecimento específico.
+
+### Ciclo administrativo
+
+O operador com `gestao.write` cria rascunho em:
+
+- `POST /api/v1/admin/lgpd/transferencias-internacionais`
+
+O rascunho é enviado para revisão do encarregado por:
+
+- `PATCH /api/v1/admin/lgpd/transferencias-internacionais/:id/dpo-review`
+
+Após parecer do encarregado, o mecanismo é ativado em:
+
+- `PATCH /api/v1/admin/lgpd/transferencias-internacionais/:id/approve`
+
+O encerramento exige `endsAt`:
+
+- `PATCH /api/v1/admin/lgpd/transferencias-internacionais/:id/close`
+
+Mutações emitem auditoria com `resourceType=lgpd_international_transfer`.
+
+### Detecção e portal
+
+`AuditWriterService` registra evento em
+`lgpd.international_transfer_event` quando metadados de auditoria trazem
+`flowKey`, `processorName` e `destinationCountry` diferente de `BR` e há
+mecanismo ativo compatível. A página `/lgpd/encarregado` e a rota autenticada
+`/portal/lgpd/encarregado` consultam
+`GET /api/v1/public/lgpd/transferencias-internacionais` e exibem apenas resumo
+público do mecanismo ativo, sem notas internas ou identificadores de evento.
 
 ### Administração DSAR
 

@@ -24,7 +24,7 @@ O SGP é composto por duas SPAs Angular independentes:
 | Aplicação    | Finalidade                                                              | Menus de 1º nível                                           |
 | ------------ | ----------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `sgp-admin`  | Back-office administrativo; acesso restrito a operadores internos       | 11 ramos postergados sob `ADMIN_INSTALL_LATER`              |
-| `sgp-portal` | Portal do Servidor / Pensionista / Candidato; acesso ao próprio usuário | 1 raiz com 11 seções; itens de identidade/OAuth postergados |
+| `sgp-portal` | Portal do Servidor / Pensionista / Candidato; acesso ao próprio usuário | 1 raiz com 12 seções; itens de identidade/OAuth postergados |
 
 #### 1.1 Menus de 1º nível — `sgp-admin`
 
@@ -46,7 +46,7 @@ Arrecadação Previdenciária fica para versão futura e não possui ramo de men
 
 #### 1.2 Menu raiz — `sgp-portal`
 
-O Portal do Servidor expõe uma única raiz de navegação com 11 seções (ver seção 4). Itens de identidade, MFA, troca de senha, Cognito UserPool e federação Gov.br ficam sob `IDENTITY_INSTALL_LATER` até integração com o framework corporativo.
+O Portal do Servidor expõe uma única raiz de navegação com 12 seções (ver seção 4). Itens de identidade, MFA, troca de senha, Cognito UserPool e federação Gov.br ficam sob `IDENTITY_INSTALL_LATER` até integração com o framework corporativo.
 
 ---
 
@@ -688,9 +688,13 @@ sgp-portal
 │   ├── Nova Requisição
 │   └── Acompanhamento
 ├── Documentos Pessoais
+│   ├── Solicitar Documento
 │   ├── Ficha Funcional (download)
 │   ├── Declarações
 │   └── Certidões
+├── Minha Equipe
+│   ├── Fila de Aprovações
+│   └── Aprovações
 ├── Avaliação
 │   ├── Auto-Avaliação
 │   └── Resultados
@@ -703,43 +707,46 @@ sgp-portal
 
 #### 4.1 Tabela detalhada — `sgp-portal`
 
-| Seção                   | Item                | Rota Portal                       | Papel / Condição                   | Módulo NestJS    | Comentário                                                    |
-| ----------------------- | ------------------- | --------------------------------- | ---------------------------------- | ---------------- | ------------------------------------------------------------- |
-| Início                  | Dashboard pessoal   | `/`                               | autenticado                        | `rh`, `folha`    | KPIs pessoais: próximo recadastramento, contracheques, férias |
-| Meus Dados              | Cadastro Pessoal    | `/meus-dados/cadastro`            | autenticado                        | `rh`             | Somente visualização; edição via RH                           |
-| Meus Dados              | Endereço            | `/meus-dados/endereco`            | autenticado                        | `pessoa`         | Edição permite atualizar recadastramento                      |
-| Meus Dados              | Contato             | `/meus-dados/contato`             | autenticado                        | `pessoa`         | E-mail pessoal, telefones                                     |
-| Meus Dados              | Documentos          | `/meus-dados/documentos`          | autenticado                        | `pessoa`         | Visualização dos documentos cadastrados                       |
-| Meus Dados              | Dependentes         | `/meus-dados/dependentes`         | autenticado                        | `rh`             | Somente leitura; inclusão via RH                              |
-| Contracheques           | Mês Atual           | `/contracheques/atual`            | autenticado                        | `folha`          | Contracheque competência corrente                             |
-| Contracheques           | Histórico           | `/contracheques/historico`        | autenticado                        | `folha`          | Listagem por ano/mês                                          |
-| Contracheques           | Download PDF        | `/contracheques/download/:id`     | autenticado                        | `folha`          | PDF sem marca d'água para o próprio servidor                  |
-| Contracheques           | Financeiro Anual    | `/contracheques/financeiro-anual` | autenticado                        | `folha`          | Totais anuais de proventos e descontos                        |
-| Licenças e Afastamentos | Solicitações        | `/licencas/solicitacoes`          | autenticado                        | `rh`             | Formulário de solicitação de licença                          |
-| Licenças e Afastamentos | Histórico           | `/licencas/historico`             | autenticado                        | `rh`             | Situações passadas                                            |
-| Licenças e Afastamentos | Documentos          | `/licencas/documentos`            | autenticado                        | `rh`             | Atestados e laudos do próprio servidor                        |
-| Perícias                | Agendadas           | `/pericias/agendadas`             | autenticado                        | `saude`          | Próximas perícias agendadas                                   |
-| Perícias                | Histórico           | `/pericias/historico`             | autenticado                        | `saude`          | Perícias concluídas; laudos aprovados                         |
-| Perícias                | Anexos              | `/pericias/anexos`                | autenticado                        | `saude`          | Download de laudos próprios (S3 presigned)                    |
-| Recadastramento         | Iniciar             | `/recadastramento/iniciar`        | autenticado                        | `previdenciario` | Canal `PORTAL_COLABORADOR`; `PROVA_VIDA_PUBLIC_API_ENABLED`   |
-| Recadastramento         | Histórico           | `/recadastramento/historico`      | autenticado                        | `previdenciario` | —                                                             |
-| Recadastramento         | Comprovantes        | `/recadastramento/comprovantes`   | autenticado                        | `previdenciario` | Download PDF; apenas se RECADASTRADO                          |
-| Férias                  | Solicitar           | `/ferias/solicitar`               | autenticado                        | `rh`             | Gera demanda de aprovação para RH                             |
-| Férias                  | Histórico           | `/ferias/historico`               | autenticado                        | `rh`             | Períodos gozados e saldos                                     |
-| Férias                  | Programação         | `/ferias/programacao`             | autenticado                        | `rh`             | Meses agendados                                               |
-| Currículo               | Meu Currículo       | `/curriculo/meu-curriculo`        | autenticado                        | `recrutamento`   | Edita `banco_talentos`; upload PDF S3                         |
-| Currículo               | Candidaturas        | `/curriculo/candidaturas`         | autenticado                        | `recrutamento`   | Acompanha `candidato_requisicao`                              |
-| Requisições             | Nova Requisição     | `/requisicoes/nova`               | `REQUISICAO_DE_PESSOAL.CADASTRAR`  | `recrutamento`   | Visível apenas para gestores solicitantes                     |
-| Requisições             | Acompanhamento      | `/requisicoes/acompanhamento`     | `REQUISICAO_DE_PESSOAL.VISUALIZAR` | `recrutamento`   | Requisições abertas pelo próprio usuário                      |
-| Documentos Pessoais     | Ficha Funcional     | `/documentos/ficha-funcional`     | autenticado                        | `rh`             | PDF da view `ficha_funcional`                                 |
-| Documentos Pessoais     | Declarações         | `/documentos/declaracoes`         | autenticado                        | `previdenciario` | Declaração de aposentado / ex-servidor                        |
-| Documentos Pessoais     | Certidões           | `/documentos/certidoes`           | autenticado                        | `previdenciario` | CTC, compensação                                              |
-| Avaliação               | Auto-Avaliação      | `/avaliacao/auto-avaliacao`       | autenticado                        | `avaliacao`      | Formulário de auto-avaliação de desempenho                    |
-| Avaliação               | Resultados          | `/avaliacao/resultados`           | autenticado                        | `avaliacao`      | Ciclos concluídos e notas                                     |
-| Notificações            | Inbox               | `/notificacoes`                   | autenticado                        | `notificacoes`   | In-app; e-mail configurável                                   |
-| Configurações           | MFA                 | `/configuracoes/mfa`              | autenticado                        | `auth`           | TOTP via Cognito                                              |
-| Configurações           | Alterar Senha       | `/configuracoes/senha`            | autenticado                        | `auth`           | Fluxo Cognito change-password                                 |
-| Configurações           | Consentimentos LGPD | `/configuracoes/lgpd`             | autenticado                        | `auth`           | Registros de consentimento e revogação                        |
+| Seção                   | Item                | Rota Portal                       | Papel / Condição                           | Módulo NestJS    | Comentário                                                      |
+| ----------------------- | ------------------- | --------------------------------- | ------------------------------------------ | ---------------- | --------------------------------------------------------------- |
+| Início                  | Dashboard pessoal   | `/`                               | autenticado                                | `rh`, `folha`    | KPIs pessoais: próximo recadastramento, contracheques, férias   |
+| Meus Dados              | Cadastro Pessoal    | `/meus-dados/cadastro`            | autenticado                                | `rh`             | Somente visualização; edição via RH                             |
+| Meus Dados              | Endereço            | `/meus-dados/endereco`            | autenticado                                | `pessoa`         | Edição permite atualizar recadastramento                        |
+| Meus Dados              | Contato             | `/meus-dados/contato`             | autenticado                                | `pessoa`         | E-mail pessoal, telefones                                       |
+| Meus Dados              | Documentos          | `/meus-dados/documentos`          | autenticado                                | `pessoa`         | Visualização dos documentos cadastrados                         |
+| Meus Dados              | Dependentes         | `/meus-dados/dependentes`         | autenticado                                | `rh`             | Somente leitura; inclusão via RH                                |
+| Contracheques           | Mês Atual           | `/contracheques/atual`            | autenticado                                | `folha`          | Contracheque competência corrente                               |
+| Contracheques           | Histórico           | `/contracheques/historico`        | autenticado                                | `folha`          | Listagem por ano/mês                                            |
+| Contracheques           | Download PDF        | `/contracheques/download/:id`     | autenticado                                | `folha`          | PDF sem marca d'água para o próprio servidor                    |
+| Contracheques           | Financeiro Anual    | `/contracheques/financeiro-anual` | autenticado                                | `folha`          | Totais anuais de proventos e descontos                          |
+| Licenças e Afastamentos | Solicitações        | `/licencas/solicitacoes`          | autenticado                                | `rh`             | Formulário de solicitação de licença                            |
+| Licenças e Afastamentos | Histórico           | `/licencas/historico`             | autenticado                                | `rh`             | Situações passadas                                              |
+| Licenças e Afastamentos | Documentos          | `/licencas/documentos`            | autenticado                                | `rh`             | Atestados e laudos do próprio servidor                          |
+| Perícias                | Agendadas           | `/pericias/agendadas`             | autenticado                                | `saude`          | Próximas perícias agendadas                                     |
+| Perícias                | Histórico           | `/pericias/historico`             | autenticado                                | `saude`          | Perícias concluídas; laudos aprovados                           |
+| Perícias                | Anexos              | `/pericias/anexos`                | autenticado                                | `saude`          | Download de laudos próprios (S3 presigned)                      |
+| Recadastramento         | Iniciar             | `/recadastramento/iniciar`        | autenticado                                | `previdenciario` | Canal `PORTAL_COLABORADOR`; `PROVA_VIDA_PUBLIC_API_ENABLED`     |
+| Recadastramento         | Histórico           | `/recadastramento/historico`      | autenticado                                | `previdenciario` | —                                                               |
+| Recadastramento         | Comprovantes        | `/recadastramento/comprovantes`   | autenticado                                | `previdenciario` | Download PDF; apenas se RECADASTRADO                            |
+| Férias                  | Solicitar           | `/ferias/solicitar`               | autenticado                                | `rh`             | Gera demanda de aprovação para RH                               |
+| Férias                  | Histórico           | `/ferias/historico`               | autenticado                                | `rh`             | Períodos gozados e saldos                                       |
+| Férias                  | Programação         | `/ferias/programacao`             | autenticado                                | `rh`             | Meses agendados                                                 |
+| Currículo               | Meu Currículo       | `/curriculo/meu-curriculo`        | autenticado                                | `recrutamento`   | Edita `banco_talentos`; upload PDF S3                           |
+| Currículo               | Candidaturas        | `/curriculo/candidaturas`         | autenticado                                | `recrutamento`   | Acompanha `candidato_requisicao`                                |
+| Requisições             | Nova Requisição     | `/requisicoes/nova`               | `REQUISICAO_DE_PESSOAL.CADASTRAR`          | `recrutamento`   | Visível apenas para gestores solicitantes                       |
+| Requisições             | Acompanhamento      | `/requisicoes/acompanhamento`     | `REQUISICAO_DE_PESSOAL.VISUALIZAR`         | `recrutamento`   | Requisições abertas pelo próprio usuário                        |
+| Documentos Pessoais     | Solicitar Documento | `/documentos/solicitar`           | autenticado                                | `rh`             | Cria ticket em `public.document_request` para atendimento do RH |
+| Documentos Pessoais     | Ficha Funcional     | `/documentos/ficha-funcional`     | autenticado                                | `rh`             | PDF da view `ficha_funcional`                                   |
+| Documentos Pessoais     | Declarações         | `/documentos/declaracoes`         | autenticado                                | `previdenciario` | Declaração de aposentado / ex-servidor                          |
+| Documentos Pessoais     | Certidões           | `/documentos/certidoes`           | autenticado                                | `previdenciario` | CTC, compensação                                                |
+| Minha Equipe            | Fila de Aprovações  | `/minha-equipe`                   | `rh.leave.approve` + `rh.vacation.approve` | `rh`             | Aprovações pendentes da unidade organizacional do gestor        |
+| Minha Equipe            | Aprovações          | `/aprovacoes`                     | `rh.leave.approve` + `rh.vacation.approve` | `rh`             | Entrada dedicada para workflow de aprovação do portal           |
+| Avaliação               | Auto-Avaliação      | `/avaliacao/auto-avaliacao`       | autenticado                                | `avaliacao`      | Formulário de auto-avaliação de desempenho                      |
+| Avaliação               | Resultados          | `/avaliacao/resultados`           | autenticado                                | `avaliacao`      | Ciclos concluídos e notas                                       |
+| Notificações            | Inbox               | `/notificacoes`                   | autenticado                                | `notificacoes`   | In-app; e-mail configurável                                     |
+| Configurações           | MFA                 | `/configuracoes/mfa`              | autenticado                                | `auth`           | TOTP via Cognito                                                |
+| Configurações           | Alterar Senha       | `/configuracoes/senha`            | autenticado                                | `auth`           | Fluxo Cognito change-password                                   |
+| Configurações           | Consentimentos LGPD | `/configuracoes/lgpd`             | autenticado                                | `auth`           | Registros de consentimento e revogação                          |
 
 ---
 

@@ -1,0 +1,80 @@
+.minha-equipe {
+  display: grid;
+  gap: 1rem;
+}
+
+.minha-equipe header p {
+  margin: 0;
+  color: #5c6670;
+  font-size: 0.85rem;
+}
+
+.minha-equipe header h1 {
+  margin: 0.25rem 0 0;
+  font-size: 1.75rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.panel {
+  border: 1px solid #d6dde3;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #ffffff;
+  overflow-x: auto;
+}
+
+.minha-equipe button {
+  border: 1px solid #9aa7b2;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1c2b36;
+  padding: 0.55rem 0.8rem;
+}
+
+.minha-equipe button:first-child {
+  background: #134e4a;
+  border-color: #134e4a;
+  color: #ffffff;
+}
+
+.minha-equipe button:disabled {
+  opacity: 0.55;
+}
+
+.minha-equipe table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.minha-equipe th,
+.minha-equipe td {
+  border-bottom: 1px solid #d6dde3;
+  padding: 0.65rem;
+  text-align: left;
+}
+
+.minha-equipe td span {
+  display: block;
+  color: #5c6670;
+  font-size: 0.85rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.message {
+  color: #0f5132;
+}
+
+.error {
+  color: #842029;
+}

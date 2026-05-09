@@ -49,6 +49,33 @@ they are cited through the obligation summaries below.
 | `docs/refs/esocial/dctfweb-mit.md`                | DCTFWeb, MIT, CSLL adicional                                                              | backend/src/integrations-worker/dctfweb/dctfweb-builder.service.ts:1         | Implemented CSLL/MIT builder and golden fixture.                                   |
 | `docs/refs/esocial/efd-reinf.md`                  | EFD-Reinf R-2000/R-2055                                                                   | backend/src/integrations-worker/efd-reinf/builders/r2055.builder.ts:1        | Implemented R-2055/R-2000 builders and goldens.                                    |
 
+### External-Service Ownership Rebaseline
+
+Feature-audit mitigation MUST keep external-service and framework boundaries
+out of SGP implementation scope:
+
+- eSocial is an external runtime owned by `../stynx-esocial`. SGP owns HR and
+  payroll source records, normalized producer DTOs, `public.esocial_events`
+  projection rows, idempotency/source references, and operator-visible status.
+  XML construction, XSD validation, signing, SOAP submission, return parsing,
+  totalizer parsing, retry/DLQ, and external audit publication belong to
+  `../stynx-esocial`.
+- DET is an external-service integration boundary. SGP owns only the
+  tenant-local DET inbox projection, local annotations, operator state, and
+  "ciencia requested/recorded" status. Polling the government inbox, certificate
+  custody, acknowledgement protocol, retry/DLQ, message normalization, and
+  external audit publication belong to a future `stynx-det` service.
+- SIAPE and SIOPS are deferred external integrations until an owner-approved
+  service boundary exists. SGP can retain explicit deferral records and source
+  data projections, but must not claim active SIAPE/SIOPS service ownership.
+- SIOPE stays in SGP only when implemented as a local government reporting or
+  export workflow over SGP source data. Any FNDE service polling/transmission
+  runtime must be reclassified with SIAPE/SIOPS as an external integration.
+- Shared administration, token/auth, RBAC machinery, storage primitives, and
+  generic platform controls are owned by `../stynx`. SGP may consume those
+  primitives and may define SGP-domain permissions, but it must not fork or
+  replace the framework.
+
 ### Payroll, HR, legal, and procurement cluster
 
 | Reference                                          | Obligation cluster                              | Implementation / evidence path:line                                 | Current posture                                                      |

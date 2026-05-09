@@ -12358,6 +12358,39 @@ Atualizações em `/meus-dados/cadastro`, `/meus-dados/endereco`, `/meus-dados/c
 
 Cada criação, aprovação, rejeição ou exclusão de solicitação cadastral emite evento por `sgp_append_audit_event(...)`; a aprovação também atualiza `hr.employee`, gerando trilha separada para a mudança efetiva de cadastro. A rotina operacional é monitorar a fila por idade de pendência e tratar solicitações paradas há mais de dois dias úteis como exceção de atendimento.
 
+### 8. Solicitação documental e aprovações no portal
+
+`POST /v1/portal/documentos/solicitacoes` registra solicitações do servidor em
+`public.document_request`. A tabela é tenant-scoped, protegida por RLS e não
+substitui o módulo canônico de arquivos: uploads, download e anexos oficiais
+continuam em `public.document_attachment` e nos endpoints de `DocumentsController`.
+O portal usa `GET /v1/portal/documentos/solicitacoes` para acompanhamento pelo
+próprio servidor autenticado.
+
+Gestores com `rh.leave.approve` e `rh.vacation.approve` acessam
+`GET /v1/portal/minha-equipe/aprovacoes`. A fila combina licenças sem
+`approved_at` e férias em `programado` no mesmo tenant, filtradas pela unidade
+organizacional conhecida do gestor. As ações
+`POST /v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar` e
+`POST /v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar` delegam para as
+transições já existentes de `hr.leave_record` e `hr.vacation_record`.
+
+### 9. Bloqueios concorrentes em registros críticos
+
+`payroll.payroll_run.status` é o lock pessimista do processamento de folha.
+Reprocessamento e cálculo mudam a execução para `PROCESSING` antes de alterar
+linhas calculadas; se outro processo já manteve a folha em `PROCESSING`, a
+segunda tentativa falha com conflito e não prossegue para exclusão lógica ou
+regravação de itens. Folhas em `APPROVED`, `PAID` ou `CLOSED` são imutáveis para
+reprocessamento regular.
+
+`GET /v1/folhas/:folha_id/lock-status` expõe o estado para a UI administrativa,
+incluindo `reprocessingLocked`, `immutable`, `lockReason` e
+`optimisticVersion`. O valor `optimisticVersion` vem de `payroll_run.updated_at`
+e permite que a tela indique alteração concorrente sem criar uma coluna
+paralela. Em cadastro funcional, `hr.employee.version` continua sendo o token
+otimista canônico, incrementado pelo trigger `hr.sgp_cadastro_optimistic_version()`.
+
 ## Modelo de Autenticação e Autorização
 
 ## Modelo de Autenticação e Autorização

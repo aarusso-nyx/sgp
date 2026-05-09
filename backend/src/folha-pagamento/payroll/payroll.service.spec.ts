@@ -85,6 +85,39 @@ describe('PayrollService', () => {
     ).resolves.toHaveProperty('status', 'CLOSED');
   });
 
+  it('reports payroll run lock status for concurrent and terminal states', async () => {
+    const processingQuery = jest
+      .fn()
+      .mockResolvedValueOnce([{ ...runRow, status: 'PROCESSING' }]);
+    const processingService = new PayrollService({
+      configured: true,
+      query: processingQuery,
+    } as never);
+
+    await expect(processingService.lockStatus('run-1')).resolves.toEqual({
+      id: 'run-1',
+      status: 'PROCESSING',
+      reprocessingLocked: true,
+      immutable: false,
+      optimisticVersion: '2026-04-25T00:00:00.000Z',
+      lockReason: 'PROCESSING',
+    });
+
+    const closedQuery = jest
+      .fn()
+      .mockResolvedValueOnce([{ ...runRow, status: 'CLOSED' }]);
+    const closedService = new PayrollService({
+      configured: true,
+      query: closedQuery,
+    } as never);
+
+    await expect(closedService.lockStatus('run-1')).resolves.toMatchObject({
+      reprocessingLocked: false,
+      immutable: true,
+      lockReason: 'TERMINAL_STATUS',
+    });
+  });
+
   it('handles payroll run conflicts, missing runs, and unavailable databases', async () => {
     await expect(
       new PayrollService({
@@ -133,7 +166,7 @@ describe('PayrollService', () => {
           processing_type_code: 'RESCISAO',
         },
       ])
-      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([{ id: 'run-1' }])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([{ id: 'earning-1' }])
       .mockResolvedValueOnce([{ id: 'earning-2' }])
@@ -215,7 +248,7 @@ describe('PayrollService', () => {
           processing_type_code: 'MENSAL',
         },
       ])
-      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([{ id: 'run-1' }])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([
         {
@@ -278,6 +311,19 @@ describe('PayrollService', () => {
       expect.stringContaining('INSERT INTO payroll.employee_payroll_item'),
       expect.arrayContaining(['emp-1', 'run-1', 'ed-1']),
     );
+  });
+
+  it('blocks payroll reprocessing when the status lock is not acquired', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([runRow])
+      .mockResolvedValueOnce([]);
+    const service = new PayrollService({ configured: true, query } as never);
+
+    await expect(
+      service.populateRun('run-1', { replaceCalculatedItems: true }),
+    ).rejects.toThrow('locked by another processing operation');
+    expect(query).toHaveBeenCalledTimes(2);
   });
 
   it('populates mapped formulas, skips zero-value mappings, and uses aggregate defaults', async () => {

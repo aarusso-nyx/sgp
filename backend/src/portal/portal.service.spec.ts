@@ -24,6 +24,9 @@ describe('PortalService', () => {
     birth_date: new Date('1990-01-02T00:00:00.000Z'),
     email: 'portal@example.test',
     phone: '11999999999',
+    branch_id: '00000000-0000-4000-8000-000000000010',
+    work_location_id: '00000000-0000-4000-8000-000000000020',
+    cost_center_id: '00000000-0000-4000-8000-000000000030',
     pis_pasep: '123',
     rg: 'MG-1',
     rg_issuer: 'SSP',
@@ -303,5 +306,98 @@ describe('PortalService', () => {
     await expect(withEmployee.getPaystub(actor, 'bad')).rejects.toThrow(
       'Paystub competence must use YYYY-MM',
     );
+  });
+
+  it('creates and lists portal document requests', async () => {
+    const requestRow = {
+      id: 'request-1',
+      employee_id: 'employee-1',
+      document_kind: 'ficha-funcional',
+      purpose: 'posse',
+      status: 'REQUESTED',
+      due_at: null,
+      fulfilled_attachment_id: null,
+      notes: '',
+      created_at: '2026-05-08T12:00:00.000Z',
+      updated_at: '2026-05-08T12:00:00.000Z',
+    };
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([employee])
+      .mockResolvedValueOnce([requestRow])
+      .mockResolvedValueOnce([employee])
+      .mockResolvedValueOnce([requestRow]);
+    const service = new PortalService({ configured: true, query } as never);
+
+    await expect(
+      service.createDocumentRequest(actor, {
+        documentKind: ' ficha-funcional ',
+        purpose: 'posse',
+      }),
+    ).resolves.toMatchObject({
+      id: 'request-1',
+      documentKind: 'ficha-funcional',
+      status: 'REQUESTED',
+    });
+    await expect(service.listDocumentRequests(actor)).resolves.toMatchObject([
+      { id: 'request-1', purpose: 'posse' },
+    ]);
+    expect(query).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('INSERT'),
+      ['employee-1', 'ficha-funcional', 'posse', '', 'sub-1', 'portal.user'],
+    );
+  });
+
+  it('loads and transitions the manager approval queue', async () => {
+    const query = jest
+      .fn()
+      .mockResolvedValueOnce([employee])
+      .mockResolvedValueOnce([
+        {
+          kind: 'leave',
+          id: 'leave-1',
+          employee_id: 'employee-2',
+          employee_registration: 'MAT-2',
+          employee_name: 'Servidor Dois',
+          title: 'Licenca premio',
+          starts_on: '2026-05-01',
+          ends_on: '2026-05-10',
+          days: 10,
+          status: 'ACTIVE',
+          requested_at: '2026-04-20T12:00:00.000Z',
+        },
+      ])
+      .mockResolvedValueOnce([employee])
+      .mockResolvedValueOnce([
+        {
+          id: 'leave-1',
+          employee_id: 'employee-2',
+          starts_on: '2026-05-01',
+          ends_on: '2026-05-10',
+          days: 10,
+          status: 'ACTIVE',
+          requested_at: '2026-04-20T12:00:00.000Z',
+          approved_at: '2026-04-21T12:00:00.000Z',
+          approved_by: 'portal.user',
+        },
+      ]);
+    const service = new PortalService({ configured: true, query } as never);
+
+    await expect(service.approvalQueue(actor)).resolves.toMatchObject([
+      {
+        kind: 'leave',
+        id: 'leave-1',
+        employeeName: 'Servidor Dois',
+        startsOn: '2026-05-01',
+      },
+    ]);
+    await expect(
+      service.transitionApproval(actor, 'leave', 'leave-1', 'approve'),
+    ).resolves.toMatchObject({
+      kind: 'leave',
+      id: 'leave-1',
+      approvedBy: 'portal.user',
+    });
   });
 });

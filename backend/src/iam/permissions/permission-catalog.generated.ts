@@ -16,6 +16,8 @@ export const PERMISSIONS = [
   'consultas.read',
   'convenio.read',
   'convenio.write',
+  'det.message.read',
+  'det.message.write',
   'documents.download',
   'documents.register',
   'documents.upload',

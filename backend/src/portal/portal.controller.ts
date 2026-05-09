@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import {
   ApiOperation,
   ApiBearerAuth,
@@ -12,6 +12,7 @@ import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import { CadastralChangeRequestDto } from '../rh/employees/employees.dto';
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { AuthenticatedActor } from '../auth/actor.types';
+import { PortalDocumentRequestDto } from './portal.dto';
 import { PortalService } from './portal.service';
 
 @ApiTags('portal')
@@ -74,6 +75,32 @@ export class PortalController {
   @ApiOkResponse({ description: 'Authenticated employee documents.' })
   documentos(@CurrentActor() actor: AuthenticatedActor | undefined) {
     return this.portalService.getDocuments(actor);
+  }
+
+  @ApiOperation({ summary: 'GET v1/portal/documentos/solicitacoes' })
+  @Get('v1/portal/documentos/solicitacoes')
+  @RequirePermission('portal.profile.read')
+  @ApiOkResponse({
+    description: 'Authenticated employee document request tracking.',
+  })
+  documentRequests(@CurrentActor() actor: AuthenticatedActor | undefined) {
+    return this.portalService.listDocumentRequests(actor);
+  }
+
+  @ApiOperation({ summary: 'POST v1/portal/documentos/solicitacoes' })
+  @Post('v1/portal/documentos/solicitacoes')
+  @RequirePermission('portal.profile.write')
+  @AuditMutation({
+    action: 'CREATE',
+    resourceType: 'public.document_request',
+    tableName: 'public.document_request',
+  })
+  @ApiCreatedResponse({ description: 'Create a portal document request.' })
+  createDocumentRequest(
+    @CurrentActor() actor: AuthenticatedActor | undefined,
+    @Body() body: PortalDocumentRequestDto,
+  ) {
+    return this.portalService.createDocumentRequest(actor, body);
   }
 
   @ApiOperation({ summary: 'GET v1/portal/meus-dados/cargo' })
@@ -148,5 +175,51 @@ export class PortalController {
       body.payload,
       body.previousPayload,
     );
+  }
+
+  @ApiOperation({ summary: 'GET v1/portal/minha-equipe/aprovacoes' })
+  @Get('v1/portal/minha-equipe/aprovacoes')
+  @RequirePermission(['rh.leave.approve', 'rh.vacation.approve'])
+  @ApiOkResponse({
+    description: 'Approval queue for the authenticated manager context.',
+  })
+  approvalQueue(@CurrentActor() actor: AuthenticatedActor | undefined) {
+    return this.portalService.approvalQueue(actor);
+  }
+
+  @ApiOperation({
+    summary: 'POST v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar',
+  })
+  @Post('v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar')
+  @RequirePermission(['rh.leave.approve', 'rh.vacation.approve'])
+  @AuditMutation({
+    action: 'UPDATE',
+    resourceType: 'portal.approval_queue',
+  })
+  @ApiOkResponse({ description: 'Approve a portal approval queue item.' })
+  approveQueueItem(
+    @CurrentActor() actor: AuthenticatedActor | undefined,
+    @Param('kind') kind: string,
+    @Param('id') id: string,
+  ) {
+    return this.portalService.transitionApproval(actor, kind, id, 'approve');
+  }
+
+  @ApiOperation({
+    summary: 'POST v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar',
+  })
+  @Post('v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar')
+  @RequirePermission(['rh.leave.approve', 'rh.vacation.approve'])
+  @AuditMutation({
+    action: 'UPDATE',
+    resourceType: 'portal.approval_queue',
+  })
+  @ApiOkResponse({ description: 'Cancel a portal approval queue item.' })
+  cancelQueueItem(
+    @CurrentActor() actor: AuthenticatedActor | undefined,
+    @Param('kind') kind: string,
+    @Param('id') id: string,
+  ) {
+    return this.portalService.transitionApproval(actor, kind, id, 'cancel');
   }
 }

@@ -47,6 +47,32 @@ describe('PayrollController', () => {
     expect(result).toEqual({ id: 'run-1' });
   });
 
+  it('delegates payroll lock status checks', async () => {
+    const lockStatus = jest.fn().mockResolvedValue({
+      id: 'run-1',
+      status: 'PROCESSING',
+      reprocessingLocked: true,
+    });
+    const auditMutation = jest.fn().mockResolvedValue(undefined);
+    const controller = new PayrollController(
+      { lockStatus } as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      { auditMutation } as never,
+    );
+
+    const result = await controller.lockStatus('run-1');
+
+    expect(lockStatus).toHaveBeenCalledWith('run-1');
+    expect(result).toEqual({
+      id: 'run-1',
+      status: 'PROCESSING',
+      reprocessingLocked: true,
+    });
+  });
+
   it('delegates advance payment creation', async () => {
     const createAdvancePayment = jest
       .fn()

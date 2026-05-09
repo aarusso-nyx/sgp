@@ -32,7 +32,7 @@ LGPD, and time-attendance proof in scope:
 | Operations and observability      | `FR-OO-3BF7E1`, `FR-OO-C0F479`, `FR-OO-CBCC31`                                                                                 |
 | Payroll and fiscal outputs        | `FR-PB-FFE071`                                                                                                                 |
 | People and recruitment            | `FR-PR-E68857`, `FR-PR-BE041B`                                                                                                 |
-| Privacy and transparency          | `FR-PT-1244A7`, `FR-PT-1F254E`, `FR-PT-42F0B5`, `FR-PT-64E409`, `FR-PT-C65640`                                                 |
+| Privacy and transparency          | `FR-PT-1244A7`, `FR-PT-06B7EB`, `FR-PT-1F254E`, `FR-PT-42F0B5`, `FR-PT-64E409`, `FR-PT-C65640`                                 |
 | Time, attendance, and SST         | `FR-TAS-866093`, `FR-TAS-383663`, `FR-TAS-B89144`, `FR-TAS-CBF51F`                                                             |
 
 ## Deferred Non-MVP Surface

@@ -12,6 +12,7 @@ header {
 
 header p,
 header h1,
+.lgpd-encarregado__transfers h2,
 .lgpd-encarregado__details {
   margin: 0;
 }
@@ -50,6 +51,44 @@ dd {
 
 .lgpd-encarregado__error {
   color: #9b1c1c;
+}
+
+.lgpd-encarregado__transfers {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 48rem;
+}
+
+.lgpd-encarregado__transfers header {
+  display: block;
+}
+
+.lgpd-encarregado__transfers h2 {
+  font-size: 1rem;
+}
+
+.lgpd-encarregado__transfer-list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.lgpd-encarregado__transfer-list li {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e4e9ee;
+}
+
+.lgpd-encarregado__transfer-list span,
+.lgpd-encarregado__transfer-list small {
+  overflow-wrap: anywhere;
+}
+
+.lgpd-encarregado__transfer-list small {
+  color: #52616b;
 }
 
 @media (max-width: 640px) {

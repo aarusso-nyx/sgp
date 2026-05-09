@@ -174,6 +174,9 @@ export const PORTAL_ROUTE_ENDPOINTS: PortalRouteEndpoint[] = [
       carreira: openApi.getApiV1PortalMinhaCarreira(),
     }),
   ),
+  direct('/documentos/solicitar', 'GET /api/v1/portal/documentos/solicitacoes', ({ api }) =>
+    api.get('v1/portal/documentos/solicitacoes'),
+  ),
   fallback(
     '/documentos/declaracoes',
     'GET /api/v1/previdenciario/declaracoes',
@@ -185,6 +188,12 @@ export const PORTAL_ROUTE_ENDPOINTS: PortalRouteEndpoint[] = [
     'GET /api/v1/previdenciario/certidoes-tempo',
     'No self-service certificates endpoint exists yet; this reads the existing previdenciario certificate surface.',
     ({ api }) => api.get('v1/previdenciario/certidoes-tempo'),
+  ),
+  direct('/minha-equipe', 'GET /api/v1/portal/minha-equipe/aprovacoes', ({ api }) =>
+    api.get('v1/portal/minha-equipe/aprovacoes'),
+  ),
+  direct('/aprovacoes', 'GET /api/v1/portal/minha-equipe/aprovacoes', ({ api }) =>
+    api.get('v1/portal/minha-equipe/aprovacoes'),
   ),
   direct('/avaliacao/auto-avaliacao', 'GET /api/v1/avaliacao/desempenhos', ({ openApi }) =>
     openApi.getApiV1AvaliacaoDesempenhos(),

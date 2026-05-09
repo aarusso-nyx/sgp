@@ -23,7 +23,13 @@ export class AuditWriterService {
     request: RequestWithContext,
     action: Extract<
       AuditActionValue,
-      'CREATE' | 'UPDATE' | 'DELETE' | 'PROCESS' | 'GENERATE' | 'IMPORT'
+      | 'CREATE'
+      | 'UPDATE'
+      | 'DELETE'
+      | 'PROCESS'
+      | 'GENERATE'
+      | 'IMPORT'
+      | 'APPROVE'
     >,
     resourceType: string,
     options: AuditAppendOptions = {},
@@ -81,6 +87,7 @@ export class AuditWriterService {
         this.userAgent(request),
       ],
     );
+    await this.recordInternationalTransferEvent(request, resourceType, options);
     const labels = AuditMutationContextStore.labels();
     recordAuditEvent(
       this.auditLabel(labels?.controller, options.metadata?.['controller']),
@@ -129,5 +136,103 @@ export class AuditWriterService {
     const forwardedValue = Array.isArray(forwarded) ? forwarded[0] : forwarded;
     const candidate = forwardedValue?.split(',')[0]?.trim() || request.ip || '';
     return candidate === '::1' ? '127.0.0.1' : candidate;
+  }
+
+  private async recordInternationalTransferEvent(
+    request: RequestWithContext,
+    resourceType: string,
+    options: AuditAppendOptions,
+  ): Promise<void> {
+    const metadata = options.metadata ?? {};
+    const flowKey = this.metadataText(metadata, 'flowKey');
+    const processorName = this.metadataText(metadata, 'processorName');
+    const destinationCountry = this.metadataText(
+      metadata,
+      'destinationCountry',
+    );
+    if (!flowKey || !processorName || !destinationCountry) return;
+    if (destinationCountry.toUpperCase() === 'BR') return;
+
+    const dataCategories = this.metadataTextArray(metadata, 'dataCategories');
+    try {
+      await this.databaseService.query(
+        `
+        WITH active_transfer AS (
+          SELECT id
+          FROM lgpd.international_transfer
+          WHERE flow_key = $1
+            AND lower(processor_name) = lower($2)
+            AND destination_country = $3
+            AND status = 'ACTIVE'
+            AND (starts_at IS NULL OR starts_at <= CURRENT_DATE)
+            AND (ends_at IS NULL OR ends_at >= CURRENT_DATE)
+          ORDER BY updated_at DESC
+          LIMIT 1
+        )
+        INSERT INTO lgpd.international_transfer_event (
+          tenant_id,
+          international_transfer_id,
+          flow_key,
+          processor_name,
+          destination_country,
+          destination_region,
+          request_path,
+          resource_type,
+          resource_id,
+          data_categories,
+          metadata
+        )
+        SELECT
+          public.sgp_current_tenant_uuid(),
+          active_transfer.id,
+          $1,
+          $2,
+          $3,
+          $4,
+          $5,
+          $6,
+          $7,
+          $8::text[],
+          $9::jsonb
+        FROM active_transfer
+        `,
+        [
+          flowKey,
+          processorName,
+          destinationCountry.toUpperCase(),
+          this.metadataText(metadata, 'destinationRegion'),
+          request.originalUrl ?? request.url ?? null,
+          resourceType,
+          options.resourceId ?? null,
+          dataCategories,
+          JSON.stringify({
+            reason: options.reason ?? null,
+            statusCode: options.statusCode ?? null,
+          }),
+        ],
+      );
+    } catch (error) {
+      const code = (error as { code?: unknown }).code;
+      if (code !== '42P01' && code !== '42703') throw error;
+    }
+  }
+
+  private metadataText(
+    metadata: Record<string, unknown>,
+    key: string,
+  ): string | null {
+    const value = metadata[key];
+    return typeof value === 'string' && value.trim() ? value.trim() : null;
+  }
+
+  private metadataTextArray(
+    metadata: Record<string, unknown>,
+    key: string,
+  ): string[] {
+    const value = metadata[key];
+    if (!Array.isArray(value)) return [];
+    return value
+      .map((entry) => (typeof entry === 'string' ? entry.trim() : ''))
+      .filter(Boolean);
   }
 }

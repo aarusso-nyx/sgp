@@ -4,10 +4,12 @@ import { authGuard } from './core/auth/auth-guard';
 import { PORTAL_FEATURE_CATALOG } from './core/portal/portal-feature-catalog';
 import { PortalAuthCallback } from './pages/auth-callback/auth-callback';
 import { Contracheque } from './pages/contracheque/contracheque';
+import { Documentos } from './pages/documentos/documentos';
 import { Ferias } from './pages/ferias/ferias';
 import { GovBrSignCallback } from './pages/govbr-sign-callback/govbr-sign-callback';
 import { Licencas } from './pages/licencas/licencas';
 import { LicencasSaude } from './pages/licencas/saude/saude';
+import { MinhaEquipe } from './pages/minha-equipe/minha-equipe';
 import { MeusDados } from './pages/meus-dados/meus-dados';
 import { MeusDadosBancarios } from './pages/meus-dados/bancarios/bancarios';
 import { PortalFeaturePage } from './pages/portal-feature-page/portal-feature-page';
@@ -53,7 +55,6 @@ const portalRoutes: Routes = [
         path: 'govbr-sign/callback',
         component: GovBrSignCallback,
       },
-      ...featureRoutes,
       {
         path: 'contracheque',
         component: Contracheque,
@@ -91,9 +92,22 @@ const portalRoutes: Routes = [
         component: Licencas,
       },
       {
+        path: 'documentos/:section',
+        component: Documentos,
+      },
+      {
+        path: 'minha-equipe',
+        component: MinhaEquipe,
+      },
+      {
+        path: 'aprovacoes',
+        component: MinhaEquipe,
+      },
+      {
         path: 'ponto/proximas-escalas',
         component: ProximasEscalas,
       },
+      ...featureRoutes,
     ],
   },
   {

@@ -7,6 +7,8 @@ import { LgpdDsarAdminController } from './dsar.controller';
 import { LgpdDsarAdminService } from './dsar.service';
 import { LgpdDpoAdminController } from './dpo.controller';
 import { LgpdDpoAdminService } from './dpo.service';
+import { InternationalTransferController } from './international-transfer.controller';
+import { InternationalTransferService } from './international-transfer.service';
 import { LgpdIncidentsController } from './incidents.controller';
 import { LgpdSecurityIncidentService } from './incidents.service';
 import { LgpdPublicPowerTreatmentController } from './public-power.controller';
@@ -22,6 +24,7 @@ import { LgpdRopaService } from './ropa.service';
     LgpdDpoAdminController,
     LgpdDsarAdminController,
     LgpdPublicPowerTreatmentController,
+    InternationalTransferController,
   ],
   providers: [
     LgpdRopaService,
@@ -29,6 +32,8 @@ import { LgpdRopaService } from './ropa.service';
     LgpdDpoAdminService,
     LgpdDsarAdminService,
     LgpdPublicPowerTreatmentService,
+    InternationalTransferService,
   ],
+  exports: [InternationalTransferService],
 })
 export class LgpdAdminModule {}

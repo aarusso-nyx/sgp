@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   ServiceUnavailableException,
@@ -110,6 +111,9 @@ interface EmployeeProfileRow extends QueryResultRow {
   birth_date: Date | string | null;
   email: string | null;
   phone: string | null;
+  branch_id: string | null;
+  work_location_id: string | null;
+  cost_center_id: string | null;
   pis_pasep: string | null;
   rg: string | null;
   rg_issuer: string | null;
@@ -137,6 +141,19 @@ interface DocumentRow extends QueryResultRow {
   created_at: Date | string;
 }
 
+interface DocumentRequestRow extends QueryResultRow {
+  id: string;
+  employee_id: string;
+  document_kind: string;
+  purpose: string;
+  status: string;
+  due_at: Date | string | null;
+  fulfilled_attachment_id: string | null;
+  notes: string;
+  created_at: Date | string;
+  updated_at: Date | string;
+}
+
 interface MyJobRow extends QueryResultRow {
   job_position_code: string | null;
   job_position_name: string | null;
@@ -147,6 +164,43 @@ interface MyJobRow extends QueryResultRow {
 
 interface IdRow extends QueryResultRow {
   id: string;
+}
+
+interface ApprovalQueueRow extends QueryResultRow {
+  kind: 'leave' | 'vacation';
+  id: string;
+  employee_id: string;
+  employee_registration: string;
+  employee_name: string;
+  title: string;
+  starts_on: Date | string;
+  ends_on: Date | string | null;
+  days: number | null;
+  status: string;
+  requested_at: Date | string;
+}
+
+interface LeaveApprovalTransitionRow extends QueryResultRow {
+  id: string;
+  employee_id: string;
+  starts_on: Date | string;
+  ends_on: Date | string | null;
+  days: number | null;
+  status: string;
+  requested_at: Date | string;
+  approved_at: Date | string | null;
+  approved_by: string | null;
+}
+
+interface VacationApprovalTransitionRow extends QueryResultRow {
+  id: string;
+  employee_id: string;
+  starts_on: Date | string;
+  ends_on: Date | string;
+  days: number;
+  status: string;
+  created_at: Date | string;
+  updated_at: Date | string;
 }
 
 @Injectable()
@@ -253,6 +307,83 @@ export class PortalService {
       checksum: row.checksum,
       createdAt: this.toIso(row.created_at),
     }));
+  }
+
+  async listDocumentRequests(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    const rows = await this.databaseService.query<DocumentRequestRow>(
+      `
+      SELECT
+        id::text,
+        employee_id::text,
+        document_kind,
+        purpose,
+        status::text,
+        due_at,
+        fulfilled_attachment_id::text,
+        notes,
+        created_at,
+        updated_at
+      FROM public.document_request
+      WHERE tenant_id = public.sgp_current_tenant_uuid()
+        AND employee_id = $1::uuid
+      ORDER BY created_at DESC
+      LIMIT 100
+      `,
+      [employee.id],
+    );
+    return rows.map((row) => this.toDocumentRequest(row));
+  }
+
+  async createDocumentRequest(
+    actor: AuthenticatedActor | undefined,
+    input: { documentKind: string; purpose?: string; notes?: string },
+  ) {
+    const employee = await this.loadEmployee(actor);
+    const documentKind = input.documentKind.trim();
+    if (!documentKind) {
+      throw new BadRequestException('documentKind is required');
+    }
+    const rows = await this.databaseService.query<DocumentRequestRow>(
+      `
+      INSERT INTO public.document_request (
+        employee_id,
+        document_kind,
+        purpose,
+        notes,
+        requested_by_sub,
+        requested_by_login
+      )
+      VALUES (
+        $1::uuid,
+        $2,
+        $3,
+        $4,
+        NULLIF($5, ''),
+        NULLIF($6, '')
+      )
+      RETURNING
+        id::text,
+        employee_id::text,
+        document_kind,
+        purpose,
+        status::text,
+        due_at,
+        fulfilled_attachment_id::text,
+        notes,
+        created_at,
+        updated_at
+      `,
+      [
+        employee.id,
+        documentKind,
+        input.purpose?.trim() ?? '',
+        input.notes?.trim() ?? '',
+        actor?.sub ?? '',
+        actor?.username ?? '',
+      ],
+    );
+    return this.toDocumentRequest(rows[0]!);
   }
 
   async getMyJob(actor: AuthenticatedActor | undefined) {
@@ -543,6 +674,120 @@ export class PortalService {
     };
   }
 
+  async approvalQueue(actor: AuthenticatedActor | undefined) {
+    const employee = await this.loadEmployee(actor);
+    const rows = await this.databaseService.query<ApprovalQueueRow>(
+      `
+      WITH manager AS (
+        SELECT
+          $1::uuid AS id,
+          NULLIF($2, '')::uuid AS branch_id,
+          NULLIF($3, '')::uuid AS work_location_id,
+          NULLIF($4, '')::uuid AS cost_center_id
+      ),
+      leave_queue AS (
+        SELECT
+          'leave'::text AS kind,
+          leave_record.id::text,
+          target.id::text AS employee_id,
+          target.registration AS employee_registration,
+          target.name AS employee_name,
+          COALESCE(reason.description, 'Licenca') AS title,
+          leave_record.starts_on,
+          leave_record.ends_on,
+          leave_record.days,
+          leave_record.status::text,
+          leave_record.requested_at
+        FROM manager
+        JOIN hr.employee target ON target.tenant_id = public.sgp_current_tenant_uuid()
+        JOIN hr.leave_record leave_record
+          ON leave_record.tenant_id = target.tenant_id
+         AND leave_record.employee_id = target.id
+        LEFT JOIN hr.absence_reason reason
+          ON reason.tenant_id = leave_record.tenant_id
+         AND reason.id = leave_record.absence_reason_id
+        WHERE target.id <> manager.id
+          AND leave_record.approved_at IS NULL
+          AND leave_record.status = 'ACTIVE'::"RecordStatus"
+          AND (
+            (manager.cost_center_id IS NOT NULL AND target.cost_center_id = manager.cost_center_id)
+            OR (manager.work_location_id IS NOT NULL AND target.work_location_id = manager.work_location_id)
+            OR (manager.branch_id IS NOT NULL AND target.branch_id = manager.branch_id)
+          )
+      ),
+      vacation_queue AS (
+        SELECT
+          'vacation'::text AS kind,
+          vacation.id::text,
+          target.id::text AS employee_id,
+          target.registration AS employee_registration,
+          target.name AS employee_name,
+          'Ferias'::text AS title,
+          vacation.starts_on,
+          vacation.ends_on,
+          vacation.days,
+          vacation.status::text,
+          vacation.created_at AS requested_at
+        FROM manager
+        JOIN hr.employee target ON target.tenant_id = public.sgp_current_tenant_uuid()
+        JOIN hr.vacation_record vacation
+          ON vacation.tenant_id = target.tenant_id
+         AND vacation.employee_id = target.id
+        WHERE target.id <> manager.id
+          AND vacation.status = 'programado'
+          AND (
+            (manager.cost_center_id IS NOT NULL AND target.cost_center_id = manager.cost_center_id)
+            OR (manager.work_location_id IS NOT NULL AND target.work_location_id = manager.work_location_id)
+            OR (manager.branch_id IS NOT NULL AND target.branch_id = manager.branch_id)
+          )
+      )
+      SELECT *
+      FROM (
+        SELECT * FROM leave_queue
+        UNION ALL
+        SELECT * FROM vacation_queue
+      ) queue
+      ORDER BY requested_at ASC, employee_name ASC
+      LIMIT 100
+      `,
+      [
+        employee.id,
+        employee.branch_id ?? '',
+        employee.work_location_id ?? '',
+        employee.cost_center_id ?? '',
+      ],
+    );
+    return rows.map((row) => ({
+      kind: row.kind,
+      id: row.id,
+      employeeId: row.employee_id,
+      employeeRegistration: row.employee_registration,
+      employeeName: row.employee_name,
+      title: row.title,
+      startsOn: this.toDate(row.starts_on),
+      endsOn: row.ends_on ? this.toDate(row.ends_on) : null,
+      days: row.days,
+      status: row.status,
+      requestedAt: this.toIso(row.requested_at),
+    }));
+  }
+
+  async transitionApproval(
+    actor: AuthenticatedActor | undefined,
+    kind: string,
+    id: string,
+    action: 'approve' | 'cancel',
+  ) {
+    await this.loadEmployee(actor);
+    if (kind === 'leave') {
+      return this.transitionLeave(id, action === 'approve');
+    }
+    if (kind === 'vacation') {
+      return this.transitionVacation(id, action === 'approve');
+    }
+    throw new BadRequestException('Unsupported approval kind');
+  }
+
   async payrollSummary(
     query: DomainListQueryDto,
   ): Promise<PagedResponse<unknown>> {
@@ -652,6 +897,9 @@ export class PortalService {
         birth_date,
         email,
         phone,
+        branch_id::text,
+        work_location_id::text,
+        cost_center_id::text,
         pis_pasep,
         rg,
         rg_issuer,
@@ -692,6 +940,99 @@ export class PortalService {
     }
     if (section === 'cadastro') return this.getPersonalDataFrom(employee);
     return {};
+  }
+
+  private async transitionLeave(id: string, approve: boolean) {
+    const rows = await this.databaseService.query<LeaveApprovalTransitionRow>(
+      `
+      UPDATE hr.leave_record AS leave_record
+      SET
+        approved_at = CASE WHEN $2 THEN COALESCE(approved_at, now()) ELSE approved_at END,
+        approved_by = CASE WHEN $2 THEN NULLIF(current_setting('app.current_login', true), '') ELSE approved_by END,
+        status = CASE WHEN $2 THEN 'ACTIVE'::"RecordStatus" ELSE 'INACTIVE'::"RecordStatus" END,
+        updated_at = now()
+      WHERE leave_record.id = $1::uuid
+      RETURNING
+        id::text,
+        employee_id::text,
+        starts_on,
+        ends_on,
+        days,
+        status::text,
+        requested_at,
+        approved_at,
+        approved_by
+      `,
+      [id, approve],
+    );
+    const row = rows[0];
+    if (!row) {
+      throw new NotFoundException('Leave approval item not found');
+    }
+    return {
+      kind: 'leave',
+      id: row.id,
+      employeeId: row.employee_id,
+      startsOn: this.toDate(row.starts_on),
+      endsOn: row.ends_on ? this.toDate(row.ends_on) : null,
+      days: row.days,
+      status: row.status,
+      requestedAt: this.toIso(row.requested_at),
+      approvedAt: row.approved_at ? this.toIso(row.approved_at) : null,
+      approvedBy: row.approved_by,
+    };
+  }
+
+  private async transitionVacation(id: string, approve: boolean) {
+    const status = approve ? 'aprovado' : 'cancelado';
+    const rows =
+      await this.databaseService.query<VacationApprovalTransitionRow>(
+        `
+      UPDATE hr.vacation_record
+      SET status = $2, updated_at = now()
+      WHERE id = $1::uuid
+      RETURNING
+        id::text,
+        employee_id::text,
+        starts_on,
+        ends_on,
+        days,
+        status::text,
+        created_at,
+        updated_at
+      `,
+        [id, status],
+      );
+    const row = rows[0];
+    if (!row) {
+      throw new NotFoundException('Vacation approval item not found');
+    }
+    return {
+      kind: 'vacation',
+      id: row.id,
+      employeeId: row.employee_id,
+      startsOn: this.toDate(row.starts_on),
+      endsOn: this.toDate(row.ends_on),
+      days: row.days,
+      status: row.status,
+      requestedAt: this.toIso(row.created_at),
+      updatedAt: this.toIso(row.updated_at),
+    };
+  }
+
+  private toDocumentRequest(row: DocumentRequestRow) {
+    return {
+      id: row.id,
+      employeeId: row.employee_id,
+      documentKind: row.document_kind,
+      purpose: row.purpose,
+      status: row.status,
+      dueAt: row.due_at ? this.toDate(row.due_at) : null,
+      fulfilledAttachmentId: row.fulfilled_attachment_id,
+      notes: row.notes,
+      createdAt: this.toIso(row.created_at),
+      updatedAt: this.toIso(row.updated_at),
+    };
   }
 
   private claimString(

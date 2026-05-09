@@ -116,4 +116,52 @@ describe('AuditWriterService', () => {
     expect(values[9]).toBe('203.0.113.10');
     expect(values[10]).toBe('agent-array');
   });
+
+  it('records international-transfer events from cross-border audit metadata', async () => {
+    const query = jest.fn().mockResolvedValue([]);
+    const service = new AuditWriterService({
+      configured: true,
+      query,
+    } as never);
+
+    await service.appendEvent(
+      {
+        requestId: 'req-transfer',
+        method: 'POST',
+        originalUrl: '/processor',
+        ip: '127.0.0.1',
+        headers: {},
+        actor: {
+          sub: 'sub-1',
+          username: 'tester',
+          tenantId: '00000000-0000-0000-0000-000000000100',
+          groups: [],
+          permissions: [],
+        },
+      } as never,
+      'PROCESS',
+      'processor_call',
+      {
+        resourceId: 'call-1',
+        metadata: {
+          flowKey: 'payroll.payslip_pdf',
+          processorName: 'EU Cloud Processor',
+          destinationCountry: 'EU',
+          dataCategories: ['payroll'],
+        },
+      },
+    );
+
+    expect(query).toHaveBeenCalledTimes(2);
+    expect(query.mock.calls[1][0]).toContain(
+      'INSERT INTO lgpd.international_transfer_event',
+    );
+    expect(query.mock.calls[1][1]).toEqual(
+      expect.arrayContaining([
+        'payroll.payslip_pdf',
+        'EU Cloud Processor',
+        'EU',
+      ]),
+    );
+  });
 });

@@ -18,6 +18,7 @@
 - docs/work/round-2/prompts/ROUND3-INDEX.md.
 - docs/work/round-3/00-snapshot.md.
 - docs/gov/evidence/deferred-decision-ledger.md.
+- docs/work/feature-audit/08-backlog-plan.md.
 
 ## Summary
 
@@ -33,6 +34,16 @@
 | R11 backlog IDs | 10    |
 | R12 backlog IDs | 3     |
 | total rows      | 278   |
+
+## Feature Audit Boundary Rebaseline
+
+| key                  | classification                                                       | SGP-owned mitigation                                                                                                       | excluded from SGP closure                                                                                                     |
+| -------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `FA-EXT-ESOCIAL`     | External-service integration through `../stynx-esocial`              | Producer DTOs, `public.esocial_events`, idempotency/source references, status/audit consumers, and operator display.       | XML/XSD/signing/SOAP/return parsing/totalizer parsing/retry/DLQ implementation.                                               |
+| `FA-EXT-DET`         | Future external-service integration through `stynx-det`              | DET inbox projection, local annotation/operator state, typed request/status envelopes, and acknowledgement-request status. | Government polling, certificate handling, acknowledgement protocol, retry/DLQ, normalization, and external audit publication. |
+| `FA-EXT-SIAPE`       | Deferred external integration                                        | Explicit deferral evidence and reopen conditions.                                                                          | Active SIAPE routes, workers, adapters, or service tests.                                                                     |
+| `FA-EXT-SIOPS`       | Deferred external integration unless reapproved as local export only | Explicit deferral evidence and reopen conditions.                                                                          | DATASUS polling/transmission runtime or official acceptance claims.                                                           |
+| `FA-STYNX-FRAMEWORK` | Shared framework responsibility in `../stynx`                        | SGP-domain permission usage and route-level authorization only.                                                            | Generic admin framework, token/auth/RBAC internals, storage primitives, and shared platform controls.                         |
 
 ## Ledger
 

@@ -604,6 +604,22 @@
       "description": "Request retry for mirrored eSocial SOAP submission batches."
     },
     {
+      "key": "det.message.read",
+      "moduleKey": "det",
+      "resourceKey": "message",
+      "actionKey": "read",
+      "routePattern": "/api/v1/admin/det/messages/**",
+      "description": "Read SGP-local DET message projections mirrored from stynx-det."
+    },
+    {
+      "key": "det.message.write",
+      "moduleKey": "det",
+      "resourceKey": "message",
+      "actionKey": "write",
+      "routePattern": "/api/v1/admin/det/messages/**",
+      "description": "Update SGP-local DET operator state and request acknowledgement through stynx-det."
+    },
+    {
       "key": "fiscal.dctfweb.read",
       "moduleKey": "fiscal",
       "resourceKey": "dctfweb",
@@ -1543,6 +1559,8 @@
       "esocial.event.retry",
       "esocial.submission.read",
       "esocial.submission.retry",
+      "det.message.read",
+      "det.message.write",
       "fiscal.dctfweb.read",
       "fiscal.dctfweb.write",
       "fiscal.dirf.read",
@@ -1596,6 +1614,7 @@
       "esocial.event.read",
       "esocial.event.retry",
       "esocial.submission.read",
+      "det.message.read",
       "fiscal.dctfweb.read",
       "fiscal.dirf.read",
       "fiscal.gps.read",

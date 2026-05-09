@@ -66,6 +66,14 @@ export class PayrollController {
     return this.payrollService.listRunHistory(payrollRunId);
   }
 
+  @ApiOperation({ summary: 'GET :folha_id/lock-status' })
+  @Get(':folha_id/lock-status')
+  @RequirePermission('folha.read')
+  @ApiOkResponse({ description: 'Return payroll run concurrency lock status.' })
+  lockStatus(@Param('folha_id') payrollRunId: string) {
+    return this.payrollService.lockStatus(payrollRunId);
+  }
+
   @ApiOperation({ summary: 'POST Create run' })
   @Post()
   @RequirePermission('folha.write')

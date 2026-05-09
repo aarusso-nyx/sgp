@@ -20,9 +20,33 @@ export interface LgpdDpoResponse {
   updatedAt: string | null;
 }
 
+export interface PublicInternationalTransferResponse {
+  flowKey: string;
+  processorName: string;
+  destinationCountry: string;
+  destinationCountryName: string | null;
+  mechanism: string;
+  mechanismReference: string;
+  adequacyDecisionRef: string | null;
+  startsAt: string | null;
+  reviewDueAt: string | null;
+}
+
 interface DpoParameterRow extends QueryResultRow {
   value: unknown;
   updated_at: Date | string;
+}
+
+interface PublicInternationalTransferRow extends QueryResultRow {
+  flow_key: string;
+  processor_name: string;
+  destination_country: string;
+  destination_country_name: string | null;
+  mechanism: string;
+  mechanism_reference: string;
+  adequacy_decision_ref: string | null;
+  starts_at: Date | string | null;
+  review_due_at: Date | string | null;
 }
 
 const DEFAULT_DPO_CONTACT: LgpdDpoResponse = {
@@ -56,6 +80,20 @@ export class LgpdDpoService {
     return this.toResponse(row);
   }
 
+  async listPublicInternationalTransfers(
+    tenantId?: string,
+  ): Promise<{ items: PublicInternationalTransferResponse[] }> {
+    if (!this.databaseService.configured) {
+      return { items: [] };
+    }
+
+    const rows = await RequestContextStore.run(
+      { bypassRls: true, bypassRlsReason: 'public-lgpd-dpo' },
+      () => this.loadInternationalTransfers(tenantId),
+    );
+    return { items: rows.map((row) => this.toTransferResponse(row)) };
+  }
+
   private loadParameter(tenantId?: string): Promise<DpoParameterRow[]> {
     if (tenantId) {
       return this.databaseService.query<DpoParameterRow>(
@@ -84,6 +122,37 @@ export class LgpdDpoService {
     );
   }
 
+  private loadInternationalTransfers(
+    tenantId?: string,
+  ): Promise<PublicInternationalTransferRow[]> {
+    const whereTenant = tenantId
+      ? 'AND transfer.tenant_id = $1::uuid'
+      : 'AND tenant.status = \'ACTIVE\'::public."RecordStatus"';
+    const values = tenantId ? [tenantId] : [];
+    return this.databaseService.query<PublicInternationalTransferRow>(
+      `
+      SELECT
+        transfer.flow_key,
+        transfer.processor_name,
+        transfer.destination_country,
+        country.country_name AS destination_country_name,
+        transfer.mechanism,
+        transfer.mechanism_reference,
+        country.adequacy_decision_ref,
+        transfer.starts_at,
+        transfer.review_due_at
+      FROM lgpd.international_transfer transfer
+      JOIN public.tenant tenant ON tenant.id = transfer.tenant_id
+      LEFT JOIN lgpd.international_transfer_country_adequacy country
+        ON country.country_code = transfer.destination_country
+      WHERE transfer.status = 'ACTIVE'
+        ${whereTenant}
+      ORDER BY transfer.flow_key ASC, transfer.processor_name ASC
+      `,
+      values,
+    );
+  }
+
   private toResponse(row: DpoParameterRow): LgpdDpoResponse {
     const value = this.objectValue(row.value);
     return {
@@ -108,6 +177,22 @@ export class LgpdDpoService {
     };
   }
 
+  private toTransferResponse(
+    row: PublicInternationalTransferRow,
+  ): PublicInternationalTransferResponse {
+    return {
+      flowKey: row.flow_key,
+      processorName: row.processor_name,
+      destinationCountry: row.destination_country,
+      destinationCountryName: row.destination_country_name,
+      mechanism: row.mechanism,
+      mechanismReference: row.mechanism_reference,
+      adequacyDecisionRef: row.adequacy_decision_ref,
+      startsAt: this.dateValue(row.starts_at),
+      reviewDueAt: this.dateValue(row.review_due_at),
+    };
+  }
+
   private objectValue(value: unknown): Record<string, unknown> {
     return value && typeof value === 'object' && !Array.isArray(value)
       ? (value as Record<string, unknown>)
@@ -122,5 +207,11 @@ export class LgpdDpoService {
     return value instanceof Date
       ? value.toISOString()
       : new Date(value).toISOString();
+  }
+
+  private dateValue(value: Date | string | null): string | null {
+    if (!value) return null;
+    if (value instanceof Date) return value.toISOString().slice(0, 10);
+    return String(value).slice(0, 10);
   }
 }

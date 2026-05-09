@@ -51,16 +51,22 @@ export class PayrollLineWriter {
         `Payroll run in status ${status} cannot be reprocessed`,
       );
     }
-    await this.databaseService.query(
+    const rows = await this.databaseService.query<{ id: string }>(
       `
       UPDATE payroll.payroll_run
       SET status = 'PROCESSING'::"PayrollRunStatus",
           updated_at = now()
       WHERE id = $1::uuid
         AND status <> 'PROCESSING'::"PayrollRunStatus"
+      RETURNING id::text
       `,
       [id],
     );
+    if (!rows[0]) {
+      throw new ConflictException(
+        'Payroll run is locked by another processing operation',
+      );
+    }
   }
 
   async softDeleteCalculatedItems(
