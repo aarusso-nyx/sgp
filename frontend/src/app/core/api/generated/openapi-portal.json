@@ -2048,6 +2048,204 @@
         "tags": ["portal"]
       }
     },
+    "/api/v1/portal/documentos/solicitacoes": {
+      "get": {
+        "operationId": "PortalController_documentRequests",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Authenticated employee document request tracking.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET v1/portal/documentos/solicitacoes",
+        "tags": ["portal"]
+      },
+      "post": {
+        "operationId": "PortalController_createDocumentRequest",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalDocumentRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a portal document request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST v1/portal/documentos/solicitacoes",
+        "tags": ["portal"]
+      }
+    },
     "/api/v1/portal/meus-dados/cargo": {
       "get": {
         "operationId": "PortalController_cargo",
@@ -2634,6 +2832,325 @@
           }
         ],
         "summary": "PUT v1/portal/meus-dados/:section",
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/minha-equipe/aprovacoes": {
+      "get": {
+        "operationId": "PortalController_approvalQueue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Approval queue for the authenticated manager context.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET v1/portal/minha-equipe/aprovacoes",
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/minha-equipe/aprovacoes/{kind}/{id}/aprovar": {
+      "post": {
+        "operationId": "PortalController_approveQueueItem",
+        "parameters": [
+          {
+            "name": "kind",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Approve a portal approval queue item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar",
+        "tags": ["portal"]
+      }
+    },
+    "/api/v1/portal/minha-equipe/aprovacoes/{kind}/{id}/cancelar": {
+      "post": {
+        "operationId": "PortalController_cancelQueueItem",
+        "parameters": [
+          {
+            "name": "kind",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cancel a portal approval queue item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar",
         "tags": ["portal"]
       }
     },
@@ -7038,6 +7555,15 @@
           },
           "parameters": {
             "type": "object"
+          }
+        }
+      },
+      "PortalDocumentRequestDto": {
+        "type": "object",
+        "properties": {
+          "notes": {
+            "type": "string",
+            "maxLength": 1000
           }
         }
       },

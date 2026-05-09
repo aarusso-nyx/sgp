@@ -223,6 +223,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1');
   }
 
+  getApiV1AdminDetMessages(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/det/messages');
+  }
+
   getApiV1AdminFgtsAccountsByEmployeeId(params: { employeeId: string }): Observable<unknown> {
     return this.api.get<unknown>(
       `/v1/admin/fgts/accounts/${encodeURIComponent(params.employeeId)}`,
@@ -295,6 +299,10 @@ export class OpenApiClient {
 
   getApiV1AdminLgpdRopa(): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/lgpd/ropa');
+  }
+
+  getApiV1AdminLgpdTransferenciasInternacionais(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/lgpd/transferencias-internacionais');
   }
 
   getApiV1AdminMenus(): Observable<unknown> {
@@ -580,6 +588,10 @@ export class OpenApiClient {
     return this.api.get<unknown>(`/v1/folhas/${encodeURIComponent(params.folha_id)}/historico`);
   }
 
+  getApiV1FolhasLockStatusByFolhaId(params: { folha_id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/folhas/${encodeURIComponent(params.folha_id)}/lock-status`);
+  }
+
   getApiV1FolhasCatalogos(): Observable<unknown> {
     return this.api.get<unknown>('/v1/folhas/catalogos');
   }
@@ -849,6 +861,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/portal/contracheques/ferias');
   }
 
+  getApiV1PortalDocumentosSolicitacoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/documentos/solicitacoes');
+  }
+
   getApiV1PortalMeusDadosCadastro(): Observable<unknown> {
     return this.api.get<unknown>('/v1/portal/meus-dados/cadastro');
   }
@@ -875,6 +891,10 @@ export class OpenApiClient {
 
   getApiV1PortalMinhaCarreira(): Observable<unknown> {
     return this.api.get<unknown>('/v1/portal/minha-carreira');
+  }
+
+  getApiV1PortalMinhaEquipeAprovacoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/minha-equipe/aprovacoes');
   }
 
   getApiV1PortalPayslips(): Observable<unknown> {
@@ -952,6 +972,10 @@ export class OpenApiClient {
 
   getApiV1PublicLgpdEncarregado(): Observable<unknown> {
     return this.api.get<unknown>('/v1/public/lgpd/encarregado');
+  }
+
+  getApiV1PublicLgpdTransferenciasInternacionais(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/public/lgpd/transferencias-internacionais');
   }
 
   getApiV1PublicTransparencyPayrollByTenantId(params: { tenantId: string }): Observable<unknown> {
@@ -1221,6 +1245,13 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1AdminDetMessagesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/det/messages/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
   patchApiV1AdminFeatureFlagsByChave(
     params: { chave: string },
     body: ApiBody = {},
@@ -1305,6 +1336,46 @@ export class OpenApiClient {
   patchApiV1AdminLgpdRopaById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/admin/lgpd/ropa/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdTransferenciasInternacionaisById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/transferencias-internacionais/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdTransferenciasInternacionaisApproveById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/transferencias-internacionais/${encodeURIComponent(params.id)}/approve`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdTransferenciasInternacionaisCloseById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/transferencias-internacionais/${encodeURIComponent(params.id)}/close`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdTransferenciasInternacionaisDpoReviewById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/transferencias-internacionais/${encodeURIComponent(params.id)}/dpo-review`,
       body,
     );
   }
@@ -1799,6 +1870,20 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1AdminDetMessages(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/det/messages', body);
+  }
+
+  postApiV1AdminDetMessagesAcknowledgementRequestsById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/det/messages/${encodeURIComponent(params.id)}/acknowledgement-requests`,
+      body,
+    );
+  }
+
   postApiV1AdminEsocialS2298ByOrderId(
     params: { orderId: string },
     body: ApiBody = {},
@@ -1915,6 +2000,10 @@ export class OpenApiClient {
 
   postApiV1AdminLgpdRopa(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/ropa', body);
+  }
+
+  postApiV1AdminLgpdTransferenciasInternacionais(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/transferencias-internacionais', body);
   }
 
   postApiV1AdminMenus(body: ApiBody = {}): Observable<unknown> {
@@ -2692,6 +2781,30 @@ export class OpenApiClient {
   ): Observable<unknown> {
     return this.api.post<unknown, ApiBody>(
       `/v1/ponto/rep/${encodeURIComponent(params.repDeviceId)}/batches`,
+      body,
+    );
+  }
+
+  postApiV1PortalDocumentosSolicitacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/portal/documentos/solicitacoes', body);
+  }
+
+  postApiV1PortalMinhaEquipeAprovacoesAprovarByKindAndId(
+    params: { kind: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/portal/minha-equipe/aprovacoes/${encodeURIComponent(params.kind)}/${encodeURIComponent(params.id)}/aprovar`,
+      body,
+    );
+  }
+
+  postApiV1PortalMinhaEquipeAprovacoesCancelarByKindAndId(
+    params: { kind: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/portal/minha-equipe/aprovacoes/${encodeURIComponent(params.kind)}/${encodeURIComponent(params.id)}/cancelar`,
       body,
     );
   }
