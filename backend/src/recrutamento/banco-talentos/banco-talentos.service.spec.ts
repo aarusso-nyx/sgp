@@ -109,10 +109,12 @@ describe('BancoTalentosService', () => {
       email: 'ana@example.com',
       source: 'importacao',
       skills: ['folha', 'rh'],
+      profileCompletenessScore: 80,
+      rankingScore: 100,
     });
   });
 
-  it('updates and archives candidate profiles without ranking logic', async () => {
+  it('updates, ranks, and archives candidate profiles deterministically', async () => {
     const service = new BancoTalentosService(database() as never);
 
     await expect(
@@ -121,7 +123,12 @@ describe('BancoTalentosService', () => {
         profileSummary: 'Perfil revisado',
         skills: ['gestao'],
       }),
-    ).resolves.toMatchObject({ id: candidateId, status: 'ACTIVE' });
+    ).resolves.toMatchObject({
+      id: candidateId,
+      status: 'ACTIVE',
+      profileCompletenessScore: 80,
+      rankingScore: 100,
+    });
     await expect(service.archive(candidateId)).resolves.toMatchObject({
       id: candidateId,
       status: 'ARCHIVED',

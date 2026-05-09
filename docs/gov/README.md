@@ -21,6 +21,8 @@ This folder tracks governance controls and operational readiness for SGP v0.0.1.
 - `audit/test-confidence-proof.md`: coverage, mutation, type, and mixed-test proof.
 - `compliance/scoring.md`: current control scoring and known gaps.
 - `health/preflight.md`: preflight checks before deploy or migration.
+- `siape-siops-boundary.md`: owner-decided SIAPE/SIOPS side boundary,
+  mock/export status, and reopen conditions.
 - `audit/README.md`: audit logging model and retention notes.
 - `observability/`: governed Grafana dashboards and Prometheus alert rules.
 

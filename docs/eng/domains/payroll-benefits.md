@@ -112,6 +112,19 @@ Built-in SQL helper functions:
 - `payroll_calc.worked_days(employee_id, month, year)`
 - `payroll_calc.proportional_ratio(employee_id, month, year)`
 
+## Repasse Fundo RH
+
+Repasse Fundo RH is an SGP-owned report surface. The accepted default basis is
+an approved, paid, or closed payroll run. Eligible rubricas are those whose
+`payroll.payroll_earning_deduction.incidences` include `fund_rh` or
+`repasse_fundo_rh`, plus the explicit `FUNDO_RH` code. `fund_source` defaults
+to `TESOURO` and `fund_rh_rate` defaults to `1` when omitted.
+
+The report generator emits deterministic PDF, CSV, and JSON artifacts with
+rubrica, source, employee count, basis total, transfer total, and reconciliation
+metadata. It must not create accounting postings by itself; posting or SIAFIC
+submission remains a separate accepted integration flow.
+
 ### FOL-01 contract with CALC-01
 
 FOL-01 is the official administrative interface for rubricas consumed by CALC-01. The contract is:

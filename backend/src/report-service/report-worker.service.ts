@@ -16,8 +16,10 @@ import { DocumentsStorageService } from '../documents/documents-storage.service'
 import { BlockedPaymentsReportService } from './blocked-payments-report.service';
 import { FinancialReportService } from './financial-report.service';
 import { ManagerialReportService } from './managerial-report.service';
+import { ManadExportReportService } from './manad-export-report.service';
 import { PayrollSummaryReportService } from './payroll-summary-report.service';
 import { ReconciliationReportService } from './reconciliation-report.service';
+import { RepasseFundoRhReportService } from './repasse-fundo-rh-report.service';
 import { ReportWorkerArtifactsService } from './report-worker-artifacts.service';
 import { ReportWorkerDataService } from './report-worker-data.service';
 import {
@@ -44,6 +46,8 @@ export class ReportWorkerService {
   private readonly blockedPaymentsReports: BlockedPaymentsReportService;
   private readonly reconciliationReports: ReconciliationReportService;
   private readonly financialReports: FinancialReportService;
+  private readonly manadExports: ManadExportReportService;
+  private readonly repasseFundoRhReports: RepasseFundoRhReportService;
 
   constructor(
     private readonly databaseService: DatabaseService,
@@ -58,6 +62,10 @@ export class ReportWorkerService {
     reconciliationReports?: ReconciliationReportService,
     @Optional()
     financialReports?: FinancialReportService,
+    @Optional()
+    manadExports?: ManadExportReportService,
+    @Optional()
+    repasseFundoRhReports?: RepasseFundoRhReportService,
   ) {
     const fallback = createFallbackReportServices(
       databaseService,
@@ -71,6 +79,9 @@ export class ReportWorkerService {
     this.reconciliationReports =
       reconciliationReports ?? fallback.reconciliationReports;
     this.financialReports = financialReports ?? fallback.financialReports;
+    this.manadExports = manadExports ?? fallback.manadExports;
+    this.repasseFundoRhReports =
+      repasseFundoRhReports ?? fallback.repasseFundoRhReports;
   }
 
   async pollOnce(limit = 10): Promise<ReportWorkerRunSummary> {
@@ -209,6 +220,10 @@ export class ReportWorkerService {
         return this.reconciliationReports.generate(job);
       case 'F_FOL_017':
         return this.financialReports.generate(job);
+      case 'MANAD_EXPORT':
+        return this.manadExports.generate(job);
+      case 'RELATORIO_REPASSE_FUNDO_RH':
+        return this.repasseFundoRhReports.generate(job);
       default:
         return assertNever(canonical);
     }
@@ -348,6 +363,8 @@ function createFallbackReportServices(
     blockedPaymentsReports: new BlockedPaymentsReportService(data, artifacts),
     reconciliationReports: new ReconciliationReportService(data, artifacts),
     financialReports: new FinancialReportService(data, artifacts),
+    manadExports: new ManadExportReportService(data, artifacts),
+    repasseFundoRhReports: new RepasseFundoRhReportService(data, artifacts),
   };
 }
 

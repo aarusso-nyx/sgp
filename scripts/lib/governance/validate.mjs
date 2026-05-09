@@ -659,7 +659,8 @@ function validateDocumentationGraph() {
     (architecture.match(/```mermaid/g) ?? []).length >= 4 &&
       architecture.includes('API Request, Audit, And Logging') &&
       architecture.includes('Worker Job, Retry, Poison, And Audit') &&
-      architecture.includes('Postponed Infrastructure Topology'),
+      (architecture.includes('Postponed Infrastructure Topology') ||
+        architecture.includes('Deployment Cycle')),
     'docs/eng/architecture.md',
   );
   record(

@@ -2,13 +2,23 @@
 
 Current product and migration priorities are governed by `docs/eng/quality-migration.md` and `docs/gov/audit/backlog-ledger.md`.
 
-- `ADMIN_INSTALL_LATER`: administrative installation gaps remain deferred until accepted in docs/eng.
 - Admin backend/db/frontend surfaces and AdminFeaturePage parity are delegated
   to the `../stynx` framework; they are not SGP backlog.
+- Identity is delegated to the `../stynx` framework. SGP consumes Stynx-issued
+  actor/session/claims and keeps only product-domain permissions and tenant
+  authorization evidence.
 - eSocial and DET implementation are external-service concerns outside this
   repository. SGP owns only accepted gateway/projection/status contracts.
-- `IDENTITY_INSTALL_LATER`: identity installation gaps remain deferred until accepted in docs/eng.
-- IaC: AWS production infrastructure remains blocked on the ADR-022 owner decision and an accepted stack choice.
+- eSocial external homologation belongs to `../stynx-esocial`; SGP uses
+  deterministic mocks/contracts for other external homologation surfaces unless
+  a later owner decision reopens one.
+- Malware scanning and quarantine are delegated to the `../stynx` storage
+  module and are not SGP backlog.
+- Deployment supports AWS and client-premises through separate flows:
+  provision/IaC creates resources, while artifact deploy pushes built artifacts
+  to designated targets. Release/homologation gates remain postponed for a
+  focused owner discussion.
+- SIAPE/SIOPS boundaries are tracked in `docs/gov/siape-siops-boundary.md`.
 
 ## Deferred backlog (auto-generated)
 

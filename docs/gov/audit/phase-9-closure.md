@@ -8,12 +8,13 @@ closure/status comparison against the live repository after Waves A through E.
 
 ## Verdict
 
-Phase 9 is not fully closed yet.
+Phase 9 is conditionally closed for the SGP-owned implementation boundary.
 
-The SGP-only scope has meaningful implementation progress, but the live
-feature-audit matrix still records the legal-blocker rows M.06, N.06, N.07, and
-P.12 as absent. Current source evidence shows P.12 implemented, while M.06,
-N.06, and N.07 remain design-only in the round progress record.
+The refreshed feature-audit matrix no longer records SGP-owned M1 legal-blocker
+absences. M.06 and P.12 are promoted to present with runtime/test evidence.
+N.06 and N.07 are promoted from absent to partial because canonical DB, RLS, and
+audit lifecycle evidence exists, while focused operator/API evidence remains to
+be added before they can be promoted to fully present.
 
 The SGP-only `B` closure slice is complete: all 21 rows where `Owner=SGP` and
 `Presence=B` were promoted to `P` with retained proof in
@@ -40,55 +41,50 @@ full-stack readiness, but they are not SGP implementation closure gaps.
 
 ## Wave Status
 
-| Wave | Status                                                                                                                                                        | Evidence                                                                                                                                                      |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A    | Partial. P.12 is implemented; M.06, N.06, and N.07 remain design-only.                                                                                        | `docs/work/round-1/progress.md`; `docs/gov/audit/lgpd-international-transfer-proof.md`; `docs/eng/decisions/adr-023-lgpd-international-transfer-mechanism.md` |
-| B    | Implemented for the executed portal slice. Q.03, Q.04, and Q.09 were already P; Q.07, Q.11, and Q.12 are now promoted to P in the SGP-only B closure refresh. | `frontend/portal/src/app/pages/documentos/documentos.ts`; `frontend/portal/src/app/pages/minha-equipe/minha-equipe.ts`; `docs/user/portal-self-service.md`    |
-| C    | Implemented for the executed backend-hardening slice, pending feature-matrix refresh. R.01, T.05, T.07, and T.09 were already P; T.10 lock hardening landed.  | `backend/src/folha-pagamento/payroll/payroll.service.ts`; `backend/src/folha-pagamento/payroll/payroll.controller.ts`; `docs/work/round-1/progress.md`        |
-| D    | Superseded as SGP closure pressure. Admin surfaces are delegated to `../stynx`; retained handoff notes remain historical coordination evidence.               | `docs/gov/audit/wave-D/coordination-ledger.md`; `docs/gov/evidence/deferred-decision-ledger.md`                                                               |
-| E    | External inventory complete; eSocial and DET implementation readiness is out of SGP scope and belongs to external service/package owners.                     | `docs/gov/audit/wave-E/external-package-status.md`; `docs/gov/evidence/deferred-decision-ledger.md`                                                           |
+| Wave | Status                                                                                                                                                        | Evidence                                                                                                                                                          |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A    | Conditionally closed. M.06 and P.12 are present; N.06 and N.07 are partial pending operator/API evidence.                                                     | `backend/src/report-service/manad-export-report.service.ts`; `tests/backend/golden/manad-v01/expected.txt`; `docs/gov/audit/lgpd-international-transfer-proof.md` |
+| B    | Implemented for the executed portal slice. Q.03, Q.04, and Q.09 were already P; Q.07, Q.11, and Q.12 are now promoted to P in the SGP-only B closure refresh. | `frontend/portal/src/app/pages/documentos/documentos.ts`; `frontend/portal/src/app/pages/minha-equipe/minha-equipe.ts`; `docs/user/portal-self-service.md`        |
+| C    | Implemented for the executed backend-hardening slice, pending feature-matrix refresh. R.01, T.05, T.07, and T.09 were already P; T.10 lock hardening landed.  | `backend/src/folha-pagamento/payroll/payroll.service.ts`; `backend/src/folha-pagamento/payroll/payroll.controller.ts`; `docs/work/round-1/progress.md`            |
+| D    | Superseded as SGP closure pressure. Admin surfaces are delegated to `../stynx`; retained handoff notes remain historical coordination evidence.               | `docs/gov/audit/wave-D/coordination-ledger.md`; `docs/gov/evidence/deferred-decision-ledger.md`                                                                   |
+| E    | External inventory complete; eSocial and DET implementation readiness is out of SGP scope and belongs to external service/package owners.                     | `docs/gov/audit/wave-E/external-package-status.md`; `docs/gov/evidence/deferred-decision-ledger.md`                                                               |
 
 ## Audit-ID Comparison
 
-| ID     | Matrix before | Wave F evidence status       | Closure note                                                                                                                                   |
-| ------ | ------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| M.06   | A             | Design-only                  | MANAD implementation is still open.                                                                                                            |
-| N.06   | A             | Design-only                  | PCMAT implementation is still open.                                                                                                            |
-| N.07   | A             | Design-only                  | CIPA implementation is still open.                                                                                                             |
-| P.12   | A             | Implemented evidence present | LGPD international transfer tables, API, public summary, audit hook, ADR, runbook, and tests are present; feature matrix still needs refresh.  |
-| Q.03   | P             | P                            | Already present before Wave B.                                                                                                                 |
-| Q.04   | P             | P                            | Already present before Wave B.                                                                                                                 |
-| Q.07   | B             | P                            | Portal document request page/API evidence refreshed in the SGP-only B closure pass.                                                            |
-| Q.09   | P             | P                            | Already present before Wave B.                                                                                                                 |
-| Q.11   | B             | P                            | Manager self-service portal page/API evidence refreshed in the SGP-only B closure pass.                                                        |
-| Q.12   | B             | P                            | Portal approval entry point evidence refreshed in the SGP-only B closure pass; generic admin parity remains delegated to `../stynx` framework. |
-| P.09   | B             | P                            | Runtime logging uses the retained pino redaction policy and focused tests cover nested PII and authorization headers.                          |
-| R.07   | B             | P                            | ICP-Brasil is closed inside ADR-021's software A1/PKCS#12 boundary with signer and non-secret certificate-status proof.                        |
-| R.01   | P             | P                            | Already present before Wave C.                                                                                                                 |
-| T.05   | P             | P                            | Already present before Wave C.                                                                                                                 |
-| T.07   | P             | P                            | Already present before Wave C.                                                                                                                 |
-| T.09   | P             | P                            | Already present before Wave C.                                                                                                                 |
-| T.10   | B             | Implemented evidence present | Payroll lock acquisition and lock-status endpoint landed; feature matrix still needs refresh.                                                  |
-| Wave D | n/a           | Delegated                    | Admin backend/db/frontend surfaces are delegated to `../stynx`; retained 30-note handoff evidence is historical, not SGP backlog.              |
-| Wave E | n/a           | Delegated                    | eSocial and DET implementation work remains outside SGP; SGP owns only gateway/projection/status contracts.                                    |
+| ID     | Matrix before | Wave F evidence status        | Closure note                                                                                                                                   |
+| ------ | ------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| M.06   | A             | P                             | MANAD report-worker export produces deterministic TXT/JSON artifacts from approved payroll rows with validation and generated-file audit.      |
+| N.06   | A             | B                             | PCMAT is accepted in the canonical SST program lifecycle with tenant-scoped validity metadata, audit triggers, and RLS.                        |
+| N.07   | A             | B                             | CIPA has tenant-scoped committee, member, and minutes tables with work-location scope, audit triggers, and RLS.                                |
+| P.12   | A             | P                             | LGPD international transfer tables, API, public summary, audit hook, ADR, runbook, and tests are present.                                      |
+| Q.03   | P             | P                             | Already present before Wave B.                                                                                                                 |
+| Q.04   | P             | P                             | Already present before Wave B.                                                                                                                 |
+| Q.07   | B             | P                             | Portal document request page/API evidence refreshed in the SGP-only B closure pass.                                                            |
+| Q.09   | P             | P                             | Already present before Wave B.                                                                                                                 |
+| Q.11   | B             | P                             | Manager self-service portal page/API evidence refreshed in the SGP-only B closure pass.                                                        |
+| Q.12   | B             | P                             | Portal approval entry point evidence refreshed in the SGP-only B closure pass; generic admin parity remains delegated to `../stynx` framework. |
+| P.09   | B             | P                             | Runtime logging uses the retained pino redaction policy and focused tests cover nested PII and authorization headers.                          |
+| R.07   | B             | P                             | ICP-Brasil is closed inside ADR-021's software A1/PKCS#12 boundary with signer and non-secret certificate-status proof.                        |
+| R.01   | P             | P                             | Already present before Wave C.                                                                                                                 |
+| T.05   | P             | P                             | Already present before Wave C.                                                                                                                 |
+| T.07   | P             | P                             | Already present before Wave C.                                                                                                                 |
+| T.09   | P             | P                             | Already present before Wave C.                                                                                                                 |
+| T.10   | B             | Delegated/full-stack boundary | Payroll lock evidence exists, but the row remains outside the exact SGP-only B closure because it is owned by a hybrid admin/full-stack lane.  |
+| Wave D | n/a           | Delegated                     | Admin backend/db/frontend surfaces are delegated to `../stynx`; retained 30-note handoff evidence is historical, not SGP backlog.              |
+| Wave E | n/a           | Delegated                     | eSocial and DET implementation work remains outside SGP; SGP owns only gateway/projection/status contracts.                                    |
 
 ## Gates
 
-Wave F refreshed the functional-requisite audit with `npm run audit:fr`. The
-available retained status is now current for the docs/gov audit surfaces.
-
-Because Wave F is a docs/status pass and there are unrelated untracked backend
-coverage-hardening specs in the worktree, full test execution should be treated
-as a publication gate after the owner decides whether those untracked specs are
-part of the branch. The prior Wave D retained ledger records passing broad gates
-before Wave E/F docs-only changes.
+The 2026-05-09 production-grade pass repaired the canonical DB bootstrap and
+reran broad gates through `npm run test`, `npm run test:db`, alignment checks,
+and governance checks. The feature-audit scratch matrix and summary have been
+refreshed for M.06, N.06, N.07, and P.12.
 
 ## Remaining Closure Work
 
-1. Implement M.06 MANAD beyond the design note.
-2. Implement N.06 PCMAT beyond the design note.
-3. Implement N.07 CIPA beyond the design note.
-4. Re-run or refresh the feature-audit matrix for P.12 and T.10, which were not
-   part of the SGP-only B closure slice.
-5. Track external package/service readiness outside SGP; do not count eSocial,
+1. Add/verify focused operator/API evidence for N.06 PCMAT.
+2. Add/verify focused operator/API evidence for N.07 CIPA.
+3. Track T.10 in the delegated admin/full-stack boundary unless owner reopens it
+   as SGP-owned scope.
+4. Track external package/service readiness outside SGP; do not count eSocial,
    DET, or admin-surface implementation as SGP closure backlog.

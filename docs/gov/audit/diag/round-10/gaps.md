@@ -9,12 +9,19 @@
 
 ## Open Gaps
 
-| Gap                                      | Evidence                                   | Impact                                                               |
-| ---------------------------------------- | ------------------------------------------ | -------------------------------------------------------------------- |
-| Functional requisites mostly remain TODO | `docs/gov/audit/functional-requisites.md`  | Product acceptance is not fully closed even though tests are mapped. |
-| Admin menu parity postponed              | `docs/gov/audit/api-surface.md`            | Admin navigation parity is explicitly staged for later installation. |
-| MemPalace search failed                  | Round 10 snapshot under docs/work          | Prior memory context was unavailable during audit.                   |
-| Hotspot baseline equals HEAD             | `docs/gov/audit/diag/round-10/hotspots.md` | Delta-risk analysis is not meaningful for this round.                |
+| Gap                              | Evidence                                   | Impact                                                              |
+| -------------------------------- | ------------------------------------------ | ------------------------------------------------------------------- |
+| PCMAT/CIPA operator/API partials | `docs/gov/audit/functional-requisites.md`  | N.06/N.07 need focused operator/API evidence before full promotion. |
+| MemPalace search failed          | Round 10 snapshot under docs/work          | Prior memory context was unavailable during audit.                  |
+| Hotspot baseline equals HEAD     | `docs/gov/audit/diag/round-10/hotspots.md` | Delta-risk analysis is not meaningful for this round.               |
+
+## Current 2026-05-09 Addendum
+
+- Admin menu parity is no longer an SGP implementation gap; it is delegated to
+  `../stynx` by owner decision.
+- Remaining product gap pressure is concentrated in PCMAT/CIPA operator/API
+  evidence and in deferred or external service boundaries, not in broad missing
+  SGP runtime foundations.
 
 ## Closed Signals
 

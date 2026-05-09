@@ -184,6 +184,6 @@ SET
     notes = EXCLUDED.notes,
     updated_at = CURRENT_TIMESTAMP;
 
-COMMENT ON TABLE lgpd.international_transfer_country_adequacy IS 'P.12 reference table for ANPD adequacy decisions and default transfer mechanisms.';
+COMMENT ON TABLE lgpd.international_transfer_country_adequacy IS 'P.12 R4-72 Non-tenant-scoped reference table for ANPD adequacy decisions and default transfer mechanisms.';
 COMMENT ON TABLE lgpd.international_transfer IS 'P.12 tenant international personal-data transfer mechanism register under LGPD art. 33 and Resolução CD/ANPD 19/2024.';
 COMMENT ON TABLE lgpd.international_transfer_event IS 'P.12 detected cross-border or cross-region transfer events linked to active approved mechanisms.';

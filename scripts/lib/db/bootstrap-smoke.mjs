@@ -139,6 +139,7 @@ DECLARE
   expected text[] := ARRAY[
     'fiscal.gps_payment_code',
     'hr.cf37_xvi_accumulation_compatibility',
+    'lgpd.international_transfer_country_adequacy',
     'lgpd.legal_basis_rule',
     'public.permission',
     'public.profile_permission',

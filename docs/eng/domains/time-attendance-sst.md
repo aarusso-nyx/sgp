@@ -118,6 +118,22 @@ O modulo `saude` passa a manter o catalogo de exames ocupacionais e o ciclo de v
 - `saude.medical_exam`: catalogo tenant-scoped de exames clinicos, laboratoriais, complementares e de imagem, com marcadores de obrigatoriedade admissional/periodica e periodicidade em meses.
 - `saude.aso_record`: registro principal do ASO por servidor, tipo, datas, medico responsavel, conclusao, restricoes resumidas, proximo vencimento e status.
 - `saude.aso_exam_item`: resultados resumidos por exame vinculado ao ASO. Laudos brutos nao sao armazenados neste campo.
+
+## PCMAT And CIPA
+
+N.06 PCMAT uses the same program lifecycle as PCMSO/PGR. The canonical SQL
+accepts `saude.health_program.kind = PCMAT`, validity dates, lifecycle status,
+and append-oriented `saude.program_revision` metadata with document URI and
+hash. File storage, malware scanning, quarantine, and object release policy
+remain delegated to the Stynx storage boundary.
+
+N.07 CIPA is represented by tenant-scoped `saude.cipa_committee`,
+`saude.cipa_member`, and `saude.cipa_minute`. Committees are scoped to
+`hr.work_location`, carry election call reference, mandate dates, status, and
+metadata. Members bind employees to roles and active/substitute/removed state.
+Minutes store meeting metadata, document URI, and SHA-256. All CIPA tables use
+forced RLS and audit triggers under the `saude.program.*` permission boundary.
+
 - `saude.aso_attachment`: metadados do PDF de laudo/exames, com `sha256`, MIME `application/pdf` e `encrypted_at_rest=true`.
 
 Novos servidores admitidos pelo fluxo `POST /api/v1/funcionarios` recebem automaticamente um ASO admissional pendente (`SCHEDULED`) na mesma transacao de admissao.

@@ -1,19 +1,26 @@
 # Infrastructure
 
-AWS is the target platform for SGP modernization.
+SGP supports AWS and client-premises deployment targets.
 
-## Temporary Status
+## Accepted Boundary
 
-The final infrastructure implementation path is intentionally open as of 2026-04-26. CloudFormation, Terraform, AWS SDK automation, and AWS CLI scripts are all acceptable candidates until the owner selects one. Files in this directory are planning scaffolds, not a release gate.
+Provisioning/IaC and artifact deployment are separate flows. Provisioning creates
+or changes infrastructure resources. Artifact deployment pushes built images,
+bundles, SQL packs, and runtime configuration to already designated AWS services
+or client-premises hosts.
+
+Release/homologation gate composition remains postponed for a focused owner
+discussion. Files in this directory are planning scaffolds unless a later
+target-specific provision plan is accepted as retained evidence.
 
 ## Layout
 
-- `infra/aws/README.md`: AWS stack model and deployment flow.
+- `infra/aws/README.md`: AWS stack model and split provision/deploy flow.
 - `infra/aws/templates/`: CloudFormation placeholder templates by stack; not a final commitment to CloudFormation.
 
 ## Stack Scope
 
-- `cognito`: OAuth2/OIDC identity provider for frontend and API clients.
+- `identity`: delegated to `../stynx`; AWS Cognito can be a Stynx-owned provider.
 - `rds`: PostgreSQL and related networking/security dependencies.
 - `backend`: containerized NestJS API runtime and ingress.
 - `frontend`: static Angular hosting and CDN edge configuration.
@@ -22,4 +29,7 @@ The final infrastructure implementation path is intentionally open as of 2026-04
 
 - Never hardcode credentials, API keys, or passwords in templates.
 - Resolve runtime secrets via environment variables and secret managers.
-- Keep deploy operations in dry-run planning mode until the final infra approach is selected and placeholders are replaced.
+- Keep provision operations in dry-run planning mode until placeholders are
+  replaced and a reviewed plan is retained.
+- Keep artifact deployment pointed only at accepted AWS or client-premises target
+  manifests. Never commit host credentials or production secrets.

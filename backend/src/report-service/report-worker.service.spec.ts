@@ -5,7 +5,7 @@ const summary = {
   competence_year: 2026,
   competence_month: 5,
   branch_name: 'Matriz',
-  status: 'GENERATED',
+  status: 'APPROVED',
   employee_count: '12',
   total_earnings: '120000.00',
   total_deductions: '24000.00',
@@ -20,10 +20,25 @@ describe('ReportWorkerService', () => {
       job('req-015', 'SERVIDOR_PAGAMENTO_BLOQUEADO'),
       job('req-016', 'RELATORIO_BATIMENTO_FOLHA'),
       job('req-017', 'F-FOL-017'),
+      job('req-manad', 'MANAD_EXPORT'),
     ];
     const query = jest.fn(async (sql: string) => {
       if (sql.includes('WITH claimed AS')) return jobs;
       if (sql.includes('FROM payroll.payroll_run run')) return [summary];
+      if (sql.includes('employee.registration AS employee_registration')) {
+        return [
+          {
+            employee_registration: 'MAT-001',
+            employee_cpf: '123.456.789-01',
+            rubric_code: 'BASE',
+            rubric_description: 'Vencimento base',
+            entry_kind: 'EARNING',
+            quantity: '1.0000',
+            reference_value: '1000.00',
+            amount: '1000.00',
+          },
+        ];
+      }
       if (sql.includes('GROUP BY coalesce(branch.name')) {
         return [
           {
@@ -88,16 +103,24 @@ describe('ReportWorkerService', () => {
     );
 
     await expect(service.pollOnce(10)).resolves.toEqual({
-      discovered: 5,
-      processed: 5,
+      discovered: 6,
+      processed: 6,
       failed: 0,
       skipped: 0,
     });
 
-    expect(storedInputs).toHaveLength(7);
+    expect(storedInputs).toHaveLength(9);
     expect(
       storedInputs.filter((input) => input.contentType === 'application/pdf'),
     ).toHaveLength(5);
+    expect(
+      storedInputs.filter(
+        (input) => input.contentType === 'text/plain; charset=utf-8',
+      ),
+    ).toHaveLength(1);
+    expect(
+      storedInputs.filter((input) => input.contentType === 'application/json'),
+    ).toHaveLength(1);
     expect(
       storedInputs.filter(
         (input) =>

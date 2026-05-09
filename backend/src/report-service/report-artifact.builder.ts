@@ -3,7 +3,7 @@ import { Buffer } from 'node:buffer';
 export interface ReportArtifact {
   fileName: string;
   contentType: string;
-  format: 'PDF' | 'XLSX';
+  format: 'CSV' | 'JSON' | 'PDF' | 'TXT' | 'XLSX';
   content: Buffer;
   recordCount: number;
 }
@@ -137,6 +137,51 @@ ${input.sheets
   };
 }
 
+export function buildReportCsv(input: {
+  fileName: string;
+  table: ReportTable;
+  recordCount: number;
+}): ReportArtifact {
+  const lines = [input.table.columns, ...input.table.rows]
+    .map((row) => row.map((cell) => csvCell(formatCell(cell))).join(','))
+    .join('\n');
+  return {
+    fileName: input.fileName,
+    contentType: 'text/csv; charset=utf-8',
+    format: 'CSV',
+    content: Buffer.from(`${lines}\n`, 'utf8'),
+    recordCount: input.recordCount,
+  };
+}
+
+export function buildReportJson(input: {
+  fileName: string;
+  payload: Record<string, unknown>;
+  recordCount: number;
+}): ReportArtifact {
+  return {
+    fileName: input.fileName,
+    contentType: 'application/json',
+    format: 'JSON',
+    content: Buffer.from(`${JSON.stringify(input.payload, null, 2)}\n`, 'utf8'),
+    recordCount: input.recordCount,
+  };
+}
+
+export function buildReportText(input: {
+  fileName: string;
+  lines: string[];
+  recordCount: number;
+}): ReportArtifact {
+  return {
+    fileName: input.fileName,
+    contentType: 'text/plain; charset=utf-8',
+    format: 'TXT',
+    content: Buffer.from(`${input.lines.join('\n')}\n`, 'utf8'),
+    recordCount: input.recordCount,
+  };
+}
+
 function tableLines(tables: ReportTable[]): string[] {
   return tables.flatMap((table) => [
     '',
@@ -256,6 +301,11 @@ function escapeXml(value: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
+}
+
+function csvCell(value: string): string {
+  if (!/[",\n\r]/.test(value)) return value;
+  return `"${value.replace(/"/g, '""')}"`;
 }
 
 function formatCell(value: string | number | null): string {

@@ -2,7 +2,10 @@
 
 This directory contains an AWS container-stack planning baseline for SGP.
 
-As of 2026-04-26 this is not the required production IaC path. CloudFormation, Terraform, AWS SDK automation, and AWS CLI scripts remain open options until the owner makes a final infrastructure decision.
+AWS is one accepted deployment target family. Resource provisioning and artifact
+deployment are separate steps: provision creates resources, while deploy pushes
+already built artifacts to designated AWS targets. Identity provider resources,
+including Cognito when used, are owned through the `../stynx` identity boundary.
 
 ## Layout
 
@@ -22,15 +25,27 @@ Shared foundations are intentionally abstracted in placeholders until account-le
 - Backend service image, scaling, and environment mapping.
 - Frontend bucket, CloudFront, and DNS integration.
 
-## Deployment Entry Points
+## Provision Entry Points
 
 From the repository root:
 
-- `npm run deploy -- --dry-run`
-- `npm run deploy -- --target stage --stack cognito --dry-run`
-- `npm run deploy -- --target prod --stack all --dry-run`
+- `npm run deploy -- --mode provision --provider aws --dry-run`
+- `npm run deploy -- --mode provision --provider aws --target stage --stack rds --dry-run`
+- `npm run deploy -- --mode provision --provider aws --target prod --stack all --dry-run`
 
-`--apply` is intentionally blocked in the dispatcher until placeholders are parameterized.
+`--apply` remains blocked until placeholders are parameterized and retained
+governance evidence accepts the plan.
+
+## Artifact Deploy Entry Points
+
+Artifact deployment targets already-created resources and must not create or
+change infrastructure:
+
+- `npm run deploy -- --mode artifacts --provider aws --target stage --dry-run`
+- `npm run deploy -- --mode artifacts --provider aws --target prod --dry-run`
+
+Client-premises deployments use the same split cycle with
+`--provider client-prem` and an accepted target manifest.
 
 ## Required Environment Variables
 
@@ -48,4 +63,6 @@ Document and provide these in your deployment shell or CI environment:
 
 ## Placeholder Policy
 
-All templates in this folder are scaffolds. Replace `TODO_*` parameters and tighten IAM/network defaults before allowing apply mode, or replace this folder with the selected Terraform/AWS SDK/AWS CLI implementation after the infrastructure ADR is resolved.
+All templates in this folder are scaffolds. Replace `TODO_*` parameters and
+tighten IAM/network defaults before allowing provision apply mode. Artifact
+deploy mode must remain decoupled from resource creation.

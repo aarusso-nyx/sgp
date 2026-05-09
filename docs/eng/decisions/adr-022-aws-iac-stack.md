@@ -1,28 +1,53 @@
-# ADR-022: AWS IaC Stack Postponement
+# ADR-022: Production Provisioning And Artifact Deploy Boundary
 
-Status: Postponed
+Status: Accepted
 
-Date: 2026-05-08
+Date: 2026-05-09
 
 ## Context
 
-The QA inspection report at `docs/work/qa/report.md` identifies AWS infrastructure as a release-readiness gap. The current `infra/aws` templates are scaffolding, and the deployment dispatcher keeps `--apply` blocked until an owner chooses and accepts a production IaC path.
+The owner decision on 2026-05-09 selects a production deployment boundary
+rather than a single hosted-only environment. SGP must be deployable to AWS and
+to client-premises targets. Resource provisioning/IaC and artifact deployment
+must be separate lifecycle steps.
 
-SGP v0.0.1 will not implement final production IaC in the QA scorecard closure lift. This ADR records the postponement boundary: infrastructure readiness remains explicitly out of current implementation scope, and SGP must not claim production deployment maturity until a later owner-approved infrastructure wave lands.
+The current `infra/aws` templates remain scaffolding until parameterized. Client
+premises deployments require an accepted target manifest before artifacts can be
+pushed to designated hosts. Release/homologation gate composition remains
+postponed for a focused owner discussion and is not decided by this ADR.
 
 ## Options
 
-- CDK for TypeScript: keeps the stack close to the TypeScript workspace and can reuse familiar review patterns.
-- Terraform: provides a widely used declarative IaC baseline with mature plan/apply review flow.
-- AWS SDK orchestration: can model custom provisioning flows but increases bespoke runtime code and review burden.
-- AWS CLI scripts: simple for experiments but weak for durable review, drift detection, and reusable environments.
+- AWS provision + AWS artifact deploy: provision resources with a reviewed IaC
+  flow, then deploy images/bundles to the selected AWS targets.
+- Client-prem provision handoff + client-prem artifact deploy: record the
+  externally created hosts/services in a target manifest, then deploy artifacts
+  to those designated targets.
+- Combined provision-and-deploy command: rejected because it hides promotion
+  risk and makes homologation evidence ambiguous.
 
 ## Decision
 
-Infrastructure implementation is postponed. No stack is selected by this ADR. The dispatcher `--apply` block remains in place until the repository owner accepts one IaC path, the placeholder parameters are removed, and the resulting plan/diff gate is retained in governance evidence.
+SGP uses a split production cycle:
+
+1. Provisioning/IaC creates or changes resources.
+2. Artifact deployment pushes built artifacts to already designated targets.
+
+Supported target families are AWS and client premises. SGP must not combine
+resource creation and artifact rollout in a single production promotion. The AWS
+templates in `infra/aws` remain non-authoritative scaffolding until placeholders
+are removed and a reviewed plan gate is retained. Client-premises deployment
+must use a target manifest or equivalent retained evidence that identifies hosts,
+artifact destinations, secret boundaries, and rollback points.
 
 ## Consequences
 
-- Production-readiness claims remain blocked on a later accepted ADR or implementation round.
-- Existing CloudFormation placeholder files remain non-authoritative scaffolding.
-- Future IaC work must include reviewable plan output, least-privilege IAM posture, encryption posture, network boundaries, backup/restore posture, and rollback evidence.
+- Deployment tooling and docs must expose separate provision and artifact-deploy
+  flows.
+- AWS and client-premises targets are both valid, but each needs retained target
+  evidence before production use.
+- Production-readiness claims remain blocked on later gate evidence for the
+  selected target.
+- Future IaC work must include reviewable plan output, least-privilege posture,
+  encryption posture, network boundaries, backup/restore posture, and rollback
+  evidence.

@@ -51,6 +51,15 @@ The OpenTelemetry tracing middleware (`backend/src/common/observability/otel.tra
   admin backend/db/frontend surfaces are delegated to the `../stynx` framework
   and are not SGP v0.0.1 acceptance blockers unless a future owner decision
   reopens a concrete product-domain route or surface in `docs/eng`.
+- Identity is fully delegated to the `../stynx` framework. Production identity
+  may be Gov.br or Cognito, but provider integration, token issuance, MFA,
+  account lifecycle, and identity administration are Stynx-owned. SGP consumes
+  Stynx-issued actor/session/claims transparently through request context,
+  guards, product-domain permission names, and tenant authorization checks.
+- Storage malware scanning and quarantine are delegated to the `../stynx`
+  storage module. SGP document flows may consume Stynx storage status when the
+  framework exposes it, but SGP does not own scanner provider selection,
+  quarantine release, or scan SLA evidence.
 - eSocial implementation is outside SGP runtime ownership. SGP owns source-data
   mappings, producer DTO/projection contracts, `public.esocial_events` gateway
   state, local status/audit consumers, and operator display; XML/XSD builders,
@@ -65,9 +74,10 @@ The OpenTelemetry tracing middleware (`backend/src/common/observability/otel.tra
   boundaries, but backend code must not import from `frontend/`, frontend code
   must not import from `backend/`, and generated/client artifacts must remain
   produced by the accepted API alignment flow.
-- eSocial, TCE, banking, Gov.br, and other official external homologation paths
-  stay behind accepted mock/sandbox/downstream boundaries recorded in
-  `docs/gov/evidence/deferred-decision-ledger.md`.
+- eSocial official homologation belongs to `../stynx-esocial`. TCE, banking,
+  Gov.br signatures, SIAFIC, SIAPE, SIOPS, and other external homologation
+  paths stay behind deterministic SGP mocks/contracts unless a later owner
+  decision reopens the boundary in `docs/gov/evidence/deferred-decision-ledger.md`.
 
 ## Contract Flows
 
@@ -118,15 +128,25 @@ flowchart LR
   Gate --> Evidence[docs/gov/generated/api/route-alignment.json]
 ```
 
-### Postponed Infrastructure Topology
+### Deployment Cycle
 
 ```mermaid
 flowchart TB
-  Users[Operators and public users] --> Edge[Production edge owner decision pending]
+  Provision[Provision / IaC flow] --> Resources[AWS or client-prem resources]
+  Build[Build artifacts] --> Deploy[Artifact deploy flow]
+  Deploy --> Targets[Designated AWS services or client-prem hosts]
+  Users[Operators and public users] --> Edge[Accepted production edge]
   Edge --> Api[SGP runtime entrypoints]
   Api --> Db[(PostgreSQL)]
   Api --> Workers[Worker entrypoints]
   Workers --> Db
-  Infra[INFRA_STRATEGY: Postponed] -. retained in .-> ADR[ADR-022]
+  Resources -. selected before .-> Deploy
+  Infra[INFRA_STRATEGY: AWS + client-prem split cycle] -. retained in .-> ADR[ADR-022]
   Infra -. retained in .-> Ledger[docs/gov/evidence/deferred-decision-ledger.md]
 ```
+
+Provisioning and artifact deployment are separate lifecycle steps. Provisioning
+creates or changes infrastructure resources; artifact deployment pushes built
+images, bundles, SQL packs, and runtime configuration to an already designated
+AWS or client-premises target. Release/homologation gate composition remains
+postponed for a focused owner decision.

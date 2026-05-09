@@ -42,7 +42,12 @@ function printHelp() {
   console.log('Examples:');
   console.log('  node scripts/run.mjs health --json');
   console.log('  node scripts/run.mjs test db');
-  console.log('  node scripts/run.mjs deploy --target stage --dry-run');
+  console.log(
+    '  node scripts/run.mjs deploy --mode provision --provider aws --target stage --dry-run',
+  );
+  console.log(
+    '  node scripts/run.mjs deploy --mode artifacts --provider client-prem --target prod --dry-run',
+  );
 }
 
 function parseOption(optionName, defaultValue) {
@@ -566,8 +571,63 @@ function handleHealth() {
 function handleDeploy() {
   const target = parseOption('target', 'stage');
   const stack = parseOption('stack', 'all');
+  const mode = parseOption('mode', 'provision');
+  const provider = parseOption('provider', 'aws');
   const apply = hasFlag('apply');
   const dryRun = hasFlag('dry-run') || !apply;
+
+  if (!['provision', 'artifacts'].includes(mode)) {
+    console.error(`[deploy] invalid mode: ${mode}`);
+    console.error('Valid modes: provision, artifacts');
+    return 1;
+  }
+
+  if (!['aws', 'client-prem'].includes(provider)) {
+    console.error(`[deploy] invalid provider: ${provider}`);
+    console.error('Valid providers: aws, client-prem');
+    return 1;
+  }
+
+  if (mode === 'artifacts') {
+    const targetManifest = parseOption(
+      'target-manifest',
+      provider === 'client-prem'
+        ? `infra/client-prem/${target}.manifest.json`
+        : `infra/aws/${target}.targets.json`,
+    );
+    console.log(
+      `[deploy] mode=artifacts provider=${provider} target=${target} targetManifest=${targetManifest}`,
+    );
+    if (dryRun) {
+      console.log('[deploy] dry-run mode active; no artifacts were pushed.');
+      console.log('[deploy] artifact deploy does not create or change infrastructure resources.');
+      console.log('[deploy] provide an accepted target manifest before using --apply.');
+      return 0;
+    }
+    if (!existsSync(join(cwd, targetManifest))) {
+      console.error(`[deploy] target manifest not found: ${targetManifest}`);
+      return 1;
+    }
+    console.error(
+      '[deploy] artifact apply mode is blocked until release/homologation gates are accepted.',
+    );
+    return 1;
+  }
+
+  if (provider !== 'aws') {
+    console.log(`[deploy] mode=provision provider=${provider} target=${target}`);
+    if (dryRun) {
+      console.log('[deploy] dry-run mode active; no client-prem resources were changed.');
+      console.log(
+        '[deploy] client-prem provisioning is an external handoff; retain the accepted target manifest before artifact deploy.',
+      );
+      return 0;
+    }
+    console.error(
+      '[deploy] client-prem provision apply is outside SGP automation; use an accepted external provision handoff.',
+    );
+    return 1;
+  }
 
   const stackTemplateByName = {
     all: 'infra/aws/templates/stack-all.yaml',
@@ -584,16 +644,23 @@ function handleDeploy() {
   }
 
   const templatePath = stackTemplateByName[stack];
-  console.log(`[deploy] target=${target} stack=${stack} template=${templatePath}`);
+  console.log(
+    `[deploy] mode=provision provider=aws target=${target} stack=${stack} template=${templatePath}`,
+  );
 
   if (dryRun) {
     console.log('[deploy] dry-run mode active; no infrastructure changes applied.');
-    console.log('[deploy] to apply, run with --apply after filling template placeholders.');
+    console.log(
+      '[deploy] provision mode creates resources only; artifact deploy is a separate mode.',
+    );
+    console.log(
+      '[deploy] to apply, run with --apply after filling template placeholders and retaining plan evidence.',
+    );
     return 0;
   }
 
   console.error(
-    '[deploy] apply mode is blocked in this repo baseline until templates are parameterized.',
+    '[deploy] provision apply mode is blocked in this repo baseline until templates are parameterized.',
   );
   console.error('[deploy] use --dry-run for planning only.');
   return 1;

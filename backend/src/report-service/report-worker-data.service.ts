@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
 import {
+  ManadPayrollRow,
   PayrollSummaryRow,
   ReconciliationRow,
+  RepasseFundoRhRow,
   ReportJobRow,
   ReportLineRow,
 } from './report-worker.types';
@@ -227,6 +229,111 @@ export class ReportWorkerDataService {
       CROSS JOIN LATERAL (
         SELECT (rows.source_total - rows.recomputed_total)::numeric(16, 2) AS difference
       ) diff
+      `,
+      this.criteriaValues(job),
+    );
+  }
+
+  loadRepasseFundoRh(job: ReportJobRow): Promise<RepasseFundoRhRow[]> {
+    return this.databaseService.query<RepasseFundoRhRow>(
+      `
+      WITH run AS (
+        SELECT payroll_run.id, payroll_run.status
+        FROM payroll.payroll_run
+        WHERE (
+            $1::uuid IS NOT NULL
+            AND payroll_run.id = $1::uuid
+          )
+          OR (
+            $1::uuid IS NULL
+            AND payroll_run.competence_year = $2::integer
+            AND payroll_run.competence_month = $3::integer
+            AND ($4::uuid IS NULL OR payroll_run.branch_id = $4::uuid)
+          )
+        ORDER BY payroll_run.updated_at DESC
+        LIMIT 1
+      )
+      SELECT
+        coalesce(earning.incidences->>'fund_source', 'TESOURO') AS fund_source,
+        earning.code AS rubric_code,
+        earning.description AS rubric_description,
+        count(DISTINCT item.employee_id)::text AS employee_count,
+        coalesce(sum(item.amount), 0)::numeric(16, 2)::text AS basis_total,
+        coalesce(sum(
+          item.amount
+          * coalesce(NULLIF(earning.incidences->>'fund_rh_rate', '')::numeric, 1)
+        ), 0)::numeric(16, 2)::text AS transfer_total
+      FROM run
+      JOIN payroll.employee_payroll_item item
+        ON item.payroll_run_id = run.id
+       AND item.deleted_at IS NULL
+      JOIN payroll.payroll_earning_deduction earning
+        ON earning.id = item.earning_deduction_id
+       AND earning.tenant_id = item.tenant_id
+      WHERE run.status IN (
+          'APPROVED'::public."PayrollRunStatus",
+          'PAID'::public."PayrollRunStatus",
+          'CLOSED'::public."PayrollRunStatus"
+        )
+        AND (
+          earning.incidences ? 'fund_rh'
+          OR earning.incidences ? 'repasse_fundo_rh'
+          OR earning.code = 'FUNDO_RH'
+        )
+      GROUP BY
+        coalesce(earning.incidences->>'fund_source', 'TESOURO'),
+        earning.code,
+        earning.description
+      ORDER BY fund_source ASC, rubric_code ASC
+      `,
+      this.criteriaValues(job),
+    );
+  }
+
+  loadManadPayrollRows(job: ReportJobRow): Promise<ManadPayrollRow[]> {
+    return this.databaseService.query<ManadPayrollRow>(
+      `
+      WITH run AS (
+        SELECT payroll_run.id, payroll_run.status
+        FROM payroll.payroll_run
+        WHERE (
+            $1::uuid IS NOT NULL
+            AND payroll_run.id = $1::uuid
+          )
+          OR (
+            $1::uuid IS NULL
+            AND payroll_run.competence_year = $2::integer
+            AND payroll_run.competence_month = $3::integer
+            AND ($4::uuid IS NULL OR payroll_run.branch_id = $4::uuid)
+          )
+        ORDER BY payroll_run.updated_at DESC
+        LIMIT 1
+      )
+      SELECT
+        employee.registration AS employee_registration,
+        coalesce(employee.cpf, '') AS employee_cpf,
+        earning.code AS rubric_code,
+        earning.description AS rubric_description,
+        earning.kind::text AS entry_kind,
+        coalesce(item.quantity, 0)::numeric(12, 4)::text AS quantity,
+        coalesce(item.reference_value, 0)::numeric(14, 2)::text AS reference_value,
+        item.amount::numeric(14, 2)::text AS amount
+      FROM run
+      JOIN payroll.employee_payroll_item item
+        ON item.payroll_run_id = run.id
+       AND item.deleted_at IS NULL
+      JOIN payroll.payroll_earning_deduction earning
+        ON earning.id = item.earning_deduction_id
+       AND earning.tenant_id = item.tenant_id
+      JOIN hr.employee employee
+        ON employee.id = item.employee_id
+       AND employee.tenant_id = item.tenant_id
+      WHERE run.status IN (
+          'APPROVED'::public."PayrollRunStatus",
+          'PAID'::public."PayrollRunStatus",
+          'CLOSED'::public."PayrollRunStatus"
+        )
+      ORDER BY employee.registration ASC, earning.code ASC, item.id ASC
       `,
       this.criteriaValues(job),
     );
