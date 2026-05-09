@@ -1,3 +1,5 @@
+import { domainError } from '../../common/errors/domain-error';
+
 const DATE_FORMATTER = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'UTC',
   year: 'numeric',
@@ -18,6 +20,9 @@ export function assertTenantTimeZone(timeZone: string): string {
     new Intl.DateTimeFormat('en-US', { timeZone }).format(new Date(0));
     return timeZone;
   } catch {
-    throw new Error(`Invalid tenant time zone: ${timeZone}`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `Invalid tenant time zone: ${timeZone}`,
+    );
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { domainError } from '../errors/domain-error';
 import {
   findLgpdLegalBasisRule,
   LgpdLegalBasisRule,
@@ -34,7 +35,10 @@ export class LgpdLegalBasisService {
   async assertPiiReadAllowed(flowKey: string): Promise<LgpdLegalBasisRule> {
     const staticRule = findLgpdLegalBasisRule(flowKey);
     if (!staticRule) {
-      throw new Error(`Unknown LGPD data flow: ${flowKey}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `Unknown LGPD data flow: ${flowKey}`,
+      );
     }
 
     if (!this.databaseService.configured) {
@@ -71,7 +75,8 @@ export class LgpdLegalBasisService {
     );
     const row = rows[0];
     if (!row) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         `LGPD legal basis is not active for data flow: ${flowKey}`,
       );
     }

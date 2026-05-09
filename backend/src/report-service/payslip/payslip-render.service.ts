@@ -19,6 +19,7 @@ import {
   buildPayslipStorageKey,
   PayslipDocument,
 } from './payslip-template';
+import { domainError } from '../../common/errors/domain-error';
 
 interface EmployeeContextRow extends QueryResultRow {
   id: string;
@@ -299,7 +300,8 @@ export class PayslipRenderService {
     const buffer = await this.pdfBuilder.buildPayslip(document);
     const validation = this.pdfBuilder.validatePdfA1b(buffer);
     if (!validation.valid) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         `PDF/A-1b validation failed: ${validation.reasons.join(', ')}`,
       );
     }

@@ -7,6 +7,7 @@ import {
 } from '../contracts/tce-adapter.decorator';
 import { TceAdapter } from '../contracts/tce-adapter.interface';
 import { AdapterRegistryService } from './adapter-registry.service';
+import { domainError } from '../../common/errors/domain-error';
 
 interface DiscoveredProvider {
   instance?: unknown;
@@ -67,7 +68,8 @@ export class AdapterLoaderService implements OnApplicationBootstrap {
       metadata.state_code !== adapter.state_code() ||
       metadata.organ_kind !== adapter.organ_kind()
     ) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         `TCE adapter metadata does not match instance: ${adapter.id()}`,
       );
     }

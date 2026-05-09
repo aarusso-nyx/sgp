@@ -1,3 +1,5 @@
+import { domainError } from '../common/errors/domain-error';
+
 export interface ValidatedEnvironment {
   NODE_ENV: string;
   PORT: number;
@@ -133,7 +135,10 @@ export function validateEnvironment(
   );
 
   if (errors.length > 0) {
-    throw new Error(`Invalid backend configuration: ${errors.join('; ')}`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `Invalid backend configuration: ${errors.join('; ')}`,
+    );
   }
 
   return {

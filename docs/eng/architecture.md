@@ -40,6 +40,10 @@ the generated topology remains the machine-readable runtime source.
 | `sgp-report-service`      | `backend/src/main-report-service.ts`      | `ReportServiceModule`             | Pino redaction, OpenTelemetry, Prometheus, helmet, rate limit, CORS.              |
 | `sgp-report-worker`       | `backend/src/main-report-worker.ts`       | `ReportWorkerRuntimeModule`       | Pino redaction, worker scheduler, readiness probe, graceful shutdown.             |
 
+### Trace ↔ log correlation
+
+The OpenTelemetry tracing middleware (`backend/src/common/observability/otel.tracing.ts`) extracts the W3C trace-id from the incoming `traceparent` header at request entry and writes it onto `request.traceId` (declared on `RequestWithContext`). The Pino logger configured in `backend/src/common/logging/logging.config.ts` emits that same trace-id on every request log line via its `customProps` callback, and the exported OTel span carries it twice — once as the canonical W3C `traceId` field and once as the explicit `sgp.trace_id` attribute. Operators pivoting between log entries and the OTel collector reach the same identifier from either signal. The contract is exercised end-to-end by `tests/backend/observability/trace-id-end-to-end.spec.ts`.
+
 ## Boundary Rules
 
 - `ADMIN_INSTALL_LATER` remains owner-accepted scope reduction: full admin menu

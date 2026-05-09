@@ -13,6 +13,7 @@ import {
   type SiconfiRelayScenario,
 } from '../../../external/mocks/siconfi-relay';
 import type { SiconfiFiscalStatementInput } from '../rreo-rgf.generator';
+import { domainError } from '../../../common/errors/domain-error';
 
 export type SiconfiQueueAdapterOptions = Readonly<{
   transport?: QueueAdapterTransport | undefined;
@@ -71,7 +72,8 @@ export class SiconfiQueueAdapter {
       return;
     }
     if (!options.transport) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'SiconfiQueueAdapter requires either a queue or a queue transport.',
       );
     }
@@ -118,7 +120,10 @@ export class SiconfiQueueAdapter {
 
     const relay = queueResponse.payload;
     if (!relay) {
-      throw new Error('SICONFI relay returned an OK response without payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SICONFI relay returned an OK response without payload.',
+      );
     }
     this.assertRelayPayload(input, payload, relay);
 
@@ -158,17 +163,26 @@ export class SiconfiQueueAdapter {
     relay: SiconfiRelayResponsePayload,
   ): void {
     if (relay.submissionId !== input.submissionId) {
-      throw new Error('SICONFI relay returned a different submission id.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SICONFI relay returned a different submission id.',
+      );
     }
     if (relay.hashes.contentSha256 !== payload.contentHash) {
-      throw new Error('SICONFI relay returned a different content hash.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SICONFI relay returned a different content hash.',
+      );
     }
     if (
       relay.declaration !== input.statement.declaration ||
       relay.layoutEdition !== input.statement.layoutEdition ||
       relay.period !== input.statement.period
     ) {
-      throw new Error('SICONFI relay returned different fiscal metadata.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SICONFI relay returned different fiscal metadata.',
+      );
     }
   }
 

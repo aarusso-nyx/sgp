@@ -7,6 +7,7 @@ import {
   IntegrationProcessResult,
   PendingIntegrationJobRow,
 } from './integration-job-dispatcher';
+import { domainError } from '../../common/errors/domain-error';
 
 interface EvaluationSheetRow extends QueryResultRow {
   evaluation_id: string;
@@ -42,7 +43,10 @@ export class EvaluationIntegrationDispatcher implements IntegrationJobDispatcher
       case 'AVALIACAO_RELATORIO_CICLO':
         return this.processEvaluationCycle(job, context);
       default:
-        throw new Error(`Unsupported evaluation job: ${job.definition_code}`);
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
+          `Unsupported evaluation job: ${job.definition_code}`,
+        );
     }
   }
 
@@ -70,7 +74,10 @@ export class EvaluationIntegrationDispatcher implements IntegrationJobDispatcher
     );
     const row = rows[0];
     if (!row) {
-      throw new Error('Performance evaluation report source not found');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Performance evaluation report source not found',
+      );
     }
 
     const artifact = buildSimplePdfReport({
@@ -123,7 +130,10 @@ export class EvaluationIntegrationDispatcher implements IntegrationJobDispatcher
     );
     const row = rows[0];
     if (!row) {
-      throw new Error('Evaluation cycle report source not found');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Evaluation cycle report source not found',
+      );
     }
 
     const artifact = buildSimplePdfReport({

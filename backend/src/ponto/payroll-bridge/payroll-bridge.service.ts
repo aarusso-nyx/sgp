@@ -11,6 +11,7 @@ import {
 import { formatInstantIso } from './tenant-timezone.util';
 import { PayrollLineBuilderService } from './payroll-line-builder.service';
 import { TimesheetAggregatorService } from './timesheet-aggregator.service';
+import { domainError } from '../../common/errors/domain-error';
 
 interface PayrollRunRow extends QueryResultRow {
   competence_month: number;
@@ -175,7 +176,10 @@ export class PayrollBridgeService {
       [payrollRunId],
     );
     if (!rows[0]) {
-      throw new Error('Payroll run was not found.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Payroll run was not found.',
+      );
     }
     return rows[0];
   }

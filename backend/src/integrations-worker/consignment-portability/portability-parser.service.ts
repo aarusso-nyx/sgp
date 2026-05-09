@@ -3,6 +3,7 @@ import Decimal from 'decimal.js';
 
 import { parseBankX } from './adapters/bank-x';
 import { parseBankY } from './adapters/bank-y';
+import { domainError } from '../../common/errors/domain-error';
 
 export type PortabilityLayout = 'CANONICAL_CSV' | 'BANK_X' | 'BANK_Y';
 
@@ -140,7 +141,10 @@ function decimal(value: string, scale: number, sequence: number): string {
   try {
     const parsed = new Decimal(value.replace(',', '.'));
     if (!parsed.isFinite() || parsed.isNegative()) {
-      throw new Error('non-negative finite decimal required');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'non-negative finite decimal required',
+      );
     }
     return parsed.toDecimalPlaces(scale).toFixed(scale);
   } catch {

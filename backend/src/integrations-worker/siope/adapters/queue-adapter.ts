@@ -13,6 +13,7 @@ import {
   type SiopeRelayScenario,
 } from '../../../external/mocks/siope-relay';
 import type { SiopeExportInput } from '../siope-export.generator';
+import { domainError } from '../../../common/errors/domain-error';
 
 export type SiopeQueueAdapterOptions = Readonly<{
   transport?: QueueAdapterTransport | undefined;
@@ -71,7 +72,8 @@ export class SiopeQueueAdapter {
       return;
     }
     if (!options.transport) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'SiopeQueueAdapter requires either a queue or a queue transport.',
       );
     }
@@ -115,7 +117,10 @@ export class SiopeQueueAdapter {
 
     const relay = queueResponse.payload;
     if (!relay) {
-      throw new Error('SIOPE relay returned an OK response without payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPE relay returned an OK response without payload.',
+      );
     }
     this.assertRelayPayload(input, payload, relay);
 
@@ -154,16 +159,25 @@ export class SiopeQueueAdapter {
     relay: SiopeRelayResponsePayload,
   ): void {
     if (relay.exportId !== input.exportId) {
-      throw new Error('SIOPE relay returned a different export id.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPE relay returned a different export id.',
+      );
     }
     if (relay.hashes.contentSha256 !== payload.contentHash) {
-      throw new Error('SIOPE relay returned a different content hash.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPE relay returned a different content hash.',
+      );
     }
     if (
       relay.layoutEdition !== input.export.layoutEdition ||
       relay.year !== input.export.year
     ) {
-      throw new Error('SIOPE relay returned different fiscal metadata.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPE relay returned different fiscal metadata.',
+      );
     }
   }
 

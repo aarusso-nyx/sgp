@@ -470,6 +470,18 @@ function handleGovernance() {
   return runCommand(process.execPath, ['scripts/lib/governance/validate.mjs']);
 }
 
+function handleRoadmap() {
+  const subcommand = args[0] ?? 'write';
+  if (subcommand === 'check') {
+    return runCommand(process.execPath, ['scripts/lib/roadmap-from-ledger.mjs', '--check']);
+  }
+  if (subcommand !== 'write') {
+    console.error('[roadmap] valid subcommands: write, check');
+    return 1;
+  }
+  return runCommand(process.execPath, ['scripts/lib/roadmap-from-ledger.mjs']);
+}
+
 function handleCheck() {
   if (args[0] === 'circular') {
     const target = args[1] ?? 'help';
@@ -613,6 +625,7 @@ const handlers = {
   qa: handleQa,
   audit: handleAudit,
   governance: handleGovernance,
+  roadmap: handleRoadmap,
   health: handleHealth,
   deploy: handleDeploy,
   prepare: () => runCommand('husky', args),

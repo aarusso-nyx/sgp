@@ -1,3 +1,5 @@
+import { domainError } from '../../common/errors/domain-error';
+
 export interface SiopeExportInput {
   sourceStatus: 'CALLER_SELECTED_OFFICIAL_LAYOUT';
   layoutEdition: string;
@@ -17,7 +19,8 @@ export interface SiopeExportRow {
 export class SiopeExportGenerator {
   generateCsv(input: SiopeExportInput): string {
     if (input.sourceStatus !== 'CALLER_SELECTED_OFFICIAL_LAYOUT') {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'SIOPE generation requires a caller-selected official layout.',
       );
     }

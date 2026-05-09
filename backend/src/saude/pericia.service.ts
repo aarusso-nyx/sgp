@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
-import { domainError } from '../common/errors/domain-error';
 import { DatabaseService } from '../database/database.service';
 import {
   CreateMedicalRecordDto,
@@ -11,6 +10,7 @@ import {
   UpdatePericiaAppointmentDto,
   ValidateMedicalRecordDto,
 } from './pericia.dto';
+import { domainError } from '../common/errors/domain-error';
 
 interface EmployeeStateRow extends QueryResultRow {
   id: string;

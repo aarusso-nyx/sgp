@@ -2,6 +2,27 @@
 
 SGP in this repository (`./sgp`) is the canonical root for a fresh implementation.
 
+## Quickstart
+
+From a fresh clone:
+
+```bash
+nvm use                                # Node 24 per .nvmrc
+npm ci                                 # install workspace dependencies
+npm run typecheck                      # backend + frontend typecheck
+npm run test                           # backend unit + RLS specs
+npm run start:admin                    # serve sgp-admin at http://127.0.0.1:4200
+```
+
+Common follow-ups:
+
+- `npm run start:portal` — serve `sgp-portal` at `http://127.0.0.1:4300`.
+- `npm run start:core-api` — serve `sgp-core-api` (NestJS).
+- `npm run governance:check` — run the full governance gate set (lint, format, typecheck, alignment, ADRs).
+- `npm run health:json` — emit runtime topology and health probes as JSON.
+
+For background, deeper runbooks, and contribution rules see [AGENTS.md](./AGENTS.md) and [docs/eng/](./docs/eng/).
+
 ## Source of truth
 
 - Engineering/product authority: `docs/eng/`

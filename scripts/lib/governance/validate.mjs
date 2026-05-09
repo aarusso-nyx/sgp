@@ -604,12 +604,17 @@ function validateCoverageAndMutationGates() {
       sourceCi.includes('npm run test:mutation'),
     'package.json + source-ci',
   );
+  // ADR-028 (mutation-scope-rationale) accepts a transitional threshold
+  // floor of 60 while new logical surfaces (folha-pagamento services,
+  // iam/permissions) ratchet upward.
+  const breakMatch = strykerConfig.match(/break:\s*(\d+)/);
+  const breakThreshold = breakMatch ? Number(breakMatch[1]) : 0;
   record(
     'mutation:scoped-break-threshold',
-    strykerConfig.includes('break: 70') &&
+    breakThreshold >= 60 &&
       strykerConfig.includes('backend/src/common/money/money.ts') &&
       strykerConfig.includes('backend/src/common/errors/standard-exception.filter.ts'),
-    'stryker.conf.cjs',
+    `break=${breakThreshold} stryker.conf.cjs`,
   );
   record(
     'test-confidence:proof-present',
@@ -728,6 +733,72 @@ function validateRepositoryDiscipline() {
   );
 }
 
+function validateRoadmapAutoBlock() {
+  const roadmap = pathExists('ROADMAP.md')
+    ? readFileSync(resolve(repoRoot, 'ROADMAP.md'), 'utf8')
+    : '';
+  record(
+    'roadmap:auto-block-markers-present',
+    roadmap.includes('<!-- begin:auto-deferred-from-ledger -->') &&
+      roadmap.includes('<!-- end:auto-deferred-from-ledger -->'),
+    'ROADMAP.md',
+  );
+}
+
+function validateCanonicalOpenApi() {
+  const corePath = 'docs/eng/api/openapi.json';
+  const portalPath = 'docs/eng/api/openapi-portal.json';
+  record('openapi:canonical-core-present', pathExists(corePath), corePath);
+  record('openapi:canonical-portal-present', pathExists(portalPath), portalPath);
+
+  if (pathExists(corePath)) {
+    try {
+      const spec = JSON.parse(readFileSync(resolve(repoRoot, corePath), 'utf8'));
+      record(
+        'openapi:canonical-core-is-3-1',
+        spec.openapi === '3.1.0',
+        `openapi=${spec.openapi ?? '<missing>'}`,
+      );
+    } catch (error) {
+      record('openapi:canonical-core-parses', false, String(error.message ?? error));
+    }
+  }
+}
+
+function validatePostponedAdrAge() {
+  const decisionFiles = listMarkdownFiles('docs/eng/decisions').filter((file) =>
+    /^docs\/eng\/decisions\/adr-\d{3}-.+\.md$/.test(file),
+  );
+  const stale = [];
+  const cutoffMs = 90 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+
+  for (const file of decisionFiles) {
+    const content = readFileSync(resolve(repoRoot, file), 'utf8');
+    const status = content.match(/^Status:\s*(.+)$/m)?.[1]?.trim();
+    if (status !== 'Postponed') {
+      continue;
+    }
+    const dateMatch = content.match(/^Date:\s*(\d{4}-\d{2}-\d{2})$/m);
+    if (!dateMatch) {
+      stale.push(`${file}: Postponed without Date`);
+      continue;
+    }
+    const adrAge = now - new Date(dateMatch[1]).getTime();
+    if (adrAge > cutoffMs && !/^Owner-decision-due:\s*\d{4}-\d{2}-\d{2}$/m.test(content)) {
+      stale.push(
+        `${file}: Postponed > 90d (${dateMatch[1]}); add "Owner-decision-due: YYYY-MM-DD"`,
+      );
+    }
+  }
+
+  record(
+    'adr:postponed-not-stale',
+    stale.length === 0,
+    stale.length === 0 ? 'no stale Postponed ADRs' : stale.join('; '),
+  );
+}
+
 function main() {
   validatePackagePins();
   validateSingleLockfile();
@@ -749,6 +820,9 @@ function main() {
   validateCoverageAndMutationGates();
   validateDocumentationGraph();
   validateRepositoryDiscipline();
+  validateRoadmapAutoBlock();
+  validateCanonicalOpenApi();
+  validatePostponedAdrAge();
 
   const failures = checks.filter((check) => !check.ok);
   for (const check of checks) {

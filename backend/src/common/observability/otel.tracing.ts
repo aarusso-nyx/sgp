@@ -13,6 +13,7 @@ type HttpRequestLike = {
   baseUrl?: string | undefined;
   route?: { path?: string | RegExp } | undefined;
   headers?: Record<string, string | string[] | undefined>;
+  traceId?: string | undefined;
 };
 
 type HttpResponseLike = {
@@ -247,6 +248,12 @@ export function configureOpenTelemetryTracingEntrypoint(
       const route = routePath(request);
       const method = request.method ?? 'UNKNOWN';
 
+      // Make the W3C trace ID visible to downstream concerns (Pino logger
+      // customProps, audit writers, etc.) before the handler runs so that
+      // log lines emitted during the request carry the same trace ID that
+      // the OTel span will report at finish.
+      request.traceId = context.traceId;
+
       response.once('finish', () => {
         if (request.path === '/metrics') return;
 
@@ -263,6 +270,7 @@ export function configureOpenTelemetryTracingEntrypoint(
             'http.request.method': method,
             'http.route': route,
             'http.response.status_code': statusCode,
+            'sgp.trace_id': context.traceId,
           },
           status: statusCode >= 500 ? 'error' : 'ok',
         };

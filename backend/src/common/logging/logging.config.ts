@@ -63,6 +63,16 @@ export function createPinoLoggerParams(serviceName: string): Params {
         paths: [...LOGGER_REDACT_PATHS],
         censor: REDACTION_POLICY.censor,
       },
+      // Surface the OTel W3C trace-id on every request log line so that
+      // log search and the OTel collector can pivot between log entries
+      // and exported spans by trace ID. The OTel tracing middleware in
+      // common/observability/otel.tracing.ts populates `req.traceId` at
+      // request entry; here we read it back via the standard pinoHttp
+      // request hook.
+      customProps: (req) => {
+        const traceId = (req as { traceId?: string }).traceId;
+        return traceId ? { traceId } : {};
+      },
     },
   };
 }

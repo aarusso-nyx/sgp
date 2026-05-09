@@ -7,6 +7,7 @@ import {
   ReportJobRow,
   ReportLineRow,
 } from './report-worker.types';
+import { domainError } from '../common/errors/domain-error';
 
 @Injectable()
 export class ReportWorkerDataService {
@@ -46,7 +47,10 @@ export class ReportWorkerDataService {
     );
     const row = rows[0];
     if (!row) {
-      throw new Error('Payroll run source not found for report request');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Payroll run source not found for report request',
+      );
     }
     return row;
   }
@@ -240,7 +244,8 @@ export class ReportWorkerDataService {
       job.competence_month ?? Number(params.competenceMonth ?? 0);
     const branchId = job.branch_id ?? this.readString(params, 'branchId');
     if (!payrollRunId && (!competenceYear || !competenceMonth)) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'Report request requires payrollRunId or competenceYear/competenceMonth',
       );
     }

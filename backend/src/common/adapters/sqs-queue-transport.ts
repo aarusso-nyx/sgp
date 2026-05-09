@@ -14,6 +14,7 @@ import type {
   QueueMessageHandler,
   QueueSubscription,
 } from './queue-adapter';
+import { domainError } from '../errors/domain-error';
 
 type SqsClientLike = Pick<SQSClient, 'send'>;
 
@@ -139,7 +140,10 @@ export class SqsQueueTransport implements QueueAdapterTransport {
       }),
     );
     if (!response.QueueUrl) {
-      throw new Error(`SQS queue URL not found for topic: ${topic}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `SQS queue URL not found for topic: ${topic}`,
+      );
     }
     this.resolvedQueueUrls.set(topic, response.QueueUrl);
     return response.QueueUrl;

@@ -87,6 +87,19 @@ export const domainError = {
       details,
     });
   },
+
+  internal(
+    code: string,
+    message: string,
+    details?: readonly string[],
+  ): DomainError {
+    return new DomainError({
+      code,
+      message,
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      details,
+    });
+  },
 } as const;
 
 export function isDomainError(error: unknown): error is DomainError {

@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 
 import Decimal from 'decimal.js';
+import { domainError } from '../../common/errors/domain-error';
 
 export type TceFiscalReportType = 'RREO' | 'RGF';
 export type TceFiscalReportSourceStatus = 'CALLER_SELECTED_LRF_STRUCTURE';
@@ -168,7 +169,8 @@ export class RreoBuilder {
   build(input: RreoBuilderInput): RreoFiscalReportEnvelope {
     assertFiscalReportBase(input, 'RREO', 'BIMESTER', 6);
     if (!Array.isArray(input.lines) || input.lines.length === 0) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'RREO lines must include at least one fiscal statement line.',
       );
     }
@@ -233,7 +235,8 @@ export function assertFiscalReportBase(
   maxPeriodNumber: number,
 ): void {
   if (input.sourceStatus !== 'CALLER_SELECTED_LRF_STRUCTURE') {
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `${reportType} sourceStatus must be CALLER_SELECTED_LRF_STRUCTURE.`,
     );
   }
@@ -243,7 +246,8 @@ export function assertFiscalReportBase(
   assertIsoDateTime(input.generatedAt, 'generatedAt');
 
   if (!STATE_PROFILES[input.targetState]) {
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `Unsupported TCE fiscal report state: ${input.targetState}`,
     );
   }
@@ -259,14 +263,18 @@ export function assertFiscalReportBase(
   requiredText(input.responsible?.registration, 'responsible.registration');
 
   if (input.period?.periodKind !== expectedPeriodKind) {
-    throw new Error(`${reportType} periodKind must be ${expectedPeriodKind}.`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `${reportType} periodKind must be ${expectedPeriodKind}.`,
+    );
   }
   if (
     !Number.isInteger(input.period.periodNumber) ||
     input.period.periodNumber < 1 ||
     input.period.periodNumber > maxPeriodNumber
   ) {
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `${reportType} periodNumber must be between 1 and ${maxPeriodNumber}.`,
     );
   }
@@ -274,7 +282,10 @@ export function assertFiscalReportBase(
     !Number.isInteger(input.period.fiscalYear) ||
     input.period.fiscalYear < 2000
   ) {
-    throw new Error(`${reportType} fiscalYear must be a valid fiscal year.`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `${reportType} fiscalYear must be a valid fiscal year.`,
+    );
   }
   requiredText(input.period.startsOn, 'period.startsOn');
   requiredText(input.period.endsOn, 'period.endsOn');
@@ -292,7 +303,10 @@ export function assertFiscalReportBase(
   );
   assertIsoDateTime(input.sourceLedger.closedAt, 'sourceLedger.closedAt');
   if (!Array.isArray(input.sourceLedger.payrollRunIds)) {
-    throw new Error('sourceLedger.payrollRunIds must be an array.');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'sourceLedger.payrollRunIds must be an array.',
+    );
   }
 
   if (input.publicationEvidence) {
@@ -374,7 +388,10 @@ export function decimal(value: string, fieldPath: string): Decimal {
   try {
     return new Decimal(requiredText(value, fieldPath));
   } catch {
-    throw new Error(`${fieldPath} must be a decimal string.`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `${fieldPath} must be a decimal string.`,
+    );
   }
 }
 
@@ -389,20 +406,29 @@ export function requiredText(
   fieldPath: string,
 ): string {
   if (typeof value !== 'string' || value.trim() === '') {
-    throw new Error(`${fieldPath} is required.`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `${fieldPath} is required.`,
+    );
   }
   return value;
 }
 
 function assertDate(value: string, fieldPath: string): void {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    throw new Error(`${fieldPath} must use YYYY-MM-DD.`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `${fieldPath} must use YYYY-MM-DD.`,
+    );
   }
 }
 
 function assertIsoDateTime(value: string, fieldPath: string): void {
   if (Number.isNaN(Date.parse(value)) || !value.endsWith('Z')) {
-    throw new Error(`${fieldPath} must be an ISO-8601 UTC timestamp.`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `${fieldPath} must be an ISO-8601 UTC timestamp.`,
+    );
   }
 }
 

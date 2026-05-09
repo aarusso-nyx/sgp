@@ -5,6 +5,7 @@ import { DatabaseService } from '../database/database.service';
 import { DocumentsStorageService } from '../documents/documents-storage.service';
 import { ReportArtifact } from './report-artifact.builder';
 import { IdRow, ReportJobRow, WorkerResult } from './report-worker.types';
+import { domainError } from '../common/errors/domain-error';
 
 @Injectable()
 export class ReportWorkerArtifactsService {
@@ -115,7 +116,11 @@ export class ReportWorkerArtifactsService {
       ],
     );
     const attachmentId = rows[0]?.id;
-    if (!attachmentId) throw new Error('Unable to persist report attachment');
+    if (!attachmentId)
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Unable to persist report attachment',
+      );
 
     await this.databaseService.query(
       `
@@ -160,7 +165,11 @@ export class ReportWorkerArtifactsService {
     metadata: Record<string, unknown>,
   ): WorkerResult {
     const primary = results[0];
-    if (!primary) throw new Error('Report worker produced no files');
+    if (!primary)
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Report worker produced no files',
+      );
     return {
       ...primary,
       files: results.flatMap((result) => result.files),

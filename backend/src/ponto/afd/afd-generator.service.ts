@@ -17,6 +17,7 @@ import {
   trailerHashForLines,
 } from './afd-layout';
 import { AfdExportSummary, GeneratedAfdContent } from './afd.types';
+import { domainError } from '../../common/errors/domain-error';
 
 interface AfdExportRow extends QueryResultRow {
   afd_export_id: string;
@@ -123,7 +124,7 @@ export class AfdGeneratorService {
     );
     const entry = rows[0];
     if (!entry) {
-      throw new Error('AFD export not found');
+      throw domainError.internal('INTERNAL_INVARIANT', 'AFD export not found');
     }
     const content = await this.generateContent({
       repDeviceId: entry.rep_device_id,
@@ -258,7 +259,11 @@ export class AfdGeneratorService {
       `,
       [repDeviceId],
     );
-    if (!rows.rows[0]) throw new Error('REP device not found for AFD export');
+    if (!rows.rows[0])
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'REP device not found for AFD export',
+      );
     return rows.rows[0];
   }
 

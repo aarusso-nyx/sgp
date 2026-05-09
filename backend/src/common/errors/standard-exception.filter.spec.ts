@@ -5,8 +5,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { domainError } from './domain-error';
 import { StandardExceptionFilter } from './standard-exception.filter';
+import { domainError } from './domain-error';
 
 describe('StandardExceptionFilter', () => {
   const createHost = ({

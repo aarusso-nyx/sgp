@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { requestId, RequestId, tenantId, TenantId } from '../types/branded-ids';
+import { domainError } from '../errors/domain-error';
 
 export type QueueAdapterResponseStatus = 'OK' | 'RETRY' | 'DEAD_LETTER';
 
@@ -191,7 +192,10 @@ export function adapterQueueTopics<TKind extends string>(
 ): QueueAdapterTopics<TKind> {
   const normalizedKind = kind.trim();
   if (!normalizedKind) {
-    throw new Error('Queue adapter kind must be non-empty.');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Queue adapter kind must be non-empty.',
+    );
   }
 
   return {
@@ -360,7 +364,10 @@ export class SgpQueueAdapter<TKind extends string> {
     const nextRequestId = requestId(input.requestId ?? this.idFactory());
     const maxAttempts = input.maxAttempts ?? this.maxAttempts;
     if (maxAttempts < 1) {
-      throw new Error('Queue adapter maxAttempts must be at least 1.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Queue adapter maxAttempts must be at least 1.',
+      );
     }
 
     return {

@@ -14,6 +14,7 @@ export const workspaceCommandDescriptions = {
   qa: 'Run QA helper commands.',
   audit: 'Run deterministic audit helper commands.',
   governance: 'Run governance validation.',
+  roadmap: 'Regenerate the deferred-backlog block in ROADMAP.md from the audit ledger.',
   health: 'Run non-destructive runtime topology and workspace health checks.',
   deploy: 'Run AWS deployment plan checks (dry-run by default).',
   prepare: 'Install local Git hooks through Husky.',

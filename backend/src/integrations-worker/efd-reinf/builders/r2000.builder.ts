@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { domainError } from '../../../common/errors/domain-error';
 
 export const EFD_REINF_R2000_LAYOUT_VERSION = '2.1.2';
 export const EFD_REINF_R2000_TECHNICAL_NOTE = 'NT 01/2026';
@@ -118,7 +119,8 @@ ${input.bodyXml}
 export function buildR2000EventHeader(input: R2000BaseEventInput): string {
   const kind = input.kind ?? 'ORIGINAL';
   if (kind === 'RETIFICADORA' && !input.originalReceiptNumber) {
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `${input.eventCode} retificadora requires originalReceiptNumber`,
     );
   }
@@ -153,7 +155,8 @@ export function assertRetroactiveReference(
   const reporting = competenceText(reportingCompetence);
   const reference = competenceText(referenceCompetence);
   if (reference >= reporting) {
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `Retroactive EFD-Reinf adjustment must reference a competence before ${reporting}`,
     );
   }
@@ -161,14 +164,20 @@ export function assertRetroactiveReference(
 
 export function competenceText(value: string): string {
   if (!/^\d{4}-(0[1-9]|1[0-2])(?:-\d{2})?$/.test(value)) {
-    throw new Error(`Invalid EFD-Reinf competence: ${value}`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `Invalid EFD-Reinf competence: ${value}`,
+    );
   }
   return value.slice(0, 7);
 }
 
 export function dateText(value: string): string {
   if (!/^\d{4}-(0[1-9]|1[0-2])-\d{2}$/.test(value)) {
-    throw new Error(`Invalid EFD-Reinf date: ${value}`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `Invalid EFD-Reinf date: ${value}`,
+    );
   }
   return value;
 }
@@ -177,7 +186,10 @@ export function moneyText(value: string | number | undefined): string {
   const normalized = String(value ?? '0').replace(',', '.');
   const number = Number(normalized);
   if (!Number.isFinite(number) || number < 0) {
-    throw new Error('EFD-Reinf monetary values must be non-negative');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'EFD-Reinf monetary values must be non-negative',
+    );
   }
   return number.toFixed(2);
 }
@@ -213,7 +225,7 @@ function buildInvoiceXml(invoice: R2000ServiceInvoiceInput): string {
 
 function assertNonEmpty<T>(items: T[], label: string): void {
   if (!items.length) {
-    throw new Error(`${label} are required`);
+    throw domainError.internal('INTERNAL_INVARIANT', `${label} are required`);
   }
 }
 

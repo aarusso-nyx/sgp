@@ -19,6 +19,7 @@ import {
 } from './audesp-sp.types';
 import { AudespStubServerService } from './stub/audesp-stub-server.service';
 import { AudespXmlSerializer } from './serializer/audesp-xml.serializer';
+import { domainError } from '../../../common/errors/domain-error';
 
 @Injectable()
 @TceAdapterMetadata({ id: 'audesp-sp', state_code: 'SP', organ_kind: 'TCE' })
@@ -78,7 +79,10 @@ export class AudespSpAdapter implements TceAdapter<AudespPayrollEnvelope> {
     layoutVersion: string,
   ): SerializedEnvelope {
     if (layoutVersion !== '0.0.1') {
-      throw new Error(`Unsupported layout version: ${layoutVersion}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `Unsupported layout version: ${layoutVersion}`,
+      );
     }
     const body = this.serializer.serialize(payload);
     return {

@@ -1,6 +1,7 @@
 import type { QueryResultRow } from 'pg';
 
 import type { ReportArtifact } from './report-artifact.builder';
+import { domainError } from '../common/errors/domain-error';
 
 export interface ReportJobRow extends QueryResultRow {
   id: string;
@@ -132,5 +133,8 @@ export function canonicalReportCode(code: string): CanonicalReportCode {
   if (normalized === 'F_FOL_017' || normalized === 'RELATORIO_FINANCEIRO') {
     return 'F_FOL_017';
   }
-  throw new Error(`Unsupported report worker definition: ${code}`);
+  throw domainError.internal(
+    'INTERNAL_INVARIANT',
+    `Unsupported report worker definition: ${code}`,
+  );
 }

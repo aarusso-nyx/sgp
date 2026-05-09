@@ -76,6 +76,8 @@
     "db:alignment:check": "node scripts/run.mjs db alignment check",
     "governance:check": "node scripts/run.mjs governance check",
     "evidence:check": "node scripts/run.mjs check evidence",
+    "roadmap": "node scripts/run.mjs roadmap write",
+    "roadmap:check": "node scripts/run.mjs roadmap check",
     "deploy": "node scripts/run.mjs deploy",
     "deploy:plan": "node scripts/run.mjs deploy --dry-run",
     "deploy:stage": "node scripts/run.mjs deploy --target stage --stack all --dry-run",

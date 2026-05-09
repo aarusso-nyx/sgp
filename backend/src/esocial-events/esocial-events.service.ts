@@ -15,6 +15,7 @@ import type {
   EsocialEventsRecord,
   EsocialEventsRow,
 } from './esocial-events.types';
+import { domainError } from '../common/errors/domain-error';
 
 const ESOCIAL_EVENTS_PERMISSIONS = [
   'esocial.event.read',
@@ -280,7 +281,10 @@ function requiredRow(
   id: string,
 ): EsocialEventsRow {
   if (!row) {
-    throw new Error(`eSocial spool row not found: ${id}`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `eSocial spool row not found: ${id}`,
+    );
   }
   return row;
 }

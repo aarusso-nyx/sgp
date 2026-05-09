@@ -13,6 +13,7 @@ import {
   type SiopsRelayScenario,
 } from '../../../external/mocks/siops-relay';
 import type { SiopsExportInput } from '../siops-export.generator';
+import { domainError } from '../../../common/errors/domain-error';
 
 export type SiopsQueueAdapterOptions = Readonly<{
   transport?: QueueAdapterTransport | undefined;
@@ -71,7 +72,8 @@ export class SiopsQueueAdapter {
       return;
     }
     if (!options.transport) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'SiopsQueueAdapter requires either a queue or a queue transport.',
       );
     }
@@ -115,7 +117,10 @@ export class SiopsQueueAdapter {
 
     const relay = queueResponse.payload;
     if (!relay) {
-      throw new Error('SIOPS relay returned an OK response without payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPS relay returned an OK response without payload.',
+      );
     }
     this.assertRelayPayload(input, payload, relay);
 
@@ -154,16 +159,25 @@ export class SiopsQueueAdapter {
     relay: SiopsRelayResponsePayload,
   ): void {
     if (relay.exportId !== input.exportId) {
-      throw new Error('SIOPS relay returned a different export id.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPS relay returned a different export id.',
+      );
     }
     if (relay.hashes.contentSha256 !== payload.contentHash) {
-      throw new Error('SIOPS relay returned a different content hash.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPS relay returned a different content hash.',
+      );
     }
     if (
       relay.layoutEdition !== input.export.layoutEdition ||
       relay.period !== input.export.period
     ) {
-      throw new Error('SIOPS relay returned different fiscal metadata.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPS relay returned different fiscal metadata.',
+      );
     }
   }
 

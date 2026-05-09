@@ -23,6 +23,7 @@ import {
   queueJobColumns,
   queueJobFromClause,
 } from './queue.types';
+import { domainError } from '../../common/errors/domain-error';
 
 interface ClaimedQueueRow extends QueryResultRow {
   id: string;
@@ -275,7 +276,8 @@ export class TceWorkerService implements OnModuleInit, OnModuleDestroy {
       await this.audespSubmissions.submit(job.submission_id, false);
       return;
     }
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `Unsupported TCE adapter for queue dispatch: ${job.adapter_id}`,
     );
   }

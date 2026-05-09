@@ -8,6 +8,7 @@ import {
   IntegrationProcessResult,
   PendingIntegrationJobRow,
 } from './integration-job-dispatcher';
+import { domainError } from '../../common/errors/domain-error';
 
 interface ContributionTimeCertificateExecutionRow extends QueryResultRow {
   certificate_id: string;
@@ -77,7 +78,8 @@ export class PrevidentiaryIntegrationDispatcher implements IntegrationJobDispatc
       case 'PREVIDENCIARIO_SIPREV_EXPORT':
         return this.processSiprevExport(job, context);
       default:
-        throw new Error(
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
           `Unsupported previdentiary job: ${job.definition_code}`,
         );
     }
@@ -110,7 +112,10 @@ export class PrevidentiaryIntegrationDispatcher implements IntegrationJobDispatc
       );
     const row = rows[0];
     if (!row) {
-      throw new Error('Contribution time certificate source not found');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Contribution time certificate source not found',
+      );
     }
 
     const artifact = buildSimplePdfReport({
@@ -169,7 +174,10 @@ export class PrevidentiaryIntegrationDispatcher implements IntegrationJobDispatc
       );
     const row = rows[0];
     if (!row) {
-      throw new Error('Previdentiary declaration source not found');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Previdentiary declaration source not found',
+      );
     }
 
     const artifact = buildSimplePdfReport({
@@ -392,7 +400,10 @@ export class PrevidentiaryIntegrationDispatcher implements IntegrationJobDispatc
         [campaignId],
       );
     if (!rows[0]) {
-      throw new Error('Recertification campaign summary not found');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Recertification campaign summary not found',
+      );
     }
     return rows[0];
   }

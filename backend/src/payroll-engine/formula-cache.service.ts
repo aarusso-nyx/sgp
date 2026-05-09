@@ -3,6 +3,7 @@ import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
+import { domainError } from '../common/errors/domain-error';
 
 interface EvaluationRow extends QueryResultRow {
   amount: string | null;
@@ -55,7 +56,10 @@ export class FormulaCacheService {
     const year = Number(yearText);
     const month = Number(monthText);
     if (!Number.isInteger(year) || !Number.isInteger(month)) {
-      throw new Error('competence must use YYYY-MM format');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'competence must use YYYY-MM format',
+      );
     }
 
     const rows = await RequestContextStore.run(

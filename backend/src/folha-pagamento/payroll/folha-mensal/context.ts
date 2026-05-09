@@ -10,6 +10,7 @@ import {
   RunRow,
 } from '../folha-mensal.types';
 import { ensureMonthlyCatalog } from './catalog';
+import { domainError } from '../../../common/errors/domain-error';
 
 export async function ensureMonthlyCompetence(
   client: PoolClient,
@@ -58,7 +59,10 @@ export async function ensureMonthlyCompetence(
   );
   const row = rows.rows[0];
   if (!row) {
-    throw new Error('Monthly competence could not be ensured');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Monthly competence could not be ensured',
+    );
   }
   if (row.status === 'CLOSED') {
     throw new ConflictException('Monthly competence is already closed');

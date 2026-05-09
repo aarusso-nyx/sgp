@@ -1,3 +1,5 @@
+import { domainError } from '../../../common/errors/domain-error';
+
 export const BANKING_RELAY_KIND = 'banking' as const;
 
 export const BANKING_RELAY_BANKS = {
@@ -55,5 +57,8 @@ export function normalizeBankingRelayBankCode(
   if (Object.prototype.hasOwnProperty.call(BANKING_RELAY_BANKS, normalized)) {
     return normalized as BankingRelayBankCode;
   }
-  throw new Error(`Unsupported mock banking relay bank code: ${normalized}`);
+  throw domainError.internal(
+    'INTERNAL_INVARIANT',
+    `Unsupported mock banking relay bank code: ${normalized}`,
+  );
 }

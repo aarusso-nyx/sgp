@@ -21,6 +21,7 @@ import {
   OccurrenceMapperService,
   type Cnab240ReturnInternalStatus,
 } from '../return/occurrence-mapper.service';
+import { domainError } from '../../../common/errors/domain-error';
 
 export type BankingPaymentBatchStateStatus = 'PAID' | 'RETURNED' | 'REJECTED';
 
@@ -145,7 +146,10 @@ export class BankingCnab240QueueAdapter {
   ): Promise<SubmitBankingRemittanceResult> {
     const remittanceFileHash = hashBuffer(input.artifact.content);
     if (remittanceFileHash !== input.artifact.fileHash) {
-      throw new Error('CNAB240 artifact hash does not match artifact content.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'CNAB240 artifact hash does not match artifact content.',
+      );
     }
 
     const bankCode = this.resolveBankCode(input);
@@ -166,7 +170,10 @@ export class BankingCnab240QueueAdapter {
 
     const relay = queueResponse.payload;
     if (!relay) {
-      throw new Error('Banking relay returned an OK response without payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay returned an OK response without payload.',
+      );
     }
     this.assertRelayPayload(input, relay, bankCode, remittanceFileHash);
 
@@ -174,7 +181,8 @@ export class BankingCnab240QueueAdapter {
       Buffer.from(relay.retornoContentBase64, 'base64'),
     );
     if (parsedReturn.fileHash !== relay.returnFileHash) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'Banking relay return hash does not match retorno bytes.',
       );
     }
@@ -246,13 +254,22 @@ export class BankingCnab240QueueAdapter {
     remittanceFileHash: string,
   ): void {
     if (relay.bankCode !== bankCode) {
-      throw new Error('Banking relay returned a different bank code.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay returned a different bank code.',
+      );
     }
     if (relay.remittanceFileId !== input.remittanceFileId) {
-      throw new Error('Banking relay returned a different remittance id.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay returned a different remittance id.',
+      );
     }
     if (relay.remittanceFileHash !== remittanceFileHash) {
-      throw new Error('Banking relay returned a different remittance hash.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay returned a different remittance hash.',
+      );
     }
   }
 
@@ -272,7 +289,8 @@ export class BankingCnab240QueueAdapter {
         parsedDetail.occurrenceCode,
       );
       if (remittanceDetail && remittanceDetail.amount !== parsedDetail.amount) {
-        throw new Error(
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
           `Banking relay return amount mismatch at sequence ${parsedDetail.sequence}.`,
         );
       }

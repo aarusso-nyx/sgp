@@ -4,7 +4,7 @@
   "moduleDirectories": ["node_modules", "<rootDir>/node_modules"],
   "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
   "testEnvironment": "node",
-  "testRegex": "(backend/src/common/money/money\\.(property\\.)?spec\\.ts|backend/src/common/errors/standard-exception\\.filter\\.spec\\.ts|backend/src/audit/audit-redaction\\.util\\.spec\\.ts)$",
+  "testRegex": "(backend/src/common/money/money\\.(property\\.)?spec\\.ts|backend/src/common/errors/standard-exception\\.filter\\.spec\\.ts|backend/src/audit/audit-redaction\\.util\\.spec\\.ts|backend/src/folha-pagamento/.*\\.service\\.spec\\.ts|backend/src/iam/permissions/.*\\.spec\\.ts)$",
   "transform": {
     "^.+\\.ts$": [
       "<rootDir>/node_modules/ts-jest",

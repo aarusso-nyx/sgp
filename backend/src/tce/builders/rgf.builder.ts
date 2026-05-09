@@ -11,6 +11,7 @@ import {
   type TceFiscalReportEnvelope,
   type TceFiscalReportPeriod,
 } from './rreo.builder';
+import { domainError } from '../../common/errors/domain-error';
 
 export interface RgfBuilderInput extends TceFiscalReportBaseInput {
   period: TceFiscalReportPeriod & { periodKind: 'QUADRIMESTER' };
@@ -70,7 +71,8 @@ export class RgfBuilder {
     assertFiscalReportBase(input, 'RGF', 'QUADRIMESTER', 3);
     assertPersonnelLimit(input.personnelLimit);
     if (!Array.isArray(input.lines) || input.lines.length === 0) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'RGF lines must include at least one fiscal statement line.',
       );
     }
@@ -164,7 +166,10 @@ export function buildRgfFiscalReport(
 
 function assertPersonnelLimit(limit: RgfPersonnelLimitInput | undefined): void {
   if (!limit) {
-    throw new Error('personnelLimit is required.');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'personnelLimit is required.',
+    );
   }
   decimal(limit.netCurrentRevenue, 'personnelLimit.netCurrentRevenue');
   decimal(limit.personnelExpenseTotal, 'personnelLimit.personnelExpenseTotal');

@@ -1,6 +1,7 @@
 import { PoolClient } from 'pg';
 
 import { CatalogRow } from '../folha-mensal.types';
+import { domainError } from '../../../common/errors/domain-error';
 
 export async function ensureMonthlyCatalog(
   client: PoolClient,
@@ -217,7 +218,10 @@ export async function ensureMonthlyCatalog(
   );
   const row = rows.rows[0];
   if (!row) {
-    throw new Error('Monthly payroll catalog could not be ensured');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Monthly payroll catalog could not be ensured',
+    );
   }
   return row;
 }

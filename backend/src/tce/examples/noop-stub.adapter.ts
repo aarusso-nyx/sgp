@@ -12,6 +12,7 @@ import {
   TceAdapter,
   ValidationResult,
 } from '../contracts/tce-adapter.interface';
+import { domainError } from '../../common/errors/domain-error';
 
 @Injectable()
 @TceAdapterMetadata({ id: 'noop', state_code: 'XX', organ_kind: 'TCE' })
@@ -71,7 +72,10 @@ export class NoopStubAdapter implements TceAdapter<Record<string, unknown>> {
   ): SerializedEnvelope {
     const layout = this.layoutFor(layout_version);
     if (!layout) {
-      throw new Error(`Unsupported layout version: ${layout_version}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `Unsupported layout version: ${layout_version}`,
+      );
     }
     const body = JSON.stringify({
       adapterId: this.id(),

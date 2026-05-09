@@ -5,6 +5,7 @@ import noHardcodedDateInSpecRule from './backend/eslint-rules/no-hardcoded-date-
 import noPontoDateToIsoRule from './backend/eslint-rules/no-ponto-date-to-iso.js';
 import noRawHandlerLoggingRule from './backend/eslint-rules/no-raw-handler-logging.js';
 import requirePermissionRule from './backend/eslint-rules/require-permission.js';
+import noBareErrorThrowRule from './backend/eslint-rules/no-bare-error-throw.js';
 
 const backendRequire = createRequire(new URL('./backend/package.json', import.meta.url));
 const { default: eslint } = await import(backendRequire.resolve('@eslint/js'));
@@ -43,6 +44,7 @@ export default tseslint.config(
           'no-ponto-date-to-iso': noPontoDateToIsoRule,
           'no-raw-handler-logging': noRawHandlerLoggingRule,
           'require-permission': requirePermissionRule,
+          'no-bare-error-throw': noBareErrorThrowRule,
         },
       },
     },
@@ -56,6 +58,7 @@ export default tseslint.config(
       'sgp/no-ponto-date-to-iso': 'error',
       'sgp/no-raw-handler-logging': 'error',
       'sgp/require-permission': 'error',
+      'sgp/no-bare-error-throw': 'error',
     },
   },
   {

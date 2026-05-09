@@ -7,6 +7,7 @@ import {
   IntegrationProcessResult,
   PendingIntegrationJobRow,
 } from './integration-job-dispatcher';
+import { domainError } from '../../common/errors/domain-error';
 
 interface PayrollRunExecutionRow extends QueryResultRow {
   payroll_run_id: string | null;
@@ -104,7 +105,10 @@ export class GfipIntegrationDispatcher implements IntegrationJobDispatcher {
     );
     const row = rows[0];
     if (!row) {
-      throw new Error('Payroll run for GFIP request not found');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Payroll run for GFIP request not found',
+      );
     }
     return row;
   }

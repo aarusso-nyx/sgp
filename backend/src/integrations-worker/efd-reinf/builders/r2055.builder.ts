@@ -9,6 +9,7 @@ import {
   R2000BaseEventInput,
   xmlEscape,
 } from './r2000.builder';
+import { domainError } from '../../../common/errors/domain-error';
 
 export interface R2055ProducerInput {
   registrationType: Extract<ReinfRegistrationType, '1' | '2' | '3'>;
@@ -59,7 +60,10 @@ export interface R2055EventInput extends Omit<
 
 export function buildR2055EventXml(input: R2055EventInput): string {
   if (!input.acquisitions.length) {
-    throw new Error('R2055 acquisitions are required');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'R2055 acquisitions are required',
+    );
   }
   for (const acquisition of input.acquisitions) {
     if (acquisition.retroactiveAdjustment) {

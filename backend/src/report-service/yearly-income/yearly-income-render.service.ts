@@ -19,6 +19,7 @@ import {
   toYearlyIncomeDocument,
   YearlyIncomeAggregate,
 } from './yearly-income-template';
+import { domainError } from '../../common/errors/domain-error';
 
 interface AggregateRow extends QueryResultRow {
   tenant_id: string;
@@ -135,7 +136,8 @@ export class YearlyIncomeRenderService {
     const buffer = await this.pdfBuilder.buildYearlyIncome(document);
     const validation = this.pdfBuilder.validatePdfA1b(buffer);
     if (!validation.valid) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         `PDF/A-1b validation failed: ${validation.reasons.join(', ')}`,
       );
     }

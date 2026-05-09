@@ -29,6 +29,7 @@ import {
   WorkerResult,
   WORKER_PERMISSIONS,
 } from './report-worker.types';
+import { domainError } from '../common/errors/domain-error';
 
 export { REPORT_WORKER_DEFINITIONS } from './report-worker.types';
 export type { ReportWorkerRunSummary } from './report-worker.types';
@@ -352,5 +353,8 @@ function createFallbackReportServices(
 
 function assertNever(value: never): never {
   void value;
-  throw new Error('Unsupported report worker definition');
+  throw domainError.internal(
+    'INTERNAL_INVARIANT',
+    'Unsupported report worker definition',
+  );
 }

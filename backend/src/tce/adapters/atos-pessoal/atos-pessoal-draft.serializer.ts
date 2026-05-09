@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { domainError } from '../../../common/errors/domain-error';
 
 export type AtosPessoalState = 'SP' | 'MG' | 'RJ';
 
@@ -44,9 +45,15 @@ export class AtosPessoalDraftSerializer {
 
 function assertPayload(payload: AtosPessoalDraftPayload): void {
   if (payload.sourceStatus !== 'UNVERIFIED_LAYOUT') {
-    throw new Error('Atos de Pessoal sourceStatus must be UNVERIFIED_LAYOUT');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Atos de Pessoal sourceStatus must be UNVERIFIED_LAYOUT',
+    );
   }
   if (!['SP', 'MG', 'RJ'].includes(payload.stateCode)) {
-    throw new Error(`Unsupported Atos de Pessoal state: ${payload.stateCode}`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `Unsupported Atos de Pessoal state: ${payload.stateCode}`,
+    );
   }
 }

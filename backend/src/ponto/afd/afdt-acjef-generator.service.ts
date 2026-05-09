@@ -18,6 +18,7 @@ import {
 } from './afdt-acjef-layout';
 import { fileSha256 } from './afd-layout';
 import { GeneratedAfdContent } from './afd.types';
+import { domainError } from '../../common/errors/domain-error';
 
 interface RepDeviceRow extends QueryResultRow {
   rep_device_id: string;
@@ -190,7 +191,10 @@ export class AfdtAcjefGeneratorService {
       [repDeviceId],
     );
     if (!rows.rows[0]) {
-      throw new Error('REP device not found for AFDT/ACJEF export');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'REP device not found for AFDT/ACJEF export',
+      );
     }
     return rows.rows[0];
   }

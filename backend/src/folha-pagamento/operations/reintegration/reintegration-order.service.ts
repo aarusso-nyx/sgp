@@ -11,6 +11,7 @@ import {
   RegisterReintegrationOrderDto,
   ReintegrationKind,
 } from './reintegration-order.dto';
+import { domainError } from '../../../common/errors/domain-error';
 
 interface LinkRow extends QueryResultRow {
   employment_link_id: string;
@@ -870,7 +871,11 @@ export class ReintegrationOrderService {
   private currentTenantId(): string {
     const context = RequestContextStore.get();
     const tenantId = context?.actor?.tenantId ?? context?.tenantId;
-    if (!tenantId) throw new Error('Tenant context is required');
+    if (!tenantId)
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Tenant context is required',
+      );
     return tenantId;
   }
 
