@@ -1,5 +1,4 @@
 {
-  "threshold": 3,
   "minTokens": 50,
   "format": ["typescript"],
   "pattern": "**/*.ts",
