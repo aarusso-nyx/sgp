@@ -127,13 +127,13 @@ jobs:
           fi
 
       - name: Upload API alignment report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: api-alignment-report
           path: api-alignment-report.json
 
       - name: Upload DB alignment report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: db-alignment-report
           path: db-alignment-report.json
