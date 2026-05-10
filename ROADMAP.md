@@ -16,8 +16,8 @@ Current product and migration priorities are governed by `docs/eng/quality-migra
   module and are not SGP backlog.
 - Automated deployment is AWS-only with separate flows: CDK provision/IaC
   creates resources, while artifact deploy pushes versioned Node/Angular bundles
-  to designated EC2/PM2 targets. Release/homologation gates remain postponed for
-  a focused owner discussion.
+  to designated EC2/PM2 targets. Release/homologation gates are governed by
+  `docs/eng/decisions/adr-030-homologation-and-release-gates.md`.
 - SIAPE/SIOPS boundaries are tracked in `docs/gov/siape-siops-boundary.md`.
 
 ## Deferred backlog (auto-generated)

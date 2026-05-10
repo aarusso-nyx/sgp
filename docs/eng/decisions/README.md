@@ -35,3 +35,4 @@ Every ADR must:
 | [ADR-027](adr-027-custom-lint-as-policy.md)                 | Accepted  | Custom ESLint rules under `backend/eslint-rules/` are policy enforcement with an explicit add/change/remove lifecycle. |
 | [ADR-028](adr-028-mutation-scope-rationale.md)              | Accepted  | Stryker mutation scope is intentionally narrow; expansion is a deliberate amendment, not an accident.                  |
 | [ADR-029](adr-029-waf-posture.md)                           | Accepted  | AWS WAF is explicitly not provisioned in the current baseline, with reopen triggers recorded.                          |
+| [ADR-030](adr-030-homologation-and-release-gates.md)        | Accepted  | GitHub Environments and accepted gate evidence govern stage/prod homologation and release promotion.                   |
