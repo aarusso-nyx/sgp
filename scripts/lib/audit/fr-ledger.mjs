@@ -8,6 +8,7 @@ import {
   createContext,
   firstTableRows,
   markdownTable,
+  parseMarkdownTables,
   readText,
   runGit,
   slug,
@@ -97,45 +98,89 @@ await writeText(
 await writeText(join(context.auditRoot, 'functional-requisites.md'), refresh.ledgerMarkdown, {
   dryRun: context.dryRun,
 });
+if (refresh.newRows.length > 0) {
+  console.error(`audit:fr: ${refresh.newRows.length} new FR-IDs need classification`);
+  process.exitCode = 1;
+}
 
 export async function buildFunctionalRequisites(repoRoot, auditRoot, round) {
   const currentFacts = await extractDomainFacts(repoRoot);
   const ledgerPath = join(auditRoot, 'functional-requisites.md');
   const existingLedger = await readText(ledgerPath);
-  const existingRows = normalizeLedgerRows(firstTableRows(existingLedger));
+  const existingRows = normalizeLedgerRows(functionalRequisiteTableRows(existingLedger));
   const existingBySlug = new Map(existingRows.map((row) => [slug(row.requirement), row]));
   const existingById = new Map(existingRows.map((row) => [row.id, row]));
 
-  const rows = currentFacts.map((fact) => {
+  const rows = [];
+  const newRows = [];
+
+  for (const fact of currentFacts) {
     const prior = existingById.get(fact.id) ?? existingBySlug.get(slug(fact.requirement));
-    return {
-      id: fact.id,
+    const row = {
+      id: prior?.id || fact.id,
       requirement: fact.requirement,
       status: prior?.status || fact.status,
       evidence: fact.evidence,
       notes: prior?.notes || fact.notes || '-',
     };
-  });
+
+    if (prior) {
+      rows.push(row);
+    } else {
+      newRows.push(row);
+    }
+  }
+
+  const deltaCandidateRows = [...rows, ...newRows];
+  const preservedAddendum = preserveLedgerAddendum(existingLedger, round);
 
   const previousCommitted = await readCommittedLedger(repoRoot);
-  const previousRows = normalizeLedgerRows(firstTableRows(previousCommitted));
+  const previousRows = normalizeLedgerRows(functionalRequisiteTableRows(previousCommitted));
   const previousById = new Map(previousRows.map((row) => [row.id, row]));
-  const deltaRows = rows
-    .map((row) => ({
-      id: row.id,
-      prior: previousById.get(row.id)?.status ?? 'NEW',
-      next: row.status,
-      evidenceDelta:
-        previousById.get(row.id)?.evidence === row.evidence ? 'unchanged' : row.evidence || '-',
-    }))
+  const deltaRows = deltaCandidateRows
+    .map((row) => {
+      const previous = previousById.get(row.id);
+      return {
+        id: row.id,
+        prior: previous?.status ?? 'NEW',
+        next: row.status,
+        evidenceDelta: previous?.evidence === row.evidence ? 'unchanged' : row.evidence || '-',
+      };
+    })
     .filter(
       (row) => row.prior !== row.next || row.prior === 'NEW' || row.evidenceDelta !== 'unchanged',
     );
 
   return {
     rows,
-    ledgerMarkdown: renderLedger(round, rows),
+    newRows,
+    ledgerMarkdown: renderLedger(round, rows, newRows, preservedAddendum),
     deltaMarkdown: renderDelta(round, deltaRows),
+  };
+}
+
+function functionalRequisiteTableRows(markdown) {
+  const tables = parseMarkdownTables(markdown);
+  const rows = [];
+  for (const table of tables) {
+    if (!table.headers.includes('FR-ID')) continue;
+    rows.push(...table.rows);
+  }
+  return rows.length > 0 ? rows : firstTableRows(markdown);
+}
+
+function preserveLedgerAddendum(markdown, round) {
+  const titleMatch = /^# Functional Requisites[^\S\r\n]*(?:\r?\n|$)/.exec(markdown);
+  const tableMatch = /\r?\n\|\s*FR-ID\s*\|/.exec(markdown);
+  if (!titleMatch || !tableMatch || tableMatch.index < titleMatch[0].length) {
+    return {
+      text: `\n\nLast refreshed from \`docs/eng/domains/*.md\` for round ${round}.\n\n`,
+      preserved: false,
+    };
+  }
+  return {
+    text: markdown.slice(titleMatch[0].length - 1, tableMatch.index + 1),
+    preserved: true,
   };
 }
 
@@ -379,17 +424,25 @@ async function readCommittedLedger(repoRoot) {
   return result.ok ? result.stdout : '';
 }
 
-function renderLedger(round, rows) {
-  return [
-    '# Functional Requisites',
-    '',
-    `Last refreshed from \`docs/eng/domains/*.md\` for round ${round}.`,
-    '',
-    markdownTable(
-      ['FR-ID', 'Requirement', 'Status', 'Evidence', 'Notes'],
-      rows.map((row) => [row.id, row.requirement, row.status, row.evidence, row.notes]),
-    ),
-  ].join('\n');
+function renderLedger(round, rows, newRows, preservedAddendum) {
+  const mainTable = markdownTable(
+    ['FR-ID', 'Requirement', 'Status', 'Evidence', 'Notes'],
+    rows.map((row) => [row.id, row.requirement, row.status, row.evidence, row.notes]),
+  );
+  const addendum =
+    preservedAddendum.preserved && preservedAddendum.text.length > 0
+      ? preservedAddendum.text
+      : `\n\nLast refreshed from \`docs/eng/domains/*.md\` for round ${round}.\n\n`;
+
+  if (newRows.length === 0) {
+    return `# Functional Requisites${addendum}${mainTable}`;
+  }
+
+  const newTable = markdownTable(
+    ['FR-ID', 'Requirement', 'Status', 'Evidence', 'Notes'],
+    newRows.map((row) => [row.id, row.requirement, 'TODO', row.evidence, row.notes]),
+  );
+  return `# Functional Requisites${addendum}## Newly Extracted (round ${round})\n\n${newTable}\n\n${mainTable}`;
 }
 
 function renderDelta(round, rows) {

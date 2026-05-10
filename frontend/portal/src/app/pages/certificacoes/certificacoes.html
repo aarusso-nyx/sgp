@@ -1,0 +1,55 @@
+<section class="certificacoes">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Certificacoes</h1>
+  </header>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="panel">
+    <label>
+      <span>Curso</span>
+      <input type="text" formControlName="courseName" maxlength="240" />
+    </label>
+    <label>
+      <span>Emissor</span>
+      <input type="text" formControlName="issuer" maxlength="240" />
+    </label>
+    <label>
+      <span>Data de emissao</span>
+      <input type="date" formControlName="issuedAt" />
+    </label>
+    <label>
+      <span>Validade</span>
+      <input type="date" formControlName="expiresAt" />
+    </label>
+    <label>
+      <span>Carga horaria (h)</span>
+      <input type="number" min="0" max="10000" formControlName="hoursWorkload" />
+    </label>
+    <label class="wide">
+      <span>Observacoes</span>
+      <textarea rows="2" formControlName="notes"></textarea>
+    </label>
+    <button type="submit" [disabled]="saving || !employeeId">Registrar</button>
+  </form>
+
+  <section class="panel">
+    <div class="toolbar">
+      <h2>Minhas certificacoes</h2>
+      <button type="button" (click)="refresh()" [disabled]="loading">Atualizar</button>
+    </div>
+    <p *ngIf="loading" role="status">Carregando...</p>
+    <p *ngIf="!loading && certificates.length === 0">Nenhuma certificacao registrada.</p>
+    <ul *ngIf="!loading && certificates.length > 0">
+      <li *ngFor="let cert of certificates">
+        <strong>{{ cert.courseName }}</strong>
+        <span>{{ cert.issuer }}</span>
+        <span>Emitida em {{ cert.issuedAt }}</span>
+        <span *ngIf="cert.expiresAt">Valida ate {{ cert.expiresAt }}</span>
+        <span *ngIf="cert.hoursWorkload">{{ cert.hoursWorkload }}h</span>
+      </li>
+    </ul>
+  </section>
+</section>

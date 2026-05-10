@@ -21,6 +21,7 @@ import { BlockedPaymentsReportService } from './blocked-payments-report.service'
 import { FinancialReportService } from './financial-report.service';
 import { ManagerialReportService } from './managerial-report.service';
 import { ManadExportReportService } from './manad-export-report.service';
+import { PerdcompExportReportService } from './perdcomp-export-report.service';
 import { PdfABuilderService } from './payslip/pdf-a-builder.service';
 import { PayslipController } from './payslip/payslip.controller';
 import { PayslipRenderService } from './payslip/payslip-render.service';
@@ -64,6 +65,7 @@ import { ReportWorkerService } from './report-worker.service';
     PayrollSummaryReportService,
     ManagerialReportService,
     ManadExportReportService,
+    PerdcompExportReportService,
     BlockedPaymentsReportService,
     ReconciliationReportService,
     FinancialReportService,

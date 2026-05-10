@@ -4,6 +4,7 @@ import { DatabaseService } from '../database/database.service';
 import {
   ManadPayrollRow,
   PayrollSummaryRow,
+  PerdcompCreditRow,
   ReconciliationRow,
   RepasseFundoRhRow,
   ReportJobRow,
@@ -285,6 +286,74 @@ export class ReportWorkerDataService {
         earning.code,
         earning.description
       ORDER BY fund_source ASC, rubric_code ASC
+      `,
+      this.criteriaValues(job),
+    );
+  }
+
+  loadPerdcompCreditRows(job: ReportJobRow): Promise<PerdcompCreditRow[]> {
+    return this.databaseService.query<PerdcompCreditRow>(
+      `
+      WITH run AS (
+        SELECT payroll_run.id, payroll_run.status
+        FROM payroll.payroll_run
+        WHERE (
+            $1::uuid IS NOT NULL
+            AND payroll_run.id = $1::uuid
+          )
+          OR (
+            $1::uuid IS NULL
+            AND payroll_run.competence_year = $2::integer
+            AND payroll_run.competence_month = $3::integer
+            AND ($4::uuid IS NULL OR payroll_run.branch_id = $4::uuid)
+          )
+        ORDER BY payroll_run.updated_at DESC
+        LIMIT 1
+      )
+      SELECT
+        earning.code AS rubric_code,
+        earning.description AS rubric_description,
+        earning.kind::text AS entry_kind,
+        CASE
+          WHEN upper(earning.code) LIKE '%PATRONAL%'
+            OR upper(earning.description) LIKE '%PATRONAL%'
+            THEN 'INSS_PATRONAL'
+          WHEN upper(earning.code) LIKE '%RAT%'
+            OR upper(earning.description) LIKE '%RAT%'
+            THEN 'RAT'
+          WHEN upper(earning.code) LIKE 'INSS%'
+            OR upper(earning.description) LIKE '%INSS%'
+            OR upper(earning.code) LIKE 'RGPS%'
+            OR upper(earning.description) LIKE '%RGPS%'
+            THEN 'INSS_SEGURADO'
+          ELSE 'OUTROS'
+        END AS category,
+        count(DISTINCT item.employee_id)::text AS employee_count,
+        coalesce(sum(item.amount), 0)::numeric(16, 2)::text AS total_amount
+      FROM run
+      JOIN payroll.employee_payroll_item item
+        ON item.payroll_run_id = run.id
+       AND item.deleted_at IS NULL
+      JOIN payroll.payroll_earning_deduction earning
+        ON earning.id = item.earning_deduction_id
+       AND earning.tenant_id = item.tenant_id
+      WHERE run.status IN (
+          'APPROVED'::public."PayrollRunStatus",
+          'PAID'::public."PayrollRunStatus",
+          'CLOSED'::public."PayrollRunStatus"
+        )
+        AND (
+          upper(earning.code) LIKE 'INSS%'
+          OR upper(earning.description) LIKE '%INSS%'
+          OR upper(earning.code) LIKE 'RGPS%'
+          OR upper(earning.description) LIKE '%RGPS%'
+          OR upper(earning.code) LIKE '%PATRONAL%'
+          OR upper(earning.description) LIKE '%PATRONAL%'
+          OR upper(earning.code) LIKE '%RAT%'
+          OR upper(earning.description) LIKE '%RAT%'
+        )
+      GROUP BY earning.code, earning.description, earning.kind, category
+      ORDER BY category ASC, earning.code ASC
       `,
       this.criteriaValues(job),
     );

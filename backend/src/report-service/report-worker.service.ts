@@ -17,6 +17,7 @@ import { BlockedPaymentsReportService } from './blocked-payments-report.service'
 import { FinancialReportService } from './financial-report.service';
 import { ManagerialReportService } from './managerial-report.service';
 import { ManadExportReportService } from './manad-export-report.service';
+import { PerdcompExportReportService } from './perdcomp-export-report.service';
 import { PayrollSummaryReportService } from './payroll-summary-report.service';
 import { ReconciliationReportService } from './reconciliation-report.service';
 import { RepasseFundoRhReportService } from './repasse-fundo-rh-report.service';
@@ -47,6 +48,7 @@ export class ReportWorkerService {
   private readonly reconciliationReports: ReconciliationReportService;
   private readonly financialReports: FinancialReportService;
   private readonly manadExports: ManadExportReportService;
+  private readonly perdcompExports: PerdcompExportReportService;
   private readonly repasseFundoRhReports: RepasseFundoRhReportService;
 
   constructor(
@@ -65,6 +67,8 @@ export class ReportWorkerService {
     @Optional()
     manadExports?: ManadExportReportService,
     @Optional()
+    perdcompExports?: PerdcompExportReportService,
+    @Optional()
     repasseFundoRhReports?: RepasseFundoRhReportService,
   ) {
     const fallback = createFallbackReportServices(
@@ -80,6 +84,7 @@ export class ReportWorkerService {
       reconciliationReports ?? fallback.reconciliationReports;
     this.financialReports = financialReports ?? fallback.financialReports;
     this.manadExports = manadExports ?? fallback.manadExports;
+    this.perdcompExports = perdcompExports ?? fallback.perdcompExports;
     this.repasseFundoRhReports =
       repasseFundoRhReports ?? fallback.repasseFundoRhReports;
   }
@@ -222,6 +227,8 @@ export class ReportWorkerService {
         return this.financialReports.generate(job);
       case 'MANAD_EXPORT':
         return this.manadExports.generate(job);
+      case 'PERDCOMP_EXPORT':
+        return this.perdcompExports.generate(job);
       case 'RELATORIO_REPASSE_FUNDO_RH':
         return this.repasseFundoRhReports.generate(job);
       default:
@@ -364,6 +371,7 @@ function createFallbackReportServices(
     reconciliationReports: new ReconciliationReportService(data, artifacts),
     financialReports: new FinancialReportService(data, artifacts),
     manadExports: new ManadExportReportService(data, artifacts),
+    perdcompExports: new PerdcompExportReportService(data, artifacts),
     repasseFundoRhReports: new RepasseFundoRhReportService(data, artifacts),
   };
 }

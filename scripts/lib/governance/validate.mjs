@@ -2,6 +2,7 @@
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { checkRlsNoWriteGuard } from '../checks/db/rls-no-write-guard.mjs';
 import { inspectRlsSpecs } from '../checks/rls-specs.mjs';
 import { defaultRepoRoot } from '../repo-paths.mjs';
 import { hardFailGateCommands } from '../workspace-commands.mjs';
@@ -175,6 +176,23 @@ function validateRlsSpecsExecutable() {
     'rls-specs:tenant-insert-select-promoted',
     result.smokeExecutableCount >= 50,
     `${result.smokeExecutableCount} executable tenant-A insert + tenant-B zero-row specs`,
+  );
+}
+
+function validateRlsNoWriteGuard() {
+  const result = checkRlsNoWriteGuard(repoRoot);
+
+  record(
+    'db:rls-no-write-guard',
+    result.ok,
+    result.ok
+      ? `${result.rlsNoTables.length} RLS=no tables scanned across ${result.scannedFiles} files`
+      : result.violations
+          .map(
+            (violation) =>
+              `${violation.file}:${violation.line} ${violation.operation} ${violation.table}`,
+          )
+          .join('; '),
   );
 }
 
@@ -862,6 +880,7 @@ function main() {
   validateDevaiConfig();
   validateCanonicalRootScripts();
   validateRlsSpecsExecutable();
+  validateRlsNoWriteGuard();
   validateLiveDocPaths();
   validateAdr011CurrentState();
   validateArchitectureDecisions();

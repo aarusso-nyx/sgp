@@ -182,7 +182,11 @@ At round-audit completion:
 
 ## 8. Acceptance Criteria
 
-- docs/work/round-<n>/00-snapshot.md exists with current HEAD + previous-round baseline.
+- docs/work/round-<n>/00-snapshot.md exists with current HEAD, recorded as
+  `HEAD at audit start`, and previous-round baseline.
+- docs/work/round-<n>/00-snapshot.md includes a "Carry-forward TODO" section
+  listing the round-(N+1) hotspot baseline command that uses the current
+  `HEAD at audit start` SHA as the next round baseline.
 - docs/gov/audit/{schema-digest,api-surface,functional-requisites,non-functional-requisites}.md refreshed (or unchanged with a last_refreshed: <sha> line).
 - docs/gov/audit/inv/round-<n>/{db,backend,frontend,tests,legacy-parity}.md exist.
 - docs/gov/audit/diag/round-<n>/{gaps,regulatory-adherence,code-quality,delta-from-round-<n-1>,hotspots,promise-vs-delivery}.md exist.
@@ -197,6 +201,7 @@ At round-audit completion:
 
 - [ ] No write outside docs/work/round-<n>/ and docs/gov/audit/ subtrees.
 - [ ] HEAD SHA recorded in 00-snapshot.md matches git rev-parse HEAD.
+- [ ] Round-(N+1) baseline SHA carry-forward line present in 00-snapshot.md.
 - [ ] Every artifact in §8 exists and is non-empty.
 - [ ] path:line citations used; not located only with search surface.
 - [ ] Regulatory claims anchored in docs/refs/.

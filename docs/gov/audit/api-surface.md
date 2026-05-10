@@ -1,6 +1,6 @@
 # API Surface
 
-Round: 10
+Round: 13
 
 ## Drift Checks
 
@@ -13,7 +13,7 @@ Round: 10
 
 | Tag      | Total | Implemented | Excluded |
 | -------- | ----- | ----------- | -------- |
-| untagged | 453   | 453         | 0        |
+| untagged | 468   | 468         | 0        |
 
 ## Routes
 
@@ -140,6 +140,7 @@ Round: 10
 | GET    | /api/v1/portal/aso/proximo                                             | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/contracheque/:competence                                | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/contracheques/ferias                                    | untagged | implemented | -          | -       | -         |
+| GET    | /api/v1/portal/documentos/solicitacoes                                 | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/meus-dados/cadastro                                     | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/meus-dados/cargo                                        | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/meus-dados/contato                                      | untagged | implemented | -          | -       | -         |
@@ -147,6 +148,7 @@ Round: 10
 | GET    | /api/v1/portal/meus-dados/documentos                                   | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/meus-dados/endereco                                     | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/minha-carreira                                          | untagged | implemented | -          | -       | -         |
+| GET    | /api/v1/portal/minha-equipe/aprovacoes                                 | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/payslips                                                | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/payslips/:id/pdf                                        | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/portal/termos-rescisao                                         | untagged | implemented | -          | -       | -         |
@@ -165,6 +167,7 @@ Round: 10
 | GET    | /api/v1/previdenciario/simulacoes                                      | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/public/lai/:tenantId/requests/:protocol/status                 | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/public/lgpd/encarregado                                        | untagged | implemented | -          | -       | -         |
+| GET    | /api/v1/public/lgpd/transferencias-internacionais                      | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/public/transparency/:tenantId/payroll                          | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/public/transparency/:tenantId/payroll.csv                      | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/publico/banca/verify/:token                                    | untagged | implemented | -          | -       | -         |
@@ -204,6 +207,8 @@ Round: 10
 | GET    | /api/v1/saude/exposicoes                                               | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/saude/exposicoes/folha                                         | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/saude/ppp                                                      | untagged | implemented | -          | -       | -         |
+| GET    | /api/v1/saude/programas/cipa/comissoes                                 | untagged | implemented | -          | -       | -         |
+| GET    | /api/v1/saude/programas/pcmat                                          | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/saude/programas/pcmso                                          | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/saude/programas/pgr                                            | untagged | implemented | -          | -       | -         |
 | GET    | /api/v1/tce/adapters                                                   | untagged | implemented | -          | -       | -         |
@@ -259,6 +264,8 @@ Round: 10
 | PATCH  | /api/v1/saude/aso/:id/arquivar                                         | untagged | implemented | -          | -       | -         |
 | PATCH  | /api/v1/saude/aso/:id/realizacao                                       | untagged | implemented | -          | -       | -         |
 | PATCH  | /api/v1/saude/exposicoes/:id                                           | untagged | implemented | -          | -       | -         |
+| PATCH  | /api/v1/saude/programas/cipa/comissoes/:id/ativar                      | untagged | implemented | -          | -       | -         |
+| PATCH  | /api/v1/saude/programas/pcmat/:id/ativar                               | untagged | implemented | -          | -       | -         |
 | PATCH  | /api/v1/saude/programas/pcmso/:id/ativar                               | untagged | implemented | -          | -       | -         |
 | PATCH  | /api/v1/saude/programas/pgr/:id/ativar                                 | untagged | implemented | -          | -       | -         |
 | PATCH  | /api/v1/tce/layouts/:id/status                                         | untagged | implemented | -          | -       | -         |
@@ -377,6 +384,9 @@ Round: 10
 | POST   | /api/v1/ponto/periodos                                                 | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/ponto/rep                                                      | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/ponto/rep/:repDeviceId/batches                                 | untagged | implemented | -          | -       | -         |
+| POST   | /api/v1/portal/documentos/solicitacoes                                 | untagged | implemented | -          | -       | -         |
+| POST   | /api/v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar               | untagged | implemented | -          | -       | -         |
+| POST   | /api/v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar              | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/previdenciario/aposentadorias                                  | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/previdenciario/certidoes-tempo                                 | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/previdenciario/certidoes-tempo/:id/emitir                      | untagged | implemented | -          | -       | -         |
@@ -455,6 +465,11 @@ Round: 10
 | POST   | /api/v1/saude/exames                                                   | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/saude/exposicoes                                               | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/saude/ppp/gerar                                                | untagged | implemented | -          | -       | -         |
+| POST   | /api/v1/saude/programas/cipa/comissoes                                 | untagged | implemented | -          | -       | -         |
+| POST   | /api/v1/saude/programas/cipa/comissoes/:id/atas                        | untagged | implemented | -          | -       | -         |
+| POST   | /api/v1/saude/programas/cipa/comissoes/:id/membros                     | untagged | implemented | -          | -       | -         |
+| POST   | /api/v1/saude/programas/pcmat                                          | untagged | implemented | -          | -       | -         |
+| POST   | /api/v1/saude/programas/pcmat/:id/revisoes                             | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/saude/programas/pcmso                                          | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/saude/programas/pcmso/:id/exames                               | untagged | implemented | -          | -       | -         |
 | POST   | /api/v1/saude/programas/pcmso/:id/revisoes                             | untagged | implemented | -          | -       | -         |

@@ -33,6 +33,10 @@ import { EmployeeTransferController } from './employee-transfer/employee-transfe
 import { EmployeeTransferService } from './employee-transfer/employee-transfer.service';
 import { OrganicDefinitionController } from './organic-definitions/organic-definition.controller';
 import { OrganicDefinitionService } from './organic-definitions/organic-definition.service';
+import { TrainingCertificationsController } from './certifications/certifications.controller';
+import { TrainingCertificationsService } from './certifications/certifications.service';
+import { DevelopmentPlansController } from './development-plans/development-plans.controller';
+import { DevelopmentPlansService } from './development-plans/development-plans.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule, ConsultasModule],
@@ -46,6 +50,8 @@ import { OrganicDefinitionService } from './organic-definitions/organic-definiti
     EmployeeMeritLeaveController,
     EmployeeTransferController,
     OrganicDefinitionController,
+    TrainingCertificationsController,
+    DevelopmentPlansController,
   ],
   providers: [
     EmployeesService,
@@ -66,6 +72,8 @@ import { OrganicDefinitionService } from './organic-definitions/organic-definiti
     EmployeeMeritLeaveService,
     EmployeeTransferService,
     OrganicDefinitionService,
+    TrainingCertificationsService,
+    DevelopmentPlansService,
   ],
 })
 export class RhModule {}

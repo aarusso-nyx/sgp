@@ -3,9 +3,11 @@ import { Route, Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth-guard';
 import { PORTAL_FEATURE_CATALOG } from './core/portal/portal-feature-catalog';
 import { PortalAuthCallback } from './pages/auth-callback/auth-callback';
+import { Certificacoes } from './pages/certificacoes/certificacoes';
 import { Contracheque } from './pages/contracheque/contracheque';
 import { Documentos } from './pages/documentos/documentos';
 import { Ferias } from './pages/ferias/ferias';
+import { Pdi } from './pages/pdi/pdi';
 import { GovBrSignCallback } from './pages/govbr-sign-callback/govbr-sign-callback';
 import { Licencas } from './pages/licencas/licencas';
 import { LicencasSaude } from './pages/licencas/saude/saude';
@@ -106,6 +108,14 @@ const portalRoutes: Routes = [
       {
         path: 'ponto/proximas-escalas',
         component: ProximasEscalas,
+      },
+      {
+        path: 'certificacoes',
+        component: Certificacoes,
+      },
+      {
+        path: 'pdi',
+        component: Pdi,
       },
       ...featureRoutes,
     ],

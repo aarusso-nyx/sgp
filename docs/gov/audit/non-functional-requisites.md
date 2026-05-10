@@ -5,7 +5,8 @@
 - Snapshot date: 2026-05-03.
 - Live HEAD: 63f67c79ecff5745b7370ea1e7af4e0f1d010572.
 - Workspaces: npm workspaces with roots backend/, frontend/; sgp-admin source is frontend/src/ and sgp-portal source is frontend/portal/.
-- Backend: NestJS TypeScript with 7 entrypoints including backend/src/main-report-worker.ts; strict-mode posture is part of the accepted stack contract.
+- Backend: NestJS TypeScript with 6 entrypoints (main, main-portal, main-integrations-worker, main-payroll-engine, main-report-service, main-report-worker).
+- Historical: an earlier seventh worker was retired before round 13; see `git log -- backend/src/main-*.ts`.
 - Frontend: Angular ^21.2.0 portal surface in SGP; admin surfaces are Stynx-owned.
 - DB: PostgreSQL; canonical SQL lives in database/sql/; backend/prisma/schema.prisma is informational and not runtime authority.
 - Test runners: Jest backend, Vitest frontend, Playwright e2e.
@@ -32,6 +33,9 @@
 - Secret scanning is a source-CI control through the gitleaks workflow step.
   Branch protection, CODEOWNERS review posture, and the ADR gate for
   contract-bearing changes are retained under `docs/gov/evidence/`.
+- NFR-001 now includes `db:rls-no-write-guard` in `governance:check` to detect
+  runtime INSERT/UPDATE/DELETE/MERGE/UPSERT paths targeting live `RLS=no`
+  reference tables unless an explicit `rls-allow-write:` annotation is present.
 
 ## Ledger
 

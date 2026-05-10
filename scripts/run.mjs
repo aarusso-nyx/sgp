@@ -184,6 +184,9 @@ function handleTypecheck() {
 
 function handleTest() {
   const subcommand = args[0] ?? 'unit';
+  if (subcommand.startsWith('tests/') && subcommand.endsWith('.mjs')) {
+    return runCommand(process.execPath, ['--test', ...args]);
+  }
   const e2eArgs = args.slice(1);
   const serialE2eArgs =
     e2eArgs.includes('--runInBand') || e2eArgs.some((arg) => arg.startsWith('--maxWorkers'))
@@ -263,7 +266,7 @@ function handleDb() {
   const dbHandlers = {
     help: () => {
       console.log(
-        'Usage: node scripts/run.mjs db <migrate|seed|smoke|alignment check|fk-coverage check|fk-coverage write|push-guard> [options]',
+        'Usage: node scripts/run.mjs db <migrate|seed|smoke|alignment check|fk-coverage check|fk-coverage write|push-guard|rls-no-write-guard> [options]',
       );
       return 0;
     },
@@ -309,11 +312,17 @@ function handleDb() {
     },
     'push-guard': () =>
       runCommand(process.execPath, ['scripts/check-db.mjs', 'push-guard', ...args.slice(1)]),
+    'rls-no-write-guard': () =>
+      runCommand(process.execPath, [
+        'scripts/check-db.mjs',
+        'rls-no-write-guard',
+        ...args.slice(1),
+      ]),
   };
 
   if (!dbHandlers[subcommand]) {
     console.error(
-      '[db] valid subcommands: help, migrate, seed, smoke, alignment, fk-coverage, push-guard',
+      '[db] valid subcommands: help, migrate, seed, smoke, alignment, fk-coverage, push-guard, rls-no-write-guard',
     );
     return 1;
   }

@@ -284,6 +284,46 @@
       "description": "Approve or reject employee self-service cadastral change requests."
     },
     {
+      "key": "rh.certification.read",
+      "moduleKey": "rh",
+      "resourceKey": "certification",
+      "actionKey": "read",
+      "routePattern": "/api/v1/rh/certificacoes/**",
+      "description": "Read employee training certifications."
+    },
+    {
+      "key": "rh.certification.write",
+      "moduleKey": "rh",
+      "resourceKey": "certification",
+      "actionKey": "write",
+      "routePattern": "/api/v1/rh/certificacoes/**",
+      "description": "Register, update, or remove employee training certifications."
+    },
+    {
+      "key": "rh.development_plan.read",
+      "moduleKey": "rh",
+      "resourceKey": "development_plan",
+      "actionKey": "read",
+      "routePattern": "/api/v1/rh/pdi/**",
+      "description": "Read employee individual development plans (PDI) and goals."
+    },
+    {
+      "key": "rh.development_plan.write",
+      "moduleKey": "rh",
+      "resourceKey": "development_plan",
+      "actionKey": "write",
+      "routePattern": "/api/v1/rh/pdi/**",
+      "description": "Create or update PDI plans and goals."
+    },
+    {
+      "key": "rh.development_plan.approve",
+      "moduleKey": "rh",
+      "resourceKey": "development_plan",
+      "actionKey": "approve",
+      "routePattern": "/api/v1/rh/pdi/**",
+      "description": "Approve or close out PDI plans and record manager review."
+    },
+    {
       "key": "rh.vacation.read",
       "moduleKey": "rh",
       "resourceKey": "vacation",

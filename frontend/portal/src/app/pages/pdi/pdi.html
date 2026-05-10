@@ -1,0 +1,60 @@
+<section class="pdi">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Plano de Desenvolvimento Individual</h1>
+  </header>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <p *ngIf="loading" role="status">Carregando...</p>
+
+  <section *ngIf="!loading && !activePlan" class="panel empty">
+    Nenhum PDI registrado. Solicite a abertura ao seu gestor.
+  </section>
+
+  <section *ngIf="!loading && activePlan" class="panel">
+    <h2>{{ activePlan.status }}</h2>
+    <p>{{ activePlan.periodStart }} ate {{ activePlan.periodEnd }}</p>
+    <p *ngIf="activePlan.objective">{{ activePlan.objective }}</p>
+    <p *ngIf="activePlan.managerReview">
+      <strong>Comentario do gestor:</strong> {{ activePlan.managerReview }}
+    </p>
+  </section>
+
+  <form *ngIf="!loading && activePlan" [formGroup]="goalForm" (ngSubmit)="addGoal()" class="panel">
+    <label class="wide">
+      <span>Nova meta</span>
+      <input type="text" formControlName="description" maxlength="1000" />
+    </label>
+    <label>
+      <span>Prazo</span>
+      <input type="date" formControlName="dueAt" />
+    </label>
+    <label class="wide">
+      <span>Observacoes</span>
+      <textarea rows="2" formControlName="notes"></textarea>
+    </label>
+    <button type="submit" [disabled]="saving">Adicionar meta</button>
+  </form>
+
+  <section *ngIf="!loading && goals.length > 0" class="panel">
+    <h2>Metas</h2>
+    <ul>
+      <li *ngFor="let goal of goals">
+        <strong>{{ goal.description }}</strong>
+        <span>Status: {{ goal.status }}</span>
+        <span *ngIf="goal.dueAt">Prazo: {{ goal.dueAt }}</span>
+        <span *ngIf="goal.completedAt">Concluida em {{ goal.completedAt }}</span>
+        <button
+          *ngIf="goal.status !== 'DONE'"
+          type="button"
+          (click)="markGoalDone(goal)"
+          [disabled]="saving"
+        >
+          Marcar como concluida
+        </button>
+      </li>
+    </ul>
+  </section>
+</section>

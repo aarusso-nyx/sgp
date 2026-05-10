@@ -61,6 +61,15 @@ export interface ManadPayrollRow extends QueryResultRow {
   amount: string;
 }
 
+export interface PerdcompCreditRow extends QueryResultRow {
+  rubric_code: string;
+  rubric_description: string;
+  entry_kind: string;
+  category: 'INSS_PATRONAL' | 'INSS_SEGURADO' | 'RAT' | 'OUTROS';
+  employee_count: string;
+  total_amount: string;
+}
+
 export interface IdRow extends QueryResultRow {
   id: string;
 }
@@ -95,6 +104,7 @@ export type CanonicalReportCode =
   | 'F_FOL_016'
   | 'F_FOL_017'
   | 'MANAD_EXPORT'
+  | 'PERDCOMP_EXPORT'
   | 'RELATORIO_REPASSE_FUNDO_RH';
 
 export const REPORT_WORKER_DEFINITIONS = [
@@ -119,6 +129,10 @@ export const REPORT_WORKER_DEFINITIONS = [
   'M_06',
   'MANAD',
   'MANAD_EXPORT',
+  'M-08',
+  'M_08',
+  'PERDCOMP',
+  'PERDCOMP_EXPORT',
   'RELATORIO_REPASSE_FUNDO_RH',
 ] as const;
 
@@ -166,6 +180,13 @@ export function canonicalReportCode(code: string): CanonicalReportCode {
     normalized === 'MANAD_EXPORT'
   ) {
     return 'MANAD_EXPORT';
+  }
+  if (
+    normalized === 'M_08' ||
+    normalized === 'PERDCOMP' ||
+    normalized === 'PERDCOMP_EXPORT'
+  ) {
+    return 'PERDCOMP_EXPORT';
   }
   if (normalized === 'RELATORIO_REPASSE_FUNDO_RH') {
     return 'RELATORIO_REPASSE_FUNDO_RH';
