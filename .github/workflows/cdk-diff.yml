@@ -18,6 +18,7 @@ jobs:
     timeout-minutes: 20
     env:
       AWS_REGION: ${{ vars.AWS_REGION || 'sa-east-1' }}
+      AWS_CDK_DIFF_READONLY_ROLE_ARN: ${{ secrets.AWS_CDK_DIFF_READONLY_ROLE_ARN }}
       ROUTE53_HOSTED_ZONE_ID: ${{ vars.ROUTE53_HOSTED_ZONE_ID || 'ZSGPPLACEHOLDER' }}
     steps:
       - name: Checkout
@@ -34,20 +35,31 @@ jobs:
         run: npm --prefix infra/aws/cdk ci
 
       - name: Configure AWS read-only credentials
+        if: env.AWS_CDK_DIFF_READONLY_ROLE_ARN != ''
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_CDK_DIFF_READONLY_ROLE_ARN }}
+          role-to-assume: ${{ env.AWS_CDK_DIFF_READONLY_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: CDK synth stage
         run: npm --prefix infra/aws/cdk run synth -- -c target=stage
 
       - name: CDK diff stage
+        if: env.AWS_CDK_DIFF_READONLY_ROLE_ARN != ''
         id: cdk_diff
         continue-on-error: true
         run: |
           set -o pipefail
           npm --prefix infra/aws/cdk run diff -- -c target=stage --no-color 2>&1 | tee cdk-diff-stage.txt
+
+      - name: Record skipped CDK diff
+        if: env.AWS_CDK_DIFF_READONLY_ROLE_ARN == ''
+        run: |
+          cat > cdk-diff-stage.txt <<'EOF'
+          CDK synth completed, but live cdk diff was skipped because
+          AWS_CDK_DIFF_READONLY_ROLE_ARN is not configured for this repository.
+          Configure that secret with a read-only OIDC role to enable live diff output.
+          EOF
 
       - name: Comment CDK diff
         uses: actions/github-script@v7
