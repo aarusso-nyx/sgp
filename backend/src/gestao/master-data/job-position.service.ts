@@ -2,12 +2,14 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Optional,
 } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../common/pagination/paged-response';
 import { DatabaseService } from '../../database/database.service';
+import { SgpEsocialEmittersService } from '../../integrations/stynx-esocial';
 import { JobPositionMutationDto } from './job-position.dto';
 
 interface JobPositionRow extends QueryResultRow {
@@ -31,7 +33,11 @@ interface CountRow extends QueryResultRow {
 
 @Injectable()
 export class JobPositionService {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(
+    private readonly database: DatabaseService,
+    @Optional()
+    private readonly esocialEmitters?: SgpEsocialEmittersService,
+  ) {}
 
   async list(query: DomainListQueryDto): Promise<PagedResponse<unknown>> {
     const page = query.page ?? 1;
@@ -72,7 +78,7 @@ export class JobPositionService {
   }
 
   async create(input: JobPositionMutationDto): Promise<unknown> {
-    return this.database.transaction(async (client) => {
+    const created = await this.database.transaction(async (client) => {
       await this.assertUniqueCode(client, input.code);
       const rows = await client.query<JobPositionRow>(
         `
@@ -103,10 +109,12 @@ export class JobPositionService {
       await this.appendAudit(client, 'CREATE', row.id, null, this.toDto(row));
       return this.toDto(row);
     });
+    await this.emitS1030(created, 'create');
+    return created;
   }
 
   async update(id: string, input: JobPositionMutationDto): Promise<unknown> {
-    return this.database.transaction(async (client) => {
+    const result = await this.database.transaction(async (client) => {
       const before = await this.getRaw(client, id);
       if (before.code !== input.code) {
         await this.assertUniqueCode(client, input.code, id);
@@ -144,6 +152,25 @@ export class JobPositionService {
         this.toDto(after),
       );
       return this.toDto(after);
+    });
+    await this.emitS1030(result, 'update');
+    return result;
+  }
+
+  private emitS1030(
+    jobPosition: ReturnType<typeof this.toDto>,
+    operation: 'create' | 'update',
+  ): Promise<unknown> | undefined {
+    return this.esocialEmitters?.emitForCurrentTenant('s1030JobPosition', {
+      sourceId: String(jobPosition.id),
+      operation,
+      data: {
+        code: jobPosition.code,
+        name: jobPosition.name,
+        category: jobPosition.category,
+        legalRegime: jobPosition.legalRegime,
+        creationLaw: jobPosition.creationLaw,
+      },
     });
   }
 

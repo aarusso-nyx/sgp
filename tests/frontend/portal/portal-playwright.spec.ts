@@ -1,4 +1,6 @@
-import { expect, test, type Page } from '@playwright/test';
+import playwright, { type Page } from '@playwright/test';
+
+const { expect, test } = playwright;
 
 interface ApiHit {
   method: string;
@@ -14,6 +16,34 @@ interface CatalogLink {
 
 const employeeId = '11111111-1111-4111-8111-111111111111';
 
+const SPECIALIZED_PORTAL_ROUTES = new Set([
+  '/aprovacoes',
+  '/certificacoes',
+  '/contracheques/atual',
+  '/contracheques/download/competencia-atual',
+  '/contracheques/financeiro-anual',
+  '/contracheques/historico',
+  '/documentos/certidoes',
+  '/documentos/declaracoes',
+  '/documentos/ficha-funcional',
+  '/documentos/solicitar',
+  '/ferias/historico',
+  '/ferias/programacao',
+  '/ferias/solicitar',
+  '/licencas/documentos',
+  '/licencas/historico',
+  '/licencas/saude/solicitar',
+  '/licencas/solicitacoes',
+  '/meus-dados/cadastro',
+  '/meus-dados/contato',
+  '/meus-dados/dependentes',
+  '/meus-dados/documentos',
+  '/meus-dados/endereco',
+  '/minha-equipe',
+  '/pdi',
+  '/ponto/proximas-escalas',
+]);
+
 test.describe('SGP portal Playwright e2e', () => {
   test('redirects anonymous users to the Cognito login boundary', async ({ page }) => {
     await bootPortal(page, { authenticated: false });
@@ -27,14 +57,14 @@ test.describe('SGP portal Playwright e2e', () => {
     expect(loginUrl.searchParams.get('redirect_uri')).toBe('http://127.0.0.1:4310/auth/callback');
   });
 
-  test('renders the authenticated dashboard with the live 35-route catalog', async ({ page }) => {
+  test('renders the authenticated dashboard with the live route catalog', async ({ page }) => {
     const hits: ApiHit[] = [];
     await bootPortal(page, { hits });
 
     await page.goto('/');
 
     await expect(page.getByRole('heading', { name: /Portal surface aligned/ })).toBeVisible();
-    await expect(page.locator('.section-grid a')).toHaveCount(35);
+    await expect(page.locator('.section-grid a')).toHaveCount(38);
     await expect(page.getByText('portal journeys mapped')).toBeVisible();
     expect(hits).toContainEqual({
       method: 'GET',
@@ -43,19 +73,23 @@ test.describe('SGP portal Playwright e2e', () => {
     });
   });
 
-  test('renders every catalog route through the R2-132 backend data page', async ({ page }) => {
+  test('renders every catalog route without leaving a blank portal surface', async ({ page }) => {
     await bootPortal(page);
 
     await page.goto('/');
     const routes = await catalogLinks(page);
-    expect(routes).toHaveLength(35);
+    expect(routes).toHaveLength(38);
 
     for (const route of routes) {
       await page.goto(route.path);
-      await expect(page.locator('section.feature-sheet')).toBeVisible();
-      await expect(page.getByText(route.path, { exact: true })).toBeVisible();
-      await expect(page.getByRole('heading', { name: route.label })).toBeVisible();
-      await expect(page.getByRole('heading', { name: 'Backend data' })).toBeVisible();
+      await expect(page.locator('main.content section').first()).toBeVisible();
+
+      if (!SPECIALIZED_PORTAL_ROUTES.has(route.path)) {
+        await expect(page.locator('section.feature-sheet')).toBeVisible();
+        await expect(page.getByText(route.path, { exact: true })).toBeVisible();
+        await expect(page.getByRole('heading', { name: route.label })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Backend data' })).toBeVisible();
+      }
     }
   });
 
@@ -71,15 +105,18 @@ test.describe('SGP portal Playwright e2e', () => {
       .toBe(true);
   });
 
-  test('loads the comprovante de rendimentos route from yearly-income data', async ({ page }) => {
+  test('keeps the annual finance catalog route on the current contracheque workflow', async ({
+    page,
+  }) => {
     const hits: ApiHit[] = [];
     await bootPortal(page, { hits });
 
     await page.goto('/contracheques/financeiro-anual');
 
-    await expect(page.getByRole('heading', { name: 'Financeiro Anual' })).toBeVisible();
-    await expect(page.getByText('GET /api/v1/portal/yearly-income')).toBeVisible();
-    await expect.poll(() => hits.some((hit) => hit.path === '/v1/portal/yearly-income')).toBe(true);
+    await expect(page.getByRole('heading', { name: 'Contracheque' })).toBeVisible();
+    await expect
+      .poll(() => hits.some((hit) => /^\/v1\/portal\/contracheque\/\d{4}-\d{2}$/.test(hit.path)))
+      .toBe(true);
   });
 
   test('loads the ponto consultation surface for upcoming schedules', async ({ page }) => {
@@ -102,12 +139,13 @@ test.describe('SGP portal Playwright e2e', () => {
 
     await page.goto('/ferias/solicitar');
 
-    await expect(page.getByRole('heading', { name: 'Solicitar' })).toBeVisible();
-    await expect(page.getByText('GET /api/v1/ferias/saldo/:employee_id')).toBeVisible();
-    await expect(
-      page.getByText(/No self-service \/api\/v1\/portal\/ferias endpoint/),
-    ).toBeVisible();
-    expect(hits.some((hit) => hit.path === `/v1/ferias/saldo/${employeeId}`)).toBe(true);
+    await expect(page.getByRole('heading', { name: 'Ferias' })).toBeVisible();
+    await page.getByPlaceholder('UUID do servidor').fill(employeeId);
+    await page.getByRole('button', { name: 'Saldo' }).click();
+    await expect
+      .poll(() => hits.some((hit) => hit.path === `/v1/ferias/saldo/${employeeId}`))
+      .toBe(true);
+    await expect(page.getByText('30 dias')).toBeVisible();
   });
 
   test('loads dependents as an authenticated portal data workflow', async ({ page }) => {
@@ -116,8 +154,8 @@ test.describe('SGP portal Playwright e2e', () => {
 
     await page.goto('/meus-dados/dependentes');
 
-    await expect(page.getByRole('heading', { name: 'Dependentes' })).toBeVisible();
-    await expect(page.getByText('GET /api/v1/portal/meus-dados/dependentes')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Meus Dados' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'dependentes' })).toBeVisible();
     await expect
       .poll(() => hits.some((hit) => hit.path === '/v1/portal/meus-dados/dependentes'))
       .toBe(true);
@@ -129,8 +167,8 @@ test.describe('SGP portal Playwright e2e', () => {
 
     await page.goto('/meus-dados/cadastro');
 
-    await expect(page.getByRole('heading', { name: 'Cadastro Pessoal' })).toBeVisible();
-    await expect(page.getByText('GET /api/v1/portal/meus-dados/cadastro')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Meus Dados' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'cadastro' })).toBeVisible();
     await expect
       .poll(() => hits.some((hit) => hit.path === '/v1/portal/meus-dados/cadastro'))
       .toBe(true);

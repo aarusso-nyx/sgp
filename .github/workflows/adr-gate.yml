@@ -66,3 +66,6 @@ jobs:
           echo "Affected files:"
           echo "$contract_changed"
           exit 1
+
+      - name: Verify ADR machine links
+        run: node scripts/audit/adr-link-coverage.mjs

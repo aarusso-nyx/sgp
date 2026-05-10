@@ -1,4 +1,5 @@
 import type { EsocialClass } from '../kinds';
+import type { EsocialRelayEventClass } from '../kinds';
 
 export type EsocialClassRequestPayload<TClass extends EsocialClass> = Readonly<{
   class: TClass;
@@ -21,3 +22,24 @@ export type EsocialClassResponsePayload<TClass extends EsocialClass> =
       details?: unknown;
     };
   }>;
+
+export type EsocialSgpPayloadSource = Readonly<{
+  schema: string;
+  table: string;
+  id: string;
+  version?: string | number | undefined;
+}>;
+
+export type EsocialSgpEventPayload<
+  TEventClass extends EsocialRelayEventClass,
+  TData extends Readonly<Record<string, unknown>> = Readonly<
+    Record<string, unknown>
+  >,
+> = Readonly<{
+  producer: 'sgp';
+  eventClass: TEventClass;
+  operation: 'bootstrap' | 'create' | 'update' | 'close' | 'reopen' | 'delete';
+  tenantId: string;
+  source: EsocialSgpPayloadSource;
+  data: TData;
+}>;

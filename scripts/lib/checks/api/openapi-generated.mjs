@@ -22,12 +22,16 @@ function responseJsonSchema(response) {
   return response?.content?.['application/json']?.schema;
 }
 
+function responseProblemJsonSchema(response) {
+  return response?.content?.['application/problem+json']?.schema;
+}
+
 function hasJsonSchema(response) {
   return Boolean(responseJsonSchema(response));
 }
 
 function hasProblemDetailsRef(response) {
-  const schema = responseJsonSchema(response);
+  const schema = responseProblemJsonSchema(response);
   return schema?.$ref === '#/components/schemas/SgpProblemDetails';
 }
 

@@ -14,6 +14,11 @@
       "handler": "list"
     },
     {
+      "method": "GET",
+      "path": "/api/v1/spec-tagged",
+      "status": "implemented"
+    },
+    {
       "method": "POST",
       "path": "/api/v1/legacy",
       "status": "explicitly_excluded",

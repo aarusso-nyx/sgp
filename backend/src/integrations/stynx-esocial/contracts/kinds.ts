@@ -20,6 +20,15 @@ export const ESOCIAL_RELAY_QUEUE_KIND = 'esocial' as const;
 export type EsocialRelayKind = typeof ESOCIAL_RELAY_QUEUE_KIND;
 
 export const ESOCIAL_RELAY_EVENT_CLASSES = [
+  'S-1000',
+  'S-1005',
+  'S-1010',
+  'S-1020',
+  'S-1030',
+  'S-1040',
+  'S-1050',
+  'S-1060',
+  'S-1070',
   'S-1200',
   'S-1202',
   'S-1207',
@@ -37,6 +46,7 @@ export const ESOCIAL_RELAY_EVENT_CLASSES = [
   'S-2221',
   'S-2230',
   'S-2240',
+  'S-2250',
   'S-2298',
   'S-2299',
   'S-2300',

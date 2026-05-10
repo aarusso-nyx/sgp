@@ -19,7 +19,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -29,7 +29,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -39,7 +39,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -49,7 +49,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -59,7 +59,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -69,7 +69,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -79,7 +79,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -114,7 +114,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -124,7 +124,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -134,7 +134,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -144,7 +144,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -154,7 +154,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -164,7 +164,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -174,7 +174,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -209,7 +209,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -219,7 +219,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -229,7 +229,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -239,7 +239,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -249,7 +249,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -259,7 +259,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -269,7 +269,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -304,7 +304,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -314,7 +314,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -324,7 +324,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -334,7 +334,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -344,7 +344,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -354,7 +354,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -364,7 +364,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -394,7 +394,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -404,7 +404,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -414,7 +414,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -424,7 +424,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -434,7 +434,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -444,7 +444,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -454,7 +454,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -484,7 +484,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -494,7 +494,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -504,7 +504,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -514,7 +514,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -524,7 +524,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -534,7 +534,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -544,7 +544,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -579,7 +579,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -589,7 +589,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -599,7 +599,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -609,7 +609,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -619,7 +619,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -629,7 +629,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -639,7 +639,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -667,7 +667,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -677,7 +677,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -687,7 +687,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -697,7 +697,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -707,7 +707,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -717,7 +717,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -727,7 +727,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -757,7 +757,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -767,7 +767,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -777,7 +777,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -787,7 +787,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -797,7 +797,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -807,7 +807,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -817,7 +817,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -993,7 +993,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1003,7 +1003,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1013,7 +1013,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1023,7 +1023,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1033,7 +1033,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1043,7 +1043,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1053,7 +1053,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1097,7 +1097,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1107,7 +1107,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1117,7 +1117,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1127,7 +1127,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1137,7 +1137,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1147,7 +1147,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1157,7 +1157,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1202,7 +1202,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1212,7 +1212,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1222,7 +1222,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1232,7 +1232,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1242,7 +1242,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1252,7 +1252,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1262,7 +1262,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1306,7 +1306,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1316,7 +1316,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1326,7 +1326,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1336,7 +1336,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1346,7 +1346,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1356,7 +1356,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1366,7 +1366,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1401,7 +1401,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1411,7 +1411,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1421,7 +1421,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1431,7 +1431,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1441,7 +1441,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1451,7 +1451,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1461,7 +1461,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1496,7 +1496,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1506,7 +1506,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1516,7 +1516,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1526,7 +1526,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1536,7 +1536,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1546,7 +1546,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1556,7 +1556,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1591,7 +1591,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1601,7 +1601,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1611,7 +1611,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1621,7 +1621,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1631,7 +1631,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1641,7 +1641,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1651,7 +1651,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1686,7 +1686,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1696,7 +1696,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1706,7 +1706,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1716,7 +1716,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1726,7 +1726,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1736,7 +1736,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1746,7 +1746,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1781,7 +1781,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1791,7 +1791,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1801,7 +1801,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1811,7 +1811,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1821,7 +1821,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1831,7 +1831,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1841,7 +1841,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1876,7 +1876,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1886,7 +1886,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1896,7 +1896,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1906,7 +1906,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1916,7 +1916,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1926,7 +1926,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1936,7 +1936,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1971,7 +1971,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1981,7 +1981,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -1991,7 +1991,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2001,7 +2001,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2011,7 +2011,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2021,7 +2021,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2031,7 +2031,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2066,7 +2066,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2076,7 +2076,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2086,7 +2086,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2096,7 +2096,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2106,7 +2106,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2116,7 +2116,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2126,7 +2126,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2169,7 +2169,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2179,7 +2179,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2189,7 +2189,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2199,7 +2199,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2209,7 +2209,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2219,7 +2219,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2229,7 +2229,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2264,7 +2264,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2274,7 +2274,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2284,7 +2284,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2294,7 +2294,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2304,7 +2304,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2314,7 +2314,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2324,7 +2324,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2359,7 +2359,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2369,7 +2369,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2379,7 +2379,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2389,7 +2389,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2399,7 +2399,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2409,7 +2409,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2419,7 +2419,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2454,7 +2454,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2464,7 +2464,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2474,7 +2474,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2484,7 +2484,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2494,7 +2494,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2504,7 +2504,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2514,7 +2514,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2549,7 +2549,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2559,7 +2559,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2569,7 +2569,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2579,7 +2579,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2589,7 +2589,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2599,7 +2599,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2609,7 +2609,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2653,7 +2653,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2663,7 +2663,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2673,7 +2673,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2683,7 +2683,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2693,7 +2693,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2703,7 +2703,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2713,7 +2713,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2758,7 +2758,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2768,7 +2768,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2778,7 +2778,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2788,7 +2788,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2798,7 +2798,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2808,7 +2808,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2818,7 +2818,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2853,7 +2853,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2863,7 +2863,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2873,7 +2873,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2883,7 +2883,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2893,7 +2893,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2903,7 +2903,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2913,7 +2913,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2965,7 +2965,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2975,7 +2975,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2985,7 +2985,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -2995,7 +2995,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3005,7 +3005,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3015,7 +3015,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3025,7 +3025,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3077,7 +3077,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3087,7 +3087,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3097,7 +3097,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3107,7 +3107,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3117,7 +3117,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3127,7 +3127,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3137,7 +3137,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3182,7 +3182,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3192,7 +3192,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3202,7 +3202,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3212,7 +3212,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3222,7 +3222,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3232,7 +3232,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3242,7 +3242,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3277,7 +3277,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3287,7 +3287,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3297,7 +3297,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3307,7 +3307,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3317,7 +3317,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3327,7 +3327,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3337,7 +3337,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3380,7 +3380,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3390,7 +3390,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3400,7 +3400,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3410,7 +3410,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3420,7 +3420,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3430,7 +3430,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3440,7 +3440,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3494,7 +3494,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3504,7 +3504,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3514,7 +3514,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3524,7 +3524,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3534,7 +3534,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3544,7 +3544,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3554,7 +3554,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3589,7 +3589,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3599,7 +3599,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3609,7 +3609,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3619,7 +3619,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3629,7 +3629,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3639,7 +3639,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3649,7 +3649,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3692,7 +3692,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3702,7 +3702,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3712,7 +3712,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3722,7 +3722,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3732,7 +3732,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3742,7 +3742,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3752,7 +3752,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3787,7 +3787,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3797,7 +3797,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3807,7 +3807,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3817,7 +3817,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3827,7 +3827,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3837,7 +3837,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3847,7 +3847,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3890,7 +3890,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3900,7 +3900,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3910,7 +3910,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3920,7 +3920,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3930,7 +3930,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3940,7 +3940,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3950,7 +3950,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3985,7 +3985,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -3995,7 +3995,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4005,7 +4005,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4015,7 +4015,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4025,7 +4025,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4035,7 +4035,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4045,7 +4045,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4088,7 +4088,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4098,7 +4098,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4108,7 +4108,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4118,7 +4118,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4128,7 +4128,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4138,7 +4138,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4148,7 +4148,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4202,7 +4202,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4212,7 +4212,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4222,7 +4222,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4232,7 +4232,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4242,7 +4242,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4252,7 +4252,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4262,7 +4262,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4316,7 +4316,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4326,7 +4326,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4336,7 +4336,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4346,7 +4346,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4356,7 +4356,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4366,7 +4366,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4376,7 +4376,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4430,7 +4430,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4440,7 +4440,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4450,7 +4450,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4460,7 +4460,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4470,7 +4470,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4480,7 +4480,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4490,7 +4490,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4525,7 +4525,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4535,7 +4535,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4545,7 +4545,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4555,7 +4555,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4565,7 +4565,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4575,7 +4575,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4585,7 +4585,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4628,7 +4628,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4638,7 +4638,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4648,7 +4648,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4658,7 +4658,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4668,7 +4668,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4678,7 +4678,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4688,7 +4688,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4742,7 +4742,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4752,7 +4752,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4762,7 +4762,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4772,7 +4772,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4782,7 +4782,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4792,7 +4792,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4802,7 +4802,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4854,7 +4854,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4864,7 +4864,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4874,7 +4874,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4884,7 +4884,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4894,7 +4894,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4904,7 +4904,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4914,7 +4914,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4958,7 +4958,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4968,7 +4968,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4978,7 +4978,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4988,7 +4988,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -4998,7 +4998,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5008,7 +5008,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5018,7 +5018,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5063,7 +5063,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5073,7 +5073,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5083,7 +5083,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5093,7 +5093,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5103,7 +5103,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5113,7 +5113,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5123,7 +5123,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5168,7 +5168,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5178,7 +5178,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5188,7 +5188,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5198,7 +5198,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5208,7 +5208,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5218,7 +5218,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5228,7 +5228,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5281,7 +5281,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5291,7 +5291,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5301,7 +5301,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5311,7 +5311,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5321,7 +5321,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5331,7 +5331,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5341,7 +5341,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5386,7 +5386,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5396,7 +5396,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5406,7 +5406,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5416,7 +5416,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5426,7 +5426,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5436,7 +5436,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5446,7 +5446,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5490,7 +5490,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5500,7 +5500,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5510,7 +5510,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5520,7 +5520,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5530,7 +5530,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5540,7 +5540,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5550,7 +5550,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5594,7 +5594,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5604,7 +5604,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5614,7 +5614,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5624,7 +5624,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5634,7 +5634,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5644,7 +5644,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5654,7 +5654,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5699,7 +5699,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5709,7 +5709,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5719,7 +5719,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5729,7 +5729,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5739,7 +5739,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5749,7 +5749,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5759,7 +5759,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5794,7 +5794,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5804,7 +5804,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5814,7 +5814,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5824,7 +5824,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5834,7 +5834,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5844,7 +5844,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5854,7 +5854,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5884,7 +5884,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5894,7 +5894,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5904,7 +5904,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5914,7 +5914,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5924,7 +5924,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5934,7 +5934,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5944,7 +5944,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5984,7 +5984,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -5994,7 +5994,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6004,7 +6004,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6014,7 +6014,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6024,7 +6024,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6034,7 +6034,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6044,7 +6044,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6084,7 +6084,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6094,7 +6094,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6104,7 +6104,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6114,7 +6114,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6124,7 +6124,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6134,7 +6134,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6144,7 +6144,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6174,7 +6174,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6184,7 +6184,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6194,7 +6194,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6204,7 +6204,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6214,7 +6214,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6224,7 +6224,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6234,7 +6234,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6278,7 +6278,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6288,7 +6288,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6298,7 +6298,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6308,7 +6308,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6318,7 +6318,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6328,7 +6328,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6338,7 +6338,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6383,7 +6383,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6393,7 +6393,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6403,7 +6403,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6413,7 +6413,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6423,7 +6423,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6433,7 +6433,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6443,7 +6443,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6478,7 +6478,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6488,7 +6488,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6498,7 +6498,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6508,7 +6508,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6518,7 +6518,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6528,7 +6528,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6538,7 +6538,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6582,7 +6582,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6592,7 +6592,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6602,7 +6602,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6612,7 +6612,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6622,7 +6622,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6632,7 +6632,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6642,7 +6642,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6687,7 +6687,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6697,7 +6697,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6707,7 +6707,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6717,7 +6717,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6727,7 +6727,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6737,7 +6737,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6747,7 +6747,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6827,7 +6827,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6837,7 +6837,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6847,7 +6847,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6857,7 +6857,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6867,7 +6867,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6877,7 +6877,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6887,7 +6887,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6932,7 +6932,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6942,7 +6942,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6952,7 +6952,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6962,7 +6962,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6972,7 +6972,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6982,7 +6982,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -6992,7 +6992,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7027,7 +7027,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7037,7 +7037,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7047,7 +7047,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7057,7 +7057,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7067,7 +7067,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7077,7 +7077,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7087,7 +7087,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7131,7 +7131,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7141,7 +7141,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7151,7 +7151,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7161,7 +7161,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7171,7 +7171,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7181,7 +7181,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7191,7 +7191,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7235,7 +7235,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7245,7 +7245,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7255,7 +7255,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7265,7 +7265,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7275,7 +7275,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7285,7 +7285,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7295,7 +7295,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7330,7 +7330,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7340,7 +7340,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7350,7 +7350,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7360,7 +7360,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7370,7 +7370,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7380,7 +7380,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7390,7 +7390,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7420,7 +7420,7 @@
           "400": {
             "description": "Bad request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7430,7 +7430,7 @@
           "401": {
             "description": "Authentication required.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7440,7 +7440,7 @@
           "403": {
             "description": "Permission, tenant, or policy denial.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7450,7 +7450,7 @@
           "404": {
             "description": "Resource not found.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7460,7 +7460,7 @@
           "409": {
             "description": "Conflict with current resource state.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7470,7 +7470,7 @@
           "422": {
             "description": "Semantically invalid request.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -7480,7 +7480,7 @@
           "429": {
             "description": "Rate limit exceeded.",
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/SgpProblemDetails"
                 }
@@ -8047,37 +8047,40 @@
       },
       "SgpProblemDetails": {
         "type": "object",
-        "required": ["statusCode", "message", "error"],
+        "required": ["type", "title", "status", "detail", "instance"],
         "properties": {
-          "statusCode": {
+          "type": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
             "type": "integer",
             "minimum": 400,
             "maximum": 599
           },
-          "message": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          },
-          "error": {
+          "detail": {
             "type": "string"
           },
-          "code": {
+          "instance": {
             "type": "string"
           },
-          "requestId": {
+          "traceId": {
             "type": "string"
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "SgpOperationResult": {
         "description": "Fallback success response for operations that return plain objects or arrays without a dedicated DTO class yet.",

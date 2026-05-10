@@ -175,6 +175,10 @@ export class SgpAwsStack extends Stack {
       removalPolicy: RemovalPolicy.RETAIN,
       publiclyAccessible: false,
     });
+    database.addRotationSingleUser({
+      automaticallyAfter: Duration.days(30),
+      vpcSubnets: { subnetGroupName: 'app' },
+    });
 
     const runtimeSecret = new secretsmanager.Secret(this, 'RuntimeSecret', {
       secretName: `${config.namePrefix}/runtime/stynx-identity`,

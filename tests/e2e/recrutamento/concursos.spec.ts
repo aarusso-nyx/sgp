@@ -1,4 +1,6 @@
-import { expect, test } from '@playwright/test';
+import playwright from '@playwright/test';
+
+const { expect, test } = playwright;
 
 import { bootRound5Admin } from '../support/round5-admin-playwright';
 

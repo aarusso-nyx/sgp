@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -277,3 +278,9 @@ function item(
     amount,
   };
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

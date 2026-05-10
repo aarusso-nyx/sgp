@@ -9,6 +9,7 @@ import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
 import { DatabaseService } from '../../backend/src/database/database.service';
+import { SgpEsocialEmittersService } from '../../backend/src/integrations/stynx-esocial';
 
 function encodePart(value: unknown): string {
   return Buffer.from(JSON.stringify(value)).toString('base64url');
@@ -114,6 +115,12 @@ class FakeLeavesDatabaseService {
   }
 }
 
+class NoopEsocialEmittersService {
+  s2230Leave(): Promise<void> {
+    return Promise.resolve();
+  }
+}
+
 describe('General leaves workflow (e2e)', () => {
   let app: INestApplication;
   const originalUnsigned = process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
@@ -125,6 +132,8 @@ describe('General leaves workflow (e2e)', () => {
     })
       .overrideProvider(DatabaseService)
       .useClass(FakeLeavesDatabaseService)
+      .overrideProvider(SgpEsocialEmittersService)
+      .useClass(NoopEsocialEmittersService)
       .compile();
 
     app = moduleFixture.createNestApplication();

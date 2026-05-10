@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1010",
+  "operation": "update",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "payroll",
+    "table": "payroll_earning_deduction",
+    "id": "00000000-0000-4000-8000-000000001010",
+    "version": 1
+  },
+  "data": { "code": "001", "description": "Vencimento base", "kind": "EARNING" }
+}

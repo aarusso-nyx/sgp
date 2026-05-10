@@ -2,11 +2,13 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../../database/database.service';
+import { SgpEsocialEmittersService } from '../../../integrations/stynx-esocial';
 import { CreateLeaveDto, GeneralLeaveReason } from './leaves.dto';
 
 const LEAVE_REASONS: Record<GeneralLeaveReason, string> = {
@@ -84,7 +86,11 @@ export interface GeneralLeave {
 
 @Injectable()
 export class LeavesService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @Optional()
+    private readonly esocialEmitters?: SgpEsocialEmittersService,
+  ) {}
 
   async create(body: CreateLeaveDto): Promise<GeneralLeave> {
     this.ensureDatabase();
@@ -96,7 +102,7 @@ export class LeavesService {
       throw new BadRequestException('Unsupported leave reason');
     }
 
-    return this.databaseService.transaction(async (client) => {
+    const created = await this.databaseService.transaction(async (client) => {
       const employee = await this.loadEmployee(client, employeeId);
       if (!employee) {
         throw new NotFoundException('Employee not found');
@@ -192,8 +198,24 @@ export class LeavesService {
         ],
       );
 
-      return this.toLeave(result.rows[0]!);
+      return {
+        tenantId: employee.tenant_id,
+        leave: this.toLeave(result.rows[0]!),
+      };
     });
+    await this.esocialEmitters?.s2230Leave({
+      tenantId: created.tenantId,
+      sourceId: created.leave.id,
+      operation: 'create',
+      data: {
+        employeeId: created.leave.employeeId,
+        reason: created.leave.reason,
+        startsOn: created.leave.startsOn,
+        endsOn: created.leave.endsOn,
+        status: created.leave.status,
+      },
+    });
+    return created.leave;
   }
 
   async listByEmployee(employeeId: string): Promise<GeneralLeave[]> {

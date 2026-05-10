@@ -1,0 +1,16 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-3000",
+  "operation": "delete",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "public",
+    "table": "esocial_events",
+    "id": "00000000-0000-4000-8000-000000003000",
+    "version": 1
+  },
+  "data": {
+    "targetEventClass": "S-2205",
+    "targetMessageId": "00000000-0000-4000-8000-000000002205"
+  }
+}

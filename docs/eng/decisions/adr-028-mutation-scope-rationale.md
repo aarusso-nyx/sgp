@@ -1,3 +1,17 @@
+---
+controllers: []
+migrations: []
+infra:
+  - stryker.conf.cjs
+  - backend/src/common/money/money.ts
+  - backend/src/common/errors/standard-exception.filter.ts
+  - backend/src/common/lgpd/legal-basis.service.ts
+  - backend/src/folha-pagamento/fgts/fgts.service.ts
+  - backend/src/folha-pagamento/operations/bank-account/bank-account-validator.service.ts
+  - tests/backend/jest-mutation.json
+runbooks: []
+---
+
 # ADR-028: Stryker Mutation Testing Scope Rationale
 
 Status: Accepted
@@ -6,13 +20,16 @@ Date: 2026-05-08
 
 ## Context
 
-`stryker.conf.cjs` scopes mutation testing to two files:
+`stryker.conf.cjs` scopes mutation testing to five files:
 
 - `backend/src/common/money/money.ts`
 - `backend/src/common/errors/standard-exception.filter.ts`
+- `backend/src/common/lgpd/legal-basis.service.ts`
+- `backend/src/folha-pagamento/fgts/fgts.service.ts`
+- `backend/src/folha-pagamento/operations/bank-account/bank-account-validator.service.ts`
 
-The recent audit at `docs/work/qa/report.md` reports a mutation score of
-83.61% against this scope, well above the configured `break: 70` threshold.
+The 2026-05-10 QA-lift run reports a mutation score of 79.78% against this
+scope, well above the configured `break: 70` threshold.
 The scope is **narrow by design**, and the audit explicitly held Dim 7
 (Testing Quality) below 9.5 because this design choice was implicit.
 
@@ -27,11 +44,13 @@ a signal that mutation testing applies only to those two files forever.
 **Mutation testing scope is intentionally narrow and grows by accepted
 decision, not by accident.** Specifically:
 
-- The current scope (`money.ts`, `standard-exception.filter.ts`) reflects
-  the two highest-leverage targets: monetary computation correctness and HTTP
-  exception envelope correctness. A regression in either is a class of bug
-  that traditional unit tests routinely miss but mutation testing reliably
-  surfaces.
+- The current scope (`money.ts`, `standard-exception.filter.ts`,
+  `legal-basis.service.ts`, `fgts.service.ts`,
+  `bank-account-validator.service.ts`) reflects high-leverage targets:
+  monetary computation correctness, HTTP exception envelope correctness, LGPD
+  legal-basis enforcement, FGTS computation/projection orchestration, and bank
+  account validation. A regression in any of these is a class of bug that
+  traditional unit tests routinely miss but mutation testing reliably surfaces.
 - Expansion of the scope is done deliberately, one logical surface at a
   time, with a `break:` threshold appropriate to the new surface's spec
   density.
@@ -89,6 +108,30 @@ either:
 None of these are in scope for the current QA-lift wave; each is a
 separate accepted-decision question.
 
+## Amendment 2026-05-10 — focused service expansion retained
+
+The QA-lift Wave 3 expansion first added
+`backend/src/common/lgpd/legal-basis.service.ts` to `stryker.conf.cjs` without
+changing `tests/backend/jest-mutation.json`. That run failed with a 65.98%
+global mutation score because the mutation runner's narrow `testRegex` did not
+include `backend/src/common/lgpd/legal-basis.service.spec.ts`; Stryker therefore
+reported the candidate at 0% coverage. The failed attempt was rejected rather
+than lowering the `break: 70` threshold.
+
+The accepted amendment adds the direct legal-basis, FGTS, and bank-account
+validator specs to `tests/backend/jest-mutation.json` and retains all three
+services in `stryker.conf.cjs`. `npm run test:mutation` then passed with:
+
+| File                                                                                    | Mutation score | Covered score |
+| --------------------------------------------------------------------------------------- | -------------: | ------------: |
+| `backend/src/common/lgpd/legal-basis.service.ts`                                        |         90.48% |        90.48% |
+| `backend/src/folha-pagamento/fgts/fgts.service.ts`                                      |         90.32% |        93.33% |
+| `backend/src/folha-pagamento/operations/bank-account/bank-account-validator.service.ts` |         73.38% |        75.00% |
+| All files                                                                               |         79.78% |        81.61% |
+
+This keeps the same global `break: 70` policy while proving that additional
+mutation scope must be paired with a mutation-runner spec allow-list update.
+
 ## Options Considered
 
 - Option A: No mutation testing. Rejected because the cost of a single
@@ -115,6 +158,8 @@ separate accepted-decision question.
 ## Verification
 
 - `stryker.conf.cjs` `mutate` array matches the scope this ADR documents.
+- `tests/backend/jest-mutation.json` includes the specs for every retained
+  mutation target.
 - `npm run test:mutation` reports a score ≥ `break:` for the listed scope.
 - `.github/workflows/source-ci.yml` `Scoped mutation gate` step stays green.
 - `docs/gov/audit/test-confidence-proof.md` continues to cite the live

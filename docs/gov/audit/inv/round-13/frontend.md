@@ -80,3 +80,32 @@ route endpoints; spec coverage in `portal-route-endpoints.spec.ts` and
 - The 11 raw `http` call sites are the only regression risk indicator on the
   ApiClient migration FR. Recommend a B1 grooming line item to confirm exempt
   vs non-exempt before round 14.
+
+## Migration outcome (R14-06)
+
+Live recheck on 2026-05-10 found `grep -r "this\.http\." frontend/src/app
+frontend/portal/src/app | wc -l` still returns **11**, but all 11 matches are
+inside the canonical admin or portal `ApiClient` transport implementations.
+No application feature/service/component call site remains outside
+`core/api/api-client.ts`; `grep -rn "this\.http\." frontend/src/app
+frontend/portal/src/app | grep -v '/core/api/api-client.ts'` returns **0**.
+
+These are deliberate internal transport exemptions, not FR R2-109 migration
+debt. Source comments were not added because R14-06 explicitly defers edits to
+`frontend/src/app/core/api/api-client.ts` and avoids `api-client.ts`; the
+canonical clients must retain direct `HttpClient` calls to implement the
+`ApiClient` facade.
+
+| File                                             | Line | Method   | Disposition                                              |
+| ------------------------------------------------ | ---: | -------- | -------------------------------------------------------- |
+| `frontend/src/app/core/api/api-client.ts`        |   21 | `get`    | Exempt: canonical admin `ApiClient` internal transport.  |
+| `frontend/src/app/core/api/api-client.ts`        |   25 | `list`   | Exempt: canonical admin `ApiClient` internal transport.  |
+| `frontend/src/app/core/api/api-client.ts`        |   31 | `post`   | Exempt: canonical admin `ApiClient` internal transport.  |
+| `frontend/src/app/core/api/api-client.ts`        |   35 | `put`    | Exempt: canonical admin `ApiClient` internal transport.  |
+| `frontend/src/app/core/api/api-client.ts`        |   39 | `patch`  | Exempt: canonical admin `ApiClient` internal transport.  |
+| `frontend/src/app/core/api/api-client.ts`        |   43 | `delete` | Exempt: canonical admin `ApiClient` internal transport.  |
+| `frontend/portal/src/app/core/api/api-client.ts` |   15 | `get`    | Exempt: canonical portal `ApiClient` internal transport. |
+| `frontend/portal/src/app/core/api/api-client.ts` |   19 | `post`   | Exempt: canonical portal `ApiClient` internal transport. |
+| `frontend/portal/src/app/core/api/api-client.ts` |   23 | `put`    | Exempt: canonical portal `ApiClient` internal transport. |
+| `frontend/portal/src/app/core/api/api-client.ts` |   27 | `patch`  | Exempt: canonical portal `ApiClient` internal transport. |
+| `frontend/portal/src/app/core/api/api-client.ts` |   31 | `delete` | Exempt: canonical portal `ApiClient` internal transport. |

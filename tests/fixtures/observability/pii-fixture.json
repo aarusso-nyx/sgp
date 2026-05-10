@@ -1,0 +1,21 @@
+{
+  "piiValues": {
+    "cpf": "cpf-fixture-12345678901",
+    "cpf_cnpj": "cpf-cnpj-fixture-12345678901234",
+    "pis_pasep": "pis-pasep-fixture-12345678901",
+    "pisPasep": "pisPasep-fixture-12345678901",
+    "email": "redaction-fixture@example.test",
+    "bank_account": "bank-account-fixture-00012345-6",
+    "bankAccount": "bankAccount-fixture-00012345-6",
+    "accountNumber": "accountNumber-fixture-999888777",
+    "agencyNumber": "agencyNumber-fixture-1234"
+  },
+  "secretValues": {
+    "headers.authorization": "Bearer fixture-headers-lower",
+    "headers.Authorization": "Bearer fixture-headers-upper",
+    "req.headers.authorization": "Bearer fixture-req-lower",
+    "req.headers.Authorization": "Bearer fixture-req-upper",
+    "request.headers.authorization": "Bearer fixture-request-lower",
+    "request.headers.Authorization": "Bearer fixture-request-upper"
+  }
+}

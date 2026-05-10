@@ -30,21 +30,38 @@ const methods = new Set([
 
 const problemDetailsSchema = {
   type: 'object',
-  required: ['statusCode', 'message', 'error'],
+  required: ['type', 'title', 'status', 'detail', 'instance'],
   properties: {
-    statusCode: {
+    type: {
+      type: 'string',
+      format: 'uri',
+    },
+    title: {
+      type: 'string',
+    },
+    status: {
       type: 'integer',
       minimum: 400,
       maximum: 599,
     },
-    message: {
-      oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }],
+    detail: {
+      type: 'string',
     },
-    error: { type: 'string' },
-    code: { type: 'string' },
-    requestId: { type: 'string' },
+    instance: {
+      type: 'string',
+    },
+    traceId: {
+      type: 'string',
+    },
+    correlationId: {
+      type: 'string',
+    },
+    errors: {
+      type: 'array',
+      items: { type: 'string' },
+    },
   },
-  additionalProperties: true,
+  additionalProperties: false,
 };
 
 const fallbackSuccessSchema = {
@@ -74,7 +91,7 @@ function problemResponse(description: string): OpenApiResponse {
   return {
     description,
     content: {
-      'application/json': {
+      'application/problem+json': {
         schema: { $ref: '#/components/schemas/SgpProblemDetails' },
       },
     },

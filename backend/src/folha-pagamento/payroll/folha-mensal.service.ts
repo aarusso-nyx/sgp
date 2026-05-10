@@ -1,6 +1,7 @@
 import { Injectable, Optional } from '@nestjs/common';
 
 import { DatabaseService } from '../../database/database.service';
+import { SgpEsocialEmittersService } from '../../integrations/stynx-esocial';
 import { FgtsService } from '../fgts/fgts.service';
 import { AlimonyDeductionService } from '../operations/alimony/alimony-deduction.service';
 import { ConsignmentDeductionService } from '../operations/consignment/consignment-deduction.service';
@@ -40,6 +41,8 @@ export class FolhaMensalService {
     fgtsService?: FgtsService,
     @Optional()
     pisPasepService?: PisPasepService,
+    @Optional()
+    esocialEmitters?: SgpEsocialEmittersService,
   ) {
     this.workflow = new FolhaMensalWorkflow(databaseService);
     this.abrirStep = new FolhaMensalAbrirStepService(this.workflow);
@@ -55,7 +58,10 @@ export class FolhaMensalService {
       fgtsService,
       pisPasepService,
     );
-    this.reabrirStep = new FolhaMensalReabrirStepService(this.workflow);
+    this.reabrirStep = new FolhaMensalReabrirStepService(
+      this.workflow,
+      esocialEmitters,
+    );
   }
 
   openCompetence(input: FolhaMensalCompetenceDto): Promise<FolhaMensalResult> {

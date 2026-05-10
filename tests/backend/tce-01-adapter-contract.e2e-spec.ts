@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -66,5 +67,11 @@ describe('TCE-01 adapter contract (e2e)', () => {
         'tce-sc',
       ]),
     );
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

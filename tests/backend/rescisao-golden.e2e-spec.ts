@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { readFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
@@ -583,3 +584,9 @@ async function setBypassContext(client: PoolClient): Promise<void> {
 function readFixture<T>(name: string): T {
   return JSON.parse(readFileSync(join(fixtureDir, name), 'utf8')) as T;
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

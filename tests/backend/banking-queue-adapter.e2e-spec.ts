@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -501,3 +502,9 @@ async function submitWithRelayPayload(options: {
     adapter.close();
   }
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

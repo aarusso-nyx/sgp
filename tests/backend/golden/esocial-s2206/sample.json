@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-2206",
+  "operation": "update",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "hr",
+    "table": "employment_link",
+    "id": "00000000-0000-4000-8000-000000002206",
+    "version": 1
+  },
+  "data": { "employeeId": "00000000-0000-4000-8000-000000000501", "contractType": "statutory" }
+}

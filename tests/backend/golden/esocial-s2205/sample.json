@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-2205",
+  "operation": "update",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "hr",
+    "table": "cadastral_change_request",
+    "id": "00000000-0000-4000-8000-000000002205",
+    "version": 1
+  },
+  "data": { "employeeId": "00000000-0000-4000-8000-000000000501", "section": "contato" }
+}

@@ -19,6 +19,17 @@ type ExceptionResponse =
       code?: string | undefined;
     };
 
+type ProblemDetails = {
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+  instance: string;
+  traceId?: string | undefined;
+  correlationId?: string | undefined;
+  errors?: readonly string[] | undefined;
+};
+
 @Catch()
 export class StandardExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
@@ -45,19 +56,23 @@ export class StandardExceptionFilter implements ExceptionFilter {
         ? exceptionResponse.message
         : undefined;
 
-    response.status(status).json({
-      error: {
-        code:
-          domainException?.code ?? this.resolveCode(exceptionResponse, status),
-        message,
-        status,
-        method: request.method,
-        path: request.originalUrl || request.url,
-        timestamp: new Date().toISOString(),
-        ...(request.requestId ? { requestId: request.requestId } : {}),
-        ...(details ? { details } : {}),
-      },
-    });
+    const code =
+      domainException?.code ?? this.resolveCode(exceptionResponse, status);
+    const problemDetails: ProblemDetails = {
+      type: this.resolveType(code, details),
+      title: code,
+      status,
+      detail: message,
+      instance: request.originalUrl || request.url,
+      ...(request.traceId ? { traceId: request.traceId } : {}),
+      ...(request.requestId ? { correlationId: request.requestId } : {}),
+      ...(details ? { errors: details } : {}),
+    };
+
+    response
+      .type('application/problem+json')
+      .status(status)
+      .json(problemDetails);
   }
 
   private resolveMessage(
@@ -83,5 +98,18 @@ export class StandardExceptionFilter implements ExceptionFilter {
     if (typeof exceptionResponse === 'object' && exceptionResponse.code)
       return exceptionResponse.code;
     return HttpStatus[status]?.toString() ?? 'ERROR';
+  }
+
+  private resolveType(
+    code: string,
+    details: readonly string[] | undefined,
+  ): string {
+    if (details?.length) {
+      return 'https://sgp.detran-am.sistematech.com.br/errors/validation';
+    }
+    return `https://sgp.detran-am.sistematech.com.br/errors/${code
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')}`;
   }
 }

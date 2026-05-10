@@ -1,17 +1,17 @@
 # Schema Digest
 
-Round: 13
+Round: 14
 
 ## Counts
 
 | Metric                  | Count |
 | ----------------------- | ----- |
 | classification_comments | 119   |
-| foreign_keys            | 673   |
-| indexes                 | 1008  |
-| rls_policies            | 587   |
-| rls_tables              | 277   |
-| tables                  | 281   |
+| foreign_keys            | 681   |
+| indexes                 | 1011  |
+| rls_policies            | 596   |
+| rls_tables              | 280   |
+| tables                  | 284   |
 | triggers                | 252   |
 
 ## Tables
@@ -54,6 +54,8 @@ Round: 13
 | hr.contract_type                             | 7       | id                                                  | 1   | yes | database/sql/10-05-hr-ddl.sql                   |
 | hr.contribution_time_certificate             | 12      | id                                                  | 2   | yes | database/sql/10-05-hr-ddl.sql                   |
 | hr.cost_center                               | 8       | id                                                  | 2   | yes | database/sql/10-05-hr-ddl.sql                   |
+| hr.development_plan                          | 12      | id                                                  | 3   | yes | database/sql/20-hr-development-plans.sql        |
+| hr.development_plan_goal                     | 10      | id                                                  | 2   | yes | database/sql/20-hr-development-plans.sql        |
 | hr.education_institution                     | 9       | id                                                  | 1   | yes | database/sql/10-05-hr-ddl.sql                   |
 | hr.employee                                  | 47      | id                                                  | 15  | yes | database/sql/10-05-hr-ddl.sql                   |
 | hr.employee_alimony                          | 27      | id                                                  | 2   | yes | database/sql/10-05-hr-ddl.sql                   |
@@ -124,6 +126,7 @@ Round: 13
 | hr.shift                                     | 9       | id                                                  | 1   | yes | database/sql/10-05-hr-ddl.sql                   |
 | hr.shift_day_off                             | 9       | id                                                  | 2   | yes | database/sql/10-05-hr-ddl.sql                   |
 | hr.termination_reason                        | 7       | id                                                  | 1   | yes | database/sql/10-05-hr-ddl.sql                   |
+| hr.training_certificate                      | 12      | id                                                  | 3   | yes | database/sql/20-hr-training-certifications.sql  |
 | hr.training_suggestion                       | 12      | id                                                  | 2   | yes | database/sql/10-05-hr-ddl.sql                   |
 | hr.training_suggestion_complement            | 11      | id                                                  | 3   | yes | database/sql/10-05-hr-ddl.sql                   |
 | hr.training_suggestion_cost                  | 10      | id                                                  | 2   | yes | database/sql/10-05-hr-ddl.sql                   |

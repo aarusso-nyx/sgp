@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -51,3 +52,9 @@ function expectedText(path: string, actual: string): string {
   }
   return readFileSync(path, 'utf8').replace(/\n$/, '');
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

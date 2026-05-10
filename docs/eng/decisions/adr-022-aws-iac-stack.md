@@ -1,3 +1,16 @@
+---
+controllers: []
+migrations: []
+infra:
+  - infra/aws/cdk/lib/sgp-aws-stack.ts
+  - infra/aws/cdk/lib/sgp-environment.ts
+  - infra/aws/operations/pm2/ecosystem.config.cjs
+runbooks:
+  - docs/eng/runbooks/deploy-rollback.md
+  - docs/eng/runbooks/secret-rotation.md
+  - docs/eng/runbooks/dr.md
+---
+
 # ADR-022: AWS CDK Provisioning And PM2 Artifact Deploy Boundary
 
 Status: Accepted
@@ -58,6 +71,11 @@ The AWS runtime baseline is:
 - Customer-managed KMS keys with automatic rotation for RDS, Secrets Manager,
   S3, CloudWatch logs, and prod SQS. EC2 root EBS volumes are encrypted using
   the account EBS encryption default in this baseline.
+- The generated RDS master credential secret has an AWS Secrets Manager
+  single-user rotation schedule with a 30-day cadence. The rotation Lambda runs
+  in private app subnets and uses the Secrets Manager VPC endpoint; Stynx-owned
+  identity values remain externally supplied runtime secrets rather than
+  SGP-managed signing keys.
 - EC2 Auto Scaling Groups keep at least two app hosts across availability zones,
   and the public ALB keeps cross-zone load balancing enabled.
 - CloudWatch alarms for ALB 5xx responses and unhealthy API targets.

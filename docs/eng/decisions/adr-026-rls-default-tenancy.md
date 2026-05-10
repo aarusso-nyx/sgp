@@ -1,3 +1,12 @@
+---
+controllers: []
+migrations:
+  - database/sql/70-hr-final.sql
+infra:
+  - tests/rls
+runbooks: []
+---
+
 # ADR-026: Row-Level Security as the Default Tenancy Boundary
 
 Status: Accepted

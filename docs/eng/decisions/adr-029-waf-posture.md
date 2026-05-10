@@ -1,3 +1,13 @@
+---
+controllers: []
+migrations: []
+infra:
+  - docs/gov/generated/runtime-topology.json
+  - infra/aws/cdk/lib/sgp-aws-stack.ts
+runbooks:
+  - docs/eng/runbooks/dr.md
+---
+
 # ADR-029: WAF Posture
 
 Status: Accepted

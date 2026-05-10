@@ -6,8 +6,9 @@ Status: retained evidence for the 2026-05-08 QA lift.
 
 - `npm run test:types`: passed after enabling frontend
   `exactOptionalPropertyTypes` and `noUncheckedIndexedAccess`.
-- `npm run test:mutation`: passed with Stryker mutation score `83.61`, above
-  the scoped `break: 70` gate.
+- `npm run test:mutation`: passed with Stryker mutation score `79.78`, above
+  the scoped `break: 70` gate, after expanding the retained mutation scope to
+  five files.
 - `npm --workspace frontend run test:admin:coverage`: passed with the admin
   global ratchet at 90 statements, 90 branches, 90 functions, and 90 lines.
 - `npm run test:frontend:coverage`: retained as the combined admin and portal
@@ -26,8 +27,9 @@ Status: retained evidence for the 2026-05-08 QA lift.
 - Frontend coverage includes admin fiscal, payroll/rubrica, LGPD/public
   concurso, recruitment, audit, Angular TestBed metadata instantiation, portal
   endpoint, empty, and error paths.
-- Mutation coverage is scoped to MVP-critical money and exception-envelope
-  behavior in `stryker.conf.cjs`.
+- Mutation coverage is scoped to MVP-critical money, exception-envelope, LGPD
+  legal-basis, FGTS, and bank-account validation behavior in
+  `stryker.conf.cjs`.
 - Property-based coverage inventory is retained in
   `docs/gov/audit/property-based-test-inventory.md`.
 - Existing retained gates cover DB/RLS, e2e, frontend e2e/Playwright,

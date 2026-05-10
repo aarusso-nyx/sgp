@@ -18,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../audit/audit.service';
+import { AuditMutation } from '../common/audit/audit-mutation.decorator';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import {
@@ -35,6 +36,10 @@ import {
 
 @ApiTags('lgpd')
 @ApiBearerAuth()
+@AuditMutation({
+  resourceType: 'lgpd_international_transfer',
+  tableName: 'lgpd.international_transfer',
+})
 @Controller('v1/admin/lgpd/transferencias-internacionais')
 export class InternationalTransferController {
   constructor(

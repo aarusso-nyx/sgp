@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { readFileSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import { join } from 'node:path';
@@ -347,3 +348,9 @@ function stageAt(values: readonly unknown[], index: number): SiaficSyncStage {
 function statusAt(values: readonly unknown[], index: number): SiaficSyncStatus {
   return stringAt(values, index) as SiaficSyncStatus;
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

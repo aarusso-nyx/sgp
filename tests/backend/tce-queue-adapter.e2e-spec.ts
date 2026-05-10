@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -321,3 +322,9 @@ function deterministicIdFactory(): () => string {
     return `00000000-0000-4000-8000-${suffix}`;
   };
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

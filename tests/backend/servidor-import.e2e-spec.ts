@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { ServidorImportController } from '../../backend/src/folha-pagamento/import/servidor-import.controller';
 import { buildSimpleXlsx } from './helpers/simple-xlsx-fixture';
 
@@ -65,5 +66,11 @@ describe('Servidor verba XLSX import API contract (e2e)', () => {
       }),
     );
     expect(auditMutation).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

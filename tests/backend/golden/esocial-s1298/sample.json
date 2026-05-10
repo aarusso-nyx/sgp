@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1298",
+  "operation": "reopen",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "payroll",
+    "table": "payroll_run",
+    "id": "00000000-0000-4000-8000-000000001298",
+    "version": 1
+  },
+  "data": { "payrollRunId": "00000000-0000-4000-8000-000000001298", "reason": "monthly.reopened" }
+}

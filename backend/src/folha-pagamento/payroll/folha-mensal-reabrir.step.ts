@@ -1,16 +1,20 @@
 import { Injectable } from '@nestjs/common';
 
+import { SgpEsocialEmittersService } from '../../integrations/stynx-esocial';
 import { FolhaMensalResult } from './folha-mensal.types';
 import { FolhaMensalWorkflow } from './folha-mensal.workflow';
 import { FolhaMensalCompetenceDto } from './payroll.dto';
 
 @Injectable()
 export class FolhaMensalReabrirStepService {
-  constructor(private readonly workflow: FolhaMensalWorkflow) {}
+  constructor(
+    private readonly workflow: FolhaMensalWorkflow,
+    private readonly esocialEmitters?: SgpEsocialEmittersService,
+  ) {}
 
   async execute(input: FolhaMensalCompetenceDto): Promise<FolhaMensalResult> {
     this.workflow.ensureDatabase();
-    return this.workflow.transaction(async (client) => {
+    const result = await this.workflow.transaction(async (client) => {
       const context = await this.workflow.loadContext(client, input);
       this.workflow.assertCompetenceStatus(context.competence.status, [
         'CLOSED',
@@ -41,5 +45,17 @@ export class FolhaMensalReabrirStepService {
         validation,
       );
     });
+    await this.esocialEmitters?.emitForCurrentTenant('s1298Reopen', {
+      sourceId: result.payrollRunId,
+      operation: 'reopen',
+      data: {
+        payrollRunId: result.payrollRunId,
+        competenceYear: result.competenceYear,
+        competenceMonth: result.competenceMonth,
+        competenceStatus: result.competenceStatus,
+        payrollStatus: result.payrollStatus,
+      },
+    });
+    return result;
   }
 }

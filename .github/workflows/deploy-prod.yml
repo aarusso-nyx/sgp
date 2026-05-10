@@ -1,9 +1,10 @@
 name: Deploy (prod)
 
 # Triggered by a release-please-generated tag or manual workflow_dispatch.
-# AWS is the only automated provision target. Prod has no required GitHub
-# Environment reviewer in the accepted baseline; failed gates still block
-# deploy. Artifact rollout remains a separate flow.
+# AWS is the only automated provision target. Prod deploy planning is gated by
+# the `prod` GitHub Environment; repository settings must require reviewer
+# approval before this job runs. Failed gates still block deploy. Artifact
+# rollout remains a separate flow.
 
 on:
   push:
@@ -19,6 +20,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  attestations: write
 
 concurrency:
   group: deploy-prod
@@ -70,3 +72,9 @@ jobs:
             cdk.out
             *.tfplan
           if-no-files-found: ignore
+
+      - name: Attest deployment plan provenance
+        if: always()
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'infra/aws/cdk/cdk.out/*.template.json'

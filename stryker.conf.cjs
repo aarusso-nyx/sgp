@@ -13,8 +13,10 @@
 //      this best-case targeted expansion drops the total below the
 //      70 % bar.
 //
-// Both experiments are reverted. The mutation scope returns to the two
-// files whose dedicated specs reliably clear 70 %.
+// A subsequent focused expansion added the LGPD legal-basis service, FGTS
+// service, and bank-account validator after wiring their direct specs into the
+// mutation runner. The five-file scope clears the 70 % gate and is retained
+// under ADR-028.
 module.exports = {
   packageManager: 'npm',
   testRunner: 'jest',
@@ -22,6 +24,9 @@ module.exports = {
   mutate: [
     'backend/src/common/money/money.ts',
     'backend/src/common/errors/standard-exception.filter.ts',
+    'backend/src/common/lgpd/legal-basis.service.ts',
+    'backend/src/folha-pagamento/fgts/fgts.service.ts',
+    'backend/src/folha-pagamento/operations/bank-account/bank-account-validator.service.ts',
   ],
   jest: {
     projectType: 'custom',

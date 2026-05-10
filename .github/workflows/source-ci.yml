@@ -125,6 +125,9 @@ jobs:
       - name: Circular dependency check
         run: npm run check:circular:backend && npm run check:circular:frontend
 
+      - name: Module graph check
+        run: npm run check:module-graph
+
       - name: Frontend OpenAPI client drift gate
         run: |
           npm run api:client:generate
@@ -133,6 +136,9 @@ jobs:
 
       - name: API route alignment
         run: npm run api:alignment:check -- --json
+
+      - name: OpenAPI endpoint coverage report
+        run: npm run audit:openapi-coverage
 
       - name: DB alignment
         run: npm run db:alignment:check -- --json

@@ -158,8 +158,16 @@ export class OpenApiClient {
     return this.api.delete<unknown>(`/v1/rh/afastamentos/${encodeURIComponent(params.id)}`);
   }
 
+  deleteApiV1RhCertificacoesById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/rh/certificacoes/${encodeURIComponent(params.id)}`);
+  }
+
   deleteApiV1RhOrganicDefinitionsById(params: { id: string }): Observable<unknown> {
     return this.api.delete<unknown>(`/v1/rh/organic-definitions/${encodeURIComponent(params.id)}`);
+  }
+
+  deleteApiV1RhPdiMetasByGoalId(params: { goalId: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/rh/pdi/metas/${encodeURIComponent(params.goalId)}`);
   }
 
   deleteApiV1RhProcessosFuncaoById(params: { id: string }): Observable<unknown> {
@@ -1106,6 +1114,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/rh/afastamentos', query);
   }
 
+  getApiV1RhCertificacoes(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/rh/certificacoes', query);
+  }
+
   getApiV1RhEmployeeTransfer(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/rh/employee-transfer', query);
   }
@@ -1120,6 +1132,18 @@ export class OpenApiClient {
 
   getApiV1RhOrganicDefinitions(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/rh/organic-definitions', query);
+  }
+
+  getApiV1RhPdi(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/rh/pdi', query);
+  }
+
+  getApiV1RhPdiById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/rh/pdi/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1RhPdiMetasById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/rh/pdi/${encodeURIComponent(params.id)}/metas`);
   }
 
   getApiV1RhProcessos(query: ApiQuery = {}): Observable<unknown> {
@@ -1721,12 +1745,33 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1RhCertificacoesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/certificacoes/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
   patchApiV1RhOrganicDefinitionsById(
     params: { id: string },
     body: ApiBody = {},
   ): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/rh/organic-definitions/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1RhPdiById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(`/v1/rh/pdi/${encodeURIComponent(params.id)}`, body);
+  }
+
+  patchApiV1RhPdiMetasByGoalId(
+    params: { goalId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/pdi/metas/${encodeURIComponent(params.goalId)}`,
       body,
     );
   }
@@ -1910,6 +1955,20 @@ export class OpenApiClient {
       `/v1/admin/det/messages/${encodeURIComponent(params.id)}/acknowledgement-requests`,
       body,
     );
+  }
+
+  postApiV1AdminEsocialMessagesTransmitByMessageId(
+    params: { messageId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/esocial/messages/${encodeURIComponent(params.messageId)}/transmit`,
+      body,
+    );
+  }
+
+  postApiV1AdminEsocialProcessPending(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/esocial/process-pending', body);
   }
 
   postApiV1AdminEsocialS2298ByOrderId(
@@ -3241,6 +3300,10 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/rh/afastamentos', body);
   }
 
+  postApiV1RhCertificacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/rh/certificacoes', body);
+  }
+
   postApiV1RhEmployeeTransfer(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/rh/employee-transfer', body);
   }
@@ -3277,6 +3340,17 @@ export class OpenApiClient {
 
   postApiV1RhOrganicDefinitions(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/rh/organic-definitions', body);
+  }
+
+  postApiV1RhPdi(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/rh/pdi', body);
+  }
+
+  postApiV1RhPdiMetasById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/rh/pdi/${encodeURIComponent(params.id)}/metas`,
+      body,
+    );
   }
 
   postApiV1RhProcessos(body: ApiBody = {}): Observable<unknown> {

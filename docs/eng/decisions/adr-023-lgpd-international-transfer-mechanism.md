@@ -1,3 +1,14 @@
+---
+controllers:
+  - backend/src/lgpd/international-transfer.controller.ts
+  - backend/src/publico/public-transparency.controller.ts
+migrations:
+  - database/sql/18-lgpd-international-transfer.sql
+infra: []
+runbooks:
+  - docs/user/lgpd-transferencia-internacional-runbook.md
+---
+
 # ADR-023: LGPD International Transfer Mechanism Registry
 
 Date: 2026-05-08

@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1020",
+  "operation": "update",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "hr",
+    "table": "tax_location",
+    "id": "00000000-0000-4000-8000-000000001020",
+    "version": 1
+  },
+  "data": { "code": "LOT-TRIB-001", "description": "Lotacao tributaria padrao" }
+}

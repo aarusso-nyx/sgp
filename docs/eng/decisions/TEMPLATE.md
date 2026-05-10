@@ -1,3 +1,10 @@
+---
+controllers: []
+migrations: []
+infra: []
+runbooks: []
+---
+
 # ADR-NNN: Short Decision Title
 
 Status: Proposed

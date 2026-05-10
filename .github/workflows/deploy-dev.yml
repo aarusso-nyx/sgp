@@ -14,6 +14,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  attestations: write
 
 concurrency:
   group: deploy-dev
@@ -64,3 +65,9 @@ jobs:
             cdk.out
             *.tfplan
           if-no-files-found: ignore
+
+      - name: Attest deployment plan provenance
+        if: always()
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'infra/aws/cdk/cdk.out/*.template.json'

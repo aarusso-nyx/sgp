@@ -14,33 +14,38 @@ describe('StandardExceptionFilter', () => {
     originalUrl,
     url = '/api/v1/fallback',
     requestId,
+    traceId,
   }: {
     method?: string | undefined;
     originalUrl?: string | undefined;
     url?: string | undefined;
     requestId?: string | undefined;
+    traceId?: string | undefined;
   } = {}) => {
     const json = jest.fn();
     const status = jest.fn(() => ({ json }));
+    const type = jest.fn(() => ({ status }));
     const host = {
       switchToHttp: () => ({
-        getResponse: () => ({ status }),
+        getResponse: () => ({ status, type }),
         getRequest: () => ({
           method,
           originalUrl,
           url,
           requestId,
+          traceId,
         }),
       }),
     } as unknown as ArgumentsHost;
 
-    return { host, json, status };
+    return { host, json, status, type };
   };
 
-  it('maps domain errors to the standard status/code/message envelope', () => {
-    const { host, json, status } = createHost({
+  it('maps domain errors to RFC 9457 problem details', () => {
+    const { host, json, status, type } = createHost({
       originalUrl: '/api/v1/pericia/agendamentos',
       requestId: 'req-123',
+      traceId: 'trace-123',
     });
 
     new StandardExceptionFilter().catch(
@@ -51,17 +56,16 @@ describe('StandardExceptionFilter', () => {
       host,
     );
 
+    expect(type).toHaveBeenCalledWith('application/problem+json');
     expect(status).toHaveBeenCalledWith(HttpStatus.UNPROCESSABLE_ENTITY);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        code: 'SAUDE.PERICIA.EMPLOYEE_NOT_ACTIVE',
-        message: 'Funcionário não se encontra em exercício',
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        method: 'POST',
-        path: '/api/v1/pericia/agendamentos',
-        requestId: 'req-123',
-        timestamp: expect.any(String),
-      },
+      type: 'https://sgp.detran-am.sistematech.com.br/errors/saude-pericia-employee-not-active',
+      title: 'SAUDE.PERICIA.EMPLOYEE_NOT_ACTIVE',
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+      detail: 'Funcionário não se encontra em exercício',
+      instance: '/api/v1/pericia/agendamentos',
+      traceId: 'trace-123',
+      correlationId: 'req-123',
     });
   });
 
@@ -82,15 +86,12 @@ describe('StandardExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        code: 'IAM.USER_NOT_FOUND',
-        message: 'User not found',
-        status: HttpStatus.NOT_FOUND,
-        method: 'GET',
-        path: '/api/v1/users',
-        requestId: 'req-http',
-        timestamp: expect.any(String),
-      },
+      type: 'https://sgp.detran-am.sistematech.com.br/errors/iam-user-not-found',
+      title: 'IAM.USER_NOT_FOUND',
+      status: HttpStatus.NOT_FOUND,
+      detail: 'User not found',
+      instance: '/api/v1/users',
+      correlationId: 'req-http',
     });
   });
 
@@ -108,15 +109,12 @@ describe('StandardExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.CONFLICT);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        code: 'CONFLICT',
-        message: 'User is locked',
-        status: HttpStatus.CONFLICT,
-        method: 'PATCH',
-        path: '/api/v1/users/123',
-        requestId: 'req-string',
-        timestamp: expect.any(String),
-      },
+      type: 'https://sgp.detran-am.sistematech.com.br/errors/conflict',
+      title: 'CONFLICT',
+      status: HttpStatus.CONFLICT,
+      detail: 'User is locked',
+      instance: '/api/v1/users/123',
+      correlationId: 'req-string',
     });
   });
 
@@ -137,15 +135,12 @@ describe('StandardExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.CONFLICT);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        code: 'CONFLICT',
-        message: 'Declaration already transmitted',
-        status: HttpStatus.CONFLICT,
-        method: 'PUT',
-        path: '/api/v1/fiscal/dctfweb',
-        requestId: 'req-error-fallback',
-        timestamp: expect.any(String),
-      },
+      type: 'https://sgp.detran-am.sistematech.com.br/errors/conflict',
+      title: 'CONFLICT',
+      status: HttpStatus.CONFLICT,
+      detail: 'Declaration already transmitted',
+      instance: '/api/v1/fiscal/dctfweb',
+      correlationId: 'req-error-fallback',
     });
   });
 
@@ -166,16 +161,13 @@ describe('StandardExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.UNPROCESSABLE_ENTITY);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        code: 'FOLHA.CALC.INVALID_INPUT',
-        message: 'Invalid payroll input',
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        method: 'POST',
-        path: '/api/v1/folha/calculos',
-        requestId: 'req-domain-details',
-        timestamp: expect.any(String),
-        details: ['employee_id is required'],
-      },
+      type: 'https://sgp.detran-am.sistematech.com.br/errors/validation',
+      title: 'FOLHA.CALC.INVALID_INPUT',
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+      detail: 'Invalid payroll input',
+      instance: '/api/v1/folha/calculos',
+      correlationId: 'req-domain-details',
+      errors: ['employee_id is required'],
     });
   });
 
@@ -194,16 +186,13 @@ describe('StandardExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        code: 'BAD_REQUEST',
-        message: 'Request validation failed',
-        status: HttpStatus.BAD_REQUEST,
-        method: 'POST',
-        path: '/api/v1/ponto/marcacoes',
-        requestId: 'req-validation',
-        timestamp: expect.any(String),
-        details: ['tenant_id must be a UUID', 'employee_id must be a UUID'],
-      },
+      type: 'https://sgp.detran-am.sistematech.com.br/errors/validation',
+      title: 'BAD_REQUEST',
+      status: HttpStatus.BAD_REQUEST,
+      detail: 'Request validation failed',
+      instance: '/api/v1/ponto/marcacoes',
+      correlationId: 'req-validation',
+      errors: ['tenant_id must be a UUID', 'employee_id must be a UUID'],
     });
   });
 
@@ -217,15 +206,12 @@ describe('StandardExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Internal server error',
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        method: 'POST',
-        path: '/api/v1/health',
-        requestId: 'req-non-error',
-        timestamp: expect.any(String),
-      },
+      type: 'https://sgp.detran-am.sistematech.com.br/errors/internal-server-error',
+      title: 'INTERNAL_SERVER_ERROR',
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      detail: 'Internal server error',
+      instance: '/api/v1/health',
+      correlationId: 'req-non-error',
     });
   });
 
@@ -240,15 +226,12 @@ describe('StandardExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
     expect(json).toHaveBeenCalledWith({
-      error: {
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Internal server error',
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        method: 'DELETE',
-        path: '/api/v1/lgpd/requests/123',
-        timestamp: expect.any(String),
-      },
+      type: 'https://sgp.detran-am.sistematech.com.br/errors/internal-server-error',
+      title: 'INTERNAL_SERVER_ERROR',
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      detail: 'Internal server error',
+      instance: '/api/v1/lgpd/requests/123',
     });
-    expect(json.mock.calls[0][0].error).not.toHaveProperty('requestId');
+    expect(json.mock.calls[0][0]).not.toHaveProperty('correlationId');
   });
 });

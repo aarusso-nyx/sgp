@@ -1,3 +1,12 @@
+---
+controllers: []
+migrations: []
+infra:
+  - eslint.config.mjs
+  - backend/eslint-rules/no-math-round-money.js
+runbooks: []
+---
+
 # ADR-027: Custom ESLint Rules as Repository Policy
 
 Status: Accepted

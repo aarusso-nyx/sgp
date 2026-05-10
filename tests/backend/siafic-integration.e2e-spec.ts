@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { createServer, Server } from 'node:http';
 
 import { ConfigService } from '@nestjs/config';
@@ -140,5 +141,11 @@ describe('SIAFIC payroll accounting sync (e2e)', () => {
       LIQUIDACAO: 'ACCEPTED',
       PAGAMENTO: 'ACCEPTED',
     });
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

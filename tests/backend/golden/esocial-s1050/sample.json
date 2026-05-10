@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1050",
+  "operation": "update",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "ponto",
+    "table": "work_schedule",
+    "id": "00000000-0000-4000-8000-000000001050",
+    "version": 1
+  },
+  "data": { "code": "40H", "weeklyHours": "40.00" }
+}

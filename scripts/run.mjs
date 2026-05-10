@@ -452,6 +452,7 @@ function runAuditSubcommand(subcommand, passThrough) {
       'backlog',
       'pvd',
       'live-data',
+      'openapi-coverage',
       'rls-spec-coverage',
     ].includes(subcommand)
   ) {
@@ -494,6 +495,17 @@ function handleRoadmap() {
 }
 
 function handleCheck() {
+  if (args[0] === 'module-graph') {
+    return runCommand('npx', [
+      'depcruise',
+      '--validate',
+      '.dependency-cruiser.cjs',
+      'backend/src',
+      'frontend/src',
+      ...args.slice(1),
+    ]);
+  }
+
   if (args[0] === 'circular') {
     const target = args[1] ?? 'help';
     const handlers = {
@@ -746,6 +758,7 @@ const handlers = {
   'audit:backlog': () => handleAuditAlias('backlog'),
   'audit:pvd': () => handleAuditAlias('pvd'),
   'audit:rls-spec-coverage': () => handleAuditAlias('rls-spec-coverage'),
+  'audit:openapi-coverage': () => handleAuditAlias('openapi-coverage'),
   'audit:all': () => handleAuditAlias('all'),
   'evidence-step': () => runEvidenceStepByName(args[0]),
 };

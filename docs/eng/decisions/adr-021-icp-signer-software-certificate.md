@@ -1,3 +1,13 @@
+---
+controllers: []
+migrations: []
+infra:
+  - backend/src/external/signature/icp-signer.service.ts
+  - backend/src/external/signature/tenant-fiscal-certificate.service.ts
+runbooks:
+  - docs/user/sgp-boundary-runbook.md
+---
+
 # ADR-021: ICP-Brasil signer uses software certificates inside SGP
 
 Status: Accepted

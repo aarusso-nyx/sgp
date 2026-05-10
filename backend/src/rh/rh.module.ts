@@ -4,6 +4,7 @@ import { AuditModule } from '../audit/audit.module';
 import { AuthModule } from '../auth/auth.module';
 import { ConsultasModule } from '../consultas/consultas.module';
 import { DatabaseModule } from '../database/database.module';
+import { StynxEsocialModule } from '../integrations/stynx-esocial';
 import { EmployeesController } from './employees/employees.controller';
 import { AccumulationService } from './employees/accumulation.service';
 import { EmployeeAbonoPermanenciaService } from './employees/employee-abono-permanencia.service';
@@ -18,10 +19,15 @@ import { EmployeeVersionService } from './employees/employee-version.service';
 import { EmployeesService } from './employees/employees.service';
 import { HistoryService } from './employees/history.service';
 import { ServiceTimeService } from './employees/service-time.service';
-import {
-  EmployeeRhWorkflowsController,
-  RhWorkflowsController,
-} from './workflows/rh-workflows.controller';
+import { RhWorkflowLeavesController } from './workflows/afastamentos/afastamentos.controller';
+import { UnionContributionsWorkflowController } from './workflows/contribuicoes-sindicais/contribuicoes-sindicais.controller';
+import { BenefitDependentsWorkflowController } from './workflows/dependentes-beneficio/dependentes-beneficio.controller';
+import { ExercisesWorkflowController } from './workflows/exercicios/exercicios.controller';
+import { AlimoniesWorkflowController } from './workflows/pensoes-alimenticias/pensoes-alimenticias.controller';
+import { RhWorkflowProfessionalExperiencesController } from './workflows/professional-experiences/professional-experiences.controller';
+import { RhWorkflowProcessFunctionsController } from './workflows/processos-funcao/processos-funcao.controller';
+import { RhWorkflowProcessesController } from './workflows/processos/processos.controller';
+import { TransitBenefitsWorkflowController } from './workflows/vales-transporte/vales-transporte.controller';
 import { RhWorkflowsService } from './workflows/rh-workflows.service';
 import { VacationController } from './workflows/vacation/vacation.controller';
 import { VacationService } from './workflows/vacation/vacation.service';
@@ -39,11 +45,24 @@ import { DevelopmentPlansController } from './development-plans/development-plan
 import { DevelopmentPlansService } from './development-plans/development-plans.service';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule, ConsultasModule],
+  imports: [
+    AuthModule,
+    DatabaseModule,
+    AuditModule,
+    ConsultasModule,
+    StynxEsocialModule,
+  ],
   controllers: [
     EmployeesController,
-    RhWorkflowsController,
-    EmployeeRhWorkflowsController,
+    RhWorkflowLeavesController,
+    RhWorkflowProfessionalExperiencesController,
+    RhWorkflowProcessesController,
+    RhWorkflowProcessFunctionsController,
+    BenefitDependentsWorkflowController,
+    UnionContributionsWorkflowController,
+    ExercisesWorkflowController,
+    AlimoniesWorkflowController,
+    TransitBenefitsWorkflowController,
     VacationController,
     MedicalLeaveController,
     LeavesController,

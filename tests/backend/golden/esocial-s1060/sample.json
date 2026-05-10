@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1060",
+  "operation": "update",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "saude",
+    "table": "work_environment",
+    "id": "00000000-0000-4000-8000-000000001060",
+    "version": 1
+  },
+  "data": { "code": "AMB-001", "description": "Ambiente administrativo" }
+}

@@ -1,3 +1,13 @@
+---
+controllers: []
+migrations: []
+infra:
+  - backend/package.json
+  - frontend/package.json
+runbooks:
+  - docs/user/sgp-boundary-runbook.md
+---
+
 # ADR-025: Stynx Vendored Package Boundary
 
 Status: Accepted

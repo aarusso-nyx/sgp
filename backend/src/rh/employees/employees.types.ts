@@ -159,6 +159,7 @@ export interface ContractRow extends QueryResultRow {
 
 export interface CadastralChangeRow extends QueryResultRow {
   id: string;
+  tenant_id: string;
   employee_id: string;
   registration: string;
   employee_name: string;

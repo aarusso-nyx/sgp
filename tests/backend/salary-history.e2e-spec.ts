@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { SalaryHistoryController } from '../../backend/src/avaliacao/salary-history/salary-history.controller';
 import { SalaryHistoryService } from '../../backend/src/avaliacao/salary-history/salary-history.service';
 
@@ -38,5 +39,11 @@ describe('Salary history API contract (e2e)', () => {
     ).resolves.toEqual([
       expect.objectContaining({ vencimentoBasico: '1100.00' }),
     ]);
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

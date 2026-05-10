@@ -1,3 +1,13 @@
+---
+controllers: []
+migrations: []
+infra:
+  - .github/workflows/deploy-prod.yml
+  - scripts/run.mjs
+runbooks:
+  - docs/eng/runbooks/deploy-rollback.md
+---
+
 # ADR-030: Homologation And Release Gates
 
 Status: Accepted

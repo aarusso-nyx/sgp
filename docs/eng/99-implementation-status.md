@@ -1,6 +1,6 @@
 # Implementation Status
 
-Status date: 2026-05-09
+Status date: 2026-05-10
 
 This page records the current implementation status for the feature-audit
 execution round. It is intentionally conservative: source evidence can exist

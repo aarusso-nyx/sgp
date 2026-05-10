@@ -1,3 +1,11 @@
+---
+controllers: []
+migrations: []
+infra:
+  - backend/src/payroll-engine/payroll-engine.service.ts
+runbooks: []
+---
+
 # ADR-024: Folia-First Payroll Engine Authority
 
 Status: Accepted

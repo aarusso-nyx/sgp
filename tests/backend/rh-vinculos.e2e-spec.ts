@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
@@ -5,6 +6,7 @@ import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
 import { DatabaseService } from '../../backend/src/database/database.service';
+import { SgpEsocialEmittersService } from '../../backend/src/integrations/stynx-esocial';
 
 function encodePart(value: unknown): string {
   return Buffer.from(JSON.stringify(value)).toString('base64url');
@@ -102,6 +104,12 @@ class FakeRhVinculosDatabaseService {
   }
 }
 
+class NoopEsocialEmittersService {
+  s2206ContractChange(): Promise<void> {
+    return Promise.resolve();
+  }
+}
+
 describe('RH vinculos legal regime (e2e)', () => {
   let app: INestApplication;
   const originalUnsigned = process.env.AUTH_ALLOW_UNSIGNED_TEST_TOKENS;
@@ -113,6 +121,8 @@ describe('RH vinculos legal regime (e2e)', () => {
     })
       .overrideProvider(DatabaseService)
       .useClass(FakeRhVinculosDatabaseService)
+      .overrideProvider(SgpEsocialEmittersService)
+      .useClass(NoopEsocialEmittersService)
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -166,5 +176,11 @@ describe('RH vinculos legal regime (e2e)', () => {
           '00000000-0000-4000-8000-000000000060',
         );
       });
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

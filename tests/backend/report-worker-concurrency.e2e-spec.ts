@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { ReportWorkerService } from '../../backend/src/report-service/report-worker.service';
 
 const tenantId = '00000000-0000-4000-8000-000000000100';
@@ -173,3 +174,9 @@ function statusTotalsForRun(payrollRunId: string): Record<string, unknown> {
 function sleep(durationMs: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, durationMs));
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

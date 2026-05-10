@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-2221",
+  "operation": "create",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "saude",
+    "table": "toxicology_test",
+    "id": "00000000-0000-4000-8000-000000002221",
+    "version": 1
+  },
+  "data": { "employeeId": "00000000-0000-4000-8000-000000000501", "performedOn": "2026-05-10" }
+}

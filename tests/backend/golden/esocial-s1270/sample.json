@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1270",
+  "operation": "create",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "hr",
+    "table": "casual_worker_hire",
+    "id": "00000000-0000-4000-8000-000000001270",
+    "version": 1
+  },
+  "data": { "workerName": "Trabalhador Avulso", "workedOn": "2026-05-10" }
+}

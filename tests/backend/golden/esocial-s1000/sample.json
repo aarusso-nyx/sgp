@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1000",
+  "operation": "bootstrap",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "hr",
+    "table": "company",
+    "id": "00000000-0000-4000-8000-000000000100",
+    "version": 1
+  },
+  "data": { "cnpj": "00000000000191", "companyName": "Municipio Exemplo" }
+}

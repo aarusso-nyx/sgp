@@ -1,4 +1,6 @@
-import { expect, test, type Locator, type Page, type Request } from '@playwright/test';
+import playwright, { type Locator, type Page, type Request } from '@playwright/test';
+
+const { expect, test } = playwright;
 
 interface ApiHit {
   method: string;

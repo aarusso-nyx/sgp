@@ -1,4 +1,6 @@
-import { defineConfig, devices } from '@playwright/test';
+import playwright from '@playwright/test';
+
+const { defineConfig, devices } = playwright;
 
 const port = Number(process.env['SGP_PORTAL_E2E_PORT'] ?? '4310');
 const baseURL = `http://127.0.0.1:${port}`;

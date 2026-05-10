@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { RequestContextStore } from '../../backend/src/common/request-context/request-context.store';
 import { DatabaseService } from '../../backend/src/database/database.service';
 import { ReintegrationOrderService } from '../../backend/src/folha-pagamento/operations/reintegration/reintegration-order.service';
@@ -36,5 +37,11 @@ describe('Reintegracao future date validation (e2e)', () => {
     );
 
     await databaseService.onModuleDestroy();
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

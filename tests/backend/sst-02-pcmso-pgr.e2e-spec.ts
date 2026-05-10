@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
@@ -282,5 +283,11 @@ describe('SST-02 PCMSO/PGR flow (e2e)', () => {
       })
       .expect(201)
       .expect((response) => expect(response.body.sha256).toBe('a'.repeat(64)));
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

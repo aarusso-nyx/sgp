@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { BadRequestException } from '@nestjs/common';
 
 import { RequestContextStore } from '../../backend/src/common/request-context/request-context.store';
@@ -273,5 +274,11 @@ describe('TS-V no-op contractual change rejection', () => {
         ).rejects.toThrow('effectiveDate cannot be before startDate');
       },
     );
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });
