@@ -36,7 +36,7 @@ jobs:
 
       - name: Configure AWS read-only credentials
         if: env.AWS_CDK_DIFF_READONLY_ROLE_ARN != ''
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ env.AWS_CDK_DIFF_READONLY_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
