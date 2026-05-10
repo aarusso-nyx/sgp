@@ -183,7 +183,7 @@ jobs:
 
       - name: Generate SLSA build provenance attestation
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: 'build-artefacts/*.tar.gz'
 

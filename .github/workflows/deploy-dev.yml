@@ -73,6 +73,6 @@ jobs:
 
       - name: Attest deployment plan provenance
         if: always()
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: 'infra/aws/cdk/cdk.out/*.template.json'
