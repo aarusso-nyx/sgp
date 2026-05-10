@@ -152,6 +152,7 @@ function handleLint() {
   if (check) {
     steps.push(
       () => runCommand(process.execPath, ['scripts/lib/checks/test-debt-coverage.mjs']),
+      () => runCommand('npx', ['jscpd', '--config', '.jscpd.json', '--exitCode', '0']),
       () => runCommand(process.execPath, ['scripts/check-api.mjs', 'operation', 'check']),
       () => runCommand(process.execPath, ['scripts/check-api.mjs', 'spec', 'check']),
     );
@@ -497,6 +498,17 @@ function handleCheck() {
     }
 
     return handlers[target]();
+  }
+
+  if (args[0] === 'duplication') {
+    return runCommand('npx', [
+      'jscpd',
+      '--config',
+      '.jscpd.json',
+      '--exitCode',
+      '0',
+      ...args.slice(1),
+    ]);
   }
 
   return runCommand(process.execPath, ['scripts/check-evidence.mjs', ...args]);
