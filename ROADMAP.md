@@ -14,10 +14,10 @@ Current product and migration priorities are governed by `docs/eng/quality-migra
   a later owner decision reopens one.
 - Malware scanning and quarantine are delegated to the `../stynx` storage
   module and are not SGP backlog.
-- Deployment supports AWS and client-premises through separate flows:
-  provision/IaC creates resources, while artifact deploy pushes built artifacts
-  to designated targets. Release/homologation gates remain postponed for a
-  focused owner discussion.
+- Automated deployment is AWS-only with separate flows: CDK provision/IaC
+  creates resources, while artifact deploy pushes versioned Node/Angular bundles
+  to designated EC2/PM2 targets. Release/homologation gates remain postponed for
+  a focused owner discussion.
 - SIAPE/SIOPS boundaries are tracked in `docs/gov/siape-siops-boundary.md`.
 
 ## Deferred backlog (auto-generated)

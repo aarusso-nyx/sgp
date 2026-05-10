@@ -28,6 +28,8 @@ Status: retained evidence for the 2026-05-08 QA lift.
   endpoint, empty, and error paths.
 - Mutation coverage is scoped to MVP-critical money and exception-envelope
   behavior in `stryker.conf.cjs`.
+- Property-based coverage inventory is retained in
+  `docs/gov/audit/property-based-test-inventory.md`.
 - Existing retained gates cover DB/RLS, e2e, frontend e2e/Playwright,
   OpenAPI drift, database alignment, type tests, unit tests, and mutation tests.
 
@@ -102,3 +104,18 @@ database-unavailable.spec.ts` baseline are now exercised by:
   honored as `AbortError`, and that empty success envelopes from the
   SDK still produce a typed `domainError` rather than a fall-through
   `undefined`.
+- `backend/src/common/adapters/sqs-queue-transport.spec.ts` — injects SQS
+  send, FIFO, malformed-message, handler-failure, and successful-delete paths
+  around the production SQS transport. Malformed or failed messages are not
+  deleted, preserving SQS retry semantics; successful messages are deleted only
+  after handler completion.
+
+## Trace Correlation Coverage
+
+- `frontend/src/app/shared/trace-context-interceptor.spec.ts` proves the admin
+  and portal shared frontend interceptor adds W3C `traceparent` to API calls and
+  preserves caller-supplied trace context.
+- `tests/backend/observability/trace-id-end-to-end.spec.ts` proves the backend
+  consumes that W3C trace id, threads it into the request object, emits it in
+  Pino request-log custom props, and exports the same id as `sgp.trace_id` on
+  the request span.

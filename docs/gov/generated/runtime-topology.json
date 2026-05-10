@@ -1,6 +1,69 @@
 {
   "generated_at": "2026-04-25",
   "authority": ["docs/eng/product.md", "docs/eng/platform.md", "docs/eng/experience.md"],
+  "deployment": {
+    "provider": "aws",
+    "iac": {
+      "tool": "cdk-typescript",
+      "path": "infra/aws/cdk",
+      "stacks": [
+        "sgp-stage-edge-cert",
+        "sgp-stage-aws",
+        "sgp-prod-edge-cert",
+        "sgp-prod-aws",
+        "sgp-shared-storage"
+      ]
+    },
+    "targets": {
+      "stage": {
+        "domain": "sgp-stage.detran-am.sistematech.com.br",
+        "name_prefix": "sgp-stage",
+        "host_count": 1,
+        "host": "Amazon Linux 2023 t4g.small arm64",
+        "rds": "PostgreSQL single-AZ",
+        "queues": "db-backed workers and local mocks"
+      },
+      "prod": {
+        "domain": "sgp.detran-am.sistematech.com.br",
+        "name_prefix": "sgp-prod",
+        "host_count": 1,
+        "host": "Amazon Linux 2023 t4g.small arm64",
+        "rds": "PostgreSQL multi-AZ",
+        "queues": "prod-only SQS"
+      }
+    },
+    "network": {
+      "public_entrypoint": "CloudFront",
+      "origin": "public ALB",
+      "compute": "private EC2 Auto Scaling Group with SSM only",
+      "database": "private RDS subnet",
+      "vpc_endpoints": [
+        "s3",
+        "logs",
+        "monitoring",
+        "ssm",
+        "ssmmessages",
+        "ec2messages",
+        "kms",
+        "secretsmanager",
+        "sqs-prod"
+      ]
+    },
+    "security": {
+      "identity": "delegated to ../stynx; SGP consumes Stynx/Cognito claims and endpoints",
+      "admin_surfaces": "delegated to ../stynx framework",
+      "storage_controls": "delegated to ../stynx storage module, while SGP buckets are SSE-KMS encrypted",
+      "esocial": "runtime delegated to ../stynx-esocial",
+      "det": "external DET service boundary",
+      "waf": "not required by current owner decision"
+    },
+    "deploy_lifecycle": {
+      "provision": "CDK creates and updates resources only",
+      "artifacts": "versioned tarball deploy to EC2 via SSM/PM2 after accepted gates",
+      "database_migrations": "manual and evidenced before artifact apply",
+      "rollback": "previous artifact pointer only"
+    }
+  },
   "runtimes": [
     {
       "name": "sgp-admin",

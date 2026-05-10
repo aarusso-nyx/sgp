@@ -9,9 +9,13 @@ import {
 
 import { AuditMutation } from '../../common/audit/audit-mutation.decorator';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
+import { CipaCommitteeService } from './cipa-committee.service';
 import { HealthProgramService } from './health-program.service';
 import {
+  AddCipaMemberDto,
+  AddCipaMinuteDto,
   AddRequiredExamDto,
+  CreateCipaCommitteeDto,
   CreateHealthProgramDto,
   CreateProgramRevisionDto,
   CreateRiskManagementProgramDto,
@@ -25,6 +29,7 @@ export class ProgramController {
   constructor(
     private readonly healthProgramService: HealthProgramService,
     private readonly riskManagementProgramService: RiskManagementProgramService,
+    private readonly cipaCommitteeService: CipaCommitteeService,
   ) {}
 
   @ApiOperation({ summary: 'GET pcmso' })
@@ -89,6 +94,55 @@ export class ProgramController {
     return this.healthProgramService.addRequiredExam(id, body);
   }
 
+  @ApiOperation({ summary: 'GET pcmat' })
+  @Get('pcmat')
+  @RequirePermission('saude.program.read')
+  @ApiOkResponse({ description: 'PCMAT programs.' })
+  listPcmat() {
+    return this.healthProgramService.list('PCMAT');
+  }
+
+  @ApiOperation({ summary: 'POST pcmat' })
+  @Post('pcmat')
+  @RequirePermission('saude.program.write')
+  @AuditMutation({
+    action: 'CREATE',
+    resourceType: 'saude.health_program',
+    tableName: 'saude.health_program',
+  })
+  @ApiCreatedResponse({ description: 'Create a PCMAT draft.' })
+  createPcmat(@Body() body: CreateHealthProgramDto) {
+    return this.healthProgramService.create(body, 'PCMAT');
+  }
+
+  @ApiOperation({ summary: 'PATCH pcmat/:id/ativar' })
+  @Patch('pcmat/:id/ativar')
+  @RequirePermission('saude.program.write')
+  @AuditMutation({
+    action: 'UPDATE',
+    resourceType: 'saude.health_program',
+    tableName: 'saude.health_program',
+  })
+  @ApiOkResponse({
+    description: 'Activate PCMAT and supersede prior active revision.',
+  })
+  activatePcmat(@Param('id') id: string) {
+    return this.healthProgramService.activate(id, 'PCMAT');
+  }
+
+  @ApiOperation({ summary: 'POST pcmat/:id/revisoes' })
+  @Post('pcmat/:id/revisoes')
+  @RequirePermission('saude.program.write')
+  @AuditMutation({
+    action: 'CREATE',
+    resourceType: 'saude.program_revision',
+    tableName: 'saude.program_revision',
+  })
+  @ApiCreatedResponse({ description: 'Append an immutable PCMAT revision.' })
+  revisePcmat(@Param('id') id: string, @Body() body: CreateProgramRevisionDto) {
+    return this.healthProgramService.revise(id, body, 'PCMAT');
+  }
+
   @ApiOperation({ summary: 'GET pgr' })
   @Get('pgr')
   @RequirePermission('saude.program.read')
@@ -136,5 +190,65 @@ export class ProgramController {
   @ApiCreatedResponse({ description: 'Append an immutable PGR revision.' })
   revisePgr(@Param('id') id: string, @Body() body: CreateProgramRevisionDto) {
     return this.riskManagementProgramService.revise(id, body);
+  }
+
+  @ApiOperation({ summary: 'GET cipa/comissoes' })
+  @Get('cipa/comissoes')
+  @RequirePermission('saude.program.read')
+  @ApiOkResponse({ description: 'CIPA committees.' })
+  listCipaCommittees() {
+    return this.cipaCommitteeService.list();
+  }
+
+  @ApiOperation({ summary: 'POST cipa/comissoes' })
+  @Post('cipa/comissoes')
+  @RequirePermission('saude.program.write')
+  @AuditMutation({
+    action: 'CREATE',
+    resourceType: 'saude.cipa_committee',
+    tableName: 'saude.cipa_committee',
+  })
+  @ApiCreatedResponse({ description: 'Create a CIPA committee draft.' })
+  createCipaCommittee(@Body() body: CreateCipaCommitteeDto) {
+    return this.cipaCommitteeService.create(body);
+  }
+
+  @ApiOperation({ summary: 'PATCH cipa/comissoes/:id/ativar' })
+  @Patch('cipa/comissoes/:id/ativar')
+  @RequirePermission('saude.program.write')
+  @AuditMutation({
+    action: 'UPDATE',
+    resourceType: 'saude.cipa_committee',
+    tableName: 'saude.cipa_committee',
+  })
+  @ApiOkResponse({ description: 'Activate a CIPA committee mandate.' })
+  activateCipaCommittee(@Param('id') id: string) {
+    return this.cipaCommitteeService.activate(id);
+  }
+
+  @ApiOperation({ summary: 'POST cipa/comissoes/:id/membros' })
+  @Post('cipa/comissoes/:id/membros')
+  @RequirePermission('saude.program.write')
+  @AuditMutation({
+    action: 'CREATE',
+    resourceType: 'saude.cipa_member',
+    tableName: 'saude.cipa_member',
+  })
+  @ApiCreatedResponse({ description: 'Add a CIPA committee member.' })
+  addCipaMember(@Param('id') id: string, @Body() body: AddCipaMemberDto) {
+    return this.cipaCommitteeService.addMember(id, body);
+  }
+
+  @ApiOperation({ summary: 'POST cipa/comissoes/:id/atas' })
+  @Post('cipa/comissoes/:id/atas')
+  @RequirePermission('saude.program.write')
+  @AuditMutation({
+    action: 'CREATE',
+    resourceType: 'saude.cipa_minute',
+    tableName: 'saude.cipa_minute',
+  })
+  @ApiCreatedResponse({ description: 'Attach CIPA meeting minutes metadata.' })
+  addCipaMinute(@Param('id') id: string, @Body() body: AddCipaMinuteDto) {
+    return this.cipaCommitteeService.addMinute(id, body);
   }
 }

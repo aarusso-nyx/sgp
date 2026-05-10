@@ -98,32 +98,48 @@ export class SqsQueueTransport implements QueueAdapterTransport {
     subscription: InternalSubscription,
   ): Promise<void> {
     while (!subscription.closed) {
-      const queueUrl = await this.queueUrl(topic);
-      const response = await this.client.send(
-        new ReceiveMessageCommand({
-          QueueUrl: queueUrl,
-          MaxNumberOfMessages: this.maxMessages,
-          WaitTimeSeconds: this.receiveWaitTimeSeconds,
-          VisibilityTimeout: this.visibilityTimeoutSeconds,
-        }),
-      );
-      for (const message of response.Messages ?? []) {
-        if (!message.Body) continue;
-        await handler(JSON.parse(message.Body) as TMessage, topic);
-        if (message.ReceiptHandle) {
-          await this.client.send(
-            new DeleteMessageCommand({
-              QueueUrl: queueUrl,
-              ReceiptHandle: message.ReceiptHandle,
-            }),
-          );
+      try {
+        const hadMessages = await this.pollOnce(topic, handler);
+        if (!hadMessages) {
+          await delay(this.pollIntervalMs);
         }
-      }
-
-      if ((response.Messages ?? []).length === 0) {
+      } catch {
         await delay(this.pollIntervalMs);
       }
     }
+  }
+
+  private async pollOnce<TMessage>(
+    topic: string,
+    handler: QueueMessageHandler<TMessage>,
+  ): Promise<boolean> {
+    const queueUrl = await this.queueUrl(topic);
+    const response = await this.client.send(
+      new ReceiveMessageCommand({
+        QueueUrl: queueUrl,
+        MaxNumberOfMessages: this.maxMessages,
+        WaitTimeSeconds: this.receiveWaitTimeSeconds,
+        VisibilityTimeout: this.visibilityTimeoutSeconds,
+      }),
+    );
+    const messages = response.Messages ?? [];
+    for (const message of messages) {
+      if (!message.Body) continue;
+      try {
+        await handler(JSON.parse(message.Body) as TMessage, topic);
+      } catch {
+        continue;
+      }
+      if (message.ReceiptHandle) {
+        await this.client.send(
+          new DeleteMessageCommand({
+            QueueUrl: queueUrl,
+            ReceiptHandle: message.ReceiptHandle,
+          }),
+        );
+      }
+    }
+    return messages.length > 0;
   }
 
   private async queueUrl(topic: string): Promise<string> {

@@ -11,6 +11,8 @@ v0.0.1 readiness.
 - Test and smoke command usage: `docs/user/testing.md`.
 - Runtime topology source: `docs/gov/generated/runtime-topology.json`.
 - Health and preflight rules: `docs/gov/health/preflight.md`.
+- Current implementation status: `docs/eng/99-implementation-status.md`.
+- Current audit ledgers: `docs/gov/audit/`.
 
 ## Operational Controls
 
@@ -18,7 +20,9 @@ v0.0.1 readiness.
 - Security disclosure and vulnerability contact: `SECURITY.md`.
 - Adapter and downstream boundary runbook: `docs/user/sgp-boundary-runbook.md`.
 - Backup, restore, deploy, and rollback posture:
-  `docs/gov/evidence/deferred-decision-ledger.md`.
+  `docs/gov/evidence/deferred-decision-ledger.md` and
+  `docs/gov/evidence/release-homologation-gate-bundle.md`.
+- KMS rotation posture: `docs/eng/runbooks/kms-rotation.md`.
 - Incident and audit evidence:
   `docs/gov/evidence/repository-discipline.md` and
   `docs/gov/audit/test-confidence-proof.md`.
@@ -38,6 +42,7 @@ npm run test:frontend:coverage
 npm run test:db
 npm run test:e2e
 npm run test:frontend:e2e
+npm -w frontend run test:admin -- --include src/app/shared/trace-context-interceptor.spec.ts --watch=false
 npm run api:alignment:check -- --json
 npm run db:alignment:check -- --json
 npm run health:json
@@ -47,6 +52,12 @@ npm run build
 
 ## Scope Notes
 
-Production infrastructure is postponed until the owner selects the production
-IaC path. `ADMIN_INSTALL_LATER` remains an accepted staged boundary for broad
-admin parity.
+Production infrastructure is AWS-only and materialized in `infra/aws/cdk`.
+Provisioning and artifact rollout are separate lifecycle steps. Artifact apply
+requires migration evidence, accepted release-gate evidence, and artifact-apply
+authorization paths, and is still blocked until the postponed
+release/homologation gate bundle is accepted.
+
+Admin surfaces, identity, and storage malware/quarantine controls are delegated
+to `../stynx`; eSocial runtime is delegated to `../stynx-esocial`; DET remains
+an external service boundary.

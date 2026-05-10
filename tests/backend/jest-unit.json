@@ -4,7 +4,7 @@
   "moduleDirectories": ["node_modules", "<rootDir>/node_modules", "<rootDir>/backend/node_modules"],
   "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
   "testEnvironment": "node",
-  "testPathIgnorePatterns": ["<rootDir>/tests/scripts/fixtures/"],
+  "testPathIgnorePatterns": ["<rootDir>/tests/scripts/fixtures/", "<rootDir>/.stryker-tmp/"],
   "testRegex": "(backend/src/.*\\.spec\\.ts|tests/backend/.*\\.spec\\.ts|tests/scripts/.*\\.spec\\.ts)$",
   "transform": {
     "^.+\\.ts$": [

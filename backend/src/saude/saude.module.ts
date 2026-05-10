@@ -20,6 +20,7 @@ import { PericiaController } from './pericia.controller';
 import { PericiaService } from './pericia.service';
 import { PppController } from './ppp/ppp.controller';
 import { PppService } from './ppp/ppp.service';
+import { CipaCommitteeService } from './program/cipa-committee.service';
 import { HealthProgramService } from './program/health-program.service';
 import { ProgramController } from './program/program.controller';
 import { ProgramRevisionService } from './program/program-revision.service';
@@ -43,6 +44,7 @@ import { RiskManagementProgramService } from './program/risk-management-program.
     AsoAttachmentService,
     CatEmissionService,
     WorkAccidentService,
+    CipaCommitteeService,
     HealthProgramService,
     RiskManagementProgramService,
     ProgramRevisionService,

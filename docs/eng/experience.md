@@ -748,6 +748,19 @@ sgp-portal
 | Configurações           | Alterar Senha       | `/configuracoes/senha`            | autenticado                                | `auth`           | Fluxo Cognito change-password                                   |
 | Configurações           | Consentimentos LGPD | `/configuracoes/lgpd`             | autenticado                                | `auth`           | Registros de consentimento e revogação                          |
 
+Portal self-service API acceptance:
+
+- `GET /api/v1/portal/documentos/solicitacoes` lists document requests created
+  by the authenticated portal actor.
+- `POST /api/v1/portal/documentos/solicitacoes` creates a document request
+  ticket for RH fulfillment.
+- `GET /api/v1/portal/minha-equipe/aprovacoes` lists approval queue items for
+  the authenticated manager.
+- `POST /api/v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar` approves a
+  portal approval queue item.
+- `POST /api/v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar` cancels a
+  portal approval queue item.
+
 ---
 
 ### 5. Regras de Exibição de Menu

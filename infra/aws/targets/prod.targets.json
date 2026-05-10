@@ -1,0 +1,18 @@
+{
+  "target": "prod",
+  "provider": "aws",
+  "domain": "https://sgp.detran-am.sistematech.com.br",
+  "provisionStack": "sgp-prod-aws",
+  "appHostSelection": {
+    "type": "autoscaling-group",
+    "name": "sgp-prod-app-asg"
+  },
+  "artifactBucket": "s3://sgp-artifacts.detran-am.sistematech.com.br/prod/",
+  "deployScript": "/opt/sgp/bin/deploy-artifact.sh",
+  "rollbackScript": "/opt/sgp/bin/rollback-artifact.sh",
+  "runtime": {
+    "processManager": "pm2",
+    "apiBasePath": "/api",
+    "health": "/api/v1/health/ready"
+  }
+}

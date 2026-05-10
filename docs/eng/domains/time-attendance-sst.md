@@ -127,12 +127,35 @@ and append-oriented `saude.program_revision` metadata with document URI and
 hash. File storage, malware scanning, quarantine, and object release policy
 remain delegated to the Stynx storage boundary.
 
+The operator/API surface is:
+
+- `GET /api/v1/saude/programas/pcmat`
+- `POST /api/v1/saude/programas/pcmat`
+- `PATCH /api/v1/saude/programas/pcmat/:id/ativar`
+- `POST /api/v1/saude/programas/pcmat/:id/revisoes`
+
+All PCMAT routes require `saude.program.read` or `saude.program.write`, carry
+audit mutation metadata for writes, and reuse the immutable program-revision
+ledger with parent kind `PCMAT`.
+
 N.07 CIPA is represented by tenant-scoped `saude.cipa_committee`,
 `saude.cipa_member`, and `saude.cipa_minute`. Committees are scoped to
 `hr.work_location`, carry election call reference, mandate dates, status, and
 metadata. Members bind employees to roles and active/substitute/removed state.
 Minutes store meeting metadata, document URI, and SHA-256. All CIPA tables use
 forced RLS and audit triggers under the `saude.program.*` permission boundary.
+
+The operator/API surface is:
+
+- `GET /api/v1/saude/programas/cipa/comissoes`
+- `POST /api/v1/saude/programas/cipa/comissoes`
+- `PATCH /api/v1/saude/programas/cipa/comissoes/:id/ativar`
+- `POST /api/v1/saude/programas/cipa/comissoes/:id/membros`
+- `POST /api/v1/saude/programas/cipa/comissoes/:id/atas`
+
+Only committee, membership, minute metadata, document URI, and SHA-256 are
+stored in SGP. The CIPA minutes file itself remains behind the Stynx storage
+boundary.
 
 - `saude.aso_attachment`: metadados do PDF de laudo/exames, com `sha256`, MIME `application/pdf` e `encrypted_at_rest=true`.
 

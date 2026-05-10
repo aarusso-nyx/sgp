@@ -12,6 +12,9 @@ Status: retained evidence for the 2026-05-08 QA lift.
   2026-05-08 and configured with required reviews, CODEOWNERS review, stale
   review dismissal, linear history, no force pushes, no deletions, conversation
   resolution, and required source/security/database checks.
+- The required check set is expected to include workspace/source gates, database
+  alignment, dependency/security review, ADR linkage, release-impact evidence,
+  and deploy plan jobs before publication to `main`.
 
 ## Dependency And Metadata Controls
 
@@ -28,6 +31,11 @@ Status: retained evidence for the 2026-05-08 QA lift.
 - `.github/workflows/source-ci.yml` enforces commit message or PR title policy,
   type contract tests, scoped mutation tests, frontend coverage, backend
   coverage, and governance checks.
+- `.github/workflows/adr-gate.yml` requires ADR linkage for contract-bearing
+  changes.
+- `.github/workflows/release-impact-gate.yml` requires changelog, release gate,
+  operator-readiness, or explicit PR-body release-impact evidence for
+  release-impacting changes.
 - `devai.config.json` and `scripts/lib/workspace-commands.mjs` retain
   `npm run test:types` and `npm run test:mutation` as hard-fail gates.
 

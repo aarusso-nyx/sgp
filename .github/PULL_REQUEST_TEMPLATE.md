@@ -11,4 +11,5 @@
 - [ ] `npm run governance:check` passes.
 - [ ] API or database alignment artifacts were regenerated when contracts changed.
 - [ ] Decision-bearing changes link the accepted ADR or docs/eng authority.
+- [ ] Release-impacting changes include changelog, release-gate evidence, or `Release-impact: none`.
 - [ ] No secrets, credentials, production data, or real `.env` values are included.

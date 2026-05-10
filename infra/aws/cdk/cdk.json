@@ -1,0 +1,8 @@
+{
+  "app": "node dist/bin/sgp-aws.js",
+  "context": {
+    "@aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021": true,
+    "@aws-cdk/core:checkSecretUsage": true,
+    "@aws-cdk/core:stackRelativeExports": true
+  }
+}

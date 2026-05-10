@@ -68,6 +68,32 @@ function optionalString(value: string | undefined): string | undefined {
   return normalized ? normalized : undefined;
 }
 
+export function normalizeS3BucketIdentifier(
+  value: string | undefined,
+  name: string,
+  errors: string[],
+): string | undefined {
+  const raw = optionalString(value);
+  if (!raw) return undefined;
+  if (!raw.startsWith('s3://')) return raw.replace(/\/+$/, '');
+
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== 's3:' || !parsed.hostname) {
+      errors.push(`${name} must be a valid S3 bucket name or s3://bucket URI`);
+      return undefined;
+    }
+    if (parsed.pathname && parsed.pathname !== '/') {
+      errors.push(`${name} must not include an object prefix`);
+      return undefined;
+    }
+    return parsed.hostname;
+  } catch {
+    errors.push(`${name} must be a valid S3 bucket name or s3://bucket URI`);
+    return undefined;
+  }
+}
+
 export function buildCognitoIssuer(
   region?: string,
   userPoolId?: string,
@@ -125,7 +151,11 @@ export function validateEnvironment(
   const s3Region =
     optionalString(config.S3_REGION) ?? optionalString(config.AWS_REGION);
   const s3Endpoint = optionalUrl('S3_ENDPOINT', config.S3_ENDPOINT, errors);
-  const s3Bucket = optionalString(config.S3_DOCUMENTS_BUCKET);
+  const s3Bucket = normalizeS3BucketIdentifier(
+    config.S3_DOCUMENTS_BUCKET,
+    'S3_DOCUMENTS_BUCKET',
+    errors,
+  );
   const s3KeyPrefix =
     optionalString(config.S3_DOCUMENTS_KEY_PREFIX) ?? 'documents';
   const minioEndpoint = optionalUrl(

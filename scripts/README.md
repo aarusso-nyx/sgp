@@ -43,7 +43,7 @@ Use the root dispatcher for commands that compose workspaces, inject runtime
 environment, read runtime topology, or write governance/audit/evidence surfaces.
 These command families are dispatcher-mandatory:
 
-- Deployment planning: `npm run deploy -- --dry-run`
+- Deployment planning: `npm run deploy -- --mode provision --target stage --dry-run`
 - Governance validation: `npm run governance:check`
 - Audit inventories and diagnostics: `npm run audit:*`
 - QA bootstrap and configured URL smoke checks: `npm run qa:bootstrap`,

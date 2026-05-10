@@ -42,12 +42,8 @@ function printHelp() {
   console.log('Examples:');
   console.log('  node scripts/run.mjs health --json');
   console.log('  node scripts/run.mjs test db');
-  console.log(
-    '  node scripts/run.mjs deploy --mode provision --provider aws --target stage --dry-run',
-  );
-  console.log(
-    '  node scripts/run.mjs deploy --mode artifacts --provider client-prem --target prod --dry-run',
-  );
+  console.log('  node scripts/run.mjs deploy --mode provision --target stage --dry-run');
+  console.log('  node scripts/run.mjs deploy --mode artifacts --target prod --dry-run');
 }
 
 function parseOption(optionName, defaultValue) {
@@ -572,9 +568,15 @@ function handleDeploy() {
   const target = parseOption('target', 'stage');
   const stack = parseOption('stack', 'all');
   const mode = parseOption('mode', 'provision');
-  const provider = parseOption('provider', 'aws');
+  const provider = parseOption('provider', undefined);
   const apply = hasFlag('apply');
   const dryRun = hasFlag('dry-run') || !apply;
+
+  if (!['stage', 'prod'].includes(target)) {
+    console.error(`[deploy] invalid target: ${target}`);
+    console.error('Valid targets: stage, prod');
+    return 1;
+  }
 
   if (!['provision', 'artifacts'].includes(mode)) {
     console.error(`[deploy] invalid mode: ${mode}`);
@@ -582,88 +584,106 @@ function handleDeploy() {
     return 1;
   }
 
-  if (!['aws', 'client-prem'].includes(provider)) {
-    console.error(`[deploy] invalid provider: ${provider}`);
-    console.error('Valid providers: aws, client-prem');
+  if (provider && provider !== 'aws') {
+    console.error('[deploy] provider selection has been removed; SGP deploy targets AWS only.');
+    console.error('Remove --provider or use --provider aws.');
     return 1;
   }
 
   if (mode === 'artifacts') {
     const targetManifest = parseOption(
       'target-manifest',
-      provider === 'client-prem'
-        ? `infra/client-prem/${target}.manifest.json`
-        : `infra/aws/${target}.targets.json`,
+      `infra/aws/targets/${target}.targets.json`,
     );
-    console.log(
-      `[deploy] mode=artifacts provider=${provider} target=${target} targetManifest=${targetManifest}`,
-    );
+    const artifactUri = parseOption('artifact-uri', parseOption('artifact', ''));
+    const releaseId = parseOption('release-id', parseOption('sha', ''));
+    const migrationEvidence = parseOption('migration-evidence', '');
+    const releaseGateEvidence = parseOption('release-gate-evidence', '');
+    const applyAuthorization = parseOption('apply-authorization', '');
+    console.log(`[deploy] mode=artifacts target=${target} targetManifest=${targetManifest}`);
+    console.log('[deploy] provider=aws');
+    console.log('[deploy] artifact deploy does not create or change infrastructure resources.');
     if (dryRun) {
       console.log('[deploy] dry-run mode active; no artifacts were pushed.');
-      console.log('[deploy] artifact deploy does not create or change infrastructure resources.');
-      console.log('[deploy] provide an accepted target manifest before using --apply.');
+      console.log(
+        `[deploy] artifact=${artifactUri || '<required for apply>'} release=${releaseId || '<required for apply>'}`,
+      );
+      console.log(
+        `[deploy] migrationEvidence=${migrationEvidence || '<manual DB migration evidence required for apply>'}`,
+      );
+      console.log(
+        `[deploy] releaseGateEvidence=${releaseGateEvidence || '<accepted release/homologation gate evidence required for apply>'}`,
+      );
+      console.log(
+        `[deploy] applyAuthorization=${applyAuthorization || '<artifact apply authorization evidence required for apply>'}`,
+      );
+      console.log(
+        '[deploy] host scripts: infra/aws/operations/deploy-artifact.sh and rollback-artifact.sh',
+      );
       return 0;
     }
     if (!existsSync(join(cwd, targetManifest))) {
       console.error(`[deploy] target manifest not found: ${targetManifest}`);
       return 1;
     }
-    console.error(
-      '[deploy] artifact apply mode is blocked until release/homologation gates are accepted.',
-    );
-    return 1;
-  }
-
-  if (provider !== 'aws') {
-    console.log(`[deploy] mode=provision provider=${provider} target=${target}`);
-    if (dryRun) {
-      console.log('[deploy] dry-run mode active; no client-prem resources were changed.');
-      console.log(
-        '[deploy] client-prem provisioning is an external handoff; retain the accepted target manifest before artifact deploy.',
-      );
-      return 0;
+    if (!artifactUri || !artifactUri.startsWith('s3://')) {
+      console.error('[deploy] --artifact-uri s3://... is required for artifact apply.');
+      return 1;
+    }
+    if (!releaseId) {
+      console.error('[deploy] --release-id is required for artifact apply.');
+      return 1;
+    }
+    if (!migrationEvidence || !existsSync(join(cwd, migrationEvidence))) {
+      console.error('[deploy] --migration-evidence <path> is required for artifact apply.');
+      return 1;
+    }
+    if (!releaseGateEvidence || !existsSync(join(cwd, releaseGateEvidence))) {
+      console.error('[deploy] --release-gate-evidence <path> is required for artifact apply.');
+      return 1;
+    }
+    if (!applyAuthorization || !existsSync(join(cwd, applyAuthorization))) {
+      console.error('[deploy] --apply-authorization <path> is required for artifact apply.');
+      return 1;
     }
     console.error(
-      '[deploy] client-prem provision apply is outside SGP automation; use an accepted external provision handoff.',
+      '[deploy] artifact apply remains blocked until release/homologation gates are accepted.',
     );
     return 1;
   }
 
-  const stackTemplateByName = {
-    all: 'infra/aws/templates/stack-all.yaml',
-    cognito: 'infra/aws/templates/stack-cognito.yaml',
-    rds: 'infra/aws/templates/stack-rds.yaml',
-    backend: 'infra/aws/templates/stack-backend.yaml',
-    frontend: 'infra/aws/templates/stack-frontend.yaml',
+  const stackByName = {
+    all: [],
+    edge: [`sgp-${target}-edge-cert`],
+    shared: ['sgp-shared-storage'],
+    app: [`sgp-${target}-aws`],
   };
 
-  if (!(stack in stackTemplateByName)) {
+  if (!(stack in stackByName)) {
     console.error(`[deploy] invalid stack: ${stack}`);
-    console.error('Valid stacks: all, cognito, rds, backend, frontend');
+    console.error('Valid stacks: all, edge, shared, app');
     return 1;
   }
 
-  const templatePath = stackTemplateByName[stack];
-  console.log(
-    `[deploy] mode=provision provider=aws target=${target} stack=${stack} template=${templatePath}`,
-  );
+  const cdkArgs = ['--prefix', 'infra/aws/cdk', 'run'];
+  const cdkContextArgs = ['--', '-c', `target=${target}`];
+  const selectedStacks = stackByName[stack];
+  console.log(`[deploy] mode=provision provider=aws target=${target} stack=${stack}`);
+  console.log('[deploy] provision mode creates or changes AWS resources only.');
+  console.log('[deploy] artifact rollout is a separate mode.');
 
   if (dryRun) {
     console.log('[deploy] dry-run mode active; no infrastructure changes applied.');
     console.log(
-      '[deploy] provision mode creates resources only; artifact deploy is a separate mode.',
+      `[deploy] CDK synth command: npm --prefix infra/aws/cdk run synth -- -c target=${target}`,
     );
     console.log(
-      '[deploy] to apply, run with --apply after filling template placeholders and retaining plan evidence.',
+      `[deploy] CDK diff command: npm --prefix infra/aws/cdk run diff -- -c target=${target}${selectedStacks.length ? ` ${selectedStacks.join(' ')}` : ''}`,
     );
     return 0;
   }
 
-  console.error(
-    '[deploy] provision apply mode is blocked in this repo baseline until templates are parameterized.',
-  );
-  console.error('[deploy] use --dry-run for planning only.');
-  return 1;
+  return runCommand('npm', [...cdkArgs, 'deploy', ...cdkContextArgs, ...selectedStacks]);
 }
 
 function runEvidenceStepByName(stepName) {

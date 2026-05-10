@@ -1174,6 +1174,14 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/saude/ppp');
   }
 
+  getApiV1SaudeProgramasCipaComissoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/programas/cipa/comissoes');
+  }
+
+  getApiV1SaudeProgramasPcmat(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/programas/pcmat');
+  }
+
   getApiV1SaudeProgramasPcmso(): Observable<unknown> {
     return this.api.get<unknown>('/v1/saude/programas/pcmso');
   }
@@ -1797,6 +1805,26 @@ export class OpenApiClient {
   patchApiV1SaudeExposicoesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/saude/exposicoes/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeProgramasCipaComissoesAtivarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/programas/cipa/comissoes/${encodeURIComponent(params.id)}/ativar`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeProgramasPcmatAtivarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/programas/pcmat/${encodeURIComponent(params.id)}/ativar`,
       body,
     );
   }
@@ -3303,6 +3331,44 @@ export class OpenApiClient {
 
   postApiV1SaudePppGerar(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/saude/ppp/gerar', body);
+  }
+
+  postApiV1SaudeProgramasCipaComissoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/programas/cipa/comissoes', body);
+  }
+
+  postApiV1SaudeProgramasCipaComissoesAtasById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/cipa/comissoes/${encodeURIComponent(params.id)}/atas`,
+      body,
+    );
+  }
+
+  postApiV1SaudeProgramasCipaComissoesMembrosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/cipa/comissoes/${encodeURIComponent(params.id)}/membros`,
+      body,
+    );
+  }
+
+  postApiV1SaudeProgramasPcmat(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/programas/pcmat', body);
+  }
+
+  postApiV1SaudeProgramasPcmatRevisoesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/pcmat/${encodeURIComponent(params.id)}/revisoes`,
+      body,
+    );
   }
 
   postApiV1SaudeProgramasPcmso(body: ApiBody = {}): Observable<unknown> {

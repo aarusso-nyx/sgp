@@ -5813,7 +5813,7 @@ O SGP — Sistema de Gestão de Pessoas é uma plataforma **SaaS multi-tenant** 
 
 O backend é implementado em **NestJS (TypeScript)** com aplicações separadas: API administrativa principal (`sgp-core-api`), API própria do portal (`sgp-portal-api`), implementação separada do cálculo de folha (`sgp-payroll-engine`) e workers especializados para eSocial, integrações bancárias e relatórios. O frontend é composto por duas SPAs distintas: `sgp-admin` (staff) e `sgp-portal` (employee/beneficiário/candidato).
 
-O isolamento entre clientes é implementado via **Row-Level Security (RLS)** no PostgreSQL, com `tenant_id` presente em todas as tabelas de negócio. A autenticação definitiva usa **OAuth2/OIDC** com user pools separados para core e portal, mas as rotas e telas OAuth/Cognito/Gov.br foram movidas para instalação posterior conforme decisão temporária de 2026-04-26. Processos de longa duração — principalmente cálculo em lote da folha — são executados fora do backend REST, com agendamento, requisição sob demanda e acompanhamento de progresso via canais assíncronos. A estratégia definitiva de infraestrutura (`./infra`) e pipeline será escolhida depois entre CloudFormation, Terraform, AWS SDK e scripts AWS CLI antes de release produtiva.
+O isolamento entre clientes é implementado via **Row-Level Security (RLS)** no PostgreSQL, com `tenant_id` presente em todas as tabelas de negócio. A autenticação produtiva consome identidade delegada ao `../stynx`, incluindo valores Stynx/Cognito de issuer, JWKS, client e claims; SGP não provisiona nem administra identidade. Processos de longa duração — principalmente cálculo em lote da folha — são executados fora do backend REST, com agendamento, requisição sob demanda e acompanhamento de progresso via canais assíncronos. A estratégia definitiva de infraestrutura (`./infra`) é AWS CDK TypeScript com provisionamento separado do deploy de artefatos para EC2/PM2, sem Docker/ECR no baseline aceito.
 
 ---
 
@@ -5857,9 +5857,9 @@ O contrato de redaction de logs usa o censor literal `[redacted]` para os caminh
 
 A implementação de CloudWatch/X-Ray/alarms fica postergada junto aos gates de governança; no pacote atual, health checks, readiness probes e o contrato de redaction de logs seguem como evidência mínima de runtime.
 
-#### 2.8 Estratégia de Infraestrutura Temporariamente Aberta
+#### 2.8 Estratégia de Infraestrutura AWS CDK
 
-`./infra` não impõe Terraform no pacote atual. CloudFormation, Terraform, AWS SDK e scripts AWS CLI permanecem opções válidas até decisão posterior do owner. Qualquer caminho escolhido deverá registrar estado remoto, revisão humana, segregação por ambiente e proteção de segredos antes de produção.
+`./infra` usa AWS CDK TypeScript como superfície IaC automatizada. Stage e prod são provisionados no mesmo account com nomes/tags `sgp-stage-*` e `sgp-prod-*`, EC2/RDS em subnets privadas, ALB público, CloudFront como entrada pública, SSM-only e VPC endpoints. O deploy de artefatos é separado do provisionamento e ativa bundles Node/Angular versionados em EC2 privado com PM2.
 
 #### 2.9 Portal Isolado do Core
 
@@ -7656,7 +7656,7 @@ terraform {
 
 #### 14.3 Pipeline de Infra
 
-Este fluxo é um exemplo de alvo caso Terraform seja escolhido. A estratégia final de `./infra` permanece aberta entre CloudFormation, Terraform, AWS SDK e scripts AWS CLI.
+Este fluxo é histórico para a opção Terraform e não é o baseline aceito. O baseline atual usa AWS CDK TypeScript em `infra/aws/cdk`; provisionamento e deploy de artefatos permanecem comandos separados.
 
 ```mermaid
 flowchart LR
@@ -7771,13 +7771,13 @@ Os itens a seguir foram decididos formalmente e não estão mais em aberto. Cada
 
 Cada decisão pendente tem impacto direto em artefatos de documentação e código ainda não finalizados:
 
-| Decisão                        | Artefatos bloqueados ou impactados                                 | Estado atual                                                          |
-| ------------------------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| Runtime database ownership     | `database/sql`, `scripts/check-db.mjs alignment check`             | PostgreSQL canônico em `database/sql`; Prisma schema/client removidos |
-| State Management Angular       | Arquitetura de módulo frontend e componentes compartilhados        | Angular local sem lib `@sgp/shared-state` dedicada                    |
-| Estratégia final de infra      | `infra/aws/templates`, pipeline de deploy, segregação por ambiente | AWS templates locais e deploy dry-run; produção postergada            |
-| Gov.br SSO                     | Fluxo de federação Cognito/Gov.br e testes de integração           | `IDENTITY_INSTALL_LATER`                                              |
-| Estratégia final de migrations | Bootstrap, rollback e release DB                                   | SQL canônico em `database/sql`; gates locais ativos                   |
+| Decisão                        | Artefatos bloqueados ou impactados                           | Estado atual                                                          |
+| ------------------------------ | ------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Runtime database ownership     | `database/sql`, `scripts/check-db.mjs alignment check`       | PostgreSQL canônico em `database/sql`; Prisma schema/client removidos |
+| State Management Angular       | Arquitetura de módulo frontend e componentes compartilhados  | Angular local sem lib `@sgp/shared-state` dedicada                    |
+| Estratégia final de infra      | `infra/aws/cdk`, pipeline de deploy, segregação por ambiente | AWS CDK TypeScript com EC2/PM2; deploy de artefato separado           |
+| Gov.br SSO                     | Fluxo de federação Cognito/Gov.br e testes de integração     | `IDENTITY_INSTALL_LATER`                                              |
+| Estratégia final de migrations | Bootstrap, rollback e release DB                             | SQL canônico em `database/sql`; gates locais ativos                   |
 
 #### 15.2 Roadmap Técnico Resumido
 
@@ -15207,15 +15207,15 @@ Manter eSocial como provedor externo stubado/sandbox no pacote atual. O runtime 
 
 #### Contexto
 
-Os documentos anteriores assumiam Terraform ou templates CloudFormation, mas a decisão final de provisionamento ainda não foi tomada.
+Os documentos anteriores assumiam Terraform ou templates CloudFormation, mas a decisão final de provisionamento foi tomada em 2026-05-09.
 
 #### Decisão
 
-Afrouxar temporariamente a exigência de `./infra`. CloudFormation, Terraform, AWS SDK e scripts AWS CLI são opções válidas até decisão futura. A escolha definitiva deve preservar revisão humana, segregação por ambiente, controle de estado e proteção de segredos.
+Usar AWS CDK TypeScript em `infra/aws/cdk` como IaC automatizada do SGP. Provisionamento cria recursos AWS; deploy de artefato é um fluxo separado para EC2/PM2. Docker/ECR e provider não-AWS automatizado estão fora do baseline aceito.
 
 #### Consequências
 
-- Templates placeholder em `./infra` não são gap corrente.
+- Templates placeholder em `./infra` foram aposentados; gaps de produção passam a ser evidência de apply, release/homologation gates e operação real do stack CDK.
 - Nenhum caminho específico de IaC é obrigatório nesta reavaliação.
 - A decisão final precisa atualizar BRIEF, arquitetura, runbooks e pipelines.
 

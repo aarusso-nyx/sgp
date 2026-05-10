@@ -1,12 +1,9 @@
 name: Deploy (prod)
 
 # Triggered by a release-please-generated tag or manual workflow_dispatch.
-# Gated on the `prod` GitHub Environment, which must require reviewer
-# approval and restrict the AWS_DEPLOY_ROLE_PROD secret to that
-# environment. While ADR-022 (AWS IaC stack) remains Postponed, this
-# workflow runs in dry-run/plan mode only — the deploy dispatcher in
-# scripts/run.mjs intentionally blocks --apply until infra/aws/templates
-# are parameterized.
+# AWS is the only automated provision target. Prod has no required GitHub
+# Environment reviewer in the accepted baseline; failed gates still block
+# deploy. Artifact rollout remains a separate flow.
 
 on:
   push:
@@ -15,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       stack:
-        description: 'Stack to deploy (cognito|rds|backend|frontend|all)'
+        description: 'Stack to deploy (edge|shared|app|all)'
         required: true
         default: 'all'
 
@@ -29,7 +26,7 @@ concurrency:
 
 jobs:
   deploy-prod:
-    name: Plan prod stack (dry-run; --apply blocked until ADR-022)
+    name: Plan prod stack (dry-run)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment:
@@ -49,6 +46,9 @@ jobs:
       - name: Install workspace dependencies
         run: npm ci
 
+      - name: Install CDK dependencies
+        run: npm --prefix infra/aws/cdk ci
+
       - name: Configure AWS credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -57,7 +57,9 @@ jobs:
           role-session-name: sgp-deploy-prod-${{ github.run_id }}
 
       - name: Plan prod deployment
-        run: npm run deploy -- --target prod --stack ${{ github.event.inputs.stack || 'all' }} --dry-run
+        run: |
+          npm --prefix infra/aws/cdk run synth:prod -- -c hostedZoneId=${{ vars.ROUTE53_HOSTED_ZONE_ID }}
+          npm run deploy -- --mode provision --target prod --stack ${{ github.event.inputs.stack || 'all' }} --dry-run
 
       - name: Upload plan artifact
         if: always()

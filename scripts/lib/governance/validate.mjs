@@ -772,9 +772,11 @@ function validateDeployPipelineAndProvenance() {
   const deployDevPath = '.github/workflows/deploy-dev.yml';
   const deployProdPath = '.github/workflows/deploy-prod.yml';
   const sourceCiPath = '.github/workflows/source-ci.yml';
+  const releaseImpactPath = '.github/workflows/release-impact-gate.yml';
 
   record('cicd:deploy-dev-workflow-present', pathExists(deployDevPath), deployDevPath);
   record('cicd:deploy-prod-workflow-present', pathExists(deployProdPath), deployProdPath);
+  record('cicd:release-impact-gate-present', pathExists(releaseImpactPath), releaseImpactPath);
 
   if (pathExists(deployDevPath) && pathExists(deployProdPath)) {
     const dev = readFileSync(resolve(repoRoot, deployDevPath), 'utf8');
@@ -803,6 +805,17 @@ function validateDeployPipelineAndProvenance() {
       sourceCi.includes('actions/attest-build-provenance') &&
         sourceCi.includes('attestations: write'),
       'attest-build-provenance + attestations: write',
+    );
+  }
+
+  if (pathExists(releaseImpactPath)) {
+    const releaseImpact = readFileSync(resolve(repoRoot, releaseImpactPath), 'utf8');
+    record(
+      'cicd:release-impact-evidence-required',
+      releaseImpact.includes('Release-impacting changes require') &&
+        releaseImpact.includes('CHANGELOG.md') &&
+        releaseImpact.includes('docs/gov/evidence/release-homologation-gate-bundle.md'),
+      releaseImpactPath,
     );
   }
 }

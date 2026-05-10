@@ -338,11 +338,11 @@ Source prompt: `docs/work/feature-audit/09-execution-prompt.md`.
 
 Retained status: `docs/gov/audit/phase-9-closure.md`.
 
-Current result: conditionally closed for the SGP-owned implementation boundary.
-M.06 MANAD and P.12 LGPD international transfer are present with runtime/test
-evidence; N.06 PCMAT and N.07 CIPA moved from absent to partial on canonical
-DB/RLS/audit lifecycle evidence and still need operator/API promotion. Wave B
-SGP-only rows are closed, Wave C hardening evidence is retained, and Wave D/E
-admin/eSocial/DET work is delegated outside SGP. Full production go-live remains
-blocked by release/homologation gate decisions and materialized infrastructure,
-not by absent SGP-owned M1 legal blockers.
+Current result: closed for the SGP-owned implementation boundary. M.06 MANAD,
+N.06 PCMAT, N.07 CIPA, and P.12 LGPD international transfer are present with
+runtime/test evidence; PCMAT and CIPA now include operator/API, OpenAPI, RBAC,
+audit, DB/RLS, and focused SST e2e evidence. Wave B SGP-only rows are closed,
+Wave C hardening evidence is retained, and Wave D/E admin/eSocial/DET work is
+delegated outside SGP. Full production go-live remains blocked by the postponed
+release/homologation gate decision and live AWS apply evidence, not by absent
+SGP-owned M1 legal blockers.

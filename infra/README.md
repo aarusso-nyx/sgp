@@ -1,35 +1,39 @@
 # Infrastructure
 
-SGP supports AWS and client-premises deployment targets.
+SGP has one automated infrastructure target: AWS. Client-premises remains a
+manual/external handoff, not an automated provider in this repository.
 
 ## Accepted Boundary
 
-Provisioning/IaC and artifact deployment are separate flows. Provisioning creates
-or changes infrastructure resources. Artifact deployment pushes built images,
-bundles, SQL packs, and runtime configuration to already designated AWS services
-or client-premises hosts.
+Provisioning/IaC and artifact deployment are separate flows:
+
+- Provision creates or changes AWS resources with CDK TypeScript.
+- Artifact deploy pushes built SGP bundles to already designated AWS hosts.
 
 Release/homologation gate composition remains postponed for a focused owner
-discussion. Files in this directory are planning scaffolds unless a later
-target-specific provision plan is accepted as retained evidence.
+discussion. Artifact apply stays blocked until that gate is accepted.
 
 ## Layout
 
-- `infra/aws/README.md`: AWS stack model and split provision/deploy flow.
-- `infra/aws/templates/`: CloudFormation placeholder templates by stack; not a final commitment to CloudFormation.
+- `infra/aws/cdk/`: authoritative AWS CDK TypeScript app.
+- `infra/aws/operations/`: PM2, CloudWatch Agent, deploy, and rollback host
+  assets.
+- `infra/aws/targets/`: AWS target manifests for stage/prod artifact deploy.
 
 ## Stack Scope
 
-- `identity`: delegated to `../stynx`; AWS Cognito can be a Stynx-owned provider.
-- `rds`: PostgreSQL and related networking/security dependencies.
-- `backend`: containerized NestJS API runtime and ingress.
-- `frontend`: static Angular hosting and CDN edge configuration.
+- Identity: delegated to `../stynx`; SGP consumes Stynx-owned Cognito/JWKS/claim
+  settings but does not provision identity resources.
+- Database: RDS PostgreSQL, private subnets, encrypted storage.
+- Backend: one private Amazon Linux 2023 EC2 host per environment, PM2-managed.
+- Frontend: S3 + CloudFront, with one public domain per environment.
+- Messaging: SQS only in prod; stage uses DB-backed workers and local/mock
+  transports.
 
 ## Security Baseline
 
-- Never hardcode credentials, API keys, or passwords in templates.
-- Resolve runtime secrets via environment variables and secret managers.
-- Keep provision operations in dry-run planning mode until placeholders are
-  replaced and a reviewed plan is retained.
-- Keep artifact deployment pointed only at accepted AWS or client-premises target
-  manifests. Never commit host credentials or production secrets.
+- Never hardcode credentials, API keys, passwords, or production secrets.
+- Use SSM Session Manager only; no public SSH.
+- Keep EC2 and RDS private.
+- Use VPC endpoints instead of NAT for AWS service access.
+- Keep artifact deploy decoupled from resource creation.

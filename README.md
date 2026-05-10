@@ -23,6 +23,13 @@ Common follow-ups:
 
 For background, deeper runbooks, and contribution rules see [AGENTS.md](./AGENTS.md) and [docs/eng/](./docs/eng/).
 
+Current status entrypoints:
+
+- Product/implementation status: `docs/eng/99-implementation-status.md`.
+- Current audit ledgers and backlog: `docs/gov/audit/`.
+- Operator readiness: `docs/user/operator-readiness.md`.
+- AWS deployment design and operations: `infra/aws/README.md` and `infra/aws/operations/README.md`.
+
 ## Source of truth
 
 - Engineering/product authority: `docs/eng/`

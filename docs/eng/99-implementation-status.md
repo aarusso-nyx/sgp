@@ -10,7 +10,7 @@ before the feature-audit matrix has been regenerated.
 
 | Area                    | Status                           | Notes                                                                                                                 |
 | ----------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Legal blockers          | Partial                          | M.06 MANAD now has report-worker export evidence; P.12 is DB-gated; N.06/N.07 have canonical SQL lifecycle coverage.  |
+| Legal blockers          | Implemented                      | M.06 MANAD, N.06 PCMAT, N.07 CIPA, and P.12 LGPD international transfer now have source/test/operator evidence.       |
 | Portal self-service     | Implemented for the Wave B slice | Q.03, Q.04, and Q.09 were already present; Q.07, Q.11, and Q.12 now have dedicated portal/API evidence.               |
 | Backend M2 hardening    | Implemented for the Wave C slice | R.01, T.05, T.07, and T.09 were already present; T.10 lock hardening now has source/test evidence.                    |
 | SGP-only B closure      | Implemented                      | All 21 `Owner=SGP`, `Presence=B` rows in the closure slice are promoted to `P`; sibling-owned B rows are unchanged.   |
@@ -19,13 +19,13 @@ before the feature-audit matrix has been regenerated.
 
 ## Current Verdict
 
-SGP is not yet at a clean Phase 9 closure verdict. M.06 MANAD now has a
-tenant-scoped report-worker export package with deterministic TXT/JSON outputs,
-validation, generated-file audit, and a golden fixture. N.06 PCMAT and N.07 CIPA
-now have canonical tenant-scoped SQL lifecycle coverage with audit/RLS, but
-still need public feature-audit promotion after focused operator/API evidence is
-added. P.12 is eligible for reclassification after the feature-audit matrix is
-refreshed from the current source evidence.
+SGP has a clean SGP-owned Phase 9 closure verdict for the M1 legal-blocker
+slice. M.06 MANAD has a tenant-scoped report-worker export package with
+deterministic TXT/JSON outputs, validation, generated-file audit, and a golden
+fixture. N.06 PCMAT and N.07 CIPA now have canonical tenant-scoped SQL
+lifecycle coverage with audit/RLS plus operator/API routes, OpenAPI evidence,
+and focused SST e2e coverage. P.12 has DB/API/test evidence for LGPD
+international transfer.
 
 Admin parity, eSocial implementation, and DET implementation are not SGP
 closure gaps. SGP owns only accepted product-domain APIs, portal/operator
@@ -46,8 +46,8 @@ dependencies no longer count as SGP implementation backlog.
 The 2026-05-09 production decisions are absorbed: identity, admin surfaces, and
 storage malware scanning/quarantine are Stynx-owned; eSocial homologation
 belongs to `../stynx-esocial`; SGP uses deterministic mocks/contracts for other
-external homologation surfaces; deployment separates provision/IaC from
-artifact deploy for AWS and client-premises targets; release/homologation gate
+external homologation surfaces; automated deployment is AWS-only and separates
+CDK provision/IaC from EC2/PM2 artifact deploy; release/homologation gate
 composition remains postponed.
 
 ## Retained Evidence

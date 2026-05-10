@@ -2,13 +2,14 @@
 
 Last refreshed from `docs/eng/domains/*.md` for round 12.
 
-Current 2026-05-09 assessment addendum: M.06 MANAD and P.12 LGPD international
-transfer are present with runtime/test evidence; N.06 PCMAT and N.07 CIPA are
-partial with canonical DB/RLS/audit lifecycle evidence pending operator/API
-promotion; Banco de Talentos, Repasse Fundo RH, and full non-destructive PII
-encryption defaults are now implemented for the accepted SGP boundary. eSocial,
-DET, admin, identity, and storage malware/quarantine remain delegated or
-external boundaries and must not be counted as SGP-owned feature gaps.
+Current 2026-05-09 assessment addendum: M.06 MANAD, N.06 PCMAT, N.07 CIPA, and
+P.12 LGPD international transfer are present with runtime/test evidence. PCMAT
+and CIPA now have operator/API routes, generated OpenAPI evidence, RBAC/audit
+metadata, focused SST e2e coverage, and canonical DB/RLS lifecycle evidence.
+Banco de Talentos, Repasse Fundo RH, and full non-destructive PII encryption
+defaults are implemented for the accepted SGP boundary. eSocial, DET, admin,
+identity, and storage malware/quarantine remain delegated or external
+boundaries and must not be counted as SGP-owned feature gaps.
 
 | FR-ID         | Requirement                                                                                                                              | Status   | Evidence                                         | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -132,21 +132,27 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  Provision[Provision / IaC flow] --> Resources[AWS or client-prem resources]
+  Provision[Provision / AWS CDK flow] --> Resources[AWS resources]
   Build[Build artifacts] --> Deploy[Artifact deploy flow]
-  Deploy --> Targets[Designated AWS services or client-prem hosts]
-  Users[Operators and public users] --> Edge[Accepted production edge]
-  Edge --> Api[SGP runtime entrypoints]
+  Deploy --> Targets[Designated AWS EC2 PM2 host]
+  Users[Operators and public users] --> Edge[CloudFront domain]
+  Edge --> Alb[Public ALB]
+  Alb --> Api[SGP runtime entrypoints]
   Api --> Db[(PostgreSQL)]
   Api --> Workers[Worker entrypoints]
   Workers --> Db
   Resources -. selected before .-> Deploy
-  Infra[INFRA_STRATEGY: AWS + client-prem split cycle] -. retained in .-> ADR[ADR-022]
+  Infra[INFRA_STRATEGY: AWS CDK + artifact split cycle] -. retained in .-> ADR[ADR-022]
   Infra -. retained in .-> Ledger[docs/gov/evidence/deferred-decision-ledger.md]
 ```
 
 Provisioning and artifact deployment are separate lifecycle steps. Provisioning
-creates or changes infrastructure resources; artifact deployment pushes built
-images, bundles, SQL packs, and runtime configuration to an already designated
-AWS or client-premises target. Release/homologation gate composition remains
-postponed for a focused owner decision.
+creates or changes AWS resources with CDK TypeScript; artifact deployment pushes
+versioned Node/Angular bundles with production `node_modules` to an already
+designated EC2 host and reloads PM2. Release/homologation gate composition
+remains postponed for a focused owner decision.
+
+AWS stage and prod use private EC2/RDS subnets, public ALB, CloudFront as the
+public entrypoint, SSM-only host access, VPC endpoints only, and one public
+domain per environment: `sgp-stage.detran-am.sistematech.com.br` for stage and
+`sgp.detran-am.sistematech.com.br` for production.
