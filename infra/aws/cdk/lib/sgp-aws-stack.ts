@@ -242,9 +242,9 @@ export class SgpAwsStack extends Stack {
       vpcSubnets: { subnetGroupName: 'app' },
       role: appRole,
       securityGroup: appSecurityGroup,
-      minCapacity: 1,
-      desiredCapacity: 1,
-      maxCapacity: 1,
+      minCapacity: 2,
+      desiredCapacity: 2,
+      maxCapacity: 4,
       instanceType: new ec2.InstanceType(config.instanceType),
       machineImage: ec2.MachineImage.resolveSsmParameterAtLaunch(
         '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64',
@@ -268,6 +268,7 @@ export class SgpAwsStack extends Stack {
       securityGroup: albSecurityGroup,
       vpcSubnets: { subnetGroupName: 'public' },
     });
+    alb.setAttribute('load_balancing.cross_zone.enabled', 'true');
     const listener = alb.addListener('HttpListener', {
       port: 80,
       open: false,

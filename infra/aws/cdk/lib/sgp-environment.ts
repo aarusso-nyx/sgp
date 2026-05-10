@@ -37,7 +37,7 @@ export function buildEnvironmentConfig(app: App): SgpEnvironmentConfig {
   const domainName = target === 'prod' ? `sgp.${hostedZoneName}` : `sgp-stage.${hostedZoneName}`;
   const namePrefix = `sgp-${target}`;
   const region = process.env.CDK_DEFAULT_REGION ?? process.env.AWS_REGION ?? 'sa-east-1';
-  const availabilityZones = target === 'prod' ? [`${region}a`, `${region}b`] : [`${region}a`];
+  const availabilityZones = [`${region}a`, `${region}b`];
 
   return {
     target,

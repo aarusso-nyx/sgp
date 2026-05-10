@@ -40,10 +40,10 @@ cycle remains split:
    provisioned AWS targets.
 
 AWS resources use `AWS_PROFILE=detran-am` and environment-scoped names/tags
-(`sgp-stage-*`, `sgp-prod-*`). Stage and prod each run one private Amazon Linux
-2023 `t4g.small` arm64 EC2 host with PM2 managing all SGP backend entrypoints.
-APIs/services run in PM2 cluster mode; workers run in fork mode, one instance
-per worker.
+(`sgp-stage-*`, `sgp-prod-*`). Stage and prod each run private Amazon Linux
+2023 `t4g.small` arm64 EC2 hosts across at least two availability zones, with
+PM2 managing all SGP backend entrypoints. APIs/services run in PM2 cluster mode;
+workers run in fork mode, one instance per worker process.
 
 The AWS runtime baseline is:
 
@@ -58,6 +58,8 @@ The AWS runtime baseline is:
 - Customer-managed KMS keys with automatic rotation for RDS, Secrets Manager,
   S3, CloudWatch logs, and prod SQS. EC2 root EBS volumes are encrypted using
   the account EBS encryption default in this baseline.
+- EC2 Auto Scaling Groups keep at least two app hosts across availability zones,
+  and the public ALB keeps cross-zone load balancing enabled.
 - CloudWatch alarms for ALB 5xx responses and unhealthy API targets.
 - SQS only in prod; stage keeps DB-backed workers and local/mock transports.
 - PM2 stdout/stderr captured by CloudWatch Agent with JSON logs preserved.

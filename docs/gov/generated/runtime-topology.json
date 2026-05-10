@@ -18,16 +18,16 @@
       "stage": {
         "domain": "sgp-stage.detran-am.sistematech.com.br",
         "name_prefix": "sgp-stage",
-        "host_count": 1,
-        "host": "Amazon Linux 2023 t4g.small arm64",
+        "host_count": 2,
+        "host": "Amazon Linux 2023 t4g.small arm64 across at least two availability zones",
         "rds": "PostgreSQL single-AZ",
         "queues": "db-backed workers and local mocks"
       },
       "prod": {
         "domain": "sgp.detran-am.sistematech.com.br",
         "name_prefix": "sgp-prod",
-        "host_count": 1,
-        "host": "Amazon Linux 2023 t4g.small arm64",
+        "host_count": 2,
+        "host": "Amazon Linux 2023 t4g.small arm64 across at least two availability zones",
         "rds": "PostgreSQL multi-AZ",
         "queues": "prod-only SQS"
       }
