@@ -48,6 +48,10 @@
       "command": "npm run test:mutation"
     },
     {
+      "id": "duplication",
+      "command": "npm run check:duplication"
+    },
+    {
       "id": "api-alignment",
       "command": "npm run api:alignment:check -- --json"
     },

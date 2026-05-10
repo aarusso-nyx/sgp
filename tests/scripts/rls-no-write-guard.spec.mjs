@@ -57,9 +57,37 @@ describe('rls-no-write-guard', () => {
 
     assert.match(result.stdout, /\[rls-no-write-guard\] OK/);
   });
+
+  test('ignores framework-owned shared public catalogs', async () => {
+    fixtureRoot = await makeFixture(
+      `
+      export const sql = \`
+        DELETE FROM public.profile_permission
+        WHERE profile_id = $1::uuid
+      \`;
+    `,
+      [
+        '| fiscal.gps_payment_code | 9 | id | 0 | no | database/sql/10-04-fiscal-ddl.sql |',
+        '| public.permission | 9 | id | 0 | no | database/sql/10-10-public-ddl.sql |',
+        '| public.profile_permission | 5 | id | 2 | no | database/sql/10-10-public-ddl.sql |',
+        '| public.tenant | 9 | id | 0 | no | database/sql/10-10-public-ddl.sql |',
+      ],
+    );
+
+    const result = await runGuard(fixtureRoot);
+
+    assert.match(result.stdout, /\[rls-no-write-guard\] OK/);
+    assert.match(result.stdout, /fiscal\.gps_payment_code/);
+    assert.doesNotMatch(result.stdout, /public\.profile_permission/);
+  });
 });
 
-async function makeFixture(source) {
+async function makeFixture(
+  source,
+  digestRows = [
+    '| fiscal.gps_payment_code | 9 | id | 0 | no | database/sql/10-04-fiscal-ddl.sql |',
+  ],
+) {
   const root = await mkdtemp(join(tmpdir(), 'sgp-rls-no-write-guard-'));
   await writeFixtureFile(
     root,
@@ -69,7 +97,7 @@ async function makeFixture(source) {
       '',
       '| Table | Columns | PK | FKs | RLS | Source |',
       '| --- | ---: | --- | ---: | --- | --- |',
-      '| fiscal.gps_payment_code | 9 | id | 0 | no | database/sql/10-04-fiscal-ddl.sql |',
+      ...digestRows,
       '',
     ].join('\n'),
   );

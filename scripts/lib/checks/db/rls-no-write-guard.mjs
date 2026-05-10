@@ -6,6 +6,11 @@ import { fileURLToPath } from 'node:url';
 
 const DEFAULT_ROOT = process.cwd();
 const ALLOW_MARKER = 'rls-allow-write:';
+const FRAMEWORK_RLS_NO_TABLES = new Set([
+  'public.permission',
+  'public.profile_permission',
+  'public.tenant',
+]);
 const WRITE_PATTERN =
   /\b(?<operation>INSERT\s+INTO|UPDATE|DELETE\s+FROM|MERGE\s+INTO|UPSERT\s+INTO)\s+(?:ONLY\s+)?(?<table>[a-z_][a-z0-9_]*\.[a-z_][a-z0-9_]*)\b/giu;
 
@@ -60,7 +65,10 @@ export function parseRlsNoTablesFromDigest(content) {
       .slice(1, -1)
       .map((cell) => cell.trim());
     if (cells.length < 6 || cells[0] === 'Table' || cells[4] !== 'no') continue;
-    if (/^[a-z_][a-z0-9_]*\.[a-z_][a-z0-9_]*$/i.test(cells[0])) {
+    if (
+      /^[a-z_][a-z0-9_]*\.[a-z_][a-z0-9_]*$/i.test(cells[0]) &&
+      !FRAMEWORK_RLS_NO_TABLES.has(cells[0].toLowerCase())
+    ) {
       tables.push(cells[0].toLowerCase());
     }
   }
@@ -88,7 +96,11 @@ export function parseRlsNoTablesFromSql(rootDir = DEFAULT_ROOT) {
     enabledTables.add(match.groups.table.toLowerCase());
   }
 
-  return uniqueSorted(createdTables.filter((table) => !enabledTables.has(table)));
+  return uniqueSorted(
+    createdTables.filter(
+      (table) => !enabledTables.has(table) && !FRAMEWORK_RLS_NO_TABLES.has(table),
+    ),
+  );
 }
 
 export function findWrites(content) {

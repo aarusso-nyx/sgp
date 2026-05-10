@@ -35,7 +35,9 @@
   contract-bearing changes are retained under `docs/gov/evidence/`.
 - NFR-001 now includes `db:rls-no-write-guard` in `governance:check` to detect
   runtime INSERT/UPDATE/DELETE/MERGE/UPSERT paths targeting live `RLS=no`
-  reference tables unless an explicit `rls-allow-write:` annotation is present.
+  SGP-owned reference tables unless an explicit `rls-allow-write:` annotation is
+  present; shared framework catalogs owned by `../stynx` stay outside this SGP
+  guard.
 
 ## Ledger
 
