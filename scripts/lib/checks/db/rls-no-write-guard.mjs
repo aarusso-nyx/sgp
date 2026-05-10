@@ -125,11 +125,18 @@ function listFiles(dir, predicate) {
 }
 
 function hasAllowMarker(content, index) {
-  const lineStart = content.lastIndexOf('\n', index) + 1;
-  const previousLineStart = content.lastIndexOf('\n', Math.max(0, lineStart - 2)) + 1;
+  let windowStart = content.lastIndexOf('\n', index) + 1;
+  for (let line = 0; line < 6; line += 1) {
+    const previousBreak = content.lastIndexOf('\n', Math.max(0, windowStart - 2));
+    if (previousBreak === -1) {
+      windowStart = 0;
+      break;
+    }
+    windowStart = previousBreak + 1;
+  }
   const nextLineEnd = content.indexOf('\n', index);
   const windowEnd = nextLineEnd === -1 ? content.length : nextLineEnd;
-  const localWindow = content.slice(previousLineStart, windowEnd);
+  const localWindow = content.slice(windowStart, windowEnd);
   return localWindow.includes(ALLOW_MARKER);
 }
 

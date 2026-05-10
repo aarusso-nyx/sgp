@@ -55,9 +55,7 @@ test('emits newly extracted FR-IDs in an advisory subsection', async () => {
       'utf8',
     );
     const advisoryIndex = refreshedLedger.indexOf('## Newly Extracted (round 15)');
-    const mainTableIndex = refreshedLedger.lastIndexOf(
-      '| FR-ID | Requirement | Status | Evidence | Notes |',
-    );
+    const mainTableIndex = lastTableHeaderIndex(refreshedLedger);
 
     assert.notEqual(advisoryIndex, -1);
     assert.ok(advisoryIndex < mainTableIndex);
@@ -134,14 +132,22 @@ function ledgerWithAddendum(rows) {
 
 function extractAddendum(markdown) {
   const titleEnd = markdown.indexOf('\n');
-  const tableStart = markdown.indexOf('\n| FR-ID |');
+  const tableStart = markdown.search(/\n\|\s*FR-ID\s*\|/);
   assert.notEqual(titleEnd, -1);
   assert.notEqual(tableStart, -1);
   return markdown.slice(titleEnd, tableStart + 1);
 }
 
+function lastTableHeaderIndex(markdown) {
+  const matches = [...markdown.matchAll(/\n\|\s*FR-ID\s*\|/g)];
+  assert.ok(matches.length > 0);
+  return matches.at(-1).index;
+}
+
 function rowPattern(id, status) {
-  return new RegExp(`\\| ${escapeRegExp(id)} \\| [^|]+ \\| ${status} \\| [^|]+ \\| [^|]+ \\|`);
+  return new RegExp(
+    `\\|\\s+${escapeRegExp(id)}\\s+\\|\\s+[^|]+\\|\\s+${status}\\s+\\|\\s+[^|]+\\|\\s+[^|]+\\|`,
+  );
 }
 
 function escapeRegExp(value) {
