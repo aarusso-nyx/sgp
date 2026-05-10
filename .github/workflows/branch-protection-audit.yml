@@ -1,0 +1,44 @@
+name: Branch Protection Audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  branch-protection:
+    name: Audit main branch protection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ secrets.BRANCH_PROTECTION_AUDIT_TOKEN || github.token }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      BRANCH_PROTECTION_BRANCH: main
+      BRANCH_PROTECTION_REQUIRED_CONTEXTS: Workspace gates,CodeQL,ADR Gate,Dependency Review
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Audit branch protection
+        run: node scripts/audit/branch-protection.mjs
+
+  prod-signed-commits:
+    name: Audit prod signed commits
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: ${{ vars.SGP_PROD_BRANCH_PROTECTION_ENABLED == 'true' }}
+    env:
+      GH_TOKEN: ${{ secrets.BRANCH_PROTECTION_AUDIT_TOKEN || github.token }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      BRANCH_PROTECTION_BRANCH: prod
+      BRANCH_PROTECTION_REQUIRED_CONTEXTS: Workspace gates,CodeQL,ADR Gate,Dependency Review
+      BRANCH_PROTECTION_REQUIRE_SIGNED_COMMITS: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Audit prod branch protection
+        run: node scripts/audit/branch-protection.mjs
