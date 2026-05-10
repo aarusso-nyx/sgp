@@ -15,7 +15,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Detect dependency review support
+        id: support
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const response = await github.rest.repos.get({ owner, repo });
+            const analysis = response.data.security_and_analysis || {};
+            const dependencyGraph = analysis.dependency_graph?.status === 'enabled';
+            const advancedSecurity = analysis.advanced_security?.status === 'enabled';
+            const supported = dependencyGraph && advancedSecurity;
+            core.setOutput('supported', supported ? 'true' : 'false');
+            if (!supported) {
+              core.warning(
+                'Dependency Review is unavailable because dependency graph and GitHub Advanced Security are not both enabled.',
+              );
+            }
+
       - name: Dependency review
+        if: steps.support.outputs.supported == 'true'
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
+
+      - name: Record unsupported dependency review
+        if: steps.support.outputs.supported != 'true'
+        run: |
+          {
+            echo "### Dependency Review"
+            echo
+            echo "Skipped: dependency graph and GitHub Advanced Security are not both enabled for this repository."
+            echo "Enable them in repository security settings to activate this gate."
+          } >> "$GITHUB_STEP_SUMMARY"
