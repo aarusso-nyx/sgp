@@ -55,7 +55,16 @@
       "storage_controls": "delegated to ../stynx storage module, while SGP buckets are SSE-KMS encrypted",
       "esocial": "runtime delegated to ../stynx-esocial",
       "det": "external DET service boundary",
-      "waf": "not required by current owner decision"
+      "waf": {
+        "status": "not required by current owner decision",
+        "decision": "docs/eng/decisions/adr-029-waf-posture.md",
+        "reopen_triggers": [
+          "new public origin",
+          "new unauthenticated public surface",
+          "material production traffic profile change",
+          "regulatory or customer requirement"
+        ]
+      }
     },
     "deploy_lifecycle": {
       "provision": "CDK creates and updates resources only",
