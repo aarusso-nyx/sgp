@@ -1,10 +1,11 @@
 import type { INestApplication } from '@nestjs/common';
+import { domainError } from '../errors/domain-error';
 
 const LOCAL_DEVELOPMENT_ORIGIN = 'http://localhost:4200';
 
 type CorsEnvironment = {
-  CORS_ORIGIN?: string;
-  NODE_ENV?: string;
+  CORS_ORIGIN?: string | undefined;
+  NODE_ENV?: string | undefined;
 };
 
 type CorsConfiguration = {
@@ -28,7 +29,10 @@ export function resolveCorsOrigins(
   if (origins.length > 0) return origins;
 
   if (env.NODE_ENV === 'production') {
-    throw new Error('CORS_ORIGIN is required when NODE_ENV=production');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'CORS_ORIGIN is required when NODE_ENV=production',
+    );
   }
 
   return [LOCAL_DEVELOPMENT_ORIGIN];

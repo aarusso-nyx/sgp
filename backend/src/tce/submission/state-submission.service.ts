@@ -21,21 +21,21 @@ import {
 export const TCE_STATE_SUBMISSION_OPTIONS = 'TCE_STATE_SUBMISSION_OPTIONS';
 
 export type TceStateSubmissionServiceOptions = Readonly<{
-  transport?: QueueAdapterTransport;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  transport?: QueueAdapterTransport | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export type SubmitTceStateReportInput = Readonly<{
   tenantId: string;
   submissionId: string;
   report: TceRelayFiscalReportEnvelope;
-  requestId?: string;
-  correlationId?: string;
-  idempotencyKey?: string;
-  maxAttempts?: number;
+  requestId?: string | undefined;
+  correlationId?: string | undefined;
+  idempotencyKey?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type SubmitTceStateReportResult = Readonly<{

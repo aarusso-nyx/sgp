@@ -21,6 +21,7 @@ import {
   OccurrenceMapperService,
   type Cnab240ReturnInternalStatus,
 } from '../return/occurrence-mapper.service';
+import { domainError } from '../../../common/errors/domain-error';
 
 export type BankingPaymentBatchStateStatus = 'PAID' | 'RETURNED' | 'REJECTED';
 
@@ -49,7 +50,7 @@ export type BankingCnab240ReturnProcessingInput = Readonly<{
   content: string;
   encoding: 'base64';
   remittanceFileHash: string;
-  processedBy?: string | null;
+  processedBy?: string | null | undefined;
 }>;
 
 export type BankingCnab240ReturnProcessingResult = Readonly<{
@@ -77,27 +78,27 @@ export type BankingQueueDatabase = Readonly<{
 
 export type BankingCnab240QueueAdapterOptions = Readonly<{
   transport: QueueAdapterTransport;
-  returnProcessor?: BankingCnab240ReturnProcessor;
-  paymentBatchStateWriter?: BankingPaymentBatchStateWriter;
-  parser?: Cnab240ReturnParserService;
-  mapper?: OccurrenceMapperService;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  returnProcessor?: BankingCnab240ReturnProcessor | undefined;
+  paymentBatchStateWriter?: BankingPaymentBatchStateWriter | undefined;
+  parser?: Cnab240ReturnParserService | undefined;
+  mapper?: OccurrenceMapperService | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export type SubmitBankingRemittanceInput = Readonly<{
   tenantId: string;
   remittanceFileId: string;
   artifact: Cnab240BuildResult;
-  bankCode?: string | number;
-  processedBy?: string | null;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  bankCode?: string | number | undefined;
+  processedBy?: string | null | undefined;
+  idempotencyKey?: string | undefined;
+  correlationId?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type SubmitBankingRemittanceResult = Readonly<{
@@ -113,8 +114,10 @@ export type SubmitBankingRemittanceResult = Readonly<{
 
 export class BankingCnab240QueueAdapter {
   private readonly queue: SgpQueueAdapter<typeof BANKING_RELAY_KIND>;
-  private readonly returnProcessor?: BankingCnab240ReturnProcessor;
-  private readonly paymentBatchStateWriter?: BankingPaymentBatchStateWriter;
+  private readonly returnProcessor?: BankingCnab240ReturnProcessor | undefined;
+  private readonly paymentBatchStateWriter?:
+    | BankingPaymentBatchStateWriter
+    | undefined;
   private readonly parser: Cnab240ReturnParserService;
   private readonly mapper: OccurrenceMapperService;
 
@@ -143,7 +146,10 @@ export class BankingCnab240QueueAdapter {
   ): Promise<SubmitBankingRemittanceResult> {
     const remittanceFileHash = hashBuffer(input.artifact.content);
     if (remittanceFileHash !== input.artifact.fileHash) {
-      throw new Error('CNAB240 artifact hash does not match artifact content.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'CNAB240 artifact hash does not match artifact content.',
+      );
     }
 
     const bankCode = this.resolveBankCode(input);
@@ -164,7 +170,10 @@ export class BankingCnab240QueueAdapter {
 
     const relay = queueResponse.payload;
     if (!relay) {
-      throw new Error('Banking relay returned an OK response without payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay returned an OK response without payload.',
+      );
     }
     this.assertRelayPayload(input, relay, bankCode, remittanceFileHash);
 
@@ -172,7 +181,8 @@ export class BankingCnab240QueueAdapter {
       Buffer.from(relay.retornoContentBase64, 'base64'),
     );
     if (parsedReturn.fileHash !== relay.returnFileHash) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'Banking relay return hash does not match retorno bytes.',
       );
     }
@@ -244,13 +254,22 @@ export class BankingCnab240QueueAdapter {
     remittanceFileHash: string,
   ): void {
     if (relay.bankCode !== bankCode) {
-      throw new Error('Banking relay returned a different bank code.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay returned a different bank code.',
+      );
     }
     if (relay.remittanceFileId !== input.remittanceFileId) {
-      throw new Error('Banking relay returned a different remittance id.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay returned a different remittance id.',
+      );
     }
     if (relay.remittanceFileHash !== remittanceFileHash) {
-      throw new Error('Banking relay returned a different remittance hash.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay returned a different remittance hash.',
+      );
     }
   }
 
@@ -270,7 +289,8 @@ export class BankingCnab240QueueAdapter {
         parsedDetail.occurrenceCode,
       );
       if (remittanceDetail && remittanceDetail.amount !== parsedDetail.amount) {
-        throw new Error(
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
           `Banking relay return amount mismatch at sequence ${parsedDetail.sequence}.`,
         );
       }

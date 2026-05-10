@@ -1,0 +1,29 @@
+* @aarusso-nyx
+
+/package.json @aarusso-nyx
+/package-lock.json @aarusso-nyx
+/tsconfig.json @aarusso-nyx
+/eslint.config.mjs @aarusso-nyx
+/commitlint.config.cjs @aarusso-nyx
+/.github/ @aarusso-nyx
+/.github/workflows/ @aarusso-nyx
+/.github/CODEOWNERS @aarusso-nyx
+
+/backend/ @aarusso-nyx
+/backend/src/common/ @aarusso-nyx
+/backend/src/audit/ @aarusso-nyx
+/frontend/ @aarusso-nyx
+/database/ @aarusso-nyx
+/database/sql/ @aarusso-nyx
+/infra/ @aarusso-nyx
+/docs/ @aarusso-nyx
+/docs/eng/decisions/ @aarusso-nyx
+/docs/gov/ @aarusso-nyx
+/docs/gov/generated/ @aarusso-nyx
+/docs/gov/privacy/ @aarusso-nyx
+/docs/user/ @aarusso-nyx
+/scripts/ @aarusso-nyx
+/tests/ @aarusso-nyx
+/tests/backend/ @aarusso-nyx
+/tests/rls/ @aarusso-nyx
+/tests/types/ @aarusso-nyx

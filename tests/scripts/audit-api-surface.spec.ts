@@ -20,10 +20,16 @@ describe('audit-api-surface', () => {
     await runAuditCommand('api', fixtureRoot);
 
     const json = await readJson<{
-      routes: Array<{ path: string }>;
+      routes: Array<{ path: string; tag: string }>;
       checks: Array<{ ok: boolean | null }>;
     }>(join(fixtureRoot, 'out', 'inv', 'round-7', 'api-surface.json'));
     expect(json.routes.map((route) => route.path)).toContain('/api/v1/people');
+    expect(json.routes).toContainEqual(
+      expect.objectContaining({
+        path: '/api/v1/spec-tagged',
+        tag: 'Spec Tagged',
+      }),
+    );
     expect(json.checks.every((check) => check.ok === null)).toBe(true);
     await expect(readMarkdownHeader(join(fixtureRoot, 'out', 'api-surface.md'))).resolves
       .toMatchInlineSnapshot(`

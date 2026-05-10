@@ -60,7 +60,8 @@ export class RhEmployeeTransfer implements OnInit, OnDestroy {
         next: (items) => {
           this.queues = { solicitada: [], aprovada: [], efetivada: [] };
           for (const item of items) {
-            if (this.queues[item.status]) this.queues[item.status].push(item);
+            const queue = this.queues[item.status];
+            if (queue) queue.push(item);
           }
         },
         error: () => {

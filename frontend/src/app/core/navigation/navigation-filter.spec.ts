@@ -53,4 +53,35 @@ describe('NavigationFilter', () => {
     expect(sections.length).toBeGreaterThan(0);
     expect(sections.every((section) => section.items.length > 0)).toBe(true);
   });
+
+  it('filters the installed Auditoria menu group by permission', () => {
+    const blockedSession = {
+      subject: '1',
+      login: 'operador',
+      displayName: 'Operador',
+      groups: [],
+      permissions: [],
+    };
+    const allowedSession = {
+      ...blockedSession,
+      permissions: ['auditoria.read'],
+    };
+
+    expect(
+      service.visibleSections(blockedSession).some((section) => section.moduleKey === 'auditoria'),
+    ).toBe(false);
+    expect(
+      service
+        .visibleSections(allowedSession)
+        .find((section) => section.moduleKey === 'auditoria')
+        ?.items.map((item) => item.routePath),
+    ).toEqual([
+      '/auditoria/trilha/gestao',
+      '/auditoria/trilha/detalhes/:id',
+      '/auditoria/relatorio/gestao',
+      '/auditoria/entidade/gestao',
+      '/auditoria/usuario/gestao',
+      '/auditoria/periodo/gestao',
+    ]);
+  });
 });

@@ -88,7 +88,7 @@ export class TaxRateRpps implements OnInit {
       .map((line) => line.trim())
       .filter(Boolean)
       .map((line, index) => {
-        const [min, max, rate] = line.split(';').map((value) => value.trim());
+        const [min = '', max = '', rate = ''] = line.split(';').map((value) => value.trim());
         return {
           code: `RPPS-${this.form.value.referenceYear}-${String(index + 1).padStart(2, '0')}`,
           bracketMin: min,

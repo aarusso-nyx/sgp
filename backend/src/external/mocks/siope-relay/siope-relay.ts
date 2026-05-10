@@ -26,7 +26,7 @@ export type SiopeRelayRequestPayload = Readonly<{
   year: number;
   contentHash: string;
   contentBase64: string;
-  scenario?: SiopeRelayScenario;
+  scenario?: SiopeRelayScenario | undefined;
 }>;
 
 export type SiopeRelayResponsePayload = Readonly<{
@@ -67,8 +67,8 @@ type RelayDecision =
 
 export type SiopeRelayMockResponderOptions = Readonly<{
   transport: QueueAdapterTransport;
-  concurrency?: number;
-  now?: () => Date;
+  concurrency?: number | undefined;
+  now?: (() => Date) | undefined;
 }>;
 
 export class SiopeRelayMockResponder {

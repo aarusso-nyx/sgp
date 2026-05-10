@@ -47,7 +47,7 @@ interface RemittanceRow extends QueryResultRow {
   total_amount: string;
   status: GpsStatus;
   file_uri: string | null;
-  txt_content?: string;
+  txt_content?: string | undefined;
   txt_hash: string;
   generated_at: Date | string;
   paid_at: Date | string | null;

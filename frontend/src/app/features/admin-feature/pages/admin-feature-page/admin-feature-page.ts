@@ -79,7 +79,7 @@ export class AdminFeaturePage {
         return { feature, routeId: params.get('id') };
       }),
     ),
-    { initialValue: { feature: ADMIN_FEATURES[0], routeId: null } },
+    { initialValue: { feature: ADMIN_FEATURES[0]!, routeId: null } },
   );
 
   readonly feature = computed(() => this.routeState().feature);
@@ -283,7 +283,7 @@ export class AdminFeaturePage {
   }
 
   private findFirstFeatureForModule(moduleKey: string | undefined): AdminFeature {
-    return ADMIN_FEATURES.find((feature) => feature.moduleKey === moduleKey) ?? ADMIN_FEATURES[0];
+    return ADMIN_FEATURES.find((feature) => feature.moduleKey === moduleKey) ?? ADMIN_FEATURES[0]!;
   }
 
   private seedRecords(feature: AdminFeature, routeId: string | null): WorkspaceRecord[] {

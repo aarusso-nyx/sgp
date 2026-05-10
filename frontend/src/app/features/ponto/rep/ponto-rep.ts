@@ -80,17 +80,24 @@ export class PontoRep implements OnInit, OnDestroy {
       this.deviceForm.markAllAsTouched();
       return;
     }
-    const value = this.deviceForm.value as Record<string, string>;
+    const value = this.deviceForm.getRawValue() as {
+      kind: string;
+      serialNumber: string;
+      employerTaxId: string;
+      manufacturer: string;
+      model: string;
+      programHash: string;
+    };
     this.saving = true;
     this.error = '';
     this.service
       .createDevice({
-        kind: value['kind'],
-        serialNumber: value['serialNumber'] || undefined,
-        employerTaxId: value['employerTaxId'],
-        manufacturer: value['manufacturer'] || undefined,
-        model: value['model'] || undefined,
-        programHash: value['programHash'] || undefined,
+        kind: value.kind,
+        employerTaxId: value.employerTaxId,
+        ...(value.serialNumber ? { serialNumber: value.serialNumber } : {}),
+        ...(value.manufacturer ? { manufacturer: value.manufacturer } : {}),
+        ...(value.model ? { model: value.model } : {}),
+        ...(value.programHash ? { programHash: value.programHash } : {}),
       })
       .pipe(
         finalize(() => {
@@ -115,13 +122,17 @@ export class PontoRep implements OnInit, OnDestroy {
       this.batchForm.markAllAsTouched();
       return;
     }
-    const value = this.batchForm.value as Record<string, string>;
+    const value = this.batchForm.getRawValue() as {
+      repDeviceId: string;
+      fileName: string;
+      content: string;
+    };
     this.saving = true;
     this.error = '';
     this.service
-      .uploadBatch(value['repDeviceId'], {
-        fileName: value['fileName'],
-        content: value['content'],
+      .uploadBatch(value.repDeviceId, {
+        fileName: value.fileName,
+        content: value.content,
       })
       .pipe(
         finalize(() => {

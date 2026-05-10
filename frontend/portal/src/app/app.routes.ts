@@ -3,11 +3,15 @@ import { Route, Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth-guard';
 import { PORTAL_FEATURE_CATALOG } from './core/portal/portal-feature-catalog';
 import { PortalAuthCallback } from './pages/auth-callback/auth-callback';
+import { Certificacoes } from './pages/certificacoes/certificacoes';
 import { Contracheque } from './pages/contracheque/contracheque';
+import { Documentos } from './pages/documentos/documentos';
 import { Ferias } from './pages/ferias/ferias';
+import { Pdi } from './pages/pdi/pdi';
 import { GovBrSignCallback } from './pages/govbr-sign-callback/govbr-sign-callback';
 import { Licencas } from './pages/licencas/licencas';
 import { LicencasSaude } from './pages/licencas/saude/saude';
+import { MinhaEquipe } from './pages/minha-equipe/minha-equipe';
 import { MeusDados } from './pages/meus-dados/meus-dados';
 import { MeusDadosBancarios } from './pages/meus-dados/bancarios/bancarios';
 import { PortalFeaturePage } from './pages/portal-feature-page/portal-feature-page';
@@ -32,10 +36,11 @@ const featureRoutes: Routes = PORTAL_FEATURE_CATALOG.flatMap((section) =>
 );
 
 function withAuthGuard(route: Route): Route {
+  const children = route.children?.map(withAuthGuard);
   return {
     ...route,
     canActivate: [authGuard, ...(route.canActivate ?? [])],
-    children: route.children?.map(withAuthGuard),
+    ...(children ? { children } : {}),
   };
 }
 
@@ -52,7 +57,6 @@ const portalRoutes: Routes = [
         path: 'govbr-sign/callback',
         component: GovBrSignCallback,
       },
-      ...featureRoutes,
       {
         path: 'contracheque',
         component: Contracheque,
@@ -90,9 +94,30 @@ const portalRoutes: Routes = [
         component: Licencas,
       },
       {
+        path: 'documentos/:section',
+        component: Documentos,
+      },
+      {
+        path: 'minha-equipe',
+        component: MinhaEquipe,
+      },
+      {
+        path: 'aprovacoes',
+        component: MinhaEquipe,
+      },
+      {
         path: 'ponto/proximas-escalas',
         component: ProximasEscalas,
       },
+      {
+        path: 'certificacoes',
+        component: Certificacoes,
+      },
+      {
+        path: 'pdi',
+        component: Pdi,
+      },
+      ...featureRoutes,
     ],
   },
   {

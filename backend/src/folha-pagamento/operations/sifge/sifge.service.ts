@@ -72,7 +72,7 @@ interface RemittanceRow extends QueryResultRow {
   signed: boolean;
   created_at: string | Date;
   updated_at: string | Date;
-  file_content_base64?: string | null;
+  file_content_base64?: string | null | undefined;
 }
 
 export interface FgtsRemittanceSummary {
@@ -93,7 +93,7 @@ export interface FgtsRemittanceSummary {
   signed: boolean;
   createdAt: string;
   updatedAt: string;
-  fileContentBase64?: string | null;
+  fileContentBase64?: string | null | undefined;
 }
 
 @Injectable()

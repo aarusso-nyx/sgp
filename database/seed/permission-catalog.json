@@ -284,6 +284,46 @@
       "description": "Approve or reject employee self-service cadastral change requests."
     },
     {
+      "key": "rh.certification.read",
+      "moduleKey": "rh",
+      "resourceKey": "certification",
+      "actionKey": "read",
+      "routePattern": "/api/v1/rh/certificacoes/**",
+      "description": "Read employee training certifications."
+    },
+    {
+      "key": "rh.certification.write",
+      "moduleKey": "rh",
+      "resourceKey": "certification",
+      "actionKey": "write",
+      "routePattern": "/api/v1/rh/certificacoes/**",
+      "description": "Register, update, or remove employee training certifications."
+    },
+    {
+      "key": "rh.development_plan.read",
+      "moduleKey": "rh",
+      "resourceKey": "development_plan",
+      "actionKey": "read",
+      "routePattern": "/api/v1/rh/pdi/**",
+      "description": "Read employee individual development plans (PDI) and goals."
+    },
+    {
+      "key": "rh.development_plan.write",
+      "moduleKey": "rh",
+      "resourceKey": "development_plan",
+      "actionKey": "write",
+      "routePattern": "/api/v1/rh/pdi/**",
+      "description": "Create or update PDI plans and goals."
+    },
+    {
+      "key": "rh.development_plan.approve",
+      "moduleKey": "rh",
+      "resourceKey": "development_plan",
+      "actionKey": "approve",
+      "routePattern": "/api/v1/rh/pdi/**",
+      "description": "Approve or close out PDI plans and record manager review."
+    },
+    {
       "key": "rh.vacation.read",
       "moduleKey": "rh",
       "resourceKey": "vacation",
@@ -602,6 +642,22 @@
       "resourceKey": "submission",
       "actionKey": "retry",
       "description": "Request retry for mirrored eSocial SOAP submission batches."
+    },
+    {
+      "key": "det.message.read",
+      "moduleKey": "det",
+      "resourceKey": "message",
+      "actionKey": "read",
+      "routePattern": "/api/v1/admin/det/messages/**",
+      "description": "Read SGP-local DET message projections mirrored from stynx-det."
+    },
+    {
+      "key": "det.message.write",
+      "moduleKey": "det",
+      "resourceKey": "message",
+      "actionKey": "write",
+      "routePattern": "/api/v1/admin/det/messages/**",
+      "description": "Update SGP-local DET operator state and request acknowledgement through stynx-det."
     },
     {
       "key": "fiscal.dctfweb.read",
@@ -1543,6 +1599,8 @@
       "esocial.event.retry",
       "esocial.submission.read",
       "esocial.submission.retry",
+      "det.message.read",
+      "det.message.write",
       "fiscal.dctfweb.read",
       "fiscal.dctfweb.write",
       "fiscal.dirf.read",
@@ -1596,6 +1654,7 @@
       "esocial.event.read",
       "esocial.event.retry",
       "esocial.submission.read",
+      "det.message.read",
       "fiscal.dctfweb.read",
       "fiscal.dirf.read",
       "fiscal.gps.read",

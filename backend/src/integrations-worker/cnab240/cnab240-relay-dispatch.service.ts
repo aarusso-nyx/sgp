@@ -22,10 +22,10 @@ export type Cnab240RelayDispatchInput = Readonly<{
   remittanceFileId: string;
   bankId: string;
   artifact: Cnab240BuildResult;
-  processedBy?: string | null;
-  requestId?: string;
-  correlationId?: string;
-  idempotencyKey?: string;
+  processedBy?: string | null | undefined;
+  requestId?: string | undefined;
+  correlationId?: string | undefined;
+  idempotencyKey?: string | undefined;
 }>;
 
 @Injectable()

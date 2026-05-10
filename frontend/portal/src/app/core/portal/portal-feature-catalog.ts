@@ -245,8 +245,15 @@ export const PORTAL_FEATURE_CATALOG = [
   },
   {
     label: 'Documentos Pessoais',
-    summary: 'Document download center for the authenticated actor.',
+    summary: 'Document request and download center for the authenticated actor.',
     items: [
+      {
+        label: 'Solicitar Documento',
+        path: '/documentos/solicitar',
+        capability: 'authenticated',
+        module: 'rh',
+        description: 'Request a personal or functional document from HR.',
+      },
       {
         label: 'Ficha Funcional',
         path: '/documentos/ficha-funcional',
@@ -267,6 +274,26 @@ export const PORTAL_FEATURE_CATALOG = [
         capability: 'authenticated',
         module: 'previdenciario',
         description: 'Contribution and compensation certificate downloads.',
+      },
+    ],
+  },
+  {
+    label: 'Minha Equipe',
+    summary: 'Manager self-service approval queue and team request follow-up.',
+    items: [
+      {
+        label: 'Fila de Aprovacoes',
+        path: '/minha-equipe',
+        capability: 'rh.leave.approve',
+        module: 'rh',
+        description: 'Pending leave and vacation approvals for the manager context.',
+      },
+      {
+        label: 'Aprovacoes',
+        path: '/aprovacoes',
+        capability: 'rh.vacation.approve',
+        module: 'rh',
+        description: 'Dedicated approval workflow entry point for portal managers.',
       },
     ],
   },

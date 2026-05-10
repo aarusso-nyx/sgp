@@ -1,3 +1,5 @@
+import { domainError } from '../../common/errors/domain-error';
+
 export interface SiconfiFiscalStatementInput {
   sourceStatus: 'CALLER_SELECTED_OFFICIAL_LAYOUT';
   declaration: 'RREO' | 'RGF';
@@ -19,12 +21,16 @@ export interface SiconfiFiscalStatementRow {
 export class SiconfiRreoRgfGenerator {
   generateCsv(input: SiconfiFiscalStatementInput): string {
     if (input.sourceStatus !== 'CALLER_SELECTED_OFFICIAL_LAYOUT') {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'Siconfi RREO/RGF generation requires a caller-selected official layout.',
       );
     }
     if (!input.layoutEdition || !input.sourceUrl) {
-      throw new Error('layoutEdition and sourceUrl are required');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'layoutEdition and sourceUrl are required',
+      );
     }
 
     const rows = input.rows.map((row) => [

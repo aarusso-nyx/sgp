@@ -20,6 +20,16 @@ CREATE INDEX health_program_location_status_idx ON saude.health_program USING bt
 
 CREATE UNIQUE INDEX health_program_one_active_idx ON saude.health_program USING btree (tenant_id, work_location_id, kind) WHERE (status = 'ACTIVE'::saude.program_status);
 
+CREATE INDEX cipa_committee_location_status_idx ON saude.cipa_committee USING btree (tenant_id, work_location_id, status, mandate_end);
+
+CREATE UNIQUE INDEX cipa_committee_one_active_idx ON saude.cipa_committee USING btree (tenant_id, work_location_id) WHERE (status = 'ACTIVE'::saude.cipa_committee_status);
+
+CREATE INDEX cipa_member_committee_idx ON saude.cipa_member USING btree (tenant_id, committee_id, status);
+
+CREATE INDEX cipa_member_employee_idx ON saude.cipa_member USING btree (tenant_id, employee_id);
+
+CREATE INDEX cipa_minute_committee_idx ON saude.cipa_minute USING btree (tenant_id, committee_id, meeting_at DESC);
+
 CREATE INDEX medical_exam_active_idx ON saude.medical_exam USING btree (tenant_id, active);
 
 CREATE INDEX pcmso_required_exam_program_idx ON saude.pcmso_required_exam USING btree (tenant_id, health_program_id);
@@ -71,6 +81,18 @@ CREATE TRIGGER epi_inventory_touch_updated_at BEFORE UPDATE ON saude.epi_invento
 CREATE TRIGGER health_program_audit AFTER INSERT OR DELETE OR UPDATE ON saude.health_program FOR EACH ROW EXECUTE FUNCTION saude.sst01_audit_row();
 
 CREATE TRIGGER health_program_touch_updated_at BEFORE UPDATE ON saude.health_program FOR EACH ROW EXECUTE FUNCTION saude.sst01_touch_updated_at();
+
+CREATE TRIGGER cipa_committee_audit AFTER INSERT OR DELETE OR UPDATE ON saude.cipa_committee FOR EACH ROW EXECUTE FUNCTION saude.sst01_audit_row();
+
+CREATE TRIGGER cipa_committee_touch_updated_at BEFORE UPDATE ON saude.cipa_committee FOR EACH ROW EXECUTE FUNCTION saude.sst01_touch_updated_at();
+
+CREATE TRIGGER cipa_member_audit AFTER INSERT OR DELETE OR UPDATE ON saude.cipa_member FOR EACH ROW EXECUTE FUNCTION saude.sst01_audit_row();
+
+CREATE TRIGGER cipa_member_touch_updated_at BEFORE UPDATE ON saude.cipa_member FOR EACH ROW EXECUTE FUNCTION saude.sst01_touch_updated_at();
+
+CREATE TRIGGER cipa_minute_audit AFTER INSERT OR DELETE OR UPDATE ON saude.cipa_minute FOR EACH ROW EXECUTE FUNCTION saude.sst01_audit_row();
+
+CREATE TRIGGER cipa_minute_touch_updated_at BEFORE UPDATE ON saude.cipa_minute FOR EACH ROW EXECUTE FUNCTION saude.sst01_touch_updated_at();
 
 CREATE TRIGGER medical_exam_audit AFTER INSERT OR DELETE OR UPDATE ON saude.medical_exam FOR EACH ROW EXECUTE FUNCTION saude.sst01_audit_row();
 
@@ -162,6 +184,27 @@ ALTER TABLE ONLY saude.health_program
 ALTER TABLE ONLY saude.health_program
     ADD CONSTRAINT health_program_work_location_id_fkey FOREIGN KEY (work_location_id) REFERENCES hr.work_location(id);
 
+ALTER TABLE ONLY saude.cipa_committee
+    ADD CONSTRAINT cipa_committee_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
+ALTER TABLE ONLY saude.cipa_committee
+    ADD CONSTRAINT cipa_committee_work_location_id_fkey FOREIGN KEY (work_location_id) REFERENCES hr.work_location(id);
+
+ALTER TABLE ONLY saude.cipa_member
+    ADD CONSTRAINT cipa_member_committee_id_fkey FOREIGN KEY (committee_id) REFERENCES saude.cipa_committee(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY saude.cipa_member
+    ADD CONSTRAINT cipa_member_employee_id_fkey FOREIGN KEY (employee_id) REFERENCES hr.employee(id) ON DELETE RESTRICT;
+
+ALTER TABLE ONLY saude.cipa_member
+    ADD CONSTRAINT cipa_member_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
+ALTER TABLE ONLY saude.cipa_minute
+    ADD CONSTRAINT cipa_minute_committee_id_fkey FOREIGN KEY (committee_id) REFERENCES saude.cipa_committee(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY saude.cipa_minute
+    ADD CONSTRAINT cipa_minute_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
+
 ALTER TABLE ONLY saude.medical_exam
     ADD CONSTRAINT medical_exam_tenant_id_fkey FOREIGN KEY (tenant_id) REFERENCES public.tenant(id);
 
@@ -217,6 +260,12 @@ ALTER TABLE ONLY saude.epi_inventory FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY saude.health_program FORCE ROW LEVEL SECURITY;
 
+ALTER TABLE ONLY saude.cipa_committee FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY saude.cipa_member FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE ONLY saude.cipa_minute FORCE ROW LEVEL SECURITY;
+
 ALTER TABLE ONLY saude.medical_exam FORCE ROW LEVEL SECURITY;
 
 ALTER TABLE ONLY saude.pcmso_required_exam FORCE ROW LEVEL SECURITY;
@@ -270,6 +319,18 @@ CREATE POLICY epi_inventory_rw ON saude.epi_inventory USING ((public.sgp_tenant_
 ALTER TABLE saude.health_program ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY health_program_rw ON saude.health_program USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.program.read'::text, 'saude.program.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.program.write'::text])));
+
+ALTER TABLE saude.cipa_committee ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY cipa_committee_rw ON saude.cipa_committee USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.program.read'::text, 'saude.program.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.program.write'::text])));
+
+ALTER TABLE saude.cipa_member ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY cipa_member_rw ON saude.cipa_member USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.program.read'::text, 'saude.program.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.program.write'::text])));
+
+ALTER TABLE saude.cipa_minute ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY cipa_minute_rw ON saude.cipa_minute USING ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.program.read'::text, 'saude.program.write'::text]))) WITH CHECK ((public.sgp_tenant_matches(tenant_id) AND public.sgp_has_any_permission(ARRAY['saude.program.write'::text])));
 
 ALTER TABLE saude.medical_exam ENABLE ROW LEVEL SECURITY;
 

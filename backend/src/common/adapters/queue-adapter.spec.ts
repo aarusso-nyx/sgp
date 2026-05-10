@@ -53,6 +53,25 @@ describe('queue retry strategies', () => {
     expect(linearRetryStrategy(0)).toBe(0);
     expect(linearRetryStrategy(2)).toBe(200);
     expect(linearRetryStrategy(5)).toBe(500);
+    expect(Number.isNaN(linearRetryStrategy(Number.NaN))).toBe(true);
+    expect(linearRetryStrategy(-2.8)).toBe(0);
+  });
+
+  it('normalizes invalid exponential jitter inputs defensively', () => {
+    expect(
+      cappedExponentialJitterRetryStrategy(Number.NaN, {
+        baseDelayMs: Number.NaN,
+        maxDelayMs: Number.NaN,
+        jitterUnit: Number.POSITIVE_INFINITY,
+      }),
+    ).toBe(0);
+    expect(
+      cappedExponentialJitterRetryStrategy(3.9, {
+        baseDelayMs: -10,
+        maxDelayMs: 100,
+        jitterUnit: -1,
+      }),
+    ).toBe(0);
   });
 });
 
@@ -271,5 +290,111 @@ describe('SGP adapter mock queue contract', () => {
       responses.map((response) => response['request-id']),
     );
     expect(requestIds.size).toBe(12);
+  });
+
+  it('rejects invalid topics and maxAttempts before publishing', async () => {
+    expect(() => adapterQueueTopics('   ')).toThrow(
+      'Queue adapter kind must be non-empty.',
+    );
+
+    setup();
+    await expect(
+      adapter.request<ReferenceMockPayload>({
+        tenantId: 'tenant-a',
+        maxAttempts: 0,
+        payload: { action: 'echo', value: 'ignored' },
+      }),
+    ).rejects.toThrow('Queue adapter maxAttempts must be at least 1.');
+    expect(transport.depth(topics.request)).toBe(0);
+  });
+
+  it('rejects mismatched correlation responses', async () => {
+    transport = new InMemoryQueueTransport();
+    adapter = new SgpQueueAdapter({
+      kind,
+      transport,
+      responseTimeoutMs: 1_000,
+      now: fixedNow,
+      idFactory: () => 'request-mismatch-1',
+    });
+    responder = undefined as never;
+
+    const pending = adapter.request<ReferenceMockPayload>({
+      tenantId: 'tenant-a',
+      correlationId: 'expected-correlation',
+      payload: { action: 'echo', value: 'ignored' },
+    });
+    await transport.publish<QueueAdapterResponseEnvelope<typeof kind>>(
+      topics.response,
+      {
+        'request-id': 'request-mismatch-1',
+        'correlation-id': 'wrong-correlation',
+        'created-at': fixedNow().toISOString(),
+        tenant_id: 'tenant-a',
+        kind,
+        status: 'OK',
+        attempt: 1,
+      },
+    );
+
+    await expect(pending).rejects.toThrow(
+      'Mismatched adapter correlation-id for request-mismatch-1',
+    );
+  });
+
+  it('rejects pending requests on timeout and close', async () => {
+    transport = new InMemoryQueueTransport();
+    responder = undefined as never;
+    adapter = new SgpQueueAdapter({
+      kind,
+      transport,
+      responseTimeoutMs: 1,
+      now: fixedNow,
+      idFactory: () => 'request-timeout-1',
+    });
+
+    await expect(
+      adapter.request<ReferenceMockPayload>({
+        tenantId: 'tenant-a',
+        payload: { action: 'echo', value: 'ignored' },
+      }),
+    ).rejects.toThrow(
+      'Timed out waiting for adapter response request-timeout-1',
+    );
+
+    adapter.close();
+    adapter = new SgpQueueAdapter({
+      kind,
+      transport,
+      responseTimeoutMs: 1_000,
+      now: fixedNow,
+      idFactory: () => 'request-close-1',
+    });
+    const pending = adapter.request<ReferenceMockPayload>({
+      tenantId: 'tenant-a',
+      payload: { action: 'echo', value: 'ignored' },
+    });
+    adapter.close();
+    await expect(pending).rejects.toThrow(
+      'Queue adapter closed before response arrived.',
+    );
+  });
+
+  it('honors in-memory unsubscribe and handler failure paths', async () => {
+    const localTransport = new InMemoryQueueTransport();
+    const handled: unknown[] = [];
+    const subscription = localTransport.subscribe('topic-a', (message) => {
+      handled.push(message);
+      throw new Error('handler failure is swallowed');
+    });
+
+    await localTransport.publish('topic-a', { id: 1 });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    subscription.unsubscribe();
+    await localTransport.publish('topic-a', { id: 2 });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(handled).toEqual([{ id: 1 }]);
+    expect(localTransport.history('topic-a')).toEqual([{ id: 1 }, { id: 2 }]);
   });
 });

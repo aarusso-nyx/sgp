@@ -67,8 +67,8 @@ export interface AuditReportRequestSummary {
   id: string;
   status: string;
   requestedAt: string;
-  completedAt?: string | null;
-  errorMessage?: string | null;
+  completedAt?: string | null | undefined;
+  errorMessage?: string | null | undefined;
 }
 
 @Injectable()

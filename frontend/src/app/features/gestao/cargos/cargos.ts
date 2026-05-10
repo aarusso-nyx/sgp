@@ -21,7 +21,7 @@ export class Cargos implements OnInit {
   cargos: JobPositionRecord[] = [];
   salaryRanges: SalaryRangeRecord[] = [];
   salaryLevels: SalaryRangeLevelRecord[] = [];
-  selectedCargo?: JobPositionRecord;
+  selectedCargo: JobPositionRecord | undefined;
   loading = false;
   error = '';
   readonly form;

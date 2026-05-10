@@ -29,7 +29,7 @@ interface PublicConcursoRow extends QueryResultRow {
 
 interface PublicVaga {
   positionId: string;
-  requirement?: Record<string, unknown>;
+  requirement?: Record<string, unknown> | undefined;
   baseSalary: string;
 }
 

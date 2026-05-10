@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AuditModule } from '../audit/audit.module';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
+import { StynxEsocialModule } from '../integrations/stynx-esocial';
 import {
   JobPositionsController,
   MasterDataController,
@@ -20,7 +21,7 @@ import {
 } from './master-data/salary-range.service';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule],
+  imports: [AuthModule, DatabaseModule, AuditModule, StynxEsocialModule],
   controllers: [
     MasterDataController,
     JobPositionsController,

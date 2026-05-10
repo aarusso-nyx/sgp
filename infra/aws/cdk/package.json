@@ -1,0 +1,22 @@
+{
+  "name": "@sgp/aws-cdk",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "synth": "npm run build && cdk synth",
+    "synth:stage": "npm run build && cdk synth --output cdk.out/stage -c target=stage",
+    "synth:prod": "npm run build && cdk synth --output cdk.out/prod -c target=prod",
+    "diff": "npm run build && cdk diff",
+    "deploy": "npm run build && cdk deploy"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.253.1",
+    "constructs": "10.6.0"
+  },
+  "devDependencies": {
+    "aws-cdk": "2.1121.0",
+    "typescript": "5.9.2"
+  }
+}

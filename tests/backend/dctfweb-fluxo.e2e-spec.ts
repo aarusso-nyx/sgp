@@ -18,6 +18,8 @@ interface TestDbClient {
 describe('DCTFWeb flow (e2e)', () => {
   it('matches DCTFWeb item totals to accepted S-5011/S-5012/S-5013 totalizers', async () => {
     const inserted: Array<{ baseAmount: string; amount: string }> = [];
+    let payloadXml = '';
+    let payloadXmlHash = '';
     const db = {
       configured: true,
       query: jest
@@ -49,7 +51,9 @@ describe('DCTFWeb flow (e2e)', () => {
           ]),
         ])
         .mockResolvedValueOnce([])
-        .mockResolvedValueOnce([declarationRow('314.00')])
+        .mockImplementationOnce(async () => [
+          declarationRow('314.00', { payloadXml, payloadXmlHash }),
+        ])
         .mockResolvedValueOnce([
           itemRow('S5011', '1082-01', '1000.00', '200.00'),
           itemRow('S5012', '0561', '500.00', '50.00'),
@@ -60,6 +64,8 @@ describe('DCTFWeb flow (e2e)', () => {
           callback({
             query: jest.fn(async (sql: string, values: unknown[]) => {
               if (sql.includes('INSERT INTO fiscal.dctfweb_declaration')) {
+                payloadXml = String(values[5]);
+                payloadXmlHash = String(values[6]);
                 return { rows: [{ id: declarationId }] };
               }
               if (sql.includes('INSERT INTO fiscal.dctfweb_item')) {
@@ -96,7 +102,14 @@ describe('DCTFWeb flow (e2e)', () => {
   });
 
   it('includes pending MIT tax debits with CSLL adicional in generated DCTFWeb', async () => {
-    const inserted: Array<{ amount: string; csllAdicionalAmount: string }> = [];
+    const inserted: Array<{
+      sourceRunId: string;
+      debitCode: string;
+      amount: string;
+      csllAdicionalAmount: string;
+    }> = [];
+    let payloadXml = '';
+    let payloadXmlHash = '';
     const db = {
       configured: true,
       query: jest
@@ -114,24 +127,30 @@ describe('DCTFWeb flow (e2e)', () => {
             mit_status: null,
           },
         ])
-        .mockResolvedValueOnce([declarationRow('103.10')])
-        .mockResolvedValueOnce([
-          itemRow('MIT', '0561', '900.00', '88.10', {
-            cnpj_filial: '12345678000199',
-            csll_adicional_amount: '15.00',
-            mit_debit_id: 'MIT-generated',
-            mit_status: 'PENDING',
-          }),
-        ]),
+        .mockImplementationOnce(async () => [
+          declarationRow('103.10', { payloadXml, payloadXmlHash }),
+        ])
+        .mockImplementationOnce(async () =>
+          inserted.map((item) =>
+            itemRow('MIT', item.debitCode, '900.00', item.amount, {
+              source_run_id: item.sourceRunId,
+              csll_adicional_amount: item.csllAdicionalAmount,
+            }),
+          ),
+        ),
       transaction: jest.fn(
         async (callback: (client: TestDbClient) => Promise<unknown>) =>
           callback({
             query: jest.fn(async (sql: string, values: unknown[]) => {
               if (sql.includes('INSERT INTO fiscal.dctfweb_declaration')) {
+                payloadXml = String(values[5]);
+                payloadXmlHash = String(values[6]);
                 return { rows: [{ id: declarationId }] };
               }
               if (sql.includes('INSERT INTO fiscal.dctfweb_item')) {
                 inserted.push({
+                  sourceRunId: String(values[3]),
+                  debitCode: String(values[4]),
                   amount: String(values[6]),
                   csllAdicionalAmount: String(values[7]),
                 });
@@ -156,7 +175,10 @@ describe('DCTFWeb flow (e2e)', () => {
       [tenantId, '2026-01-01'],
     );
     expect(inserted).toEqual([
-      { amount: '88.10', csllAdicionalAmount: '15.00' },
+      expect.objectContaining({
+        amount: '88.10',
+        csllAdicionalAmount: '15.00',
+      }),
     ]);
     expect(result.items[0]).toMatchObject({
       sourceEvent: 'MIT',
@@ -165,6 +187,8 @@ describe('DCTFWeb flow (e2e)', () => {
       mitStatus: 'PENDING',
       cnpjFilial: '12345678000199',
     });
+    expect(result.payloadXml).toContain('sourceEvent="MIT"');
+    expect(result.payloadXml).toContain('csllAdicional="15.00"');
   });
 
   it('returns 412 when no ICP-Brasil certificate is configured', async () => {
@@ -206,7 +230,10 @@ function debit(
   return { sourceRunId, debitCode, baseAmount, amount };
 }
 
-function declarationRow(totalAmount: string) {
+function declarationRow(
+  totalAmount: string,
+  overrides: { payloadXml?: string; payloadXmlHash?: string } = {},
+) {
   return {
     id: declarationId,
     competence: '2026-01-01',
@@ -214,8 +241,8 @@ function declarationRow(totalAmount: string) {
     status: 'DRAFT',
     original_declaration_id: null,
     payload_xml_ref: 's3://payload.xml',
-    payload_xml: '<DCTFWeb />',
-    payload_xml_hash: 'a'.repeat(64),
+    payload_xml: overrides.payloadXml ?? '<DCTFWeb />',
+    payload_xml_hash: overrides.payloadXmlHash ?? 'a'.repeat(64),
     signed_xml_ref: null,
     signed_xml: null,
     signed_xml_hash: null,

@@ -49,6 +49,11 @@ on:
       - 'scripts/**'
       - 'tests/**'
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   source-gates:
     name: Workspace gates
@@ -86,6 +91,25 @@ jobs:
       - name: Install workspace dependencies
         run: npm ci
 
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit message policy
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title || '' }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            printf '%s\n' "$PR_TITLE" | npx commitlint
+          else
+            npx commitlint --from "${{ github.event.before }}" --to "${{ github.sha }}"
+          fi
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high --omit=dev
+        continue-on-error: false
+
       - name: Lint check
         run: npm run lint:check
 
@@ -95,8 +119,26 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Type contract tests
+        run: npm run test:types
+
+      - name: Circular dependency check
+        run: npm run check:circular:backend && npm run check:circular:frontend
+
+      - name: Module graph check
+        run: npm run check:module-graph
+
+      - name: Frontend OpenAPI client drift gate
+        run: |
+          npm run api:client:generate
+          npm --workspace frontend exec -- prettier --write --ignore-unknown src/app/core/api/generated portal/src/app/core/api/generated
+          git diff --exit-code -- frontend/src/app/core/api/generated frontend/portal/src/app/core/api/generated docs/eng/api/openapi.json docs/eng/api/openapi-portal.json
+
       - name: API route alignment
         run: npm run api:alignment:check -- --json
+
+      - name: OpenAPI endpoint coverage report
+        run: npm run audit:openapi-coverage
 
       - name: DB alignment
         run: npm run db:alignment:check -- --json
@@ -125,8 +167,29 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Package build artefacts for attestation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          set -euo pipefail
+          mkdir -p build-artefacts
+          tar -czf build-artefacts/sgp-admin-dist.tar.gz -C frontend/dist . 2>/dev/null || true
+          tar -czf build-artefacts/sgp-backend-dist.tar.gz -C backend/dist . 2>/dev/null || true
+          ls -lh build-artefacts/
+
+      - name: Generate SLSA build provenance attestation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'build-artefacts/*.tar.gz'
+
       - name: Backend coverage
         run: npm run test:coverage -- --runInBand
+
+      - name: Scoped mutation gate
+        run: npm run test:mutation
+
+      - name: ROADMAP auto-block check
+        run: npm run roadmap:check
 
       - name: Governance validation
         run: npm run governance:check

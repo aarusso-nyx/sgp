@@ -2,11 +2,13 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { SgpEsocialEmittersService } from '../../integrations/stynx-esocial';
 import { ChangeContractRegimeDto } from './employees.dto';
 import { toIso } from './employee-mappers';
 import { EmployeeReferenceDataService } from './employee-reference-data.service';
@@ -24,6 +26,8 @@ export class EmployeeContractRegimeService {
     private readonly databaseService: DatabaseService,
     private readonly referenceDataService: EmployeeReferenceDataService,
     private readonly versionService: EmployeeVersionService,
+    @Optional()
+    private readonly esocialEmitters?: SgpEsocialEmittersService,
   ) {}
 
   async changeContractRegime(
@@ -34,7 +38,7 @@ export class EmployeeContractRegimeService {
     this.ensureDatabase();
     this.validateContractRegime(input);
 
-    return this.databaseService.transaction(async (client) => {
+    const result = await this.databaseService.transaction(async (client) => {
       const employeeRows = await client.query<EmployeeRegimeRow>(
         `
         SELECT
@@ -247,6 +251,7 @@ export class EmployeeContractRegimeService {
       const row = changeRows.rows[0]!;
       AuditMutationContextStore.markMutationAudited();
       return {
+        tenantId: employee.tenant_id,
         employeeId: row.employee_id,
         employmentLinkId: row.employment_link_id,
         employmentContractId: row.employment_contract_id,
@@ -259,6 +264,22 @@ export class EmployeeContractRegimeService {
         employmentLinkVersion: Number(row.employment_link_version),
       };
     });
+    await this.esocialEmitters?.s2206ContractChange({
+      tenantId: result.tenantId,
+      sourceId: result.employmentLinkId,
+      operation: 'update',
+      version: result.employmentLinkVersion,
+      data: {
+        employeeId: result.employeeId,
+        employmentContractId: result.employmentContractId,
+        contractType: result.contractType,
+        effectiveOn: result.effectiveOn,
+        endDate: result.endDate,
+      },
+    });
+    const { tenantId, ...publicResult } = result;
+    void tenantId;
+    return publicResult;
   }
 
   private validateContractRegime(input: ChangeContractRegimeDto): void {

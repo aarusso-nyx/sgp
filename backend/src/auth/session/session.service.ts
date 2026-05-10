@@ -30,7 +30,10 @@ export class SessionService {
     };
   }
 
-  recoverPassword(input: { login?: string; email?: string }) {
+  recoverPassword(input: {
+    login?: string | undefined;
+    email?: string | undefined;
+  }) {
     return {
       accepted: true,
       identifier: input.login ?? input.email ?? null,

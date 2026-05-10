@@ -9,6 +9,7 @@ import {
   TceOrganKind,
 } from '../contracts/tce-adapter.interface';
 import { LifecycleEmitterService } from '../lifecycle/lifecycle-emitter.service';
+import { domainError } from '../../common/errors/domain-error';
 
 export type TceAdapterStatus =
   | 'REGISTERED'
@@ -258,11 +259,15 @@ export class AdapterRegistryService {
     ] as const;
     for (const method of requiredMethods) {
       if (typeof adapter[method] !== 'function') {
-        throw new Error(`TCE adapter is missing method ${method}`);
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
+          `TCE adapter is missing method ${method}`,
+        );
       }
     }
     if (!adapter.supported_layouts().length) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         `TCE adapter ${adapter.id()} must declare at least one layout`,
       );
     }

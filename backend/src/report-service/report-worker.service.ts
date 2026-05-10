@@ -16,8 +16,11 @@ import { DocumentsStorageService } from '../documents/documents-storage.service'
 import { BlockedPaymentsReportService } from './blocked-payments-report.service';
 import { FinancialReportService } from './financial-report.service';
 import { ManagerialReportService } from './managerial-report.service';
+import { ManadExportReportService } from './manad-export-report.service';
+import { PerdcompExportReportService } from './perdcomp-export-report.service';
 import { PayrollSummaryReportService } from './payroll-summary-report.service';
 import { ReconciliationReportService } from './reconciliation-report.service';
+import { RepasseFundoRhReportService } from './repasse-fundo-rh-report.service';
 import { ReportWorkerArtifactsService } from './report-worker-artifacts.service';
 import { ReportWorkerDataService } from './report-worker-data.service';
 import {
@@ -29,6 +32,7 @@ import {
   WorkerResult,
   WORKER_PERMISSIONS,
 } from './report-worker.types';
+import { domainError } from '../common/errors/domain-error';
 
 export { REPORT_WORKER_DEFINITIONS } from './report-worker.types';
 export type { ReportWorkerRunSummary } from './report-worker.types';
@@ -43,6 +47,9 @@ export class ReportWorkerService {
   private readonly blockedPaymentsReports: BlockedPaymentsReportService;
   private readonly reconciliationReports: ReconciliationReportService;
   private readonly financialReports: FinancialReportService;
+  private readonly manadExports: ManadExportReportService;
+  private readonly perdcompExports: PerdcompExportReportService;
+  private readonly repasseFundoRhReports: RepasseFundoRhReportService;
 
   constructor(
     private readonly databaseService: DatabaseService,
@@ -57,6 +64,12 @@ export class ReportWorkerService {
     reconciliationReports?: ReconciliationReportService,
     @Optional()
     financialReports?: FinancialReportService,
+    @Optional()
+    manadExports?: ManadExportReportService,
+    @Optional()
+    perdcompExports?: PerdcompExportReportService,
+    @Optional()
+    repasseFundoRhReports?: RepasseFundoRhReportService,
   ) {
     const fallback = createFallbackReportServices(
       databaseService,
@@ -70,6 +83,10 @@ export class ReportWorkerService {
     this.reconciliationReports =
       reconciliationReports ?? fallback.reconciliationReports;
     this.financialReports = financialReports ?? fallback.financialReports;
+    this.manadExports = manadExports ?? fallback.manadExports;
+    this.perdcompExports = perdcompExports ?? fallback.perdcompExports;
+    this.repasseFundoRhReports =
+      repasseFundoRhReports ?? fallback.repasseFundoRhReports;
   }
 
   async pollOnce(limit = 10): Promise<ReportWorkerRunSummary> {
@@ -208,6 +225,12 @@ export class ReportWorkerService {
         return this.reconciliationReports.generate(job);
       case 'F_FOL_017':
         return this.financialReports.generate(job);
+      case 'MANAD_EXPORT':
+        return this.manadExports.generate(job);
+      case 'PERDCOMP_EXPORT':
+        return this.perdcompExports.generate(job);
+      case 'RELATORIO_REPASSE_FUNDO_RH':
+        return this.repasseFundoRhReports.generate(job);
       default:
         return assertNever(canonical);
     }
@@ -347,10 +370,16 @@ function createFallbackReportServices(
     blockedPaymentsReports: new BlockedPaymentsReportService(data, artifacts),
     reconciliationReports: new ReconciliationReportService(data, artifacts),
     financialReports: new FinancialReportService(data, artifacts),
+    manadExports: new ManadExportReportService(data, artifacts),
+    perdcompExports: new PerdcompExportReportService(data, artifacts),
+    repasseFundoRhReports: new RepasseFundoRhReportService(data, artifacts),
   };
 }
 
 function assertNever(value: never): never {
   void value;
-  throw new Error('Unsupported report worker definition');
+  throw domainError.internal(
+    'INTERNAL_INVARIANT',
+    'Unsupported report worker definition',
+  );
 }

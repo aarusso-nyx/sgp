@@ -14,6 +14,7 @@ import {
   IntegrationProcessResult,
   PendingIntegrationJobRow,
 } from './integration-job-dispatcher';
+import { domainError } from '../../common/errors/domain-error';
 
 interface RemittanceExecutionRow extends QueryResultRow {
   remittance_id: string;
@@ -84,7 +85,11 @@ export function createQueryOnlyCnabEmitter(
         [input.remittanceId],
       );
       const row = rows[0];
-      if (!row) throw new Error('Remittance record not found');
+      if (!row)
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
+          'Remittance record not found',
+        );
       const fileName =
         row.file_name ??
         `remessa_${String(input.remittanceNumber).padStart(6, '0')}.rem`;
@@ -122,7 +127,10 @@ export class Cnab240IntegrationDispatcher implements IntegrationJobDispatcher {
       case 'FOLHA_CNAB_RETORNO':
         return this.processReturn(job, context);
       default:
-        throw new Error(`Unsupported CNAB240 job: ${job.definition_code}`);
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
+          `Unsupported CNAB240 job: ${job.definition_code}`,
+        );
     }
   }
 
@@ -162,7 +170,8 @@ export class Cnab240IntegrationDispatcher implements IntegrationJobDispatcher {
       /^[a-f0-9]{64}$/i.test(stored.checksum) &&
       stored.checksum !== artifact.fileHash
     ) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'Generated CNAB hash does not match stored object checksum',
       );
     }
@@ -263,7 +272,10 @@ export class Cnab240IntegrationDispatcher implements IntegrationJobDispatcher {
     );
     const row = rows[0];
     if (!row) {
-      throw new Error('Return remittance record not found');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Return remittance record not found',
+      );
     }
 
     const artifact = buildCnabReturnReport({

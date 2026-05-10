@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { EventEmitter } from 'node:events';
 
 import {
@@ -114,5 +115,11 @@ describe('R4 observability spans and metrics', () => {
         status: 'ok',
       }),
     );
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

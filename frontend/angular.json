@@ -91,10 +91,10 @@
             ],
             "coverageReporters": ["text-summary", "json-summary", "lcov"],
             "coverageThresholds": {
-              "statements": 31,
-              "branches": 35,
-              "functions": 16,
-              "lines": 31
+              "statements": 90,
+              "branches": 90,
+              "functions": 90,
+              "lines": 90
             }
           }
         },
@@ -188,10 +188,10 @@
             ],
             "coverageReporters": ["text-summary", "json-summary", "lcov"],
             "coverageThresholds": {
-              "statements": 40,
-              "branches": 44,
-              "functions": 37,
-              "lines": 42
+              "statements": 90,
+              "branches": 90,
+              "functions": 90,
+              "lines": 90
             }
           }
         }

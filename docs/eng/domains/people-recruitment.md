@@ -103,6 +103,25 @@ Os dados de inscricao ficam vinculados ao concurso e ao tenant responsavel. A re
 
 As tabelas de candidato, inscricao e cobranca sao tenant-scoped, protegidas por RLS e auditadas por `sgp_append_audit_event(...)`. A rota publica de consulta nao expõe busca livre por CPF; exige identificador da inscricao e token gerado na criacao. Gateways de pagamento concretos devem manter o mesmo contrato sem armazenar segredos no repositorio.
 
+## Banco de Talentos
+
+Banco de Talentos is SGP-owned for v0.0.1. The accepted defaults are:
+
+- intake requires LGPD consent version and timestamp before persistence;
+- authenticated portal/admin intake stores the candidate in
+  `recrutamento.candidato`;
+- storage of curriculum files remains at the Stynx storage boundary through
+  object references, never scanner/quarantine logic;
+- ranking is deterministic: profile completeness, skills count, profile
+  summary depth, curriculum evidence, and stable tie-breakers decide ordering;
+- opt-out archives the profile through `pool_status = ARCHIVED` and preserves
+  audit/retention evidence rather than hard deleting candidate history.
+
+The backend response exposes `profileCompletenessScore` and `rankingScore` for
+operator triage. The values are advisory defaults; a later hiring policy may
+override weighting only through an explicit `docs/eng` change and matching
+tests.
+
 ## Recursos de prova em concursos
 
 ## Recursos de prova em concursos

@@ -1,0 +1,58 @@
+name: Release Impact Gate
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'backend/**'
+      - 'database/sql/**'
+      - 'frontend/**'
+      - 'infra/**'
+      - 'scripts/**'
+      - 'docs/eng/api/**'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  release-impact:
+    name: Release evidence for release-impacting changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify release evidence
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          changed_files=$(git diff --name-only "$BASE_REF" "$HEAD_REF" || true)
+          release_impact=$(echo "$changed_files" | grep -E '^(\.github/workflows/|backend/|database/sql/|frontend/|infra/|scripts/|docs/eng/api/)' || true)
+
+          if [ -z "$release_impact" ]; then
+            echo "No release-impacting files changed."
+            exit 0
+          fi
+
+          changelog_changed=$(echo "$changed_files" | grep -E '^(CHANGELOG.md|docs/gov/evidence/release-homologation-gate-bundle.md|docs/user/operator-readiness.md)$' || true)
+          body_release_marker=$(printf '%s' "${PR_BODY:-}" | grep -Ei 'Release-impact:\s*(none|yes|deferred|documented)' || true)
+
+          if [ -n "$changelog_changed" ] || [ -n "$body_release_marker" ]; then
+            echo "Release-impacting change is covered by release evidence."
+            echo "$changelog_changed"
+            echo "$body_release_marker"
+            exit 0
+          fi
+
+          echo "::error title=Release impact gate::Release-impacting changes require CHANGELOG.md, docs/gov/evidence/release-homologation-gate-bundle.md, docs/user/operator-readiness.md, or a PR body marker such as 'Release-impact: documented'."
+          echo "Affected files:"
+          echo "$release_impact"
+          exit 1

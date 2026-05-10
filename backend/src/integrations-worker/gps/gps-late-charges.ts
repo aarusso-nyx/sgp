@@ -3,7 +3,7 @@ import Decimal from 'decimal.js';
 export interface GpsLateChargesInput {
   competence: string;
   amount: string;
-  paidAt?: Date;
+  paidAt?: Date | undefined;
 }
 
 export interface GpsLateCharges {

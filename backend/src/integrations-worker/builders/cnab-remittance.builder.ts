@@ -1,3 +1,5 @@
+import { domainError } from '../../common/errors/domain-error';
+
 export interface CnabRemittanceBuildInput {
   competenceYear: number;
   competenceMonth: number;
@@ -22,7 +24,8 @@ export interface GeneratedArtifact {
 export function buildCnabRemittance(
   input: CnabRemittanceBuildInput,
 ): GeneratedArtifact {
-  throw new Error(
+  throw domainError.internal(
+    'INTERNAL_INVARIANT',
     `Use Cnab240EmitService for CNAB 240 remittance generation (${input.remittanceId})`,
   );
 }

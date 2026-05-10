@@ -16,7 +16,7 @@ export class RhTsvContratos {
   transmitting = false;
   saving = false;
   error = '';
-  transmission?: Record<string, unknown>;
+  transmission: Record<string, unknown> | undefined;
 
   private readonly fb = inject(FormBuilder);
   private readonly service = inject(TsvContratosService);
@@ -52,6 +52,11 @@ export class RhTsvContratos {
     }
     const value = this.form.getRawValue();
     const contractId = value.contractId ?? '';
+    const role = optional(value.role);
+    const monthlyAmount = optional(value.monthlyAmount);
+    const weeklyHours = optional(value.weeklyHours);
+    const workplaceId = optional(value.workplaceId);
+    const supervisorEmployeeId = optional(value.supervisorEmployeeId);
     this.saving = true;
     this.error = '';
     this.transmission = undefined;
@@ -59,11 +64,11 @@ export class RhTsvContratos {
       .update(contractId, {
         effectiveDate: value.effectiveDate ?? '',
         reason: value.reason ?? '',
-        role: optional(value.role),
-        monthlyAmount: optional(value.monthlyAmount),
-        weeklyHours: optional(value.weeklyHours),
-        workplaceId: optional(value.workplaceId),
-        supervisorEmployeeId: optional(value.supervisorEmployeeId),
+        ...(role ? { role } : {}),
+        ...(monthlyAmount ? { monthlyAmount } : {}),
+        ...(weeklyHours ? { weeklyHours } : {}),
+        ...(workplaceId ? { workplaceId } : {}),
+        ...(supervisorEmployeeId ? { supervisorEmployeeId } : {}),
       })
       .subscribe({
         next: (change) => {

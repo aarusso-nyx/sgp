@@ -28,13 +28,13 @@ export interface EmployeeListRow extends QueryResultRow {
   lifecycle_status: string;
   functional_status: string | null;
   branch_name: string | null;
-  branch_id?: string | null;
+  branch_id?: string | null | undefined;
   active: boolean;
-  abono_permanencia_ativo?: boolean;
-  abono_permanencia_inicio?: Date | string | null;
-  abono_permanencia_fundamento?: string | null;
-  recruitment_origin?: string | null;
-  version?: number | string;
+  abono_permanencia_ativo?: boolean | undefined;
+  abono_permanencia_inicio?: Date | string | null | undefined;
+  abono_permanencia_fundamento?: string | null | undefined;
+  recruitment_origin?: string | null | undefined;
+  version?: number | string | undefined;
   created_at: Date | string;
   updated_at: Date | string;
 }
@@ -44,8 +44,8 @@ export interface AbonoPermanenciaRow extends QueryResultRow {
   active: boolean;
   starts_on: Date | string | null;
   legal_basis: string | null;
-  audit_event_id?: string;
-  version?: number | string;
+  audit_event_id?: string | undefined;
+  version?: number | string | undefined;
   updated_at: Date | string;
 }
 
@@ -159,6 +159,7 @@ export interface ContractRow extends QueryResultRow {
 
 export interface CadastralChangeRow extends QueryResultRow {
   id: string;
+  tenant_id: string;
   employee_id: string;
   registration: string;
   employee_name: string;

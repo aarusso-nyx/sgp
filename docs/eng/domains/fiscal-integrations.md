@@ -44,10 +44,40 @@ they are cited through the obligation summaries below.
 | `docs/refs/esocial/events-tabelas.md`             | S-1000/S-1005/S-1010/S-1020 table events                                                  | backend/src/integrations/stynx-esocial/contracts/payloads/tabelas.ts:1       | Table-event construction and manual operation belong to stynx-esocial.             |
 | `docs/refs/esocial/events-totalizadores.md`       | S-5001/S-5002/S-5012 totalizer returns                                                    | backend/src/integrations/stynx-esocial/spool-update-consumer.service.ts:1    | Return/totalizer promotion arrives through event updates.                          |
 | `docs/refs/esocial/events-exclusao-fechamento.md` | S-3000 exclusion and S-1298/S-1299 reopening/closure                                      | backend/src/integrations/stynx-esocial/contracts/payloads/fechamento.ts:1    | Closure/exclusion requests cross the service boundary through contracts.           |
-| `docs/refs/esocial/transmission-soap-ws.md`       | SOAP WS transmission and production-restricted boundary                                   | backend/src/integrations/stynx-esocial/stynx-esocial.client.ts:1             | SGP does not perform SOAP transmission; it calls the stynx-esocial boundary.       |
+| `docs/refs/esocial/transmission-soap-ws.md`       | SOAP WS transmission and production-restricted boundary                                   | backend/src/integrations/stynx-esocial/sgp-esocial-transmission.service.ts:1 | SGP owns the local sandbox transmission/retry path over `public.esocial_events`.   |
 | `docs/refs/esocial/xsd-and-signing.md`            | XSD validation and PAdES/PKCS#7 sandbox evidence                                          | backend/src/auth/govbr/software-pades-pkcs7.signer.ts:1                      | Local sandbox signer/validator implemented; real certificate validation deferred.  |
 | `docs/refs/esocial/dctfweb-mit.md`                | DCTFWeb, MIT, CSLL adicional                                                              | backend/src/integrations-worker/dctfweb/dctfweb-builder.service.ts:1         | Implemented CSLL/MIT builder and golden fixture.                                   |
 | `docs/refs/esocial/efd-reinf.md`                  | EFD-Reinf R-2000/R-2055                                                                   | backend/src/integrations-worker/efd-reinf/builders/r2055.builder.ts:1        | Implemented R-2055/R-2000 builders and goldens.                                    |
+| Feature audit M.06                                | MANAD payroll digital-file package                                                        | backend/src/report-service/manad-export-report.service.ts:1                  | Implemented deterministic TXT/JSON export package with golden fixture.             |
+
+### External-Service Ownership Rebaseline
+
+Feature-audit mitigation MUST keep external-service and framework boundaries
+out of SGP implementation scope:
+
+- eSocial scope was owner-reopened on 2026-05-10 for SGP-side
+  transmission/signing/retry. SGP now owns HR and payroll source records,
+  normalized producer DTOs, `public.esocial_events` projection rows,
+  idempotency/source references, operator-visible status, and a local
+  sandbox adapter that signs XML evidence, submits it through the SGP
+  transmission service, and records retry/DLQ outcomes. Production SERPRO
+  credentials, ICP-Brasil custody, national homologation, and official return
+  parser evidence remain outside the repository unless separately authorized.
+- DET is an external-service integration boundary. SGP owns only the
+  tenant-local DET inbox projection, local annotations, operator state, and
+  "ciencia requested/recorded" status. Polling the government inbox, certificate
+  custody, acknowledgement protocol, retry/DLQ, message normalization, and
+  external audit publication belong to a future `stynx-det` service.
+- SIAPE and SIOPS are deferred external integrations until an owner-approved
+  service boundary exists. SGP can retain explicit deferral records and source
+  data projections, but must not claim active SIAPE/SIOPS service ownership.
+- SIOPE stays in SGP only when implemented as a local government reporting or
+  export workflow over SGP source data. Any FNDE service polling/transmission
+  runtime must be reclassified with SIAPE/SIOPS as an external integration.
+- Shared administration, token/auth, RBAC machinery, storage primitives, and
+  generic platform controls are owned by `../stynx`. SGP may consume those
+  primitives and may define SGP-domain permissions, but it must not fork or
+  replace the framework.
 
 ### Payroll, HR, legal, and procurement cluster
 
@@ -495,55 +525,57 @@ A DCTFWeb passa a consumir totalizadores Reinf R-9015 junto dos totalizadores eS
 
 ## Submissao eSocial SOAP
 
-## Submissao eSocial SOAP
+**Versao:** 3.0 | **Data:** 2026-05-10 | **Status:** SGP sandbox implemented
+**Escopo:** ES-08 no SGP cobre submissão local sandbox a partir de `public.esocial_events`.
 
-**Versao:** 2.0 | **Data:** 2026-05-04 | **Status:** Lifted out
-**Escopo:** ES-08 no SGP agora é apenas contrato de submissão para stynx-esocial.
-
-**Truth banner:** SGP no longer owns SOAP client plumbing, WS-Security/mTLS,
-XSD bundles, circuit breakers, production certificates, or national eSocial
-homologation. Those responsibilities are outside this repository and are
-represented in SGP by `public.esocial_events` plus gateway contracts.
+**Truth banner:** SGP owns the local sandbox transmission/signing/retry path for
+spool rows. Production certificates, ICP-Brasil custody, WSDL/SOAP
+homologation, and national eSocial certification are still not claimed by this
+repository.
 
 ### Decisao
 
 Os módulos SGP disparam eSocial internamente a partir de ações de domínio. Cada
-ação cria uma mensagem em `public.esocial_events` e a entrega ao client
-stynx-esocial. O serviço externo decide lote, assinatura, ambiente, retry,
-protocolo, recibo, rejeição definitiva e totalizadores.
+ação cria uma mensagem em `public.esocial_events`. O serviço
+`backend/src/integrations/stynx-esocial/sgp-esocial-transmission.service.ts`
+promove linhas `PENDING`/`RETRY` para `SENT`, monta envelope XML determinístico,
+anexa evidência de assinatura sandbox SHA-256/RSA, chama o adaptador sandbox
+SERPRO e grava `ACCEPTED`, `REJECTED`, `RETRY` ou `DLQ` no próprio spool.
 
 ### Endpoints
 
-SGP não configura WSDL ou endpoint eSocial nacional. O único endpoint eSocial
-externo do SGP é o destino stynx-esocial configurado para o gateway.
+SGP não configura WSDL ou endpoint eSocial nacional. A transmissão SGP atual é
+um adaptador sandbox local, acionável por `POST /v1/admin/esocial/messages/:id/transmit`
+ou `POST /v1/admin/esocial/process-pending`.
 
 ### Seguranca SOAP
 
-SGP não assina XML eSocial nem envelope SOAP. Assinatura, mTLS, A1/A3 e
-custódia de certificado pertencem ao stynx-esocial.
+SGP assina evidência XML sandbox para cada mensagem transmitida e persiste
+hashes de XML, certificado sandbox e digest de assinatura na resposta do spool.
+mTLS, A1/A3 real e custódia de certificado de produção seguem fora do escopo
+até autorização específica.
 
 ### Persistencia
 
-`public.esocial_events` e o registro canonico SGP de cada mensagem enviada ou
-recebida no limite com `stynx-esocial`. A tabela fica no banco SGP, forca RLS por
-tenant, armazena hashes SHA-256 de payload/resposta, status
+`public.esocial_events` é o registro canônico SGP de cada mensagem emitida,
+transmitida, aceita, rejeitada ou retida para retry/DLQ. A tabela fica no banco
+SGP, força RLS por tenant, armazena hashes SHA-256 de payload/resposta, status
 `PENDING|SENT|RECEIVED|ACCEPTED|REJECTED|RETRY|DLQ`, metadados de ator e
-request, e e a fonte para recibos e relatorios SGP. O banco isolado
-`stynx-esocial` nao tem FK, FDW, peering, replicacao, callback SQL ou connection
-string compartilhada com SGP.
+request, e é a fonte para recibos e relatórios SGP.
 
 ### Retry e Circuit Breaker
 
-Falhas de transporte entre SGP e stynx-esocial entram no spool como `RETRY` ou
-`DLQ`. Falhas do Ambiente Nacional são traduzidas por stynx-esocial e espelhadas
-como `ACCEPTED`, `REJECTED` ou `RETRY`.
+Falhas transitórias do adaptador sandbox entram no spool como `RETRY` enquanto
+`attempt < max_attempts`; quando o orçamento termina, a linha vai para `DLQ`.
+Rejeições definitivas são gravadas como `REJECTED`.
 
 ### Testes
 
 Os testes SGP usam `tests/backend/esocial-events.spec.ts`,
-`tests/backend/stynx-esocial-spool-update-consumer.spec.ts` e
-`tests/backend/stynx-esocial-audit-consumer.spec.ts`. Eles não dependem de WSDL,
-SOAP ou endpoint `gov.br`.
+`tests/backend/stynx-esocial-spool-update-consumer.spec.ts`,
+`tests/backend/stynx-esocial-audit-consumer.spec.ts` e
+`backend/src/integrations/stynx-esocial/sgp-esocial-transmission.service.spec.ts`.
+Eles não dependem de WSDL, SOAP ou endpoint `gov.br`.
 
 ### Apendice ES-09: classificacao de retorno
 
@@ -1028,7 +1060,29 @@ Before any adapter can submit official files:
 4. Add endpoint-specific submission behavior or a tenant-owned connector.
 5. Re-run `npm run test:coverage`, `npm run governance:check`, and `DATABASE_URL=... npm run db:smoke`.
 
-## Official Fiscal Export Primitives
+## MANAD Export Package
+
+**Status:** Implemented as a deterministic SGP report-worker export package.
+
+M.06 MANAD is generated by the report worker from tenant-scoped approved, paid,
+or closed payroll runs. The SGP-owned contract is a deterministic evidence
+package, not direct RFB transmission. The TXT artifact uses the `MANAD-SGP-V1`
+layout with header, item, and total records. The JSON artifact carries the same
+rows and totals for operator reconciliation.
+
+### Evidence
+
+- Runtime: `backend/src/report-service/manad-export-report.service.ts`
+- Worker routing: `backend/src/report-service/report-worker.service.ts`
+- Data source: `payroll.payroll_run`, `payroll.employee_payroll_item`,
+  `payroll.payroll_earning_deduction`, and `hr.employee`
+- Golden fixture: `tests/backend/golden/manad-v01/expected.txt`
+- Focused spec: `backend/src/report-service/manad-export-report.service.spec.ts`
+
+Generated files are persisted through `public.generated_report_file`, so the
+existing generated-report audit trigger records insert/update/delete mutations.
+Official RFB upload, receipt polling, and homologation remain outside this SGP
+runtime unless reopened by owner decision.
 
 ## Official Fiscal Export Primitives
 

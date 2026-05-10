@@ -4,7 +4,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 export interface ProgramRevisionSummary {
   id: string;
   parentProgramId: string;
-  parentProgramKind: 'PCMSO' | 'PGR';
+  parentProgramKind: ProgramParentKind;
   revisionNumber: number;
   revisionReason: string;
   snapshotJson: Record<string, unknown>;
@@ -16,7 +16,7 @@ export interface ProgramRevisionSummary {
 interface RevisionRow extends QueryResultRow {
   id: string;
   parent_program_id: string;
-  parent_program_kind: 'PCMSO' | 'PGR';
+  parent_program_kind: ProgramParentKind;
   revision_number: number;
   revision_reason: string;
   snapshot_json: Record<string, unknown>;
@@ -25,24 +25,37 @@ interface RevisionRow extends QueryResultRow {
   created_at: Date | string;
 }
 
+export type ProgramParentKind = 'PCMSO' | 'PGR' | 'PCMAT';
+
 @Injectable()
 export class ProgramRevisionService {
   async createWithClient(
     client: PoolClient,
     input: {
       parentProgramId: string;
-      parentProgramKind: 'PCMSO' | 'PGR';
+      parentProgramKind: ProgramParentKind;
       revisionReason: string;
-      signedPdfUri?: string | null;
-      sha256?: string | null;
+      signedPdfUri?: string | null | undefined;
+      sha256?: string | null | undefined;
       snapshotJson: Record<string, unknown>;
     },
   ): Promise<ProgramRevisionSummary> {
     if (input.parentProgramKind === 'PCMSO') {
-      await this.assertPcmosExists(client, input.parentProgramId);
+      await this.assertHealthProgramExists(
+        client,
+        input.parentProgramId,
+        'PCMSO',
+      );
     }
     if (input.parentProgramKind === 'PGR') {
       await this.assertPgrExists(client, input.parentProgramId);
+    }
+    if (input.parentProgramKind === 'PCMAT') {
+      await this.assertHealthProgramExists(
+        client,
+        input.parentProgramId,
+        'PCMAT',
+      );
     }
     const rows = await client.query<RevisionRow>(
       `
@@ -93,15 +106,21 @@ export class ProgramRevisionService {
     };
   }
 
-  private async assertPcmosExists(
+  private async assertHealthProgramExists(
     client: PoolClient,
     id: string,
+    kind: 'PCMSO' | 'PCMAT',
   ): Promise<void> {
     const rows = await client.query(
-      'SELECT 1 FROM saude.health_program WHERE id = $1::uuid',
-      [id],
+      `
+      SELECT 1
+      FROM saude.health_program
+      WHERE id = $1::uuid
+        AND kind = $2::saude.health_program_kind
+      `,
+      [id, kind],
     );
-    if (rows.rowCount === 0) throw new BadRequestException('PCMSO not found');
+    if (rows.rowCount === 0) throw new BadRequestException(`${kind} not found`);
   }
 
   private async assertPgrExists(client: PoolClient, id: string): Promise<void> {

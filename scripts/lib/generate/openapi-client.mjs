@@ -31,6 +31,8 @@ const portalSpecPath = resolve(adminOutDir, 'openapi-portal.json');
 const adminClientPath = resolve(adminOutDir, 'openapi-client.ts');
 const portalClientPath = resolve(portalOutDir, 'openapi-client.ts');
 const portalClientSpecPath = resolve(portalOutDir, 'openapi-portal.json');
+const canonicalCoreSpecPath = resolve(sourceRoot, 'docs/eng/api/openapi.json');
+const canonicalPortalSpecPath = resolve(sourceRoot, 'docs/eng/api/openapi-portal.json');
 
 const corePort = Number(process.env.OPENAPI_CORE_PORT ?? 3300);
 const portalPort = Number(process.env.OPENAPI_PORTAL_PORT ?? 3301);
@@ -293,6 +295,10 @@ async function main() {
     writeFileSync(coreSpecPath, `${JSON.stringify(coreSpec, null, 2)}\n`, 'utf8');
     writeFileSync(portalSpecPath, `${JSON.stringify(portalSpec, null, 2)}\n`, 'utf8');
 
+    mkdirSync(dirname(canonicalCoreSpecPath), { recursive: true });
+    writeFileSync(canonicalCoreSpecPath, `${JSON.stringify(coreSpec, null, 2)}\n`, 'utf8');
+    writeFileSync(canonicalPortalSpecPath, `${JSON.stringify(portalSpec, null, 2)}\n`, 'utf8');
+
     const mergedOperations = dedupeOperations([
       ...extractOperations(coreSpec),
       ...extractOperations(portalSpec),
@@ -313,6 +319,8 @@ async function main() {
     console.log(`[openapi-client] wrote ${coreSpecPath}`);
     console.log(`[openapi-client] wrote ${portalSpecPath}`);
     console.log(`[openapi-client] wrote ${portalClientSpecPath}`);
+    console.log(`[openapi-client] wrote ${canonicalCoreSpecPath}`);
+    console.log(`[openapi-client] wrote ${canonicalPortalSpecPath}`);
   } finally {
     killProcess(coreProcess);
     killProcess(portalProcess);

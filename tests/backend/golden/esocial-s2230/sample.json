@@ -1,0 +1,17 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-2230",
+  "operation": "create",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "hr",
+    "table": "leave_record",
+    "id": "00000000-0000-4000-8000-000000002230",
+    "version": 1
+  },
+  "data": {
+    "employeeId": "00000000-0000-4000-8000-000000000501",
+    "startsOn": "2026-05-10",
+    "reason": "maternidade"
+  }
+}

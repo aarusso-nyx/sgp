@@ -32,3 +32,7 @@ Run this checklist before applying canonical SQL or releasing API changes.
    - `npm run test:e2e`
 9. Verify docs endpoint:
    - `/docs` loads and reflects protected document routes.
+
+See also: `docs/eng/runbooks/db-migration.md`,
+`docs/eng/runbooks/deploy-rollback.md`, and
+`docs/eng/runbooks/backup-restore.md`.

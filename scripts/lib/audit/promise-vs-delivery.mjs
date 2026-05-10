@@ -29,20 +29,13 @@ await writeText(
 );
 
 export async function buildPromiseVsDelivery(repoRoot, auditRoot, round) {
-  const rows = parseFrRows(await readText(join(auditRoot, 'functional-requisites.md')));
+  const rows = parseFrRows(await readFunctionalRequisites(repoRoot, auditRoot));
   const findings = [];
   for (const row of rows) {
     if (row.status === 'DONE') {
-      findings.push(await validateDone(repoRoot, row));
+      findings.push(await validatePromoted(repoRoot, row));
     } else if (row.status === 'PARTIAL') {
-      findings.push({
-        fr_id: row.id,
-        status: row.status,
-        result: 'missing-dimensions',
-        notes:
-          missingEvidenceDimensions(row.evidence).join(', ') ||
-          'Evidence dimensions are not explicit.',
-      });
+      findings.push(await validatePromoted(repoRoot, row));
     }
   }
   return {
@@ -56,17 +49,35 @@ export async function buildPromiseVsDelivery(repoRoot, auditRoot, round) {
   };
 }
 
+async function readFunctionalRequisites(repoRoot, auditRoot) {
+  const auditLedger = await readText(join(auditRoot, 'functional-requisites.md'));
+  if (auditLedger.trim()) return auditLedger;
+  return readText(join(repoRoot, 'docs', 'gov', 'audit', 'functional-requisites.md'));
+}
+
 function parseFrRows(markdown) {
   return firstTableRows(markdown).map((row) => ({
     id: row['FR-ID'] || row.ID || '',
     requirement: row.Requirement || '',
     status: String(row.Status || '').toUpperCase(),
     evidence: row.Evidence || '',
+    notes: row.Notes || '',
   }));
 }
 
-async function validateDone(repoRoot, row) {
-  const refs = evidenceRefs(row.evidence);
+async function validatePromoted(repoRoot, row) {
+  const proof = parseProof(row);
+  const proofFailures = requiredProofFailures(proof, row.status);
+  if (proofFailures.length > 0) {
+    return {
+      fr_id: row.id,
+      status: row.status,
+      result: 'missing-proof-metadata',
+      notes: proofFailures.join(', '),
+    };
+  }
+
+  const refs = evidenceRefs(proof.text);
   if (refs.length === 0) {
     return {
       fr_id: row.id,
@@ -98,14 +109,14 @@ async function validateDone(repoRoot, row) {
     fr_id: row.id,
     status: row.status,
     result: failures.length === 0 ? 'ok' : 'invalid-evidence',
-    notes: failures.join('; ') || refs.map((ref) => ref.raw).join(', '),
+    notes: failures.join('; ') || proof.rationale || refs.map((ref) => ref.raw).join(', '),
   };
 }
 
 function evidenceRefs(evidence) {
   const refs = [];
   const regex =
-    /(?:`)?(?<path>(?:backend|frontend|database|docs|scripts|tests|infra)\/[^`:\s,|]+)(?::(?<line>\d+))?(?:`)?/g;
+    /(?:`)?(?<path>(?:backend|frontend|database|docs|scripts|tests|infra)\/[^`:\s,;|]+)(?::(?<line>\d+))?(?:`)?/g;
   for (const match of evidence.matchAll(regex)) {
     refs.push({
       raw: match[0].replace(/`/g, ''),
@@ -116,15 +127,52 @@ function evidenceRefs(evidence) {
   return refs;
 }
 
-function missingEvidenceDimensions(evidence) {
-  const dimensions = [
-    ['docs', /\bdocs\//],
-    ['backend', /\bbackend\//],
-    ['frontend', /\bfrontend\//],
-    ['database', /\bdatabase\//],
-    ['tests', /\btests?\//],
-  ];
-  return dimensions.filter(([, pattern]) => !pattern.test(evidence)).map(([name]) => name);
+function parseProof(row) {
+  const text = `${row.evidence || ''}; ${row.notes || ''}`;
+  return {
+    text,
+    source: proofField(text, 'source'),
+    test: proofField(text, 'test'),
+    command: proofField(text, 'command'),
+    audit: proofField(text, 'audit'),
+    rationale: proofField(text, 'rationale'),
+  };
+}
+
+function proofField(text, field) {
+  const match = new RegExp(`${field}\\s*=\\s*([^;]+)`, 'i').exec(text);
+  return match?.[1]?.trim() ?? '';
+}
+
+function requiredProofFailures(proof, status) {
+  const failures = [];
+  if (!isSourcePath(proof.source)) failures.push('source');
+  if (!isTestPath(proof.test)) failures.push('test');
+  if (!isCommand(proof.command)) failures.push('command');
+  if (!isAuditNotePath(proof.audit)) failures.push('audit');
+  if (!proof.rationale || proof.rationale.length < 10) failures.push('rationale');
+  if (status === 'DONE' && /partial|todo|blocked/i.test(proof.rationale)) {
+    failures.push('rationale-status-mismatch');
+  }
+  return failures;
+}
+
+function isSourcePath(value) {
+  return /^(backend|frontend|database|scripts|infra)\/\S+/.test(value);
+}
+
+function isTestPath(value) {
+  return (
+    /^(tests|backend|frontend)\/\S+/.test(value) && /(?:\.spec|\.test|-spec|\/golden\/)/.test(value)
+  );
+}
+
+function isCommand(value) {
+  return /^(npm run|npm -w|node scripts\/|npx )\b/.test(value);
+}
+
+function isAuditNotePath(value) {
+  return /^docs\/gov\/audit\/\S+/.test(value);
 }
 
 function renderMarkdown(pvd) {

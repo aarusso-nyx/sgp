@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { BadRequestException } from '@nestjs/common';
 
 import { ShiftPatternService } from './shift-pattern.service';

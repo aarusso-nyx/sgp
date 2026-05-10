@@ -16,7 +16,7 @@ const tenantId = '00000000-0000-0000-0000-00000000f522';
 const declarationId = '00000000-0000-4000-8000-00000000f522';
 const competence = '2026-01-01';
 
-type TotalizerKind = 'S-5011' | 'S-5013';
+type TotalizerKind = 'S-5011' | 'S-5012' | 'S-5013' | 'R-9015';
 
 interface TotalizerRow {
   kind: TotalizerKind;
@@ -52,7 +52,7 @@ describe('DCTFWeb totalizer reconciliation (e2e)', () => {
     jest.restoreAllMocks();
   });
 
-  it('transmits S-5011 and S-5013 totals equal to accepted eSocial totalizers for the same competence', async () => {
+  it('transmits S-5011, S-5012, S-5013, and EFD-Reinf R-9015 totals for the same competence', async () => {
     const totalizers = acceptedTotalizers();
     const inserted: InsertedItem[] = [];
     let payloadXml = '';
@@ -157,6 +157,7 @@ describe('DCTFWeb totalizer reconciliation (e2e)', () => {
     expect(transmitted.status).toBe('ACCEPTED');
     expect(generated.competence).toBe(competence);
     expect(transmittedXml).toContain('<competencia>2026-01</competencia>');
+    expect(transmittedXml).toContain('sourceEvent="R9015"');
     expect(transmittedTotalsByEvent(transmittedXml)).toEqual(
       expectedTotalsByEvent(totalizers),
     );
@@ -198,6 +199,34 @@ function acceptedTotalizers(): TotalizerRow[] {
             'FGTS',
             '800.00',
             '64.00',
+          ),
+        ],
+      },
+    },
+    {
+      kind: 'S-5012',
+      source_event_recibo: '1.1.0000000000000001299',
+      payload: {
+        items: [
+          item(
+            '00000000-0000-4000-8000-000000005121',
+            '0561',
+            '450.00',
+            '45.00',
+          ),
+        ],
+      },
+    },
+    {
+      kind: 'R-9015',
+      source_event_recibo: 'R-9015-R4099-2026-01',
+      payload: {
+        items: [
+          item(
+            '00000000-0000-4000-8000-000000009015',
+            '5952',
+            '700.00',
+            '70.50',
           ),
         ],
       },
@@ -251,7 +280,7 @@ function declarationRow(input: {
     transmitted_xml_hash: null,
     receipt_number: null,
     receipt_at: null,
-    item_count: 3,
+    item_count: 5,
     total_base_amount: input.totalBaseAmount,
     total_amount: input.totalAmount,
     created_at: '2026-05-02T12:00:00.000Z',
@@ -276,7 +305,7 @@ function itemRow(item: InsertedItem) {
 
 function expectedTotalsByEvent(
   totalizers: TotalizerRow[],
-): Record<DctfwebSourceEvent, string> {
+): Partial<Record<DctfwebSourceEvent, string>> {
   return {
     S5011: moneyFromCents(
       sumTotalizers(
@@ -284,10 +313,21 @@ function expectedTotalsByEvent(
         (entry) => entry.amount,
       ),
     ),
-    S5012: '0.00',
+    S5012: moneyFromCents(
+      sumTotalizers(
+        totalizers.filter((row) => row.kind === 'S-5012'),
+        (entry) => entry.amount,
+      ),
+    ),
     S5013: moneyFromCents(
       sumTotalizers(
         totalizers.filter((row) => row.kind === 'S-5013'),
+        (entry) => entry.amount,
+      ),
+    ),
+    R9015: moneyFromCents(
+      sumTotalizers(
+        totalizers.filter((row) => row.kind === 'R-9015'),
         (entry) => entry.amount,
       ),
     ),
@@ -296,11 +336,12 @@ function expectedTotalsByEvent(
 
 function transmittedTotalsByEvent(
   xml: string,
-): Record<DctfwebSourceEvent, string> {
+): Partial<Record<DctfwebSourceEvent, string>> {
   return {
     S5011: moneyFromCents(sumXmlValues(xml, 'S5011')),
     S5012: moneyFromCents(sumXmlValues(xml, 'S5012')),
     S5013: moneyFromCents(sumXmlValues(xml, 'S5013')),
+    R9015: moneyFromCents(sumXmlValues(xml, 'R9015')),
   };
 }
 

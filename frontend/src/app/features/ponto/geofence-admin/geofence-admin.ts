@@ -33,7 +33,9 @@ export class GeofenceAdmin {
       .map((line) => line.trim())
       .filter(Boolean)
       .map((line) => {
-        const [lat, lon] = line.split(',').map((value) => Number(value.trim()));
+        const [lat = Number.NaN, lon = Number.NaN] = line
+          .split(',')
+          .map((value) => Number(value.trim()));
         return { lat, lon };
       })
       .filter((point) => Number.isFinite(point.lat) && Number.isFinite(point.lon));
@@ -45,10 +47,12 @@ export class GeofenceAdmin {
     for (let i = 0; i < points.length; i += 1) {
       const a1 = points[i];
       const a2 = points[(i + 1) % points.length];
+      if (!a1 || !a2) continue;
       for (let j = i + 1; j < points.length; j += 1) {
         if (Math.abs(i - j) <= 1 || (i === 0 && j === points.length - 1)) continue;
         const b1 = points[j];
         const b2 = points[(j + 1) % points.length];
+        if (!b1 || !b2) continue;
         if (this.segmentsIntersect(a1, a2, b1, b2)) return true;
       }
     }

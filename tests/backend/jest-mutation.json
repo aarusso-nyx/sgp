@@ -1,0 +1,16 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "../..",
+  "moduleDirectories": ["node_modules", "<rootDir>/node_modules"],
+  "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
+  "testEnvironment": "node",
+  "testRegex": "(backend/src/common/money/money\\.(property\\.)?spec\\.ts|backend/src/common/errors/standard-exception\\.filter\\.spec\\.ts|backend/src/common/lgpd/legal-basis\\.service\\.spec\\.ts|backend/src/folha-pagamento/fgts/fgts\\.service\\.spec\\.ts|backend/src/folha-pagamento/operations/bank-account/bank-account-validator\\.service\\.spec\\.ts|backend/src/audit/audit-redaction\\.util\\.spec\\.ts)$",
+  "transform": {
+    "^.+\\.ts$": [
+      "<rootDir>/node_modules/ts-jest",
+      {
+        "tsconfig": "<rootDir>/tests/backend/tsconfig.json"
+      }
+    ]
+  }
+}

@@ -31,11 +31,11 @@ export interface AfdType1Input {
 export interface AfdType4Input {
   nsr: number;
   employeeIdentifier: string;
-  employeeName?: string | null;
+  employeeName?: string | null | undefined;
   recordedAt: string;
   source: string;
   repDeviceId: string;
-  recordHash?: string | null;
+  recordHash?: string | null | undefined;
 }
 
 export interface AfdType9Input {

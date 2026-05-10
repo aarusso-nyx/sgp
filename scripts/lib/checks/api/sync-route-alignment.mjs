@@ -23,6 +23,8 @@ const DOMAIN_WORKFLOW_MENU_DOCS = [
   'docs/eng/platform.md',
   'docs/eng/experience.md',
 ];
+const INSTALLED_ADMIN_MENU_MODULES = new Set(['auditoria']);
+const ADMIN_MENU_INSTALL_PROOF = 'docs/gov/audit/admin-menu-install-plan.md';
 
 const ROUTE_AUTHORITY_EXCLUDED_DOCS = new Set([
   'docs/gov/generated/database/alignment-matrix.json',
@@ -511,11 +513,15 @@ function buildMenuAlignment() {
     '### 5. Regras de Exibição de Menu',
   );
   const portalRuntimePaths = parsePortalRuntimePaths();
-  const adminRows = adminMenuRoutes.map((route) => ({
-    ...route,
-    status: 'postponed',
-    deferred_scope: 'ADMIN_INSTALL_LATER',
-  }));
+  const adminRows = adminMenuRoutes.map((route) => {
+    const implemented = INSTALLED_ADMIN_MENU_MODULES.has(route.module);
+    return {
+      ...route,
+      status: implemented ? 'implemented' : 'postponed',
+      deferred_scope: implemented ? undefined : 'ADMIN_INSTALL_LATER',
+      evidence: implemented ? [ADMIN_MENU_INSTALL_PROOF] : undefined,
+    };
+  });
   const portalRows = portalMenuRoutes.map((route) => {
     const deferred = route.module === 'auth' ? 'IDENTITY_INSTALL_LATER' : undefined;
     const implemented = portalRuntimePaths.some((runtimePath) =>
@@ -530,11 +536,15 @@ function buildMenuAlignment() {
 
   return {
     admin: {
-      status: 'postponed',
+      status: adminRows.every((row) => row.status === 'implemented')
+        ? 'implemented'
+        : adminRows.some((row) => row.status === 'implemented')
+          ? 'partial'
+          : 'postponed',
       deferred_scope: 'ADMIN_INSTALL_LATER',
       documented_routes: adminRows.length,
-      implemented: 0,
-      postponed: adminRows.length,
+      implemented: adminRows.filter((row) => row.status === 'implemented').length,
+      postponed: adminRows.filter((row) => row.status === 'postponed').length,
       missing: [],
       routes: adminRows,
     },

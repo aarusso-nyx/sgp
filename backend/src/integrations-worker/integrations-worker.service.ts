@@ -25,6 +25,7 @@ import {
   PendingIntegrationJobRow,
   SUPPORTED_DEFINITIONS as DEFAULT_SUPPORTED_DEFINITIONS,
 } from './dispatcher/integration-job-dispatcher';
+import { domainError } from '../common/errors/domain-error';
 
 export {
   REPORT_SERVICE_DEFINITIONS,
@@ -235,7 +236,10 @@ export class IntegrationsWorkerService {
   private async process(job: PendingJobRow): Promise<ProcessResult> {
     const dispatcher = this.dispatchersByDefinition.get(job.definition_code);
     if (!dispatcher) {
-      throw new Error(`Unsupported integrations job: ${job.definition_code}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `Unsupported integrations job: ${job.definition_code}`,
+      );
     }
     return dispatcher.process(job, this.dispatchContext);
   }
@@ -290,7 +294,10 @@ export class IntegrationsWorkerService {
     );
     const attachmentId = rows[0]?.id;
     if (!attachmentId) {
-      throw new Error('Unable to persist generated attachment');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Unable to persist generated attachment',
+      );
     }
 
     await this.databaseService.query(
@@ -422,7 +429,10 @@ export class IntegrationsWorkerService {
   ): string {
     const value = this.readString(payload, key);
     if (!value) {
-      throw new Error(`Missing required worker parameter: ${key}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `Missing required worker parameter: ${key}`,
+      );
     }
     return value;
   }

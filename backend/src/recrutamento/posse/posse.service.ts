@@ -21,7 +21,7 @@ interface PosseRow extends QueryResultRow {
   employee_id: string | null;
   status: string;
   cancellation_reason: string | null;
-  s2200_event_count?: string;
+  s2200_event_count?: string | undefined;
 }
 
 interface EffectRow extends QueryResultRow {

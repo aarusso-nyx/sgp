@@ -42,7 +42,8 @@ function printHelp() {
   console.log('Examples:');
   console.log('  node scripts/run.mjs health --json');
   console.log('  node scripts/run.mjs test db');
-  console.log('  node scripts/run.mjs deploy --target stage --dry-run');
+  console.log('  node scripts/run.mjs deploy --mode provision --target stage --dry-run');
+  console.log('  node scripts/run.mjs deploy --mode artifacts --target prod --dry-run');
 }
 
 function parseOption(optionName, defaultValue) {
@@ -151,6 +152,7 @@ function handleLint() {
   if (check) {
     steps.push(
       () => runCommand(process.execPath, ['scripts/lib/checks/test-debt-coverage.mjs']),
+      () => runCommand('npx', ['jscpd', '--config', '.jscpd.json', '--exitCode', '0']),
       () => runCommand(process.execPath, ['scripts/check-api.mjs', 'operation', 'check']),
       () => runCommand(process.execPath, ['scripts/check-api.mjs', 'spec', 'check']),
     );
@@ -183,6 +185,9 @@ function handleTypecheck() {
 
 function handleTest() {
   const subcommand = args[0] ?? 'unit';
+  if (subcommand.startsWith('tests/') && subcommand.endsWith('.mjs')) {
+    return runCommand(process.execPath, ['--test', ...args]);
+  }
   const e2eArgs = args.slice(1);
   const serialE2eArgs =
     e2eArgs.includes('--runInBand') || e2eArgs.some((arg) => arg.startsWith('--maxWorkers'))
@@ -211,6 +216,12 @@ function handleTest() {
       runWorkspaceScript('backend', 'test', args.slice(1), {
         env: localTestDatabaseEnv(),
       }),
+    types: () => runCommand('npx', ['tsc', '--noEmit', '-p', 'tests/types/tsconfig.json']),
+    mutation: () => runCommand('npx', ['stryker', 'run', ...args.slice(1)]),
+    'backend-exception-filter': () =>
+      runWorkspaceScript('backend', 'test:exception-filter', args.slice(1), {
+        env: localTestDatabaseEnv(),
+      }),
     db: () =>
       runCommand(process.execPath, ['scripts/db.mjs', 'bootstrap-smoke'], {
         env: localTestDatabaseEnv(),
@@ -231,7 +242,7 @@ function handleTest() {
 
   if (!handlers[subcommand]) {
     console.error(
-      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, frontend-e2e, backend, db, e2e, coverage, frontend-coverage, qa, qa-api, qa-frontend',
+      '[test] valid subcommands: unit, admin, admin-e2e, portal, portal-e2e, frontend-e2e, backend, backend-exception-filter, types, mutation, db, e2e, coverage, frontend-coverage, qa, qa-api, qa-frontend',
     );
     return 1;
   }
@@ -256,7 +267,7 @@ function handleDb() {
   const dbHandlers = {
     help: () => {
       console.log(
-        'Usage: node scripts/run.mjs db <migrate|seed|smoke|alignment check|fk-coverage check|fk-coverage write|push-guard> [options]',
+        'Usage: node scripts/run.mjs db <migrate|seed|smoke|alignment check|fk-coverage check|fk-coverage write|push-guard|rls-no-write-guard> [options]',
       );
       return 0;
     },
@@ -302,11 +313,17 @@ function handleDb() {
     },
     'push-guard': () =>
       runCommand(process.execPath, ['scripts/check-db.mjs', 'push-guard', ...args.slice(1)]),
+    'rls-no-write-guard': () =>
+      runCommand(process.execPath, [
+        'scripts/check-db.mjs',
+        'rls-no-write-guard',
+        ...args.slice(1),
+      ]),
   };
 
   if (!dbHandlers[subcommand]) {
     console.error(
-      '[db] valid subcommands: help, migrate, seed, smoke, alignment, fk-coverage, push-guard',
+      '[db] valid subcommands: help, migrate, seed, smoke, alignment, fk-coverage, push-guard, rls-no-write-guard',
     );
     return 1;
   }
@@ -435,6 +452,7 @@ function runAuditSubcommand(subcommand, passThrough) {
       'backlog',
       'pvd',
       'live-data',
+      'openapi-coverage',
       'rls-spec-coverage',
     ].includes(subcommand)
   ) {
@@ -464,7 +482,56 @@ function handleGovernance() {
   return runCommand(process.execPath, ['scripts/lib/governance/validate.mjs']);
 }
 
+function handleRoadmap() {
+  const subcommand = args[0] ?? 'write';
+  if (subcommand === 'check') {
+    return runCommand(process.execPath, ['scripts/lib/roadmap-from-ledger.mjs', '--check']);
+  }
+  if (subcommand !== 'write') {
+    console.error('[roadmap] valid subcommands: write, check');
+    return 1;
+  }
+  return runCommand(process.execPath, ['scripts/lib/roadmap-from-ledger.mjs']);
+}
+
 function handleCheck() {
+  if (args[0] === 'module-graph') {
+    return runCommand('npx', [
+      'depcruise',
+      '--validate',
+      '.dependency-cruiser.cjs',
+      'backend/src',
+      'frontend/src',
+      ...args.slice(1),
+    ]);
+  }
+
+  if (args[0] === 'circular') {
+    const target = args[1] ?? 'help';
+    const handlers = {
+      backend: () => runCommand('madge', ['--circular', 'backend/src', ...args.slice(2)]),
+      frontend: () => runCommand('madge', ['--circular', 'frontend/src', ...args.slice(2)]),
+    };
+
+    if (!handlers[target]) {
+      console.error('[check circular] valid targets: backend, frontend');
+      return 1;
+    }
+
+    return handlers[target]();
+  }
+
+  if (args[0] === 'duplication') {
+    return runCommand('npx', [
+      'jscpd',
+      '--config',
+      '.jscpd.json',
+      '--exitCode',
+      '0',
+      ...args.slice(1),
+    ]);
+  }
+
   return runCommand(process.execPath, ['scripts/check-evidence.mjs', ...args]);
 }
 
@@ -533,37 +600,123 @@ function handleHealth() {
 function handleDeploy() {
   const target = parseOption('target', 'stage');
   const stack = parseOption('stack', 'all');
+  const mode = parseOption('mode', 'provision');
+  const provider = parseOption('provider', undefined);
   const apply = hasFlag('apply');
   const dryRun = hasFlag('dry-run') || !apply;
 
-  const stackTemplateByName = {
-    all: 'infra/aws/templates/stack-all.yaml',
-    cognito: 'infra/aws/templates/stack-cognito.yaml',
-    rds: 'infra/aws/templates/stack-rds.yaml',
-    backend: 'infra/aws/templates/stack-backend.yaml',
-    frontend: 'infra/aws/templates/stack-frontend.yaml',
-  };
-
-  if (!(stack in stackTemplateByName)) {
-    console.error(`[deploy] invalid stack: ${stack}`);
-    console.error('Valid stacks: all, cognito, rds, backend, frontend');
+  if (!['stage', 'prod'].includes(target)) {
+    console.error(`[deploy] invalid target: ${target}`);
+    console.error('Valid targets: stage, prod');
     return 1;
   }
 
-  const templatePath = stackTemplateByName[stack];
-  console.log(`[deploy] target=${target} stack=${stack} template=${templatePath}`);
+  if (!['provision', 'artifacts'].includes(mode)) {
+    console.error(`[deploy] invalid mode: ${mode}`);
+    console.error('Valid modes: provision, artifacts');
+    return 1;
+  }
+
+  if (provider && provider !== 'aws') {
+    console.error('[deploy] provider selection has been removed; SGP deploy targets AWS only.');
+    console.error('Remove --provider or use --provider aws.');
+    return 1;
+  }
+
+  if (mode === 'artifacts') {
+    const targetManifest = parseOption(
+      'target-manifest',
+      `infra/aws/targets/${target}.targets.json`,
+    );
+    const artifactUri = parseOption('artifact-uri', parseOption('artifact', ''));
+    const releaseId = parseOption('release-id', parseOption('sha', ''));
+    const migrationEvidence = parseOption('migration-evidence', '');
+    const releaseGateEvidence = parseOption('release-gate-evidence', '');
+    const applyAuthorization = parseOption('apply-authorization', '');
+    console.log(`[deploy] mode=artifacts target=${target} targetManifest=${targetManifest}`);
+    console.log('[deploy] provider=aws');
+    console.log('[deploy] artifact deploy does not create or change infrastructure resources.');
+    if (dryRun) {
+      console.log('[deploy] dry-run mode active; no artifacts were pushed.');
+      console.log(
+        `[deploy] artifact=${artifactUri || '<required for apply>'} release=${releaseId || '<required for apply>'}`,
+      );
+      console.log(
+        `[deploy] migrationEvidence=${migrationEvidence || '<manual DB migration evidence required for apply>'}`,
+      );
+      console.log(
+        `[deploy] releaseGateEvidence=${releaseGateEvidence || '<accepted release/homologation gate evidence required for apply>'}`,
+      );
+      console.log(
+        `[deploy] applyAuthorization=${applyAuthorization || '<artifact apply authorization evidence required for apply>'}`,
+      );
+      console.log(
+        '[deploy] host scripts: infra/aws/operations/deploy-artifact.sh and rollback-artifact.sh',
+      );
+      return 0;
+    }
+    if (!existsSync(join(cwd, targetManifest))) {
+      console.error(`[deploy] target manifest not found: ${targetManifest}`);
+      return 1;
+    }
+    if (!artifactUri || !artifactUri.startsWith('s3://')) {
+      console.error('[deploy] --artifact-uri s3://... is required for artifact apply.');
+      return 1;
+    }
+    if (!releaseId) {
+      console.error('[deploy] --release-id is required for artifact apply.');
+      return 1;
+    }
+    if (!migrationEvidence || !existsSync(join(cwd, migrationEvidence))) {
+      console.error('[deploy] --migration-evidence <path> is required for artifact apply.');
+      return 1;
+    }
+    if (!releaseGateEvidence || !existsSync(join(cwd, releaseGateEvidence))) {
+      console.error('[deploy] --release-gate-evidence <path> is required for artifact apply.');
+      return 1;
+    }
+    if (!applyAuthorization || !existsSync(join(cwd, applyAuthorization))) {
+      console.error('[deploy] --apply-authorization <path> is required for artifact apply.');
+      return 1;
+    }
+    console.error(
+      '[deploy] artifact apply remains blocked until release/homologation gates are accepted.',
+    );
+    return 1;
+  }
+
+  const stackByName = {
+    all: [],
+    edge: [`sgp-${target}-edge-cert`],
+    shared: ['sgp-shared-storage'],
+    app: [`sgp-${target}-aws`],
+  };
+
+  if (!(stack in stackByName)) {
+    console.error(`[deploy] invalid stack: ${stack}`);
+    console.error('Valid stacks: all, edge, shared, app');
+    return 1;
+  }
+
+  const cdkArgs = ['--prefix', 'infra/aws/cdk', 'run'];
+  const cdkContextArgs = ['--', '-c', `target=${target}`];
+  const selectedStacks = stackByName[stack];
+  console.log(`[deploy] mode=provision provider=aws target=${target} stack=${stack}`);
+  console.log('[deploy] provision mode creates or changes AWS resources only.');
+  console.log('[deploy] artifact rollout is a separate mode.');
 
   if (dryRun) {
     console.log('[deploy] dry-run mode active; no infrastructure changes applied.');
-    console.log('[deploy] to apply, run with --apply after filling template placeholders.');
+    console.log(
+      `[deploy] CDK synth command: npm --prefix infra/aws/cdk run synth -- -c target=${target}`,
+    );
+    console.log(
+      `[deploy] CDK diff command: npm --prefix infra/aws/cdk run diff -- -c target=${target}${selectedStacks.length ? ` ${selectedStacks.join(' ')}` : ''}`,
+    );
     return 0;
   }
 
-  console.error(
-    '[deploy] apply mode is blocked in this repo baseline until templates are parameterized.',
-  );
-  console.error('[deploy] use --dry-run for planning only.');
-  return 1;
+  return runCommand('npm', [...cdkArgs, 'deploy', ...cdkContextArgs, ...selectedStacks]);
 }
 
 function runEvidenceStepByName(stepName) {
@@ -592,8 +745,10 @@ const handlers = {
   qa: handleQa,
   audit: handleAudit,
   governance: handleGovernance,
+  roadmap: handleRoadmap,
   health: handleHealth,
   deploy: handleDeploy,
+  prepare: () => runCommand('husky', args),
   clean: () => runCommand(process.execPath, ['scripts/clean.mjs', ...args]),
   'audit:schema': () => handleAuditAlias('schema'),
   'audit:api': () => handleAuditAlias('api'),
@@ -603,6 +758,7 @@ const handlers = {
   'audit:backlog': () => handleAuditAlias('backlog'),
   'audit:pvd': () => handleAuditAlias('pvd'),
   'audit:rls-spec-coverage': () => handleAuditAlias('rls-spec-coverage'),
+  'audit:openapi-coverage': () => handleAuditAlias('openapi-coverage'),
   'audit:all': () => handleAuditAlias('all'),
   'evidence-step': () => runEvidenceStepByName(args[0]),
 };

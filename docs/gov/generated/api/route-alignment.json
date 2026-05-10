@@ -1,12 +1,25 @@
 {
-  "generated_at": "2026-05-05",
+  "generated_at": "2026-05-10",
   "authority": [
+    "docs/eng/99-implementation-status.md",
     "docs/eng/Banking/00-cnab-overview.md",
     "docs/eng/Banking/01-cnab240-structure.md",
     "docs/eng/Banking/02-cnab240-bank-variations.md",
     "docs/eng/Banking/03-cnab240-return-processing.md",
     "docs/eng/Banking/04-cnab240-alternative-formats.md",
     "docs/eng/Banking/05-sgp-implementation-matrix.md",
+    "docs/eng/api/README.md",
+    "docs/eng/architecture.md",
+    "docs/eng/decisions/README.md",
+    "docs/eng/decisions/TEMPLATE.md",
+    "docs/eng/decisions/adr-021-icp-signer-software-certificate.md",
+    "docs/eng/decisions/adr-022-aws-iac-stack.md",
+    "docs/eng/decisions/adr-023-lgpd-international-transfer-mechanism.md",
+    "docs/eng/decisions/adr-024-folia-first-payroll-authority.md",
+    "docs/eng/decisions/adr-025-stynx-package-boundary.md",
+    "docs/eng/decisions/adr-026-rls-default-tenancy.md",
+    "docs/eng/decisions/adr-027-custom-lint-as-policy.md",
+    "docs/eng/decisions/adr-028-mutation-scope-rationale.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -16,15 +29,34 @@
     "docs/eng/experience.md",
     "docs/eng/platform.md",
     "docs/eng/product.md",
-    "docs/eng/quality-migration.md"
+    "docs/eng/quality-migration.md",
+    "docs/eng/runbooks/backup-restore.md",
+    "docs/eng/runbooks/db-migration.md",
+    "docs/eng/runbooks/deploy-rollback.md",
+    "docs/eng/runbooks/incident-response.md",
+    "docs/eng/runbooks/kms-rotation.md",
+    "docs/eng/runbooks/secret-rotation.md"
   ],
   "route_contract_authority": [
+    "docs/eng/99-implementation-status.md",
     "docs/eng/Banking/00-cnab-overview.md",
     "docs/eng/Banking/01-cnab240-structure.md",
     "docs/eng/Banking/02-cnab240-bank-variations.md",
     "docs/eng/Banking/03-cnab240-return-processing.md",
     "docs/eng/Banking/04-cnab240-alternative-formats.md",
     "docs/eng/Banking/05-sgp-implementation-matrix.md",
+    "docs/eng/api/README.md",
+    "docs/eng/architecture.md",
+    "docs/eng/decisions/README.md",
+    "docs/eng/decisions/TEMPLATE.md",
+    "docs/eng/decisions/adr-021-icp-signer-software-certificate.md",
+    "docs/eng/decisions/adr-022-aws-iac-stack.md",
+    "docs/eng/decisions/adr-023-lgpd-international-transfer-mechanism.md",
+    "docs/eng/decisions/adr-024-folia-first-payroll-authority.md",
+    "docs/eng/decisions/adr-025-stynx-package-boundary.md",
+    "docs/eng/decisions/adr-026-rls-default-tenancy.md",
+    "docs/eng/decisions/adr-027-custom-lint-as-policy.md",
+    "docs/eng/decisions/adr-028-mutation-scope-rationale.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -34,7 +66,13 @@
     "docs/eng/experience.md",
     "docs/eng/platform.md",
     "docs/eng/product.md",
-    "docs/eng/quality-migration.md"
+    "docs/eng/quality-migration.md",
+    "docs/eng/runbooks/backup-restore.md",
+    "docs/eng/runbooks/db-migration.md",
+    "docs/eng/runbooks/deploy-rollback.md",
+    "docs/eng/runbooks/incident-response.md",
+    "docs/eng/runbooks/kms-rotation.md",
+    "docs/eng/runbooks/secret-rotation.md"
   ],
   "documentation_semantics": {
     "route_contract_authority_roots": ["docs/eng"],
@@ -88,27 +126,27 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 541,
-    "documented_candidates_total": 681,
+    "documented_total": 562,
+    "documented_candidates_total": 702,
     "documented_outside_runtime": 140,
-    "documented": 453,
-    "runtime_total": 558,
-    "runtime": 453,
-    "deferred_documented": 88,
-    "deferred_runtime": 105,
-    "implemented": 453,
+    "documented": 468,
+    "runtime_total": 586,
+    "runtime": 469,
+    "deferred_documented": 94,
+    "deferred_runtime": 117,
+    "implemented": 468,
     "explicitly_excluded": 0,
     "documented_missing": 0,
     "runtime_only": 0,
     "runtime_outside_families": 0,
     "domain_modules": 11,
     "domain_modules_implemented": 11,
-    "portal_menu_routes": 34,
+    "portal_menu_routes": 37,
     "portal_menu_missing": 0,
     "admin_menu_routes": 181,
-    "admin_menu_implemented": 0,
+    "admin_menu_implemented": 6,
     "admin_menu_missing": 0,
-    "admin_menu_routes_postponed": 181
+    "admin_menu_routes_postponed": 175
   },
   "deferred_documented_routes": [
     {
@@ -280,6 +318,14 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/lgpd/dsar",
+      "source_doc": "docs/eng/domains/privacy-transparency.md",
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/lgpd/incidents",
       "source_doc": "docs/eng/domains/privacy-transparency.md",
       "source_docs": ["docs/eng/domains/privacy-transparency.md"],
@@ -429,6 +475,14 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/dsar/:id",
+      "source_doc": "docs/eng/domains/privacy-transparency.md",
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/admin/lgpd/incidents/:id/close",
       "source_doc": "docs/eng/domains/privacy-transparency.md",
       "evidence": "runtime_backed_path_mention",
@@ -472,6 +526,30 @@
       "path": "/api/v1/admin/lgpd/ropa/:id",
       "source_doc": "docs/eng/domains/privacy-transparency.md",
       "evidence": "runtime_backed_path_mention",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais/:id/approve",
+      "source_doc": "docs/eng/domains/privacy-transparency.md",
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais/:id/close",
+      "source_doc": "docs/eng/domains/privacy-transparency.md",
+      "evidence": "explicit_method",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais/:id/dpo-review",
+      "source_doc": "docs/eng/domains/privacy-transparency.md",
+      "evidence": "explicit_method",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -657,6 +735,14 @@
       "source_doc": "docs/eng/domains/privacy-transparency.md",
       "source_docs": ["docs/eng/domains/privacy-transparency.md"],
       "evidence": "runtime_backed_path_mention",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais",
+      "source_doc": "docs/eng/domains/privacy-transparency.md",
+      "evidence": "explicit_method",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -1895,6 +1981,13 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/det/messages",
+      "source_file": "backend/src/det/det.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/fgts/accounts/:employeeId",
       "source_file": "backend/src/folha-pagamento/fgts/fgts.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -1993,6 +2086,13 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/admin/lgpd/dsar",
+      "source_file": "backend/src/lgpd/dsar.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/admin/lgpd/incidents",
       "source_file": "backend/src/lgpd/incidents.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2009,6 +2109,13 @@
       "method": "GET",
       "path": "/api/v1/admin/lgpd/ropa",
       "source_file": "backend/src/lgpd/ropa.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais",
+      "source_file": "backend/src/lgpd/international-transfer.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2126,6 +2233,13 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/admin/det/messages/:id",
+      "source_file": "backend/src/det/det.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/admin/feature-flags/:chave",
       "source_file": "backend/src/system-parameters/system-parameters.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2142,6 +2256,13 @@
       "method": "PATCH",
       "path": "/api/v1/admin/lgpd/dpo",
       "source_file": "backend/src/lgpd/dpo.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/dsar/:id",
+      "source_file": "backend/src/lgpd/dsar.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2184,6 +2305,34 @@
       "method": "PATCH",
       "path": "/api/v1/admin/lgpd/ropa/:id",
       "source_file": "backend/src/lgpd/ropa.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais/:id",
+      "source_file": "backend/src/lgpd/international-transfer.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais/:id/approve",
+      "source_file": "backend/src/lgpd/international-transfer.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais/:id/close",
+      "source_file": "backend/src/lgpd/international-transfer.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais/:id/dpo-review",
+      "source_file": "backend/src/lgpd/international-transfer.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2268,6 +2417,20 @@
       "method": "POST",
       "path": "/api/v1/admin/concursos/:id/classificacao/publicacao",
       "source_file": "backend/src/recrutamento/classificacao/classificacao.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/det/messages",
+      "source_file": "backend/src/det/det.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/det/messages/:id/acknowledgement-requests",
+      "source_file": "backend/src/det/det.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -2401,6 +2564,13 @@
       "method": "POST",
       "path": "/api/v1/admin/lgpd/ropa",
       "source_file": "backend/src/lgpd/ropa.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/lgpd/transferencias-internacionais",
+      "source_file": "backend/src/lgpd/international-transfer.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
     },
@@ -3737,8 +3907,8 @@
     ],
     "portal_menu": {
       "status": "implemented",
-      "documented_routes": 34,
-      "implemented": 31,
+      "documented_routes": 37,
+      "implemented": 34,
       "postponed": 3,
       "missing": [],
       "routes": [
@@ -3893,6 +4063,12 @@
           "status": "implemented"
         },
         {
+          "label": "Documentos Pessoais / Solicitar Documento",
+          "path": "/documentos/solicitar",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
           "label": "Documentos Pessoais / Ficha Funcional",
           "path": "/documentos/ficha-funcional",
           "module": "rh",
@@ -3908,6 +4084,18 @@
           "label": "Documentos Pessoais / Certidões",
           "path": "/documentos/certidoes",
           "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Minha Equipe / Fila de Aprovações",
+          "path": "/minha-equipe",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Minha Equipe / Aprovações",
+          "path": "/aprovacoes",
+          "module": "rh",
           "status": "implemented"
         },
         {
@@ -3954,11 +4142,11 @@
   },
   "menu_alignment": {
     "admin": {
-      "status": "postponed",
+      "status": "partial",
       "deferred_scope": "ADMIN_INSTALL_LATER",
       "documented_routes": 181,
-      "implemented": 0,
-      "postponed": 181,
+      "implemented": 6,
+      "postponed": 175,
       "missing": [],
       "routes": [
         {
@@ -5008,43 +5196,43 @@
           "label": "Consulta de Trilha / `/auditoria/trilha/gestao`",
           "path": "/auditoria/trilha/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Detalhe de Evento / `/auditoria/trilha/detalhes/:id`",
           "path": "/auditoria/trilha/detalhes/:id",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Relatório de Auditoria / `/auditoria/relatorio/gestao`",
           "path": "/auditoria/relatorio/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Filtros por Entidade / `/auditoria/entidade/gestao`",
           "path": "/auditoria/entidade/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Filtros por Usuário / `/auditoria/usuario/gestao`",
           "path": "/auditoria/usuario/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Filtros por Período / `/auditoria/periodo/gestao`",
           "path": "/auditoria/periodo/gestao",
           "module": "auditoria",
-          "status": "postponed",
-          "deferred_scope": "ADMIN_INSTALL_LATER"
+          "status": "implemented",
+          "evidence": ["docs/gov/audit/admin-menu-install-plan.md"]
         },
         {
           "label": "Configurar Agenda Médica / `/saude/agenda-medica/formulario`",
@@ -5232,8 +5420,8 @@
     },
     "portal": {
       "status": "implemented",
-      "documented_routes": 34,
-      "implemented": 31,
+      "documented_routes": 37,
+      "implemented": 34,
       "postponed": 3,
       "missing": [],
       "routes": [
@@ -5388,6 +5576,12 @@
           "status": "implemented"
         },
         {
+          "label": "Documentos Pessoais / Solicitar Documento",
+          "path": "/documentos/solicitar",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
           "label": "Documentos Pessoais / Ficha Funcional",
           "path": "/documentos/ficha-funcional",
           "module": "rh",
@@ -5403,6 +5597,18 @@
           "label": "Documentos Pessoais / Certidões",
           "path": "/documentos/certidoes",
           "module": "previdenciario",
+          "status": "implemented"
+        },
+        {
+          "label": "Minha Equipe / Fila de Aprovações",
+          "path": "/minha-equipe",
+          "module": "rh",
+          "status": "implemented"
+        },
+        {
+          "label": "Minha Equipe / Aprovações",
+          "path": "/aprovacoes",
+          "module": "rh",
           "status": "implemented"
         },
         {
@@ -6448,6 +6654,14 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/portal/documentos/solicitacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/experience.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/portal/meus-dados/cadastro",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
@@ -6499,6 +6713,14 @@
       "path": "/api/v1/portal/minha-carreira",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/portal/minha-equipe/aprovacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/experience.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6647,6 +6869,18 @@
       "status": "implemented",
       "source_doc": "docs/eng/domains/privacy-transparency.md",
       "source_docs": ["docs/eng/domains/privacy-transparency.md", "docs/eng/platform.md"],
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/public/lgpd/transferencias-internacionais",
+      "status": "implemented",
+      "source_doc": "docs/eng/decisions/adr-023-lgpd-international-transfer-mechanism.md",
+      "source_docs": [
+        "docs/eng/decisions/adr-023-lgpd-international-transfer-mechanism.md",
+        "docs/eng/domains/privacy-transparency.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6969,6 +7203,22 @@
       "path": "/api/v1/saude/ppp",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/programas/cipa/comissoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/saude/programas/pcmat",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7426,6 +7676,22 @@
       "path": "/api/v1/saude/exposicoes/:id",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/programas/cipa/comissoes/:id/ativar",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/saude/programas/pcmat/:id/ativar",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -8410,6 +8676,30 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/portal/documentos/solicitacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/experience.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar",
+      "status": "implemented",
+      "source_doc": "docs/eng/experience.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar",
+      "status": "implemented",
+      "source_doc": "docs/eng/experience.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/previdenciario/aposentadorias",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
@@ -9046,6 +9336,46 @@
       "path": "/api/v1/saude/ppp/gerar",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/cipa/comissoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/cipa/comissoes/:id/atas",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/cipa/comissoes/:id/membros",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pcmat",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/saude/programas/pcmat/:id/revisoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/time-attendance-sst.md",
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },

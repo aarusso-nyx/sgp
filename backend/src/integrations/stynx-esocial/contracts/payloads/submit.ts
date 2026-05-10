@@ -8,7 +8,7 @@ export type EsocialRelayRequestPayload = Readonly<{
   eventIds: string[];
   eventClass: EsocialRelayEventClass;
   signedEnvelope: EsocialPadesPkcs7Envelope;
-  scenario?: EsocialRelayScenario;
+  scenario?: EsocialRelayScenario | undefined;
 }>;
 
 export type EsocialRelayResponsePayload = Readonly<{

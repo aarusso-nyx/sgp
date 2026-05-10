@@ -560,7 +560,7 @@ describe('SGP backend foundation (e2e)', () => {
     expect(body.error).toEqual(
       expect.objectContaining({
         code: 'FORBIDDEN',
-        message: 'Insufficient permissions',
+        message: 'Access denied by policy evaluator',
         status: 403,
       }),
     );
@@ -639,7 +639,7 @@ describe('SGP backend foundation (e2e)', () => {
     expect(body.error).toEqual(
       expect.objectContaining({
         code: 'FORBIDDEN',
-        message: 'Insufficient permissions',
+        message: 'Access denied by policy evaluator',
         status: 403,
       }),
     );

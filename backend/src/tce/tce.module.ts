@@ -38,7 +38,7 @@ import { TceStateSubmissionService } from './submission';
 import { TceController } from './tce.controller';
 
 export interface TceModuleOptions {
-  adapters?: Provider[];
+  adapters?: Provider[] | undefined;
 }
 
 @Module({})

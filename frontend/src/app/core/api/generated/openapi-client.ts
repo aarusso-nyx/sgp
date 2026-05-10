@@ -158,8 +158,16 @@ export class OpenApiClient {
     return this.api.delete<unknown>(`/v1/rh/afastamentos/${encodeURIComponent(params.id)}`);
   }
 
+  deleteApiV1RhCertificacoesById(params: { id: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/rh/certificacoes/${encodeURIComponent(params.id)}`);
+  }
+
   deleteApiV1RhOrganicDefinitionsById(params: { id: string }): Observable<unknown> {
     return this.api.delete<unknown>(`/v1/rh/organic-definitions/${encodeURIComponent(params.id)}`);
+  }
+
+  deleteApiV1RhPdiMetasByGoalId(params: { goalId: string }): Observable<unknown> {
+    return this.api.delete<unknown>(`/v1/rh/pdi/metas/${encodeURIComponent(params.goalId)}`);
   }
 
   deleteApiV1RhProcessosFuncaoById(params: { id: string }): Observable<unknown> {
@@ -223,6 +231,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1');
   }
 
+  getApiV1AdminDetMessages(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/det/messages');
+  }
+
   getApiV1AdminFgtsAccountsByEmployeeId(params: { employeeId: string }): Observable<unknown> {
     return this.api.get<unknown>(
       `/v1/admin/fgts/accounts/${encodeURIComponent(params.employeeId)}`,
@@ -281,6 +293,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/admin/lgpd/dpo');
   }
 
+  getApiV1AdminLgpdDsar(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/lgpd/dsar');
+  }
+
   getApiV1AdminLgpdIncidents(): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/lgpd/incidents');
   }
@@ -291,6 +307,10 @@ export class OpenApiClient {
 
   getApiV1AdminLgpdRopa(): Observable<unknown> {
     return this.api.get<unknown>('/v1/admin/lgpd/ropa');
+  }
+
+  getApiV1AdminLgpdTransferenciasInternacionais(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/admin/lgpd/transferencias-internacionais');
   }
 
   getApiV1AdminMenus(): Observable<unknown> {
@@ -576,6 +596,10 @@ export class OpenApiClient {
     return this.api.get<unknown>(`/v1/folhas/${encodeURIComponent(params.folha_id)}/historico`);
   }
 
+  getApiV1FolhasLockStatusByFolhaId(params: { folha_id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/folhas/${encodeURIComponent(params.folha_id)}/lock-status`);
+  }
+
   getApiV1FolhasCatalogos(): Observable<unknown> {
     return this.api.get<unknown>('/v1/folhas/catalogos');
   }
@@ -845,6 +869,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/portal/contracheques/ferias');
   }
 
+  getApiV1PortalDocumentosSolicitacoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/documentos/solicitacoes');
+  }
+
   getApiV1PortalMeusDadosCadastro(): Observable<unknown> {
     return this.api.get<unknown>('/v1/portal/meus-dados/cadastro');
   }
@@ -871,6 +899,10 @@ export class OpenApiClient {
 
   getApiV1PortalMinhaCarreira(): Observable<unknown> {
     return this.api.get<unknown>('/v1/portal/minha-carreira');
+  }
+
+  getApiV1PortalMinhaEquipeAprovacoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/minha-equipe/aprovacoes');
   }
 
   getApiV1PortalPayslips(): Observable<unknown> {
@@ -948,6 +980,10 @@ export class OpenApiClient {
 
   getApiV1PublicLgpdEncarregado(): Observable<unknown> {
     return this.api.get<unknown>('/v1/public/lgpd/encarregado');
+  }
+
+  getApiV1PublicLgpdTransferenciasInternacionais(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/public/lgpd/transferencias-internacionais');
   }
 
   getApiV1PublicTransparencyPayrollByTenantId(params: { tenantId: string }): Observable<unknown> {
@@ -1078,6 +1114,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/rh/afastamentos', query);
   }
 
+  getApiV1RhCertificacoes(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/rh/certificacoes', query);
+  }
+
   getApiV1RhEmployeeTransfer(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/rh/employee-transfer', query);
   }
@@ -1092,6 +1132,18 @@ export class OpenApiClient {
 
   getApiV1RhOrganicDefinitions(query: ApiQuery = {}): Observable<unknown> {
     return this.api.get<unknown>('/v1/rh/organic-definitions', query);
+  }
+
+  getApiV1RhPdi(query: ApiQuery = {}): Observable<unknown> {
+    return this.api.get<unknown>('/v1/rh/pdi', query);
+  }
+
+  getApiV1RhPdiById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/rh/pdi/${encodeURIComponent(params.id)}`);
+  }
+
+  getApiV1RhPdiMetasById(params: { id: string }): Observable<unknown> {
+    return this.api.get<unknown>(`/v1/rh/pdi/${encodeURIComponent(params.id)}/metas`);
   }
 
   getApiV1RhProcessos(query: ApiQuery = {}): Observable<unknown> {
@@ -1144,6 +1196,14 @@ export class OpenApiClient {
 
   getApiV1SaudePpp(): Observable<unknown> {
     return this.api.get<unknown>('/v1/saude/ppp');
+  }
+
+  getApiV1SaudeProgramasCipaComissoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/programas/cipa/comissoes');
+  }
+
+  getApiV1SaudeProgramasPcmat(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/saude/programas/pcmat');
   }
 
   getApiV1SaudeProgramasPcmso(): Observable<unknown> {
@@ -1217,6 +1277,13 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1AdminDetMessagesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/det/messages/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
   patchApiV1AdminFeatureFlagsByChave(
     params: { chave: string },
     body: ApiBody = {},
@@ -1239,6 +1306,13 @@ export class OpenApiClient {
 
   patchApiV1AdminLgpdDpo(body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>('/v1/admin/lgpd/dpo', body);
+  }
+
+  patchApiV1AdminLgpdDsarById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/dsar/${encodeURIComponent(params.id)}`,
+      body,
+    );
   }
 
   patchApiV1AdminLgpdIncidentsCloseById(
@@ -1294,6 +1368,46 @@ export class OpenApiClient {
   patchApiV1AdminLgpdRopaById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/admin/lgpd/ropa/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdTransferenciasInternacionaisById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/transferencias-internacionais/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdTransferenciasInternacionaisApproveById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/transferencias-internacionais/${encodeURIComponent(params.id)}/approve`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdTransferenciasInternacionaisCloseById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/transferencias-internacionais/${encodeURIComponent(params.id)}/close`,
+      body,
+    );
+  }
+
+  patchApiV1AdminLgpdTransferenciasInternacionaisDpoReviewById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/admin/lgpd/transferencias-internacionais/${encodeURIComponent(params.id)}/dpo-review`,
       body,
     );
   }
@@ -1631,12 +1745,33 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1RhCertificacoesById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/certificacoes/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
   patchApiV1RhOrganicDefinitionsById(
     params: { id: string },
     body: ApiBody = {},
   ): Observable<unknown> {
     return this.api.patch<unknown, ApiBody>(
       `/v1/rh/organic-definitions/${encodeURIComponent(params.id)}`,
+      body,
+    );
+  }
+
+  patchApiV1RhPdiById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(`/v1/rh/pdi/${encodeURIComponent(params.id)}`, body);
+  }
+
+  patchApiV1RhPdiMetasByGoalId(
+    params: { goalId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/rh/pdi/metas/${encodeURIComponent(params.goalId)}`,
       body,
     );
   }
@@ -1719,6 +1854,26 @@ export class OpenApiClient {
     );
   }
 
+  patchApiV1SaudeProgramasCipaComissoesAtivarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/programas/cipa/comissoes/${encodeURIComponent(params.id)}/ativar`,
+      body,
+    );
+  }
+
+  patchApiV1SaudeProgramasPcmatAtivarById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.patch<unknown, ApiBody>(
+      `/v1/saude/programas/pcmat/${encodeURIComponent(params.id)}/ativar`,
+      body,
+    );
+  }
+
   patchApiV1SaudeProgramasPcmsoAtivarById(
     params: { id: string },
     body: ApiBody = {},
@@ -1786,6 +1941,34 @@ export class OpenApiClient {
       `/v1/admin/concursos/${encodeURIComponent(params.id)}/classificacao/publicacao`,
       body,
     );
+  }
+
+  postApiV1AdminDetMessages(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/det/messages', body);
+  }
+
+  postApiV1AdminDetMessagesAcknowledgementRequestsById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/det/messages/${encodeURIComponent(params.id)}/acknowledgement-requests`,
+      body,
+    );
+  }
+
+  postApiV1AdminEsocialMessagesTransmitByMessageId(
+    params: { messageId: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/admin/esocial/messages/${encodeURIComponent(params.messageId)}/transmit`,
+      body,
+    );
+  }
+
+  postApiV1AdminEsocialProcessPending(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/esocial/process-pending', body);
   }
 
   postApiV1AdminEsocialS2298ByOrderId(
@@ -1904,6 +2087,10 @@ export class OpenApiClient {
 
   postApiV1AdminLgpdRopa(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/ropa', body);
+  }
+
+  postApiV1AdminLgpdTransferenciasInternacionais(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/admin/lgpd/transferencias-internacionais', body);
   }
 
   postApiV1AdminMenus(body: ApiBody = {}): Observable<unknown> {
@@ -2685,6 +2872,30 @@ export class OpenApiClient {
     );
   }
 
+  postApiV1PortalDocumentosSolicitacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/portal/documentos/solicitacoes', body);
+  }
+
+  postApiV1PortalMinhaEquipeAprovacoesAprovarByKindAndId(
+    params: { kind: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/portal/minha-equipe/aprovacoes/${encodeURIComponent(params.kind)}/${encodeURIComponent(params.id)}/aprovar`,
+      body,
+    );
+  }
+
+  postApiV1PortalMinhaEquipeAprovacoesCancelarByKindAndId(
+    params: { kind: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/portal/minha-equipe/aprovacoes/${encodeURIComponent(params.kind)}/${encodeURIComponent(params.id)}/cancelar`,
+      body,
+    );
+  }
+
   postApiV1PrevidenciarioAposentadorias(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/previdenciario/aposentadorias', body);
   }
@@ -3089,6 +3300,10 @@ export class OpenApiClient {
     return this.api.post<unknown, ApiBody>('/v1/rh/afastamentos', body);
   }
 
+  postApiV1RhCertificacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/rh/certificacoes', body);
+  }
+
   postApiV1RhEmployeeTransfer(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/rh/employee-transfer', body);
   }
@@ -3125,6 +3340,17 @@ export class OpenApiClient {
 
   postApiV1RhOrganicDefinitions(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/rh/organic-definitions', body);
+  }
+
+  postApiV1RhPdi(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/rh/pdi', body);
+  }
+
+  postApiV1RhPdiMetasById(params: { id: string }, body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/rh/pdi/${encodeURIComponent(params.id)}/metas`,
+      body,
+    );
   }
 
   postApiV1RhProcessos(body: ApiBody = {}): Observable<unknown> {
@@ -3179,6 +3405,44 @@ export class OpenApiClient {
 
   postApiV1SaudePppGerar(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/saude/ppp/gerar', body);
+  }
+
+  postApiV1SaudeProgramasCipaComissoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/programas/cipa/comissoes', body);
+  }
+
+  postApiV1SaudeProgramasCipaComissoesAtasById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/cipa/comissoes/${encodeURIComponent(params.id)}/atas`,
+      body,
+    );
+  }
+
+  postApiV1SaudeProgramasCipaComissoesMembrosById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/cipa/comissoes/${encodeURIComponent(params.id)}/membros`,
+      body,
+    );
+  }
+
+  postApiV1SaudeProgramasPcmat(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/saude/programas/pcmat', body);
+  }
+
+  postApiV1SaudeProgramasPcmatRevisoesById(
+    params: { id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/saude/programas/pcmat/${encodeURIComponent(params.id)}/revisoes`,
+      body,
+    );
   }
 
   postApiV1SaudeProgramasPcmso(body: ApiBody = {}): Observable<unknown> {

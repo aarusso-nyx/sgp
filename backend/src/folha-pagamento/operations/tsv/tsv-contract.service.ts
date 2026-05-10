@@ -8,6 +8,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 import { RequestContextStore } from '../../../common/request-context/request-context.store';
 import { DatabaseService } from '../../../database/database.service';
 import { UpdateTsvContractDto } from './tsv-contract.dto';
+import { domainError } from '../../../common/errors/domain-error';
 
 type TsvPatchKey =
   | 'role'
@@ -312,7 +313,11 @@ export class TsvContractService {
   private currentTenantId(): string {
     const context = RequestContextStore.get();
     const tenantId = context?.actor?.tenantId ?? context?.tenantId;
-    if (!tenantId) throw new Error('Tenant context is required');
+    if (!tenantId)
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Tenant context is required',
+      );
     return tenantId;
   }
 }

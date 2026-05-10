@@ -13,15 +13,16 @@ import {
   type SiopeRelayScenario,
 } from '../../../external/mocks/siope-relay';
 import type { SiopeExportInput } from '../siope-export.generator';
+import { domainError } from '../../../common/errors/domain-error';
 
 export type SiopeQueueAdapterOptions = Readonly<{
-  transport?: QueueAdapterTransport;
-  queue?: SgpQueueAdapter<SiopeRelayKind>;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  transport?: QueueAdapterTransport | undefined;
+  queue?: SgpQueueAdapter<SiopeRelayKind> | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export type SubmitSiopeExportInput = Readonly<{
@@ -29,11 +30,11 @@ export type SubmitSiopeExportInput = Readonly<{
   exportId: string;
   export: SiopeExportInput;
   content: string;
-  scenario?: SiopeRelayScenario;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  scenario?: SiopeRelayScenario | undefined;
+  idempotencyKey?: string | undefined;
+  correlationId?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type SiopeQueueDispatchState = Readonly<{
@@ -71,7 +72,8 @@ export class SiopeQueueAdapter {
       return;
     }
     if (!options.transport) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'SiopeQueueAdapter requires either a queue or a queue transport.',
       );
     }
@@ -115,7 +117,10 @@ export class SiopeQueueAdapter {
 
     const relay = queueResponse.payload;
     if (!relay) {
-      throw new Error('SIOPE relay returned an OK response without payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPE relay returned an OK response without payload.',
+      );
     }
     this.assertRelayPayload(input, payload, relay);
 
@@ -154,16 +159,25 @@ export class SiopeQueueAdapter {
     relay: SiopeRelayResponsePayload,
   ): void {
     if (relay.exportId !== input.exportId) {
-      throw new Error('SIOPE relay returned a different export id.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPE relay returned a different export id.',
+      );
     }
     if (relay.hashes.contentSha256 !== payload.contentHash) {
-      throw new Error('SIOPE relay returned a different content hash.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPE relay returned a different content hash.',
+      );
     }
     if (
       relay.layoutEdition !== input.export.layoutEdition ||
       relay.year !== input.export.year
     ) {
-      throw new Error('SIOPE relay returned different fiscal metadata.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'SIOPE relay returned different fiscal metadata.',
+      );
     }
   }
 

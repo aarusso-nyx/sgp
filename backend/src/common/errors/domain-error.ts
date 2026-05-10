@@ -4,13 +4,13 @@ export interface DomainErrorOptions {
   readonly code: string;
   readonly message: string;
   readonly status: HttpStatus;
-  readonly details?: readonly string[];
+  readonly details?: readonly string[] | undefined;
 }
 
 export class DomainError extends Error {
   readonly code: string;
   readonly status: HttpStatus;
-  readonly details?: readonly string[];
+  readonly details?: readonly string[] | undefined;
 
   constructor(options: DomainErrorOptions) {
     super(options.message);
@@ -84,6 +84,19 @@ export const domainError = {
       code,
       message,
       status: HttpStatus.UNPROCESSABLE_ENTITY,
+      details,
+    });
+  },
+
+  internal(
+    code: string,
+    message: string,
+    details?: readonly string[],
+  ): DomainError {
+    return new DomainError({
+      code,
+      message,
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
       details,
     });
   },

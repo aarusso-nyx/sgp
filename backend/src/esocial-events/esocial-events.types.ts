@@ -17,7 +17,7 @@ export type EsocialEventsJson =
   | { readonly [key: string]: EsocialEventsJson };
 
 export type EsocialEventsError = Readonly<{
-  code?: string;
+  code?: string | undefined;
   message: string;
   details?: unknown;
 }>;
@@ -69,7 +69,7 @@ export type EsocialEventsRow = QueryResultRow & {
 };
 
 export type EsocialEventsListFilters = Readonly<{
-  status?: EsocialEventsStatus;
-  kind?: EsocialEventsKind;
-  limit?: number;
+  status?: EsocialEventsStatus | undefined;
+  kind?: EsocialEventsKind | undefined;
+  limit?: number | undefined;
 }>;

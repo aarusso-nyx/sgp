@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomBytes } from 'crypto';
+import { domainError } from '../../common/errors/domain-error';
 
 export type BiometricKind = 'FINGERPRINT' | 'FACE';
 
@@ -13,7 +14,10 @@ export function extractBiometricTemplate(
 ): ExtractedBiometricTemplate {
   const sample = Buffer.from(sampleBase64, 'base64');
   if (sample.length < 8) {
-    throw new Error('Biometric sample is too small');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Biometric sample is too small',
+    );
   }
   const normalized = createHash('sha512').update(kind).update(sample).digest();
   const quality = Math.min(0.99, Math.max(0.1, sample.length / 2048));
@@ -47,7 +51,10 @@ export function encryptTemplate(template: Buffer, kmsKeyId: string): Buffer {
 export function decryptTemplate(cipher: Buffer, kmsKeyId: string): Buffer {
   const prefix = Buffer.from('SGPBIO1:');
   if (!cipher.subarray(0, prefix.length).equals(prefix)) {
-    throw new Error('Unsupported biometric cipher envelope');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Unsupported biometric cipher envelope',
+    );
   }
   const nonce = cipher.subarray(prefix.length, prefix.length + 16);
   const body = cipher.subarray(prefix.length + 16);
@@ -61,7 +68,8 @@ export function decryptTemplate(cipher: Buffer, kmsKeyId: string): Buffer {
 }
 
 function deriveLocalKmsKey(kmsKeyId: string): Buffer {
-  if (!kmsKeyId.trim()) throw new Error('KMS key id is required');
+  if (!kmsKeyId.trim())
+    throw domainError.internal('INTERNAL_INVARIANT', 'KMS key id is required');
   return createHash('sha256')
     .update('sgp-rec-07-local-kms')
     .update(kmsKeyId)

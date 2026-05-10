@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomBytes } from 'node:crypto';
+import { domainError } from '../../common/errors/domain-error';
 
 export interface ExtractedFaceTemplate {
   embedding: Buffer;
@@ -12,7 +13,10 @@ export function extractLocalFaceEmbedding(
 ): ExtractedFaceTemplate {
   const image = Buffer.from(imageBase64, 'base64');
   if (image.length < 8) {
-    throw new Error('Face sample is too small');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Face sample is too small',
+    );
   }
   const normalized = createHash('sha512')
     .update('LOCAL_INSIGHTFACE_OPEN_SOURCE')
@@ -69,7 +73,10 @@ export function encryptFaceEmbedding(
 export function decryptFaceEmbedding(cipher: Buffer, kmsKeyId: string): Buffer {
   const prefix = Buffer.from('SGPFACE1:');
   if (!cipher.subarray(0, prefix.length).equals(prefix)) {
-    throw new Error('Unsupported face embedding cipher envelope');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Unsupported face embedding cipher envelope',
+    );
   }
   const nonce = cipher.subarray(prefix.length, prefix.length + 16);
   const body = cipher.subarray(prefix.length + 16);
@@ -83,7 +90,8 @@ export function decryptFaceEmbedding(cipher: Buffer, kmsKeyId: string): Buffer {
 }
 
 function deriveLocalKmsKey(kmsKeyId: string): Buffer {
-  if (!kmsKeyId.trim()) throw new Error('KMS key id is required');
+  if (!kmsKeyId.trim())
+    throw domainError.internal('INTERNAL_INVARIANT', 'KMS key id is required');
   return createHash('sha256')
     .update('sgp-ponto-10-face-local-kms')
     .update(kmsKeyId)

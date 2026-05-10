@@ -52,6 +52,8 @@ export interface TalentPoolCandidate {
   curriculumS3Key: string | null;
   profileSummary: string;
   skills: string[];
+  profileCompletenessScore: number;
+  rankingScore: number;
   status: TalentPoolStatus;
   createdAt: string;
   updatedAt: string;
@@ -109,7 +111,19 @@ export class BancoTalentosService {
         updated_at
       FROM recrutamento.candidato
       ${where}
-      ORDER BY created_at DESC, full_name ASC
+      ORDER BY
+        (
+          CASE WHEN curriculum_s3_key IS NOT NULL THEN 10 ELSE 0 END
+          + CASE WHEN length(btrim(profile_summary)) >= 120 THEN 20 WHEN length(btrim(profile_summary)) > 0 THEN 10 ELSE 0 END
+          + LEAST(cardinality(skills), 6) * 5
+          + CASE WHEN email <> '' THEN 10 ELSE 0 END
+          + CASE WHEN phone <> '' THEN 10 ELSE 0 END
+          + CASE WHEN address <> '{}'::jsonb THEN 10 ELSE 0 END
+          + CASE WHEN lgpd_consent_at IS NOT NULL THEN 10 ELSE 0 END
+        ) DESC,
+        updated_at DESC,
+        full_name ASC,
+        id ASC
       LIMIT $${values.length + 1}
       OFFSET $${values.length + 2}
       `,
@@ -324,6 +338,8 @@ export class BancoTalentosService {
       curriculumS3Key: row.curriculum_s3_key,
       profileSummary: row.profile_summary,
       skills: this.parseSkills(row.skills),
+      profileCompletenessScore: this.profileCompletenessScore(row),
+      rankingScore: this.rankingScore(row),
       status: row.pool_status,
       createdAt: this.toIso(row.created_at),
       updatedAt: this.toIso(row.updated_at),
@@ -353,6 +369,35 @@ export class BancoTalentosService {
     return [
       ...new Set((value ?? []).map((entry) => entry.trim()).filter(Boolean)),
     ];
+  }
+
+  private profileCompletenessScore(row: TalentPoolCandidateRow): number {
+    const skills = this.parseSkills(row.skills);
+    const summaryLength = row.profile_summary.trim().length;
+    const score =
+      20 +
+      (row.email.trim() ? 10 : 0) +
+      (row.phone.trim() ? 10 : 0) +
+      (Object.keys(this.parseObject(row.address)).length > 0 ? 10 : 0) +
+      (row.curriculum_s3_key ? 10 : 0) +
+      (summaryLength >= 120 ? 20 : summaryLength > 0 ? 10 : 0) +
+      Math.min(skills.length, 4) * 5;
+    return Math.min(score, 100);
+  }
+
+  private rankingScore(row: TalentPoolCandidateRow): number {
+    const skills = this.parseSkills(row.skills);
+    const summaryLength = row.profile_summary.trim().length;
+    const weightedSkills = Math.min(skills.length, 8) * 5;
+    const weightedExperience = Math.min(Math.floor(summaryLength / 80), 5) * 4;
+    const consentWeight = row.lgpd_consent_at ? 10 : 0;
+    return Math.min(
+      this.profileCompletenessScore(row) +
+        weightedSkills +
+        weightedExperience +
+        consentWeight,
+      150,
+    );
   }
 
   private ensureDatabase(): void {

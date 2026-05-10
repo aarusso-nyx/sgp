@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Reinf xmlns="urn:br:gov:rfb:reinf:sgp:r4000">
+  <evtFech Id="IDR4099fde5bd123587fb8f1e4692adb591b544">
+    <ideEvento>
+      <perApur>2025-01</perApur>
+      <tpAmb>2</tpAmb>
+      <procEmi>1</procEmi>
+      <indRetif>1</indRetif>
+    </ideEvento>
+    <ideContri>
+      <nrInsc>00000000-0000-0000-0000-00000000f501</nrInsc>
+    </ideContri>
+    <infoR4000>
+      <pagamento sourceRunId="00000000-0000-4000-8000-000000004099">
+        <beneficiario tipo="CPF">
+          <cpfCnpj>12345678901</cpfCnpj>
+          <nome>Servidor Exemplo</nome>
+        </beneficiario>
+        <codReceita>0561</codReceita>
+        <vlrBruto>4000.00</vlrBruto>
+        <vlrRetencao>285.15</vlrRetencao>
+      </pagamento>
+      <pagamento sourceRunId="00000000-0000-4000-8000-000000004098">
+        <beneficiario tipo="CNPJ">
+          <cpfCnpj>11222333000144</cpfCnpj>
+          <nome>Fornecedor Exemplo LTDA</nome>
+        </beneficiario>
+        <codReceita>1708</codReceita>
+        <vlrBruto>8000.00</vlrBruto>
+        <vlrRetencao>120.00</vlrRetencao>
+      </pagamento>
+    </infoR4000>
+  </evtFech>
+</Reinf>

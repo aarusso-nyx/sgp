@@ -10,19 +10,19 @@ import type {
 import { PermissionsService } from '../iam/permissions/permissions.service';
 
 interface JwtPayload extends Record<string, unknown> {
-  sub?: string;
-  username?: string;
+  sub?: string | undefined;
+  username?: string | undefined;
   'cognito:username'?: string;
   'cognito:groups'?: string[];
   'custom:tenant_id'?: string;
-  tenant_id?: string;
-  email?: string;
-  iss?: string;
-  aud?: string | string[];
-  client_id?: string;
-  exp?: number;
-  nbf?: number;
-  token_use?: string;
+  tenant_id?: string | undefined;
+  email?: string | undefined;
+  iss?: string | undefined;
+  aud?: string | string[] | undefined;
+  client_id?: string | undefined;
+  exp?: number | undefined;
+  nbf?: number | undefined;
+  token_use?: string | undefined;
 }
 
 const TENANT_ID_PATTERN =
@@ -30,7 +30,7 @@ const TENANT_ID_PATTERN =
 
 @Injectable()
 export class SgpStynxTokenVerifier implements TokenVerifier {
-  private delegate?: CognitoTokenVerifier;
+  private delegate?: CognitoTokenVerifier | undefined;
 
   constructor(
     private readonly configService: ConfigService,
@@ -89,19 +89,25 @@ export class SgpStynxTokenVerifier implements TokenVerifier {
       payload.sub ??
       '';
 
+    const principal: Principal = {
+      id: payload.sub ?? '',
+      username,
+      roles,
+      permissions: this.stringArray(payload.permissions),
+      tenants: [tenantId],
+      claims: this.safeClaims(payload),
+      ...(payload.email ? { email: payload.email } : {}),
+    };
+
     return {
       principal: {
-        id: payload.sub ?? '',
-        username,
-        email: payload.email,
-        roles,
-        permissions: this.stringArray(payload.permissions),
-        tenants: [tenantId],
-        claims: this.safeClaims(payload),
+        ...principal,
       },
       token,
-      expiresAt: payload.exp,
-      tokenUse: payload.token_use,
+      ...(payload.exp !== undefined ? { expiresAt: payload.exp } : {}),
+      ...(payload.token_use !== undefined
+        ? { tokenUse: payload.token_use }
+        : {}),
     };
   }
 
@@ -186,15 +192,18 @@ export class SgpStynxTokenVerifier implements TokenVerifier {
     }
 
     const tokenUse = this.configService.get<string>('COGNITO_TOKEN_USE');
+    const audience = this.configService.get<string>('COGNITO_CLIENT_ID');
+    const jwksUri = this.configService.get<string>('COGNITO_JWKS_URI');
     this.delegate = new CognitoTokenVerifier({
       issuer,
-      audience: this.configService.get<string>('COGNITO_CLIENT_ID'),
-      jwksUri: this.configService.get<string>('COGNITO_JWKS_URI'),
-      enforceTokenUse:
-        tokenUse === 'id' || tokenUse === 'access' ? tokenUse : undefined,
       tenantClaims: ['custom:tenant_id', 'tenant_id', 'tenants'],
       roleClaims: ['cognito:groups', 'roles'],
       permissionClaims: ['permissions'],
+      ...(audience ? { audience } : {}),
+      ...(jwksUri ? { jwksUri } : {}),
+      ...(tokenUse === 'id' || tokenUse === 'access'
+        ? { enforceTokenUse: tokenUse }
+        : {}),
     });
 
     return this.delegate;

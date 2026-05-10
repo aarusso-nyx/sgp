@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { BadRequestException } from '@nestjs/common';
 
 import { TaxRateService } from './tax-rate.service';

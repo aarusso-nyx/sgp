@@ -4,5 +4,5 @@ export interface AuthenticatedActor {
   tenantId: string;
   groups: string[];
   permissions: string[];
-  claims?: Record<string, unknown>;
+  claims?: Record<string, unknown> | undefined;
 }

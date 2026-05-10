@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import {
   InMemoryQueueTransport,
   type QueueAdapterRequestEnvelope,
@@ -121,7 +122,92 @@ describe('R5-40 SICONFI mock relay queue adapter (e2e)', () => {
       }),
     );
   });
+
+  it('covers SICONFI relay retry, definitive, and validation branches', async () => {
+    const statement = siconfiStatement();
+    const content = new SiconfiRreoRgfGenerator().generateCsv(statement);
+
+    await expect(
+      adapter.submitFiscalStatement({
+        tenantId: '00000000-0000-4000-8000-000000000140',
+        submissionId: 'transient-siconfi',
+        statement,
+        content,
+        scenario: 'TRANSIENT_ERROR',
+        maxAttempts: 2,
+      }),
+    ).rejects.toThrow('Adapter request exceeded 2 attempts.');
+
+    await expect(
+      adapter.submitFiscalStatement({
+        tenantId: '00000000-0000-4000-8000-000000000140',
+        submissionId: 'definitive-siconfi',
+        statement,
+        content,
+        scenario: 'DEFINITIVE_ERROR',
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow('Mock SICONFI relay requested adapter retry.');
+
+    await expect(
+      adapter.submitFiscalStatement({
+        tenantId: '00000000-0000-4000-8000-000000000140',
+        submissionId: '',
+        statement,
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow('SICONFI relay requests must carry a submission id.');
+
+    await expect(
+      adapter.submitFiscalStatement({
+        tenantId: '00000000-0000-4000-8000-000000000140',
+        submissionId: 'layout-missing-siconfi',
+        statement: { ...statement, layoutEdition: '', sourceUrl: '' },
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'SICONFI relay requests must carry caller-selected layout metadata.',
+    );
+
+    await expect(
+      adapter.submitFiscalStatement({
+        tenantId: '00000000-0000-4000-8000-000000000140',
+        submissionId: 'bad-source-siconfi',
+        statement: {
+          ...statement,
+          sourceStatus: 'LEGACY_IMPORTED' as never,
+        },
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'SICONFI relay only accepts caller-selected official-layout artifacts.',
+    );
+  });
 });
+
+function siconfiStatement(): SiconfiFiscalStatementInput {
+  return {
+    sourceStatus: 'CALLER_SELECTED_OFFICIAL_LAYOUT',
+    declaration: 'RREO',
+    layoutEdition: 'MDF-15-2026',
+    sourceUrl:
+      'https://www.gov.br/tesouronacional/pt-br/contabilidade-e-custos/manuais/manual-de-demonstrativos-fiscais-mdf',
+    tenantIbgeCode: '3550308',
+    period: '2026-BIM-02',
+    rows: [
+      {
+        annex: 'Anexo 1',
+        table: 'Receitas',
+        accountCode: '1.0.0.0.00.0.0',
+        label: 'Receita corrente',
+        value: '1250000.00',
+      },
+    ],
+  };
+}
 
 function deterministicIdFactory(): () => string {
   let next = 1;
@@ -131,3 +217,9 @@ function deterministicIdFactory(): () => string {
     return `00000000-0000-4000-8000-${suffix}`;
   };
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

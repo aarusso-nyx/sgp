@@ -38,7 +38,7 @@ export class ComprovantesRendimentos {
     ],
   });
 
-  result?: YearlyIncomeBatchResult;
+  result: YearlyIncomeBatchResult | undefined;
   errorMessage = '';
   loading = false;
 

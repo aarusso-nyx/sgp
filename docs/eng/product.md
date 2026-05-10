@@ -36,7 +36,7 @@ Authored product authority: mission, scope, glossary, domain map, and binding de
 - A árvore frontend do `sgp-admin`, rotas backend administrativas (`/api/v1/admin`, `/api/admin/v1`), gestão corporativa de usuários/perfis/permissões e fluxos OAuth/Cognito/Gov.br seguem instaláveis posteriormente e não são bloqueadores do pacote atual.
 - O armazenamento de documentos oficiais continua S3-compatible. Em produção/homologação, S3 real é obrigatório; em testes locais/CI sem configuração S3, é permitido usar MiniIO em Docker como substituto S3-compatible. Fallback para disco local não é aceite de runtime.
 - eSocial permanece tratado como provedor externo stubado/sandbox no pacote atual. Geração de payload e persistência interna são escopo corrente; transmissão real, certificados de produção e homologação externa ficam para etapa posterior.
-- A exigência de `./infra` fica temporariamente afrouxada: CloudFormation, Terraform, AWS SDK ou scripts AWS CLI continuam alternativas em aberto. A escolha definitiva deve ser registrada antes de qualquer release produtiva.
+- A escolha de `./infra` está definida: AWS CDK TypeScript é a superfície IaC automatizada do SGP; provisionamento e deploy de artefatos permanecem fluxos separados. O runtime AWS usa EC2 privado com PM2, sem Docker/ECR.
 - Gates de governança/release (GitHub Actions completos, Pact broker/provider, scanners e observabilidade produtiva) ficam postergados e não bloqueiam a reavaliação de código atual.
 
 ### 2. Decisões de arquitetura aprovadas
@@ -1690,7 +1690,7 @@ SQL:    SELECT f.nivel_salarial_valor * (t.dias_trab / t.dias_mes)
 | **KMS**                     | Chaves de cifragem S3 SSE-KMS por tenant; cifragem de secrets em repouso                         |
 | **CloudWatch**              | Logs estruturados JSON; métricas de negócio; dashboards operacionais                             |
 | **X-Ray**                   | Rastreamento distribuído de requests através dos microsserviços                                  |
-| **ECR**                     | Registry de imagens Docker dos serviços                                                          |
+| **EC2 + PM2**               | Host privado Amazon Linux 2023 para APIs, serviços e workers SGP sem Docker                      |
 | **Route 53**                | DNS gerenciado; health checks; failover                                                          |
 
 #### Observabilidade
@@ -1718,13 +1718,13 @@ SQL:    SELECT f.nivel_salarial_valor * (t.dias_trab / t.dias_mes)
 
 Alvo futuro. Pela decisão temporária de 2026-04-26, gates de governança/release e a escolha final de IaC não bloqueiam a reavaliação atual.
 
-| Etapa        | Ferramenta                        | Ação                                                                           |
-| ------------ | --------------------------------- | ------------------------------------------------------------------------------ |
-| CI           | GitHub Actions                    | Lint, typecheck, testes, build, SAST (CodeQL)                                  |
-| CD (staging) | GitHub Actions → ECR → ECS        | Deploy automático em push para `main`                                          |
-| CD (prod)    | GitHub Actions + aprovação manual | Deploy via approval gate em PR de release                                      |
-| Migrations   | Flyway (ou Prisma Migrate)        | Aplicadas antes do deploy; rollback automático em falha                        |
-| IaC          | A definir                         | CloudFormation, Terraform, AWS SDK e scripts AWS CLI permanecem opções abertas |
+| Etapa        | Ferramenta                         | Ação                                                                          |
+| ------------ | ---------------------------------- | ----------------------------------------------------------------------------- |
+| CI           | GitHub Actions                     | Lint, typecheck, testes, build, SAST (CodeQL)                                 |
+| CD (staging) | Artefato versionado → S3 → EC2/PM2 | Deploy de artefato separado do provisionamento; gates falhos bloqueiam deploy |
+| CD (prod)    | Artefato versionado → S3 → EC2/PM2 | Release/homologação permanece pendente de decisão focada                      |
+| Migrations   | Manual                             | Evidência de migração é exigida antes do deploy de artefato                   |
+| IaC          | AWS CDK TypeScript                 | Provisionamento AWS em fluxo separado do deploy de artefato                   |
 
 ---
 

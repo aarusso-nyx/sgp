@@ -7,16 +7,17 @@ import { URL } from 'node:url';
 type AttributeValue = string | number | boolean;
 
 type HttpRequestLike = {
-  method?: string;
-  originalUrl?: string;
-  path?: string;
-  baseUrl?: string;
-  route?: { path?: string | RegExp };
+  method?: string | undefined;
+  originalUrl?: string | undefined;
+  path?: string | undefined;
+  baseUrl?: string | undefined;
+  route?: { path?: string | RegExp } | undefined;
   headers?: Record<string, string | string[] | undefined>;
+  traceId?: string | undefined;
 };
 
 type HttpResponseLike = {
-  statusCode?: number;
+  statusCode?: number | undefined;
   once: (event: 'finish', listener: () => void) => void;
 };
 
@@ -27,7 +28,7 @@ type SpanStatus = 'ok' | 'error';
 export type RequestSpan = {
   traceId: string;
   spanId: string;
-  parentSpanId?: string;
+  parentSpanId?: string | undefined;
   name: string;
   entrypoint: string;
   startTimeUnixNano: string;
@@ -41,7 +42,7 @@ export type RequestSpanExporter = {
 };
 
 type TracingOptions = {
-  exporter?: RequestSpanExporter;
+  exporter?: RequestSpanExporter | undefined;
   now?: () => bigint;
 };
 
@@ -95,7 +96,7 @@ function headerValue(
 
 function traceContext(request: HttpRequestLike): {
   traceId: string;
-  parentSpanId?: string;
+  parentSpanId?: string | undefined;
 } {
   const traceparent = headerValue(request.headers, 'traceparent');
   const match = traceparent?.match(TRACEPARENT_PATTERN);
@@ -247,6 +248,12 @@ export function configureOpenTelemetryTracingEntrypoint(
       const route = routePath(request);
       const method = request.method ?? 'UNKNOWN';
 
+      // Make the W3C trace ID visible to downstream concerns (Pino logger
+      // customProps, audit writers, etc.) before the handler runs so that
+      // log lines emitted during the request carry the same trace ID that
+      // the OTel span will report at finish.
+      request.traceId = context.traceId;
+
       response.once('finish', () => {
         if (request.path === '/metrics') return;
 
@@ -263,6 +270,7 @@ export function configureOpenTelemetryTracingEntrypoint(
             'http.request.method': method,
             'http.route': route,
             'http.response.status_code': statusCode,
+            'sgp.trace_id': context.traceId,
           },
           status: statusCode >= 500 ? 'error' : 'ok',
         };

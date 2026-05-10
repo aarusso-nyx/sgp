@@ -8,6 +8,7 @@ import { caixaStrategy } from './banks/caixa.strategy';
 import { itauStrategy } from './banks/itau.strategy';
 import { santanderStrategy } from './banks/santander.strategy';
 import type { BankStrategy } from './banks/bank-strategy';
+import { domainError } from '../../common/errors/domain-error';
 
 export interface FileHeader {
   bankCode: string;
@@ -27,16 +28,16 @@ export interface BatchHeader {
 export interface SegmentA {
   sequence: number;
   employeeId: string;
-  alimonyId?: string | null;
+  alimonyId?: string | null | undefined;
   beneficiaryName: string;
   bankCode: string;
   branch: string;
-  branchDigit?: string | null;
+  branchDigit?: string | null | undefined;
   account: string;
   accountDigit: string;
   amount: string;
   paymentDate: string;
-  purposeCode?: string | null;
+  purposeCode?: string | null | undefined;
 }
 
 export interface SegmentB {
@@ -57,16 +58,16 @@ export interface FileTrailer {
 
 export interface Cnab240PaymentInput {
   employeeId: string;
-  alimonyId?: string | null;
+  alimonyId?: string | null | undefined;
   employeeName: string;
   employeeDocument: string;
   bankCode: string;
   branch: string;
-  branchDigit?: string | null;
+  branchDigit?: string | null | undefined;
   account: string;
   accountDigit: string;
   amount: string;
-  purposeCode?: string | null;
+  purposeCode?: string | null | undefined;
 }
 
 export interface Cnab240BuildInput {
@@ -74,7 +75,7 @@ export interface Cnab240BuildInput {
   companyName: string;
   companyRegistration: string;
   paymentDate: string;
-  generatedAt?: Date;
+  generatedAt?: Date | undefined;
   remittanceNumber: number;
   payments: Cnab240PaymentInput[];
 }
@@ -119,10 +120,16 @@ export class Cnab240BuilderService {
     const bankCode = numeric(input.bankCode, 3);
     const strategy = STRATEGIES.get(bankCode);
     if (!strategy) {
-      throw new Error(`Unsupported CNAB 240 bank code: ${bankCode}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `Unsupported CNAB 240 bank code: ${bankCode}`,
+      );
     }
     if (input.payments.length === 0) {
-      throw new Error('CNAB 240 remittance requires at least one payment');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'CNAB 240 remittance requires at least one payment',
+      );
     }
 
     const generatedAt = input.generatedAt ?? new Date();
@@ -340,7 +347,10 @@ export class Cnab240BuilderService {
 export function numeric(value: string | number, length: number): string {
   const digits = String(value ?? '').replace(/\D/g, '');
   if (digits.length > length) {
-    throw new Error(`CNAB numeric field overflow: ${digits.length}/${length}`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `CNAB numeric field overflow: ${digits.length}/${length}`,
+    );
   }
   return digits.padStart(length, '0');
 }
@@ -367,7 +377,10 @@ function line(fields: Array<[number, string]>): string {
   for (const [start, value] of fields) {
     const offset = start - 1;
     if (offset < 0 || offset + value.length > RECORD_SIZE) {
-      throw new Error(`CNAB field out of bounds at ${start}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `CNAB field out of bounds at ${start}`,
+      );
     }
     for (let index = 0; index < value.length; index += 1) {
       chars[offset + index] = value.charAt(index);
@@ -393,7 +406,10 @@ function time6(value: Date): string {
 function dateString8(value: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!match) {
-    throw new Error(`CNAB date must use YYYY-MM-DD: ${value}`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `CNAB date must use YYYY-MM-DD: ${value}`,
+    );
   }
   return `${match[3]}${match[2]}${match[1]}`;
 }

@@ -15,7 +15,7 @@ export interface MasterDataField {
   label: string;
   type: 'text' | 'boolean' | 'number';
   required: boolean;
-  maxLength?: number;
+  maxLength?: number | undefined;
 }
 
 export interface MasterDataColumn {
@@ -68,20 +68,20 @@ export interface ResourceSqlMapping {
   descriptionExpression: string;
   activeExpression: string;
   searchExpression: string;
-  baseWhere?: string;
-  metadataExpression?: string;
+  baseWhere?: string | undefined;
+  metadataExpression?: string | undefined;
   writable: boolean;
-  write?: WriteMapping;
+  write?: WriteMapping | undefined;
 }
 
 export interface WriteMapping {
   codeColumn: string;
-  nameColumn?: string;
-  descriptionColumn?: string;
-  statusColumn?: string;
+  nameColumn?: string | undefined;
+  descriptionColumn?: string | undefined;
+  statusColumn?: string | undefined;
   statusMode: StatusMode;
-  extraInsertColumns?: string[];
+  extraInsertColumns?: string[] | undefined;
   extraInsertValues?: (input: MasterDataMutationDto) => unknown[];
-  extraUpdateAssignments?: string[];
+  extraUpdateAssignments?: string[] | undefined;
   extraUpdateValues?: (input: MasterDataMutationDto) => unknown[];
 }

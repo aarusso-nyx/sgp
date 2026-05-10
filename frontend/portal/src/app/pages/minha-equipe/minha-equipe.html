@@ -1,0 +1,50 @@
+<section class="minha-equipe">
+  <header>
+    <p>Portal do Servidor</p>
+    <h1>Minha Equipe</h1>
+  </header>
+
+  <div class="toolbar">
+    <button type="button" (click)="loadQueue()" [disabled]="loading">Atualizar fila</button>
+    <span>{{ queue.length }} pendentes</span>
+  </div>
+
+  <p *ngIf="message" role="status" class="message">{{ message }}</p>
+  <p *ngIf="error" role="alert" class="error">{{ error }}</p>
+
+  <section class="panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Servidor</th>
+          <th>Tipo</th>
+          <th>Periodo</th>
+          <th>Status</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of queue">
+          <td>
+            <strong>{{ item.employeeName }}</strong>
+            <span>{{ item.employeeRegistration }}</span>
+          </td>
+          <td>{{ item.title }}</td>
+          <td>{{ item.startsOn }} a {{ item.endsOn || item.startsOn }}</td>
+          <td>{{ item.status }}</td>
+          <td class="actions">
+            <button type="button" (click)="approve(item)" [disabled]="actingId === item.id">
+              Aprovar
+            </button>
+            <button type="button" (click)="cancel(item)" [disabled]="actingId === item.id">
+              Cancelar
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="!queue.length">
+          <td colspan="5">Nenhuma aprovacao pendente.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>

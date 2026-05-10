@@ -16,4 +16,14 @@ export class LgpdDpoController {
   encarregado(@Headers('x-tenant-id') tenantId?: string) {
     return this.lgpdDpoService.getPublicContact(tenantId);
   }
+
+  @ApiOperation({ summary: 'GET transferencias-internacionais' })
+  @Get('transferencias-internacionais')
+  @Public()
+  @ApiOkResponse({
+    description: 'Public active LGPD international transfer mechanisms.',
+  })
+  transferenciasInternacionais(@Headers('x-tenant-id') tenantId?: string) {
+    return this.lgpdDpoService.listPublicInternationalTransfers(tenantId);
+  }
 }

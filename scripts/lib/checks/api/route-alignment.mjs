@@ -233,6 +233,10 @@ function main() {
     );
   } else if (adminMenu.status === 'implemented') {
     ok(`Admin menu alignment covers ${adminMenu.implemented ?? 0} current-scope route(s).`);
+  } else if (adminMenu.status === 'partial') {
+    ok(
+      `Admin menu alignment covers ${adminMenu.implemented ?? 0} installed route(s) and keeps ${adminMenu.postponed ?? 0} route(s) under ${adminMenu.deferred_scope ?? 'deferred scope'}.`,
+    );
   } else if (adminMenu.status === 'postponed') {
     ok(`Admin menu parity is postponed under ${adminMenu.deferred_scope ?? 'deferred scope'}.`);
   }

@@ -40,6 +40,7 @@
     "test": "jest --config ../tests/backend/jest-unit.json",
     "test:watch": "jest --config ../tests/backend/jest-unit.json --watch",
     "test:cov": "jest --config ../tests/backend/jest-coverage.json",
+    "test:exception-filter": "jest --config ../tests/backend/jest-exception-filter-coverage.json",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config ../tests/backend/jest-unit.json --runInBand",
     "test:e2e": "jest --config ../tests/backend/jest-e2e.json",
     "db:seed": "node ../database/seed/run.mjs"

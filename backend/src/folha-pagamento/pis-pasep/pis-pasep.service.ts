@@ -3,6 +3,7 @@ import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
+import { domainError } from '../../common/errors/domain-error';
 
 interface PisPasepRow extends QueryResultRow {
   employee_id: string;
@@ -174,7 +175,8 @@ export class PisPasepService {
     const context = RequestContextStore.get();
     const tenantId = context?.actor?.tenantId ?? context?.tenantId;
     if (!tenantId) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'Tenant context is required for PIS/PASEP base recompute',
       );
     }

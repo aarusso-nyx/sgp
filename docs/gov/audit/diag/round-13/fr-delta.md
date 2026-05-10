@@ -1,0 +1,64 @@
+# Functional Requisites Delta
+
+Round: 13
+
+| FR-ID         | Prior status | New status | Evidence delta                               |
+| ------------- | ------------ | ---------- | -------------------------------------------- |
+| FR-FI-75588D  | DONE         | DONE       | docs/eng/domains/fiscal-integrations.md:119  |
+| FR-FI-90930A  | DONE         | DONE       | docs/eng/domains/fiscal-integrations.md:221  |
+| FR-FI-7A4DE7  | DONE         | DONE       | docs/eng/domains/fiscal-integrations.md:273  |
+| FR-FI-93690B  | DONE         | DONE       | docs/eng/domains/fiscal-integrations.md:309  |
+| FR-FI-06B611  | DONE         | DONE       | docs/eng/domains/fiscal-integrations.md:367  |
+| FR-FI-976867  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:400  |
+| FR-FI-0A7819  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:444  |
+| FR-FI-26241D  | DONE         | DONE       | docs/eng/domains/fiscal-integrations.md:502  |
+| FR-FI-A98E24  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:524  |
+| FR-FI-C592B5  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:582  |
+| FR-FI-ADD57D  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:610  |
+| FR-FI-1F136F  | DONE         | DONE       | docs/eng/domains/fiscal-integrations.md:652  |
+| FR-FI-AA7847  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:714  |
+| FR-FI-87AB14  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:741  |
+| FR-FI-9FDB83  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:789  |
+| FR-FI-EC93C5  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:813  |
+| FR-FI-7732F5  | DONE         | DONE       | docs/eng/domains/fiscal-integrations.md:875  |
+| FR-FI-94021B  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:907  |
+| FR-FI-7599F0  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:953  |
+| FR-FI-B2E3A0  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:1006 |
+| FR-FI-352981  | NEW          | TODO       | docs/eng/domains/fiscal-integrations.md:1059 |
+| FR-FI-BB3575  | DEFERRED     | DEFERRED   | docs/eng/domains/fiscal-integrations.md:1083 |
+| FR-PB-493825  | NEW          | TODO       | docs/eng/domains/payroll-benefits.md:115     |
+| FR-PB-93E6C5  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:152     |
+| FR-PB-DBE345  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:181     |
+| FR-PB-074A6F  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:203     |
+| FR-PB-D8160F  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:238     |
+| FR-PB-764C73  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:278     |
+| FR-PB-384772  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:312     |
+| FR-PB-FFE071  | DONE         | DONE       | docs/eng/domains/payroll-benefits.md:337     |
+| FR-PB-84E179  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:359     |
+| FR-PB-3625CA  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:422     |
+| FR-PB-8D50A8  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:461     |
+| FR-PB-7D2CBD  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:495     |
+| FR-PB-FE502B  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:539     |
+| FR-PB-34C5BA  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:572     |
+| FR-PB-BF748F  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:586     |
+| FR-PB-494374  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:600     |
+| FR-PB-084526  | DEFERRED     | DEFERRED   | docs/eng/domains/payroll-benefits.md:625     |
+| FR-PR-9D4AE1  | NEW          | TODO       | docs/eng/domains/people-recruitment.md:106   |
+| FR-PR-026C51  | DEFERRED     | DEFERRED   | docs/eng/domains/people-recruitment.md:125   |
+| FR-PR-DE52F4  | DEFERRED     | DEFERRED   | docs/eng/domains/people-recruitment.md:151   |
+| FR-PR-2F2690  | DEFERRED     | DEFERRED   | docs/eng/domains/people-recruitment.md:179   |
+| FR-PR-310238  | DEFERRED     | DEFERRED   | docs/eng/domains/people-recruitment.md:203   |
+| FR-PR-278EF3  | DEFERRED     | DEFERRED   | docs/eng/domains/people-recruitment.md:232   |
+| FR-PR-DB822A  | DEFERRED     | DEFERRED   | docs/eng/domains/people-recruitment.md:264   |
+| FR-PR-27A188  | DEFERRED     | DEFERRED   | docs/eng/domains/people-recruitment.md:283   |
+| FR-TAS-94FEDC | NEW          | TODO       | docs/eng/domains/time-attendance-sst.md:122  |
+| FR-TAS-B89144 | DONE         | DONE       | docs/eng/domains/time-attendance-sst.md:178  |
+| FR-TAS-35E667 | DEFERRED     | DEFERRED   | docs/eng/domains/time-attendance-sst.md:204  |
+| FR-TAS-CBF51F | DONE         | DONE       | docs/eng/domains/time-attendance-sst.md:227  |
+| FR-TAS-3D7CE6 | DEFERRED     | DEFERRED   | docs/eng/domains/time-attendance-sst.md:263  |
+| FR-TAS-44EFAF | DEFERRED     | DEFERRED   | docs/eng/domains/time-attendance-sst.md:303  |
+| FR-TAS-04FA10 | DEFERRED     | DEFERRED   | docs/eng/domains/time-attendance-sst.md:343  |
+| FR-TAS-917B0B | DEFERRED     | DEFERRED   | docs/eng/domains/time-attendance-sst.md:379  |
+| FR-TAS-89FA82 | DEFERRED     | DEFERRED   | docs/eng/domains/time-attendance-sst.md:409  |
+| FR-TAS-C0DDDB | DEFERRED     | DEFERRED   | docs/eng/domains/time-attendance-sst.md:437  |
+| FR-TAS-DDDBB9 | DEFERRED     | DEFERRED   | docs/eng/domains/time-attendance-sst.md:468  |

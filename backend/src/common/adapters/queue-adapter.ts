@@ -1,5 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
+import { requestId, RequestId, tenantId, TenantId } from '../types/branded-ids';
+import { domainError } from '../errors/domain-error';
+
 export type QueueAdapterResponseStatus = 'OK' | 'RETRY' | 'DEAD_LETTER';
 
 export type QueueAdapterErrorKind =
@@ -26,13 +29,13 @@ export type QueueAdapterRequestEnvelope<
   TKind extends string = string,
   TPayload = unknown,
 > = Readonly<{
-  'request-id': string;
-  'correlation-id': string;
+  'request-id': RequestId;
+  'correlation-id': RequestId;
   'idempotency-key': string;
   'reply-to': string;
   'dead-letter-topic': string;
   'created-at': string;
-  tenant_id: string;
+  tenant_id: TenantId;
   kind: TKind;
   payload: TPayload;
   attempt: number;
@@ -43,15 +46,15 @@ export type QueueAdapterResponseEnvelope<
   TKind extends string = string,
   TPayload = unknown,
 > = Readonly<{
-  'request-id': string;
-  'correlation-id': string;
+  'request-id': RequestId;
+  'correlation-id': RequestId;
   'created-at': string;
-  tenant_id: string;
+  tenant_id: TenantId;
   kind: TKind;
   status: QueueAdapterResponseStatus;
   attempt: number;
-  payload?: TPayload;
-  error?: QueueAdapterErrorEnvelope;
+  payload?: TPayload | undefined;
+  error?: QueueAdapterErrorEnvelope | undefined;
 }>;
 
 export type QueueAdapterDeadLetterEnvelope<
@@ -59,7 +62,7 @@ export type QueueAdapterDeadLetterEnvelope<
   TPayload = unknown,
 > = Readonly<{
   request: QueueAdapterRequestEnvelope<TKind, TPayload>;
-  response?: QueueAdapterResponseEnvelope<TKind, unknown>;
+  response?: QueueAdapterResponseEnvelope<TKind, unknown> | undefined;
   reason: string;
   'dead-lettered-at': string;
 }>;
@@ -103,12 +106,12 @@ export type QueueAdapterObservability<TKind extends string> = Readonly<{
 }>;
 
 export type QueueAdapterRequestInput<TPayload> = Readonly<{
-  tenantId: string;
+  tenantId: TenantId | string;
   payload: TPayload;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  idempotencyKey?: string | undefined;
+  correlationId?: RequestId | string | undefined;
+  requestId?: RequestId | string | undefined;
+  maxAttempts?: number | undefined;
   onPublished?: (
     request: QueueAdapterRequestEnvelope<string, TPayload>,
   ) => void | Promise<void>;
@@ -117,22 +120,22 @@ export type QueueAdapterRequestInput<TPayload> = Readonly<{
 export type QueueRetryStrategy = (attempt: number) => number;
 
 export type QueueJitterRetryStrategyOptions = Readonly<{
-  baseDelayMs?: number;
-  maxDelayMs?: number;
-  jitterUnit?: number;
+  baseDelayMs?: number | undefined;
+  maxDelayMs?: number | undefined;
+  jitterUnit?: number | undefined;
 }>;
 
 export type SgpQueueAdapterOptions<TKind extends string> = Readonly<{
   kind: TKind;
   transport: QueueAdapterTransport;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: QueueRetryStrategy;
-  baseDelayMs?: number;
-  maxDelayMs?: number;
-  now?: () => Date;
-  idFactory?: () => string;
-  observability?: QueueAdapterObservability<TKind>;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: QueueRetryStrategy | undefined;
+  baseDelayMs?: number | undefined;
+  maxDelayMs?: number | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
+  observability?: QueueAdapterObservability<TKind> | undefined;
 }>;
 
 type PendingRequest<TKind extends string> = {
@@ -189,7 +192,10 @@ export function adapterQueueTopics<TKind extends string>(
 ): QueueAdapterTopics<TKind> {
   const normalizedKind = kind.trim();
   if (!normalizedKind) {
-    throw new Error('Queue adapter kind must be non-empty.');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Queue adapter kind must be non-empty.',
+    );
   }
 
   return {
@@ -262,7 +268,8 @@ export class InMemoryQueueTransport implements QueueAdapterTransport {
       if (!next) return;
 
       subscriber.active += 1;
-      Promise.resolve(subscriber.handler(next.message, next.topic))
+      Promise.resolve()
+        .then(() => subscriber.handler(next.message, next.topic))
         .catch(() => undefined)
         .finally(() => {
           subscriber.active -= 1;
@@ -281,7 +288,7 @@ export class SgpQueueAdapter<TKind extends string> {
   private readonly retryDelayMs: QueueRetryStrategy;
   private readonly now: () => Date;
   private readonly idFactory: () => string;
-  private readonly observability?: QueueAdapterObservability<TKind>;
+  private readonly observability?: QueueAdapterObservability<TKind> | undefined;
   private readonly pending = new Map<string, PendingRequest<TKind>>();
   private readonly responseSubscription: QueueSubscription;
 
@@ -354,20 +361,23 @@ export class SgpQueueAdapter<TKind extends string> {
   private buildRequest<TPayload>(
     input: QueueAdapterRequestInput<TPayload>,
   ): QueueAdapterRequestEnvelope<TKind, TPayload> {
-    const requestId = input.requestId ?? this.idFactory();
+    const nextRequestId = requestId(input.requestId ?? this.idFactory());
     const maxAttempts = input.maxAttempts ?? this.maxAttempts;
     if (maxAttempts < 1) {
-      throw new Error('Queue adapter maxAttempts must be at least 1.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Queue adapter maxAttempts must be at least 1.',
+      );
     }
 
     return {
-      'request-id': requestId,
-      'correlation-id': input.correlationId ?? requestId,
-      'idempotency-key': input.idempotencyKey ?? requestId,
+      'request-id': nextRequestId,
+      'correlation-id': requestId(input.correlationId ?? nextRequestId),
+      'idempotency-key': input.idempotencyKey ?? nextRequestId,
       'reply-to': this.topics.response,
       'dead-letter-topic': this.topics.deadLetter,
       'created-at': this.now().toISOString(),
-      tenant_id: input.tenantId,
+      tenant_id: tenantId(input.tenantId),
       kind: this.topics.kind,
       payload: input.payload,
       attempt: 1,

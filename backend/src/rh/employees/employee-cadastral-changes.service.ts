@@ -2,11 +2,13 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { PoolClient } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { SgpEsocialEmittersService } from '../../integrations/stynx-esocial';
 import {
   ApproveCadastralChangeDto,
   RejectCadastralChangeDto,
@@ -16,7 +18,11 @@ import { CadastralChangeRow } from './employees.types';
 
 @Injectable()
 export class EmployeeCadastralChangesService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @Optional()
+    private readonly esocialEmitters?: SgpEsocialEmittersService,
+  ) {}
 
   async listCadastralChanges(
     status = 'PENDING',
@@ -61,6 +67,7 @@ export class EmployeeCadastralChangesService {
         `
         SELECT
           c.id::text,
+          c.tenant_id::text,
           c.employee_id::text,
           e.registration,
           e.name AS employee_name,
@@ -111,6 +118,7 @@ export class EmployeeCadastralChangesService {
         WHERE id = $1::uuid
         RETURNING
           id::text,
+          tenant_id::text,
           employee_id::text,
           $3::text AS registration,
           $4::text AS employee_name,
@@ -145,7 +153,18 @@ export class EmployeeCadastralChangesService {
       return approved.rows;
     });
 
-    return toCadastralChange(rows[0]!);
+    const approved = rows[0]!;
+    await this.esocialEmitters?.s2205CadastralChange({
+      tenantId: approved.tenant_id,
+      sourceId: approved.id,
+      operation: 'update',
+      data: {
+        employeeId: approved.employee_id,
+        section: approved.section,
+        status: approved.status,
+      },
+    });
+    return toCadastralChange(approved);
   }
 
   async rejectCadastralChange(

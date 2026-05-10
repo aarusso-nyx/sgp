@@ -13,7 +13,7 @@ export interface CertificateMaterial {
 export interface SignXmlInput {
   xml: string;
   pkcs12: Buffer;
-  password?: string;
+  password?: string | undefined;
 }
 
 export interface SignedXmlResult {

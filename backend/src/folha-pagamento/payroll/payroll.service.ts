@@ -52,6 +52,15 @@ export interface PayrollRunExecutionHistory {
   totalNet: string | null;
 }
 
+export interface PayrollRunLockStatus {
+  id: string;
+  status: string;
+  reprocessingLocked: boolean;
+  immutable: boolean;
+  optimisticVersion: string;
+  lockReason: string | null;
+}
+
 export interface AdvancePaymentResult {
   requestId: string;
   paymentId: string;
@@ -125,6 +134,26 @@ export class PayrollService {
       employeeCount: row.employee_count,
       totalNet: row.total_net,
     }));
+  }
+
+  async lockStatus(id: string): Promise<PayrollRunLockStatus> {
+    this.ensureDatabase();
+    const run = await this.itemReader.getRunDetail(id);
+    const immutableStatuses = ['APPROVED', 'PAID', 'CLOSED'];
+    const reprocessingLocked = run.status === 'PROCESSING';
+    const immutable = immutableStatuses.includes(run.status);
+    return {
+      id: run.id,
+      status: run.status,
+      reprocessingLocked,
+      immutable,
+      optimisticVersion: this.toIso(run.updated_at),
+      lockReason: reprocessingLocked
+        ? 'PROCESSING'
+        : immutable
+          ? 'TERMINAL_STATUS'
+          : null,
+    };
   }
 
   async updateRunStatus(

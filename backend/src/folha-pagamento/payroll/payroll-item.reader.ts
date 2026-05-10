@@ -83,7 +83,7 @@ export class PayrollItemReader {
     competenceMonth: number;
     payrollTypeId: string;
     processingTypeId: string;
-    branchId?: string;
+    branchId?: string | undefined;
   }): Promise<PayrollRunRow> {
     const rows = await this.databaseService.query<PayrollRunRow>(
       `

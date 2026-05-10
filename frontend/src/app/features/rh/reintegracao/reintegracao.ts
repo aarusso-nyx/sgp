@@ -13,8 +13,8 @@ import { SGP_FEATURE_I18N_MESSAGES } from '../../../core/i18n/feature-messages';
 })
 export class RhReintegracao {
   savedOrder?: ReintegrationOrder;
-  appliedOrder?: ReintegrationOrder;
-  transmission?: Record<string, unknown>;
+  appliedOrder: ReintegrationOrder | undefined;
+  transmission: Record<string, unknown> | undefined;
   saving = false;
   applying = false;
   transmitting = false;
@@ -59,6 +59,11 @@ export class RhReintegracao {
       return;
     }
     const value = this.form.getRawValue();
+    const processNumber = optional(value.processNumber);
+    const court = optional(value.court);
+    const attachmentUri = optional(value.attachmentUri);
+    const originalTerminationEventId = optional(value.originalTerminationEventId);
+    const originalS2299Receipt = optional(value.originalS2299Receipt);
     this.saving = true;
     this.error = '';
     this.appliedOrder = undefined;
@@ -68,12 +73,12 @@ export class RhReintegracao {
         employmentLinkId: value.employmentLinkId ?? '',
         reinstatementDate: value.reinstatementDate ?? '',
         kind: value.kind ?? 'JUDICIAL',
-        processNumber: optional(value.processNumber),
-        court: optional(value.court),
+        ...(processNumber ? { processNumber } : {}),
+        ...(court ? { court } : {}),
         decisionDate: value.decisionDate ?? '',
-        attachmentUri: optional(value.attachmentUri),
-        originalTerminationEventId: optional(value.originalTerminationEventId),
-        originalS2299Receipt: optional(value.originalS2299Receipt),
+        ...(attachmentUri ? { attachmentUri } : {}),
+        ...(originalTerminationEventId ? { originalTerminationEventId } : {}),
+        ...(originalS2299Receipt ? { originalS2299Receipt } : {}),
       })
       .subscribe({
         next: (order) => {

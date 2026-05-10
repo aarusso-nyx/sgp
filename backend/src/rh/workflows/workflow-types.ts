@@ -46,5 +46,5 @@ export interface WorkflowDefinition {
   from: string;
   search: string;
   orderBy: string;
-  activeDelete?: string;
+  activeDelete?: string | undefined;
 }

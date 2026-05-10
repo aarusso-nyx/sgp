@@ -83,9 +83,9 @@ class FakePosseDatabase {
 
   constructor(
     input: {
-      posseStatus?: string;
-      nomeacaoStatus?: string;
-      employeeId?: string | null;
+      posseStatus?: string | undefined;
+      nomeacaoStatus?: string | undefined;
+      employeeId?: string | null | undefined;
     } = {},
   ) {
     this.posseStatus = input.posseStatus ?? 'AGENDADA';

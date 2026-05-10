@@ -14,6 +14,7 @@ import {
   type TceRelayResponsePayload,
   type TceRelayScenario,
 } from '../../external/mocks/tce-relay';
+import { domainError } from '../../common/errors/domain-error';
 
 export type TceSubmissionRelayStatus = 'STUB_OK';
 
@@ -40,26 +41,26 @@ export type TceQueueDatabase = Readonly<{
 }>;
 
 export type TceQueueAdapterOptions = Readonly<{
-  transport?: QueueAdapterTransport;
-  queue?: SgpQueueAdapter<TceRelayKind>;
-  stateWriter?: TceSubmissionStateWriter;
-  database?: TceQueueDatabase;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  transport?: QueueAdapterTransport | undefined;
+  queue?: SgpQueueAdapter<TceRelayKind> | undefined;
+  stateWriter?: TceSubmissionStateWriter | undefined;
+  database?: TceQueueDatabase | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export type SubmitTceFiscalReportInput = Readonly<{
   tenantId: string;
   submissionId: string;
   report: TceRelayFiscalReportEnvelope;
-  scenario?: TceRelayScenario;
-  idempotencyKey?: string;
-  correlationId?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  scenario?: TceRelayScenario | undefined;
+  idempotencyKey?: string | undefined;
+  correlationId?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type SubmitTceFiscalReportResult = Readonly<{
@@ -79,7 +80,7 @@ const TCE_QUEUE_WORKER_PERMISSIONS = [
 export class TceQueueAdapter {
   private readonly queue: SgpQueueAdapter<TceRelayKind>;
   private readonly ownsQueue: boolean;
-  private readonly stateWriter?: TceSubmissionStateWriter;
+  private readonly stateWriter?: TceSubmissionStateWriter | undefined;
 
   constructor(options: TceQueueAdapterOptions) {
     if (options.queue) {
@@ -87,7 +88,8 @@ export class TceQueueAdapter {
       this.ownsQueue = false;
     } else {
       if (!options.transport) {
-        throw new Error(
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
           'TceQueueAdapter requires either a queue or a queue transport.',
         );
       }
@@ -119,7 +121,8 @@ export class TceQueueAdapter {
     input: SubmitTceFiscalReportInput,
   ): Promise<SubmitTceFiscalReportResult> {
     if (!this.stateWriter) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'TceQueueAdapter requires a state writer or database to persist relay acknowledgement.',
       );
     }
@@ -140,7 +143,10 @@ export class TceQueueAdapter {
 
     const relay = queueResponse.payload;
     if (!relay) {
-      throw new Error('TCE relay returned an OK response without payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'TCE relay returned an OK response without payload.',
+      );
     }
     this.assertRelayPayload(input, relay);
 
@@ -174,16 +180,28 @@ export class TceQueueAdapter {
     relay: TceRelayResponsePayload,
   ): void {
     if (relay.submissionId !== input.submissionId) {
-      throw new Error('TCE relay returned a different submission id.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'TCE relay returned a different submission id.',
+      );
     }
     if (relay.reportType !== input.report.reportType) {
-      throw new Error('TCE relay returned a different report type.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'TCE relay returned a different report type.',
+      );
     }
     if (relay.stateCode !== input.report.target.stateCode) {
-      throw new Error('TCE relay returned a different state code.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'TCE relay returned a different state code.',
+      );
     }
     if (relay.hashes.evidenceHash !== input.report.evidenceHash) {
-      throw new Error('TCE relay returned a different evidence hash.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'TCE relay returned a different evidence hash.',
+      );
     }
   }
 
@@ -259,7 +277,8 @@ export class TceSubmissionSqlStateWriter implements TceSubmissionStateWriter {
           ],
         );
         if (!rows[0]) {
-          throw new Error(
+          throw domainError.internal(
+            'INTERNAL_INVARIANT',
             `TCE submission was not updated by relay adapter: ${state.submissionId}`,
           );
         }

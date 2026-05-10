@@ -6,6 +6,7 @@ import {
   SiaficConnectorResponse,
   SiaficStagePayload,
 } from './siafic.dto';
+import { domainError } from '../../common/errors/domain-error';
 
 interface CircuitRecord {
   state: SiaficCircuitState;
@@ -89,7 +90,8 @@ export class SiaficConnectorService {
       });
       const body = await response.text();
       if (!response.ok) {
-        throw new Error(
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
           `SIAFIC endpoint returned ${response.status}: ${body.slice(0, 300)}`,
         );
       }
@@ -177,11 +179,11 @@ export function parseSiaficResponse(
 ): SiaficConnectorResponse {
   try {
     const parsed = JSON.parse(body) as {
-      accepted?: boolean;
-      receiptNumber?: string;
-      receipt_number?: string;
-      protocolo?: string;
-      status?: string;
+      accepted?: boolean | undefined;
+      receiptNumber?: string | undefined;
+      receipt_number?: string | undefined;
+      protocolo?: string | undefined;
+      status?: string | undefined;
     };
     const accepted =
       parsed.accepted ??

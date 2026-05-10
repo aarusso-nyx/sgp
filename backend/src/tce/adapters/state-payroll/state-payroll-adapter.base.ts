@@ -10,6 +10,7 @@ import {
   TceOrganKind,
   ValidationResult,
 } from '../../contracts/tce-adapter.interface';
+import { domainError } from '../../../common/errors/domain-error';
 
 export interface StatePayrollAdapterConfig {
   id: string;
@@ -93,7 +94,10 @@ export abstract class StatePayrollSourcePendingAdapter implements TceAdapter<Sta
   ): SerializedEnvelope {
     const layout = this.layoutFor(layoutVersion);
     if (!layout) {
-      throw new Error(`Unsupported layout version: ${layoutVersion}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `Unsupported layout version: ${layoutVersion}`,
+      );
     }
     const body = JSON.stringify(
       {

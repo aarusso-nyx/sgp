@@ -47,6 +47,6 @@ describe('Licencas', () => {
 
     component.submit();
 
-    expect(component.records[0].days).toBe(120);
+    expect(component.records[0]!.days).toBe(120);
   });
 });

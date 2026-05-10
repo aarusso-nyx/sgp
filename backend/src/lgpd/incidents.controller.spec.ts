@@ -71,6 +71,11 @@ describe('LgpdIncidentsController', () => {
         metadata: expect.objectContaining({ transition: 'CLOSED' }),
       }),
     );
+    const auditMetadata = auditMutation.mock.calls.map((call) => call[3]);
+    expect(JSON.stringify(auditMetadata)).toContain('lgpd.security_incident');
+    expect(JSON.stringify(auditMetadata)).not.toContain('CPF');
+    expect(JSON.stringify(auditMetadata)).not.toContain('rotation');
+    expect(JSON.stringify(auditMetadata)).not.toContain('dpo@example.gov.br');
   });
 });
 

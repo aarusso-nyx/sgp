@@ -83,7 +83,9 @@ export class TaxRateIrrf implements OnInit {
       .map((line) => line.trim())
       .filter(Boolean)
       .map((line, index) => {
-        const [min, max, rate, deduction, dependent] = line.split(';').map((value) => value.trim());
+        const [min = '', max = '', rate = '', deduction = '', dependent = ''] = line
+          .split(';')
+          .map((value) => value.trim());
         return {
           code: `IRRF-${this.form.value.referenceYear}-${String(index + 1).padStart(2, '0')}`,
           bracketMin: min,

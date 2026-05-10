@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "censor": "[redacted]",
+  "maxDepth": 5,
+  "piiKeys": [
+    "cpf",
+    "cpf_cnpj",
+    "pis_pasep",
+    "pisPasep",
+    "email",
+    "bank_account",
+    "bankAccount",
+    "accountNumber",
+    "agencyNumber"
+  ],
+  "secretPaths": [
+    "headers.authorization",
+    "headers.Authorization",
+    "req.headers.authorization",
+    "req.headers.Authorization",
+    "request.headers.authorization",
+    "request.headers.Authorization"
+  ]
+}

@@ -12,8 +12,8 @@ const candidatoId = '00000000-0000-4000-8000-000000000701';
 
 class FakeCaptureDatabase {
   readonly configured = true;
-  capturedCipher?: Buffer;
-  capturedKmsKeyId?: string;
+  capturedCipher?: Buffer | undefined;
+  capturedKmsKeyId?: string | undefined;
 
   async transaction<T>(
     callback: (client: { query: jest.Mock }) => Promise<T>,

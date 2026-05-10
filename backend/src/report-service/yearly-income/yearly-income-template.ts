@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js';
+import { domainError } from '../../common/errors/domain-error';
 
 export interface YearlyIncomeAggregate {
   tenantId: string;
@@ -60,14 +61,16 @@ export function toYearlyIncomeDocument(
   );
   const s1210Total = money(aggregate.s1210Total);
   if (!taxablePlusExempt.equals(s1210Total)) {
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `S-1210 coherence failed for ${aggregate.employeeId}/${aggregate.yearBase}: ${taxablePlusExempt.toFixed(2)} != ${s1210Total.toFixed(2)}`,
     );
   }
   const irrfTotal = money(aggregate.irrfTotal);
   const s1210IrrfTotal = money(aggregate.s1210IrrfTotal);
   if (!irrfTotal.equals(s1210IrrfTotal)) {
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `S-1210 IRRF coherence failed for ${aggregate.employeeId}/${aggregate.yearBase}: ${irrfTotal.toFixed(2)} != ${s1210IrrfTotal.toFixed(2)}`,
     );
   }

@@ -13,6 +13,7 @@ import {
   PayrollCalculationRequestDto,
   type PayrollCalculationMode,
 } from './payroll-engine.dto';
+import { domainError } from '../common/errors/domain-error';
 
 interface PayrollRunRow extends QueryResultRow {
   id: string;
@@ -53,10 +54,10 @@ interface PayrollRunSummaryRow extends QueryResultRow {
 interface NormalizedCalculationRequest {
   payrollRunId: string;
   mode: PayrollCalculationMode;
-  competenceYear?: number;
-  competenceMonth?: number;
+  competenceYear?: number | undefined;
+  competenceMonth?: number | undefined;
   dryRun: boolean;
-  requestedBy?: string;
+  requestedBy?: string | undefined;
 }
 
 const UUID_PATTERN =
@@ -300,7 +301,10 @@ export class PayrollEngineService {
 
     const summary = summaryRows[0];
     if (!summary) {
-      throw new Error('Payroll run calculation did not return a summary');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Payroll run calculation did not return a summary',
+      );
     }
 
     await this.databaseService.query(

@@ -139,6 +139,15 @@ Before starting:
 
 - Query MemPalace for project:sgp, round:<n>, phase:audit (load B0 closing context).
 - Query for phase:backlog, round:<n> to detect prior partial backlog work.
+- If MCP lookup fails or the palace index is untrusted, use the non-destructive
+  CLI fallback against `~/.mempalace/palace-coding`:
+  `PATH="$HOME/Library/Python/3.9/bin:$PATH" mempalace --palace ~/.mempalace/palace-coding search --results 5 "<query>"`.
+- If CLI search succeeds, mirror B1 notes under `docs/work/round-<n>/mempalace-backlog/`
+  and continue with a blocker note. If both MCP and CLI are unavailable, write a
+  blocker in `docs/work/round-<n>/QUESTIONS.md` and continue with file-backed
+  evidence only.
+- Do not run `mempalace repair`, restore backups, or rebuild indexes inside B1;
+  those are owner-controlled recovery actions.
 
 After each tier completion:
 

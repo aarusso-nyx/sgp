@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import {
   InMemoryQueueTransport,
   type QueueAdapterRequestEnvelope,
@@ -118,7 +119,89 @@ describe('R5-40 SIOPE mock relay queue adapter (e2e)', () => {
       }),
     );
   });
+
+  it('covers SIOPE relay retry, definitive, and validation branches', async () => {
+    const exportInput = siopeExport();
+    const content = new SiopeExportGenerator().generateCsv(exportInput);
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000141',
+        exportId: 'transient-siope',
+        export: exportInput,
+        content,
+        scenario: 'TRANSIENT_ERROR',
+        maxAttempts: 2,
+      }),
+    ).rejects.toThrow('Adapter request exceeded 2 attempts.');
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000141',
+        exportId: 'definitive-siope',
+        export: exportInput,
+        content,
+        scenario: 'DEFINITIVE_ERROR',
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow('Mock SIOPE relay requested adapter retry.');
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000141',
+        exportId: '',
+        export: exportInput,
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow('SIOPE relay requests must carry an export id.');
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000141',
+        exportId: 'layout-missing-siope',
+        export: { ...exportInput, layoutEdition: '', sourceUrl: '' },
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'SIOPE relay requests must carry caller-selected layout metadata.',
+    );
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000141',
+        exportId: 'bad-source-siope',
+        export: {
+          ...exportInput,
+          sourceStatus: 'LEGACY_IMPORTED' as never,
+        },
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'SIOPE relay only accepts caller-selected official-layout artifacts.',
+    );
+  });
 });
+
+function siopeExport(): SiopeExportInput {
+  return {
+    sourceStatus: 'CALLER_SELECTED_OFFICIAL_LAYOUT',
+    layoutEdition: 'SIOPE-2026-26.0.1.2',
+    sourceUrl: 'https://www.fnde.gov.br/siope/download.do',
+    tenantIbgeCode: '3550308',
+    year: 2026,
+    rows: [
+      {
+        category: 'REMUNERACAO_PROFISSIONAIS',
+        accountCode: 'FUNDEB-REM',
+        label: 'Remuneracao dos profissionais da educacao',
+        value: '500000.00',
+      },
+    ],
+  };
+}
 
 function deterministicIdFactory(): () => string {
   let next = 1;
@@ -128,3 +211,9 @@ function deterministicIdFactory(): () => string {
     return `00000000-0000-4000-8000-${suffix}`;
   };
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

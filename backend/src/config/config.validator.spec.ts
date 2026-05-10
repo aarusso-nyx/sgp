@@ -56,4 +56,26 @@ describe('environment validator', () => {
       'Invalid backend configuration: COGNITO_TOKEN_USE must be either access or id when set; COGNITO_USER_POOL_ID is required when COGNITO_REGION is set; PORT must be a positive integer; S3_ENDPOINT must be a valid URL',
     );
   });
+
+  it('normalizes document bucket S3 URIs for AWS SDK usage', () => {
+    expect(
+      validateEnvironment({
+        S3_DOCUMENTS_BUCKET: 's3://sgp-docs.detran-am.sistematech.com.br/',
+      }),
+    ).toEqual(
+      expect.objectContaining({
+        S3_DOCUMENTS_BUCKET: 'sgp-docs.detran-am.sistematech.com.br',
+      }),
+    );
+  });
+
+  it('rejects S3 bucket URI values with object prefixes', () => {
+    expect(() =>
+      validateEnvironment({
+        S3_DOCUMENTS_BUCKET: 's3://sgp-docs.detran-am.sistematech.com.br/prod',
+      }),
+    ).toThrow(
+      'Invalid backend configuration: S3_DOCUMENTS_BUCKET must not include an object prefix',
+    );
+  });
 });

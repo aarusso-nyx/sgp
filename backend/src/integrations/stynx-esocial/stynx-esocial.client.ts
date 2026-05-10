@@ -9,15 +9,15 @@ import {
 import type { EsocialClass } from './contracts';
 
 export type StynxEsocialEnqueueInput = Readonly<{
-  tenantId?: string;
+  tenantId?: string | undefined;
   kind: EsocialClass;
   eventClass: string;
-  sourceRef?: EsocialEventsSourceRef;
+  sourceRef?: EsocialEventsSourceRef | undefined;
   payload?: unknown;
-  actorSub?: string;
-  actorLogin?: string;
-  requestId?: string;
-  maxAttempts?: number;
+  actorSub?: string | undefined;
+  actorLogin?: string | undefined;
+  requestId?: string | undefined;
+  maxAttempts?: number | undefined;
 }>;
 
 export type StynxEsocialEnqueueResult = Readonly<{
@@ -39,16 +39,21 @@ export class StynxEsocialClient {
   ): Promise<StynxEsocialEnqueueResult> {
     const context = RequestContextStore.get();
     const tenantId = input.tenantId ?? this.currentTenantId();
+    const actorSub = input.actorSub ?? context?.actor?.sub;
+    const actorLogin = input.actorLogin ?? context?.actor?.username;
+    const requestId = input.requestId ?? context?.requestId;
     const row = await this.eventsService.recordPending({
       tenantId,
       kind: input.kind,
       eventClass: input.eventClass,
-      sourceRef: input.sourceRef,
       payload: input.payload ?? {},
-      actorSub: input.actorSub ?? context?.actor?.sub,
-      actorLogin: input.actorLogin ?? context?.actor?.username,
-      requestId: input.requestId ?? context?.requestId,
-      maxAttempts: input.maxAttempts,
+      ...(input.sourceRef ? { sourceRef: input.sourceRef } : {}),
+      ...(actorSub ? { actorSub } : {}),
+      ...(actorLogin ? { actorLogin } : {}),
+      ...(requestId ? { requestId } : {}),
+      ...(input.maxAttempts !== undefined
+        ? { maxAttempts: input.maxAttempts }
+        : {}),
     });
     return this.toResult(row);
   }

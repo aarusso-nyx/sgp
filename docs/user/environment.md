@@ -6,14 +6,15 @@ This file documents variables used by `sgp-admin`, `sgp-portal`, the Nest APIs, 
 - `tests/.env.example`: QA smoke/e2e base URLs and local test storage variables.
 - `infra/aws/.env.example`: deployment planning variables.
 
-## Auth (Cognito)
+## Auth (Stynx-owned Cognito)
 
-- `COGNITO_REGION`: AWS region hosting Cognito.
-- `COGNITO_USER_POOL_ID`: Cognito User Pool identifier.
-- `COGNITO_CLIENT_ID`: Cognito app client identifier.
-- `COGNITO_DOMAIN`: Cognito hosted UI base domain.
-- `COGNITO_REDIRECT_URI`: local callback URI after login.
-- `COGNITO_LOGOUT_URI`: post-logout redirect URI.
+- `COGNITO_REGION`: AWS region hosting the Stynx-owned Cognito pool, when Stynx exposes region/pool-id instead of an issuer URL.
+- `COGNITO_USER_POOL_ID`: Stynx-owned Cognito User Pool identifier, when region/pool-id mode is used.
+- `COGNITO_ISSUER`: Stynx-provided token issuer URL. Preferred when Stynx publishes the issuer directly.
+- `COGNITO_CLIENT_ID`: Stynx-owned Cognito app client identifier expected in SGP tokens.
+- `COGNITO_JWKS_URI`: Stynx-provided JWKS URL, when Stynx publishes an explicit key endpoint.
+- `COGNITO_TOKEN_USE`: token-use claim expected by SGP (`access` or `id`).
+- `STYNX_CLAIMS_MAPPING`: optional deployment-specific claim mapping descriptor supplied by Stynx.
 
 ## API / Data
 
@@ -24,7 +25,7 @@ This file documents variables used by `sgp-admin`, `sgp-portal`, the Nest APIs, 
 - `S3_REGION`: AWS region for the S3 documents bucket (defaults to `AWS_REGION` when omitted).
 - `S3_ENDPOINT`: optional S3-compatible endpoint override.
 - `S3_FORCE_PATH_STYLE`: set to `true` for path-style S3-compatible endpoints.
-- `S3_DOCUMENTS_BUCKET`: bucket used by `/api/v1/arquivos` presigned upload/download endpoints.
+- `S3_DOCUMENTS_BUCKET`: bucket used by `/api/v1/arquivos` presigned upload/download endpoints. Runtime accepts either a bare bucket name or `s3://bucket/` and normalizes it before AWS SDK calls.
 - `S3_DOCUMENTS_PRESIGN_EXPIRES_SECONDS`: upload URL TTL in seconds (default `900`).
 - `S3_DOCUMENTS_DOWNLOAD_EXPIRES_SECONDS`: download URL TTL in seconds (default `300`).
 - `S3_DOCUMENTS_KEY_PREFIX`: object key prefix for generated document storage keys (default `documents`).
@@ -53,15 +54,14 @@ This file documents variables used by `sgp-admin`, `sgp-portal`, the Nest APIs, 
 
 - `AWS_REGION`: AWS region for deployment operations.
 - `AWS_ACCOUNT_ID`: AWS account identifier.
-- `AWS_PROFILE`: local AWS CLI profile name.
+- `AWS_PROFILE`: local AWS CLI profile name. SGP AWS deployment uses `detran-am`.
 - `DEPLOY_TARGET`: deployment environment (`stage` or `prod`).
-- `BACKEND_IMAGE_URI`: container image URI for the API runtime family.
-- `FRONTEND_DOMAIN`: DNS name for `sgp-admin`.
-- `PORTAL_FRONTEND_DOMAIN`: DNS name for `sgp-portal`.
-- `COGNITO_CALLBACK_URL`: deployed `sgp-admin` callback URL.
-- `COGNITO_LOGOUT_URL`: deployed `sgp-admin` logout URL.
-- `PORTAL_COGNITO_CALLBACK_URL`: deployed `sgp-portal` callback URL.
-- `PORTAL_COGNITO_LOGOUT_URL`: deployed `sgp-portal` logout URL.
+- `SGP_DOMAIN`: public CloudFront domain. Production uses `sgp.detran-am.sistematech.com.br`; stage uses `sgp-stage.detran-am.sistematech.com.br`.
+- `S3_FRONTEND_BUCKET`: frontend asset bucket. The accepted AWS value is `s3://frontend.detran-am.sistematech.com.br/`.
+- `S3_DOCUMENTS_BUCKET`: document bucket. The accepted AWS value is `s3://sgp-docs.detran-am.sistematech.com.br/`.
+
+SGP does not build or deploy Docker images. Artifact deployment uses versioned
+Node/Angular tarballs with production `node_modules` bundled into the artifact.
 
 ## Conventions
 

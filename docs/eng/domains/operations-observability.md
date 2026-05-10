@@ -157,8 +157,7 @@ SGP adapter/mock-relay boundary lives in `docs/user/sgp-boundary-runbook.md`.
 
 Workers run as independently deployable NestJS entrypoints and must be observable through the same runtime controls as synchronous APIs:
 
-- `stynx-esocial`: eSocial build, sign, submit, retorno sync, totalizers.
-- `sgp-integrations-worker`: DCTFWeb, DIRF, EFD-Reinf, CNAB, SIAFIC, Siconfi/SIOPE/SIOPS export primitives.
+- `sgp-integrations-worker`: eSocial sandbox build/sign/submit retry loop plus DCTFWeb, DIRF, EFD-Reinf, CNAB, SIAFIC, Siconfi/SIOPE/SIOPS export primitives.
 - `sgp-report-worker`: batch report and PDF/PDF-A generation.
 - `sgp-payroll-engine`: folia-first calculation runtime.
 - `tce-worker`: Postgres-backed TCE submission queue and circuit breaker.

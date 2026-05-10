@@ -13,7 +13,7 @@ const matrixPath = resolve(cwd, 'docs/gov/generated/database/alignment-matrix.js
 const sqlSupportPath = resolve(cwd, 'database/sql');
 const authTokenVerifierPath = resolve(cwd, 'backend/src/auth/sgp-stynx-token-verifier.service.ts');
 const databaseServicePath = resolve(cwd, 'backend/src/database/database.service.ts');
-const portalServicePath = resolve(cwd, 'backend/src/portal/portal.service.ts');
+const portalSourcePath = resolve(cwd, 'backend/src/portal');
 const publicTransparencyServicePath = resolve(
   cwd,
   'backend/src/publico/public-transparency.service.ts',
@@ -206,6 +206,19 @@ function readCanonicalSql() {
     .filter((name) => !optionalSqlFiles.has(name))
     .sort((a, b) => a.localeCompare(b))
     .map((name) => readFileSync(resolve(sqlSupportPath, name), 'utf8'))
+    .join('\n');
+}
+
+function readTypeScriptTree(root) {
+  return readdirSync(root, { withFileTypes: true })
+    .sort((left, right) => left.name.localeCompare(right.name))
+    .map((entry) => {
+      const path = resolve(root, entry.name);
+      if (entry.isDirectory()) return readTypeScriptTree(path);
+      if (entry.isFile() && entry.name.endsWith('.ts')) return readFileSync(path, 'utf8');
+      return '';
+    })
+    .filter(Boolean)
     .join('\n');
 }
 
@@ -411,7 +424,7 @@ function main() {
   const portalProjectionSql = canonicalSchema;
   const authTokenVerifier = readFileSync(authTokenVerifierPath, 'utf8');
   const databaseService = readFileSync(databaseServicePath, 'utf8');
-  const portalService = readFileSync(portalServicePath, 'utf8');
+  const portalRuntimeSource = readTypeScriptTree(portalSourcePath);
   const publicTransparencyService = readFileSync(publicTransparencyServicePath, 'utf8');
   if (includesAny(rlsPolicies, ['notification_counter_select', 'notification_counter_write'])) {
     fail('RLS policy file still contains notification_counter policy references.');
@@ -462,7 +475,7 @@ function main() {
   }
 
   if (
-    !includesAny(portalService, ['prs.tenant_id = public.sgp_current_tenant_uuid()']) ||
+    !includesAny(portalRuntimeSource, ['prs.tenant_id = public.sgp_current_tenant_uuid()']) ||
     !includesAny(publicTransparencyService, ['prs.tenant_slug = $1'])
   ) {
     fail('Portal/public runtime queries do not scope projection reads by tenant.');

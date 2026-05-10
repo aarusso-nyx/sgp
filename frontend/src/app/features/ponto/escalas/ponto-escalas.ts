@@ -99,16 +99,20 @@ export class PontoEscalas implements OnInit, OnDestroy {
       this.rosterForm.markAllAsTouched();
       return;
     }
-    const value = this.rosterForm.value as Record<string, string>;
+    const value = this.rosterForm.getRawValue() as {
+      employeeIds: string;
+      periodStart: string;
+      periodEnd: string;
+    };
     this.saving = true;
     this.service
       .generateRoster({
-        employeeIds: value['employeeIds']
+        employeeIds: value.employeeIds
           .split(',')
           .map((entry) => entry.trim())
           .filter(Boolean),
-        periodStart: value['periodStart'],
-        periodEnd: value['periodEnd'],
+        periodStart: value.periodStart,
+        periodEnd: value.periodEnd,
       })
       .pipe(
         finalize(() => {

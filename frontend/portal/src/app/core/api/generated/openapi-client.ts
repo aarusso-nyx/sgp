@@ -132,6 +132,10 @@ export class OpenApiClient {
     return this.api.get<unknown>('/v1/portal/contracheques/ferias');
   }
 
+  getApiV1PortalDocumentosSolicitacoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/documentos/solicitacoes');
+  }
+
   getApiV1PortalMeusDadosCadastro(): Observable<unknown> {
     return this.api.get<unknown>('/v1/portal/meus-dados/cadastro');
   }
@@ -158,6 +162,10 @@ export class OpenApiClient {
 
   getApiV1PortalMinhaCarreira(): Observable<unknown> {
     return this.api.get<unknown>('/v1/portal/minha-carreira');
+  }
+
+  getApiV1PortalMinhaEquipeAprovacoes(): Observable<unknown> {
+    return this.api.get<unknown>('/v1/portal/minha-equipe/aprovacoes');
   }
 
   getApiV1PortalPayslips(): Observable<unknown> {
@@ -324,6 +332,30 @@ export class OpenApiClient {
 
   postApiV1AvaliacaoSimulacoes(body: ApiBody = {}): Observable<unknown> {
     return this.api.post<unknown, ApiBody>('/v1/avaliacao/simulacoes', body);
+  }
+
+  postApiV1PortalDocumentosSolicitacoes(body: ApiBody = {}): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>('/v1/portal/documentos/solicitacoes', body);
+  }
+
+  postApiV1PortalMinhaEquipeAprovacoesAprovarByKindAndId(
+    params: { kind: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/portal/minha-equipe/aprovacoes/${encodeURIComponent(params.kind)}/${encodeURIComponent(params.id)}/aprovar`,
+      body,
+    );
+  }
+
+  postApiV1PortalMinhaEquipeAprovacoesCancelarByKindAndId(
+    params: { kind: string; id: string },
+    body: ApiBody = {},
+  ): Observable<unknown> {
+    return this.api.post<unknown, ApiBody>(
+      `/v1/portal/minha-equipe/aprovacoes/${encodeURIComponent(params.kind)}/${encodeURIComponent(params.id)}/cancelar`,
+      body,
+    );
   }
 
   postApiV1ReportServicePoll(body: ApiBody = {}): Observable<unknown> {

@@ -1,7 +1,12 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Injectable,
+  Optional,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
+import { SgpEsocialEmittersService } from '../../integrations/stynx-esocial';
 import { formatDateOnlyUtc } from '../payroll-bridge/tenant-timezone.util';
 import { CreateWorkScheduleDto } from '../ponto.dto';
 
@@ -29,7 +34,11 @@ export interface WorkScheduleSummary {
 
 @Injectable()
 export class WorkScheduleService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @Optional()
+    private readonly esocialEmitters?: SgpEsocialEmittersService,
+  ) {}
 
   async list(): Promise<WorkScheduleSummary[]> {
     this.ensureDatabase();
@@ -46,7 +55,7 @@ export class WorkScheduleService {
 
   async create(input: CreateWorkScheduleDto): Promise<WorkScheduleSummary> {
     this.ensureDatabase();
-    return this.databaseService.transaction(async (client) => {
+    const created = await this.databaseService.transaction(async (client) => {
       const schedule = await client.query<WorkScheduleRow>(
         `
         INSERT INTO ponto.work_schedule (
@@ -82,6 +91,18 @@ export class WorkScheduleService {
       }
       return this.toSummary(schedule.rows[0]!);
     });
+    await this.esocialEmitters?.emitForCurrentTenant('s1050WorkSchedule', {
+      sourceId: created.workScheduleId,
+      operation: 'create',
+      data: {
+        code: created.code,
+        name: created.name,
+        weeklyHours: created.weeklyHours.toFixed(2),
+        validFrom: created.validFrom,
+        validTo: created.validTo,
+      },
+    });
+    return created;
   }
 
   private async insertDaySchedules(

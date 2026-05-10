@@ -14,10 +14,13 @@ import {
 } from './program.dto';
 import { ProgramRevisionService } from './program-revision.service';
 
+type HealthProgramKind = 'PCMSO' | 'PCMAT';
+
 interface HealthProgramRow extends QueryResultRow {
   id: string;
   work_location_id: string;
   work_location_name: string | null;
+  kind: HealthProgramKind;
   valid_from: Date | string;
   valid_until: Date | string;
   responsible_doctor_crm: string;
@@ -47,6 +50,7 @@ export interface HealthProgramSummary {
   id: string;
   workLocationId: string;
   workLocationName: string | null;
+  kind: HealthProgramKind;
   validFrom: string;
   validUntil: string;
   responsibleDoctorCrm: string;
@@ -61,36 +65,46 @@ export class HealthProgramService {
     private readonly revisionService: ProgramRevisionService,
   ) {}
 
-  async list(): Promise<HealthProgramSummary[]> {
+  async list(
+    kind: HealthProgramKind = 'PCMSO',
+  ): Promise<HealthProgramSummary[]> {
     this.ensureDatabase();
     const rows = await this.databaseService.query<HealthProgramRow>(
       `
       SELECT hp.id::text, hp.work_location_id::text, wl.name AS work_location_name,
+             hp.kind::text,
              hp.valid_from, hp.valid_until, hp.responsible_doctor_crm,
              hp.responsible_doctor_name, hp.status::text
       FROM saude.health_program hp
       JOIN hr.work_location wl ON wl.id = hp.work_location_id
+      WHERE hp.kind = $1::saude.health_program_kind
       ORDER BY hp.status = 'ACTIVE' DESC, hp.valid_from DESC
       `,
+      [kind],
     );
     return rows.map((row) => this.toSummary(row));
   }
 
-  async create(input: CreateHealthProgramDto): Promise<HealthProgramSummary> {
+  async create(
+    input: CreateHealthProgramDto,
+    kind: HealthProgramKind = 'PCMSO',
+  ): Promise<HealthProgramSummary> {
     this.ensureDatabase();
     const rows = await this.databaseService.query<HealthProgramRow>(
       `
       INSERT INTO saude.health_program (
-        work_location_id, valid_from, valid_until,
+        work_location_id, kind, valid_from, valid_until,
         responsible_doctor_crm, responsible_doctor_name
       )
-      VALUES ($1::uuid, $2::date, $3::date, $4, $5)
+      VALUES ($1::uuid, $2::saude.health_program_kind, $3::date, $4::date, $5, $6)
       RETURNING id::text, work_location_id::text, NULL::text AS work_location_name,
+        kind::text,
         valid_from, valid_until, responsible_doctor_crm,
         responsible_doctor_name, status::text
       `,
       [
         input.workLocationId,
+        kind,
         input.validFrom,
         input.validUntil,
         input.responsibleDoctorCrm.trim(),
@@ -100,24 +114,29 @@ export class HealthProgramService {
     return this.toSummary(rows[0]!);
   }
 
-  async activate(id: string): Promise<HealthProgramSummary> {
+  async activate(
+    id: string,
+    kind: HealthProgramKind = 'PCMSO',
+  ): Promise<HealthProgramSummary> {
     this.ensureDatabase();
     return this.databaseService.transaction(async (client) => {
       const currentRows = await client.query<HealthProgramRow>(
         `
         SELECT id::text, work_location_id::text, NULL::text AS work_location_name,
+          kind::text,
           valid_from, valid_until, responsible_doctor_crm,
           responsible_doctor_name, status::text
         FROM saude.health_program
         WHERE id = $1::uuid
+          AND kind = $2::saude.health_program_kind
         FOR UPDATE
         `,
-        [id],
+        [id, kind],
       );
       const current = currentRows.rows[0];
-      if (!current) throw new NotFoundException('PCMSO not found');
+      if (!current) throw new NotFoundException(`${kind} not found`);
       if (current.status === 'ARCHIVED') {
-        throw new BadRequestException('Archived PCMSO cannot be activated');
+        throw new BadRequestException(`Archived ${kind} cannot be activated`);
       }
 
       const previousRows = await client.query<HealthProgramRow>(
@@ -125,30 +144,33 @@ export class HealthProgramService {
         UPDATE saude.health_program
         SET status = 'SUPERSEDED'::saude.program_status
         WHERE work_location_id = $1::uuid
-          AND kind = 'PCMSO'::saude.health_program_kind
+          AND kind = $3::saude.health_program_kind
           AND status = 'ACTIVE'::saude.program_status
           AND id <> $2::uuid
         RETURNING id::text, work_location_id::text, NULL::text AS work_location_name,
+          kind::text,
           valid_from, valid_until, responsible_doctor_crm,
           responsible_doctor_name, status::text
         `,
-        [current.work_location_id, id],
+        [current.work_location_id, id, kind],
       );
       const updated = await client.query<HealthProgramRow>(
         `
         UPDATE saude.health_program
         SET status = 'ACTIVE'::saude.program_status
         WHERE id = $1::uuid
+          AND kind = $2::saude.health_program_kind
         RETURNING id::text, work_location_id::text, NULL::text AS work_location_name,
+          kind::text,
           valid_from, valid_until, responsible_doctor_crm,
           responsible_doctor_name, status::text
         `,
-        [id],
+        [id, kind],
       );
       const active = updated.rows[0]!;
       await this.revisionService.createWithClient(client, {
         parentProgramId: id,
-        parentProgramKind: 'PCMSO',
+        parentProgramKind: kind,
         revisionReason: 'ACTIVATION',
         snapshotJson: {
           program: this.toSummary(active),
@@ -159,24 +181,28 @@ export class HealthProgramService {
     });
   }
 
-  async revise(id: string, input: CreateProgramRevisionDto) {
+  async revise(
+    id: string,
+    input: CreateProgramRevisionDto,
+    kind: HealthProgramKind = 'PCMSO',
+  ) {
     this.ensureDatabase();
     return this.databaseService.transaction(async (client) => {
-      const current = await this.loadWithClient(client, id);
+      const current = await this.loadWithClient(client, id, kind);
       const previous = await client.query(
         `
         SELECT revision_number, snapshot_json
         FROM saude.program_revision
         WHERE parent_program_id = $1::uuid
-          AND parent_program_kind = 'PCMSO'::saude.program_parent_kind
+          AND parent_program_kind = $2::saude.program_parent_kind
         ORDER BY revision_number DESC
         LIMIT 1
         `,
-        [id],
+        [id, kind],
       );
       return this.revisionService.createWithClient(client, {
         parentProgramId: id,
-        parentProgramKind: 'PCMSO',
+        parentProgramKind: kind,
         revisionReason: input.revisionReason,
         signedPdfUri: input.signedPdfUri,
         sha256: input.sha256,
@@ -225,20 +251,23 @@ export class HealthProgramService {
   private async loadWithClient(
     client: PoolClient,
     id: string,
+    kind: HealthProgramKind,
   ): Promise<HealthProgramRow> {
     const rows = await client.query<HealthProgramRow>(
       `
       SELECT hp.id::text, hp.work_location_id::text, wl.name AS work_location_name,
+             hp.kind::text,
              hp.valid_from, hp.valid_until, hp.responsible_doctor_crm,
              hp.responsible_doctor_name, hp.status::text
       FROM saude.health_program hp
       JOIN hr.work_location wl ON wl.id = hp.work_location_id
       WHERE hp.id = $1::uuid
+        AND hp.kind = $2::saude.health_program_kind
       `,
-      [id],
+      [id, kind],
     );
     const row = rows.rows[0];
-    if (!row) throw new NotFoundException('PCMSO not found');
+    if (!row) throw new NotFoundException(`${kind} not found`);
     return row;
   }
 
@@ -253,6 +282,7 @@ export class HealthProgramService {
       id: row.id,
       workLocationId: row.work_location_id,
       workLocationName: row.work_location_name,
+      kind: row.kind,
       validFrom: this.dateValue(row.valid_from),
       validUntil: this.dateValue(row.valid_until),
       responsibleDoctorCrm: row.responsible_doctor_crm,

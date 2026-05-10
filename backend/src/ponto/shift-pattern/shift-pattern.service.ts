@@ -293,6 +293,14 @@ export class ShiftPatternService {
   }
 
   private toDaySummary(row: ShiftPatternDayRow): ShiftPatternDaySummary {
+    const dayTimes: Pick<
+      ShiftPatternDayDto,
+      'entryTime' | 'exitTime' | 'lunchMinutes'
+    > = {};
+    if (row.entry_time) dayTimes.entryTime = row.entry_time;
+    if (row.exit_time) dayTimes.exitTime = row.exit_time;
+    if (row.lunch_minutes !== null) dayTimes.lunchMinutes = row.lunch_minutes;
+
     return {
       dayIndex: row.day_index,
       isWorking: row.is_working,
@@ -301,13 +309,7 @@ export class ShiftPatternService {
       lunchMinutes: row.lunch_minutes,
       nightShiftFlag: row.night_shift_flag,
       hazardFlag: row.hazard_flag,
-      expectedMinutes: row.is_working
-        ? this.expectedMinutes({
-            entryTime: row.entry_time ?? undefined,
-            exitTime: row.exit_time ?? undefined,
-            lunchMinutes: row.lunch_minutes ?? undefined,
-          })
-        : 0,
+      expectedMinutes: row.is_working ? this.expectedMinutes(dayTimes) : 0,
     };
   }
 

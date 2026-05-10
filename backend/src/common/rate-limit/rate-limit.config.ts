@@ -3,17 +3,18 @@ import type {
   ThrottlerModuleOptions,
   ThrottlerOptions,
 } from '@nestjs/throttler';
+import { domainError } from '../errors/domain-error';
 
 const DEFAULT_WINDOW_MS = 60_000;
 const DEFAULT_IP_LIMIT = 120;
 const DEFAULT_TENANT_LIMIT = 600;
 
 type RequestLike = {
-  actor?: { tenantId?: string | null } | null;
-  tenantId?: string | null;
-  ip?: string;
-  ips?: string[];
-  socket?: { remoteAddress?: string };
+  actor?: { tenantId?: string | null } | null | undefined;
+  tenantId?: string | null | undefined;
+  ip?: string | undefined;
+  ips?: string[] | undefined;
+  socket?: { remoteAddress?: string } | undefined;
   headers?: Record<string, string | string[] | undefined>;
 };
 
@@ -27,7 +28,10 @@ function positiveIntFromEnv(name: string, fallback: number): number {
 
   const parsed = Number(raw);
   if (!Number.isInteger(parsed) || parsed < 1) {
-    throw new Error(`${name} must be a positive integer`);
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      `${name} must be a positive integer`,
+    );
   }
 
   return parsed;
@@ -85,7 +89,8 @@ export function createRateLimitOptions(): ThrottlerModuleOptions {
   );
 
   if (tenantLimit <= ipLimit) {
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       'SGP_RATE_LIMIT_TENANT_LIMIT must be higher than SGP_RATE_LIMIT_IP_LIMIT',
     );
   }

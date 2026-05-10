@@ -315,10 +315,10 @@ export class EfdReinfBuilderService {
       return aggregateClosureItems([...accepted, ...explicit]);
     }
     if (input.eventType === 'R4040' || input.eventType === 'R4080') {
-      return explicit;
+      return sortSourceItems(explicit);
     }
     const rows = await this.loadSourcePayments(input.eventType, competence);
-    return [...rows.map(sourcePaymentToItem), ...explicit];
+    return sortSourceItems([...rows.map(sourcePaymentToItem), ...explicit]);
   }
 
   private async loadSourcePayments(
@@ -467,7 +467,7 @@ export function buildEfdReinfXml(input: {
   const retificationXml = input.originalEventId
     ? `\n      <nrRecibo>${input.originalEventId}</nrRecibo>`
     : '';
-  const itemsXml = input.items
+  const itemsXml = sortSourceItems(input.items)
     .map(
       (item) => `      <pagamento sourceRunId="${item.sourceRunId}">
         <beneficiario tipo="${item.beneficiaryKind}">
@@ -545,7 +545,17 @@ function aggregateClosureItems(items: SourceItem[]): SourceItem[] {
       Number(current.retainedAmount) + Number(item.retainedAmount)
     ).toFixed(2);
   }
-  return [...grouped.values()];
+  return sortSourceItems([...grouped.values()]);
+}
+
+function sortSourceItems(items: SourceItem[]): SourceItem[] {
+  return [...items].sort(
+    (left, right) =>
+      left.revenueCode.localeCompare(right.revenueCode) ||
+      left.beneficiaryKind.localeCompare(right.beneficiaryKind) ||
+      left.beneficiaryDocument.localeCompare(right.beneficiaryDocument) ||
+      left.sourceRunId.localeCompare(right.sourceRunId),
+  );
 }
 
 function eventSelectSql(where: string): string {

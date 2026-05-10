@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import { RubricaController } from '../../backend/src/folha-pagamento/accounting/rubrica/rubrica.controller';
 import { RubricaService } from '../../backend/src/folha-pagamento/accounting/rubrica/rubrica.service';
 
@@ -77,5 +78,11 @@ describe('Rubrica API contract (e2e)', () => {
         metadata: expect.objectContaining({ event: 'folha.rubrica.created' }),
       }),
     );
+  });
+});
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
   });
 });

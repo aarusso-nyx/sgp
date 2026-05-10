@@ -1,0 +1,80 @@
+name: Deploy (prod)
+
+# Triggered by a release-please-generated tag or manual workflow_dispatch.
+# AWS is the only automated provision target. Prod deploy planning is gated by
+# the `prod` GitHub Environment; repository settings must require reviewer
+# approval before this job runs. Failed gates still block deploy. Artifact
+# rollout remains a separate flow.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: 'Stack to deploy (edge|shared|app|all)'
+        required: true
+        default: 'all'
+
+permissions:
+  id-token: write
+  contents: read
+  attestations: write
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy-prod:
+    name: Plan prod stack (dry-run)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: prod
+      url: ${{ vars.PROD_DEPLOY_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install workspace dependencies
+        run: npm ci
+
+      - name: Install CDK dependencies
+        run: npm --prefix infra/aws/cdk ci
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_PROD }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+          role-session-name: sgp-deploy-prod-${{ github.run_id }}
+
+      - name: Plan prod deployment
+        run: |
+          npm --prefix infra/aws/cdk run synth:prod -- -c hostedZoneId=${{ vars.ROUTE53_HOSTED_ZONE_ID }}
+          npm run deploy -- --mode provision --target prod --stack ${{ github.event.inputs.stack || 'all' }} --dry-run
+
+      - name: Upload plan artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-prod-plan-${{ github.ref_name }}
+          path: |
+            cdk.out
+            *.tfplan
+          if-no-files-found: ignore
+
+      - name: Attest deployment plan provenance
+        if: always()
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'infra/aws/cdk/cdk.out/*.template.json'

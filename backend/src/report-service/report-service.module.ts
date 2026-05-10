@@ -20,11 +20,14 @@ import { PadesAdapter } from '../external/signature/pades.adapter';
 import { BlockedPaymentsReportService } from './blocked-payments-report.service';
 import { FinancialReportService } from './financial-report.service';
 import { ManagerialReportService } from './managerial-report.service';
+import { ManadExportReportService } from './manad-export-report.service';
+import { PerdcompExportReportService } from './perdcomp-export-report.service';
 import { PdfABuilderService } from './payslip/pdf-a-builder.service';
 import { PayslipController } from './payslip/payslip.controller';
 import { PayslipRenderService } from './payslip/payslip-render.service';
 import { PayrollSummaryReportService } from './payroll-summary-report.service';
 import { ReconciliationReportService } from './reconciliation-report.service';
+import { RepasseFundoRhReportService } from './repasse-fundo-rh-report.service';
 import { ReportWorkerArtifactsService } from './report-worker-artifacts.service';
 import { ReportWorkerDataService } from './report-worker-data.service';
 import { YearlyIncomeBatchService } from './yearly-income/yearly-income-batch.service';
@@ -61,9 +64,12 @@ import { ReportWorkerService } from './report-worker.service';
     ReportWorkerArtifactsService,
     PayrollSummaryReportService,
     ManagerialReportService,
+    ManadExportReportService,
+    PerdcompExportReportService,
     BlockedPaymentsReportService,
     ReconciliationReportService,
     FinancialReportService,
+    RepasseFundoRhReportService,
     ReportWorkerService,
     {
       provide: APP_PIPE,

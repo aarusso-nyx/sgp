@@ -71,8 +71,8 @@ export class PortalJustificativa implements OnInit {
           kind: value.kind,
           absenceStart: value.absenceStart,
           absenceEnd: value.absenceEnd,
-          attachmentId: value.attachmentId || undefined,
           reason: value.reason,
+          ...(value.attachmentId ? { attachmentId: value.attachmentId } : {}),
           payrollTreatment: 'PAID',
         }),
       );

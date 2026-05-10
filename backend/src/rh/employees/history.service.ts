@@ -29,7 +29,11 @@ export class HistoryService {
 
   async listEmployeeHistory(
     employeeId: string,
-    filters: { startDate?: string; endDate?: string; type?: string },
+    filters: {
+      startDate?: string | undefined;
+      endDate?: string | undefined;
+      type?: string | undefined;
+    },
   ): Promise<CareerHistoryEvent[]> {
     this.ensureDatabase();
     const rows = await this.databaseService.query<CareerHistoryRow>(

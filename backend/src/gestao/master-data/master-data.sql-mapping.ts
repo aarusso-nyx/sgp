@@ -4,13 +4,13 @@ export function mapping(input: {
   table: string;
   code: string;
   name: string;
-  description?: string;
+  description?: string | undefined;
   active: string;
   search: string;
-  baseWhere?: string;
-  metadata?: string;
-  writable?: boolean;
-  write?: WriteMapping;
+  baseWhere?: string | undefined;
+  metadata?: string | undefined;
+  writable?: boolean | undefined;
+  write?: WriteMapping | undefined;
 }): ResourceSqlMapping {
   return {
     table: input.table,

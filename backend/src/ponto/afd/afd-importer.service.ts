@@ -10,6 +10,7 @@ import { TimeRecordHashService } from '../time-record/time-record-hash.service';
 import { CreateAfdImportDto } from '../ponto.dto';
 import { AfdRecord, parseAfd } from './afd-layout';
 import { AfdImportSummary } from './afd.types';
+import { domainError } from '../../common/errors/domain-error';
 
 interface AfdImportRow extends QueryResultRow {
   afd_import_id: string;
@@ -164,7 +165,11 @@ export class AfdImporterService {
       `,
       [repDeviceId],
     );
-    if (!rows.rows[0]) throw new Error('REP device not found for AFD import');
+    if (!rows.rows[0])
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'REP device not found for AFD import',
+      );
     return rows.rows[0];
   }
 
@@ -220,7 +225,10 @@ export class AfdImporterService {
     );
     const employee = rows.rows[0];
     if (!employee) {
-      throw new Error(`Employee not found for AFD identifier ${identifier}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `Employee not found for AFD identifier ${identifier}`,
+      );
     }
     return employee.id;
   }

@@ -1,25 +1,39 @@
 # Infrastructure
 
-AWS is the target platform for SGP modernization.
+SGP has one automated infrastructure target: AWS. Client-premises remains a
+manual/external handoff, not an automated provider in this repository.
 
-## Temporary Status
+## Accepted Boundary
 
-The final infrastructure implementation path is intentionally open as of 2026-04-26. CloudFormation, Terraform, AWS SDK automation, and AWS CLI scripts are all acceptable candidates until the owner selects one. Files in this directory are planning scaffolds, not a release gate.
+Provisioning/IaC and artifact deployment are separate flows:
+
+- Provision creates or changes AWS resources with CDK TypeScript.
+- Artifact deploy pushes built SGP bundles to already designated AWS hosts.
+
+Release/homologation gate composition remains postponed for a focused owner
+discussion. Artifact apply stays blocked until that gate is accepted.
 
 ## Layout
 
-- `infra/aws/README.md`: AWS stack model and deployment flow.
-- `infra/aws/templates/`: CloudFormation placeholder templates by stack; not a final commitment to CloudFormation.
+- `infra/aws/cdk/`: authoritative AWS CDK TypeScript app.
+- `infra/aws/operations/`: PM2, CloudWatch Agent, deploy, and rollback host
+  assets.
+- `infra/aws/targets/`: AWS target manifests for stage/prod artifact deploy.
 
 ## Stack Scope
 
-- `cognito`: OAuth2/OIDC identity provider for frontend and API clients.
-- `rds`: PostgreSQL and related networking/security dependencies.
-- `backend`: containerized NestJS API runtime and ingress.
-- `frontend`: static Angular hosting and CDN edge configuration.
+- Identity: delegated to `../stynx`; SGP consumes Stynx-owned Cognito/JWKS/claim
+  settings but does not provision identity resources.
+- Database: RDS PostgreSQL, private subnets, encrypted storage.
+- Backend: one private Amazon Linux 2023 EC2 host per environment, PM2-managed.
+- Frontend: S3 + CloudFront, with one public domain per environment.
+- Messaging: SQS only in prod; stage uses DB-backed workers and local/mock
+  transports.
 
 ## Security Baseline
 
-- Never hardcode credentials, API keys, or passwords in templates.
-- Resolve runtime secrets via environment variables and secret managers.
-- Keep deploy operations in dry-run planning mode until the final infra approach is selected and placeholders are replaced.
+- Never hardcode credentials, API keys, passwords, or production secrets.
+- Use SSM Session Manager only; no public SSH.
+- Keep EC2 and RDS private.
+- Use VPC endpoints instead of NAT for AWS service access.
+- Keep artifact deploy decoupled from resource creation.

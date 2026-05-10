@@ -1,6 +1,7 @@
 import type { QueryResultRow } from 'pg';
 
 import type { ReportArtifact } from './report-artifact.builder';
+import { domainError } from '../common/errors/domain-error';
 
 export interface ReportJobRow extends QueryResultRow {
   id: string;
@@ -40,6 +41,35 @@ export interface ReconciliationRow extends QueryResultRow {
   difference: string;
 }
 
+export interface RepasseFundoRhRow extends QueryResultRow {
+  fund_source: string;
+  rubric_code: string;
+  rubric_description: string;
+  employee_count: string;
+  basis_total: string;
+  transfer_total: string;
+}
+
+export interface ManadPayrollRow extends QueryResultRow {
+  employee_registration: string;
+  employee_cpf: string;
+  rubric_code: string;
+  rubric_description: string;
+  entry_kind: string;
+  quantity: string;
+  reference_value: string;
+  amount: string;
+}
+
+export interface PerdcompCreditRow extends QueryResultRow {
+  rubric_code: string;
+  rubric_description: string;
+  entry_kind: string;
+  category: 'INSS_PATRONAL' | 'INSS_SEGURADO' | 'RAT' | 'OUTROS';
+  employee_count: string;
+  total_amount: string;
+}
+
 export interface IdRow extends QueryResultRow {
   id: string;
 }
@@ -72,7 +102,10 @@ export type CanonicalReportCode =
   | 'F_FOL_014'
   | 'F_FOL_015'
   | 'F_FOL_016'
-  | 'F_FOL_017';
+  | 'F_FOL_017'
+  | 'MANAD_EXPORT'
+  | 'PERDCOMP_EXPORT'
+  | 'RELATORIO_REPASSE_FUNDO_RH';
 
 export const REPORT_WORKER_DEFINITIONS = [
   'F-FOL-013',
@@ -92,6 +125,15 @@ export const REPORT_WORKER_DEFINITIONS = [
   'F-FOL-017',
   'F_FOL_017',
   'RELATORIO_FINANCEIRO',
+  'M-06',
+  'M_06',
+  'MANAD',
+  'MANAD_EXPORT',
+  'M-08',
+  'M_08',
+  'PERDCOMP',
+  'PERDCOMP_EXPORT',
+  'RELATORIO_REPASSE_FUNDO_RH',
 ] as const;
 
 export const WORKER_PERMISSIONS = [
@@ -132,5 +174,25 @@ export function canonicalReportCode(code: string): CanonicalReportCode {
   if (normalized === 'F_FOL_017' || normalized === 'RELATORIO_FINANCEIRO') {
     return 'F_FOL_017';
   }
-  throw new Error(`Unsupported report worker definition: ${code}`);
+  if (
+    normalized === 'M_06' ||
+    normalized === 'MANAD' ||
+    normalized === 'MANAD_EXPORT'
+  ) {
+    return 'MANAD_EXPORT';
+  }
+  if (
+    normalized === 'M_08' ||
+    normalized === 'PERDCOMP' ||
+    normalized === 'PERDCOMP_EXPORT'
+  ) {
+    return 'PERDCOMP_EXPORT';
+  }
+  if (normalized === 'RELATORIO_REPASSE_FUNDO_RH') {
+    return 'RELATORIO_REPASSE_FUNDO_RH';
+  }
+  throw domainError.internal(
+    'INTERNAL_INVARIANT',
+    `Unsupported report worker definition: ${code}`,
+  );
 }

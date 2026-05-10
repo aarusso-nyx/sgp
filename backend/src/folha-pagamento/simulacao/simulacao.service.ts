@@ -8,6 +8,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../database/database.service';
 import { RunPayrollSimulationDto } from './simulacao.dto';
+import { domainError } from '../../common/errors/domain-error';
 
 interface SimulationLineRow extends QueryResultRow {
   earning_deduction_id: string;
@@ -107,7 +108,10 @@ export class SimulacaoService {
           before.payroll_runs !== after.payroll_runs ||
           before.payroll_run_lines !== after.payroll_run_lines
         ) {
-          throw new Error('Payroll simulation changed payroll_run tables');
+          throw domainError.internal(
+            'INTERNAL_INVARIANT',
+            'Payroll simulation changed payroll_run tables',
+          );
         }
 
         throw new RollbackSimulation();
@@ -119,7 +123,10 @@ export class SimulacaoService {
       throw error;
     }
 
-    throw new Error('Payroll simulation transaction did not roll back');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Payroll simulation transaction did not roll back',
+    );
   }
 
   private ensureDatabase(): void {

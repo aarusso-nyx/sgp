@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-2555",
+  "operation": "update",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "hr",
+    "table": "administrative_process",
+    "id": "00000000-0000-4000-8000-000000002555",
+    "version": 1
+  },
+  "data": { "processNumber": "TRAB-001", "kind": "trabalhista" }
+}

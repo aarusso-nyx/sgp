@@ -17,9 +17,9 @@ import {
 export interface ProcessCnab240ReturnInput {
   remittanceFileId: string;
   content: string;
-  encoding?: 'ascii' | 'base64';
+  encoding?: 'ascii' | 'base64' | undefined;
   remittanceFileHash: string;
-  processedBy?: string | null;
+  processedBy?: string | null | undefined;
 }
 
 export interface ReprocessRejectedResult {

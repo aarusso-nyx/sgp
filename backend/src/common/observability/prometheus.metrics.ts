@@ -3,15 +3,15 @@ import type { INestApplication } from '@nestjs/common';
 type LabelValues = Record<string, string | number | boolean | undefined>;
 
 type HttpRequestLike = {
-  method?: string;
-  originalUrl?: string;
-  path?: string;
-  baseUrl?: string;
-  route?: { path?: string | RegExp };
+  method?: string | undefined;
+  originalUrl?: string | undefined;
+  path?: string | undefined;
+  baseUrl?: string | undefined;
+  route?: { path?: string | RegExp } | undefined;
 };
 
 type HttpResponseLike = {
-  statusCode?: number;
+  statusCode?: number | undefined;
   setHeader: (name: string, value: string) => void;
   end: (body?: string) => void;
   once: (event: 'finish', listener: () => void) => void;

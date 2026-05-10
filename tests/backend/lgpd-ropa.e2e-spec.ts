@@ -17,6 +17,8 @@ const entryId = '00000000-0000-4000-8000-000000000239';
 class FakeRopaDatabase {
   readonly configured = true;
   auditEvents = 0;
+  private currentFlowKey = 'payroll.payslip_pdf';
+  private currentOperationName = 'Payroll payslip generation';
 
   async query<T>(sql: string, values: readonly unknown[] = []): Promise<T[]> {
     if (sql.includes('sgp_append_audit_event')) {
@@ -24,6 +26,8 @@ class FakeRopaDatabase {
       return [{ id: 'audit-1' }] as T[];
     }
     if (sql.includes('INSERT INTO lgpd.ropa_entry')) {
+      this.currentFlowKey = String(values[0]);
+      this.currentOperationName = String(values[1]);
       return [{ id: entryId }] as T[];
     }
     if (sql.includes('UPDATE lgpd.ropa_entry')) {
@@ -34,10 +38,8 @@ class FakeRopaDatabase {
     }
     if (sql.includes('FROM lgpd.ropa_entry')) {
       const candidate = String(values[0] ?? 'payroll.payslip_pdf');
-      const flowKey = candidate.includes('.')
-        ? candidate
-        : 'payroll.payslip_pdf';
-      return [ropaRow(flowKey)] as T[];
+      const flowKey = candidate.includes('.') ? candidate : this.currentFlowKey;
+      return [ropaRow(flowKey, this.currentOperationName)] as T[];
     }
     return [] as T[];
   }
@@ -70,6 +72,10 @@ describe('LGPD ROPA admin API (e2e)', () => {
 
   afterAll(async () => {
     await app?.close();
+  });
+
+  beforeEach(() => {
+    database.auditEvents = 0;
   });
 
   it('exposes GET, POST, and PATCH under /api/v1/admin/lgpd/ropa with audit on mutations', async () => {
@@ -108,14 +114,67 @@ describe('LGPD ROPA admin API (e2e)', () => {
 
     expect(database.auditEvents).toBe(2);
   });
+
+  it('audits CRUD creation for representative payroll, recruitment, time, and regulatory ROPA flows', async () => {
+    const representativeFlows = [
+      {
+        flowKey: 'payroll.payslip_pdf',
+        operationName: 'Payroll payslip generation',
+        legalBasisCode: 'LGPD_ART_7_II',
+      },
+      {
+        flowKey: 'recruitment.public_application',
+        operationName: 'Recruitment public application intake',
+        legalBasisCode: 'LGPD_ART_7_V',
+      },
+      {
+        flowKey: 'time.attendance_register',
+        operationName: 'Attendance register and time-bank processing',
+        legalBasisCode: 'LGPD_ART_7_II',
+      },
+      {
+        flowKey: 'regulatory.esocial_reporting',
+        operationName: 'Regulatory reporting gateway',
+        legalBasisCode: 'LGPD_ART_7_II',
+      },
+    ];
+
+    for (const flow of representativeFlows) {
+      await request(app.getHttpServer() as SupertestApp)
+        .post('/api/v1/admin/lgpd/ropa')
+        .set('Authorization', 'Bearer fake')
+        .send({
+          flowKey: flow.flowKey,
+          operationName: flow.operationName,
+          controllerArea: 'LGPD operations',
+          riskLevel: 'HIGH',
+          securityControls: ['tenant RLS', 'permission guard'],
+          lifecycleEvidence: ['docs/eng/domains/privacy-transparency.md'],
+        })
+        .expect(201)
+        .expect(({ body }) => {
+          expect(body.flowKey).toBe(flow.flowKey);
+          expect(body.operationName).toBe(flow.operationName);
+          expect(body.legalBasis.legalBasisCode).toBe(flow.legalBasisCode);
+        });
+    }
+
+    expect(database.auditEvents).toBe(representativeFlows.length);
+  });
 });
 
 function legalBasisRow(flowKey: string) {
+  const legalBasisByFlow: Record<string, { legalBasisCode: string }> = {
+    'recruitment.public_application': { legalBasisCode: 'LGPD_ART_7_V' },
+  };
+  const legalBasis = legalBasisByFlow[flowKey] ?? {
+    legalBasisCode: 'LGPD_ART_7_II',
+  };
   return {
     flow_key: flowKey,
     flow_name: 'Official payslip PDF/A',
     data_category: 'MIXED',
-    legal_basis_code: 'LGPD_ART_7_II',
+    legal_basis_code: legalBasis.legalBasisCode,
     legal_basis_article: 'LGPD art. 7, II',
     sensitive_basis_code: 'LGPD_ART_11_II_A',
     sensitive_basis_article: 'LGPD art. 11, II, a',
@@ -132,12 +191,16 @@ function legalBasisRow(flowKey: string) {
   };
 }
 
-function ropaRow(flowKey: string) {
+function ropaRow(
+  flowKey: string,
+  operationName = 'Payroll payslip generation',
+) {
+  const legalBasis = legalBasisRow(flowKey);
   return {
     id: entryId,
     tenant_id: tenantId,
     flow_key: flowKey,
-    operation_name: 'Payroll payslip generation',
+    operation_name: operationName,
     controller_area: 'Payroll',
     processor_name: 'SGP report-service',
     external_recipients: [],
@@ -150,20 +213,20 @@ function ropaRow(flowKey: string) {
     notes: null,
     created_at: '2026-05-02T12:00:00.000Z',
     updated_at: '2026-05-02T12:00:00.000Z',
-    flow_name: 'Official payslip PDF/A',
-    data_category: 'MIXED',
-    legal_basis_code: 'LGPD_ART_7_II',
-    sensitive_basis_code: 'LGPD_ART_11_II_A',
-    purpose: 'Generate payslips.',
-    data_subjects: ['public employee'],
-    data_categories: ['CPF'],
-    source_tables: ['hr.employee'],
-    read_surfaces: ['report-service/payslip'],
-    retention_rule: 'Functional retention.',
-    sharing_scope: 'internal_employee_portal',
-    requires_consent: false,
-    requires_dpia: true,
-    decision_record_anchor: 'ADR-LGPD-001',
+    flow_name: legalBasis.flow_name,
+    data_category: legalBasis.data_category,
+    legal_basis_code: legalBasis.legal_basis_code,
+    sensitive_basis_code: legalBasis.sensitive_basis_code,
+    purpose: legalBasis.purpose,
+    data_subjects: legalBasis.data_subjects,
+    data_categories: legalBasis.data_categories,
+    source_tables: legalBasis.source_tables,
+    read_surfaces: legalBasis.read_surfaces,
+    retention_rule: legalBasis.retention_rule,
+    sharing_scope: legalBasis.sharing_scope,
+    requires_consent: legalBasis.requires_consent,
+    requires_dpia: legalBasis.requires_dpia,
+    decision_record_anchor: legalBasis.decision_record_anchor,
   };
 }
 

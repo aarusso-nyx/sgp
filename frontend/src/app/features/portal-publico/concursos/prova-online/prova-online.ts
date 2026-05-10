@@ -30,10 +30,10 @@ export class PortalPublicoProvaOnline implements OnDestroy {
   recording = false;
   snapshotIntervalSeconds = 15;
   lastSnapshotAt = '';
-  private cameraStream?: MediaStream;
-  private screenStream?: MediaStream;
-  private countdownHandle?: number;
-  private snapshotHandle?: number;
+  private cameraStream: MediaStream | undefined;
+  private screenStream: MediaStream | undefined;
+  private countdownHandle: number | undefined;
+  private snapshotHandle: number | undefined;
 
   async requestMedia(): Promise<void> {
     if (!this.consentAccepted) {

@@ -1,0 +1,20 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Fixture API",
+    "version": "0.0.0"
+  },
+  "paths": {
+    "/api/v1/spec-tagged": {
+      "get": {
+        "operationId": "SpecTaggedController_list",
+        "tags": ["Spec Tagged"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

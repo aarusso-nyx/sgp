@@ -5,9 +5,9 @@ import { runCommand } from './lib/command-runner.mjs';
 import { defaultRepoRoot } from './lib/repo-paths.mjs';
 
 const usage = `
-Usage: node scripts/check-db.mjs <alignment check|fk-coverage check|fk-coverage write|push-guard> [options]
+Usage: node scripts/check-db.mjs <alignment check|fk-coverage check|fk-coverage write|push-guard|rls-no-write-guard> [options]
 
-Run database alignment, FK coverage, and retired Prisma force-reset checks.
+Run database alignment, FK coverage, RLS reference-write, and retired Prisma force-reset checks.
 `;
 
 const options = parseArgs(process.argv.slice(2), { booleanFlags: ['help'] });
@@ -48,7 +48,11 @@ function runDbCheck(name, subcommand, args) {
     return runHelper('scripts/lib/checks/db/prisma-push-guard.mjs', args);
   }
 
-  console.error('[db] valid subcommands: alignment, fk-coverage, push-guard');
+  if (name === 'rls-no-write-guard') {
+    return runHelper('scripts/lib/checks/db/rls-no-write-guard.mjs', args);
+  }
+
+  console.error('[db] valid subcommands: alignment, fk-coverage, push-guard, rls-no-write-guard');
   return 1;
 }
 

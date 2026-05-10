@@ -5,9 +5,9 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 export interface PadesPrepareInput {
   payload: Buffer;
   verifyUrl: string;
-  reason?: string;
-  signedAt?: string;
-  signerName?: string;
+  reason?: string | undefined;
+  signedAt?: string | undefined;
+  signerName?: string | undefined;
 }
 
 @Injectable()

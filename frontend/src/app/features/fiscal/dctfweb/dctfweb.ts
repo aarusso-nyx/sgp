@@ -80,7 +80,9 @@ export class FiscalDctfweb {
           year: value.year,
           month: value.month,
           kind: value.kind,
-          originalDeclarationId: value.originalDeclarationId || undefined,
+          ...(value.originalDeclarationId
+            ? { originalDeclarationId: value.originalDeclarationId }
+            : {}),
         }),
       );
       this.upsert(created);

@@ -1,8 +1,8 @@
 declare module 'libxmljs2' {
   export interface ValidationError {
     message: string;
-    line?: number;
-    column?: number;
+    line?: number | undefined;
+    column?: number | undefined;
   }
 
   export interface Document {

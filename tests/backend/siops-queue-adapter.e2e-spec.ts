@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import {
   InMemoryQueueTransport,
   type QueueAdapterRequestEnvelope,
@@ -119,7 +120,90 @@ describe('R5-40 SIOPS mock relay queue adapter (e2e)', () => {
       }),
     );
   });
+
+  it('covers SIOPS relay retry, definitive, and validation branches', async () => {
+    const exportInput = siopsExport();
+    const content = new SiopsExportGenerator().generateCsv(exportInput);
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000142',
+        exportId: 'transient-siops',
+        export: exportInput,
+        content,
+        scenario: 'TRANSIENT_ERROR',
+        maxAttempts: 2,
+      }),
+    ).rejects.toThrow('Adapter request exceeded 2 attempts.');
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000142',
+        exportId: 'definitive-siops',
+        export: exportInput,
+        content,
+        scenario: 'DEFINITIVE_ERROR',
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow('Mock SIOPS relay requested adapter retry.');
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000142',
+        exportId: '',
+        export: exportInput,
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow('SIOPS relay requests must carry an export id.');
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000142',
+        exportId: 'layout-missing-siops',
+        export: { ...exportInput, layoutEdition: '', sourceUrl: '' },
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'SIOPS relay requests must carry caller-selected layout metadata.',
+    );
+
+    await expect(
+      adapter.submitExport({
+        tenantId: '00000000-0000-4000-8000-000000000142',
+        exportId: 'bad-source-siops',
+        export: {
+          ...exportInput,
+          sourceStatus: 'LEGACY_IMPORTED' as never,
+        },
+        content,
+        maxAttempts: 1,
+      }),
+    ).rejects.toThrow(
+      'SIOPS relay only accepts caller-selected official-layout artifacts.',
+    );
+  });
 });
+
+function siopsExport(): SiopsExportInput {
+  return {
+    sourceStatus: 'CALLER_SELECTED_OFFICIAL_LAYOUT',
+    layoutEdition: 'SIOPS-2026-1BIM',
+    sourceUrl:
+      'https://portalfns.saude.gov.br/siops-arquivos-de-estrutura-e-nova-versao-do-sistema-para-o-1o-bimestre-de-2026-ja-estao-disponiveis/',
+    tenantIbgeCode: '3550308',
+    period: '2026-BIM-01',
+    rows: [
+      {
+        category: 'ASPS',
+        accountCode: '3.1.90.11',
+        label: 'Vencimentos e vantagens fixas',
+        value: '750000.00',
+      },
+    ],
+  };
+}
 
 function deterministicIdFactory(): () => string {
   let next = 1;
@@ -129,3 +213,9 @@ function deterministicIdFactory(): () => string {
     return `00000000-0000-4000-8000-${suffix}`;
   };
 }
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

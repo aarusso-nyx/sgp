@@ -30,7 +30,7 @@ From the repository root:
 - Build: `npm run build`, `npm run build:admin`, `npm run build:portal`, `npm run build:backend`
 - Start: `npm run start`, `npm run start:admin`, `npm run start:portal`, `npm run start:core-api`, `npm run start:portal-api`, `npm run start:payroll-engine`, `npm run start:integrations-worker`, `npm run start:report-worker`, `npm run start:report-service`
 - Quality: `npm run lint`, `npm run lint:check`, `npm run format`, `npm run format:check`, `npm run typecheck`
-- Tests: `npm run test`, `npm run test:admin`, `npm run test:portal`, `npm run test:backend`, `npm run test:db`, `npm run test:e2e`, `npm run test:coverage`, `npm run test:qa`
+- Tests: `npm run test`, `npm run test:admin`, `npm run test:portal`, `npm run test:backend`, `npm run test:backend:exception-filter`, `npm run test:db`, `npm run test:e2e`, `npm run test:coverage`, `npm run test:frontend:coverage`, `npm run test:qa`
 - Audit helpers: `npm run audit:schema`, `npm run audit:api`, `npm run audit:fr`, `npm run audit:tests`, `npm run audit:hotspots -- --baseline <sha>`, `npm run audit:backlog -- --closure <path>`, `npm run audit:pvd`, `npm run audit:all`
 - Database: `npm run db -- help`, `npm run db:migrate`, `npm run db:seed`, `npm run db:smoke`
 - Governance/evidence: `npm run api:alignment:sync`, `npm run api:alignment:check -- --json`, `npm run api:operation:check`, `npm run api:spec:check`, `npm run db:alignment:check -- --json`, `npm run db:fk-coverage:check`, `npm run db:push:guard`, `npm run health:json`, `npm run governance:check`, `npm run evidence:check`. DB alignment includes RLS, tenant coverage, SECURITY DEFINER search paths, PII cipher coverage, and runtime grants.
@@ -43,7 +43,7 @@ Use the root dispatcher for commands that compose workspaces, inject runtime
 environment, read runtime topology, or write governance/audit/evidence surfaces.
 These command families are dispatcher-mandatory:
 
-- Deployment planning: `npm run deploy -- --dry-run`
+- Deployment planning: `npm run deploy -- --mode provision --target stage --dry-run`
 - Governance validation: `npm run governance:check`
 - Audit inventories and diagnostics: `npm run audit:*`
 - QA bootstrap and configured URL smoke checks: `npm run qa:bootstrap`,

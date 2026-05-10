@@ -12,7 +12,7 @@ export type ReferenceMockAction = 'echo' | 'transient-then-ok' | 'always-retry';
 export type ReferenceMockPayload = Readonly<{
   action: ReferenceMockAction;
   value?: unknown;
-  delayMs?: number;
+  delayMs?: number | undefined;
 }>;
 
 export type ReferenceMockResponsePayload = Readonly<{
@@ -24,9 +24,9 @@ export type ReferenceMockResponsePayload = Readonly<{
 export type ReferenceMockResponderOptions<TKind extends string> = Readonly<{
   kind: TKind;
   transport: QueueAdapterTransport;
-  concurrency?: number;
-  transientFailuresBeforeSuccess?: number;
-  now?: () => Date;
+  concurrency?: number | undefined;
+  transientFailuresBeforeSuccess?: number | undefined;
+  now?: (() => Date) | undefined;
 }>;
 
 export class ReferenceMockResponder<TKind extends string = string> {

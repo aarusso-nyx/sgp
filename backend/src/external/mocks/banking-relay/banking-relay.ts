@@ -18,6 +18,7 @@ import {
   type BankingRelayResponsePayload,
   normalizeBankingRelayBankCode,
 } from './types';
+import { domainError } from '../../../common/errors/domain-error';
 
 const RECORD_SIZE = 240;
 
@@ -35,9 +36,9 @@ type ReturnFixtureTemplate = Readonly<{
 
 export type BankingRelayMockResponderOptions = Readonly<{
   transport: QueueAdapterTransport;
-  fixturesRoot?: string;
-  concurrency?: number;
-  now?: () => Date;
+  fixturesRoot?: string | undefined;
+  concurrency?: number | undefined;
+  now?: (() => Date) | undefined;
 }>;
 
 export class BankingRelayMockResponder {
@@ -123,7 +124,10 @@ export class BankingRelayMockResponder {
     const remittanceContent = Buffer.from(payload.contentBase64, 'base64');
     const remittanceHash = sha256(remittanceContent);
     if (remittanceHash !== payload.remittanceFileHash) {
-      throw new Error('Banking relay remittance hash does not match content.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'Banking relay remittance hash does not match content.',
+      );
     }
 
     const bankCode = normalizeBankingRelayBankCode(
@@ -131,7 +135,8 @@ export class BankingRelayMockResponder {
     );
     const remittanceDetails = extractRemittanceDetails(remittanceContent);
     if (remittanceDetails.length === 0) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'Banking relay received CNAB240 remittance without segment A records.',
       );
     }
@@ -165,14 +170,18 @@ export class BankingRelayMockResponder {
     const slug = BANKING_RELAY_BANKS[bankCode];
     const fixturePath = join(this.fixturesRoot, slug, 'expected.ret');
     if (!existsSync(fixturePath)) {
-      throw new Error(`CNAB240 return fixture not found: ${fixturePath}`);
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        `CNAB240 return fixture not found: ${fixturePath}`,
+      );
     }
 
     const lines = splitRecords(readFileSync(fixturePath));
     const firstDetailIndex = lines.findIndex(isSegmentA);
     const lastDetailIndex = findLastIndex(lines, isSegmentA);
     if (firstDetailIndex < 0 || lastDetailIndex < firstDetailIndex) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         `CNAB240 return fixture has no segment A records: ${fixturePath}`,
       );
     }
@@ -206,7 +215,10 @@ function buildReturnContent(
   const detailLines = remittanceDetails.map((detail, index) => {
     const fixtureDetail = template.details[index % template.details.length];
     if (!fixtureDetail) {
-      throw new Error('CNAB240 return fixture has no reusable detail record.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'CNAB240 return fixture has no reusable detail record.',
+      );
     }
 
     return patchFields(fixtureDetail, [
@@ -241,7 +253,10 @@ function extractRemittanceDetails(content: Buffer): RemittanceDetailRecord[] {
 
 function splitRecords(content: Buffer): string[] {
   if (content.byteLength === 0 || content.byteLength % RECORD_SIZE !== 0) {
-    throw new Error('CNAB240 content must contain fixed 240-byte records.');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'CNAB240 content must contain fixed 240-byte records.',
+    );
   }
 
   const lines: string[] = [];

@@ -82,7 +82,7 @@ export class FiscalDirf {
         this.service.generate({
           yearBase: value.yearBase,
           kind: value.kind,
-          originalArquivoId: value.originalArquivoId || undefined,
+          ...(value.originalArquivoId ? { originalArquivoId: value.originalArquivoId } : {}),
         }),
       );
       this.upsert(created);

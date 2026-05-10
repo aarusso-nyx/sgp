@@ -43,12 +43,12 @@ export class RecrutamentoConcursos {
 
   next(): void {
     const order = ['general', 'seats', 'edital', 'publish'] as const;
-    this.step = order[Math.min(order.indexOf(this.step) + 1, order.length - 1)];
+    this.step = order[Math.min(order.indexOf(this.step) + 1, order.length - 1)] ?? order[0];
   }
 
   previous(): void {
     const order = ['general', 'seats', 'edital', 'publish'] as const;
-    this.step = order[Math.max(order.indexOf(this.step) - 1, 0)];
+    this.step = order[Math.max(order.indexOf(this.step) - 1, 0)] ?? order[0];
   }
 
   addSeat(): void {

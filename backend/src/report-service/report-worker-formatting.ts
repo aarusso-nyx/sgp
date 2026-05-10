@@ -46,7 +46,7 @@ export function withTotals(
 export function fileName(
   prefix: string,
   summary: PayrollSummaryRow,
-  extension: 'pdf' | 'xlsx',
+  extension: 'csv' | 'json' | 'pdf' | 'txt' | 'xlsx',
 ): string {
   return `${prefix}-${summary.competence_year}-${String(summary.competence_month).padStart(2, '0')}.${extension}`;
 }

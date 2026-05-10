@@ -1,0 +1,71 @@
+name: ADR Gate
+
+on:
+  pull_request:
+    paths:
+      - 'database/sql/**'
+      - 'backend/src/**/*.controller.ts'
+      - 'frontend/src/app/core/api/generated/**'
+      - 'frontend/portal/src/app/core/api/generated/**'
+      - 'infra/**'
+      - 'docs/eng/decisions/**'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  adr-gate:
+    name: ADR linkage on contract-bearing changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify ADR linkage
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          changed_files=$(git diff --name-only "$BASE_REF" "$HEAD_REF" || true)
+          echo "Changed files in PR:"
+          echo "$changed_files"
+
+          contract_changed=$(echo "$changed_files" | grep -E '^(database/sql/|backend/src/.*\.controller\.ts$|frontend/src/app/core/api/generated/|frontend/portal/src/app/core/api/generated/|infra/)' || true)
+
+          if [ -z "$contract_changed" ]; then
+            echo "No contract-bearing files changed; ADR gate not required."
+            exit 0
+          fi
+
+          echo "Contract-bearing changes detected:"
+          echo "$contract_changed"
+
+          adr_changed=$(echo "$changed_files" | grep -E '^docs/eng/decisions/adr-[0-9]{3}-.+\.md$' || true)
+          adr_in_body=$(printf '%s' "${PR_BODY:-}" | grep -oE 'ADR-?[0-9]{3}' || true)
+
+          if [ -n "$adr_changed" ]; then
+            echo "ADR file(s) changed in this PR:"
+            echo "$adr_changed"
+            exit 0
+          fi
+
+          if [ -n "$adr_in_body" ]; then
+            echo "PR body references ADR(s):"
+            echo "$adr_in_body"
+            exit 0
+          fi
+
+          echo "::error title=ADR gate::Contract-bearing changes require either a modified docs/eng/decisions/adr-NNN-*.md file in this PR, or an ADR-NNN reference in the PR description."
+          echo "Affected files:"
+          echo "$contract_changed"
+          exit 1
+
+      - name: Verify ADR machine links
+        run: node scripts/audit/adr-link-coverage.mjs

@@ -12,6 +12,12 @@ import type { EligibilityService } from '../../backend/src/avaliacao/progression
 import { RequestContextStore } from '../../backend/src/common/request-context/request-context.store';
 import { DatabaseService } from '../../backend/src/database/database.service';
 import { FolhaMensalService } from '../../backend/src/folha-pagamento/payroll/folha-mensal.service';
+import { ContrachequeService } from '../../backend/src/portal/contracheque/contracheque.service';
+import { DocumentosService } from '../../backend/src/portal/documentos/documentos.service';
+import { FeriasService } from '../../backend/src/portal/ferias/ferias.service';
+import { LicencasService } from '../../backend/src/portal/licencas/licencas.service';
+import { MeusDadosService } from '../../backend/src/portal/meus-dados/meus-dados.service';
+import { MinhaEquipeService } from '../../backend/src/portal/minha-equipe/minha-equipe.service';
 import { PortalService } from '../../backend/src/portal/portal.service';
 
 const tenantId = randomUUID();
@@ -58,10 +64,21 @@ describe('CALC-11 complete monthly payroll orchestration (e2e)', () => {
       new ConfigService({ DATABASE_URL: process.env.DATABASE_URL }),
     );
     service = new FolhaMensalService(database);
-    portalService = new PortalService(
+    const meusDadosService = new MeusDadosService(
       database,
       {} as CareerPlanService,
       {} as EligibilityService,
+    );
+    portalService = new PortalService(
+      meusDadosService,
+      new DocumentosService(database, meusDadosService),
+      new ContrachequeService(database, meusDadosService),
+      new MinhaEquipeService(
+        database,
+        meusDadosService,
+        new LicencasService(database, meusDadosService),
+        new FeriasService(database, meusDadosService),
+      ),
     );
 
     const client = await pool.connect();

@@ -556,12 +556,18 @@ node scripts/run.mjs deploy [--target <target>] [--stack <stack>] [--dry-run] [-
 
 ### Options
 
-| Option              | Default           | Meaning                                                                             |
-| ------------------- | ----------------- | ----------------------------------------------------------------------------------- |
-| `--target <target>` | `stage`           | Deployment target label.                                                            |
-| `--stack <stack>`   | `all`             | Stack template group. Valid values: `all`, `cognito`, `rds`, `backend`, `frontend`. |
-| `--dry-run`         | active by default | Print plan metadata and do not apply infrastructure.                                |
-| `--apply`           | false             | Attempts apply mode. Currently blocked until templates are parameterized.           |
+| Option              | Default           | Meaning                                                                            |
+| ------------------- | ----------------- | ---------------------------------------------------------------------------------- |
+| `--target <target>` | `stage`           | Deployment target label.                                                           |
+| `--mode <mode>`     | `provision`       | Deployment mode. Valid values: `provision`, `artifacts`.                           |
+| `--stack <stack>`   | `all`             | CDK stack group for provision. Valid values: `all`, `edge`, `shared`, `app`.       |
+| `--dry-run`         | active by default | Print plan metadata and do not apply infrastructure or artifacts.                  |
+| `--apply`           | false             | Applies CDK provision. Artifact apply remains blocked until release gates are set. |
+
+Provider selection is not parameterized. SGP deploy automation targets AWS only.
+Artifact mode accepts `--artifact-uri`, `--release-id`, and
+`--migration-evidence`, but apply is blocked until the postponed
+release/homologation gate is accepted.
 
 ## Clean Commands
 

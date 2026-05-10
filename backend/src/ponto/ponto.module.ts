@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AuditModule } from '../audit/audit.module';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
+import { StynxEsocialModule } from '../integrations/stynx-esocial';
 import { AssignmentController } from './assignment/assignment.controller';
 import { AssignmentService } from './assignment/assignment.service';
 import { TimeRecordController } from './time-record/time-record.controller';
@@ -58,7 +59,7 @@ import { MockLocationDetector } from './mobile/mock-location.detector';
 import { MobileClockPlausibilityService } from './mobile/plausibility.service';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule],
+  imports: [AuthModule, DatabaseModule, AuditModule, StynxEsocialModule],
   controllers: [
     WorkScheduleController,
     AssignmentController,

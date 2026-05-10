@@ -26,7 +26,7 @@ export class Rubricas implements OnDestroy, OnInit {
   rubricas: RubricaRecord[] = [];
   jobPositions: JobPositionRecord[] = [];
   jobPositionLinks: JobPositionRubrica[] = [];
-  selected?: RubricaRecord;
+  selected: RubricaRecord | undefined;
   attributes: RubricaAttribute[] = [];
   error = '';
   message = '';
@@ -105,7 +105,7 @@ export class Rubricas implements OnDestroy, OnInit {
         this.jobPositions = jobPositions.items;
         this.jobPositionLinks = links;
         if (!this.selected && this.rubricas.length > 0) {
-          this.select(this.rubricas[0]);
+          this.select(this.rubricas[0]!);
         }
       },
       error: () => {

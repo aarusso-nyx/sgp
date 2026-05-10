@@ -23,8 +23,8 @@ interface AsoRecordRow extends QueryResultRow {
   restriction_text: string | null;
   next_exam_due_at: Date | string | null;
   status: string;
-  attachment_count?: string;
-  s2220_spool_message_id?: string | null;
+  attachment_count?: string | undefined;
+  s2220_spool_message_id?: string | null | undefined;
 }
 
 interface MedicalExamRow extends QueryResultRow {

@@ -9,12 +9,13 @@ import {
   R2000BaseEventInput,
   xmlEscape,
 } from './r2000.builder';
+import { domainError } from '../../../common/errors/domain-error';
 
 export interface R2055ProducerInput {
   registrationType: Extract<ReinfRegistrationType, '1' | '2' | '3'>;
   registrationNumber: string;
   name: string;
-  ruralProducerOption?: 'S' | 'N';
+  ruralProducerOption?: 'S' | 'N' | undefined;
 }
 
 export interface R2055AcquiringEstablishmentInput {
@@ -25,9 +26,9 @@ export interface R2055AcquiringEstablishmentInput {
 
 export interface R2055JudicialProcessInput {
   processNumber: string;
-  suspendedPrincipalAmount?: string;
-  suspendedGilratAmount?: string;
-  suspendedSenarAmount?: string;
+  suspendedPrincipalAmount?: string | undefined;
+  suspendedGilratAmount?: string | undefined;
+  suspendedSenarAmount?: string | undefined;
 }
 
 export interface R2055RetroactiveAdjustmentInput {
@@ -37,29 +38,32 @@ export interface R2055RetroactiveAdjustmentInput {
 }
 
 export interface R2055AcquisitionInput {
-  sourceRunId?: string;
+  sourceRunId?: string | undefined;
   acquisitionIndicator: string;
   grossAmount: string;
   principalWithheldAmount: string;
   gilratWithheldAmount: string;
   senarWithheldAmount: string;
-  additionalWithheldAmount?: string;
-  judicialProcess?: R2055JudicialProcessInput;
-  retroactiveAdjustment?: R2055RetroactiveAdjustmentInput;
+  additionalWithheldAmount?: string | undefined;
+  judicialProcess?: R2055JudicialProcessInput | undefined;
+  retroactiveAdjustment?: R2055RetroactiveAdjustmentInput | undefined;
 }
 
 export interface R2055EventInput extends Omit<
   R2000BaseEventInput,
   'eventCode'
 > {
-  eventCode?: 'R2055';
+  eventCode?: 'R2055' | undefined;
   acquiringEstablishment: R2055AcquiringEstablishmentInput;
   acquisitions: R2055AcquisitionInput[];
 }
 
 export function buildR2055EventXml(input: R2055EventInput): string {
   if (!input.acquisitions.length) {
-    throw new Error('R2055 acquisitions are required');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'R2055 acquisitions are required',
+    );
   }
   for (const acquisition of input.acquisitions) {
     if (acquisition.retroactiveAdjustment) {

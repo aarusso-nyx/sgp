@@ -29,8 +29,8 @@ export class ConsignadoPortabilidade {
   uploading = false;
   processing = false;
   errorMessage = '';
-  uploadResult?: PortabilityUploadResult;
-  processResult?: PortabilityProcessResult;
+  uploadResult: PortabilityUploadResult | undefined;
+  processResult: PortabilityProcessResult | undefined;
 
   upload(): void {
     if (this.form.invalid) {

@@ -77,6 +77,8 @@ When uncertain, choose the lower score and explain why.
 ## Output Contract
 
 - Write markdown artifacts under `docs/work/round-<n>/`.
+- Always emit `docs/work/round-<n>/00-snapshot.md` with current HEAD; record
+  that HEAD as the round-(N+1) hotspot baseline.
 - Include an executive summary only after the evidence files exist.
 - End with exact artifact paths, git cleanliness before/after, commands run, and unresolved questions.
 - Do not update `docs/eng/` from this skill unless the user turns the audit into implementation.

@@ -7,6 +7,7 @@ import {
   ParsedSifgePayload,
   SifgePayload,
 } from './caixa-adapter.contract';
+import { domainError } from '../../../common/errors/domain-error';
 
 interface SifgeEnvelope {
   adapterKey: string;
@@ -100,7 +101,10 @@ export class CaixaSifgeV4Adapter implements CaixaSifgeAdapter {
         !parsed.payload?.header ||
         !Array.isArray(parsed.payload.records)
       ) {
-        throw new Error('Invalid SIFGE envelope');
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
+          'Invalid SIFGE envelope',
+        );
       }
       return parsed;
     } catch {

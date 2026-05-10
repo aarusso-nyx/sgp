@@ -22,13 +22,14 @@ import type {
   GovBrSignatureDecision,
 } from '../govbr-signature-sandbox.adapter';
 import type { GovBrSignRequestDto } from '../sign.dto';
+import { domainError } from '../../../common/errors/domain-error';
 
 export type GovBrQueueRequestOptions = Readonly<{
-  requestId?: string;
-  correlationId?: string;
-  idempotencyKey?: string;
-  maxAttempts?: number;
-  scenario?: GovBrRelayScenario;
+  requestId?: string | undefined;
+  correlationId?: string | undefined;
+  idempotencyKey?: string | undefined;
+  maxAttempts?: number | undefined;
+  scenario?: GovBrRelayScenario | undefined;
 }>;
 
 export type GovBrQueueCreateInput = GovBrQueueRequestOptions &
@@ -41,8 +42,8 @@ export type GovBrQueueCompleteInput = GovBrQueueRequestOptions &
   Readonly<{
     state: string;
     decision: GovBrSignatureDecision;
-    challenge?: string;
-    tenantId?: string;
+    challenge?: string | undefined;
+    tenantId?: string | undefined;
   }>;
 
 export type GovBrQueueAdapterResult = Readonly<{
@@ -58,13 +59,13 @@ export type GovBrQueueAdapterResult = Readonly<{
 }>;
 
 export type GovBrQueueAdapterOptions = Readonly<{
-  transport?: QueueAdapterTransport;
-  queue?: SgpQueueAdapter<GovBrRelayKind>;
-  maxAttempts?: number;
-  responseTimeoutMs?: number;
-  retryDelayMs?: (attempt: number) => number;
-  now?: () => Date;
-  idFactory?: () => string;
+  transport?: QueueAdapterTransport | undefined;
+  queue?: SgpQueueAdapter<GovBrRelayKind> | undefined;
+  maxAttempts?: number | undefined;
+  responseTimeoutMs?: number | undefined;
+  retryDelayMs?: ((attempt: number) => number) | undefined;
+  now?: (() => Date) | undefined;
+  idFactory?: (() => string) | undefined;
 }>;
 
 export class GovBrQueueAdapter {
@@ -80,7 +81,8 @@ export class GovBrQueueAdapter {
     }
 
     if (!options.transport) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'GovBrQueueAdapter requires either a queue or a queue transport.',
       );
     }
@@ -149,7 +151,8 @@ export class GovBrQueueAdapter {
   ): Promise<GovBrQueueAdapterResult> {
     const tenantId = input.tenantId ?? this.stateTenants.get(input.state);
     if (!tenantId) {
-      throw new Error(
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
         'GovBrQueueAdapter cannot complete an unknown state without tenantId.',
       );
     }
@@ -187,7 +190,10 @@ export class GovBrQueueAdapter {
     input: GovBrQueueCreateInput,
   ): GovBrRelayCreateRequestPayload {
     if (!input.request.payload || typeof input.request.payload !== 'object') {
-      throw new Error('GovBrQueueAdapter requires an object payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'GovBrQueueAdapter requires an object payload.',
+      );
     }
 
     return {
@@ -232,7 +238,10 @@ export class GovBrQueueAdapter {
 
     const relay = queueResponse.payload;
     if (!relay) {
-      throw new Error('GovBR relay returned an OK response without payload.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'GovBR relay returned an OK response without payload.',
+      );
     }
     this.assertRelayPayload(payload, relay);
 
@@ -251,14 +260,23 @@ export class GovBrQueueAdapter {
     relay: GovBrRelayResponsePayload,
   ): void {
     if (relay.relay !== 'govbr-relay') {
-      throw new Error('GovBR relay returned an unexpected relay identifier.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'GovBR relay returned an unexpected relay identifier.',
+      );
     }
     if (relay.action !== payload.action) {
-      throw new Error('GovBR relay returned a different action.');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'GovBR relay returned a different action.',
+      );
     }
     if (payload.action === 'COMPLETE_SIGNATURE_REQUEST') {
       if (relay.request.state !== payload.state) {
-        throw new Error('GovBR relay returned a different signature state.');
+        throw domainError.internal(
+          'INTERNAL_INVARIANT',
+          'GovBR relay returned a different signature state.',
+        );
       }
     }
   }

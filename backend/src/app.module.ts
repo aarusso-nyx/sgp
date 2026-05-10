@@ -25,6 +25,7 @@ import { validateEnvironment } from './config/environment';
 import { ConvenioModule } from './convenio/convenio.module';
 import { ConsultasModule } from './consultas/consultas.module';
 import { DatabaseModule } from './database/database.module';
+import { DetModule } from './det';
 import { DocumentsModule } from './documents/documents.module';
 import { ExternalModule } from './external/external.module';
 import { FolhaPagamentoModule } from './folha-pagamento/folha-pagamento.module';
@@ -66,6 +67,7 @@ import { AppService } from './app.service';
     SystemParametersModule,
     NotificationsModule,
     DocumentsModule,
+    DetModule,
     PortalModule,
     PontoModule,
     ExternalModule,

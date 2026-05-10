@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomBytes } from 'node:crypto';
+import { domainError } from '../../common/errors/domain-error';
 
 export type PontoBiometricKind = 'FINGERPRINT' | 'PALM_VEIN';
 
@@ -13,7 +14,10 @@ export function extractPontoBiometricTemplate(
 ): ExtractedPontoBiometricTemplate {
   const sample = Buffer.from(sampleBase64, 'base64');
   if (sample.length < 8) {
-    throw new Error('Biometric sample is too small');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Biometric sample is too small',
+    );
   }
   const normalized = createHash('sha512').update(kind).update(sample).digest();
   const quality = Math.min(0.99, Math.max(0.1, sample.length / 2048));
@@ -53,7 +57,10 @@ export function encryptPontoTemplate(
 export function decryptPontoTemplate(cipher: Buffer, kmsKeyId: string): Buffer {
   const prefix = Buffer.from('SGPPONTOBIO1:');
   if (!cipher.subarray(0, prefix.length).equals(prefix)) {
-    throw new Error('Unsupported ponto biometric cipher envelope');
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
+      'Unsupported ponto biometric cipher envelope',
+    );
   }
   const nonce = cipher.subarray(prefix.length, prefix.length + 16);
   const body = cipher.subarray(prefix.length + 16);
@@ -67,7 +74,8 @@ export function decryptPontoTemplate(cipher: Buffer, kmsKeyId: string): Buffer {
 }
 
 function deriveLocalKmsKey(kmsKeyId: string): Buffer {
-  if (!kmsKeyId.trim()) throw new Error('KMS key id is required');
+  if (!kmsKeyId.trim())
+    throw domainError.internal('INTERNAL_INVARIANT', 'KMS key id is required');
   return createHash('sha256')
     .update('sgp-ponto-08-local-kms')
     .update(kmsKeyId)

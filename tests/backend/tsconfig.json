@@ -9,9 +9,9 @@
     "noEmit": true,
     "rootDir": "../..",
     "paths": {
-      "*": ["backend/node_modules/*", "*"]
+      "*": ["node_modules/*", "backend/node_modules/*", "*"]
     },
-    "typeRoots": ["../../backend/node_modules/@types"],
+    "typeRoots": ["../../node_modules/@types", "../../backend/node_modules/@types"],
     "types": ["jest", "node"]
   },
   "include": ["**/*.ts"]

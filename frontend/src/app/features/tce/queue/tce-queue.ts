@@ -57,10 +57,10 @@ export class TceQueue {
       const { jobs, circuits } = await firstValueFrom(
         forkJoin({
           jobs: this.service.list({
-            adapter: this.adapter.trim() || undefined,
-            stateCode: this.stateCode.trim() || undefined,
-            status: this.status || undefined,
-            competence: this.competence.trim() || undefined,
+            ...(this.adapter.trim() ? { adapter: this.adapter.trim() } : {}),
+            ...(this.stateCode.trim() ? { stateCode: this.stateCode.trim() } : {}),
+            ...(this.status ? { status: this.status } : {}),
+            ...(this.competence.trim() ? { competence: this.competence.trim() } : {}),
           }),
           circuits: this.service.circuits(),
         }),

@@ -65,6 +65,84 @@ describe('EfdReinfBuilderService', () => {
     expect(xml).toBe(golden('r4020.golden.xml'));
   });
 
+  it('builds the R-4040 golden XML for non-identified beneficiary retention', () => {
+    const xml = buildEfdReinfXml({
+      tenantId: '00000000-0000-0000-0000-00000000f501',
+      competence: '2025-01-01',
+      eventType: 'R4040',
+      kind: 'ORIGINAL',
+      originalEventId: null,
+      items: [
+        {
+          sourceRunId: '00000000-0000-4000-8000-000000004040',
+          beneficiaryKind: 'EXTERIOR',
+          beneficiaryDocument: 'EXT-0001',
+          beneficiaryName: 'Beneficiario Exterior & Cia',
+          revenueCode: '8045',
+          grossAmount: '12500.00',
+          retainedAmount: '1875.00',
+        },
+      ],
+    });
+
+    expect(xml).toBe(golden('r4040.golden.xml'));
+  });
+
+  it('builds the R-4080 golden XML for recebimento antecipado retention', () => {
+    const xml = buildEfdReinfXml({
+      tenantId: '00000000-0000-0000-0000-00000000f501',
+      competence: '2025-01-01',
+      eventType: 'R4080',
+      kind: 'ORIGINAL',
+      originalEventId: null,
+      items: [
+        {
+          sourceRunId: '00000000-0000-4000-8000-000000004080',
+          beneficiaryKind: 'CNPJ',
+          beneficiaryDocument: '44555666000177',
+          beneficiaryName: 'Operadora Cartao Exemplo SA',
+          revenueCode: '5944',
+          grossAmount: '6000.00',
+          retainedAmount: '90.00',
+        },
+      ],
+    });
+
+    expect(xml).toBe(golden('r4080.golden.xml'));
+  });
+
+  it('builds the R-4099 golden XML for deterministic closure handoff', () => {
+    const xml = buildEfdReinfXml({
+      tenantId: '00000000-0000-0000-0000-00000000f501',
+      competence: '2025-01-01',
+      eventType: 'R4099',
+      kind: 'ORIGINAL',
+      originalEventId: null,
+      items: [
+        {
+          sourceRunId: '00000000-0000-4000-8000-000000004099',
+          beneficiaryKind: 'CPF',
+          beneficiaryDocument: '12345678901',
+          beneficiaryName: 'Servidor Exemplo',
+          revenueCode: '0561',
+          grossAmount: '4000.00',
+          retainedAmount: '285.15',
+        },
+        {
+          sourceRunId: '00000000-0000-4000-8000-000000004098',
+          beneficiaryKind: 'CNPJ',
+          beneficiaryDocument: '11222333000144',
+          beneficiaryName: 'Fornecedor Exemplo LTDA',
+          revenueCode: '1708',
+          grossAmount: '8000.00',
+          retainedAmount: '120.00',
+        },
+      ],
+    });
+
+    expect(xml).toBe(golden('r4099.golden.xml'));
+  });
+
   it('requires database and tenant context for service operations', async () => {
     const service = new EfdReinfBuilderService({ configured: false } as never);
     await expect(service.list()).rejects.toBeInstanceOf(

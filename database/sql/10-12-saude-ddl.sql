@@ -40,7 +40,30 @@ CREATE TYPE saude.harmful_agent_kind AS ENUM (
 );
 
 CREATE TYPE saude.health_program_kind AS ENUM (
-    'PCMSO'
+    'PCMSO',
+    'PCMAT'
+);
+
+CREATE TYPE saude.cipa_committee_status AS ENUM (
+    'DRAFT',
+    'ELECTION_OPEN',
+    'ACTIVE',
+    'CLOSED',
+    'ARCHIVED'
+);
+
+CREATE TYPE saude.cipa_member_role AS ENUM (
+    'EMPLOYER_REPRESENTATIVE',
+    'EMPLOYEE_REPRESENTATIVE',
+    'PRESIDENT',
+    'VICE_PRESIDENT',
+    'SECRETARY'
+);
+
+CREATE TYPE saude.cipa_member_status AS ENUM (
+    'ACTIVE',
+    'SUBSTITUTE',
+    'REMOVED'
 );
 
 CREATE TYPE saude.medical_exam_type AS ENUM (
@@ -52,7 +75,8 @@ CREATE TYPE saude.medical_exam_type AS ENUM (
 
 CREATE TYPE saude.program_parent_kind AS ENUM (
     'PCMSO',
-    'PGR'
+    'PGR',
+    'PCMAT'
 );
 
 CREATE TYPE saude.program_status AS ENUM (
@@ -211,6 +235,51 @@ CREATE TABLE saude.health_program (
     CONSTRAINT health_program_validity_chk CHECK ((valid_until >= valid_from))
 );
 
+CREATE TABLE saude.cipa_committee (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
+    work_location_id uuid NOT NULL,
+    election_call_ref text NOT NULL,
+    mandate_start date NOT NULL,
+    mandate_end date NOT NULL,
+    status saude.cipa_committee_status DEFAULT 'DRAFT'::saude.cipa_committee_status NOT NULL,
+    metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT cipa_committee_mandate_chk CHECK ((mandate_end >= mandate_start)),
+    CONSTRAINT cipa_committee_ref_chk CHECK ((length(btrim(election_call_ref)) > 0))
+);
+
+CREATE TABLE saude.cipa_member (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
+    committee_id uuid NOT NULL,
+    employee_id uuid NOT NULL,
+    role saude.cipa_member_role NOT NULL,
+    status saude.cipa_member_status DEFAULT 'ACTIVE'::saude.cipa_member_status NOT NULL,
+    elected_at date,
+    appointed_at date,
+    removed_at date,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT cipa_member_role_date_chk CHECK ((elected_at IS NOT NULL) OR (appointed_at IS NOT NULL))
+);
+
+CREATE TABLE saude.cipa_minute (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
+    committee_id uuid NOT NULL,
+    meeting_at timestamp with time zone NOT NULL,
+    subject text NOT NULL,
+    minutes_uri text NOT NULL,
+    sha256 text NOT NULL,
+    metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT cipa_minute_sha256_chk CHECK ((sha256 ~ '^[0-9a-f]{64}$'::text)),
+    CONSTRAINT cipa_minute_subject_chk CHECK ((length(btrim(subject)) > 0))
+);
+
 CREATE TABLE saude.medical_exam (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
@@ -330,6 +399,18 @@ ALTER TABLE ONLY saude.epi_inventory
 
 ALTER TABLE ONLY saude.health_program
     ADD CONSTRAINT health_program_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY saude.cipa_committee
+    ADD CONSTRAINT cipa_committee_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY saude.cipa_member
+    ADD CONSTRAINT cipa_member_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY saude.cipa_member
+    ADD CONSTRAINT cipa_member_committee_employee_uq UNIQUE (committee_id, employee_id);
+
+ALTER TABLE ONLY saude.cipa_minute
+    ADD CONSTRAINT cipa_minute_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY saude.medical_exam
     ADD CONSTRAINT medical_exam_code_tenant_uq UNIQUE (tenant_id, code);

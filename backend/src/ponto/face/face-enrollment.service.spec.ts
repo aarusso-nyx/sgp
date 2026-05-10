@@ -12,10 +12,10 @@ const employeeId = '00000000-0000-4000-8000-000000000501';
 
 class FakeEnrollmentDatabase {
   readonly configured = true;
-  capturedCipher?: Buffer;
-  capturedKmsKeyId?: string;
-  capturedModelId?: string;
-  capturedModelVersion?: string;
+  capturedCipher?: Buffer | undefined;
+  capturedKmsKeyId?: string | undefined;
+  capturedModelId?: string | undefined;
+  capturedModelVersion?: string | undefined;
 
   async transaction<T>(
     callback: (client: { query: jest.Mock }) => Promise<T>,

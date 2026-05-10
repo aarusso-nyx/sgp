@@ -1,11 +1,13 @@
 import {
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../../../database/database.service';
+import { SgpEsocialEmittersService } from '../../../integrations/stynx-esocial';
 
 export type PriorNoticeKind = 'WORKED' | 'INDEMNIFIED' | 'NONE';
 export type PriorNoticeReductionMode =
@@ -30,7 +32,11 @@ export interface PriorNoticeResult {
 
 @Injectable()
 export class PriorNoticeService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @Optional()
+    private readonly esocialEmitters?: SgpEsocialEmittersService,
+  ) {}
 
   async resolve(
     employmentLinkId: string,
@@ -64,7 +70,7 @@ export class PriorNoticeService {
       throw new NotFoundException('Employment link not found');
     }
 
-    return {
+    const result = {
       employmentLinkId,
       kind,
       reductionMode,
@@ -72,5 +78,18 @@ export class PriorNoticeService {
       projectedEndDate: row.projected_end_date,
       baseAmount: row.base_amount,
     };
+    await this.esocialEmitters?.emitForCurrentTenant('s2250PriorNotice', {
+      sourceId: employmentLinkId,
+      operation: 'create',
+      data: {
+        employmentLinkId,
+        terminationDate,
+        kind,
+        reductionMode,
+        noticeDays: result.noticeDays,
+        projectedEndDate: result.projectedEndDate,
+      },
+    });
+    return result;
   }
 }

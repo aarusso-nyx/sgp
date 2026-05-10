@@ -4,6 +4,7 @@ import { Pool, PoolClient, QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { TenantContextMissingError } from './tenant-context-missing.error';
+import { domainError } from '../common/errors/domain-error';
 
 const SENSITIVE_RLS_TABLES = [
   /\bhr\.employee_dependent\b/i,
@@ -14,7 +15,7 @@ const BYPASS_RLS_ALLOWLIST = new Set(['payroll-engine', 'integrations-worker']);
 
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {
-  private pool?: Pool;
+  private pool?: Pool | undefined;
 
   constructor(private readonly configService: ConfigService) {}
 
@@ -153,7 +154,8 @@ export class DatabaseService implements OnModuleDestroy {
     const reason = context.bypassRlsReason ?? '';
     if (BYPASS_RLS_ALLOWLIST.has(reason)) return;
 
-    throw new Error(
+    throw domainError.internal(
+      'INTERNAL_INVARIANT',
       `app.bypass_rls=true is not allowed for sensitive RLS tables without an allowlisted job reason: ${reason || 'unspecified'}`,
     );
   }
@@ -176,7 +178,10 @@ export class DatabaseService implements OnModuleDestroy {
 
     const connectionString = this.configService.get<string>('DATABASE_URL');
     if (!connectionString) {
-      throw new Error('DATABASE_URL is not configured');
+      throw domainError.internal(
+        'INTERNAL_INVARIANT',
+        'DATABASE_URL is not configured',
+      );
     }
 
     this.pool = new Pool({

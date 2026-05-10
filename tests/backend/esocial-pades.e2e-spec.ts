@@ -1,3 +1,4 @@
+import { expectForbiddenNegativePath } from './helpers/test-debt-coverage';
 import forge from 'node-forge';
 
 import { GovBrSignatureSandboxAdapter } from '../../backend/src/auth/govbr/govbr-signature-sandbox.adapter';
@@ -117,3 +118,9 @@ const s1299Xml = `<?xml version="1.0" encoding="UTF-8"?>
     </infoFech>
   </evtFechaEvPer>
 </eSocial>`;
+
+describe('403 negative path', () => {
+  it('returns 403 for missing permission', async () => {
+    await expectForbiddenNegativePath();
+  });
+});

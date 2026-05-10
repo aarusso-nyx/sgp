@@ -1,0 +1,7 @@
+{
+  "backend/src/**/*.{ts,js,mjs}": ["backend/node_modules/.bin/eslint --fix"],
+  "tests/backend/**/*.{ts,js,mjs}": ["backend/node_modules/.bin/eslint --fix"],
+  "*.{ts,tsx,js,mjs,json,md,yml,yaml}": [
+    "backend/node_modules/.bin/prettier --write --ignore-unknown"
+  ]
+}

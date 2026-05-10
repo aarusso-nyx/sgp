@@ -6,7 +6,7 @@ export type HealthState = 'OK' | 'FAIL';
 export interface LayoutDescriptor {
   code: string;
   version: string;
-  description?: string;
+  description?: string | undefined;
 }
 
 export interface ValidationResult {

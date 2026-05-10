@@ -16,7 +16,7 @@
     "test:portal": "ng test sgp-portal --watch=false",
     "test:admin:coverage": "ng test sgp-admin --watch=false --coverage",
     "test:portal:coverage": "ng test sgp-portal --watch=false --coverage",
-    "test:coverage": "npm run test:portal:coverage",
+    "test:coverage": "npm run test:admin:coverage && npm run test:portal:coverage",
     "test:admin:e2e": "playwright test -c ../tests/playwright.admin.config.ts",
     "test:portal:e2e": "playwright test -c ../tests/playwright.portal.config.ts",
     "i18n:extract": "ng extract-i18n sgp-admin",

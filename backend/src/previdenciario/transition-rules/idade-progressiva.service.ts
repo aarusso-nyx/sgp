@@ -7,8 +7,8 @@ export interface IdadeProgressivaInput {
   birthDate: Date | string | null;
   referenceDate: Date | string;
   contributionStartDate: Date | string | null;
-  contributionYearsAtReference?: number;
-  teacher?: boolean;
+  contributionYearsAtReference?: number | undefined;
+  teacher?: boolean | undefined;
 }
 
 export interface IdadeProgressivaYearRequirement {

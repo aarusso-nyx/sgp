@@ -5,7 +5,7 @@ import { runCommand, runSequence } from './lib/command-runner.mjs';
 import { defaultRepoRoot } from './lib/repo-paths.mjs';
 
 const usage = `
-Usage: node scripts/audit.mjs <schema|api|fr|tests|hotspots|backlog|pvd|live-data|idempotency|decimal|fe-i18n|rls-spec-coverage|all> [options]
+Usage: node scripts/audit.mjs <schema|api|fr|tests|hotspots|backlog|pvd|live-data|idempotency|decimal|fe-i18n|rls-spec-coverage|openapi-coverage|all> [options]
 
 Run deterministic audit helpers through one stable entrypoint.
 `;
@@ -23,6 +23,7 @@ const scriptBySubcommand = {
   decimal: 'scripts/lib/audit/decimal-coverage.mjs',
   'fe-i18n': 'scripts/lib/audit/fe-i18n-coverage.mjs',
   'rls-spec-coverage': 'scripts/lib/audit/rls-spec-coverage.mjs',
+  'openapi-coverage': 'scripts/audit/openapi-spec-coverage.mjs',
 };
 
 const options = parseArgs(process.argv.slice(2), { booleanFlags: ['help'] });
@@ -58,7 +59,7 @@ function runAuditScript(name, args) {
   const script = scriptBySubcommand[name];
   if (!script) {
     console.error(
-      '[audit] valid subcommands: schema, api, fr, tests, hotspots, backlog, pvd, live-data, idempotency, decimal, fe-i18n, rls-spec-coverage, all',
+      '[audit] valid subcommands: schema, api, fr, tests, hotspots, backlog, pvd, live-data, idempotency, decimal, fe-i18n, rls-spec-coverage, openapi-coverage, all',
     );
     return 1;
   }

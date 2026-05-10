@@ -27,7 +27,7 @@ describe('audit-fr-ledger', () => {
       [
         "# Functional Requisites",
         "",
-        "Last refreshed from \`docs/eng/domains/*.md\` for round 7.",
+        "Last refreshed from \`docs/eng/domains/*.md\` for round 6.",
         "",
       ]
     `);
@@ -92,6 +92,33 @@ async function writeDomainFixture(root: string): Promise<void> {
       '## Merged Artifact Index',
       '',
       '## Public Recruitment Appeals',
+      '',
+    ].join('\n'),
+    'utf8',
+  );
+  const auditRoot = join(root, 'out');
+  await mkdir(auditRoot, { recursive: true });
+  await writeFile(
+    join(auditRoot, 'functional-requisites.md'),
+    [
+      '# Functional Requisites',
+      '',
+      'Last refreshed from `docs/eng/domains/*.md` for round 6.',
+      '',
+      '| FR-ID | Requirement | Status | Evidence | Notes |',
+      '| --- | --- | --- | --- | --- |',
+      `| ${stableHeadingId(
+        'payroll-benefits.md',
+        'Payroll Monthly Calculation',
+      )} | Payroll And Benefits: Payroll Monthly Calculation | TODO | docs/eng/domains/payroll-benefits.md:5 | Generated from docs/eng domain heading. |`,
+      `| ${stableHeadingId(
+        'people-recruitment.md',
+        'Public Recruitment Appeals',
+      )} | People And Recruitment: Public Recruitment Appeals | TODO | docs/eng/domains/people-recruitment.md:5 | Generated from docs/eng domain heading. |`,
+      `| ${stableHeadingId(
+        'payroll-benefits.md',
+        'Bank Remittance',
+      )} | Payroll And Benefits: Bank Remittance | TODO | docs/eng/domains/payroll-benefits.md:11 | Generated from docs/eng domain heading. |`,
       '',
     ].join('\n'),
     'utf8',

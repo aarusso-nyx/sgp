@@ -42,4 +42,25 @@
       <dd>{{ info.updatedAt || 'Configuracao padrao' }}</dd>
     </div>
   </dl>
+
+  <section class="lgpd-encarregado__transfers" aria-labelledby="lgpd-transfer-title">
+    <header>
+      <h2 id="lgpd-transfer-title" i18n>Transferencias internacionais</h2>
+    </header>
+
+    <p *ngIf="!loading && transfers.length === 0" class="lgpd-encarregado__state" i18n>
+      Nenhuma transferencia internacional ativa publicada.
+    </p>
+
+    <ul *ngIf="transfers.length > 0" class="lgpd-encarregado__transfer-list">
+      <li *ngFor="let transfer of transfers">
+        <strong>{{ transfer.processorName }}</strong>
+        <span>
+          {{ transfer.destinationCountryName || transfer.destinationCountry }} ·
+          {{ transfer.mechanismReference }}
+        </span>
+        <small *ngIf="transfer.adequacyDecisionRef">{{ transfer.adequacyDecisionRef }}</small>
+      </li>
+    </ul>
+  </section>
 </section>

@@ -58,8 +58,8 @@ export class SessionController {
   recoverPassword(
     @Body()
     body: {
-      login?: string;
-      email?: string;
+      login?: string | undefined;
+      email?: string | undefined;
     },
   ) {
     return this.sessionService.recoverPassword(body);

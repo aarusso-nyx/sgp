@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1005",
+  "operation": "update",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "hr",
+    "table": "work_location",
+    "id": "00000000-0000-4000-8000-000000000105",
+    "version": 1
+  },
+  "data": { "code": "SEDE", "name": "Sede administrativa" }
+}

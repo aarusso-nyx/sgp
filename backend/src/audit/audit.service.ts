@@ -58,7 +58,13 @@ export class AuditService {
     request: RequestWithContext,
     action: Extract<
       AuditActionValue,
-      'CREATE' | 'UPDATE' | 'DELETE' | 'PROCESS' | 'GENERATE' | 'IMPORT'
+      | 'CREATE'
+      | 'UPDATE'
+      | 'DELETE'
+      | 'PROCESS'
+      | 'GENERATE'
+      | 'IMPORT'
+      | 'APPROVE'
     >,
     resourceType: string,
     options?: AuditAppendOptions,

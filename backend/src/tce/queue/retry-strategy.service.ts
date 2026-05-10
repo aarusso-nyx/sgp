@@ -23,13 +23,13 @@ export interface TceRetryDecision {
 }
 
 interface ErrorLike {
-  code?: string;
-  message?: string;
-  status?: number;
-  statusCode?: number;
+  code?: string | undefined;
+  message?: string | undefined;
+  status?: number | undefined;
+  statusCode?: number | undefined;
   response?: {
-    status?: number;
-    statusCode?: number;
+    status?: number | undefined;
+    statusCode?: number | undefined;
     data?: unknown;
   };
   body?: unknown;

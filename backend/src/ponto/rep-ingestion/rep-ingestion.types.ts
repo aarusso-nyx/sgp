@@ -2,16 +2,18 @@ export interface ParsedRepLine {
   lineNo: number;
   nsr: number;
   rawLine: string;
-  employeeId?: string;
-  employeeRegistration?: string;
-  employeeCpf?: string;
+  employeeId?: string | undefined;
+  employeeRegistration?: string | undefined;
+  employeeCpf?: string | undefined;
   recordedAt: string;
   payload: Record<string, unknown>;
-  biometric?: {
-    kind: 'FINGERPRINT' | 'PALM_VEIN';
-    sampleBase64: string;
-    threshold?: number;
-  };
+  biometric?:
+    | {
+        kind: 'FINGERPRINT' | 'PALM_VEIN';
+        sampleBase64: string;
+        threshold?: number | undefined;
+      }
+    | undefined;
 }
 
 export interface RepDeviceSummary {

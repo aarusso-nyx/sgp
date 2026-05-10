@@ -10,6 +10,7 @@ import { PoolClient, QueryResultRow } from 'pg';
 import { DomainListQueryDto } from '../../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../../common/pagination/paged-response';
 import { DatabaseService } from '../../../database/database.service';
+import { SgpEsocialEmittersService } from '../../../integrations/stynx-esocial';
 import { FormulaCompilerService } from '../../../payroll-engine/formula-compiler.service';
 import { PayrollEngineService } from '../../../payroll-engine/payroll-engine.service';
 import {
@@ -147,6 +148,8 @@ export class RubricaService {
     private readonly payrollEngineService: PayrollEngineService,
     @Optional()
     private readonly formulaCompilerService?: FormulaCompilerService,
+    @Optional()
+    private readonly esocialEmitters?: SgpEsocialEmittersService,
   ) {}
 
   async listRubricas(
@@ -211,7 +214,9 @@ export class RubricaService {
       await this.replaceAttributes(client, row.id, input.attributes ?? []);
       return this.reloadRubrica(client, row.id);
     });
-    return this.recompileIfFormula(created);
+    const recompiled = await this.recompileIfFormula(created);
+    await this.emitS1010(recompiled, 'create');
+    return recompiled;
   }
 
   async updateRubrica(
@@ -250,7 +255,30 @@ export class RubricaService {
       await this.replaceAttributes(client, row.id, input.attributes ?? []);
       return this.reloadRubrica(client, row.id);
     });
-    return this.recompileIfFormula(updated);
+    const recompiled = await this.recompileIfFormula(updated);
+    await this.emitS1010(recompiled, 'update');
+    return recompiled;
+  }
+
+  private emitS1010(
+    rubrica: RubricaRecord,
+    operation: 'create' | 'update',
+  ): Promise<unknown> | undefined {
+    return this.esocialEmitters?.emitForCurrentTenant('s1010EarningDeduction', {
+      sourceId: rubrica.id,
+      operation,
+      data: {
+        code: rubrica.code,
+        description: rubrica.description,
+        type: rubrica.type,
+        taxable: rubrica.taxable,
+        incidences: rubrica.incidences,
+        startsOn: rubrica.startsOn,
+        endsOn: rubrica.endsOn,
+        esocialCode: rubrica.esocialCode,
+        officialRubricCode: rubrica.officialRubricCode,
+      },
+    });
   }
 
   async deactivateRubrica(id: string): Promise<RubricaRecord> {

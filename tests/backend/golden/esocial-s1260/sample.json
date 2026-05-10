@@ -1,0 +1,13 @@
+{
+  "producer": "sgp",
+  "eventClass": "S-1260",
+  "operation": "create",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "source": {
+    "schema": "payroll",
+    "table": "rural_sale",
+    "id": "00000000-0000-4000-8000-000000001260",
+    "version": 1
+  },
+  "data": { "grossAmount": "1000.00", "soldOn": "2026-05-10" }
+}

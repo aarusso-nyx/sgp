@@ -7,9 +7,9 @@ export interface PontosInput {
   birthDate: Date | string | null;
   referenceDate: Date | string;
   contributionStartDate: Date | string | null;
-  publicServiceStartDate?: Date | string | null;
-  currentPositionStartDate?: Date | string | null;
-  teacher?: boolean;
+  publicServiceStartDate?: Date | string | null | undefined;
+  currentPositionStartDate?: Date | string | null | undefined;
+  teacher?: boolean | undefined;
 }
 
 export interface PontosYearRequirement {

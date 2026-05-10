@@ -7,10 +7,10 @@ export interface Pedagio100Input {
   birthDate: Date | string | null;
   referenceDate: Date | string;
   contributionStartDate: Date | string | null;
-  publicServiceStartDate?: Date | string | null;
-  currentPositionStartDate?: Date | string | null;
-  contributionYearsAtReform?: number;
-  teacher?: boolean;
+  publicServiceStartDate?: Date | string | null | undefined;
+  currentPositionStartDate?: Date | string | null | undefined;
+  contributionYearsAtReform?: number | undefined;
+  teacher?: boolean | undefined;
 }
 
 export interface Pedagio100Result {

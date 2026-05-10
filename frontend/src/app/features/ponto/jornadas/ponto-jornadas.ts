@@ -99,15 +99,20 @@ export class PontoJornadas implements OnInit, OnDestroy {
       this.assignmentForm.markAllAsTouched();
       return;
     }
-    const value = this.assignmentForm.value as Record<string, string>;
+    const value = this.assignmentForm.getRawValue() as {
+      employeeId: string;
+      workScheduleId: string;
+      validFrom: string;
+      validTo: string;
+    };
     this.saving = true;
     this.error = '';
     this.service
       .assign({
-        employeeId: value['employeeId'],
-        workScheduleId: value['workScheduleId'],
-        validFrom: value['validFrom'],
-        validTo: value['validTo'] || undefined,
+        employeeId: value.employeeId,
+        workScheduleId: value.workScheduleId,
+        validFrom: value.validFrom,
+        ...(value.validTo ? { validTo: value.validTo } : {}),
       })
       .pipe(
         finalize(() => {

@@ -18,6 +18,8 @@ Usage: node scripts/audit.mjs api [--round <n>] [--dry-run] [--output-root <path
 Render docs/gov/generated/api/route-alignment.json into an audit API surface digest and run API drift checks when present.
 `;
 
+const HTTP_METHODS = new Set(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
+
 const context = await createContext(process.argv.slice(2), usage);
 const surface = await buildApiSurface(context.repoRoot, context.round);
 await writeJson(
@@ -34,8 +36,9 @@ await writeText(join(context.auditRoot, 'api-surface.md'), renderApiSurface(surf
 export async function buildApiSurface(repoRoot, round) {
   const alignmentPath = join(repoRoot, 'docs', 'gov', 'generated', 'api', 'route-alignment.json');
   const alignment = JSON.parse(await readFile(alignmentPath, 'utf8'));
+  const openApiTags = await buildOpenApiTagIndex(repoRoot);
   const routes = (Array.isArray(alignment.routes) ? alignment.routes : [])
-    .map(normalizeRoute)
+    .map((route) => normalizeRoute(route, openApiTags))
     .sort((a, b) =>
       `${a.tag} ${a.method} ${a.path}`.localeCompare(`${b.tag} ${b.method} ${b.path}`),
     );
@@ -68,11 +71,81 @@ export async function buildApiSurface(repoRoot, round) {
   };
 }
 
-function normalizeRoute(route) {
-  const tags = Array.isArray(route.tags) ? route.tags : [];
+async function buildOpenApiTagIndex(repoRoot) {
+  const specs = [
+    join(repoRoot, 'docs', 'eng', 'api', 'openapi.json'),
+    join(repoRoot, 'docs', 'eng', 'api', 'openapi-portal.json'),
+  ];
+  const index = new Map();
+  const entries = [];
+
+  for (const specPath of specs) {
+    if (!(await exists(specPath))) continue;
+    const spec = JSON.parse(await readFile(specPath, 'utf8'));
+    for (const [path, pathItem] of Object.entries(spec.paths ?? {})) {
+      for (const [method, operation] of Object.entries(pathItem ?? {})) {
+        const normalizedMethod = method.toUpperCase();
+        if (!HTTP_METHODS.has(normalizedMethod)) continue;
+        const tags = Array.isArray(operation?.tags) ? operation.tags.filter(Boolean) : [];
+        if (tags.length > 0) {
+          const normalizedTags = tags.map(String);
+          const normalizedPath = normalizePath(path);
+          index.set(routeKey(normalizedMethod, normalizedPath), normalizedTags);
+          entries.push({
+            method: normalizedMethod,
+            path: normalizedPath,
+            tags: normalizedTags,
+          });
+        }
+      }
+    }
+  }
+
+  return { exact: index, entries };
+}
+
+function routeKey(method, path) {
+  return `${method.toUpperCase()} ${normalizePath(path)}`;
+}
+
+function normalizePath(path) {
+  return String(path ?? '')
+    .replace(/\{([^}]+)\}/g, ':$1')
+    .replace(/\/+/g, '/')
+    .replace(/\/$/, '');
+}
+
+function routePathMatches(leftPath, rightPath) {
+  const leftSegments = normalizePath(leftPath).split('/').filter(Boolean);
+  const rightSegments = normalizePath(rightPath).split('/').filter(Boolean);
+  if (leftSegments.length !== rightSegments.length) return false;
+
+  return leftSegments.every(
+    (segment, index) =>
+      segment === rightSegments[index] ||
+      segment.startsWith(':') ||
+      rightSegments[index].startsWith(':'),
+  );
+}
+
+function findOpenApiTags(openApiTags, method, path) {
+  const exact = openApiTags.exact?.get(routeKey(method, path));
+  if (exact) return exact;
+  return (
+    openApiTags.entries?.find(
+      (entry) => entry.method === method && routePathMatches(entry.path, path),
+    )?.tags ?? []
+  );
+}
+
+function normalizeRoute(route, openApiTags = { exact: new Map(), entries: [] }) {
+  const method = String(route.method ?? '').toUpperCase();
+  const path = String(route.path ?? '');
+  const routeTags = Array.isArray(route.tags) ? route.tags : [];
+  const tags = routeTags.length > 0 ? routeTags : findOpenApiTags(openApiTags, method, path);
   return {
-    method: String(route.method ?? '').toUpperCase(),
-    path: String(route.path ?? ''),
+    method,
+    path,
     status: String(route.status ?? 'unknown'),
     tag: String(route.tag ?? tags[0] ?? route.domain ?? route.menu ?? 'untagged'),
     controller: route.controller ?? null,
