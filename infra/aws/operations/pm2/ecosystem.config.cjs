@@ -3,6 +3,11 @@ const sharedEnv = {
   APP_ENV_FILE: '/opt/sgp/shared/runtime.env',
 };
 
+const gracefulShutdown = {
+  kill_timeout: 30000,
+  listen_timeout: 10000,
+};
+
 module.exports = {
   apps: [
     {
@@ -11,6 +16,7 @@ module.exports = {
       cwd: '/opt/sgp/current',
       exec_mode: 'cluster',
       instances: 'max',
+      ...gracefulShutdown,
       env: { ...sharedEnv, PORT: '3000' },
     },
     {
@@ -19,6 +25,7 @@ module.exports = {
       cwd: '/opt/sgp/current',
       exec_mode: 'cluster',
       instances: 'max',
+      ...gracefulShutdown,
       env: { ...sharedEnv, PORTAL_API_PORT: '3001' },
     },
     {
@@ -27,6 +34,7 @@ module.exports = {
       cwd: '/opt/sgp/current',
       exec_mode: 'cluster',
       instances: 'max',
+      ...gracefulShutdown,
       env: { ...sharedEnv, PAYROLL_ENGINE_PORT: '3302' },
     },
     {
@@ -35,6 +43,7 @@ module.exports = {
       cwd: '/opt/sgp/current',
       exec_mode: 'fork',
       instances: 1,
+      ...gracefulShutdown,
       env: { ...sharedEnv, INTEGRATIONS_WORKER_READY_PORT: '3304' },
     },
     {
@@ -43,6 +52,7 @@ module.exports = {
       cwd: '/opt/sgp/current',
       exec_mode: 'cluster',
       instances: 'max',
+      ...gracefulShutdown,
       env: { ...sharedEnv, REPORT_SERVICE_PORT: '3305' },
     },
     {
@@ -51,6 +61,7 @@ module.exports = {
       cwd: '/opt/sgp/current',
       exec_mode: 'fork',
       instances: 1,
+      ...gracefulShutdown,
       env: { ...sharedEnv, REPORT_WORKER_READY_PORT: '3306' },
     },
   ],
