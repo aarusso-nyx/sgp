@@ -20,7 +20,7 @@ jobs:
       BRANCH_PROTECTION_REQUIRED_CONTEXTS: Workspace gates,CodeQL,ADR Gate,Dependency Review
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Audit branch protection
         run: node scripts/audit/branch-protection.mjs
@@ -38,7 +38,7 @@ jobs:
       BRANCH_PROTECTION_REQUIRE_SIGNED_COMMITS: 'true'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Audit prod branch protection
         run: node scripts/audit/branch-protection.mjs
