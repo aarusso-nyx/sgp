@@ -1,0 +1,17 @@
+{
+  "threshold": 3,
+  "minTokens": 50,
+  "format": ["typescript"],
+  "pattern": "**/*.ts",
+  "reporters": ["console"],
+  "ignore": [
+    "**/*.spec.ts",
+    "**/*.e2e-spec.ts",
+    "**/dist/**",
+    "**/coverage/**",
+    "**/.stryker-tmp/**",
+    "frontend/src/app/core/api/generated/**",
+    "frontend/portal/src/app/core/api/generated/**"
+  ],
+  "path": ["backend/src", "frontend/src", "frontend/portal/src"]
+}

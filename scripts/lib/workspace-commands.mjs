@@ -8,7 +8,8 @@ export const workspaceCommandDescriptions = {
   format: 'Format workspace files and code.',
   typecheck: 'Run TypeScript checks across frontend and backend workspaces.',
   test: 'Run workspace tests; unit tests are the default subcommand.',
-  check: 'Run cross-cutting check helpers, including evidence and circular dependency gates.',
+  check:
+    'Run cross-cutting check helpers, including evidence, circular dependency, and duplication gates.',
   db: 'Run database lifecycle, alignment, FK coverage, and safety helpers.',
   api: 'Run API alignment, decorator, OpenAPI, and client-generation helpers.',
   qa: 'Run QA helper commands.',
@@ -61,6 +62,7 @@ export const hardFailGateCommands = [
   'npm run typecheck',
   'npm run test:types',
   'npm run test:mutation',
+  'npm run check:duplication',
   'npm run api:alignment:check -- --json',
   'npm run db:alignment:check -- --json',
   'npm run health:json',
