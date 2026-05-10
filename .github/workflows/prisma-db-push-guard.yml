@@ -24,6 +24,11 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
+      - name: Setup Stynx local packages
+        uses: ./.github/actions/setup-stynx-local-npm
+        with:
+          ref: ${{ vars.STYNX_REF || 'main' }}
+
       - name: Install workspace dependencies
         run: npm ci
 
