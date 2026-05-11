@@ -3,7 +3,6 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { QueryResultRow } from 'pg';
 
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../common/pagination/paged-response';
@@ -13,95 +12,31 @@ import {
   CreateRemittanceRequestDto,
   ProcessReturnRequestDto,
 } from './payroll-operations.dto';
+import { PayrollOperationsRemittanceService } from './payroll-operations-remittance.service';
+import { PayrollOperationsReportService } from './payroll-operations-report.service';
+import {
+  OperationRequestSummary,
+  PayrollRunRow,
+  RemittanceSummary,
+  REPORT_DEFINITIONS,
+} from './payroll-operations.types';
 
-interface CountRow extends QueryResultRow {
-  total: string;
-}
-
-interface PayrollRunRow extends QueryResultRow {
-  id: string;
-  branch_id: string | null;
-  processing_type_id: string;
-  status: string;
-  competence_year: number;
-  competence_month: number;
-  total_net: string;
-}
-
-interface IdRow extends QueryResultRow {
-  id: string;
-}
-
-interface RemittanceRow extends QueryResultRow {
-  id: string;
-  status: string;
-  competence_year: number;
-  competence_month: number;
-  payment_date: Date | string | null;
-  file_name: string | null;
-  file_hash: string | null;
-  bank_code: number | null;
-  layout_version: string | null;
-  record_count: number | null;
-  total_amount: string;
-  generated_at: Date | string | null;
-  attachment_id: string | null;
-  created_at: Date | string;
-  updated_at: Date | string;
-}
-
-interface ReportRequestRow extends QueryResultRow {
-  id: string;
-  status: string;
-  requested_at: Date | string;
-}
-
-export interface RemittanceSummary {
-  id: string;
-  status: string;
-  competenceYear: number;
-  competenceMonth: number;
-  paymentDate: string | null;
-  fileName: string | null;
-  fileHash: string | null;
-  bankCode: number | null;
-  layoutVersion: string | null;
-  recordCount: number | null;
-  totalAmount: string;
-  generatedAt: string | null;
-  attachmentId: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface OperationRequestSummary {
-  requestId: string;
-  status: string;
-  requestedAt: string;
-  metadata: Record<string, unknown>;
-}
-
-const REPORT_DEFINITIONS = {
-  remittance: {
-    code: 'FOLHA_CNAB_REMESSA',
-    name: 'Folha - Remessa CNAB',
-    description: 'Solicitacao de geracao de remessa bancaria CNAB da folha.',
-  },
-  returnProcessing: {
-    code: 'FOLHA_CNAB_RETORNO',
-    name: 'Folha - Retorno CNAB',
-    description: 'Solicitacao de processamento de retorno bancario CNAB.',
-  },
-  gfip: {
-    code: 'FOLHA_GFIP_GERAR',
-    name: 'Folha - Geracao GFIP/SEFIP',
-    description: 'Solicitacao de geracao do arquivo GFIP/SEFIP.',
-  },
-} as const;
+export type {
+  OperationRequestSummary,
+  RemittanceSummary,
+} from './payroll-operations.types';
 
 @Injectable()
 export class PayrollOperationsService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly remittanceService: PayrollOperationsRemittanceService = new PayrollOperationsRemittanceService(
+      databaseService,
+    ),
+    private readonly reportService: PayrollOperationsReportService = new PayrollOperationsReportService(
+      databaseService,
+    ),
+  ) {}
 
   async listRemittances(
     payrollRunId: string,
@@ -110,60 +45,7 @@ export class PayrollOperationsService {
     this.ensureDatabase();
     await this.getPayrollRun(payrollRunId);
 
-    const page = query.page ?? 1;
-    const pageSize = query.pageSize ?? 20;
-    const offset = (page - 1) * pageSize;
-
-    const count = await this.databaseService.query<CountRow>(
-      `
-      SELECT count(*)::text AS total
-      FROM payroll.payment_remittance_file
-      WHERE payroll_run_id = $1::uuid
-      `,
-      [payrollRunId],
-    );
-
-    const rows = await this.databaseService.query<RemittanceRow>(
-      `
-      SELECT
-        id::text AS id,
-        status::text AS status,
-        competence_year,
-        competence_month,
-        payment_date,
-        file_name,
-        file_hash,
-        bank_code,
-        layout_version,
-        record_count,
-        total_amount::text AS total_amount,
-        generated_at,
-        (
-          SELECT grf.attachment_id::text
-          FROM public.report_request request
-          JOIN public.generated_report_file grf ON grf.report_request_id = request.id
-          WHERE request.parameters->>'remittanceId' = payroll.payment_remittance_file.id::text
-          ORDER BY grf.created_at DESC
-          LIMIT 1
-        ) AS attachment_id,
-        created_at,
-        updated_at
-      FROM payroll.payment_remittance_file
-      WHERE payroll_run_id = $1::uuid
-      ORDER BY created_at DESC
-      LIMIT $2 OFFSET $3
-      `,
-      [payrollRunId, pageSize, offset],
-    );
-
-    const total = Number(count[0]?.total ?? 0);
-    return {
-      items: rows.map((row) => this.toRemittanceSummary(row)),
-      page,
-      pageSize,
-      total,
-      totalPages: total === 0 ? 0 : Math.ceil(total / pageSize),
-    };
+    return this.remittanceService.listByPayrollRun(payrollRunId, query);
   }
 
   async listRemittancesByCompetence(
@@ -172,62 +54,12 @@ export class PayrollOperationsService {
     query: DomainListQueryDto,
   ): Promise<PagedResponse<RemittanceSummary>> {
     this.ensureDatabase();
-    const page = query.page ?? 1;
-    const pageSize = query.pageSize ?? 20;
-    const offset = (page - 1) * pageSize;
 
-    const count = await this.databaseService.query<CountRow>(
-      `
-      SELECT count(*)::text AS total
-      FROM payroll.payment_remittance_file
-      WHERE competence_year = $1
-        AND competence_month = $2
-      `,
-      [competenceYear, competenceMonth],
+    return this.remittanceService.listByCompetence(
+      competenceYear,
+      competenceMonth,
+      query,
     );
-
-    const rows = await this.databaseService.query<RemittanceRow>(
-      `
-      SELECT
-        id::text AS id,
-        status::text AS status,
-        competence_year,
-        competence_month,
-        payment_date,
-        file_name,
-        file_hash,
-        bank_code,
-        layout_version,
-        record_count,
-        total_amount::text AS total_amount,
-        generated_at,
-        (
-          SELECT grf.attachment_id::text
-          FROM public.report_request request
-          JOIN public.generated_report_file grf ON grf.report_request_id = request.id
-          WHERE request.parameters->>'remittanceId' = payroll.payment_remittance_file.id::text
-          ORDER BY grf.created_at DESC
-          LIMIT 1
-        ) AS attachment_id,
-        created_at,
-        updated_at
-      FROM payroll.payment_remittance_file
-      WHERE competence_year = $1
-        AND competence_month = $2
-      ORDER BY created_at DESC
-      LIMIT $3 OFFSET $4
-      `,
-      [competenceYear, competenceMonth, pageSize, offset],
-    );
-
-    const total = Number(count[0]?.total ?? 0);
-    return {
-      items: rows.map((row) => this.toRemittanceSummary(row)),
-      page,
-      pageSize,
-      total,
-      totalPages: total === 0 ? 0 : Math.ceil(total / pageSize),
-    };
   }
 
   async requestRemittance(
@@ -239,109 +71,51 @@ export class PayrollOperationsService {
     if (run.status !== 'APPROVED') {
       throw new NotFoundException('Approved payroll run not found');
     }
-    await this.ensureValidBankAccountsForRemittance(input.bankId);
-    const nextNumber = await this.getNextRemittanceNumber(run);
+
+    await this.remittanceService.ensureValidBankAccountsForRemittance(
+      input.bankId,
+    );
+    const nextNumber =
+      await this.remittanceService.getNextRemittanceNumber(run);
     const fileName = `remessa_${String(nextNumber).padStart(6, '0')}.txt`;
     const paymentDate =
       input.paymentDate ??
       new Date(Date.UTC(run.competence_year, run.competence_month - 1, 25))
         .toISOString()
         .slice(0, 10);
+    const remittanceId = await this.remittanceService.createRemittanceFile(
+      payrollRunId,
+      run,
+      paymentDate,
+      fileName,
+    );
 
-    const remittanceRows = await this.databaseService.query<IdRow>(
-      `
-      INSERT INTO payroll.payment_remittance_file (
-        tenant_id,
-        payroll_run_id,
-        branch_id,
-        processing_type_id,
-        status,
-        competence_year,
-        competence_month,
-        payment_date,
-        file_name,
-        total_amount
-      )
-      VALUES (
-        public.sgp_current_tenant_uuid(),
-        $1::uuid,
-        NULLIF($2, '')::uuid,
-        $3::uuid,
-        'DRAFT'::"PaymentRemittanceStatus",
-        $4,
-        $5,
-        $6::date,
-        $7,
-        $8::decimal
-      )
-      RETURNING id::text
-      `,
-      [
-        payrollRunId,
-        run.branch_id ?? '',
-        run.processing_type_id,
-        run.competence_year,
-        run.competence_month,
+    const definition = REPORT_DEFINITIONS.remittance;
+    const definitionId = await this.reportService.ensureDefinition(
+      definition.code,
+      definition.name,
+      definition.description,
+    );
+    const request = await this.reportService.createRequest({
+      definitionId,
+      branchId: run.branch_id,
+      payrollRunId,
+      processingTypeId: run.processing_type_id,
+      competenceYear: run.competence_year,
+      competenceMonth: run.competence_month,
+      parameters: {
+        operation: 'remessa.gerar',
+        remittanceId,
+        bankId: input.bankId,
+        format: input.format ?? 'CNAB240',
         paymentDate,
+        launchType: input.launchType ?? 'ACCOUNT_CREDIT',
+        remittanceNumber: nextNumber,
         fileName,
-        run.total_net,
-      ],
-    );
-    const remittanceId = remittanceRows[0]?.id ?? '';
+      },
+    });
 
-    const definitionId = await this.ensureDefinition(
-      REPORT_DEFINITIONS.remittance.code,
-      REPORT_DEFINITIONS.remittance.name,
-      REPORT_DEFINITIONS.remittance.description,
-    );
-
-    const requestRows = await this.databaseService.query<ReportRequestRow>(
-      `
-      INSERT INTO public.report_request (
-        tenant_id,
-        definition_id,
-        branch_id,
-        payroll_run_id,
-        processing_type_id,
-        competence_year,
-        competence_month,
-        status,
-        parameters
-      )
-      VALUES (
-        public.sgp_current_tenant_uuid(),
-        $1::uuid,
-        NULLIF($2, '')::uuid,
-        $3::uuid,
-        $4::uuid,
-        $5,
-        $6,
-        'REQUESTED'::"ReportRequestStatus",
-        $7::jsonb
-      )
-      RETURNING id::text, status::text, requested_at
-      `,
-      [
-        definitionId,
-        run.branch_id ?? '',
-        payrollRunId,
-        run.processing_type_id,
-        run.competence_year,
-        run.competence_month,
-        JSON.stringify({
-          operation: 'remessa.gerar',
-          remittanceId,
-          bankId: input.bankId,
-          format: input.format ?? 'CNAB240',
-          paymentDate,
-          launchType: input.launchType ?? 'ACCOUNT_CREDIT',
-          remittanceNumber: nextNumber,
-          fileName,
-        }),
-      ],
-    );
-
-    return this.toRequestSummary(requestRows[0]!, {
+    return this.reportService.toRequestSummary(request, {
       remittanceId,
       remittanceNumber: nextNumber,
       fileName,
@@ -354,72 +128,35 @@ export class PayrollOperationsService {
   ): Promise<OperationRequestSummary> {
     this.ensureDatabase();
     const run = await this.getPayrollRun(payrollRunId);
-    await this.getRemittance(payrollRunId, input.remittanceId);
-
-    await this.databaseService.query(
-      `
-      UPDATE payroll.payment_remittance_file
-      SET status = CASE
-            WHEN status = 'DRAFT'::"PaymentRemittanceStatus"
-              THEN 'SENT'::"PaymentRemittanceStatus"
-            ELSE status
-          END,
-          updated_at = now()
-      WHERE id = $1::uuid
-      `,
-      [input.remittanceId],
+    await this.remittanceService.getRemittance(
+      payrollRunId,
+      input.remittanceId,
     );
+    await this.remittanceService.markDraftAsSent(input.remittanceId);
 
-    const definitionId = await this.ensureDefinition(
-      REPORT_DEFINITIONS.returnProcessing.code,
-      REPORT_DEFINITIONS.returnProcessing.name,
-      REPORT_DEFINITIONS.returnProcessing.description,
+    const definition = REPORT_DEFINITIONS.returnProcessing;
+    const definitionId = await this.reportService.ensureDefinition(
+      definition.code,
+      definition.name,
+      definition.description,
     );
+    const request = await this.reportService.createRequest({
+      definitionId,
+      branchId: run.branch_id,
+      payrollRunId,
+      processingTypeId: run.processing_type_id,
+      competenceYear: run.competence_year,
+      competenceMonth: run.competence_month,
+      parameters: {
+        operation: 'retorno.processar',
+        remittanceId: input.remittanceId,
+        s3Key: input.s3Key,
+        format: input.format ?? 'CNAB240',
+        returnFileName: input.returnFileName ?? null,
+      },
+    });
 
-    const requestRows = await this.databaseService.query<ReportRequestRow>(
-      `
-      INSERT INTO public.report_request (
-        tenant_id,
-        definition_id,
-        branch_id,
-        payroll_run_id,
-        processing_type_id,
-        competence_year,
-        competence_month,
-        status,
-        parameters
-      )
-      VALUES (
-        public.sgp_current_tenant_uuid(),
-        $1::uuid,
-        NULLIF($2, '')::uuid,
-        $3::uuid,
-        $4::uuid,
-        $5,
-        $6,
-        'REQUESTED'::"ReportRequestStatus",
-        $7::jsonb
-      )
-      RETURNING id::text, status::text, requested_at
-      `,
-      [
-        definitionId,
-        run.branch_id ?? '',
-        payrollRunId,
-        run.processing_type_id,
-        run.competence_year,
-        run.competence_month,
-        JSON.stringify({
-          operation: 'retorno.processar',
-          remittanceId: input.remittanceId,
-          s3Key: input.s3Key,
-          format: input.format ?? 'CNAB240',
-          returnFileName: input.returnFileName ?? null,
-        }),
-      ],
-    );
-
-    return this.toRequestSummary(requestRows[0]!, {
+    return this.reportService.toRequestSummary(request, {
       remittanceId: input.remittanceId,
       s3Key: input.s3Key,
     });
@@ -435,56 +172,29 @@ export class PayrollOperationsService {
       run = await this.getPayrollRun(input.payrollRunId);
     }
 
-    const definitionId = await this.ensureDefinition(
-      REPORT_DEFINITIONS.gfip.code,
-      REPORT_DEFINITIONS.gfip.name,
-      REPORT_DEFINITIONS.gfip.description,
+    const definition = REPORT_DEFINITIONS.gfip;
+    const definitionId = await this.reportService.ensureDefinition(
+      definition.code,
+      definition.name,
+      definition.description,
     );
+    const request = await this.reportService.createRequest({
+      definitionId,
+      branchId: input.branchId ?? run?.branch_id ?? null,
+      payrollRunId: input.payrollRunId ?? null,
+      processingTypeId: run?.processing_type_id ?? null,
+      competenceYear: input.competenceYear,
+      competenceMonth: input.competenceMonth,
+      parameters: {
+        operation: 'gfip.gerada',
+        payrollRunId: input.payrollRunId ?? null,
+        branchId: input.branchId ?? run?.branch_id ?? null,
+        collectionCode: input.collectionCode,
+        modality: input.modality,
+      },
+    });
 
-    const requestRows = await this.databaseService.query<ReportRequestRow>(
-      `
-      INSERT INTO public.report_request (
-        tenant_id,
-        definition_id,
-        branch_id,
-        payroll_run_id,
-        processing_type_id,
-        competence_year,
-        competence_month,
-        status,
-        parameters
-      )
-      VALUES (
-        public.sgp_current_tenant_uuid(),
-        $1::uuid,
-        NULLIF($2, '')::uuid,
-        NULLIF($3, '')::uuid,
-        NULLIF($4, '')::uuid,
-        $5,
-        $6,
-        'REQUESTED'::"ReportRequestStatus",
-        $7::jsonb
-      )
-      RETURNING id::text, status::text, requested_at
-      `,
-      [
-        definitionId,
-        input.branchId ?? run?.branch_id ?? '',
-        input.payrollRunId ?? '',
-        run?.processing_type_id ?? '',
-        input.competenceYear,
-        input.competenceMonth,
-        JSON.stringify({
-          operation: 'gfip.gerada',
-          payrollRunId: input.payrollRunId ?? null,
-          branchId: input.branchId ?? run?.branch_id ?? null,
-          collectionCode: input.collectionCode,
-          modality: input.modality,
-        }),
-      ],
-    );
-
-    return this.toRequestSummary(requestRows[0]!, {
+    return this.reportService.toRequestSummary(request, {
       payrollRunId: input.payrollRunId ?? null,
       branchId: input.branchId ?? run?.branch_id ?? null,
       collectionCode: input.collectionCode,
@@ -514,156 +224,11 @@ export class PayrollOperationsService {
     return rows[0];
   }
 
-  private async ensureValidBankAccountsForRemittance(
-    bankIdOrCode: string,
-  ): Promise<void> {
-    const isUuid =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-        bankIdOrCode,
-      );
-    const rows = await this.databaseService.query<CountRow>(
-      isUuid
-        ? `
-          SELECT count(*)::text AS total
-          FROM hr.v_employee_bank_account_pii_decrypted account
-          JOIN hr.bank bank ON bank.id = account.bank_id
-          WHERE account.validation_status = 'VALID'::hr.employee_bank_account_validation_status
-            AND bank.id = $1::uuid
-          `
-        : `
-          SELECT count(*)::text AS total
-          FROM hr.v_employee_bank_account_pii_decrypted account
-          JOIN hr.bank bank ON bank.id = account.bank_id
-          WHERE account.validation_status = 'VALID'::hr.employee_bank_account_validation_status
-            AND bank.code = lpad(regexp_replace($1, '\\D', '', 'g'), 3, '0')
-          `,
-      [bankIdOrCode],
-    );
-    if (Number(rows[0]?.total ?? 0) === 0) {
-      throw new NotFoundException(
-        'No valid employee bank account is eligible for CNAB remittance',
-      );
-    }
-  }
-
-  private async getRemittance(
-    payrollRunId: string,
-    remittanceId: string,
-  ): Promise<void> {
-    const rows = await this.databaseService.query<IdRow>(
-      `
-      SELECT id::text
-      FROM payroll.payment_remittance_file
-      WHERE id = $1::uuid
-        AND payroll_run_id = $2::uuid
-      `,
-      [remittanceId, payrollRunId],
-    );
-    if (!rows[0]) {
-      throw new NotFoundException('Remittance file not found');
-    }
-  }
-
-  private async getNextRemittanceNumber(run: PayrollRunRow): Promise<number> {
-    const rows = await this.databaseService.query<CountRow>(
-      `
-      SELECT count(*)::text AS total
-      FROM payroll.payment_remittance_file
-      WHERE competence_year = $1
-        AND competence_month = $2
-      `,
-      [run.competence_year, run.competence_month],
-    );
-    return Number(rows[0]?.total ?? 0) + 1;
-  }
-
-  private async ensureDefinition(
-    code: string,
-    name: string,
-    description: string,
-  ): Promise<string> {
-    const rows = await this.databaseService.query<IdRow>(
-      `
-      WITH inserted AS (
-        INSERT INTO public.report_definition (
-          tenant_id,
-          code,
-          name,
-          description,
-          module_key,
-          status
-        )
-        SELECT
-          public.sgp_current_tenant_uuid(),
-          $1,
-          $2,
-          $3,
-          'folha',
-          'ACTIVE'::"RecordStatus"
-        WHERE NOT EXISTS (
-          SELECT 1
-          FROM public.report_definition
-          WHERE code = $1
-            AND tenant_id = public.sgp_current_tenant_uuid()
-        )
-        RETURNING id::text
-      )
-      SELECT id::text FROM inserted
-      UNION ALL
-      SELECT id::text
-      FROM public.report_definition
-      WHERE code = $1
-        AND tenant_id = public.sgp_current_tenant_uuid()
-      LIMIT 1
-      `,
-      [code, name, description],
-    );
-    return rows[0]?.id ?? '';
-  }
-
   private ensureDatabase(): void {
     if (!this.databaseService.configured) {
       throw new ServiceUnavailableException(
         'DATABASE_URL is required for payroll export operations',
       );
     }
-  }
-
-  private toRemittanceSummary(row: RemittanceRow): RemittanceSummary {
-    return {
-      id: row.id,
-      status: row.status,
-      competenceYear: row.competence_year,
-      competenceMonth: row.competence_month,
-      paymentDate: row.payment_date ? this.toIso(row.payment_date) : null,
-      fileName: row.file_name,
-      fileHash: row.file_hash,
-      bankCode: row.bank_code,
-      layoutVersion: row.layout_version,
-      recordCount: row.record_count,
-      totalAmount: row.total_amount,
-      generatedAt: row.generated_at ? this.toIso(row.generated_at) : null,
-      attachmentId: row.attachment_id,
-      createdAt: this.toIso(row.created_at),
-      updatedAt: this.toIso(row.updated_at),
-    };
-  }
-
-  private toRequestSummary(
-    row: ReportRequestRow,
-    metadata: Record<string, unknown>,
-  ): OperationRequestSummary {
-    return {
-      requestId: row.id,
-      status: row.status,
-      requestedAt: this.toIso(row.requested_at),
-      metadata,
-    };
-  }
-
-  private toIso(value: Date | string): string {
-    return value instanceof Date
-      ? value.toISOString()
-      : new Date(value).toISOString();
   }
 }

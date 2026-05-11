@@ -36,3 +36,4 @@ Every ADR must:
 | [ADR-028](adr-028-mutation-scope-rationale.md)              | Accepted  | Stryker mutation scope is intentionally narrow; expansion is a deliberate amendment, not an accident.                  |
 | [ADR-029](adr-029-waf-posture.md)                           | Accepted  | AWS WAF is explicitly not provisioned in the current baseline, with reopen triggers recorded.                          |
 | [ADR-030](adr-030-homologation-and-release-gates.md)        | Accepted  | GitHub Environments and accepted gate evidence govern stage/prod homologation and release promotion.                   |
+| [ADR-031](adr-031-centralised-idempotency.md)               | Accepted  | `@Idempotent()` and `public.idempotency_keys` provide tenant-scoped HTTP mutation replay and duplicate suppression.    |

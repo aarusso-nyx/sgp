@@ -7,6 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
+import { Idempotent } from '../common/idempotency/idempotency.decorator';
 import {
   Public,
   RequirePermission,
@@ -40,6 +41,7 @@ export class ReportServiceController {
   }
 
   @ApiOperation({ summary: 'POST requests' })
+  @Idempotent()
   @Post('requests')
   @RequirePermission('relatorio.generate')
   @ApiCreatedResponse({ description: 'Queue a report request.' })

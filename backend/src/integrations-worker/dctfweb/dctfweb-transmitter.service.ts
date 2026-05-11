@@ -5,6 +5,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import {
+  combineAbortSignals,
+  currentRequestAbortSignal,
+} from '../../common/http/request-abort-signal';
 import { DctfwebBuilderService } from './dctfweb-builder.service';
 import { DctfwebDeclarationDetailsDto } from './dctfweb.dto';
 import { DctfwebReceiptService } from './dctfweb-receipt.service';
@@ -95,11 +99,15 @@ export class DctfwebTransmitterService {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
+      const signal = combineAbortSignals(
+        controller.signal,
+        currentRequestAbortSignal(),
+      );
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'content-type': 'application/xml' },
         body: declaration.signedXml,
-        signal: controller.signal,
+        signal,
       });
       const body = await response.text();
       if (!response.ok) {

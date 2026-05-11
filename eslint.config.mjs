@@ -7,6 +7,7 @@ import noRawHandlerLoggingRule from './backend/eslint-rules/no-raw-handler-loggi
 import requirePermissionRule from './backend/eslint-rules/require-permission.js';
 import noBareErrorThrowRule from './backend/eslint-rules/no-bare-error-throw.js';
 import noOversizeServiceRule from './backend/eslint-rules/no-oversize-service.js';
+import noFatControllerRule from './backend/eslint-rules/no-fat-controller.js';
 
 const backendRequire = createRequire(new URL('./backend/package.json', import.meta.url));
 const { default: eslint } = await import(backendRequire.resolve('@eslint/js'));
@@ -47,6 +48,7 @@ export default tseslint.config(
           'require-permission': requirePermissionRule,
           'no-bare-error-throw': noBareErrorThrowRule,
           'no-oversize-service': noOversizeServiceRule,
+          'no-fat-controller': noFatControllerRule,
         },
       },
     },
@@ -61,7 +63,10 @@ export default tseslint.config(
       'sgp/no-raw-handler-logging': 'error',
       'sgp/require-permission': 'error',
       'sgp/no-bare-error-throw': 'error',
-      'sgp/no-oversize-service': 'warn',
+      // Promoted after Phase B decomposition: any service above 600 effective LOC
+      // must be split before it can land.
+      'sgp/no-oversize-service': 'error',
+      'sgp/no-fat-controller': 'warn',
     },
   },
   {

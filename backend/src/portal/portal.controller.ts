@@ -9,6 +9,7 @@ import {
 
 import { CurrentActor } from '../auth/current-actor.decorator';
 import { AuditMutation } from '../common/audit/audit-mutation.decorator';
+import { Idempotent } from '../common/idempotency/idempotency.decorator';
 import { CadastralChangeRequestDto } from '../rh/employees/employees.dto';
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import { AuthenticatedActor } from '../auth/actor.types';
@@ -88,6 +89,7 @@ export class PortalController {
   }
 
   @ApiOperation({ summary: 'POST v1/portal/documentos/solicitacoes' })
+  @Idempotent()
   @Post('v1/portal/documentos/solicitacoes')
   @RequirePermission('portal.profile.write')
   @AuditMutation({
@@ -157,6 +159,7 @@ export class PortalController {
   }
 
   @ApiOperation({ summary: 'PUT v1/portal/meus-dados/:section' })
+  @Idempotent()
   @Put('v1/portal/meus-dados/:section')
   @RequirePermission('portal.profile.write')
   @AuditMutation({
@@ -190,6 +193,7 @@ export class PortalController {
   @ApiOperation({
     summary: 'POST v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar',
   })
+  @Idempotent()
   @Post('v1/portal/minha-equipe/aprovacoes/:kind/:id/aprovar')
   @RequirePermission(['rh.leave.approve', 'rh.vacation.approve'])
   @AuditMutation({
@@ -208,6 +212,7 @@ export class PortalController {
   @ApiOperation({
     summary: 'POST v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar',
   })
+  @Idempotent()
   @Post('v1/portal/minha-equipe/aprovacoes/:kind/:id/cancelar')
   @RequirePermission(['rh.leave.approve', 'rh.vacation.approve'])
   @AuditMutation({

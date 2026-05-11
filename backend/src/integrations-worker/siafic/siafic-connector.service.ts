@@ -7,6 +7,10 @@ import {
   SiaficStagePayload,
 } from './siafic.dto';
 import { domainError } from '../../common/errors/domain-error';
+import {
+  combineAbortSignals,
+  currentRequestAbortSignal,
+} from '../../common/http/request-abort-signal';
 
 interface CircuitRecord {
   state: SiaficCircuitState;
@@ -77,6 +81,10 @@ export class SiaficConnectorService {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
+      const signal = combineAbortSignals(
+        controller.signal,
+        currentRequestAbortSignal(),
+      );
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -86,7 +94,7 @@ export class SiaficConnectorService {
           'x-idempotency-key': payload.idempotencyKey,
         },
         body: JSON.stringify(payload),
-        signal: controller.signal,
+        signal,
       });
       const body = await response.text();
       if (!response.ok) {

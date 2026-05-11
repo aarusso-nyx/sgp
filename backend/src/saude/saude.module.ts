@@ -16,7 +16,10 @@ import { EpiDeliveryService } from './epi/epi-delivery.service';
 import { EpiInventoryService } from './epi/epi-inventory.service';
 import { EnvironmentalExposureController } from './exposure/environmental-exposure.controller';
 import { EnvironmentalExposureService } from './exposure/environmental-exposure.service';
+import { PericiaAppointmentWorkflowService } from './pericia-appointment-workflow.service';
 import { PericiaController } from './pericia.controller';
+import { PericiaMedicalRecordWorkflowService } from './pericia-medical-record-workflow.service';
+import { PericiaReplicationWorkflowService } from './pericia-replication-workflow.service';
 import { PericiaService } from './pericia.service';
 import { PppController } from './ppp/ppp.controller';
 import { PppService } from './ppp/ppp.service';
@@ -40,6 +43,9 @@ import { RiskManagementProgramService } from './program/risk-management-program.
   ],
   providers: [
     PericiaService,
+    PericiaAppointmentWorkflowService,
+    PericiaMedicalRecordWorkflowService,
+    PericiaReplicationWorkflowService,
     AsoService,
     AsoAttachmentService,
     CatEmissionService,

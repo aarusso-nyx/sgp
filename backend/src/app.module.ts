@@ -1,23 +1,12 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  ValidationPipe,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 import { AuditModule } from './audit/audit.module';
 import { AuditoriaModule } from './auditoria/auditoria.module';
 import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { AuthModule } from './auth/auth.module';
-import {
-  SgpStynxAuthGuard,
-  SgpStynxAuthorizationGuard,
-} from './auth/sgp-stynx-auth.guard';
-import { StandardExceptionFilter } from './common/errors/standard-exception.filter';
-import { AuditRequiredInterceptor } from './common/audit/audit-required.interceptor';
+import { createAppCoreProviders } from './common/bootstrap/app-providers';
 import { createLoggingModule } from './common/logging/logging.config';
 import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { createRateLimitOptions } from './common/rate-limit/rate-limit.config';
@@ -92,38 +81,7 @@ import { AppService } from './app.service';
     HealthModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_PIPE,
-      useFactory: () =>
-        new ValidationPipe({
-          whitelist: true,
-          forbidNonWhitelisted: true,
-          transform: true,
-        }),
-    },
-    {
-      provide: APP_FILTER,
-      useClass: StandardExceptionFilter,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: AuditRequiredInterceptor,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: SgpStynxAuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: SgpStynxAuthorizationGuard,
-    },
-  ],
+  providers: [AppService, ...createAppCoreProviders()],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -4,7 +4,6 @@ import {
   NotImplementedException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { QueryResultRow } from 'pg';
 
 import { DomainListQueryDto } from '../../common/pagination/domain-list-query.dto';
 import { PagedResponse } from '../../common/pagination/paged-response';
@@ -13,95 +12,33 @@ import {
   PayrollAccountingAccountMutationDto,
   PayrollCatalogMutationDto,
 } from './payroll-accounting.dto';
+import { PayrollAccountingMapper } from './payroll-accounting.mapper';
+import {
+  AccountingAccountRow,
+  CatalogMapping,
+  CatalogRow,
+  CountRow,
+  PAYROLL_ACCOUNTING_CATALOGS,
+  PayrollCatalogRecord,
+  PayrollCatalogResource,
+} from './payroll-accounting.types';
 
-interface CountRow extends QueryResultRow {
-  total: string;
-}
-
-interface CatalogRow extends QueryResultRow {
-  id: string;
-  code: string;
-  description: string;
-  active: boolean;
-  metadata: Record<string, unknown> | null;
-  created_at: Date | string;
-  updated_at: Date | string;
-}
-
-interface AccountingAccountRow extends QueryResultRow {
-  id: string;
-  code: string;
-  description: string;
-  active: boolean;
-  metadata: Record<string, unknown> | null;
-  created_at: Date | string;
-  updated_at: Date | string;
-}
-
-export interface PayrollCatalogResource {
-  key: string;
-  label: string;
-  route: string;
-}
-
-export interface PayrollCatalogRecord {
-  id: string;
-  code: string;
-  description: string;
-  active: boolean;
-  metadata: Record<string, unknown>;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface CatalogMapping {
-  table: string;
-  label: string;
-  route: string;
-  searchExpression: string;
-  metadataExpression?: string | undefined;
-  typeColumn?: string | undefined;
-}
-
-const CATALOGS: Record<string, CatalogMapping> = {
-  'gps-codes': {
-    table: 'payroll.gps_payment_code',
-    label: 'Codigos GPS',
-    route: '#!/folha/catalogos/codigoPagamentoGps',
-    searchExpression: "lower(concat_ws(' ', code, description))",
-  },
-  sefip: {
-    table: 'payroll.sefip_code',
-    label: 'Codigos SEFIP',
-    route: '#!/folha/catalogos/sefip',
-    searchExpression: "lower(concat_ws(' ', code, description, type))",
-    metadataExpression: "jsonb_build_object('type', type)",
-    typeColumn: 'type',
-  },
-  'accounting-histories': {
-    table: 'payroll.accounting_history',
-    label: 'Historicos Contabeis',
-    route: '#!/folha/catalogos/historicoContabil',
-    searchExpression: "lower(concat_ws(' ', code, description))",
-  },
-  'simple-accounts': {
-    table: 'payroll.simple_account',
-    label: 'Contas Simples',
-    route: '#!/folha/catalogos/contaContabilSimples',
-    searchExpression: "lower(concat_ws(' ', code, description))",
-  },
-};
+export type { PayrollCatalogRecord, PayrollCatalogResource };
 
 @Injectable()
 export class PayrollAccountingService {
+  private readonly mapper = new PayrollAccountingMapper();
+
   constructor(private readonly databaseService: DatabaseService) {}
 
   listCatalogResources(): PayrollCatalogResource[] {
-    return Object.entries(CATALOGS).map(([key, mapping]) => ({
-      key,
-      label: mapping.label,
-      route: mapping.route,
-    }));
+    return Object.entries(PAYROLL_ACCOUNTING_CATALOGS).map(
+      ([key, mapping]) => ({
+        key,
+        label: mapping.label,
+        route: mapping.route,
+      }),
+    );
   }
 
   async listCatalogRecords(
@@ -143,7 +80,7 @@ export class PayrollAccountingService {
     );
 
     return {
-      items: rows.map((row) => this.toCatalogRecord(row)),
+      items: rows.map((row) => this.mapper.toCatalogRecord(row)),
       page,
       pageSize,
       total: Number(count[0]?.total ?? 0),
@@ -191,15 +128,15 @@ export class PayrollAccountingService {
             input.code.trim(),
             input.description.trim(),
             typeValue,
-            this.toRecordStatus(input.active),
+            this.mapper.toRecordStatus(input.active),
           ]
         : [
             input.code.trim(),
             input.description.trim(),
-            this.toRecordStatus(input.active),
+            this.mapper.toRecordStatus(input.active),
           ],
     );
-    return this.toCatalogRecord(rows[0]!);
+    return this.mapper.toCatalogRecord(rows[0]!);
   }
 
   async updateCatalogRecord(
@@ -235,19 +172,19 @@ export class PayrollAccountingService {
             input.code.trim(),
             input.description.trim(),
             typeValue,
-            this.toRecordStatus(input.active),
+            this.mapper.toRecordStatus(input.active),
           ]
         : [
             id,
             input.code.trim(),
             input.description.trim(),
-            this.toRecordStatus(input.active),
+            this.mapper.toRecordStatus(input.active),
           ],
     );
     if (!rows[0]) {
       throw new NotFoundException('Payroll catalog record not found');
     }
-    return this.toCatalogRecord(rows[0]);
+    return this.mapper.toCatalogRecord(rows[0]);
   }
 
   async deactivateCatalogRecord(
@@ -276,7 +213,7 @@ export class PayrollAccountingService {
     if (!rows[0]) {
       throw new NotFoundException('Payroll catalog record not found');
     }
-    return this.toCatalogRecord(rows[0]);
+    return this.mapper.toCatalogRecord(rows[0]);
   }
 
   async listAccountingAccounts(
@@ -366,7 +303,7 @@ export class PayrollAccountingService {
 
     const total = Number(count[0]?.total ?? 0);
     return {
-      items: rows.map((row) => this.toCatalogRecord(row)),
+      items: rows.map((row) => this.mapper.toCatalogRecord(row)),
       page,
       pageSize,
       total,
@@ -425,7 +362,7 @@ export class PayrollAccountingService {
         input.accountCode.trim(),
         input.allocationPercent,
         input.totalAllocationPercent ?? input.allocationPercent,
-        this.toRecordStatus(input.active),
+        this.mapper.toRecordStatus(input.active),
       ],
     );
     const created = rows[0]!;
@@ -477,7 +414,7 @@ export class PayrollAccountingService {
         input.accountCode.trim(),
         input.allocationPercent,
         input.totalAllocationPercent ?? input.allocationPercent,
-        this.toRecordStatus(input.active),
+        this.mapper.toRecordStatus(input.active),
       ],
     );
     if (!rows[0]) {
@@ -563,7 +500,7 @@ export class PayrollAccountingService {
     if (!rows[0]) {
       throw new NotFoundException('Payroll accounting account not found');
     }
-    return this.toCatalogRecord(rows[0]);
+    return this.mapper.toCatalogRecord(rows[0]);
   }
 
   private async syncAccountingWorkLocations(
@@ -605,7 +542,7 @@ export class PayrollAccountingService {
   }
 
   private getCatalogMapping(resource: string): CatalogMapping {
-    const mapping = CATALOGS[resource];
+    const mapping = PAYROLL_ACCOUNTING_CATALOGS[resource];
     if (!mapping) {
       throw new NotImplementedException('Payroll catalog resource not mapped');
     }
@@ -624,29 +561,5 @@ export class PayrollAccountingService {
       throw new NotFoundException('Catalog type is required for this resource');
     }
     return value;
-  }
-
-  private toRecordStatus(active?: boolean): 'ACTIVE' | 'INACTIVE' {
-    return active === false ? 'INACTIVE' : 'ACTIVE';
-  }
-
-  private toCatalogRecord(
-    row: CatalogRow | AccountingAccountRow,
-  ): PayrollCatalogRecord {
-    return {
-      id: row.id,
-      code: row.code,
-      description: row.description,
-      active: row.active,
-      metadata: row.metadata ?? {},
-      createdAt: this.toIso(row.created_at),
-      updatedAt: this.toIso(row.updated_at),
-    };
-  }
-
-  private toIso(value: Date | string): string {
-    return value instanceof Date
-      ? value.toISOString()
-      : new Date(value).toISOString();
   }
 }

@@ -4,6 +4,7 @@ import type { AuthenticatedActor } from '../../auth/actor.types';
 import { requestId, RequestId, tenantId, TenantId } from '../types/branded-ids';
 
 export interface RequestContextSnapshot {
+  abortSignal?: AbortSignal | undefined;
   requestId?: RequestId | undefined;
   tenantId?: TenantId | undefined;
   actor?: AuthenticatedActor | undefined;

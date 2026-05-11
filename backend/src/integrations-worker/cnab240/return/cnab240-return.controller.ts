@@ -7,6 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../../audit/audit.service';
+import { Idempotent } from '../../../common/idempotency/idempotency.decorator';
 import type { RequestWithContext } from '../../../common/request-id/request-with-context';
 import { RequirePermission } from '../../../iam/decorators/require-permission.decorator';
 import { ProcessCnab240ReturnDto } from './cnab240-return.dto';
@@ -22,6 +23,7 @@ export class Cnab240ReturnController {
   ) {}
 
   @ApiOperation({ summary: 'POST Process' })
+  @Idempotent()
   @Post()
   @RequirePermission('payment.return.write')
   @ApiCreatedResponse({
@@ -52,6 +54,7 @@ export class Cnab240ReturnController {
   }
 
   @ApiOperation({ summary: 'POST :id/reprocess-rejected' })
+  @Idempotent()
   @Post(':id/reprocess-rejected')
   @RequirePermission('payment.return.write')
   @ApiCreatedResponse({

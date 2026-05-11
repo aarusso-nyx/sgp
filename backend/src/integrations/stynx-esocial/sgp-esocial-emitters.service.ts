@@ -1,7 +1,6 @@
-import { createHash } from 'node:crypto';
-
 import { BadRequestException, Injectable } from '@nestjs/common';
 
+import { stableJsonSha256 } from '../../common/crypto/stable-hash';
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import {
   EsocialEventsService,
@@ -13,6 +12,8 @@ import type {
   EsocialSgpEventPayload,
   EsocialSgpPayloadSource,
 } from './contracts/payloads';
+
+export { stableJsonSha256 } from '../../common/crypto/stable-hash';
 
 export type SgpEsocialOperation =
   EsocialSgpEventPayload<EsocialRelayEventClass>['operation'];
@@ -278,18 +279,4 @@ export class SgpEsocialEmittersService {
     }
     return tenantId;
   }
-}
-
-export function stableJsonSha256(value: unknown): string {
-  return createHash('sha256').update(stableStringify(value)).digest('hex');
-}
-
-export function stableStringify(value: unknown): string {
-  if (value === null || typeof value !== 'object') return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
-  const record = value as Record<string, unknown>;
-  return `{${Object.keys(record)
-    .sort()
-    .map((key) => `${JSON.stringify(key)}:${stableStringify(record[key])}`)
-    .join(',')}}`;
 }

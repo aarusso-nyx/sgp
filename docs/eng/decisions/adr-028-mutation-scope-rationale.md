@@ -73,10 +73,10 @@ A second, targeted expansion was attempted: include the three folha-pagamento
 services whose existing specs DIRECTLY import the service so Stryker's
 `enableFindRelatedTests` correctly maps mutations to runnable tests:
 
-| Service                                                                               | Mapping spec                                                |            Per-file score |
-| ------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------: |
-| `backend/src/folha-pagamento/operations/consignment/margin-calculator.service.ts`     | `tests/backend/margin-calculator.golden.spec.ts`            | 43.33 % (76.47 % covered) |
-| `backend/src/folha-pagamento/operations/reintegration/reintegration-order.service.ts` | `tests/backend/reintegration-order-branch-coverage.spec.ts` | 20.33 % (60.49 % covered) |
+| Service                                                                               | Mapping spec                                                                                                                          |                             Per-file score |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -----------------------------------------: |
+| `backend/src/folha-pagamento/operations/consignment/margin-calculator.service.ts`     | `tests/backend/margin-calculator.golden.spec.ts`                                                                                      |                  43.33 % (76.47 % covered) |
+| `backend/src/folha-pagamento/operations/reintegration/reintegration-order.service.ts` | `backend/src/folha-pagamento/operations/reintegration/reintegration-order.service.spec.ts` plus the split eligibility/financial specs | 20.33 % (60.49 % covered before the split) |
 
 The targeted expansion ran in 49 seconds (vs the bulk-glob's 5 minutes —
 `enableFindRelatedTests` worked), demonstrating the architectural
@@ -131,6 +131,18 @@ services in `stryker.conf.cjs`. `npm run test:mutation` then passed with:
 
 This keeps the same global `break: 70` policy while proving that additional
 mutation scope must be paired with a mutation-runner spec allow-list update.
+
+## Amendment 2026-05-10 — reintegration decomposition coverage shape
+
+The QA-closure service-size wave split
+`backend/src/folha-pagamento/operations/reintegration/reintegration-order.service.ts`
+into a slim coordinator plus eligibility and financial services. The split
+keeps public `ReintegrationOrderService` methods stable and moves the
+service-importing branch specs beside each implementation file, so a future
+Stryker expansion can target one reintegration surface at a time without
+re-mutating the entire former 939-line coordinator. This amendment documents
+the coverage shape only; it does not add reintegration files to the retained
+mutation scope.
 
 ## Options Considered
 

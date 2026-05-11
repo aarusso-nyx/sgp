@@ -1,108 +1,39 @@
-import {
-  BadRequestException,
-  ConflictException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-  ServiceUnavailableException,
-} from '@nestjs/common';
-import { QueryResultRow } from 'pg';
+import { ConflictException, Injectable } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
 import {
   AttachRecruitmentCandidatesDto,
   CreateRecruitmentRequestDto,
-  RecruitmentCandidateStatusInput,
-  RecruitmentHiringTypeInput,
   UpdateRecruitmentCandidateDto,
 } from './recruitment.dto';
+import { RecruitmentLifecycle } from './recruitment.lifecycle';
+import { RecruitmentMapper } from './recruitment.mapper';
+import {
+  RecruitmentCandidateSqlRow,
+  RecruitmentCandidateSummary,
+  RecruitmentCandidatesSqlRow,
+  RecruitmentRequestSqlRow,
+  RecruitmentRequestSummary,
+} from './recruitment.types';
 
-interface RecruitmentFunctionRow {
-  id: string;
-  funcaoId: string | null;
-  tipoContratacao: RecruitmentHiringTypeInput;
-  quantidadeVagas: number;
-  requisitos: string;
-  turnoId: string | null;
-}
-
-interface RecruitmentCandidateRow {
-  id: string;
-  pessoaId: string;
-  curriculoS3Key: string | null;
-  situacao: RecruitmentCandidateStatusInput;
-  comentarioAnalise: string;
-}
-
-export interface RecruitmentRequestSummary {
-  id: string;
-  solicitanteId: string;
-  filialId: string | null;
-  lotacaoId: string | null;
-  motivo: string;
-  justificativa: string;
-  dataEntrada: string;
-  dataLimite: string | null;
-  situacao: string;
-  concluidoEm: string | null;
-  funcoesRequisitadas: RecruitmentFunctionRow[];
-}
-
-export interface RecruitmentCandidateSummary extends RecruitmentCandidateRow {
-  requisicaoId: string;
-}
-
-interface RecruitmentRequestSqlRow extends QueryResultRow {
-  id: string;
-  requester_ref: string;
-  branch_id: string | null;
-  work_location_id: string | null;
-  reason: string;
-  justification: string;
-  request_date: Date | string;
-  due_date: Date | string | null;
-  status: string;
-  completed_at: Date | string | null;
-  functions: RecruitmentFunctionRow[] | string | null;
-}
-
-interface RecruitmentCandidatesSqlRow extends QueryResultRow {
-  candidates: RecruitmentCandidateSummary[] | string | null;
-}
-
-interface RecruitmentCandidateSqlRow extends QueryResultRow {
-  id: string;
-  request_id: string;
-  person_ref: string;
-  curriculum_s3_key: string | null;
-  status: string;
-  review_comment: string;
-}
-
-interface RecruitmentRequestStateRow extends QueryResultRow {
-  id: string;
-  requester_ref: string;
-  status: string;
-}
-
-interface RecruitmentCandidateStateRow extends QueryResultRow {
-  id: string;
-  request_id: string;
-  request_status: string;
-}
-
-interface CountRow extends QueryResultRow {
-  total: string;
-}
+export type {
+  RecruitmentCandidateSummary,
+  RecruitmentRequestSummary,
+} from './recruitment.types';
 
 @Injectable()
 export class RecruitmentService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  private readonly lifecycle: RecruitmentLifecycle;
+  private readonly mapper = new RecruitmentMapper();
+
+  constructor(private readonly databaseService: DatabaseService) {
+    this.lifecycle = new RecruitmentLifecycle(databaseService);
+  }
 
   async createRequest(
     input: CreateRecruitmentRequestDto,
   ): Promise<RecruitmentRequestSummary> {
-    this.ensureDatabase();
+    this.lifecycle.ensureDatabase();
 
     try {
       const rows = await this.databaseService.query<RecruitmentRequestSqlRow>(
@@ -215,7 +146,7 @@ export class RecruitmentService {
         ],
       );
 
-      return this.toRequestSummary(rows[0]);
+      return this.mapper.toRequestSummary(rows[0]);
     } catch (error: unknown) {
       this.handleConstraintError(error, 'Recruitment request already exists');
       throw error;
@@ -226,22 +157,8 @@ export class RecruitmentService {
     requestId: string,
     actorUsername?: string,
   ): Promise<RecruitmentRequestSummary> {
-    this.ensureDatabase();
-
-    const current = await this.getRequestState(requestId);
-    if (!current) {
-      throw new NotFoundException('Recruitment request not found');
-    }
-    if (current.status !== 'DRAFT') {
-      throw new BadRequestException(
-        'Recruitment request can only be forwarded from draft state',
-      );
-    }
-    if (actorUsername && current.requester_ref !== actorUsername) {
-      throw new ForbiddenException(
-        'Only the request creator can forward the recruitment request',
-      );
-    }
+    this.lifecycle.ensureDatabase();
+    await this.lifecycle.requireForwardableRequest(requestId, actorUsername);
 
     const rows = await this.databaseService.query<RecruitmentRequestSqlRow>(
       `
@@ -311,7 +228,7 @@ export class RecruitmentService {
       [requestId],
     );
 
-    return this.toRequestSummary(rows[0]);
+    return this.mapper.toRequestSummary(rows[0]);
   }
 
   async attachCandidates(
@@ -321,17 +238,11 @@ export class RecruitmentService {
     requisicaoId: string;
     candidatos: RecruitmentCandidateSummary[];
   }> {
-    this.ensureDatabase();
-
-    const current = await this.getRequestState(requestId);
-    if (!current) {
-      throw new NotFoundException('Recruitment request not found');
-    }
-    if (current.status !== 'IN_PROGRESS') {
-      throw new BadRequestException(
-        'Candidates can only be attached to requests in progress',
-      );
-    }
+    this.lifecycle.ensureDatabase();
+    await this.lifecycle.requireRequestInProgress(
+      requestId,
+      'Candidates can only be attached to requests in progress',
+    );
 
     try {
       const rows =
@@ -387,7 +298,7 @@ export class RecruitmentService {
 
       return {
         requisicaoId: requestId,
-        candidatos: this.parseJsonArray<RecruitmentCandidateSummary>(
+        candidatos: this.mapper.parseJsonArray<RecruitmentCandidateSummary>(
           rows[0]?.candidates,
         ),
       };
@@ -404,17 +315,8 @@ export class RecruitmentService {
     candidateId: string,
     input: UpdateRecruitmentCandidateDto,
   ): Promise<RecruitmentCandidateSummary> {
-    this.ensureDatabase();
-
-    const current = await this.getCandidateState(candidateId);
-    if (!current) {
-      throw new NotFoundException('Recruitment candidate not found');
-    }
-    if (current.request_status !== 'IN_PROGRESS') {
-      throw new BadRequestException(
-        'Candidate analysis can only be updated while the request is in progress',
-      );
-    }
+    this.lifecycle.ensureDatabase();
+    await this.lifecycle.requireCandidateAnalysisOpen(candidateId);
 
     const rows = await this.databaseService.query<RecruitmentCandidateSqlRow>(
       `
@@ -442,36 +344,12 @@ export class RecruitmentService {
       [candidateId, input.situacao, input.comentarioAnalise?.trim() ?? ''],
     );
 
-    return this.toCandidateSummary(rows[0]);
+    return this.mapper.toCandidateSummary(rows[0]);
   }
 
   async concludeRequest(requestId: string): Promise<RecruitmentRequestSummary> {
-    this.ensureDatabase();
-
-    const current = await this.getRequestState(requestId);
-    if (!current) {
-      throw new NotFoundException('Recruitment request not found');
-    }
-    if (current.status !== 'IN_PROGRESS') {
-      throw new BadRequestException(
-        'Recruitment request can only be concluded from in-progress state',
-      );
-    }
-
-    const approvedCount = await this.databaseService.query<CountRow>(
-      `
-      SELECT count(*)::text AS total
-      FROM hr.recruitment_candidate
-      WHERE request_id = $1::uuid
-        AND status = 'APPROVED'::"RecruitmentCandidateStatus"
-      `,
-      [requestId],
-    );
-    if (Number(approvedCount[0]?.total ?? 0) === 0) {
-      throw new BadRequestException(
-        'Recruitment request requires at least one approved candidate before conclusion',
-      );
-    }
+    this.lifecycle.ensureDatabase();
+    await this.lifecycle.requireConclusionReady(requestId);
 
     const rows = await this.databaseService.query<RecruitmentRequestSqlRow>(
       `
@@ -544,139 +422,7 @@ export class RecruitmentService {
       [requestId],
     );
 
-    return this.toRequestSummary(rows[0]);
-  }
-
-  private async getRequestState(
-    requestId: string,
-  ): Promise<RecruitmentRequestStateRow | null> {
-    const rows = await this.databaseService.query<RecruitmentRequestStateRow>(
-      `
-      SELECT id, requester_ref, status::text AS status
-      FROM hr.recruitment_request
-      WHERE id = $1::uuid
-      `,
-      [requestId],
-    );
-    return rows[0] ?? null;
-  }
-
-  private async getCandidateState(
-    candidateId: string,
-  ): Promise<RecruitmentCandidateStateRow | null> {
-    const rows = await this.databaseService.query<RecruitmentCandidateStateRow>(
-      `
-      SELECT
-        candidate.id,
-        candidate.request_id,
-        request_row.status::text AS request_status
-      FROM hr.recruitment_candidate candidate
-      JOIN hr.recruitment_request request_row
-        ON request_row.id = candidate.request_id
-      WHERE candidate.id = $1::uuid
-      `,
-      [candidateId],
-    );
-    return rows[0] ?? null;
-  }
-
-  private toRequestSummary(
-    row: RecruitmentRequestSqlRow | undefined,
-  ): RecruitmentRequestSummary {
-    if (!row) {
-      throw new NotFoundException('Recruitment request not found');
-    }
-
-    return {
-      id: row.id,
-      solicitanteId: row.requester_ref,
-      filialId: row.branch_id,
-      lotacaoId: row.work_location_id,
-      motivo: row.reason,
-      justificativa: row.justification,
-      dataEntrada: this.toDateOnly(row.request_date),
-      dataLimite: row.due_date ? this.toDateOnly(row.due_date) : null,
-      situacao: this.toApiRequestStatus(row.status),
-      concluidoEm: row.completed_at ? this.toIso(row.completed_at) : null,
-      funcoesRequisitadas: this.parseJsonArray<RecruitmentFunctionRow>(
-        row.functions,
-      ),
-    };
-  }
-
-  private toCandidateSummary(
-    row: RecruitmentCandidateSqlRow | undefined,
-  ): RecruitmentCandidateSummary {
-    if (!row) {
-      throw new NotFoundException('Recruitment candidate not found');
-    }
-
-    return {
-      id: row.id,
-      requisicaoId: row.request_id,
-      pessoaId: row.person_ref,
-      curriculoS3Key: row.curriculum_s3_key,
-      situacao: this.toApiCandidateStatus(row.status),
-      comentarioAnalise: row.review_comment,
-    };
-  }
-
-  private parseJsonArray<T>(value: T[] | string | null | undefined): T[] {
-    if (!value) return [];
-    if (Array.isArray(value)) return value;
-    return JSON.parse(value) as T[];
-  }
-
-  private toApiRequestStatus(status: string): string {
-    switch (status) {
-      case 'DRAFT':
-        return 'RASCUNHO';
-      case 'IN_PROGRESS':
-        return 'EM_PROCESSO';
-      case 'COMPLETED':
-        return 'CONCLUIDO';
-      case 'CANCELED':
-        return 'CANCELADO';
-      default:
-        return status;
-    }
-  }
-
-  private toApiCandidateStatus(
-    status: string,
-  ): RecruitmentCandidateStatusInput {
-    switch (status) {
-      case 'PENDING':
-        return 'PENDENTE';
-      case 'APPROVED':
-        return 'APROVADO';
-      case 'REJECTED':
-        return 'REPROVADO';
-      default:
-        throw new BadRequestException(
-          `Unsupported candidate status: ${status}`,
-        );
-    }
-  }
-
-  private ensureDatabase(): void {
-    if (!this.databaseService.configured) {
-      throw new ServiceUnavailableException(
-        'DATABASE_URL is required for recruitment operations',
-      );
-    }
-  }
-
-  private toDateOnly(value: Date | string): string {
-    const normalized =
-      value instanceof Date ? value.toISOString() : String(value);
-    return normalized.slice(0, 10);
-  }
-
-  private toIso(value: Date | string): string {
-    return value instanceof Date
-      ? value.toISOString()
-      : new Date(value).toISOString();
+    return this.mapper.toRequestSummary(rows[0]);
   }
 
   private handleConstraintError(error: unknown, message: string): void {

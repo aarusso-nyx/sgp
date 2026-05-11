@@ -9,6 +9,7 @@ import { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { DatabaseService } from '../database/database.service';
+import { addBusinessDays } from './incidents.business-days';
 import {
   CloseLgpdIncidentDto,
   ComplementLgpdIncidentDto,
@@ -589,16 +590,4 @@ export class LgpdSecurityIncidentService {
   }
 }
 
-export function addBusinessDays(value: Date, days: number): Date {
-  const current = new Date(value);
-  if (days <= 0) return current;
-  let added = 0;
-  while (added < days) {
-    current.setUTCDate(current.getUTCDate() + 1);
-    const day = current.getUTCDay();
-    if (day !== 0 && day !== 6) {
-      added += 1;
-    }
-  }
-  return current;
-}
+export { addBusinessDays } from './incidents.business-days';

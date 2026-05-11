@@ -1,7 +1,18 @@
 import { RequestContextStore } from '../../common/request-context/request-context.store';
+import { InternshipEsocialService } from './internship-esocial.service';
+import { InternshipLifecycleService } from './internship-lifecycle.service';
+import { InternshipProgramsService } from './internship-programs.service';
 import { InternshipsService } from './internships.service';
 
 const tenantId = '00000000-0000-4000-8000-000000000076';
+
+function createService(database: never, stynx: never): InternshipsService {
+  return new InternshipsService(
+    new InternshipProgramsService(database),
+    new InternshipLifecycleService(database),
+    new InternshipEsocialService(database, stynx),
+  );
+}
 
 describe('InternshipsService', () => {
   it('creates an internship program', async () => {
@@ -17,7 +28,7 @@ describe('InternshipsService', () => {
         status: 'ACTIVE',
       },
     ]);
-    const service = new InternshipsService(
+    const service = createService(
       { configured: true, query } as never,
       {} as never,
     );
@@ -70,7 +81,7 @@ describe('InternshipsService', () => {
         <T>(callback: (value: typeof client) => Promise<T>) => callback(client),
       ),
     };
-    const service = new InternshipsService(database as never, {} as never);
+    const service = createService(database as never, {} as never);
 
     const result = await RequestContextStore.run(
       { tenantId, permissions: ['convenio.write'] },
@@ -103,10 +114,7 @@ describe('InternshipsService', () => {
   });
 
   it('rejects ordinary internship weekly hours above the legal operational ceiling', async () => {
-    const service = new InternshipsService(
-      { configured: true } as never,
-      {} as never,
-    );
+    const service = createService({ configured: true } as never, {} as never);
 
     await expect(
       RequestContextStore.run({ tenantId }, () =>
@@ -156,7 +164,7 @@ describe('InternshipsService', () => {
       messageId: 'message-1',
       status: 'PENDING',
     });
-    const service = new InternshipsService(
+    const service = createService(
       { configured: true, query } as never,
       { enqueue } as never,
     );

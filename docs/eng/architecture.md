@@ -29,6 +29,38 @@ the generated topology remains the machine-readable runtime source.
   `scripts/`, with root commands routed through `scripts/run.mjs`; no separate
   root `tools/` boundary is required for v0.0.1.
 
+## Module Dependency Graph
+
+SGP feature modules keep imports pointed inward through explicit layers:
+controllers validate API edges, services own domain behavior, repositories and
+query adapters own persistence access, and database-facing code terminates at
+canonical SQL/database modules. Shared/common code is imported by product
+features, but must not import product features back. Feature modules do not
+cross-import each other directly; any cross-domain collaboration goes through a
+documented core/shared boundary, generated API contract, or explicit adapter.
+
+```mermaid
+flowchart TB
+  Controller["Feature controllers<br/>HTTP DTO and permission boundary"] --> Service["Feature services<br/>domain orchestration"]
+  Service --> Repository["Feature repositories and query adapters<br/>persistence boundary"]
+  Repository --> Database["Database modules and canonical SQL<br/>schemas, RLS, grants, seeds"]
+
+  Controller --> Common["common/shared contracts<br/>guards, filters, logging, auth context, generated DTOs"]
+  Service --> Common
+  Repository --> Common
+  Database --> Common
+
+  FeatureA["Feature module A"] --> Boundary["documented core/shared boundary<br/>or explicit adapter"]
+  FeatureB["Feature module B"] --> Boundary
+  Boundary -. "mediates collaboration" .-> FeatureA
+  Boundary -. "mediates collaboration" .-> FeatureB
+
+  Common -. "must not import" .-> FeatureA
+  Common -. "must not import" .-> FeatureB
+  FeatureA -. "no direct feature import" .-> FeatureB
+  FeatureB -. "no direct feature import" .-> FeatureA
+```
+
 ## Runtime Entrypoints
 
 | Runtime                   | Entrypoint                                | Module                            | Observability                                                                     |

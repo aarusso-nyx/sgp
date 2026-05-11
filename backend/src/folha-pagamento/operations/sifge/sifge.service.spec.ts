@@ -1,6 +1,9 @@
 import { CaixaSifgeMockAdapter } from './caixa-sifge-mock.adapter';
 import { CaixaSifgeV4Adapter } from './caixa-sifge-v4.adapter';
+import { SifgeGenerationService } from './sifge-generation.service';
+import { SifgePersistenceService } from './sifge-persistence.service';
 import { SifgeService } from './sifge.service';
+import { SifgeValidationService } from './sifge-validation.service';
 
 const tenantId = '00000000-0000-0000-0000-000000000175';
 const payrollRunId = '40000000-0000-0000-0000-000000000175';
@@ -9,10 +12,7 @@ const remittanceId = '60000000-0000-0000-0000-000000000175';
 describe('SifgeService', () => {
   it('generates a monthly GRF for 10 CLT employees from FGTS movements', async () => {
     const database = fakeDatabase();
-    const service = new SifgeService(database as never, [
-      new CaixaSifgeV4Adapter(),
-      new CaixaSifgeMockAdapter(),
-    ]);
+    const service = createService(database);
 
     const result = await service.generateMonthlyGRF(tenantId, '2026-04');
 
@@ -30,10 +30,7 @@ describe('SifgeService', () => {
 
   it('uses the configured mock adapter without service changes', async () => {
     const database = fakeDatabase('caixa-sifge-mock');
-    const service = new SifgeService(database as never, [
-      new CaixaSifgeV4Adapter(),
-      new CaixaSifgeMockAdapter(),
-    ]);
+    const service = createService(database);
 
     const result = await service.generateMonthlyGRF(tenantId, '2026-04');
 
@@ -42,6 +39,16 @@ describe('SifgeService', () => {
     expect(result.signed).toBe(false);
   });
 });
+
+function createService(database: ReturnType<typeof fakeDatabase>) {
+  return new SifgeService(
+    database as never,
+    [new CaixaSifgeV4Adapter(), new CaixaSifgeMockAdapter()],
+    new SifgePersistenceService(),
+    new SifgeGenerationService(),
+    new SifgeValidationService(),
+  );
+}
 
 function fakeDatabase(adapterKey?: string) {
   const client = {

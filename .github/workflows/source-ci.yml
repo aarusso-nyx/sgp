@@ -131,7 +131,12 @@ jobs:
         run: npm run check:circular:backend && npm run check:circular:frontend
 
       - name: Module graph check
-        run: npm run check:module-graph
+        run: |
+          npm run check:depcruise:backend
+          npm run check:depcruise:frontend
+
+      - name: Duplicate code budget
+        run: npm run check:duplication
 
       - name: Frontend OpenAPI client drift gate
         run: |

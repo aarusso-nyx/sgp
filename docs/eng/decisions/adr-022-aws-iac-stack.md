@@ -94,7 +94,7 @@ private unless a later owner decision exposes it.
 ## Consequences
 
 - `infra/aws/cdk/` is the authoritative AWS IaC implementation.
-- `infra/aws/templates/` CloudFormation placeholders are retired.
+- The retired CloudFormation placeholder directory at infra/aws/templates has been removed from the repository.
 - `scripts/run.mjs deploy` no longer exposes provider selection; AWS is assumed.
 - Provision apply can run CDK deploy after owner-reviewed parameters are present.
 - Artifact apply remains blocked until release/homologation gates are accepted.

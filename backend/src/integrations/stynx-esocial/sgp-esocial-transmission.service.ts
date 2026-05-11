@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 
 import { domainError } from '../../common/errors/domain-error';
+import { stableStringify } from '../../common/crypto/stable-hash';
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import {
   EsocialEventsService,
@@ -308,19 +309,6 @@ function asRecord(value: unknown): Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
     ? (value as Record<string, unknown>)
     : {};
-}
-
-function stableStringify(value: unknown): string {
-  if (value === null || typeof value !== 'object') {
-    return JSON.stringify(value);
-  }
-  if (Array.isArray(value)) {
-    return `[${value.map((entry) => stableStringify(entry)).join(',')}]`;
-  }
-  return `{${Object.entries(value as Record<string, unknown>)
-    .sort(([left], [right]) => left.localeCompare(right))
-    .map(([key, entry]) => `${JSON.stringify(key)}:${stableStringify(entry)}`)
-    .join(',')}}`;
 }
 
 function escapeXml(value: string): string {

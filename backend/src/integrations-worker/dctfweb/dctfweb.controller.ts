@@ -17,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
+import { Idempotent } from '../../common/idempotency/idempotency.decorator';
 import { recordDctfwebTransmission } from '../../common/observability/prometheus.metrics';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
@@ -58,6 +59,7 @@ export class DctfwebController {
   }
 
   @ApiOperation({ summary: 'POST gerar' })
+  @Idempotent()
   @Post('gerar')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({
@@ -87,6 +89,7 @@ export class DctfwebController {
   }
 
   @ApiOperation({ summary: 'POST mit/gerar' })
+  @Idempotent()
   @Post('mit/gerar')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({
@@ -116,6 +119,7 @@ export class DctfwebController {
   }
 
   @ApiOperation({ summary: 'POST :id/assinar' })
+  @Idempotent()
   @Post(':id/assinar')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({
@@ -138,6 +142,7 @@ export class DctfwebController {
   }
 
   @ApiOperation({ summary: 'POST :id/transmitir' })
+  @Idempotent()
   @Post(':id/transmitir')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({

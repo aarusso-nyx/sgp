@@ -2,6 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Response } from 'express';
 import { randomUUID } from 'node:crypto';
 
+import { bindRequestAbortSignal } from '../http/request-abort-signal';
 import { RequestContextStore } from '../request-context/request-context.store';
 import { requestId as brandRequestId } from '../types/branded-ids';
 import type { RequestWithContext } from './request-with-context';
@@ -16,10 +17,15 @@ export class RequestIdMiddleware implements NestMiddleware {
       incoming && REQUEST_ID_PATTERN.test(incoming) ? incoming : randomUUID();
 
     const brandedRequestId = brandRequestId(requestId);
-    RequestContextStore.run({ requestId: brandedRequestId }, () => {
-      request.requestId = brandedRequestId;
-      response.setHeader('x-request-id', requestId);
-      next();
-    });
+    const abortBinding = bindRequestAbortSignal(request);
+    RequestContextStore.run(
+      { abortSignal: abortBinding.abortSignal, requestId: brandedRequestId },
+      () => {
+        request.requestId = brandedRequestId;
+        response.setHeader('x-request-id', requestId);
+        response.on('finish', abortBinding.dispose);
+        next();
+      },
+    );
   }
 }

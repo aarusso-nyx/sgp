@@ -17,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
+import { Idempotent } from '../../common/idempotency/idempotency.decorator';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { EfdReinfBuilderService } from './efd-reinf-builder.service';
@@ -57,6 +58,7 @@ export class EfdReinfController {
   }
 
   @ApiOperation({ summary: 'POST gerar' })
+  @Idempotent()
   @Post('gerar')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({ description: 'Generate an EFD-Reinf R-4000 event.' })
@@ -85,6 +87,7 @@ export class EfdReinfController {
   }
 
   @ApiOperation({ summary: 'POST :id/assinar' })
+  @Idempotent()
   @Post(':id/assinar')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({
@@ -107,6 +110,7 @@ export class EfdReinfController {
   }
 
   @ApiOperation({ summary: 'POST :id/transmitir' })
+  @Idempotent()
   @Post(':id/transmitir')
   @RequirePermission('fiscal.dctfweb.write')
   @ApiCreatedResponse({

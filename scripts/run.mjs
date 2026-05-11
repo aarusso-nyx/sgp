@@ -506,6 +506,27 @@ function handleCheck() {
     ]);
   }
 
+  if (args[0] === 'depcruise') {
+    const target = args[1] ?? 'help';
+    const targetPaths = {
+      backend: 'backend/src',
+      frontend: 'frontend/src',
+    };
+
+    if (!targetPaths[target]) {
+      console.error('[check depcruise] valid targets: backend, frontend');
+      return 1;
+    }
+
+    return runCommand('npx', [
+      'depcruise',
+      '--validate',
+      '.dependency-cruiser.cjs',
+      targetPaths[target],
+      ...args.slice(2),
+    ]);
+  }
+
   if (args[0] === 'circular') {
     const target = args[1] ?? 'help';
     const handlers = {
@@ -522,14 +543,7 @@ function handleCheck() {
   }
 
   if (args[0] === 'duplication') {
-    return runCommand('npx', [
-      'jscpd',
-      '--config',
-      '.jscpd.json',
-      '--exitCode',
-      '0',
-      ...args.slice(1),
-    ]);
+    return runCommand('npx', ['jscpd', '--config', '.jscpd.json', ...args.slice(1)]);
   }
 
   return runCommand(process.execPath, ['scripts/check-evidence.mjs', ...args]);

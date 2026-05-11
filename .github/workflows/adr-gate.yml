@@ -69,3 +69,20 @@ jobs:
 
       - name: Verify ADR machine links
         run: node scripts/audit/adr-link-coverage.mjs
+
+      - name: Verify controller spec coverage
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          controller_changed=$(git diff --name-only "$BASE_REF" "$HEAD_REF" | grep -E '^backend/src/.*\.controller\.ts$' || true)
+          if [ -z "$controller_changed" ]; then
+            echo "No controller changes; OpenAPI operation coverage delta not required."
+            exit 0
+          fi
+
+          echo "Controller changes detected; enforcing OpenAPI operation coverage:"
+          echo "$controller_changed"
+          node scripts/audit/openapi-spec-coverage.mjs

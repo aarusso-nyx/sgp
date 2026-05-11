@@ -15,6 +15,7 @@ import type {
   QueueSubscription,
 } from './queue-adapter';
 import { domainError } from '../errors/domain-error';
+import { currentRequestAbortOptions } from '../http/request-abort-signal';
 
 type SqsClientLike = Pick<SQSClient, 'send'>;
 
@@ -71,7 +72,10 @@ export class SqsQueueTransport implements QueueAdapterTransport {
       commandInput.MessageDeduplicationId = defaultDeduplicationId(body);
     }
 
-    await this.client.send(new SendMessageCommand(commandInput));
+    await this.client.send(
+      new SendMessageCommand(commandInput),
+      currentRequestAbortOptions(),
+    );
   }
 
   subscribe<TMessage>(
@@ -121,6 +125,7 @@ export class SqsQueueTransport implements QueueAdapterTransport {
         WaitTimeSeconds: this.receiveWaitTimeSeconds,
         VisibilityTimeout: this.visibilityTimeoutSeconds,
       }),
+      currentRequestAbortOptions(),
     );
     const messages = response.Messages ?? [];
     for (const message of messages) {
@@ -136,6 +141,7 @@ export class SqsQueueTransport implements QueueAdapterTransport {
             QueueUrl: queueUrl,
             ReceiptHandle: message.ReceiptHandle,
           }),
+          currentRequestAbortOptions(),
         );
       }
     }
@@ -154,6 +160,7 @@ export class SqsQueueTransport implements QueueAdapterTransport {
       new GetQueueUrlCommand({
         QueueName: queueName,
       }),
+      currentRequestAbortOptions(),
     );
     if (!response.QueueUrl) {
       throw domainError.internal(

@@ -1,101 +1,53 @@
-import { createHash } from 'node:crypto';
-
 import {
   BadRequestException,
   Injectable,
+  Optional,
   PreconditionFailedException,
   ServiceUnavailableException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { PoolClient, QueryResultRow } from 'pg';
+import { PoolClient } from 'pg';
 
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
 import {
   DctfwebDeclarationDetailsDto,
   DctfwebDeclarationDto,
-  DctfwebDeclarationKind,
   DctfwebItemDto,
-  DctfwebMitStatus,
-  DctfwebSourceEvent,
   GenerateDctfwebDto,
 } from './dctfweb.dto';
-import { buildMitDebitId } from './mit-inclusion.service';
+import {
+  DeclarationRow,
+  ItemRow,
+  PgdTaxDebitRow,
+  TotalizerRow,
+  XmlItemMetadata,
+} from './dctfweb-builder.types';
+import { competenceDate, dateText, sha256 } from './dctfweb-builder.util';
+import { DctfwebMitSectionService } from './dctfweb-mit-section.service';
+import { DctfwebTotalizerSectionService } from './dctfweb-totalizer-section.service';
+import {
+  buildDctfwebXml,
+  parseDctfwebXmlItemMetadata,
+} from './dctfweb-xml.builder';
 
-interface TotalizerRow extends QueryResultRow {
-  kind: 'S-5011' | 'S-5012' | 'S-5013' | 'R-9015';
-  source_event_recibo: string;
-  payload: Record<string, unknown> | string;
-}
-
-interface DeclarationRow extends QueryResultRow {
-  id: string;
-  competence: Date | string;
-  kind: DctfwebDeclarationKind;
-  status: DctfwebDeclarationDto['status'];
-  original_declaration_id: string | null;
-  payload_xml_ref: string;
-  payload_xml: string;
-  payload_xml_hash: string;
-  signed_xml_ref: string | null;
-  signed_xml: string | null;
-  signed_xml_hash: string | null;
-  transmitted_xml_hash: string | null;
-  receipt_number: string | null;
-  receipt_at: Date | string | null;
-  item_count: number | string;
-  total_base_amount: string;
-  total_amount: string;
-  created_at: Date | string;
-  updated_at: Date | string;
-}
-
-interface ItemRow extends QueryResultRow {
-  id: string;
-  source_event: DctfwebSourceEvent;
-  source_run_id: string;
-  debit_code: string;
-  base_amount: string;
-  amount: string;
-  csll_adicional_amount: string | null;
-  mit_status: DctfwebMitStatus | null;
-  mit_debit_id: string | null;
-  cnpj_filial: string | null;
-}
-
-interface PgdTaxDebitRow extends QueryResultRow {
-  pgd_declaration_id: string;
-  pgd_debit_id: string;
-  cnpj_filial: string;
-  tax_code: string;
-  base_amount: string;
-  amount: string;
-  csll_adicional_amount: string | null;
-  mit_status: DctfwebMitStatus | null;
-}
-
-interface SourceItem {
-  sourceEvent: DctfwebSourceEvent;
-  sourceRunId: string;
-  debitCode: string;
-  baseAmount: string;
-  amount: string;
-  csllAdicionalAmount: string;
-  mitStatus?: DctfwebMitStatus | undefined;
-  mitDebitId?: string | undefined;
-  cnpjFilial?: string | undefined;
-}
-
-const EVENT_MAP: Record<TotalizerRow['kind'], DctfwebSourceEvent> = {
-  'S-5011': 'S5011',
-  'S-5012': 'S5012',
-  'S-5013': 'S5013',
-  'R-9015': 'R9015',
-};
+export { buildDctfwebXml } from './dctfweb-xml.builder';
 
 @Injectable()
 export class DctfwebBuilderService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  private readonly totalizerSection: DctfwebTotalizerSectionService;
+  private readonly mitSection: DctfwebMitSectionService;
+
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @Optional() totalizerSection?: DctfwebTotalizerSectionService,
+    @Optional() mitSection?: DctfwebMitSectionService,
+  ) {
+    this.totalizerSection =
+      totalizerSection ?? new DctfwebTotalizerSectionService(databaseService);
+    this.mitSection =
+      mitSection ?? new DctfwebMitSectionService(databaseService);
+  }
 
   async list(year?: number, month?: number): Promise<DctfwebDeclarationDto[]> {
     this.ensureDatabase();
@@ -289,7 +241,7 @@ export class DctfwebBuilderService {
             item.debitCode,
             item.baseAmount,
             item.amount,
-            item.csllAdicionalAmount,
+            item.csllAdicionalAmount ?? '0.00',
           ],
         );
       }
@@ -299,127 +251,30 @@ export class DctfwebBuilderService {
     return this.find(id);
   }
 
-  private async loadPublishedTotalizers(
+  private loadPublishedTotalizers(
     tenantId: string,
     competence: string,
   ): Promise<TotalizerRow[]> {
-    return this.databaseService.query<TotalizerRow>(
-      `
-      SELECT
-        spool.event_class AS kind,
-        COALESCE(
-          spool.response->'receipt'->>'receiptNumber',
-          spool.response->>'receiptNumber',
-          spool.message_id::text
-        ) AS source_event_recibo,
-        COALESCE(spool.response->'payload', spool.response, spool.payload) AS payload
-      FROM public.esocial_events spool
-      WHERE spool.tenant_id = $1::uuid
-        AND COALESCE(spool.source_ref->>'competence', spool.payload->>'competence') = $2
-        AND spool.status = 'ACCEPTED'::public.esocial_events_status
-        AND spool.event_class IN ('S-5011', 'S-5012', 'S-5013')
-      UNION ALL
-      SELECT
-        totalizer.kind::text AS kind,
-        totalizer.receipt_number AS source_event_recibo,
-        totalizer.payload
-      FROM fiscal.efd_reinf_totalizer totalizer
-      WHERE totalizer.tenant_id = $1::uuid
-        AND totalizer.competence = $2::date
-        AND totalizer.kind = 'R-9015'::fiscal.efd_reinf_totalizer_kind
-      ORDER BY kind, source_event_recibo
-      `,
-      [tenantId, competence],
-    );
+    return this.totalizerSection.loadPublishedTotalizers(tenantId, competence);
   }
 
-  private async loadPendingMitDebits(
+  private loadPendingMitDebits(
     tenantId: string,
     competence: string,
   ): Promise<PgdTaxDebitRow[]> {
-    return this.databaseService.query<PgdTaxDebitRow>(
-      `
-      SELECT
-        pgd_declaration_id::text,
-        pgd_debit_id::text,
-        cnpj_filial,
-        tax_code,
-        base_amount::text,
-        amount::text,
-        csll_adicional_amount::text,
-        mit_status::text
-      FROM fiscal.dctf_pgd_tax_debit
-      WHERE tenant_id = $1::uuid
-        AND competence = $2::date
-        AND COALESCE(mit_status::text, 'PENDING') IN ('PENDING', 'REJECTED')
-      ORDER BY cnpj_filial, tax_code, pgd_debit_id
-      `,
-      [tenantId, competence],
-    );
+    return this.mitSection.loadPendingMitDebits(tenantId, competence);
   }
 
-  private itemsFromTotalizer(row: TotalizerRow): SourceItem[] {
-    const payload =
-      typeof row.payload === 'string'
-        ? (JSON.parse(row.payload) as Record<string, unknown>)
-        : row.payload;
-    const sourceEvent = EVENT_MAP[row.kind];
-    const explicitItems = Array.isArray(payload.items)
-      ? payload.items
-      : Array.isArray(payload.debits)
-        ? payload.debits
-        : null;
-    if (explicitItems) {
-      return explicitItems.map((entry, index) =>
-        normalizePayloadItem(
-          entry,
-          sourceEvent,
-          row.source_event_recibo,
-          index,
-        ),
-      );
-    }
-
-    const rawXml = typeof payload.rawXml === 'string' ? payload.rawXml : '';
-    if (!rawXml) return [];
-    return extractItemsFromTotalizerXml(
-      rawXml,
-      sourceEvent,
-      row.source_event_recibo,
-    );
+  private itemsFromTotalizer(row: TotalizerRow) {
+    return this.totalizerSection.itemsFromTotalizer(row);
   }
 
   private itemFromMitDebit(
     tenantId: string,
     competence: string,
     row: PgdTaxDebitRow,
-  ): SourceItem {
-    const cnpjFilial = scalarText(row.cnpj_filial, '').replace(/\D/g, '');
-    const debitCode = scalarText(row.tax_code, 'MIT');
-    const baseAmount = moneyText(row.base_amount);
-    const amount = moneyText(row.amount);
-    const csllAdicionalAmount = moneyText(row.csll_adicional_amount ?? 0);
-    const pgdDeclarationId = scalarText(row.pgd_declaration_id, '');
-    const pgdDebitId = scalarText(row.pgd_debit_id, '');
-    return {
-      sourceEvent: 'MIT',
-      sourceRunId: uuidText(pgdDebitId, `MIT:${pgdDeclarationId}:${debitCode}`),
-      debitCode,
-      baseAmount,
-      amount,
-      csllAdicionalAmount,
-      mitStatus: row.mit_status ?? 'PENDING',
-      mitDebitId: buildMitDebitId({
-        tenantId,
-        competence,
-        cnpjFilial,
-        pgdDeclarationId,
-        pgdDebitId,
-        taxCode: debitCode,
-        amount,
-      }),
-      cnpjFilial,
-    };
+  ) {
+    return this.mitSection.itemFromMitDebit(tenantId, competence, row);
   }
 
   private async assertOriginalExists(
@@ -484,169 +339,6 @@ export class DctfwebBuilderService {
   }
 }
 
-export function buildDctfwebXml(input: {
-  tenantId: string;
-  competence: string;
-  kind: DctfwebDeclarationKind;
-  originalDeclarationId: string | null;
-  items: SourceItem[];
-}): string {
-  const id = `DCTF${sha256(
-    `${input.tenantId}:${input.competence}:${input.kind}:${input.originalDeclarationId ?? ''}`,
-  ).slice(0, 32)}`;
-  const itemsXml = input.items
-    .map(
-      (item) =>
-        `    <debito sourceEvent="${item.sourceEvent}"${mitAttributes(
-          item,
-        )}${csllAdicionalAttribute(item)} sourceRunId="${item.sourceRunId}" codigo="${xmlEscape(
-          item.debitCode,
-        )}" base="${item.baseAmount}" valor="${item.amount}" />`,
-    )
-    .join('\n');
-  const originalXml = input.originalDeclarationId
-    ? `\n    <declaracaoOriginal>${input.originalDeclarationId}</declaracaoOriginal>`
-    : '';
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<DCTFWeb xmlns="urn:br:gov:rfb:dctfweb:sgp:v1">
-  <declaracao Id="${id}">
-    <tenantId>${input.tenantId}</tenantId>
-    <competencia>${input.competence.slice(0, 7)}</competencia>
-    <tipo>${input.kind}</tipo>${originalXml}
-    <totalizadores>
-${itemsXml}
-    </totalizadores>
-  </declaracao>
-</DCTFWeb>`;
-}
-
-function mitAttributes(item: SourceItem): string {
-  if (item.sourceEvent !== 'MIT') return '';
-  const attrs = [
-    item.mitStatus ? `mitStatus="${xmlEscape(item.mitStatus)}"` : null,
-    item.mitDebitId ? `mitId="${xmlEscape(item.mitDebitId)}"` : null,
-    item.cnpjFilial ? `cnpjFilial="${xmlEscape(item.cnpjFilial)}"` : null,
-  ].filter(Boolean);
-  return attrs.length ? ` ${attrs.join(' ')}` : '';
-}
-
-function csllAdicionalAttribute(item: SourceItem): string {
-  if (!item.csllAdicionalAmount || item.csllAdicionalAmount === '0.00') {
-    return '';
-  }
-  return ` csllAdicional="${xmlEscape(item.csllAdicionalAmount)}"`;
-}
-
-function normalizePayloadItem(
-  value: unknown,
-  sourceEvent: DctfwebSourceEvent,
-  receipt: string,
-  index: number,
-): SourceItem {
-  const item =
-    value && typeof value === 'object'
-      ? (value as Record<string, unknown>)
-      : {};
-  const debitCode = scalarText(
-    item.debitCode ?? item.codigo ?? item.code,
-    sourceEvent,
-  );
-  const baseAmount = moneyText(
-    item.baseAmount ?? item.base ?? item.base_amount ?? 0,
-  );
-  const amount = moneyText(item.amount ?? item.valor ?? item.value ?? 0);
-  const csllAdicionalAmount = moneyText(
-    item.csllAdicionalAmount ??
-      item.csllAdicional ??
-      item.csll_adicional_amount ??
-      item.valorCsllAdicional ??
-      item.vrCsllAdicional ??
-      item.vrAdicionalCsll ??
-      item.adicionalCsll ??
-      0,
-  );
-  const sourceRunId = uuidText(
-    item.sourceRunId ?? item.source_run_id,
-    `${sourceEvent}:${receipt}:${debitCode}:${index}`,
-  );
-  return {
-    sourceEvent,
-    sourceRunId,
-    debitCode,
-    baseAmount,
-    amount,
-    csllAdicionalAmount,
-  };
-}
-
-function extractItemsFromTotalizerXml(
-  xml: string,
-  sourceEvent: DctfwebSourceEvent,
-  receipt: string,
-): SourceItem[] {
-  const blocks = xml.match(
-    /<[^>]*(?:infoCRContrib|infoCRIRRF|infoBaseFGTS|infoFGTS)\b[^>]*>[\s\S]*?<\/[^>]*(?:infoCRContrib|infoCRIRRF|infoBaseFGTS|infoFGTS)>/g,
-  ) ?? [xml];
-  return blocks
-    .map((node, index) => {
-      const debitCode =
-        childText(node, 'tpCR') ??
-        childText(node, 'codReceita') ??
-        childText(node, 'codCateg') ??
-        childText(node, 'tpValor') ??
-        `${sourceEvent}-${index + 1}`;
-      const baseAmount = firstMoney(node, [
-        'vrBcCP',
-        'vrBcCP00',
-        'vrBcFGTS',
-        'vrBcFGTSProcTrab',
-        'base',
-      ]);
-      const amount = firstMoney(node, [
-        'vrCR',
-        'vrDescCP',
-        'vrDescSest',
-        'vrFGTS',
-        'vrFGTSProcTrab',
-        'valor',
-      ]);
-      const csllAdicionalAmount = firstMoney(node, [
-        'csllAdicional',
-        'valorCsllAdicional',
-        'vrCsllAdicional',
-        'vrAdicionalCsll',
-        'adicionalCsll',
-      ]);
-      if (amount === null && baseAmount === null) return null;
-      return {
-        sourceEvent,
-        sourceRunId: hashToUuid(
-          `${sourceEvent}:${receipt}:${debitCode}:${index}`,
-        ),
-        debitCode,
-        baseAmount: moneyText(baseAmount ?? 0),
-        amount: moneyText(amount ?? 0),
-        csllAdicionalAmount: moneyText(csllAdicionalAmount ?? 0),
-      };
-    })
-    .filter((item): item is SourceItem => Boolean(item));
-}
-
-function firstMoney(node: string, names: string[]): string | null {
-  for (const name of names) {
-    const value = childText(node, name);
-    if (value !== null) return value;
-  }
-  return null;
-}
-
-function childText(node: string, name: string): string | null {
-  const value = node
-    .match(new RegExp(`<(?:[A-Za-z0-9_]+:)?${name}\\b[^>]*>([^<]+)<`, 'i'))?.[1]
-    ?.trim();
-  return value || null;
-}
-
 function declarationSelectSql(where: string): string {
   return `
     SELECT
@@ -678,12 +370,6 @@ function declarationSelectSql(where: string): string {
   `;
 }
 
-interface XmlItemMetadata {
-  mitStatus?: DctfwebMitStatus;
-  mitDebitId?: string;
-  cnpjFilial?: string;
-}
-
 function toItemDto(
   row: ItemRow,
   metadata: XmlItemMetadata = {},
@@ -706,109 +392,6 @@ function toItemDto(
   return item;
 }
 
-function parseDctfwebXmlItemMetadata(
-  xml: string,
-): Map<string, XmlItemMetadata> {
-  const metadata = new Map<string, XmlItemMetadata>();
-  for (const match of xml.matchAll(/<debito\b([^>]*)\/>/g)) {
-    const attrs = parseXmlAttributes(match[1]!);
-    const sourceEvent = attrs.sourceEvent;
-    const sourceRunId = attrs.sourceRunId;
-    const debitCode = attrs.codigo;
-    if (!sourceEvent || !sourceRunId || !debitCode) continue;
-    const itemMetadata: XmlItemMetadata = {};
-    if (isDctfwebMitStatus(attrs.mitStatus)) {
-      itemMetadata.mitStatus = attrs.mitStatus;
-    }
-    if (attrs.mitId) itemMetadata.mitDebitId = attrs.mitId;
-    if (attrs.cnpjFilial) itemMetadata.cnpjFilial = attrs.cnpjFilial;
-    metadata.set(`${sourceEvent}:${sourceRunId}:${debitCode}`, itemMetadata);
-  }
-  return metadata;
-}
-
-function parseXmlAttributes(input: string): Record<string, string> {
-  const attrs: Record<string, string> = {};
-  for (const match of input.matchAll(/([A-Za-z0-9_:-]+)="([^"]*)"/g)) {
-    attrs[match[1]!] = xmlUnescape(match[2]!);
-  }
-  return attrs;
-}
-
 function itemMetadataKey(row: ItemRow): string {
   return `${row.source_event}:${row.source_run_id}:${row.debit_code}`;
-}
-
-function isDctfwebMitStatus(
-  value: string | undefined,
-): value is DctfwebMitStatus {
-  return (
-    value === 'PENDING' ||
-    value === 'INCLUDED' ||
-    value === 'ACCEPTED' ||
-    value === 'REJECTED'
-  );
-}
-
-function competenceDate(year: number, month: number): string {
-  return `${year}-${String(month).padStart(2, '0')}-01`;
-}
-
-function dateText(value: Date | string): string {
-  return value instanceof Date
-    ? value.toISOString().slice(0, 10)
-    : String(value).slice(0, 10);
-}
-
-function moneyText(value: unknown): string {
-  const normalized = scalarText(value, '0').replace(',', '.');
-  const number = Number(normalized);
-  if (!Number.isFinite(number) || number < 0) {
-    throw new UnprocessableEntityException(
-      'DCTFWeb monetary values must be non-negative',
-    );
-  }
-  return number.toFixed(2);
-}
-
-function uuidText(value: unknown, fallbackSeed: string): string {
-  const text = scalarText(value, '');
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    text,
-  )
-    ? text
-    : hashToUuid(fallbackSeed);
-}
-
-function scalarText(value: unknown, fallback: string): string {
-  if (typeof value === 'string') return value;
-  if (typeof value === 'number' || typeof value === 'boolean') {
-    return String(value);
-  }
-  return fallback;
-}
-
-function hashToUuid(seed: string): string {
-  const hex = createHash('sha256').update(seed).digest('hex');
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-4${hex.slice(13, 16)}-8${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
-}
-
-function sha256(value: string): string {
-  return createHash('sha256').update(value, 'utf8').digest('hex');
-}
-
-function xmlEscape(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function xmlUnescape(value: string): string {
-  return value
-    .replace(/&quot;/g, '"')
-    .replace(/&gt;/g, '>')
-    .replace(/&lt;/g, '<')
-    .replace(/&amp;/g, '&');
 }

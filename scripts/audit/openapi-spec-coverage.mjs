@@ -7,7 +7,8 @@ const root = process.cwd();
 const specPaths = ['docs/eng/api/openapi.json', 'docs/eng/api/openapi-portal.json'];
 const testRoots = ['tests/backend', 'tests/e2e'];
 const httpMethods = new Set(['get', 'post', 'put', 'patch', 'delete', 'head', 'options']);
-const failOnGap = process.argv.includes('--fail-on-gap');
+const reportOnly = process.argv.includes('--report');
+const failOnGap = !reportOnly || process.argv.includes('--fail-on-gap');
 const jsonOutput = process.argv.includes('--json');
 
 function walk(dir) {

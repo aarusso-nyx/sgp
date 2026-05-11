@@ -1,7 +1,9 @@
 {
   "minTokens": 50,
+  "threshold": 3,
   "format": ["typescript"],
   "pattern": "**/*.ts",
+  "ignorePattern": ["import[\\s\\S]*?;"],
   "reporters": ["console"],
   "ignore": [
     "**/*.spec.ts",

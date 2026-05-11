@@ -30,6 +30,8 @@
     "lint:check": "node scripts/run.mjs lint check",
     "check:duplication": "node scripts/run.mjs check duplication",
     "check:module-graph": "node scripts/run.mjs check module-graph",
+    "check:depcruise:backend": "node scripts/run.mjs check depcruise backend",
+    "check:depcruise:frontend": "node scripts/run.mjs check depcruise frontend",
     "format": "node scripts/run.mjs format",
     "format:check": "node scripts/run.mjs format check",
     "typecheck": "node scripts/run.mjs typecheck",

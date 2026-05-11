@@ -5,6 +5,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import {
+  combineAbortSignals,
+  currentRequestAbortSignal,
+} from '../../common/http/request-abort-signal';
 import { EfdReinfEventDetailsDto } from './efd-reinf.dto';
 import { EfdReinfBuilderService } from './efd-reinf-builder.service';
 import { EfdReinfReceiptService } from './efd-reinf-receipt.service';
@@ -100,11 +104,15 @@ export class EfdReinfTransmitterService {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
+      const signal = combineAbortSignals(
+        controller.signal,
+        currentRequestAbortSignal(),
+      );
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'content-type': 'application/xml' },
         body: event.signedXml,
-        signal: controller.signal,
+        signal,
       });
       const body = await response.text();
       if (!response.ok) {

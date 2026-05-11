@@ -372,6 +372,67 @@ $$;
   console.log(
     '[db-smoke] validated schema split, tenant coverage, RLS, and portal read-only privileges',
   );
+
+  await runSqlSnippet(
+    '99-idempotency-keys-rls.sql',
+    `
+DO $$
+DECLARE
+  tenant_a constant uuid := '00000000-0000-0000-0000-000000000100';
+  tenant_b constant uuid := '00000000-0000-0000-0000-000000000200';
+  visible_count integer;
+BEGIN
+  INSERT INTO public.tenant (id, slug, code, name, status)
+  VALUES
+    (tenant_a, 'tenant-a', 'TENANT_A', 'Tenant A', 'ACTIVE'::public."RecordStatus"),
+    (tenant_b, 'tenant-b', 'TENANT_B', 'Tenant B', 'ACTIVE'::public."RecordStatus")
+  ON CONFLICT (id) DO UPDATE SET updated_at = now();
+
+  GRANT USAGE ON SCHEMA public TO sgp_smoke_rls;
+  GRANT SELECT, INSERT, UPDATE ON public.idempotency_keys TO sgp_smoke_rls;
+
+  PERFORM set_config('app.current_tenant_id', tenant_a::text, true);
+  PERFORM set_config('app.current_tenant', tenant_a::text, true);
+  PERFORM set_config('app.current_permissions', '', true);
+  PERFORM set_config('app.authenticated', 'true', true);
+  SET LOCAL ROLE sgp_smoke_rls;
+
+  INSERT INTO public.idempotency_keys (
+    tenant_id, key_hash, request_hash, response_snapshot, status
+  )
+  VALUES (
+    tenant_a,
+    repeat('a', 64),
+    repeat('b', 64),
+    '{"statusCode":201,"body":{"ok":true}}'::jsonb,
+    'completed'
+  )
+  ON CONFLICT (tenant_id, key_hash) DO UPDATE
+    SET updated_at = now();
+
+  SELECT count(*) INTO visible_count
+  FROM public.idempotency_keys
+  WHERE key_hash = repeat('a', 64);
+  IF visible_count <> 1 THEN
+    RAISE EXCEPTION 'Expected tenant A to see 1 idempotency_keys row, found %', visible_count;
+  END IF;
+
+  PERFORM set_config('app.current_tenant_id', tenant_b::text, true);
+  PERFORM set_config('app.current_tenant', tenant_b::text, true);
+  SELECT count(*) INTO visible_count
+  FROM public.idempotency_keys
+  WHERE key_hash = repeat('a', 64);
+  IF visible_count <> 0 THEN
+    RAISE EXCEPTION 'Expected tenant B to see 0 idempotency_keys rows from tenant A, found %', visible_count;
+  END IF;
+
+  RESET ROLE;
+END
+$$;
+    `,
+  );
+  console.log('[db-smoke] validated HTTP idempotency key tenant RLS');
+
   await runSqlSnippet(
     '99-hr01-employee-lifecycle.sql',
     `

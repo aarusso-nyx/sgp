@@ -1,7 +1,7 @@
 'use strict';
 
 const SERVICE_PATTERN = /(?:^|[/\\])backend[/\\]src[/\\].*\.service\.ts$/;
-const MAX_EFFECTIVE_LINES = 500;
+const MAX_EFFECTIVE_LINES = 600;
 
 function commentLineNumbers(sourceCode) {
   const lines = new Set();
@@ -21,12 +21,12 @@ module.exports = {
     type: 'suggestion',
     docs: {
       description:
-        'Warn when backend service files exceed the 500 effective-line maintainability budget.',
+        'Reject backend service files that exceed the 600 effective-line decomposition budget.',
     },
     schema: [],
     messages: {
       oversize:
-        '{{effectiveLines}} effective lines in {{filename}} exceeds the {{limit}} line service budget. Split by domain responsibility before promoting this rule to error.',
+        '{{effectiveLines}} effective lines in {{filename}} exceeds the {{limit}} line service budget. Split by domain responsibility.',
     },
   },
   create(context) {

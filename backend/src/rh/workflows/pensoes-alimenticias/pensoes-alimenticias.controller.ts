@@ -1,29 +1,27 @@
 import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  AuditMutation,
+  AuditService,
   Body,
   Controller,
   Delete,
+  DomainListQueryDto,
+  EmployeeWorkflowControllerBase,
   Get,
   Param,
   Patch,
   Post,
   Query,
   Req,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
-
-import { AuditMutation } from '../../../common/audit/audit-mutation.decorator';
-import { DomainListQueryDto } from '../../../common/pagination/domain-list-query.dto';
-import type { RequestWithContext } from '../../../common/request-id/request-with-context';
-import { RequirePermission } from '../../../iam/decorators/require-permission.decorator';
-import { AuditService } from '../../../audit/audit.service';
-import { RhWorkflowMutationDto } from '../rh-workflows.dto';
-import { RhWorkflowsService } from '../rh-workflows.service';
+  RequirePermission,
+  RhWorkflowMutationDto,
+  RhWorkflowsService,
+  type RequestWithContext,
+} from '../workflow-controller-deps';
 
 @ApiTags('rh')
 @ApiBearerAuth()
@@ -32,14 +30,16 @@ import { RhWorkflowsService } from '../rh-workflows.service';
   tableName: 'employee_alimony',
 })
 @Controller('v1/employees/:employeeId/rh-workflows')
-export class AlimoniesWorkflowController {
-  private readonly workflow = 'alimonies';
-  private readonly tableName = 'employee_alimony';
+export class AlimoniesWorkflowController extends EmployeeWorkflowControllerBase {
+  protected readonly workflow = 'alimonies';
+  protected readonly tableName = 'employee_alimony';
 
   constructor(
-    private readonly workflowsService: RhWorkflowsService,
-    private readonly auditService: AuditService,
-  ) {}
+    workflowsService: RhWorkflowsService,
+    auditService: AuditService,
+  ) {
+    super(workflowsService, auditService);
+  }
 
   @ApiOperation({ summary: 'GET pensoes-alimenticias' })
   @Get('pensoes-alimenticias')
@@ -82,56 +82,5 @@ export class AlimoniesWorkflowController {
   @ApiOkResponse({ description: 'Deactivate an alimony record.' })
   deleteAlimony(@Req() request: RequestWithContext, @Param('id') id: string) {
     return this.deleteEmployeeWorkflow(request, id);
-  }
-
-  private async createEmployeeWorkflow(
-    request: RequestWithContext,
-    employeeId: string,
-    body: RhWorkflowMutationDto,
-  ) {
-    const created = await this.workflowsService.createWorkflowRecord(
-      this.workflow,
-      body,
-      employeeId,
-    );
-    await this.auditMutation(request, 'CREATE', String(created.id));
-    return created;
-  }
-
-  private async updateEmployeeWorkflow(
-    request: RequestWithContext,
-    id: string,
-    body: RhWorkflowMutationDto,
-  ) {
-    const updated = await this.workflowsService.updateWorkflowRecord(
-      this.workflow,
-      id,
-      body,
-    );
-    await this.auditMutation(request, 'UPDATE', String(updated.id));
-    return updated;
-  }
-
-  private async deleteEmployeeWorkflow(
-    request: RequestWithContext,
-    id: string,
-  ) {
-    const deleted = await this.workflowsService.deleteWorkflowRecord(
-      this.workflow,
-      id,
-    );
-    await this.auditMutation(request, 'DELETE', id);
-    return deleted;
-  }
-
-  private auditMutation(
-    request: RequestWithContext,
-    action: 'CREATE' | 'UPDATE' | 'DELETE',
-    resourceId: string,
-  ) {
-    return this.auditService.auditMutation(request, action, this.tableName, {
-      resourceId,
-      tableName: this.tableName,
-    });
   }
 }

@@ -14,6 +14,8 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
+import { currentRequestAbortOptions } from '../common/http/request-abort-signal';
+
 export interface PresignedUploadResult {
   url: string;
   requiredHeaders: Record<string, string>;
@@ -122,6 +124,7 @@ export class DocumentsStorageService {
           Bucket: bucket,
           Key: storageKey,
         }),
+        currentRequestAbortOptions(),
       );
     } catch (error) {
       if (
@@ -160,6 +163,7 @@ export class DocumentsStorageService {
           checksum,
         },
       }),
+      currentRequestAbortOptions(),
     );
 
     return {

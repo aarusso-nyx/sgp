@@ -25,6 +25,7 @@ For background, deeper runbooks, and contribution rules see [AGENTS.md](./AGENTS
 
 Current status entrypoints:
 
+- Architecture and module dependency graph: `docs/eng/architecture.md`.
 - Product/implementation status: `docs/eng/99-implementation-status.md`.
 - Current audit ledgers and backlog: `docs/gov/audit/`.
 - Operator readiness: `docs/user/operator-readiness.md`.

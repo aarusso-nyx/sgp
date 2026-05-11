@@ -10,13 +10,18 @@ import { RubricaService } from './accounting/rubrica/rubrica.service';
 import { ManualEntryImportController } from './import/manual-entry-import.controller';
 import { ManualEntryImportService } from './import/manual-entry-import.service';
 import { PensionistaImportController } from './import/pensionista-import.controller';
+import { PensionistaImportParserService } from './import/pensionista-import-parser.service';
+import { PensionistaImportPersistenceService } from './import/pensionista-import-persistence.service';
 import { PensionistaImportService } from './import/pensionista-import.service';
+import { PensionistaImportValidationService } from './import/pensionista-import-validation.service';
 import { ServidorImportController } from './import/servidor-import.controller';
 import { ServidorImportService } from './import/servidor-import.service';
 import {
   PayrollGfipController,
   PayrollOperationsController,
 } from './operations/payroll-operations.controller';
+import { PayrollOperationsRemittanceService } from './operations/payroll-operations-remittance.service';
+import { PayrollOperationsReportService } from './operations/payroll-operations-report.service';
 import { PayrollOperationsService } from './operations/payroll-operations.service';
 import { BankAccountController } from './operations/bank-account/bank-account.controller';
 import { BankAccountService } from './operations/bank-account/bank-account.service';
@@ -35,6 +40,8 @@ import { FeriasPayrollService } from './payroll/ferias-payroll.service';
 import { FolhaMensalService } from './payroll/folha-mensal.service';
 import { PayrollService } from './payroll/payroll.service';
 import { RescisaoService } from './rescisao/rescisao.service';
+import { RescisaoCalculationService } from './rescisao/rescisao-calculation.service';
+import { RescisaoTerminationService } from './rescisao/rescisao-termination.service';
 import { PriorNoticeController } from './rescisao/prior-notice/prior-notice.controller';
 import { PriorNoticeService } from './rescisao/prior-notice/prior-notice.service';
 import { SimulacaoController } from './simulacao/simulacao.controller';
@@ -43,6 +50,8 @@ import { PayrollEngineModule } from '../payroll-engine/payroll-engine.module';
 import { StynxEsocialModule } from '../integrations/stynx-esocial';
 import { FgtsModule } from './fgts/fgts.module';
 import { PisPasepModule } from './pis-pasep/pis-pasep.module';
+import { ReintegrationEligibilityService } from './operations/reintegration/reintegration-eligibility.service';
+import { ReintegrationFinancialService } from './operations/reintegration/reintegration-financial.service';
 import { ReintegrationOrderController } from './operations/reintegration/reintegration-order.controller';
 import { ReintegrationOrderService } from './operations/reintegration/reintegration-order.service';
 import { SifgeModule } from './operations/sifge/sifge.module';
@@ -81,6 +90,8 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
   providers: [
     PayrollService,
     PriorNoticeService,
+    RescisaoCalculationService,
+    RescisaoTerminationService,
     RescisaoService,
     DecimoTerceiroService,
     FeriasPayrollService,
@@ -88,6 +99,8 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     SimulacaoService,
     PayrollAccountingService,
     RubricaService,
+    PayrollOperationsRemittanceService,
+    PayrollOperationsReportService,
     PayrollOperationsService,
     BankAccountService,
     BankAccountValidatorService,
@@ -97,8 +110,13 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
     ConsignmentLoanService,
     ConsignmentDeductionService,
     ManualEntryImportService,
+    PensionistaImportParserService,
+    PensionistaImportPersistenceService,
     PensionistaImportService,
+    PensionistaImportValidationService,
     ServidorImportService,
+    ReintegrationEligibilityService,
+    ReintegrationFinancialService,
     ReintegrationOrderService,
     TsvContractService,
   ],

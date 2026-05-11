@@ -17,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
+import { Idempotent } from '../../common/idempotency/idempotency.decorator';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { GenerateGpsDto } from './gps.dto';
@@ -70,6 +71,7 @@ export class GpsController {
   }
 
   @ApiOperation({ summary: 'POST Generate' })
+  @Idempotent()
   @Post()
   @RequirePermission('fiscal.gps.write')
   @ApiCreatedResponse({ description: 'Generate residual GPS TXT.' })

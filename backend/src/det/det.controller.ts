@@ -18,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../audit/audit.service';
+import { Idempotent } from '../common/idempotency/idempotency.decorator';
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import { RequirePermission } from '../iam/decorators/require-permission.decorator';
 import {
@@ -46,6 +47,7 @@ export class DetMessagesController {
   }
 
   @ApiOperation({ summary: 'POST Apply DET inbox projection update' })
+  @Idempotent()
   @Post()
   @RequirePermission('det.message.write')
   @ApiCreatedResponse({
@@ -95,6 +97,7 @@ export class DetMessagesController {
   @ApiOperation({
     summary: 'POST Request DET acknowledgement through stynx-det',
   })
+  @Idempotent()
   @Post(':id/acknowledgement-requests')
   @RequirePermission('det.message.write')
   @ApiCreatedResponse({

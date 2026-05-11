@@ -19,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuditService } from '../../audit/audit.service';
+import { Idempotent } from '../../common/idempotency/idempotency.decorator';
 import type { RequestWithContext } from '../../common/request-id/request-with-context';
 import { RequirePermission } from '../../iam/decorators/require-permission.decorator';
 import { DirfBuilderService } from './dirf-builder.service';
@@ -68,6 +69,7 @@ export class DirfController {
   }
 
   @ApiOperation({ summary: 'POST gerar' })
+  @Idempotent()
   @Post('gerar')
   @RequirePermission('fiscal.dirf.write')
   @ApiCreatedResponse({ description: 'Generate annual DIRF TXT.' })

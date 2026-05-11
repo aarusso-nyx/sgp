@@ -1,21 +1,15 @@
-import { createHash } from 'node:crypto';
-
+import type { QueueAdapterRequestEnvelope } from '../../../common/adapters';
 import {
-  adapterQueueTopics,
-  type QueueAdapterErrorEnvelope,
-  type QueueAdapterRequestEnvelope,
-  type QueueAdapterResponseEnvelope,
-  type QueueAdapterTransport,
-  type QueueSubscription,
-} from '../../../common/adapters';
+  OfficialLayoutRelayMockResponderBase,
+  type OfficialLayoutRelayDecision,
+  type OfficialLayoutRelayMockResponderOptions,
+  type OfficialLayoutRelayScenario,
+} from '../official-layout-relay.mock';
 
 export const SIOPS_RELAY_QUEUE_KIND = 'siops' as const;
 
 export type SiopsRelayKind = typeof SIOPS_RELAY_QUEUE_KIND;
-export type SiopsRelayScenario =
-  | 'ACCEPT'
-  | 'TRANSIENT_ERROR'
-  | 'DEFINITIVE_ERROR';
+export type SiopsRelayScenario = OfficialLayoutRelayScenario;
 
 export type SiopsRelayRequestPayload = Readonly<{
   exportId: string;
@@ -55,57 +49,20 @@ export type SiopsRelayResponsePayload = Readonly<{
   };
 }>;
 
-type RelayDecision =
-  | {
-      status: 'OK';
-      payload: SiopsRelayResponsePayload;
-    }
-  | {
-      status: 'RETRY' | 'DEAD_LETTER';
-      error: QueueAdapterErrorEnvelope;
-    };
+type RelayDecision = OfficialLayoutRelayDecision<SiopsRelayResponsePayload>;
+export type SiopsRelayMockResponderOptions =
+  OfficialLayoutRelayMockResponderOptions;
 
-export type SiopsRelayMockResponderOptions = Readonly<{
-  transport: QueueAdapterTransport;
-  concurrency?: number | undefined;
-  now?: (() => Date) | undefined;
-}>;
-
-export class SiopsRelayMockResponder {
-  private readonly transport: QueueAdapterTransport;
-  private readonly now: () => Date;
-  private readonly subscription: QueueSubscription;
-
+export class SiopsRelayMockResponder extends OfficialLayoutRelayMockResponderBase<
+  SiopsRelayKind,
+  SiopsRelayRequestPayload,
+  SiopsRelayResponsePayload
+> {
   constructor(options: SiopsRelayMockResponderOptions) {
-    this.transport = options.transport;
-    this.now = options.now ?? (() => new Date());
-    this.subscription = this.transport.subscribe<
-      QueueAdapterRequestEnvelope<SiopsRelayKind, SiopsRelayRequestPayload>
-    >(
-      adapterQueueTopics(SIOPS_RELAY_QUEUE_KIND).request,
-      (request) => this.handleRequest(request),
-      { concurrency: options.concurrency ?? 4 },
-    );
+    super(SIOPS_RELAY_QUEUE_KIND, options);
   }
 
-  close(): void {
-    this.subscription.unsubscribe();
-  }
-
-  private async handleRequest(
-    request: QueueAdapterRequestEnvelope<
-      SiopsRelayKind,
-      SiopsRelayRequestPayload
-    >,
-  ): Promise<void> {
-    const decision = this.evaluate(request);
-    await this.transport.publish(
-      request['reply-to'],
-      this.buildResponse(request, decision),
-    );
-  }
-
-  private evaluate(
+  protected evaluate(
     request: QueueAdapterRequestEnvelope<
       SiopsRelayKind,
       SiopsRelayRequestPayload
@@ -113,10 +70,20 @@ export class SiopsRelayMockResponder {
   ): RelayDecision {
     const payload = request.payload;
     if (payload.scenario === 'TRANSIENT_ERROR') {
-      return this.error('RETRY', 'TRANSIENT', 'SIOPS_RELAY_TRANSIENT');
+      return this.error(
+        'RETRY',
+        'TRANSIENT',
+        'SIOPS_RELAY_TRANSIENT',
+        'Mock SIOPS relay requested adapter retry.',
+      );
     }
     if (payload.scenario === 'DEFINITIVE_ERROR') {
-      return this.error('DEAD_LETTER', 'DEFINITIVE', 'SIOPS_RELAY_DEFINITIVE');
+      return this.error(
+        'DEAD_LETTER',
+        'DEFINITIVE',
+        'SIOPS_RELAY_DEFINITIVE',
+        'Mock SIOPS relay requested adapter retry.',
+      );
     }
     if (!payload.exportId) {
       return this.error(
@@ -144,7 +111,7 @@ export class SiopsRelayMockResponder {
     }
 
     const content = Buffer.from(payload.contentBase64, 'base64');
-    const contentSha256 = sha256(content);
+    const contentSha256 = this.sha256(content);
     if (content.byteLength === 0 || contentSha256 !== payload.contentHash) {
       return this.error(
         'DEAD_LETTER',
@@ -155,7 +122,7 @@ export class SiopsRelayMockResponder {
     }
 
     const receivedAt = this.now().toISOString();
-    const requestSha256 = sha256String(JSON.stringify(payload));
+    const requestSha256 = this.sha256String(JSON.stringify(payload));
     const protocol = [
       'SIOPS',
       payload.period,
@@ -187,55 +154,11 @@ export class SiopsRelayMockResponder {
         hashes: {
           requestSha256,
           contentSha256,
-          evidenceHash: sha256String(
+          evidenceHash: this.sha256String(
             `${payload.exportId}:${request.tenant_id}:${contentSha256}`,
           ),
         },
       },
     };
   }
-
-  private buildResponse(
-    request: QueueAdapterRequestEnvelope<
-      SiopsRelayKind,
-      SiopsRelayRequestPayload
-    >,
-    decision: RelayDecision,
-  ): QueueAdapterResponseEnvelope<SiopsRelayKind, SiopsRelayResponsePayload> {
-    return {
-      'request-id': request['request-id'],
-      'correlation-id': request['correlation-id'],
-      'created-at': this.now().toISOString(),
-      tenant_id: request.tenant_id,
-      kind: request.kind,
-      status: decision.status,
-      attempt: request.attempt,
-      payload: decision.status === 'OK' ? decision.payload : undefined,
-      error: decision.status === 'OK' ? undefined : decision.error,
-    };
-  }
-
-  private error(
-    status: 'RETRY' | 'DEAD_LETTER',
-    kind: QueueAdapterErrorEnvelope['kind'],
-    code: string,
-    message = 'Mock SIOPS relay requested adapter retry.',
-  ): RelayDecision {
-    return {
-      status,
-      error: {
-        kind,
-        code,
-        message,
-      },
-    };
-  }
-}
-
-function sha256(content: Buffer): string {
-  return createHash('sha256').update(content).digest('hex');
-}
-
-function sha256String(value: string): string {
-  return createHash('sha256').update(value, 'utf8').digest('hex');
 }

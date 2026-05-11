@@ -6,12 +6,13 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { PoolClient, QueryResultRow } from 'pg';
+import type { PoolClient, QueryResultRow } from 'pg';
 
 import type { AuthenticatedActor } from '../../auth/actor.types';
-import { RequestContextStore } from '../../common/request-context/request-context.store';
+import { domainError } from '../../common/errors/domain-error';
 import { LGPD_DATA_FLOWS } from '../../common/lgpd/legal-basis.registry';
 import { LgpdLegalBasisService } from '../../common/lgpd/legal-basis.service';
+import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
 import { PdfABuilderService } from './pdf-a-builder.service';
 import {
@@ -19,64 +20,24 @@ import {
   buildPayslipStorageKey,
   PayslipDocument,
 } from './payslip-template';
-import { domainError } from '../../common/errors/domain-error';
+import { PayslipRenderMapper } from './payslip-render.mapper';
+import { PayslipRenderPersistence } from './payslip-render.persistence';
+import type {
+  CountRow,
+  EmployeeContextRow,
+  FileRow,
+  IdRow,
+  PayslipSourceRow,
+  RenderedPayslip,
+} from './payslip-render.types';
 
-interface EmployeeContextRow extends QueryResultRow {
-  id: string;
-  tenant_id: string;
-}
-
-interface PayslipSourceRow extends QueryResultRow {
-  tenant_id: string;
-  tenant_name: string | null;
-  employee_id: string;
-  registration: string;
-  employee_name: string;
-  cpf: string | null;
-  employment_link: string | null;
-  bank_agency: string | null;
-  bank_account: string | null;
-  payroll_run_id: string;
-  competence_date: string;
-  total_earnings: string;
-  total_deductions: string;
-  net_amount: string;
-  irrf_base: string;
-  inss_base: string;
-  fgts_deposit: string;
-  lines: unknown;
-}
-
-interface FileRow extends QueryResultRow {
-  id: string;
-  tenant_id: string;
-  employee_id: string;
-  competence: string;
-  file_hash: string;
-  payroll_run_id: string;
-  generated_at?: Date | string | undefined;
-}
-
-interface IdRow extends QueryResultRow {
-  id: string;
-}
-
-interface CountRow extends QueryResultRow {
-  total: string;
-}
-
-export interface RenderedPayslip {
-  fileId: string;
-  employeeId: string;
-  payrollRunId: string;
-  competence: string;
-  fileHash: string;
-  fileName: string;
-  buffer: Buffer;
-}
+export type { RenderedPayslip } from './payslip-render.types';
 
 @Injectable()
 export class PayslipRenderService {
+  private readonly mapper = new PayslipRenderMapper();
+  private readonly persistence = new PayslipRenderPersistence();
+
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly pdfBuilder: PdfABuilderService,
@@ -179,14 +140,16 @@ export class PayslipRenderService {
   ): Promise<PayslipDocument> {
     await this.assertPayslipLegalBasis();
     const rows = await this.databaseService.query<PayslipSourceRow>(
-      this.sourceSql('WHERE run.id = $1::uuid AND employee.id = $2::uuid'),
+      this.mapper.sourceSql(
+        'WHERE run.id = $1::uuid AND employee.id = $2::uuid',
+      ),
       [payrollRunId, employeeId],
     );
     const row = rows[0];
     if (!row) {
       throw new NotFoundException('Payslip source data not found');
     }
-    return this.toDocument(row);
+    return this.mapper.toDocument(row);
   }
 
   async renderBatch(
@@ -291,12 +254,14 @@ export class PayslipRenderService {
   ): Promise<RenderedPayslip> {
     await this.assertPayslipLegalBasis();
     const rows = await client.query<PayslipSourceRow>(
-      this.sourceSql('WHERE run.id = $1::uuid AND employee.id = $2::uuid'),
+      this.mapper.sourceSql(
+        'WHERE run.id = $1::uuid AND employee.id = $2::uuid',
+      ),
       [payrollRunId, employeeId],
     );
     const row = rows.rows[0];
     if (!row) throw new NotFoundException('Payslip source data not found');
-    const document = this.toDocument(row);
+    const document = this.mapper.toDocument(row);
     const buffer = await this.pdfBuilder.buildPayslip(document);
     const validation = this.pdfBuilder.validatePdfA1b(buffer);
     if (!validation.valid) {
@@ -309,20 +274,17 @@ export class PayslipRenderService {
     const fileName = buildPayslipFileName(document);
     const storageKey = buildPayslipStorageKey(row.tenant_id, document);
 
-    const definitionId = await this.ensureDefinition(client, row.tenant_id);
-    const requestId = await this.ensureReportRequest(client, row, definitionId);
-    const attachmentId = await this.ensureAttachment(client, row.tenant_id, {
-      employeeId,
-      fileName,
-      fileHash,
-      sizeBytes: buffer.length,
-      storageKey,
-    });
-    const fileId = await this.ensureGeneratedFile(client, row, {
-      requestId,
-      attachmentId,
-      fileHash,
-    });
+    const fileId = await this.persistence.ensureGeneratedPayslipFile(
+      client,
+      row,
+      {
+        employeeId,
+        fileName,
+        fileHash,
+        sizeBytes: buffer.length,
+        storageKey,
+      },
+    );
 
     return {
       fileId,
@@ -335,298 +297,10 @@ export class PayslipRenderService {
     };
   }
 
-  private sourceSql(whereClause: string): string {
-    return `
-      SELECT
-        run.tenant_id::text,
-        coalesce(company.legal_name, branch.name, 'Ente publico') AS tenant_name,
-        employee.id::text AS employee_id,
-        employee.registration,
-        employee.name AS employee_name,
-        employee.cpf,
-        coalesce(link.name, link.code, '') AS employment_link,
-        employee.bank_agency,
-        employee.bank_account,
-        run.id::text AS payroll_run_id,
-        make_date(run.competence_year, run.competence_month, 1)::text AS competence_date,
-        financial.total_earnings::text,
-        financial.total_deductions::text,
-        financial.net_amount::text,
-        coalesce(sum(CASE WHEN earning.taxable THEN item.amount ELSE 0 END), 0)::numeric(14,2)::text AS irrf_base,
-        coalesce(sum(CASE WHEN earning.kind IN ('EARNING'::public."PayrollEntryKind", 'BASE'::public."PayrollEntryKind") THEN item.amount ELSE 0 END), 0)::numeric(14,2)::text AS inss_base,
-        '0.00'::text AS fgts_deposit,
-        coalesce(
-          jsonb_agg(
-            jsonb_build_object(
-              'code', earning.code,
-              'description', earning.description,
-              'reference', coalesce(item.quantity::text, item.reference_value::text, ''),
-              'kind', earning.kind::text,
-              'amount', item.amount::text
-            )
-            ORDER BY earning.kind::text, earning.code
-          ) FILTER (WHERE item.id IS NOT NULL),
-          '[]'::jsonb
-        ) AS lines
-      FROM payroll.payroll_run run
-      JOIN payroll.payroll_financial_record financial
-        ON financial.tenant_id = run.tenant_id
-       AND financial.payroll_run_id = run.id
-      JOIN hr.v_employee_pii_decrypted employee
-        ON employee.tenant_id = run.tenant_id
-       AND employee.id = financial.employee_id
-      LEFT JOIN hr.branch branch ON branch.id = employee.branch_id
-      LEFT JOIN hr.company company ON company.id = branch.company_id
-      LEFT JOIN hr.employment_link link ON link.id = employee.employment_link_id
-      LEFT JOIN payroll.v_payroll_run_line_active item
-        ON item.tenant_id = run.tenant_id
-       AND item.payroll_run_id = run.id
-       AND item.employee_id = employee.id
-      LEFT JOIN payroll.payroll_earning_deduction earning
-        ON earning.id = item.earning_deduction_id
-      ${whereClause}
-      GROUP BY
-        run.tenant_id,
-        company.legal_name,
-        branch.name,
-        employee.id,
-        employee.registration,
-        employee.name,
-        employee.cpf,
-        link.name,
-        link.code,
-        employee.bank_agency,
-        employee.bank_account,
-        run.id,
-        run.competence_year,
-        run.competence_month,
-        financial.total_earnings,
-        financial.total_deductions,
-        financial.net_amount
-    `;
-  }
-
   private async assertPayslipLegalBasis(): Promise<void> {
     await this.legalBasisService?.assertPiiReadAllowed(
       LGPD_DATA_FLOWS.PAYROLL_PAYSLIP_PDF,
     );
-  }
-
-  private toDocument(row: PayslipSourceRow): PayslipDocument {
-    const lines = Array.isArray(row.lines) ? row.lines : [];
-    return {
-      tenantName: row.tenant_name ?? 'Ente publico',
-      legalReference:
-        'Demonstrativo remuneratorio oficial conforme catalogo de saidas oficiais SGP.',
-      employee: {
-        id: row.employee_id,
-        registration: row.registration,
-        name: row.employee_name,
-        cpf: row.cpf ?? '',
-        employmentLink: row.employment_link ?? '',
-        bankAgency: row.bank_agency ?? '',
-        bankAccount: row.bank_account ?? '',
-      },
-      payrollRunId: row.payroll_run_id,
-      competence: row.competence_date,
-      totals: {
-        earnings: row.total_earnings,
-        deductions: row.total_deductions,
-        net: row.net_amount,
-        irrfBase: row.irrf_base,
-        inssBase: row.inss_base,
-        fgtsDeposit: row.fgts_deposit,
-      },
-      lines: lines.map((line) => {
-        const item = line as Record<string, string | undefined>;
-        const isDeduction = item.kind === 'DEDUCTION';
-        return {
-          code: item.code ?? '',
-          description: item.description ?? '',
-          reference: item.reference ?? '',
-          earning: isDeduction ? '' : (item.amount ?? ''),
-          deduction: isDeduction ? (item.amount ?? '') : '',
-        };
-      }),
-    };
-  }
-
-  private async ensureDefinition(
-    client: PoolClient,
-    tenantId: string,
-  ): Promise<string> {
-    const rows = await client.query<IdRow>(
-      `
-      INSERT INTO public.report_definition (
-        tenant_id,
-        code,
-        module_key,
-        name,
-        description
-      )
-      VALUES (
-        $1::uuid,
-        'PAYSLIP_OFFICIAL_PDF',
-        'RELATORIO',
-        'Contracheque oficial PDF/A-1b',
-        'Contracheque oficial gerado por biblioteca PDF dedicada.'
-      )
-      ON CONFLICT (tenant_id, code) DO UPDATE
-      SET name = EXCLUDED.name,
-          description = EXCLUDED.description,
-          updated_at = now()
-      RETURNING id::text
-      `,
-      [tenantId],
-    );
-    return rows.rows[0]!.id;
-  }
-
-  private async ensureReportRequest(
-    client: PoolClient,
-    row: PayslipSourceRow,
-    definitionId: string,
-  ): Promise<string> {
-    const rows = await client.query<IdRow>(
-      `
-      INSERT INTO public.report_request (
-        tenant_id,
-        definition_id,
-        payroll_run_id,
-        competence_year,
-        competence_month,
-        status,
-        parameters,
-        completed_at
-      )
-      VALUES (
-        $1::uuid,
-        $2::uuid,
-        $3::uuid,
-        extract(year from $4::date)::int,
-        extract(month from $4::date)::int,
-        'COMPLETED'::public."ReportRequestStatus",
-        jsonb_build_object('employeeId', $5::text, 'reportKind', 'PAYSLIP'),
-        now()
-      )
-      RETURNING id::text
-      `,
-      [
-        row.tenant_id,
-        definitionId,
-        row.payroll_run_id,
-        row.competence_date,
-        row.employee_id,
-      ],
-    );
-    return rows.rows[0]!.id;
-  }
-
-  private async ensureAttachment(
-    client: PoolClient,
-    tenantId: string,
-    file: {
-      employeeId: string;
-      fileName: string;
-      fileHash: string;
-      sizeBytes: number;
-      storageKey: string;
-    },
-  ): Promise<string> {
-    const rows = await client.query<IdRow>(
-      `
-      INSERT INTO public.document_attachment (
-        tenant_id,
-        owner_type,
-        owner_id,
-        storage_kind,
-        file_name,
-        content_type,
-        size_bytes,
-        checksum,
-        storage_key,
-        public
-      )
-      VALUES (
-        $1::uuid,
-        'payslip',
-        $2::uuid,
-        'LOCAL'::public."DocumentStorageKind",
-        $3,
-        'application/pdf',
-        $4,
-        $5,
-        $6,
-        false
-      )
-      RETURNING id::text
-      `,
-      [
-        tenantId,
-        file.employeeId,
-        file.fileName,
-        file.sizeBytes,
-        file.fileHash,
-        file.storageKey,
-      ],
-    );
-    return rows.rows[0]!.id;
-  }
-
-  private async ensureGeneratedFile(
-    client: PoolClient,
-    row: PayslipSourceRow,
-    file: {
-      requestId: string;
-      attachmentId: string;
-      fileHash: string;
-    },
-  ): Promise<string> {
-    const rows = await client.query<IdRow>(
-      `
-      INSERT INTO public.generated_report_file (
-        tenant_id,
-        report_request_id,
-        attachment_id,
-        format,
-        report_kind,
-        competence,
-        employee_id,
-        payroll_run_id,
-        pdf_a_compliance,
-        signature_kind,
-        signed_at,
-        retention_until,
-        file_hash
-      )
-      VALUES (
-        $1::uuid,
-        $2::uuid,
-        $3::uuid,
-        'PDF',
-        'PAYSLIP'::public."ReportKind",
-        $4::date,
-        $5::uuid,
-        $6::uuid,
-        'PDF_A_1B'::public."PdfACompliance",
-        'ICP_BRASIL_A1'::public."SignatureKind",
-        $4::date::timestamptz,
-        ($4::date + interval '10 years')::date,
-        $7
-      )
-      RETURNING id::text
-      `,
-      [
-        row.tenant_id,
-        file.requestId,
-        file.attachmentId,
-        row.competence_date,
-        row.employee_id,
-        row.payroll_run_id,
-        file.fileHash,
-      ],
-    );
-    return rows.rows[0]!.id;
   }
 
   private async loadActorEmployee(

@@ -1,3 +1,64 @@
+const recommendedStrict = require('./node_modules/dependency-cruiser/configs/recommended-strict.cjs');
+
+const acceptedStrictBaseline = {
+  frontendModelOrphans:
+    '^frontend/src/app/core/models/(?:route-permission|navigation-item|domain-action)\\.ts$',
+  stynxFrontendAliases:
+    '^(?:@sgp/shared(?:/stynx-runtime-config)?|@sgp/shared-platform/(?:filter-bar|crud-table))$',
+  supertestTypes: '^supertest/types$',
+  angularAuthOidcBundle:
+    '^node_modules/angular-auth-oidc-client/fesm2022/angular-auth-oidc-client\\.mjs$',
+  consignmentPortabilityCycle:
+    '^backend/src/integrations-worker/consignment-portability/(?:portability-parser\\.service|adapters/(?:bank-x|bank-y))\\.ts$',
+};
+
+const strictRules = recommendedStrict.forbidden.map((rule) => {
+  if (rule.name === 'no-orphans') {
+    return {
+      ...rule,
+      from: {
+        ...rule.from,
+        pathNot: [rule.from.pathNot, acceptedStrictBaseline.frontendModelOrphans].join('|'),
+      },
+    };
+  }
+
+  if (rule.name === 'not-to-unresolvable') {
+    return {
+      ...rule,
+      to: {
+        ...rule.to,
+        pathNot: [
+          acceptedStrictBaseline.stynxFrontendAliases,
+          acceptedStrictBaseline.supertestTypes,
+        ].join('|'),
+      },
+    };
+  }
+
+  if (rule.name === 'no-non-package-json') {
+    return {
+      ...rule,
+      to: {
+        ...rule.to,
+        pathNot: acceptedStrictBaseline.angularAuthOidcBundle,
+      },
+    };
+  }
+
+  if (rule.name === 'no-circular') {
+    return {
+      ...rule,
+      to: {
+        ...rule.to,
+        pathNot: acceptedStrictBaseline.consignmentPortabilityCycle,
+      },
+    };
+  }
+
+  return rule;
+});
+
 const featureModules = [
   'avaliacao',
   'consultas',
@@ -32,6 +93,9 @@ const featureModules = [
 
 const sharedModules = ['common', 'database'];
 
+// Accepted legacy backend feature edges discovered before the module-graph gate
+// was introduced. New direct feature-to-feature imports must use shared/core
+// boundaries or be documented here intentionally.
 const existingFeatureEdges = [
   ['avaliacao', 'rh'],
   ['consultas', 'folha-pagamento'],
@@ -93,6 +157,10 @@ function backendModulePath(moduleName) {
   return `^backend/src/${moduleName}(?:/|$)`;
 }
 
+function frontendFeaturePath(featureName) {
+  return `^frontend/src/app/features/${featureName}(?:/|$)`;
+}
+
 const existingFeatureEdgeNames = new Set(
   existingFeatureEdges.map(([from, to]) => `${from}->${to}`),
 );
@@ -111,8 +179,66 @@ const featureEdgeRules = featureModules.flatMap((fromModule) =>
     })),
 );
 
+const frontendFeatureModules = [
+  'admin',
+  'admin-feature',
+  'auditoria',
+  'avaliacao',
+  'convenio',
+  'fiscal',
+  'folha-pagamento',
+  'gestao',
+  'portal',
+  'portal-empregado',
+  'portal-publico',
+  'portal-transparencia',
+  'ponto',
+  'publico',
+  'recrutamento',
+  'relatorio',
+  'rh',
+  'saude',
+  'security',
+  'tce',
+];
+
+// Accepted legacy frontend feature edges discovered before the module-graph gate
+// was introduced. These stay explicit so new sibling feature imports fail until
+// the boundary is redesigned or the edge is intentionally documented.
+const existingFrontendFeatureEdges = [
+  ['convenio', 'admin-feature', 'legacy navigation card reuse'],
+  ['folha-pagamento', 'gestao', 'legacy master-data page integration'],
+  ['gestao', 'admin', 'legacy parameter entry point reuse'],
+  ['portal', 'folha-pagamento', 'legacy employee payroll page reuse'],
+  ['portal', 'ponto', 'legacy employee time page reuse'],
+  ['portal-empregado', 'ponto', 'legacy employee time page reuse'],
+  ['relatorio', 'admin-feature', 'legacy generic report shell reuse'],
+];
+
+const existingFrontendFeatureEdgeNames = new Set(
+  existingFrontendFeatureEdges.map(([from, to]) => `${from}->${to}`),
+);
+
+const frontendFeatureEdgeRules = frontendFeatureModules.flatMap((fromFeature) =>
+  frontendFeatureModules
+    .filter((toFeature) => toFeature !== fromFeature)
+    .filter(
+      (toFeature) => !existingFrontendFeatureEdgeNames.has(`${fromFeature}->${toFeature}`),
+    )
+    .map((toFeature) => ({
+      name: `no-frontend-feature-sibling-import:${fromFeature}->${toFeature}`,
+      comment:
+        'Frontend feature modules must not import sibling features directly. Move shared behavior to app/core, app/shared, or app/shared-platform before depending on it.',
+      severity: 'error',
+      from: { path: frontendFeaturePath(fromFeature) },
+      to: { path: frontendFeaturePath(toFeature) },
+    })),
+);
+
 module.exports = {
+  ...recommendedStrict,
   forbidden: [
+    ...strictRules,
     {
       name: 'no-shared-to-feature',
       comment: 'Shared backend layers must not depend on feature modules.',
@@ -131,9 +257,12 @@ module.exports = {
       to: { path: '^frontend/portal/src/' },
     },
     ...featureEdgeRules,
+    ...frontendFeatureEdgeRules,
   ],
   options: {
+    ...recommendedStrict.options,
     doNotFollow: {
+      ...recommendedStrict.options.doNotFollow,
       path: 'node_modules',
     },
     exclude: {
