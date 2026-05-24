@@ -6,10 +6,6 @@ describe('PayrollController', () => {
     const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollController(
       { calculateRun } as never,
-      {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
       { auditMutation } as never,
     );
 
@@ -28,10 +24,6 @@ describe('PayrollController', () => {
     const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollController(
       { populateRun } as never,
-      {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
       { auditMutation } as never,
     );
 
@@ -56,10 +48,6 @@ describe('PayrollController', () => {
     const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollController(
       { lockStatus } as never,
-      {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
       { auditMutation } as never,
     );
 
@@ -80,10 +68,6 @@ describe('PayrollController', () => {
     const auditMutation = jest.fn().mockResolvedValue(undefined);
     const controller = new PayrollController(
       { createAdvancePayment } as never,
-      {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
       { auditMutation } as never,
     );
 

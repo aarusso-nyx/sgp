@@ -9,6 +9,8 @@ import {
   TEST_DATE_2025_01_01,
 } from './../../../tests/backend/helpers/date-fixtures';
 import { PrevidenciarioController } from './previdenciario.controller';
+import { PrevidenciarioRecertificationController } from './previdenciario-recertification.controller';
+import { PrevidenciarioRulesController } from './previdenciario-rules.controller';
 
 describe('PrevidenciarioController', () => {
   const request = { actor: { username: 'previd-user' } } as never;
@@ -84,6 +86,14 @@ describe('PrevidenciarioController', () => {
         audit as never,
         registry as never,
       ),
+      recertificationController: new PrevidenciarioRecertificationController(
+        audit as never,
+        registry as never,
+      ),
+      rulesController: new PrevidenciarioRulesController(
+        audit as never,
+        registry as never,
+      ),
     };
   };
 
@@ -99,14 +109,40 @@ describe('PrevidenciarioController', () => {
         recadastramento: {},
       } as never,
     );
+    const rulesController = new PrevidenciarioRulesController(
+      {} as never,
+      {
+        regras: {},
+        aposentadoria: {},
+        pensao: {},
+        ctc: {},
+        declaracao: {},
+        recadastramento: {},
+      } as never,
+    );
+    const recertificationController =
+      new PrevidenciarioRecertificationController(
+        {} as never,
+        {
+          regras: {},
+          aposentadoria: {},
+          pensao: {},
+          ctc: {},
+          declaracao: {},
+          recadastramento: {},
+        } as never,
+      );
     expect(controller).toBeDefined();
+    expect(rulesController).toBeDefined();
+    expect(recertificationController).toBeDefined();
   });
 
   it('delegates read endpoints to the previdenciario service', async () => {
-    const { controller, service } = createController();
+    const { controller, recertificationController, rulesController, service } =
+      createController();
     const reads: Array<[() => Promise<unknown>, jest.Mock]> = [
-      [() => controller.listRules(), service.listRules],
-      [() => controller.listSimulations(), service.listSimulations],
+      [() => rulesController.listRules(), service.listRules],
+      [() => rulesController.listSimulations(), service.listSimulations],
       [() => controller.listRetirementGrants(), service.listRetirementGrants],
       [() => controller.listPensions(), service.listPensions],
       [
@@ -115,14 +151,17 @@ describe('PrevidenciarioController', () => {
       ],
       [() => controller.listDeclarations(), service.listDeclarations],
       [() => controller.listCompensations(), service.listCompensations],
-      [() => controller.listCampaigns(), service.listCampaigns],
-      [() => controller.listBeneficiaries(), service.listBeneficiaries],
+      [() => recertificationController.listCampaigns(), service.listCampaigns],
       [
-        () => controller.listPendingRecertifications(),
+        () => recertificationController.listBeneficiaries(),
+        service.listBeneficiaries,
+      ],
+      [
+        () => recertificationController.listPendingRecertifications(),
         service.listPendingRecertifications,
       ],
       [
-        () => controller.listBeneficiaryContactHistory(),
+        () => recertificationController.listBeneficiaryContactHistory(),
         service.listBeneficiaryContactHistory,
       ],
     ];
@@ -134,107 +173,150 @@ describe('PrevidenciarioController', () => {
   });
 
   it('audits previdenciario mutations and report requests', async () => {
-    const { controller, service, audit } = createController();
-    const writes: Array<[string, unknown[], string, string]> = [
-      ['createRule', [request, payload], 'createRule', 'retirement_rule'],
+    const {
+      controller,
+      recertificationController,
+      rulesController,
+      service,
+      audit,
+    } = createController();
+    const writes: Array<
       [
+        Record<string, (...input: unknown[]) => unknown>,
+        string,
+        unknown[],
+        string,
+        string,
+      ]
+    > = [
+      [
+        rulesController,
+        'createRule',
+        [request, payload],
+        'createRule',
+        'retirement_rule',
+      ],
+      [
+        rulesController,
         'updateRule',
         [request, 'rule-1', payload],
         'updateRule',
         'retirement_rule',
       ],
       [
+        rulesController,
         'createSimulation',
         [request, payload],
         'createSimulation',
         'retirement_simulation',
       ],
       [
+        controller,
         'createRetirementGrant',
         [request, payload],
         'createRetirementGrant',
         'retirement_grant',
       ],
-      ['createPension', [request, payload], 'createPension', 'pension_grant'],
       [
+        controller,
+        'createPension',
+        [request, payload],
+        'createPension',
+        'pension_grant',
+      ],
+      [
+        controller,
         'createContributionTimeCertificate',
         [request, payload],
         'createContributionTimeCertificate',
         'contribution_time_certificate',
       ],
       [
+        controller,
         'requestContributionTimeCertificateOutput',
         [request, 'ctc-1', payload],
         'requestContributionTimeCertificateOutput',
         'report_request',
       ],
       [
+        controller,
         'createDeclaration',
         [request, payload],
         'createDeclaration',
         'previdentiary_declaration',
       ],
       [
+        controller,
         'requestDeclarationOutput',
         [request, 'decl-1', payload],
         'requestDeclarationOutput',
         'report_request',
       ],
       [
+        controller,
         'createCompensation',
         [request, payload],
         'createCompensation',
         'pension_compensation',
       ],
       [
+        controller,
         'updateCompensation',
         [request, 'comp-1', payload],
         'updateCompensation',
         'pension_compensation',
       ],
       [
+        recertificationController,
         'createCampaign',
         [request, payload],
         'createCampaign',
         'recertification_campaign',
       ],
       [
+        recertificationController,
         'createBeneficiary',
         [request, payload],
         'createBeneficiary',
         'recertification_beneficiary',
       ],
       [
+        recertificationController,
         'createRecord',
         [request, payload],
         'createRecord',
         'recertification_record',
       ],
       [
+        recertificationController,
         'createBeneficiaryContactHistory',
         [request, payload],
         'createBeneficiaryContactHistory',
         'beneficiary_contact_history',
       ],
       [
+        recertificationController,
         'createExternalLifeProof',
         [request, payload],
         'createExternalLifeProof',
         'external_life_proof',
       ],
       [
+        recertificationController,
         'requestRecertificationNotice',
         [request, payload],
         'requestRecertificationNotice',
         'report_request',
       ],
       [
+        recertificationController,
         'requestRecertificationPendingReport',
         [request, payload],
         'requestRecertificationPendingReport',
         'report_request',
       ],
       [
+        recertificationController,
         'requestSiprevExport',
         [request, payload],
         'requestSiprevExport',
@@ -242,14 +324,15 @@ describe('PrevidenciarioController', () => {
       ],
     ];
 
-    for (const [controllerMethod, args, serviceMethod, tableName] of writes) {
+    for (const [
+      targetController,
+      controllerMethod,
+      args,
+      serviceMethod,
+      tableName,
+    ] of writes) {
       await expect(
-        (
-          controller as never as Record<
-            string,
-            (...input: unknown[]) => unknown
-          >
-        )[controllerMethod](...args),
+        targetController[controllerMethod](...args),
       ).resolves.toEqual(expect.objectContaining({ id: expect.any(String) }));
       expect(service[serviceMethod as keyof typeof service]).toHaveBeenCalled();
       expect(audit.auditMutation).toHaveBeenCalledWith(
@@ -262,10 +345,10 @@ describe('PrevidenciarioController', () => {
   });
 
   it('delegates and audits the EC 103 Pedagio 100 simulator', async () => {
-    const { controller, service, audit } = createController();
+    const { rulesController, service, audit } = createController();
 
     await expect(
-      controller.simulateEc103Pedagio100(request, {
+      rulesController.simulateEc103Pedagio100(request, {
         sexo: 'MALE',
         dataNascimento: TEST_DATE_1962_01_01,
         dataInicioContribuicao: TEST_DATE_1985_01_01,
@@ -291,10 +374,10 @@ describe('PrevidenciarioController', () => {
   });
 
   it('delegates and audits the EC 103 Pedagio 50 simulator', async () => {
-    const { controller, service, audit } = createController();
+    const { rulesController, service, audit } = createController();
 
     await expect(
-      controller.simulateEc103Pedagio50(request, {
+      rulesController.simulateEc103Pedagio50(request, {
         sexo: 'FEMALE',
         dataInicioContribuicao: TEST_DATE_1990_01_01,
         dataReferencia: TEST_DATE_2025_01_01,
@@ -320,10 +403,10 @@ describe('PrevidenciarioController', () => {
   });
 
   it('delegates and audits the EC 103 points simulator', async () => {
-    const { controller, service, audit } = createController();
+    const { rulesController, service, audit } = createController();
 
     await expect(
-      controller.simulateEc103Pontos(request, {
+      rulesController.simulateEc103Pontos(request, {
         sexo: 'MALE',
         dataNascimento: TEST_DATE_1962_01_01,
         dataInicioContribuicao: TEST_DATE_1985_01_01,
@@ -349,10 +432,10 @@ describe('PrevidenciarioController', () => {
   });
 
   it('delegates and audits the EC 103 progressive age simulator', async () => {
-    const { controller, service, audit } = createController();
+    const { rulesController, service, audit } = createController();
 
     await expect(
-      controller.simulateEc103IdadeProgressiva(request, {
+      rulesController.simulateEc103IdadeProgressiva(request, {
         sexo: 'FEMALE',
         dataNascimento: TEST_DATE_1965_01_01,
         dataInicioContribuicao: TEST_DATE_1990_01_01,
@@ -378,10 +461,10 @@ describe('PrevidenciarioController', () => {
   });
 
   it('delegates and audits the EC 103 risk activity or teacher simulator', async () => {
-    const { controller, service, audit } = createController();
+    const { rulesController, service, audit } = createController();
 
     await expect(
-      controller.simulateEc103AtividadeRiscoProfessor(request, {
+      rulesController.simulateEc103AtividadeRiscoProfessor(request, {
         populacao: 'RISK_ACTIVITY',
         sexo: 'MALE',
         dataNascimento: TEST_DATE_1964_01_01,

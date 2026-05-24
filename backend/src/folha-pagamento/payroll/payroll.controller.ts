@@ -23,19 +23,11 @@ import type { RequestWithContext } from '../../common/request-id/request-with-co
 import {
   CalculatePayrollRunDto,
   CreateAdvancePaymentDto,
-  FolhaMensalCompetenceDto,
   CreatePayrollRunDto,
-  RunFeriasPayrollDto,
   PopulatePayrollRunDto,
-  RunDecimoTerceiroDto,
   UpdatePayrollRunStatusDto,
 } from './payroll.dto';
-import { DecimoTerceiroService } from './decimo-terceiro.service';
-import { FeriasPayrollService } from './ferias-payroll.service';
-import { FolhaMensalService } from './folha-mensal.service';
 import { PayrollService } from './payroll.service';
-import { RunRescisaoDto } from '../rescisao/rescisao.dto';
-import { RescisaoService } from '../rescisao/rescisao.service';
 
 @ApiTags('folha-pagamento')
 @ApiBearerAuth()
@@ -43,10 +35,6 @@ import { RescisaoService } from '../rescisao/rescisao.service';
 export class PayrollController {
   constructor(
     private readonly payrollService: PayrollService,
-    private readonly decimoTerceiroService: DecimoTerceiroService,
-    private readonly feriasPayrollService: FeriasPayrollService,
-    private readonly folhaMensalService: FolhaMensalService,
-    private readonly rescisaoService: RescisaoService,
     private readonly auditService: AuditService,
   ) {}
 
@@ -181,216 +169,5 @@ export class PayrollController {
       },
     );
     return created;
-  }
-
-  @ApiOperation({ summary: 'POST decimo-terceiro/adiantamento' })
-  @Post('decimo-terceiro/adiantamento')
-  @RequirePermission('payroll.run.execute')
-  @ApiCreatedResponse({ description: 'Generate the first 13th salary parcel.' })
-  async runDecimoTerceiroAdiantamento(
-    @Req() request: RequestWithContext,
-    @Body() body: RunDecimoTerceiroDto,
-  ) {
-    const created = await this.decimoTerceiroService.runAdiantamento(
-      request.actor?.tenantId ?? request.tenantId ?? '',
-      body.year,
-    );
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: created.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'decimo_terceiro_adiantamento',
-        year: body.year,
-        employeeCount: created.employeeCount,
-      },
-    });
-    return created;
-  }
-
-  @ApiOperation({ summary: 'POST decimo-terceiro/fechamento' })
-  @Post('decimo-terceiro/fechamento')
-  @RequirePermission('payroll.run.execute')
-  @ApiCreatedResponse({ description: 'Generate the closing 13th salary run.' })
-  async runDecimoTerceiroFechamento(
-    @Req() request: RequestWithContext,
-    @Body() body: RunDecimoTerceiroDto,
-  ) {
-    const created = await this.decimoTerceiroService.runFechamento(
-      request.actor?.tenantId ?? request.tenantId ?? '',
-      body.year,
-    );
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: created.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'decimo_terceiro_fechamento',
-        year: body.year,
-        employeeCount: created.employeeCount,
-      },
-    });
-    return created;
-  }
-
-  @ApiOperation({ summary: 'POST ferias/calcular' })
-  @Post('ferias/calcular')
-  @RequirePermission(['payroll.run.execute', 'rh.vacation.payout'])
-  @ApiCreatedResponse({ description: 'Generate a vacation payroll run.' })
-  async runFeriasPayroll(
-    @Req() request: RequestWithContext,
-    @Body() body: RunFeriasPayrollDto,
-  ) {
-    const created = await this.feriasPayrollService.run(body.vacationRecordId);
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: created.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'ferias',
-        vacationRecordId: body.vacationRecordId,
-        employeeCount: created.employeeCount,
-      },
-    });
-    return created;
-  }
-
-  @ApiOperation({ summary: 'POST rescisao/calcular' })
-  @Post('rescisao/calcular')
-  @RequirePermission(['payroll.run.execute', 'rh.employee.terminate'])
-  @ApiCreatedResponse({ description: 'Generate a termination payroll run.' })
-  async runRescisaoPayroll(
-    @Req() request: RequestWithContext,
-    @Body() body: RunRescisaoDto,
-  ) {
-    const created = await this.rescisaoService.run(
-      body.employmentLinkId,
-      body.terminationDate,
-      body.cause,
-      body.priorNoticeKind,
-      body.priorNoticeReductionMode ?? 'NONE',
-    );
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: created.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'rescisao',
-        employmentLinkId: body.employmentLinkId,
-        terminationDate: body.terminationDate,
-        cause: body.cause,
-        employeeCount: created.employeeCount,
-      },
-    });
-    return created;
-  }
-
-  @ApiOperation({ summary: 'POST mensal/abrir' })
-  @Post('mensal/abrir')
-  @RequirePermission(['payroll.run.execute', 'folha.write'])
-  @ApiCreatedResponse({ description: 'Open a monthly payroll competence.' })
-  async openMonthlyCompetence(
-    @Req() request: RequestWithContext,
-    @Body() body: FolhaMensalCompetenceDto,
-  ) {
-    const result = await this.folhaMensalService.openCompetence(body);
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: result.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'monthly.opened',
-        year: body.year,
-        month: body.month,
-      },
-    });
-    return result;
-  }
-
-  @ApiOperation({ summary: 'POST mensal/calcular' })
-  @Post('mensal/calcular')
-  @RequirePermission(['payroll.run.execute', 'folha.write'])
-  @ApiOkResponse({ description: 'Calculate a monthly payroll competence.' })
-  async calculateMonthlyCompetence(
-    @Req() request: RequestWithContext,
-    @Body() body: FolhaMensalCompetenceDto,
-  ) {
-    const result = await this.folhaMensalService.calculate(body);
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: result.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'monthly.calculated',
-        year: body.year,
-        month: body.month,
-      },
-    });
-    return result;
-  }
-
-  @ApiOperation({ summary: 'POST mensal/aprovar' })
-  @Post('mensal/aprovar')
-  @RequirePermission(['payroll.run.execute', 'folha.write'])
-  @ApiOkResponse({ description: 'Approve a monthly payroll competence.' })
-  async approveMonthlyCompetence(
-    @Req() request: RequestWithContext,
-    @Body() body: FolhaMensalCompetenceDto,
-  ) {
-    const result = await this.folhaMensalService.approve(body);
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: result.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'monthly.approved',
-        year: body.year,
-        month: body.month,
-      },
-    });
-    return result;
-  }
-
-  @ApiOperation({ summary: 'POST mensal/gerar' })
-  @Post('mensal/gerar')
-  @RequirePermission(['payroll.run.execute', 'folha.write'])
-  @ApiOkResponse({ description: 'Generate monthly employee paystubs.' })
-  async generateMonthlyPaystubs(
-    @Req() request: RequestWithContext,
-    @Body() body: FolhaMensalCompetenceDto,
-  ) {
-    const result = await this.folhaMensalService.generate(body);
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: result.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'monthly.generated',
-        year: body.year,
-        month: body.month,
-      },
-    });
-    return result;
-  }
-
-  @ApiOperation({ summary: 'POST mensal/fechar' })
-  @Post('mensal/fechar')
-  @RequirePermission(['payroll.run.execute', 'folha.write'])
-  @ApiOkResponse({ description: 'Close a monthly payroll competence.' })
-  async closeMonthlyCompetence(
-    @Req() request: RequestWithContext,
-    @Body() body: FolhaMensalCompetenceDto,
-  ) {
-    const result = await this.folhaMensalService.close(body);
-    await this.auditService.auditMutation(request, 'PROCESS', 'payroll_run', {
-      resourceId: result.payrollRunId,
-      tableName: 'payroll_run',
-      metadata: {
-        operation: 'monthly.closed',
-        year: body.year,
-        month: body.month,
-      },
-    });
-    return result;
-  }
-
-  @ApiOperation({ summary: 'GET mensal/revisao' })
-  @Get('mensal/revisao')
-  @RequirePermission(['payroll.run.execute', 'folha.read'])
-  @ApiOkResponse({ description: 'Review monthly payroll totals by employee.' })
-  reviewMonthlyCompetence(@Query() query: FolhaMensalCompetenceDto) {
-    return this.folhaMensalService.review(query);
   }
 }

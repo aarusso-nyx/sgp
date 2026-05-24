@@ -9,6 +9,8 @@ import { CtcService } from './ctc/ctc.service';
 import { DeclaracaoService } from './declaracao/declaracao.service';
 import { PensaoService } from './pensao/pensao.service';
 import { PrevidenciarioController } from './previdenciario.controller';
+import { PrevidenciarioRecertificationController } from './previdenciario-recertification.controller';
+import { PrevidenciarioRulesController } from './previdenciario-rules.controller';
 import { PrevidenciarioService } from './previdenciario.service';
 import {
   PREVIDENCIARIO_SERVICE_REGISTRY,
@@ -25,7 +27,11 @@ import { PontosService } from './transition-rules/pontos.service';
 
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule, StynxEsocialModule],
-  controllers: [PrevidenciarioController],
+  controllers: [
+    PrevidenciarioController,
+    PrevidenciarioRulesController,
+    PrevidenciarioRecertificationController,
+  ],
   providers: [
     PrevidenciarioService,
     RegrasService,

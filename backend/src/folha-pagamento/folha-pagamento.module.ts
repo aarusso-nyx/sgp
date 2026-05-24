@@ -35,6 +35,8 @@ import { ConsignmentDeductionService } from './operations/consignment/consignmen
 import { ConsignmentLoanService } from './operations/consignment/consignment-loan.service';
 import { MarginCalculatorService } from './operations/consignment/margin-calculator.service';
 import { PayrollController } from './payroll/payroll.controller';
+import { PayrollMonthlyController } from './payroll/payroll-monthly.controller';
+import { PayrollRunExecutionController } from './payroll/payroll-run-execution.controller';
 import { DecimoTerceiroService } from './payroll/decimo-terceiro.service';
 import { FeriasPayrollService } from './payroll/ferias-payroll.service';
 import { FolhaMensalService } from './payroll/folha-mensal.service';
@@ -72,6 +74,8 @@ import { TsvContractService } from './operations/tsv/tsv-contract.service';
   ],
   controllers: [
     PayrollController,
+    PayrollMonthlyController,
+    PayrollRunExecutionController,
     PayrollAccountingController,
     RubricaController,
     ManualEntryImportController,
