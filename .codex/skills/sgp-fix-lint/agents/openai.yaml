@@ -1,4 +1,4 @@
 interface:
-  display_name: "SGP Fix Lint"
-  short_description: "Iterate SGP lint failures to green"
-  default_prompt: "Use $sgp-fix-lint to run SGP lint checks and fix failures until clean."
+  display_name: 'SGP Fix Lint'
+  short_description: 'Iterate SGP lint failures to green'
+  default_prompt: 'Use $sgp-fix-lint as the SGP adapter for DEVAI SKILL-fix-lint.'

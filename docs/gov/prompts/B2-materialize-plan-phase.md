@@ -11,7 +11,7 @@
 **Type.** Reusable phase prompt. Run after B1 produces the round-<n+1> backlog.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output root.** docs/work/round-<n>/prompts/.
-**Skill awareness.** Defers to sgp-round-backlog (prompt schema) and sgp-round-orchestrator (orchestrator semantics) when present.
+**Skill awareness.** Defers to DEVAI `SKILL-round-backlog` (prompt schema) and `SKILL-round-orchestrate` (orchestrator semantics); local SGP skills are adapters only.
 **Memory.** MemPalace required.
 
 ---
@@ -27,7 +27,7 @@ This phase produces:
 - docs/work/round-<n>/prompts/wave-<k>-launch.md (one per wave)
 - docs/work/round-<n>/prompts/<wave>-R<n+1>-<id>-<slug>.prompt.md (one per backlog item)
 
-Layout matches docs/work/round-2/prompts/ exactly so B3 (and sgp-round-orchestrator) can load it without configuration.
+Layout matches docs/work/round-2/prompts/ exactly so B3 and DEVAI `SKILL-round-orchestrate` can load it without configuration.
 
 ---
 

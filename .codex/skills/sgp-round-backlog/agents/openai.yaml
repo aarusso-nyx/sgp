@@ -1,4 +1,4 @@
 interface:
-  display_name: "SGP Round Backlog"
-  short_description: "Turn docs/gov/audit into wave prompts"
-  default_prompt: "Use $sgp-round-backlog with docs/gov/prompts/B1-B2 to convert current audit context into wave-grouped prompts."
+  display_name: 'SGP Round Backlog'
+  short_description: 'Turn docs/gov/audit into wave prompts'
+  default_prompt: 'Use $sgp-round-backlog as the SGP adapter for DEVAI SKILL-round-backlog with docs/gov/prompts/B1-B2.'

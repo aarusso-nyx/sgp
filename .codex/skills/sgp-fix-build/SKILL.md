@@ -1,63 +1,30 @@
 ---
 name: sgp-fix-build
-description: Reproduce and fix SGP build or typecheck failures until build gates are clean. Use when the user asks to run build and correct errors, repair typecheck/build failures, unblock build:backend/build:admin/build:portal, or recover an SGP wave blocked by typecheck or build.
+description: Thin SGP adapter for DEVAI SKILL-fix-build and SKILL-fix-typecheck. Use when the user asks to repair typecheck/build failures or recover an SGP wave blocked by typecheck or build.
 ---
 
 # SGP Fix Build
 
-## Overview
+Thin adapter. The canonical workflows live in DEVAI:
 
-Run the live SGP typecheck/build gates, fix root causes in the smallest owned scope, and verify the relevant builds are clean.
+```bash
+devai skill-run SKILL-fix-build --repo-root /Users/aarusso/Development/stech/sgp
+devai skill-run SKILL-fix-typecheck --repo-root /Users/aarusso/Development/stech/sgp
+```
 
-## Current Docs Routing
+## SGP Config
 
-- `docs/eng/` is authoritative for product and engineering behavior, acceptance, and developer facts.
-- `docs/gov/audit/` holds current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.
-- `docs/gov/prompts/` holds reusable B0-B3 round prompts; materialized per-round outputs stay under `docs/work/round-<n>/`.
-- `docs/gov/` holds governance controls, generated surfaces, retained evidence, compliance, health, and observability.
-- `docs/work/**` is scratch and never acceptance authority.
+- Repo root: `/Users/aarusso/Development/stech/sgp`.
+- Gate commands: `npm run typecheck`, `npm run build`, `npm run build:backend`, `npm run build:admin`, and `npm run build:portal` when present in live `package.json`.
+- Relevant alignment commands when API contracts move: `npm run api:spec:check` and `npm run api:client:generate`.
 
-## Workflow
+## Adapter Rules
 
-1. Inspect:
-   - `git status --short --branch`
-   - `package.json` scripts for `typecheck`, `build`, `build:backend`, `build:admin`, and `build:portal`.
-   - `scripts/run.mjs` and workspace command mappings if the failure command is unclear.
-2. Reproduce:
-   - Run the user-provided command first.
-   - If no command was provided, start with `npm run typecheck`, then the narrow build matching touched files.
-3. Diagnose:
-   - Separate TypeScript errors, generated-client drift, OpenAPI/schema drift, missing exports, config/path drift, test-only compile errors, and dependency/toolchain errors.
-   - Search neighboring modules for the established pattern before editing.
-4. Fix:
-   - Prefer real type/model fixes over `any`, casts, or disabling strictness.
-   - Regenerate OpenAPI clients only when the live repo scripts and source changes require it.
-   - If generated artifacts change, verify they are expected and include them in the result.
-   - Do not change public DTOs, route shapes, RBAC strings, tenant/RLS posture, or payroll semantics without authoritative docs or explicit user direction.
-5. Verify:
-   - Rerun the failing build/typecheck.
-   - Add `npm run lint:check` and `npm run governance:check` when code/docs behavior changed.
-
-## Common Commands
-
-- `npm run typecheck`
-- `npm run build`
-- `npm run build:backend`
-- `npm run build:admin`
-- `npm run build:portal`
-- `npm run api:spec:check`
-- `npm run api:client:generate`
-
-Always confirm these scripts exist in the current `package.json` before running them.
-
-## SGP-Specific Rules
-
-- Preserve unrelated dirty changes.
-- Keep code artifacts in English.
-- Update `docs/eng/` only for real behavior changes.
-- Do not add v0.0.1 compatibility shims.
-- Stop for high-impact folia/spec payroll conflicts.
+- Reproduce the exact failing command first.
+- Preserve unrelated dirty changes and avoid broad generated drift unless required by the failure.
+- Do not paper over type errors with `any`, public-contract shims, or weakened strictness.
+- Keep SGP behavior authority in `docs/eng/**`; do not duplicate DEVAI fix logic here.
 
 ## Output Contract
 
-Report the initial failing command, root cause, files changed, final passing command set, and any build surfaces not run.
+Return the failing command, root cause, files changed, final passing build/typecheck gates, skipped surfaces, and current git status.

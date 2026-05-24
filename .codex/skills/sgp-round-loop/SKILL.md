@@ -1,59 +1,30 @@
 ---
 name: sgp-round-loop
-description: Coordinate the full SGP outer loop of measure, plan, execute, compare, and optionally publish across reusable SGP skills. Use when the user asks to run a whole SGP round, automate the round cycle, continue measure-plan-execute-compare, or decide which SGP round skill should handle an ambiguous round request.
+description: Thin SGP adapter for DEVAI SKILL-round-execute. Use when the user asks to run a whole SGP round, automate the round cycle, continue measure-plan-execute-compare, or decide which SGP round skill should handle an ambiguous round request.
 ---
 
 # SGP Round Loop
 
-## Overview
+Thin adapter. DEVAI renamed the canonical loop runner to `SKILL-round-execute`; invoke it with:
 
-Use this as the high-level router for SGP's round-based development cycle. It keeps the loop coherent while delegating detailed behavior to the narrower `sgp-*` skills when they are available.
+```bash
+devai skill-run SKILL-round-execute --repo-root /Users/aarusso/Development/stech/sgp
+```
 
-## Current Docs Routing
+## SGP Config
 
-- `docs/eng/` is authoritative for product and engineering behavior, acceptance, and developer facts.
-- `docs/gov/audit/` holds current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.
-- `docs/gov/prompts/` holds reusable B0-B3 round prompts; materialized per-round outputs stay under `docs/work/round-<n>/`.
-- `docs/gov/` holds governance controls, generated surfaces, retained evidence, compliance, health, and observability.
-- `docs/work/**` is scratch and never acceptance authority.
+- Repo root: `/Users/aarusso/Development/stech/sgp`.
+- Phase mapping: measure with `SKILL-round-audit`, plan with `SKILL-round-backlog`, execute with `SKILL-round-orchestrate`, compare or publish with `SKILL-round-verify-publish`.
+- Fix routing: lint/format to `SKILL-fix-lint`, typecheck/build to `SKILL-fix-typecheck` or `SKILL-fix-build`, tests to `SKILL-fix-test`.
+- Authority and scratch boundaries follow `AGENTS.md`.
 
-## Loop Phases
+## Adapter Rules
 
-1. Measure with `sgp-round-audit`:
-   - Inspect the live repo first.
-   - Refresh `docs/gov/audit/` current status and produce `docs/work/round-<n>/` scratch context.
-   - Keep this phase read-only unless the user explicitly asks for implementation.
-2. Plan with `sgp-round-backlog`:
-   - Convert the audit pack into a next-round backlog.
-   - Use reusable `docs/gov/prompts/B2-materialize-plan-phase.md` semantics to materialize `prompts/00-orchestration-plan.md`, wave launch files, worker prompts, and a round index.
-   - Route routine work to low/medium effort prompts and reserve high/xhigh effort for cross-cutting contracts, migrations, regulatory behavior, frontend gates, and owner-decision spikes.
-3. Execute with `sgp-round-orchestrator`:
-   - Run the orchestration prompt or selected wave.
-   - Use worker fan-out only when explicitly requested by the user or prompt.
-   - Run wave gates before advancing.
-   - Write unavoidable decisions to `docs/work/round-<n>/QUESTIONS.md` and continue unrelated work when safe.
-4. Compare with `sgp-round-verify-publish`:
-   - Compare prompt acceptance criteria, `docs/gov/audit/` current status, current diff, and live gates.
-   - Fix current-round failures with focused loops or route to `sgp-fix-lint`, `sgp-fix-build`, or `sgp-fix-tests`.
-   - Publish only when explicitly requested.
-
-## SGP Invariants
-
-- Verify current repo state before trusting prior prompts, memory, or scratch docs.
-- `docs/work/**` is ignored scratch and cannot override acceptance authority.
-- `docs/eng/` is authoritative for behavior; `docs/gov/audit/` for current status and compiled context; `docs/gov/` for governance and reusable prompts; `docs/user/` for operator guidance; `docs/leg/` for legacy/archive evidence.
-- Do not add compatibility shims for v0.0.1.
-- Use stubs, mocks, sandbox adapters, contract fixtures, or golden files for external services unless the user explicitly asks for real-service tests.
-- Stop for high-impact folia/spec payroll conflicts.
-
-## Routing
-
-- If the user asks only for assessment, use `sgp-round-audit` and stop after artifacts.
-- If the user asks for planning or prompt materialization, use `sgp-round-backlog` and stop after generated prompts.
-- If the user points at an orchestration or wave prompt and says run it, use `sgp-round-orchestrator`.
-- If the user asks to verify, compare, commit, merge, push, or check GitHub acceptance, use `sgp-round-verify-publish`.
-- If a gate fails inside any phase, route to `sgp-fix-lint`, `sgp-fix-build`, or `sgp-fix-tests` as appropriate.
+- Use this adapter only for SGP repo-local routing and authority reminders.
+- Verify live repo state before trusting prior prompts, memory, or scratch docs.
+- Publish only when explicitly requested.
+- Do not duplicate DEVAI round-loop logic here.
 
 ## Output Contract
 
-At the end of a full loop, report the round number, generated artifacts, waves completed, gates run, `QUESTIONS.md` blockers, current git status, and publish status if publication was requested.
+Return round number, artifacts, phases completed, gates run, blockers, current git status, and publish status if publication was requested.

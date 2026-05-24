@@ -12,7 +12,7 @@
 **Type.** Reusable phase prompt. Run after B3 emits a completed round closure.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** `docs/work/round-<n>/compare.md`, optional updates to `docs/gov/audit/backlog-ledger.md`, and file-backed MemPalace mirrors.
-**Skill awareness.** Defers to `sgp-round-verify-publish` for verification only; publish remains disabled without explicit user authorization.
+**Skill awareness.** Defers to DEVAI `SKILL-round-verify-publish` for verification only; local `sgp-round-verify-publish` is only an SGP adapter, and publish remains disabled without explicit user authorization.
 **Memory.** MemPalace required, with the non-destructive CLI/file-backed fallback below.
 
 ---

@@ -1,4 +1,4 @@
 interface:
-  display_name: "SGP Round Loop"
-  short_description: "Run SGP measure-plan-execute loop"
-  default_prompt: "Use $sgp-round-loop to run the next SGP cycle through reusable docs/gov/prompts B0-B3."
+  display_name: 'SGP Round Loop'
+  short_description: 'Run SGP measure-plan-execute loop'
+  default_prompt: 'Use $sgp-round-loop as the SGP adapter for DEVAI SKILL-round-execute with reusable docs/gov/prompts B0-B4.'

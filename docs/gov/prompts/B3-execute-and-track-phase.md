@@ -12,7 +12,7 @@
 **Type.** Reusable phase prompt. Run after B2 materializes the round-<n+1> prompt fan-out.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** Product source (under each worker's owned scope), docs/work/round-<n+1>/, docs/gov/audit/backlog-ledger.md (status updates).
-**Skill awareness.** Defers to sgp-round-orchestrator (execution) and sgp-round-verify-publish (closure). Routes gate failures to sgp-fix-lint, sgp-fix-build, sgp-fix-tests.
+**Skill awareness.** Defers to DEVAI `SKILL-round-orchestrate` (execution) and `SKILL-round-verify-publish` (closure). Routes gate failures to `SKILL-fix-lint`, `SKILL-fix-build`, `SKILL-fix-typecheck`, or `SKILL-fix-test`; local SGP skills are adapters only.
 **Memory.** MemPalace required.
 
 ---
@@ -29,9 +29,9 @@ This is the **execute** + **compare** phase of the measure → plan → execute 
 
 If skills are available:
 
-- sgp-round-orchestrator for the wave loop, fan-out, gate routing.
-- sgp-fix-lint / sgp-fix-build / sgp-fix-tests for fix-up rounds.
-- sgp-round-verify-publish only at round-end and only on explicit user authorization for commit/merge/push.
+- DEVAI `SKILL-round-orchestrate` for the wave loop, fan-out, gate routing.
+- DEVAI `SKILL-fix-lint` / `SKILL-fix-build` / `SKILL-fix-typecheck` / `SKILL-fix-test` for fix-up rounds.
+- DEVAI `SKILL-round-verify-publish` only at round-end and only on explicit user authorization for commit/merge/push.
 
 If skills are unavailable, follow the workflow inline.
 
@@ -123,9 +123,9 @@ If the wave gate fails:
 
 - Identify the failing area (lint / format / typecheck / governance / unit / e2e / db / coverage).
 - Spawn a focused fix-up agent:
-  - Lint/format → sgp-fix-lint.
-  - Typecheck/build → sgp-fix-build.
-  - Tests (Jest / Vitest / Playwright / RLS) → sgp-fix-tests.
+  - Lint/format -> DEVAI `SKILL-fix-lint`.
+  - Typecheck -> DEVAI `SKILL-fix-typecheck`; build -> DEVAI `SKILL-fix-build`.
+  - Tests (Jest / Vitest / Playwright / RLS) -> DEVAI `SKILL-fix-test`.
 - Cap at 2 fix-up rounds per gate.
 - After 2 failed fix-up rounds, write a blocker entry to docs/work/round-<n+1>/QUESTIONS.md and continue to the next wave (do not block other waves on this).
 
@@ -206,14 +206,14 @@ This appends round-<n+1> final statuses to docs/gov/audit/backlog-ledger.md (ide
 
 ## 8. Publish (only on explicit authorization)
 
-Defer to sgp-round-verify-publish. Required user wording: "commit", "merge", "push", "publish", or "open PR". Without that wording, **stop after §7** and report status.
+Defer to DEVAI `SKILL-round-verify-publish`. Required user wording: "commit", "merge", "push", "publish", or "open PR". Without that wording, **stop after §7** and report status.
 
 When authorized:
 
 - Compose commit message in the round-N closure-wave style (Implement SGP round <n+1> closure waves).
 - Co-author trailer per repository convention.
 - Run final gates one more time before commit.
-- Push and open PR per sgp-round-verify-publish.
+- Push and open PR per DEVAI `SKILL-round-verify-publish`.
 
 ---
 
