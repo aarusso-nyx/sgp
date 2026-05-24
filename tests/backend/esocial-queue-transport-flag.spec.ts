@@ -2,14 +2,15 @@ import {
   ESOCIAL_QUEUE_TRANSPORT_PARAMETER_KEY,
   EsocialQueueTransportFlag,
 } from '../../backend/src/system-parameters/esocial-queue-transport-flag';
+import { SystemParameterFeatureFlagProvider } from '../../backend/src/system-parameters/system-parameter-feature-flag.provider';
 
 const tenantId = '00000000-0000-4000-8000-000000060700';
 
 describe('EsocialQueueTransportFlag', () => {
   it('defaults to in-memory when the database is not configured', async () => {
-    const service = new EsocialQueueTransportFlag({
-      configured: false,
-    } as never);
+    const service = new EsocialQueueTransportFlag(
+      new SystemParameterFeatureFlagProvider({ configured: false } as never),
+    );
 
     await expect(service.resolve(tenantId)).resolves.toBe('in-memory');
   });
@@ -23,10 +24,12 @@ describe('EsocialQueueTransportFlag', () => {
         },
       },
     ]);
-    const service = new EsocialQueueTransportFlag({
-      configured: true,
-      query,
-    } as never);
+    const service = new EsocialQueueTransportFlag(
+      new SystemParameterFeatureFlagProvider({
+        configured: true,
+        query,
+      } as never),
+    );
 
     await expect(service.resolve(tenantId)).resolves.toBe('sqs');
     expect(query).toHaveBeenCalledWith(
@@ -43,10 +46,12 @@ describe('EsocialQueueTransportFlag', () => {
         { value: { active: true, transport: 'invalid' } },
       ])
       .mockResolvedValueOnce([]);
-    const service = new EsocialQueueTransportFlag({
-      configured: true,
-      query,
-    } as never);
+    const service = new EsocialQueueTransportFlag(
+      new SystemParameterFeatureFlagProvider({
+        configured: true,
+        query,
+      } as never),
+    );
 
     await expect(service.resolve(tenantId)).resolves.toBe('in-memory');
     await expect(service.resolve(tenantId)).resolves.toBe('in-memory');

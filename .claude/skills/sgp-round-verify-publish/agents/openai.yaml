@@ -1,4 +1,0 @@
-interface:
-  display_name: "SGP Verify Publish"
-  short_description: "Verify SGP gates and publish safely"
-  default_prompt: "Use $sgp-round-verify-publish to verify SGP gates and publish the completed round when requested."

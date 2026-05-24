@@ -1,4 +1,0 @@
-interface:
-  display_name: 'SGP Fix Tests'
-  short_description: 'Iterate SGP test failures to green'
-  default_prompt: 'Use $sgp-fix-tests as the SGP adapter for DEVAI SKILL-fix-test.'

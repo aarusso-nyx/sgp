@@ -350,14 +350,13 @@ interface ReadyResponseBody {
 }
 
 interface ErrorResponseBody {
-  error: {
-    code: string;
-    message: string;
-    status: number;
-    path?: string;
-    requestId?: string;
-    details?: string[];
-  };
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+  instance: string;
+  correlationId?: string;
+  errors?: string[];
 }
 
 interface SessionResponseBody {
@@ -519,15 +518,15 @@ describe('SGP backend foundation (e2e)', () => {
     const response = await request(server()).get('/api/v1/auth/me').expect(401);
     const body = bodyAs<ErrorResponseBody>(response);
 
-    expect(body.error).toEqual(
+    expect(body).toEqual(
       expect.objectContaining({
-        code: 'UNAUTHORIZED',
-        message: 'Missing bearer token',
+        title: 'UNAUTHORIZED',
+        detail: 'Missing bearer token',
         status: 401,
-        path: '/api/v1/auth/me',
+        instance: '/api/v1/auth/me',
       }),
     );
-    expect(body.error.requestId).toEqual(expect.any(String));
+    expect(body.correlationId).toEqual(expect.any(String));
   });
 
   it('maps Cognito groups to permissions in the session endpoint', async () => {
@@ -557,10 +556,10 @@ describe('SGP backend foundation (e2e)', () => {
       .expect(403);
     const body = bodyAs<ErrorResponseBody>(response);
 
-    expect(body.error).toEqual(
+    expect(body).toEqual(
       expect.objectContaining({
-        code: 'FORBIDDEN',
-        message: 'Access denied by policy evaluator',
+        title: 'FORBIDDEN',
+        detail: 'Access denied by policy evaluator',
         status: 403,
       }),
     );
@@ -636,10 +635,10 @@ describe('SGP backend foundation (e2e)', () => {
       .expect(403);
     const body = bodyAs<ErrorResponseBody>(response);
 
-    expect(body.error).toEqual(
+    expect(body).toEqual(
       expect.objectContaining({
-        code: 'FORBIDDEN',
-        message: 'Access denied by policy evaluator',
+        title: 'FORBIDDEN',
+        detail: 'Access denied by policy evaluator',
         status: 403,
       }),
     );
@@ -652,14 +651,14 @@ describe('SGP backend foundation (e2e)', () => {
       .expect(400);
     const body = bodyAs<ErrorResponseBody>(response);
 
-    expect(body.error).toEqual(
+    expect(body).toEqual(
       expect.objectContaining({
-        code: 'BAD_REQUEST',
-        message: 'Request validation failed',
+        title: 'BAD_REQUEST',
+        detail: 'Request validation failed',
         status: 400,
       }),
     );
-    expect(body.error.details).toEqual(
+    expect(body.errors).toEqual(
       expect.arrayContaining(['page must not be less than 1']),
     );
   });

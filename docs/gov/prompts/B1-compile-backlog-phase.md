@@ -11,7 +11,7 @@
 **Type.** Reusable phase prompt. Run after B0 produces the audit pack.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** docs/work/round-<n>/12-round-<n+1>-backlog.md + appended draft column in docs/gov/audit/backlog-ledger.md.
-**Skill awareness.** Defers to DEVAI `SKILL-round-backlog`; local `sgp-round-backlog` is only an SGP adapter for repository config.
+**Skill awareness.** Invoke DEVAI canonical `SKILL-round-backlog` directly with SGP repository configuration from `.devai/config/project.json`.
 **Memory.** MemPalace required.
 
 ---
@@ -26,7 +26,10 @@ The backlog is the input to B2 (materialize prompts) and ultimately to B3 (execu
 
 ## 2. Skill Routing
 
-If skills are available, invoke DEVAI `SKILL-round-backlog` first; this prompt's contract still applies. Local `sgp-round-backlog` adapters must not duplicate DEVAI planning logic.
+If skills are available, invoke DEVAI `SKILL-round-backlog` first:
+`devai skill-run SKILL-round-backlog --repo-root /Users/aarusso/Development/stech/sgp`.
+This prompt's contract still applies, while SGP-specific gates and authority
+directories come from `.devai/config/project.json`.
 
 ---
 

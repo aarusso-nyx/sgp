@@ -1,0 +1,44 @@
+{
+  "skill_id": "SKILL-round-audit",
+  "status": "pass",
+  "evidence": {
+    "round_dir": "docs/work/round-0",
+    "phase": "audit",
+    "steps": [
+      {
+        "id": "audit.1",
+        "description": "Run SKILL-assess-state to compute the current scorecard."
+      },
+      {
+        "id": "audit.2",
+        "description": "Run SKILL-compute-scorecard for the per-cell verdict matrix."
+      },
+      {
+        "id": "audit.3",
+        "description": "Materialize docs/work/round-0/audit/scratch.md with findings, open questions, and prior-round carryovers."
+      },
+      {
+        "id": "audit.4",
+        "description": "Snapshot relevant gov/audit/ docs into docs/work/round-0/audit/inputs/."
+      }
+    ],
+    "next_phase": "backlog",
+    "references": {
+      "prompts_library": "docs/adopters/round-prompts/B0-audit.md",
+      "skills": ["SKILL-assess-state", "SKILL-compute-scorecard"]
+    },
+    "executed_artifacts": {
+      "round_dir": "docs/work/round-0",
+      "audit_dir": "docs/work/round-0/audit",
+      "files": [
+        "docs/work/round-0/audit/assessment.json",
+        "docs/work/round-0/audit/scorecard.baseline.json",
+        "docs/work/round-0/audit/scratch.md"
+      ],
+      "sub_skill_results": {
+        "SKILL-assess-state": "pass",
+        "SKILL-compute-scorecard": "pass"
+      }
+    }
+  }
+}

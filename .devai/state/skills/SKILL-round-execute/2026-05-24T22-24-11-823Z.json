@@ -1,0 +1,72 @@
+{
+  "skill_id": "SKILL-round-execute",
+  "status": "pass",
+  "notes": [
+    "Round 15 composer: all four phases passed",
+    "Verdict: with-blockers",
+    "Gates: 1/5 green",
+    "Blockers: 0 open",
+    "Ledger records written: 4 (DEC-0001, DEC-0002, DEC-0003, DEC-0004)"
+  ],
+  "evidence": {
+    "round_dir": "docs/work/round-15",
+    "phase": "loop",
+    "steps": [
+      {
+        "id": "loop.1",
+        "description": "Pick or create docs/work/round-15 (N = next free integer from docs/work/round-*)."
+      },
+      {
+        "id": "loop.2",
+        "description": "Invoke SKILL-round-audit."
+      },
+      {
+        "id": "loop.3",
+        "description": "Invoke SKILL-round-backlog."
+      },
+      {
+        "id": "loop.4",
+        "description": "Invoke SKILL-round-orchestrate."
+      },
+      {
+        "id": "loop.5",
+        "description": "Invoke SKILL-round-verify-publish (stops before publish unless --publish threaded through)."
+      }
+    ],
+    "next_phase": "done",
+    "references": {
+      "prompts_library": "docs/adopters/round-prompts/",
+      "skills": [
+        "SKILL-round-audit",
+        "SKILL-round-backlog",
+        "SKILL-round-orchestrate",
+        "SKILL-round-verify-publish"
+      ]
+    },
+    "executed_artifacts": {
+      "round_dir": "docs/work/round-15",
+      "round_n": 15,
+      "sub_results": {
+        "audit": {
+          "status": "pass"
+        },
+        "backlog": {
+          "status": "pass"
+        },
+        "orchestrate": {
+          "status": "pass",
+          "notes": ["Round dispatch complete; SKILL-round-verify-publish required for verdict."]
+        },
+        "verify-publish": {
+          "status": "pass",
+          "notes": [
+            "Verdict: with-blockers",
+            "Gates: 1/5 green",
+            "Blockers: 0 open",
+            "Ledger records written: 4 (DEC-0001, DEC-0002, DEC-0003, DEC-0004)"
+          ]
+        }
+      }
+    }
+  }
+}

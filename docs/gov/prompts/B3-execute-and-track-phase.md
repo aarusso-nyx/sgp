@@ -12,7 +12,7 @@
 **Type.** Reusable phase prompt. Run after B2 materializes the round-<n+1> prompt fan-out.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** Product source (under each worker's owned scope), docs/work/round-<n+1>/, docs/gov/audit/backlog-ledger.md (status updates).
-**Skill awareness.** Defers to DEVAI `SKILL-round-orchestrate` (execution) and `SKILL-round-verify-publish` (closure). Routes gate failures to `SKILL-fix-lint`, `SKILL-fix-build`, `SKILL-fix-typecheck`, or `SKILL-fix-test`; local SGP skills are adapters only.
+**Skill awareness.** Invoke DEVAI canonical `SKILL-round-orchestrate` for execution and `SKILL-round-verify-publish` for closure. Route gate failures to `SKILL-fix-lint`, `SKILL-fix-build`, `SKILL-fix-typecheck`, or `SKILL-fix-test`, using SGP repository configuration from `.devai/config/project.json`.
 **Memory.** MemPalace required.
 
 ---
@@ -29,9 +29,11 @@ This is the **execute** + **compare** phase of the measure → plan → execute 
 
 If skills are available:
 
-- DEVAI `SKILL-round-orchestrate` for the wave loop, fan-out, gate routing.
+- DEVAI `SKILL-round-orchestrate` for the wave loop, fan-out, gate routing:
+  `devai skill-run SKILL-round-orchestrate --repo-root /Users/aarusso/Development/stech/sgp`.
 - DEVAI `SKILL-fix-lint` / `SKILL-fix-build` / `SKILL-fix-typecheck` / `SKILL-fix-test` for fix-up rounds.
-- DEVAI `SKILL-round-verify-publish` only at round-end and only on explicit user authorization for commit/merge/push.
+- DEVAI `SKILL-round-verify-publish` only at round-end and only on explicit user authorization for commit/merge/push:
+  `devai skill-run SKILL-round-verify-publish --repo-root /Users/aarusso/Development/stech/sgp`.
 
 If skills are unavailable, follow the workflow inline.
 

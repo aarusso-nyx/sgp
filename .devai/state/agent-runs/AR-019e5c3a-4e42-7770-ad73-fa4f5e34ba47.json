@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0.0",
+  "run_id": "AR-019e5c3a-4e42-7770-ad73-fa4f5e34ba47",
+  "started_at": "2026-05-24T23:03:05.483Z",
+  "ended_at": "2026-05-24T23:03:05.537Z",
+  "caller": {
+    "kind": "skill",
+    "name": "SKILL-fix-test"
+  },
+  "files_read": [],
+  "files_written": [
+    "/Users/aarusso/Development/stech/sgp/.devai/state/skills/SKILL-fix-test/2026-05-24T23-03-05-537Z.json"
+  ],
+  "commands_run": [],
+  "compliance": {
+    "invariant_ids": ["INV-DEVAI-010"]
+  },
+  "outcome": {
+    "status": "fail"
+  },
+  "prev_hash": "289995ecc6ffce887d9cd284ed5741fa2993b59ce2356c1b69cc8b271aaffab9",
+  "hash_algo_version": "2.0",
+  "manifest_hash": "950f8f2dc9450e6ac13ffc04d134cea445898ad02a1d3611b8851906d15744f3"
+}

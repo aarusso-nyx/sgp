@@ -11,7 +11,7 @@
 **Type.** Reusable phase prompt. Run at the start of every SGP round.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** docs/work/round-<n>/ (round-scoped) + docs/gov/audit/{,inv/round-<n>/,diag/round-<n>/} (governance-tracked).
-**Skill awareness.** Defers to DEVAI `SKILL-round-audit`; local `sgp-round-audit` is only an SGP adapter for repository config. Falls through to inline workflow if neither is available.
+**Skill awareness.** Invoke DEVAI canonical `SKILL-round-audit` directly with SGP repository configuration from `.devai/config/project.json`. Falls through to inline workflow if the canonical skill is unavailable.
 **Memory.** MemPalace required.
 
 ---
@@ -28,7 +28,9 @@ This is the **measure** phase of the measure → plan → execute → compare lo
 
 If the executing agent supports skills:
 
-- Invoke DEVAI `SKILL-round-audit` first; local `sgp-round-audit` only supplies SGP repository config.
+- Invoke DEVAI `SKILL-round-audit` first:
+  `devai skill-run SKILL-round-audit --repo-root /Users/aarusso/Development/stech/sgp`.
+- SGP-specific authority dirs, gates, and guardrails come from `.devai/config/project.json`.
 - This prompt's body still applies as the contract the skill must honor.
 
 If skills are unavailable, follow the workflow inline.

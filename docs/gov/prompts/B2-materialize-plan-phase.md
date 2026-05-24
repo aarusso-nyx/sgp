@@ -11,7 +11,7 @@
 **Type.** Reusable phase prompt. Run after B1 produces the round-<n+1> backlog.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output root.** docs/work/round-<n>/prompts/.
-**Skill awareness.** Defers to DEVAI `SKILL-round-backlog` (prompt schema) and `SKILL-round-orchestrate` (orchestrator semantics); local SGP skills are adapters only.
+**Skill awareness.** Invoke DEVAI canonical `SKILL-round-backlog` for prompt schema and `SKILL-round-orchestrate` for orchestrator semantics, using SGP repository configuration from `.devai/config/project.json`.
 **Memory.** MemPalace required.
 
 ---

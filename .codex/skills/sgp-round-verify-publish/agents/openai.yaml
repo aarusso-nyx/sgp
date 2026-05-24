@@ -1,4 +1,0 @@
-interface:
-  display_name: 'SGP Verify Publish'
-  short_description: 'Verify SGP gates and publish safely'
-  default_prompt: 'Use $sgp-round-verify-publish as the SGP adapter for DEVAI SKILL-round-verify-publish.'

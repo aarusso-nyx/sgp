@@ -30,3 +30,16 @@ Scope executed from `/Users/aarusso/Development/stech/align/sgp/round-2/prompts/
 - `npm run governance:check`
 - `npm run build`
 - `npm run test:types`
+
+## 2026-05-24 — R4 Closure
+
+- Full aggregate CI: partially closed by R4 worker 11 evidence capture. The new
+  `tests/backend/esocial-spool-transmission.e2e-spec.ts` passed locally; broad
+  CI evidence is retained under `.devai/state/test-results/` when generated.
+- eSocial spool suite: closed by
+  `tests/backend/esocial-spool-transmission.e2e-spec.ts`.
+- Signature architecture gap: closed by
+  `docs/eng/68-signature-architecture.md`.
+- PDF/A builder architecture gap: closed by `docs/eng/67-pdf-a-builder.md`.
+- npm audit findings: closed. `npm audit --json` reported zero vulnerabilities
+  on 2026-05-24.

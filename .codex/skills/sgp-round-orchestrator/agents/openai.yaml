@@ -1,4 +1,0 @@
-interface:
-  display_name: 'SGP Round Orchestrator'
-  short_description: 'Run SGP wave prompts with gates'
-  default_prompt: 'Use $sgp-round-orchestrator as the SGP adapter for DEVAI SKILL-round-orchestrate with docs/gov/prompts/B3.'

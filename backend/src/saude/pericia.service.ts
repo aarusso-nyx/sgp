@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
 import { PericiaAppointmentWorkflowService } from './pericia-appointment-workflow.service';
@@ -25,18 +25,29 @@ export type {
 
 @Injectable()
 export class PericiaService {
+  private readonly appointmentWorkflow: PericiaAppointmentWorkflowService;
+  private readonly medicalRecordWorkflow: PericiaMedicalRecordWorkflowService;
+  private readonly replicationWorkflow: PericiaReplicationWorkflowService;
+
   constructor(
     databaseService: DatabaseService,
-    private readonly appointmentWorkflow = new PericiaAppointmentWorkflowService(
-      databaseService,
-    ),
-    private readonly medicalRecordWorkflow = new PericiaMedicalRecordWorkflowService(
-      databaseService,
-    ),
-    private readonly replicationWorkflow = new PericiaReplicationWorkflowService(
-      databaseService,
-    ),
-  ) {}
+    @Optional()
+    appointmentWorkflow?: PericiaAppointmentWorkflowService,
+    @Optional()
+    medicalRecordWorkflow?: PericiaMedicalRecordWorkflowService,
+    @Optional()
+    replicationWorkflow?: PericiaReplicationWorkflowService,
+  ) {
+    this.appointmentWorkflow =
+      appointmentWorkflow ??
+      new PericiaAppointmentWorkflowService(databaseService);
+    this.medicalRecordWorkflow =
+      medicalRecordWorkflow ??
+      new PericiaMedicalRecordWorkflowService(databaseService);
+    this.replicationWorkflow =
+      replicationWorkflow ??
+      new PericiaReplicationWorkflowService(databaseService);
+  }
 
   async scheduleAppointment(
     input: SchedulePericiaDto,

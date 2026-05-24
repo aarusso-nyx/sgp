@@ -192,10 +192,10 @@ describe('Movimentacao workflow (e2e)', () => {
       .send({})
       .expect(422)
       .expect((response) => {
-        expect(response.body.error).toEqual(
+        expect(response.body).toEqual(
           expect.objectContaining({
-            code: 'UNPROCESSABLE_ENTITY',
-            message:
+            title: 'UNPROCESSABLE_ENTITY',
+            detail:
               'Transfer effective date is inside a closed payroll competence',
             status: 422,
           }),

@@ -7,6 +7,7 @@
 ## Quick Start for Agents
 
 ### Before starting any task
+
 ```bash
 git status --short --branch          # See current state
 git log --oneline -5                 # Recent commits
@@ -14,6 +15,7 @@ ls -la docs/eng/ | grep -E "^-"      # Check for relevant spec docs
 ```
 
 ### Authority Order (short version)
+
 1. **`docs/eng/`** — Product spec, architecture, acceptance (source of truth)
 2. **Source code + tests** — Proof of implementation
 3. **`docs/gov/`** — Governance controls, compliance, runtime topology
@@ -27,18 +29,19 @@ ls -la docs/eng/ | grep -E "^-"      # Check for relevant spec docs
 
 ## Key Directories & Commands
 
-| Path | Role | Key Files |
-|------|------|-----------|
-| `backend/src/` | NestJS API, services, workers | Controllers, DTOs, specs |
-| `frontend/src/` | Angular admin + portal apps | Components, services, specs |
-| `database/sql/` | Canonical schema, RLS, triggers | DDL packs, migrations |
-| `tests/` | Jest (backend), Vitest (frontend), Playwright e2e, RLS specs | `*.spec.ts` |
-| `scripts/` | Orchestration commands | `run.mjs` (dispatcher), `lib/` (metadata) |
-| `docs/eng/` | Product truth, ADRs, status | `99-implementation-status.md` |
-| `docs/gov/` | Governance, runtime topology, compliance | `runtime-topology.json` |
-| `.claude/skills/` | SGP custom skills (backported from Codex) | `sgp-fix-*`, `sgp-round-*` |
+| Path             | Role                                                         | Key Files                                   |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------------- |
+| `backend/src/`   | NestJS API, services, workers                                | Controllers, DTOs, specs                    |
+| `frontend/src/`  | Angular admin + portal apps                                  | Components, services, specs                 |
+| `database/sql/`  | Canonical schema, RLS, triggers                              | DDL packs, migrations                       |
+| `tests/`         | Jest (backend), Vitest (frontend), Playwright e2e, RLS specs | `*.spec.ts`                                 |
+| `scripts/`       | Orchestration commands                                       | `run.mjs` (dispatcher), `lib/` (metadata)   |
+| `docs/eng/`      | Product truth, ADRs, status                                  | `99-implementation-status.md`               |
+| `docs/gov/`      | Governance, runtime topology, compliance                     | `runtime-topology.json`                     |
+| `.devai/config/` | SGP project configuration for DEVAI canonical skills         | `project.json`, gate and authority settings |
 
 **Fast commands:**
+
 ```bash
 npm run lint              # Check style (root workspace)
 npm run typecheck        # Type check (root workspace)
@@ -65,6 +68,7 @@ npm run build            # Build all workspaces
 ## Common Agent Tasks
 
 ### Adding a Feature
+
 1. Check acceptance in `docs/eng/99-implementation-status.md`
 2. Align with `docs/eng/` spec (route, DB schema, permissions)
 3. Implement in source (backend service, frontend component, database DDL)
@@ -73,6 +77,7 @@ npm run build            # Build all workspaces
 6. Run `npm run governance:check` before committing
 
 ### Fixing a Build/Test Failure
+
 1. `git log --oneline -1` — See what changed
 2. `npm run lint` — Check style
 3. `npm run typecheck` — Check types
@@ -81,6 +86,7 @@ npm run build            # Build all workspaces
 6. Verify gates pass cleanly
 
 ### Understanding a Subsystem
+
 1. Start in `docs/eng/` — Find the relevant spec or ADR
 2. Read source in `backend/src/` or `frontend/src/`
 3. Check tests in `tests/` for usage examples
@@ -103,6 +109,7 @@ npm run build            # Build all workspaces
 ## Reporting Issues
 
 If you find:
+
 - **Stale docs** that contradict source → Update `docs/eng/` after confirming with source
 - **Unresolved design question** → Record in `docs/work/` scratch or ask for owner decision
 - **Governance violation** → Report in turn summary; do not silently bypass rules

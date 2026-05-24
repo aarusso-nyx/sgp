@@ -19,6 +19,68 @@
     "governance": "npm run governance:check",
     "health": "npm run health:json"
   },
+  "round_skills": {
+    "build_command": "npm run build",
+    "lint_command": "npm run lint:check",
+    "format_command": "npm run format:check",
+    "typecheck_command": "npm run typecheck",
+    "test_commands": {
+      "unit": "npm run test",
+      "backend": "npm run test:backend -- --runInBand",
+      "e2e": "npm run test:e2e -- --runInBand",
+      "db": "DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run test:db",
+      "coverage": "npm run test:coverage",
+      "frontend_coverage": "npm run test:frontend:coverage"
+    },
+    "mutation_command": "npm run test:mutation"
+  },
+  "gate_commands": {
+    "build": "npm run build",
+    "build_backend": "npm run build:backend",
+    "build_admin": "npm run build:admin",
+    "build_portal": "npm run build:portal",
+    "lint": "npm run lint:check",
+    "format": "npm run format:check",
+    "typecheck": "npm run typecheck",
+    "test": "npm run test",
+    "test_backend": "npm run test:backend -- --runInBand",
+    "test_e2e": "npm run test:e2e -- --runInBand",
+    "test_db": "DATABASE_URL=postgresql://$USER@localhost:5432/sgp_test npm run test:db",
+    "test_coverage": "npm run test:coverage",
+    "test_frontend_coverage": "npm run test:frontend:coverage",
+    "governance": "npm run governance:check",
+    "health": "npm run health:json",
+    "api_spec": "npm run api:spec:check",
+    "api_client_generate": "npm run api:client:generate"
+  },
+  "authority_dirs": [
+    "AGENTS.md",
+    "docs/eng",
+    "docs/eng/domains",
+    "docs/gov/audit",
+    "docs/gov",
+    "docs/user",
+    "docs/leg"
+  ],
+  "byte_sensitive_fixtures": [
+    "**/*.rem",
+    "**/*.ret",
+    "**/*.xml",
+    "**/*.txt",
+    "**/*.pdf",
+    "tests/backend/golden/**",
+    "tests/regulatory/**/*.gold",
+    "tests/**/*.golden"
+  ],
+  "guardrails": [
+    "Build and evolve SGP v0.0.1 without backward-compatibility shims, legacy compatibility schemas, or transition aliases.",
+    "Payroll-engine decisions are folia-first and reconcile against docs/eng/domains/payroll-benefits.md.",
+    "Preserve tenant context, RLS posture, RBAC, audit behavior, request IDs, and PII redaction on protected routes and services.",
+    "Use deterministic stubs, mocks, sandbox adapters, contract fixtures, or goldens for external integrations unless explicitly asked to use real services.",
+    "Do not normalize byte-sensitive REM, RET, XML, TXT, PDF, banking, or regulatory golden fixtures without intentional review."
+  ],
+  "round_prompts_dir": "docs/gov/prompts",
+  "devai_version": "0.0.0",
   "hardFailGates": [
     {
       "id": "lint-check",

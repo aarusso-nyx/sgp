@@ -30,3 +30,15 @@ alignment prompt from `/Users/aarusso/Development/stech/align/sgp/round-1`.
 - `npm run typecheck`
 - `npm run build`
 - `npm run test:types`
+
+## 2026-05-24 — R4 Closure
+
+- Full broad runtime gates: partially closed by R4 worker 11 evidence capture.
+  The focused new eSocial spool e2e test passed. Full aggregate CI status is
+  tracked in `.devai/state/test-results/r4-*.json` when generated.
+- npm audit findings: closed. `npm audit --json` reported zero vulnerabilities
+  on 2026-05-24.
+- Angular locale warning: policy closed by `docs/eng/locale-policy.md`; runtime
+  implementation remains governed by that policy.
+- Lint threshold diagnostics: closed by `docs/gov/audit/lint-thresholds.md`.
+- STYNX local tarball workflow: closed by `docs/user/dependency-management.md`.

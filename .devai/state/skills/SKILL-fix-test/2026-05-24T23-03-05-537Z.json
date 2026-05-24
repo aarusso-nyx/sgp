@@ -1,0 +1,26 @@
+{
+  "skill_id": "SKILL-fix-test",
+  "status": "fail",
+  "evidence": {
+    "schemaVersion": "1.0.0",
+    "id": "SR-08c6ec56e9fb802f",
+    "sensor": {
+      "name": "test.unit",
+      "kind": "unit_test"
+    },
+    "timestamp": "2026-05-24T23:03:05.536Z",
+    "status": "error",
+    "deterministic": true,
+    "command": "pnpm test",
+    "command_hash": "ae7aca4de98e885127fe392c0b60056f3472ed0f0be972870a06df422b3f140a",
+    "exit_code": 1,
+    "duration_ms": 49,
+    "out_head": "",
+    "err_head": "This project is configured to use npm because /Users/aarusso/Development/stech/sgp/package.json has a \"packageManager\" field\n",
+    "killed": false,
+    "metrics": {
+      "tests_passed": 0,
+      "tests_failed": 0
+    }
+  }
+}

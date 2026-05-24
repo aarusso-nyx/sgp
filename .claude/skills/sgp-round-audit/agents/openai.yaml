@@ -1,4 +1,0 @@
-interface:
-  display_name: "SGP Round Audit"
-  short_description: "Refresh docs/gov/audit and round context"
-  default_prompt: "Use $sgp-round-audit with docs/gov/prompts/B0 to refresh docs/gov/audit and produce the next round context."
