@@ -40,5 +40,7 @@ alignment prompt from `/Users/aarusso/Development/stech/align/sgp/round-1`.
   on 2026-05-24.
 - Angular locale warning: policy closed by `docs/eng/locale-policy.md`; runtime
   implementation remains governed by that policy.
-- Lint threshold diagnostics: closed by `docs/gov/audit/lint-thresholds.md`.
+- Lint threshold diagnostics: closed by `docs/gov/audit/lint-thresholds.md`;
+  the jscpd clone inventory is documented there as informational output for
+  `npm run lint:check`.
 - STYNX local tarball workflow: closed by `docs/user/dependency-management.md`.

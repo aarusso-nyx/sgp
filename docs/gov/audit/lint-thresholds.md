@@ -27,6 +27,14 @@ TypeScript files in `backend/src`, `frontend/src`, and `frontend/portal/src`,
 excluding specs, e2e specs, generated API clients, coverage, dist, and Stryker
 temporary output.
 
+## jscpd duplication inventory
+
+`npm run lint:check` exits green; the jscpd clone inventory printed alongside
+is informational, not a failing gate. To inspect actively, run
+`npm run check:duplication` and review the exact clone report before any
+refactor. Any duplication refactor must NOT alter payroll, RBAC, audit, RLS, or
+regulatory behavior opportunistically.
+
 R4 baseline captured on 2026-05-24:
 
 | Metric                   | Value |
