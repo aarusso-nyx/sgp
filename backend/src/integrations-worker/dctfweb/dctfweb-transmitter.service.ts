@@ -4,6 +4,10 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  IntegrationAdapter,
+  type RetryPolicy,
+} from '@stynx/integration-adapter';
 
 import {
   combineAbortSignals,
@@ -52,29 +56,34 @@ export class DctfwebTransmitterService {
   private async sendWithRetry(
     declaration: DctfwebDeclarationDetailsDto,
   ): Promise<RfbResponse> {
-    const attempts = Math.max(
-      1,
-      Number(this.configService.get<string>('DCTFWEB_RFB_MAX_ATTEMPTS') ?? 3),
-    );
-    let lastError: unknown;
-    for (let attempt = 1; attempt <= attempts; attempt += 1) {
-      try {
-        return await this.sendOnce(declaration, attempt);
-      } catch (error) {
-        lastError = error;
-        if (attempt === attempts) break;
-      }
+    const adapter = new IntegrationAdapter<
+      DctfwebDeclarationDetailsDto,
+      RfbResponse,
+      RfbResponse
+    >({
+      name: 'sgp.dctfweb.rfb',
+      request: (input) => this.sendOnce(input),
+      parseResponse: (response) => response,
+      idempotencyKey: (input) =>
+        `dctfweb:${input.id}:${input.signedXmlHash ?? input.payloadXmlHash}`,
+      retryPolicy: this.retryPolicy('DCTFWEB_RFB_MAX_ATTEMPTS'),
+      timeoutMs: this.timeoutMs('DCTFWEB_RFB_TIMEOUT_MS'),
+      circuitBreakerKey: () => 'rfb:dctfweb',
+    });
+
+    try {
+      return await adapter.execute(declaration);
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        error instanceof Error
+          ? error.message
+          : 'DCTFWeb transmission failed after retries',
+      );
     }
-    throw new ServiceUnavailableException(
-      lastError instanceof Error
-        ? lastError.message
-        : 'DCTFWeb transmission failed after retries',
-    );
   }
 
   private async sendOnce(
     declaration: DctfwebDeclarationDetailsDto,
-    attempt: number,
   ): Promise<RfbResponse> {
     const endpoint = this.configService.get<string>('DCTFWEB_RFB_ENDPOINT_URL');
     if (!endpoint) {
@@ -83,7 +92,7 @@ export class DctfwebTransmitterService {
         receiptNumber: `DCTFWEB-${declaration.id.slice(0, 8).toUpperCase()}`,
         payload: {
           mode: 'sandbox',
-          attempt,
+          attempt: 1,
           message:
             'DCTFWeb sandbox transmitter accepted the signed XML without an external RFB call.',
         },
@@ -121,6 +130,23 @@ export class DctfwebTransmitterService {
     } finally {
       clearTimeout(timeout);
     }
+  }
+
+  private retryPolicy(maxAttemptsKey: string): RetryPolicy {
+    return {
+      maxAttempts: Math.max(
+        1,
+        Number(this.configService.get<string>(maxAttemptsKey) ?? 3),
+      ),
+      baseDelayMs: 0,
+    };
+  }
+
+  private timeoutMs(key: string): number {
+    return Math.max(
+      1_000,
+      Number(this.configService.get<string>(key) ?? 15_000),
+    );
   }
 }
 

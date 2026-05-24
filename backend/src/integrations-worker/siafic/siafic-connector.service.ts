@@ -1,5 +1,10 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  InMemoryCircuitBreaker,
+  IntegrationAdapter,
+  type RetryPolicy,
+} from '@stynx/integration-adapter';
 
 import {
   SiaficCircuitState,
@@ -12,50 +17,61 @@ import {
   currentRequestAbortSignal,
 } from '../../common/http/request-abort-signal';
 
-interface CircuitRecord {
-  state: SiaficCircuitState;
-  failures: number;
-  openedAt: number | null;
-}
-
 @Injectable()
 export class SiaficConnectorService {
-  private readonly circuits = new Map<string, CircuitRecord>();
+  private readonly circuitBreaker: InMemoryCircuitBreaker;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {
+    this.circuitBreaker = new InMemoryCircuitBreaker({
+      failureThreshold: this.failureThreshold(),
+      openAfterMs: 0,
+      halfOpenAfterMs: this.resetTimeoutMs(),
+    });
+  }
 
   getCircuitState(enteCode: string): SiaficCircuitState {
-    return this.resolveCircuit(enteCode).state;
+    const state = this.circuitBreaker.snapshot(this.circuitKey(enteCode)).state;
+    if (state === 'open') return 'OPEN';
+    if (state === 'half-open') return 'HALF_OPEN';
+    return 'CLOSED';
   }
 
   async sendStage(
     payload: SiaficStagePayload,
   ): Promise<SiaficConnectorResponse> {
-    this.assertCircuitAllows(payload.enteCode);
-    const attempts = this.maxAttempts();
-    let lastError: unknown;
-    for (let attempt = 1; attempt <= attempts; attempt += 1) {
-      try {
-        const response = await this.sendOnce(payload, attempt);
-        this.recordSuccess(payload.enteCode);
-        return response;
-      } catch (error) {
-        lastError = error;
-        this.recordFailure(payload.enteCode);
-        if (attempt === attempts || this.isOpen(payload.enteCode)) break;
-      }
-    }
+    const adapter = new IntegrationAdapter<
+      SiaficStagePayload,
+      SiaficConnectorResponse,
+      SiaficConnectorResponse
+    >({
+      name: 'sgp.siafic.stage',
+      request: (input) => this.sendOnce(input),
+      parseResponse: (response) => response,
+      idempotencyKey: (input) => input.idempotencyKey,
+      retryPolicy: this.retryPolicy(payload.enteCode),
+      timeoutMs: this.timeoutMs(),
+      circuitBreakerKey: (input) => this.circuitKey(input.enteCode),
+      circuitBreaker: this.circuitBreaker,
+    });
 
-    throw new ServiceUnavailableException(
-      lastError instanceof Error
-        ? lastError.message
-        : 'SIAFIC transmission failed after retries',
-    );
+    try {
+      return await adapter.execute(payload, {
+        metadata: {
+          enteCode: payload.enteCode,
+          stage: payload.stage,
+        },
+      });
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        error instanceof Error
+          ? error.message
+          : 'SIAFIC transmission failed after retries',
+      );
+    }
   }
 
   private async sendOnce(
     payload: SiaficStagePayload,
-    attempt: number,
   ): Promise<SiaficConnectorResponse> {
     const endpoint = this.configService.get<string>('SIAFIC_ENDPOINT_URL');
     if (!endpoint) {
@@ -66,7 +82,7 @@ export class SiaficConnectorService {
           .toUpperCase()}`,
         payload: {
           mode: 'sandbox',
-          attempt,
+          attempt: 1,
           stage: payload.stage,
           message:
             'SIAFIC sandbox connector accepted the payroll accounting payload without an external call.',
@@ -109,55 +125,27 @@ export class SiaficConnectorService {
     }
   }
 
-  private assertCircuitAllows(enteCode: string): void {
-    const circuit = this.resolveCircuit(enteCode);
-    if (circuit.state !== 'OPEN') return;
-    const openedAt = circuit.openedAt ?? 0;
-    if (Date.now() - openedAt >= this.resetTimeoutMs()) {
-      circuit.state = 'HALF_OPEN';
-      return;
-    }
-    throw new ServiceUnavailableException(
-      `SIAFIC circuit is open for ente ${enteCode}`,
-    );
+  private circuitKey(enteCode: string): string {
+    return `siafic:${enteCode}`;
   }
 
-  private recordSuccess(enteCode: string): void {
-    const circuit = this.resolveCircuit(enteCode);
-    circuit.state = 'CLOSED';
-    circuit.failures = 0;
-    circuit.openedAt = null;
-  }
-
-  private recordFailure(enteCode: string): void {
-    const circuit = this.resolveCircuit(enteCode);
-    circuit.failures += 1;
-    if (circuit.failures >= this.failureThreshold()) {
-      circuit.state = 'OPEN';
-      circuit.openedAt = Date.now();
-    }
-  }
-
-  private isOpen(enteCode: string): boolean {
-    return this.resolveCircuit(enteCode).state === 'OPEN';
-  }
-
-  private resolveCircuit(enteCode: string): CircuitRecord {
-    const current = this.circuits.get(enteCode);
-    if (current) return current;
-    const created: CircuitRecord = {
-      state: 'CLOSED',
-      failures: 0,
-      openedAt: null,
+  private retryPolicy(enteCode: string): RetryPolicy {
+    return {
+      maxAttempts: Math.max(
+        1,
+        Number(this.configService.get<string>('SIAFIC_MAX_ATTEMPTS') ?? 3),
+      ),
+      baseDelayMs: 0,
+      retryable: () =>
+        this.circuitBreaker.snapshot(this.circuitKey(enteCode)).state !==
+        'open',
     };
-    this.circuits.set(enteCode, created);
-    return created;
   }
 
-  private maxAttempts(): number {
+  private timeoutMs(): number {
     return Math.max(
-      1,
-      Number(this.configService.get<string>('SIAFIC_MAX_ATTEMPTS') ?? 3),
+      1_000,
+      Number(this.configService.get<string>('SIAFIC_TIMEOUT_MS') ?? 15_000),
     );
   }
 

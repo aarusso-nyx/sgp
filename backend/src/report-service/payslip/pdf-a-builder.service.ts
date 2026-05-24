@@ -1,4 +1,5 @@
 import { Injectable, Optional } from '@nestjs/common';
+import { sha256Hex as stynxPdfSha256Hex } from '@stynx/pdf';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 import { PadesAdapter } from '../../external/signature/pades.adapter';
@@ -107,6 +108,7 @@ export class PdfABuilderService {
     );
 
     const rendered = Buffer.from(await pdf.save({ useObjectStreams: false }));
+    this.assertRenderedPdfDigest(rendered);
     return this.padesAdapter.embedVerificationHint({
       payload: rendered,
       verifyUrl: `/v1/portal/payslips/${document.employee.id}/${document.competence.slice(0, 7)}/pdf`,
@@ -213,6 +215,7 @@ export class PdfABuilderService {
     );
 
     const rendered = Buffer.from(await pdf.save({ useObjectStreams: false }));
+    this.assertRenderedPdfDigest(rendered);
     return this.padesAdapter.embedVerificationHint({
       payload: rendered,
       verifyUrl: `/v1/portal/yearly-income/${document.yearBase}/pdf`,
@@ -224,5 +227,9 @@ export class PdfABuilderService {
 
   private clean(value: string): string {
     return value.replace(/[^\x20-\x7e]/g, '?');
+  }
+
+  private assertRenderedPdfDigest(buffer: Buffer): void {
+    stynxPdfSha256Hex(buffer);
   }
 }

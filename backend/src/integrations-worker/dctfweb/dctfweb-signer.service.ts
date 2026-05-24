@@ -1,11 +1,10 @@
-import { createHash } from 'node:crypto';
-
 import {
   BadRequestException,
   Injectable,
   PreconditionFailedException,
   ServiceUnavailableException,
 } from '@nestjs/common';
+import { sha256Hex } from '@stynx/signature';
 import { SignedXml } from 'xml-crypto';
 
 import { DatabaseService } from '../../database/database.service';
@@ -54,7 +53,7 @@ export class DctfwebSignerService {
       material.privateKeyPem,
       material.certificatePem,
     );
-    const signedHash = sha256(signedXml);
+    const signedHash = sha256Hex(Buffer.from(signedXml, 'utf8'));
     const signedRef = `s3://local-fiscal/dctfweb/${id}/${signedHash}.signed.xml`;
 
     await this.databaseService.query(
@@ -115,8 +114,4 @@ export function signDctfwebXml(
     },
   });
   return signer.getSignedXml();
-}
-
-function sha256(value: string): string {
-  return createHash('sha256').update(value, 'utf8').digest('hex');
 }

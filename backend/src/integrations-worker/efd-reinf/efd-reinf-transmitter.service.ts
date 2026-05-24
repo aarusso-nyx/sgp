@@ -4,6 +4,10 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  IntegrationAdapter,
+  type RetryPolicy,
+} from '@stynx/integration-adapter';
 
 import {
   combineAbortSignals,
@@ -52,30 +56,33 @@ export class EfdReinfTransmitterService {
   private async sendWithRetry(
     event: EfdReinfEventDetailsDto,
   ): Promise<RfbResponse> {
-    const attempts = Math.max(
-      1,
-      Number(this.configService.get<string>('EFD_REINF_RFB_MAX_ATTEMPTS') ?? 3),
-    );
-    let lastError: unknown;
-    for (let attempt = 1; attempt <= attempts; attempt += 1) {
-      try {
-        return await this.sendOnce(event, attempt);
-      } catch (error) {
-        lastError = error;
-        if (attempt === attempts) break;
-      }
+    const adapter = new IntegrationAdapter<
+      EfdReinfEventDetailsDto,
+      RfbResponse,
+      RfbResponse
+    >({
+      name: 'sgp.efd-reinf.rfb',
+      request: (input) => this.sendOnce(input),
+      parseResponse: (response) => response,
+      idempotencyKey: (input) =>
+        `efd-reinf:${input.id}:${input.signedXmlHash ?? input.payloadXmlHash}`,
+      retryPolicy: this.retryPolicy('EFD_REINF_RFB_MAX_ATTEMPTS'),
+      timeoutMs: this.timeoutMs('EFD_REINF_RFB_TIMEOUT_MS'),
+      circuitBreakerKey: () => 'rfb:efd-reinf',
+    });
+
+    try {
+      return await adapter.execute(event);
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        error instanceof Error
+          ? error.message
+          : 'EFD-Reinf transmission failed after retries',
+      );
     }
-    throw new ServiceUnavailableException(
-      lastError instanceof Error
-        ? lastError.message
-        : 'EFD-Reinf transmission failed after retries',
-    );
   }
 
-  private async sendOnce(
-    event: EfdReinfEventDetailsDto,
-    attempt: number,
-  ): Promise<RfbResponse> {
+  private async sendOnce(event: EfdReinfEventDetailsDto): Promise<RfbResponse> {
     const endpoint = this.configService.get<string>(
       'EFD_REINF_RFB_ENDPOINT_URL',
     );
@@ -87,7 +94,7 @@ export class EfdReinfTransmitterService {
           .toUpperCase()}`,
         payload: {
           mode: 'sandbox',
-          attempt,
+          attempt: 1,
           eventType: event.eventType,
           message:
             'EFD-Reinf sandbox transmitter accepted the signed XML without an external RFB call.',
@@ -126,6 +133,23 @@ export class EfdReinfTransmitterService {
     } finally {
       clearTimeout(timeout);
     }
+  }
+
+  private retryPolicy(maxAttemptsKey: string): RetryPolicy {
+    return {
+      maxAttempts: Math.max(
+        1,
+        Number(this.configService.get<string>(maxAttemptsKey) ?? 3),
+      ),
+      baseDelayMs: 0,
+    };
+  }
+
+  private timeoutMs(key: string): number {
+    return Math.max(
+      1_000,
+      Number(this.configService.get<string>(key) ?? 15_000),
+    );
   }
 }
 

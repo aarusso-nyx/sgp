@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { createHash } from 'node:crypto';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import {
+  createMockSignatureBackend,
+  sha256Hex,
+  SignatureService,
+} from '@stynx/signature';
 
 export interface PadesPrepareInput {
   payload: Buffer;
@@ -35,20 +39,46 @@ export class PadesAdapter {
       return Buffer.concat([
         input.payload,
         Buffer.from(`\n%%SGP-VERIFY-QR:${input.verifyUrl}\n`, 'utf8'),
-        this.padesBlock(input.payload, input),
+        await this.padesBlock(input.payload, input),
       ]);
     }
   }
 
-  private appendPadesBlock(payload: Buffer, input: PadesPrepareInput): Buffer {
-    return Buffer.concat([payload, this.padesBlock(payload, input)]);
+  private async appendPadesBlock(
+    payload: Buffer,
+    input: PadesPrepareInput,
+  ): Promise<Buffer> {
+    return Buffer.concat([payload, await this.padesBlock(payload, input)]);
   }
 
-  private padesBlock(payload: Buffer, input: PadesPrepareInput): Buffer {
-    const payloadHash = createHash('sha256').update(payload).digest('hex');
-    const signatureHash = createHash('sha256')
-      .update(`${payloadHash}:${input.verifyUrl}:${input.reason ?? ''}`)
-      .digest('hex');
+  private async padesBlock(
+    payload: Buffer,
+    input: PadesPrepareInput,
+  ): Promise<Buffer> {
+    const payloadHash = sha256Hex(payload);
+    await new SignatureService(
+      createMockSignatureBackend(
+        () => new Date(input.signedAt ?? new Date(0).toISOString()),
+      ),
+    ).sign({
+      tenantId: 'sgp',
+      actorId: input.signerName ?? 'SGP report-service',
+      document: payload,
+      documentSha256: payloadHash,
+      tsa: { endpoint: input.verifyUrl },
+      certificate: {
+        subject: input.signerName ?? 'SGP report-service',
+        issuer: 'SGP local signature adapter',
+        serialNumber: payloadHash.slice(0, 16),
+      },
+      idempotencyKey: `${payloadHash}:${input.verifyUrl}`,
+      metadata: {
+        reason: input.reason ?? 'Official PDF signature',
+      },
+    });
+    const signatureHash = sha256Hex(
+      Buffer.from(`${payloadHash}:${input.verifyUrl}:${input.reason ?? ''}`),
+    );
     const block = {
       format: 'PAdES',
       profile: 'PAdES-B-B',

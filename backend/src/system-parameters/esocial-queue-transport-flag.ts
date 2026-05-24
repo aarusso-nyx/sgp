@@ -1,27 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import type { QueryResultRow } from 'pg';
+import { FeatureFlagsService } from '@stynx/feature-flags';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
-import { DatabaseService } from '../database/database.service';
+import { SystemParameterFeatureFlagProvider } from './system-parameter-feature-flag.provider';
 
 export const ESOCIAL_QUEUE_TRANSPORT_FLAG = 'esocial.queue.transport';
 export const ESOCIAL_QUEUE_TRANSPORT_PARAMETER_KEY = `feature-flag:${ESOCIAL_QUEUE_TRANSPORT_FLAG}`;
 
 export type EsocialQueueTransportMode = 'in-memory' | 'sqs';
 
-type FeatureFlagRow = QueryResultRow & {
-  value: unknown;
-};
-
 @Injectable()
 export class EsocialQueueTransportFlag {
-  constructor(private readonly databaseService: DatabaseService) {}
+  private readonly featureFlags: FeatureFlagsService;
+
+  constructor(
+    private readonly featureFlagProvider: SystemParameterFeatureFlagProvider,
+  ) {
+    this.featureFlags = new FeatureFlagsService(featureFlagProvider);
+  }
 
   async resolve(tenantId: string): Promise<EsocialQueueTransportMode> {
-    if (!this.databaseService.configured) {
-      return 'in-memory';
-    }
-
     return RequestContextStore.run(
       {
         ...RequestContextStore.get(),
@@ -29,18 +27,12 @@ export class EsocialQueueTransportFlag {
         permissions: ['gestao.read'],
       },
       async () => {
-        const [row] = await this.databaseService.query<FeatureFlagRow>(
-          `
-          SELECT value
-          FROM public.system_parameter
-          WHERE tenant_id = $1::uuid
-            AND key = $2
-          LIMIT 1
-          `,
-          [tenantId, ESOCIAL_QUEUE_TRANSPORT_PARAMETER_KEY],
+        const evaluation = await this.featureFlags.evaluate(
+          ESOCIAL_QUEUE_TRANSPORT_FLAG,
+          { tenantId },
+          false,
         );
-
-        return normalizeTransportFlag(row?.value);
+        return normalizeTransportFlag(evaluation.value);
       },
     );
   }

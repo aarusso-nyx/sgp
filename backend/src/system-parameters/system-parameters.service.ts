@@ -1,4 +1,9 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Injectable,
+  Optional,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import { FeatureFlagsService } from '@stynx/feature-flags';
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../database/database.service';
@@ -13,6 +18,7 @@ import {
   UpsertGlobalParameterDto,
   UpsertSystemParametersDto,
 } from './system-parameters.dto';
+import { SystemParameterFeatureFlagProvider } from './system-parameter-feature-flag.provider';
 
 interface ParameterRow extends QueryResultRow {
   key: string;
@@ -37,7 +43,11 @@ interface AtsParameterRow extends QueryResultRow {
 
 @Injectable()
 export class SystemParametersService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @Optional()
+    private readonly featureFlagProvider?: SystemParameterFeatureFlagProvider,
+  ) {}
 
   async listSystemParameters(): Promise<unknown> {
     this.ensureDatabase();
@@ -126,10 +136,12 @@ export class SystemParametersService {
       [`feature-flag:${key}`],
     );
     const row = rows[0];
+    const evaluation = await this.featureFlags().evaluate(key, {}, false);
     return {
       chave: key,
       ativo: payload.ativo,
       value: row?.value ?? value,
+      evaluation,
       updatedAt: row?.updated_at
         ? this.toIso(row.updated_at)
         : new Date().toISOString(),
@@ -276,6 +288,13 @@ export class SystemParametersService {
         'DATABASE_URL is required for system parameters operations',
       );
     }
+  }
+
+  private featureFlags(): FeatureFlagsService {
+    return new FeatureFlagsService(
+      this.featureFlagProvider ??
+        new SystemParameterFeatureFlagProvider(this.databaseService),
+    );
   }
 
   private toIso(value: Date | string): string {

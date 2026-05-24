@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 
+import { IntegrationAdapter } from '@stynx/integration-adapter';
 import {
   SgpQueueAdapter,
   type QueueAdapterResponseEnvelope,
@@ -127,18 +128,38 @@ export class TceQueueAdapter {
       );
     }
     const payload = this.buildPayload(input);
-    const queueResponse = await this.queue.request<
+    const sharedAdapter = new IntegrationAdapter<
       TceRelayRequestPayload,
-      TceRelayResponsePayload
+      QueueAdapterResponseEnvelope<TceRelayKind, TceRelayResponsePayload>,
+      QueueAdapterResponseEnvelope<TceRelayKind, TceRelayResponsePayload>
     >({
-      tenantId: input.tenantId,
-      requestId: input.requestId,
-      correlationId: input.correlationId,
-      idempotencyKey:
+      name: 'sgp.tce.relay-queue',
+      request: (requestPayload) =>
+        this.queue.request<TceRelayRequestPayload, TceRelayResponsePayload>({
+          tenantId: input.tenantId,
+          requestId: input.requestId,
+          correlationId: input.correlationId,
+          idempotencyKey:
+            input.idempotencyKey ??
+            `${input.tenantId}:tce:${input.submissionId}:${input.report.idempotencyKey}`,
+          maxAttempts: input.maxAttempts,
+          payload: requestPayload,
+        }),
+      parseResponse: (response) => response,
+      idempotencyKey: () =>
         input.idempotencyKey ??
         `${input.tenantId}:tce:${input.submissionId}:${input.report.idempotencyKey}`,
-      maxAttempts: input.maxAttempts,
-      payload,
+      retryPolicy: { maxAttempts: 1, baseDelayMs: 0 },
+      circuitBreakerKey: () => `tce:${input.report.target.stateCode}`,
+    });
+    const queueResponse = await sharedAdapter.execute(payload, {
+      tenantId: input.tenantId,
+      ...(input.correlationId ? { correlationId: input.correlationId } : {}),
+      metadata: {
+        submissionId: input.submissionId,
+        reportType: input.report.reportType,
+        stateCode: input.report.target.stateCode,
+      },
     });
 
     const relay = queueResponse.payload;
