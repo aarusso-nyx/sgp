@@ -1,5 +1,21 @@
 # Database Bootstrap
 
+## Canonical Layout
+
+SGP's authoritative database layout is:
+
+- `database/sql/` for canonical SQL packs, applied in lexical order.
+- `database/sql/checks/` for focused SQL check probes.
+- `database/sql/replay/` for retained replay SQL artifacts.
+- `database/seed/` for deterministic non-secret seed fixtures and the seed
+  runner.
+
+Do not reshape this repository to `database/{ddl,seed,migrations}`. That
+external alignment shape conflicts with the root `AGENTS.md` authority, which
+keeps canonical SQL under `database/sql/` for SGP v0.0.1.
+
+## Bootstrap
+
 The canonical database bootstrap entrypoint is:
 
 ```sh

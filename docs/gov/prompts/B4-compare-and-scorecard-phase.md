@@ -1,5 +1,14 @@
 # B4 — Compare And Scorecard Phase (reusable, per-round)
 
+> DEVAI canonical template: `../devai/docs/adopters/round-prompts/B4-verify-publish.md`
+> (`B4 — verify and publish`, DEVAI R2 canonical adopter template).
+>
+> SGP keeps this as a local derivative rather than a thin wrapper because SGP's
+> compare phase folds closure evidence into `docs/gov/audit/`, produces
+> `compare.md`, and keeps publication disabled unless explicitly authorized by
+> the user and `AGENTS.md`. Divergences are tracked in
+> `docs/work/2026-05-23-prompts-divergence.md`.
+
 **Type.** Reusable phase prompt. Run after B3 emits a completed round closure.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** `docs/work/round-<n>/compare.md`, optional updates to `docs/gov/audit/backlog-ledger.md`, and file-backed MemPalace mirrors.

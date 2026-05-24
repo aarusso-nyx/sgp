@@ -103,19 +103,79 @@ function validateReverseSuccession() {
 }
 
 function validateDevaiConfig() {
-  const config = readJson('devai.config.json');
-  record('devai:project', config.project === 'sgp', config.project);
-  record('devai:source-root', config.sourceRoot === '.', config.sourceRoot);
+  const project = readJson('.devai/config/project.json');
+  const domains = readJson('.devai/config/domains.json');
+  const forbiddenActions = readJson('.devai/config/forbidden-actions.json');
+  const scorecardNa = readJson('.devai/config/scorecard-na.json');
+  const thresholds = readJson('.devai/config/thresholds.json');
 
-  for (const path of config.authoritativeDocs ?? []) {
+  record('devai:project', project.name === 'sgp', project.name);
+  record('devai:source-root', project.sourceRoot === '.', project.sourceRoot);
+
+  for (const path of [
+    'docs/eng/README.md',
+    'docs/eng/product.md',
+    'docs/eng/platform.md',
+    'docs/eng/experience.md',
+    'docs/eng/quality-migration.md',
+    'docs/eng/domains/payroll-benefits.md',
+    'docs/eng/domains/fiscal-integrations.md',
+    'docs/eng/domains/time-attendance-sst.md',
+    'docs/eng/domains/privacy-transparency.md',
+  ]) {
     assertPath(path, `devai-authoritative:${path}`);
   }
 
-  for (const path of config.generatedSurfaces ?? []) {
+  for (const path of [
+    'docs/gov/generated/api/route-alignment.json',
+    'docs/gov/generated/database/alignment-matrix.json',
+    'docs/gov/generated/runtime-topology.json',
+    'docs/gov/generated/governance-manifest.json',
+  ]) {
     assertPath(path, `devai-generated:${path}`);
   }
 
-  const hardFailCommands = new Set(config.hardFailGates?.map((gate) => gate.command) ?? []);
+  record(
+    'devai:config-files',
+    pathExists('.devai/config/project.json') &&
+      pathExists('.devai/config/domains.json') &&
+      pathExists('.devai/config/forbidden-actions.json') &&
+      pathExists('.devai/config/scorecard-na.json') &&
+      pathExists('.devai/config/thresholds.json'),
+    '.devai/config/{project,domains,forbidden-actions,scorecard-na,thresholds}.json',
+  );
+  record(
+    'devai:domains-shape',
+    domains.schemaVersion === '1.0.0' &&
+      Array.isArray(domains.core) &&
+      Array.isArray(domains.framework) &&
+      Array.isArray(domains.client),
+    '.devai/config/domains.json',
+  );
+  record(
+    'devai:forbidden-actions-shape',
+    forbiddenActions.schemaVersion === '1.0.0' &&
+      Array.isArray(forbiddenActions.actions) &&
+      forbiddenActions.actions.length >= 1,
+    '.devai/config/forbidden-actions.json',
+  );
+  record(
+    'devai:scorecard-na-shape',
+    scorecardNa.schemaVersion === '1.0.0' && Array.isArray(scorecardNa.cells),
+    '.devai/config/scorecard-na.json',
+  );
+  record(
+    'devai:thresholds-shape',
+    thresholds.schemaVersion === '1.0.0' &&
+      thresholds.coverage?.lines >= 90 &&
+      thresholds.coverage?.branches >= 80 &&
+      thresholds.mutation?.score_min >= 70 &&
+      thresholds.lint?.max_errors === 0 &&
+      thresholds.typecheck?.max_errors === 0,
+    '.devai/config/thresholds.json',
+  );
+
+  const hardFailCommands = new Set(project.hardFailGates?.map((gate) => gate.command) ?? []);
   for (const command of hardFailGateCommands) {
     record(`devai-hard-fail:${command}`, hardFailCommands.has(command), command);
   }
@@ -226,7 +286,7 @@ function validateLiveDocPaths() {
       (file) => !file.startsWith('docs/gov/audit/diag/') && !file.startsWith('docs/gov/audit/inv/'),
     );
   const pathPattern =
-    /`((?:backend|frontend|database|scripts|docs|infra|\.github|tests|package\.json|devai\.config\.json|GOVERNANCE\.md)[^`\s]*)`/g;
+    /`((?:backend|frontend|database|scripts|docs|infra|\.github|\.devai|tests|package\.json|GOVERNANCE\.md)[^`\s]*)`/g;
   const missing = [];
 
   for (const file of liveDocFiles) {

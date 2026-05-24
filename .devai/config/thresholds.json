@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "coverage": {
+    "statements": 90,
+    "branches": 80,
+    "functions": 90,
+    "lines": 90
+  },
+  "mutation": {
+    "score_min": 70,
+    "survived_max": 0
+  },
+  "lint": {
+    "max_errors": 0,
+    "max_warnings": 0
+  },
+  "typecheck": {
+    "max_errors": 0
+  },
+  "freshness": {
+    "default_max_age_hours": 168
+  }
+}

@@ -1,5 +1,13 @@
 # B0 — Audit Phase (reusable, per-round)
 
+> DEVAI canonical template: `../devai/docs/adopters/round-prompts/B0-audit.md`
+> (`B0 — audit`, DEVAI R2 canonical adopter template).
+>
+> SGP keeps this as a local derivative rather than a thin wrapper because
+> `AGENTS.md` makes `docs/eng/`, `docs/gov/audit/`, the folia-first payroll
+> boundary, and canonical SGP root commands authoritative for this repository.
+> Divergences are tracked in `docs/work/2026-05-23-prompts-divergence.md`.
+
 **Type.** Reusable phase prompt. Run at the start of every SGP round.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** docs/work/round-<n>/ (round-scoped) + docs/gov/audit/{,inv/round-<n>/,diag/round-<n>/} (governance-tracked).

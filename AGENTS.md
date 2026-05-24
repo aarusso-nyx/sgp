@@ -81,8 +81,9 @@ SGP is the host Plant for devai-style governance. Keep the boundary clear:
 - Sensors: lint, format, typecheck, unit/e2e/coverage tests, DB smoke/alignment,
   API alignment, governance check, health check, CI, runtime probes, and audit
   evidence.
-- Host adapter: `devai.config.json`. It maps SGP paths and commands into the
-  governance/control-plane model. It is not itself product semantics.
+- Governance state root: `.devai/`. Its `config/` files map SGP paths and
+  commands into the governance/control-plane model. They are not themselves
+  product semantics.
 - Retained governance evidence: `docs/gov/**`.
 - Current status and compiled context: `docs/gov/audit/**`.
 - Reusable round prompts: `docs/gov/prompts/**`.
@@ -95,24 +96,24 @@ claims require explicit owner authorization and retained evidence.
 
 ## 4. Repository Layout
 
-| Path | Responsibility |
-| --- | --- |
-| `backend/` | NestJS backend workspace for core API, portal API, services, workers, backend tests, and runtime entrypoints. |
-| `frontend/` | Angular workspace for `sgp-admin` and `sgp-portal`, frontend API clients, UI tests, and Playwright surfaces. |
-| `database/sql/` | Canonical SQL packs for schemas, RLS, functions, grants, seeds, FK/index hardening, and PII/audit data controls. |
-| `database/seed/` | Deterministic non-secret seed fixtures and seed documentation. |
-| `scripts/` | Authoritative orchestration scripts. `scripts/run.mjs` is the root dispatcher; shared command/gate metadata lives under `scripts/lib/`. |
-| `tests/backend/` | Backend e2e and Jest configuration surfaces. |
-| `tests/rls/` | Executable tenant/RLS isolation specs. |
-| `.github/workflows/` | Repository CI workflows using the canonical root commands. |
-| `docs/eng/` | Product, engineering, architecture, ADR, acceptance, domain behavior, and developer-fact authority. |
-| `docs/gov/audit/` | Current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking. |
-| `docs/gov/generated/` | Machine-generated governance surfaces such as runtime topology, governance manifest, route alignment, and database alignment. |
-| `docs/gov/prompts/` | Reusable B0-B3 phase prompts for the measure-plan-execute-compare loop. |
-| `docs/gov/` | Governance controls, health/preflight, compliance, observability config, generated surfaces, retained evidence, and reusable prompts. |
-| `docs/user/` | User/operator setup, environment, testing, and runtime guidance. |
-| `docs/leg/` | Legacy and reverse-evidence archive. |
-| `docs/work/` | Ignored scratch for audits, prompts, inventories, and temporary working notes. |
+| Path                  | Responsibility                                                                                                                          |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `backend/`            | NestJS backend workspace for core API, portal API, services, workers, backend tests, and runtime entrypoints.                           |
+| `frontend/`           | Angular workspace for `sgp-admin` and `sgp-portal`, frontend API clients, UI tests, and Playwright surfaces.                            |
+| `database/sql/`       | Canonical SQL packs for schemas, RLS, functions, grants, seeds, FK/index hardening, and PII/audit data controls.                        |
+| `database/seed/`      | Deterministic non-secret seed fixtures and seed documentation.                                                                          |
+| `scripts/`            | Authoritative orchestration scripts. `scripts/run.mjs` is the root dispatcher; shared command/gate metadata lives under `scripts/lib/`. |
+| `tests/backend/`      | Backend e2e and Jest configuration surfaces.                                                                                            |
+| `tests/rls/`          | Executable tenant/RLS isolation specs.                                                                                                  |
+| `.github/workflows/`  | Repository CI workflows using the canonical root commands.                                                                              |
+| `docs/eng/`           | Product, engineering, architecture, ADR, acceptance, domain behavior, and developer-fact authority.                                     |
+| `docs/gov/audit/`     | Current implementation status, compiled audit context, ledgers, inventories, diagnostics, and backlog tracking.                         |
+| `docs/gov/generated/` | Machine-generated governance surfaces such as runtime topology, governance manifest, route alignment, and database alignment.           |
+| `docs/gov/prompts/`   | Reusable B0-B3 phase prompts for the measure-plan-execute-compare loop.                                                                 |
+| `docs/gov/`           | Governance controls, health/preflight, compliance, observability config, generated surfaces, retained evidence, and reusable prompts.   |
+| `docs/user/`          | User/operator setup, environment, testing, and runtime guidance.                                                                        |
+| `docs/leg/`           | Legacy and reverse-evidence archive.                                                                                                    |
+| `docs/work/`          | Ignored scratch for audits, prompts, inventories, and temporary working notes.                                                          |
 
 Runtime topology is tracked in `docs/gov/generated/runtime-topology.json`. Keep runtime
 names aligned with that file and root commands.

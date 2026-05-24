@@ -36,7 +36,7 @@ Status: retained evidence for the 2026-05-08 QA lift.
 - `.github/workflows/release-impact-gate.yml` requires changelog, release gate,
   operator-readiness, or explicit PR-body release-impact evidence for
   release-impacting changes.
-- `devai.config.json` and `scripts/lib/workspace-commands.mjs` retain
+- `.devai/config/project.json` and `scripts/lib/workspace-commands.mjs` retain
   `npm run test:types` and `npm run test:mutation` as hard-fail gates.
 
 ## Required Local Gate List

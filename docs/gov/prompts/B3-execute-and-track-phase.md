@@ -1,5 +1,14 @@
 # B3 — Execute and Track Phase (reusable, per-round)
 
+> DEVAI canonical template: `../devai/docs/adopters/round-prompts/B3-orchestrate.md`
+> (`B3 — orchestrate`, DEVAI R2 canonical adopter template).
+>
+> SGP keeps this as a local derivative rather than a thin wrapper because
+> execution must preserve SGP wave gates, file ownership, fix-up routing,
+> backlog-ledger fold-back, closure manifests, and the no-publish-without-
+> authorization boundary from `AGENTS.md`. Divergences are tracked in
+> `docs/work/2026-05-23-prompts-divergence.md`.
+
 **Type.** Reusable phase prompt. Run after B2 materializes the round-<n+1> prompt fan-out.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** Product source (under each worker's owned scope), docs/work/round-<n+1>/, docs/gov/audit/backlog-ledger.md (status updates).

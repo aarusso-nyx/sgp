@@ -1,5 +1,13 @@
 # B2 — Materialize Plan Phase (reusable, per-round)
 
+> DEVAI canonical template: `../devai/docs/adopters/round-prompts/B2-wave-plan.md`
+> (`B2 — wave plan`, DEVAI R2 canonical adopter template).
+>
+> SGP keeps this as a local derivative rather than a thin wrapper because the
+> materialized prompt package must encode SGP wave-launch files, round indexes,
+> file ownership, MemPalace/file-backed fallback, and SGP gate commands.
+> Divergences are tracked in `docs/work/2026-05-23-prompts-divergence.md`.
+
 **Type.** Reusable phase prompt. Run after B1 produces the round-<n+1> backlog.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output root.** docs/work/round-<n>/prompts/.

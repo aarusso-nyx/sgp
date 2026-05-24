@@ -1,5 +1,13 @@
 # B1 — Compile Backlog Phase (reusable, per-round)
 
+> DEVAI canonical template: `../devai/docs/adopters/round-prompts/B1-backlog.md`
+> (`B1 — backlog`, DEVAI R2 canonical adopter template).
+>
+> SGP keeps this as a local derivative rather than a thin wrapper because
+> backlog planning must preserve SGP's audit ledgers, regulatory anchors,
+> backlog-ledger schema, and `AGENTS.md` authority order. Divergences are
+> tracked in `docs/work/2026-05-23-prompts-divergence.md`.
+
 **Type.** Reusable phase prompt. Run after B0 produces the audit pack.
 **Working directory.** /Users/aarusso/Development/stech/sgp (verify with pwd).
 **Output roots.** docs/work/round-<n>/12-round-<n+1>-backlog.md + appended draft column in docs/gov/audit/backlog-ledger.md.

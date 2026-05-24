@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0.0",
+  "actions": [
+    {
+      "id": "SGP-FORBID-SECRETS",
+      "action": "Commit secrets, credentials, private keys, real .env values, or production data.",
+      "rationale": "SGP AGENTS.md prohibits committing secrets and production data.",
+      "severity": "critical",
+      "detect_patterns": ["\\.env$", "\\.pem$", "\\.key$", "\\.p12$", "\\.pfx$"],
+      "safer_alternative": "Use example files and local secret stores only."
+    },
+    {
+      "id": "SGP-FORBID-AUTH-WEAKENING",
+      "action": "Bypass or weaken auth, RBAC, tenant isolation, RLS, audit, validation, or governance checks.",
+      "rationale": "These are repository constitution hard boundaries.",
+      "severity": "critical",
+      "safer_alternative": "Fix the underlying implementation or record an owner decision."
+    },
+    {
+      "id": "SGP-FORBID-COMPAT-SHIMS",
+      "action": "Add v0.0.1 compatibility shims, legacy schemas, retired command aliases, or transitional APIs.",
+      "rationale": "SGP is a fresh implementation with no legacy compatibility runtime.",
+      "severity": "critical",
+      "safer_alternative": "Implement the accepted current contract from docs/eng."
+    },
+    {
+      "id": "SGP-FORBID-PROD-MUTATION",
+      "action": "Run production data repair, destructive migrations, retention changes, or AWS production apply operations.",
+      "rationale": "Production mutation requires explicit owner direction.",
+      "severity": "critical",
+      "safer_alternative": "Use dry-run plans, local fixtures, or owner-approved runbooks."
+    },
+    {
+      "id": "SGP-FORBID-FORCE-PUSH",
+      "action": "Force-push or rewrite published history without explicit authorization.",
+      "rationale": "Repository publish rules prohibit unapproved history rewrites.",
+      "severity": "critical",
+      "detect_patterns": ["\\bgit\\s+push\\s+--force\\b", "\\bgit\\s+push\\s+\\+"],
+      "safer_alternative": "Push a feature branch and open a pull request."
+    },
+    {
+      "id": "SGP-FORBID-DOC-AUTHORITY-INVERSION",
+      "action": "Treat docs/work or docs/leg as acceptance authority over docs/eng or source/tests.",
+      "rationale": "SGP authority order makes docs/work scratch and docs/leg archival.",
+      "severity": "high",
+      "safer_alternative": "Promote accepted behavior through docs/eng, code, and executable tests."
+    }
+  ]
+}
