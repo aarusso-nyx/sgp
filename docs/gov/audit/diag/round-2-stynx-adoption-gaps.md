@@ -43,3 +43,14 @@ Scope executed from `/Users/aarusso/Development/stech/align/sgp/round-2/prompts/
 - PDF/A builder architecture gap: closed by `docs/eng/67-pdf-a-builder.md`.
 - npm audit findings: closed. `npm audit --json` reported zero vulnerabilities
   on 2026-05-24.
+
+## 2026-05-24 — R10 STYNX signature re-adoption check
+
+- `pnpm --filter @stynx/signature build` passed in the sibling STYNX checkout.
+- The current public `@stynx/signature` API exposes PAdES/TSA/provider
+  contracts and `sha256Hex`, but no public XMLDSig, GovBR sandbox, sequential
+  signing, or PDF/A conformance facade was available in this pass.
+- SGP therefore keeps local XMLDSig signing for DCTFWeb and EFD-Reinf, local
+  GovBR sandbox semantics, local recruitment-board sequential signing, and the
+  existing byte-stable PDF/A-style builder until those STYNX surfaces are
+  accepted upstream.
