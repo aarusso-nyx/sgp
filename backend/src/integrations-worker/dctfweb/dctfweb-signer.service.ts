@@ -5,7 +5,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { sha256Hex } from '@stynx/signature';
-import { SignedXml } from 'xml-crypto';
+import { XmlDSigSigner } from '@stynx/signature/xmldsig';
 
 import { DatabaseService } from '../../database/database.service';
 import { IcpSignerService } from '../../external/signature/icp-signer.service';
@@ -92,26 +92,13 @@ export function signDctfwebXml(
   if (!referenceId) {
     throw new BadRequestException('DCTFWeb XML must include an Id attribute');
   }
-  const signer = new SignedXml();
-  signer.privateKey = privateKeyPem;
-  signer.publicCert = certificatePem;
-  signer.canonicalizationAlgorithm =
-    'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
-  signer.signatureAlgorithm =
-    'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256';
-  signer.addReference({
-    xpath: `//*[@Id='${referenceId}']`,
-    transforms: [
-      'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
-      'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-    ],
-    digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
-  });
-  signer.computeSignature(xml, {
+
+  return new XmlDSigSigner().sign(xml, {
+    key: { privateKeyPem, certificatePem },
+    reference: { id: referenceId, idAttribute: 'Id' },
     location: {
       reference: "//*[local-name(.)='declaracao']",
       action: 'append',
     },
   });
-  return signer.getSignedXml();
 }
