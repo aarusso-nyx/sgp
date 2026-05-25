@@ -4,17 +4,23 @@ Date: 2026-05-24
 
 ## Decision
 
-SGP adopts `@stynx/signature` for shared digest and PAdES-facing contracts, but
-retains local sandbox XMLDSig signing for fiscal integrations that still need
-SGP-owned deterministic fixtures.
+SGP adopts `@stynx/signature` for shared digest helpers, PAdES evidence blocks,
+XMLDSig signing/verification, GovBR sandbox evidence, and ordered sequential
+document-signing envelopes.
 
-The retained local boundary is intentionally narrow:
+The retained SGP boundary is intentionally narrow:
 
 - `backend/src/external/signature/icp-signer.service.ts` owns tenant fiscal
-  certificate lookup and sandbox XML signature material used by DCTFWeb and
-  EFD-Reinf flows.
-- `backend/src/external/signature/pades.adapter.ts` adapts the shared
-  `@stynx/signature` PAdES facade for signed PDF evidence.
+  certificate lookup and PKCS#12 parsing, then delegates XMLDSig signing and
+  verification to `@stynx/signature/xmldsig`.
+- `@stynx/pdf/evidence` adapts PDF verification hints and delegates the
+  `%%STYNX-PADES-SIGNATURE` evidence block to `@stynx/signature`.
+- `backend/src/auth/govbr/govbr-signature-sandbox.adapter.ts` preserves the SGP
+  API shape while delegating tamper-evident GovBR sandbox signatures to
+  `@stynx/signature`.
+- `backend/src/recrutamento/banca/document-signing.service.ts` preserves SGP
+  database writes and RBAC/audit flow while delegating ordered sequential
+  envelope verification to `@stynx/signature`.
 - `backend/src/integrations/stynx-esocial/sgp-esocial-transmission.service.ts`
   signs SGP sandbox eSocial spool envelopes only for local transmission tests.
 
@@ -25,30 +31,28 @@ official transmission remain outside SGP in `stynx-esocial`.
 
 ```mermaid
 flowchart LR
-  SGP["SGP fiscal workers"] --> Digest["@stynx/signature digest and PAdES contracts"]
-  SGP --> Local["SGP sandbox XMLDSig services"]
-  Local --> Fiscal["DCTFWeb / EFD-Reinf deterministic XML fixtures"]
+  SGP["SGP domain services"] --> Signature["@stynx/signature digest, XMLDSig, PAdES evidence, GovBR, sequential envelopes"]
+  SGP --> Certs["SGP certificate lookup and database/audit writes"]
+  Certs --> Fiscal["DCTFWeb / EFD-Reinf deterministic XML fixtures"]
   SGP --> Spool["public.esocial_events gateway"]
   Spool --> Esocial["stynx-esocial official XML/sign/transmit service"]
 ```
 
 ## Rationale
 
-The local XMLDSig code stays because current SGP tests assert byte-sensitive
-golden XML and sandbox signatures. Moving that code to `@stynx/signature`
-requires the shared package to expose an XMLDSig adapter with deterministic
-canonicalization, fixture-stable certificate metadata, and test helpers for the
-DCTFWeb and EFD-Reinf payload shapes SGP already covers.
+STYNX now owns the reusable cryptographic helper surfaces SGP needed to retire
+duplicated local implementations. SGP still owns domain orchestration, tenant
+certificate lookup, RLS-protected persistence, audit marking, and regulatory
+workflow status transitions.
 
-Until that lands, SGP must not replace the local signer with a compatibility
-shim or a weaker digest-only proof. The local code remains sandbox-only and
-must not acquire production certificate custody.
+SGP must not move production certificate custody into this repository. Official
+eSocial XML construction, schema validation, certificate custody, and
+transmission remain delegated to `stynx-esocial`.
 
-## Retirement Criteria
+## Remaining Boundary
 
-Retire the SGP XMLDSig copy only after `@stynx/signature` provides:
-
-- XML canonicalization and SHA-256/RSA signing interfaces for fiscal XML.
-- Deterministic sandbox adapters suitable for byte-sensitive goldens.
-- Clear production certificate ownership boundaries.
-- Passing SGP DCTFWeb, EFD-Reinf, and eSocial spool tests without fixture drift.
+`@stynx/signature` provides package-owned PAdES evidence and provider contracts,
+and `@stynx/pdf/evidence` owns the PDF verification-hint append step. SGP uses
+the deterministic provider-free STYNX evidence appender for local PDF fixtures.
+Legal CMS/PKCS#7/PAdES provider signing remains a release-gated integration
+decision, not a local test shortcut.

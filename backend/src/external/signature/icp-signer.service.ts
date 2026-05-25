@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { XmlDSigSigner, XmlDSigVerifier } from '@stynx/signature/xmldsig';
 import forge from 'node-forge';
-import { SignedXml } from 'xml-crypto';
 
 export interface CertificateMaterial {
   certificatePem: string;
@@ -29,42 +29,25 @@ export class IcpSignerService {
   sign(input: SignXmlInput): SignedXmlResult {
     const material = this.readPkcs12(input.pkcs12, input.password);
     const referenceId = this.findReferenceId(input.xml);
-    const signer = new SignedXml();
-
-    signer.privateKey = material.privateKeyPem;
-    signer.publicCert = material.certificatePem;
-    signer.canonicalizationAlgorithm =
-      'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
-    signer.signatureAlgorithm =
-      'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256';
-    signer.addReference({
-      xpath: `//*[@Id='${referenceId}']`,
-      transforms: [
-        'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
-        'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-      ],
-      digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
-    });
-    signer.computeSignature(input.xml, {
+    const xml = new XmlDSigSigner().sign(input.xml, {
+      key: {
+        privateKeyPem: material.privateKeyPem,
+        certificatePem: material.certificatePem,
+      },
+      reference: { id: referenceId, idAttribute: 'Id' },
       location: { reference: `//*[@Id='${referenceId}']`, action: 'append' },
     });
 
     return {
       ...material,
-      xml: signer.getSignedXml(),
+      xml,
     };
   }
 
   verify(xml: string, certificatePem: string): boolean {
-    const signatureXml = xml.match(
-      /<(?:\w+:)?Signature\b[\s\S]*<\/(?:\w+:)?Signature>/,
-    )?.[0];
-    if (!signatureXml) return false;
-
-    const verifier = new SignedXml();
-    verifier.publicCert = certificatePem;
-    verifier.loadSignature(signatureXml);
-    return verifier.checkSignature(xml);
+    return new XmlDSigVerifier().verify(xml, {
+      keys: [{ publicKeyPem: certificatePem }],
+    }).ok;
   }
 
   readPkcs12(pkcs12: Buffer, password = ''): CertificateMaterial {

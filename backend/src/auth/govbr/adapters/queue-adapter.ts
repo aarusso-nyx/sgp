@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { sha256CanonicalJson } from '@stynx/signature';
 
 import {
   SgpQueueAdapter,
@@ -173,16 +173,14 @@ export class GovBrQueueAdapter {
     payload: Record<string, unknown>,
     envelope: GovBrAdvancedSignatureEnvelope,
   ): boolean {
-    const payloadHash = sha256(canonical(payload));
+    const payloadHash = sha256CanonicalJson(payload);
     if (payloadHash !== envelope.payloadHash) return false;
-    const tamperEvidentHash = sha256(
-      canonical({
-        payloadHash: envelope.payloadHash,
-        signatureHash: envelope.signatureHash,
-        signerUniqueKey: envelope.signerUniqueKey,
-        signedAt: envelope.signedAt,
-      }),
-    );
+    const tamperEvidentHash = sha256CanonicalJson({
+      payloadHash: envelope.payloadHash,
+      signatureHash: envelope.signatureHash,
+      signerUniqueKey: envelope.signerUniqueKey,
+      signedAt: envelope.signedAt,
+    });
     return tamperEvidentHash === envelope.tamperEvidentHash;
   }
 
@@ -291,29 +289,7 @@ export class GovBrQueueAdapter {
       'create',
       payload.resourceType,
       payload.resourceId ?? 'none',
-      sha256(canonical(payload.payload)),
+      sha256CanonicalJson(payload.payload),
     ].join(':');
   }
-}
-
-function sha256(value: string): string {
-  return createHash('sha256').update(value, 'utf8').digest('hex');
-}
-
-function canonical(value: unknown): string {
-  if (Array.isArray(value)) {
-    return `[${value.map((item) => canonical(item)).join(',')}]`;
-  }
-  if (value && typeof value === 'object') {
-    return `{${Object.keys(value as Record<string, unknown>)
-      .sort()
-      .map(
-        (key) =>
-          `${JSON.stringify(key)}:${canonical(
-            (value as Record<string, unknown>)[key],
-          )}`,
-      )
-      .join(',')}}`;
-  }
-  return JSON.stringify(value);
 }

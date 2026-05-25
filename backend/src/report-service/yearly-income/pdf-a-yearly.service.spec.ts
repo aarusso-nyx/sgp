@@ -43,7 +43,7 @@ describe('PdfABuilderService yearly income', () => {
     );
 
     expect(buffer.subarray(0, 5).toString('latin1')).toBe('%PDF-');
-    expect(buffer.toString('latin1')).toContain('%%SGP-PADES-SIGNATURE:');
+    expect(buffer.toString('latin1')).toContain('%%STYNX-PADES-SIGNATURE:');
     expect(service.validatePdfA1b(buffer)).toEqual({
       valid: true,
       reasons: [],
@@ -88,8 +88,8 @@ function expectedBuffer(path: string, actual: Buffer): Buffer {
 function decodeSignatureBlock(buffer: Buffer): Record<string, unknown> {
   const match = buffer
     .toString('latin1')
-    .match(/%%SGP-PADES-SIGNATURE:([A-Za-z0-9+/=]+)/);
-  if (!match) throw new Error('missing SGP PAdES signature block');
+    .match(/%%STYNX-PADES-SIGNATURE:([A-Za-z0-9+/=]+)/);
+  if (!match) throw new Error('missing STYNX PAdES signature block');
   return JSON.parse(Buffer.from(match[1], 'base64').toString('utf8')) as Record<
     string,
     unknown

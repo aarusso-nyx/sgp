@@ -8,15 +8,19 @@ Scope executed from `/Users/aarusso/Development/stech/align/sgp/round-2/prompts/
 
 - `@stynx/feature-flags` is wired through a SGP `system_parameter` provider and used by `EsocialQueueTransportFlag`.
 - `@stynx/integration-adapter` wraps DCTFWeb, EFD-Reinf, SIAFIC, and TCE relay dispatch retry/idempotency/circuit boundaries.
-- `@stynx/signature` digest and mock PAdES facade are used by signed PDF evidence, and fiscal XML signed-hash computation now uses the shared digest helper.
-- `@stynx/pdf` digest helper is used at the report PDF boundary while the existing SGP PDF/A byte-stable builder remains in place.
+- `@stynx/pdf/evidence` is used for signed PDF verification hints and delegates
+  the PAdES evidence block to `@stynx/signature`; fiscal XML signed-hash
+  computation now uses the shared digest helper.
+- `@stynx/pdf/public-payroll` is now used at the report PDF construction boundary while SGP keeps report-service orchestration, evidence appending, persistence, audit, RBAC/RLS, and golden acceptance.
 
-## Remaining gaps
+## Historical gaps from original pass
 
 - Full aggregate CI was not run in this pass: `npm run test`, full `npm run test:e2e`, `npm run test:coverage`, `npm run test:frontend:coverage`, and DB-backed `npm run test:db` remain unverified.
 - The eSocial gateway is still delegated to `stynx-esocial`; this pass did not run a full eSocial spool transmission suite.
-- `@stynx/signature` currently exposes PAdES/TSA/provider contracts, not XMLDSig signing. SGP therefore retains local XMLDSig signing for DCTFWeb and EFD-Reinf while adopting the shared digest boundary.
-- `@stynx/pdf` does not provide a PDF/A conformance adapter in the current local package. SGP therefore retains the existing `pdf-lib` PDF/A-style builder to preserve byte-for-byte golden fixtures.
+- At the original round-2 pass, `@stynx/signature` exposed PAdES/TSA/provider
+  contracts, not XMLDSig signing. That historical gap is superseded by the
+  2026-05-24 STYNX signature re-adoption update below.
+- At the original round-2 pass, `@stynx/pdf` did not provide the public-payroll template pack or a PDF/A conformance adapter. The template-pack gap is superseded by the 2026-05-24 STYNX PDF adoption update below; real PDF/A conformance remains deferred.
 - `npm install` still reports 6 moderate npm audit findings. No `npm audit fix` was run because that would expand dependency churn beyond this orchestrator scope.
 
 ## Gates run
@@ -50,7 +54,37 @@ Scope executed from `/Users/aarusso/Development/stech/align/sgp/round-2/prompts/
 - The current public `@stynx/signature` API exposes PAdES/TSA/provider
   contracts and `sha256Hex`, but no public XMLDSig, GovBR sandbox, sequential
   signing, or PDF/A conformance facade was available in this pass.
-- SGP therefore keeps local XMLDSig signing for DCTFWeb and EFD-Reinf, local
+- SGP therefore kept local XMLDSig signing for DCTFWeb and EFD-Reinf, local
   GovBR sandbox semantics, local recruitment-board sequential signing, and the
-  existing byte-stable PDF/A-style builder until those STYNX surfaces are
+  existing byte-stable PDF/A-style builder until those STYNX surfaces were
   accepted upstream.
+
+## 2026-05-24 — STYNX signature re-adoption update
+
+- DCTFWeb XMLDSig was already migrated to `@stynx/signature/xmldsig` in
+  `3f7323c4`.
+- EFD-Reinf XMLDSig and the shared ICP XML signer now delegate XMLDSig signing
+  and verification to `@stynx/signature/xmldsig`.
+- GovBR sandbox evidence and queue-envelope verification now use
+  `@stynx/signature` canonical GovBR/digest helpers while preserving SGP's API
+  response shape.
+- Recruitment-board document signing now uses `@stynx/signature`
+  `SequentialSigner` envelopes while preserving SGP database writes, audit
+  marking, and publication status behavior.
+- PDF PAdES evidence blocks now use the STYNX package-owned
+  `%%STYNX-PADES-SIGNATURE` envelope.
+
+## 2026-05-24 — STYNX PDF public-payroll adoption update
+
+- The sibling STYNX checkout now exposes `@stynx/pdf/public-payroll` with
+  deterministic fixed-layout payslip and yearly-income builders.
+- The sibling STYNX checkout now exposes `@stynx/pdf/evidence` with
+  `PdfVerificationEvidenceAppender`; SGP deleted its local `PadesAdapter`.
+- `backend/src/report-service/payslip/pdf-a-builder.service.ts` is now a thin
+  SGP adapter around `PublicPayrollPdfBuilder`, preserving the existing
+  `PdfABuilderService` call sites.
+- SGP still owns database reads, LGPD legal-basis checks, RBAC/RLS/audit,
+  `public.generated_report_file` persistence, storage keys, batch state, and
+  payroll/fiscal reconciliation.
+- The package remains PDF/A-style structural output. A real validator-backed
+  PDF/A conformance adapter is still a deferred upstream capability.

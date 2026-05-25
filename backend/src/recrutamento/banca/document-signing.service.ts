@@ -2,15 +2,20 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { createHash } from 'node:crypto';
+import { PdfVerificationEvidenceAppender } from '@stynx/pdf/evidence';
+import {
+  SequentialSigner,
+  sha256,
+  type SequentialEnvelope,
+} from '@stynx/signature';
 import type { PoolClient, QueryResultRow } from 'pg';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';
 import { RequestContextStore } from '../../common/request-context/request-context.store';
 import { DatabaseService } from '../../database/database.service';
-import { PadesAdapter } from '../../external/signature/pades.adapter';
 import type { CreateSignedDocumentDto, SignDocumentDto } from './banca.dto';
 
 interface DocumentRow extends QueryResultRow {
@@ -54,20 +59,17 @@ interface SignatureRow extends QueryResultRow {
 
 interface Envelope {
   format: 'XADES' | 'PADES';
-  payloadBase64: string;
-  signatures: Array<{
-    memberId: string;
-    subject: string;
-    serial: string;
-    digest: string;
-  }>;
+  sequential: SequentialEnvelope;
 }
 
 @Injectable()
 export class DocumentSigningService {
   constructor(
     private readonly database: DatabaseService,
-    private readonly padesAdapter: PadesAdapter,
+    @Optional()
+    private readonly evidenceAppender: PdfVerificationEvidenceAppender = new PdfVerificationEvidenceAppender(
+      { defaultSignerName: 'SGP report-service' },
+    ),
   ) {}
 
   async create(input: CreateSignedDocumentDto) {
@@ -77,17 +79,18 @@ export class DocumentSigningService {
     const rawPayload = Buffer.from(input.payloadBase64, 'base64');
     const payload =
       input.format === 'PADES'
-        ? await this.padesAdapter.embedVerificationHint({
+        ? await this.evidenceAppender.embedVerificationHint({
             payload: rawPayload,
             verifyUrl,
           })
         : this.embedXmlVerificationHint(rawPayload, verifyUrl);
     const envelope = this.encodeEnvelope({
       format: input.format,
-      payloadBase64: payload.toString('base64'),
-      signatures: [],
+      sequential: new SequentialSigner({ expectedSignerIds: [] }).create(
+        payload,
+      ),
     });
-    const hash = this.sha256(envelope);
+    const hash = sha256(envelope);
     const rows = await this.database.query<DocumentRow>(
       `
       INSERT INTO recrutamento.signed_document (
@@ -142,19 +145,33 @@ export class DocumentSigningService {
       );
       const order = existing.length + 1;
       const envelope = this.decodeEnvelope(document.signed_payload);
-      const digest = this.signatureDigest(
-        document.signed_payload,
-        member,
-        order,
+      const expectedSignerIds = [
+        ...existing.map((signature) => signature.banca_membro_id),
+        member.id,
+      ];
+      const sequential = new SequentialSigner({
+        expectedSignerIds,
+      }).append(
+        {
+          ...envelope.sequential,
+          expectedSignerIds,
+        },
+        {
+          id: member.id,
+          subject: member.cert_subject_dn ?? member.full_name,
+          serial: member.cert_serial ?? member.id,
+          role: member.role,
+        },
       );
-      envelope.signatures.push({
-        memberId: member.id,
-        subject: member.cert_subject_dn ?? member.full_name,
-        serial: member.cert_serial ?? member.id,
-        digest,
+      const signature = sequential.signatures.at(-1);
+      if (!signature) {
+        throw new BadRequestException('Sequential signature was not appended');
+      }
+      const signedPayload = this.encodeEnvelope({
+        ...envelope,
+        sequential,
       });
-      const signedPayload = this.encodeEnvelope(envelope);
-      const contentHash = this.sha256(signedPayload);
+      const contentHash = sha256(signedPayload);
       const status = order >= 3 ? 'SIGNED' : 'PARTIALLY_SIGNED';
 
       await client.query(
@@ -168,7 +185,7 @@ export class DocumentSigningService {
           document.tenant_id,
           document.id,
           member.id,
-          Buffer.from(digest, 'utf8'),
+          Buffer.from(signature.digest, 'utf8'),
           input.certChainBase64
             ? Buffer.from(input.certChainBase64, 'base64')
             : Buffer.from(member.cert_subject_dn ?? member.full_name, 'utf8'),
@@ -358,29 +375,30 @@ export class DocumentSigningService {
   private verifyPayload(payload: Buffer, signatures: SignatureRow[]): boolean {
     try {
       const finalEnvelope = this.decodeEnvelope(payload);
-      if (finalEnvelope.signatures.length !== signatures.length) return false;
-      const replay: Envelope = {
-        format: finalEnvelope.format,
-        payloadBase64: finalEnvelope.payloadBase64,
-        signatures: [],
-      };
+      if (finalEnvelope.sequential.signatures.length !== signatures.length) {
+        return false;
+      }
+      const expectedSignerIds = signatures.map(
+        (signature) => signature.banca_membro_id,
+      );
+      const verified = new SequentialSigner({
+        expectedSignerIds,
+      }).verify({
+        ...finalEnvelope.sequential,
+        expectedSignerIds,
+      });
+      if (!verified.ok) return false;
       for (const [index, signature] of signatures.entries()) {
-        const expectedDigest = this.signatureDigest(
-          this.encodeEnvelope(replay),
-          {
-            id: signature.banca_membro_id,
-            cert_serial: signature.cert_serial,
-          } as MemberRow,
-          signature.signature_order,
-        );
+        const envelopeSignature = finalEnvelope.sequential.signatures[index];
+        if (!envelopeSignature) return false;
         const actualDigest = signature.signature_value.toString('utf8');
         if (
-          expectedDigest !== actualDigest ||
-          finalEnvelope.signatures[index]!.digest !== actualDigest
+          envelopeSignature.digest !== actualDigest ||
+          envelopeSignature.signer.id !== signature.banca_membro_id ||
+          envelopeSignature.order !== signature.signature_order
         ) {
           return false;
         }
-        replay.signatures.push(finalEnvelope.signatures[index]!);
       }
       return true;
     } catch {
@@ -403,31 +421,11 @@ export class DocumentSigningService {
   }
 
   private publicToken(input: CreateSignedDocumentDto): string {
-    return this.sha256(
+    return sha256(
       Buffer.from(
         `${input.concursoId}:${input.kind}:${input.sourceRef}:${Date.now()}`,
       ),
     ).slice(0, 48);
-  }
-
-  private signatureDigest(
-    payload: Buffer,
-    member: MemberRow,
-    order: number,
-  ): string {
-    return this.sha256(
-      Buffer.concat([
-        payload,
-        Buffer.from(
-          `:${member.id}:${member.cert_serial ?? ''}:${order}`,
-          'utf8',
-        ),
-      ]),
-    );
-  }
-
-  private sha256(payload: Buffer): string {
-    return createHash('sha256').update(payload).digest('hex');
   }
 
   private encodeEnvelope(envelope: Envelope): Buffer {

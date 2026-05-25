@@ -1,5 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { createHash, randomUUID } from 'node:crypto';
+import {
+  createGovBrSandboxAdapter,
+  type GovBrSandboxAdapter,
+  type GovBrSandboxResult,
+} from '@stynx/signature';
 
 import { AuthenticatedActor } from '../actor.types';
 import { GovBrSignRequestDto } from './sign.dto';
@@ -50,7 +54,18 @@ export interface GovBrAdvancedSignatureEnvelope {
 
 @Injectable()
 export class GovBrSignatureSandboxAdapter {
-  private readonly requests = new Map<string, GovBrSignatureRequestRecord>();
+  private readonly adapter: GovBrSandboxAdapter = createGovBrSandboxAdapter(
+    () => new Date(),
+  );
+  private readonly requests = new Map<
+    string,
+    {
+      actor: AuthenticatedActor;
+      input: GovBrSignRequestDto;
+      returnUrl: string;
+      record: GovBrSignatureRequestRecord;
+    }
+  >();
 
   createRequest(actor: AuthenticatedActor, input: GovBrSignRequestDto) {
     if (!input.resourceType?.trim()) {
@@ -60,35 +75,23 @@ export class GovBrSignatureSandboxAdapter {
       throw new BadRequestException('payload is required');
     }
 
-    const id = randomUUID();
-    const state = randomUUID();
-    const challenge = randomUUID();
-    const payloadHash = this.sha256(this.canonical(input.payload));
     const returnUrl = this.normalizeReturnUrl(input.returnUrl);
-    const record: GovBrSignatureRequestRecord = {
-      id,
-      state,
-      challenge,
+    const result = this.adapter.createRequest({
       tenantId: actor.tenantId,
       signer: this.signer(actor),
       resourceType: input.resourceType.trim(),
       resourceId: input.resourceId?.trim() || null,
       payload: input.payload,
-      payloadHash,
       returnUrl,
-      status: 'PENDING',
-      createdAt: new Date().toISOString(),
-      decidedAt: null,
-      signature: null,
-    };
-
-    this.requests.set(state, record);
+    });
+    const record = this.toRecord(result, actor, input, returnUrl);
+    this.requests.set(result.state, { actor, input, returnUrl, record });
 
     return {
       request: this.toResponse(record),
       redirectUrl: `/api/portal/v1/auth/govbr/sign/callback?state=${encodeURIComponent(
-        state,
-      )}&decision=approved&challenge=${encodeURIComponent(challenge)}`,
+        result.state,
+      )}&decision=approved&challenge=${encodeURIComponent(result.challenge)}`,
       provider: 'govbr-local-sandbox' as const,
     };
   }
@@ -98,114 +101,65 @@ export class GovBrSignatureSandboxAdapter {
     decision: GovBrSignatureDecision,
     challenge?: string,
   ) {
-    const record = this.requests.get(state);
-    if (!record) {
-      throw new BadRequestException('Unknown gov.br signature state');
-    }
-    if (record.status !== 'PENDING') {
+    const context = this.requests.get(state);
+    let result: GovBrSandboxResult;
+    try {
+      result = this.adapter.complete(
+        state,
+        decision === 'APPROVED' ? 'approved' : 'denied',
+        challenge,
+      );
+    } catch (error) {
       throw new BadRequestException(
-        'Gov.br signature request is already closed',
+        error instanceof Error
+          ? error.message
+          : 'Unknown gov.br signature state',
       );
     }
-
-    const decidedAt = new Date().toISOString();
-    record.decidedAt = decidedAt;
-
-    if (decision === 'DENIED') {
-      record.status = 'DENIED';
-      return this.toResponse(record);
+    const record = this.toRecord(
+      result,
+      context?.actor,
+      context?.input,
+      context?.returnUrl,
+    );
+    if (context) {
+      context.record = record;
     }
-
-    if (challenge !== record.challenge) {
-      record.status = 'DENIED';
-      record.decidedAt = decidedAt;
-      return this.toResponse(record);
-    }
-
-    record.status = 'SIGNED';
-    record.signature = this.signatureEnvelope(record, decidedAt);
     return this.toResponse(record);
   }
 
   getByState(state: string) {
-    const record = this.requests.get(state);
-    return record ? this.toResponse(record) : null;
+    const context = this.requests.get(state);
+    return context ? this.toResponse(context.record) : null;
   }
 
   verifyEnvelope(
     payload: Record<string, unknown>,
     envelope: GovBrAdvancedSignatureEnvelope,
   ): boolean {
-    const payloadHash = this.sha256(this.canonical(payload));
-    if (payloadHash !== envelope.payloadHash) return false;
-    const tamperEvidentHash = this.sha256(
-      this.canonical({
-        payloadHash: envelope.payloadHash,
-        signatureHash: envelope.signatureHash,
-        signerUniqueKey: envelope.signerUniqueKey,
-        signedAt: envelope.signedAt,
-      }),
-    );
-    return tamperEvidentHash === envelope.tamperEvidentHash;
-  }
-
-  private signatureEnvelope(
-    record: GovBrSignatureRequestRecord,
-    signedAt: string,
-  ): GovBrAdvancedSignatureEnvelope {
-    const signatureHash = this.sha256(
-      this.canonical({
-        challenge: record.challenge,
-        payloadHash: record.payloadHash,
-        signerUniqueKey: record.signer.uniqueKey,
-        signedAt,
-        state: record.state,
-      }),
-    );
-    const tamperEvidentHash = this.sha256(
-      this.canonical({
-        payloadHash: record.payloadHash,
-        signatureHash,
-        signerUniqueKey: record.signer.uniqueKey,
-        signedAt,
-      }),
-    );
-
-    return {
-      id: randomUUID(),
+    return this.adapter.verify(payload, {
+      id: envelope.id,
+      state: '',
+      challenge: '',
       provider: 'govbr-local-sandbox',
-      legalBasis: 'Lei 14.063/2020 art. 4 II',
-      level: 'ADVANCED',
-      signerUniqueKey: record.signer.uniqueKey,
-      payloadHash: record.payloadHash,
-      signatureHash,
-      tamperEvidentHash,
-      evidence: {
-        uniqueAssociation: true,
-        signerControlHighConfidence: true,
-        laterModificationDetectable: true,
-        creationDataControl: 'sandbox-state-challenge',
-      },
-      signedAt,
-    };
+      status: 'completed',
+      signerUniqueKey: envelope.signerUniqueKey,
+      payloadHash: envelope.payloadHash,
+      signatureHash: envelope.signatureHash,
+      tamperEvidentHash: envelope.tamperEvidentHash,
+      evidenceUri: `govbr-sandbox://advanced-signatures/${envelope.id}`,
+      evidence: envelope.evidence,
+      createdAt: envelope.signedAt,
+      decidedAt: envelope.signedAt,
+    });
   }
 
   private signer(actor: AuthenticatedActor) {
-    const cpf = this.stringClaim(actor, 'cpf');
-    const email = this.stringClaim(actor, 'email');
-    const uniqueKey = this.sha256(
-      this.canonical({
-        cpf,
-        sub: actor.sub,
-        tenantId: actor.tenantId,
-      }),
-    );
     return {
       sub: actor.sub,
       username: actor.username,
-      cpf,
-      email,
-      uniqueKey,
+      cpf: this.stringClaim(actor, 'cpf'),
+      email: this.stringClaim(actor, 'email'),
     };
   }
 
@@ -259,25 +213,69 @@ export class GovBrSignatureSandboxAdapter {
     };
   }
 
-  private sha256(value: string): string {
-    return createHash('sha256').update(value).digest('hex');
+  private toRecord(
+    result: GovBrSandboxResult,
+    actor?: AuthenticatedActor,
+    input?: GovBrSignRequestDto,
+    returnUrl = '/govbr-sign/callback',
+  ): GovBrSignatureRequestRecord {
+    const cpf = actor ? this.stringClaim(actor, 'cpf') : null;
+    const email = actor ? this.stringClaim(actor, 'email') : null;
+    return {
+      id: result.id,
+      state: result.state,
+      challenge: result.challenge,
+      tenantId: actor?.tenantId ?? '',
+      signer: {
+        sub: actor?.sub ?? '',
+        username: actor?.username ?? '',
+        cpf,
+        email,
+        uniqueKey: result.signerUniqueKey,
+      },
+      resourceType: input?.resourceType.trim() ?? '',
+      resourceId: input?.resourceId?.trim() || null,
+      payload: input?.payload ?? {},
+      payloadHash: result.payloadHash,
+      returnUrl,
+      status: this.toSgpStatus(result.status),
+      createdAt: result.createdAt,
+      decidedAt: result.decidedAt,
+      signature: this.toSignatureEnvelope(result),
+    };
   }
 
-  private canonical(value: unknown): string {
-    if (Array.isArray(value)) {
-      return `[${value.map((item) => this.canonical(item)).join(',')}]`;
+  private toSignatureEnvelope(
+    result: GovBrSandboxResult,
+  ): GovBrAdvancedSignatureEnvelope | null {
+    if (
+      result.status !== 'completed' ||
+      !result.signatureHash ||
+      !result.tamperEvidentHash ||
+      !result.evidence
+    ) {
+      return null;
     }
-    if (value && typeof value === 'object') {
-      return `{${Object.keys(value as Record<string, unknown>)
-        .sort()
-        .map(
-          (key) =>
-            `${JSON.stringify(key)}:${this.canonical(
-              (value as Record<string, unknown>)[key],
-            )}`,
-        )
-        .join(',')}}`;
-    }
-    return JSON.stringify(value);
+
+    return {
+      id: result.id,
+      provider: 'govbr-local-sandbox',
+      legalBasis: 'Lei 14.063/2020 art. 4 II',
+      level: 'ADVANCED',
+      signerUniqueKey: result.signerUniqueKey,
+      payloadHash: result.payloadHash,
+      signatureHash: result.signatureHash,
+      tamperEvidentHash: result.tamperEvidentHash,
+      evidence: result.evidence,
+      signedAt: result.decidedAt ?? result.createdAt,
+    };
+  }
+
+  private toSgpStatus(
+    status: GovBrSandboxResult['status'],
+  ): GovBrSignatureStatus {
+    if (status === 'completed') return 'SIGNED';
+    if (status === 'failed') return 'DENIED';
+    return 'PENDING';
   }
 }

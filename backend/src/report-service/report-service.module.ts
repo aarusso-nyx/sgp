@@ -7,6 +7,7 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { PdfVerificationEvidenceAppender } from '@stynx/pdf/evidence';
 
 import { StandardExceptionFilter } from '../common/errors/standard-exception.filter';
 import { LgpdModule } from '../common/lgpd/lgpd.module';
@@ -16,7 +17,6 @@ import { RequestIdMiddleware } from '../common/request-id/request-id.middleware'
 import { validateEnvironment } from '../config/environment';
 import { DatabaseModule } from '../database/database.module';
 import { DocumentsModule } from '../documents/documents.module';
-import { PadesAdapter } from '../external/signature/pades.adapter';
 import { BlockedPaymentsReportService } from './blocked-payments-report.service';
 import { FinancialReportService } from './financial-report.service';
 import { ManagerialReportService } from './managerial-report.service';
@@ -55,7 +55,13 @@ import { ReportWorkerService } from './report-worker.service';
   ],
   providers: [
     ReportRuntimeService,
-    PadesAdapter,
+    {
+      provide: PdfVerificationEvidenceAppender,
+      useFactory: () =>
+        new PdfVerificationEvidenceAppender({
+          defaultSignerName: 'SGP report-service',
+        }),
+    },
     PdfABuilderService,
     PayslipRenderService,
     YearlyIncomeRenderService,
@@ -90,7 +96,6 @@ import { ReportWorkerService } from './report-worker.service';
     },
   ],
   exports: [
-    PadesAdapter,
     PdfABuilderService,
     PayslipRenderService,
     ReportWorkerService,

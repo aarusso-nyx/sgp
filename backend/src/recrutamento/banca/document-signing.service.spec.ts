@@ -1,6 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { PadesAdapter } from '../../external/signature/pades.adapter';
 import { DocumentSigningService } from './document-signing.service';
 import { TEST_INSTANT_2026_05_02T12_00_00_000Z } from '../../../../tests/backend/helpers/date-fixtures';
 
@@ -115,10 +114,7 @@ class FakeBancaDatabase {
 describe('DocumentSigningService', () => {
   it('preserves sequential signatures for three banca members', async () => {
     const database = new FakeBancaDatabase();
-    const service = new DocumentSigningService(
-      database as never,
-      new PadesAdapter(),
-    );
+    const service = new DocumentSigningService(database as never);
     await service.create({
       concursoId,
       kind: 'GABARITO',
@@ -141,10 +137,7 @@ describe('DocumentSigningService', () => {
 
   it('detects tampering after signature', async () => {
     const database = new FakeBancaDatabase();
-    const service = new DocumentSigningService(
-      database as never,
-      new PadesAdapter(),
-    );
+    const service = new DocumentSigningService(database as never);
     await service.create({
       concursoId,
       kind: 'GABARITO',
@@ -156,7 +149,8 @@ describe('DocumentSigningService', () => {
     const envelope = JSON.parse(
       database.document.signed_payload.toString('utf8'),
     );
-    envelope.payloadBase64 = Buffer.from('tampered PDF').toString('base64');
+    envelope.sequential.payloadBase64 =
+      Buffer.from('tampered PDF').toString('base64');
     database.document.signed_payload = Buffer.from(
       JSON.stringify(envelope),
       'utf8',
@@ -170,10 +164,7 @@ describe('DocumentSigningService', () => {
   it('rejects a revoked certificate during the flow', async () => {
     const database = new FakeBancaDatabase();
     database.members[0].cert_serial = 'REVOKED-1';
-    const service = new DocumentSigningService(
-      database as never,
-      new PadesAdapter(),
-    );
+    const service = new DocumentSigningService(database as never);
 
     await expect(
       service.sign(documentId, { bancaMembroId: memberIds[0] }),

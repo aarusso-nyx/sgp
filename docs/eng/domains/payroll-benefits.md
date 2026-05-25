@@ -241,9 +241,9 @@ A aceitacao de S-3000 marca o evento alvo como `EXCLUIDO` e aciona recomposicao 
 
 **Escopo:** FISC-03 — comprovante anual de rendimentos pagos e de Imposto sobre a Renda Retido na Fonte para servidores, com geração em lote no admin e download pelo Portal do Servidor.
 
-**Truth banner:** The PDF/A runtime uses internal hash and
-`%%SGP-PADES-SIGNATURE` evidence through `PadesAdapter`. This is not real
-CMS/PKCS#7/PAdES signing; legal PAdES remains deferred in
+**Truth banner:** The PDF/A runtime uses STYNX package-owned evidence via
+`%%STYNX-PADES-SIGNATURE` through `@stynx/pdf/evidence`. This is not real
+CMS/PKCS#7/PAdES provider signing; legal PAdES remains deferred in
 `103-deferred-decision-ledger.md#deferred-decision-ledger`.
 
 ### Fundamento e Cobertura
@@ -273,7 +273,7 @@ A geração do PDF valida que `taxable_total + exempt_total` coincide com o tota
 
 ### Saída Oficial
 
-O PDF é produzido por `backend/src/report-service/yearly-income/` com a mesma biblioteca real de XCUT-01 (`pdf-lib` via `PdfABuilderService`), metadados PDF/A-1b, armazenamento S3-compatible e hash SHA-256 em `public.generated_report_file.file_hash`. A chave lógica é `{tenant}/outputs/yearly-income/{ano_base}/{employee_id}.pdf`, com retenção de 10 anos.
+O PDF é produzido por `backend/src/report-service/yearly-income/` com o template pack `@stynx/pdf/public-payroll` via `PdfABuilderService`, metadados PDF/A-1b-style, armazenamento S3-compatible e hash SHA-256 em `public.generated_report_file.file_hash`. A chave lógica é `{tenant}/outputs/yearly-income/{ano_base}/{employee_id}.pdf`, com retenção de 10 anos.
 
 ## SIFGE FGTS — Deposito Caixa
 
@@ -604,7 +604,7 @@ serem aceitas.
 **Status:** implemented
 **Data:** 2026-05-02
 
-**Truth banner:** The current `PadesAdapter` appends an internal
+**Truth banner:** The current STYNX PDF evidence appender adds an internal
 tamper-evidence block and records signature metadata. It is not a real
 CMS/PKCS#7/PAdES signer and must not be claimed as legally valid ICP-Brasil
 PAdES until `103-deferred-decision-ledger.md#deferred-decision-ledger` is closed
@@ -612,15 +612,15 @@ for `PADES_REAL_SIGNATURE`.
 
 ### Decisão
 
-O contracheque oficial passa a ser gerado em `backend/src/report-service/payslip/` com `pdf-lib`. A biblioteca foi escolhida para este slice porque evita o footprint operacional de navegador headless, tem licença MIT, roda no runtime NestJS existente e produz um PDF binário real com metadados estáveis suficientes para a validação PDF/A-1b do pipeline interno.
+O contracheque oficial passa a ser gerado em `backend/src/report-service/payslip/` por `@stynx/pdf/public-payroll`, chamado pelo adaptador NestJS `PdfABuilderService`. O template pack STYNX evita o footprint operacional de navegador headless, mantém construção determinística de layout fixo e produz um PDF binário real com metadados estáveis suficientes para a validação PDF/A-style do pipeline interno.
 
 ### Consequências
 
 - `puppeteer` permanece fora do runtime público deste slice.
 - O hash SHA-256 do PDF é persistido em `public.generated_report_file.file_hash`.
 - `public.generated_report_file` registra `report_kind = PAYSLIP`, `pdf_a_compliance = PDF_A_1B`, `signature_kind`, competência, servidor, folha e retenção.
-- O PDF/A renderizado recebe o bloco interno de evidência do `PadesAdapter` antes do cálculo do hash e da persistência do arquivo gerado; o registro preserva `signature_kind` e `signed_at` para auditoria interna.
-- A validação automatizada do slice verifica cabeçalho binário `%PDF-`, metadados, fontes, bloco `%%SGP-PADES-SIGNATURE`, golden PDF byte-estável e persistência do hash; validações externas veraPDF e PAdES real dependem dos gates de release quando disponíveis no ambiente.
+- O PDF/A renderizado recebe o bloco interno de evidência de `@stynx/pdf/evidence` antes do cálculo do hash e da persistência do arquivo gerado; o registro preserva `signature_kind` e `signed_at` para auditoria interna.
+- A validação automatizada do slice verifica cabeçalho binário `%PDF-`, metadados, fontes, bloco `%%STYNX-PADES-SIGNATURE`, golden PDF byte-estável e persistência do hash; validações externas veraPDF e PAdES real dependem dos gates de release quando disponíveis no ambiente.
 
 ## Convencoes de fixtures XLSX dos importadores de folha
 

@@ -4,42 +4,49 @@ Date: 2026-05-24
 
 ## Decision
 
-SGP adopts `@stynx/pdf` for shared PDF digest helpers, but retains its local
-`pdf-lib` PDF/A-style builders for official payroll fixtures.
+SGP adopts the `@stynx/pdf/public-payroll` template pack for official
+payslip and yearly-income PDF construction. SGP keeps a thin
+`PdfABuilderService` adapter for NestJS wiring, evidence appending, and existing
+call-site compatibility.
 
-The current local builder lives at
-`backend/src/report-service/payslip/pdf-a-builder.service.ts`. Related yearly
-income rendering is covered by
-`backend/src/report-service/yearly-income/pdf-a-yearly.service.spec.ts`.
+The current adapter lives at
+`backend/src/report-service/payslip/pdf-a-builder.service.ts`. The reusable
+fixed-layout rendering logic is upstream in `@stynx/pdf/public-payroll`.
 
 ## Rationale
 
 SGP payroll PDFs are regulatory output fixtures. The tests compare versioned
 goldens byte-for-byte, including deterministic metadata and the internal
-`%%SGP-PADES-SIGNATURE` evidence block. The current `@stynx/pdf` package does
-not yet provide a PDF/A conformance adapter with those stability guarantees.
+`%%STYNX-PADES-SIGNATURE` evidence block. STYNX now owns the deterministic
+fixed-layout report construction, while SGP still owns the regulatory data,
+storage, audit, and status boundary.
 
-Replacing the local builder before the shared package owns PDF/A layout,
-metadata, digest, and fixture-stability semantics would turn a regulated output
-contract into an implementation detail. That is not acceptable for payroll,
-annual income evidence, or audit replay.
+The STYNX template pack is still a PDF/A-style structural builder, not a bundled
+validator-backed PDF/A conformance implementation. SGP therefore continues to
+record `pdf_a_compliance = PDF_A_1B` only under the accepted internal pipeline
+and retained golden evidence.
 
 ## Scope
 
-SGP may use shared `@stynx/pdf` helpers for digest and package-level utilities.
+SGP consumes `@stynx/pdf/public-payroll` for:
+
+- PDF/A-style fixed-layout payslip construction.
+- PDF/A-style fixed-layout yearly-income construction.
+- Structural validation through `validatePdfAStyle(...)`.
+
 SGP continues to own:
 
-- PDF/A-style document construction for payslips.
 - Deterministic golden fixture comparison.
-- Local PAdES evidence markers used by tests.
+- STYNX PAdES evidence appending through `@stynx/pdf/evidence`.
+- SQL reads, LGPD checks, RBAC/RLS/audit, storage keys, report persistence, and
+  batch status transitions.
 - Any byte-sensitive migration of existing goldens.
 
 ## Retirement Criteria
 
-Retire the SGP `pdf-lib` builder only after `@stynx/pdf` provides:
+Retire the SGP adapter entirely only after `@stynx/pdf` also owns or exposes:
 
-- A PDF/A adapter with deterministic metadata and object ordering guarantees.
-- A compatible PAdES evidence hook.
+- A compatible PAdES evidence/hint hook accepted for SGP report-service output.
 - Golden-fixture helpers that preserve byte-sensitive expected files.
-- Passing SGP payslip and yearly-income golden tests without normalizing the
-  existing expected PDFs.
+- A real PDF/A conformance adapter if SGP wants to replace its current
+  PDF/A-style structural assertion with validator-backed archival conformance.

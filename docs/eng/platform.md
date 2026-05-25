@@ -4744,7 +4744,7 @@ stateDiagram-v2
 
 **Eventos publicados:** `report.gerar.<tipo>` (para `sgp-report-service`).
 
-`report-service/payslip` substitui a geração textual de contracheque por PDF binário gerado com `pdf-lib`. O serviço lê `payroll.payroll_run`, `payroll.payroll_financial_record` e `payroll.v_payroll_run_line_active`, grava metadados em `public.generated_report_file` com `report_kind = PAYSLIP`, `pdf_a_compliance = PDF_A_1B`, `retention_until` e `file_hash` SHA-256, e controla geração administrativa em `public.payslip_batch`. O portal aplica filtro de controller e RLS por `employee_id = sgp_current_employee_id()`.
+`report-service/payslip` substitui a geração textual de contracheque por PDF binário gerado com `@stynx/pdf/public-payroll` via `PdfABuilderService`. O serviço lê `payroll.payroll_run`, `payroll.payroll_financial_record` e `payroll.v_payroll_run_line_active`, grava metadados em `public.generated_report_file` com `report_kind = PAYSLIP`, `pdf_a_compliance = PDF_A_1B`, `retention_until` e `file_hash` SHA-256, e controla geração administrativa em `public.payslip_batch`. O portal aplica filtro de controller e RLS por `employee_id = sgp_current_employee_id()`.
 
 **Eventos consumidos:** `report.gerado` (atualiza status da solicitação).
 

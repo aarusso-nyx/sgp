@@ -17,8 +17,8 @@
 - `api/README.md`: OpenAPI generation, client drift gate, route alignment gate, and generated API artifact locations.
 - `experience.md`: menu tree, operator workflows, manual guidance, and official outputs.
 - `quality-migration.md`: test strategy, migration rules, and acceptance gates.
-- `67-pdf-a-builder.md`: accepted boundary for the local byte-stable PDF/A builders and shared `@stynx/pdf`.
-- `68-signature-architecture.md`: accepted boundary for local sandbox XMLDSig, shared `@stynx/signature`, and `stynx-esocial`.
+- `67-pdf-a-builder.md`: accepted boundary for STYNX public-payroll PDF builders, SGP report-service orchestration, and PDF/A-style evidence.
+- `68-signature-architecture.md`: accepted boundary for shared `@stynx/signature`, SGP certificate/persistence ownership, and `stynx-esocial`.
 - `locale-policy.md`: Angular Brazilian Portuguese locale policy.
 - `decisions/adr-021-icp-signer-software-certificate.md`: accepted ICP signer boundary for software certificates and out-of-scope HSM/A3 ownership.
 - `domains/people-recruitment.md`: people, recruitment, concursos, appointment, quotas, and related workflows.

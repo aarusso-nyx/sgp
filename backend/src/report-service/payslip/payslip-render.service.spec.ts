@@ -210,7 +210,7 @@ describe('PayslipRenderService', () => {
         { id: 'file-1' },
       ]),
     };
-    const signedPdf = Buffer.from('%PDF-test\n%%SGP-PADES-SIGNATURE:test\n');
+    const signedPdf = Buffer.from('%PDF-test\n%%STYNX-PADES-SIGNATURE:test\n');
     const pdf = {
       buildPayslip: jest.fn().mockResolvedValue(signedPdf),
       validatePdfA1b: jest.fn().mockReturnValue({ valid: true, reasons: [] }),
@@ -230,7 +230,7 @@ describe('PayslipRenderService', () => {
       payrollRunId: 'run-1',
       competence: '2026-05-01',
       fileHash:
-        'cc592f3cac31a8ce28e43ae7eeaf9b6ecb7fb2f092f2fac0bac566ad16c0b72f',
+        '02b8a4415119459f96a904741dfb455d7edaeee32b11eda12114a63280169480',
     });
     expect(client.query).toHaveBeenCalledTimes(5);
     expect(client.query.mock.calls[4][0]).toContain(

@@ -1,6 +1,6 @@
 import { MODULE_METADATA } from '@nestjs/common/constants';
+import { PdfVerificationEvidenceAppender } from '@stynx/pdf/evidence';
 
-import { PadesAdapter } from '../external/signature/pades.adapter';
 import { PdfABuilderService } from '../report-service/payslip/pdf-a-builder.service';
 import { PayslipRenderService } from '../report-service/payslip/payslip-render.service';
 import { ReportServiceModule } from '../report-service/report-service.module';
@@ -26,7 +26,7 @@ describe('PortalModule', () => {
     expect(imports).toContain(ReportServiceModule);
     expect(providers).not.toEqual(
       expect.arrayContaining([
-        PadesAdapter,
+        PdfVerificationEvidenceAppender,
         PdfABuilderService,
         PayslipRenderService,
         YearlyIncomeRenderService,
@@ -35,7 +35,6 @@ describe('PortalModule', () => {
     );
     expect(reportExports).toEqual(
       expect.arrayContaining([
-        PadesAdapter,
         PdfABuilderService,
         PayslipRenderService,
         YearlyIncomeRenderService,

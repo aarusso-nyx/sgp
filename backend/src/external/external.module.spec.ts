@@ -7,7 +7,6 @@ import { ExternalController } from './external.controller';
 import { ExternalModule } from './external.module';
 import { ExternalService } from './external.service';
 import { IcpSignerService } from './signature/icp-signer.service';
-import { PadesAdapter } from './signature/pades.adapter';
 import { TenantFiscalCertificateService } from './signature/tenant-fiscal-certificate.service';
 
 function metadataTarget(method: string) {
@@ -34,12 +33,11 @@ describe('ExternalModule', () => {
     ).toEqual([
       ExternalService,
       IcpSignerService,
-      PadesAdapter,
       TenantFiscalCertificateService,
     ]);
     expect(
       Reflect.getMetadata(MODULE_METADATA.EXPORTS, ExternalModule),
-    ).toEqual([IcpSignerService, PadesAdapter, TenantFiscalCertificateService]);
+    ).toEqual([IcpSignerService, TenantFiscalCertificateService]);
   });
 
   it('keeps external M2M endpoints behind auth.read', () => {
