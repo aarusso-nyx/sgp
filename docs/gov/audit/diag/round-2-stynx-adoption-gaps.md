@@ -123,3 +123,22 @@ Scope executed from `/Users/aarusso/Development/stech/align/sgp/round-2/prompts/
   `passedRules=144`, `failedRules=0`, `failedChecks=0` for both documents.
   SGP R11 W04+ resume from this point. Details:
   `docs/work/round-11/r13-handoff.md`.
+
+## 2026-05-26 — R11 PDF/A Row CLOSED
+
+**Status: CLOSED** — Date: 2026-05-26
+
+SGP R11 fully resolves the PDF/A conformance gap identified at original round-2 baseline. The following work chain delivered the closure:
+
+- `9485689b` W01 — wired `VeraPdfDockerValidator` (warn-only) into `PdfABuilderService` for payslip output
+- `d60c1ccb` W02 — wired the same validator into yearly-income builder; `buildYearlyIncomeWithAudit()` added
+- `a97b5d83` W03 — ran real veraPDF baseline against byte-stable goldens; 5 rule failures (all upstream STYNX, none SGP-side); 5 gap entries filed (`stynx-r13-pdf-a-001..005`)
+- `b8302a66` Pre-flight — STYNX R13 (`cb1916f8`) closed all 5 defects (font embedding, XMP pdfaid block, sRGB ICC OutputIntent, trailer /ID, bytes-after-EOF); SGP re-packed `@stynx/pdf` and regenerated goldens; VeraPDF now reports `compliant=true`, 144/144 passedRules for both documents
+- `2a81d005` W04 — `TelemetryPdfAValidator` decorator emits 3 Prometheus metrics (`sgp_pdf_a_validation_attempts_total`, `sgp_pdf_a_validation_errors_total`, `sgp_pdf_a_validation_duration_ms`); observability reference: `docs/ops/observability.md`
+- `97277726` W05 — build-time strict conformance gate (`tests/backend/pdf-a-conformance.e2e-spec.ts`) asserts `valid===true` for both golden fixtures using real VeraPDF; auto-skips when Docker is unavailable (Apple Silicon / CI noop path)
+- `5f97c684` W06 — 14-day trust-period monitoring plan with weekly checklist, exit criteria, and Grafana panel definitions: `docs/ops/pdf-a-trust-period.md`
+- `189dd70f` W07 — fail-fast policy flip runbook (prereqs, code change, deployment sequence, rollback, comms): `docs/ops/pdf-a-fail-fast-flip.md`
+
+STYNX upstream closure: `cb1916f8` "Engineer: close PDF/A-2b conformance gaps" (STYNX R13).
+
+**Runtime remains warn-only** per the SGP R11 phased adoption plan. The fail-fast transition is a separate operational decision gated on successful completion of the W06 trust period (minimum 14 days, owner signoff required). The runbook for that transition is docked at `docs/ops/pdf-a-fail-fast-flip.md`.

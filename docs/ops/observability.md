@@ -51,7 +51,7 @@ observe it.
 - Baseline findings and STYNX R13 gap entries: `docs/work/round-11/stynx-r13-gaps.md`
 - R13 handoff (all five defects closed, goldens regenerated): `docs/work/round-11/r13-handoff.md`
 - Build-time strict gate (W05): parallel worker, separate spec file.
-- Trust-period monitoring plan (W06): not yet implemented.
+- Trust-period monitoring plan (W06): `docs/ops/pdf-a-trust-period.md`
 
 ### Wiring
 
