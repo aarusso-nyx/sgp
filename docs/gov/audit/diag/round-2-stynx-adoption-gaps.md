@@ -88,3 +88,26 @@ Scope executed from `/Users/aarusso/Development/stech/align/sgp/round-2/prompts/
   payroll/fiscal reconciliation.
 - The package remains PDF/A-style structural output. A real validator-backed
   PDF/A conformance adapter is still a deferred upstream capability.
+
+## 2026-05-25 — R11 / W03 PDF/A baseline run
+
+- SGP R11 W01 + W02 wired a real `VeraPdfDockerValidator` into both payslip
+  and yearly-income builders (default Noop in CI; Docker-backed in
+  environments where Docker is available). See commits `9485689b` and
+  `d60c1ccb`.
+- W03 ran veraPDF (PDF/A-2b flavour, pinned image
+  `verapdf/cli@sha256:20202b4bcc2410a25db1f637c7b461a2e0dda1d97dd8a6df658286b30d56c842`)
+  against the byte-stable goldens emitted by both builders. Result: 5
+  distinct rule failures per document, IDENTICAL between the two outputs.
+- All 5 findings are classified as upstream STYNX defects in `@stynx/pdf`
+  `FixedLayoutDocumentBuilder` + `PdfVerificationEvidenceAppender`. No
+  SGP-side adapter defect was found. Full baseline + classification:
+  `docs/work/round-11/pdf-a-baseline-findings.md`. STYNX R13 gap entries:
+  `docs/work/round-11/stynx-r13-gaps.md` (5 entries, ids
+  `stynx-r13-pdf-a-001..005`).
+- Per the W03 orchestrator instruction ("If you patch STYNX upstream during
+  this round STOP and report"), W03 did NOT patch the STYNX packages and
+  did NOT mutate any SGP fixture or builder wiring. The runtime
+  warn-only policy from W01/W02 remains active. The build-time strict gate
+  (W05) and telemetry (W04) consume the same audit shape and will start
+  reporting `valid:true` once the STYNX R13 fixes ship.
