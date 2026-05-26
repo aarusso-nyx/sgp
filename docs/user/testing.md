@@ -128,6 +128,52 @@ fixture diff before publishing; the TCE source-pending fixture must keep
 `sourceStatus=UNVERIFIED_LAYOUT` and `officialConformance=false` until an owner
 approves an official layout source.
 
+## PDF/A Conformance Suite
+
+The `pdf-a-conformance.e2e-spec.ts` suite in `tests/backend/` is a
+**build-time strict** gate. It uses the real `VeraPdfDockerValidator` (not the
+Noop used in unit tests) and asserts `valid === true` for both the payslip and
+yearly-income golden fixtures.
+
+### Docker requirement
+
+The suite requires the Docker daemon and the pinned veraPDF image:
+
+```
+verapdf/cli@sha256:20202b4bcc2410a25db1f637c7b461a2e0dda1d97dd8a6df658286b30d56c842
+```
+
+This is the same digest locked in the STYNX R12 W01 ADR and consumed by
+`@stynx/pdf-a-vera-docker`. On CI runners (Linux/amd64) the image is pulled
+automatically. See the [upstream `@stynx/pdf-a-vera-docker` package](../../node_modules/@stynx/pdf-a-vera-docker/README.md)
+for environment variables (`STYNX_VERAPDF_IMAGE`, `STYNX_VERAPDF_DOCKER_BIN`,
+`STYNX_VERAPDF_TIMEOUT_MS`) that override defaults.
+
+The suite runs as part of `npm run test:e2e`. It **skips automatically** with an
+informative message when Docker is unavailable or when the image smoke check
+fails (e.g. on Apple Silicon hosts without Rosetta/emulation). Local
+`npm run test:e2e` exits zero whether or not Docker is present.
+
+### Apple Silicon caveat
+
+The upstream `runVeraPdfDocker` runner does not pass `--platform linux/amd64`
+and SIGSEGVs on M-series chips. The conformance spec ships a custom
+`platformAwareRunner` that injects `--platform linux/amd64`. If the Docker
+daemon on the host cannot serve `linux/amd64` images (i.e. `docker run
+--platform linux/amd64 <image>` fails), the suite skips automatically.
+
+### Running the conformance suite directly
+
+```bash
+npm --workspace backend exec jest -- \
+  --config ../tests/backend/jest-e2e.json \
+  --runTestsByPath ../tests/backend/pdf-a-conformance.e2e-spec.ts \
+  --runInBand
+```
+
+On failure, the suite prints the full `errors[]` array from veraPDF so PR
+reviewers can see exactly which PDF/A rules regressed.
+
 ## Backend QA Flow
 
 The preferred local path is the one-command bootstrap:
