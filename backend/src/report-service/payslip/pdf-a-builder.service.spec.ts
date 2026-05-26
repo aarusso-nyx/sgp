@@ -1,10 +1,78 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
+import { Logger } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { NoopPdfAValidator } from '@stynx/pdf-a';
+import type {
+  PdfAValidateOptions,
+  PdfAValidationResult,
+  PdfAValidator,
+} from '@stynx/pdf-a';
+
 import { PdfABuilderService } from './pdf-a-builder.service';
 import { PayslipDocument } from './payslip-template';
+import { PDF_A_VALIDATOR } from '../pdf-a/pdf-a-validator.provider';
 
 const updateGoldens = process.env.SGP_UPDATE_R3_016_GOLDENS === '1';
+
+class SpyPdfAValidator implements PdfAValidator {
+  readonly calls: Array<{
+    pdf: Uint8Array;
+    opts: PdfAValidateOptions | undefined;
+  }> = [];
+
+  constructor(private readonly response: PdfAValidationResult) {}
+
+  validate(
+    pdf: Uint8Array,
+    opts?: PdfAValidateOptions,
+  ): Promise<PdfAValidationResult> {
+    this.calls.push({ pdf, opts });
+    return Promise.resolve(this.response);
+  }
+}
+
+function validResult(): PdfAValidationResult {
+  return {
+    valid: true,
+    declared: { version: 'A-2', conformance: 'b' },
+    rulesetVersion: 'spy-valid',
+    validatedAt: new Date().toISOString(),
+    durationMs: 1,
+    errors: [],
+  };
+}
+
+function invalidResult(): PdfAValidationResult {
+  return {
+    valid: false,
+    declared: { version: 'A-2', conformance: 'b' },
+    rulesetVersion: 'spy-invalid',
+    validatedAt: new Date().toISOString(),
+    durationMs: 2,
+    errors: [
+      {
+        ruleId: '6.6.4-1',
+        severity: 'error',
+        clause: 'PDF/A-2:6.6.4',
+        message: 'XMP PDF/A part metadata is missing.',
+      },
+    ],
+  };
+}
+
+async function buildService(
+  validator: PdfAValidator,
+): Promise<PdfABuilderService> {
+  const module = await Test.createTestingModule({
+    providers: [
+      PdfABuilderService,
+      { provide: PDF_A_VALIDATOR, useValue: validator },
+    ],
+  }).compile();
+  return module.get(PdfABuilderService);
+}
 
 describe('PdfABuilderService', () => {
   const document: PayslipDocument = {
@@ -45,7 +113,7 @@ describe('PdfABuilderService', () => {
   );
 
   it('creates binary PDF output with PDF/A-style validation metadata', async () => {
-    const service = new PdfABuilderService();
+    const service = await buildService(new NoopPdfAValidator());
     const buffer = await service.buildPayslip(document);
 
     expect(buffer.subarray(0, 5).toString('latin1')).toBe('%PDF-');
@@ -65,7 +133,7 @@ describe('PdfABuilderService', () => {
   });
 
   it('is deterministic for the same payload', async () => {
-    const service = new PdfABuilderService();
+    const service = await buildService(new NoopPdfAValidator());
     const first = await service.buildPayslip(document);
     const second = await service.buildPayslip(document);
 
@@ -73,7 +141,7 @@ describe('PdfABuilderService', () => {
   });
 
   it('matches the payslip PDF/A PAdES golden fixture byte-for-byte', async () => {
-    const service = new PdfABuilderService();
+    const service = await buildService(new NoopPdfAValidator());
     const input = JSON.parse(
       readFileSync(join(goldenDir, 'input.json'), 'utf8'),
     ) as PayslipDocument;
@@ -83,6 +151,44 @@ describe('PdfABuilderService', () => {
     expect(
       actual.equals(expectedBuffer(join(goldenDir, 'expected.pdf'), actual)),
     ).toBe(true);
+  });
+
+  it('calls validator on generated PDF and attaches result to audit record', async () => {
+    const spy = new SpyPdfAValidator(validResult());
+    const service = await buildService(spy);
+
+    const audit = await service.buildPayslipWithAudit(document);
+
+    expect(spy.calls).toHaveLength(1);
+    const [call] = spy.calls;
+    expect(call.pdf).toBeInstanceOf(Uint8Array);
+    expect(call.pdf.length).toBeGreaterThan(0);
+    expect(call.opts).toEqual({ version: 'A-2', conformance: 'b' });
+    expect(audit.buffer.subarray(0, 5).toString('latin1')).toBe('%PDF-');
+    expect(audit.pdfAValidation).toEqual(spy['response']);
+    expect(audit.pdfAValidation.valid).toBe(true);
+  });
+
+  it('non-conformant validator result does not throw and logs a warning', async () => {
+    const spy = new SpyPdfAValidator(invalidResult());
+    const service = await buildService(spy);
+    const warnSpy = jest
+      .spyOn(Logger.prototype, 'warn')
+      .mockImplementation(() => undefined);
+
+    try {
+      const audit = await service.buildPayslipWithAudit(document);
+
+      expect(audit.buffer.subarray(0, 5).toString('latin1')).toBe('%PDF-');
+      expect(audit.pdfAValidation.valid).toBe(false);
+      expect(audit.pdfAValidation.errors[0]?.ruleId).toBe('6.6.4-1');
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      const message = warnSpy.mock.calls[0]![0] as string;
+      expect(message).toContain('PDF/A validation reported non-conformance');
+      expect(message).toContain('6.6.4-1');
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 });
 

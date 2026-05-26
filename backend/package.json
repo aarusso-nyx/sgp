@@ -69,6 +69,8 @@
     "@stynx/integration-adapter": "file:../../stynx/.release/local-npm/stynx-integration-adapter-0.1.0.tgz",
     "@stynx/logging": "file:../../stynx/.release/local-npm/stynx-logging-1.0.0.tgz",
     "@stynx/pdf": "file:../../stynx/.release/local-npm/stynx-pdf-0.1.0.tgz",
+    "@stynx/pdf-a": "file:../../stynx/.release/local-npm/stynx-pdf-a-0.1.0.tgz",
+    "@stynx/pdf-a-vera-docker": "file:../../stynx/.release/local-npm/stynx-pdf-a-vera-docker-0.1.0.tgz",
     "@stynx/privacy": "file:../../stynx/.release/local-npm/stynx-privacy-1.0.0.tgz",
     "@stynx/ratelimit": "file:../../stynx/.release/local-npm/stynx-ratelimit-1.0.0.tgz",
     "@stynx/sessions": "file:../../stynx/.release/local-npm/stynx-sessions-1.0.0.tgz",

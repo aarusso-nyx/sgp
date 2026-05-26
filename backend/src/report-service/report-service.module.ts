@@ -22,6 +22,7 @@ import { FinancialReportService } from './financial-report.service';
 import { ManagerialReportService } from './managerial-report.service';
 import { ManadExportReportService } from './manad-export-report.service';
 import { PerdcompExportReportService } from './perdcomp-export-report.service';
+import { PdfAValidatorProvider } from './pdf-a/pdf-a-validator.provider';
 import { PdfABuilderService } from './payslip/pdf-a-builder.service';
 import { PayslipController } from './payslip/payslip.controller';
 import { PayslipRenderService } from './payslip/payslip-render.service';
@@ -62,6 +63,7 @@ import { ReportWorkerService } from './report-worker.service';
           defaultSignerName: 'SGP report-service',
         }),
     },
+    PdfAValidatorProvider,
     PdfABuilderService,
     PayslipRenderService,
     YearlyIncomeRenderService,
