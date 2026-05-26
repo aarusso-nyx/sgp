@@ -76,7 +76,17 @@ export class PdfABuilderService {
   }
 
   async buildYearlyIncome(document: YearlyIncomeDocument): Promise<Buffer> {
-    return Buffer.from(await this.builder.buildYearlyIncome(document));
+    const { buffer } = await this.buildYearlyIncomeWithAudit(document);
+    return buffer;
+  }
+
+  async buildYearlyIncomeWithAudit(
+    document: YearlyIncomeDocument,
+  ): Promise<PdfABuildAuditRecord> {
+    const bytes = await this.builder.buildYearlyIncome(document);
+    const buffer = Buffer.from(bytes);
+    const pdfAValidation = await this.runValidation(bytes, 'yearly-income');
+    return { buffer, pdfAValidation };
   }
 
   private async runValidation(
