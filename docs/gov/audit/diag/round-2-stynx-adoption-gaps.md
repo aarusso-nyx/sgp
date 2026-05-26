@@ -110,7 +110,8 @@ Scope executed from `/Users/aarusso/Development/stech/align/sgp/round-2/prompts/
   did NOT mutate any SGP fixture or builder wiring. The runtime
   warn-only policy from W01/W02 remains active. The build-time strict gate
   (W05) and telemetry (W04) consume the same audit shape and will start
-  reporting `valid:true` once the STYNX R13 fixes ship.
+  reporting `valid:true` once the STYNX R13 fixes ship. The trust-period
+  monitoring plan (W06) is documented at `docs/ops/pdf-a-trust-period.md`.
 - 2026-05-25 — STYNX R13 (`cb1916f8` "Engineer: close PDF/A-2b conformance
   gaps") closes all five upstream defects (`stynx-r13-pdf-a-001..005`):
   Liberation font subsetting, XMP `pdfaid:part`/`pdfaid:conformance` block,
