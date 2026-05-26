@@ -13,6 +13,10 @@ import {
   NoopPdfAValidator,
   PDF_A_VALIDATOR,
 } from '../pdf-a/pdf-a-validator.provider';
+import {
+  isTelemetryValidator,
+  type DocumentKind,
+} from '../pdf-a/pdf-a-validator-telemetry.decorator';
 
 export interface PdfAStyleValidationResult {
   valid: boolean;
@@ -67,7 +71,11 @@ export class PdfABuilderService {
   ): Promise<PdfABuildAuditRecord> {
     const bytes = await this.builder.buildPayslip(document);
     const buffer = Buffer.from(bytes);
-    const pdfAValidation = await this.runValidation(bytes, 'payslip');
+    const pdfAValidation = await this.runValidation(
+      bytes,
+      'payslip',
+      'payslip',
+    );
     return { buffer, pdfAValidation };
   }
 
@@ -85,18 +93,29 @@ export class PdfABuilderService {
   ): Promise<PdfABuildAuditRecord> {
     const bytes = await this.builder.buildYearlyIncome(document);
     const buffer = Buffer.from(bytes);
-    const pdfAValidation = await this.runValidation(bytes, 'yearly-income');
+    const pdfAValidation = await this.runValidation(
+      bytes,
+      'yearly-income',
+      'yearly_income',
+    );
     return { buffer, pdfAValidation };
   }
 
   private async runValidation(
     pdf: Uint8Array,
     label: string,
+    kind: DocumentKind,
   ): Promise<PdfAValidationResult> {
-    const result = await this.validator.validate(pdf, DEFAULT_PDF_A_OPTS);
+    // If the validator supports per-call kind labeling (TelemetryPdfAValidator),
+    // use it so that metrics carry the correct document_kind label even when a
+    // single validator instance handles both document types.
+    const result = isTelemetryValidator(this.validator)
+      ? await this.validator.validateAs(pdf, DEFAULT_PDF_A_OPTS, kind)
+      : await this.validator.validate(pdf, DEFAULT_PDF_A_OPTS);
+
     if (!result.valid) {
       // Phased adoption policy (SGP R11): runtime warn-only, document persists.
-      // W04 will wire telemetry counters from this same path.
+      // W04 telemetry counters are emitted by TelemetryPdfAValidator above.
       const ruleIds = result.errors.map((err) => err.ruleId).join(',');
       this.logger.warn(
         `PDF/A validation reported non-conformance for ${label}; ` +
