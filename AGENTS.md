@@ -84,6 +84,9 @@ SGP is the host Plant for devai-style governance. Keep the boundary clear:
 - Governance state root: `.devai/`. Its `config/` files map SGP paths and
   commands into the governance/control-plane model. They are not themselves
   product semantics.
+- Docs-governance closeout for the Docusaurus adoption pass is recorded at
+  `docs/work/round-12/docs-governance-closeout.md`; it is scratch evidence, not
+  acceptance authority.
 - Retained governance evidence: `docs/gov/**`.
 - Current status and compiled context: `docs/gov/audit/**`.
 - Reusable round prompts: `docs/gov/prompts/**`.
