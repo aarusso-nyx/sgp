@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-eng/Banking/eng--Banking--03-cnab240-return-processing" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">CNAB 240 — Return Processing and Reconciliation | SGP</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://aarusso-nyx.github.io/sgp/docs/eng/Banking/03-cnab240-return-processing"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="CNAB 240 — Return Processing and Reconciliation | SGP"><meta data-rh="true" name="description" content="Type: Return-file operations reference."><meta data-rh="true" property="og:description" content="Type: Return-file operations reference."><link data-rh="true" rel="canonical" href="https://aarusso-nyx.github.io/sgp/docs/eng/Banking/03-cnab240-return-processing"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/eng/Banking/03-cnab240-return-processing" hreflang="en"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/eng/Banking/03-cnab240-return-processing" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CNAB 240 — Return Processing and Reconciliation","item":"https://aarusso-nyx.github.io/sgp/docs/eng/Banking/03-cnab240-return-processing"}]}</script><link rel="stylesheet" href="/sgp/assets/css/styles.e3aa2f06.css">
+<script src="/sgp/assets/js/runtime~main.de3161a6.js" defer="defer"></script>
+<script src="/sgp/assets/js/main.ecb7e854.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/sgp/"><b class="navbar__title text--truncate">SGP</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/eng">Engineering</a><a class="navbar__item navbar__link" href="/sgp/docs/gov">Governance</a><a class="navbar__item navbar__link" href="/sgp/docs/user">Operators</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/sgp/docs/"><span title="SGP Documentation Map" class="linkLabel_WmDU">SGP Documentation Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/architecture"><span title="Architecture" class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/decisions/TEMPLATE"><span title="ADRs" class="categoryLinkLabel_W154">ADRs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/api"><span title="Contracts" class="categoryLinkLabel_W154">Contracts</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/sgp/docs/eng/67-pdf-a-builder"><span title="Engineering" class="categoryLinkLabel_W154">Engineering</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/67-pdf-a-builder"><span title="PDF/A Builder Boundary" class="linkLabel_WmDU">PDF/A Builder Boundary</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/68-signature-architecture"><span title="Signature Architecture" class="linkLabel_WmDU">Signature Architecture</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/99-implementation-status"><span title="Implementation Status" class="linkLabel_WmDU">Implementation Status</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/sgp/docs/eng/Banking/00-cnab-overview"><span title="Banking" class="categoryLinkLabel_W154">Banking</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/00-cnab-overview"><span title="CNAB 240 — Overview" class="linkLabel_WmDU">CNAB 240 — Overview</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/01-cnab240-structure"><span title="CNAB 240 — Record Structure and Field Definitions" class="linkLabel_WmDU">CNAB 240 — Record Structure and Field Definitions</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/02-cnab240-bank-variations"><span title="CNAB 240 — Bank-Specific Variations" class="linkLabel_WmDU">CNAB 240 — Bank-Specific Variations</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/eng/Banking/03-cnab240-return-processing"><span title="CNAB 240 — Return Processing and Reconciliation" class="linkLabel_WmDU">CNAB 240 — Return Processing and Reconciliation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/04-cnab240-alternative-formats"><span title="CNAB 240 — Alternative Formats and Future Roadmap" class="linkLabel_WmDU">CNAB 240 — Alternative Formats and Future Roadmap</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/05-sgp-implementation-matrix"><span title="SGP CNAB 240 — Implementation Matrix and Coverage" class="linkLabel_WmDU">SGP CNAB 240 — Implementation Matrix and Coverage</span></a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/api"><span title="API Contract Authority" class="linkLabel_WmDU">API Contract Authority</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/architecture"><span title="SGP Architecture and Layout Map" class="linkLabel_WmDU">SGP Architecture and Layout Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/sgp/docs/eng/decisions"><span title="Architecture Decision Records" class="categoryLinkLabel_W154">Architecture Decision Records</span></a><button aria-label="Expand sidebar category &#x27;Architecture Decision Records&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/eng/domains/fiscal-integrations"><span title="domains" class="categoryLinkLabel_W154">domains</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/experience"><span title="Experience Authority" class="linkLabel_WmDU">Experience Authority</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/eng/facts/law-esocial"><span title="facts" class="categoryLinkLabel_W154">facts</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng"><span title="Engineering Authority" class="linkLabel_WmDU">Engineering Authority</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/locale-policy"><span title="Locale Policy" class="linkLabel_WmDU">Locale Policy</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/platform"><span title="Platform Authority" class="linkLabel_WmDU">Platform Authority</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/product"><span title="Product Authority" class="linkLabel_WmDU">Product Authority</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/quality-migration"><span title="Quality And Migration Authority" class="linkLabel_WmDU">Quality And Migration Authority</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/eng/runbooks/backup-restore"><span title="runbooks" class="categoryLinkLabel_W154">runbooks</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/00-cnab-overview"><span title="CNAB 240 — Overview" class="linkLabel_WmDU">CNAB 240 — Overview</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/01-cnab240-structure"><span title="CNAB 240 — Record Structure and Field Definitions" class="linkLabel_WmDU">CNAB 240 — Record Structure and Field Definitions</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/02-cnab240-bank-variations"><span title="CNAB 240 — Bank-Specific Variations" class="linkLabel_WmDU">CNAB 240 — Bank-Specific Variations</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/eng/Banking/03-cnab240-return-processing"><span title="CNAB 240 — Return Processing and Reconciliation" class="linkLabel_WmDU">CNAB 240 — Return Processing and Reconciliation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/04-cnab240-alternative-formats"><span title="CNAB 240 — Alternative Formats and Future Roadmap" class="linkLabel_WmDU">CNAB 240 — Alternative Formats and Future Roadmap</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/05-sgp-implementation-matrix"><span title="SGP CNAB 240 — Implementation Matrix and Coverage" class="linkLabel_WmDU">SGP CNAB 240 — Implementation Matrix and Coverage</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/gov"><span title="Governance" class="categoryLinkLabel_W154">Governance</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/ops/observability"><span title="Operations" class="categoryLinkLabel_W154">Operations</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/esocial/00-index"><span title="Schemas" class="categoryLinkLabel_W154">Schemas</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/user/dependency-management"><span title="User" class="categoryLinkLabel_W154">User</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/leg/audit/plan"><span title="Legacy" class="categoryLinkLabel_W154">Legacy</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/legal/clt-rescisao-aviso-fgts"><span title="References" class="categoryLinkLabel_W154">References</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/sgp/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Engineering</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Banking</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">CNAB 240 — Return Processing and Reconciliation</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>CNAB 240 — Return Processing and Reconciliation</h1></header>
+<p><strong>Type:</strong> Return-file operations reference.
+<strong>Authority:</strong> FEBRABAN standard, SGP implementation.
+<strong>Last validated:</strong> 2026-05-04.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="return-files-overview">Return Files Overview<a href="#return-files-overview" class="hash-link" aria-label="Direct link to Return Files Overview" title="Direct link to Return Files Overview" translate="no">​</a></h2>
+<p>After SGP submits a CNAB 240 remittance file to a bank, the bank processes the payments and returns a <strong>return file (retorno)</strong> with status updates.</p>
+<p><strong>Key differences: Remittance vs. Return</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Aspect</th><th>Remittance (Remessa)</th><th>Return (Retorno)</th></tr></thead><tbody><tr><td><strong>Direction</strong></td><td>Company → Bank</td><td>Bank → Company</td></tr><tr><td><strong>Content</strong></td><td>Payment instructions</td><td>Status confirmations</td></tr><tr><td><strong>Record structure</strong></td><td>240 bytes, same as standard</td><td>240 bytes, same as standard</td></tr><tr><td><strong>Timeline</strong></td><td>T (submission day)</td><td>T+1 to T+3 (bank processing)</td></tr><tr><td><strong>Occurrence codes</strong></td><td>Not used (remittance only carries payment data)</td><td>3-digit codes indicating acceptance/rejection</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="return-file-structure">Return File Structure<a href="#return-file-structure" class="hash-link" aria-label="Direct link to Return File Structure" title="Direct link to Return File Structure" translate="no">​</a></h2>
+<p>A return file has the <strong>same 240-byte record structure</strong> as a remittance, but:</p>
+<ol>
+<li class=""><strong>File Header</strong> and <strong>File Trailer</strong> carry the same metadata (file count, date, company)</li>
+<li class=""><strong>Batch Header</strong> and <strong>Batch Trailer</strong> carry aggregate status (counts, sum of amounts)</li>
+<li class=""><strong>Detail records</strong> (A and B) carry the <strong>occurrence code</strong> indicating the outcome of each payment</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="occurrence-codes--bank-specific-status-indicators">Occurrence Codes — Bank-Specific Status Indicators<a href="#occurrence-codes--bank-specific-status-indicators" class="hash-link" aria-label="Direct link to Occurrence Codes — Bank-Specific Status Indicators" title="Direct link to Occurrence Codes — Bank-Specific Status Indicators" translate="no">​</a></h2>
+<p>Each Detail A or B record in a return file includes an <strong>occurrence code</strong> (3 characters, numeric or alphanumeric) that indicates:</p>
+<ul>
+<li class="">Whether the payment was accepted and credited</li>
+<li class="">Why it was rejected or returned (if applicable)</li>
+<li class="">Bank-specific internal processing status</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="default-occurrence-code-table-all-banks">Default Occurrence Code Table (All Banks)<a href="#default-occurrence-code-table-all-banks" class="hash-link" aria-label="Direct link to Default Occurrence Code Table (All Banks)" title="Direct link to Default Occurrence Code Table (All Banks)" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Code</th><th>SGP Internal Status</th><th>Meaning</th><th>Action</th></tr></thead><tbody><tr><td><code>00</code></td><td>ACCEPTED</td><td>Crédito confirmado pelo banco</td><td>Mark payment as PAID</td></tr><tr><td><code>BD</code></td><td>REJECTED_INVALID_ACCOUNT</td><td>Conta do favorecido inválida</td><td>Investigate account; retry with corrected data</td></tr><tr><td><code>BE</code></td><td>REJECTED_INVALID_ACCOUNT</td><td>Agência ou conta inexistente</td><td>Account does not exist; require manual review</td></tr><tr><td><code>BI</code></td><td>REJECTED_INSUFFICIENT_FUNDS</td><td>Saldo insuficiente para efetivar o pagamento</td><td>Insufficient funds in remitter account; retry later</td></tr><tr><td><code>RJ</code></td><td>RETURNED_OTHER</td><td>Pagamento devolvido ou rejeitado por ocorrência bancária</td><td>Bank rejection reason unknown; investigate return details</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="bank-specific-occurrence-codes">Bank-Specific Occurrence Codes<a href="#bank-specific-occurrence-codes" class="hash-link" aria-label="Direct link to Bank-Specific Occurrence Codes" title="Direct link to Bank-Specific Occurrence Codes" translate="no">​</a></h3>
+<p><strong>Banco do Brasil (bank code 001):</strong> Adds</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Code</th><th>SGP Internal Status</th><th>Meaning</th></tr></thead><tbody><tr><td><code>AA</code></td><td>ACCEPTED</td><td>Arquivo aceito pelo Banco do Brasil</td></tr></tbody></table>
+<p><strong>Caixa (bank code 104):</strong> Overrides</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Code</th><th>SGP Internal Status</th><th>Meaning</th></tr></thead><tbody><tr><td><code>01</code></td><td>ACCEPTED</td><td>Crédito confirmado pela Caixa (preferred)</td></tr><tr><td><code>03</code></td><td>REJECTED_INVALID_ACCOUNT</td><td>Conta inválida na Caixa</td></tr></tbody></table>
+<p>(Caixa uses <code>01</code> and <code>03</code> instead of <code>00</code> and <code>BD</code>; SGP&#x27;s OccurrenceMapperService handles the mapping.)</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="unmapped-occurrence-codes">Unmapped Occurrence Codes<a href="#unmapped-occurrence-codes" class="hash-link" aria-label="Direct link to Unmapped Occurrence Codes" title="Direct link to Unmapped Occurrence Codes" translate="no">​</a></h3>
+<p>If SGP receives an occurrence code not in the mapping table, it:</p>
+<ol>
+<li class="">Logs the code as unmapped</li>
+<li class="">Returns status = RETURNED_OTHER</li>
+<li class="">Escalates to manual review (recorded in audit logs)</li>
+</ol>
+<p>Example: Code <code>ZZ</code> (hypothetical) → RETURNED_OTHER, pending investigation.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="sgp-return-processing-flow">SGP Return Processing Flow<a href="#sgp-return-processing-flow" class="hash-link" aria-label="Direct link to SGP Return Processing Flow" title="Direct link to SGP Return Processing Flow" translate="no">​</a></h2>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">1. Bank submits return file (retorno_&lt;BANKCODE&gt;_&lt;SEQUENCE&gt;.ret)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">2. BankingCnab240ReturnParserService reads file (240-byte records)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">3. Parser extracts occurrence codes per Detail record</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">4. OccurrenceMapperService maps codes to internal statuses</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">5. BankingCnab240ReturnProcessService updates payment statuses</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">6. PaymentRemittanceDetail records updated with:</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   - occurrence_code (e.g., &quot;00&quot;, &quot;BD&quot;, &quot;AA&quot;)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   - last_internal_status (e.g., &quot;ACCEPTED&quot;, &quot;REJECTED_INVALID_ACCOUNT&quot;)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   - last_settled_at (timestamp)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">7. Notifications sent to HR/Finance (if applicable)</span><br></div></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="return-file-detail-records">Return File Detail Records<a href="#return-file-detail-records" class="hash-link" aria-label="Direct link to Return File Detail Records" title="Direct link to Return File Detail Records" translate="no">​</a></h2>
+<p>The <strong>Detail A and B segments in a return file</strong> carry the occurrence code and reconciliation data.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="detail-a--segment-a-in-return-file">Detail A — Segment A in Return File<a href="#detail-a--segment-a-in-return-file" class="hash-link" aria-label="Direct link to Detail A — Segment A in Return File" title="Direct link to Detail A — Segment A in Return File" translate="no">​</a></h3>
+<p>Same structure as remittance Detail A, but focus is on:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Position</th><th>Length</th><th>Field</th><th>Remittance</th><th>Return</th></tr></thead><tbody><tr><td>109–123</td><td>15</td><td>Actual debit amount</td><td>What SGP requested</td><td>What bank actually debited</td></tr><tr><td>139–152</td><td>14</td><td>Occurrence code</td><td>(not used)</td><td><strong>Bank status code (e.g., &quot;00&quot;, &quot;BD&quot;)</strong></td></tr><tr><td>153–161</td><td>9</td><td>Credit date</td><td>Settlement target</td><td>Bank&#x27;s actual credit date</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="detail-b--segment-b-in-return-file">Detail B — Segment B in Return File<a href="#detail-b--segment-b-in-return-file" class="hash-link" aria-label="Direct link to Detail B — Segment B in Return File" title="Direct link to Detail B — Segment B in Return File" translate="no">​</a></h3>
+<p>Same structure as remittance Detail B, but:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Position</th><th>Length</th><th>Field</th><th>Remittance</th><th>Return</th></tr></thead><tbody><tr><td>81–93</td><td>13</td><td>Days notice</td><td>0 (unused)</td><td>Occurrence code / reason code (bank-specific)</td></tr><tr><td>124–138</td><td>15</td><td>Actual debit amount</td><td>Requested amount</td><td><strong>Actual debited amount</strong> (may differ if partial/adjusted)</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="reconciliation-logic-in-sgp">Reconciliation Logic in SGP<a href="#reconciliation-logic-in-sgp" class="hash-link" aria-label="Direct link to Reconciliation Logic in SGP" title="Direct link to Reconciliation Logic in SGP" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="match-criteria">Match Criteria<a href="#match-criteria" class="hash-link" aria-label="Direct link to Match Criteria" title="Direct link to Match Criteria" translate="no">​</a></h3>
+<p>SGP matches a return Detail record to a sent remittance Detail record by:</p>
+<ol>
+<li class=""><strong>Sequence number</strong> (Detail A/B position 7–13): Must match exactly</li>
+<li class=""><strong>Beneficiary account</strong> (Detail B positions 23–48): Must match bank + branch + account</li>
+<li class=""><strong>Amount</strong> (Detail B position 124–138): Should match (±tolerance for rounding, interest, discounts)</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="status-updates">Status Updates<a href="#status-updates" class="hash-link" aria-label="Direct link to Status Updates" title="Direct link to Status Updates" translate="no">​</a></h3>
+<p>Once matched, SGP updates the payment record:</p>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">// Example: payment_remittance_detail</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  file_id</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;REM-2026-04-001&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  sequence</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  employee_id</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;EMP-12345&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  amount</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;825.04&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// Requested</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  occurrence_code</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;00&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// From return</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  last_internal_status</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;ACCEPTED&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  last_settled_at</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;2026-04-26T10:30:00Z&quot;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="partial-payments--adjustments">Partial Payments &amp; Adjustments<a href="#partial-payments--adjustments" class="hash-link" aria-label="Direct link to Partial Payments &amp; Adjustments" title="Direct link to Partial Payments &amp; Adjustments" translate="no">​</a></h3>
+<p>If a bank credits a different amount than requested:</p>
+<ul>
+<li class=""><strong>Amount debited</strong> &lt; <strong>Amount requested:</strong> Partial acceptance; last_internal_status = PARTIAL</li>
+<li class=""><strong>Amount debited</strong> &gt; <strong>Amount requested:</strong> Bank added interest/adjustments; last_internal_status = ACCEPTED (with note)</li>
+<li class=""><strong>Occurrence code = rejection:</strong> No debit; last<em>internal_status = REJECTED</em>*</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="return-file-parsing">Return File Parsing<a href="#return-file-parsing" class="hash-link" aria-label="Direct link to Return File Parsing" title="Direct link to Return File Parsing" translate="no">​</a></h2>
+<p><strong>Location:</strong> <code>backend/src/integrations-worker/cnab240/return/cnab240-return-parser.service.ts</code></p>
+<p>The parser:</p>
+<ol>
+<li class=""><strong>Reads 240-byte records</strong> from the return file</li>
+<li class=""><strong>Identifies record types</strong> (0, 1, 3, 5, 9)</li>
+<li class=""><strong>Extracts occurrence codes</strong> from Detail A/B segments (position varies by bank)</li>
+<li class=""><strong>Builds ParsedCnab240Return</strong> structure:</li>
+</ol>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  fileHeader</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> bankCode</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> companyRegistration</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">...</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  batchHeader</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">...</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  details</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      sequence</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      employeeId</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;EMP-12345&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      occurrenceCode</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;00&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// &lt;-- Key field</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      actualAmount</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;825.04&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      creditDate</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;2026-04-26&quot;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token operator" style="color:#393A34">...</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  batchTrailer</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> recordCount</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> totalAmount</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">...</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  fileTrailer</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">...</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></div></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="occurrence-code-extraction-by-bank">Occurrence Code Extraction by Bank<a href="#occurrence-code-extraction-by-bank" class="hash-link" aria-label="Direct link to Occurrence Code Extraction by Bank" title="Direct link to Occurrence Code Extraction by Bank" translate="no">​</a></h2>
+<p>Different banks place occurrence codes in different field positions. SGP&#x27;s parser and OccurrenceMapperService handle the variation:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Bank</th><th>Position in Detail</th><th>Field Name</th><th>Example</th></tr></thead><tbody><tr><td><strong>Banco do Brasil</strong></td><td>Detail A, pos 139–142</td><td>Occurrence field</td><td><code>00</code> or <code>AA</code></td></tr><tr><td><strong>Bradesco</strong></td><td>Detail A, pos 139–142</td><td>Occurrence field</td><td><code>00</code> or <code>BD</code></td></tr><tr><td><strong>Caixa</strong></td><td>Detail A, pos 139–142</td><td>Occurrence field (Caixa-mapped)</td><td><code>01</code> or <code>03</code></td></tr><tr><td><strong>Itau</strong></td><td>Detail A, pos 139–142</td><td>Occurrence field</td><td><code>00</code> or <code>BD</code></td></tr><tr><td><strong>Santander</strong></td><td>Detail A, pos 139–142</td><td>Occurrence field</td><td><code>00</code> or <code>RJ</code></td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="known-return-delays-and-timelines">Known Return Delays and Timelines<a href="#known-return-delays-and-timelines" class="hash-link" aria-label="Direct link to Known Return Delays and Timelines" title="Direct link to Known Return Delays and Timelines" translate="no">​</a></h2>
+<p><strong>Standard processing (T = submission day):</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Bank</th><th>Return Timing</th><th>Notes</th></tr></thead><tbody><tr><td><strong>Banco do Brasil</strong></td><td>T+1 (next business day)</td><td>Often same-day for salary transfers</td></tr><tr><td><strong>Bradesco</strong></td><td>T+1 to T+2</td><td>Depends on batch size and time of day</td></tr><tr><td><strong>Caixa</strong></td><td>T+1 to T+2</td><td>May delay if processing issues</td></tr><tr><td><strong>Itau</strong></td><td>T+1</td><td>Usually reliable next-day return</td></tr><tr><td><strong>Santander</strong></td><td>T+2 to T+3</td><td>Slower than other banks</td></tr></tbody></table>
+<p><strong>Deferred/Held Returns:</strong> If a bank encounters validation errors, it may hold the return for manual review (T+3 to T+5).</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="common-return-scenarios">Common Return Scenarios<a href="#common-return-scenarios" class="hash-link" aria-label="Direct link to Common Return Scenarios" title="Direct link to Common Return Scenarios" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="scenario-1-full-acceptance-occurrence-00">Scenario 1: Full Acceptance (Occurrence <code>00</code>)<a href="#scenario-1-full-acceptance-occurrence-00" class="hash-link" aria-label="Direct link to scenario-1-full-acceptance-occurrence-00" title="Direct link to scenario-1-full-acceptance-occurrence-00" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Remittance: EMPLOYEE-001, account 001-12345, amount 825.04</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Return: occurrence_code=&quot;00&quot;, amount=825.04, creditDate=&quot;2026-04-26&quot;</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Outcome: last_internal_status=&quot;ACCEPTED&quot;, payment marked as PAID</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="scenario-2-account-does-not-exist-occurrence-be">Scenario 2: Account Does Not Exist (Occurrence <code>BE</code>)<a href="#scenario-2-account-does-not-exist-occurrence-be" class="hash-link" aria-label="Direct link to scenario-2-account-does-not-exist-occurrence-be" title="Direct link to scenario-2-account-does-not-exist-occurrence-be" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Remittance: EMPLOYEE-002, account 002-99999, amount 1500.00</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Return: occurrence_code=&quot;BE&quot;, amount=0, creditDate=&quot;0000-00-00&quot;</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Outcome: last_internal_status=&quot;REJECTED_INVALID_ACCOUNT&quot;</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Action: HR to verify correct account number; resubmit in next batch</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="scenario-3-insufficient-funds-occurrence-bi">Scenario 3: Insufficient Funds (Occurrence <code>BI</code>)<a href="#scenario-3-insufficient-funds-occurrence-bi" class="hash-link" aria-label="Direct link to scenario-3-insufficient-funds-occurrence-bi" title="Direct link to scenario-3-insufficient-funds-occurrence-bi" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Remittance: 10 payments, total 10,000.00</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Return: 1 payment with occurrence_code=&quot;BI&quot;, amount=0</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Outcome: last_internal_status=&quot;REJECTED_INSUFFICIENT_FUNDS&quot;</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Action: Retry when account balance is replenished</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="scenario-4-bank-rejection-occurrence-rj">Scenario 4: Bank Rejection (Occurrence <code>RJ</code>)<a href="#scenario-4-bank-rejection-occurrence-rj" class="hash-link" aria-label="Direct link to scenario-4-bank-rejection-occurrence-rj" title="Direct link to scenario-4-bank-rejection-occurrence-rj" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Remittance: EMPLOYEE-004, valid account, amount 500.00</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Return: occurrence_code=&quot;RJ&quot; (generic rejection)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Outcome: last_internal_status=&quot;RETURNED_OTHER&quot;</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Action: Contact bank to investigate reason; may be duplicate, frozen account, etc.</span><br></div></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="reconciliation-troubleshooting">Reconciliation Troubleshooting<a href="#reconciliation-troubleshooting" class="hash-link" aria-label="Direct link to Reconciliation Troubleshooting" title="Direct link to Reconciliation Troubleshooting" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="missing-return-record">Missing Return Record<a href="#missing-return-record" class="hash-link" aria-label="Direct link to Missing Return Record" title="Direct link to Missing Return Record" translate="no">​</a></h3>
+<p>If SGP sent a Detail A/B pair but the return contains no matching sequence:</p>
+<ul>
+<li class=""><strong>Likely cause:</strong> Bank batched the payment but hasn&#x27;t returned yet (within T+1 to T+3 window)</li>
+<li class=""><strong>Action:</strong> Wait; re-query bank return file in 2–4 hours</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="amount-mismatch-debited--requested">Amount Mismatch (Debited ≠ Requested)<a href="#amount-mismatch-debited--requested" class="hash-link" aria-label="Direct link to Amount Mismatch (Debited ≠ Requested)" title="Direct link to Amount Mismatch (Debited ≠ Requested)" translate="no">​</a></h3>
+<p>If actual_amount ≠ request_amount:</p>
+<ul>
+<li class=""><strong>Check 1:</strong> Is the occurrence_code <code>00</code> (accepted) or <code>RJ</code> (partial)?</li>
+<li class=""><strong>Check 2:</strong> Did the bank apply fees, discounts, or rounding?</li>
+<li class=""><strong>Check 3:</strong> Is the difference ≤ 0.05 BRL (acceptable rounding tolerance)?</li>
+</ul>
+<p>If differences exceed tolerance:</p>
+<ul>
+<li class="">Contact bank and request detailed return explanation</li>
+<li class="">Review payment instruction for typos (account number, amount)</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="unmapped-occurrence-code">Unmapped Occurrence Code<a href="#unmapped-occurrence-code" class="hash-link" aria-label="Direct link to Unmapped Occurrence Code" title="Direct link to Unmapped Occurrence Code" translate="no">​</a></h3>
+<p>If an occurrence code is not in the table:</p>
+<ul>
+<li class="">SGP logs: <code>Unsupported CNAB return occurrence {code} for bank {bankCode}</code></li>
+<li class="">Status marked: RETURNED_OTHER</li>
+<li class="">Action: File a ticket with the bank to add the code to SGP&#x27;s mapping</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="return-file-example">Return File Example<a href="#return-file-example" class="hash-link" aria-label="Direct link to Return File Example" title="Direct link to Return File Example" translate="no">​</a></h2>
+<p><strong>File:</strong> <code>retorno_001_000001.ret</code> (Banco do Brasil return for remittance #1)</p>
+<p><strong>Contents:</strong> Same structure as remittance, but Detail A records carry occurrence codes in position 139–142.</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">[File Header: 240 bytes]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">[Batch Header: 240 bytes]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">[Detail A: sequence 1, occurrence &quot;00&quot;: 240 bytes]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">[Detail B: sequence 2, account details: 240 bytes]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">[Detail A: sequence 3, occurrence &quot;BD&quot;: 240 bytes]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">[Detail B: sequence 4, account details: 240 bytes]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">[Batch Trailer: 240 bytes]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">[File Trailer: 240 bytes]</span><br></div></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="database-recording">Database Recording<a href="#database-recording" class="hash-link" aria-label="Direct link to Database Recording" title="Direct link to Database Recording" translate="no">​</a></h2>
+<p><strong>Table:</strong> <code>payroll.payment_remittance_detail</code></p>
+<p>After parsing and reconciliation:</p>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">UPDATE</span><span class="token plain"> payroll</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">payment_remittance_detail</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">SET</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  occurrence_code </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;00&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  last_internal_status </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;ACCEPTED&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  last_settled_at </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">NOW</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> file_id </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;REM-2026-04-001&#x27;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> sequence </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="references">References<a href="#references" class="hash-link" aria-label="Direct link to References" title="Direct link to References" translate="no">​</a></h2>
+<ul>
+<li class="">SGP return parser: <code>backend/src/integrations-worker/cnab240/return/cnab240-return-parser.service.ts</code></li>
+<li class="">SGP occurrence mapper: <code>backend/src/integrations-worker/cnab240/return/occurrence-mapper.service.ts</code></li>
+<li class="">SGP return processor: <code>backend/src/integrations-worker/cnab240/return/cnab240-return-process.service.ts</code></li>
+<li class="">Return test fixtures: <code>tests/backend/golden/cnab240/return/</code> covers BB,
+Bradesco, Caixa, Itau, and Santander examples.</li>
+<li class=""><a href="https://cmsarquivos.febraban.org.br/Arquivos/documentos/PDF/Layout%20padrao%20CNAB240%20V%2010%2011%20-%2021_08_2023.pdf" target="_blank" rel="noopener noreferrer" class="">FEBRABAN Return Standard</a></li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/sgp/docs/eng/Banking/02-cnab240-bank-variations"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">CNAB 240 — Bank-Specific Variations</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/sgp/docs/eng/Banking/04-cnab240-alternative-formats"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">CNAB 240 — Alternative Formats and Future Roadmap</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#return-files-overview" class="table-of-contents__link toc-highlight">Return Files Overview</a></li><li><a href="#return-file-structure" class="table-of-contents__link toc-highlight">Return File Structure</a></li><li><a href="#occurrence-codes--bank-specific-status-indicators" class="table-of-contents__link toc-highlight">Occurrence Codes — Bank-Specific Status Indicators</a><ul><li><a href="#default-occurrence-code-table-all-banks" class="table-of-contents__link toc-highlight">Default Occurrence Code Table (All Banks)</a></li><li><a href="#bank-specific-occurrence-codes" class="table-of-contents__link toc-highlight">Bank-Specific Occurrence Codes</a></li><li><a href="#unmapped-occurrence-codes" class="table-of-contents__link toc-highlight">Unmapped Occurrence Codes</a></li></ul></li><li><a href="#sgp-return-processing-flow" class="table-of-contents__link toc-highlight">SGP Return Processing Flow</a></li><li><a href="#return-file-detail-records" class="table-of-contents__link toc-highlight">Return File Detail Records</a><ul><li><a href="#detail-a--segment-a-in-return-file" class="table-of-contents__link toc-highlight">Detail A — Segment A in Return File</a></li><li><a href="#detail-b--segment-b-in-return-file" class="table-of-contents__link toc-highlight">Detail B — Segment B in Return File</a></li></ul></li><li><a href="#reconciliation-logic-in-sgp" class="table-of-contents__link toc-highlight">Reconciliation Logic in SGP</a><ul><li><a href="#match-criteria" class="table-of-contents__link toc-highlight">Match Criteria</a></li><li><a href="#status-updates" class="table-of-contents__link toc-highlight">Status Updates</a></li><li><a href="#partial-payments--adjustments" class="table-of-contents__link toc-highlight">Partial Payments &amp; Adjustments</a></li></ul></li><li><a href="#return-file-parsing" class="table-of-contents__link toc-highlight">Return File Parsing</a></li><li><a href="#occurrence-code-extraction-by-bank" class="table-of-contents__link toc-highlight">Occurrence Code Extraction by Bank</a></li><li><a href="#known-return-delays-and-timelines" class="table-of-contents__link toc-highlight">Known Return Delays and Timelines</a></li><li><a href="#common-return-scenarios" class="table-of-contents__link toc-highlight">Common Return Scenarios</a><ul><li><a href="#scenario-1-full-acceptance-occurrence-00" class="table-of-contents__link toc-highlight">Scenario 1: Full Acceptance (Occurrence <code>00</code>)</a></li><li><a href="#scenario-2-account-does-not-exist-occurrence-be" class="table-of-contents__link toc-highlight">Scenario 2: Account Does Not Exist (Occurrence <code>BE</code>)</a></li><li><a href="#scenario-3-insufficient-funds-occurrence-bi" class="table-of-contents__link toc-highlight">Scenario 3: Insufficient Funds (Occurrence <code>BI</code>)</a></li><li><a href="#scenario-4-bank-rejection-occurrence-rj" class="table-of-contents__link toc-highlight">Scenario 4: Bank Rejection (Occurrence <code>RJ</code>)</a></li></ul></li><li><a href="#reconciliation-troubleshooting" class="table-of-contents__link toc-highlight">Reconciliation Troubleshooting</a><ul><li><a href="#missing-return-record" class="table-of-contents__link toc-highlight">Missing Return Record</a></li><li><a href="#amount-mismatch-debited--requested" class="table-of-contents__link toc-highlight">Amount Mismatch (Debited ≠ Requested)</a></li><li><a href="#unmapped-occurrence-code" class="table-of-contents__link toc-highlight">Unmapped Occurrence Code</a></li></ul></li><li><a href="#return-file-example" class="table-of-contents__link toc-highlight">Return File Example</a></li><li><a href="#database-recording" class="table-of-contents__link toc-highlight">Database Recording</a></li><li><a href="#references" class="table-of-contents__link toc-highlight">References</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Authority</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng">Engineering</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/decisions">ADRs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/gov">Governance</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Operations</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/user">User docs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/runbooks/deploy-rollback">Runbooks</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/leg">Legacy archive</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built with Docusaurus. SGP documentation follows DEVAI docs-governance.</div></div></div></footer></div>
+</body>
+</html>

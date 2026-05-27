@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-eng/Banking/eng--Banking--05-sgp-implementation-matrix" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">SGP CNAB 240 — Implementation Matrix and Coverage | SGP</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://aarusso-nyx.github.io/sgp/docs/eng/Banking/05-sgp-implementation-matrix"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="SGP CNAB 240 — Implementation Matrix and Coverage | SGP"><meta data-rh="true" name="description" content="Type: Implementation status reference."><meta data-rh="true" property="og:description" content="Type: Implementation status reference."><link data-rh="true" rel="canonical" href="https://aarusso-nyx.github.io/sgp/docs/eng/Banking/05-sgp-implementation-matrix"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/eng/Banking/05-sgp-implementation-matrix" hreflang="en"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/eng/Banking/05-sgp-implementation-matrix" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"SGP CNAB 240 — Implementation Matrix and Coverage","item":"https://aarusso-nyx.github.io/sgp/docs/eng/Banking/05-sgp-implementation-matrix"}]}</script><link rel="stylesheet" href="/sgp/assets/css/styles.e3aa2f06.css">
+<script src="/sgp/assets/js/runtime~main.de3161a6.js" defer="defer"></script>
+<script src="/sgp/assets/js/main.ecb7e854.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/sgp/"><b class="navbar__title text--truncate">SGP</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/eng">Engineering</a><a class="navbar__item navbar__link" href="/sgp/docs/gov">Governance</a><a class="navbar__item navbar__link" href="/sgp/docs/user">Operators</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/sgp/docs/"><span title="SGP Documentation Map" class="linkLabel_WmDU">SGP Documentation Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/architecture"><span title="Architecture" class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/decisions/TEMPLATE"><span title="ADRs" class="categoryLinkLabel_W154">ADRs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/api"><span title="Contracts" class="categoryLinkLabel_W154">Contracts</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/sgp/docs/eng/67-pdf-a-builder"><span title="Engineering" class="categoryLinkLabel_W154">Engineering</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/67-pdf-a-builder"><span title="PDF/A Builder Boundary" class="linkLabel_WmDU">PDF/A Builder Boundary</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/68-signature-architecture"><span title="Signature Architecture" class="linkLabel_WmDU">Signature Architecture</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/99-implementation-status"><span title="Implementation Status" class="linkLabel_WmDU">Implementation Status</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/sgp/docs/eng/Banking/00-cnab-overview"><span title="Banking" class="categoryLinkLabel_W154">Banking</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/00-cnab-overview"><span title="CNAB 240 — Overview" class="linkLabel_WmDU">CNAB 240 — Overview</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/01-cnab240-structure"><span title="CNAB 240 — Record Structure and Field Definitions" class="linkLabel_WmDU">CNAB 240 — Record Structure and Field Definitions</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/02-cnab240-bank-variations"><span title="CNAB 240 — Bank-Specific Variations" class="linkLabel_WmDU">CNAB 240 — Bank-Specific Variations</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/03-cnab240-return-processing"><span title="CNAB 240 — Return Processing and Reconciliation" class="linkLabel_WmDU">CNAB 240 — Return Processing and Reconciliation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/04-cnab240-alternative-formats"><span title="CNAB 240 — Alternative Formats and Future Roadmap" class="linkLabel_WmDU">CNAB 240 — Alternative Formats and Future Roadmap</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/eng/Banking/05-sgp-implementation-matrix"><span title="SGP CNAB 240 — Implementation Matrix and Coverage" class="linkLabel_WmDU">SGP CNAB 240 — Implementation Matrix and Coverage</span></a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/api"><span title="API Contract Authority" class="linkLabel_WmDU">API Contract Authority</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/architecture"><span title="SGP Architecture and Layout Map" class="linkLabel_WmDU">SGP Architecture and Layout Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/sgp/docs/eng/decisions"><span title="Architecture Decision Records" class="categoryLinkLabel_W154">Architecture Decision Records</span></a><button aria-label="Expand sidebar category &#x27;Architecture Decision Records&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/eng/domains/fiscal-integrations"><span title="domains" class="categoryLinkLabel_W154">domains</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/experience"><span title="Experience Authority" class="linkLabel_WmDU">Experience Authority</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/eng/facts/law-esocial"><span title="facts" class="categoryLinkLabel_W154">facts</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng"><span title="Engineering Authority" class="linkLabel_WmDU">Engineering Authority</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/locale-policy"><span title="Locale Policy" class="linkLabel_WmDU">Locale Policy</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/platform"><span title="Platform Authority" class="linkLabel_WmDU">Platform Authority</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/product"><span title="Product Authority" class="linkLabel_WmDU">Product Authority</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/quality-migration"><span title="Quality And Migration Authority" class="linkLabel_WmDU">Quality And Migration Authority</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/eng/runbooks/backup-restore"><span title="runbooks" class="categoryLinkLabel_W154">runbooks</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/00-cnab-overview"><span title="CNAB 240 — Overview" class="linkLabel_WmDU">CNAB 240 — Overview</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/01-cnab240-structure"><span title="CNAB 240 — Record Structure and Field Definitions" class="linkLabel_WmDU">CNAB 240 — Record Structure and Field Definitions</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/02-cnab240-bank-variations"><span title="CNAB 240 — Bank-Specific Variations" class="linkLabel_WmDU">CNAB 240 — Bank-Specific Variations</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/03-cnab240-return-processing"><span title="CNAB 240 — Return Processing and Reconciliation" class="linkLabel_WmDU">CNAB 240 — Return Processing and Reconciliation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/eng/Banking/04-cnab240-alternative-formats"><span title="CNAB 240 — Alternative Formats and Future Roadmap" class="linkLabel_WmDU">CNAB 240 — Alternative Formats and Future Roadmap</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/eng/Banking/05-sgp-implementation-matrix"><span title="SGP CNAB 240 — Implementation Matrix and Coverage" class="linkLabel_WmDU">SGP CNAB 240 — Implementation Matrix and Coverage</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/gov"><span title="Governance" class="categoryLinkLabel_W154">Governance</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/ops/observability"><span title="Operations" class="categoryLinkLabel_W154">Operations</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/esocial/00-index"><span title="Schemas" class="categoryLinkLabel_W154">Schemas</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/user/dependency-management"><span title="User" class="categoryLinkLabel_W154">User</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/leg/audit/plan"><span title="Legacy" class="categoryLinkLabel_W154">Legacy</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/legal/clt-rescisao-aviso-fgts"><span title="References" class="categoryLinkLabel_W154">References</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/sgp/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Engineering</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Banking</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">SGP CNAB 240 — Implementation Matrix and Coverage</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>SGP CNAB 240 — Implementation Matrix and Coverage</h1></header>
+<p><strong>Type:</strong> Implementation status reference.
+<strong>Authority:</strong> SGP source code + tests.
+<strong>Last validated:</strong> 2026-05-04.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="overview">Overview<a href="#overview" class="hash-link" aria-label="Direct link to Overview" title="Direct link to Overview" translate="no">​</a></h2>
+<p>This document maps SGP&#x27;s CNAB 240 implementation against the standard, listing:</p>
+<ul>
+<li class="">Which banks are supported</li>
+<li class="">Which payment types are covered</li>
+<li class="">Which occurrence codes are mapped</li>
+<li class="">Test coverage by domain</li>
+<li class="">Known gaps and deferred items</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="bank-coverage-matrix">Bank Coverage Matrix<a href="#bank-coverage-matrix" class="hash-link" aria-label="Direct link to Bank Coverage Matrix" title="Direct link to Bank Coverage Matrix" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Bank</th><th>Code</th><th>Status</th><th>Strategy</th><th>Golden Fixtures</th><th>Return Parser</th><th>Occurrence Codes</th></tr></thead><tbody><tr><td><strong>Banco do Brasil</strong></td><td><code>001</code></td><td>✅ Implemented</td><td><code>bb.strategy.ts</code></td><td>✅ bb/</td><td>✅ Mapped (default + AA)</td><td>6 codes</td></tr><tr><td><strong>Bradesco</strong></td><td><code>237</code></td><td>✅ Implemented</td><td><code>bradesco.strategy.ts</code></td><td>✅ bradesco/</td><td>✅ Mapped (default)</td><td>5 codes</td></tr><tr><td><strong>Caixa</strong></td><td><code>104</code></td><td>✅ Implemented</td><td><code>caixa.strategy.ts</code></td><td>✅ caixa/</td><td>✅ Mapped (Caixa-specific)</td><td>7 codes</td></tr><tr><td><strong>Itau</strong></td><td><code>341</code></td><td>✅ Implemented</td><td><code>itau.strategy.ts</code></td><td>✅ itau/</td><td>✅ Mapped (default)</td><td>5 codes</td></tr><tr><td><strong>Santander</strong></td><td><code>033</code></td><td>✅ Implemented</td><td><code>santander.strategy.ts</code></td><td>✅ santander/</td><td>✅ Mapped (default)</td><td>5 codes</td></tr></tbody></table>
+<p><strong>Coverage: 5/5 major Brazilian banks implemented.</strong></p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="payment-type-coverage">Payment Type Coverage<a href="#payment-type-coverage" class="hash-link" aria-label="Direct link to Payment Type Coverage" title="Direct link to Payment Type Coverage" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Payment Type</th><th>CNAB 240 Support</th><th>SGP Remittance</th><th>Return Processing</th><th>Test Coverage</th><th>Deferred?</th></tr></thead><tbody><tr><td><strong>Payroll (Salário)</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅ Golden + E2E</td><td>No</td></tr><tr><td><strong>FGTS Deposits</strong></td><td>✅</td><td>✅</td><td>⏳ Partial</td><td>✅ Golden</td><td>Clarify settlement logic</td></tr><tr><td><strong>GPS (Social Security)</strong></td><td>✅</td><td>✅</td><td>⏳ Partial</td><td>⏳ Stub</td><td>Fiscal integration pending</td></tr><tr><td><strong>Alimony (Pensão Alimenticia)</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅ E2E</td><td>No</td></tr><tr><td><strong>Supplier Payments (PAGFOR)</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅ Golden</td><td>No</td></tr><tr><td><strong>Overtime/Bonuses (as salary sub-type)</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅ Part of payroll tests</td><td>No</td></tr></tbody></table>
+<p><strong>Status:</strong> 6/6 payment types have remittance support; 5/6 have full return processing.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="occurrence-code-coverage">Occurrence Code Coverage<a href="#occurrence-code-coverage" class="hash-link" aria-label="Direct link to Occurrence Code Coverage" title="Direct link to Occurrence Code Coverage" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="common-codes-all-banks">Common Codes (All Banks)<a href="#common-codes-all-banks" class="hash-link" aria-label="Direct link to Common Codes (All Banks)" title="Direct link to Common Codes (All Banks)" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Code</th><th>Status</th><th>Meaning</th><th>Test Coverage</th></tr></thead><tbody><tr><td><code>00</code></td><td>✅ Mapped</td><td>Payment accepted &amp; credited</td><td>✅ Golden fixtures</td></tr><tr><td><code>BD</code></td><td>✅ Mapped</td><td>Invalid beneficiary account</td><td>✅ Return parser test</td></tr><tr><td><code>BE</code></td><td>✅ Mapped</td><td>Account doesn&#x27;t exist</td><td>✅ Return parser test</td></tr><tr><td><code>BI</code></td><td>✅ Mapped</td><td>Insufficient funds</td><td>✅ Return parser test</td></tr><tr><td><code>RJ</code></td><td>✅ Mapped</td><td>Generic bank rejection</td><td>✅ Return parser test</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="bank-specific-codes">Bank-Specific Codes<a href="#bank-specific-codes" class="hash-link" aria-label="Direct link to Bank-Specific Codes" title="Direct link to Bank-Specific Codes" translate="no">​</a></h3>
+<p><strong>Banco do Brasil:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Code</th><th>Status</th><th>Meaning</th><th>Mapping</th></tr></thead><tbody><tr><td><code>AA</code></td><td>✅ Mapped</td><td>File accepted by BB</td><td>ACCEPTED</td></tr></tbody></table>
+<p><strong>Caixa:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Code</th><th>Status</th><th>Meaning</th><th>Mapping</th></tr></thead><tbody><tr><td><code>01</code></td><td>✅ Mapped</td><td>Credit confirmed by Caixa</td><td>ACCEPTED (overrides <code>00</code>)</td></tr><tr><td><code>03</code></td><td>✅ Mapped</td><td>Invalid account at Caixa</td><td>REJECTED_INVALID_ACCOUNT</td></tr></tbody></table>
+<p><strong>Total codes mapped: 12 codes across 5 banks.</strong></p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="servicemodality-coverage">Service/Modality Coverage<a href="#servicemodality-coverage" class="hash-link" aria-label="Direct link to Service/Modality Coverage" title="Direct link to Service/Modality Coverage" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Modality</th><th>FEBRABAN Code</th><th>Banks Using</th><th>SGP Implementation</th><th>Golden Fixture</th></tr></thead><tbody><tr><td><strong>SALARIO</strong></td><td>Various</td><td>BB, Bradesco</td><td>✅ Default for salary</td><td>✅ bb/, bradesco/</td></tr><tr><td><strong>PAGFOR</strong></td><td>Various</td><td>Bradesco, Itau</td><td>✅ Default for supplier</td><td>✅ itau/, bradesco/</td></tr><tr><td><strong>CREDITO</strong></td><td>Various</td><td>Caixa</td><td>✅ Caixa-specific</td><td>✅ caixa/</td></tr><tr><td><strong>FORNECEDOR</strong></td><td>Various</td><td>Santander</td><td>✅ Santander-specific</td><td>✅ santander/</td></tr></tbody></table>
+<p><strong>All 4 primary modalities implemented.</strong></p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="test-coverage-breakdown">Test Coverage Breakdown<a href="#test-coverage-breakdown" class="hash-link" aria-label="Direct link to Test Coverage Breakdown" title="Direct link to Test Coverage Breakdown" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="e2e-tests-full-remittance--return-flow">E2E Tests (Full Remittance → Return Flow)<a href="#e2e-tests-full-remittance--return-flow" class="hash-link" aria-label="Direct link to E2E Tests (Full Remittance → Return Flow)" title="Direct link to E2E Tests (Full Remittance → Return Flow)" translate="no">​</a></h3>
+<p><strong>Location:</strong> <code>tests/backend/banking-cnab240-*.e2e-spec.ts</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Test</th><th>Scope</th><th>Banks</th><th>Status</th></tr></thead><tbody><tr><td><strong>banking-cnab240-via-queue.e2e-spec.ts</strong></td><td>Full remittance + return via queue</td><td>All 5</td><td>✅ Passing</td></tr><tr><td><strong>cnab240-emit.e2e-spec.ts</strong></td><td>Remittance generation</td><td>All 5</td><td>✅ Passing</td></tr><tr><td><strong>cnab240-return-process.e2e-spec.ts</strong></td><td>Return parsing + reconciliation</td><td>All 5</td><td>✅ Passing</td></tr><tr><td><strong>banking-queue-adapter.e2e-spec.ts</strong></td><td>Queue submission/response</td><td>All 5</td><td>✅ Passing</td></tr><tr><td><strong>alimony-cnab.e2e-spec.ts</strong></td><td>Alimony-specific flow</td><td>All 5</td><td>✅ Passing</td></tr></tbody></table>
+<p><strong>Total E2E: 5 test suites, 100+ assertions.</strong></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="golden-fixture-tests">Golden Fixture Tests<a href="#golden-fixture-tests" class="hash-link" aria-label="Direct link to Golden Fixture Tests" title="Direct link to Golden Fixture Tests" translate="no">​</a></h3>
+<p><strong>Location:</strong> <code>tests/backend/golden/cnab240/</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Bank</th><th>Input</th><th>Expected Output</th><th>Coverage</th></tr></thead><tbody><tr><td><strong>BB</strong></td><td>10 sample payments</td><td>Exact 240-byte CNAB file</td><td>✅ Byte-for-byte match</td></tr><tr><td><strong>Bradesco</strong></td><td>10 sample payments</td><td>Exact 240-byte CNAB file</td><td>✅ Byte-for-byte match</td></tr><tr><td><strong>Caixa</strong></td><td>10 sample payments</td><td>Exact 240-byte CNAB file</td><td>✅ Byte-for-byte match</td></tr><tr><td><strong>Itau</strong></td><td>10 sample payments</td><td>Exact 240-byte CNAB file</td><td>✅ Byte-for-byte match</td></tr><tr><td><strong>Santander</strong></td><td>10 sample payments</td><td>Exact 240-byte CNAB file</td><td>✅ Byte-for-byte match</td></tr></tbody></table>
+<p><strong>Golden fixtures:</strong> 5 banks × 2 files (input + expected) = 10 fixtures. Deterministic test inputs ensure byte-exact output reproducibility.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="return-fixtures">Return Fixtures<a href="#return-fixtures" class="hash-link" aria-label="Direct link to Return Fixtures" title="Direct link to Return Fixtures" translate="no">​</a></h3>
+<p><strong>Location:</strong> <code>tests/backend/golden/cnab240/return/</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Bank</th><th>Occurrence Codes Tested</th><th>Test Cases</th><th>Status</th></tr></thead><tbody><tr><td><strong>BB</strong></td><td>00, AA, BD, BE, BI, RJ</td><td>6 test cases</td><td>✅ Passing</td></tr><tr><td><strong>Bradesco</strong></td><td>00, BD, BE, BI, RJ</td><td>5 test cases</td><td>✅ Passing</td></tr><tr><td><strong>Caixa</strong></td><td>01, 03, BD, BE, BI, RJ</td><td>6 test cases</td><td>✅ Passing</td></tr><tr><td><strong>Itau</strong></td><td>00, BD, BE, BI, RJ</td><td>5 test cases</td><td>✅ Passing</td></tr><tr><td><strong>Santander</strong></td><td>00, BD, BE, BI, RJ</td><td>5 test cases</td><td>✅ Passing</td></tr></tbody></table>
+<p><strong>Return coverage: 27 test scenarios (one per occurrence code per bank).</strong></p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="implementation-checklist">Implementation Checklist<a href="#implementation-checklist" class="hash-link" aria-label="Direct link to Implementation Checklist" title="Direct link to Implementation Checklist" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="remittance-emission-cnab240builderservice">Remittance Emission (CNAB240BuilderService)<a href="#remittance-emission-cnab240builderservice" class="hash-link" aria-label="Direct link to Remittance Emission (CNAB240BuilderService)" title="Direct link to Remittance Emission (CNAB240BuilderService)" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> File Header generation (240 bytes)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Batch Header generation (240 bytes)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Detail A segment (payment payer/beneficiary)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Detail B segment (account &amp; amount details)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Batch Trailer (record count + amount sum)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> File Trailer (file-level totals)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Record count validation</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Amount validation (Decimal precision to 2 decimal places)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Bank strategy selection (bank-specific convenios, modalities)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> File hash generation (SHA-256)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Support for 5 banks with strategy pattern</li>
+</ul>
+<p><strong>Status: Complete</strong></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="return-processing-cnab240returnparserservice--occurrencemapperservice">Return Processing (Cnab240ReturnParserService + OccurrenceMapperService)<a href="#return-processing-cnab240returnparserservice--occurrencemapperservice" class="hash-link" aria-label="Direct link to Return Processing (Cnab240ReturnParserService + OccurrenceMapperService)" title="Direct link to Return Processing (Cnab240ReturnParserService + OccurrenceMapperService)" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Parse 240-byte return records</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Identify record types (0, 1, 3, 5, 9)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Extract occurrence codes per Detail segment</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Map codes to internal statuses</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Support bank-specific code variations</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Handle unmapped codes (log + escalate)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Record count validation</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Amount validation (returned vs. sent)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Credit date extraction</li>
+</ul>
+<p><strong>Status: Complete</strong></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="reconciliation-bankingcnab240returnprocessservice">Reconciliation (BankingCnab240ReturnProcessService)<a href="#reconciliation-bankingcnab240returnprocessservice" class="hash-link" aria-label="Direct link to Reconciliation (BankingCnab240ReturnProcessService)" title="Direct link to Reconciliation (BankingCnab240ReturnProcessService)" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Match return Detail → sent remittance Detail by sequence</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Match by beneficiary account (bank + branch + account)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Update payment_remittance_detail with occurrence_code</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Update last<em>internal_status (ACCEPTED, REJECTED</em>*, PARTIAL)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Record last_settled_at timestamp</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Handle partial payments (amount mismatch handling)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Log discrepancies for audit</li>
+</ul>
+<p><strong>Status: Complete</strong></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="queue-integration-bankingcnab240queueadapter">Queue Integration (BankingCnab240QueueAdapter)<a href="#queue-integration-bankingcnab240queueadapter" class="hash-link" aria-label="Direct link to Queue Integration (BankingCnab240QueueAdapter)" title="Direct link to Queue Integration (BankingCnab240QueueAdapter)" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Submit remittance via queue</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Receive return via queue</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> State tracking (pending → settled)</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Retry logic for transient failures</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Timeout handling</li>
+</ul>
+<p><strong>Status: Complete (via mock banking relay in dev/test)</strong></p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="v2-production-hardening-waves-in-progress">V2 Production-Hardening Waves (in progress)<a href="#v2-production-hardening-waves-in-progress" class="hash-link" aria-label="Direct link to V2 Production-Hardening Waves (in progress)" title="Direct link to V2 Production-Hardening Waves (in progress)" translate="no">​</a></h2>
+<p>The full plan is at <code>~/.claude/plans/pesquise-por-formatos-de-stateless-rabbit.md</code>. Six waves take the adapter from &quot;functional but partial&quot; to production go-live.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="wave-1--per-company-bank-configuration-in-progress">Wave 1 — Per-company bank configuration (in progress)<a href="#wave-1--per-company-bank-configuration-in-progress" class="hash-link" aria-label="Direct link to Wave 1 — Per-company bank configuration (in progress)" title="Direct link to Wave 1 — Per-company bank configuration (in progress)" translate="no">​</a></h3>
+<p>Goal: replace hardcoded <code>convenio</code> / <code>agencyAgreement</code> / <code>modality</code> values in the bank strategies with per-tenant, per-bank, per-service-form rows in <code>payroll.company_bank_account</code>.</p>
+<p><strong>Shipped this slice:</strong></p>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> <code>database/sql/10-15-payroll-bank-config-ddl.sql</code> — <code>payroll.company_bank_account</code> table, indexes, check constraints (bank code 1–999, service form 4 digits, relay mode mock|http|sftp). Auto-acquires audit triggers + <code>created_at</code>/<code>updated_at</code> via <code>92-audit-final.sql</code>.</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> <code>database/sql/70-payroll-bank-config-final.sql</code> — RLS: <code>company_bank_account_select</code> (read with <code>payroll.bank_config.read|write</code> or <code>payment.remittance.write</code>) + <code>company_bank_account_write</code> (write with <code>payroll.bank_config.write</code>); both honour <code>sgp_bypass_rls</code> and <code>sgp_tenant_matches</code>.</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> <code>backend/src/folha-pagamento/operations/company-bank-account/</code> — module with read-only <code>CompanyBankAccountService</code> (<code>resolve(bankCode, serviceFormCode)</code> + <code>list()</code>), exported and wired into both <code>FolhaPagamentoModule</code> and <code>IntegrationsWorkerModule</code>.</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Jest unit spec: 7 tests covering resolve hit/miss, bank-code normalization, list, and DB-not-configured guard. Pass under <code>npm test -- --testPathPatterns=company-bank-account</code>.</li>
+<li class="task-list-item"><input type="checkbox" disabled="" checked=""> Gates: <code>npm run typecheck</code> ✅, <code>npm run lint:check</code> ✅, governance failure pre-existed (unrelated <code>docs/eng/domains/fiscal-integrations.md</code> link drift).</li>
+</ul>
+<p><strong>Still owed in Wave 1 (next session):</strong></p>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> Refactor <code>backend/src/integrations-worker/cnab240/banks/*.strategy.ts</code> from &quot;value object&quot; to <code>BankLayoutTemplate { bankCode, layoutVersion, formatHeader/Batch/SegmentA/SegmentB(ctx) }</code> accepting <code>ResolvedCompanyBankAccount</code>.</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> Update <code>Cnab240BuilderService</code> + <code>Cnab240EmitService</code> to call <code>CompanyBankAccountService.resolve(...)</code> and pass the resolved config through to the layout template.</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> CRUD controller + DTOs for <code>CompanyBankAccountService</code> (POST/GET/PATCH/DELETE under <code>v1/payroll/bank-config</code>) with <code>@RequirePermission(&#x27;payroll.bank_config.write&#x27;)</code>.</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> Seed default rows (one per bank using current hardcoded values) so existing 5 golden fixtures still match byte-for-byte.</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> DB integration spec under <code>tests/backend/</code> covering RLS isolation across two tenants.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="waves-26-planned">Waves 2–6 (planned)<a href="#waves-26-planned" class="hash-link" aria-label="Direct link to Waves 2–6 (planned)" title="Direct link to Waves 2–6 (planned)" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Wave</th><th>Theme</th><th>Status</th></tr></thead><tbody><tr><td>2</td><td>Builder V2: every FEBRABAN V10.11 mandatory field populated; per-bank account-DV calculators</td><td>not started</td></tr><tr><td>3</td><td>FGTS / GPS / Alimony service-type expansion</td><td>not started</td></tr><tr><td>4</td><td>Return V2: ~30 occurrence codes per bank, partial payments, severity classification</td><td>not started</td></tr><tr><td>5</td><td>Real banking relay (HTTPS + signed webhook + transmission log + retry scheduler)</td><td>not started</td></tr><tr><td>6</td><td>Ops: reconciliation dashboard, retry workflow UI, audit archival, observability</td><td>not started</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="known-gaps--deferred-items">Known Gaps &amp; Deferred Items<a href="#known-gaps--deferred-items" class="hash-link" aria-label="Direct link to Known Gaps &amp; Deferred Items" title="Direct link to Known Gaps &amp; Deferred Items" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Item</th><th>Scope</th><th>Reason</th><th>Estimated Effort</th><th>Roadmap</th></tr></thead><tbody><tr><td><strong>CNAB 400 support</strong></td><td>Legacy format</td><td>No customer demand; CNAB 240 sufficient</td><td>2–3 weeks</td><td>Deferred indefinitely</td></tr><tr><td><strong>Pix integration</strong></td><td>Real-time payment API</td><td>Not yet customer-requested; ecosystem still maturing</td><td>6–8 weeks</td><td>V0.4+ (12–18 months)</td></tr><tr><td><strong>TED/DOC shortcuts</strong></td><td>Express transfers</td><td>Niche use case; CNAB 240 covers 99%</td><td>1–2 weeks</td><td>On-demand only</td></tr><tr><td><strong>Multi-batch remittances</strong></td><td>Splitting large volumes</td><td>Current limit ~5000 payments/batch sufficient</td><td>1 week</td><td>Monitor; defer unless customer exceeds limit</td></tr><tr><td><strong>Regulatory audit trail</strong></td><td>Full CNAB file archival with signatures</td><td>Database stores hash; file itself on banking relay</td><td>1 week</td><td>Deferred pending compliance audit</td></tr><tr><td><strong>Pix-CNAB hybrid</strong></td><td>Unified payment API</td><td>Requires both backends + reconciliation logic</td><td>3–4 weeks</td><td>V0.5+ (future)</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="performance-metrics">Performance Metrics<a href="#performance-metrics" class="hash-link" aria-label="Direct link to Performance Metrics" title="Direct link to Performance Metrics" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="remittance-generation">Remittance Generation<a href="#remittance-generation" class="hash-link" aria-label="Direct link to Remittance Generation" title="Direct link to Remittance Generation" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Single payment:</strong> &lt;10ms</li>
+<li class=""><strong>100 payments:</strong> &lt;50ms</li>
+<li class=""><strong>1000 payments:</strong> &lt;200ms</li>
+<li class=""><strong>File I/O (write to disk):</strong> &lt;5ms</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="return-parsing">Return Parsing<a href="#return-parsing" class="hash-link" aria-label="Direct link to Return Parsing" title="Direct link to Return Parsing" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Single return file:</strong> &lt;20ms</li>
+<li class=""><strong>Reconciliation (100 records):</strong> &lt;50ms</li>
+<li class=""><strong>Database update (100 records):</strong> &lt;100ms</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="concurrency">Concurrency<a href="#concurrency" class="hash-link" aria-label="Direct link to Concurrency" title="Direct link to Concurrency" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Concurrent remittances (4 banks):</strong> Supported via bank-strategy pattern (no lock contention)</li>
+<li class=""><strong>Concurrent return processing:</strong> Supported (read-only return parser; DB writes are transactional)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="code-organization">Code Organization<a href="#code-organization" class="hash-link" aria-label="Direct link to Code Organization" title="Direct link to Code Organization" translate="no">​</a></h2>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">backend/src/integrations-worker/cnab240/</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">├── cnab240-builder.service.ts         # Remittance generation</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">├── cnab240-emit.service.ts            # Orchestrates emission</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">├── cnab240-relay-dispatch.service.ts  # Queue submission</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">├── return/</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   ├── cnab240-return-parser.service.ts      # Parse return files</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   ├── cnab240-return-process.service.ts     # Reconciliation</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   └── occurrence-mapper.service.ts          # Code → internal status</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">├── banks/</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   ├── bank-strategy.ts               # Interface</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   ├── bb.strategy.ts                 # Banco do Brasil</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   ├── bradesco.strategy.ts</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   ├── caixa.strategy.ts</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   ├── itau.strategy.ts</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">│   └── santander.strategy.ts</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">└── adapters/</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    └── queue-adapter.ts               # Banking relay integration</span><br></div></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="database-schema">Database Schema<a href="#database-schema" class="hash-link" aria-label="Direct link to Database Schema" title="Direct link to Database Schema" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="payment_remittance_file">payment_remittance_file<a href="#payment_remittance_file" class="hash-link" aria-label="Direct link to payment_remittance_file" title="Direct link to payment_remittance_file" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Column</th><th>Type</th><th>Purpose</th></tr></thead><tbody><tr><td>id</td><td>UUID</td><td>Primary key</td></tr><tr><td>payroll_run_id</td><td>UUID</td><td>Parent payroll run</td></tr><tr><td>status</td><td>ENUM (DRAFT, GENERATED, SENT, PAID, REJECTED)</td><td>Lifecycle</td></tr><tr><td>bank_code</td><td>NUMERIC(3)</td><td>001, 237, 104, 341, 033</td></tr><tr><td>layout_version</td><td>VARCHAR</td><td>CNAB240-FEBRABAN-10.11-{BANK}</td></tr><tr><td>file_hash</td><td>VARCHAR(64)</td><td>SHA-256 hash</td></tr><tr><td>record_count</td><td>INT</td><td>Total records in file</td></tr><tr><td>total_amount</td><td>DECIMAL(15,2)</td><td>Sum of all payments</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="payment_remittance_detail">payment_remittance_detail<a href="#payment_remittance_detail" class="hash-link" aria-label="Direct link to payment_remittance_detail" title="Direct link to payment_remittance_detail" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Column</th><th>Type</th><th>Purpose</th></tr></thead><tbody><tr><td>file_id</td><td>UUID</td><td>Foreign key to payment_remittance_file</td></tr><tr><td>sequence</td><td>INT</td><td>Detail sequence (1, 2, 3, ...)</td></tr><tr><td>employee_id</td><td>VARCHAR</td><td>Beneficiary</td></tr><tr><td>amount</td><td>DECIMAL(15,2)</td><td>Payment amount</td></tr><tr><td>occurrence_code</td><td>VARCHAR(3)</td><td>From return file (00, BD, etc.)</td></tr><tr><td>last_internal_status</td><td>ENUM (ACCEPTED, REJECTED_*, PARTIAL, RETURNED_OTHER)</td><td>Computed status</td></tr><tr><td>last_settled_at</td><td>TIMESTAMP</td><td>Settlement date</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="integration-points">Integration Points<a href="#integration-points" class="hash-link" aria-label="Direct link to Integration Points" title="Direct link to Integration Points" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="upstream-payrollrun--cnab240emit">Upstream: PayrollRun → Cnab240Emit<a href="#upstream-payrollrun--cnab240emit" class="hash-link" aria-label="Direct link to Upstream: PayrollRun → Cnab240Emit" title="Direct link to Upstream: PayrollRun → Cnab240Emit" translate="no">​</a></h3>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">payrollRun</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> PayrollRunState</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  → Cnab240EmitService</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">emit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    → Cnab240BuilderService</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">build</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      → </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> fileName</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> content</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> recordCount</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> totalAmount</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> fileHash</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> layoutVersion</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> details </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    → BankingCnab240QueueAdapter</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">submit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      → </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">submit to bank</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    → PaymentRemittanceFile record </span><span class="token function" style="color:#d73a49">created</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">status</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token constant" style="color:#36acaa">SENT</span><span class="token punctuation" style="color:#393A34">)</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="downstream-bankingrelay--return-processing">Downstream: BankingRelay → Return Processing<a href="#downstream-bankingrelay--return-processing" class="hash-link" aria-label="Direct link to Downstream: BankingRelay → Return Processing" title="Direct link to Downstream: BankingRelay → Return Processing" translate="no">​</a></h3>
+<div class="language-typescript codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-typescript codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">bank returns file</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  → BankingCnab240QueueAdapter</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">receive</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    → Cnab240ReturnParserService</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">parse</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      → ParsedCnab240Return </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> details</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">occurrence_code</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">...</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">...</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    → OccurrenceMapperService</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">map</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">bankCode</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> occurrenceCode</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      → OccurrenceMapping </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> internalStatus</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> message </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    → Cnab240ReturnProcessService</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">process</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      → PaymentRemittanceDetail records </span><span class="token function" style="color:#d73a49">updated</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">status</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> timestamp</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    → PaymentRemittanceFile status </span><span class="token function" style="color:#d73a49">updated</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token constant" style="color:#36acaa">PAID</span><span class="token plain"> or </span><span class="token constant" style="color:#36acaa">REJECTED</span><span class="token punctuation" style="color:#393A34">)</span><br></div></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="compliance--audit">Compliance &amp; Audit<a href="#compliance--audit" class="hash-link" aria-label="Direct link to Compliance &amp; Audit" title="Direct link to Compliance &amp; Audit" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="regulatory-acceptance">Regulatory Acceptance<a href="#regulatory-acceptance" class="hash-link" aria-label="Direct link to Regulatory Acceptance" title="Direct link to Regulatory Acceptance" translate="no">​</a></h3>
+<ul>
+<li class="">✅ BACEN (Banco Central do Brasil) — Recognizes CNAB 240</li>
+<li class="">✅ CIP (Câmara Interbancária) — Payment clearing standard</li>
+<li class="">✅ FEBRABAN — Official maintainer of standard</li>
+<li class="">✅ TCE audit readiness — File hashes + timestamps recorded</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="audit-trail">Audit Trail<a href="#audit-trail" class="hash-link" aria-label="Direct link to Audit Trail" title="Direct link to Audit Trail" translate="no">​</a></h3>
+<ul>
+<li class="">File submission: payment_remittance_file.created_at</li>
+<li class="">Return receipt: payment_remittance_file.updated_at</li>
+<li class="">Per-payment status: payment_remittance_detail.last_settled_at</li>
+<li class="">File integrity: SHA-256 hash stored for verification</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="references">References<a href="#references" class="hash-link" aria-label="Direct link to References" title="Direct link to References" translate="no">​</a></h2>
+<ul>
+<li class=""><strong>Source:</strong> <code>backend/src/integrations-worker/cnab240/</code></li>
+<li class=""><strong>Tests:</strong> <code>tests/backend/**/*cnab240*.e2e-spec.ts</code></li>
+<li class=""><strong>Fixtures:</strong> <code>tests/backend/golden/cnab240/</code></li>
+<li class=""><strong>Schema:</strong> <code>database/sql/10-07-payroll-ddl.sql</code></li>
+<li class=""><strong>Spec:</strong> <code>docs/eng/Banking/0{0..4}-cnab*.md</code></li>
+<li class=""><strong>Standards:</strong> <a href="https://cmsarquivos.febraban.org.br/Arquivos/documentos/PDF/Layout%20padrao%20CNAB240%20V%2010%2011%20-%2021_08_2023.pdf" target="_blank" rel="noopener noreferrer" class="">FEBRABAN CNAB 240 V 10.11</a></li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/sgp/docs/eng/Banking/04-cnab240-alternative-formats"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">CNAB 240 — Alternative Formats and Future Roadmap</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/sgp/docs/eng/api"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">API Contract Authority</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#overview" class="table-of-contents__link toc-highlight">Overview</a></li><li><a href="#bank-coverage-matrix" class="table-of-contents__link toc-highlight">Bank Coverage Matrix</a></li><li><a href="#payment-type-coverage" class="table-of-contents__link toc-highlight">Payment Type Coverage</a></li><li><a href="#occurrence-code-coverage" class="table-of-contents__link toc-highlight">Occurrence Code Coverage</a><ul><li><a href="#common-codes-all-banks" class="table-of-contents__link toc-highlight">Common Codes (All Banks)</a></li><li><a href="#bank-specific-codes" class="table-of-contents__link toc-highlight">Bank-Specific Codes</a></li></ul></li><li><a href="#servicemodality-coverage" class="table-of-contents__link toc-highlight">Service/Modality Coverage</a></li><li><a href="#test-coverage-breakdown" class="table-of-contents__link toc-highlight">Test Coverage Breakdown</a><ul><li><a href="#e2e-tests-full-remittance--return-flow" class="table-of-contents__link toc-highlight">E2E Tests (Full Remittance → Return Flow)</a></li><li><a href="#golden-fixture-tests" class="table-of-contents__link toc-highlight">Golden Fixture Tests</a></li><li><a href="#return-fixtures" class="table-of-contents__link toc-highlight">Return Fixtures</a></li></ul></li><li><a href="#implementation-checklist" class="table-of-contents__link toc-highlight">Implementation Checklist</a><ul><li><a href="#remittance-emission-cnab240builderservice" class="table-of-contents__link toc-highlight">Remittance Emission (CNAB240BuilderService)</a></li><li><a href="#return-processing-cnab240returnparserservice--occurrencemapperservice" class="table-of-contents__link toc-highlight">Return Processing (Cnab240ReturnParserService + OccurrenceMapperService)</a></li><li><a href="#reconciliation-bankingcnab240returnprocessservice" class="table-of-contents__link toc-highlight">Reconciliation (BankingCnab240ReturnProcessService)</a></li><li><a href="#queue-integration-bankingcnab240queueadapter" class="table-of-contents__link toc-highlight">Queue Integration (BankingCnab240QueueAdapter)</a></li></ul></li><li><a href="#v2-production-hardening-waves-in-progress" class="table-of-contents__link toc-highlight">V2 Production-Hardening Waves (in progress)</a><ul><li><a href="#wave-1--per-company-bank-configuration-in-progress" class="table-of-contents__link toc-highlight">Wave 1 — Per-company bank configuration (in progress)</a></li><li><a href="#waves-26-planned" class="table-of-contents__link toc-highlight">Waves 2–6 (planned)</a></li></ul></li><li><a href="#known-gaps--deferred-items" class="table-of-contents__link toc-highlight">Known Gaps &amp; Deferred Items</a></li><li><a href="#performance-metrics" class="table-of-contents__link toc-highlight">Performance Metrics</a><ul><li><a href="#remittance-generation" class="table-of-contents__link toc-highlight">Remittance Generation</a></li><li><a href="#return-parsing" class="table-of-contents__link toc-highlight">Return Parsing</a></li><li><a href="#concurrency" class="table-of-contents__link toc-highlight">Concurrency</a></li></ul></li><li><a href="#code-organization" class="table-of-contents__link toc-highlight">Code Organization</a></li><li><a href="#database-schema" class="table-of-contents__link toc-highlight">Database Schema</a><ul><li><a href="#payment_remittance_file" class="table-of-contents__link toc-highlight">payment_remittance_file</a></li><li><a href="#payment_remittance_detail" class="table-of-contents__link toc-highlight">payment_remittance_detail</a></li></ul></li><li><a href="#integration-points" class="table-of-contents__link toc-highlight">Integration Points</a><ul><li><a href="#upstream-payrollrun--cnab240emit" class="table-of-contents__link toc-highlight">Upstream: PayrollRun → Cnab240Emit</a></li><li><a href="#downstream-bankingrelay--return-processing" class="table-of-contents__link toc-highlight">Downstream: BankingRelay → Return Processing</a></li></ul></li><li><a href="#compliance--audit" class="table-of-contents__link toc-highlight">Compliance &amp; Audit</a><ul><li><a href="#regulatory-acceptance" class="table-of-contents__link toc-highlight">Regulatory Acceptance</a></li><li><a href="#audit-trail" class="table-of-contents__link toc-highlight">Audit Trail</a></li></ul></li><li><a href="#references" class="table-of-contents__link toc-highlight">References</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Authority</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng">Engineering</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/decisions">ADRs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/gov">Governance</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Operations</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/user">User docs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/runbooks/deploy-rollback">Runbooks</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/leg">Legacy archive</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built with Docusaurus. SGP documentation follows DEVAI docs-governance.</div></div></div></footer></div>
+</body>
+</html>

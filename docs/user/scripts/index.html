@@ -1,0 +1,1447 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-user/user--scripts" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Scripts Reference | SGP</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://aarusso-nyx.github.io/sgp/docs/user/scripts"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Scripts Reference | SGP"><meta data-rh="true" name="description" content="Name"><meta data-rh="true" property="og:description" content="Name"><link data-rh="true" rel="canonical" href="https://aarusso-nyx.github.io/sgp/docs/user/scripts"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/user/scripts" hreflang="en"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/user/scripts" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Scripts Reference","item":"https://aarusso-nyx.github.io/sgp/docs/user/scripts"}]}</script><link rel="stylesheet" href="/sgp/assets/css/styles.e3aa2f06.css">
+<script src="/sgp/assets/js/runtime~main.de3161a6.js" defer="defer"></script>
+<script src="/sgp/assets/js/main.ecb7e854.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/sgp/"><b class="navbar__title text--truncate">SGP</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/">Docs</a><a class="navbar__item navbar__link" href="/sgp/docs/eng">Engineering</a><a class="navbar__item navbar__link" href="/sgp/docs/gov">Governance</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/user">Operators</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/sgp/docs/"><span title="SGP Documentation Map" class="linkLabel_WmDU">SGP Documentation Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/architecture"><span title="Architecture" class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/decisions/TEMPLATE"><span title="ADRs" class="categoryLinkLabel_W154">ADRs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/api"><span title="Contracts" class="categoryLinkLabel_W154">Contracts</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/67-pdf-a-builder"><span title="Engineering" class="categoryLinkLabel_W154">Engineering</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/gov"><span title="Governance" class="categoryLinkLabel_W154">Governance</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/ops/observability"><span title="Operations" class="categoryLinkLabel_W154">Operations</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/esocial/00-index"><span title="Schemas" class="categoryLinkLabel_W154">Schemas</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/sgp/docs/user/dependency-management"><span title="User" class="categoryLinkLabel_W154">User</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/dependency-management"><span title="Dependency Management" class="linkLabel_WmDU">Dependency Management</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/environment"><span title="Environment Variables" class="linkLabel_WmDU">Environment Variables</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user"><span title="User and Operator Docs" class="linkLabel_WmDU">User and Operator Docs</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/lgpd-transferencia-internacional-runbook"><span title="LGPD International Transfer Runbook" class="linkLabel_WmDU">LGPD International Transfer Runbook</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/lgpd"><span title="LGPD Operations" class="linkLabel_WmDU">LGPD Operations</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/local-setup"><span title="Local Setup" class="linkLabel_WmDU">Local Setup</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/operator-readiness"><span title="Operator Readiness" class="linkLabel_WmDU">Operator Readiness</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/portal-self-service"><span title="Portal self-service operations" class="linkLabel_WmDU">Portal self-service operations</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/user/runbooks/pii-plaintext-cutover"><span title="runbooks" class="categoryLinkLabel_W154">runbooks</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/user/scripts"><span title="Scripts Reference" class="linkLabel_WmDU">Scripts Reference</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/sgp-boundary-runbook"><span title="SGP Boundary Architecture Runbook" class="linkLabel_WmDU">SGP Boundary Architecture Runbook</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/source-workspace"><span title="SGP Source Workspace" class="linkLabel_WmDU">SGP Source Workspace</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/testing"><span title="Testing" class="linkLabel_WmDU">Testing</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/leg/audit/plan"><span title="Legacy" class="categoryLinkLabel_W154">Legacy</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/legal/clt-rescisao-aviso-fgts"><span title="References" class="categoryLinkLabel_W154">References</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/sgp/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">User</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Scripts Reference</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Scripts Reference</h1></header>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="name">Name<a href="#name" class="hash-link" aria-label="Direct link to Name" title="Direct link to Name" translate="no">​</a></h2>
+<p>SGP workspace scripts - operator and contributor command reference for the root
+dispatcher, npm aliases, QA/bootstrap flows, database helpers, generated
+artifacts, audit helpers, and governance checks.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis">Synopsis<a href="#synopsis" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h2>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run &lt;script-name&gt; -- [script-specific-arguments]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs &lt;command&gt; [subcommand] [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/&lt;family&gt;.mjs &lt;subcommand&gt; [options]</span><br></div></code></pre></div></div>
+<p>Run commands from the repository root unless a command explicitly says it is a
+workspace command. Root npm scripts are thin entrypoints over
+<code>scripts/run.mjs</code>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="description">Description<a href="#description" class="hash-link" aria-label="Direct link to Description" title="Direct link to Description" translate="no">​</a></h2>
+<p>The authoritative command surface is the root dispatcher:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs &lt;command&gt; [subcommand] [options]</span><br></div></code></pre></div></div>
+<p>Root <code>package.json</code> exposes stable npm aliases for common workflows. Family
+entrypoints under <code>scripts/</code> own human-facing command groups. Implementation
+helpers live under <code>scripts/lib/</code> and are not operator entrypoints unless this
+document says otherwise.</p>
+<p>Use <code>--</code> after <code>npm run &lt;script&gt;</code> when passing options through npm:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:fk-coverage:check -- --json</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:hotspots -- --baseline &lt;sha&gt;</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run qa:bootstrap -- --database-url postgresql://$USER@localhost:5432/sgp_test</span><br></div></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="files">Files<a href="#files" class="hash-link" aria-label="Direct link to Files" title="Direct link to Files" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Path</th><th>Role</th></tr></thead><tbody><tr><td><code>package.json</code></td><td>Root npm entrypoint surface.</td></tr><tr><td><code>scripts/run.mjs</code></td><td>Main dispatcher for root commands.</td></tr><tr><td><code>scripts/audit.mjs</code></td><td>Audit helper family.</td></tr><tr><td><code>scripts/check-api.mjs</code></td><td>API alignment and OpenAPI check family.</td></tr><tr><td><code>scripts/check-db.mjs</code></td><td>Database alignment, FK coverage, and DB push guard family.</td></tr><tr><td><code>scripts/check-evidence.mjs</code></td><td>Evidence gate wrapper.</td></tr><tr><td><code>scripts/check-frontend.mjs</code></td><td>Frontend policy check family.</td></tr><tr><td><code>scripts/db.mjs</code></td><td>Database lifecycle implementation helper family.</td></tr><tr><td><code>scripts/generate.mjs</code></td><td>Generated artifact family.</td></tr><tr><td><code>scripts/qa.mjs</code></td><td>QA bootstrap and smoke URL helper family.</td></tr><tr><td><code>scripts/clean.mjs</code></td><td>Local generated-output cleanup helper.</td></tr><tr><td><code>scripts/lib/workspace-commands.mjs</code></td><td>Shared descriptions, format targets, hard-fail gates, and evidence steps.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="exit-status">Exit Status<a href="#exit-status" class="hash-link" aria-label="Direct link to Exit Status" title="Direct link to Exit Status" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Code</th><th>Meaning</th></tr></thead><tbody><tr><td>0</td><td>Command completed successfully.</td></tr><tr><td>1</td><td>Validation failed, command arguments were invalid, a child command failed, or required configuration was missing.</td></tr><tr><td>130</td><td>QA bootstrap was interrupted with SIGINT.</td></tr><tr><td>143</td><td>QA bootstrap or long-running services received SIGTERM during teardown.</td></tr></tbody></table>
+<p>Some QA/evidence commands distinguish &quot;blocked&quot; from &quot;failed&quot; in logs, but they
+still return a non-zero exit code when required live services or environment
+variables are missing.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="environment">Environment<a href="#environment" class="hash-link" aria-label="Direct link to Environment" title="Direct link to Environment" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Variable</th><th>Used By</th><th>Meaning</th></tr></thead><tbody><tr><td><code>DATABASE_URL</code></td><td>DB migrate, DB smoke, backend e2e, backend coverage, QA bootstrap, evidence</td><td>PostgreSQL URL. Local DB-backed tests conventionally use <code>postgresql://$USER@localhost:5432/sgp_test</code>.</td></tr><tr><td><code>AUTH_ALLOW_UNSIGNED_TEST_TOKENS</code></td><td>QA bootstrap, backend QA smoke</td><td>Enables local unsigned test tokens when bootstrapping live QA services. Defaults to <code>true</code> inside QA bootstrap.</td></tr><tr><td><code>QA_API_BASE_URL</code></td><td>QA smoke, evidence</td><td>Backend API base URL.</td></tr><tr><td><code>API_BASE_URL</code></td><td>QA smoke</td><td>Fallback backend API base URL.</td></tr><tr><td><code>QA_ADMIN_FRONTEND_BASE_URL</code></td><td>QA smoke, evidence</td><td>Admin frontend base URL.</td></tr><tr><td><code>QA_FRONTEND_BASE_URL</code></td><td>QA smoke</td><td>Legacy fallback for admin frontend URL.</td></tr><tr><td><code>FRONTEND_BASE_URL</code></td><td>QA smoke</td><td>Fallback admin frontend URL.</td></tr><tr><td><code>QA_PORTAL_FRONTEND_BASE_URL</code></td><td>QA smoke, evidence</td><td>Portal frontend base URL.</td></tr><tr><td><code>PORTAL_FRONTEND_BASE_URL</code></td><td>QA smoke</td><td>Fallback portal frontend URL.</td></tr><tr><td><code>OPENAPI_CORE_PORT</code></td><td>OpenAPI client generation</td><td>Temporary core API port. Default: 3300.</td></tr><tr><td><code>OPENAPI_PORTAL_PORT</code></td><td>OpenAPI client generation</td><td>Temporary portal API port. Default: 3301.</td></tr><tr><td><code>OPENAPI_WAIT_TIMEOUT_MS</code></td><td>OpenAPI client generation</td><td>Wait timeout for generated OpenAPI JSON. Default: 30000.</td></tr><tr><td><code>SGP_DB_ALIGNMENT_PHASE</code></td><td>DB alignment check</td><td>Alignment phase to inspect. Default: <code>full_closure</code>.</td></tr><tr><td><code>GITHUB_BASE_REF</code></td><td>DB push guard</td><td>GitHub base branch used to derive the diff range in CI.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="root-dispatcher">Root Dispatcher<a href="#root-dispatcher" class="hash-link" aria-label="Direct link to Root Dispatcher" title="Direct link to Root Dispatcher" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="name-1">Name<a href="#name-1" class="hash-link" aria-label="Direct link to Name" title="Direct link to Name" translate="no">​</a></h3>
+<p><code>scripts/run.mjs</code> - root workspace dispatcher.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-1">Synopsis<a href="#synopsis-1" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs help</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs &lt;command&gt; [subcommand] [options]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="commands">Commands<a href="#commands" class="hash-link" aria-label="Direct link to Commands" title="Direct link to Commands" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>help</code></td><td>Print dispatcher help.</td></tr><tr><td><code>build</code></td><td>Build frontend admin, frontend portal, and backend.</td></tr><tr><td><code>start</code></td><td>Start local development runtimes.</td></tr><tr><td><code>lint</code></td><td>Run fix-mode lint, or check-mode lint with <code>check</code>.</td></tr><tr><td><code>format</code></td><td>Run Prettier write mode, or check mode with <code>check</code>.</td></tr><tr><td><code>typecheck</code></td><td>Run frontend and backend TypeScript checks.</td></tr><tr><td><code>test</code></td><td>Run unit, workspace, e2e, coverage, DB, and QA tests.</td></tr><tr><td><code>check</code></td><td>Run cross-cutting checks. Currently evidence only.</td></tr><tr><td><code>db</code></td><td>Run database lifecycle and database checks.</td></tr><tr><td><code>api</code></td><td>Run API alignment, OpenAPI checks, and client generation.</td></tr><tr><td><code>qa</code></td><td>Run QA bootstrap and live URL checks.</td></tr><tr><td><code>audit</code></td><td>Run governance audit extractors.</td></tr><tr><td><code>governance</code></td><td>Run repository governance validation.</td></tr><tr><td><code>health</code></td><td>Run non-destructive runtime topology and path health checks.</td></tr><tr><td><code>deploy</code></td><td>Validate deployment plan arguments. Dry-run by default.</td></tr><tr><td><code>clean</code></td><td>Remove local generated outputs and caches.</td></tr><tr><td><code>audit:&lt;name&gt;</code></td><td>Npm-compatible audit aliases handled by the dispatcher.</td></tr><tr><td><code>evidence-step</code></td><td>Run one named evidence step from <code>scripts/lib/workspace-commands.mjs</code>. Diagnostic use only.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="build-commands">Build Commands<a href="#build-commands" class="hash-link" aria-label="Direct link to Build Commands" title="Direct link to Build Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-2">Synopsis<a href="#synopsis-2" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run build</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run build:admin -- [frontend build args]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run build:portal -- [frontend build args]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run build:backend -- [backend build args]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs build [all|admin|portal|backend] [args]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions">Actions<a href="#actions" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Action</th><th>Npm Alias</th><th>Behavior</th></tr></thead><tbody><tr><td><code>all</code></td><td><code>npm run build</code></td><td>Runs admin build, portal build, then backend build.</td></tr><tr><td><code>admin</code></td><td><code>npm run build:admin</code></td><td>Runs frontend workspace <code>build:admin</code>.</td></tr><tr><td><code>portal</code></td><td><code>npm run build:portal</code></td><td>Runs frontend workspace <code>build:portal</code>.</td></tr><tr><td><code>backend</code></td><td><code>npm run build:backend</code></td><td>Runs backend workspace <code>build</code>. Backend <code>prebuild</code> regenerates permission catalogs.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h3>
+<p>Arguments after the action are passed through to the workspace script. Example:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run build:admin -- --configuration production</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs build backend -- --verbose</span><br></div></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="start-commands">Start Commands<a href="#start-commands" class="hash-link" aria-label="Direct link to Start Commands" title="Direct link to Start Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-3">Synopsis<a href="#synopsis-3" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run start</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run start:admin -- [ng serve args]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run start:portal -- [ng serve args]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run start:core-api</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run start:portal-api</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run start:payroll-engine</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run start:integrations-worker</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run start:report-worker</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run start:report-service</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs start [all|admin|portal|core-api|portal-api|payroll-engine|integrations-worker|report-worker|report-service] [args]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions-1">Actions<a href="#actions-1" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Action</th><th>Npm Alias</th><th>Runtime</th></tr></thead><tbody><tr><td><code>all</code></td><td><code>npm run start</code></td><td>Starts core API, portal API, admin, and portal together.</td></tr><tr><td><code>admin</code></td><td><code>npm run start:admin</code></td><td>Starts <code>sgp-admin</code> on 127.0.0.1:4200 by default.</td></tr><tr><td><code>portal</code></td><td><code>npm run start:portal</code></td><td>Starts <code>sgp-portal</code> on 127.0.0.1:4300 by default.</td></tr><tr><td><code>core-api</code></td><td><code>npm run start:core-api</code></td><td>Starts backend core API with <code>APP_SERVICE_NAME=sgp-core-api</code>.</td></tr><tr><td><code>portal-api</code></td><td><code>npm run start:portal-api</code></td><td>Starts backend portal API with <code>APP_SERVICE_NAME=sgp-portal-api</code>.</td></tr><tr><td><code>payroll-engine</code></td><td><code>npm run start:payroll-engine</code></td><td>Starts payroll engine with <code>APP_SERVICE_NAME=sgp-payroll-engine</code> and <code>PAYROLL_ENGINE_PORT=3302</code>.</td></tr><tr><td><code>integrations-worker</code></td><td><code>npm run start:integrations-worker</code></td><td>Starts integrations worker.</td></tr><tr><td><code>report-worker</code></td><td><code>npm run start:report-worker</code></td><td>Starts report worker.</td></tr><tr><td><code>report-service</code></td><td><code>npm run start:report-service</code></td><td>Starts report service with <code>REPORT_SERVICE_PORT=3305</code>.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="signals">Signals<a href="#signals" class="hash-link" aria-label="Direct link to Signals" title="Direct link to Signals" translate="no">​</a></h3>
+<p>For <code>start all</code>, SIGINT and SIGTERM stop all child processes. If one child
+exits non-zero, the dispatcher terminates the group.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="quality-commands">Quality Commands<a href="#quality-commands" class="hash-link" aria-label="Direct link to Quality Commands" title="Direct link to Quality Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-4">Synopsis<a href="#synopsis-4" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run lint</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run lint:check</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run format</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run format:check</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run typecheck</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs lint [check]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs format [check]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs typecheck</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions-2">Actions<a href="#actions-2" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Command</th><th>Behavior</th></tr></thead><tbody><tr><td><code>npm run lint</code></td><td>Runs frontend lint/fix policy checks and backend ESLint fix mode.</td></tr><tr><td><code>npm run lint:check</code></td><td>Runs frontend checks, backend ESLint check mode, test-debt guard, API operation decorator check, and OpenAPI generated-spec check.</td></tr><tr><td><code>npm run format</code></td><td>Runs frontend formatter, backend formatter, then root workspace format targets.</td></tr><tr><td><code>npm run format:check</code></td><td>Checks formatting across frontend, backend, root docs, scripts, tests, infra, and root config targets.</td></tr><tr><td><code>npm run typecheck</code></td><td>Runs frontend TypeScript checks and backend <code>tsconfig.build.json</code> check.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="test-commands">Test Commands<a href="#test-commands" class="hash-link" aria-label="Direct link to Test Commands" title="Direct link to Test Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-5">Synopsis<a href="#synopsis-5" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run test</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:admin</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:portal</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:backend -- [jest args]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:db</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:e2e -- [jest args]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:coverage -- [jest args]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:frontend:coverage</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:frontend:e2e</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:qa</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:qa:api</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:qa:frontend</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs test &lt;subcommand&gt; [args]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions-3">Actions<a href="#actions-3" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Subcommand</th><th>Npm Alias</th><th>Behavior</th></tr></thead><tbody><tr><td><code>unit</code></td><td><code>npm run test</code></td><td>Runs frontend admin tests, frontend portal tests, then backend Jest unit tests.</td></tr><tr><td><code>admin</code></td><td><code>npm run test:admin</code></td><td>Runs frontend admin tests.</td></tr><tr><td><code>portal</code></td><td><code>npm run test:portal</code></td><td>Runs frontend portal tests.</td></tr><tr><td><code>admin-e2e</code></td><td><code>npm run test:admin:e2e</code></td><td>Runs admin Playwright suite.</td></tr><tr><td><code>portal-e2e</code></td><td><code>npm run test:portal:e2e</code></td><td>Runs portal Playwright suite.</td></tr><tr><td>frontend-e2e</td><td><code>npm run test:frontend:e2e</code></td><td>Runs admin and portal Playwright suites.</td></tr><tr><td><code>backend</code></td><td><code>npm run test:backend</code></td><td>Runs backend Jest unit tests. Extra args are passed to Jest.</td></tr><tr><td><code>db</code></td><td><code>npm run test:db</code></td><td>Runs DB bootstrap smoke via <code>scripts/db.mjs bootstrap-smoke</code>.</td></tr><tr><td><code>e2e</code></td><td><code>npm run test:e2e</code></td><td>Runs backend Jest e2e tests with local test database env defaulting to <code>sgp_test</code>.</td></tr><tr><td><code>coverage</code></td><td><code>npm run test:coverage</code></td><td>Runs backend coverage with local test database env defaulting to <code>sgp_test</code>.</td></tr><tr><td>frontend-coverage</td><td><code>npm run test:frontend:coverage</code></td><td>Runs Angular coverage for SGP-owned frontend surfaces. Admin coverage belongs to Stynx.</td></tr><tr><td><code>qa</code></td><td><code>npm run test:qa</code></td><td>Runs black-box API and frontend QA smoke suites.</td></tr><tr><td><code>qa-api</code></td><td><code>npm run test:qa:api</code></td><td>Runs <code>tests/backend/api</code> and <code>tests/backend/e2e</code> Node tests.</td></tr><tr><td><code>qa-frontend</code></td><td><code>npm run test:qa:frontend</code></td><td>Runs <code>tests/frontend/e2e</code> Node tests.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="database-commands">Database Commands<a href="#database-commands" class="hash-link" aria-label="Direct link to Database Commands" title="Direct link to Database Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-6">Synopsis<a href="#synopsis-6" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run db -- help</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:generate</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:migrate</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:seed</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:smoke</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:studio</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:alignment:check -- --json</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:fk-coverage:check -- --json</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:fk-coverage:write</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run db:push:guard -- --range &lt;git-range&gt;</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs db &lt;subcommand&gt; [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/check-db.mjs &lt;family&gt; &lt;action&gt; [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/db.mjs &lt;apply-sql|bootstrap-smoke&gt;</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions-4">Actions<a href="#actions-4" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Subcommand</th><th>Npm Alias</th><th>Behavior</th></tr></thead><tbody><tr><td><code>generate</code></td><td><code>npm run db:generate</code></td><td>Runs Prisma generate in backend workspace.</td></tr><tr><td><code>migrate</code></td><td><code>npm run db:migrate</code></td><td>Applies Prisma migrations, then canonical SQL files from <code>database/sql/</code>. Requires <code>DATABASE_URL</code>.</td></tr><tr><td><code>seed</code></td><td><code>npm run db:seed</code></td><td>Runs backend deterministic seed.</td></tr><tr><td><code>smoke</code></td><td><code>npm run db:smoke</code></td><td>Runs DB bootstrap smoke. Uses local <code>sgp_test</code> by default when no <code>DATABASE_URL</code> is set by the dispatcher.</td></tr><tr><td><code>studio</code></td><td><code>npm run db:studio</code></td><td>Opens Prisma Studio in backend workspace.</td></tr><tr><td><code>alignment check</code></td><td><code>npm run db:alignment:check</code></td><td>Validates generated database alignment matrix, SQL-only schema posture, RLS, tenant coverage, runtime grants, PII cipher coverage, SECURITY DEFINER search paths, and forbidden runtime references.</td></tr><tr><td><code>fk-coverage check</code></td><td><code>npm run db:fk-coverage:check</code></td><td>Validates FK and leading-column index coverage from canonical SQL.</td></tr><tr><td><code>fk-coverage write</code></td><td><code>npm run db:fk-coverage:write</code></td><td>Rewrites generated FK/index SQL support files. Review generated SQL diffs intentionally.</td></tr><tr><td><code>push-guard</code></td><td><code>npm run db:push:guard</code></td><td>Scans added diff lines for forbidden <code>prisma db push --force-reset</code>.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Option</th><th>Commands</th><th>Meaning</th></tr></thead><tbody><tr><td><code>--json</code></td><td><code>db:alignment:check</code>, <code>db:fk-coverage:check</code></td><td>Emit machine-readable JSON.</td></tr><tr><td><code>--range &lt;git-range&gt;</code></td><td><code>db:push:guard</code></td><td>Explicit git diff range to scan.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="notes">Notes<a href="#notes" class="hash-link" aria-label="Direct link to Notes" title="Direct link to Notes" translate="no">​</a></h3>
+<p><code>db:alignment:check</code> is static and non-mutating. Its grant baseline is
+implemented by <code>scripts/lib/checks/db/grants-alignment.mjs</code>, which accepts only
+the current least-privilege runtime grants for <code>sgp_app_role</code> and
+<code>sgp_portal_api</code>; unexpected grants fail the alignment gate.</p>
+<p><code>db:smoke</code> is destructive only for a local disposable database whose URL path is
+<code>/sgp_test</code> and whose host is localhost, 127.0.0.1, or ::1. It resets schemas,
+applies SQL, validates RLS and partition coverage, runs seed, and performs
+schema/RLS assertions.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="api-commands">API Commands<a href="#api-commands" class="hash-link" aria-label="Direct link to API Commands" title="Direct link to API Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-7">Synopsis<a href="#synopsis-7" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run api:alignment:sync</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run api:alignment:check -- --json</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run api:operation:check</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run api:spec:check</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run api:client:generate</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs api &lt;alignment|operation|spec|client&gt; &lt;action&gt; [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/check-api.mjs &lt;alignment sync|alignment check|operation check|spec check&gt; [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/generate.mjs openapi-client</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions-5">Actions<a href="#actions-5" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Subcommand</th><th>Npm Alias</th><th>Behavior</th></tr></thead><tbody><tr><td><code>alignment sync</code></td><td><code>npm run api:alignment:sync</code></td><td>Rebuilds generated API route alignment JSON from current docs and backend controllers.</td></tr><tr><td><code>alignment check</code></td><td><code>npm run api:alignment:check</code></td><td>Validates generated API route alignment JSON.</td></tr><tr><td><code>operation check</code></td><td><code>npm run api:operation:check</code></td><td>Ensures controller route handlers declare <code>@ApiOperation</code>.</td></tr><tr><td><code>spec check</code></td><td><code>npm run api:spec:check</code></td><td>Validates generated OpenAPI specs are OpenAPI 3.1 and include documented 2xx/4xx contracts.</td></tr><tr><td><code>client generate</code></td><td><code>npm run api:client:generate</code></td><td>Builds backend, starts generated backend dist entrypoints, pulls OpenAPI JSON, and regenerates frontend API clients.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Option or Env</th><th>Commands</th><th>Meaning</th></tr></thead><tbody><tr><td><code>--json</code></td><td><code>api:alignment:check</code></td><td>Emit machine-readable JSON.</td></tr><tr><td><code>OPENAPI_CORE_PORT</code></td><td><code>api:client:generate</code></td><td>Temporary core API port.</td></tr><tr><td><code>OPENAPI_PORTAL_PORT</code></td><td><code>api:client:generate</code></td><td>Temporary portal API port.</td></tr><tr><td><code>OPENAPI_WAIT_TIMEOUT_MS</code></td><td><code>api:client:generate</code></td><td>Wait timeout for generated OpenAPI JSON.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="frontend-check-commands">Frontend Check Commands<a href="#frontend-check-commands" class="hash-link" aria-label="Direct link to Frontend Check Commands" title="Direct link to Frontend Check Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-8">Synopsis<a href="#synopsis-8" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/check-frontend.mjs [all|api-client|modern-angular|i18n] [--help]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace frontend run lint</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace frontend run lint:check</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace frontend run i18n:check</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions-6">Actions<a href="#actions-6" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Action</th><th>Behavior</th></tr></thead><tbody><tr><td><code>all</code></td><td>Runs all frontend policy checks. Default when no action is provided.</td></tr><tr><td><code>api-client</code></td><td>Fails on raw <code>this.http.get/post/put/patch/delete</code> calls outside allowed API client files.</td></tr><tr><td><code>modern-angular</code></td><td>Enforces OnPush component posture, subscribe-site ceiling, and signal adoption baseline.</td></tr><tr><td><code>i18n</code></td><td>Validates Angular localize setup, extracted catalogs, English target catalog, and template marker coverage.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="qa-commands">QA Commands<a href="#qa-commands" class="hash-link" aria-label="Direct link to QA Commands" title="Direct link to QA Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-9">Synopsis<a href="#synopsis-9" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run qa:bootstrap -- [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run qa:smoke:urls -- [--json] [--check]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs qa &lt;bootstrap|smoke:urls&gt; [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/qa.mjs &lt;bootstrap|smoke-urls&gt; [options]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="bootstrap-options">Bootstrap Options<a href="#bootstrap-options" class="hash-link" aria-label="Direct link to Bootstrap Options" title="Direct link to Bootstrap Options" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Option</th><th>Meaning</th></tr></thead><tbody><tr><td><code>--database-url &lt;url&gt;</code></td><td>DATABASE_URL for live backend services. Required unless <code>DATABASE_URL</code> is already set.</td></tr><tr><td><code>--prepare-db</code></td><td>Run <code>db:migrate</code> and <code>db:seed</code> before starting services.</td></tr><tr><td><code>--evidence</code></td><td>Run <code>evidence:check</code> after services are ready instead of <code>test:qa</code>.</td></tr><tr><td><code>--keep-alive</code></td><td>Start services and wait, but do not run tests. Use Ctrl-C to stop.</td></tr><tr><td><code>--timeout-ms &lt;ms&gt;</code></td><td>Readiness timeout per target. Default: 120000.</td></tr><tr><td><code>--help</code></td><td>Print help.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="smoke-url-options">Smoke URL Options<a href="#smoke-url-options" class="hash-link" aria-label="Direct link to Smoke URL Options" title="Direct link to Smoke URL Options" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Option</th><th>Meaning</th></tr></thead><tbody><tr><td><code>--json</code></td><td>Emit JSON with configured and missing URL groups.</td></tr><tr><td><code>--check</code></td><td>Exit non-zero when required URL groups are missing.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="url-groups">URL Groups<a href="#url-groups" class="hash-link" aria-label="Direct link to URL Groups" title="Direct link to URL Groups" translate="no">​</a></h3>
+<p>QA smoke checks accept these environment variables:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Group</th><th>Accepted Variables</th><th>Example</th></tr></thead><tbody><tr><td>API smoke</td><td><code>QA_API_BASE_URL</code>, <code>API_BASE_URL</code></td><td><code>http://127.0.0.1:3000</code></td></tr><tr><td>Backend auth/domain smoke</td><td><code>QA_API_BASE_URL</code>, <code>API_BASE_URL</code></td><td><code>http://127.0.0.1:3000</code></td></tr><tr><td>Admin frontend smoke</td><td><code>QA_ADMIN_FRONTEND_BASE_URL</code>, <code>QA_FRONTEND_BASE_URL</code>, <code>FRONTEND_BASE_URL</code></td><td><code>http://127.0.0.1:4200</code></td></tr><tr><td>Portal frontend smoke</td><td><code>QA_PORTAL_FRONTEND_BASE_URL</code>, <code>PORTAL_FRONTEND_BASE_URL</code></td><td><code>http://127.0.0.1:4300</code></td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="audit-commands">Audit Commands<a href="#audit-commands" class="hash-link" aria-label="Direct link to Audit Commands" title="Direct link to Audit Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-10">Synopsis<a href="#synopsis-10" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:schema -- [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:api -- [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:fr -- [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:tests -- [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:hotspots -- (--baseline &lt;sha&gt; | --prev-round)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:backlog -- --closure &lt;path&gt;</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:pvd -- [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run audit:all -- [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs audit &lt;schema|api|fr|tests|hotspots|backlog|pvd|live-data|all&gt; [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/audit.mjs &lt;schema|api|fr|tests|hotspots|backlog|pvd|live-data|all&gt; [options]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions-7">Actions<a href="#actions-7" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Action</th><th>Npm Alias</th><th>Behavior</th></tr></thead><tbody><tr><td><code>schema</code></td><td><code>npm run audit:schema</code></td><td>Parses canonical SQL DDL and emits schema digest artifacts.</td></tr><tr><td><code>api</code></td><td><code>npm run audit:api</code></td><td>Renders API route surface from generated route alignment and records drift checks.</td></tr><tr><td><code>fr</code></td><td><code>npm run audit:fr</code></td><td>Refreshes functional requisite status and writes per-round delta.</td></tr><tr><td><code>tests</code></td><td><code>npm run audit:tests</code></td><td>Builds a static test coverage map from spec files and FR IDs.</td></tr><tr><td><code>hotspots</code></td><td><code>npm run audit:hotspots</code></td><td>Aggregates git churn since a baseline. Requires <code>--baseline</code> or resolvable <code>--prev-round</code>.</td></tr><tr><td><code>backlog</code></td><td><code>npm run audit:backlog</code></td><td>Applies a round closure file to the backlog ledger. Not included in <code>audit:all</code>.</td></tr><tr><td><code>pvd</code></td><td><code>npm run audit:pvd</code></td><td>Validates promise-vs-delivery evidence references.</td></tr><tr><td><code>live-data</code></td><td>none</td><td>Generates a scratch live PostgreSQL data inventory under <code>docs/work/</code>.</td></tr><tr><td><code>all</code></td><td><code>npm run audit:all</code></td><td>Runs schema, API, FR, tests, hotspots, and promise-vs-delivery in order.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="common-options">Common Options<a href="#common-options" class="hash-link" aria-label="Direct link to Common Options" title="Direct link to Common Options" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Option</th><th>Meaning</th></tr></thead><tbody><tr><td><code>--help</code></td><td>Print family or helper help.</td></tr><tr><td><code>--dry-run</code></td><td>Print intended writes without writing files.</td></tr><tr><td><code>--round &lt;n&gt;</code></td><td>Use an explicit round number. Defaults to highest <code>docs/work/round-N</code> directory.</td></tr><tr><td><code>--output-root &lt;path&gt;</code></td><td>Write committed audit outputs under a temporary or alternate root.</td></tr><tr><td><code>--repo-root &lt;path&gt;</code></td><td>Read from a temporary or fixture repository root.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="action-specific-options">Action-Specific Options<a href="#action-specific-options" class="hash-link" aria-label="Direct link to Action-Specific Options" title="Direct link to Action-Specific Options" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Option</th><th>Action</th><th>Meaning</th></tr></thead><tbody><tr><td><code>--baseline &lt;sha&gt;</code></td><td><code>hotspots</code></td><td>Git baseline SHA for churn aggregation.</td></tr><tr><td><code>--prev-round</code></td><td><code>hotspots</code>, <code>all</code></td><td>Resolve the previous round baseline automatically.</td></tr><tr><td><code>--closure &lt;path&gt;</code></td><td><code>backlog</code></td><td>Closure JSON file to apply.</td></tr><tr><td><code>--output &lt;path&gt;</code></td><td><code>live-data</code></td><td>Explicit live-data report path.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="generate-commands">Generate Commands<a href="#generate-commands" class="hash-link" aria-label="Direct link to Generate Commands" title="Direct link to Generate Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-11">Synopsis<a href="#synopsis-11" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/generate.mjs openapi-client</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/generate.mjs permissions</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run api:client:generate</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace backend run prebuild</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="actions-8">Actions<a href="#actions-8" class="hash-link" aria-label="Direct link to Actions" title="Direct link to Actions" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Action</th><th>Trigger</th><th>Behavior</th></tr></thead><tbody><tr><td><code>openapi-client</code></td><td><code>npm run api:client:generate</code></td><td>Regenerates OpenAPI JSON and Angular API client files. The npm alias builds backend first.</td></tr><tr><td><code>permissions</code></td><td>Backend <code>prebuild</code></td><td>Regenerates backend and frontend permission catalogs from <code>database/seed/permission-catalog.json</code>.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="outputs">Outputs<a href="#outputs" class="hash-link" aria-label="Direct link to Outputs" title="Direct link to Outputs" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Action</th><th>Output</th></tr></thead><tbody><tr><td><code>openapi-client</code></td><td>OpenAPI JSON and client files under frontend generated API directories.</td></tr><tr><td><code>permissions</code></td><td>Backend permission catalog and frontend route permission map generated files.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="evidence-and-governance-commands">Evidence and Governance Commands<a href="#evidence-and-governance-commands" class="hash-link" aria-label="Direct link to Evidence and Governance Commands" title="Direct link to Evidence and Governance Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-12">Synopsis<a href="#synopsis-12" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run evidence:check -- [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run governance:check</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs check evidence [options]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs governance check</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs evidence-step &lt;step-name&gt;</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="evidence">Evidence<a href="#evidence" class="hash-link" aria-label="Direct link to Evidence" title="Direct link to Evidence" translate="no">​</a></h3>
+<p><code>npm run evidence:check</code> runs the ordered evidence sequence defined in
+<code>scripts/lib/workspace-commands.mjs</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Step</th><th>Command</th></tr></thead><tbody><tr><td><code>api-alignment-sync</code></td><td><code>npm run api:alignment:sync</code></td></tr><tr><td><code>api-alignment-check</code></td><td><code>npm run api:alignment:check -- --json</code></td></tr><tr><td><code>db-alignment-check</code></td><td><code>npm run db:alignment:check -- --json</code></td></tr><tr><td><code>runtime-health</code></td><td><code>npm run health:json</code></td></tr><tr><td><code>lint-check</code></td><td><code>npm run lint:check</code></td></tr><tr><td><code>format-check</code></td><td><code>npm run format:check</code></td></tr><tr><td><code>typecheck</code></td><td><code>npm run typecheck</code></td></tr><tr><td><code>openapi-client-generate</code></td><td><code>npm run api:client:generate</code></td></tr><tr><td><code>build-all</code></td><td><code>npm run build</code></td></tr><tr><td><code>unit-tests</code></td><td><code>npm run test</code></td></tr><tr><td>backend-e2e</td><td><code>npm run test:e2e</code></td></tr><tr><td>frontend-e2e</td><td><code>npm run test:frontend:e2e</code></td></tr><tr><td><code>db-smoke</code></td><td><code>npm run test:db</code></td></tr><tr><td>backend-coverage</td><td><code>npm run test:coverage</code></td></tr><tr><td>frontend-coverage</td><td><code>npm run test:frontend:coverage</code></td></tr><tr><td><code>governance-check</code></td><td><code>npm run governance:check</code></td></tr><tr><td><code>qa-smoke-url-config</code></td><td><code>node scripts/qa.mjs smoke-urls --check</code></td></tr><tr><td><code>qa-smoke-live</code></td><td><code>npm run test:qa</code></td></tr></tbody></table>
+<p>The steps backend-e2e, <code>db-smoke</code>, and backend-coverage require
+<code>DATABASE_URL</code>. The QA smoke steps require the live base URL variables listed in
+the QA section.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="governance">Governance<a href="#governance" class="hash-link" aria-label="Direct link to Governance" title="Direct link to Governance" translate="no">​</a></h3>
+<p><code>npm run governance:check</code> validates runtime pins, lockfile layout, governance
+manifest controls, reverse-evidence succession, devai config, canonical root
+scripts, executable RLS spec posture, live docs path references, and current
+architecture state markers.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="health-commands">Health Commands<a href="#health-commands" class="hash-link" aria-label="Direct link to Health Commands" title="Direct link to Health Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-13">Synopsis<a href="#synopsis-13" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run health</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run health:json</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs health [--json]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="behavior">Behavior<a href="#behavior" class="hash-link" aria-label="Direct link to Behavior" title="Direct link to Behavior" translate="no">​</a></h3>
+<p>Health is non-destructive. It checks required workspace paths and runtime
+topology entries from <code>docs/gov/generated/runtime-topology.json</code>. Use <code>--json</code>
+for machine-readable status.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="deploy-commands">Deploy Commands<a href="#deploy-commands" class="hash-link" aria-label="Direct link to Deploy Commands" title="Direct link to Deploy Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-14">Synopsis<a href="#synopsis-14" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run deploy -- --dry-run</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run deploy -- --target &lt;stage|prod&gt; --stack &lt;name&gt; [--apply]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run deploy:plan</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run deploy:stage</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run deploy:prod</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs deploy [--target &lt;target&gt;] [--stack &lt;stack&gt;] [--dry-run] [--apply]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="options">Options<a href="#options" class="hash-link" aria-label="Direct link to Options" title="Direct link to Options" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Option</th><th>Default</th><th>Meaning</th></tr></thead><tbody><tr><td><code>--target &lt;target&gt;</code></td><td><code>stage</code></td><td>Deployment target label.</td></tr><tr><td><code>--mode &lt;mode&gt;</code></td><td><code>provision</code></td><td>Deployment mode. Valid values: <code>provision</code>, <code>artifacts</code>.</td></tr><tr><td><code>--stack &lt;stack&gt;</code></td><td><code>all</code></td><td>CDK stack group for provision. Valid values: <code>all</code>, <code>edge</code>, <code>shared</code>, <code>app</code>.</td></tr><tr><td><code>--dry-run</code></td><td>active by default</td><td>Print plan metadata and do not apply infrastructure or artifacts.</td></tr><tr><td><code>--apply</code></td><td>false</td><td>Applies CDK provision. Artifact apply remains blocked until release gates are set.</td></tr></tbody></table>
+<p>Provider selection is not parameterized. SGP deploy automation targets AWS only.
+Artifact mode accepts <code>--artifact-uri</code>, <code>--release-id</code>, and
+<code>--migration-evidence</code>, but apply is blocked until the postponed
+release/homologation gate is accepted.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="clean-commands">Clean Commands<a href="#clean-commands" class="hash-link" aria-label="Direct link to Clean Commands" title="Direct link to Clean Commands" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synopsis-15">Synopsis<a href="#synopsis-15" class="hash-link" aria-label="Direct link to Synopsis" title="Direct link to Synopsis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run clean -- [--dry-run] [all|root|backend|frontend]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/run.mjs clean [--dry-run] [all|root|backend|frontend]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">node scripts/clean.mjs [--dry-run] [all|root|backend|frontend]</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="targets">Targets<a href="#targets" class="hash-link" aria-label="Direct link to Targets" title="Direct link to Targets" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Target</th><th>Removes</th></tr></thead><tbody><tr><td><code>all</code></td><td>Root, backend, and frontend generated outputs. Default target.</td></tr><tr><td><code>root</code></td><td>Root dependency, cache, coverage, dist, generated, and TypeScript build-info outputs.</td></tr><tr><td><code>backend</code></td><td>Backend dependency, dist, generated, coverage, cache, ESLint cache, and TypeScript build-info outputs.</td></tr><tr><td><code>frontend</code></td><td>Frontend dependency, dist, Angular cache, coverage, Vite/cache, ESLint cache, and TypeScript build-info outputs.</td></tr></tbody></table>
+<p>Use <code>--dry-run</code> before destructive cleanup:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm run clean -- --dry-run backend</span><br></div></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="npm-script-index">Npm Script Index<a href="#npm-script-index" class="hash-link" aria-label="Direct link to Npm Script Index" title="Direct link to Npm Script Index" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="build-and-start">Build and Start<a href="#build-and-start" class="hash-link" aria-label="Direct link to Build and Start" title="Direct link to Build and Start" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Npm Script</th><th>Dispatcher Command</th></tr></thead><tbody><tr><td><code>build</code></td><td><code>node scripts/run.mjs build</code></td></tr><tr><td><code>build:admin</code></td><td><code>node scripts/run.mjs build admin</code></td></tr><tr><td><code>build:portal</code></td><td><code>node scripts/run.mjs build portal</code></td></tr><tr><td><code>build:backend</code></td><td><code>node scripts/run.mjs build backend</code></td></tr><tr><td><code>start</code></td><td><code>node scripts/run.mjs start</code></td></tr><tr><td><code>start:admin</code></td><td><code>node scripts/run.mjs start admin -- --host 127.0.0.1 --port 4200</code></td></tr><tr><td><code>start:portal</code></td><td><code>node scripts/run.mjs start portal -- --host 127.0.0.1 --port 4300</code></td></tr><tr><td><code>start:core-api</code></td><td><code>node scripts/run.mjs start core-api</code></td></tr><tr><td><code>start:portal-api</code></td><td><code>node scripts/run.mjs start portal-api</code></td></tr><tr><td><code>start:payroll-engine</code></td><td><code>node scripts/run.mjs start payroll-engine</code></td></tr><tr><td><code>start:integrations-worker</code></td><td><code>node scripts/run.mjs start integrations-worker</code></td></tr><tr><td><code>start:report-worker</code></td><td><code>node scripts/run.mjs start report-worker</code></td></tr><tr><td><code>start:report-service</code></td><td><code>node scripts/run.mjs start report-service</code></td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="quality-and-tests">Quality and Tests<a href="#quality-and-tests" class="hash-link" aria-label="Direct link to Quality and Tests" title="Direct link to Quality and Tests" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Npm Script</th><th>Dispatcher Command</th></tr></thead><tbody><tr><td><code>lint</code></td><td><code>node scripts/run.mjs lint</code></td></tr><tr><td><code>lint:check</code></td><td><code>node scripts/run.mjs lint check</code></td></tr><tr><td><code>format</code></td><td><code>node scripts/run.mjs format</code></td></tr><tr><td><code>format:check</code></td><td><code>node scripts/run.mjs format check</code></td></tr><tr><td><code>typecheck</code></td><td><code>node scripts/run.mjs typecheck</code></td></tr><tr><td><code>test</code></td><td><code>node scripts/run.mjs test</code></td></tr><tr><td><code>test:admin</code></td><td><code>node scripts/run.mjs test admin</code></td></tr><tr><td><code>test:portal</code></td><td><code>node scripts/run.mjs test portal</code></td></tr><tr><td><code>test:backend</code></td><td><code>node scripts/run.mjs test backend</code></td></tr><tr><td><code>test:db</code></td><td><code>node scripts/run.mjs test db</code></td></tr><tr><td><code>test:e2e</code></td><td><code>node scripts/run.mjs test e2e</code></td></tr><tr><td><code>test:admin:e2e</code></td><td><code>node scripts/run.mjs test admin-e2e</code></td></tr><tr><td><code>test:portal:e2e</code></td><td><code>node scripts/run.mjs test portal-e2e</code></td></tr><tr><td><code>test:frontend:e2e</code></td><td><code>node scripts/run.mjs test frontend-e2e</code></td></tr><tr><td><code>test:coverage</code></td><td><code>node scripts/run.mjs test coverage</code></td></tr><tr><td><code>test:frontend:coverage</code></td><td><code>node scripts/run.mjs test frontend-coverage</code></td></tr><tr><td><code>test:qa</code></td><td><code>node scripts/run.mjs test qa</code></td></tr><tr><td><code>test:qa:api</code></td><td><code>node scripts/run.mjs test qa-api</code></td></tr><tr><td><code>test:qa:frontend</code></td><td><code>node scripts/run.mjs test qa-frontend</code></td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="qa-audit-database-api-governance-and-operations">QA, Audit, Database, API, Governance, and Operations<a href="#qa-audit-database-api-governance-and-operations" class="hash-link" aria-label="Direct link to QA, Audit, Database, API, Governance, and Operations" title="Direct link to QA, Audit, Database, API, Governance, and Operations" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Npm Script</th><th>Dispatcher Command</th></tr></thead><tbody><tr><td><code>qa:bootstrap</code></td><td><code>node scripts/run.mjs qa bootstrap</code></td></tr><tr><td><code>qa:smoke:urls</code></td><td><code>node scripts/run.mjs qa smoke:urls</code></td></tr><tr><td><code>audit:schema</code></td><td><code>node scripts/run.mjs audit:schema</code></td></tr><tr><td><code>audit:api</code></td><td><code>node scripts/run.mjs audit:api</code></td></tr><tr><td><code>audit:fr</code></td><td><code>node scripts/run.mjs audit:fr</code></td></tr><tr><td><code>audit:tests</code></td><td><code>node scripts/run.mjs audit:tests</code></td></tr><tr><td><code>audit:hotspots</code></td><td><code>node scripts/run.mjs audit:hotspots</code></td></tr><tr><td><code>audit:backlog</code></td><td><code>node scripts/run.mjs audit:backlog</code></td></tr><tr><td><code>audit:pvd</code></td><td><code>node scripts/run.mjs audit:pvd</code></td></tr><tr><td><code>audit:all</code></td><td><code>node scripts/run.mjs audit:all</code></td></tr><tr><td><code>db</code></td><td><code>node scripts/run.mjs db</code></td></tr><tr><td><code>db:generate</code></td><td><code>node scripts/run.mjs db generate</code></td></tr><tr><td><code>db:migrate</code></td><td><code>node scripts/run.mjs db migrate</code></td></tr><tr><td><code>db:seed</code></td><td><code>node scripts/run.mjs db seed</code></td></tr><tr><td><code>db:smoke</code></td><td><code>node scripts/run.mjs db smoke</code></td></tr><tr><td><code>db:studio</code></td><td><code>node scripts/run.mjs db studio</code></td></tr><tr><td><code>db:fk-coverage:check</code></td><td><code>node scripts/run.mjs db fk-coverage check</code></td></tr><tr><td><code>db:fk-coverage:write</code></td><td><code>node scripts/run.mjs db fk-coverage write</code></td></tr><tr><td><code>db:push:guard</code></td><td><code>node scripts/run.mjs db push-guard</code></td></tr><tr><td><code>db:alignment:check</code></td><td><code>node scripts/run.mjs db alignment check</code></td></tr><tr><td><code>api:alignment:sync</code></td><td><code>node scripts/run.mjs api alignment sync</code></td></tr><tr><td><code>api:alignment:check</code></td><td><code>node scripts/run.mjs api alignment check</code></td></tr><tr><td><code>api:operation:check</code></td><td><code>node scripts/run.mjs api operation check</code></td></tr><tr><td><code>api:spec:check</code></td><td><code>node scripts/run.mjs api spec check</code></td></tr><tr><td><code>api:client:generate</code></td><td><code>node scripts/run.mjs api client generate</code></td></tr><tr><td><code>governance:check</code></td><td><code>node scripts/run.mjs governance check</code></td></tr><tr><td><code>evidence:check</code></td><td><code>node scripts/run.mjs check evidence</code></td></tr><tr><td><code>deploy</code></td><td><code>node scripts/run.mjs deploy</code></td></tr><tr><td><code>deploy:plan</code></td><td><code>node scripts/run.mjs deploy --dry-run</code></td></tr><tr><td><code>deploy:stage</code></td><td><code>node scripts/run.mjs deploy --target stage --stack all --dry-run</code></td></tr><tr><td><code>deploy:prod</code></td><td><code>node scripts/run.mjs deploy --target prod --stack all --dry-run</code></td></tr><tr><td><code>health</code></td><td><code>node scripts/run.mjs health</code></td></tr><tr><td><code>health:json</code></td><td><code>node scripts/run.mjs health --json</code></td></tr><tr><td><code>clean</code></td><td><code>node scripts/run.mjs clean</code></td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="see-also">See Also<a href="#see-also" class="hash-link" aria-label="Direct link to See Also" title="Direct link to See Also" translate="no">​</a></h2>
+<ul>
+<li class=""><code>docs/user/local-setup.md</code></li>
+<li class=""><code>docs/user/testing.md</code></li>
+<li class=""><code>docs/user/environment.md</code></li>
+<li class=""><code>scripts/README.md</code></li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/sgp/docs/user/runbooks/pii-plaintext-cutover"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">PII Plaintext Cutover Runbook</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/sgp/docs/user/sgp-boundary-runbook"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">SGP Boundary Architecture Runbook</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#name" class="table-of-contents__link toc-highlight">Name</a></li><li><a href="#synopsis" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#description" class="table-of-contents__link toc-highlight">Description</a></li><li><a href="#files" class="table-of-contents__link toc-highlight">Files</a></li><li><a href="#exit-status" class="table-of-contents__link toc-highlight">Exit Status</a></li><li><a href="#environment" class="table-of-contents__link toc-highlight">Environment</a></li><li><a href="#root-dispatcher" class="table-of-contents__link toc-highlight">Root Dispatcher</a><ul><li><a href="#name-1" class="table-of-contents__link toc-highlight">Name</a></li><li><a href="#synopsis-1" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#commands" class="table-of-contents__link toc-highlight">Commands</a></li></ul></li><li><a href="#build-commands" class="table-of-contents__link toc-highlight">Build Commands</a><ul><li><a href="#synopsis-2" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions" class="table-of-contents__link toc-highlight">Actions</a></li><li><a href="#parameters" class="table-of-contents__link toc-highlight">Parameters</a></li></ul></li><li><a href="#start-commands" class="table-of-contents__link toc-highlight">Start Commands</a><ul><li><a href="#synopsis-3" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions-1" class="table-of-contents__link toc-highlight">Actions</a></li><li><a href="#signals" class="table-of-contents__link toc-highlight">Signals</a></li></ul></li><li><a href="#quality-commands" class="table-of-contents__link toc-highlight">Quality Commands</a><ul><li><a href="#synopsis-4" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions-2" class="table-of-contents__link toc-highlight">Actions</a></li></ul></li><li><a href="#test-commands" class="table-of-contents__link toc-highlight">Test Commands</a><ul><li><a href="#synopsis-5" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions-3" class="table-of-contents__link toc-highlight">Actions</a></li></ul></li><li><a href="#database-commands" class="table-of-contents__link toc-highlight">Database Commands</a><ul><li><a href="#synopsis-6" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions-4" class="table-of-contents__link toc-highlight">Actions</a></li><li><a href="#parameters-1" class="table-of-contents__link toc-highlight">Parameters</a></li><li><a href="#notes" class="table-of-contents__link toc-highlight">Notes</a></li></ul></li><li><a href="#api-commands" class="table-of-contents__link toc-highlight">API Commands</a><ul><li><a href="#synopsis-7" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions-5" class="table-of-contents__link toc-highlight">Actions</a></li><li><a href="#parameters-2" class="table-of-contents__link toc-highlight">Parameters</a></li></ul></li><li><a href="#frontend-check-commands" class="table-of-contents__link toc-highlight">Frontend Check Commands</a><ul><li><a href="#synopsis-8" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions-6" class="table-of-contents__link toc-highlight">Actions</a></li></ul></li><li><a href="#qa-commands" class="table-of-contents__link toc-highlight">QA Commands</a><ul><li><a href="#synopsis-9" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#bootstrap-options" class="table-of-contents__link toc-highlight">Bootstrap Options</a></li><li><a href="#smoke-url-options" class="table-of-contents__link toc-highlight">Smoke URL Options</a></li><li><a href="#url-groups" class="table-of-contents__link toc-highlight">URL Groups</a></li></ul></li><li><a href="#audit-commands" class="table-of-contents__link toc-highlight">Audit Commands</a><ul><li><a href="#synopsis-10" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions-7" class="table-of-contents__link toc-highlight">Actions</a></li><li><a href="#common-options" class="table-of-contents__link toc-highlight">Common Options</a></li><li><a href="#action-specific-options" class="table-of-contents__link toc-highlight">Action-Specific Options</a></li></ul></li><li><a href="#generate-commands" class="table-of-contents__link toc-highlight">Generate Commands</a><ul><li><a href="#synopsis-11" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#actions-8" class="table-of-contents__link toc-highlight">Actions</a></li><li><a href="#outputs" class="table-of-contents__link toc-highlight">Outputs</a></li></ul></li><li><a href="#evidence-and-governance-commands" class="table-of-contents__link toc-highlight">Evidence and Governance Commands</a><ul><li><a href="#synopsis-12" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#evidence" class="table-of-contents__link toc-highlight">Evidence</a></li><li><a href="#governance" class="table-of-contents__link toc-highlight">Governance</a></li></ul></li><li><a href="#health-commands" class="table-of-contents__link toc-highlight">Health Commands</a><ul><li><a href="#synopsis-13" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#behavior" class="table-of-contents__link toc-highlight">Behavior</a></li></ul></li><li><a href="#deploy-commands" class="table-of-contents__link toc-highlight">Deploy Commands</a><ul><li><a href="#synopsis-14" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#options" class="table-of-contents__link toc-highlight">Options</a></li></ul></li><li><a href="#clean-commands" class="table-of-contents__link toc-highlight">Clean Commands</a><ul><li><a href="#synopsis-15" class="table-of-contents__link toc-highlight">Synopsis</a></li><li><a href="#targets" class="table-of-contents__link toc-highlight">Targets</a></li></ul></li><li><a href="#npm-script-index" class="table-of-contents__link toc-highlight">Npm Script Index</a><ul><li><a href="#build-and-start" class="table-of-contents__link toc-highlight">Build and Start</a></li><li><a href="#quality-and-tests" class="table-of-contents__link toc-highlight">Quality and Tests</a></li><li><a href="#qa-audit-database-api-governance-and-operations" class="table-of-contents__link toc-highlight">QA, Audit, Database, API, Governance, and Operations</a></li></ul></li><li><a href="#see-also" class="table-of-contents__link toc-highlight">See Also</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Authority</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng">Engineering</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/decisions">ADRs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/gov">Governance</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Operations</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/user">User docs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/runbooks/deploy-rollback">Runbooks</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/leg">Legacy archive</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built with Docusaurus. SGP documentation follows DEVAI docs-governance.</div></div></div></footer></div>
+</body>
+</html>

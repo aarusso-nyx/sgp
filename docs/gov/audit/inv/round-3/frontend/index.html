@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-gov/audit/inv/round-3/gov--audit--inv--round-3--frontend" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Frontend Inventory (Round 3) | SGP</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-3/frontend"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Frontend Inventory (Round 3) | SGP"><meta data-rh="true" name="description" content="Narrative wrapper. Authority for the admin app lives in frontend/src/ and the portal in frontend/portal/. Round-3 inherits round-2&#x27;s deep map at docs/work/round-2/03d-frontend-inventory.md; this file overlays the round-3 delta."><meta data-rh="true" property="og:description" content="Narrative wrapper. Authority for the admin app lives in frontend/src/ and the portal in frontend/portal/. Round-3 inherits round-2&#x27;s deep map at docs/work/round-2/03d-frontend-inventory.md; this file overlays the round-3 delta."><link data-rh="true" rel="canonical" href="https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-3/frontend"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-3/frontend" hreflang="en"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-3/frontend" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Frontend Inventory (Round 3)","item":"https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-3/frontend"}]}</script><link rel="stylesheet" href="/sgp/assets/css/styles.e3aa2f06.css">
+<script src="/sgp/assets/js/runtime~main.de3161a6.js" defer="defer"></script>
+<script src="/sgp/assets/js/main.ecb7e854.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/sgp/"><b class="navbar__title text--truncate">SGP</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/">Docs</a><a class="navbar__item navbar__link" href="/sgp/docs/eng">Engineering</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/gov">Governance</a><a class="navbar__item navbar__link" href="/sgp/docs/user">Operators</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/sgp/docs/"><span title="SGP Documentation Map" class="linkLabel_WmDU">SGP Documentation Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/architecture"><span title="Architecture" class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/decisions/TEMPLATE"><span title="ADRs" class="categoryLinkLabel_W154">ADRs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/api"><span title="Contracts" class="categoryLinkLabel_W154">Contracts</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/67-pdf-a-builder"><span title="Engineering" class="categoryLinkLabel_W154">Engineering</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/sgp/docs/gov"><span title="Governance" class="categoryLinkLabel_W154">Governance</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov"><span title="Governance Artifacts (docs/gov)" class="linkLabel_WmDU">Governance Artifacts (docs/gov)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/admin-menu-install-plan"><span title="Admin Menu Install Plan" class="linkLabel_WmDU">Admin Menu Install Plan</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/api-surface"><span title="API Surface" class="linkLabel_WmDU">API Surface</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/backlog-ledger"><span title="Backlog Ledger" class="linkLabel_WmDU">Backlog Ledger</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/diag/round-1/fr-delta"><span title="diag" class="categoryLinkLabel_W154">diag</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/efd-reinf-r4000-proof"><span title="EFD-Reinf R-4000 Proof" class="linkLabel_WmDU">EFD-Reinf R-4000 Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/fr-promotion-proof"><span title="Functional Requisite Promotion Proof" class="linkLabel_WmDU">Functional Requisite Promotion Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/functional-requisites"><span title="Functional Requisites" class="linkLabel_WmDU">Functional Requisites</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit"><span title="Audit Governance" class="linkLabel_WmDU">Audit Governance</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/sgp/docs/gov/audit/inv/round-10/backend"><span title="inv" class="categoryLinkLabel_W154">inv</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-10/backend"><span title="round-10" class="categoryLinkLabel_W154">round-10</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-11/test-coverage-map"><span title="round-11" class="categoryLinkLabel_W154">round-11</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-13/backend"><span title="round-13" class="categoryLinkLabel_W154">round-13</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-14/test-coverage-map"><span title="round-14" class="categoryLinkLabel_W154">round-14</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/sgp/docs/gov/audit/inv/round-3/backend"><span title="round-3" class="categoryLinkLabel_W154">round-3</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-3/backend"><span title="Backend Inventory (Round 3)" class="linkLabel_WmDU">Backend Inventory (Round 3)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-3/db"><span title="DB Inventory (Round 3)" class="linkLabel_WmDU">DB Inventory (Round 3)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/gov/audit/inv/round-3/frontend"><span title="Frontend Inventory (Round 3)" class="linkLabel_WmDU">Frontend Inventory (Round 3)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-3/legacy-parity"><span title="Legacy Parity (Round 3)" class="linkLabel_WmDU">Legacy Parity (Round 3)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-3/test-coverage-map"><span title="Test Coverage Map" class="linkLabel_WmDU">Test Coverage Map</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-3/tests"><span title="Test Inventory (Round 3)" class="linkLabel_WmDU">Test Inventory (Round 3)</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-4/backend"><span title="round-4" class="categoryLinkLabel_W154">round-4</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-5/test-coverage-map"><span title="round-5" class="categoryLinkLabel_W154">round-5</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-6/backend"><span title="round-6" class="categoryLinkLabel_W154">round-6</span></a></div></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/lgpd-dpo-dsar-proof"><span title="LGPD DPO and DSAR Proof" class="linkLabel_WmDU">LGPD DPO and DSAR Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/lgpd-international-transfer-proof"><span title="LGPD International Transfer Proof" class="linkLabel_WmDU">LGPD International Transfer Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/lgpd-ropa-rcis-proof"><span title="LGPD ROPA and RCIS Proof" class="linkLabel_WmDU">LGPD ROPA and RCIS Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/lint-thresholds"><span title="Lint And Duplication Thresholds" class="linkLabel_WmDU">Lint And Duplication Thresholds</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/mvp-fr-scope-proof"><span title="MVP Functional Requisite Scope Proof" class="linkLabel_WmDU">MVP Functional Requisite Scope Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/non-functional-requisites"><span title="Non-Functional Requisites Ledger" class="linkLabel_WmDU">Non-Functional Requisites Ledger</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/phase-9-closure"><span title="Phase 9 Closure Compare" class="linkLabel_WmDU">Phase 9 Closure Compare</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/portaria-671-time-export-proof"><span title="Portaria 671 Time Export Proof" class="linkLabel_WmDU">Portaria 671 Time Export Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/property-based-test-inventory"><span title="Property-Based Test Inventory" class="linkLabel_WmDU">Property-Based Test Inventory</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/recruitment-public-concurso-lgpd-proof"><span title="Public Concurso Registration and LGPD Consent Proof" class="linkLabel_WmDU">Public Concurso Registration and LGPD Consent Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/schema-digest"><span title="Schema Digest" class="linkLabel_WmDU">Schema Digest</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/sgp-only-b-closure"><span title="SGP-Only B Closure Proof" class="linkLabel_WmDU">SGP-Only B Closure Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/test-confidence-proof"><span title="Test Confidence Proof" class="linkLabel_WmDU">Test Confidence Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/type-safety-proof"><span title="Type Safety Proof" class="linkLabel_WmDU">Type Safety Proof</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/wave-D/coordination-ledger"><span title="wave-D" class="categoryLinkLabel_W154">wave-D</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/wave-E/external-package-status"><span title="wave-E" class="categoryLinkLabel_W154">wave-E</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/backend-surface-notes"><span title="Backend Surface Notes Evidence" class="linkLabel_WmDU">Backend Surface Notes Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-closure"><span title="Database Alignment Closure Evidence" class="linkLabel_WmDU">Database Alignment Closure Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-phase-1"><span title="Database Alignment Evidence Phase 1" class="linkLabel_WmDU">Database Alignment Evidence Phase 1</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-phase-2"><span title="Database Alignment Evidence Phase 2" class="linkLabel_WmDU">Database Alignment Evidence Phase 2</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-phase-3"><span title="Database Alignment Evidence Phase 3" class="linkLabel_WmDU">Database Alignment Evidence Phase 3</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-phase-4"><span title="Database Alignment Evidence Phase 4" class="linkLabel_WmDU">Database Alignment Evidence Phase 4</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/deferred-decision-ledger"><span title="Deferred Decision Ledger Evidence" class="linkLabel_WmDU">Deferred Decision Ledger Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/implementation-status"><span title="Implementation Status Evidence" class="linkLabel_WmDU">Implementation Status Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/mvp-scope-ledger"><span title="MVP Scope Ledger" class="linkLabel_WmDU">MVP Scope Ledger</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/pii-cutover-dry-run-2026-05"><span title="PII Plaintext Cutover Dry-Run Evidence - 2026-05" class="linkLabel_WmDU">PII Plaintext Cutover Dry-Run Evidence - 2026-05</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/release-homologation-gate-bundle"><span title="Release And Homologation Gate Bundle" class="linkLabel_WmDU">Release And Homologation Gate Bundle</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/repository-discipline"><span title="Repository Discipline Evidence" class="linkLabel_WmDU">Repository Discipline Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/compliance/scoring"><span title="Compliance Scoring" class="linkLabel_WmDU">Compliance Scoring</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/health/preflight"><span title="Preflight Checks" class="linkLabel_WmDU">Preflight Checks</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B0-audit-phase"><span title="B0 — Audit Phase (reusable, per-round)" class="linkLabel_WmDU">B0 — Audit Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B1-compile-backlog-phase"><span title="B1 — Compile Backlog Phase (reusable, per-round)" class="linkLabel_WmDU">B1 — Compile Backlog Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B2-materialize-plan-phase"><span title="B2 — Materialize Plan Phase (reusable, per-round)" class="linkLabel_WmDU">B2 — Materialize Plan Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B3-execute-and-track-phase"><span title="B3 — Execute and Track Phase (reusable, per-round)" class="linkLabel_WmDU">B3 — Execute and Track Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B4-compare-and-scorecard-phase"><span title="B4 — Compare And Scorecard Phase (reusable, per-round)" class="linkLabel_WmDU">B4 — Compare And Scorecard Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/feature-completeness"><span title="gov--prompts--feature-completeness" class="linkLabel_WmDU">gov--prompts--feature-completeness</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/repo-quality-assessment"><span title="Repository Quality Assessment &amp; Scorecard — Unified Prompt" class="linkLabel_WmDU">Repository Quality Assessment &amp; Scorecard — Unified Prompt</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/ops/observability"><span title="Operations" class="categoryLinkLabel_W154">Operations</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/esocial/00-index"><span title="Schemas" class="categoryLinkLabel_W154">Schemas</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/user/dependency-management"><span title="User" class="categoryLinkLabel_W154">User</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/leg/audit/plan"><span title="Legacy" class="categoryLinkLabel_W154">Legacy</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/legal/clt-rescisao-aviso-fgts"><span title="References" class="categoryLinkLabel_W154">References</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/sgp/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Governance</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">inv</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">round-3</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Frontend Inventory (Round 3)</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Frontend Inventory (Round 3)</h1></header>
+<p>Narrative wrapper. Authority for the admin app lives in <a class="" href="/sgp/frontend/src/"><code>frontend/src/</code></a> and the portal in <a class="" href="/sgp/frontend/portal/"><code>frontend/portal/</code></a>. Round-3 inherits round-2&#x27;s deep map at <a class="" href="/sgp/docs/work/round-2/03d-frontend-inventory.md"><code>docs/work/round-2/03d-frontend-inventory.md</code></a>; this file overlays the round-3 delta.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="topology-snapshot-at-head-50dc67c">Topology snapshot at HEAD <code>50dc67c</code><a href="#topology-snapshot-at-head-50dc67c" class="hash-link" aria-label="Direct link to topology-snapshot-at-head-50dc67c" title="Direct link to topology-snapshot-at-head-50dc67c" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Aspect</th><th style="text-align:right">Admin (<code>frontend/src</code>)</th><th style="text-align:right">Portal (<code>frontend/portal</code>)</th><th>Source</th></tr></thead><tbody><tr><td>Framework</td><td style="text-align:right">Angular <code>^21.2.0</code></td><td style="text-align:right">Angular <code>^21.2.0</code></td><td><a class="" href="/sgp/frontend/package.json"><code>frontend/package.json</code></a></td></tr><tr><td><code>*.ts</code> files (excl. dist/node_modules)</td><td style="text-align:right">21 948 LOC</td><td style="text-align:right">2 723 LOC</td><td><code>find</code> over <code>frontend/src</code> and <code>frontend/portal</code></td></tr><tr><td>Top-level under <code>src/app/</code></td><td style="text-align:right"><code>core</code>, <code>features</code>, <code>reports</code>, <code>shared</code>, <code>shared-platform</code>, plus <code>app.config.ts</code>, <code>app.routes.ts</code></td><td style="text-align:right"><code>core</code>, <code>pages</code>, <code>app.config.ts</code>, <code>app.routes.ts</code></td><td><code>ls frontend/src/app/</code> and <code>ls frontend/portal/src/app/</code></td></tr><tr><td>Feature directories</td><td style="text-align:right">23 (under <code>features/</code>)</td><td style="text-align:right">8 (under <code>pages/</code>)</td><td>see Feature breakdown</td></tr><tr><td>Generated OpenAPI client files</td><td style="text-align:right">3 (admin: <code>openapi-client.ts</code> + <code>openapi-core.json</code> 67 297 LOC + <code>openapi-portal.json</code> 7 588 LOC)</td><td style="text-align:right">2 (portal: <code>openapi-client.ts</code> + <code>openapi-portal.json</code> 7 588 LOC)</td><td><a class="" href="/sgp/frontend/src/app/core/api/generated/"><code>frontend/src/app/core/api/generated/</code></a>, <a class="" href="/sgp/frontend/portal/src/app/core/api/generated/"><code>frontend/portal/src/app/core/api/generated/</code></a></td></tr><tr><td>Lazy routes (<code>loadChildren</code>/<code>loadComponent</code>)</td><td style="text-align:right">2 detected via <code>grep</code> of <code>app.routes.ts</code> siblings</td><td style="text-align:right">—</td><td><code>app.routes.ts</code></td></tr></tbody></table>
+<p>Round-3 LOC delta vs round-2: <strong>−552 (−2.2 %)</strong> combined frontend <code>*.ts</code>. The decrease is consistent with R3-020 (dead NgModule cleanup) + R3-022 (async pipe / signals modernization slice). No new top-level feature directory.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="admin-feature-breakdown-under-frontendsrcappfeatures">Admin feature breakdown (under <a class="" href="/sgp/frontend/src/app/features/"><code>frontend/src/app/features/</code></a>)<a href="#admin-feature-breakdown-under-frontendsrcappfeatures" class="hash-link" aria-label="Direct link to admin-feature-breakdown-under-frontendsrcappfeatures" title="Direct link to admin-feature-breakdown-under-frontendsrcappfeatures" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:right">Feature</th><th style="text-align:right"><code>*.ts</code> files</th><th>Notes</th></tr></thead><tbody><tr><td style="text-align:right"><code>folha-pagamento/</code></td><td style="text-align:right">32</td><td>Largest feature. Payroll runs, contracheque, importadores, R2-50 fixtures consumed via API.</td></tr><tr><td style="text-align:right"><code>rh/</code></td><td style="text-align:right">25</td><td>Employee lifecycle. Includes new R2-75 organic-definition surface.</td></tr><tr><td style="text-align:right"><code>ponto/</code></td><td style="text-align:right">20</td><td>Time, journada, biometria, face.</td></tr><tr><td style="text-align:right"><code>esocial/</code></td><td style="text-align:right">16</td><td>Event monitoring, S-1xxx/S-2xxx UI.</td></tr><tr><td style="text-align:right"><code>saude/</code></td><td style="text-align:right">10</td><td>SST.</td></tr><tr><td style="text-align:right"><code>gestao/</code></td><td style="text-align:right">9</td><td>Master-data.</td></tr><tr><td style="text-align:right"><code>portal/</code></td><td style="text-align:right">9</td><td>Admin-side portal.</td></tr><tr><td style="text-align:right"><code>admin/</code></td><td style="text-align:right">8</td><td>Admin shell.</td></tr><tr><td style="text-align:right"><code>recrutamento/</code></td><td style="text-align:right">8</td><td>Banca, banco-talentos, prova-online.</td></tr><tr><td style="text-align:right"><code>tce/</code></td><td style="text-align:right">8</td><td>TCE event monitoring.</td></tr><tr><td style="text-align:right"><code>portal-publico/</code></td><td style="text-align:right">7</td><td>Transparency landing.</td></tr><tr><td style="text-align:right"><code>fiscal/</code></td><td style="text-align:right">6</td><td>DCTFWeb, EFD-Reinf, DIRF, GPS, SIAFIC.</td></tr><tr><td style="text-align:right"><code>portal-empregado/</code></td><td style="text-align:right">4</td><td>Employee self-service.</td></tr><tr><td style="text-align:right"><code>avaliacao/</code></td><td style="text-align:right">3</td><td>Performance/career.</td></tr><tr><td style="text-align:right"><code>publico/</code></td><td style="text-align:right">3</td><td>LAI requests.</td></tr><tr><td style="text-align:right"><code>security/</code></td><td style="text-align:right">2</td><td>RBAC management.</td></tr><tr><td style="text-align:right"><code>auditoria/</code></td><td style="text-align:right">2</td><td>Audit log viewer.</td></tr><tr><td style="text-align:right"><code>admin-feature/</code></td><td style="text-align:right">2</td><td>Wrapper.</td></tr><tr><td style="text-align:right"><code>portal-transparencia/</code></td><td style="text-align:right">1</td><td>Transparency listings.</td></tr><tr><td style="text-align:right"><code>convenio/</code>, <code>relatorio/</code>, <code>shared-platform/</code></td><td style="text-align:right">0 each</td><td>Empty placeholders (NgModule cleanup candidates if not stubs).</td></tr></tbody></table>
+<p>Total: <strong>175</strong> <code>*.ts</code> files under <code>features/</code>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="portal-pages-breakdown-under-frontendportalsrcapppages">Portal pages breakdown (under <a class="" href="/sgp/frontend/portal/src/app/pages/"><code>frontend/portal/src/app/pages/</code></a>)<a href="#portal-pages-breakdown-under-frontendportalsrcapppages" class="hash-link" aria-label="Direct link to portal-pages-breakdown-under-frontendportalsrcapppages" title="Direct link to portal-pages-breakdown-under-frontendportalsrcapppages" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:right">Page</th><th style="text-align:right"><code>*.ts</code> files</th><th>Notes</th></tr></thead><tbody><tr><td style="text-align:right"><code>licencas/</code></td><td style="text-align:right">4</td><td>Licenses CRUD.</td></tr><tr><td style="text-align:right"><code>meus-dados/</code></td><td style="text-align:right">3</td><td>Personal data + LGPD DSAR entrypoint.</td></tr><tr><td style="text-align:right"><code>contracheque/</code></td><td style="text-align:right">2</td><td>Payslip viewer.</td></tr><tr><td style="text-align:right"><code>ferias/</code></td><td style="text-align:right">2</td><td>Vacation request.</td></tr><tr><td style="text-align:right"><code>govbr-sign-callback/</code></td><td style="text-align:right">2</td><td>GovBR sandbox sign callback.</td></tr><tr><td style="text-align:right"><code>portal-shell/</code></td><td style="text-align:right">1</td><td>Layout.</td></tr><tr><td style="text-align:right"><code>portal-home/</code></td><td style="text-align:right">1</td><td>Landing.</td></tr><tr><td style="text-align:right"><code>portal-feature-page/</code></td><td style="text-align:right">1</td><td>Generic shell.</td></tr><tr><td style="text-align:right"><code>ponto/</code></td><td style="text-align:right">1</td><td>Time-card.</td></tr></tbody></table>
+<p>Total under <code>pages/</code>: <strong>17</strong> <code>*.ts</code> files.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="round-3-frontend-deltas">Round-3 frontend deltas<a href="#round-3-frontend-deltas" class="hash-link" aria-label="Direct link to Round-3 frontend deltas" title="Direct link to Round-3 frontend deltas" translate="no">​</a></h2>
+<p>The closure-wave commit <code>c9d99ee</code> is the only round-3 commit that touched frontend source (plus the regenerated OpenAPI clients in <a class="" href="/sgp/docs/gov/audit/diag/round-3/hotspots"><code>docs/gov/audit/diag/round-3/hotspots.md</code></a> §&quot;frontend/src/app/core/api/generated/openapi-core.json&quot; — <code>+51 217 / −4 976</code> from R3-003 OpenAPI 3.1 contract regen).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Backlog ID</th><th>Landing surface</th><th>Evidence</th></tr></thead><tbody><tr><td>R3-020</td><td>Dead NgModule cleanup</td><td>LOC drop −552 vs round-2 across <code>frontend/src</code> and <code>frontend/portal</code></td></tr><tr><td>R3-021</td><td>Frontend coverage + Playwright gate</td><td>NFR-010 <code>DONE</code> (<a class="" href="/sgp/frontend/angular.json">frontend/angular.json:81</a>, <a class="" href="/sgp/.github/workflows/source-ci.yml">.github/workflows/source-ci.yml:110</a>); NFR-011 <code>DONE</code> (<a class="" href="/sgp/.github/workflows/source-ci.yml">.github/workflows/source-ci.yml:113-122</a>)</td></tr><tr><td>R3-022</td><td>Async pipe / signals modernization slice</td><td>LOC churn within <code>features/folha-pagamento</code>, <code>features/rh</code>, <code>features/ponto</code></td></tr><tr><td>R3-023</td><td>Tipos de Férias + Legislação registry parity</td><td>new entries in <code>master-data</code> consuming surface</td></tr><tr><td>R3-024</td><td>RH small-parity</td><td><code>features/rh/</code> updates</td></tr><tr><td>R3-025</td><td>RH report + talent</td><td><code>features/recrutamento/banco-talentos/</code></td></tr></tbody></table>
+<p>The 030–053 R3-* prompts are backend-/governance-leaning; they do not require a frontend surface in round-3.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="httpclient-call-sites">HttpClient call sites<a href="#httpclient-call-sites" class="hash-link" aria-label="Direct link to HttpClient call sites" title="Direct link to HttpClient call sites" translate="no">​</a></h2>
+<ul>
+<li class="">Single shared API client: <a class="" href="/sgp/frontend/src/app/core/api/api-client.ts">frontend/src/app/core/api/api-client.ts:1-20</a> — wraps <code>HttpClient</code> / <code>HttpParams</code>.</li>
+<li class="">All feature-level service calls flow through this client (verified by <code>grep -rE &#x27;HttpClient&#x27; frontend/src/app/features --include=&#x27;*.ts&#x27;</code> returns mostly type imports; direct injection is centralized).</li>
+<li class="">Generated OpenAPI client: <a class="" href="/sgp/frontend/src/app/core/api/generated/openapi-client.ts"><code>frontend/src/app/core/api/generated/openapi-client.ts</code></a> regenerated in round-3 from the OpenAPI 3.1 doc landed in R3-003.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="i18n--a11y--signals-posture">i18n / a11y / signals posture<a href="#i18n--a11y--signals-posture" class="hash-link" aria-label="Direct link to i18n / a11y / signals posture" title="Direct link to i18n / a11y / signals posture" translate="no">​</a></h2>
+<ul>
+<li class="">i18n posture refresh: still pt-BR-only. <a class="" href="/sgp/scripts/check-frontend.mjs"><code>scripts/check-frontend.mjs</code></a> (folded in <code>134460b</code> from the previous separate <code>check-frontend-i18n.mjs</code> sibling) carries the i18n drift gate.</li>
+<li class="">a11y posture: round-2 noted partial coverage; no targeted a11y items landed in round-3.</li>
+<li class="">Signals/OnPush coverage: increased per R3-022 in <code>features/folha-pagamento</code>, <code>features/rh</code>, <code>features/ponto</code>. No global metric tracked — code-quality scoring continues round-2&#x27;s posture.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="e2e-posture">E2E posture<a href="#e2e-posture" class="hash-link" aria-label="Direct link to E2E posture" title="Direct link to E2E posture" translate="no">​</a></h2>
+<p>Playwright admin + portal configs at <a class="" href="/sgp/tests/playwright.admin.config.ts"><code>tests/playwright.admin.config.ts</code></a> and <a class="" href="/sgp/tests/playwright.portal.config.ts"><code>tests/playwright.portal.config.ts</code></a>. Round-3 commit <code>50dc67c</code> simplified node + playwright config layout (small dispatcher cleanup, no behavioral change).</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/sgp/docs/gov/audit/inv/round-3/db"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">DB Inventory (Round 3)</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/sgp/docs/gov/audit/inv/round-3/legacy-parity"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Legacy Parity (Round 3)</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#topology-snapshot-at-head-50dc67c" class="table-of-contents__link toc-highlight">Topology snapshot at HEAD <code>50dc67c</code></a></li><li><a href="#admin-feature-breakdown-under-frontendsrcappfeatures" class="table-of-contents__link toc-highlight">Admin feature breakdown (under <code>frontend/src/app/features/</code>)</a></li><li><a href="#portal-pages-breakdown-under-frontendportalsrcapppages" class="table-of-contents__link toc-highlight">Portal pages breakdown (under <code>frontend/portal/src/app/pages/</code>)</a></li><li><a href="#round-3-frontend-deltas" class="table-of-contents__link toc-highlight">Round-3 frontend deltas</a></li><li><a href="#httpclient-call-sites" class="table-of-contents__link toc-highlight">HttpClient call sites</a></li><li><a href="#i18n--a11y--signals-posture" class="table-of-contents__link toc-highlight">i18n / a11y / signals posture</a></li><li><a href="#e2e-posture" class="table-of-contents__link toc-highlight">E2E posture</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Authority</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng">Engineering</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/decisions">ADRs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/gov">Governance</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Operations</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/user">User docs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/runbooks/deploy-rollback">Runbooks</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/leg">Legacy archive</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built with Docusaurus. SGP documentation follows DEVAI docs-governance.</div></div></div></footer></div>
+</body>
+</html>

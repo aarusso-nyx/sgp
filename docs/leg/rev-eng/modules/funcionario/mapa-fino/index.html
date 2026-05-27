@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-leg/rev-eng/modules/funcionario/leg--rev-eng--modules--funcionario--mapa-fino" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Mapa fino do domínio FUNCIONARIO | SGP</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://aarusso-nyx.github.io/sgp/docs/leg/rev-eng/modules/funcionario/mapa-fino"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Mapa fino do domínio FUNCIONARIO | SGP"><meta data-rh="true" name="description" content="1. Escopo e fontes"><meta data-rh="true" property="og:description" content="1. Escopo e fontes"><link data-rh="true" rel="canonical" href="https://aarusso-nyx.github.io/sgp/docs/leg/rev-eng/modules/funcionario/mapa-fino"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/leg/rev-eng/modules/funcionario/mapa-fino" hreflang="en"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/leg/rev-eng/modules/funcionario/mapa-fino" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Legacy Reverse Evidence Archive","item":"https://aarusso-nyx.github.io/sgp/docs/leg/rev-eng"},{"@type":"ListItem","position":2,"name":"Module Deep Docs","item":"https://aarusso-nyx.github.io/sgp/docs/leg/rev-eng/modules"},{"@type":"ListItem","position":3,"name":"Mapa fino do domínio FUNCIONARIO","item":"https://aarusso-nyx.github.io/sgp/docs/leg/rev-eng/modules/funcionario/mapa-fino"}]}</script><link rel="stylesheet" href="/sgp/assets/css/styles.e3aa2f06.css">
+<script src="/sgp/assets/js/runtime~main.de3161a6.js" defer="defer"></script>
+<script src="/sgp/assets/js/main.ecb7e854.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/sgp/"><b class="navbar__title text--truncate">SGP</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/">Docs</a><a class="navbar__item navbar__link" href="/sgp/docs/eng">Engineering</a><a class="navbar__item navbar__link" href="/sgp/docs/gov">Governance</a><a class="navbar__item navbar__link" href="/sgp/docs/user">Operators</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/sgp/docs/"><span title="SGP Documentation Map" class="linkLabel_WmDU">SGP Documentation Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/architecture"><span title="Architecture" class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/decisions/TEMPLATE"><span title="ADRs" class="categoryLinkLabel_W154">ADRs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/api"><span title="Contracts" class="categoryLinkLabel_W154">Contracts</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/67-pdf-a-builder"><span title="Engineering" class="categoryLinkLabel_W154">Engineering</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/gov"><span title="Governance" class="categoryLinkLabel_W154">Governance</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/ops/observability"><span title="Operations" class="categoryLinkLabel_W154">Operations</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/esocial/00-index"><span title="Schemas" class="categoryLinkLabel_W154">Schemas</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/user/dependency-management"><span title="User" class="categoryLinkLabel_W154">User</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/sgp/docs/leg/audit/plan"><span title="Legacy" class="categoryLinkLabel_W154">Legacy</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/audit/plan"><span title="audit" class="categoryLinkLabel_W154">audit</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/handoff/agent-handoff"><span title="handoff" class="categoryLinkLabel_W154">handoff</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg"><span title="Legacy Documentation Archive" class="linkLabel_WmDU">Legacy Documentation Archive</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/old-specs/integrations"><span title="old-specs" class="categoryLinkLabel_W154">old-specs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/sgp/docs/leg/rev-eng"><span title="Legacy Reverse Evidence Archive" class="categoryLinkLabel_W154">Legacy Reverse Evidence Archive</span></a><button aria-label="Collapse sidebar category &#x27;Legacy Reverse Evidence Archive&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/api-calls"><span title="Backend API Call Catalog" class="linkLabel_WmDU">Backend API Call Catalog</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/application-overview"><span title="SGP Application Overview" class="linkLabel_WmDU">SGP Application Overview</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/rev-eng/data-archaeology/dumps-achados-operacionais"><span title="data-archaeology" class="categoryLinkLabel_W154">data-archaeology</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/database-model"><span title="Inferred Database Model" class="linkLabel_WmDU">Inferred Database Model</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/deprecation-status"><span title="Legacy Reverse Deprecation Coverage" class="linkLabel_WmDU">Legacy Reverse Deprecation Coverage</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/feature-catalog"><span title="Feature Catalog" class="linkLabel_WmDU">Feature Catalog</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/handoff-2026-04-19"><span title="SGP Handoff (2026-04-19)" class="linkLabel_WmDU">SGP Handoff (2026-04-19)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/legacy-assumptions"><span title="Unverified Legacy Assumptions" class="linkLabel_WmDU">Unverified Legacy Assumptions</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/sgp/docs/leg/rev-eng/modules"><span title="Module Deep Docs" class="categoryLinkLabel_W154">Module Deep Docs</span></a><button aria-label="Collapse sidebar category &#x27;Module Deep Docs&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/auditoria"><span title="Module: Auditoria" class="linkLabel_WmDU">Module: Auditoria</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/convenio"><span title="Module: Convênio" class="linkLabel_WmDU">Module: Convênio</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/folha/calculo/formulas-dependencias-analise"><span title="folha" class="categoryLinkLabel_W154">folha</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/folha-de-pgt"><span title="Module: Folha de Pgt" class="linkLabel_WmDU">Module: Folha de Pgt</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/funcionario/cargo-funcao-vinculo-elegibilidade"><span title="funcionario" class="categoryLinkLabel_W154">funcionario</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/funcionario/cargo-funcao-vinculo-elegibilidade"><span title="Funcionário, cargo, função, vínculo e elegibilidade de verbas" class="linkLabel_WmDU">Funcionário, cargo, função, vínculo e elegibilidade de verbas</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/funcionario/decomposicao-subtopicos"><span title="FUNCIONARIO: decomposição em sub-tópicos funcionais" class="linkLabel_WmDU">FUNCIONARIO: decomposição em sub-tópicos funcionais</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/funcionario/mapa-fino"><span title="Mapa fino do domínio FUNCIONARIO" class="linkLabel_WmDU">Mapa fino do domínio FUNCIONARIO</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/funcionario/pessoa-x-vinculo"><span title="FUNCIONARIO: decomposição focal em Pessoa x Vínculo" class="linkLabel_WmDU">FUNCIONARIO: decomposição focal em Pessoa x Vínculo</span></a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/gestao"><span title="Module: Gestão" class="linkLabel_WmDU">Module: Gestão</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/modulo-rh"><span title="Module: Módulo RH" class="linkLabel_WmDU">Module: Módulo RH</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/pericias/decomposicao-subtopicos"><span title="pericias" class="categoryLinkLabel_W154">pericias</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/recadastramento/campanha-x-atendimento"><span title="recadastramento" class="categoryLinkLabel_W154">recadastramento</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/recrutamento/decomposicao-subtopicos"><span title="recrutamento" class="categoryLinkLabel_W154">recrutamento</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/relatorio"><span title="Module: Relatório" class="linkLabel_WmDU">Module: Relatório</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/modules/unmapped"><span title="Module: Unmapped" class="linkLabel_WmDU">Module: Unmapped</span></a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/permission-gap-report"><span title="Permission Gap Report" class="linkLabel_WmDU">Permission Gap Report</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/sitemap"><span title="Sitemap" class="linkLabel_WmDU">Sitemap</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg/rev-eng/workflows"><span title="Workflows" class="linkLabel_WmDU">Workflows</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/sgp/docs/leg/sql-reference"><span title="SQL Reference Archive" class="categoryLinkLabel_W154">SQL Reference Archive</span></a><button aria-label="Expand sidebar category &#x27;SQL Reference Archive&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/legal/clt-rescisao-aviso-fgts"><span title="References" class="categoryLinkLabel_W154">References</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/sgp/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Legacy</span></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/sgp/docs/leg/rev-eng"><span>Legacy Reverse Evidence Archive</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/sgp/docs/leg/rev-eng/modules"><span>Module Deep Docs</span></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">funcionario</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Mapa fino do domínio FUNCIONARIO</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Mapa fino do domínio FUNCIONARIO</h1></header>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-escopo-e-fontes">1. Escopo e fontes<a href="#1-escopo-e-fontes" class="hash-link" aria-label="Direct link to 1. Escopo e fontes" title="Direct link to 1. Escopo e fontes" translate="no">​</a></h2>
+<p>Este documento aprofunda exclusivamente o domínio <strong>FUNCIONARIO / SERVIDOR</strong> do legado, tratando <code>funcionário</code> e <code>servidor</code> como sinônimos funcionais, já que a terminologia é parametrizável na aplicação.</p>
+<p>Fontes priorizadas nesta leitura:</p>
+<ul>
+<li class=""><code>docs/01-visao-geral-legado.md</code></li>
+<li class=""><code>docs/02-inventario-rotas-front.csv</code></li>
+<li class=""><code>docs/03-inventario-endpoints-backend.csv</code></li>
+<li class=""><code>rhClient/client/app/page/funcionario/*</code></li>
+<li class=""><code>FuncionarioController</code></li>
+<li class=""><code>FuncionarioObservacaoGeralController</code></li>
+<li class=""><code>FuncionarioVerbasController</code></li>
+<li class=""><code>HistoricoSituacaoFuncionalController</code></li>
+<li class=""><code>PosseController</code></li>
+<li class=""><code>LotacaoController</code></li>
+<li class=""><code>TransferenciaFuncionarioController</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-papel-do-domínio-no-produto">2. Papel do domínio no produto<a href="#2-papel-do-domínio-no-produto" class="hash-link" aria-label="Direct link to 2. Papel do domínio no produto" title="Direct link to 2. Papel do domínio no produto" translate="no">​</a></h2>
+<p>O domínio <code>FUNCIONARIO</code> é o <strong>cadastro mestre da vida funcional</strong>. Ele concentra:</p>
+<ul>
+<li class="">identificação civil e documental;</li>
+<li class="">lotação e vinculação organizacional;</li>
+<li class="">dados de admissão, posse, cargo, função e enquadramento remuneratório;</li>
+<li class="">situação funcional corrente;</li>
+<li class="">dependências imediatas com folha, contracheque, transferências, posse, lotação, férias, licenças e dossiê documental;</li>
+<li class="">emissão de ficha funcional consolidada.</li>
+</ul>
+<p>Na prática, quase todo o ERP de RH depende deste cadastro para localizar a pessoa, o vínculo, a unidade de exercício e a situação funcional vigente.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-atores-funcionais-detectados">3. Atores funcionais detectados<a href="#3-atores-funcionais-detectados" class="hash-link" aria-label="Direct link to 3. Atores funcionais detectados" title="Direct link to 3. Atores funcionais detectados" translate="no">​</a></h2>
+<ul>
+<li class=""><strong>Analista de cadastro funcional</strong>: abre cadastro, edita dados pessoais, documentos, endereço e vínculo.</li>
+<li class=""><strong>Analista de movimentação de pessoal</strong>: mantém posse, lotação, situação funcional e transferência.</li>
+<li class=""><strong>Operador de folha</strong>: consulta contracheques, prévias e verbas associadas ao servidor.</li>
+<li class=""><strong>Gestor de arquivo/dossiê</strong>: anexa documentos, classifica tipo documental e mantém observações gerais.</li>
+<li class=""><strong>Gestor de RH</strong>: exclui cadastro, emite ficha funcional e executa importação em lote.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-mapa-de-navegação-do-domínio">4. Mapa de navegação do domínio<a href="#4-mapa-de-navegação-do-domínio" class="hash-link" aria-label="Direct link to 4. Mapa de navegação do domínio" title="Direct link to 4. Mapa de navegação do domínio" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="41-núcleo-do-cadastro">4.1 Núcleo do cadastro<a href="#41-núcleo-do-cadastro" class="hash-link" aria-label="Direct link to 4.1 Núcleo do cadastro" title="Direct link to 4.1 Núcleo do cadastro" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Jornada</th><th>Estados/rotas detectados</th><th>Finalidade funcional</th></tr></thead><tbody><tr><td>Gestão de servidores</td><td><code>/funcionario/gestao</code>, <code>/servidor/gestao</code></td><td>Listagem principal, filtros, emissão de ficha e manutenção</td></tr><tr><td>Novo cadastro</td><td><code>/funcionario/formulario</code>, <code>/servidor/formulario</code></td><td>Inclusão de novo servidor</td></tr><tr><td>Edição</td><td><code>/funcionario/formulario/:id</code>, <code>/servidor/formulario/:id</code></td><td>Manutenção completa do cadastro</td></tr><tr><td>Detalhes</td><td><code>/funcionario/detalhes/:id/:detalhes</code>, <code>/servidor/detalhes/:id/:detalhes</code></td><td>Consulta sem edição</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="42-módulos-satélite-diretamente-acoplados">4.2 Módulos satélite diretamente acoplados<a href="#42-módulos-satélite-diretamente-acoplados" class="hash-link" aria-label="Direct link to 4.2 Módulos satélite diretamente acoplados" title="Direct link to 4.2 Módulos satélite diretamente acoplados" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Subdomínio</th><th>Estados/rotas detectados</th><th>Papel no domínio funcionário</th></tr></thead><tbody><tr><td>Dossiê legado</td><td><code>/observacaoDoc/gestao</code>, <code>/observacaoDoc/list/:funcionarioId</code>, <code>/observacaoDoc/formulario/:funcionarioId</code>, <code>/observacaoDoc/editar/:funcionarioId/:anexoId/:editar</code>, <code>/observacaoDoc/detalhes/:funcionarioId/:anexoId/:detalhes</code></td><td>Gestão documental por servidor fora do formulário principal</td></tr><tr><td>Verbas do servidor</td><td><code>/verbasFuncionario/gestao</code>, <code>/verbasFuncionario/formulario/:funcionarioId</code> e aliases <code>verbasServidor/*</code></td><td>Cadastro e consulta de verbas vinculadas ao servidor</td></tr><tr><td>Posse</td><td><code>/posse/gestao</code>, buscas e formulários <code>e/c/o/t</code></td><td>Formalização de ingresso por tipo de vínculo</td></tr><tr><td>Lotação</td><td><code>/lotacao/gestao</code>, <code>/lotacao/formulario</code>, <code>/lotacao/formulario/:id</code></td><td>Cadastro da estrutura de exercício usada no servidor</td></tr><tr><td>Transferência</td><td><code>/transferenciaFuncionario/gestao</code>, <code>/transferenciaFuncionario/formulario/:id</code>, aliases <code>transferenciaServidor/*</code></td><td>Movimentação interna e entre órgãos</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-jornada-de-cadastro">5. Jornada de cadastro<a href="#5-jornada-de-cadastro" class="hash-link" aria-label="Direct link to 5. Jornada de cadastro" title="Direct link to 5. Jornada de cadastro" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="51-objetivo">5.1 Objetivo<a href="#51-objetivo" class="hash-link" aria-label="Direct link to 5.1 Objetivo" title="Direct link to 5.1 Objetivo" translate="no">​</a></h3>
+<p>Criar um cadastro funcional completo, com dados pessoais, documentação, dados de contato, enquadramento funcional, pagamento e base documental.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="52-entradas-principais">5.2 Entradas principais<a href="#52-entradas-principais" class="hash-link" aria-label="Direct link to 5.2 Entradas principais" title="Direct link to 5.2 Entradas principais" translate="no">​</a></h3>
+<p>O formulário principal está organizado em abas:</p>
+<ul>
+<li class=""><code>Dados Cadastrais</code></li>
+<li class=""><code>Documentação</code></li>
+<li class=""><code>Contato &amp; Endereço</code></li>
+<li class=""><code>Dados do Pagamento</code></li>
+<li class=""><code>Contracheque</code> (somente quando aplicável)</li>
+<li class=""><code>Dossiê do Servidor</code></li>
+<li class=""><code>Observações Gerais</code></li>
+</ul>
+<p>Principais grupos de entrada detectados:</p>
+<ul>
+<li class="">identificação: CPF, matrícula, nome, foto, nome social;</li>
+<li class="">vínculo organizacional: filial, lotação, centro de custo;</li>
+<li class="">dados pessoais: sexo, data de nascimento, estado civil, naturalidade, nacionalidade, cor da pele, filiação;</li>
+<li class="">documentação civil e trabalhista: RG, órgão expedidor, CTPS, PIS/PASEP, SUS, título eleitoral, CNH, alistamento, dados de nomeação, conselho profissional;</li>
+<li class="">estrangeiro/naturalização: naturalizado, casamento com brasileiro, filho brasileiro, registro e data de chegada;</li>
+<li class="">contato e endereço: CEP, logradouro, número, complemento, UF, município, bairro, e-mails e telefones;</li>
+<li class="">dados funcionais e financeiros: jornada, carga horária, vínculo, tipo de ingresso, posse, admissão/exercício, dependentes IR/SF, sindicato, cargo, função, remuneração, FGTS, ATS, probatório, banco, agência, conta, operação;</li>
+<li class="">situação funcional corrente: tipo de situação, início e fim;</li>
+<li class="">benefícios relacionados: vale-transporte;</li>
+<li class="">observação geral e dossiê documental.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="53-decisões-funcionais-na-abertura-do-cadastro">5.3 Decisões funcionais na abertura do cadastro<a href="#53-decisões-funcionais-na-abertura-do-cadastro" class="hash-link" aria-label="Direct link to 5.3 Decisões funcionais na abertura do cadastro" title="Direct link to 5.3 Decisões funcionais na abertura do cadastro" translate="no">​</a></h3>
+<ul>
+<li class="">O CPF é o identificador inicial do processo de cadastro.</li>
+<li class="">Ao informar CPF, o sistema permite <strong>buscar vínculos anteriores</strong> e reaproveitar dados pessoais/documentais do vínculo mais recente.</li>
+<li class="">Se o CPF já teve vínculos, o usuário recebe alerta com quantidade de vínculos, matrícula, vínculo e secretaria/filial, podendo decidir reutilizar o histórico.</li>
+<li class="">A matrícula pode ser manual ou automática, conforme parâmetro sistêmico.</li>
+<li class="">Há indício de um modo de <strong>cadastro em duas etapas</strong>: quando o parâmetro <code>funcionarioEtapas</code> está ativo, campos como filial/lotação/centro de custo ficam bloqueados no formulário.</li>
+<li class="">O cadastro pode nascer como <strong>servidor cedido</strong>, o que desloca a jornada para regras documentais e funcionais específicas.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="54-regras-de-validação-observadas-nesta-jornada">5.4 Regras de validação observadas nesta jornada<a href="#54-regras-de-validação-observadas-nesta-jornada" class="hash-link" aria-label="Direct link to 5.4 Regras de validação observadas nesta jornada" title="Direct link to 5.4 Regras de validação observadas nesta jornada" translate="no">​</a></h3>
+<ul>
+<li class="">CPF é obrigatório.</li>
+<li class="">Nome é obrigatório.</li>
+<li class="">Grau de instrução, sexo, estado civil, cor da pele, nome da mãe e vários documentos-chave são obrigatórios na UI.</li>
+<li class="">Idade menor ou igual a 14 anos bloqueia o cadastro.</li>
+<li class="">PIS/PASEP não pode estar associado a outro CPF.</li>
+<li class="">Matrícula segue formato parametrizado e pode ficar bloqueada quando já gerada ou quando a matrícula é automática.</li>
+<li class="">Filial determina as opções de lotação; se não houver lotações para a filial, o formulário explicita isso.</li>
+<li class="">Centro de custo depende do encadeamento organizacional carregado.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="55-saídas-do-cadastro">5.5 Saídas do cadastro<a href="#55-saídas-do-cadastro" class="hash-link" aria-label="Direct link to 5.5 Saídas do cadastro" title="Direct link to 5.5 Saídas do cadastro" translate="no">​</a></h3>
+<ul>
+<li class="">novo servidor cadastrado;</li>
+<li class="">matrícula atribuída ou consolidada;</li>
+<li class="">foto funcional associada;</li>
+<li class="">observação geral gravada;</li>
+<li class="">anexos de dossiê já preparados no fluxo de criação;</li>
+<li class="">possibilidade de continuidade para manutenção, contracheque e jornadas satélite.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="56-apis-centrais-da-jornada">5.6 APIs centrais da jornada<a href="#56-apis-centrais-da-jornada" class="hash-link" aria-label="Direct link to 5.6 APIs centrais da jornada" title="Direct link to 5.6 APIs centrais da jornada" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/funcionario/form</code></li>
+<li class=""><code>POST /api/funcionario</code></li>
+<li class=""><code>GET /api/funcionario/cpf/info</code></li>
+<li class=""><code>GET /api/funcionario/searchPisAndAnotherCpf</code></li>
+<li class=""><code>POST /api/funcionario/cedido</code></li>
+<li class=""><code>PUT /api/funcionarioAnexo</code></li>
+<li class=""><code>PUT /api/funcionarios/{funcionarioId}/observacao-geral</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-jornada-de-manutenção">6. Jornada de manutenção<a href="#6-jornada-de-manutenção" class="hash-link" aria-label="Direct link to 6. Jornada de manutenção" title="Direct link to 6. Jornada de manutenção" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="61-porta-de-entrada">6.1 Porta de entrada<a href="#61-porta-de-entrada" class="hash-link" aria-label="Direct link to 6.1 Porta de entrada" title="Direct link to 6.1 Porta de entrada" translate="no">​</a></h3>
+<p>A manutenção começa na listagem principal:</p>
+<ul>
+<li class=""><code>GET /api/funcionarios/lista</code></li>
+<li class="">rotas <code>/funcionario/gestao</code> e <code>/servidor/gestao</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="62-filtros-e-recortes-disponíveis">6.2 Filtros e recortes disponíveis<a href="#62-filtros-e-recortes-disponíveis" class="hash-link" aria-label="Direct link to 6.2 Filtros e recortes disponíveis" title="Direct link to 6.2 Filtros e recortes disponíveis" translate="no">​</a></h3>
+<p>Na gestão principal, o operador filtra por:</p>
+<ul>
+<li class="">nome, matrícula ou CPF;</li>
+<li class="">situação funcional;</li>
+<li class="">vínculo;</li>
+<li class="">sigla da filial.</li>
+</ul>
+<p>Na tela de transferência, o filtro textual distingue automaticamente:</p>
+<ul>
+<li class="">CPF quando o texto é numérico longo;</li>
+<li class="">matrícula quando o texto é numérico curto;</li>
+<li class="">nome quando o texto é alfanumérico.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="63-ações-disponíveis-por-registro">6.3 Ações disponíveis por registro<a href="#63-ações-disponíveis-por-registro" class="hash-link" aria-label="Direct link to 6.3 Ações disponíveis por registro" title="Direct link to 6.3 Ações disponíveis por registro" translate="no">​</a></h3>
+<ul>
+<li class="">emitir ficha funcional em PDF;</li>
+<li class="">abrir detalhes cadastrais;</li>
+<li class="">editar cadastro;</li>
+<li class="">excluir cadastro.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="64-regras-de-manutenção-percebidas">6.4 Regras de manutenção percebidas<a href="#64-regras-de-manutenção-percebidas" class="hash-link" aria-label="Direct link to 6.4 Regras de manutenção percebidas" title="Direct link to 6.4 Regras de manutenção percebidas" translate="no">​</a></h3>
+<ul>
+<li class="">edição e exclusão dependem de permissão específica do módulo <code>FUNCIONARIO</code>;</li>
+<li class="">o formulário de detalhes abre em modo somente leitura;</li>
+<li class="">em edição, o sistema recarrega foto, vales, observação geral, última transferência, dossiê e dados do documento de amparo quando o servidor é cedido;</li>
+<li class="">alteração de CPF/dados de situação pode disparar lógica de readmissão/reintegração;</li>
+<li class="">exclusão pede confirmação explícita.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="65-apis-centrais">6.5 APIs centrais<a href="#65-apis-centrais" class="hash-link" aria-label="Direct link to 6.5 APIs centrais" title="Direct link to 6.5 APIs centrais" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/funcionario/{funcionarioId}</code></li>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/form</code></li>
+<li class=""><code>PUT /api/funcionario</code></li>
+<li class=""><code>DELETE /api/funcionario/{id}</code></li>
+<li class=""><code>GET /api/funcionario/{id}/detalhes-para-tabela</code></li>
+<li class=""><code>GET /api/funcionario/status/desligado</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-jornada-documental-e-anexos">7. Jornada documental e anexos<a href="#7-jornada-documental-e-anexos" class="hash-link" aria-label="Direct link to 7. Jornada documental e anexos" title="Direct link to 7. Jornada documental e anexos" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="71-camadas-documentais-existentes">7.1 Camadas documentais existentes<a href="#71-camadas-documentais-existentes" class="hash-link" aria-label="Direct link to 7.1 Camadas documentais existentes" title="Direct link to 7.1 Camadas documentais existentes" translate="no">​</a></h3>
+<p>O legado trata documentação do servidor em quatro camadas distintas:</p>
+<ol>
+<li class=""><strong>dados documentais estruturados</strong> na aba <code>Documentação</code>;</li>
+<li class=""><strong>documento de amparo ao fato</strong> para servidor cedido;</li>
+<li class=""><strong>dossiê do servidor</strong> com anexos classificados;</li>
+<li class=""><strong>observações gerais</strong> exibidas na ficha funcional.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="72-documentação-estruturada">7.2 Documentação estruturada<a href="#72-documentação-estruturada" class="hash-link" aria-label="Direct link to 7.2 Documentação estruturada" title="Direct link to 7.2 Documentação estruturada" translate="no">​</a></h3>
+<p>A aba <code>Documentação</code> reúne:</p>
+<ul>
+<li class="">RG, UF e data de expedição;</li>
+<li class="">CTPS e UF da CTPS;</li>
+<li class="">PIS/PASEP, data de emissão e agência;</li>
+<li class="">SUS;</li>
+<li class="">título eleitoral, seção, zona, UF e município;</li>
+<li class="">CNH, validade e categoria;</li>
+<li class="">registro de alistamento;</li>
+<li class="">portaria/decreto, processo, ato, nomeação e diário oficial;</li>
+<li class="">conselho profissional, número, registro, UF, município e data de expedição;</li>
+<li class="">condições de estrangeiro/naturalização.</li>
+</ul>
+<p>O objetivo funcional é manter o <strong>cadastro documental auditável</strong> do servidor para uso em posse, folha, relatórios e exigências legais.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="73-dossiê-do-servidor-no-formulário-principal">7.3 Dossiê do servidor no formulário principal<a href="#73-dossiê-do-servidor-no-formulário-principal" class="hash-link" aria-label="Direct link to 7.3 Dossiê do servidor no formulário principal" title="Direct link to 7.3 Dossiê do servidor no formulário principal" translate="no">​</a></h3>
+<p>A aba <code>Dossiê do Servidor</code> permite:</p>
+<ul>
+<li class="">escolher tipo documental;</li>
+<li class="">anexar arquivo;</li>
+<li class="">registrar observação;</li>
+<li class="">inserir o documento no dossiê;</li>
+<li class="">consultar, editar metadados, excluir e baixar anexos.</li>
+</ul>
+<p>Regras funcionais visíveis:</p>
+<ul>
+<li class="">inserir documento exige simultaneamente: arquivo enviado, tipo documental e observação;</li>
+<li class="">em novo cadastro, os anexos podem ser acumulados antes da criação definitiva do servidor;</li>
+<li class="">em servidor já existente, o vínculo do anexo é gravado imediatamente;</li>
+<li class="">há diferenciação entre modo detalhe, edição e inclusão;</li>
+<li class="">o dossiê mostra matrícula e nome do servidor para contexto.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="74-módulo-legado-observacaodoc">7.4 Módulo legado <code>observacaoDoc</code><a href="#74-módulo-legado-observacaodoc" class="hash-link" aria-label="Direct link to 74-módulo-legado-observacaodoc" title="Direct link to 74-módulo-legado-observacaodoc" translate="no">​</a></h3>
+<p>Além do dossiê embutido no formulário, existe um fluxo legado paralelo:</p>
+<ul>
+<li class="">gestão por funcionário;</li>
+<li class="">listagem de documentos do servidor;</li>
+<li class="">inclusão/edição/detalhe de anexo.</li>
+</ul>
+<p>Esse fluxo usa o módulo <code>DOSSIE_DO_SERVIDOR</code> e indica coexistência de duas experiências para o mesmo propósito funcional.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="75-documento-de-amparo-ao-fato-para-cedidos">7.5 Documento de amparo ao fato para cedidos<a href="#75-documento-de-amparo-ao-fato-para-cedidos" class="hash-link" aria-label="Direct link to 7.5 Documento de amparo ao fato para cedidos" title="Direct link to 7.5 Documento de amparo ao fato para cedidos" translate="no">​</a></h3>
+<p>Quando o servidor é marcado como <code>cedido</code>, surgem entradas específicas:</p>
+<ul>
+<li class="">órgão de origem;</li>
+<li class="">cargo de origem;</li>
+<li class="">data, número e tipo do documento de amparo;</li>
+<li class="">observações;</li>
+<li class="">número, data e página da publicação;</li>
+<li class="">tipo e meio de publicação;</li>
+<li class="">outros meios de publicação;</li>
+<li class="">tipo de documento;</li>
+<li class="">marcação de sigilo;</li>
+<li class="">anexo e descrição do anexo.</li>
+</ul>
+<p>Na criação de cedido, este documento compõe a formalização funcional do afastamento/cessão.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="76-observações-gerais">7.6 Observações gerais<a href="#76-observações-gerais" class="hash-link" aria-label="Direct link to 7.6 Observações gerais" title="Direct link to 7.6 Observações gerais" translate="no">​</a></h3>
+<p>As observações gerais são tratadas como <strong>texto histórico livre</strong> e, pelo próprio formulário, devem aparecer na ficha funcional. O uso sugerido pelo legado inclui:</p>
+<ul>
+<li class="">ocorrências comportamentais;</li>
+<li class="">registros de saúde;</li>
+<li class="">histórico relevante não modelado em campos estruturados.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="77-apis-documentais-mais-relevantes">7.7 APIs documentais mais relevantes<a href="#77-apis-documentais-mais-relevantes" class="hash-link" aria-label="Direct link to 7.7 APIs documentais mais relevantes" title="Direct link to 7.7 APIs documentais mais relevantes" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/anexos</code></li>
+<li class=""><code>DELETE /api/funcionario/{funcionarioId}/anexo/{anexoId}</code></li>
+<li class=""><code>PUT /api/funcionarioAnexo</code></li>
+<li class=""><code>GET /api/funcionarios/{funcionarioId}/observacao-geral</code></li>
+<li class=""><code>PUT /api/funcionarios/{funcionarioId}/observacao-geral</code></li>
+<li class=""><code>DELETE /api/funcionarios/{funcionarioId}/observacao-geral</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="8-jornada-de-ficha-funcional">8. Jornada de ficha funcional<a href="#8-jornada-de-ficha-funcional" class="hash-link" aria-label="Direct link to 8. Jornada de ficha funcional" title="Direct link to 8. Jornada de ficha funcional" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="81-acesso">8.1 Acesso<a href="#81-acesso" class="hash-link" aria-label="Direct link to 8.1 Acesso" title="Direct link to 8.1 Acesso" translate="no">​</a></h3>
+<p>A ficha funcional é acionada diretamente na listagem principal pela ação <code>Ficha</code>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="82-conteúdo-consolidado">8.2 Conteúdo consolidado<a href="#82-conteúdo-consolidado" class="hash-link" aria-label="Direct link to 8.2 Conteúdo consolidado" title="Direct link to 8.2 Conteúdo consolidado" translate="no">​</a></h3>
+<p>O backend monta a ficha funcional a partir de várias consultas:</p>
+<ul>
+<li class="">ficha base do servidor;</li>
+<li class="">férias;</li>
+<li class="">licenças/atestados;</li>
+<li class="">transferências;</li>
+<li class="">licença-prêmio;</li>
+<li class="">vencimentos;</li>
+<li class="">desligamentos;</li>
+<li class="">observação geral.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="83-saídas">8.3 Saídas<a href="#83-saídas" class="hash-link" aria-label="Direct link to 8.3 Saídas" title="Direct link to 8.3 Saídas" translate="no">​</a></h3>
+<ul>
+<li class="">visualização consolidada em API;</li>
+<li class="">emissão de PDF da ficha funcional.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="84-apis-da-ficha">8.4 APIs da ficha<a href="#84-apis-da-ficha" class="hash-link" aria-label="Direct link to 8.4 APIs da ficha" title="Direct link to 8.4 APIs da ficha" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/ficha</code></li>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/ficha/ferias</code></li>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/ficha/licencas</code></li>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/ficha/transferencias</code></li>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/ficha/licenca-premio</code></li>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/ficha/vencimentos</code></li>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/ficha/desligamentos</code></li>
+<li class=""><code>GET /api/funcionario/{funcionarioId}/ficha/pdf</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="9-jornada-de-importação">9. Jornada de importação<a href="#9-jornada-de-importação" class="hash-link" aria-label="Direct link to 9. Jornada de importação" title="Direct link to 9. Jornada de importação" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="91-importação-cadastral-de-servidores">9.1 Importação cadastral de servidores<a href="#91-importação-cadastral-de-servidores" class="hash-link" aria-label="Direct link to 9.1 Importação cadastral de servidores" title="Direct link to 9.1 Importação cadastral de servidores" translate="no">​</a></h3>
+<p>A gestão principal possui ação direta de <strong>importar funcionários por CSV</strong>.</p>
+<p>Comportamento funcional detectado:</p>
+<ul>
+<li class="">operador dispara a importação pela listagem principal;</li>
+<li class="">seleciona arquivo <code>.csv</code>;</li>
+<li class="">o sistema processa o lote;</li>
+<li class="">ao final, apresenta mensagem de sucesso/erro e recarrega a listagem.</li>
+</ul>
+<p>API central:</p>
+<ul>
+<li class=""><code>POST /api/funcionarios/importar</code></li>
+</ul>
+<p>Regra explícita no backend:</p>
+<ul>
+<li class="">arquivo vazio é rejeitado.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="92-reaproveitamento-de-dados-por-cpf">9.2 Reaproveitamento de dados por CPF<a href="#92-reaproveitamento-de-dados-por-cpf" class="hash-link" aria-label="Direct link to 9.2 Reaproveitamento de dados por CPF" title="Direct link to 9.2 Reaproveitamento de dados por CPF" translate="no">​</a></h3>
+<p>Embora não seja importação em lote, existe uma segunda jornada de reaproveitamento:</p>
+<ul>
+<li class="">consulta por CPF;</li>
+<li class="">detecção de vínculos anteriores;</li>
+<li class="">reaproveitamento dos dados pessoais/documentais do vínculo mais recente.</li>
+</ul>
+<p>Funcionalmente, isso opera como uma <strong>importação pontual de histórico cadastral</strong>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="10-jornadas-satélite-do-domínio">10. Jornadas satélite do domínio<a href="#10-jornadas-satélite-do-domínio" class="hash-link" aria-label="Direct link to 10. Jornadas satélite do domínio" title="Direct link to 10. Jornadas satélite do domínio" translate="no">​</a></h2>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="101-posse">10.1 Posse<a href="#101-posse" class="hash-link" aria-label="Direct link to 10.1 Posse" title="Direct link to 10.1 Posse" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="papel-funcional">Papel funcional<a href="#papel-funcional" class="hash-link" aria-label="Direct link to Papel funcional" title="Direct link to Papel funcional" translate="no">​</a></h3>
+<p>Formaliza o ingresso e o enquadramento inicial do servidor, com variantes por tipo de vínculo:</p>
+<ul>
+<li class="">efetivo;</li>
+<li class="">comissionado;</li>
+<li class="">contratado;</li>
+<li class="">prestador/terceirizado.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="navegação-detectada">Navegação detectada<a href="#navegação-detectada" class="hash-link" aria-label="Direct link to Navegação detectada" title="Direct link to Navegação detectada" translate="no">​</a></h3>
+<ul>
+<li class="">gestão: <code>/posse/gestao</code></li>
+<li class="">busca por tipo: <code>/posse/e/busca</code>, <code>/posse/c/busca</code>, <code>/posse/o/busca</code>, <code>/posse/t/busca</code></li>
+<li class="">formulários correspondentes por tipo e modo detalhe/edição</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="entradas-e-decisões">Entradas e decisões<a href="#entradas-e-decisões" class="hash-link" aria-label="Direct link to Entradas e decisões" title="Direct link to Entradas e decisões" translate="no">​</a></h3>
+<ul>
+<li class="">seleção do servidor para iniciar a posse;</li>
+<li class="">composição do enquadramento: cargo ou função, nível salarial e referência salarial;</li>
+<li class="">filial, lotação e centro de custo de exercício;</li>
+<li class="">banco, agência, tipo de conta e conta;</li>
+<li class="">carga horária, turno, opção de remuneração;</li>
+<li class="">bens declarados e documentos de posse;</li>
+<li class="">no contratado/prestador, datas de fim de exercício/contrato;</li>
+<li class="">histórico de posse e dados de exoneracão como consultas de apoio.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ações-e-saídas">Ações e saídas<a href="#ações-e-saídas" class="hash-link" aria-label="Direct link to Ações e saídas" title="Direct link to Ações e saídas" translate="no">​</a></h3>
+<ul>
+<li class="">criar posse;</li>
+<li class="">atualizar posse;</li>
+<li class="">remover anexo da posse;</li>
+<li class="">imprimir documentos/termos de posse;</li>
+<li class="">consultar histórico de posse do servidor.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="apis-mais-relevantes">APIs mais relevantes<a href="#apis-mais-relevantes" class="hash-link" aria-label="Direct link to APIs mais relevantes" title="Direct link to APIs mais relevantes" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/posse/funcionario/{funcionarioId}</code></li>
+<li class=""><code>GET /api/posse/{id}/form</code></li>
+<li class=""><code>POST /api/posse/form</code></li>
+<li class=""><code>PUT /api/posse/form</code></li>
+<li class=""><code>DELETE /api/posse/funcionario/{funcionarioId}/anexo/{anexoId}</code></li>
+<li class=""><code>GET /api/posse/historico/{funcionarioId}</code></li>
+<li class=""><code>GET /api/posse/{posseId}/dados-exoneracao</code></li>
+<li class=""><code>GET /api/posse/funcionario/{funcionarioId}/cargo/{cargoId}/nivelSalarial</code></li>
+<li class=""><code>GET /api/posse/funcionario/{funcionarioId}/funcao/{funcaoId}/nivelSalarial</code></li>
+<li class=""><code>GET /api/posse/funcionario/{funcionarioId}/nivelSalarial/{nivelSalarialId}/referenciaSalarial</code></li>
+<li class=""><code>GET /api/posse/funcionario/{funcionarioId}/filial/{filialId}/lotacao</code></li>
+<li class=""><code>POST /api/posse/centroCusto</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="102-lotação">10.2 Lotação<a href="#102-lotação" class="hash-link" aria-label="Direct link to 10.2 Lotação" title="Direct link to 10.2 Lotação" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="papel-funcional-1">Papel funcional<a href="#papel-funcional-1" class="hash-link" aria-label="Direct link to Papel funcional" title="Direct link to Papel funcional" translate="no">​</a></h3>
+<p><code>Lotação</code> é cadastro estrutural, mas opera como dependência direta do servidor porque define:</p>
+<ul>
+<li class="">unidade de exercício;</li>
+<li class="">difícil acesso;</li>
+<li class="">nível organizacional;</li>
+<li class="">efetivo previsto;</li>
+<li class="">centro de custo associado;</li>
+<li class="">vigência;</li>
+<li class="">dados contábeis relacionados.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="navegação-detectada-1">Navegação detectada<a href="#navegação-detectada-1" class="hash-link" aria-label="Direct link to Navegação detectada" title="Direct link to Navegação detectada" translate="no">​</a></h3>
+<ul>
+<li class=""><code>/lotacao/gestao</code></li>
+<li class=""><code>/lotacao/formulario</code></li>
+<li class=""><code>/lotacao/formulario/:id</code></li>
+<li class=""><code>/lotacao/detalhes/:id/:detalhes</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="regras-e-saídas">Regras e saídas<a href="#regras-e-saídas" class="hash-link" aria-label="Direct link to Regras e saídas" title="Direct link to Regras e saídas" translate="no">​</a></h3>
+<ul>
+<li class="">descrição resumida e completa são obrigatórias;</li>
+<li class="">nível varia entre 1 e 4;</li>
+<li class="">tipo de lotação é obrigatório;</li>
+<li class="">centro de custo influencia tipo e número de conta;</li>
+<li class="">vigência inicial é obrigatória;</li>
+<li class="">lotação alimenta seletores do cadastro do servidor, posse e transferência.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="apis-mais-relevantes-1">APIs mais relevantes<a href="#apis-mais-relevantes-1" class="hash-link" aria-label="Direct link to APIs mais relevantes" title="Direct link to APIs mais relevantes" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/lotacoes</code></li>
+<li class=""><code>GET /api/lotacao/{lotacaoId}</code></li>
+<li class=""><code>GET /api/listaLotacoes</code></li>
+<li class=""><code>GET /api/listaLotacoes/{empresaFilialId}</code></li>
+<li class=""><code>POST /api/lotacao</code></li>
+<li class=""><code>PUT /api/lotacao</code></li>
+<li class=""><code>DELETE /api/lotacao/{id}</code></li>
+<li class=""><code>GET /api/lotacao/searchComplete</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="103-situação-funcional">10.3 Situação funcional<a href="#103-situação-funcional" class="hash-link" aria-label="Direct link to 10.3 Situação funcional" title="Direct link to 10.3 Situação funcional" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="papel-funcional-2">Papel funcional<a href="#papel-funcional-2" class="hash-link" aria-label="Direct link to Papel funcional" title="Direct link to Papel funcional" translate="no">​</a></h3>
+<p>A situação funcional corrente é mantida dentro da aba <code>Dados do Pagamento</code>, mas o backend expõe um subdomínio completo de histórico.</p>
+<p>O legado diferencia pelo menos:</p>
+<ul>
+<li class="">ativo;</li>
+<li class="">afastamento;</li>
+<li class="">desligamento;</li>
+<li class="">sustado;</li>
+<li class="">demais tipos parametrizados de situação funcional.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="entradas-e-decisões-no-cadastro-do-servidor">Entradas e decisões no cadastro do servidor<a href="#entradas-e-decisões-no-cadastro-do-servidor" class="hash-link" aria-label="Direct link to Entradas e decisões no cadastro do servidor" title="Direct link to Entradas e decisões no cadastro do servidor" translate="no">​</a></h3>
+<ul>
+<li class="">seleção da situação funcional atual;</li>
+<li class="">data de início;</li>
+<li class="">data final, retorno ou desligamento, com rótulo dinâmico conforme o tipo selecionado.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="regras-detectadas-no-backend">Regras detectadas no backend<a href="#regras-detectadas-no-backend" class="hash-link" aria-label="Direct link to Regras detectadas no backend" title="Direct link to Regras detectadas no backend" translate="no">​</a></h3>
+<ul>
+<li class="">ao criar situação não desligamento, o sistema valida se o servidor pode ser afastado novamente no ano pelo mesmo motivo;</li>
+<li class="">afastamento superior ao limite anual para o mesmo motivo é rejeitado;</li>
+<li class="">se o afastamento não tiver retorno adequado, o servidor pode ser colocado em situação <code>SUSTADO</code>;</li>
+<li class="">quando a situação é do tipo desligamento, a mensagem de negócio muda para desligamento realizado.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="apis-mais-relevantes-2">APIs mais relevantes<a href="#apis-mais-relevantes-2" class="hash-link" aria-label="Direct link to APIs mais relevantes" title="Direct link to APIs mais relevantes" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/historicoSituacoesFuncionais</code></li>
+<li class=""><code>GET /api/historicoSituacoesFuncionais/lista</code></li>
+<li class=""><code>GET /api/listaHistoricoSituacoesFuncionais</code></li>
+<li class=""><code>GET /api/getPrimeiraSituacaoFuncionalByFuncionario</code></li>
+<li class=""><code>GET /api/historicoSituacaoFuncional/{id}</code></li>
+<li class=""><code>POST /api/historicoSituacaoFuncional</code></li>
+<li class=""><code>PUT /api/historicoSituacaoFuncional</code></li>
+<li class=""><code>DELETE /api/historicoSituacaoFuncional/{id}</code></li>
+<li class=""><code>GET /api/historicoSituacaoFuncional/afastamentosVencidos</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="104-transferência">10.4 Transferência<a href="#104-transferência" class="hash-link" aria-label="Direct link to 10.4 Transferência" title="Direct link to 10.4 Transferência" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="papel-funcional-3">Papel funcional<a href="#papel-funcional-3" class="hash-link" aria-label="Direct link to Papel funcional" title="Direct link to Papel funcional" translate="no">​</a></h3>
+<p>Transferência movimenta o servidor:</p>
+<ul>
+<li class="">internamente, dentro da mesma filial;</li>
+<li class="">entre órgãos/unidades, com tratamento de designação e ônus.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="navegação-detectada-2">Navegação detectada<a href="#navegação-detectada-2" class="hash-link" aria-label="Direct link to Navegação detectada" title="Direct link to Navegação detectada" translate="no">​</a></h3>
+<ul>
+<li class=""><code>/transferenciaFuncionario/gestao</code></li>
+<li class=""><code>/transferenciaFuncionario/formulario/:id</code></li>
+<li class=""><code>/transferenciaFuncionario/detalhes/:id/:detalhes</code></li>
+<li class="">aliases <code>transferenciaServidor/*</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="entradas-e-filtros">Entradas e filtros<a href="#entradas-e-filtros" class="hash-link" aria-label="Direct link to Entradas e filtros" title="Direct link to Entradas e filtros" translate="no">​</a></h3>
+<p>Na gestão:</p>
+<ul>
+<li class="">busca por nome, matrícula ou CPF;</li>
+<li class="">filtro por sigla da filial.</li>
+</ul>
+<p>No formulário:</p>
+<ul>
+<li class="">dados atuais do servidor: matrícula, nome, filial, lotação, centro de custo;</li>
+<li class="">transferência interna: lotação destino e centro de custo;</li>
+<li class="">transferência entre órgãos: designado, com/sem ônus, filial destino, lotação destino e centro de custo.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="regras-detectadas">Regras detectadas<a href="#regras-detectadas" class="hash-link" aria-label="Direct link to Regras detectadas" title="Direct link to Regras detectadas" translate="no">​</a></h3>
+<ul>
+<li class="">designado faz a origem continuar responsável pelos custos;</li>
+<li class="">se marcado <code>sem ônus</code>, o centro de custo pode deixar de ser exigido;</li>
+<li class="">na transferência interna, a filial destino é a mesma filial atual;</li>
+<li class="">a última transferência é consultada para reaproveitar o status de designação;</li>
+<li class="">o detalhe da transferência exibe histórico comparando origem e destino.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="apis-mais-relevantes-3">APIs mais relevantes<a href="#apis-mais-relevantes-3" class="hash-link" aria-label="Direct link to APIs mais relevantes" title="Direct link to APIs mais relevantes" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/transferencias/{funcionarioId}</code></li>
+<li class=""><code>GET /api/transferencias/ultimaTransferencia/{funcionarioId}</code></li>
+<li class=""><code>POST /api/transferenciaFuncionario</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="105-verbas-relacionadas">10.5 Verbas relacionadas<a href="#105-verbas-relacionadas" class="hash-link" aria-label="Direct link to 10.5 Verbas relacionadas" title="Direct link to 10.5 Verbas relacionadas" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="papel-funcional-4">Papel funcional<a href="#papel-funcional-4" class="hash-link" aria-label="Direct link to Papel funcional" title="Direct link to Papel funcional" translate="no">​</a></h3>
+<p>O subdomínio <code>Verbas do Funcionário</code> permite associar lançamentos fixos ou recorrentes ao cadastro do servidor, antes ou além do processamento mensal da folha.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="navegação-detectada-3">Navegação detectada<a href="#navegação-detectada-3" class="hash-link" aria-label="Direct link to Navegação detectada" title="Direct link to Navegação detectada" translate="no">​</a></h3>
+<ul>
+<li class=""><code>/verbasFuncionario/gestao</code></li>
+<li class=""><code>/verbasFuncionario/formulario/:funcionarioId</code></li>
+<li class="">aliases <code>verbasServidor/*</code></li>
+<li class="">atalho de importação para <code>/importadorVerbaFuncionario/gestao</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="filtros-e-listagem">Filtros e listagem<a href="#filtros-e-listagem" class="hash-link" aria-label="Direct link to Filtros e listagem" title="Direct link to Filtros e listagem" translate="no">​</a></h3>
+<p>Na gestão de verbas:</p>
+<ul>
+<li class="">busca por nome, matrícula ou CPF;</li>
+<li class="">filtro por filial;</li>
+<li class="">filtro por situação <code>com verbas</code> ou <code>sem verbas</code>.</li>
+</ul>
+<p>Cada servidor pode expandir um acordeão com as verbas já vinculadas.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="entradas-do-formulário">Entradas do formulário<a href="#entradas-do-formulário" class="hash-link" aria-label="Direct link to Entradas do formulário" title="Direct link to Entradas do formulário" translate="no">​</a></h3>
+<ul>
+<li class="">verba;</li>
+<li class="">tipo de valor;</li>
+<li class="">recorrência;</li>
+<li class="">valor;</li>
+<li class="">parcelas e parcelas pagas;</li>
+<li class="">tipo de folha;</li>
+<li class="">competência inicial;</li>
+<li class="">observação.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="regras-detectadas-1">Regras detectadas<a href="#regras-detectadas-1" class="hash-link" aria-label="Direct link to Regras detectadas" title="Direct link to Regras detectadas" translate="no">​</a></h3>
+<ul>
+<li class="">verba, tipo, recorrência e tipo de folha são obrigatórios para inclusão;</li>
+<li class="">valor default pode cair para zero;</li>
+<li class="">recorrência <code>em parcela</code> exige quantidade de parcelas;</li>
+<li class="">se mês for informado, o ano torna-se obrigatório;</li>
+<li class="">ano da competência deve ficar entre 1999 e 9999;</li>
+<li class="">o lote de verbas é salvo em conjunto;</li>
+<li class="">a saída sem salvar avisa perda de alterações.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="apis-mais-relevantes-4">APIs mais relevantes<a href="#apis-mais-relevantes-4" class="hash-link" aria-label="Direct link to APIs mais relevantes" title="Direct link to APIs mais relevantes" translate="no">​</a></h3>
+<ul>
+<li class=""><code>GET /api/funcionariosVerbas</code></li>
+<li class=""><code>GET /api/funcionarioVerbas/{funcionarioId}</code></li>
+<li class=""><code>POST /api/funcionarioVerbas/</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="importação-satélite-de-verbas">Importação satélite de verbas<a href="#importação-satélite-de-verbas" class="hash-link" aria-label="Direct link to Importação satélite de verbas" title="Direct link to Importação satélite de verbas" translate="no">​</a></h3>
+<p>Há um fluxo satélite próprio para carga em lote de verbas do servidor:</p>
+<ul>
+<li class=""><code>/importadorVerbaFuncionario/gestao</code></li>
+<li class=""><code>POST /api/importadorVerbasFuncionario/validacao/arquivo</code></li>
+<li class=""><code>POST /api/importadorVerbaFuncionario/arquivo</code></li>
+<li class=""><code>POST /api/importadorVerbaFuncionario/importar</code></li>
+<li class=""><code>GET /api/importadorVerbaFuncionario/template</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-dependências-com-outros-domínios">11. Dependências com outros domínios<a href="#11-dependências-com-outros-domínios" class="hash-link" aria-label="Direct link to 11. Dependências com outros domínios" title="Direct link to 11. Dependências com outros domínios" translate="no">​</a></h2>
+<p>O domínio <code>FUNCIONARIO</code> depende ou é consumido diretamente por:</p>
+<ul>
+<li class=""><strong>Folha/Contracheque</strong>: consulta de competências, tipos de processamento, contracheques processados e prévias.</li>
+<li class=""><strong>Verbas</strong>: verbas fixas/recorrentes vinculadas ao servidor.</li>
+<li class=""><strong>Posse</strong>: formalização do ingresso e enquadramento inicial.</li>
+<li class=""><strong>Lotação</strong>: estrutura organizacional e centro de custo.</li>
+<li class=""><strong>Situação funcional / afastamentos</strong>: estado vigente e histórico.</li>
+<li class=""><strong>Transferência</strong>: histórico de movimentação interna e entre órgãos.</li>
+<li class=""><strong>Férias e licença-prêmio</strong>: compõem a ficha funcional e usam buscas de servidor.</li>
+<li class=""><strong>Licenças médicas</strong>: há endpoints específicos por CPF/matrícula em torno do servidor.</li>
+<li class=""><strong>Reembolso e certidões</strong>: reaproveitam recortes específicos do cadastro do servidor.</li>
+<li class=""><strong>Estágio/pensão/previdência</strong>: o backend expõe buscas derivadas do cadastro funcional para outros fluxos.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-regras-funcionais-detectadas-no-front">12. Regras funcionais detectadas no front<a href="#12-regras-funcionais-detectadas-no-front" class="hash-link" aria-label="Direct link to 12. Regras funcionais detectadas no front" title="Direct link to 12. Regras funcionais detectadas no front" translate="no">​</a></h2>
+<ul>
+<li class="">O módulo respeita permissão fina por ação: visualizar, cadastrar, atualizar e excluir.</li>
+<li class="">O cadastro admite reaproveitamento de dados a partir de CPF com vínculos anteriores.</li>
+<li class="">O servidor não pode ser cadastrado com 14 anos ou menos.</li>
+<li class="">PIS/PASEP não pode estar compartilhado entre CPFs diferentes.</li>
+<li class="">Matrícula pode ser automática ou parametrizada manualmente.</li>
+<li class="">Filial dirige a seleção de lotação e, por consequência, o centro de custo.</li>
+<li class="">O modo <code>cedido</code> altera a jornada e exige formalização documental específica.</li>
+<li class="">Para novo cedido, o sistema força vínculo <code>A DISPOSIÇÃO / EFETIVO</code>.</li>
+<li class="">A aba de contracheque só aparece quando existem tipos de processamento de prévia aplicáveis ao vínculo.</li>
+<li class="">Dossiê exige arquivo + tipo documental + observação antes da inserção.</li>
+<li class="">Observações gerais são tratadas como histórico livre e persistidas por servidor.</li>
+<li class="">Transferência interna mantém a filial e altera lotação/centro de custo.</li>
+<li class="">Transferência entre órgãos considera <code>designado</code> e <code>com ônus/sem ônus</code>.</li>
+<li class="">Em verbas, a competência inicial tem consistência temporal mínima.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="13-regras-funcionais-detectadas-no-backend">13. Regras funcionais detectadas no backend<a href="#13-regras-funcionais-detectadas-no-backend" class="hash-link" aria-label="Direct link to 13. Regras funcionais detectadas no backend" title="Direct link to 13. Regras funcionais detectadas no backend" translate="no">​</a></h2>
+<ul>
+<li class="">A criação padrão de servidor pode retornar conflito quando já existe cadastro do mesmo CPF com matrícula vazia.</li>
+<li class="">O cadastro de servidor cedido é tratado como fluxo próprio.</li>
+<li class="">A ficha funcional em PDF agrega ficha base, férias, licenças, transferências, licença-prêmio, vencimentos, desligamentos e observação geral.</li>
+<li class="">A importação de servidores rejeita arquivo vazio.</li>
+<li class="">O histórico de situação funcional impede novo afastamento anual acima do limite para o mesmo motivo.</li>
+<li class="">O histórico de situação funcional pode sustar automaticamente o servidor quando não há retorno adequado do afastamento.</li>
+<li class="">O desligamento é tratado como caso distinto na atribuição de situação funcional.</li>
+<li class="">Transferência possui conceito explícito de <code>designado</code>, em que a origem segue responsável pelos custos.</li>
+<li class="">Posse fornece derivação dinâmica de lotação, nível salarial, referência salarial, município e centro de custo conforme o contexto do servidor.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="14-lacunas-e-ambiguidades-do-legado">14. Lacunas e Ambiguidades do Legado<a href="#14-lacunas-e-ambiguidades-do-legado" class="hash-link" aria-label="Direct link to 14. Lacunas e Ambiguidades do Legado" title="Direct link to 14. Lacunas e Ambiguidades do Legado" translate="no">​</a></h2>
+<ul>
+<li class="">Há coexistência de dois fluxos para dossiê documental: o módulo <code>observacaoDoc</code> e a aba <code>Dossiê do Servidor</code> no formulário principal. O papel oficial de cada um não está claramente separado.</li>
+<li class="">O campo <code>Matricula Oficial</code> no HTML está ligado a <code>categoriaAlistamento</code>, o que sugere possível reaproveitamento indevido de campo ou nomenclatura ambígua.</li>
+<li class="">O modo <code>funcionarioEtapas</code> bloqueia parte do enquadramento organizacional, mas a segunda etapa não aparece nas fontes analisadas.</li>
+<li class="">O fluxo de atualização de servidor cedido, no controlador, não deixa claro se o documento de amparo ao fato é integralmente atualizado junto com o cadastro.</li>
+<li class="">O front trata <code>funcionário</code> e <code>servidor</code> como aliases de navegação; falta confirmação se existe alguma distinção funcional real entre os termos em regras de negócio.</li>
+<li class="">A aba <code>Contracheque</code> depende da existência de tipos de processamento de prévia, mas o critério funcional completo para sua exibição não está descrito no legado.</li>
+<li class="">O backend de transferência usa permissões associadas a <code>REGRAS_DE_APOSENTADORIA</code> em parte do controlador, o que indica possível herança indevida de autorização ou nomenclatura inconsistente.</li>
+<li class="">O módulo <code>observacaoDoc</code> mantém nomes e mensagens herdadas de outros contextos em alguns trechos, o que dificulta afirmar se ele foi integralmente consolidado como dossiê de servidor.</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/sgp/docs/leg/rev-eng/modules/funcionario/decomposicao-subtopicos"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">FUNCIONARIO: decomposição em sub-tópicos funcionais</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/sgp/docs/leg/rev-eng/modules/funcionario/pessoa-x-vinculo"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">FUNCIONARIO: decomposição focal em Pessoa x Vínculo</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-escopo-e-fontes" class="table-of-contents__link toc-highlight">1. Escopo e fontes</a></li><li><a href="#2-papel-do-domínio-no-produto" class="table-of-contents__link toc-highlight">2. Papel do domínio no produto</a></li><li><a href="#3-atores-funcionais-detectados" class="table-of-contents__link toc-highlight">3. Atores funcionais detectados</a></li><li><a href="#4-mapa-de-navegação-do-domínio" class="table-of-contents__link toc-highlight">4. Mapa de navegação do domínio</a><ul><li><a href="#41-núcleo-do-cadastro" class="table-of-contents__link toc-highlight">4.1 Núcleo do cadastro</a></li><li><a href="#42-módulos-satélite-diretamente-acoplados" class="table-of-contents__link toc-highlight">4.2 Módulos satélite diretamente acoplados</a></li></ul></li><li><a href="#5-jornada-de-cadastro" class="table-of-contents__link toc-highlight">5. Jornada de cadastro</a><ul><li><a href="#51-objetivo" class="table-of-contents__link toc-highlight">5.1 Objetivo</a></li><li><a href="#52-entradas-principais" class="table-of-contents__link toc-highlight">5.2 Entradas principais</a></li><li><a href="#53-decisões-funcionais-na-abertura-do-cadastro" class="table-of-contents__link toc-highlight">5.3 Decisões funcionais na abertura do cadastro</a></li><li><a href="#54-regras-de-validação-observadas-nesta-jornada" class="table-of-contents__link toc-highlight">5.4 Regras de validação observadas nesta jornada</a></li><li><a href="#55-saídas-do-cadastro" class="table-of-contents__link toc-highlight">5.5 Saídas do cadastro</a></li><li><a href="#56-apis-centrais-da-jornada" class="table-of-contents__link toc-highlight">5.6 APIs centrais da jornada</a></li></ul></li><li><a href="#6-jornada-de-manutenção" class="table-of-contents__link toc-highlight">6. Jornada de manutenção</a><ul><li><a href="#61-porta-de-entrada" class="table-of-contents__link toc-highlight">6.1 Porta de entrada</a></li><li><a href="#62-filtros-e-recortes-disponíveis" class="table-of-contents__link toc-highlight">6.2 Filtros e recortes disponíveis</a></li><li><a href="#63-ações-disponíveis-por-registro" class="table-of-contents__link toc-highlight">6.3 Ações disponíveis por registro</a></li><li><a href="#64-regras-de-manutenção-percebidas" class="table-of-contents__link toc-highlight">6.4 Regras de manutenção percebidas</a></li><li><a href="#65-apis-centrais" class="table-of-contents__link toc-highlight">6.5 APIs centrais</a></li></ul></li><li><a href="#7-jornada-documental-e-anexos" class="table-of-contents__link toc-highlight">7. Jornada documental e anexos</a><ul><li><a href="#71-camadas-documentais-existentes" class="table-of-contents__link toc-highlight">7.1 Camadas documentais existentes</a></li><li><a href="#72-documentação-estruturada" class="table-of-contents__link toc-highlight">7.2 Documentação estruturada</a></li><li><a href="#73-dossiê-do-servidor-no-formulário-principal" class="table-of-contents__link toc-highlight">7.3 Dossiê do servidor no formulário principal</a></li><li><a href="#74-módulo-legado-observacaodoc" class="table-of-contents__link toc-highlight">7.4 Módulo legado <code>observacaoDoc</code></a></li><li><a href="#75-documento-de-amparo-ao-fato-para-cedidos" class="table-of-contents__link toc-highlight">7.5 Documento de amparo ao fato para cedidos</a></li><li><a href="#76-observações-gerais" class="table-of-contents__link toc-highlight">7.6 Observações gerais</a></li><li><a href="#77-apis-documentais-mais-relevantes" class="table-of-contents__link toc-highlight">7.7 APIs documentais mais relevantes</a></li></ul></li><li><a href="#8-jornada-de-ficha-funcional" class="table-of-contents__link toc-highlight">8. Jornada de ficha funcional</a><ul><li><a href="#81-acesso" class="table-of-contents__link toc-highlight">8.1 Acesso</a></li><li><a href="#82-conteúdo-consolidado" class="table-of-contents__link toc-highlight">8.2 Conteúdo consolidado</a></li><li><a href="#83-saídas" class="table-of-contents__link toc-highlight">8.3 Saídas</a></li><li><a href="#84-apis-da-ficha" class="table-of-contents__link toc-highlight">8.4 APIs da ficha</a></li></ul></li><li><a href="#9-jornada-de-importação" class="table-of-contents__link toc-highlight">9. Jornada de importação</a><ul><li><a href="#91-importação-cadastral-de-servidores" class="table-of-contents__link toc-highlight">9.1 Importação cadastral de servidores</a></li><li><a href="#92-reaproveitamento-de-dados-por-cpf" class="table-of-contents__link toc-highlight">9.2 Reaproveitamento de dados por CPF</a></li></ul></li><li><a href="#10-jornadas-satélite-do-domínio" class="table-of-contents__link toc-highlight">10. Jornadas satélite do domínio</a></li><li><a href="#101-posse" class="table-of-contents__link toc-highlight">10.1 Posse</a><ul><li><a href="#papel-funcional" class="table-of-contents__link toc-highlight">Papel funcional</a></li><li><a href="#navegação-detectada" class="table-of-contents__link toc-highlight">Navegação detectada</a></li><li><a href="#entradas-e-decisões" class="table-of-contents__link toc-highlight">Entradas e decisões</a></li><li><a href="#ações-e-saídas" class="table-of-contents__link toc-highlight">Ações e saídas</a></li><li><a href="#apis-mais-relevantes" class="table-of-contents__link toc-highlight">APIs mais relevantes</a></li></ul></li><li><a href="#102-lotação" class="table-of-contents__link toc-highlight">10.2 Lotação</a><ul><li><a href="#papel-funcional-1" class="table-of-contents__link toc-highlight">Papel funcional</a></li><li><a href="#navegação-detectada-1" class="table-of-contents__link toc-highlight">Navegação detectada</a></li><li><a href="#regras-e-saídas" class="table-of-contents__link toc-highlight">Regras e saídas</a></li><li><a href="#apis-mais-relevantes-1" class="table-of-contents__link toc-highlight">APIs mais relevantes</a></li></ul></li><li><a href="#103-situação-funcional" class="table-of-contents__link toc-highlight">10.3 Situação funcional</a><ul><li><a href="#papel-funcional-2" class="table-of-contents__link toc-highlight">Papel funcional</a></li><li><a href="#entradas-e-decisões-no-cadastro-do-servidor" class="table-of-contents__link toc-highlight">Entradas e decisões no cadastro do servidor</a></li><li><a href="#regras-detectadas-no-backend" class="table-of-contents__link toc-highlight">Regras detectadas no backend</a></li><li><a href="#apis-mais-relevantes-2" class="table-of-contents__link toc-highlight">APIs mais relevantes</a></li></ul></li><li><a href="#104-transferência" class="table-of-contents__link toc-highlight">10.4 Transferência</a><ul><li><a href="#papel-funcional-3" class="table-of-contents__link toc-highlight">Papel funcional</a></li><li><a href="#navegação-detectada-2" class="table-of-contents__link toc-highlight">Navegação detectada</a></li><li><a href="#entradas-e-filtros" class="table-of-contents__link toc-highlight">Entradas e filtros</a></li><li><a href="#regras-detectadas" class="table-of-contents__link toc-highlight">Regras detectadas</a></li><li><a href="#apis-mais-relevantes-3" class="table-of-contents__link toc-highlight">APIs mais relevantes</a></li></ul></li><li><a href="#105-verbas-relacionadas" class="table-of-contents__link toc-highlight">10.5 Verbas relacionadas</a><ul><li><a href="#papel-funcional-4" class="table-of-contents__link toc-highlight">Papel funcional</a></li><li><a href="#navegação-detectada-3" class="table-of-contents__link toc-highlight">Navegação detectada</a></li><li><a href="#filtros-e-listagem" class="table-of-contents__link toc-highlight">Filtros e listagem</a></li><li><a href="#entradas-do-formulário" class="table-of-contents__link toc-highlight">Entradas do formulário</a></li><li><a href="#regras-detectadas-1" class="table-of-contents__link toc-highlight">Regras detectadas</a></li><li><a href="#apis-mais-relevantes-4" class="table-of-contents__link toc-highlight">APIs mais relevantes</a></li><li><a href="#importação-satélite-de-verbas" class="table-of-contents__link toc-highlight">Importação satélite de verbas</a></li></ul></li><li><a href="#11-dependências-com-outros-domínios" class="table-of-contents__link toc-highlight">11. Dependências com outros domínios</a></li><li><a href="#12-regras-funcionais-detectadas-no-front" class="table-of-contents__link toc-highlight">12. Regras funcionais detectadas no front</a></li><li><a href="#13-regras-funcionais-detectadas-no-backend" class="table-of-contents__link toc-highlight">13. Regras funcionais detectadas no backend</a></li><li><a href="#14-lacunas-e-ambiguidades-do-legado" class="table-of-contents__link toc-highlight">14. Lacunas e Ambiguidades do Legado</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Authority</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng">Engineering</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/decisions">ADRs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/gov">Governance</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Operations</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/user">User docs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/runbooks/deploy-rollback">Runbooks</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/leg">Legacy archive</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built with Docusaurus. SGP documentation follows DEVAI docs-governance.</div></div></div></footer></div>
+</body>
+</html>

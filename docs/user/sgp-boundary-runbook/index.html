@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-user/user--sgp-boundary-runbook" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">SGP Boundary Architecture Runbook | SGP</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://aarusso-nyx.github.io/sgp/docs/user/sgp-boundary-runbook"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="SGP Boundary Architecture Runbook | SGP"><meta data-rh="true" name="description" content="This runbook explains the v0.0.1 operating boundary for external integrations."><meta data-rh="true" property="og:description" content="This runbook explains the v0.0.1 operating boundary for external integrations."><link data-rh="true" rel="canonical" href="https://aarusso-nyx.github.io/sgp/docs/user/sgp-boundary-runbook"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/user/sgp-boundary-runbook" hreflang="en"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/user/sgp-boundary-runbook" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"SGP Boundary Architecture Runbook","item":"https://aarusso-nyx.github.io/sgp/docs/user/sgp-boundary-runbook"}]}</script><link rel="stylesheet" href="/sgp/assets/css/styles.e3aa2f06.css">
+<script src="/sgp/assets/js/runtime~main.de3161a6.js" defer="defer"></script>
+<script src="/sgp/assets/js/main.ecb7e854.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/sgp/"><b class="navbar__title text--truncate">SGP</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/">Docs</a><a class="navbar__item navbar__link" href="/sgp/docs/eng">Engineering</a><a class="navbar__item navbar__link" href="/sgp/docs/gov">Governance</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/user">Operators</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/sgp/docs/"><span title="SGP Documentation Map" class="linkLabel_WmDU">SGP Documentation Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/architecture"><span title="Architecture" class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/decisions/TEMPLATE"><span title="ADRs" class="categoryLinkLabel_W154">ADRs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/api"><span title="Contracts" class="categoryLinkLabel_W154">Contracts</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/67-pdf-a-builder"><span title="Engineering" class="categoryLinkLabel_W154">Engineering</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/gov"><span title="Governance" class="categoryLinkLabel_W154">Governance</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/ops/observability"><span title="Operations" class="categoryLinkLabel_W154">Operations</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/esocial/00-index"><span title="Schemas" class="categoryLinkLabel_W154">Schemas</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/sgp/docs/user/dependency-management"><span title="User" class="categoryLinkLabel_W154">User</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/dependency-management"><span title="Dependency Management" class="linkLabel_WmDU">Dependency Management</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/environment"><span title="Environment Variables" class="linkLabel_WmDU">Environment Variables</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user"><span title="User and Operator Docs" class="linkLabel_WmDU">User and Operator Docs</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/lgpd-transferencia-internacional-runbook"><span title="LGPD International Transfer Runbook" class="linkLabel_WmDU">LGPD International Transfer Runbook</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/lgpd"><span title="LGPD Operations" class="linkLabel_WmDU">LGPD Operations</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/local-setup"><span title="Local Setup" class="linkLabel_WmDU">Local Setup</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/operator-readiness"><span title="Operator Readiness" class="linkLabel_WmDU">Operator Readiness</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/portal-self-service"><span title="Portal self-service operations" class="linkLabel_WmDU">Portal self-service operations</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/user/runbooks/pii-plaintext-cutover"><span title="runbooks" class="categoryLinkLabel_W154">runbooks</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/scripts"><span title="Scripts Reference" class="linkLabel_WmDU">Scripts Reference</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/user/sgp-boundary-runbook"><span title="SGP Boundary Architecture Runbook" class="linkLabel_WmDU">SGP Boundary Architecture Runbook</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/source-workspace"><span title="SGP Source Workspace" class="linkLabel_WmDU">SGP Source Workspace</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/user/testing"><span title="Testing" class="linkLabel_WmDU">Testing</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/leg/audit/plan"><span title="Legacy" class="categoryLinkLabel_W154">Legacy</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/legal/clt-rescisao-aviso-fgts"><span title="References" class="categoryLinkLabel_W154">References</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/sgp/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">User</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">SGP Boundary Architecture Runbook</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>SGP Boundary Architecture Runbook</h1></header>
+<p>This runbook explains the v0.0.1 operating boundary for external integrations.
+SGP owns deterministic adapters, queue envelopes, local mock relays, persisted
+state, audit, and observability. Real government, bank, GovBR, or HSM provider
+homologation is an ente-side responsibility unless a future owner decision
+changes <code>docs/eng</code>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="queue-contract-overview">Queue Contract Overview<a href="#queue-contract-overview" class="hash-link" aria-label="Direct link to Queue Contract Overview" title="Direct link to Queue Contract Overview" translate="no">​</a></h2>
+<p>The SGP boundary is the two-way adapter queue contract documented in
+<code>docs/eng/domains/fiscal-integrations.md</code>:</p>
+<ul>
+<li class="">request topic: <code>sgp.adapter.&lt;kind&gt;.request</code></li>
+<li class="">response topic: <code>sgp.adapter.&lt;kind&gt;.response</code></li>
+<li class="">dead-letter topic: <code>sgp.adapter.&lt;kind&gt;.dlq</code></li>
+</ul>
+<p>Every request carries <code>request-id</code>, <code>correlation-id</code>, <code>idempotency-key</code>,
+<code>tenant_id</code>, <code>kind</code>, <code>payload</code>, <code>attempt</code>, <code>max-attempts</code>, <code>reply-to</code>,
+<code>dead-letter-topic</code>, and <code>created-at</code>. Every response echoes the correlation
+fields and returns <code>OK</code>, <code>RETRY</code>, or <code>DEAD_LETTER</code>.</p>
+<p>The local in-memory transport and mock relays are the accepted CI/runtime
+evidence for SGP. A production deployment can replace the transport or attach an
+ente-owned relay as long as the envelope, tenant, retry, DLQ, and audit
+semantics remain unchanged.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="adapter-wiring">Adapter Wiring<a href="#adapter-wiring" class="hash-link" aria-label="Direct link to Adapter Wiring" title="Direct link to Adapter Wiring" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="esocial">eSocial<a href="#esocial" class="hash-link" aria-label="Direct link to eSocial" title="Direct link to eSocial" translate="no">​</a></h3>
+<p>SGP-side runtime:</p>
+<ul>
+<li class=""><code>backend/src/integrations/stynx-esocial/</code></li>
+<li class=""><code>backend/src/esocial-events/</code></li>
+<li class=""><code>public.esocial_events</code></li>
+</ul>
+<p>SGP no longer owns the eSocial worker, builders, XSD bundle, certificate store,
+SOAP client, return parser, or eSocial schema tables. SGP does not expose the
+legacy browser-facing eSocial route family; domain actions enqueue internal
+events into <code>public.esocial_events</code> and exchange HTTP/queue envelopes with the
+separate <code>stynx-esocial</code> service.</p>
+<p>Official endpoint custody, certificates, national-environment homologation,
+payload construction, signing, retries, and return parsing are outside the SGP
+runtime and belong to <code>stynx-esocial</code> or ente-side production operations.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="tce">TCE<a href="#tce" class="hash-link" aria-label="Direct link to TCE" title="Direct link to TCE" translate="no">​</a></h3>
+<p>SGP-side runtime:</p>
+<ul>
+<li class=""><code>backend/src/tce/adapters/queue-adapter.ts</code></li>
+<li class=""><code>backend/src/external/mocks/tce-relay/</code></li>
+<li class=""><code>tce.submission</code></li>
+<li class=""><code>tce.submission_queue</code></li>
+<li class=""><code>tce.submission_attempt</code></li>
+<li class=""><code>tce.adapter_circuit_state</code></li>
+</ul>
+<p>The TCE adapter publishes state-shaped report envelopes to <code>kind=tce</code>. The local
+relay returns deterministic SP/MG acknowledgements and persists local submission
+state. Official state court layouts, endpoints, proprietary field dictionaries,
+and homologation fixtures stay downstream of the SGP adapter boundary.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="banking">Banking<a href="#banking" class="hash-link" aria-label="Direct link to Banking" title="Direct link to Banking" translate="no">​</a></h3>
+<p>SGP-side runtime:</p>
+<ul>
+<li class=""><code>backend/src/integrations-worker/cnab240/adapters/queue-adapter.ts</code></li>
+<li class=""><code>backend/src/external/mocks/banking-relay/</code></li>
+<li class="">CNAB240 remittance and return goldens under <code>tests/backend/golden/cnab240/</code></li>
+</ul>
+<p>The banking adapter proves deterministic file production and local return
+reconciliation. Bank host/channel contracts, keys, credentials, and return-file
+SLAs are ente-side production operations.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="siafic">SIAFIC<a href="#siafic" class="hash-link" aria-label="Direct link to SIAFIC" title="Direct link to SIAFIC" translate="no">​</a></h3>
+<p>SGP-side runtime:</p>
+<ul>
+<li class=""><code>backend/src/integrations-worker/siafic/</code></li>
+<li class=""><code>tests/backend/golden/siafic-v01/</code></li>
+</ul>
+<p>SIAFIC uses the neutral payroll-accounting JSON contract as the permanent SGP
+surface. <code>officialConformance=false</code> is intentional for v0.0.1; each ente maps
+the neutral payload to its SIAFI, SIAFEM, or municipal SIAFIC layout outside
+SGP.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="siconfi-siope-and-siops">SICONFI, SIOPE, and SIOPS<a href="#siconfi-siope-and-siops" class="hash-link" aria-label="Direct link to SICONFI, SIOPE, and SIOPS" title="Direct link to SICONFI, SIOPE, and SIOPS" translate="no">​</a></h3>
+<p>The current SGP side has export primitives under:</p>
+<ul>
+<li class=""><code>backend/src/integrations-worker/siconfi/</code></li>
+<li class=""><code>backend/src/integrations-worker/siope/</code></li>
+<li class=""><code>backend/src/integrations-worker/siops/</code></li>
+</ul>
+<p>Round 5 item R5-40 extends these into the same mock-relay boundary. Until that
+lands, operators should treat generated files as internal evidence packages, not
+accepted government transmissions.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="govbr-and-hsma3-signing">GovBR and HSM/A3 Signing<a href="#govbr-and-hsma3-signing" class="hash-link" aria-label="Direct link to GovBR and HSM/A3 Signing" title="Direct link to GovBR and HSM/A3 Signing" translate="no">​</a></h3>
+<p>The SGP-side signing default is the local software-certificate path. HSM/A3 is a
+per-ente downstream concern because provider, custody, certificate chain,
+onboarding, SLA, and cost are deployment-specific.</p>
+<p>Software A1/PKCS#12 certificate material and passwords enter SGP only through
+the deployment secret boundary. Runtime and audit status surfaces may expose
+alias, subject, validity dates, days until expiry, and expired/near-expiry
+flags, but must never return PKCS#12 bytes, passwords, private keys, or raw
+certificate PEM values.</p>
+<p>Production installations that need HSM/A3 should attach it through a
+config-driven signer strategy/factory:</p>
+<ul>
+<li class=""><code>signer=software</code> keeps the SGP default.</li>
+<li class=""><code>signer=external-hsm</code> delegates signing to an ente-owned adapter.</li>
+<li class="">the adapter must return the same verification evidence fields expected by SGP.</li>
+<li class="">private keys and HSM credentials never enter SGP source, fixtures, logs, or
+retained evidence.</li>
+</ul>
+<p>GovBR production provider selection follows the same boundary: the SGP sandbox
+evidence shape is stable, while production provider credentials and acceptance
+belong to the ente-side integration.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="slo-expectations">SLO Expectations<a href="#slo-expectations" class="hash-link" aria-label="Direct link to SLO Expectations" title="Direct link to SLO Expectations" translate="no">​</a></h2>
+<p>The SGP-side operational targets for local queues are documented in
+<code>docs/eng/domains/operations-observability.md</code>. They are evidence targets for
+local workers and mock relays, not production homologation promises.</p>
+<p>Production SLOs are TBD per ente. Before enabling a real relay, the ente must
+record:</p>
+<ul>
+<li class="">endpoint and provider ownership;</li>
+<li class="">credential and certificate custody;</li>
+<li class="">retry budget and dead-letter response time;</li>
+<li class="">operator escalation path;</li>
+<li class="">evidence retention path for official receipts.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="observability">Observability<a href="#observability" class="hash-link" aria-label="Direct link to Observability" title="Direct link to Observability" translate="no">​</a></h2>
+<p>Use the governed dashboard and alert rules:</p>
+<ul>
+<li class=""><code>docs/gov/observability/audit-worker-dashboard.json</code></li>
+<li class=""><code>docs/gov/observability/audit-worker-alerts.yml</code></li>
+</ul>
+<p>Required log/metric dimensions are <code>worker</code>, <code>tenant_id</code>, <code>request-id</code>,
+<code>correlation-id</code>, <code>idempotency-key</code>, <code>kind</code>, <code>attempt</code>, <code>status</code>, <code>duration_ms</code>,
+and <code>trace_id</code> when available. Queue depth, active claims, retries, DLQ counts,
+and circuit state must remain visible before a real relay is enabled.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="failure-recovery">Failure Recovery<a href="#failure-recovery" class="hash-link" aria-label="Direct link to Failure Recovery" title="Direct link to Failure Recovery" translate="no">​</a></h2>
+<ol>
+<li class="">Identify <code>kind</code>, tenant, <code>correlation-id</code>, and final status from logs or the
+dashboard.</li>
+<li class="">For <code>RETRY</code>, confirm attempt count and circuit state before manual action.</li>
+<li class="">For validation failures, correct source data or layout metadata. Do not
+replay unchanged invalid payloads.</li>
+<li class="">For <code>DEAD_LETTER</code>, inspect the final request and response, preserve evidence,
+fix the upstream cause, then replay only through the documented operator
+endpoint or ente-owned relay process.</li>
+<li class="">If a real relay fails because of credentials, endpoint policy, certificate
+chain, HSM custody, or homologation rejection, record the incident as
+ente-side. Do not weaken SGP tests or mock-relay contracts to hide it.</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="security-boundary">Security Boundary<a href="#security-boundary" class="hash-link" aria-label="Direct link to Security Boundary" title="Direct link to Security Boundary" translate="no">​</a></h2>
+<ul>
+<li class="">SGP source and fixtures must not contain production credentials, HSM secrets,
+private keys, bank keys, government endpoint credentials, or real certificates.</li>
+<li class="">Tenant context and RLS posture must be preserved across adapter requests,
+relay responses, persisted state, logs, and metrics.</li>
+<li class="">Audit events remain append-oriented and redacted.</li>
+<li class="">Real-service traffic is forbidden in CI unless explicitly authorized by the
+owner for a separate homologation run.</li>
+</ul>
+<p>See also: <code>docs/eng/runbooks/incident-response.md</code> and
+<code>docs/eng/runbooks/secret-rotation.md</code>.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/sgp/docs/user/scripts"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Scripts Reference</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/sgp/docs/user/source-workspace"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">SGP Source Workspace</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#queue-contract-overview" class="table-of-contents__link toc-highlight">Queue Contract Overview</a></li><li><a href="#adapter-wiring" class="table-of-contents__link toc-highlight">Adapter Wiring</a><ul><li><a href="#esocial" class="table-of-contents__link toc-highlight">eSocial</a></li><li><a href="#tce" class="table-of-contents__link toc-highlight">TCE</a></li><li><a href="#banking" class="table-of-contents__link toc-highlight">Banking</a></li><li><a href="#siafic" class="table-of-contents__link toc-highlight">SIAFIC</a></li><li><a href="#siconfi-siope-and-siops" class="table-of-contents__link toc-highlight">SICONFI, SIOPE, and SIOPS</a></li><li><a href="#govbr-and-hsma3-signing" class="table-of-contents__link toc-highlight">GovBR and HSM/A3 Signing</a></li></ul></li><li><a href="#slo-expectations" class="table-of-contents__link toc-highlight">SLO Expectations</a></li><li><a href="#observability" class="table-of-contents__link toc-highlight">Observability</a></li><li><a href="#failure-recovery" class="table-of-contents__link toc-highlight">Failure Recovery</a></li><li><a href="#security-boundary" class="table-of-contents__link toc-highlight">Security Boundary</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Authority</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng">Engineering</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/decisions">ADRs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/gov">Governance</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Operations</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/user">User docs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/runbooks/deploy-rollback">Runbooks</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/leg">Legacy archive</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built with Docusaurus. SGP documentation follows DEVAI docs-governance.</div></div></div></footer></div>
+</body>
+</html>

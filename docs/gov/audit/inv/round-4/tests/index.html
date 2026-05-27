@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-gov/audit/inv/round-4/gov--audit--inv--round-4--tests" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Test Inventory (Round 4) | SGP</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-4/tests"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Test Inventory (Round 4) | SGP"><meta data-rh="true" name="description" content="Narrative wrapper around test-coverage-map.json and test-coverage-map.md."><meta data-rh="true" property="og:description" content="Narrative wrapper around test-coverage-map.json and test-coverage-map.md."><link data-rh="true" rel="canonical" href="https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-4/tests"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-4/tests" hreflang="en"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-4/tests" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Test Inventory (Round 4)","item":"https://aarusso-nyx.github.io/sgp/docs/gov/audit/inv/round-4/tests"}]}</script><link rel="stylesheet" href="/sgp/assets/css/styles.e3aa2f06.css">
+<script src="/sgp/assets/js/runtime~main.de3161a6.js" defer="defer"></script>
+<script src="/sgp/assets/js/main.ecb7e854.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/sgp/"><b class="navbar__title text--truncate">SGP</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/">Docs</a><a class="navbar__item navbar__link" href="/sgp/docs/eng">Engineering</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/gov">Governance</a><a class="navbar__item navbar__link" href="/sgp/docs/user">Operators</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/sgp/docs/"><span title="SGP Documentation Map" class="linkLabel_WmDU">SGP Documentation Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/architecture"><span title="Architecture" class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/decisions/TEMPLATE"><span title="ADRs" class="categoryLinkLabel_W154">ADRs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/api"><span title="Contracts" class="categoryLinkLabel_W154">Contracts</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/67-pdf-a-builder"><span title="Engineering" class="categoryLinkLabel_W154">Engineering</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/sgp/docs/gov"><span title="Governance" class="categoryLinkLabel_W154">Governance</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov"><span title="Governance Artifacts (docs/gov)" class="linkLabel_WmDU">Governance Artifacts (docs/gov)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/admin-menu-install-plan"><span title="Admin Menu Install Plan" class="linkLabel_WmDU">Admin Menu Install Plan</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/api-surface"><span title="API Surface" class="linkLabel_WmDU">API Surface</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/backlog-ledger"><span title="Backlog Ledger" class="linkLabel_WmDU">Backlog Ledger</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/diag/round-1/fr-delta"><span title="diag" class="categoryLinkLabel_W154">diag</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/efd-reinf-r4000-proof"><span title="EFD-Reinf R-4000 Proof" class="linkLabel_WmDU">EFD-Reinf R-4000 Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/fr-promotion-proof"><span title="Functional Requisite Promotion Proof" class="linkLabel_WmDU">Functional Requisite Promotion Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/functional-requisites"><span title="Functional Requisites" class="linkLabel_WmDU">Functional Requisites</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit"><span title="Audit Governance" class="linkLabel_WmDU">Audit Governance</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/sgp/docs/gov/audit/inv/round-10/backend"><span title="inv" class="categoryLinkLabel_W154">inv</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-10/backend"><span title="round-10" class="categoryLinkLabel_W154">round-10</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-11/test-coverage-map"><span title="round-11" class="categoryLinkLabel_W154">round-11</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-13/backend"><span title="round-13" class="categoryLinkLabel_W154">round-13</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-14/test-coverage-map"><span title="round-14" class="categoryLinkLabel_W154">round-14</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-3/backend"><span title="round-3" class="categoryLinkLabel_W154">round-3</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/sgp/docs/gov/audit/inv/round-4/backend"><span title="round-4" class="categoryLinkLabel_W154">round-4</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-4/backend"><span title="Backend Inventory (Round 4)" class="linkLabel_WmDU">Backend Inventory (Round 4)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-4/db"><span title="DB Inventory (Round 4)" class="linkLabel_WmDU">DB Inventory (Round 4)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-4/frontend"><span title="Frontend Inventory (Round 4)" class="linkLabel_WmDU">Frontend Inventory (Round 4)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-4/legacy-parity"><span title="Legacy Parity (Round 4)" class="linkLabel_WmDU">Legacy Parity (Round 4)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/inv/round-4/test-coverage-map"><span title="Test Coverage Map" class="linkLabel_WmDU">Test Coverage Map</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/gov/audit/inv/round-4/tests"><span title="Test Inventory (Round 4)" class="linkLabel_WmDU">Test Inventory (Round 4)</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-5/test-coverage-map"><span title="round-5" class="categoryLinkLabel_W154">round-5</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/inv/round-6/backend"><span title="round-6" class="categoryLinkLabel_W154">round-6</span></a></div></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/lgpd-dpo-dsar-proof"><span title="LGPD DPO and DSAR Proof" class="linkLabel_WmDU">LGPD DPO and DSAR Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/lgpd-international-transfer-proof"><span title="LGPD International Transfer Proof" class="linkLabel_WmDU">LGPD International Transfer Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/lgpd-ropa-rcis-proof"><span title="LGPD ROPA and RCIS Proof" class="linkLabel_WmDU">LGPD ROPA and RCIS Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/lint-thresholds"><span title="Lint And Duplication Thresholds" class="linkLabel_WmDU">Lint And Duplication Thresholds</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/mvp-fr-scope-proof"><span title="MVP Functional Requisite Scope Proof" class="linkLabel_WmDU">MVP Functional Requisite Scope Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/non-functional-requisites"><span title="Non-Functional Requisites Ledger" class="linkLabel_WmDU">Non-Functional Requisites Ledger</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/phase-9-closure"><span title="Phase 9 Closure Compare" class="linkLabel_WmDU">Phase 9 Closure Compare</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/portaria-671-time-export-proof"><span title="Portaria 671 Time Export Proof" class="linkLabel_WmDU">Portaria 671 Time Export Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/property-based-test-inventory"><span title="Property-Based Test Inventory" class="linkLabel_WmDU">Property-Based Test Inventory</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/recruitment-public-concurso-lgpd-proof"><span title="Public Concurso Registration and LGPD Consent Proof" class="linkLabel_WmDU">Public Concurso Registration and LGPD Consent Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/schema-digest"><span title="Schema Digest" class="linkLabel_WmDU">Schema Digest</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/sgp-only-b-closure"><span title="SGP-Only B Closure Proof" class="linkLabel_WmDU">SGP-Only B Closure Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/test-confidence-proof"><span title="Test Confidence Proof" class="linkLabel_WmDU">Test Confidence Proof</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/audit/type-safety-proof"><span title="Type Safety Proof" class="linkLabel_WmDU">Type Safety Proof</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/wave-D/coordination-ledger"><span title="wave-D" class="categoryLinkLabel_W154">wave-D</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/gov/audit/wave-E/external-package-status"><span title="wave-E" class="categoryLinkLabel_W154">wave-E</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/backend-surface-notes"><span title="Backend Surface Notes Evidence" class="linkLabel_WmDU">Backend Surface Notes Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-closure"><span title="Database Alignment Closure Evidence" class="linkLabel_WmDU">Database Alignment Closure Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-phase-1"><span title="Database Alignment Evidence Phase 1" class="linkLabel_WmDU">Database Alignment Evidence Phase 1</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-phase-2"><span title="Database Alignment Evidence Phase 2" class="linkLabel_WmDU">Database Alignment Evidence Phase 2</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-phase-3"><span title="Database Alignment Evidence Phase 3" class="linkLabel_WmDU">Database Alignment Evidence Phase 3</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/database-alignment-phase-4"><span title="Database Alignment Evidence Phase 4" class="linkLabel_WmDU">Database Alignment Evidence Phase 4</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/deferred-decision-ledger"><span title="Deferred Decision Ledger Evidence" class="linkLabel_WmDU">Deferred Decision Ledger Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/implementation-status"><span title="Implementation Status Evidence" class="linkLabel_WmDU">Implementation Status Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/mvp-scope-ledger"><span title="MVP Scope Ledger" class="linkLabel_WmDU">MVP Scope Ledger</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/pii-cutover-dry-run-2026-05"><span title="PII Plaintext Cutover Dry-Run Evidence - 2026-05" class="linkLabel_WmDU">PII Plaintext Cutover Dry-Run Evidence - 2026-05</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/release-homologation-gate-bundle"><span title="Release And Homologation Gate Bundle" class="linkLabel_WmDU">Release And Homologation Gate Bundle</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/evidence/repository-discipline"><span title="Repository Discipline Evidence" class="linkLabel_WmDU">Repository Discipline Evidence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/compliance/scoring"><span title="Compliance Scoring" class="linkLabel_WmDU">Compliance Scoring</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/health/preflight"><span title="Preflight Checks" class="linkLabel_WmDU">Preflight Checks</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B0-audit-phase"><span title="B0 — Audit Phase (reusable, per-round)" class="linkLabel_WmDU">B0 — Audit Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B1-compile-backlog-phase"><span title="B1 — Compile Backlog Phase (reusable, per-round)" class="linkLabel_WmDU">B1 — Compile Backlog Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B2-materialize-plan-phase"><span title="B2 — Materialize Plan Phase (reusable, per-round)" class="linkLabel_WmDU">B2 — Materialize Plan Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B3-execute-and-track-phase"><span title="B3 — Execute and Track Phase (reusable, per-round)" class="linkLabel_WmDU">B3 — Execute and Track Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/B4-compare-and-scorecard-phase"><span title="B4 — Compare And Scorecard Phase (reusable, per-round)" class="linkLabel_WmDU">B4 — Compare And Scorecard Phase (reusable, per-round)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/feature-completeness"><span title="gov--prompts--feature-completeness" class="linkLabel_WmDU">gov--prompts--feature-completeness</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/gov/prompts/repo-quality-assessment"><span title="Repository Quality Assessment &amp; Scorecard — Unified Prompt" class="linkLabel_WmDU">Repository Quality Assessment &amp; Scorecard — Unified Prompt</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/ops/observability"><span title="Operations" class="categoryLinkLabel_W154">Operations</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/esocial/00-index"><span title="Schemas" class="categoryLinkLabel_W154">Schemas</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/user/dependency-management"><span title="User" class="categoryLinkLabel_W154">User</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/leg/audit/plan"><span title="Legacy" class="categoryLinkLabel_W154">Legacy</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/legal/clt-rescisao-aviso-fgts"><span title="References" class="categoryLinkLabel_W154">References</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/sgp/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Governance</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">inv</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">round-4</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Test Inventory (Round 4)</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Test Inventory (Round 4)</h1></header>
+<p>Narrative wrapper around <a class="" href="/sgp/docs/gov/audit/inv/round-4/test-coverage-map.json"><code>test-coverage-map.json</code></a> and <a class="" href="/sgp/docs/gov/audit/inv/round-4/test-coverage-map"><code>test-coverage-map.md</code></a>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="counts-at-head-ea0966c">Counts at HEAD <code>ea0966c</code><a href="#counts-at-head-ea0966c" class="hash-link" aria-label="Direct link to counts-at-head-ea0966c" title="Direct link to counts-at-head-ea0966c" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th style="text-align:right">Round-3</th><th style="text-align:right">Round-4</th><th style="text-align:right">Δ</th></tr></thead><tbody><tr><td>Detected <code>*.spec.ts</code> / <code>*.e2e-spec.ts</code> (tooling)</td><td style="text-align:right">575</td><td style="text-align:right">(re-run by tooling — see <a class="" href="/sgp/docs/gov/audit/inv/round-4/test-coverage-map">test-coverage-map.md</a>)</td><td style="text-align:right">—</td></tr><tr><td><code>find tests -name &#x27;*.spec.ts&#x27;</code> (file count under tests/)</td><td style="text-align:right">226</td><td style="text-align:right"><strong>243</strong></td><td style="text-align:right"><strong>+17</strong></td></tr><tr><td>Total <code>*.spec.ts</code> repo-wide</td><td style="text-align:right">450</td><td style="text-align:right"><strong>476</strong></td><td style="text-align:right"><strong>+26</strong></td></tr><tr><td>Total <code>*.e2e-spec.ts</code> repo-wide</td><td style="text-align:right">125</td><td style="text-align:right"><strong>136</strong></td><td style="text-align:right"><strong>+11</strong></td></tr><tr><td>Tests <code>*.{ts,mjs,js}</code> LOC</td><td style="text-align:right">30 730</td><td style="text-align:right"><strong>34 055</strong></td><td style="text-align:right"><strong>+3 325 (+10.8 %)</strong></td></tr><tr><td>Functional requisites with mapped tests</td><td style="text-align:right">1 / 1 (parser stub)</td><td style="text-align:right"><strong>77</strong> parsed (R4-60 fix)</td><td style="text-align:right">parser fully restored</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="test-surface-by-location-post-r4">Test surface by location (post-R4)<a href="#test-surface-by-location-post-r4" class="hash-link" aria-label="Direct link to Test surface by location (post-R4)" title="Direct link to Test surface by location (post-R4)" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Location</th><th style="text-align:right">Specs (round-3)</th><th style="text-align:right">Specs (round-4)</th><th>Notes</th></tr></thead><tbody><tr><td><a class="" href="/sgp/tests/backend/"><code>tests/backend/</code></a></td><td style="text-align:right">127</td><td style="text-align:right"><strong>139</strong></td><td>+12: new e2e specs for R4-01 (PAdES), R4-02 (concurrency), R4-10 (DCTFWeb CSLL), R4-11 (EFD-Reinf R-2055), R4-12/13 (totalizers), R4-14 (SIAFIC), R4-15 (RREO/RGF), R4-17 (CF 37 XVI), R4-90 (esocial via queue), R4-91 (banking via queue), R4-30 (readiness), R4-31 (observability)</td></tr><tr><td><a class="" href="/sgp/tests/rls/"><code>tests/rls/</code></a></td><td style="text-align:right">80</td><td style="text-align:right"><strong>80</strong></td><td>unchanged</td></tr><tr><td><a class="" href="/sgp/tests/db/"><code>tests/db/</code></a></td><td style="text-align:right">10</td><td style="text-align:right"><strong>11</strong></td><td>+1 RLS-posture-parity spec (R4-72)</td></tr><tr><td><a class="" href="/sgp/tests/scripts/"><code>tests/scripts/</code></a></td><td style="text-align:right">8</td><td style="text-align:right"><strong>11+</strong></td><td>+new audit-tooling specs: <code>audit-decimal-coverage</code>, <code>audit-idempotency-coverage</code>, <code>audit-fe-i18n-coverage</code>, plus the docs/refs cross-reference guard spec</td></tr><tr><td><a class="" href="/sgp/tests/e2e/"><code>tests/e2e/</code></a></td><td style="text-align:right">5</td><td style="text-align:right"><strong>5</strong></td><td>unchanged</td></tr><tr><td><a class="" href="/sgp/tests/frontend/"><code>tests/frontend/</code></a></td><td style="text-align:right">2</td><td style="text-align:right"><strong>2</strong></td><td>unchanged</td></tr><tr><td><a class="" href="/sgp/tests/audit/"><code>tests/audit/</code></a></td><td style="text-align:right">1</td><td style="text-align:right"><strong>1</strong></td><td>unchanged</td></tr><tr><td><code>backend/src/**/*.spec.ts</code> (in-tree)</td><td style="text-align:right">~330</td><td style="text-align:right"><strong>~360</strong></td><td>+new sub-service specs from R4-40 / R4-41 / R4-42 decompositions</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="goldens-inventory-post-r4">Goldens inventory (post-R4)<a href="#goldens-inventory-post-r4" class="hash-link" aria-label="Direct link to Goldens inventory (post-R4)" title="Direct link to Goldens inventory (post-R4)" translate="no">​</a></h2>
+<p>Located at <a class="" href="/sgp/tests/backend/golden/"><code>tests/backend/golden/</code></a>:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Subdir</th><th>Domain</th><th>Source</th></tr></thead><tbody><tr><td><code>payroll-mensal-v01/</code></td><td>Monthly payroll</td><td>R2-50</td></tr><tr><td><code>decimo-terceiro-v01/</code></td><td>13th salary</td><td>R2-50</td></tr><tr><td><code>ferias-folha-v01/</code></td><td>Vacations + payroll</td><td>R2-50</td></tr><tr><td><code>rescisao-v01/</code></td><td>Termination</td><td>R2-50</td></tr><tr><td><code>payslip-pdf-a-v01/</code></td><td>Payslip PDF/A</td><td>R2-92</td></tr><tr><td><code>comprovante-anual-v01/</code></td><td>Annual income statement</td><td>R3-016</td></tr><tr><td><code>cnab240/</code> (5 banks: bb, bradesco, caixa, itau, santander, return)</td><td>Banking remittance</td><td>R2-87</td></tr><tr><td><code>tce/state-payroll-v01/</code></td><td>TCE state-payroll output</td><td>R3-016</td></tr><tr><td><code>transparency/public-payroll-v01/</code></td><td>Portal de Transparência</td><td>R3-016</td></tr><tr><td><strong><code>margem-consignavel-v01/</code></strong></td><td>Lei 14.509 three-bucket margin</td><td><strong>R4-04 NEW</strong></td></tr><tr><td><strong><code>manual-entry-import-v01/</code></strong></td><td>F-FOL-007 importador estructural</td><td><strong>R4-16 NEW (PARTIAL — legacy byte-parity blocked)</strong></td></tr><tr><td><strong><code>servidor-import-v01/</code></strong></td><td>F-FOL-008 importador estructural</td><td><strong>R4-16 NEW (PARTIAL)</strong></td></tr><tr><td><strong><code>pensionista-import-v01/</code></strong></td><td>F-FOL-009 importador estructural</td><td><strong>R4-16 NEW (PARTIAL)</strong></td></tr><tr><td><strong><code>siafic-v01/</code></strong></td><td>SIAFIC neutral JSON</td><td><strong>R4-14 NEW (PARTIAL — <code>officialConformance=false</code>)</strong></td></tr><tr><td><strong><code>efd-reinf-r2055-v01/</code></strong></td><td>EFD-Reinf R-2055 NT 01/2026</td><td><strong>R4-11 NEW</strong></td></tr><tr><td><strong><code>dctfweb-csll-v01/</code></strong></td><td>DCTFWeb CSLL adicional</td><td><strong>R4-10 NEW</strong></td></tr><tr><td><strong><code>tce/rreo-v01/</code></strong></td><td>TCE RREO (LRF)</td><td><strong>R4-15 NEW</strong></td></tr><tr><td><strong><code>tce/rgf-v01/</code></strong></td><td>TCE RGF (LRF)</td><td><strong>R4-15 NEW</strong></td></tr></tbody></table>
+<p><strong>Total goldens directories: 18</strong> (was 9 in round-3, +9 in R4).</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="esocial-xsd-fixtures-post-r4">eSocial XSD fixtures (post-R4)<a href="#esocial-xsd-fixtures-post-r4" class="hash-link" aria-label="Direct link to eSocial XSD fixtures (post-R4)" title="Direct link to eSocial XSD fixtures (post-R4)" translate="no">​</a></h2>
+<p><a class="" href="/sgp/backend/src/esocial-worker/parsers/__fixtures__/"><code>backend/src/esocial-worker/parsers/__fixtures__/</code></a> — added in R4-12 / R4-13:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Fixture</th><th>Purpose</th></tr></thead><tbody><tr><td><code>s5001-totalizer.golden.xml</code></td><td>totalizer reference</td></tr><tr><td><strong><code>s5002-totalizer.golden.xml</code></strong></td><td>R4-12 — IRRF por trabalhador</td></tr><tr><td><strong><code>s5002-totalizer-retro.golden.xml</code></strong></td><td>R4-12 — retroactive case</td></tr><tr><td><code>s5011-totalizer.golden.xml</code></td><td>totalizer reference</td></tr><tr><td><strong><code>s5012-totalizer.golden.xml</code></strong></td><td>R4-13 — IRRF mensal empregador (reconciliation)</td></tr><tr><td><code>s5013-totalizer.golden.xml</code></td><td>totalizer reference</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="per-domain-coverage-delta-vs-round-3">Per-domain coverage delta vs round-3<a href="#per-domain-coverage-delta-vs-round-3" class="hash-link" aria-label="Direct link to Per-domain coverage delta vs round-3" title="Direct link to Per-domain coverage delta vs round-3" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Domain</th><th>Round-3 status</th><th>Round-4 delta</th></tr></thead><tbody><tr><td>Payroll (FOL-*)</td><td>Goldens green (monthly/13º/rescisão/férias)</td><td>+ Lei 14.509 margem golden (R4-04); + idempotency adoption proven 9/9 (R4-21); + decimal policy 0 violations (R4-22)</td></tr><tr><td>eSocial (S-1xxx/S-2xxx)</td><td>XSD + dispatch + retry covered</td><td>+ S-5002 + S-5012 totalizer parsers + reconciliation (R4-12/R4-13); + S-1299 PAdES PKCS#7 envelope (R4-01); + queue-based submission for S-1299 (R4-90, PARTIAL)</td></tr><tr><td>Fiscal (DCTFWeb/EFD-Reinf)</td><td>Stub</td><td>+ DCTFWeb CSLL adicional + MIT (R4-10); + EFD-Reinf R-2055 + R-2000 NT 01/2026 (R4-11)</td></tr><tr><td>TCE</td><td>Per-state stub goldens + transparency</td><td>+ RREO + RGF skeleton with SP/MG goldens (R4-15); + SIAFIC neutral JSON e2e (R4-14, PARTIAL); + queue-based state submission (R4-81/R4-96)</td></tr><tr><td>Banking</td><td>5-bank CNAB240 goldens</td><td>+ Mock relay round-trip (R4-98); + dispatch via queue (R4-91)</td></tr><tr><td>LGPD</td><td>DPO/DSAR/public-power/PII batch (round-3)</td><td>+ 19 cols ciphertext siblings (R4-20); NFR-013 → DONE</td></tr><tr><td>RH</td><td>R3-022 modernization slice</td><td>+ CF 37 XVI accumulation matrix (R4-17); + employees.service decomposition (R4-40, 1 763 → 163 LOC)</td></tr><tr><td>Avaliação</td><td>(round-2 base)</td><td>+ 5-way decomposition (R4-42, 1 140 → 103 LOC)</td></tr><tr><td>Integrations dispatcher</td><td>Single 1 428-LOC hub</td><td>+ per-kind dispatchers (R4-41, 1 428 → 449 LOC)</td></tr><tr><td>Worker scheduling</td><td>Raw <code>setInterval</code> (4 hits)</td><td>+ <code>@nestjs/schedule</code>-based scheduler with OTel + readiness (R4-03/R4-30/R4-31)</td></tr><tr><td>Adapters / mock services</td><td>None</td><td>+ 2-way queue contract (R4-95); 3 mock relays (R4-96/97/98)</td></tr><tr><td>Audit-tooling</td><td>8 specs (round-3)</td><td>+ decimal-coverage + idempotency-coverage + fe-i18n-coverage + docs/refs cross-reference specs</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="fr-ledger-restoration-r4-60-closed">FR-ledger restoration (R4-60 closed)<a href="#fr-ledger-restoration-r4-60-closed" class="hash-link" aria-label="Direct link to FR-ledger restoration (R4-60 closed)" title="Direct link to FR-ledger restoration (R4-60 closed)" translate="no">​</a></h2>
+<p>The round-3 single-FR-001-stub problem is <strong>fixed</strong>. The R4-60 parser now walks <code>docs/eng/domains/*.md</code> headings:</p>
+<ul>
+<li class=""><strong>77 FR rows</strong> parsed from 6 domain files.</li>
+<li class="">Per-FR test mapping is now functional (re-run via <code>npm run audit:tests -- --round 4</code>).</li>
+<li class="">See <a class="" href="/sgp/docs/gov/audit/functional-requisites">docs/gov/audit/functional-requisites.md</a> for the full list and <a class="" href="/sgp/docs/gov/audit/diag/round-4/fr-delta">diag/round-4/fr-delta.md</a> for the round-3 → round-4 delta.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="caveats">Caveats<a href="#caveats" class="hash-link" aria-label="Direct link to Caveats" title="Direct link to Caveats" translate="no">​</a></h2>
+<ul>
+<li class="">Round-4 specs lock the SGP-boundary architecture (R4-95 + R4-96/97/98) but <strong>do not</strong> test against real external services. The mock-relay pattern is a deliberate boundary per owner decision (2026-05-03).</li>
+<li class="">R4-90 (eSocial submission via queue) is PARTIAL — only S-1299 is queue-supported; other implemented S-1xxx/S-2xxx classes intentionally raise <code>ESOCIAL_QUEUE_EVENT_UNSUPPORTED</code> instead of silent SOAP fallback. Owner-decision blocker recorded in <a class="" href="/sgp/docs/work/round-3/QUESTIONS.md">docs/work/round-3/QUESTIONS.md</a>.</li>
+<li class="">R4-16 (importador goldens) is PARTIAL — structural goldens shipped; legacy XLSX template byte-parity remains source-pending per same QUESTIONS.md.</li>
+<li class="">R4-14 (SIAFIC) is PARTIAL — neutral JSON conformance shipped with <code>officialConformance=false</code>; Decreto 11.453/2023 layout selection deferred.</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/sgp/docs/gov/audit/inv/round-4/test-coverage-map"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Test Coverage Map</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/sgp/docs/gov/audit/inv/round-5/test-coverage-map"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Test Coverage Map</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#counts-at-head-ea0966c" class="table-of-contents__link toc-highlight">Counts at HEAD <code>ea0966c</code></a></li><li><a href="#test-surface-by-location-post-r4" class="table-of-contents__link toc-highlight">Test surface by location (post-R4)</a></li><li><a href="#goldens-inventory-post-r4" class="table-of-contents__link toc-highlight">Goldens inventory (post-R4)</a></li><li><a href="#esocial-xsd-fixtures-post-r4" class="table-of-contents__link toc-highlight">eSocial XSD fixtures (post-R4)</a></li><li><a href="#per-domain-coverage-delta-vs-round-3" class="table-of-contents__link toc-highlight">Per-domain coverage delta vs round-3</a></li><li><a href="#fr-ledger-restoration-r4-60-closed" class="table-of-contents__link toc-highlight">FR-ledger restoration (R4-60 closed)</a></li><li><a href="#caveats" class="table-of-contents__link toc-highlight">Caveats</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Authority</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng">Engineering</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/decisions">ADRs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/gov">Governance</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Operations</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/user">User docs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/runbooks/deploy-rollback">Runbooks</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/leg">Legacy archive</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built with Docusaurus. SGP documentation follows DEVAI docs-governance.</div></div></div></footer></div>
+</body>
+</html>

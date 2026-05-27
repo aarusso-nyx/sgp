@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-leg/handoff/leg--handoff--agent-handoff" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Agent Handoff | SGP</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://aarusso-nyx.github.io/sgp/docs/leg/handoff/agent-handoff"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Agent Handoff | SGP"><meta data-rh="true" name="description" content="Generated: 2026-04-19"><meta data-rh="true" property="og:description" content="Generated: 2026-04-19"><link data-rh="true" rel="canonical" href="https://aarusso-nyx.github.io/sgp/docs/leg/handoff/agent-handoff"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/leg/handoff/agent-handoff" hreflang="en"><link data-rh="true" rel="alternate" href="https://aarusso-nyx.github.io/sgp/docs/leg/handoff/agent-handoff" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Agent Handoff","item":"https://aarusso-nyx.github.io/sgp/docs/leg/handoff/agent-handoff"}]}</script><link rel="stylesheet" href="/sgp/assets/css/styles.e3aa2f06.css">
+<script src="/sgp/assets/js/runtime~main.de3161a6.js" defer="defer"></script>
+<script src="/sgp/assets/js/main.ecb7e854.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/sgp/"><b class="navbar__title text--truncate">SGP</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/sgp/docs/">Docs</a><a class="navbar__item navbar__link" href="/sgp/docs/eng">Engineering</a><a class="navbar__item navbar__link" href="/sgp/docs/gov">Governance</a><a class="navbar__item navbar__link" href="/sgp/docs/user">Operators</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/sgp/docs/"><span title="SGP Documentation Map" class="linkLabel_WmDU">SGP Documentation Map</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/architecture"><span title="Architecture" class="categoryLinkLabel_W154">Architecture</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/decisions/TEMPLATE"><span title="ADRs" class="categoryLinkLabel_W154">ADRs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/api"><span title="Contracts" class="categoryLinkLabel_W154">Contracts</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/eng/67-pdf-a-builder"><span title="Engineering" class="categoryLinkLabel_W154">Engineering</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/gov"><span title="Governance" class="categoryLinkLabel_W154">Governance</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/ops/observability"><span title="Operations" class="categoryLinkLabel_W154">Operations</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/esocial/00-index"><span title="Schemas" class="categoryLinkLabel_W154">Schemas</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/user/dependency-management"><span title="User" class="categoryLinkLabel_W154">User</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/sgp/docs/leg/audit/plan"><span title="Legacy" class="categoryLinkLabel_W154">Legacy</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/audit/plan"><span title="audit" class="categoryLinkLabel_W154">audit</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/sgp/docs/leg/handoff/agent-handoff"><span title="handoff" class="categoryLinkLabel_W154">handoff</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/sgp/docs/leg/handoff/agent-handoff"><span title="Agent Handoff" class="linkLabel_WmDU">Agent Handoff</span></a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/sgp/docs/leg"><span title="Legacy Documentation Archive" class="linkLabel_WmDU">Legacy Documentation Archive</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/sgp/docs/leg/old-specs/integrations"><span title="old-specs" class="categoryLinkLabel_W154">old-specs</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/sgp/docs/leg/rev-eng"><span title="Legacy Reverse Evidence Archive" class="categoryLinkLabel_W154">Legacy Reverse Evidence Archive</span></a><button aria-label="Expand sidebar category &#x27;Legacy Reverse Evidence Archive&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/sgp/docs/leg/sql-reference"><span title="SQL Reference Archive" class="categoryLinkLabel_W154">SQL Reference Archive</span></a><button aria-label="Expand sidebar category &#x27;SQL Reference Archive&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/sgp/docs/refs/legal/clt-rescisao-aviso-fgts"><span title="References" class="categoryLinkLabel_W154">References</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/sgp/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Legacy</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">handoff</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Agent Handoff</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Agent Handoff</h1></header>
+<p>Generated: 2026-04-19
+Workspace root used: <code>/Users/aarusso/Downloads/sgp</code>
+Implementation root: repository root</p>
+<blockquote>
+<p>2026-05-03 refresh: this handoff is legacy evidence, not current acceptance authority. Current implementation authority is <code>docs/eng/</code>, with runtime topology in <code>docs/gov/generated/runtime-topology.json</code>, npm workspace commands in <code>scripts/run.mjs</code>, and ADR-011 reconciled in <code>docs/eng/platform.md</code>.</p>
+</blockquote>
+<p>This document preserves the current implementation context so another agent can resume from a different desktop without relying on chat history.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="repository-purpose">Repository Purpose<a href="#repository-purpose" class="hash-link" aria-label="Direct link to Repository Purpose" title="Direct link to Repository Purpose" translate="no">​</a></h2>
+<p>This repo started as a reverse-documentation workspace for the legacy SGP AngularJS application and now also contains a modernization implementation at the repository root.</p>
+<p>The modernization target is:</p>
+<ul>
+<li class="">Angular + Angular Material frontend</li>
+<li class="">NestJS backend</li>
+<li class="">PostgreSQL persistence only</li>
+<li class="">Prisma schema/modeling</li>
+<li class="">AWS Cognito User Pools/OAuth2 authentication and Cognito groups as authoritative permissions</li>
+<li class="">No secrets in tracked files</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="security-rules">Security Rules<a href="#security-rules" class="hash-link" aria-label="Direct link to Security Rules" title="Direct link to Security Rules" translate="no">​</a></h2>
+<ul>
+<li class="">Do not commit real credentials, tokens, cookies, screenshots containing secrets, or <code>.env</code> files with real values.</li>
+<li class="">Legacy exploration credentials must remain external environment variables only:
+<ul>
+<li class=""><code>APP_BASE_URL</code></li>
+<li class=""><code>APP_LOGIN</code></li>
+<li class=""><code>APP_PASSWORD</code></li>
+</ul>
+</li>
+<li class="">Implementation runtime secrets must remain in local deployment environment, not tracked docs/code.</li>
+<li class="">Audit metadata redacts sensitive keys such as authorization, cookie, password, token, secret, credential, <code>APP_LOGIN</code>, and <code>APP_PASSWORD</code>.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="important-directories">Important Directories<a href="#important-directories" class="hash-link" aria-label="Direct link to Important Directories" title="Direct link to Important Directories" translate="no">​</a></h2>
+<ul>
+<li class="">repository root: modern implementation workspace.</li>
+<li class=""><code>frontend</code>: Angular application.</li>
+<li class=""><code>backend</code>: NestJS application and Prisma schema.</li>
+<li class=""><code>database</code>: SQL and seed artifacts.</li>
+<li class=""><code>docs</code>: engineering docs, implementation docs, handoff material, and archived work artifacts.</li>
+<li class=""><code>tests</code>, <code>scripts</code>, <code>infra</code>: test, automation, and deployment scaffolding.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="current-implemented-slices">Current Implemented Slices<a href="#current-implemented-slices" class="hash-link" aria-label="Direct link to Current Implemented Slices" title="Direct link to Current Implemented Slices" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="foundation">Foundation<a href="#foundation" class="hash-link" aria-label="Direct link to Foundation" title="Direct link to Foundation" translate="no">​</a></h3>
+<ul>
+<li class="">Root npm workspace exists with frontend/backend workspaces.</li>
+<li class="">Backend uses NestJS modules and PostgreSQL through <code>DatabaseService</code>.</li>
+<li class="">Prisma schema models the normalized SGP data model.</li>
+<li class="">Frontend uses Angular Material, lazy feature modules, shared shell, shared CRUD table, and filter components.</li>
+<li class="">Cognito JWT guard and permission guard are implemented.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="gestao-master-data">Gestao Master Data<a href="#gestao-master-data" class="hash-link" aria-label="Direct link to Gestao Master Data" title="Direct link to Gestao Master Data" translate="no">​</a></h3>
+<p>Implemented generic master-data CRUD for observed Gestao resources.</p>
+<p>Key files:</p>
+<ul>
+<li class=""><code>backend/src/gestao/master-data/master-data.controller.ts</code></li>
+<li class=""><code>backend/src/gestao/master-data/master-data.service.ts</code></li>
+<li class=""><code>frontend/src/app/features/gestao/pages/gestao-home/gestao-home.ts</code></li>
+<li class=""><code>frontend/src/app/features/gestao/services/master-data.ts</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="rh-workflows">RH Workflows<a href="#rh-workflows" class="hash-link" aria-label="Direct link to RH Workflows" title="Direct link to RH Workflows" translate="no">​</a></h3>
+<p>Implemented RH workflow vertical slice for observed and inferred legacy RH routes.</p>
+<p>Modern RH APIs include:</p>
+<ul>
+<li class=""><code>GET /rh/workflows</code></li>
+<li class=""><code>GET /rh/lookups/:kind</code></li>
+<li class=""><code>GET /rh/:workflow</code></li>
+<li class=""><code>POST /rh/:workflow</code></li>
+<li class=""><code>PATCH /rh/:workflow/:id</code></li>
+<li class=""><code>DELETE /rh/:workflow/:id</code></li>
+<li class=""><code>POST /rh/imports/:kind</code></li>
+<li class=""><code>POST /rh/reports/:reportKey/requests</code></li>
+<li class=""><code>GET /employees/:employeeId/rh-workflows/:workflow</code></li>
+<li class=""><code>POST /employees/:employeeId/rh-workflows/:workflow</code></li>
+</ul>
+<p>Covered workflows:</p>
+<ul>
+<li class="">employees</li>
+<li class="">dependents</li>
+<li class="">professional experiences</li>
+<li class="">frequencies/import request</li>
+<li class="">status history/afastamentos</li>
+<li class="">salary history</li>
+<li class="">service time</li>
+<li class="">transfers</li>
+<li class="">complement data</li>
+<li class="">organic definitions</li>
+<li class="">vacations</li>
+<li class="">leaves/licenca premio</li>
+</ul>
+<p>Key files:</p>
+<ul>
+<li class=""><code>backend/src/rh/employees/*</code></li>
+<li class=""><code>backend/src/rh/workflows/rh-workflows.controller.ts</code></li>
+<li class=""><code>backend/src/rh/workflows/rh-workflows.service.ts</code></li>
+<li class=""><code>backend/src/rh/workflows/rh-workflows.dto.ts</code></li>
+<li class=""><code>frontend/src/app/features/rh/pages/rh-home/*</code></li>
+<li class=""><code>frontend/src/app/features/rh/services/rh-workflows.ts</code></li>
+<li class=""><code>docs/eng/domains/people-recruitment.md</code></li>
+</ul>
+<p>Known RH gaps:</p>
+<ul>
+<li class="">Lookup relationships currently use UUID text inputs instead of autocomplete selectors.</li>
+<li class="">Employee create/update currently covers basic registry fields only.</li>
+<li class="">Legacy-only validations not observable during extraction remain unverified.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="auditoria">Auditoria<a href="#auditoria" class="hash-link" aria-label="Direct link to Auditoria" title="Direct link to Auditoria" translate="no">​</a></h3>
+<p>Implemented audit vertical slice.</p>
+<p>Backend was refactored into:</p>
+<ul>
+<li class=""><code>backend/src/audit/audit.dto.ts</code></li>
+<li class=""><code>backend/src/audit/audit-query.service.ts</code></li>
+<li class=""><code>backend/src/audit/audit-writer.service.ts</code></li>
+<li class=""><code>backend/src/audit/audit-redaction.util.ts</code></li>
+<li class=""><code>backend/src/audit/audit.service.ts</code></li>
+<li class=""><code>backend/src/audit/audit.controller.ts</code></li>
+</ul>
+<p>Canonical audit endpoints:</p>
+<ul>
+<li class=""><code>GET /audit/events</code></li>
+<li class=""><code>GET /audit/facets/actions</code></li>
+<li class=""><code>GET /audit/facets/tables</code></li>
+<li class=""><code>GET /audit/facets/users</code></li>
+<li class=""><code>POST /audit/reports/requests</code></li>
+</ul>
+<p>Legacy-compatible endpoint:</p>
+<ul>
+<li class=""><code>GET /auditoria/audit-search</code></li>
+</ul>
+<p>Frontend Auditoria workspace:</p>
+<ul>
+<li class=""><code>frontend/src/app/features/auditoria/pages/auditoria-home/auditoria-home.ts</code></li>
+<li class=""><code>frontend/src/app/features/auditoria/pages/auditoria-home/auditoria-home.html</code></li>
+<li class=""><code>frontend/src/app/features/auditoria/pages/auditoria-home/auditoria-home.scss</code></li>
+<li class=""><code>frontend/src/app/features/auditoria/services/audit-events.ts</code></li>
+</ul>
+<p>Frontend supports:</p>
+<ul>
+<li class="">period filters</li>
+<li class="">user filter</li>
+<li class="">action facet</li>
+<li class="">table facet</li>
+<li class="">free-text search</li>
+<li class="">resource/request/status filters</li>
+<li class="">refresh</li>
+<li class="">clear filters</li>
+<li class="">audit report request</li>
+<li class="">event detail panel with redacted metadata</li>
+</ul>
+<p>Docs:</p>
+<ul>
+<li class=""><code>docs/eng/domains/operations-observability.md</code></li>
+<li class=""><code>docs/gov/evidence/implementation-status.md</code></li>
+</ul>
+<p>Known audit gaps:</p>
+<ul>
+<li class="">Audit search reads are not audited by default to avoid recursive high-volume noise.</li>
+<li class="">Report request is persisted, but actual report file generation/export worker is not implemented.</li>
+<li class="">Database-level immutability enforcement for <code>audit_event</code> should be added once deployment DB roles are finalized.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="documents-build-fix">Documents Build Fix<a href="#documents-build-fix" class="hash-link" aria-label="Direct link to Documents Build Fix" title="Direct link to Documents Build Fix" translate="no">​</a></h3>
+<p>Approved and applied during audit implementation:</p>
+<ul>
+<li class="">Verified DTO naming around <code>PresignedDownloadDto</code> is aligned.</li>
+<li class="">Installed/verified backend dependencies:
+<ul>
+<li class=""><code>@aws-sdk/client-s3</code></li>
+<li class=""><code>@aws-sdk/s3-request-presigner</code></li>
+</ul>
+</li>
+</ul>
+<p>NPM reports 3 moderate vulnerabilities. Do not run <code>npm audit fix --force</code> without reviewing breaking changes.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="angular-bundle-budget">Angular Bundle Budget<a href="#angular-bundle-budget" class="hash-link" aria-label="Direct link to Angular Bundle Budget" title="Direct link to Angular Bundle Budget" translate="no">​</a></h3>
+<p>Raised frontend production initial bundle budget warning from <code>500kB</code> to <code>1MB</code>.</p>
+<p>File:</p>
+<ul>
+<li class=""><code>frontend/angular.json</code></li>
+</ul>
+<p>Build now completes without the previous initial budget warning.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="validation-status">Validation Status<a href="#validation-status" class="hash-link" aria-label="Direct link to Validation Status" title="Direct link to Validation Status" translate="no">​</a></h2>
+<p>Last successful validation from repository root:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace backend run build</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace frontend run build</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run lint</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:e2e</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace backend exec -- prisma validate --schema prisma/schema.prisma</span><br></div></code></pre></div></div>
+<p>Observed results:</p>
+<ul>
+<li class="">Backend build: passed</li>
+<li class="">Frontend build: passed</li>
+<li class="">Lint: passed</li>
+<li class="">Unit tests: passed
+<ul>
+<li class="">Frontend: 26 test files, 51 tests</li>
+<li class="">Backend: 25 suites, 35 tests</li>
+</ul>
+</li>
+<li class="">E2E: passed
+<ul>
+<li class="">18 tests</li>
+</ul>
+</li>
+<li class="">Prisma validate: passed</li>
+<li class="">Secret scan over <code>backend/src</code>, <code>frontend/src</code>, <code>docs</code>, and <code>tests/backend</code>: clean</li>
+</ul>
+<p>Secret scan was run over <code>backend/src</code>, <code>frontend/src</code>, <code>docs</code>, and <code>tests/backend</code>. Future agents should run an equivalent scan for credential-looking assignments, bearer tokens, JWTs, and real APP credential values before handing off or committing.</p>
+<p>Generated build/cache output was removed after validation:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">rm -rf backend/dist frontend/dist backend/generated frontend/.angular</span><br></div></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-to-work-from-another-desktop">How To Work From Another Desktop<a href="#how-to-work-from-another-desktop" class="hash-link" aria-label="Direct link to How To Work From Another Desktop" title="Direct link to How To Work From Another Desktop" translate="no">​</a></h2>
+<ol>
+<li class="">Open the repository root.</li>
+<li class="">Use the repository root as the implementation workspace.</li>
+<li class="">Install dependencies if needed:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">cd . # repository root</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm install</span><br></div></code></pre></div></div>
+<ol start="4">
+<li class="">Validate baseline:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace backend run build</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace frontend run build</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run lint</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm run test:e2e</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">npm --workspace backend exec -- prisma validate --schema prisma/schema.prisma</span><br></div></code></pre></div></div>
+<ol start="5">
+<li class="">Configure local runtime externally with environment variables. Do not write real values to tracked files.</li>
+</ol>
+<p>Important backend runtime variables include at least:</p>
+<ul>
+<li class=""><code>DATABASE_URL</code></li>
+<li class="">Cognito variables documented in <code>docs/user/environment.md</code></li>
+<li class="">S3 document variables if using document upload/download flows:
+<ul>
+<li class=""><code>S3_DOCUMENTS_BUCKET</code></li>
+<li class=""><code>S3_REGION</code></li>
+<li class="">optional presign expiry variables</li>
+</ul>
+</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="important-design-constraints">Important Design Constraints<a href="#important-design-constraints" class="hash-link" aria-label="Direct link to Important Design Constraints" title="Direct link to Important Design Constraints" translate="no">​</a></h2>
+<ul>
+<li class="">Runtime persistence must be PostgreSQL only. Do not introduce in-memory fallback stores for domain data.</li>
+<li class="">Cognito groups are authoritative roles/permissions source.</li>
+<li class="">Use simple, idiomatic NestJS and Angular patterns. Avoid abstractions unless they remove immediate duplication.</li>
+<li class="">Preserve legacy route parity using extracted docs/inventories as evidence.</li>
+<li class="">Mark unverified behavior explicitly instead of inventing hidden legacy features.</li>
+<li class="">Prefer official CLIs/schematics for new Angular/NestJS code where practical.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="suggested-next-vertical-slices">Suggested Next Vertical Slices<a href="#suggested-next-vertical-slices" class="hash-link" aria-label="Direct link to Suggested Next Vertical Slices" title="Direct link to Suggested Next Vertical Slices" translate="no">​</a></h2>
+<ol>
+<li class="">
+<p>RH lookup UX improvement:</p>
+<ul>
+<li class="">Replace UUID text fields with autocomplete selectors backed by <code>/rh/lookups/:kind</code>.</li>
+<li class="">Add employee detail tabs for dependents, status history, transfers, vacations, leaves.</li>
+</ul>
+</li>
+<li class="">
+<p>Folha de Pgt workflow implementation:</p>
+<ul>
+<li class="">Payroll run lifecycle, payroll item imports, remittance generation, blocked payments, financial records.</li>
+<li class="">Highest risk area; preserve idempotency and auditability.</li>
+</ul>
+</li>
+<li class="">
+<p>Report generation/export worker:</p>
+<ul>
+<li class="">Consume <code>report_request</code> rows from RH/Auditoria/Relatorio requests.</li>
+<li class="">Generate files, persist document attachments, and audit downloads.</li>
+</ul>
+</li>
+<li class="">
+<p>Documents hardening:</p>
+<ul>
+<li class="">Finish S3 upload/download browser workflow.</li>
+<li class="">Add document download audit events with <code>DOWNLOAD</code> action instead of only <code>PROCESS</code> where applicable.</li>
+</ul>
+</li>
+<li class="">
+<p>Database hardening:</p>
+<ul>
+<li class="">Add DB-level immutability guard for <code>public.audit_event</code> once app DB role/deployment model is known.</li>
+<li class="">Add migrations for any missing operational support tables identified during future modules.</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="reference-legacy-evidence">Reference Legacy Evidence<a href="#reference-legacy-evidence" class="hash-link" aria-label="Direct link to Reference Legacy Evidence" title="Direct link to Reference Legacy Evidence" translate="no">​</a></h2>
+<ul>
+<li class=""><code>docs/application-overview.md</code></li>
+<li class=""><code>docs/leg/rev-eng/modules/auditoria.md</code></li>
+<li class=""><code>docs/leg/rev-eng/modules/modulo-rh.md</code></li>
+<li class=""><code>docs/leg/rev-eng/modules/folha-de-pgt.md</code></li>
+<li class=""><code>docs/leg/rev-eng/feature-catalog.md</code></li>
+<li class=""><code>docs/leg/rev-eng/workflows.md</code></li>
+<li class=""><code>inventories/routes.json</code></li>
+<li class=""><code>inventories/menus.json</code></li>
+<li class=""><code>inventories/screens.json</code></li>
+<li class=""><code>inventories/actions.json</code></li>
+<li class=""><code>inventories/api-calls.json</code></li>
+<li class=""><code>inventories/database-model.json</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="notes-for-future-agents">Notes For Future Agents<a href="#notes-for-future-agents" class="hash-link" aria-label="Direct link to Notes For Future Agents" title="Direct link to Notes For Future Agents" translate="no">​</a></h2>
+<ul>
+<li class="">The root git status may show many untracked files because this was built from a blank/reverse-doc repo. Do not assume untracked means disposable.</li>
+<li class="">Do not remove generated docs, inventories, prompts, or repository-root files unless explicitly requested.</li>
+<li class="">If validation fails in unrelated files, stop and ask before changing unrelated code unless the user explicitly authorizes it.</li>
+<li class="">Keep generated build outputs out of the repo after validation.</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/sgp/docs/leg/audit/plan/future-arrecadacao.prompt"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Future Prompt - Arrecadacao Previdenciaria</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/sgp/docs/leg"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Legacy Documentation Archive</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#repository-purpose" class="table-of-contents__link toc-highlight">Repository Purpose</a></li><li><a href="#security-rules" class="table-of-contents__link toc-highlight">Security Rules</a></li><li><a href="#important-directories" class="table-of-contents__link toc-highlight">Important Directories</a></li><li><a href="#current-implemented-slices" class="table-of-contents__link toc-highlight">Current Implemented Slices</a><ul><li><a href="#foundation" class="table-of-contents__link toc-highlight">Foundation</a></li><li><a href="#gestao-master-data" class="table-of-contents__link toc-highlight">Gestao Master Data</a></li><li><a href="#rh-workflows" class="table-of-contents__link toc-highlight">RH Workflows</a></li><li><a href="#auditoria" class="table-of-contents__link toc-highlight">Auditoria</a></li><li><a href="#documents-build-fix" class="table-of-contents__link toc-highlight">Documents Build Fix</a></li><li><a href="#angular-bundle-budget" class="table-of-contents__link toc-highlight">Angular Bundle Budget</a></li></ul></li><li><a href="#validation-status" class="table-of-contents__link toc-highlight">Validation Status</a></li><li><a href="#how-to-work-from-another-desktop" class="table-of-contents__link toc-highlight">How To Work From Another Desktop</a></li><li><a href="#important-design-constraints" class="table-of-contents__link toc-highlight">Important Design Constraints</a></li><li><a href="#suggested-next-vertical-slices" class="table-of-contents__link toc-highlight">Suggested Next Vertical Slices</a></li><li><a href="#reference-legacy-evidence" class="table-of-contents__link toc-highlight">Reference Legacy Evidence</a></li><li><a href="#notes-for-future-agents" class="table-of-contents__link toc-highlight">Notes For Future Agents</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Authority</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng">Engineering</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/decisions">ADRs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/gov">Governance</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Operations</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/user">User docs</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/eng/runbooks/deploy-rollback">Runbooks</a></li><li class="footer__item"><a class="footer__link-item" href="/sgp/docs/leg">Legacy archive</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Built with Docusaurus. SGP documentation follows DEVAI docs-governance.</div></div></div></footer></div>
+</body>
+</html>
