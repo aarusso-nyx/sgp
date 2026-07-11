@@ -387,6 +387,14 @@ describe('CLT-01 FGTS monthly deposits and termination fine (e2e)', () => {
     totalEarnings: string,
   ): Promise<void> {
     await withTenantClient(async (client) => {
+      // Direct fixture inserts bypass the payroll writer, which normally
+      // pre-creates the monthly partition.  Creating it as a completed query
+      // avoids attempting DDL from the default-partition redirect trigger
+      // while the INSERT still holds an active query on the parent table.
+      await client.query(
+        'SELECT payroll.sgp_create_payroll_financial_record_partition(make_date($1::integer, $2::integer, 1))',
+        [year, month],
+      );
       await client.query(
         `
         INSERT INTO payroll.payroll_financial_record (

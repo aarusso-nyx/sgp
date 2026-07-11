@@ -12,7 +12,7 @@
  * Per-test timeout: 45 s to allow for Docker cold-start.
  */
 
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -141,7 +141,13 @@ async function platformAwareRunner(
 ): Promise<VeraPdfDockerRunResult> {
   const dir = mkdtempSync(join(tmpdir(), 'sgp-pdfa-'));
   const pdfFile = 'input.pdf';
-  writeFileSync(join(dir, pdfFile), Buffer.from(request.pdf));
+  const pdfPath = join(dir, pdfFile);
+  // mkdtemp creates a 0700 directory. The pinned CLI image runs as a
+  // non-root user, so make the read-only volume traversable and its input
+  // readable without granting write access to the container.
+  chmodSync(dir, 0o755);
+  writeFileSync(pdfPath, Buffer.from(request.pdf), { mode: 0o644 });
+  chmodSync(pdfPath, 0o644);
 
   const result = spawnSync(
     request.dockerBin,

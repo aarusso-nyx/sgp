@@ -9,6 +9,7 @@ on:
       - 'frontend/**'
       - 'infra/**'
       - 'scripts/**'
+      - 'tests/**'
       - 'docs/eng/api/**'
 
 permissions:

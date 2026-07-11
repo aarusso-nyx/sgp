@@ -9,6 +9,7 @@ on:
       - 'backend/**'
       - 'database/**'
       - 'scripts/**'
+      - 'tests/**'
       - 'docs/eng/**'
       - 'docs/leg/rev-eng/**'
   push:
@@ -22,6 +23,7 @@ on:
       - 'backend/**'
       - 'database/**'
       - 'scripts/**'
+      - 'tests/**'
       - 'docs/eng/**'
       - 'docs/leg/rev-eng/**'
 
