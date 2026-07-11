@@ -89,7 +89,7 @@ jobs:
         run: |
           set -euo pipefail
           set +e
-          npm run db:alignment:check -- --json > db-alignment-report.json
+          npm run --silent db:alignment:check -- --json > db-alignment-report.json
           status=$?
           set -e
 
