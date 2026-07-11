@@ -4,12 +4,14 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { parseTemplate } from '@angular/compiler';
 
 import { parseArgs } from './lib/cli.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const frontendRoot = join(root, 'frontend');
+const require = createRequire(import.meta.url);
 
 const usage = `
 Usage: node scripts/check-frontend.mjs [all|eslint|api-client|modern-angular|i18n] [--help]
@@ -64,11 +66,19 @@ function lineForIndex(content, index) {
 }
 
 function checkEslint() {
-  const eslintBin = join(root, 'backend', 'node_modules', 'eslint', 'bin', 'eslint.js');
+  let eslintBin;
+  try {
+    eslintBin = resolve(dirname(require.resolve('eslint')), '..', 'bin', 'eslint.js');
+  } catch {
+    console.error(
+      '[frontend-eslint] Missing the workspace ESLint runtime. Run npm install before linting.',
+    );
+    return 1;
+  }
 
   if (!existsSync(eslintBin)) {
     console.error(
-      '[frontend-eslint] Missing backend/node_modules/eslint/bin/eslint.js. Run npm install before linting.',
+      '[frontend-eslint] Missing the ESLint executable. Run npm install before linting.',
     );
     return 1;
   }
