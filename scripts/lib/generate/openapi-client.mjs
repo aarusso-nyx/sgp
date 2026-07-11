@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 
-import { format } from 'prettier';
+import { format, resolveConfig } from 'prettier';
 
 const sourceRoot = process.cwd();
 const backendRoot = resolve(sourceRoot, 'backend');
@@ -76,7 +76,8 @@ function normalizeOpenApi31(spec, label) {
 
 async function writeJson(path, value) {
   const source = `${JSON.stringify(value, null, 2)}\n`;
-  const formatted = await format(source, { filepath: path });
+  const config = await resolveConfig(path);
+  const formatted = await format(source, { ...(config ?? {}), filepath: path });
   writeFileSync(path, formatted, 'utf8');
 }
 
