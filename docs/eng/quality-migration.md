@@ -3336,16 +3336,16 @@ Com base na extração dos dumps (doc 64 e CSV 63), a DSL legada usa a seguinte 
 
 #### 6.2 Mapeamento DSL legada → DSL nova (SQL-based)
 
-| Construto legado                                         | Construto DSL novo                                                                  | SQL compilado equivalente                                                                                                |
+| Construto legado | Construto DSL novo | SQL compilado equivalente |
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
-| `r{vencimento}`                                          | `rubrica('vencimento')`                                                             | `(SELECT valor_calculado FROM lancamento WHERE contracheque_id = :cid AND verba_codigo = '1101')`                        |
-| `o{referenciaSalarialCargo.valor}`                       | `atributo('referencia_salarial_cargo.valor')`                                       | `(SELECT rs.valor FROM referencia_salarial rs JOIN funcionario f ON f.referencia_salarial_id = rs.id WHERE f.id = :fid)` |
-| `o{grauInstrucao}`                                       | `atributo('grau_instrucao')`                                                        | `(SELECT grau_instrucao FROM pessoa p JOIN funcionario f ON f.pessoa_id = p.id WHERE f.id = :fid)`                       |
-| `a{inss}`                                                | `aliquota('INSS', rubrica('vencimento'))`                                           | subconsulta na tabela `aliquota` com faixa                                                                               |
-| `a{inss(r{vencimento}+r{gratificacao_regencia_classe})}` | `aliquota('INSS', rubrica('vencimento') + rubrica('gratificacao_regencia_classe'))` | subconsulta com base composta                                                                                            |
-| `SE (cond) ENTAO x SENAO_SE (cond2) ENTAO y FIM_SE`      | `CASE WHEN cond THEN x WHEN cond2 THEN y END`                                       | SQL CASE nativo                                                                                                          |
-| `variavel = expr`                                        | variável local não existe em SQL                                                    | desmembrar em CTE ou subexpressão                                                                                        | reescrever manualmente se complexo |
-| `r{vencimento} * 0.06`                                   | `rubrica('vencimento') * 0.06`                                                      | expressão numérica direta                                                                                                |
+| `r{vencimento}` | `rubrica('vencimento')` | `(SELECT valor_calculado FROM lancamento WHERE contracheque_id = :cid AND verba_codigo = '1101')` |
+| `o{referenciaSalarialCargo.valor}` | `atributo('referencia_salarial_cargo.valor')` | `(SELECT rs.valor FROM referencia_salarial rs JOIN funcionario f ON f.referencia_salarial_id = rs.id WHERE f.id = :fid)` |
+| `o{grauInstrucao}` | `atributo('grau_instrucao')` | `(SELECT grau_instrucao FROM pessoa p JOIN funcionario f ON f.pessoa_id = p.id WHERE f.id = :fid)` |
+| `a{inss}` | `aliquota('INSS', rubrica('vencimento'))` | subconsulta na tabela `aliquota` com faixa |
+| `a{inss(r{vencimento}+r{gratificacao_regencia_classe})}` | `aliquota('INSS', rubrica('vencimento') + rubrica('gratificacao_regencia_classe'))` | subconsulta com base composta |
+| `SE (cond) ENTAO x SENAO_SE (cond2) ENTAO y FIM_SE` | `CASE WHEN cond THEN x WHEN cond2 THEN y END` | SQL CASE nativo |
+| `variavel = expr` | variável local não existe em SQL | desmembrar em CTE ou subexpressão | reescrever manualmente se complexo |
+| `r{vencimento} * 0.06` | `rubrica('vencimento') * 0.06` | expressão numérica direta |
 
 #### 6.3 Catálogo completo de fórmulas a traduzir
 

@@ -1878,13 +1878,13 @@ Todos os diagramas por contexto utilizam a sintaxe `erDiagram` do Mermaid. O dia
 
 #### 1.2 Cardinalidades
 
-| Notação  | Significado                                   |
+| Notação | Significado |
 | -------- | --------------------------------------------- | ---------------------- | --------------------------------------------------------------- | ------------------------------------------ | ----------------------------------------- |
-| `        |                                               | --                     |                                                                 | `                                          | Um-para-um (exatamente um dos dois lados) |
-| `        |                                               | --o{`                  | Um-para-muitos (obrigatório à esquerda, zero ou mais à direita) |
+| `       |                                               | --                     |                                                                 |` | Um-para-um (exatamente um dos dois lados) |
+| `        |                                               | --o{` | Um-para-muitos (obrigatório à esquerda, zero ou mais à direita) |
 | `}o--o{` | Muitos-para-muitos (via tabela de associação) |
-| `        |                                               | --o                    | `                                                               | Um-para-um opcional (zero ou um à direita) |
-| `o       | --o{`                                         | Zero-ou-um para muitos |
+| `       |                                               | --o                    |` | Um-para-um opcional (zero ou um à direita) |
+| `o       | --o{` | Zero-ou-um para muitos |
 
 #### 1.3 Convenção de Atributos
 

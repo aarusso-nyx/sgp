@@ -62,15 +62,17 @@ This document maps SGP's CNAB 240 implementation against the standard, listing:
 ### Bank-Specific Codes
 
 **Banco do Brasil:**
-| Code | Status | Meaning | Mapping |
-|------|--------|---------|---|
+
+| Code | Status    | Meaning             | Mapping  |
+| ---- | --------- | ------------------- | -------- |
 | `AA` | ✅ Mapped | File accepted by BB | ACCEPTED |
 
 **Caixa:**
-| Code | Status | Meaning | Mapping |
-|------|--------|---------|---|
+
+| Code | Status    | Meaning                   | Mapping                   |
+| ---- | --------- | ------------------------- | ------------------------- |
 | `01` | ✅ Mapped | Credit confirmed by Caixa | ACCEPTED (overrides `00`) |
-| `03` | ✅ Mapped | Invalid account at Caixa | REJECTED_INVALID_ACCOUNT |
+| `03` | ✅ Mapped | Invalid account at Caixa  | REJECTED_INVALID_ACCOUNT  |
 
 **Total codes mapped: 12 codes across 5 banks.**
 
