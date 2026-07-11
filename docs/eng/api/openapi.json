@@ -933,7 +933,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -941,7 +947,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -1482,7 +1495,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -1490,7 +1509,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -2383,7 +2409,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -2391,7 +2423,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -5312,7 +5351,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -5320,7 +5365,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -6049,7 +6101,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -6057,7 +6115,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -24825,7 +24890,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -24833,7 +24904,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -25258,7 +25336,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -25266,7 +25350,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -25406,7 +25497,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -25414,7 +25511,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -25890,7 +25994,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -25898,7 +26008,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -26133,7 +26250,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -26141,7 +26264,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -27008,7 +27138,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -27016,7 +27152,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -28674,7 +28817,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -28682,7 +28831,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -29133,7 +29289,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -29141,7 +29303,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -29592,7 +29761,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -29600,7 +29775,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -30051,7 +30233,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -30059,7 +30247,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -30518,7 +30713,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -30526,7 +30727,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -30994,7 +31202,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -31002,7 +31216,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -31470,7 +31691,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -31478,7 +31705,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -31946,7 +32180,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -31954,7 +32194,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -32422,7 +32669,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -32430,7 +32683,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -34686,7 +34946,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -34694,7 +34960,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -37280,1041 +37553,6 @@
         "tags": ["consultas"]
       }
     },
-    "/api/v1/previdenciario/regras": {
-      "get": {
-        "operationId": "PrevidenciarioController_listRules",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "List retirement rules.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "GET regras",
-        "tags": ["previdenciario"]
-      },
-      "post": {
-        "operationId": "PrevidenciarioController_createRule",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRetirementRuleDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Create a retirement rule.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST regras",
-        "tags": ["previdenciario"]
-      }
-    },
-    "/api/v1/previdenciario/regras/{id}": {
-      "patch": {
-        "operationId": "PrevidenciarioController_updateRule",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRetirementRuleDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Update a retirement rule.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "PATCH regras/:id",
-        "tags": ["previdenciario"]
-      }
-    },
-    "/api/v1/previdenciario/simulacoes": {
-      "get": {
-        "operationId": "PrevidenciarioController_listSimulations",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "List retirement simulations.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "GET simulacoes",
-        "tags": ["previdenciario"]
-      },
-      "post": {
-        "operationId": "PrevidenciarioController_createSimulation",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRetirementSimulationDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Create a retirement simulation.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST simulacoes",
-        "tags": ["previdenciario"]
-      }
-    },
-    "/api/v1/previdenciario/simulacoes/ec103/pedagio-100": {
-      "post": {
-        "operationId": "PrevidenciarioController_simulateEc103Pedagio100",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SimulateEc103Pedagio100Dto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Simulate EC 103/2019 art. 20 Pedagio 100 transition rule.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST simulacoes/ec103/pedagio-100",
-        "tags": ["previdenciario"]
-      }
-    },
-    "/api/v1/previdenciario/simulacoes/ec103/pedagio-50": {
-      "post": {
-        "operationId": "PrevidenciarioController_simulateEc103Pedagio50",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SimulateEc103Pedagio50Dto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Simulate EC 103/2019 art. 17 Pedagio 50 transition rule.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST simulacoes/ec103/pedagio-50",
-        "tags": ["previdenciario"]
-      }
-    },
-    "/api/v1/previdenciario/simulacoes/ec103/pontos": {
-      "post": {
-        "operationId": "PrevidenciarioController_simulateEc103Pontos",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SimulateEc103PontosDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Simulate EC 103/2019 art. 4 points transition rule.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST simulacoes/ec103/pontos",
-        "tags": ["previdenciario"]
-      }
-    },
-    "/api/v1/previdenciario/simulacoes/ec103/idade-progressiva": {
-      "post": {
-        "operationId": "PrevidenciarioController_simulateEc103IdadeProgressiva",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SimulateEc103IdadeProgressivaDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Simulate EC 103/2019 art. 16 progressive age rule.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST simulacoes/ec103/idade-progressiva",
-        "tags": ["previdenciario"]
-      }
-    },
-    "/api/v1/previdenciario/simulacoes/ec103/atividade-risco-professor": {
-      "post": {
-        "operationId": "PrevidenciarioController_simulateEc103AtividadeRiscoProfessor",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SimulateEc103AtividadeRiscoProfessorDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Simulate EC 103/2019 risk-activity or federal teacher transition rules.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST simulacoes/ec103/atividade-risco-professor",
-        "tags": ["previdenciario"]
-      }
-    },
     "/api/v1/previdenciario/aposentadorias": {
       "get": {
         "operationId": "PrevidenciarioController_listRetirementGrants",
@@ -39647,9 +38885,1044 @@
         "tags": ["previdenciario"]
       }
     },
+    "/api/v1/previdenciario/regras": {
+      "get": {
+        "operationId": "PrevidenciarioRulesController_listRules",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List retirement rules.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET regras",
+        "tags": ["previdenciario"]
+      },
+      "post": {
+        "operationId": "PrevidenciarioRulesController_createRule",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRetirementRuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a retirement rule.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST regras",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/regras/{id}": {
+      "patch": {
+        "operationId": "PrevidenciarioRulesController_updateRule",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRetirementRuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a retirement rule.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "PATCH regras/:id",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes": {
+      "get": {
+        "operationId": "PrevidenciarioRulesController_listSimulations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List retirement simulations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "GET simulacoes",
+        "tags": ["previdenciario"]
+      },
+      "post": {
+        "operationId": "PrevidenciarioRulesController_createSimulation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRetirementSimulationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a retirement simulation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/pedagio-100": {
+      "post": {
+        "operationId": "PrevidenciarioRulesController_simulateEc103Pedagio100",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103Pedagio100Dto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 art. 20 Pedagio 100 transition rule.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/pedagio-100",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/pedagio-50": {
+      "post": {
+        "operationId": "PrevidenciarioRulesController_simulateEc103Pedagio50",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103Pedagio50Dto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 art. 17 Pedagio 50 transition rule.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/pedagio-50",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/pontos": {
+      "post": {
+        "operationId": "PrevidenciarioRulesController_simulateEc103Pontos",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103PontosDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 art. 4 points transition rule.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/pontos",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/idade-progressiva": {
+      "post": {
+        "operationId": "PrevidenciarioRulesController_simulateEc103IdadeProgressiva",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103IdadeProgressivaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 art. 16 progressive age rule.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/idade-progressiva",
+        "tags": ["previdenciario"]
+      }
+    },
+    "/api/v1/previdenciario/simulacoes/ec103/atividade-risco-professor": {
+      "post": {
+        "operationId": "PrevidenciarioRulesController_simulateEc103AtividadeRiscoProfessor",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateEc103AtividadeRiscoProfessorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Simulate EC 103/2019 risk-activity or federal teacher transition rules.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST simulacoes/ec103/atividade-risco-professor",
+        "tags": ["previdenciario"]
+      }
+    },
     "/api/v1/previdenciario/recadastramentos/campanhas": {
       "get": {
-        "operationId": "PrevidenciarioController_listCampaigns",
+        "operationId": "PrevidenciarioRecertificationController_listCampaigns",
         "parameters": [],
         "responses": {
           "200": {
@@ -39742,7 +40015,7 @@
         "tags": ["previdenciario"]
       },
       "post": {
-        "operationId": "PrevidenciarioController_createCampaign",
+        "operationId": "PrevidenciarioRecertificationController_createCampaign",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -39847,7 +40120,7 @@
     },
     "/api/v1/previdenciario/recadastramentos/beneficiarios": {
       "get": {
-        "operationId": "PrevidenciarioController_listBeneficiaries",
+        "operationId": "PrevidenciarioRecertificationController_listBeneficiaries",
         "parameters": [],
         "responses": {
           "200": {
@@ -39940,7 +40213,7 @@
         "tags": ["previdenciario"]
       },
       "post": {
-        "operationId": "PrevidenciarioController_createBeneficiary",
+        "operationId": "PrevidenciarioRecertificationController_createBeneficiary",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -40045,7 +40318,7 @@
     },
     "/api/v1/previdenciario/recadastramentos/pendencias": {
       "get": {
-        "operationId": "PrevidenciarioController_listPendingRecertifications",
+        "operationId": "PrevidenciarioRecertificationController_listPendingRecertifications",
         "parameters": [],
         "responses": {
           "200": {
@@ -40140,7 +40413,7 @@
     },
     "/api/v1/previdenciario/recadastramentos/historico": {
       "get": {
-        "operationId": "PrevidenciarioController_listBeneficiaryContactHistory",
+        "operationId": "PrevidenciarioRecertificationController_listBeneficiaryContactHistory",
         "parameters": [],
         "responses": {
           "200": {
@@ -40233,7 +40506,7 @@
         "tags": ["previdenciario"]
       },
       "post": {
-        "operationId": "PrevidenciarioController_createBeneficiaryContactHistory",
+        "operationId": "PrevidenciarioRecertificationController_createBeneficiaryContactHistory",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -40338,7 +40611,7 @@
     },
     "/api/v1/previdenciario/recadastramentos/atos": {
       "post": {
-        "operationId": "PrevidenciarioController_createRecord",
+        "operationId": "PrevidenciarioRecertificationController_createRecord",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -40443,7 +40716,7 @@
     },
     "/api/v1/previdenciario/provas-vida": {
       "post": {
-        "operationId": "PrevidenciarioController_createExternalLifeProof",
+        "operationId": "PrevidenciarioRecertificationController_createExternalLifeProof",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -40548,7 +40821,7 @@
     },
     "/api/v1/previdenciario/recadastramentos/convocacoes": {
       "post": {
-        "operationId": "PrevidenciarioController_requestRecertificationNotice",
+        "operationId": "PrevidenciarioRecertificationController_requestRecertificationNotice",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -40653,7 +40926,7 @@
     },
     "/api/v1/previdenciario/recadastramentos/relatorios": {
       "post": {
-        "operationId": "PrevidenciarioController_requestRecertificationPendingReport",
+        "operationId": "PrevidenciarioRecertificationController_requestRecertificationPendingReport",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -40758,7 +41031,7 @@
     },
     "/api/v1/previdenciario/transferencia-siprev/exportar": {
       "post": {
-        "operationId": "PrevidenciarioController_requestSiprevExport",
+        "operationId": "PrevidenciarioRecertificationController_requestSiprevExport",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -46190,7 +46463,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -46198,7 +46477,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -47079,429 +47365,9 @@
         "tags": ["folha-pagamento"]
       }
     },
-    "/api/v1/folhas/decimo-terceiro/adiantamento": {
-      "post": {
-        "operationId": "PayrollController_runDecimoTerceiroAdiantamento",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RunDecimoTerceiroDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Generate the first 13th salary parcel.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST decimo-terceiro/adiantamento",
-        "tags": ["folha-pagamento"]
-      }
-    },
-    "/api/v1/folhas/decimo-terceiro/fechamento": {
-      "post": {
-        "operationId": "PayrollController_runDecimoTerceiroFechamento",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RunDecimoTerceiroDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Generate the closing 13th salary run.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST decimo-terceiro/fechamento",
-        "tags": ["folha-pagamento"]
-      }
-    },
-    "/api/v1/folhas/ferias/calcular": {
-      "post": {
-        "operationId": "PayrollController_runFeriasPayroll",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RunFeriasPayrollDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Generate a vacation payroll run.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST ferias/calcular",
-        "tags": ["folha-pagamento"]
-      }
-    },
-    "/api/v1/folhas/rescisao/calcular": {
-      "post": {
-        "operationId": "PayrollController_runRescisaoPayroll",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RunRescisaoDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Generate a termination payroll run.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpOperationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, tenant, or policy denial.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict with current resource state.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Semantically invalid request.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded.",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SgpProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "POST rescisao/calcular",
-        "tags": ["folha-pagamento"]
-      }
-    },
     "/api/v1/folhas/mensal/abrir": {
       "post": {
-        "operationId": "PayrollController_openMonthlyCompetence",
+        "operationId": "PayrollMonthlyController_openMonthlyCompetence",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -47606,7 +47472,7 @@
     },
     "/api/v1/folhas/mensal/calcular": {
       "post": {
-        "operationId": "PayrollController_calculateMonthlyCompetence",
+        "operationId": "PayrollMonthlyController_calculateMonthlyCompetence",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -47711,7 +47577,7 @@
     },
     "/api/v1/folhas/mensal/aprovar": {
       "post": {
-        "operationId": "PayrollController_approveMonthlyCompetence",
+        "operationId": "PayrollMonthlyController_approveMonthlyCompetence",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -47816,7 +47682,7 @@
     },
     "/api/v1/folhas/mensal/gerar": {
       "post": {
-        "operationId": "PayrollController_generateMonthlyPaystubs",
+        "operationId": "PayrollMonthlyController_generateMonthlyPaystubs",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -47921,7 +47787,7 @@
     },
     "/api/v1/folhas/mensal/fechar": {
       "post": {
-        "operationId": "PayrollController_closeMonthlyCompetence",
+        "operationId": "PayrollMonthlyController_closeMonthlyCompetence",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -48026,7 +47892,7 @@
     },
     "/api/v1/folhas/mensal/revisao": {
       "get": {
-        "operationId": "PayrollController_reviewMonthlyCompetence",
+        "operationId": "PayrollMonthlyController_reviewMonthlyCompetence",
         "parameters": [
           {
             "name": "year",
@@ -48137,6 +48003,426 @@
           }
         ],
         "summary": "GET mensal/revisao",
+        "tags": ["folha-pagamento"]
+      }
+    },
+    "/api/v1/folhas/decimo-terceiro/adiantamento": {
+      "post": {
+        "operationId": "PayrollRunExecutionController_runDecimoTerceiroAdiantamento",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunDecimoTerceiroDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate the first 13th salary parcel.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST decimo-terceiro/adiantamento",
+        "tags": ["folha-pagamento"]
+      }
+    },
+    "/api/v1/folhas/decimo-terceiro/fechamento": {
+      "post": {
+        "operationId": "PayrollRunExecutionController_runDecimoTerceiroFechamento",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunDecimoTerceiroDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate the closing 13th salary run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST decimo-terceiro/fechamento",
+        "tags": ["folha-pagamento"]
+      }
+    },
+    "/api/v1/folhas/ferias/calcular": {
+      "post": {
+        "operationId": "PayrollRunExecutionController_runFeriasPayroll",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunFeriasPayrollDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate a vacation payroll run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST ferias/calcular",
+        "tags": ["folha-pagamento"]
+      }
+    },
+    "/api/v1/folhas/rescisao/calcular": {
+      "post": {
+        "operationId": "PayrollRunExecutionController_runRescisaoPayroll",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunRescisaoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Generate a termination payroll run.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "POST rescisao/calcular",
         "tags": ["folha-pagamento"]
       }
     },
@@ -48252,7 +48538,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -48260,7 +48552,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -48736,7 +49035,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -48744,7 +49049,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -50614,7 +50926,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -50622,7 +50940,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -50762,7 +51087,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -50770,7 +51101,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -53698,7 +54036,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -53706,7 +54050,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -54157,7 +54508,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -54165,7 +54522,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -54400,7 +54764,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -54408,7 +54778,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -55516,7 +55893,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -55524,7 +55907,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -61418,7 +61808,13 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "default": 1,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -61426,7 +61822,14 @@
             "required": false,
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/Object"
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
             }
           },
           {
@@ -65628,6 +66031,189 @@
           }
         }
       },
+      "CreateRetirementGrantDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "regraId": {
+            "type": "string"
+          },
+          "dataConcessao": {
+            "type": "string",
+            "format": "date"
+          },
+          "fundamento": {
+            "type": "string"
+          },
+          "atoNomeacao": {
+            "type": "string"
+          },
+          "observacao": {
+            "type": "string"
+          },
+          "concedidaPorId": {
+            "type": "string"
+          }
+        },
+        "required": ["funcionarioId", "regraId", "dataConcessao", "fundamento", "atoNomeacao"]
+      },
+      "CreatePensionGrantDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioInstituidorId": {
+            "type": "string"
+          },
+          "nomeBeneficiario": {
+            "type": "string"
+          },
+          "cpfBeneficiario": {
+            "type": "string"
+          },
+          "parentesco": {
+            "type": "string"
+          },
+          "tipoBeneficio": {
+            "type": "string"
+          },
+          "tipoRateio": {
+            "type": "string"
+          },
+          "cotaParte": {
+            "type": "string"
+          },
+          "formaReajuste": {
+            "type": "string"
+          },
+          "natureza": {
+            "type": "string"
+          },
+          "dataConcessao": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataCessacao": {
+            "type": "string",
+            "format": "date"
+          },
+          "fundamento": {
+            "type": "string"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nomeBeneficiario",
+          "tipoBeneficio",
+          "tipoRateio",
+          "cotaParte",
+          "formaReajuste",
+          "natureza",
+          "dataConcessao",
+          "fundamento"
+        ]
+      },
+      "CreateContributionTimeCertificateDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "periodoInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "periodoFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "orgaoEmitente": {
+            "type": "string"
+          },
+          "atoEmissao": {
+            "type": "string"
+          },
+          "storageKey": {
+            "type": "string"
+          },
+          "emitidaPorId": {
+            "type": "string"
+          }
+        },
+        "required": ["funcionarioId", "periodoInicio", "periodoFim", "orgaoEmitente", "atoEmissao"]
+      },
+      "GeneratePrevidenciarioOutputDto": {
+        "type": "object",
+        "properties": {
+          "formato": {
+            "type": "string",
+            "example": "PDF"
+          },
+          "competencia": {
+            "type": "string"
+          },
+          "campanhaId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreatePrevidentiaryDeclarationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "storageKey": {
+            "type": "string"
+          },
+          "emitidaPorId": {
+            "type": "string"
+          }
+        },
+        "required": ["funcionarioId", "tipo"]
+      },
+      "CreatePensionCompensationDto": {
+        "type": "object",
+        "properties": {
+          "funcionarioId": {
+            "type": "string"
+          },
+          "certidaoReferencia": {
+            "type": "string"
+          },
+          "regimeOrigem": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["RASCUNHO", "SOLICITADA", "APROVADA", "REPROVADA", "LIQUIDADA"]
+          },
+          "observacao": {
+            "type": "string"
+          }
+        },
+        "required": ["regimeOrigem", "valor"]
+      },
+      "UpdatePensionCompensationDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["RASCUNHO", "SOLICITADA", "APROVADA", "REPROVADA", "LIQUIDADA"]
+          },
+          "observacao": {
+            "type": "string"
+          }
+        }
+      },
       "CreateRetirementRuleDto": {
         "type": "object",
         "properties": {
@@ -65941,189 +66527,6 @@
           "dataInicioContribuicao",
           "dataReferencia"
         ]
-      },
-      "CreateRetirementGrantDto": {
-        "type": "object",
-        "properties": {
-          "funcionarioId": {
-            "type": "string"
-          },
-          "regraId": {
-            "type": "string"
-          },
-          "dataConcessao": {
-            "type": "string",
-            "format": "date"
-          },
-          "fundamento": {
-            "type": "string"
-          },
-          "atoNomeacao": {
-            "type": "string"
-          },
-          "observacao": {
-            "type": "string"
-          },
-          "concedidaPorId": {
-            "type": "string"
-          }
-        },
-        "required": ["funcionarioId", "regraId", "dataConcessao", "fundamento", "atoNomeacao"]
-      },
-      "CreatePensionGrantDto": {
-        "type": "object",
-        "properties": {
-          "funcionarioInstituidorId": {
-            "type": "string"
-          },
-          "nomeBeneficiario": {
-            "type": "string"
-          },
-          "cpfBeneficiario": {
-            "type": "string"
-          },
-          "parentesco": {
-            "type": "string"
-          },
-          "tipoBeneficio": {
-            "type": "string"
-          },
-          "tipoRateio": {
-            "type": "string"
-          },
-          "cotaParte": {
-            "type": "string"
-          },
-          "formaReajuste": {
-            "type": "string"
-          },
-          "natureza": {
-            "type": "string"
-          },
-          "dataConcessao": {
-            "type": "string",
-            "format": "date"
-          },
-          "dataCessacao": {
-            "type": "string",
-            "format": "date"
-          },
-          "fundamento": {
-            "type": "string"
-          },
-          "observacao": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "nomeBeneficiario",
-          "tipoBeneficio",
-          "tipoRateio",
-          "cotaParte",
-          "formaReajuste",
-          "natureza",
-          "dataConcessao",
-          "fundamento"
-        ]
-      },
-      "CreateContributionTimeCertificateDto": {
-        "type": "object",
-        "properties": {
-          "funcionarioId": {
-            "type": "string"
-          },
-          "periodoInicio": {
-            "type": "string",
-            "format": "date"
-          },
-          "periodoFim": {
-            "type": "string",
-            "format": "date"
-          },
-          "orgaoEmitente": {
-            "type": "string"
-          },
-          "atoEmissao": {
-            "type": "string"
-          },
-          "storageKey": {
-            "type": "string"
-          },
-          "emitidaPorId": {
-            "type": "string"
-          }
-        },
-        "required": ["funcionarioId", "periodoInicio", "periodoFim", "orgaoEmitente", "atoEmissao"]
-      },
-      "GeneratePrevidenciarioOutputDto": {
-        "type": "object",
-        "properties": {
-          "formato": {
-            "type": "string",
-            "example": "PDF"
-          },
-          "competencia": {
-            "type": "string"
-          },
-          "campanhaId": {
-            "type": "string"
-          }
-        }
-      },
-      "CreatePrevidentiaryDeclarationDto": {
-        "type": "object",
-        "properties": {
-          "funcionarioId": {
-            "type": "string"
-          },
-          "tipo": {
-            "type": "string"
-          },
-          "storageKey": {
-            "type": "string"
-          },
-          "emitidaPorId": {
-            "type": "string"
-          }
-        },
-        "required": ["funcionarioId", "tipo"]
-      },
-      "CreatePensionCompensationDto": {
-        "type": "object",
-        "properties": {
-          "funcionarioId": {
-            "type": "string"
-          },
-          "certidaoReferencia": {
-            "type": "string"
-          },
-          "regimeOrigem": {
-            "type": "string"
-          },
-          "valor": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": ["RASCUNHO", "SOLICITADA", "APROVADA", "REPROVADA", "LIQUIDADA"]
-          },
-          "observacao": {
-            "type": "string"
-          }
-        },
-        "required": ["regimeOrigem", "valor"]
-      },
-      "UpdatePensionCompensationDto": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": ["RASCUNHO", "SOLICITADA", "APROVADA", "REPROVADA", "LIQUIDADA"]
-          },
-          "observacao": {
-            "type": "string"
-          }
-        }
       },
       "CreateRecertificationCampaignDto": {
         "type": "object",
@@ -66946,6 +67349,22 @@
         },
         "required": ["employeeId", "requestedAmount"]
       },
+      "FolhaMensalCompetenceDto": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "number",
+            "minimum": 2000,
+            "maximum": 2100
+          },
+          "month": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          }
+        },
+        "required": ["year", "month"]
+      },
       "RunDecimoTerceiroDto": {
         "type": "object",
         "properties": {
@@ -66989,22 +67408,6 @@
           }
         },
         "required": ["employmentLinkId", "terminationDate", "cause"]
-      },
-      "FolhaMensalCompetenceDto": {
-        "type": "object",
-        "properties": {
-          "year": {
-            "type": "number",
-            "minimum": 2000,
-            "maximum": 2100
-          },
-          "month": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 12
-          }
-        },
-        "required": ["year", "month"]
       },
       "PayrollCatalogMutationDto": {
         "type": "object",
