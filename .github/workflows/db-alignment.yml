@@ -52,7 +52,7 @@ jobs:
           set -euo pipefail
           npm run api:alignment:sync
           set +e
-          npm run api:alignment:check -- --json > api-alignment-report.json
+          npm run --silent api:alignment:check -- --json > api-alignment-report.json
           status=$?
           set -e
 
