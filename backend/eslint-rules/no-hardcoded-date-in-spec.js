@@ -19,8 +19,9 @@ module.exports = {
     },
   },
   create(context) {
-    if (!SPEC_PATTERN.test(context.getFilename())) return {};
-    if (FIXTURE_ALLOWLIST_PATTERN.test(context.getFilename())) return {};
+    const filename = context.filename ?? context.getFilename();
+    if (!SPEC_PATTERN.test(filename)) return {};
+    if (FIXTURE_ALLOWLIST_PATTERN.test(filename)) return {};
 
     const sourceCode = context.sourceCode ?? context.getSourceCode();
     if (sourceCode.getAllComments().some((comment) => comment.value.includes(OPT_OUT_COMMENT))) {

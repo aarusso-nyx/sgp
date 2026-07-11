@@ -182,7 +182,7 @@ export class MeusDadosService {
       `,
       [employee.id],
     );
-    let nextProgression: unknown = null;
+    let nextProgression: unknown;
     try {
       nextProgression = await this.eligibilityService.checkInterstice(
         employee.id,
