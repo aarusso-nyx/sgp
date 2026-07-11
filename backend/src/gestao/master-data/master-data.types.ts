@@ -4,11 +4,7 @@ import { MasterDataMutationDto } from './master-data.dto';
 
 export type EvidenceStatus = 'observed' | 'inferred' | 'unverified';
 export type StatusMode =
-  | 'record'
-  | 'agreement'
-  | 'user'
-  | 'boolean'
-  | 'always-active';
+  'record' | 'agreement' | 'user' | 'boolean' | 'always-active';
 
 export interface MasterDataField {
   key: string;

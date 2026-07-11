@@ -60,8 +60,7 @@ export function currentRequestAbortSignal(): AbortSignal | undefined {
 }
 
 export function currentRequestAbortOptions():
-  | { abortSignal: AbortSignal }
-  | undefined {
+  { abortSignal: AbortSignal } | undefined {
   const abortSignal = currentRequestAbortSignal();
   return abortSignal ? { abortSignal } : undefined;
 }

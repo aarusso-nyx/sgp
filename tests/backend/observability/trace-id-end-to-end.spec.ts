@@ -70,8 +70,7 @@ describe('trace-id end-to-end correlation between OTel spans and Pino log lines'
     // same field and emits the trace id on every log line in the request.
     const params = createPinoLoggerParams('sgp-core-api');
     const customProps = params.pinoHttp?.customProps as
-      | ((req: unknown, res: unknown) => Record<string, unknown>)
-      | undefined;
+      ((req: unknown, res: unknown) => Record<string, unknown>) | undefined;
     expect(customProps).toBeDefined();
     const logProps = customProps!(request, response);
     expect(logProps).toEqual({ traceId: expectedTraceId });
@@ -127,8 +126,7 @@ describe('trace-id end-to-end correlation between OTel spans and Pino log lines'
 
     const params = createPinoLoggerParams('sgp-core-api');
     const customProps = params.pinoHttp?.customProps as
-      | ((req: unknown, res: unknown) => Record<string, unknown>)
-      | undefined;
+      ((req: unknown, res: unknown) => Record<string, unknown>) | undefined;
     expect(customProps!(request, response)).toEqual({
       traceId: request.traceId,
     });
@@ -137,8 +135,7 @@ describe('trace-id end-to-end correlation between OTel spans and Pino log lines'
   it('omits traceId from log props when the OTel middleware has not run for the request', () => {
     const params = createPinoLoggerParams('sgp-core-api');
     const customProps = params.pinoHttp?.customProps as
-      | ((req: unknown, res: unknown) => Record<string, unknown>)
-      | undefined;
+      ((req: unknown, res: unknown) => Record<string, unknown>) | undefined;
     expect(customProps!({}, {})).toEqual({});
   });
 });

@@ -116,8 +116,7 @@ export class BankingCnab240QueueAdapter {
   private readonly queue: SgpQueueAdapter<typeof BANKING_RELAY_KIND>;
   private readonly returnProcessor?: BankingCnab240ReturnProcessor | undefined;
   private readonly paymentBatchStateWriter?:
-    | BankingPaymentBatchStateWriter
-    | undefined;
+    BankingPaymentBatchStateWriter | undefined;
   private readonly parser: Cnab240ReturnParserService;
   private readonly mapper: OccurrenceMapperService;
 

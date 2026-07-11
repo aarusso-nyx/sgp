@@ -2,7 +2,6 @@
 
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { execSync } from 'node:child_process';
 
 import { checkDefinerSearchPaths } from './definer-search-path.mjs';
 import { checkGrantsAlignment } from './grants-alignment.mjs';
@@ -220,6 +219,16 @@ function readTypeScriptTree(root) {
     })
     .filter(Boolean)
     .join('\n');
+}
+
+function listRegularFiles(root) {
+  return readdirSync(root, { withFileTypes: true })
+    .sort((left, right) => left.name.localeCompare(right.name))
+    .flatMap((entry) => {
+      const path = resolve(root, entry.name);
+      if (entry.isDirectory()) return listRegularFiles(path);
+      return entry.isFile() ? [path] : [];
+    });
 }
 
 function canonicalTableHasTenantColumn(content, schema, table) {
@@ -521,13 +530,11 @@ function main() {
     ok(`Runtime grants match ${grantsAlignment.baselineCount} least-privilege baseline entries.`);
   }
 
-  const runtimeFilePaths = execSync(
-    `rg --files ${backendSrcPath} ${sqlSupportPath} database/seed/run.mjs`,
-    { encoding: 'utf8' },
-  )
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean);
+  const runtimeFilePaths = [
+    ...listRegularFiles(backendSrcPath),
+    ...listRegularFiles(sqlSupportPath),
+    resolve(cwd, 'database/seed/run.mjs'),
+  ];
   for (const filePath of runtimeFilePaths) {
     const content = readFileSync(filePath, 'utf8');
     auditForbiddenPublicRefs(filePath, content, forbiddenRuntimeTables);

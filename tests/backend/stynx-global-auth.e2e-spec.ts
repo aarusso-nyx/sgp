@@ -11,8 +11,8 @@ import {
   AuthContextGuard,
   AuthorizationGuard,
   STYNX_TOKEN_VERIFIER,
-} from '@stynx/backend';
-import type { TokenVerifier } from '@stynx/contracts';
+} from '@stynx-nyx/backend';
+import type { TokenVerifier } from '@stynx-nyx/contracts';
 import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 

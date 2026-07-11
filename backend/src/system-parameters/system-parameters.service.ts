@@ -3,7 +3,7 @@ import {
   Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { FeatureFlagsService } from '@stynx/feature-flags';
+import { FeatureFlagsService } from '@stynx-nyx/feature-flags';
 import { QueryResultRow } from 'pg';
 
 import { DatabaseService } from '../database/database.service';

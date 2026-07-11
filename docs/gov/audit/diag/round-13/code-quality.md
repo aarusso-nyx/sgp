@@ -6,14 +6,14 @@ posture. No dynamic gate runs in this audit beyond the deterministic
 
 ## LOC by Surface
 
-| Surface                                                      |       Files |           LOC |
+| Surface | Files | LOC |
 | ------------------------------------------------------------ | ----------: | ------------: | ----- |
-| `backend/src/**/*.ts`                                        |       1 036 |       141 930 |
-| `frontend/src/app` + `frontend/portal/src/app` (excl. specs) |           — |        24 062 |
-| `database/sql/*.sql`                                         |          50 |        24 614 |
-| `tests/\*_/_.spec.ts                                         | \*.test.ts` |           127 | 6 232 |
-| `tests/rls/*.spec.ts`                                        |          72 | (incl. above) |
-| Backend e2e specs                                            |         108 | (incl. above) |
+| `backend/src/**/*.ts` | 1 036 | 141 930 |
+| `frontend/src/app` + `frontend/portal/src/app` (excl. specs) | — | 24 062 |
+| `database/sql/*.sql` | 50 | 24 614 |
+| `tests/\*_/_.spec.ts                                         | \*.test.ts` | 127 | 6 232 |
+| `tests/rls/*.spec.ts` | 72 | (incl. above) |
+| Backend e2e specs | 108 | (incl. above) |
 
 ## Backend Hotspots (largest non-spec `.ts` files)
 

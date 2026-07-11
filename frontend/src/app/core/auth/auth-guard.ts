@@ -1,6 +1,6 @@
 import { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';
-import { StynxSessionService } from '@stynx-web/angular-auth';
+import { StynxSessionService } from '@stynx-nyx/angular-auth';
 
 export const authGuard: CanActivateFn = async () => {
   const session = inject(StynxSessionService);

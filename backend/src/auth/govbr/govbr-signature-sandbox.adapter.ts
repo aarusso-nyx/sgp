@@ -3,7 +3,7 @@ import {
   createGovBrSandboxAdapter,
   type GovBrSandboxAdapter,
   type GovBrSandboxResult,
-} from '@stynx/signature';
+} from '@stynx-nyx/signature';
 
 import { AuthenticatedActor } from '../actor.types';
 import { GovBrSignRequestDto } from './sign.dto';

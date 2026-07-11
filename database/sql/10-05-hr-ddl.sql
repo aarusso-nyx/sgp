@@ -1685,7 +1685,7 @@ CREATE TABLE hr.work_location (
     tenant_id uuid DEFAULT public.sgp_current_tenant_uuid() NOT NULL,
     fpas_code text DEFAULT '000'::text NOT NULL,
     fap_rate numeric(18,6) DEFAULT 0 NOT NULL,
-    geofence_polygon postgis.geometry(Polygon,4326)
+    geofence_polygon public.geometry(Polygon,4326)
 );
 
 CREATE TABLE hr.work_location_structure_assignment (

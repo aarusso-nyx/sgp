@@ -1,9 +1,9 @@
 import type { Provider } from '@nestjs/common';
-import { NoopPdfAValidator, type PdfAValidator } from '@stynx/pdf-a';
+import { NoopPdfAValidator, type PdfAValidator } from '@stynx-nyx/pdf-a';
 import {
   VeraPdfDockerValidator,
   type VeraPdfDockerValidatorOptions,
-} from '@stynx/pdf-a-vera-docker';
+} from '@stynx-nyx/pdf-a-vera-docker';
 
 import {
   TelemetryPdfAValidator,

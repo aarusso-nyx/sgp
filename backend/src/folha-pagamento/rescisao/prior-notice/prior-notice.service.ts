@@ -11,9 +11,7 @@ import { SgpEsocialEmittersService } from '../../../integrations/stynx-esocial';
 
 export type PriorNoticeKind = 'WORKED' | 'INDEMNIFIED' | 'NONE';
 export type PriorNoticeReductionMode =
-  | 'TWO_HOURS_DAY'
-  | 'SEVEN_FINAL_DAYS'
-  | 'NONE';
+  'TWO_HOURS_DAY' | 'SEVEN_FINAL_DAYS' | 'NONE';
 
 interface PriorNoticeRow extends QueryResultRow {
   notice_days: string;

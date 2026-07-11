@@ -16,14 +16,14 @@ This is an INSPECTION and ASSESSMENT task, not a refactor task. Do not modify co
 
 ## 1. Inputs (defaults; override per invocation)
 
-| Input             | Default                    | Effect                                                                                                                                 |
+| Input | Default | Effect |
 | ----------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --- | -------------------------------------------------------------- |
-| `STAGE`           | `mvp`                      | One of `dev                                                                                                                            | mvp | prod`. Adjusts band thresholds and default weights (see §6.3). |
-| `CI_SCOPE`        | `out-of-scope`             | When `out-of-scope`, GitHub Actions / CI absence is **not** a defect. When `in-scope`, evaluate Dim 15 fully.                          |
-| `MOCK_POSTURE`    | `intentional`              | When `intentional`, the existence of mocks is **not** a defect. Mocks are only flagged on concrete contract drift evidence (see §5.7). |
-| `OUTPUT_PATH`     | `./docs/work/qa/report.md` | Single self-contained markdown report. `./docs/work` is the canonical untracked scratch area.                                          |
-| `WEIGHTS`         | see §6                     | Optional weight overrides. Equal-weight aggregate is always also computed.                                                             |
-| `PRIOR_SCORECARD` | none                       | Optional path to a previous scorecard for floor-anchoring (see §3 Operating Principles, rule 5).                                       |
+| `STAGE` | `mvp` | One of `dev                                                                                                                            | mvp | prod`. Adjusts band thresholds and default weights (see §6.3). |
+| `CI_SCOPE` | `out-of-scope` | When `out-of-scope`, GitHub Actions / CI absence is **not** a defect. When `in-scope`, evaluate Dim 15 fully. |
+| `MOCK_POSTURE` | `intentional` | When `intentional`, the existence of mocks is **not** a defect. Mocks are only flagged on concrete contract drift evidence (see §5.7). |
+| `OUTPUT_PATH` | `./docs/work/qa/report.md` | Single self-contained markdown report. `./docs/work` is the canonical untracked scratch area. |
+| `WEIGHTS` | see §6 | Optional weight overrides. Equal-weight aggregate is always also computed. |
+| `PRIOR_SCORECARD` | none | Optional path to a previous scorecard for floor-anchoring (see §3 Operating Principles, rule 5). |
 
 Record actual values used in §19 of the report.
 

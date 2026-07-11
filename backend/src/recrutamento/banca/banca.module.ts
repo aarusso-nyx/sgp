@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PdfVerificationEvidenceAppender } from '@stynx/pdf/evidence';
+import { PdfVerificationEvidenceAppender } from '@stynx-nyx/pdf/evidence';
 
 import { DatabaseModule } from '../../database/database.module';
 import { ExternalModule } from '../../external/external.module';

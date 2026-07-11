@@ -216,6 +216,22 @@ function listMarkdownFiles(relativeDir) {
   return files;
 }
 
+function listControllerFiles(relativeDir = 'backend/src') {
+  const absoluteDir = resolve(repoRoot, relativeDir);
+  const files = [];
+  for (const entry of readdirSync(absoluteDir, { withFileTypes: true })) {
+    const childRelativePath = `${relativeDir}/${entry.name}`;
+    if (entry.isDirectory()) {
+      files.push(...listControllerFiles(childRelativePath));
+      continue;
+    }
+    if (entry.isFile() && entry.name.endsWith('.controller.ts')) {
+      files.push(childRelativePath);
+    }
+  }
+  return files;
+}
+
 function listAuthorityDocs() {
   return listMarkdownFiles('docs/eng')
     .filter((relativePath) => !ROUTE_AUTHORITY_EXCLUDED_DOCS.has(relativePath))
@@ -242,13 +258,7 @@ function deferredScopeForRoute(route) {
 }
 
 function parseRuntimeRoutes() {
-  const controllerFiles = execSync("rg --files backend/src -g '*controller.ts'", {
-    cwd: sourceRoot,
-    encoding: 'utf8',
-  })
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean);
+  const controllerFiles = listControllerFiles().sort();
 
   const routes = [];
   for (const relativePath of controllerFiles) {

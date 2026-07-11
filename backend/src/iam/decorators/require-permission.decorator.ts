@@ -1,6 +1,6 @@
 import { applyDecorators, SetMetadata } from '@nestjs/common';
-import { RequirePermissions } from '@stynx/backend';
-import { Public as StynxPublic } from '@stynx/auth';
+import { RequirePermissions } from '@stynx-nyx/backend';
+import { Public as StynxPublic } from '@stynx-nyx/auth';
 
 import type { Permission } from '../permissions/permission-catalog.generated';
 

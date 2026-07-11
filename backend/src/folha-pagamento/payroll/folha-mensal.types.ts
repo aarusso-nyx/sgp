@@ -1,19 +1,10 @@
 import { QueryResultRow } from 'pg';
 
 export type CompetenceStatus =
-  | 'OPEN'
-  | 'CALCULATING'
-  | 'CALCULATED'
-  | 'APPROVED'
-  | 'GENERATED'
-  | 'CLOSED';
+  'OPEN' | 'CALCULATING' | 'CALCULATED' | 'APPROVED' | 'GENERATED' | 'CLOSED';
 
 export type PayrollRunStatus =
-  | 'DRAFT'
-  | 'PROCESSING'
-  | 'GENERATED'
-  | 'APPROVED'
-  | 'CLOSED';
+  'DRAFT' | 'PROCESSING' | 'GENERATED' | 'APPROVED' | 'CLOSED';
 
 export interface CatalogRow extends QueryResultRow {
   payroll_type_id: string;

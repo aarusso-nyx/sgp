@@ -642,7 +642,10 @@ function validateCoverageAndMutationGates() {
   const backendCoverage = readJson('tests/backend/jest-coverage.json');
   const angular = readJson('frontend/angular.json');
   const packageJson = readJson('package.json');
-  const sourceCi = readFileSync(resolve(repoRoot, '.github/workflows/source-ci.yml'), 'utf8');
+  const deepEvidence = readFileSync(
+    resolve(repoRoot, '.github/workflows/deep-evidence.yml'),
+    'utf8',
+  );
   const strykerConfig = pathExists('stryker.conf.cjs')
     ? readFileSync(resolve(repoRoot, 'stryker.conf.cjs'), 'utf8')
     : '';
@@ -679,8 +682,8 @@ function validateCoverageAndMutationGates() {
   record(
     'mutation:script-dispatcher-backed',
     packageJson.scripts?.['test:mutation'] === 'node scripts/run.mjs test mutation' &&
-      sourceCi.includes('npm run test:mutation'),
-    'package.json + source-ci',
+      deepEvidence.includes('npm run test:mutation'),
+    'package.json + deep-evidence',
   );
   // ADR-028 (mutation-scope-rationale): mutation scope is curated.
   // Two W3 expansion experiments (bulk-glob 34.49%, targeted 36.02%) were
@@ -755,6 +758,10 @@ function validateRepositoryDiscipline() {
   const codeowners = readFileSync(resolve(repoRoot, '.github/CODEOWNERS'), 'utf8');
   const dependabot = readFileSync(resolve(repoRoot, '.github/dependabot.yml'), 'utf8');
   const sourceCi = readFileSync(resolve(repoRoot, '.github/workflows/source-ci.yml'), 'utf8');
+  const deepEvidence = readFileSync(
+    resolve(repoRoot, '.github/workflows/deep-evidence.yml'),
+    'utf8',
+  );
   const gitignore = readFileSync(resolve(repoRoot, '.gitignore'), 'utf8');
   const disciplineEvidence = pathExists('docs/gov/evidence/repository-discipline.md')
     ? readFileSync(resolve(repoRoot, 'docs/gov/evidence/repository-discipline.md'), 'utf8')
@@ -799,9 +806,9 @@ function validateRepositoryDiscipline() {
     'repo-discipline:source-ci-enforces-gates',
     sourceCi.includes('commitlint') &&
       sourceCi.includes('npm run test:types') &&
-      sourceCi.includes('npm run test:mutation') &&
+      deepEvidence.includes('npm run test:mutation') &&
       sourceCi.includes('npm run governance:check'),
-    '.github/workflows/source-ci.yml',
+    '.github/workflows/source-ci.yml + deep-evidence.yml',
   );
   record('repo-discipline:docs-work-ignored', gitignore.includes('docs/work/**'), '.gitignore');
   record(

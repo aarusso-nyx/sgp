@@ -6,10 +6,7 @@ import { domainError } from '../errors/domain-error';
 export type QueueAdapterResponseStatus = 'OK' | 'RETRY' | 'DEAD_LETTER';
 
 export type QueueAdapterErrorKind =
-  | 'TRANSIENT'
-  | 'DEFINITIVE'
-  | 'TIMEOUT'
-  | 'MAX_ATTEMPTS_EXCEEDED';
+  'TRANSIENT' | 'DEFINITIVE' | 'TIMEOUT' | 'MAX_ATTEMPTS_EXCEEDED';
 
 export type QueueAdapterTopics<TKind extends string = string> = Readonly<{
   kind: TKind;
@@ -339,9 +336,7 @@ export class SgpQueueAdapter<TKind extends string> {
     });
 
     await this.publishRequest(request);
-    await input.onPublished?.(
-      request as QueueAdapterRequestEnvelope<string, TPayload>,
-    );
+    await input.onPublished?.(request);
     return responsePromise as Promise<
       QueueAdapterResponseEnvelope<TKind, TResponse>
     >;

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FeatureFlagsService } from '@stynx/feature-flags';
+import { FeatureFlagsService } from '@stynx-nyx/feature-flags';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import { SystemParameterFeatureFlagProvider } from './system-parameter-feature-flag.provider';

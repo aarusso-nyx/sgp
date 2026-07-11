@@ -14,11 +14,7 @@ import {
 } from './employee-transfer.dto';
 
 type TransferStatus =
-  | 'solicitada'
-  | 'aprovada'
-  | 'efetivada'
-  | 'indeferida'
-  | 'cancelada';
+  'solicitada' | 'aprovada' | 'efetivada' | 'indeferida' | 'cancelada';
 
 interface EmployeeRow extends QueryResultRow {
   employee_id: string;

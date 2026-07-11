@@ -4,6 +4,8 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 
+import { format, resolveConfig } from 'prettier';
+
 const sourceRoot = process.cwd();
 const backendRoot = resolve(sourceRoot, 'backend');
 const nodePath = [
@@ -70,6 +72,13 @@ function normalizeOpenApi31(spec, label) {
     openapi: '3.1.0',
     jsonSchemaDialect: 'https://json-schema.org/draft/2020-12/schema',
   };
+}
+
+async function writeJson(path, value) {
+  const source = `${JSON.stringify(value, null, 2)}\n`;
+  const config = await resolveConfig(path);
+  const formatted = await format(source, { ...(config ?? {}), filepath: path });
+  writeFileSync(path, formatted, 'utf8');
 }
 
 function toPascal(value) {
@@ -292,12 +301,12 @@ async function main() {
     const coreSpec = normalizeOpenApi31(rawCoreSpec, 'core');
     const portalSpec = normalizeOpenApi31(rawPortalSpec, 'portal');
 
-    writeFileSync(coreSpecPath, `${JSON.stringify(coreSpec, null, 2)}\n`, 'utf8');
-    writeFileSync(portalSpecPath, `${JSON.stringify(portalSpec, null, 2)}\n`, 'utf8');
+    await writeJson(coreSpecPath, coreSpec);
+    await writeJson(portalSpecPath, portalSpec);
 
     mkdirSync(dirname(canonicalCoreSpecPath), { recursive: true });
-    writeFileSync(canonicalCoreSpecPath, `${JSON.stringify(coreSpec, null, 2)}\n`, 'utf8');
-    writeFileSync(canonicalPortalSpecPath, `${JSON.stringify(portalSpec, null, 2)}\n`, 'utf8');
+    await writeJson(canonicalCoreSpecPath, coreSpec);
+    await writeJson(canonicalPortalSpecPath, portalSpec);
 
     const mergedOperations = dedupeOperations([
       ...extractOperations(coreSpec),
@@ -309,7 +318,7 @@ async function main() {
     mkdirSync(dirname(adminClientPath), { recursive: true });
     mkdirSync(dirname(portalClientPath), { recursive: true });
     writeFileSync(adminClientPath, adminClientSource, 'utf8');
-    writeFileSync(portalClientSpecPath, `${JSON.stringify(portalSpec, null, 2)}\n`, 'utf8');
+    await writeJson(portalClientSpecPath, portalSpec);
     writeFileSync(portalClientPath, portalClientSource, 'utf8');
 
     console.log(

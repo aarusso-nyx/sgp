@@ -24,16 +24,18 @@ Every ADR must:
 
 ## Index
 
-| ADR                                                         | Status    | Decision                                                                                                               |
-| ----------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------- |
-| [ADR-021](adr-021-icp-signer-software-certificate.md)       | Accepted  | SGP uses A1/software certificates for ICP-Brasil-style signing inside the SGP boundary.                                |
-| [ADR-022](adr-022-aws-iac-stack.md)                         | Postponed | Final production infrastructure strategy is postponed until owner selection and retained deployment evidence.          |
-| [ADR-023](adr-023-lgpd-international-transfer-mechanism.md) | Accepted  | SGP records LGPD international transfer mechanisms and public active summaries.                                        |
-| [ADR-024](adr-024-folia-first-payroll-authority.md)         | Accepted  | Folia engine behavior is the implementation tiebreaker for payroll calculations against `docs/eng/` spec language.     |
-| [ADR-025](adr-025-stynx-package-boundary.md)                | Accepted  | `@stynx/*` and `@stynx-web/*` packages are vendored framework dependencies with a documented contract boundary.        |
-| [ADR-026](adr-026-rls-default-tenancy.md)                   | Accepted  | Row-Level Security on every tenant-scoped PostgreSQL table is mandatory and enforced by per-entity cross-tenant specs. |
-| [ADR-027](adr-027-custom-lint-as-policy.md)                 | Accepted  | Custom ESLint rules under `backend/eslint-rules/` are policy enforcement with an explicit add/change/remove lifecycle. |
-| [ADR-028](adr-028-mutation-scope-rationale.md)              | Accepted  | Stryker mutation scope is intentionally narrow; expansion is a deliberate amendment, not an accident.                  |
-| [ADR-029](adr-029-waf-posture.md)                           | Accepted  | AWS WAF is explicitly not provisioned in the current baseline, with reopen triggers recorded.                          |
-| [ADR-030](adr-030-homologation-and-release-gates.md)        | Accepted  | GitHub Environments and accepted gate evidence govern stage/prod homologation and release promotion.                   |
-| [ADR-031](adr-031-centralised-idempotency.md)               | Accepted  | `@Idempotent()` and `public.idempotency_keys` provide tenant-scoped HTTP mutation replay and duplicate suppression.    |
+| ADR                                                         | Status     | Decision                                                                                                               |
+| ----------------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------- |
+| [ADR-021](adr-021-icp-signer-software-certificate.md)       | Accepted   | SGP uses A1/software certificates for ICP-Brasil-style signing inside the SGP boundary.                                |
+| [ADR-022](adr-022-aws-iac-stack.md)                         | Postponed  | Final production infrastructure strategy is postponed until owner selection and retained deployment evidence.          |
+| [ADR-023](adr-023-lgpd-international-transfer-mechanism.md) | Accepted   | SGP records LGPD international transfer mechanisms and public active summaries.                                        |
+| [ADR-024](adr-024-folia-first-payroll-authority.md)         | Accepted   | Folia engine behavior is the implementation tiebreaker for payroll calculations against `docs/eng/` spec language.     |
+| [ADR-025](adr-025-stynx-package-boundary.md)                | Superseded | Local STYNX artifacts were replaced by the published-package boundary in ADR-032.                                      |
+| [ADR-026](adr-026-rls-default-tenancy.md)                   | Accepted   | Row-Level Security on every tenant-scoped PostgreSQL table is mandatory and enforced by per-entity cross-tenant specs. |
+| [ADR-027](adr-027-custom-lint-as-policy.md)                 | Accepted   | Custom ESLint rules under `backend/eslint-rules/` are policy enforcement with an explicit add/change/remove lifecycle. |
+| [ADR-028](adr-028-mutation-scope-rationale.md)              | Accepted   | Stryker mutation scope is intentionally narrow; expansion is a deliberate amendment, not an accident.                  |
+| [ADR-029](adr-029-waf-posture.md)                           | Accepted   | AWS WAF is explicitly not provisioned in the current baseline, with reopen triggers recorded.                          |
+| [ADR-030](adr-030-homologation-and-release-gates.md)        | Accepted   | GitHub Environments and accepted gate evidence govern stage/prod homologation and release promotion.                   |
+| [ADR-031](adr-031-centralised-idempotency.md)               | Accepted   | `@Idempotent()` and `public.idempotency_keys` provide tenant-scoped HTTP mutation replay and duplicate suppression.    |
+| [ADR-032](adr-032-github-packages-runtime-dependencies.md)  | Accepted   | Published GitHub Packages replace local STYNX/DEVAI dependency artifacts.                                              |
+| [ADR-033](adr-033-postgis-public-schema-portability.md)     | Accepted   | PostGIS types and functions use the supported image's `public` extension schema.                                       |

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
-import { StynxSessionService } from '@stynx-web/angular-auth';
+import { StynxSessionService } from '@stynx-nyx/angular-auth';
 import { vi } from 'vitest';
 
 import { authGuard } from './auth-guard';

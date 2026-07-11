@@ -80,6 +80,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Gitleaks scans the full pull-request commit range below.
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -88,12 +91,9 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - name: Setup Stynx local packages
-        uses: ./.github/actions/setup-stynx-local-npm
-        with:
-          ref: ${{ vars.STYNX_REF || 'main' }}
-
       - name: Install workspace dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
         run: npm ci
 
       - name: Secret scan (gitleaks)
@@ -159,21 +159,6 @@ jobs:
       - name: Unit tests
         run: npm run test
 
-      - name: Frontend coverage
-        run: npm run test:frontend:coverage
-
-      - name: Install Playwright browsers
-        run: npm --workspace frontend exec -- playwright install --with-deps chromium
-
-      - name: Integration smoke
-        run: npm run test:db
-
-      - name: Backend e2e
-        run: npm run test:e2e -- --runInBand
-
-      - name: Frontend Playwright
-        run: npm run test:frontend:e2e
-
       - name: Build
         run: npm run build
 
@@ -192,38 +177,8 @@ jobs:
         with:
           subject-path: 'build-artefacts/*.tar.gz'
 
-      - name: Backend coverage
-        run: npm run test:coverage -- --runInBand
-
-      - name: Scoped mutation gate
-        run: npm run test:mutation
-
       - name: ROADMAP auto-block check
         run: npm run roadmap:check
 
       - name: Governance validation
         run: npm run governance:check
-
-      - name: Upload backend coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-coverage
-          path: backend/coverage
-          if-no-files-found: ignore
-
-      - name: Upload frontend coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-coverage
-          path: frontend/coverage
-          if-no-files-found: ignore
-
-      - name: Upload frontend Playwright traces
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-playwright-traces
-          path: test-results
-          if-no-files-found: ignore

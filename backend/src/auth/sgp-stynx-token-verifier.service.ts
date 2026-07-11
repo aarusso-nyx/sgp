@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CognitoTokenVerifier } from '@stynx/auth';
+import { CognitoTokenVerifier } from '@stynx-nyx/auth';
 import type {
   AuthVerificationResult,
   Principal,
   TokenVerifier,
-} from '@stynx/contracts';
+} from '@stynx-nyx/contracts';
 
 import { PermissionsService } from '../iam/permissions/permissions.service';
 

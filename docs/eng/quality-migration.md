@@ -126,7 +126,7 @@ O comprovante anual de rendimentos usa fixture golden versionada em `tests/backe
 
 Os goldens regulatórios R3-016 cobrem uma amostra mínima determinística de TCE e transparência pública sem promover leiaute oficial quando a fonte ainda está pendente. `tests/backend/golden/tce/state-payroll-v01/` fixa o envelope JSON do adapter TCE-MG em modo `sourceStatus=UNVERIFIED_LAYOUT` e `officialConformance=false`; `tests/backend/tce-golden.e2e-spec.ts` valida serialização e hash. `tests/backend/golden/transparency/public-payroll-v01/` fixa a resposta JSON e CSV pública de folha, com BOM UTF-8 no CSV e sem CPF, banco, dependentes, endereço ou outros campos protegidos; `tests/backend/transparency-public.e2e-spec.ts` compara os endpoints públicos aos arquivos esperados.
 
-O enforcement corrente é orquestrado pelo `scripts/run.mjs` a partir da raiz do workspace. O script backend `test:cov` executa Jest, inclui specs unitários e e2e cobertos, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. O script frontend `test:frontend:coverage` executa os targets Angular cobertos de admin e portal e grava artefatos em `frontend/coverage/sgp-admin/` e `frontend/coverage/sgp-portal/`. O corte backend focado atualmente aceito é `test:backend:exception-filter`, com config dedicada e thresholds de arquivo. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer outro corte backend por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
+O enforcement corrente é orquestrado pelo `scripts/run.mjs` a partir da raiz do workspace. O script backend `test:cov` executa Jest, inclui specs unitários e e2e cobertos, aplica `coverageThreshold.global` de 85 % para `lines`, `branches` e `functions`, e gera `lcov`, `text-summary` e `cobertura`. O script frontend `test:frontend:coverage` executa os targets Angular cobertos de admin e portal; os artefatos efêmeros de cobertura são publicados pelo workflow Deep Runtime Evidence. O corte backend focado atualmente aceito é `test:backend:exception-filter`, com config dedicada e thresholds de arquivo. Não há `jest.config.ts` raiz nem thresholds por `projects` no pacote atual; qualquer outro corte backend por módulo deve ser adicionado em decisão futura antes de ser tratado como gate.
 
 O contrato regulatório de redaction de logs é coberto por `backend/src/common/logging/logging.config.spec.ts`. O spec instancia pino com a configuração canônica de `backend/src/common/logging/logging.config.ts` e prova que CPF/PIS/PASEP, e-mail, conta bancária e cabeçalho Authorization são substituídos por `[redacted]` antes de serialização.
 
@@ -3336,16 +3336,16 @@ Com base na extração dos dumps (doc 64 e CSV 63), a DSL legada usa a seguinte 
 
 #### 6.2 Mapeamento DSL legada → DSL nova (SQL-based)
 
-| Construto legado                                         | Construto DSL novo                                                                  | SQL compilado equivalente                                                                                                |
+| Construto legado | Construto DSL novo | SQL compilado equivalente |
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
-| `r{vencimento}`                                          | `rubrica('vencimento')`                                                             | `(SELECT valor_calculado FROM lancamento WHERE contracheque_id = :cid AND verba_codigo = '1101')`                        |
-| `o{referenciaSalarialCargo.valor}`                       | `atributo('referencia_salarial_cargo.valor')`                                       | `(SELECT rs.valor FROM referencia_salarial rs JOIN funcionario f ON f.referencia_salarial_id = rs.id WHERE f.id = :fid)` |
-| `o{grauInstrucao}`                                       | `atributo('grau_instrucao')`                                                        | `(SELECT grau_instrucao FROM pessoa p JOIN funcionario f ON f.pessoa_id = p.id WHERE f.id = :fid)`                       |
-| `a{inss}`                                                | `aliquota('INSS', rubrica('vencimento'))`                                           | subconsulta na tabela `aliquota` com faixa                                                                               |
-| `a{inss(r{vencimento}+r{gratificacao_regencia_classe})}` | `aliquota('INSS', rubrica('vencimento') + rubrica('gratificacao_regencia_classe'))` | subconsulta com base composta                                                                                            |
-| `SE (cond) ENTAO x SENAO_SE (cond2) ENTAO y FIM_SE`      | `CASE WHEN cond THEN x WHEN cond2 THEN y END`                                       | SQL CASE nativo                                                                                                          |
-| `variavel = expr`                                        | variável local não existe em SQL                                                    | desmembrar em CTE ou subexpressão                                                                                        | reescrever manualmente se complexo |
-| `r{vencimento} * 0.06`                                   | `rubrica('vencimento') * 0.06`                                                      | expressão numérica direta                                                                                                |
+| `r{vencimento}` | `rubrica('vencimento')` | `(SELECT valor_calculado FROM lancamento WHERE contracheque_id = :cid AND verba_codigo = '1101')` |
+| `o{referenciaSalarialCargo.valor}` | `atributo('referencia_salarial_cargo.valor')` | `(SELECT rs.valor FROM referencia_salarial rs JOIN funcionario f ON f.referencia_salarial_id = rs.id WHERE f.id = :fid)` |
+| `o{grauInstrucao}` | `atributo('grau_instrucao')` | `(SELECT grau_instrucao FROM pessoa p JOIN funcionario f ON f.pessoa_id = p.id WHERE f.id = :fid)` |
+| `a{inss}` | `aliquota('INSS', rubrica('vencimento'))` | subconsulta na tabela `aliquota` com faixa |
+| `a{inss(r{vencimento}+r{gratificacao_regencia_classe})}` | `aliquota('INSS', rubrica('vencimento') + rubrica('gratificacao_regencia_classe'))` | subconsulta com base composta |
+| `SE (cond) ENTAO x SENAO_SE (cond2) ENTAO y FIM_SE` | `CASE WHEN cond THEN x WHEN cond2 THEN y END` | SQL CASE nativo |
+| `variavel = expr` | variável local não existe em SQL | desmembrar em CTE ou subexpressão | reescrever manualmente se complexo |
+| `r{vencimento} * 0.06` | `rubrica('vencimento') * 0.06` | expressão numérica direta |
 
 #### 6.3 Catálogo completo de fórmulas a traduzir
 

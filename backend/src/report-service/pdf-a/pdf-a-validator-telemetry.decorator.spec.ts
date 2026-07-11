@@ -2,7 +2,7 @@ import type {
   PdfAValidateOptions,
   PdfAValidationResult,
   PdfAValidator,
-} from '@stynx/pdf-a';
+} from '@stynx-nyx/pdf-a';
 
 import {
   createPdfATelemetryMetrics,
@@ -52,8 +52,7 @@ class SpyValidator implements PdfAValidator {
 
   constructor(
     private readonly response:
-      | PdfAValidationResult
-      | (() => Promise<PdfAValidationResult>),
+      PdfAValidationResult | (() => Promise<PdfAValidationResult>),
   ) {}
 
   validate(

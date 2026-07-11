@@ -15,8 +15,7 @@ describe('standard error contract registration', () => {
       ReportServiceModule,
     ]) {
       const metadata = Reflect.getMetadata('providers', moduleType) as
-        | Array<{ provide?: unknown; useClass?: unknown }>
-        | undefined;
+        Array<{ provide?: unknown; useClass?: unknown }> | undefined;
       expect(metadata).toEqual(
         expect.arrayContaining([
           expect.objectContaining({

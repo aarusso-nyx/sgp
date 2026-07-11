@@ -73,6 +73,4 @@ export type EsocialRelayEventClass =
   (typeof ESOCIAL_RELAY_EVENT_CLASSES)[number];
 
 export type EsocialRelayScenario =
-  | 'ACCEPT'
-  | 'TRANSIENT_ERROR'
-  | 'DEFINITIVE_ERROR';
+  'ACCEPT' | 'TRANSIENT_ERROR' | 'DEFINITIVE_ERROR';

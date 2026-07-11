@@ -20,12 +20,9 @@ export const GOVBR_RELAY_QUEUE_KIND = 'govbr-sign' as const;
 
 export type GovBrRelayKind = typeof GOVBR_RELAY_QUEUE_KIND;
 export type GovBrRelayScenario =
-  | 'ACCEPT'
-  | 'TRANSIENT_ERROR'
-  | 'DEFINITIVE_ERROR';
+  'ACCEPT' | 'TRANSIENT_ERROR' | 'DEFINITIVE_ERROR';
 export type GovBrRelayAction =
-  | 'CREATE_SIGNATURE_REQUEST'
-  | 'COMPLETE_SIGNATURE_REQUEST';
+  'CREATE_SIGNATURE_REQUEST' | 'COMPLETE_SIGNATURE_REQUEST';
 
 export type GovBrRelayActor = Readonly<{
   sub: string;
@@ -55,8 +52,7 @@ export type GovBrRelayCompleteRequestPayload = Readonly<{
 }>;
 
 export type GovBrRelayRequestPayload =
-  | GovBrRelayCreateRequestPayload
-  | GovBrRelayCompleteRequestPayload;
+  GovBrRelayCreateRequestPayload | GovBrRelayCompleteRequestPayload;
 
 export type GovBrRelaySignatureRequestResponse = Readonly<{
   id: string;

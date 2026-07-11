@@ -3,7 +3,7 @@ import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/cor
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { StynxSessionService } from '@stynx-web/angular-auth';
+import { StynxSessionService } from '@stynx-nyx/angular-auth';
 
 import { SGP_FEATURE_I18N_MESSAGES } from '../../../../core/i18n/feature-messages';
 

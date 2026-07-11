@@ -1,17 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 export type TceQueueErrorKind =
-  | 'TRANSIENT'
-  | 'DEFINITIVE'
-  | 'TIMEOUT'
-  | 'VALIDATION';
+  'TRANSIENT' | 'DEFINITIVE' | 'TIMEOUT' | 'VALIDATION';
 
 export type TceAttemptOutcome =
-  | 'SUCCESS'
-  | 'TRANSIENT_FAIL'
-  | 'DEFINITIVE_FAIL'
-  | 'TIMEOUT'
-  | 'CIRCUIT_OPEN';
+  'SUCCESS' | 'TRANSIENT_FAIL' | 'DEFINITIVE_FAIL' | 'TIMEOUT' | 'CIRCUIT_OPEN';
 
 export interface TceRetryDecision {
   errorKind: TceQueueErrorKind;
@@ -127,7 +120,7 @@ export class TceRetryStrategyService {
   }
 
   private toErrorLike(error: unknown): ErrorLike {
-    if (error && typeof error === 'object') return error as ErrorLike;
+    if (error && typeof error === 'object') return error;
     return { message: this.unknownText(error) };
   }
 

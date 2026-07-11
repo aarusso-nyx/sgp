@@ -26,7 +26,7 @@ describe('GeofenceValidatorService', () => {
     });
 
     expect(client.query).toHaveBeenCalledWith(
-      expect.stringContaining('postgis.ST_Within'),
+      expect.stringContaining('public.ST_Within'),
       ['00000000-0000-4000-8000-000000000101', -46.633308, -23.55052],
     );
     expect(result.inside).toBe(true);

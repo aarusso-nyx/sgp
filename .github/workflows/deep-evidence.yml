@@ -1,0 +1,83 @@
+name: Deep Runtime Evidence
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * 1-5'
+
+permissions:
+  contents: read
+
+jobs:
+  deep-runtime-evidence:
+    name: Deep runtime evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sgp_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d sgp_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/sgp_ci
+      SGP_DB_ALIGNMENT_PHASE: full_closure
+      CI: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install workspace dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: npm ci
+
+      - name: Verify registry dependency boundary
+        run: npm run check:registry-dependencies
+
+      - name: Run canonical database bootstrap smoke
+        run: npm run db:smoke
+
+      - name: Run backend end-to-end suite
+        run: npm run test:e2e -- --runInBand
+
+      - name: Run frontend and backend coverage
+        run: |
+          npm run test:frontend:coverage
+          npm run test:coverage -- --runInBand
+
+      - name: Install Playwright browsers
+        run: npm --workspace frontend exec -- playwright install --with-deps chromium
+
+      - name: Run frontend Playwright suite
+        run: npm run test:frontend:e2e
+
+      - name: Run scoped mutation gate
+        run: npm run test:mutation
+
+      - name: Upload coverage and browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deep-runtime-evidence
+          path: |
+            backend/coverage
+            frontend/coverage
+            test-results
+            playwright-report
+          if-no-files-found: ignore

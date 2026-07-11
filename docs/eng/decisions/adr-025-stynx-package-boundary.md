@@ -10,9 +10,11 @@ runbooks:
 
 # ADR-025: Stynx Vendored Package Boundary
 
-Status: Accepted
+Status: Superseded
 
 Date: 2026-05-08
+
+Superseded by: [ADR-032](adr-032-github-packages-runtime-dependencies.md)
 
 ## Context
 
@@ -69,7 +71,7 @@ existing `npm run governance:check` evidence loop and through the
   because it reinvents auth, idempotency, redaction, and tenancy primitives
   already maintained in Stynx.
 
-## Consequences
+## Historical Consequences
 
 - Reviews of new `@stynx/*` imports check that the consumed surface is the
   package entrypoint, not an internal path.
@@ -78,8 +80,8 @@ existing `npm run governance:check` evidence loop and through the
 - Cross-tier import gate in `scripts/lib/governance/validate.mjs`
   (`architecture:forbidden-cross-tier-imports`) continues to enforce the
   no-backend↔frontend rule.
-- Future Stynx version uplift remains an opt-in artefact swap with a
-  consumer-side contract test failure as the leading indicator.
+- The local-artifact installation model has been replaced by the published
+  GitHub Packages model in ADR-032.
 
 ## Verification
 

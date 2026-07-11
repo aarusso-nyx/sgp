@@ -1,5 +1,5 @@
 import { MODULE_METADATA } from '@nestjs/common/constants';
-import { PdfVerificationEvidenceAppender } from '@stynx/pdf/evidence';
+import { PdfVerificationEvidenceAppender } from '@stynx-nyx/pdf/evidence';
 
 import { PdfABuilderService } from '../report-service/payslip/pdf-a-builder.service';
 import { PayslipRenderService } from '../report-service/payslip/payslip-render.service';

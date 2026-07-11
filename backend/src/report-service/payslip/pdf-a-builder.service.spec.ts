@@ -3,12 +3,12 @@ import { dirname, join } from 'node:path';
 
 import { Logger } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { NoopPdfAValidator } from '@stynx/pdf-a';
+import { NoopPdfAValidator } from '@stynx-nyx/pdf-a';
 import type {
   PdfAValidateOptions,
   PdfAValidationResult,
   PdfAValidator,
-} from '@stynx/pdf-a';
+} from '@stynx-nyx/pdf-a';
 
 import { PdfABuilderService } from './pdf-a-builder.service';
 import { PayslipDocument } from './payslip-template';

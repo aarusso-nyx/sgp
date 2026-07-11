@@ -3,9 +3,9 @@ import type {
   PdfAValidateOptions,
   PdfAValidationResult,
   PdfAValidator,
-} from '@stynx/pdf-a';
-import { PdfVerificationEvidenceAppender } from '@stynx/pdf/evidence';
-import { PublicPayrollPdfBuilder } from '@stynx/pdf/public-payroll';
+} from '@stynx-nyx/pdf-a';
+import { PdfVerificationEvidenceAppender } from '@stynx-nyx/pdf/evidence';
+import { PublicPayrollPdfBuilder } from '@stynx-nyx/pdf/public-payroll';
 
 import { PayslipDocument } from './payslip-template';
 import { YearlyIncomeDocument } from '../yearly-income/yearly-income-template';

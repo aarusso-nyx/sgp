@@ -12,11 +12,7 @@ import {
 export type EfdReinfEventType = 'R4010' | 'R4020' | 'R4040' | 'R4080' | 'R4099';
 export type EfdReinfEventKind = 'ORIGINAL' | 'RETIFICADORA';
 export type EfdReinfEventStatus =
-  | 'DRAFT'
-  | 'SIGNED'
-  | 'TRANSMITTED'
-  | 'ACCEPTED'
-  | 'REJECTED';
+  'DRAFT' | 'SIGNED' | 'TRANSMITTED' | 'ACCEPTED' | 'REJECTED';
 export type EfdReinfBeneficiaryKind = 'CPF' | 'CNPJ' | 'EXTERIOR';
 export type EfdReinfTotalizerKind = 'R-9015';
 

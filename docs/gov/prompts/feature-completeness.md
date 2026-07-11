@@ -29,21 +29,22 @@ Produce a single authoritative answer to the question:
 ## 4. Model Assignment
 
 The orchestrator (the main agent) is **Claude Opus 4.7** at high effort. Sub-agent dispatch:
-| Phase | Task | Model | Effort | Rationale |
-|---|---|---|---|---|
-| **Orchestrator** | Coordination, dispatch, gating | Opus 4.7 | high | Multi-phase synthesis |
-| 0 | Snapshot | Haiku 4.5 | low | Mechanical |
-| 1.A | Load embedded catalog | Haiku 4.5 | low | Copy + structure |
-| 1.B | Catalog extension via web research | Sonnet 4.6 | medium | Web search, primary-source verification |
-| 2.A | DB schema enumeration | Haiku 4.5 | low | Mechanical migration scan |
-| 2.B | Backend module/route inventory | Sonnet 4.6 | medium | Walk @Module/@Controller/@Injectable |
-| 2.C | Frontend route/screen inventory | Sonnet 4.6 | medium | Walk Angular routes/components |
-| 3 | Cross-reference (presence detection) | Sonnet 4.6 | medium | Match catalog items to inventory |
-| 4 | Tier classification (M/O assignment) | Opus 4.7 | high | Legal judgment with citation |
-| 5 | Master feature matrix synthesis | Opus 4.7 | high | Aggregate, format, validate |
-| 6 | Coverage summary + go-live verdict | Opus 4.7 | high | Judgment-heavy |
-| §11 | Self-check | Haiku 4.5 | low | File-existence checks |
-Effort: low ≈ minimal extended thinking; medium ≈ standard; high ≈ extended budget for multi-source synthesis.
+
+| Phase                                                                                                          | Task                                 | Model      | Effort | Rationale                               |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ---------- | ------ | --------------------------------------- |
+| **Orchestrator**                                                                                               | Coordination, dispatch, gating       | Opus 4.7   | high   | Multi-phase synthesis                   |
+| 0                                                                                                              | Snapshot                             | Haiku 4.5  | low    | Mechanical                              |
+| 1.A                                                                                                            | Load embedded catalog                | Haiku 4.5  | low    | Copy + structure                        |
+| 1.B                                                                                                            | Catalog extension via web research   | Sonnet 4.6 | medium | Web search, primary-source verification |
+| 2.A                                                                                                            | DB schema enumeration                | Haiku 4.5  | low    | Mechanical migration scan               |
+| 2.B                                                                                                            | Backend module/route inventory       | Sonnet 4.6 | medium | Walk @Module/@Controller/@Injectable    |
+| 2.C                                                                                                            | Frontend route/screen inventory      | Sonnet 4.6 | medium | Walk Angular routes/components          |
+| 3                                                                                                              | Cross-reference (presence detection) | Sonnet 4.6 | medium | Match catalog items to inventory        |
+| 4                                                                                                              | Tier classification (M/O assignment) | Opus 4.7   | high   | Legal judgment with citation            |
+| 5                                                                                                              | Master feature matrix synthesis      | Opus 4.7   | high   | Aggregate, format, validate             |
+| 6                                                                                                              | Coverage summary + go-live verdict   | Opus 4.7   | high   | Judgment-heavy                          |
+| §11                                                                                                            | Self-check                           | Haiku 4.5  | low    | File-existence checks                   |
+| Effort: low ≈ minimal extended thinking; medium ≈ standard; high ≈ extended budget for multi-source synthesis. |
 
 ---
 
@@ -62,30 +63,32 @@ Effort: low ≈ minimal extended thinking; medium ≈ standard; high ≈ extende
 ## 6. Presence Taxonomy (authoritative)
 
 Each feature is classified into exactly one of:
-| Code | Label | Definition |
-|---|---|---|
-| **P** | Present | Backend logic + DB schema + UI surface all exist; happy path is wired end-to-end. |
-| **B** | Backend-only | Backend logic and DB exist; no Angular surface. |
-| **F** | Frontend-only | Angular surface exists; no backend logic (rare; usually a partial WIP). |
-| **D** | DB-stub | Tables exist; no service methods or controller routes that exercise the domain. |
-| **A** | Absent | No evidence in DB, backend, or frontend. |
-| **X** | Out-of-scope by design | Explicitly excluded; cite ADR or `BACKLOG.md` entry stating the exclusion. |
-**Disambiguation.** When evidence is consistent with two adjacent codes, pick the lower-presence one (e.g., B over P, D over B). Identifier names alone do not establish presence — a table called `aposentadoria` with no migrations populating it and no service methods is `A`, not `D`.
+
+| Code                                                                                                                                                                                                                                                                                        | Label                  | Definition                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------- |
+| **P**                                                                                                                                                                                                                                                                                       | Present                | Backend logic + DB schema + UI surface all exist; happy path is wired end-to-end. |
+| **B**                                                                                                                                                                                                                                                                                       | Backend-only           | Backend logic and DB exist; no Angular surface.                                   |
+| **F**                                                                                                                                                                                                                                                                                       | Frontend-only          | Angular surface exists; no backend logic (rare; usually a partial WIP).           |
+| **D**                                                                                                                                                                                                                                                                                       | DB-stub                | Tables exist; no service methods or controller routes that exercise the domain.   |
+| **A**                                                                                                                                                                                                                                                                                       | Absent                 | No evidence in DB, backend, or frontend.                                          |
+| **X**                                                                                                                                                                                                                                                                                       | Out-of-scope by design | Explicitly excluded; cite ADR or `BACKLOG.md` entry stating the exclusion.        |
+| **Disambiguation.** When evidence is consistent with two adjacent codes, pick the lower-presence one (e.g., B over P, D over B). Identifier names alone do not establish presence — a table called `aposentadoria` with no migrations populating it and no service methods is `A`, not `D`. |
 
 ---
 
 ## 7. Tier Taxonomy (authoritative)
 
 Each feature carries exactly one tier:
-| Tier | Label | Definition |
-|---|---|---|
-| **M1** | Legally mandatory | Required by federal law, constitutional article, RFB/SPREV/MTP/ANPD normative, NR, or eSocial obligatory event for the applicable regime. **Must cite the source.** |
-| **M2** | Practically mandatory | The system cannot operate as a payroll platform without it (e.g., banco integration for crédito em conta, cadastro de pessoa física). Not legally cited, but no real-world deployment lacks it. |
-| **M3** | Mandatory by ETP/TR/Edital/Contrato | Required by the project's contractual instruments (the procurement spec). Cite the contract clause. |
-| **O1** | Standard market expectation | Modern HR/Payroll products commonly include it (BI, self-service, manager workflows). Not legally required. |
-| **O2** | Differentiator | Adds value beyond market baseline (advanced BI, mobile, AI assistance). |
-| **O3** | Out-of-scope by SPG design | Explicitly excluded by ADR / project decision; cite the document. |
-**Strict rule.** No M1 claim is valid without a primary-source citation (`Lei NNN/AAAA, art. N`, `IN RFB N/AAAA`, `Portaria MTP NNN/AAAA`, `NR-N`, `eSocial Manual de Orientação versão X`, `Resolução ANPD N/AAAA`). Unsourced "obviously mandatory" claims must be downgraded to M2.
+
+| Tier                                                                                                                                                                                                                                                                                   | Label                               | Definition                                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **M1**                                                                                                                                                                                                                                                                                 | Legally mandatory                   | Required by federal law, constitutional article, RFB/SPREV/MTP/ANPD normative, NR, or eSocial obligatory event for the applicable regime. **Must cite the source.**                             |
+| **M2**                                                                                                                                                                                                                                                                                 | Practically mandatory               | The system cannot operate as a payroll platform without it (e.g., banco integration for crédito em conta, cadastro de pessoa física). Not legally cited, but no real-world deployment lacks it. |
+| **M3**                                                                                                                                                                                                                                                                                 | Mandatory by ETP/TR/Edital/Contrato | Required by the project's contractual instruments (the procurement spec). Cite the contract clause.                                                                                             |
+| **O1**                                                                                                                                                                                                                                                                                 | Standard market expectation         | Modern HR/Payroll products commonly include it (BI, self-service, manager workflows). Not legally required.                                                                                     |
+| **O2**                                                                                                                                                                                                                                                                                 | Differentiator                      | Adds value beyond market baseline (advanced BI, mobile, AI assistance).                                                                                                                         |
+| **O3**                                                                                                                                                                                                                                                                                 | Out-of-scope by SPG design          | Explicitly excluded by ADR / project decision; cite the document.                                                                                                                               |
+| **Strict rule.** No M1 claim is valid without a primary-source citation (`Lei NNN/AAAA, art. N`, `IN RFB N/AAAA`, `Portaria MTP NNN/AAAA`, `NR-N`, `eSocial Manual de Orientação versão X`, `Resolução ANPD N/AAAA`). Unsourced "obviously mandatory" claims must be downgraded to M2. |
 
 ---
 

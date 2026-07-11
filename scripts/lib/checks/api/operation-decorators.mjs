@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'node:fs';
-import { spawnSync } from 'node:child_process';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import ts from 'typescript';
 
@@ -17,13 +17,15 @@ const routeDecoratorNames = new Set([
 ]);
 
 function controllerFiles() {
-  const result = spawnSync('rg', ['--files', 'backend/src'], {
-    encoding: 'utf8',
-  });
-  if (result.status !== 0) {
-    throw new Error(result.stderr || 'Unable to list backend source files');
+  function walk(directory) {
+    return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) return walk(path);
+      return path.endsWith('controller.ts') ? [path] : [];
+    });
   }
-  return result.stdout.split('\n').filter((file) => file.endsWith('controller.ts'));
+
+  return walk('backend/src');
 }
 
 function decoratorName(decorator, sourceFile) {

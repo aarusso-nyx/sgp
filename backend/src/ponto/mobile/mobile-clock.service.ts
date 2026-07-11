@@ -174,7 +174,7 @@ export class MobileClockService {
     }>(
       `
       UPDATE hr.work_location
-      SET geofence_polygon = postgis.ST_GeomFromText($2, 4326)
+      SET geofence_polygon = public.ST_GeomFromText($2, 4326)
       WHERE tenant_id = public.sgp_current_tenant_uuid()
         AND id = $1::uuid
       RETURNING id::text, geofence_polygon IS NOT NULL AS geofence_configured

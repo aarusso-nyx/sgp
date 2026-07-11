@@ -49,6 +49,4 @@ export type DetAuditEnvelope = DetEnvelopeBase &
   }>;
 
 export type DetEnvelope =
-  | DetInboxUpdateEnvelope
-  | DetAcknowledgementRequestEnvelope
-  | DetAuditEnvelope;
+  DetInboxUpdateEnvelope | DetAcknowledgementRequestEnvelope | DetAuditEnvelope;

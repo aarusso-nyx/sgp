@@ -1,6 +1,6 @@
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthorizationGuard, STYNX_AUTHZ_METADATA } from '@stynx/backend';
+import { AuthorizationGuard, STYNX_AUTHZ_METADATA } from '@stynx-nyx/backend';
 
 import {
   SgpStynxAuthGuard,
