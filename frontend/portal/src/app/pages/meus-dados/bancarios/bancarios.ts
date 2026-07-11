@@ -49,10 +49,10 @@ export class MeusDadosBancarios {
     this.error = '';
     this.invalidField = '';
     this.api
-      .post<
-        Record<string, unknown>,
-        Record<string, unknown>
-      >(`v1/employees/${value.employeeId}/bank-accounts`, this.compact(value))
+      .post<Record<string, unknown>, Record<string, unknown>>(
+        `v1/employees/${value.employeeId}/bank-accounts`,
+        this.compact(value),
+      )
       .subscribe({
         next: () => {
           this.saving = false;

@@ -3,10 +3,7 @@ import { Observable } from 'rxjs';
 import { ApiClient } from '../../../../core/api/api-client';
 
 export type RemunerationCeilingKey =
-  | 'TETO_PREFEITURA'
-  | 'TETO_VICE'
-  | 'TETO_VEREADOR'
-  | 'TETO_SECRETARIO';
+  'TETO_PREFEITURA' | 'TETO_VICE' | 'TETO_VEREADOR' | 'TETO_SECRETARIO';
 
 export interface RemunerationCeiling {
   key: RemunerationCeilingKey;

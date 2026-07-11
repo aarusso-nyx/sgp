@@ -35,8 +35,7 @@ const portalComponents = [
 describe('portal change detection policy', () => {
   it.each(portalComponents)('keeps $label on OnPush', ({ component }) => {
     const declaration = (component as unknown as Record<string, unknown>)[declarationKey] as
-      | AngularComponentDeclaration
-      | undefined;
+      AngularComponentDeclaration | undefined;
 
     expect(declaration?.onPush).toBe(true);
   });
