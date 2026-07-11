@@ -3,10 +3,14 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'daily'
-    open-pull-requests-limit: 10
+      interval: 'monthly'
+    # Security updates bypass this version-update schedule and remain ungrouped.
+    cooldown:
+      default-days: 90
+    open-pull-requests-limit: 2
     groups:
       npm-minor-patch:
+        applies-to: version-updates
         update-types:
           - 'minor'
           - 'patch'
@@ -14,10 +18,13 @@ updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'daily'
-    open-pull-requests-limit: 10
+      interval: 'monthly'
+    cooldown:
+      default-days: 90
+    open-pull-requests-limit: 1
     groups:
       actions-minor-patch:
+        applies-to: version-updates
         update-types:
           - 'minor'
           - 'patch'
