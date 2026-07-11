@@ -56,6 +56,14 @@ Artifact deployment to prod must reference a release-gate evidence file and an
 apply-authorization file. Provisioning/CDK deploy remains a separate lifecycle
 step and must not deploy application artifacts.
 
+Pull requests run the fast, deterministic contract gates: installation, audit,
+lint, format, typecheck, unit/type tests, API/DB alignment, build, CodeQL,
+dependency review, secrets, and registry-boundary checks. Browser end-to-end,
+full PostGIS bootstrap, coverage, and mutation execution run in the retained
+scheduled/manual `Deep Runtime Evidence` lane. Those checks remain release
+evidence requirements; moving them out of every pull request does not waive
+them for stage or production promotion.
+
 For the current EC2/PM2 baseline, rollout uses rolling replacement through ALB
 target health. Canary or blue-green target-group promotion is the preferred
 future enhancement when a second target group is introduced.
