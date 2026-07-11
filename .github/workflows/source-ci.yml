@@ -80,6 +80,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Gitleaks scans the full pull-request commit range below.
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4

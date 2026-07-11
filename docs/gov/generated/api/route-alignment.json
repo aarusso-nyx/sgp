@@ -1,6 +1,8 @@
 {
-  "generated_at": "2026-05-10",
+  "generated_at": "2026-07-11",
   "authority": [
+    "docs/eng/67-pdf-a-builder.md",
+    "docs/eng/68-signature-architecture.md",
     "docs/eng/99-implementation-status.md",
     "docs/eng/Banking/00-cnab-overview.md",
     "docs/eng/Banking/01-cnab240-structure.md",
@@ -20,6 +22,9 @@
     "docs/eng/decisions/adr-026-rls-default-tenancy.md",
     "docs/eng/decisions/adr-027-custom-lint-as-policy.md",
     "docs/eng/decisions/adr-028-mutation-scope-rationale.md",
+    "docs/eng/decisions/adr-029-waf-posture.md",
+    "docs/eng/decisions/adr-030-homologation-and-release-gates.md",
+    "docs/eng/decisions/adr-031-centralised-idempotency.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -27,17 +32,21 @@
     "docs/eng/domains/privacy-transparency.md",
     "docs/eng/domains/time-attendance-sst.md",
     "docs/eng/experience.md",
+    "docs/eng/locale-policy.md",
     "docs/eng/platform.md",
     "docs/eng/product.md",
     "docs/eng/quality-migration.md",
     "docs/eng/runbooks/backup-restore.md",
     "docs/eng/runbooks/db-migration.md",
     "docs/eng/runbooks/deploy-rollback.md",
+    "docs/eng/runbooks/dr.md",
     "docs/eng/runbooks/incident-response.md",
     "docs/eng/runbooks/kms-rotation.md",
     "docs/eng/runbooks/secret-rotation.md"
   ],
   "route_contract_authority": [
+    "docs/eng/67-pdf-a-builder.md",
+    "docs/eng/68-signature-architecture.md",
     "docs/eng/99-implementation-status.md",
     "docs/eng/Banking/00-cnab-overview.md",
     "docs/eng/Banking/01-cnab240-structure.md",
@@ -57,6 +66,9 @@
     "docs/eng/decisions/adr-026-rls-default-tenancy.md",
     "docs/eng/decisions/adr-027-custom-lint-as-policy.md",
     "docs/eng/decisions/adr-028-mutation-scope-rationale.md",
+    "docs/eng/decisions/adr-029-waf-posture.md",
+    "docs/eng/decisions/adr-030-homologation-and-release-gates.md",
+    "docs/eng/decisions/adr-031-centralised-idempotency.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -64,12 +76,14 @@
     "docs/eng/domains/privacy-transparency.md",
     "docs/eng/domains/time-attendance-sst.md",
     "docs/eng/experience.md",
+    "docs/eng/locale-policy.md",
     "docs/eng/platform.md",
     "docs/eng/product.md",
     "docs/eng/quality-migration.md",
     "docs/eng/runbooks/backup-restore.md",
     "docs/eng/runbooks/db-migration.md",
     "docs/eng/runbooks/deploy-rollback.md",
+    "docs/eng/runbooks/dr.md",
     "docs/eng/runbooks/incident-response.md",
     "docs/eng/runbooks/kms-rotation.md",
     "docs/eng/runbooks/secret-rotation.md"
@@ -126,15 +140,15 @@
   ],
   "approved_out_of_scope_routes": [],
   "counts": {
-    "documented_total": 562,
-    "documented_candidates_total": 702,
+    "documented_total": 574,
+    "documented_candidates_total": 714,
     "documented_outside_runtime": 140,
-    "documented": 468,
-    "runtime_total": 586,
-    "runtime": 469,
+    "documented": 480,
+    "runtime_total": 600,
+    "runtime": 481,
     "deferred_documented": 94,
-    "deferred_runtime": 117,
-    "implemented": 468,
+    "deferred_runtime": 119,
+    "implemented": 480,
     "explicitly_excluded": 0,
     "documented_missing": 0,
     "runtime_only": 0,
@@ -2436,6 +2450,20 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/admin/esocial/messages/:messageId/transmit",
+      "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/esocial/process-pending",
+      "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts",
+      "deferred_scope": "ADMIN_INSTALL_LATER",
+      "reason": "Admin tree, backend routes, and administrative feature surfaces are intentionally installed later and are not current v0.0.1 parity blockers."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/admin/esocial/s2298/:orderId",
       "source_file": "backend/src/integrations/stynx-esocial/stynx-esocial-gateway.controller.ts",
       "deferred_scope": "ADMIN_INSTALL_LATER",
@@ -2809,7 +2837,12 @@
         {
           "method": "DELETE",
           "path": "/api/v1/rh/afastamentos/:id",
-          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          "source_file": "backend/src/rh/workflows/afastamentos/afastamentos.controller.ts"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/rh/certificacoes/:id",
+          "source_file": "backend/src/rh/certifications/certifications.controller.ts"
         },
         {
           "method": "DELETE",
@@ -2818,37 +2851,38 @@
         },
         {
           "method": "DELETE",
+          "path": "/api/v1/rh/pdi/metas/:goalId",
+          "source_file": "backend/src/rh/development-plans/development-plans.controller.ts"
+        },
+        {
+          "method": "DELETE",
           "path": "/api/v1/rh/processos-funcao/:id",
-          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          "source_file": "backend/src/rh/workflows/processos-funcao/processos-funcao.controller.ts"
         },
         {
           "method": "DELETE",
           "path": "/api/v1/rh/processos/:id",
-          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          "source_file": "backend/src/rh/workflows/processos/processos.controller.ts"
         },
         {
           "method": "DELETE",
           "path": "/api/v1/rh/professional-experiences/:id",
-          "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+          "source_file": "backend/src/rh/workflows/professional-experiences/professional-experiences.controller.ts"
         },
         {
           "method": "GET",
           "path": "/api/v1/funcionarios",
           "source_file": "backend/src/rh/employees/employees.controller.ts"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/funcionarios/:employeeId/licenca-premio/balance",
-          "source_file": "backend/src/rh/employees/employee-merit-leave.controller.ts"
-        },
-        {
-          "method": "GET",
-          "path": "/api/v1/funcionarios/:id/abono-permanencia",
-          "source_file": "backend/src/rh/employees/employees.controller.ts"
         }
       ],
       "source_evidence": [
-        "backend/src/rh/workflows/rh-workflows.controller.ts",
+        "backend/src/rh/workflows/contribuicoes-sindicais/contribuicoes-sindicais.controller.ts",
+        "backend/src/rh/workflows/dependentes-beneficio/dependentes-beneficio.controller.ts",
+        "backend/src/rh/workflows/exercicios/exercicios.controller.ts",
+        "backend/src/rh/workflows/pensoes-alimenticias/pensoes-alimenticias.controller.ts",
+        "backend/src/rh/workflows/vales-transporte/vales-transporte.controller.ts",
+        "backend/src/rh/workflows/afastamentos/afastamentos.controller.ts",
+        "backend/src/rh/certifications/certifications.controller.ts",
         "backend/src/rh/organic-definitions/organic-definition.controller.ts"
       ],
       "frontend_status": "postponed_admin_tree",
@@ -3181,20 +3215,23 @@
         {
           "method": "GET",
           "path": "/api/v1/previdenciario/recadastramentos/beneficiarios",
-          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          "source_file": "backend/src/previdenciario/previdenciario-recertification.controller.ts"
         },
         {
           "method": "GET",
           "path": "/api/v1/previdenciario/recadastramentos/campanhas",
-          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          "source_file": "backend/src/previdenciario/previdenciario-recertification.controller.ts"
         },
         {
           "method": "GET",
           "path": "/api/v1/previdenciario/recadastramentos/historico",
-          "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+          "source_file": "backend/src/previdenciario/previdenciario-recertification.controller.ts"
         }
       ],
-      "source_evidence": ["backend/src/previdenciario/previdenciario.controller.ts"],
+      "source_evidence": [
+        "backend/src/previdenciario/previdenciario.controller.ts",
+        "backend/src/previdenciario/previdenciario-recertification.controller.ts"
+      ],
       "frontend_status": "postponed_admin_tree",
       "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
       "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -3386,7 +3423,12 @@
           {
             "method": "DELETE",
             "path": "/api/v1/rh/afastamentos/:id",
-            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+            "source_file": "backend/src/rh/workflows/afastamentos/afastamentos.controller.ts"
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/v1/rh/certificacoes/:id",
+            "source_file": "backend/src/rh/certifications/certifications.controller.ts"
           },
           {
             "method": "DELETE",
@@ -3395,37 +3437,38 @@
           },
           {
             "method": "DELETE",
+            "path": "/api/v1/rh/pdi/metas/:goalId",
+            "source_file": "backend/src/rh/development-plans/development-plans.controller.ts"
+          },
+          {
+            "method": "DELETE",
             "path": "/api/v1/rh/processos-funcao/:id",
-            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+            "source_file": "backend/src/rh/workflows/processos-funcao/processos-funcao.controller.ts"
           },
           {
             "method": "DELETE",
             "path": "/api/v1/rh/processos/:id",
-            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+            "source_file": "backend/src/rh/workflows/processos/processos.controller.ts"
           },
           {
             "method": "DELETE",
             "path": "/api/v1/rh/professional-experiences/:id",
-            "source_file": "backend/src/rh/workflows/rh-workflows.controller.ts"
+            "source_file": "backend/src/rh/workflows/professional-experiences/professional-experiences.controller.ts"
           },
           {
             "method": "GET",
             "path": "/api/v1/funcionarios",
             "source_file": "backend/src/rh/employees/employees.controller.ts"
-          },
-          {
-            "method": "GET",
-            "path": "/api/v1/funcionarios/:employeeId/licenca-premio/balance",
-            "source_file": "backend/src/rh/employees/employee-merit-leave.controller.ts"
-          },
-          {
-            "method": "GET",
-            "path": "/api/v1/funcionarios/:id/abono-permanencia",
-            "source_file": "backend/src/rh/employees/employees.controller.ts"
           }
         ],
         "source_evidence": [
-          "backend/src/rh/workflows/rh-workflows.controller.ts",
+          "backend/src/rh/workflows/contribuicoes-sindicais/contribuicoes-sindicais.controller.ts",
+          "backend/src/rh/workflows/dependentes-beneficio/dependentes-beneficio.controller.ts",
+          "backend/src/rh/workflows/exercicios/exercicios.controller.ts",
+          "backend/src/rh/workflows/pensoes-alimenticias/pensoes-alimenticias.controller.ts",
+          "backend/src/rh/workflows/vales-transporte/vales-transporte.controller.ts",
+          "backend/src/rh/workflows/afastamentos/afastamentos.controller.ts",
+          "backend/src/rh/certifications/certifications.controller.ts",
           "backend/src/rh/organic-definitions/organic-definition.controller.ts"
         ],
         "frontend_status": "postponed_admin_tree",
@@ -3758,20 +3801,23 @@
           {
             "method": "GET",
             "path": "/api/v1/previdenciario/recadastramentos/beneficiarios",
-            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+            "source_file": "backend/src/previdenciario/previdenciario-recertification.controller.ts"
           },
           {
             "method": "GET",
             "path": "/api/v1/previdenciario/recadastramentos/campanhas",
-            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+            "source_file": "backend/src/previdenciario/previdenciario-recertification.controller.ts"
           },
           {
             "method": "GET",
             "path": "/api/v1/previdenciario/recadastramentos/historico",
-            "source_file": "backend/src/previdenciario/previdenciario.controller.ts"
+            "source_file": "backend/src/previdenciario/previdenciario-recertification.controller.ts"
           }
         ],
-        "source_evidence": ["backend/src/previdenciario/previdenciario.controller.ts"],
+        "source_evidence": [
+          "backend/src/previdenciario/previdenciario.controller.ts",
+          "backend/src/previdenciario/previdenciario-recertification.controller.ts"
+        ],
         "frontend_status": "postponed_admin_tree",
         "frontend_deferred_scope": "ADMIN_INSTALL_LATER",
         "frontend_note": "Admin tree parity is postponed under ADMIN_INSTALL_LATER and ignored by current alignment gates."
@@ -5803,7 +5849,23 @@
     },
     {
       "method": "DELETE",
+      "path": "/api/v1/rh/certificacoes/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
       "path": "/api/v1/rh/organic-definitions/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/rh/pdi/metas/:goalId",
       "status": "implemented",
       "source_doc": "docs/eng/domains/people-recruitment.md",
       "evidence": "explicit_method",
@@ -6350,6 +6412,7 @@
       "path": "/api/v1/health",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
+      "source_docs": ["docs/eng/platform.md", "docs/eng/runbooks/dr.md"],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -6358,6 +6421,11 @@
       "path": "/api/v1/health/ready",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
+      "source_docs": [
+        "docs/eng/platform.md",
+        "docs/eng/runbooks/dr.md",
+        "docs/eng/runbooks/secret-rotation.md"
+      ],
       "evidence": "explicit_method",
       "note": "Implemented in runtime route map."
     },
@@ -7075,6 +7143,14 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/rh/certificacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/rh/employee-transfer",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
@@ -7092,6 +7168,30 @@
     {
       "method": "GET",
       "path": "/api/v1/rh/organic-definitions",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/pdi",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/pdi/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rh/pdi/:id/metas",
       "status": "implemented",
       "source_doc": "docs/eng/domains/people-recruitment.md",
       "evidence": "explicit_method",
@@ -7596,7 +7696,31 @@
     },
     {
       "method": "PATCH",
+      "path": "/api/v1/rh/certificacoes/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
       "path": "/api/v1/rh/organic-definitions/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/rh/pdi/:id",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/rh/pdi/metas/:goalId",
       "status": "implemented",
       "source_doc": "docs/eng/domains/people-recruitment.md",
       "evidence": "explicit_method",
@@ -9200,6 +9324,14 @@
     },
     {
       "method": "POST",
+      "path": "/api/v1/rh/certificacoes",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
       "path": "/api/v1/rh/employee-transfer",
       "status": "implemented",
       "source_doc": "docs/eng/platform.md",
@@ -9233,6 +9365,22 @@
     {
       "method": "POST",
       "path": "/api/v1/rh/organic-definitions",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/pdi",
+      "status": "implemented",
+      "source_doc": "docs/eng/domains/people-recruitment.md",
+      "evidence": "explicit_method",
+      "note": "Implemented in runtime route map."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/rh/pdi/:id/metas",
       "status": "implemented",
       "source_doc": "docs/eng/domains/people-recruitment.md",
       "evidence": "explicit_method",
