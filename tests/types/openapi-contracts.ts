@@ -28,18 +28,22 @@ expectTypeOf<MethodReturn<'getApiV1AdminFgtsAccountsByEmployeeId'>>().toEqualTyp
   Observable<unknown>
 >();
 
-expectTypeOf<MethodParams<'getApiV1AdminFiscalDctfweb'>>().toEqualTypeOf<[query?: ApiQuery]>();
+expectTypeOf<MethodParams<'getApiV1AdminFiscalDctfweb'>>().toEqualTypeOf<
+  [query?: ApiQuery | undefined]
+>();
 expectTypeOf<MethodParams<'getApiV1AuditoriaLogsById'>>().toEqualTypeOf<[{ id: string }]>();
 expectTypeOf<MethodParams<'getApiV1PublicTransparencyPayrollByTenantId'>>().toEqualTypeOf<
   [{ tenantId: string }]
 >();
 expectTypeOf<MethodParams<'patchApiV1FolhaRubricaById'>>().toEqualTypeOf<
-  [{ id: string }, body?: ApiBody]
+  [{ id: string }, body?: ApiBody | undefined]
 >();
 expectTypeOf<MethodParams<'patchApiV1EmployeesAlimoniesByIdAndAlimonyId'>>().toEqualTypeOf<
-  [{ id: string; alimonyId: string }, body?: ApiBody]
+  [{ id: string; alimonyId: string }, body?: ApiBody | undefined]
 >();
-expectTypeOf<MethodParams<'postApiV1AdminFiscalDctfwebGerar'>>().toEqualTypeOf<[body?: ApiBody]>();
+expectTypeOf<MethodParams<'postApiV1AdminFiscalDctfwebGerar'>>().toEqualTypeOf<
+  [body?: ApiBody | undefined]
+>();
 expectTypeOf<MethodParams<'deleteApiV1RhAfastamentosById'>>().toEqualTypeOf<[{ id: string }]>();
 expectTypeOf<
   MethodParams<'deleteApiV1EmployeesRhWorkflowsExerciciosByEmployeeIdAndId'>
