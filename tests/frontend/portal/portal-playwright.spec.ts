@@ -81,15 +81,9 @@ test.describe('SGP portal Playwright e2e', () => {
     expect(routes).toHaveLength(38);
 
     for (const route of routes) {
-      await page.goto(route.path);
-      const surface = page.locator('main.content section').first();
-      // Vite can invalidate a lazily requested chunk while this catalog sweep
-      // issues consecutive full navigations. Retry the navigation once, then
-      // keep the same non-blank-surface assertion as the test contract.
-      if (!(await surface.isVisible({ timeout: 7_500 }))) {
-        await page.goto(route.path);
-      }
-      await expect(surface).toBeVisible();
+      await page.locator(`a[href="${route.path}"]`).first().click();
+      await expect(page).toHaveURL(new RegExp(`${route.path}$`));
+      await expect(page.locator('main.content section').first()).toBeVisible();
 
       if (!SPECIALIZED_PORTAL_ROUTES.has(route.path)) {
         await expect(page.locator('section.feature-sheet')).toBeVisible();
