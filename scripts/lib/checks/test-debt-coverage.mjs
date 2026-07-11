@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { lstatSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
@@ -13,7 +13,8 @@ function walk(dir, predicate) {
   return readdirSync(dir).flatMap((entry) => {
     const path = join(dir, entry);
     if (path.includes(`${join('node_modules')}${''}`)) return [];
-    const stat = statSync(path);
+    const stat = lstatSync(path);
+    if (stat.isSymbolicLink()) return [];
     if (stat.isDirectory()) return walk(path, predicate);
     return predicate(path) ? [path] : [];
   });

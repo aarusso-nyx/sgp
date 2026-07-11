@@ -41,21 +41,21 @@ export class GeofenceValidatorService {
         LIMIT 1
       ),
       mobile_point AS (
-        SELECT postgis.ST_SetSRID(postgis.ST_MakePoint($2::numeric, $3::numeric), 4326) AS geom
+        SELECT public.ST_SetSRID(public.ST_MakePoint($2::numeric, $3::numeric), 4326) AS geom
       )
       SELECT
         employee_location.work_location_id::text,
-        COALESCE(postgis.ST_Within(mobile_point.geom, employee_location.geofence_polygon), false) AS inside,
+        COALESCE(public.ST_Within(mobile_point.geom, employee_location.geofence_polygon), false) AS inside,
         CASE WHEN employee_location.geofence_polygon IS NULL THEN NULL
-             ELSE postgis.ST_Y(postgis.ST_Centroid(employee_location.geofence_polygon))::text
+             ELSE public.ST_Y(public.ST_Centroid(employee_location.geofence_polygon))::text
         END AS center_lat,
         CASE WHEN employee_location.geofence_polygon IS NULL THEN NULL
-             ELSE postgis.ST_X(postgis.ST_Centroid(employee_location.geofence_polygon))::text
+             ELSE public.ST_X(public.ST_Centroid(employee_location.geofence_polygon))::text
         END AS center_lon,
         CASE WHEN employee_location.geofence_polygon IS NULL THEN NULL
-             ELSE postgis.ST_DistanceSphere(
+             ELSE public.ST_DistanceSphere(
                mobile_point.geom,
-               postgis.ST_Centroid(employee_location.geofence_polygon)
+               public.ST_Centroid(employee_location.geofence_polygon)
              )::text
         END AS distance_m
       FROM employee_location, mobile_point
