@@ -24,12 +24,9 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - name: Setup Stynx local packages
-        uses: ./.github/actions/setup-stynx-local-npm
-        with:
-          ref: ${{ vars.STYNX_REF || 'main' }}
-
       - name: Install workspace dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
         run: npm ci
 
       - name: Check Prisma DB push guard

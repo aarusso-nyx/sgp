@@ -1,6 +1,6 @@
 import { HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { StynxSessionService } from '@stynx-web/angular-auth';
+import { StynxSessionService } from '@stynx-nyx/angular-auth';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 

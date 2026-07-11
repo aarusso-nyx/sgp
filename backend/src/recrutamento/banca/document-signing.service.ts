@@ -5,12 +5,12 @@ import {
   Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { PdfVerificationEvidenceAppender } from '@stynx/pdf/evidence';
+import { PdfVerificationEvidenceAppender } from '@stynx-nyx/pdf/evidence';
 import {
   SequentialSigner,
   sha256,
   type SequentialEnvelope,
-} from '@stynx/signature';
+} from '@stynx-nyx/signature';
 import type { PoolClient, QueryResultRow } from 'pg';
 
 import { AuditMutationContextStore } from '../../common/audit/audit-mutation-context.store';

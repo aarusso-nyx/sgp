@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { StynxSessionService } from '@stynx-web/angular-auth';
+import { StynxSessionService } from '@stynx-nyx/angular-auth';
 import { from, switchMap } from 'rxjs';
 
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {

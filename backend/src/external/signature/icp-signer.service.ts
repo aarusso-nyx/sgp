@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { XmlDSigSigner, XmlDSigVerifier } from '@stynx/signature/xmldsig';
+import { XmlDSigSigner, XmlDSigVerifier } from '@stynx-nyx/signature/xmldsig';
 import forge from 'node-forge';
 
 export interface CertificateMaterial {

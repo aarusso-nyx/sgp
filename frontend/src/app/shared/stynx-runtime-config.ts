@@ -13,8 +13,8 @@ import {
   type StynxAuthBackend,
   type StynxOidcAdapter,
   type StynxSessionBundle,
-} from '@stynx-web/angular-auth';
-import { provideTenancy } from '@stynx-web/angular-tenancy';
+} from '@stynx-nyx/angular-auth';
+import { provideTenancy } from '@stynx-nyx/angular-tenancy';
 
 type RuntimeConfig = Record<string, string | undefined>;
 

@@ -7,7 +7,7 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { PdfVerificationEvidenceAppender } from '@stynx/pdf/evidence';
+import { PdfVerificationEvidenceAppender } from '@stynx-nyx/pdf/evidence';
 
 import { StandardExceptionFilter } from '../common/errors/standard-exception.filter';
 import { LgpdModule } from '../common/lgpd/lgpd.module';

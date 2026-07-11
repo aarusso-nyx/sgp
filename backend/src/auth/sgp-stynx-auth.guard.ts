@@ -6,8 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthContextGuard, AuthorizationGuard } from '@stynx/backend';
-import type { AuthVerificationResult, Principal } from '@stynx/contracts';
+import { AuthContextGuard, AuthorizationGuard } from '@stynx-nyx/backend';
+import type { AuthVerificationResult, Principal } from '@stynx-nyx/contracts';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
 import type { RequestWithContext } from '../common/request-id/request-with-context';

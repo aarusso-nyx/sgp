@@ -21,11 +21,11 @@ import { Test } from '@nestjs/testing';
 
 import { PdfABuilderService } from '../../backend/src/report-service/payslip/pdf-a-builder.service';
 import { PDF_A_VALIDATOR } from '../../backend/src/report-service/pdf-a/pdf-a-validator.provider';
-import { VeraPdfDockerValidator } from '@stynx/pdf-a-vera-docker';
+import { VeraPdfDockerValidator } from '@stynx-nyx/pdf-a-vera-docker';
 import type {
   VeraPdfDockerRunRequest,
   VeraPdfDockerRunResult,
-} from '@stynx/pdf-a-vera-docker';
+} from '@stynx-nyx/pdf-a-vera-docker';
 import { PayslipDocument } from '../../backend/src/report-service/payslip/payslip-template';
 import {
   YearlyIncomeAggregate,

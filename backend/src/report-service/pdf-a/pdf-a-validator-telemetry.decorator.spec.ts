@@ -2,7 +2,7 @@ import type {
   PdfAValidateOptions,
   PdfAValidationResult,
   PdfAValidator,
-} from '@stynx/pdf-a';
+} from '@stynx-nyx/pdf-a';
 
 import {
   createPdfATelemetryMetrics,

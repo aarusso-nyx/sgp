@@ -4,7 +4,7 @@ import type {
   FlagContext,
   FlagEvaluation,
   FlagValue,
-} from '@stynx/feature-flags';
+} from '@stynx-nyx/feature-flags';
 import type { QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';

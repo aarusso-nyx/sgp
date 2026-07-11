@@ -4,8 +4,8 @@ import {
   PreconditionFailedException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { sha256Hex } from '@stynx/signature';
-import { XmlDSigSigner } from '@stynx/signature/xmldsig';
+import { sha256Hex } from '@stynx-nyx/signature';
+import { XmlDSigSigner } from '@stynx-nyx/signature/xmldsig';
 
 import { DatabaseService } from '../../database/database.service';
 import { IcpSignerService } from '../../external/signature/icp-signer.service';

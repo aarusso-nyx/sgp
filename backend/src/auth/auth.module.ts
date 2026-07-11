@@ -3,7 +3,7 @@ import {
   AuthContextGuard,
   AuthorizationGuard,
   STYNX_TOKEN_VERIFIER,
-} from '@stynx/backend';
+} from '@stynx-nyx/backend';
 
 import {
   InMemoryQueueTransport,

@@ -1,4 +1,4 @@
-import { sha256CanonicalJson } from '@stynx/signature';
+import { sha256CanonicalJson } from '@stynx-nyx/signature';
 
 import {
   SgpQueueAdapter,

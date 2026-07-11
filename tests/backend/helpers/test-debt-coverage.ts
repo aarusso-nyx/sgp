@@ -1,6 +1,6 @@
 import { ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthorizationGuard, STYNX_AUTHZ_METADATA } from '@stynx/backend';
+import { AuthorizationGuard, STYNX_AUTHZ_METADATA } from '@stynx-nyx/backend';
 
 import { SgpStynxAuthorizationGuard } from '../../../backend/src/auth/sgp-stynx-auth.guard';
 import { REQUIRED_PERMISSIONS } from '../../../backend/src/iam/decorators/require-permission.decorator';

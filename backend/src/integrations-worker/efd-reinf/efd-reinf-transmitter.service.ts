@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   IntegrationAdapter,
   type RetryPolicy,
-} from '@stynx/integration-adapter';
+} from '@stynx-nyx/integration-adapter';
 
 import {
   combineAbortSignals,
