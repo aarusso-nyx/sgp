@@ -1,8 +1,7 @@
 'use strict';
 
 const BACKEND_SRC_PATTERN = /(?:^|[/\\])backend[/\\]src[/\\]/;
-const HANDLER_PATTERN =
-  /(?:^|[/\\])backend[/\\]src[/\\].*(?:controller|resolver|gateway)\.ts$/;
+const HANDLER_PATTERN = /(?:^|[/\\])backend[/\\]src[/\\].*(?:controller|resolver|gateway)\.ts$/;
 const BOOTSTRAP_PATTERN = /(?:^|[/\\])backend[/\\]src[/\\]main(?:-[\w-]+)?\.ts$/;
 const CONSOLE_METHODS = new Set(['debug', 'error', 'info', 'log', 'warn']);
 
@@ -10,8 +9,7 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description:
-        'Disallow raw console logging and default Nest Logger in request handlers.',
+      description: 'Disallow raw console logging and default Nest Logger in request handlers.',
     },
     schema: [],
     messages: {
@@ -22,7 +20,7 @@ module.exports = {
     },
   },
   create(context) {
-    const filename = context.getFilename();
+    const filename = context.filename ?? context.getFilename();
     if (!BACKEND_SRC_PATTERN.test(filename)) return {};
     const isHandler = HANDLER_PATTERN.test(filename);
     const isBootstrap = BOOTSTRAP_PATTERN.test(filename);

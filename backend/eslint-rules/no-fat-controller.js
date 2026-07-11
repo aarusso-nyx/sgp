@@ -31,7 +31,7 @@ module.exports = {
     },
   },
   create(context) {
-    const filename = context.getFilename();
+    const filename = context.filename ?? context.getFilename();
     if (!CONTROLLER_PATTERN.test(filename)) return {};
 
     return {

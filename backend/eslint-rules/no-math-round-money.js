@@ -7,8 +7,7 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description:
-        'Disallow Math.round in payroll monetary modules; use common money helpers.',
+      description: 'Disallow Math.round in payroll monetary modules; use common money helpers.',
     },
     schema: [],
     messages: {
@@ -19,7 +18,7 @@ module.exports = {
     },
   },
   create(context) {
-    const filename = context.getFilename();
+    const filename = context.filename ?? context.getFilename();
     if (!MONEY_MODULE_PATTERN.test(filename)) return {};
 
     return {

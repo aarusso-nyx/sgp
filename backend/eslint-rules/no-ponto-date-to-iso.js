@@ -7,8 +7,7 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description:
-        'Disallow Date.toISOString in ponto code outside the tenant-timezone helper.',
+      description: 'Disallow Date.toISOString in ponto code outside the tenant-timezone helper.',
     },
     schema: [],
     messages: {
@@ -17,7 +16,7 @@ module.exports = {
     },
   },
   create(context) {
-    const filename = context.getFilename();
+    const filename = context.filename ?? context.getFilename();
     if (!PONTO_PATTERN.test(filename) || HELPER_PATTERN.test(filename)) return {};
 
     return {

@@ -29,7 +29,7 @@ module.exports = {
     },
   },
   create(context) {
-    const filename = context.getFilename();
+    const filename = context.filename ?? context.getFilename();
     if (!BACKEND_SRC_PATTERN.test(filename)) return {};
     if (SPEC_FILE_PATTERN.test(filename)) return {};
 
