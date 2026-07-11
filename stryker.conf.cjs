@@ -40,5 +40,9 @@ module.exports = {
   },
   concurrency: 2,
   timeoutMS: 20000,
+  // The DEVAI constitution is a workspace-level symlink and is not present
+  // in a standalone GitHub checkout. It is not needed by the backend mutation
+  // scope, so do not copy the broken link into Stryker sandboxes.
+  ignorePatterns: ['.devai/constitution.md'],
   tempDirName: '.stryker-tmp',
 };
