@@ -17,7 +17,7 @@ jobs:
       GH_TOKEN: ${{ secrets.BRANCH_PROTECTION_AUDIT_TOKEN || github.token }}
       GITHUB_REPOSITORY: ${{ github.repository }}
       BRANCH_PROTECTION_BRANCH: main
-      BRANCH_PROTECTION_REQUIRED_CONTEXTS: Workspace gates,CodeQL,ADR Gate,Dependency Review
+      BRANCH_PROTECTION_REQUIRED_CONTEXTS: Workspace gates,Analyze (javascript-typescript),alignment-gate,Dependency review,Secret scan,guard,Release evidence for release-impacting changes
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
       GH_TOKEN: ${{ secrets.BRANCH_PROTECTION_AUDIT_TOKEN || github.token }}
       GITHUB_REPOSITORY: ${{ github.repository }}
       BRANCH_PROTECTION_BRANCH: prod
-      BRANCH_PROTECTION_REQUIRED_CONTEXTS: Workspace gates,CodeQL,ADR Gate,Dependency Review
+      BRANCH_PROTECTION_REQUIRED_CONTEXTS: Workspace gates,Analyze (javascript-typescript),alignment-gate,Dependency review,Secret scan,guard,Release evidence for release-impacting changes
       BRANCH_PROTECTION_REQUIRE_SIGNED_COMMITS: 'true'
     steps:
       - name: Checkout
