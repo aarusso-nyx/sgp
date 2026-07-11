@@ -55,10 +55,10 @@ Run the frontend coverage ratchet for SGP-owned frontend surfaces:
 npm run test:frontend:coverage
 ```
 
-The SGP aggregate coverage gate writes portal coverage under
-`frontend/coverage/sgp-portal/`. Admin coverage belongs to Stynx and is not
-counted as SGP delivery evidence. The current portal ratchet is intentionally a
-measured frontend baseline, not the backend 85 % target.
+The SGP aggregate coverage gate publishes portal coverage as Deep Runtime
+Evidence. Admin coverage belongs to Stynx and is not counted as SGP delivery
+evidence. The current portal ratchet is intentionally a measured frontend
+baseline, not the backend 85 % target.
 
 Run the canonical Playwright browser gate for both Angular apps:
 
