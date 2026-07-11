@@ -52,8 +52,7 @@ class SpyValidator implements PdfAValidator {
 
   constructor(
     private readonly response:
-      | PdfAValidationResult
-      | (() => Promise<PdfAValidationResult>),
+      PdfAValidationResult | (() => Promise<PdfAValidationResult>),
   ) {}
 
   validate(

@@ -2,10 +2,7 @@ import { IsIn, IsInt, IsOptional, IsUUID, Max, Min } from 'class-validator';
 
 export type DirfArquivoKind = 'ORIGINAL' | 'RETIFICADORA';
 export type DirfArquivoStatus =
-  | 'DRAFT'
-  | 'GENERATED'
-  | 'VALIDATED'
-  | 'TRANSMITTED';
+  'DRAFT' | 'GENERATED' | 'VALIDATED' | 'TRANSMITTED';
 export type DirfBeneficiaryKind = 'CPF' | 'CNPJ' | 'EXTERIOR';
 
 export class GenerateDirfDto {

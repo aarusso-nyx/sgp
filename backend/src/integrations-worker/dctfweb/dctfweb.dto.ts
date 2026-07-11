@@ -10,11 +10,7 @@ import {
 
 export type DctfwebDeclarationKind = 'ORIGINAL' | 'RETIFICADORA';
 export type DctfwebDeclarationStatus =
-  | 'DRAFT'
-  | 'SIGNED'
-  | 'TRANSMITTED'
-  | 'ACCEPTED'
-  | 'REJECTED';
+  'DRAFT' | 'SIGNED' | 'TRANSMITTED' | 'ACCEPTED' | 'REJECTED';
 export type DctfwebSourceEvent = 'S5011' | 'S5012' | 'S5013' | 'R9015' | 'MIT';
 export type DctfwebMitStatus = 'PENDING' | 'INCLUDED' | 'ACCEPTED' | 'REJECTED';
 

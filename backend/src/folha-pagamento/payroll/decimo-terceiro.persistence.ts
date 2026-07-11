@@ -2,8 +2,7 @@ import { ConflictException } from '@nestjs/common';
 import { PoolClient, QueryResultRow } from 'pg';
 
 export type DecimoKind =
-  | 'DECIMO_TERCEIRO_ADIANTAMENTO'
-  | 'DECIMO_TERCEIRO_FECHAMENTO';
+  'DECIMO_TERCEIRO_ADIANTAMENTO' | 'DECIMO_TERCEIRO_FECHAMENTO';
 
 export interface CatalogRow extends QueryResultRow {
   payroll_type_id: string;

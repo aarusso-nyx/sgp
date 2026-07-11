@@ -2,11 +2,7 @@ import { IsArray, IsIn, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export type SiaficSyncStage = 'EMPENHO' | 'LIQUIDACAO' | 'PAGAMENTO';
 export type SiaficSyncStatus =
-  | 'PENDING'
-  | 'SENT'
-  | 'ACCEPTED'
-  | 'REJECTED'
-  | 'FAILED';
+  'PENDING' | 'SENT' | 'ACCEPTED' | 'REJECTED' | 'FAILED';
 export type SiaficCircuitState = 'CLOSED' | 'HALF_OPEN' | 'OPEN';
 
 export class SyncSiaficPayrollRunDto {

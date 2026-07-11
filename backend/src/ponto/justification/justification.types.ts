@@ -13,10 +13,7 @@ export type AbsenceJustificationKind =
   | 'OTHER';
 
 export type AbsenceJustificationStatus =
-  | 'REQUESTED'
-  | 'APPROVED'
-  | 'REJECTED'
-  | 'CANCELLED';
+  'REQUESTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
 
 export type AbsencePayrollTreatment = 'PAID' | 'UNPAID' | 'HOUR_BANK_NEUTRAL';
 

@@ -17,11 +17,7 @@ import {
 import { Type } from 'class-transformer';
 
 export type OnlineExamStatus =
-  | 'SCHEDULED'
-  | 'IN_PROGRESS'
-  | 'SUBMITTED'
-  | 'VOIDED'
-  | 'RESCHEDULED';
+  'SCHEDULED' | 'IN_PROGRESS' | 'SUBMITTED' | 'VOIDED' | 'RESCHEDULED';
 
 export type ProctoringEventKind =
   | 'SNAPSHOT'
@@ -34,9 +30,7 @@ export type ProctoringEventKind =
 
 export type ProctoringSeverity = 'INFO' | 'WARN' | 'SEVERE';
 export type ProctoringArtifactKind =
-  | 'SNAPSHOT'
-  | 'AUDIO_CHUNK'
-  | 'SCREEN_FRAME';
+  'SNAPSHOT' | 'AUDIO_CHUNK' | 'SCREEN_FRAME';
 
 export class MediaConstraintsDto {
   @IsBoolean()

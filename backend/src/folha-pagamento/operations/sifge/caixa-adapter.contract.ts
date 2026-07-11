@@ -1,10 +1,6 @@
 export type FgtsRemittanceKind = 'GRF_MONTHLY' | 'GRRF_TERMINATION';
 export type FgtsRemittanceStatus =
-  | 'DRAFT'
-  | 'GENERATED'
-  | 'SENT'
-  | 'PAID'
-  | 'REJECTED';
+  'DRAFT' | 'GENERATED' | 'SENT' | 'PAID' | 'REJECTED';
 
 export interface SifgeHeader {
   tenantId: string;

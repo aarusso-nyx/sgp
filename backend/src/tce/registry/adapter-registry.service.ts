@@ -12,10 +12,7 @@ import { LifecycleEmitterService } from '../lifecycle/lifecycle-emitter.service'
 import { domainError } from '../../common/errors/domain-error';
 
 export type TceAdapterStatus =
-  | 'REGISTERED'
-  | 'ENABLED'
-  | 'DISABLED'
-  | 'DEPRECATED';
+  'REGISTERED' | 'ENABLED' | 'DISABLED' | 'DEPRECATED';
 
 export interface TceLifecycleEventDto {
   id: string;

@@ -10,9 +10,7 @@ import {
 } from '../../common/adapters';
 
 export type OfficialLayoutRelayScenario =
-  | 'ACCEPT'
-  | 'TRANSIENT_ERROR'
-  | 'DEFINITIVE_ERROR';
+  'ACCEPT' | 'TRANSIENT_ERROR' | 'DEFINITIVE_ERROR';
 
 export type OfficialLayoutRelayDecision<ResponsePayload> =
   | {

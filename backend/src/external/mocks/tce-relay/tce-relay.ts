@@ -19,12 +19,9 @@ export const TCE_RELAY_QUEUE_KIND = 'tce' as const;
 
 export type TceRelayKind = typeof TCE_RELAY_QUEUE_KIND;
 export type TceRelayScenario =
-  | 'ACCEPT'
-  | 'TRANSIENT_ERROR'
-  | 'DEFINITIVE_ERROR';
+  'ACCEPT' | 'TRANSIENT_ERROR' | 'DEFINITIVE_ERROR';
 export type TceRelayFiscalReportEnvelope =
-  | RreoFiscalReportEnvelope
-  | RgfFiscalReportEnvelope;
+  RreoFiscalReportEnvelope | RgfFiscalReportEnvelope;
 
 export type TceRelayRequestPayload = Readonly<{
   submissionId: string;

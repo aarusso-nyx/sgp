@@ -38,10 +38,7 @@ export class RunRescisaoDto {
   @IsString()
   @IsIn(['TWO_HOURS_DAY', 'SEVEN_FINAL_DAYS', 'NONE'])
   priorNoticeReductionMode?:
-    | 'TWO_HOURS_DAY'
-    | 'SEVEN_FINAL_DAYS'
-    | 'NONE'
-    | undefined;
+    'TWO_HOURS_DAY' | 'SEVEN_FINAL_DAYS' | 'NONE' | undefined;
 }
 
 export class ResolvePriorNoticeDto {

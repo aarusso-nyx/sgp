@@ -32,9 +32,7 @@ interface GoldenPayrollItem {
   vectorId: string;
   employeeRegistration: string;
   code:
-    | 'DECIMO_TERCEIRO_ADIANTAMENTO'
-    | 'DECIMO_TERCEIRO_FECHAMENTO'
-    | 'IRRF_13';
+    'DECIMO_TERCEIRO_ADIANTAMENTO' | 'DECIMO_TERCEIRO_FECHAMENTO' | 'IRRF_13';
   kind: 'EARNING' | 'DEDUCTION';
   source: 'CALCULATED';
   competenceYear: number;

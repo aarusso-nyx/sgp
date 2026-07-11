@@ -40,7 +40,7 @@ export class StandardExceptionFilter implements ExceptionFilter {
     const status: HttpStatus =
       domainException?.status ??
       (exception instanceof HttpException
-        ? (exception.getStatus() as HttpStatus)
+        ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR);
     const exceptionResponse =
       exception instanceof HttpException

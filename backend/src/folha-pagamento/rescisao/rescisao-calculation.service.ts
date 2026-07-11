@@ -68,7 +68,7 @@ export class RescisaoCalculationService {
           fgtsMovementId: fine.movementId,
           cause,
         },
-      } as ComputedItemRow,
+      },
     ];
   }
 
