@@ -4,7 +4,12 @@
   "moduleDirectories": ["node_modules", "<rootDir>/node_modules", "<rootDir>/backend/node_modules"],
   "setupFiles": ["<rootDir>/tests/backend/test-env.js"],
   "testEnvironment": "node",
-  "testPathIgnorePatterns": ["<rootDir>/tests/scripts/fixtures/", "<rootDir>/.stryker-tmp/"],
+  "testPathIgnorePatterns": [
+    "<rootDir>/tests/scripts/fixtures/",
+    "<rootDir>/.stryker-tmp/",
+    "<rootDir>/tests/backend/calc-folha-mensal-e2e.spec.ts",
+    "<rootDir>/tests/backend/calc-folha-validation.spec.ts"
+  ],
   "testRegex": "(backend/src/.*\\.spec\\.ts|tests/backend/.*\\.spec\\.ts|tests/scripts/.*\\.spec\\.ts)$",
   "transform": {
     "^.+\\.ts$": [

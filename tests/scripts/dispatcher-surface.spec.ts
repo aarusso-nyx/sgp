@@ -92,5 +92,12 @@ describe('workspace dispatcher surface', () => {
       'db <migrate|seed|smoke|alignment check|fk-coverage check|fk-coverage write|push-guard|rls-no-write-guard>',
     );
     expect(check.stdout).toContain('check-evidence.mjs');
+
+    const registry = await execFile(
+      process.execPath,
+      ['scripts/run.mjs', 'check', 'registry-dependencies'],
+      { cwd: repoRoot },
+    );
+    expect(registry.stdout).toContain('[registry-dependencies] PASS');
   });
 });

@@ -495,6 +495,13 @@ function handleRoadmap() {
 }
 
 function handleCheck() {
+  if (args[0] === 'registry-dependencies') {
+    return runCommand(process.execPath, [
+      'scripts/check-registry-dependencies.mjs',
+      ...args.slice(1),
+    ]);
+  }
+
   if (args[0] === 'module-graph') {
     return runCommand('npx', [
       'depcruise',
