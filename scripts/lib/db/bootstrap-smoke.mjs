@@ -162,6 +162,15 @@ BEGIN
       FROM pg_inherits inherits
       WHERE inherits.inhrelid = class.oid
     )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM pg_depend dependency
+      JOIN pg_extension extension
+        ON extension.oid = dependency.refobjid
+      WHERE dependency.classid = 'pg_class'::regclass
+        AND dependency.objid = class.oid
+        AND dependency.deptype = 'e'
+    )
     AND NOT class.relrowsecurity;
 
   IF actual <> expected THEN

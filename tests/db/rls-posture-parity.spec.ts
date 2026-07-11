@@ -10,5 +10,5 @@ export const rlsPostureParitySpec = `
 --   public.tenant
 -- Each table has a COMMENT ON TABLE explaining its global/non-tenant-scoped status.
 -- Any new unprotected table fails the smoke gate until reviewed and documented.
--- Extension-managed tables such as postgis.spatial_ref_sys are excluded.
+-- Extension-owned tables such as spatial_ref_sys, tiger.*, and topology.* are excluded.
 `;
