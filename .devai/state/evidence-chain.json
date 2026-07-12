@@ -1,5 +1,5 @@
 {
-  "head": "c6df0c234c54c0e3faa47fd60b3b07598000584a398e3d47efbc2fc3e57d3efd",
+  "head": "86ad095bab8f125bb85b10e441927470d97e667cf065a715f8d22a9a8d6b4cea",
   "records": [
     {
       "schemaVersion": "1.0.0",
@@ -116,6 +116,52 @@
       ],
       "previous_run_hash": "7362c1936d5ce6d08906a98858aff34b3186eabce7fba0758f4e2cad46bba6e5",
       "manifest_hash": "c6df0c234c54c0e3faa47fd60b3b07598000584a398e3d47efbc2fc3e57d3efd"
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "EV-661bb2dd522ba927",
+      "timestamp": "2026-07-12T17:26:29.880Z",
+      "actor": "devai-record-run",
+      "actor_role": "harness",
+      "action": "test-run.e2e",
+      "status": "completed",
+      "context": {
+        "repo_root": "/Users/aarusso/Development/stech/sgp",
+        "git": {
+          "head_sha": "e00a5b4ffe7cf97c22128f7b63f104ba2923832c",
+          "dirty_files": [
+            "backend/src/common/openapi/openapi31.ts",
+            "docs/eng/api/openapi-portal.json",
+            "docs/eng/api/openapi.json",
+            "docs/gov/evidence/stynx-devai-adoption-inventory.md",
+            "frontend/portal/src/app/app.config.ts",
+            "frontend/portal/src/app/core/api/generated/openapi-client.ts",
+            "frontend/portal/src/app/core/api/generated/openapi-portal.json",
+            "frontend/portal/src/app/core/http/auth-token-interceptor.spec.ts",
+            "frontend/portal/src/app/core/http/auth-token-interceptor.ts",
+            "frontend/src/app/app.config.ts",
+            "frontend/src/app/core/api/generated/openapi-client.ts",
+            "frontend/src/app/core/api/generated/openapi-core.json",
+            "frontend/src/app/core/api/generated/openapi-portal.json",
+            "frontend/src/app/core/http/auth-token-interceptor.spec.ts",
+            "frontend/src/app/core/http/auth-token-interceptor.ts",
+            "frontend/src/app/shared/error-interceptor.spec.ts",
+            "frontend/src/app/shared/error-interceptor.ts",
+            "frontend/src/app/shared/index.ts",
+            "frontend/src/app/shared/stynx-runtime-config.ts",
+            "package.json",
+            "tests/frontend/admin/admin-playwright.spec.ts",
+            "tests/frontend/portal/portal-playwright.spec.ts",
+            "backend/tsconfig.build.tsbuildinfo",
+            "docs/gov/evidence/stynx-angular-wave-5.md",
+            "frontend/src/app/shared/stynx-runtime-config.spec.ts"
+          ]
+        }
+      },
+      "artifacts": [],
+      "notes": ["test-result id: TR-01KXBNWFVNDX0EPQQ1H6F96R6J; scope: wave-5-angular; tier: e2e"],
+      "previous_run_hash": "c6df0c234c54c0e3faa47fd60b3b07598000584a398e3d47efbc2fc3e57d3efd",
+      "manifest_hash": "86ad095bab8f125bb85b10e441927470d97e667cf065a715f8d22a9a8d6b4cea"
     }
   ]
 }

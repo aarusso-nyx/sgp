@@ -6,6 +6,8 @@ interface ApiHit {
   method: string;
   path: string;
   authorization: string;
+  requestId: string;
+  tenantId: string;
 }
 
 interface CatalogLink {
@@ -66,11 +68,15 @@ test.describe('SGP portal Playwright e2e', () => {
     await expect(page.getByRole('heading', { name: /Portal surface aligned/ })).toBeVisible();
     await expect(page.locator('.section-grid a')).toHaveCount(38);
     await expect(page.getByText('portal journeys mapped')).toBeVisible();
-    expect(hits).toContainEqual({
-      method: 'GET',
-      path: '/v1/portal/meus-dados/cargo',
-      authorization: 'Bearer portal-e2e-token',
-    });
+    expect(hits).toContainEqual(
+      expect.objectContaining({
+        method: 'GET',
+        path: '/v1/portal/meus-dados/cargo',
+        authorization: 'Bearer portal-e2e-token',
+        requestId: expect.stringMatching(/^[0-9a-f-]{36}$/),
+        tenantId: employeeId,
+      }),
+    );
   });
 
   test('renders every catalog route without leaving a blank portal surface', async ({ page }) => {
@@ -260,6 +266,8 @@ async function bootPortal(
       method,
       path,
       authorization: request.headers()['authorization'] ?? '',
+      requestId: request.headers()['x-request-id'] ?? '',
+      tenantId: request.headers()['x-tenant-id'] ?? '',
     });
 
     const response = responseFor(method, path);

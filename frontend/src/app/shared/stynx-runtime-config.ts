@@ -4,44 +4,56 @@ import {
   importProvidersFrom,
   makeEnvironmentProviders,
 } from '@angular/core';
-import { AuthOptions, LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
+import {
+  AuthOptions,
+  LoginResponse,
+  OidcSecurityService,
+  OpenIdConfiguration,
+  provideAuth,
+} from 'angular-auth-oidc-client';
 import { firstValueFrom } from 'rxjs';
+import { provideStynxAngular, STYNX_AUTH_PROVIDER } from '@stynx-nyx/angular';
 import {
   STYNX_AUTH_BACKEND,
   STYNX_OIDC_ADAPTER,
-  StynxAngularAuthModule,
+  provideStynxAuth,
   type StynxAuthBackend,
   type StynxOidcAdapter,
   type StynxSessionBundle,
+  StynxSessionService,
 } from '@stynx-nyx/angular-auth';
-import { provideTenancy } from '@stynx-nyx/angular-tenancy';
+import { StynxI18nModule } from '@stynx-nyx/angular-i18n';
+import { provideStynxMultipartUploadExecutor } from '@stynx-nyx/angular-storage';
 
 type RuntimeConfig = Record<string, string | undefined>;
 
 export function provideSgpStynxWeb(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    ...provideTenancy({
-      defaultTenantResolver: () =>
-        runtimeConfig()['TENANT_ID'] ?? runtimeConfig()['DEFAULT_TENANT_ID'] ?? null,
-    }),
+    provideStynxAngular(
+      {
+        apiBaseUrl: apiBaseUrl(),
+        sessionMode: 'bearer',
+      },
+      {
+        defaultTenantResolver: () =>
+          runtimeConfig()['TENANT_ID'] ?? runtimeConfig()['DEFAULT_TENANT_ID'] ?? null,
+      },
+    ),
     importProvidersFrom(
-      StynxAngularAuthModule.forRoot({
-        oidc: {
-          authority: runtimeConfig()['COGNITO_DOMAIN'] ?? '',
-          clientId: runtimeConfig()['COGNITO_CLIENT_ID'] ?? '',
-          redirectUrl: redirectUri(),
-          postLogoutRedirectUri: window.location.origin,
-          responseType: 'code',
-          scope: scopes().join(' '),
-          silentRenew: true,
-          useRefreshToken: true,
-        },
-        loginRedirectRoute: '/',
-        unauthorizedRoute: '/forbidden',
-        sessionStorageKey: 'sgp.stynx.session',
-        refreshTokenStorage: 'session-storage',
+      StynxI18nModule.forRoot({
+        defaultLocale: 'pt-BR',
+        supportedLocales: ['pt-BR'],
+        loadCatalog: loadSgpStynxCatalog,
       }),
     ),
+    provideAuth({ config: oidcConfig() }),
+    provideStynxAuth({
+      oidc: oidcConfig(),
+      loginRedirectRoute: '/',
+      unauthorizedRoute: '/forbidden',
+      sessionStorageKey: 'sgp.stynx.session',
+      refreshTokenStorage: 'session-storage',
+    }),
     {
       provide: STYNX_AUTH_BACKEND,
       useClass: SgpStynxBearerAuthBackend,
@@ -50,7 +62,30 @@ export function provideSgpStynxWeb(): EnvironmentProviders {
       provide: STYNX_OIDC_ADAPTER,
       useClass: SgpStynxOidcAdapter,
     },
+    {
+      provide: STYNX_AUTH_PROVIDER,
+      useExisting: StynxSessionService,
+    },
+    ...provideStynxMultipartUploadExecutor(),
   ]);
+}
+
+const SGP_STYNX_PT_BR_CATALOG = {
+  'i18n.localeSwitcher.label': 'Idioma',
+  'storage.upload.dropzone': 'Solte um documento aqui',
+  'storage.upload.fileInput': 'Selecione um documento',
+  'storage.upload.scanStatus': 'Status da verificacao: {status}',
+};
+
+function loadSgpStynxCatalog(locale: string): Promise<Record<string, string>> {
+  return Promise.resolve(locale === 'pt-BR' ? SGP_STYNX_PT_BR_CATALOG : {});
+}
+
+function apiBaseUrl(): string {
+  const config = runtimeConfig();
+  const baseUrl = (config['API_BASE_URL'] ?? '').replace(/\/$/, '');
+  const basePath = (config['API_BASE_PATH'] ?? '/api').replace(/^\/?/, '/').replace(/\/$/, '');
+  return `${baseUrl}${basePath}`;
 }
 
 @Injectable()
@@ -119,6 +154,19 @@ class SgpStynxBearerAuthBackend implements StynxAuthBackend {
 
 function redirectUri(): string {
   return runtimeConfig()['COGNITO_REDIRECT_URI'] ?? `${window.location.origin}/auth/callback`;
+}
+
+function oidcConfig(): OpenIdConfiguration {
+  return {
+    authority: runtimeConfig()['COGNITO_DOMAIN'] ?? '',
+    clientId: runtimeConfig()['COGNITO_CLIENT_ID'] ?? '',
+    redirectUrl: redirectUri(),
+    postLogoutRedirectUri: window.location.origin,
+    responseType: 'code',
+    scope: scopes().join(' '),
+    silentRenew: true,
+    useRefreshToken: true,
+  };
 }
 
 function scopes(): string[] {

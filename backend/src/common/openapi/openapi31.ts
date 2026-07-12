@@ -15,6 +15,7 @@ type OpenApiResponse = {
 };
 
 type OpenApiOperation = {
+  summary?: string | undefined;
   responses?: Record<string, OpenApiResponse> | undefined;
 };
 
@@ -106,7 +107,12 @@ function isOpenApiOperation(value: unknown): value is OpenApiOperation {
   return Boolean(value && typeof value === 'object');
 }
 
-function enrichOperationContracts(operation: OpenApiOperation): void {
+function enrichOperationContracts(
+  operation: OpenApiOperation,
+  method: string,
+  path: string,
+): void {
+  operation.summary ||= `${method.toUpperCase()} ${path}`;
   operation.responses ??= {};
 
   for (const [status, description] of Object.entries(standardClientResponses)) {
@@ -139,7 +145,7 @@ export function createOpenApi31Document(
   document.components.schemas.SgpProblemDetails = problemDetailsSchema;
   document.components.schemas.SgpOperationResult = fallbackSuccessSchema;
 
-  for (const pathItem of Object.values(document.paths ?? {})) {
+  for (const [path, pathItem] of Object.entries(document.paths ?? {})) {
     if (!pathItem || typeof pathItem !== 'object') {
       continue;
     }
@@ -148,7 +154,7 @@ export function createOpenApi31Document(
       if (!methods.has(method) || !isOpenApiOperation(candidate)) {
         continue;
       }
-      enrichOperationContracts(candidate);
+      enrichOperationContracts(candidate, method, path);
     }
   }
 
