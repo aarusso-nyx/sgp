@@ -39,3 +39,4 @@ Every ADR must:
 | [ADR-031](adr-031-centralised-idempotency.md)               | Accepted   | `@Idempotent()` and `public.idempotency_keys` provide tenant-scoped HTTP mutation replay and duplicate suppression.    |
 | [ADR-032](adr-032-github-packages-runtime-dependencies.md)  | Accepted   | Published GitHub Packages replace local STYNX/DEVAI dependency artifacts.                                              |
 | [ADR-033](adr-033-postgis-public-schema-portability.md)     | Accepted   | PostGIS types and functions use the supported image's `public` extension schema.                                       |
+| [ADR-034](adr-034-stynx-devai-adoption-boundary.md)         | Accepted   | STYNX owns generic platform mechanisms while SGP retains product policy and DEVAI observes the plant.                  |
