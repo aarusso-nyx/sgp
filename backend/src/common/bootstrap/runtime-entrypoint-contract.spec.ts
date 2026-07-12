@@ -56,7 +56,7 @@ describe('runtime entrypoint contract', () => {
       repoPath('backend/src/stynx/stynx-runtime.factory.ts'),
       'utf8',
     );
-    expect(factory).toContain('usePinoLogger(app)');
+    expect(factory).toContain('app.useLogger(app.get(StynxLogger))');
     expect(factory).toContain('configureOpenTelemetryTracingEntrypoint');
     expect(factory).toContain('configurePrometheusMetricsEntrypoint');
     expect(factory).toContain('configureRateLimitEntrypoint(app)');
@@ -105,34 +105,18 @@ describe('runtime entrypoint contract', () => {
     }
   });
 
-  it('wires every runtime to the retained pino redaction policy module', () => {
-    const runtimeLoggingModules = new Map([
-      ['backend/src/app.module.ts', "createLoggingModule('sgp-core-api')"],
-      [
-        'backend/src/app-portal.module.ts',
-        "createLoggingModule('sgp-portal-api')",
-      ],
-      [
-        'backend/src/payroll-engine/payroll-engine.module.ts',
-        "createLoggingModule('sgp-payroll-engine')",
-      ],
-      [
-        'backend/src/report-service/report-service.module.ts',
-        "createLoggingModule('sgp-report-service')",
-      ],
-      [
-        'backend/src/main-integrations-worker.ts',
-        "createLoggingModule('sgp-integrations-worker')",
-      ],
-      [
-        'backend/src/main-report-worker.ts',
-        "createLoggingModule('sgp-report-worker')",
-      ],
-    ]);
-
-    for (const [entrypoint, loggingModuleCall] of runtimeLoggingModules) {
-      const source = readFileSync(repoPath(entrypoint), 'utf8');
-      expect(source).toContain(loggingModuleCall);
+  it('uses only the shared STYNX logging composition at runtime', () => {
+    for (const entrypoint of [
+      'backend/src/app.module.ts',
+      'backend/src/app-portal.module.ts',
+      'backend/src/payroll-engine/payroll-engine.module.ts',
+      'backend/src/report-service/report-service.module.ts',
+      'backend/src/main-integrations-worker.ts',
+      'backend/src/main-report-worker.ts',
+    ]) {
+      expect(readFileSync(repoPath(entrypoint), 'utf8')).not.toContain(
+        'createLoggingModule',
+      );
     }
   });
 });

@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { startWorkerReadinessProbe } from './common/bootstrap/worker-readiness-probe';
-import { createLoggingModule } from './common/logging/logging.config';
 import {
   createWorkerPollSchedulerProviders,
   registerWorkerShutdown,
@@ -16,7 +15,6 @@ import { createSgpStynxWorkerRuntime } from './stynx/stynx-runtime.factory';
 @Module({
   imports: [
     SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-report-worker' }),
-    createLoggingModule('sgp-report-worker'),
     ScheduleModule.forRoot(),
     ReportServiceModule,
   ],

@@ -4,10 +4,10 @@ import type {
   Type,
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { StynxLogger } from '@stynx-nyx/logging';
 import helmet from 'helmet';
 
 import { configureCorsEntrypoint } from '../common/bootstrap/cors.config';
-import { usePinoLogger } from '../common/logging/bootstrap-logger';
 import { configureOpenTelemetryTracingEntrypoint } from '../common/observability/otel.tracing';
 import { configurePrometheusMetricsEntrypoint } from '../common/observability/prometheus.metrics';
 import { configureRateLimitEntrypoint } from '../common/rate-limit/rate-limit.config';
@@ -17,7 +17,7 @@ export async function createSgpStynxHttpRuntime(
   serviceName: string,
 ): Promise<INestApplication> {
   const app = await NestFactory.create(rootModule, { bufferLogs: true });
-  usePinoLogger(app);
+  app.useLogger(app.get(StynxLogger));
   configureRateLimitEntrypoint(app);
   configureOpenTelemetryTracingEntrypoint(app, serviceName);
   configurePrometheusMetricsEntrypoint(app, serviceName);
@@ -33,6 +33,6 @@ export async function createSgpStynxWorkerRuntime(
   const app = await NestFactory.createApplicationContext(rootModule, {
     bufferLogs: true,
   });
-  usePinoLogger(app);
+  app.useLogger(app.get(StynxLogger));
   return app;
 }

@@ -2,7 +2,7 @@
 
 Date: 2026-07-12
 
-Status: in progress.
+Status: complete.
 
 ## Audit slice
 
@@ -29,7 +29,31 @@ tenant authorization, configured presign TTLs, content-type headers, checksum
 metadata and request-abort behavior. No real provider call, deletion or
 retention mutation is part of the proof.
 
-## Remaining slices
+## Idempotency and rate-limit slice
 
-- idempotency and rate limits;
-- logging and privacy.
+The STYNX platform-pipeline idempotency and rate-limit switches remain disabled
+because the pinned defaults do not implement SGP's accepted durable
+`public.idempotency_keys` replay/lease contract or the independent IP and tenant
+bucket policy. SGP's implementations are retained as product adapters, not
+duplicated by a parallel STYNX engine. Replay/conflict/lease and rate-limit
+exhaustion tests remain the authority for these contracts.
+
+## Logging and privacy slice
+
+Runtime bootstrap now installs `StynxLogger` directly. The six parallel
+`nestjs-pino` module mounts were removed. STYNX logging consumes the existing
+JSON-driven PII and authorization-header redaction paths; SGP OTel trace and
+Prometheus correlation remain unchanged.
+
+The STYNX privacy runtime is intentionally not mounted: its export and erasure
+controllers require a separate data/storage execution model and could perform
+retention or subject-data mutations. SGP retains its deterministic LGPD
+inventory, export and erasure planning surfaces. Wave 4 proof is dry-run and
+fixture-only, with no provider call or retention change.
+
+## Closeout
+
+No raw STYNX platform composition exists outside `backend/src/stynx/`. Audit,
+storage and logging use the shared STYNX contracts/runtime. Incompatible
+idempotency, rate-limit and privacy defaults are disabled rather than run in
+parallel or weaken accepted SGP behavior.

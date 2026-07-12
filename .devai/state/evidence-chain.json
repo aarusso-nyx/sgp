@@ -1,5 +1,5 @@
 {
-  "head": "7362c1936d5ce6d08906a98858aff34b3186eabce7fba0758f4e2cad46bba6e5",
+  "head": "c6df0c234c54c0e3faa47fd60b3b07598000584a398e3d47efbc2fc3e57d3efd",
   "records": [
     {
       "schemaVersion": "1.0.0",
@@ -76,6 +76,46 @@
       "notes": ["test-result id: TR-01KXABESXMECYVDZ0BMMQ1GQP1; scope: wave-3-identity; tier: e2e"],
       "previous_run_hash": "73b0032320697914c6d634b0d61cfe7796ee6b6ca86529d47979174b9d8f32be",
       "manifest_hash": "7362c1936d5ce6d08906a98858aff34b3186eabce7fba0758f4e2cad46bba6e5"
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "EV-19542fc2ae9557c5",
+      "timestamp": "2026-07-12T06:18:14.774Z",
+      "actor": "devai-record-run",
+      "actor_role": "harness",
+      "action": "test-run.e2e",
+      "status": "completed",
+      "context": {
+        "repo_root": "/Users/aarusso/Development/stech/sgp",
+        "git": {
+          "head_sha": "9651c9cc602e125976ba26139d6cd4117ad30eef",
+          "dirty_files": [
+            ".devai/state/scorecards/current.json",
+            ".devai/state/sensor-readings/SR-08120541773608cf.json",
+            ".devai/state/sensor-readings/SR-45f5aabbf4c3fa2b.json",
+            ".devai/state/sensor-readings/SR-8d0f1a8be43bded7.json",
+            ".devai/state/sensor-readings/SR-a4f1b40153dbb604.json",
+            ".devai/state/sensor-readings/SR-afaf2e154bec9b36.json",
+            "backend/src/app-portal.module.ts",
+            "backend/src/app.module.ts",
+            "backend/src/common/bootstrap/runtime-entrypoint-contract.spec.ts",
+            "backend/src/main-integrations-worker.ts",
+            "backend/src/main-report-worker.ts",
+            "backend/src/payroll-engine/payroll-engine.module.ts",
+            "backend/src/report-service/report-service.module.ts",
+            "backend/src/stynx/stynx-runtime.factory.ts",
+            "docs/gov/evidence/stynx-devai-adoption-inventory.md",
+            "docs/gov/evidence/stynx-platform-crosscutters-wave-4.md",
+            "backend/tsconfig.build.tsbuildinfo"
+          ]
+        }
+      },
+      "artifacts": [],
+      "notes": [
+        "test-result id: TR-01KXAFPKGZXRAEAK8WQ5JRQY1M; scope: wave-4-crosscutters; tier: e2e"
+      ],
+      "previous_run_hash": "7362c1936d5ce6d08906a98858aff34b3186eabce7fba0758f4e2cad46bba6e5",
+      "manifest_hash": "c6df0c234c54c0e3faa47fd60b3b07598000584a398e3d47efbc2fc3e57d3efd"
     }
   ]
 }

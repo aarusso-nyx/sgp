@@ -7,7 +7,6 @@ import { AuditoriaModule } from './auditoria/auditoria.module';
 import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { AuthModule } from './auth/auth.module';
 import { createAppCoreProviders } from './common/bootstrap/app-providers';
-import { createLoggingModule } from './common/logging/logging.config';
 import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { createRateLimitOptions } from './common/rate-limit/rate-limit.config';
 import { validateEnvironment } from './config/environment';
@@ -45,7 +44,6 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-core-api' }),
-    createLoggingModule('sgp-core-api'),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     ThrottlerModule.forRootAsync({
       useFactory: createRateLimitOptions,
