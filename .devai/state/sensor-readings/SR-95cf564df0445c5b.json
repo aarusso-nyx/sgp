@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-95cf564df0445c5b",
+  "sensor": {
+    "name": "sgp-plant-coverage",
+    "kind": "plant_coverage",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:31:32.017Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm run api:alignment:check -- --json",
+  "command_hash": "ce13570645fb23e62f2778b1f3ab2c04577cd230d87ed9e44d8d178a348295e9",
+  "tier": "L2",
+  "exit_code": 0,
+  "duration_ms": 201,
+  "out_head": "\n> sgp@0.1.0 api:alignment:check\n> node scripts/run.mjs api alignment check --json\n\n{\n  \"ok\": true,\n  \"findings\": [\n    {\n      \"level\": \"ok\",\n      \"message\": \"Route contract authority is limited to docs/eng/ documents.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Documentation semantics exclude generated, evidence, facts, governance, user, legacy, and scratch docs from route authority.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Route alignment contains 480 documented routes.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"All route statuses are valid.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"All explicitly excluded routes are approved out-of-scope exceptions.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Runtime covers all documented routes.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Runtime exposes only documented routes.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"All runtime routes are in canonical /api path families.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Domain/workflow alignment covers 11 current SGP domain modules.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Portal menu alignment covers 34 implemented route(s) and 3 postponed identity route(s).\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Admin menu alignment covers 6 installed route(s) and keeps 175 route(s) under ADMIN_INSTALL_LATER.\"\n    }\n  ],\n  \"counts\": {\n    \"documented_total\": 574,\n    \"documented_candidates_total\": 714,\n    \"documented_outside_runtime\": 140,\n    \"documented\": 480,\n    \"runtime_total\": 600,\n    \"runtime\": 481,\n    \"deferred_documented\": 94,\n    \"deferred_runtime\": 119,\n    \"implemented\": 480,\n    \"explicitly_excluded\": 0,\n    \"documented_missing\": 0,\n    \"runtime_only\": 0,\n    \"runtime_outside_families\": 0,\n    \"domain_modules\": 11,\n    \"domain_modules_implemented\": 11,\n    \"portal_menu_routes\": 37,\n    \"portal_menu_missing\": 0,\n    \"admin_menu_routes\": 181,\n    \"admin_menu_implemented\": 6,\n    \"admin_menu_missing\": 0,\n    \"admin_menu_rout",
+  "err_head": ""
+}

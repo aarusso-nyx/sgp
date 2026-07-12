@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11",
+  "generated_at": "2026-07-12",
   "authority": [
     "docs/eng/67-pdf-a-builder.md",
     "docs/eng/68-signature-architecture.md",
@@ -25,6 +25,10 @@
     "docs/eng/decisions/adr-029-waf-posture.md",
     "docs/eng/decisions/adr-030-homologation-and-release-gates.md",
     "docs/eng/decisions/adr-031-centralised-idempotency.md",
+    "docs/eng/decisions/adr-032-github-packages-runtime-dependencies.md",
+    "docs/eng/decisions/adr-033-postgis-public-schema-portability.md",
+    "docs/eng/decisions/adr-034-stynx-devai-adoption-boundary.md",
+    "docs/eng/decisions/adr-035-cognito-general-uuid-stynx-identity-adapters.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -42,7 +46,8 @@
     "docs/eng/runbooks/dr.md",
     "docs/eng/runbooks/incident-response.md",
     "docs/eng/runbooks/kms-rotation.md",
-    "docs/eng/runbooks/secret-rotation.md"
+    "docs/eng/runbooks/secret-rotation.md",
+    "docs/eng/stynx-boundary.md"
   ],
   "route_contract_authority": [
     "docs/eng/67-pdf-a-builder.md",
@@ -69,6 +74,10 @@
     "docs/eng/decisions/adr-029-waf-posture.md",
     "docs/eng/decisions/adr-030-homologation-and-release-gates.md",
     "docs/eng/decisions/adr-031-centralised-idempotency.md",
+    "docs/eng/decisions/adr-032-github-packages-runtime-dependencies.md",
+    "docs/eng/decisions/adr-033-postgis-public-schema-portability.md",
+    "docs/eng/decisions/adr-034-stynx-devai-adoption-boundary.md",
+    "docs/eng/decisions/adr-035-cognito-general-uuid-stynx-identity-adapters.md",
     "docs/eng/domains/fiscal-integrations.md",
     "docs/eng/domains/operations-observability.md",
     "docs/eng/domains/payroll-benefits.md",
@@ -86,7 +95,8 @@
     "docs/eng/runbooks/dr.md",
     "docs/eng/runbooks/incident-response.md",
     "docs/eng/runbooks/kms-rotation.md",
-    "docs/eng/runbooks/secret-rotation.md"
+    "docs/eng/runbooks/secret-rotation.md",
+    "docs/eng/stynx-boundary.md"
   ],
   "documentation_semantics": {
     "route_contract_authority_roots": ["docs/eng"],

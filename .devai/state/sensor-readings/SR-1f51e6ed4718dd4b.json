@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-1f51e6ed4718dd4b",
+  "sensor": {
+    "name": "sgp-migration-alignment",
+    "kind": "migration_check",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:17:36.710Z",
+  "status": "fail",
+  "deterministic": true,
+  "command": "npm run db:alignment:check -- --json",
+  "command_hash": "ebec5f3578adf9183f403165b06bfd6803a623e2ebf6c4acc2cf163f8b427ee5",
+  "tier": "L2",
+  "exit_code": 1,
+  "duration_ms": 861,
+  "out_head": "\n> sgp@0.1.0 db:alignment:check\n> node scripts/run.mjs db alignment check --json\n\n{\n  \"phase\": \"full_closure\",\n  \"ok\": false,\n  \"findings\": [\n    {\n      \"level\": \"ok\",\n      \"message\": \"Matrix status/phase enums are valid.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Matrix has unique legacy_object entries.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Phase \\\"full_closure\\\" has 150 objects.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"All 150 objects in full_closure are implemented/canonicalized.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"All full_closure objects have canonical runtime targets.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Matrix closure complete: deferred=0.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"In-scope explicit exclusions are zero.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"All implemented/canonicalized objects have canonical runtime targets.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Approved out-of-scope exclusions are valid.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Derived 90 forbidden runtime public.* references from matrix.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"RLS policy file has no notification_counter policy references.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"SGP Stynx token verifier enforces JWT tenant claims.\"\n    },\n    {\n      \"level\": \"error\",\n      \"message\": \"Database service does not set tenant session context.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"RLS helper SQL includes tenant-aware helper functions.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"RLS policies enforce tenant match predicates.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Portal projections include tenant-aware columns and indexes.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Portal/public runtime queries scope projection reads by tenant.\"\n    },\n    {\n      \"level\": \"ok\",\n      \"message\": \"Tenant coverage is declared for 132 scoped tables.\"\n    },\n    {\n      ",
+  "err_head": ""
+}

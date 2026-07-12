@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "id": "SC-20260712T061813-001",
-  "generated_at": "2026-07-12T06:18:13.596Z",
-  "integration_head": "000000000000000000000000000000000000000f",
+  "id": "SC-20260712T183247-001",
+  "generated_at": "2026-07-12T18:32:47.425Z",
+  "integration_head": "8f1be2f93c66084caa05354dd2c6f616001a5eb7",
   "thresholds_used": {
     "source": "defaults"
   },
@@ -12,79 +12,91 @@
       "property": "T1",
       "verdict": "PASS",
       "deterministic": true,
-      "sensor_readings": ["SR-a4f1b40153dbb604"]
+      "sensor_readings": ["SR-9b51483fad0f16fe"]
     },
     {
       "substrate": "F1",
       "property": "T2",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-af27bdde1cf56d09"]
     },
     {
       "substrate": "F1",
       "property": "T3",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-8a77526260122e2e"]
     },
     {
       "substrate": "F1",
       "property": "T4",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-eff77f9a84537d2e"]
     },
     {
       "substrate": "F1",
       "property": "T5",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-594ebbe8ab905c0c"]
     },
     {
       "substrate": "F1",
       "property": "T6",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-eb756447ae7eaa96"]
     },
     {
       "substrate": "F1",
       "property": "T7",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-c516bb79e9bc4b35"]
     },
     {
       "substrate": "F1",
       "property": "T8",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-29168e76c684dd73"]
     },
     {
       "substrate": "F1",
       "property": "T9",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-54116a44e6fa8497"]
     },
     {
       "substrate": "F2",
       "property": "T1",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-95cf564df0445c5b"]
     },
     {
       "substrate": "F2",
       "property": "T2",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-8624ea7c34402275"]
     },
     {
       "substrate": "F2",
       "property": "T3",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-4d32669fc27f196e"]
     },
     {
       "substrate": "F2",
       "property": "T4",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-771ad13801146a6a"]
     },
     {
       "substrate": "F2",
@@ -96,14 +108,16 @@
     {
       "substrate": "F2",
       "property": "T6",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-7605f6ada40635a0"]
     },
     {
       "substrate": "F2",
       "property": "T7",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-a584bb75c30d7327"]
     },
     {
       "substrate": "F2",
@@ -115,86 +129,113 @@
     {
       "substrate": "F2",
       "property": "T9",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-d1a26b96f86b3421"]
     },
     {
       "substrate": "F3",
       "property": "T1",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-0735acdc5da75e3e"]
     },
     {
       "substrate": "F3",
       "property": "T2",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-40718532839aad45"]
     },
     {
       "substrate": "F3",
       "property": "T3",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-ccf67826cfc64bbf"]
     },
     {
       "substrate": "F3",
       "property": "T4",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-d3862f08500cdb92"]
     },
     {
       "substrate": "F3",
       "property": "T5",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-6cae67f64f6dc799"]
     },
     {
       "substrate": "F3",
       "property": "T6",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-df132fdd3e885a40"]
     },
     {
       "substrate": "F3",
       "property": "T7",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-ef46e752150fb94c"]
     },
     {
       "substrate": "F3",
       "property": "T8",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-6b70b928e7f7a134"]
     },
     {
       "substrate": "F3",
       "property": "T9",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-3aade47989ba4a37"]
     },
     {
       "substrate": "F4",
       "property": "T1",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": [
+        "SR-0b90c2f4d25ef5df",
+        "SR-84d3d47645a467ca",
+        "SR-95a757ee3350abb0",
+        "SR-574da507c9519cd6",
+        "SR-a327f4cdb716ffe1",
+        "SR-b366d585243b91f4",
+        "SR-c0471dbaebeb883d"
+      ]
     },
     {
       "substrate": "F4",
       "property": "T2",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": [
+        "SR-0b90c2f4d25ef5df",
+        "SR-574da507c9519cd6",
+        "SR-a327f4cdb716ffe1",
+        "SR-b366d585243b91f4"
+      ]
     },
     {
       "substrate": "F4",
       "property": "T3",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-c0471dbaebeb883d"]
     },
     {
       "substrate": "F4",
       "property": "T4",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-e882e876a55c0cf8"]
     },
     {
       "substrate": "F4",
@@ -205,101 +246,114 @@
     {
       "substrate": "F4",
       "property": "T6",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-84d3d47645a467ca", "SR-95a757ee3350abb0"]
     },
     {
       "substrate": "F4",
       "property": "T7",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-622cb077eb7630d9"]
     },
     {
       "substrate": "F4",
       "property": "T8",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-d3b2c561c53f8697"]
     },
     {
       "substrate": "F4",
       "property": "T9",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-a657cb07a6df6516"]
     },
     {
       "substrate": "F5",
       "property": "T1",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-c479ce4cac862cd5"]
     },
     {
       "substrate": "F5",
       "property": "T2",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-9c35b2df96680c39"]
     },
     {
       "substrate": "F5",
       "property": "T3",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-ebc3af4531590c00"]
     },
     {
       "substrate": "F5",
       "property": "T4",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-11ac7d8252963d83"]
     },
     {
       "substrate": "F5",
       "property": "T5",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-5abdf329613a03ab"]
     },
     {
       "substrate": "F5",
       "property": "T6",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-b7ed4bba4d6702cc"]
     },
     {
       "substrate": "F5",
       "property": "T7",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-c9cec8fda2911f44"]
     },
     {
       "substrate": "F5",
       "property": "T8",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-ffdf1426a9316c36"]
     },
     {
       "substrate": "F5",
       "property": "T9",
-      "verdict": "UNKNOWN",
-      "deterministic": true
+      "verdict": "PASS",
+      "deterministic": true,
+      "sensor_readings": ["SR-d3f40237d67faf98"]
     }
   ],
   "substrate_aggregates": {
     "F1": {
-      "verdict": "UNKNOWN"
+      "verdict": "PASS"
     },
     "F2": {
-      "verdict": "UNKNOWN"
+      "verdict": "PASS"
     },
     "F3": {
-      "verdict": "UNKNOWN"
+      "verdict": "PASS"
     },
     "F4": {
-      "verdict": "UNKNOWN"
+      "verdict": "PASS"
     },
     "F5": {
-      "verdict": "UNKNOWN"
+      "verdict": "PASS"
     }
   },
   "invariant_rollups": [],
   "overall": {
-    "verdict": "UNKNOWN"
+    "verdict": "PASS"
   }
 }

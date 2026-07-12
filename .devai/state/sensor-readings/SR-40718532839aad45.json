@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-40718532839aad45",
+  "sensor": {
+    "name": "sgp-test-coverage-depth",
+    "kind": "test_coverage_depth",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:32:46.190Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm run test:frontend:coverage",
+  "command_hash": "95a76035c8d71e6d152b5afcdee79365f01bc322f1dfb9064060782789c6b8a8",
+  "tier": "L2",
+  "exit_code": 0,
+  "duration_ms": 14248,
+  "out_head": "\n> sgp@0.1.0 test:frontend:coverage\n> node scripts/run.mjs test frontend-coverage\n\n\n> frontend@0.0.0 test:coverage\n> npm run test:admin:coverage && npm run test:portal:coverage\n\n\n> frontend@0.0.0 test:admin:coverage\n> ng test sgp-admin --watch=false --coverage\n\nUsing Vitest configuration file: /Users/aarusso/Development/stech/sgp/frontend/vitest.admin.config.ts\n❯ Building...\n✔ Building...\nInitial chunk files                                                                  | Names                                                                             |  Raw size\nchunk-DSJEF7DH.js                                                                    | -                                                                                 | 350.98 kB | \nchunk-4BWKGPPY.js                                                                    | -                                                                                 | 276.00 kB | \nchunk-ESZRIBJU.js                                                                    | -                                                                                 | 187.89 kB | \nchunk-6L6RDMT6.js                                                                    | -                                                                                 | 155.28 kB | \nchunk-AW2FH7PY.js                                                                    | -                                                                                 | 121.49 kB | \nchunk-6WWQ7PUK.js                                                                    | -                                                                                 |  81.93 kB | \nchunk-OOVUOTO3.js                                                                    | -                                                                                 |  69.22 kB | \nchunk-DZ53PZVL.js                                                                    | -                                                                                 |  66.20 kB | \nchu",
+  "err_head": "▲ [WARNING] Locale data for 'pt-BR' cannot be found. Using locale data for 'pt'. [plugin angular-locale-data]\n\n    angular:polyfills:angular:polyfills:1:7:\n      1 │ import 'angular:locale/data:pt-BR';\n        ╵        ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\nNot implemented: navigation to another Document\nNot implemented: navigation to another Document\n"
+}

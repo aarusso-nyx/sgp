@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-d1a26b96f86b3421",
+  "sensor": {
+    "name": "sgp-build",
+    "kind": "build",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:32:24.825Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm run build",
+  "command_hash": "16c0e4305ac213dff39fc82b69b6e08aeeb8758e33cd72d7c409752a70e9f054",
+  "tier": "L1",
+  "exit_code": 0,
+  "duration_ms": 15791,
+  "out_head": "\n> sgp@0.1.0 build\n> node scripts/run.mjs build\n\n\n> frontend@0.0.0 build:admin\n> ng build sgp-admin\n\n❯ Building...\n✔ Building...\nInitial chunk files   | Names                  |  Raw size | Estimated transfer size\nchunk-OEQC4UYT.js     | -                      | 214.94 kB |                62.21 kB\nchunk-RKHW4LBI.js     | -                      |  19.08 kB |                 5.46 kB\nchunk-JXPI76UG.js     | -                      |  12.88 kB |                 4.02 kB\nstyles-ZWQLDJBX.css   | styles                 |   8.94 kB |                 1.69 kB\npolyfills-MJRWIPRN.js | polyfills              |   2.19 kB |                 1.04 kB\nmain-YYIAC3YG.js      | main                   |   1.40 kB |               524 bytes\nchunk-7CGTOI24.js     | -                      | 618 bytes |               618 bytes\n\n                      | Initial total          | 260.05 kB |                75.57 kB\n\nLazy chunk files      | Names                  |  Raw size | Estimated transfer size\nchunk-KXB5G5NA.js     | compiler               | 545.08 kB |               120.46 kB\nchunk-OCLHRRRJ.js     | -                      | 253.87 kB |                47.94 kB\nchunk-FXXJ6DRK.js     | app-config             | 122.83 kB |                23.64 kB\nchunk-ZLOYKW5V.js     | rh-module              | 108.75 kB |                20.39 kB\nchunk-ZUUYR4CN.js     | -                      | 101.26 kB |                22.28 kB\nchunk-HM7CTAEQ.js     | folha-pagamento-module |  93.01 kB |                15.99 kB\nchunk-VQ36RL6M.js     | -                      |  85.36 kB |                16.71 kB\nchunk-JDBPSDZQ.js     | -                      |  83.70 kB |                20.83 kB\nchunk-CSHB6BRV.js     | -                      |  70.14 kB |                11.93 kB\nchunk-FBLLRV7D.js     | -                      |  69.29 kB |                15.63 kB\nchunk-NWQADAGI.js     | -                      |  66.47 kB |                 8.23 kB\nchunk-7VYMRHE6.js     | gestao-module          |  49.21 kB |                 9.66 kB\nchunk-7GAV6JZS.js     | -                      ",
+  "err_head": "▲ [WARNING] Locale data for 'pt-BR' cannot be found. Using locale data for 'pt'. [plugin angular-locale-data]\n\n    angular:polyfills:angular:polyfills:1:7:\n      1 │ import 'angular:locale/data:pt-BR';\n        ╵        ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n"
+}

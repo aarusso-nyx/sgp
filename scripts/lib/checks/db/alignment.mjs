@@ -12,6 +12,10 @@ const matrixPath = resolve(cwd, 'docs/gov/generated/database/alignment-matrix.js
 const sqlSupportPath = resolve(cwd, 'database/sql');
 const authTokenVerifierPath = resolve(cwd, 'backend/src/auth/sgp-stynx-token-verifier.service.ts');
 const databaseServicePath = resolve(cwd, 'backend/src/database/database.service.ts');
+const dbSessionContextApplierPath = resolve(
+  cwd,
+  'backend/src/stynx/sgp-db-session-context.applier.ts',
+);
 const portalSourcePath = resolve(cwd, 'backend/src/portal');
 const publicTransparencyServicePath = resolve(
   cwd,
@@ -433,6 +437,7 @@ function main() {
   const portalProjectionSql = canonicalSchema;
   const authTokenVerifier = readFileSync(authTokenVerifierPath, 'utf8');
   const databaseService = readFileSync(databaseServicePath, 'utf8');
+  const dbSessionContextApplier = readFileSync(dbSessionContextApplierPath, 'utf8');
   const portalRuntimeSource = readTypeScriptTree(portalSourcePath);
   const publicTransparencyService = readFileSync(publicTransparencyServicePath, 'utf8');
   if (includesAny(rlsPolicies, ['notification_counter_select', 'notification_counter_write'])) {
@@ -447,10 +452,13 @@ function main() {
     ok('SGP Stynx token verifier enforces JWT tenant claims.');
   }
 
-  if (!includesAny(databaseService, ['app.current_tenant_id', 'app.current_tenant'])) {
+  if (
+    !databaseService.includes('SgpDbSessionContextApplier') ||
+    !includesAny(dbSessionContextApplier, ['app.current_tenant_id', 'app.current_tenant'])
+  ) {
     fail('Database service does not set tenant session context.');
   } else {
-    ok('Database service sets tenant session context for every query.');
+    ok('Database service delegates tenant session context to the STYNX-bound applier.');
   }
 
   if (

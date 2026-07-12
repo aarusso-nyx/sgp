@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-9c35b2df96680c39",
+  "sensor": {
+    "name": "sgp-harness-depth",
+    "kind": "harness_depth",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:32:31.029Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm run check:duplication",
+  "command_hash": "89a4fdbbd1560e229d1b7944947618608169e9294730480844c03619d8cc4bb5",
+  "tier": "L1",
+  "exit_code": 0,
+  "duration_ms": 4951,
+  "out_head": "\n> sgp@0.1.0 check:duplication\n> node scripts/run.mjs check duplication\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/meus-dados/meus-dados.ts\u001b[39m\u001b[22m [53:11 - 59:58] (6 lines, 81 tokens)\n   \u001b[1m\u001b[32mfrontend/portal/src/app/pages/licencas/saude/saude.ts\u001b[39m\u001b[22m [53:10 - 59:59]\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/licencas/licencas.ts\u001b[39m\u001b[22m [38:3 - 44:15] (6 lines, 82 tokens)\n   \u001b[1m\u001b[32mfrontend/portal/src/app/pages/meus-dados/meus-dados.ts\u001b[39m\u001b[22m [36:3 - 42:11]\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/licencas/licencas.ts\u001b[39m\u001b[22m [71:11 - 77:62] (6 lines, 81 tokens)\n   \u001b[1m\u001b[32mfrontend/portal/src/app/pages/licencas/saude/saude.ts\u001b[39m\u001b[22m [53:10 - 59:59]\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/ferias/ferias.ts\u001b[39m\u001b[22m [47:3 - 54:23] (7 lines, 98 tokens)\n   \u001b[1m\u001b[32mfrontend/portal/src/app/pages/meus-dados/meus-dados.ts\u001b[39m\u001b[22m [36:3 - 45:11]\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/ferias/ferias.ts\u001b[39m\u001b[22m [96:14 - 106:27] (10 lines, 100 tokens)\n   \u001b[1m\u001b[32mfrontend/portal/src/app/pages/licencas/licencas.ts\u001b[39m\u001b[22m [89:14 - 99:23]\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/ferias/ferias.ts\u001b[39m\u001b[22m [128:8 - 140:27] (12 lines, 86 tokens)\n   \u001b[1m\u001b[32mfrontend/portal/src/app/pages/licencas/saude/saude.ts\u001b[39m\u001b[22m [71:28 - 83:20]\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/documentos/documentos.ts\u001b[39m\u001b[22m [37:3 - 43:17] (6 lines, 82 tokens)\n   \u001b[1m\u001b[32mfrontend/portal/src/app/pages/meus-dados/meus-dados.ts\u001b[39m\u001b[22m [36:3 - 42:11]\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/documentos/documentos.ts\u001b[39m\u001b[22m [56:28 - 64:81] (8 lines, 106 tokens)\n   \u001b[1m\u001b[32mfrontend/portal/src/app/pages/licencas/licencas.ts\u001b[39m\u001b[22m [69:23 - 59:71]\n\nClone found (typescript):\n - \u001b[1m\u001b[32mfrontend/portal/src/app/pages/documentos/documentos.ts\u001b[39m\u001b[22m [95:79 - 109:28] (14 lines, 94 tokens)\n   \u001b",
+  "err_head": ""
+}

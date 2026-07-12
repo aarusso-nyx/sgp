@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-ffdf1426a9316c36",
+  "sensor": {
+    "name": "sgp-harness-robustness",
+    "kind": "harness_robustness",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:32:31.942Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm run health:json",
+  "command_hash": "45259b7882e281f441f18c11747cb298e48832be43fad93ee72b213b3982b2de",
+  "tier": "L1",
+  "exit_code": 0,
+  "duration_ms": 166,
+  "out_head": "\n> sgp@0.1.0 health:json\n> node scripts/run.mjs health --json\n\n{\n  \"ok\": true,\n  \"workspace\": \"sgp\",\n  \"node\": \"v24.15.0\",\n  \"checks\": [\n    {\n      \"path\": \"frontend/package.json\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"frontend/angular.json\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"frontend/src/main.ts\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"frontend/portal/src/main.ts\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"backend/package.json\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"database/sql/00-extensions.sql\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"docs/gov/evidence/database-alignment-phase-1.md\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"infra/README.md\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"infra/aws/README.md\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"scripts/run.mjs\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"backend/src/main-payroll-engine.ts\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"backend/src/main-report-worker.ts\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"backend/src/main-report-service.ts\",\n      \"ok\": true\n    },\n    {\n      \"path\": \"docs/gov/generated/runtime-topology.json\",\n      \"ok\": true\n    }\n  ],\n  \"runtimes\": [\n    {\n      \"name\": \"sgp-admin\",\n      \"status\": \"implemented\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"sgp-portal\",\n      \"status\": \"implemented\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"sgp-core-api\",\n      \"status\": \"implemented\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"sgp-portal-api\",\n      \"status\": \"implemented\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"sgp-payroll-engine\",\n      \"status\": \"implemented\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"sgp-integrations-worker\",\n      \"status\": \"implemented\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"sgp-report-service\",\n      \"status\": \"implemented\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"sgp-report-worker\",\n      \"status\": \"implemented\",\n      \"ok\": true\n    }\n  ]\n}\n",
+  "err_head": ""
+}

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "generated_at": "2026-07-12T01:59:13.856Z",
-  "integration_head": "ee0bb6405ca314f3d94b5249fe34cb15af731dd7",
+  "generated_at": "2026-07-12T18:31:33.832Z",
+  "integration_head": "8f1be2f93c66084caa05354dd2c6f616001a5eb7",
   "modules": [
     {
       "id": "MOD-01ac208769cc7251",
@@ -48,6 +48,10 @@
       "file": "backend/src/folha-pagamento/operations/company-bank-account/company-bank-account.module.ts"
     },
     {
+      "id": "MOD-22274c61266a8bc6",
+      "file": "backend/src/stynx/sgp-stynx-identity.module.ts"
+    },
+    {
       "id": "MOD-283ce73af7d4ac9c",
       "file": "backend/src/profiles/profiles.module.ts"
     },
@@ -58,6 +62,10 @@
     {
       "id": "MOD-2f540b1da321b19e",
       "file": "backend/src/lgpd/lgpd-admin.module.ts"
+    },
+    {
+      "id": "MOD-31c3521f3e30331b",
+      "file": "backend/src/stynx/sgp-stynx-audit.module.ts"
     },
     {
       "id": "MOD-3304eb4e0aeb3762",
@@ -164,6 +172,10 @@
       "file": "backend/src/app.module.ts"
     },
     {
+      "id": "MOD-999f003c0348256e",
+      "file": "backend/src/stynx/stynx-runtime.module.ts"
+    },
+    {
       "id": "MOD-9ada5bb7924cc7a8",
       "file": "backend/src/recrutamento/inscricao/inscricao.module.ts"
     },
@@ -202,6 +214,10 @@
     {
       "id": "MOD-b804c6f707d01e6e",
       "file": "backend/src/auth/auth.module.ts"
+    },
+    {
+      "id": "MOD-bd37ae22ec8f4ab9",
+      "file": "backend/src/stynx/sgp-stynx-storage.module.ts"
     },
     {
       "id": "MOD-c2b8aa883af50867",
@@ -7928,6 +7944,14 @@
       "file": "backend/src/saude/program/risk-management-program.service.ts"
     },
     {
+      "kind": "service",
+      "name": "SgpDbSessionContextApplier",
+      "module": "MOD-5fea01a3445298dc",
+      "path": "backend/src/stynx/sgp-db-session-context.applier.ts",
+      "id": "COMP-6a64b43e",
+      "file": "backend/src/stynx/sgp-db-session-context.applier.ts"
+    },
+    {
       "kind": "nestjs_controller",
       "name": "AdminMenusController",
       "module": "MOD-36cd1e9eb0cdb19f",
@@ -11167,6 +11191,31 @@
       "invariants": []
     },
     {
+      "path": "backend/src/stynx/sgp-stynx-audit.module.spec.ts",
+      "suite": "unit",
+      "invariants": []
+    },
+    {
+      "path": "backend/src/stynx/sgp-stynx-data.module.spec.ts",
+      "suite": "unit",
+      "invariants": []
+    },
+    {
+      "path": "backend/src/stynx/sgp-stynx-identity.module.spec.ts",
+      "suite": "unit",
+      "invariants": []
+    },
+    {
+      "path": "backend/src/stynx/sgp-stynx-storage.module.spec.ts",
+      "suite": "unit",
+      "invariants": []
+    },
+    {
+      "path": "backend/src/stynx/stynx-runtime.module.spec.ts",
+      "suite": "unit",
+      "invariants": []
+    },
+    {
       "path": "backend/src/system-parameters/admin-menus.service.spec.ts",
       "suite": "unit",
       "invariants": []
@@ -11307,11 +11356,6 @@
       "invariants": []
     },
     {
-      "path": "frontend/portal/src/app/core/http/auth-token-interceptor.spec.ts",
-      "suite": "unit",
-      "invariants": []
-    },
-    {
       "path": "frontend/portal/src/app/core/portal/portal-route-endpoints.spec.ts",
       "suite": "unit",
       "invariants": []
@@ -11393,11 +11437,6 @@
     },
     {
       "path": "frontend/src/app/core/auth/permission-guard.spec.ts",
-      "suite": "unit",
-      "invariants": []
-    },
-    {
-      "path": "frontend/src/app/core/http/auth-token-interceptor.spec.ts",
       "suite": "unit",
       "invariants": []
     },
@@ -11567,7 +11606,7 @@
       "invariants": []
     },
     {
-      "path": "frontend/src/app/shared/error-interceptor.spec.ts",
+      "path": "frontend/src/app/shared/stynx-runtime-config.spec.ts",
       "suite": "unit",
       "invariants": []
     },
@@ -16448,6 +16487,54 @@
       "file": "backend/src/saude/saude.module.ts"
     },
     {
+      "id": "DEP-a45c4d04",
+      "file": "backend/src/stynx/sgp-db-session-context.applier.ts"
+    },
+    {
+      "id": "DEP-5bff918c",
+      "file": "backend/src/stynx/sgp-stynx-audit.module.spec.ts"
+    },
+    {
+      "id": "DEP-5b273c18",
+      "file": "backend/src/stynx/sgp-stynx-audit.module.ts"
+    },
+    {
+      "id": "DEP-b3834740",
+      "file": "backend/src/stynx/sgp-stynx-data.module.spec.ts"
+    },
+    {
+      "id": "DEP-065cb4d3",
+      "file": "backend/src/stynx/sgp-stynx-data.module.ts"
+    },
+    {
+      "id": "DEP-c7cbff24",
+      "file": "backend/src/stynx/sgp-stynx-identity.module.spec.ts"
+    },
+    {
+      "id": "DEP-f55adeba",
+      "file": "backend/src/stynx/sgp-stynx-identity.module.ts"
+    },
+    {
+      "id": "DEP-3e6c5403",
+      "file": "backend/src/stynx/sgp-stynx-storage.module.spec.ts"
+    },
+    {
+      "id": "DEP-cb598371",
+      "file": "backend/src/stynx/sgp-stynx-storage.module.ts"
+    },
+    {
+      "id": "DEP-759b1eab",
+      "file": "backend/src/stynx/stynx-runtime.factory.ts"
+    },
+    {
+      "id": "DEP-0b2d8f92",
+      "file": "backend/src/stynx/stynx-runtime.module.spec.ts"
+    },
+    {
+      "id": "DEP-64697f95",
+      "file": "backend/src/stynx/stynx-runtime.module.ts"
+    },
+    {
       "id": "DEP-ac111618",
       "file": "backend/src/system-parameters/admin-menus.controller.ts"
     },
@@ -16836,14 +16923,6 @@
       "file": "frontend/portal/src/app/core/auth/auth-guard.ts"
     },
     {
-      "id": "DEP-91e2162f",
-      "file": "frontend/portal/src/app/core/http/auth-token-interceptor.spec.ts"
-    },
-    {
-      "id": "DEP-ff159681",
-      "file": "frontend/portal/src/app/core/http/auth-token-interceptor.ts"
-    },
-    {
       "id": "DEP-d0fb486f",
       "file": "frontend/portal/src/app/core/portal/portal-feature-catalog.ts"
     },
@@ -17018,14 +17097,6 @@
     {
       "id": "DEP-acd201d6",
       "file": "frontend/src/app/core/auth/permission-guard.ts"
-    },
-    {
-      "id": "DEP-cb85733b",
-      "file": "frontend/src/app/core/http/auth-token-interceptor.spec.ts"
-    },
-    {
-      "id": "DEP-aedfe5c0",
-      "file": "frontend/src/app/core/http/auth-token-interceptor.ts"
     },
     {
       "id": "DEP-07520863",
@@ -17852,20 +17923,16 @@
       "file": "frontend/src/app/shared-platform/shell/shell.ts"
     },
     {
-      "id": "DEP-afe8e14d",
-      "file": "frontend/src/app/shared/error-interceptor.spec.ts"
-    },
-    {
-      "id": "DEP-e45eb0bb",
-      "file": "frontend/src/app/shared/error-interceptor.ts"
-    },
-    {
       "id": "DEP-76204d07",
       "file": "frontend/src/app/shared/index.ts"
     },
     {
       "id": "DEP-e2a562d4",
       "file": "frontend/src/app/shared/money-br.pipe.ts"
+    },
+    {
+      "id": "DEP-19a2b904",
+      "file": "frontend/src/app/shared/stynx-runtime-config.spec.ts"
     },
     {
       "id": "DEP-e39ffaa4",
@@ -18920,7 +18987,7 @@
       "file": "tests/types/openapi-contracts.ts"
     }
   ],
-  "dependency_graph_hash": "f18c456fcb88b4582ddf82a568ee0438ba80a09164d1bfa60c85a6eeedec23f8",
+  "dependency_graph_hash": "f55b55a593bab65814a42f730a10e3f6b193d8909eb4c4f0b5dac2cee50b1761",
   "checksums": {
     "AGENTS.md": "9453e9edbd074c7e735dfd167a060ce03fc515e41cf631891b1e0d3ae896ce2f",
     "BUILD-PLAN.md": "2419d4892e319b7d339270b4f7372da0ace337234f107ac8ee29e617619bbfdb",

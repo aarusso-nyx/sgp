@@ -1,12 +1,12 @@
 {
   "schemaVersion": "1.0.0",
-  "id": "SR-afaf2e154bec9b36",
+  "id": "SR-6cae67f64f6dc799",
   "sensor": {
-    "name": "sgp-lint",
-    "kind": "lint",
+    "name": "sgp-test-idiomaticity",
+    "kind": "test_idiomaticity",
     "version": "1.0.0"
   },
-  "timestamp": "2026-07-12T18:32:01.143Z",
+  "timestamp": "2026-07-12T18:32:01.144Z",
   "status": "pass",
   "deterministic": true,
   "command": "npm run lint:check",

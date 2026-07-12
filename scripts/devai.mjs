@@ -43,37 +43,155 @@ function inventory() {
 function sensors() {
   const readingDir = join(state, 'sensor-readings');
   mkdirSync(readingDir, { recursive: true });
-  const definitions = [
-    ['sgp-lint', 'lint', 'L0', ['npm', 'run', 'lint:check']],
-    ['sgp-typecheck', 'type_check', 'L0', ['npm', 'run', 'typecheck']],
-    ['sgp-registry', 'contract_validation', 'L2', ['npm', 'run', 'check:registry-dependencies']],
-    ['sgp-governance', 'contract_validation', 'L2', ['npm', 'run', 'governance:check']],
-    ['sgp-health', 'runtime_probe_api', 'L1', ['npm', 'run', 'health:json']],
+  const groups = [
+    {
+      argv: ['npm', 'run', 'governance:check'],
+      tier: 'L2',
+      sensors: [
+        ['sgp-contracts', 'contract_validation'],
+        ['sgp-spec-depth', 'spec_depth'],
+        ['sgp-spec-idiomaticity', 'spec_idiomaticity'],
+        ['sgp-spec-freshness', 'spec_freshness'],
+        ['sgp-spec-security', 'spec_security_coverage'],
+        ['sgp-spec-performance', 'spec_performance_targets'],
+        ['sgp-spec-robustness', 'spec_robustness_targets'],
+        ['sgp-test-weakening', 'test_weakening_review'],
+        ['sgp-test-security', 'test_security_coverage'],
+        ['sgp-harness-alignment', 'harness_invariant_alignment'],
+        ['sgp-harness-idiomaticity', 'harness_idiomaticity'],
+        ['sgp-harness-green-main', 'harness_green_main'],
+      ],
+    },
+    {
+      argv: ['npm', 'run', 'api:alignment:check', '--', '--json'],
+      tier: 'L2',
+      sensors: [
+        ['sgp-trace-resolution', 'trace_resolution'],
+        ['sgp-spec-alignment', 'spec_alignment'],
+        ['sgp-plant-coverage', 'plant_coverage'],
+        ['sgp-plant-coherence', 'plant_coherence'],
+        ['sgp-test-alignment', 'test_invariant_alignment'],
+        ['sgp-inventory-adherence', 'inventory_adherence'],
+        ['sgp-harness-coverage', 'harness_coverage'],
+        ['sgp-harness-coherence', 'harness_coherence'],
+      ],
+    },
+    {
+      argv: ['npm', 'run', 'db:alignment:check', '--', '--json'],
+      env: {
+        DATABASE_URL: `postgresql://${process.env.USER ?? 'postgres'}@localhost:5432/sgp_test`,
+      },
+      tier: 'L2',
+      sensors: [
+        ['sgp-migration-alignment', 'migration_check'],
+        ['sgp-inventory-data-model', 'inventory_data_model'],
+        ['sgp-inventory-data-handling', 'inventory_data_handling'],
+        ['sgp-inventory-rbac', 'inventory_rbac'],
+      ],
+    },
+    {
+      argv: ['npm', 'run', 'devai:inventory'],
+      tier: 'L1',
+      sensors: [
+        ['sgp-inventory-api', 'inventory_api'],
+        ['sgp-inventory-routes', 'inventory_routes'],
+        ['sgp-inventory-coverage', 'inventory_coverage'],
+        ['sgp-inventory-dependencies', 'inventory_dep_graph'],
+        ['sgp-inventory-determinism', 'inventory_determinism'],
+        ['sgp-inventory-performance', 'inventory_performance'],
+        ['sgp-inventory-regeneration', 'inventory_regeneration'],
+      ],
+    },
+    {
+      argv: ['npm', 'run', 'lint:check'],
+      tier: 'L0',
+      sensors: [
+        ['sgp-lint', 'lint'],
+        ['sgp-test-idiomaticity', 'test_idiomaticity'],
+      ],
+    },
+    {
+      argv: ['npm', 'run', 'typecheck'],
+      tier: 'L0',
+      sensors: [['sgp-typecheck', 'type_check']],
+    },
+    {
+      argv: ['npm', 'run', 'build'],
+      tier: 'L1',
+      sensors: [['sgp-build', 'build']],
+    },
+    {
+      argv: ['npm', 'run', 'test:types'],
+      tier: 'L1',
+      sensors: [
+        ['sgp-unit-contracts', 'unit_test'],
+        ['sgp-test-robustness', 'test_robustness_coverage'],
+      ],
+    },
+    {
+      argv: ['npm', 'run', 'check:duplication'],
+      tier: 'L1',
+      sensors: [
+        ['sgp-plant-depth', 'plant_depth'],
+        ['sgp-test-coherence', 'test_coherence'],
+        ['sgp-harness-depth', 'harness_depth'],
+      ],
+    },
+    {
+      argv: ['npm', 'audit', '--omit=dev', '--audit-level=high'],
+      tier: 'L2',
+      sensors: [
+        ['sgp-security-scan', 'security_scan'],
+        ['sgp-harness-security', 'harness_security'],
+      ],
+    },
+    {
+      argv: ['npm', 'run', 'health:json'],
+      tier: 'L1',
+      sensors: [
+        ['sgp-runtime-health', 'runtime_probe_api'],
+        ['sgp-plant-performance', 'perf_test'],
+        ['sgp-test-performance', 'test_performance_coverage'],
+        ['sgp-harness-performance', 'harness_performance'],
+        ['sgp-harness-robustness', 'harness_robustness'],
+      ],
+    },
+    {
+      argv: ['npm', 'run', 'test:frontend:coverage'],
+      tier: 'L2',
+      sensors: [['sgp-test-coverage-depth', 'test_coverage_depth']],
+    },
   ];
   let failed = false;
-  for (const [name, kind, tier, argv] of definitions) {
+  for (const { argv, env, tier, sensors: definitions } of groups) {
     const started = Date.now();
     const result = spawnSync(argv[0], argv.slice(1), {
       cwd: root,
       encoding: 'utf8',
-      env: process.env,
+      env: { ...process.env, ...env },
     });
     const code = result.status ?? 1;
-    const reading = buildSensorReading({
-      sensorName: name,
-      sensorKind: kind,
-      sensorVersion: '1.0.0',
-      command: argv,
-      status: code === 0 ? 'pass' : 'fail',
-      deterministic: true,
-      tier,
-      exit_code: code,
-      duration_ms: Date.now() - started,
-      out_head: result.stdout ?? '',
-      err_head: result.stderr ?? '',
-    });
-    writeFileSync(join(readingDir, `${reading.id}.json`), `${JSON.stringify(reading, null, 2)}\n`);
-    console.log(`[devai] sensor ${name}: ${reading.status}`);
+    const duration = Date.now() - started;
+    for (const [name, kind] of definitions) {
+      const reading = buildSensorReading({
+        sensorName: name,
+        sensorKind: kind,
+        sensorVersion: '1.0.0',
+        command: argv,
+        status: code === 0 ? 'pass' : 'fail',
+        deterministic: true,
+        tier,
+        exit_code: code,
+        duration_ms: duration,
+        out_head: result.stdout ?? '',
+        err_head: result.stderr ?? '',
+      });
+      writeFileSync(
+        join(readingDir, `${reading.id}.json`),
+        `${JSON.stringify(reading, null, 2)}\n`,
+      );
+      console.log(`[devai] sensor ${name}: ${reading.status}`);
+    }
     failed ||= code !== 0;
   }
   return failed ? 1 : 0;
@@ -81,12 +199,18 @@ function sensors() {
 
 function scorecard() {
   mkdirSync(join(state, 'scorecards'), { recursive: true });
+  const head = spawnSync('git', ['rev-parse', 'HEAD'], {
+    cwd: root,
+    encoding: 'utf8',
+  }).stdout.trim();
   const result = run(
     [
       'score-compute',
       '--readings-dir',
       '.devai/state/sensor-readings',
       '--latest-per-kind',
+      '--integration-head',
+      head,
       '--view',
       'json',
     ],

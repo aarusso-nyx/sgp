@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-51bfcff384c7877d",
+  "sensor": {
+    "name": "sgp-test-security",
+    "kind": "test_security_coverage",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:20:35.317Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm audit --omit=dev --audit-level=high",
+  "command_hash": "160a21cce8d88a86ac86d4b5e45f3527701c3b282d7b560ed8c62534c404882f",
+  "tier": "L2",
+  "exit_code": 0,
+  "duration_ms": 716,
+  "out_head": "found 0 vulnerabilities\n",
+  "err_head": ""
+}

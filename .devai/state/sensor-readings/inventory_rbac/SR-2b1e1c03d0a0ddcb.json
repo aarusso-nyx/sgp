@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-2b1e1c03d0a0ddcb",
+  "sensor": {
+    "name": "inventory:rbac",
+    "kind": "inventory_rbac",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T17:37:56.429Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "devai sense rbac --repo-root .",
+  "command_hash": "e0c5e638501022c0f1e6489d484cc154da7b040c0d15e98518025c1005add63c",
+  "tier": "L0",
+  "duration_ms": 10,
+  "evidence_path": ".devai/state/sensors/inventory_rbac/rbac.json",
+  "metrics": {
+    "role_table_count": 0,
+    "permission_table_count": 1,
+    "join_table_count": 0,
+    "endpoint_binding_count": 0,
+    "endpoints_without_role_count": 598,
+    "synthetic_guard_permission_count": 0,
+    "synthetic_role_permission_count": 0,
+    "rbac_hash": "f3eceef75b2eab7b2b65260cbb4fa947215758610e196d3e3efd76afec3dd689"
+  }
+}
