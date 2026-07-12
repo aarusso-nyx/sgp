@@ -55,6 +55,15 @@ changed:
 The first seven were already required on `main` when inspected on 2026-07-12.
 Add `DEVAI evidence gate` only after its successful PR check is observable.
 
+The first monolithic PR run completed every evidence step successfully but hit
+the 90-minute job boundary during teardown, so GitHub reported it as cancelled.
+SGP now follows STYNX's CI-economy topology: a cheap source-bound evidence
+policy fans out DB/API, backend coverage, frontend, and mutation/build tiers;
+the scorecard refresh runs only after every applicable tier succeeds; and a
+small aggregate job retains the stable `DEVAI evidence gate` check name.
+Current-ref concurrency cancels superseded runs. Backend coverage remains fully
+gated but uses two bounded Jest workers instead of serial `--runInBand`.
+
 ## Scorecard and rollback
 
 The accepted Wave 6 grid remains 44 PASS cells and the DEVAI-defined structural

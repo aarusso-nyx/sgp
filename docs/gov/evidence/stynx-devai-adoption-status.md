@@ -76,6 +76,12 @@ will therefore run the complete DB, API, browser, backend/frontend coverage,
 mutation and build tail, regenerate inventory/sensors/scorecard for the checked
 out SHA, and verify again.
 
+After the first PR execution passed all substantive steps but exhausted the
+90-minute monolithic job boundary during teardown, the fail-closed tail was
+split into parallel evidence tiers following STYNX's CI-economy mechanics. No
+test category was removed; a final aggregate check fails unless retained
+source-bound evidence is current or every tier plus scorecard refresh passes.
+
 Read-only branch-protection inspection on 2026-07-12 found the existing seven
 required checks intact. The new DEVAI context must not be added until a real PR
 run succeeds. No branch-protection write, merge, deployment or rollback was

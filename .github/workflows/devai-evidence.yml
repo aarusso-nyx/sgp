@@ -30,14 +30,47 @@ on:
       - 'scripts/**'
       - 'tests/**'
 
+concurrency:
+  group: devai-evidence-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
+env:
+  CI: 'true'
+  NODE_VERSION: '24'
+
 jobs:
-  evidence-gate:
-    name: DEVAI evidence gate
+  evidence-policy:
+    name: DEVAI retained evidence policy
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 10
+    outputs:
+      retained: ${{ steps.retained.outcome == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install registry-only workspace
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: npm ci
+      - name: Verify source-bound retained evidence
+        id: retained
+        continue-on-error: true
+        run: npm run devai:ci-verify
+
+  backend-db-api:
+    name: DEVAI backend DB and API evidence
+    needs: evidence-policy
+    if: ${{ needs.evidence-policy.outputs.retained != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     services:
       postgres:
         image: postgis/postgis:16-3.5
@@ -52,7 +85,158 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     env:
-      CI: 'true'
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/sgp_ci
+      SGP_DB_ALIGNMENT_PHASE: full_closure
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install registry-only workspace
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: npm ci
+      - name: Run database and API evidence
+        run: |
+          npm run test:db
+          npm run test:e2e -- --runInBand
+      - name: Upload DB and API evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: devai-backend-db-api-${{ github.run_id }}
+          path: |
+            .devai/state/evidence-chain.json
+            test-results
+          if-no-files-found: warn
+
+  backend-coverage:
+    name: DEVAI backend coverage evidence
+    needs: evidence-policy
+    if: ${{ needs.evidence-policy.outputs.retained != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sgp_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d sgp_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/sgp_ci
+      SGP_DB_ALIGNMENT_PHASE: full_closure
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install registry-only workspace
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: npm ci
+      - name: Run bounded parallel backend coverage
+        run: npm run test:coverage -- --maxWorkers=2
+      - name: Upload backend coverage evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: devai-backend-coverage-${{ github.run_id }}
+          path: backend/coverage
+          if-no-files-found: error
+
+  frontend:
+    name: DEVAI frontend evidence
+    needs: evidence-policy
+    if: ${{ needs.evidence-policy.outputs.retained != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install registry-only workspace
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: npm ci
+      - name: Install Chromium
+        run: npm --workspace frontend exec -- playwright install --with-deps chromium
+      - name: Run browser and frontend coverage evidence
+        run: |
+          npm run test:frontend:e2e
+          npm run test:frontend:coverage
+      - name: Upload frontend evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: devai-frontend-${{ github.run_id }}
+          path: |
+            frontend/coverage
+            playwright-report
+            test-results
+          if-no-files-found: warn
+
+  mutation-build:
+    name: DEVAI mutation and build evidence
+    needs: evidence-policy
+    if: ${{ needs.evidence-policy.outputs.retained != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install registry-only workspace
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: npm ci
+      - name: Run mutation and build evidence
+        run: |
+          npm run test:mutation
+          npm run build
+
+  refresh-evidence:
+    name: DEVAI refresh scorecard evidence
+    needs:
+      - evidence-policy
+      - backend-db-api
+      - backend-coverage
+      - frontend
+      - mutation-build
+    if: >-
+      ${{ always() && needs.evidence-policy.outputs.retained != 'true' &&
+          needs.backend-db-api.result == 'success' &&
+          needs.backend-coverage.result == 'success' &&
+          needs.frontend.result == 'success' &&
+          needs.mutation-build.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sgp_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d sgp_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/sgp_ci
       SGP_DB_ALIGNMENT_PHASE: full_closure
     steps:
@@ -61,52 +245,74 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Install registry-only workspace
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
         run: npm ci
-      - name: Verify retained DEVAI evidence
-        id: retained
-        continue-on-error: true
-        run: npm run devai:ci-verify
-      - name: Install Chromium for fail-closed test tail
-        if: steps.retained.outcome != 'success'
-        run: npm --workspace frontend exec -- playwright install --with-deps chromium
-      - name: Run full fail-closed test tail
-        if: steps.retained.outcome != 'success'
-        run: |
-          npm run test:db
-          npm run test:e2e -- --runInBand
-          npm run test:frontend:e2e
-          npm run test:coverage -- --runInBand
-          npm run test:frontend:coverage
-          npm run test:mutation
-          npm run build
       - name: Refresh DEVAI inventory, sensors and scorecard
-        if: steps.retained.outcome != 'success'
         run: |
           npm run devai:inventory
           npm run devai:sensors
           npm run devai:scorecard
       - name: Verify refreshed DEVAI evidence
-        if: steps.retained.outcome != 'success'
         run: npm run devai:ci-verify
-      - name: Upload DEVAI and test evidence
+      - name: Upload DEVAI state and SBOM
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: devai-evidence-${{ github.run_id }}
+          name: devai-control-plane-${{ github.run_id }}
           path: |
             .devai/state/evidence-chain.json
             .devai/state/inventory
             .devai/state/scorecards
             .devai/state/sensor-readings
             .devai/state/sensors
-            backend/coverage
-            frontend/coverage
-            playwright-report
-            test-results
             docs/gov/evidence/sbom.cdx.json
           if-no-files-found: error
+
+  evidence-gate:
+    name: DEVAI evidence gate
+    needs:
+      - evidence-policy
+      - backend-db-api
+      - backend-coverage
+      - frontend
+      - mutation-build
+      - refresh-evidence
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Enforce retained or refreshed evidence
+        env:
+          RETAINED: ${{ needs.evidence-policy.outputs.retained }}
+          POLICY_RESULT: ${{ needs.evidence-policy.result }}
+          BACKEND_DB_API_RESULT: ${{ needs.backend-db-api.result }}
+          BACKEND_COVERAGE_RESULT: ${{ needs.backend-coverage.result }}
+          FRONTEND_RESULT: ${{ needs.frontend.result }}
+          MUTATION_BUILD_RESULT: ${{ needs.mutation-build.result }}
+          REFRESH_RESULT: ${{ needs.refresh-evidence.result }}
+        run: |
+          set -euo pipefail
+          if [ "$POLICY_RESULT" != success ]; then
+            echo "::error title=DEVAI evidence gate::evidence policy job failed"
+            exit 1
+          fi
+          if [ "$RETAINED" = true ]; then
+            echo "Current source-bound DEVAI evidence is valid."
+            exit 0
+          fi
+          for result in \
+            "$BACKEND_DB_API_RESULT" \
+            "$BACKEND_COVERAGE_RESULT" \
+            "$FRONTEND_RESULT" \
+            "$MUTATION_BUILD_RESULT" \
+            "$REFRESH_RESULT"; do
+            if [ "$result" != success ]; then
+              echo "::error title=DEVAI evidence gate::fail-closed evidence tier result: $result"
+              exit 1
+            fi
+          done
+          echo "All fail-closed evidence tiers passed and the DEVAI scorecard was refreshed."
