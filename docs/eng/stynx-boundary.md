@@ -17,7 +17,7 @@ eight runtimes in `docs/gov/generated/runtime-topology.json`.
 | Health                     | generic liveness/readiness contributors                  | eight-runtime topology, dependency checks and SGP response contracts                     |
 | Rate limit and idempotency | reusable mechanisms                                      | route policy, tenant-scoped persistence, response replay contract and operational limits |
 | i18n                       | locale/message primitives                                | Brazilian Portuguese product copy and regulatory vocabulary                              |
-| Angular                    | auth, tenancy, session, storage, UI and SDK providers    | Admin/Portal routes, permission UX, generated clients and product journeys               |
+| Angular                    | auth, tenancy, i18n and storage providers                | Admin/Portal routes, permission UX, generated clients and product journeys               |
 
 Backend SGP-specific composition belongs under **backend/src/stynx/**. Frontend
 SGP-specific composition belongs under `frontend/src/app/shared/`. Domain code
@@ -31,3 +31,8 @@ and repaired without weakening the contract.
 
 DEVAI is a governance observer of this boundary. Its configuration maps the
 plant and sensors but does not become product authority.
+
+Direct STYNX dependencies are limited to packages whose public contracts SGP
+imports. Profile and active-session providers remain deferred under
+`STYNX-FE-001` and `STYNX-FE-002`; declaring their packages before their SGP API
+contracts exist would not constitute adoption.

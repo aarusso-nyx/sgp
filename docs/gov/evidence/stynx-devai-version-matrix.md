@@ -1,32 +1,32 @@
 # STYNX and DEVAI Version Matrix
 
-Captured: 2026-07-11 at baseline SHA `9364dea6b4f6b25da98497bacab1c82327184d49`
+Captured: 2026-07-12 for Wave 7 closeout.
 
 Owner: SGP platform maintainers. Updates are matrix changes: query GitHub
 Packages with the configured read-only token, update manifests and the root
 lockfile together, then run registry, type, build, consumer-contract, and
 concern-specific parity gates. Wave 0 did not change dependencies.
 
-| Package family                                                    | Declared range | Lockfile versions | Latest published | Compatibility evidence                                                       |
-| ----------------------------------------------------------------- | -------------- | ----------------- | ---------------- | ---------------------------------------------------------------------------- |
-| backend core: audit, auth, backend, contracts                     | `^1.0.0`       | `1.0.2`           | `1.0.3`          | backend auth/audit consumer tests                                            |
-| backend base: core, data, health, i18n, logging, sessions         | `^1.0.0`       | `1.0.1`           | `1.0.2`          | future runtime factory plus health/context probes                            |
-| backend policy: idempotency, privacy, ratelimit, storage, tenancy | `^1.0.0`       | `1.0.2`           | `1.0.3`          | concern parity, DB/RLS and storage tests                                     |
-| feature flags                                                     | `^0.1.0`       | `0.1.0`           | `0.2.2`          | system-parameter feature-flag tests                                          |
-| integration adapter                                               | `^0.1.0`       | `0.1.0`           | `0.2.2`          | deterministic integration worker tests                                       |
-| PDF                                                               | `^0.1.0`       | `0.1.0`           | `1.0.2`          | PDF and PDF/A golden tests                                                   |
-| PDF/A and VeraPDF adapter                                         | `^0.1.0`       | `0.1.0`           | `0.2.2`          | conformance and telemetry tests                                              |
-| signature                                                         | `^0.1.0`       | `0.1.0`           | `0.2.2`          | XML/PDF signature goldens and signer tests                                   |
-| Angular core/auth/profile/sessions/storage/trash/UI               | `^1.0.0`       | `1.0.2`           | `1.0.3`          | Admin and Portal provider/journey tests                                      |
-| Angular i18n and SDK                                              | `^1.0.0`       | `1.0.1`           | `1.0.2`          | frontend i18n and generated-client gates                                     |
-| Angular tenancy                                                   | `^0.1.0`       | `0.1.2`           | `0.1.3`          | tenant switch and guarded-route tests                                        |
-| `@devai-nyx/cli`                                                  | exact `0.2.1`  | `0.2.1`           | `0.2.1`          | Wave 1 doctor, spec, inventory, sensors, scorecard and evidence-chain health |
+| Package family                              | Declared range | Lockfile versions | Latest published | Compatibility evidence                                                       |
+| ------------------------------------------- | -------------- | ----------------- | ---------------- | ---------------------------------------------------------------------------- |
+| backend contracts: auth, backend, contracts | `^1.0.0`       | `1.0.2`           | Wave 0 snapshot  | backend auth, authorization and adapter tests                                |
+| backend runtime: core, health, logging      | `^1.0.0`       | `1.0.1`           | Wave 0 snapshot  | runtime factory and health/context probes                                    |
+| feature flags                               | `^0.1.0`       | `0.1.0`           | `0.2.2`          | system-parameter feature-flag tests                                          |
+| integration adapter                         | `^0.1.0`       | `0.1.0`           | `0.2.2`          | deterministic integration worker tests                                       |
+| PDF                                         | `^0.1.0`       | `0.1.0`           | `1.0.2`          | PDF and PDF/A golden tests                                                   |
+| PDF/A and VeraPDF adapter                   | `^0.1.0`       | `0.1.0`           | `0.2.2`          | conformance and telemetry tests                                              |
+| signature                                   | `^0.1.0`       | `0.1.0`           | `0.2.2`          | XML/PDF signature goldens and signer tests                                   |
+| Angular core/auth/storage                   | `^1.0.0`       | `1.0.2`           | Wave 0 snapshot  | Admin and Portal provider/journey tests                                      |
+| Angular i18n                                | `^1.0.0`       | `1.0.1`           | Wave 0 snapshot  | frontend i18n gates                                                          |
+| Angular tenancy                             | `^0.1.0`       | `0.1.2`           | `0.1.3`          | tenant switch and guarded-route tests                                        |
+| `@devai-nyx/cli`                            | exact `0.2.1`  | `0.2.1`           | `0.2.1`          | Wave 1 doctor, spec, inventory, sensors, scorecard and evidence-chain health |
 
-All 31 declared STYNX packages and the DEVAI CLI returned a published version
-from GitHub Packages with `NODE_AUTH_TOKEN` configured. No credential value was
-printed. The sibling STYNX checkout at `f2a6d5891a765e25c4aff89ced7b039d9a433cca`
-was inspected only as non-authoritative context and was dirty on
-`fix/publish-token-fallback`.
+Wave 0 verified every then-declared package through GitHub Packages. Wave 7
+removed direct declarations with no SGP import: backend audit, data, i18n,
+idempotency, privacy, ratelimit, sessions, storage and tenancy packages, plus
+frontend profile, sessions, trash, UI and SDK packages. Shared contracts remain
+consumed through the imported aggregate/adapters; no local artifact replaced a
+removed declaration.
 
 The root lockfile SHA-256 is
-`a8acd1a577d124cb4ce7e900fb346e0e0dca779f3f6cec47d1864c484914500a`.
+`b5dbcaada07548742cceb1e1bd2217b7ca26bb415d0477398cdaebfc0e0bb6bd`.

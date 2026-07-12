@@ -1,0 +1,112 @@
+name: DEVAI Evidence
+
+on:
+  workflow_call:
+  pull_request:
+    paths:
+      - '.devai/**'
+      - '.github/workflows/devai-evidence.yml'
+      - 'backend/**'
+      - 'database/**'
+      - 'docs/eng/**'
+      - 'docs/gov/**'
+      - 'frontend/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/**'
+      - 'tests/**'
+  push:
+    branches: [main, develop]
+    paths:
+      - '.devai/**'
+      - '.github/workflows/devai-evidence.yml'
+      - 'backend/**'
+      - 'database/**'
+      - 'docs/eng/**'
+      - 'docs/gov/**'
+      - 'frontend/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/**'
+      - 'tests/**'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-gate:
+    name: DEVAI evidence gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sgp_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d sgp_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      CI: 'true'
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/sgp_ci
+      SGP_DB_ALIGNMENT_PHASE: full_closure
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install registry-only workspace
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: npm ci
+      - name: Verify retained DEVAI evidence
+        id: retained
+        continue-on-error: true
+        run: npm run devai:ci-verify
+      - name: Install Chromium for fail-closed test tail
+        if: steps.retained.outcome != 'success'
+        run: npm --workspace frontend exec -- playwright install --with-deps chromium
+      - name: Run full fail-closed test tail
+        if: steps.retained.outcome != 'success'
+        run: |
+          npm run test:db
+          npm run test:e2e -- --runInBand
+          npm run test:frontend:e2e
+          npm run test:coverage -- --runInBand
+          npm run test:frontend:coverage
+          npm run test:mutation
+          npm run build
+      - name: Refresh DEVAI inventory, sensors and scorecard
+        if: steps.retained.outcome != 'success'
+        run: |
+          npm run devai:inventory
+          npm run devai:sensors
+          npm run devai:scorecard
+      - name: Verify refreshed DEVAI evidence
+        if: steps.retained.outcome != 'success'
+        run: npm run devai:ci-verify
+      - name: Upload DEVAI and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: devai-evidence-${{ github.run_id }}
+          path: |
+            .devai/state/evidence-chain.json
+            .devai/state/inventory
+            .devai/state/scorecards
+            .devai/state/sensor-readings
+            .devai/state/sensors
+            backend/coverage
+            frontend/coverage
+            playwright-report
+            test-results
+            docs/gov/evidence/sbom.cdx.json
+          if-no-files-found: error

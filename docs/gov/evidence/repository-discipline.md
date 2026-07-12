@@ -1,6 +1,6 @@
 # Repository Discipline Evidence
 
-Status: retained evidence for the 2026-05-08 QA lift.
+Status: retained evidence, reverified 2026-07-12 for Wave 7.
 
 ## Ownership
 
@@ -15,6 +15,10 @@ Status: retained evidence for the 2026-05-08 QA lift.
 - The required check set is expected to include workspace/source gates, database
   alignment, dependency/security review, ADR linkage, release-impact evidence,
   and deploy plan jobs before publication to `main`.
+- The 2026-07-12 read-only protection audit found seven current required
+  contexts. `DEVAI evidence gate` is intentionally not added until its first
+  pull-request run succeeds; changing protection before that would violate the
+  fail-closed rollout sequence.
 
 ## Dependency And Metadata Controls
 
@@ -38,6 +42,10 @@ Status: retained evidence for the 2026-05-08 QA lift.
   release-impacting changes.
 - `.devai/config/project.json` and `scripts/lib/workspace-commands.mjs` retain
   `npm run test:types` and `npm run test:mutation` as hard-fail gates.
+- `.github/workflows/devai-evidence.yml` is reusable through `workflow_call` and
+  runs the full DB, API, browser, coverage, mutation and build tail whenever
+  retained evidence is absent or stale. It uploads DEVAI state and normal test
+  artifacts on every outcome.
 
 ## Required Local Gate List
 

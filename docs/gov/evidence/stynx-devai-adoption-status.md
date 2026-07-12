@@ -2,7 +2,8 @@
 
 Date: 2026-07-12
 
-Status: Wave 6 complete; Wave 7 CI and release closeout remain.
+Status: Wave 7 local closeout complete; pull-request checks and protection
+promotion await publication.
 
 ## Adoption state
 
@@ -60,10 +61,22 @@ tracked evidence chain.
   duration. Security sensors use `npm audit --omit=dev --audit-level=high`;
   coverage and deep-runtime evidence are recorded separately.
 
-## Remaining boundary
+## Wave 7 closeout
 
-Wave 7 remains responsible for fresh token-backed installation, CI/reusable
-evidence enforcement, PR checks, branch-protection evidence, unused dependency
-review, SBOM/provenance refresh and final closeout. The frontend profile and
-active-session product-contract gaps remain planned under `STYNX-FE-001` and
-`STYNX-FE-002`.
+The repository now has a reusable, fail-closed `DEVAI evidence gate`, current
+`.devai/**` path filters, DEVAI/test artifact uploads, a repository-local
+verifier, a CycloneDX SBOM and registry-only operator instructions. Fourteen
+unused STYNX direct dependencies were removed without removing active adapter
+contracts. The frontend profile and active-session product-contract gaps remain
+planned under `STYNX-FE-001` and `STYNX-FE-002`.
+
+The retained Wave 6 scorecard is deliberately stale relative to the Wave 7
+candidate. The local verifier rejects it, proving the fail-closed branch. CI
+will therefore run the complete DB, API, browser, backend/frontend coverage,
+mutation and build tail, regenerate inventory/sensors/scorecard for the checked
+out SHA, and verify again.
+
+Read-only branch-protection inspection on 2026-07-12 found the existing seven
+required checks intact. The new DEVAI context must not be added until a real PR
+run succeeds. No branch-protection write, merge, deployment or rollback was
+performed.

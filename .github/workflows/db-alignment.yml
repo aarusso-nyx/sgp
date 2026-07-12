@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/db-alignment.yml'
+      - '.devai/**'
       - 'package.json'
       - 'package-lock.json'
       - 'stryker.conf.cjs'
@@ -19,6 +20,7 @@ on:
       - develop
     paths:
       - '.github/workflows/db-alignment.yml'
+      - '.devai/**'
       - 'package.json'
       - 'package-lock.json'
       - 'stryker.conf.cjs'

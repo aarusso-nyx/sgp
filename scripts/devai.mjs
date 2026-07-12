@@ -245,6 +245,12 @@ const handlers = {
   },
   sensors,
   scorecard,
+  'ci-verify': () =>
+    spawnSync(process.execPath, ['scripts/verify-devai-evidence.mjs', ...extra], {
+      cwd: root,
+      stdio: 'inherit',
+      env: process.env,
+    }).status ?? 1,
   record: () => run(['record-run', ...extra]).code,
   evidence: () => run(['evidence-emit', ...extra]).code,
   health: () => run(['evidence-verify', '--human', ...extra]).code,

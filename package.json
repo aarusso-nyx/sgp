@@ -97,6 +97,7 @@
     "devai:prepare": "node scripts/run.mjs devai prepare",
     "devai:sensors": "node scripts/run.mjs devai sensors",
     "devai:scorecard": "node scripts/run.mjs devai scorecard",
+    "devai:ci-verify": "node scripts/run.mjs devai ci-verify",
     "devai:record": "node scripts/run.mjs devai record",
     "devai:evidence": "node scripts/run.mjs devai evidence",
     "devai:health": "node scripts/run.mjs devai health",
