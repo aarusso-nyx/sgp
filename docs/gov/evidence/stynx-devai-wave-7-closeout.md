@@ -18,8 +18,12 @@ The atomic adoption sequence on `codex/stynx-devai-adoption` is:
 | Angular           | `0d83998b`, `8f1be2f9`             | Admin/Portal composition and registered follow-ups |
 | Evidence          | `c5aaf82d`                         | 44 PASS plus one DEVAI structural N/A              |
 
-The Wave 7 commit is the tip of this branch when published; GitHub is the
-authority for its immutable full SHA.
+The Wave 7 implementation commit is `1b690282`. A detached worktree at that
+commit completed token-backed `npm ci` from GitHub Packages, installed 1,614
+packages from lockfile version 3, and passed the registry-dependency boundary
+check. The earlier `npm ci --prefix <worktree>` probe was rejected by npm because
+`--prefix` changes workspace-root identity; rerunning from the detached
+checkout's working directory matched CI semantics and passed.
 
 ## Package and supply-chain disposition
 
