@@ -29,6 +29,8 @@ SDKs require generic profile/preferences and multi-session list/revoke
 endpoints that SGP does not expose. Enabling them would invent routes or create
 a parallel session/profile model. Existing SGP profile and Cognito session
 behavior remains authoritative until matching product contracts are accepted.
+The gaps are registered as `STYNX-FE-001` and `STYNX-FE-002` in
+`docs/gov/audit/stynx-frontend-follow-ups.md`.
 
 ## Proof
 
