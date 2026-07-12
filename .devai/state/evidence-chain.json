@@ -1,4 +1,43 @@
 {
-  "head": null,
-  "records": []
+  "head": "73b0032320697914c6d634b0d61cfe7796ee6b6ca86529d47979174b9d8f32be",
+  "records": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "EV-af5a0e3b9baf1776",
+      "timestamp": "2026-07-12T04:30:04.603Z",
+      "actor": "devai-record-run",
+      "actor_role": "harness",
+      "action": "test-run.db",
+      "status": "completed",
+      "context": {
+        "repo_root": "/Users/aarusso/Development/stech/sgp",
+        "git": {
+          "head_sha": "17a7d56900e917c38306e7bb01cb96dc1edaacaf",
+          "dirty_files": [
+            ".devai/state/scorecards/current.json",
+            ".devai/state/sensor-readings/SR-08120541773608cf.json",
+            ".devai/state/sensor-readings/SR-45f5aabbf4c3fa2b.json",
+            ".devai/state/sensor-readings/SR-8d0f1a8be43bded7.json",
+            ".devai/state/sensor-readings/SR-a4f1b40153dbb604.json",
+            ".devai/state/sensor-readings/SR-afaf2e154bec9b36.json",
+            "backend/src/database/database.module.ts",
+            "backend/src/database/database.service.ts",
+            "docs/gov/evidence/stynx-devai-adoption-inventory.md",
+            "scripts/lib/governance/validate.mjs",
+            "backend/src/stynx/sgp-db-session-context.applier.ts",
+            "backend/src/stynx/sgp-stynx-data.module.spec.ts",
+            "backend/src/stynx/sgp-stynx-data.module.ts",
+            "backend/tsconfig.build.tsbuildinfo",
+            "docs/gov/evidence/stynx-data-auth-tenancy-wave-3.md"
+          ]
+        }
+      },
+      "artifacts": [],
+      "notes": [
+        "test-result id: TR-01KXA9DZYX6CKJEYKXF7QX8CHA; scope: wave-3-data-context; tier: db"
+      ],
+      "previous_run_hash": null,
+      "manifest_hash": "73b0032320697914c6d634b0d61cfe7796ee6b6ca86529d47979174b9d8f32be"
+    }
+  ]
 }

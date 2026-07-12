@@ -6,14 +6,14 @@
     "kind": "contract_validation",
     "version": "1.0.0"
   },
-  "timestamp": "2026-07-12T01:59:58.305Z",
+  "timestamp": "2026-07-12T04:29:43.035Z",
   "status": "pass",
   "deterministic": true,
   "command": "npm run check:registry-dependencies",
   "command_hash": "17ec5c17acd392fb4713774a02becaef3e0ea5613b8ff6f24a95fe471f44568c",
   "tier": "L2",
   "exit_code": 0,
-  "duration_ms": 331,
+  "duration_ms": 280,
   "out_head": "\n> sgp@0.1.0 check:registry-dependencies\n> node scripts/run.mjs check registry-dependencies\n\n[registry-dependencies] PASS: no local or legacy STYNX/DEVAI dependencies found.\n",
   "err_head": ""
 }
