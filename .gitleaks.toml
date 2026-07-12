@@ -1,0 +1,9 @@
+title = "SGP gitleaks configuration"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Wave 0 baseline Git SHA misclassified as a Sourcegraph token"
+regexTarget = "match"
+regexes = ['''9364dea6b4f6b25da98497bacab1c82327184d49''']

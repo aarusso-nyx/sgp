@@ -1,3 +1,11 @@
+---
+controllers: []
+migrations: []
+infra: []
+runbooks:
+  - docs/eng/stynx-boundary.md
+---
+
 # ADR-035: Cognito Sessions and General UUID Tenant Identity
 
 Status: Accepted

@@ -1,3 +1,12 @@
+---
+controllers: []
+migrations: []
+infra: []
+runbooks:
+  - docs/eng/stynx-boundary.md
+  - docs/user/dependency-management.md
+---
+
 # ADR-034: STYNX and DEVAI Adoption Boundary
 
 Status: Accepted
