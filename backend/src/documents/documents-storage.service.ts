@@ -13,6 +13,13 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import type {
+  ObjectStorageService,
+  PresignedDownloadRequest,
+  PresignedDownloadResponse,
+  PresignedUploadRequest,
+  PresignedUploadResponse,
+} from '@stynx-nyx/contracts';
 
 import { currentRequestAbortOptions } from '../common/http/request-abort-signal';
 
@@ -46,7 +53,7 @@ interface StorageRuntimeConfig {
 }
 
 @Injectable()
-export class DocumentsStorageService {
+export class DocumentsStorageService implements ObjectStorageService {
   private client?: S3Client;
 
   constructor(private readonly configService: ConfigService) {}
@@ -77,6 +84,41 @@ export class DocumentsStorageService {
 
   configured(): boolean {
     return Boolean(this.storageConfig());
+  }
+
+  async presignUpload(
+    input: PresignedUploadRequest,
+  ): Promise<PresignedUploadResponse> {
+    const result = await this.createPresignedUpload({
+      storageKey: input.key,
+      contentType: input.contentType ?? 'application/octet-stream',
+    });
+    return {
+      method: 'PUT',
+      url: result.url,
+      headers: result.requiredHeaders,
+      expiresInSeconds: this.uploadExpiresInSeconds,
+    };
+  }
+
+  async presignDownload(
+    input: PresignedDownloadRequest,
+  ): Promise<PresignedDownloadResponse> {
+    const result = await this.createPresignedDownload(input.key);
+    return {
+      url: result.url,
+      expiresInSeconds: this.downloadExpiresInSeconds,
+    };
+  }
+
+  async exists(key: string): Promise<boolean> {
+    try {
+      await this.ensureObjectExists(key);
+      return true;
+    } catch (error) {
+      if (error instanceof NotFoundException) return false;
+      throw error;
+    }
   }
 
   async createPresignedUpload(input: {

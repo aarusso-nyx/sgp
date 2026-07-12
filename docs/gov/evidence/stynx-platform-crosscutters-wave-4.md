@@ -20,8 +20,16 @@ retention mutation.
 Focused evidence covers sink binding, envelope mapping, authorization-header
 redaction, mutation fallback, explicit mutation audit and missing-audit failure.
 
+## Storage slice
+
+`StynxStorageModule` resolves `STYNX_OBJECT_STORAGE` to
+`DocumentsStorageService`. The service implements the STYNX
+`ObjectStorageService` contract while preserving SGP object-key construction,
+tenant authorization, configured presign TTLs, content-type headers, checksum
+metadata and request-abort behavior. No real provider call, deletion or
+retention mutation is part of the proof.
+
 ## Remaining slices
 
-- storage;
 - idempotency and rate limits;
 - logging and privacy.
