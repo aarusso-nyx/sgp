@@ -179,6 +179,35 @@ function validateDevaiConfig() {
   for (const command of hardFailGateCommands) {
     record(`devai-hard-fail:${command}`, hardFailCommands.has(command), command);
   }
+
+  const packageJson = readJson('package.json');
+  const devaiScripts = [
+    'devai:doctor',
+    'devai:spec',
+    'devai:inventory',
+    'devai:pack',
+    'devai:prepare',
+    'devai:sensors',
+    'devai:scorecard',
+    'devai:record',
+    'devai:evidence',
+    'devai:health',
+  ];
+  record(
+    'devai:registry-cli',
+    packageJson.devDependencies?.['@devai-nyx/cli'] === project.devai_version,
+    `@devai-nyx/cli@${packageJson.devDependencies?.['@devai-nyx/cli'] ?? '<missing>'}`,
+  );
+  record(
+    'devai:executable-surface',
+    devaiScripts.every((name) => packageJson.scripts?.[name]?.includes('scripts/run.mjs devai')),
+    devaiScripts.join(', '),
+  );
+  record(
+    'devai:classification',
+    project.project_type === 'runtime-host' && project.repo?.kind === 'application',
+    `${project.project_type}/${project.repo?.kind}`,
+  );
 }
 
 function validateCanonicalRootScripts() {

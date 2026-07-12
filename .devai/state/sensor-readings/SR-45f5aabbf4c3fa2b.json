@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-45f5aabbf4c3fa2b",
+  "sensor": {
+    "name": "sgp-typecheck",
+    "kind": "type_check",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T01:59:57.974Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm run typecheck",
+  "command_hash": "982c1455e5e73c8ccab2d70a550c972e2841a0582596e26a7fcc53b80e14aa14",
+  "tier": "L0",
+  "exit_code": 0,
+  "duration_ms": 10078,
+  "out_head": "\n> sgp@0.1.0 typecheck\n> node scripts/run.mjs typecheck\n\n\n> frontend@0.0.0 typecheck\n> tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.portal.app.json && tsc --noEmit -p tsconfig.spec.json && tsc --noEmit -p tsconfig.portal.spec.json\n\n\n> backend@0.0.1 typecheck\n> tsc --noEmit -p tsconfig.build.json\n\n",
+  "err_head": ""
+}

@@ -23,6 +23,9 @@ From the repository root:
 - `node scripts/run.mjs governance check`
 - `node scripts/run.mjs health --json`
 - `node scripts/run.mjs deploy --target stage --stack all --dry-run`
+- `node scripts/run.mjs devai inventory`
+- `node scripts/run.mjs devai sensors`
+- `node scripts/run.mjs devai scorecard`
 - `node scripts/run.mjs clean --dry-run`
 
 ## Canonical npm Entry Points
@@ -34,6 +37,7 @@ From the repository root:
 - Audit helpers: `npm run audit:schema`, `npm run audit:api`, `npm run audit:fr`, `npm run audit:tests`, `npm run audit:hotspots -- --baseline <sha>`, `npm run audit:backlog -- --closure <path>`, `npm run audit:pvd`, `npm run audit:all`
 - Database: `npm run db -- help`, `npm run db:migrate`, `npm run db:seed`, `npm run db:smoke`
 - Governance/evidence: `npm run api:alignment:sync`, `npm run api:alignment:check -- --json`, `npm run api:operation:check`, `npm run api:spec:check`, `npm run db:alignment:check -- --json`, `npm run db:fk-coverage:check`, `npm run db:push:guard`, `npm run health:json`, `npm run governance:check`, `npm run evidence:check`. DB alignment includes RLS, tenant coverage, SECURITY DEFINER search paths, PII cipher coverage, and runtime grants.
+- DEVAI: `npm run devai:doctor`, `npm run devai:spec`, `npm run devai:inventory`, `npm run devai:pack`, `npm run devai:prepare`, `npm run devai:sensors`, `npm run devai:scorecard`, `npm run devai:record`, `npm run devai:evidence`, `npm run devai:health`.
 - Operations: `npm run qa:bootstrap`, `npm run qa:smoke:urls`, `npm run deploy -- --dry-run`, `npm run clean`
 - Generators: `node scripts/generate.mjs openapi-client`, `node scripts/generate.mjs permissions`
 

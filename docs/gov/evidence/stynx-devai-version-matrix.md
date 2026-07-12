@@ -7,20 +7,20 @@ Packages with the configured read-only token, update manifests and the root
 lockfile together, then run registry, type, build, consumer-contract, and
 concern-specific parity gates. Wave 0 did not change dependencies.
 
-| Package family                                                    | Declared range | Lockfile versions | Latest published | Compatibility evidence                            |
-| ----------------------------------------------------------------- | -------------- | ----------------- | ---------------- | ------------------------------------------------- |
-| backend core: audit, auth, backend, contracts                     | `^1.0.0`       | `1.0.2`           | `1.0.3`          | backend auth/audit consumer tests                 |
-| backend base: core, data, health, i18n, logging, sessions         | `^1.0.0`       | `1.0.1`           | `1.0.2`          | future runtime factory plus health/context probes |
-| backend policy: idempotency, privacy, ratelimit, storage, tenancy | `^1.0.0`       | `1.0.2`           | `1.0.3`          | concern parity, DB/RLS and storage tests          |
-| feature flags                                                     | `^0.1.0`       | `0.1.0`           | `0.2.2`          | system-parameter feature-flag tests               |
-| integration adapter                                               | `^0.1.0`       | `0.1.0`           | `0.2.2`          | deterministic integration worker tests            |
-| PDF                                                               | `^0.1.0`       | `0.1.0`           | `1.0.2`          | PDF and PDF/A golden tests                        |
-| PDF/A and VeraPDF adapter                                         | `^0.1.0`       | `0.1.0`           | `0.2.2`          | conformance and telemetry tests                   |
-| signature                                                         | `^0.1.0`       | `0.1.0`           | `0.2.2`          | XML/PDF signature goldens and signer tests        |
-| Angular core/auth/profile/sessions/storage/trash/UI               | `^1.0.0`       | `1.0.2`           | `1.0.3`          | Admin and Portal provider/journey tests           |
-| Angular i18n and SDK                                              | `^1.0.0`       | `1.0.1`           | `1.0.2`          | frontend i18n and generated-client gates          |
-| Angular tenancy                                                   | `^0.1.0`       | `0.1.2`           | `0.1.3`          | tenant switch and guarded-route tests             |
-| `@devai-nyx/cli`                                                  | not declared   | absent            | `0.2.1`          | Wave 1 doctor, spec, inventory and scorecard      |
+| Package family                                                    | Declared range | Lockfile versions | Latest published | Compatibility evidence                                                       |
+| ----------------------------------------------------------------- | -------------- | ----------------- | ---------------- | ---------------------------------------------------------------------------- |
+| backend core: audit, auth, backend, contracts                     | `^1.0.0`       | `1.0.2`           | `1.0.3`          | backend auth/audit consumer tests                                            |
+| backend base: core, data, health, i18n, logging, sessions         | `^1.0.0`       | `1.0.1`           | `1.0.2`          | future runtime factory plus health/context probes                            |
+| backend policy: idempotency, privacy, ratelimit, storage, tenancy | `^1.0.0`       | `1.0.2`           | `1.0.3`          | concern parity, DB/RLS and storage tests                                     |
+| feature flags                                                     | `^0.1.0`       | `0.1.0`           | `0.2.2`          | system-parameter feature-flag tests                                          |
+| integration adapter                                               | `^0.1.0`       | `0.1.0`           | `0.2.2`          | deterministic integration worker tests                                       |
+| PDF                                                               | `^0.1.0`       | `0.1.0`           | `1.0.2`          | PDF and PDF/A golden tests                                                   |
+| PDF/A and VeraPDF adapter                                         | `^0.1.0`       | `0.1.0`           | `0.2.2`          | conformance and telemetry tests                                              |
+| signature                                                         | `^0.1.0`       | `0.1.0`           | `0.2.2`          | XML/PDF signature goldens and signer tests                                   |
+| Angular core/auth/profile/sessions/storage/trash/UI               | `^1.0.0`       | `1.0.2`           | `1.0.3`          | Admin and Portal provider/journey tests                                      |
+| Angular i18n and SDK                                              | `^1.0.0`       | `1.0.1`           | `1.0.2`          | frontend i18n and generated-client gates                                     |
+| Angular tenancy                                                   | `^0.1.0`       | `0.1.2`           | `0.1.3`          | tenant switch and guarded-route tests                                        |
+| `@devai-nyx/cli`                                                  | exact `0.2.1`  | `0.2.1`           | `0.2.1`          | Wave 1 doctor, spec, inventory, sensors, scorecard and evidence-chain health |
 
 All 31 declared STYNX packages and the DEVAI CLI returned a published version
 from GitHub Packages with `NODE_AUTH_TOKEN` configured. No credential value was
