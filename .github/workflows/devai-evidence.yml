@@ -143,6 +143,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
         run: npm ci
+      - name: Bootstrap canonical coverage database
+        run: npm run db:smoke
       - name: Run bounded parallel backend coverage
         run: npm run test:coverage -- --maxWorkers=2
       - name: Upload backend coverage evidence

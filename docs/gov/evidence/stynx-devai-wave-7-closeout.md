@@ -63,6 +63,9 @@ the scorecard refresh runs only after every applicable tier succeeds; and a
 small aggregate job retains the stable `DEVAI evidence gate` check name.
 Current-ref concurrency cancels superseded runs. Backend coverage remains fully
 gated but uses two bounded Jest workers instead of serial `--runInBand`.
+The isolated coverage tier bootstraps canonical SQL in its own PostgreSQL
+service before Jest runs; database services are job-local and evidence tiers
+must not rely on schema state created by another runner.
 
 ## Scorecard and rollback
 
