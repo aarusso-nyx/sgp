@@ -207,10 +207,7 @@ export class InscricaoService {
   async getPublic(id: string, token: string): Promise<Record<string, unknown>> {
     this.ensureDatabase();
     const rows = await this.database.transaction(async (client) => {
-      await client.query('SELECT set_config($1, $2, true)', [
-        'app.bypass_rls',
-        'true',
-      ]);
+      await this.database.applyPublicLookupContext(client);
       return client.query<PublicInscricaoRow>(
         `
         SELECT
@@ -331,16 +328,7 @@ export class InscricaoService {
     client: PoolClient,
     tenantId: string,
   ): Promise<void> {
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_tenant_id',
-      tenantId,
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_tenant',
-      tenantId,
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_permissions',
+    await this.database.applyTenantMutationContext(client, tenantId, [
       'recrutamento.write',
     ]);
   }

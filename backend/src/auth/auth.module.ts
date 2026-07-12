@@ -1,50 +1,29 @@
 import { Module } from '@nestjs/common';
 import {
-  AuthContextGuard,
-  AuthorizationGuard,
-  STYNX_TOKEN_VERIFIER,
-} from '@stynx-nyx/backend';
-
-import {
   InMemoryQueueTransport,
   type QueueAdapterTransport,
 } from '../common/adapters';
 import { GovBrRelayMockResponder } from '../external/mocks/govbr-relay';
 import { IamModule } from '../iam/iam.module';
+import { SgpStynxIdentityModule } from '../stynx/sgp-stynx-identity.module';
 import { GovBrQueueAdapter } from './govbr/adapters/queue-adapter';
 import { GovBrSignController } from './govbr/sign.controller';
 import { GovBrSignService } from './govbr/sign.service';
 import {
-  normalizeTokenVerifierResult,
   SgpStynxAuthGuard,
   SgpStynxAuthorizationGuard,
 } from './sgp-stynx-auth.guard';
-import { SgpStynxTokenVerifier } from './sgp-stynx-token-verifier.service';
 import { SessionController } from './session/session.controller';
 import { SessionService } from './session/session.service';
 
 const GOVBR_SIGN_QUEUE_TRANSPORT = Symbol('GOVBR_SIGN_QUEUE_TRANSPORT');
+const sgpStynxIdentityModule = SgpStynxIdentityModule.forRoot();
 
 @Module({
-  imports: [IamModule],
+  imports: [IamModule, sgpStynxIdentityModule],
   controllers: [SessionController, GovBrSignController],
   providers: [
     SessionService,
-    SgpStynxTokenVerifier,
-    {
-      provide: STYNX_TOKEN_VERIFIER,
-      useFactory: (verifier: SgpStynxTokenVerifier) => ({
-        verifyAuthorizationHeader: async (
-          value: string | string[] | undefined,
-        ) =>
-          normalizeTokenVerifierResult(
-            await verifier.verifyAuthorizationHeader(value),
-          ),
-      }),
-      inject: [SgpStynxTokenVerifier],
-    },
-    AuthContextGuard,
-    AuthorizationGuard,
     SgpStynxAuthGuard,
     SgpStynxAuthorizationGuard,
     {
@@ -66,9 +45,7 @@ const GOVBR_SIGN_QUEUE_TRANSPORT = Symbol('GOVBR_SIGN_QUEUE_TRANSPORT');
     GovBrSignService,
   ],
   exports: [
-    SgpStynxTokenVerifier,
-    AuthContextGuard,
-    AuthorizationGuard,
+    sgpStynxIdentityModule,
     SgpStynxAuthGuard,
     SgpStynxAuthorizationGuard,
   ],

@@ -76,6 +76,22 @@ export class DatabaseService implements OnModuleDestroy {
     }
   }
 
+  async applyPublicLookupContext(client: PoolClient): Promise<void> {
+    await this.contextApplier.applyPublicLookup(client);
+  }
+
+  async applyTenantMutationContext(
+    client: PoolClient,
+    tenantId: string,
+    permissions: readonly string[],
+  ): Promise<void> {
+    await this.contextApplier.applyTenantMutation(
+      client,
+      tenantId,
+      permissions,
+    );
+  }
+
   async onModuleDestroy(): Promise<void> {
     if (this.pool) {
       await this.pool.end();

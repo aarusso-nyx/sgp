@@ -495,11 +495,6 @@ function validateStynxCompositionBoundary() {
 }
 
 function validateDbSessionContextBoundary() {
-  const retainedRecruitmentCutoverPaths = new Set([
-    'backend/src/recrutamento/avaliacao/nota.service.ts',
-    'backend/src/recrutamento/avaliacao/recurso.service.ts',
-    'backend/src/recrutamento/inscricao/inscricao.service.ts',
-  ]);
   const violations = [];
   const files = listFiles(
     'backend/src',
@@ -507,7 +502,6 @@ function validateDbSessionContextBoundary() {
   ).filter((file) => !file.startsWith('backend/src/stynx/'));
 
   for (const file of files) {
-    if (retainedRecruitmentCutoverPaths.has(file)) continue;
     const content = readFileSync(resolve(repoRoot, file), 'utf8');
     if (/\bset_config\s*\(/i.test(content) || /SET\s+LOCAL\s+row_security/i.test(content)) {
       violations.push(file);
@@ -517,9 +511,7 @@ function validateDbSessionContextBoundary() {
   record(
     'architecture:db-session-context-boundary',
     violations.length === 0,
-    violations.length === 0
-      ? `${files.length} production files scanned; 3 recruitment cutover paths retained`
-      : violations.join('; '),
+    violations.length === 0 ? `${files.length} production files scanned` : violations.join('; '),
   );
 }
 

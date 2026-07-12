@@ -69,10 +69,7 @@ export class NotaService {
   async listPublicByToken(inscricaoId: string, token: string) {
     this.ensureDatabase();
     return this.database.transaction(async (client) => {
-      await client.query('SELECT set_config($1, $2, true)', [
-        'app.bypass_rls',
-        'true',
-      ]);
+      await this.database.applyPublicLookupContext(client);
       const rows = await client.query<QueryResultRow>(
         `
         SELECT

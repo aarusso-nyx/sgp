@@ -33,10 +33,7 @@ export class RecursoService {
   ) {
     this.ensureDatabase();
     return this.database.transaction(async (client) => {
-      await client.query('SELECT set_config($1, $2, true)', [
-        'app.bypass_rls',
-        'true',
-      ]);
+      await this.database.applyPublicLookupContext(client);
       const context = await client.query<{
         tenant_id: string;
         deadline: Date | string | null;
@@ -72,22 +69,11 @@ export class RecursoService {
         throw new UnprocessableEntityException('Resource deadline is closed');
       }
 
-      await client.query('SELECT set_config($1, $2, true)', [
-        'app.bypass_rls',
-        'false',
-      ]);
-      await client.query('SELECT set_config($1, $2, true)', [
-        'app.current_tenant_id',
+      await this.database.applyTenantMutationContext(
+        client,
         contest.tenant_id,
-      ]);
-      await client.query('SELECT set_config($1, $2, true)', [
-        'app.current_tenant',
-        contest.tenant_id,
-      ]);
-      await client.query('SELECT set_config($1, $2, true)', [
-        'app.current_permissions',
-        'recrutamento.write',
-      ]);
+        ['recrutamento.write'],
+      );
 
       const rows = await client.query<RecursoRow>(
         `

@@ -35,6 +35,25 @@ export class SgpDbSessionContextApplier implements DbContextApplier<PoolClient> 
     }
   }
 
+  async applyPublicLookup(client: PoolClient): Promise<void> {
+    await this.applySetting(client, 'app.bypass_rls', 'true');
+  }
+
+  async applyTenantMutation(
+    client: PoolClient,
+    tenantId: string,
+    permissions: readonly string[],
+  ): Promise<void> {
+    await this.applySetting(client, 'app.bypass_rls', 'false');
+    await this.applySetting(client, 'app.current_tenant_id', tenantId);
+    await this.applySetting(client, 'app.current_tenant', tenantId);
+    await this.applySetting(
+      client,
+      'app.current_permissions',
+      permissions.join('\n'),
+    );
+  }
+
   private extraText(context: DbSessionContext, key: string): string {
     const value = context.extras?.[key];
     return typeof value === 'string' ? value : '';
@@ -42,5 +61,13 @@ export class SgpDbSessionContextApplier implements DbContextApplier<PoolClient> 
 
   private extraBoolean(context: DbSessionContext, key: string): string {
     return context.extras?.[key] === true ? 'true' : 'false';
+  }
+
+  private async applySetting(
+    client: PoolClient,
+    name: string,
+    value: string,
+  ): Promise<void> {
+    await client.query('SELECT set_config($1, $2, true)', [name, value]);
   }
 }

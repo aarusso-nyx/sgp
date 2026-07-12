@@ -1,5 +1,5 @@
 {
-  "head": "73b0032320697914c6d634b0d61cfe7796ee6b6ca86529d47979174b9d8f32be",
+  "head": "7362c1936d5ce6d08906a98858aff34b3186eabce7fba0758f4e2cad46bba6e5",
   "records": [
     {
       "schemaVersion": "1.0.0",
@@ -38,6 +38,44 @@
       ],
       "previous_run_hash": null,
       "manifest_hash": "73b0032320697914c6d634b0d61cfe7796ee6b6ca86529d47979174b9d8f32be"
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "EV-5f29585b6fe9c65d",
+      "timestamp": "2026-07-12T05:03:57.959Z",
+      "actor": "devai-record-run",
+      "actor_role": "harness",
+      "action": "test-run.e2e",
+      "status": "completed",
+      "context": {
+        "repo_root": "/Users/aarusso/Development/stech/sgp",
+        "git": {
+          "head_sha": "e9a57511435eec83d89afa17f0b3a64a9b8eff3e",
+          "dirty_files": [
+            "backend/src/auth/auth.module.ts",
+            "backend/src/database/database.service.ts",
+            "backend/src/recrutamento/avaliacao/nota.service.ts",
+            "backend/src/recrutamento/avaliacao/recurso.service.ts",
+            "backend/src/recrutamento/inscricao/inscricao.service.ts",
+            "backend/src/stynx/sgp-db-session-context.applier.ts",
+            "docs/eng/decisions/README.md",
+            "docs/gov/evidence/stynx-data-auth-tenancy-wave-3.md",
+            "docs/gov/evidence/stynx-devai-adoption-inventory.md",
+            "scripts/lib/governance/validate.mjs",
+            "tests/backend/inscricao-public.e2e-spec.ts",
+            "tests/backend/lgpd-dpo-dsar.e2e-spec.ts",
+            "tests/backend/recurso-republica-gabarito.e2e-spec.ts",
+            "backend/src/stynx/sgp-stynx-identity.module.spec.ts",
+            "backend/src/stynx/sgp-stynx-identity.module.ts",
+            "backend/tsconfig.build.tsbuildinfo",
+            "docs/eng/decisions/adr-035-cognito-general-uuid-stynx-identity-adapters.md"
+          ]
+        }
+      },
+      "artifacts": [],
+      "notes": ["test-result id: TR-01KXABESXMECYVDZ0BMMQ1GQP1; scope: wave-3-identity; tier: e2e"],
+      "previous_run_hash": "73b0032320697914c6d634b0d61cfe7796ee6b6ca86529d47979174b9d8f32be",
+      "manifest_hash": "7362c1936d5ce6d08906a98858aff34b3186eabce7fba0758f4e2cad46bba6e5"
     }
   ]
 }

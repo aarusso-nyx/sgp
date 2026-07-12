@@ -2,8 +2,7 @@
 
 Date: 2026-07-12
 
-Status: in progress; data session-context lane complete, tenancy decision
-blocked.
+Status: complete.
 
 ## Data session-context cutover
 
@@ -20,30 +19,27 @@ The adapter preserves the canonical transaction-local contract:
 - no schema or policy ownership moved out of `database/sql/`;
 - no session-wide state can survive pool release.
 
-The governance gate now rejects new `set_config(...)` or `SET LOCAL
-row_security` implementation outside the STYNX adapter boundary. Three existing
-recruitment public-token paths remain explicitly allowlisted until the prompt's
-later critical-context cutover stage; the allowlist cannot grow silently.
+The governance gate rejects `set_config(...)` or `SET LOCAL row_security`
+implementation outside the STYNX adapter boundary. Recruitment public-token
+overrides delegate to that adapter, so no production exception remains.
 
-## Owner decision required
+## Identity, tenancy and sessions
 
-The pinned STYNX tenancy interceptor accepts only UUIDv7 tenant identifiers.
-SGP's current accepted Cognito and database contracts accept general UUIDs and
-the executable suites use non-v7 UUIDs. Enabling the interceptor would reject
-currently valid tenants before authorization and RLS evaluation.
+ADR-035 retains Cognito as issuer/session authority and general UUID tenant
+identifiers. `StynxAuthModule` and `StynxAuthorizationModule` are composed once
+under `backend/src/stynx/`; SGP supplies the Cognito verifier,
+group-to-permission mapper, general UUID resolver and strict principal-tenant
+entitlement policy through STYNX contracts.
 
-The pinned STYNX sessions module also requires a STYNX-owned signing-key and
-session-store contract, while SGP currently treats Cognito as the token issuer
-and exposes product session workflows without local token signing.
+The UUIDv7-only STYNX tenancy interceptor and STYNX local signing/Redis session
+runtime are intentionally not mounted because they would create a second
+identity authority. Existing `request.actor`, `req.user`, permission metadata,
+session endpoints and error contracts remain covered by unit and e2e parity
+tests.
 
-Wave 3 cannot claim tenancy/sessions parity until the owner chooses whether to:
+## Exit evidence
 
-1. retain Cognito-issued general UUID tenants and require STYNX to support that
-   contract; or
-2. authorize a tenant-ID migration to UUIDv7 and a STYNX session-signing
-   architecture, including data migration and key/store operations.
-
-Auth and authorization already execute through STYNX `AuthContextGuard`,
-`AuthorizationGuard`, `Principal`, and `TokenVerifier` contracts with SGP's
-Cognito verifier and group-to-permission adapter. Those paths remain unchanged
-until the tenant identifier decision is resolved.
+- all backend unit and e2e suites;
+- DB reset, canonical SQL bootstrap and cross-tenant RLS suite;
+- API alignment, typecheck, lint, formatting and governance;
+- DEVAI sensors, scorecard and chained DB evidence.

@@ -24,6 +24,14 @@ class FakeInscricaoDatabase {
     fullName: string;
   }> = [];
 
+  applyPublicLookupContext(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  applyTenantMutationContext(): Promise<void> {
+    return Promise.resolve();
+  }
+
   async query<T>(sql: string, values: unknown[] = []): Promise<T[]> {
     if (sql.includes('recrutamento.get_public_concurso')) {
       if (values[0] !== 'rec-2026') {
