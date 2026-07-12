@@ -37,9 +37,11 @@ import { YearlyIncomeRenderService } from './yearly-income/yearly-income-render.
 import { ReportServiceController } from './report-service.controller';
 import { ReportRuntimeService } from './report-service.service';
 import { ReportWorkerService } from './report-worker.service';
+import { SgpStynxRuntimeModule } from '../stynx/stynx-runtime.module';
 
 @Module({
   imports: [
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-report-service' }),
     createLoggingModule('sgp-report-service'),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     ThrottlerModule.forRootAsync({

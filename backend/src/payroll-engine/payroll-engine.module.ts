@@ -18,9 +18,11 @@ import { FormulaCacheService } from './formula-cache.service';
 import { FormulaCompilerService } from './formula-compiler.service';
 import { PayrollEngineController } from './payroll-engine.controller';
 import { PayrollEngineService } from './payroll-engine.service';
+import { SgpStynxRuntimeModule } from '../stynx/stynx-runtime.module';
 
 @Module({
   imports: [
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-payroll-engine' }),
     createLoggingModule('sgp-payroll-engine'),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     ThrottlerModule.forRootAsync({

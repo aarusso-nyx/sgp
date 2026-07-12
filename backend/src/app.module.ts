@@ -38,11 +38,13 @@ import { SaudeModule } from './saude/saude.module';
 import { SystemParametersModule } from './system-parameters/system-parameters.module';
 import { TceModule } from './tce/tce.module';
 import { UsersModule } from './users/users.module';
+import { SgpStynxRuntimeModule } from './stynx/stynx-runtime.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-core-api' }),
     createLoggingModule('sgp-core-api'),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     ThrottlerModule.forRootAsync({

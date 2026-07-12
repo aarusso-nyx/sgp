@@ -466,6 +466,34 @@ function validateBoundaryImports() {
   );
 }
 
+function validateStynxCompositionBoundary() {
+  const platformModules = [
+    'StynxCoreModule',
+    'StynxLoggingModule',
+    'StynxHealthModule',
+    'StynxPlatformPipelineModule',
+  ];
+  const violations = [];
+  const files = listFiles(
+    'backend/src',
+    (file) => file.endsWith('.ts') && !file.endsWith('.spec.ts'),
+  ).filter((file) => !file.startsWith('backend/src/stynx/'));
+
+  for (const file of files) {
+    const content = readFileSync(resolve(repoRoot, file), 'utf8');
+    const directModules = platformModules.filter((moduleName) => content.includes(moduleName));
+    if (directModules.length > 0) {
+      violations.push(`${file}: ${directModules.join(', ')}`);
+    }
+  }
+
+  record(
+    'architecture:stynx-composition-boundary',
+    violations.length === 0,
+    violations.length === 0 ? `${files.length} production files scanned` : violations.join('; '),
+  );
+}
+
 function validateFunctionalRequisiteScope() {
   const ledgerPath = 'docs/gov/audit/functional-requisites.md';
   const scopeLedgerPath = 'docs/gov/evidence/mvp-scope-ledger.md';
@@ -982,6 +1010,7 @@ function main() {
   validateArchitectureDecisions();
   validateArchitectureLayoutMap();
   validateBoundaryImports();
+  validateStynxCompositionBoundary();
   validateFunctionalRequisiteScope();
   validateRouteAlignmentScope();
   validatePrivacyRedactionPolicy();

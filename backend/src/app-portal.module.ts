@@ -12,9 +12,11 @@ import { validateEnvironment } from './config/environment';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { PortalModule } from './portal/portal.module';
+import { SgpStynxRuntimeModule } from './stynx/stynx-runtime.module';
 
 @Module({
   imports: [
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-portal-api' }),
     createLoggingModule('sgp-portal-api'),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     ThrottlerModule.forRootAsync({
