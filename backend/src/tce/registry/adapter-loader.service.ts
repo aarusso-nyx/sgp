@@ -50,7 +50,7 @@ export class AdapterLoaderService implements OnApplicationBootstrap {
       if (!isTceAdapter(instance)) continue;
       const metadata = Reflect.getMetadata(
         TCE_ADAPTER_METADATA,
-        instance.constructor,
+        wrapper.metatype ?? instance.constructor,
       ) as TceAdapterMetadata | undefined;
       if (!metadata) continue;
       this.assertMetadataMatchesInstance(metadata, instance);
@@ -78,16 +78,20 @@ export class AdapterLoaderService implements OnApplicationBootstrap {
 
 function isTceAdapter(value: unknown): value is TceAdapter {
   if (!value || typeof value !== 'object') return false;
-  const candidate = value as Partial<Record<keyof TceAdapter, unknown>>;
-  return (
-    typeof candidate.id === 'function' &&
-    typeof candidate.state_code === 'function' &&
-    typeof candidate.organ_kind === 'function' &&
-    typeof candidate.supported_layouts === 'function' &&
-    typeof candidate.validate === 'function' &&
-    typeof candidate.serialize === 'function' &&
-    typeof candidate.submit === 'function' &&
-    typeof candidate.parseResponse === 'function' &&
-    typeof candidate.health === 'function'
-  );
+  try {
+    const candidate = value as Partial<Record<keyof TceAdapter, unknown>>;
+    return (
+      typeof candidate.id === 'function' &&
+      typeof candidate.state_code === 'function' &&
+      typeof candidate.organ_kind === 'function' &&
+      typeof candidate.supported_layouts === 'function' &&
+      typeof candidate.validate === 'function' &&
+      typeof candidate.serialize === 'function' &&
+      typeof candidate.submit === 'function' &&
+      typeof candidate.parseResponse === 'function' &&
+      typeof candidate.health === 'function'
+    );
+  } catch {
+    return false;
+  }
 }

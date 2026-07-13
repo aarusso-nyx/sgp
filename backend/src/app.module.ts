@@ -7,7 +7,6 @@ import { AuditoriaModule } from './auditoria/auditoria.module';
 import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { AuthModule } from './auth/auth.module';
 import { createAppCoreProviders } from './common/bootstrap/app-providers';
-import { createLoggingModule } from './common/logging/logging.config';
 import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { createRateLimitOptions } from './common/rate-limit/rate-limit.config';
 import { validateEnvironment } from './config/environment';
@@ -38,12 +37,13 @@ import { SaudeModule } from './saude/saude.module';
 import { SystemParametersModule } from './system-parameters/system-parameters.module';
 import { TceModule } from './tce/tce.module';
 import { UsersModule } from './users/users.module';
+import { SgpStynxRuntimeModule } from './stynx/stynx-runtime.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [
-    createLoggingModule('sgp-core-api'),
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-core-api' }),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     ThrottlerModule.forRootAsync({
       useFactory: createRateLimitOptions,

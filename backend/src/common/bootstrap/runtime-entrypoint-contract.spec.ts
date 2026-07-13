@@ -41,7 +41,7 @@ describe('runtime entrypoint contract', () => {
     }
   });
 
-  it('wires HTTP runtimes to logger, tracing, metrics, helmet, CORS, and rate limiting', () => {
+  it('wires HTTP runtimes through the shared STYNX runtime factory', () => {
     for (const entrypoint of [
       'backend/src/main.ts',
       'backend/src/main-portal.ts',
@@ -49,13 +49,19 @@ describe('runtime entrypoint contract', () => {
       'backend/src/main-report-service.ts',
     ]) {
       const source = readFileSync(repoPath(entrypoint), 'utf8');
-      expect(source).toContain('usePinoLogger(app)');
-      expect(source).toContain('configureOpenTelemetryTracingEntrypoint');
-      expect(source).toContain('configurePrometheusMetricsEntrypoint');
-      expect(source).toContain('configureRateLimitEntrypoint(app)');
-      expect(source).toContain('configureCorsEntrypoint(app)');
-      expect(source).toContain('app.use(helmet())');
+      expect(source).toContain('createSgpStynxHttpRuntime');
     }
+
+    const factory = readFileSync(
+      repoPath('backend/src/stynx/stynx-runtime.factory.ts'),
+      'utf8',
+    );
+    expect(factory).toContain('app.useLogger(app.get(StynxLogger))');
+    expect(factory).toContain('configureOpenTelemetryTracingEntrypoint');
+    expect(factory).toContain('configurePrometheusMetricsEntrypoint');
+    expect(factory).toContain('configureRateLimitEntrypoint(app)');
+    expect(factory).toContain('configureCorsEntrypoint(app)');
+    expect(factory).toContain('app.use(helmet())');
   });
 
   it('wires worker runtimes to scheduler, readiness probe, and shutdown handling', () => {
@@ -64,7 +70,7 @@ describe('runtime entrypoint contract', () => {
       'backend/src/main-report-worker.ts',
     ]) {
       const source = readFileSync(repoPath(entrypoint), 'utf8');
-      expect(source).toContain('usePinoLogger(app)');
+      expect(source).toContain('createSgpStynxWorkerRuntime');
       expect(source).toContain('WorkerPollSchedulerService');
       expect(source).toContain('startWorkerReadinessProbe');
       expect(source).toContain('registerWorkerShutdown');
@@ -73,34 +79,44 @@ describe('runtime entrypoint contract', () => {
     }
   });
 
-  it('wires every runtime to the retained pino redaction policy module', () => {
-    const runtimeLoggingModules = new Map([
-      ['backend/src/app.module.ts', "createLoggingModule('sgp-core-api')"],
-      [
-        'backend/src/app-portal.module.ts',
-        "createLoggingModule('sgp-portal-api')",
-      ],
-      [
-        'backend/src/payroll-engine/payroll-engine.module.ts',
-        "createLoggingModule('sgp-payroll-engine')",
-      ],
-      [
-        'backend/src/report-service/report-service.module.ts',
-        "createLoggingModule('sgp-report-service')",
-      ],
-      [
-        'backend/src/main-integrations-worker.ts',
-        "createLoggingModule('sgp-integrations-worker')",
-      ],
-      [
-        'backend/src/main-report-worker.ts',
-        "createLoggingModule('sgp-report-worker')",
-      ],
-    ]);
+  it('mounts STYNX core, logging, health, and platform pipeline only in the adapter layer', () => {
+    const composition = readFileSync(
+      repoPath('backend/src/stynx/stynx-runtime.module.ts'),
+      'utf8',
+    );
+    expect(composition).toContain('StynxLoggingModule.forRoot');
+    expect(composition).toContain('StynxHealthModule.forRoot');
+    expect(composition).toContain('StynxPlatformPipelineModule.forRoot');
+    expect(composition).toContain('rateLimit: false');
+    expect(composition).toContain('sla: false');
+    expect(composition).toContain('idempotency: false');
 
-    for (const [entrypoint, loggingModuleCall] of runtimeLoggingModules) {
-      const source = readFileSync(repoPath(entrypoint), 'utf8');
-      expect(source).toContain(loggingModuleCall);
+    for (const entrypoint of [
+      'backend/src/main.ts',
+      'backend/src/main-portal.ts',
+      'backend/src/main-payroll-engine.ts',
+      'backend/src/main-integrations-worker.ts',
+      'backend/src/main-report-service.ts',
+      'backend/src/main-report-worker.ts',
+    ]) {
+      expect(readFileSync(repoPath(entrypoint), 'utf8')).not.toContain(
+        'StynxPlatformPipelineModule',
+      );
+    }
+  });
+
+  it('uses only the shared STYNX logging composition at runtime', () => {
+    for (const entrypoint of [
+      'backend/src/app.module.ts',
+      'backend/src/app-portal.module.ts',
+      'backend/src/payroll-engine/payroll-engine.module.ts',
+      'backend/src/report-service/report-service.module.ts',
+      'backend/src/main-integrations-worker.ts',
+      'backend/src/main-report-worker.ts',
+    ]) {
+      expect(readFileSync(repoPath(entrypoint), 'utf8')).not.toContain(
+        'createLoggingModule',
+      );
     }
   });
 });

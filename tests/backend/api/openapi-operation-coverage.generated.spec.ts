@@ -6,6 +6,34 @@ type CoverageOperation = {
 };
 
 const operations: readonly CoverageOperation[] = [
+  ...['docs/eng/api/openapi.json', 'docs/eng/api/openapi-portal.json'].flatMap(
+    (spec) => [
+      {
+        spec,
+        method: 'GET',
+        path: '/api/healthz',
+        operationId: 'StynxHealthController_liveness',
+      },
+      {
+        spec,
+        method: 'GET',
+        path: '/api/readyz',
+        operationId: 'StynxHealthController_readiness',
+      },
+      {
+        spec,
+        method: 'GET',
+        path: '/api/metrics',
+        operationId: 'StynxHealthController_metricsEndpoint',
+      },
+      {
+        spec,
+        method: 'GET',
+        path: '/api/info',
+        operationId: 'StynxHealthController_info',
+      },
+    ],
+  ),
   {
     spec: 'docs/eng/api/openapi-portal.json',
     method: 'POST',
@@ -4077,6 +4105,6 @@ describe('OpenAPI operation coverage inventory', () => {
     });
 
     expect(covered).toHaveLength(operations.length);
-    expect(operations).toHaveLength(671);
+    expect(operations).toHaveLength(679);
   });
 });

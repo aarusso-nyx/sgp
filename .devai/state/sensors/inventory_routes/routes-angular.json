@@ -1,0 +1,1834 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-07-12T17:33:18.655Z",
+  "framework": "angular",
+  "routes": [
+    {
+      "id": "angular:02e8f2e6bdd9",
+      "path": "",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "PortalHome"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 52,
+          "endLine": 55
+        }
+      ]
+    },
+    {
+      "id": "angular:2cbfa896bbd0",
+      "path": "",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "PortalShell"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 48,
+          "endLine": 122
+        }
+      ]
+    },
+    {
+      "id": "angular:3037bbc092dc",
+      "path": "",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "Shell"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 99,
+          "endLine": 478
+        }
+      ]
+    },
+    {
+      "id": "angular:3b1e1c4ed1d1",
+      "path": "",
+      "evidence": [
+        {
+          "path": "frontend/src/app/core/navigation/module-route-groups.ts",
+          "startLine": 14,
+          "endLine": 24
+        }
+      ]
+    },
+    {
+      "id": "angular:ea2ef505b003",
+      "path": "",
+      "parentId": "angular:3037bbc092dc",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 104,
+          "endLine": 104
+        }
+      ]
+    },
+    {
+      "id": "angular:f0b582450540",
+      "path": "",
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 162,
+          "endLine": 166
+        }
+      ]
+    },
+    {
+      "id": "angular:0e7594f47422",
+      "path": "**",
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 123,
+          "endLine": 126
+        }
+      ]
+    },
+    {
+      "id": "angular:5a92e9658506",
+      "path": "**",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 479,
+          "endLine": 479
+        }
+      ]
+    },
+    {
+      "id": "angular:f568de2d37b7",
+      "path": "aprovacoes",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "MinhaEquipe"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 104,
+          "endLine": 107
+        }
+      ]
+    },
+    {
+      "id": "angular:2614d7c48f7d",
+      "path": "auth/callback",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "AuthCallback"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 91,
+          "endLine": 94
+        }
+      ]
+    },
+    {
+      "id": "angular:6412f208cc6a",
+      "path": "auth/callback",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "PortalAuthCallback"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 130,
+          "endLine": 133
+        }
+      ]
+    },
+    {
+      "id": "angular:51ee8ad6434f",
+      "path": "avaliacao/estagio-probatorio",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "AvaliacaoEstagioProbatorio"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 194,
+          "endLine": 200
+        }
+      ]
+    },
+    {
+      "id": "angular:c5949ac99bd0",
+      "path": "avaliacao/pccs",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "AvaliacaoPccs"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 201,
+          "endLine": 204
+        }
+      ]
+    },
+    {
+      "id": "angular:99c0adecc38f",
+      "path": "avaliacao/progressoes",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "AvaliacaoProgressoes"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 205,
+          "endLine": 211
+        }
+      ]
+    },
+    {
+      "id": "angular:12bd5862cf45",
+      "path": "cadastral-changes",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhCadastralChanges"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 92,
+          "endLine": 101
+        }
+      ]
+    },
+    {
+      "id": "angular:b22a597030b6",
+      "path": "cargo-rubrica/gestao",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "Rubricas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 143,
+          "endLine": 152
+        }
+      ]
+    },
+    {
+      "id": "angular:e4db838dc035",
+      "path": "certificacoes",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Certificacoes"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 112,
+          "endLine": 115
+        }
+      ]
+    },
+    {
+      "id": "angular:deecb11bec41",
+      "path": "competencia/mensal",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "FolhaMensal"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 83,
+          "endLine": 92
+        }
+      ]
+    },
+    {
+      "id": "angular:a8319e60fc82",
+      "path": "consignados",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "Consignados"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 23,
+          "endLine": 32
+        }
+      ]
+    },
+    {
+      "id": "angular:6d00c460ea3b",
+      "path": "consignados/portabilidade",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "ConsignadoPortabilidade"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 33,
+          "endLine": 42
+        }
+      ]
+    },
+    {
+      "id": "angular:8f08e5d77590",
+      "path": "contracheque",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Contracheque"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 60,
+          "endLine": 63
+        }
+      ]
+    },
+    {
+      "id": "angular:7561abf770b3",
+      "path": "contracheque/:competence",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Contracheque"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 64,
+          "endLine": 67
+        }
+      ]
+    },
+    {
+      "id": "angular:e975f4de100d",
+      "path": "contracheques",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "Contracheques"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 73,
+          "endLine": 82
+        }
+      ]
+    },
+    {
+      "id": "angular:834e312efb86",
+      "path": "contracheques/:section",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Contracheque"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 68,
+          "endLine": 71
+        }
+      ]
+    },
+    {
+      "id": "angular:3c794e6de555",
+      "path": "contracheques/:section/:detail",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Contracheque"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 72,
+          "endLine": 75
+        }
+      ]
+    },
+    {
+      "id": "angular:c14f0b55bba2",
+      "path": "convenio",
+      "parentId": "angular:3037bbc092dc",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 122,
+          "endLine": 126
+        }
+      ]
+    },
+    {
+      "id": "angular:6c8c871f4cf2",
+      "path": "documentos/:section",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Documentos"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 96,
+          "endLine": 99
+        }
+      ]
+    },
+    {
+      "id": "angular:c5b6db1661a9",
+      "path": "ferias",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhFerias"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 102,
+          "endLine": 111
+        }
+      ]
+    },
+    {
+      "id": "angular:41001854eab8",
+      "path": "ferias/:section",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Ferias"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 84,
+          "endLine": 87
+        }
+      ]
+    },
+    {
+      "id": "angular:ca072200fac9",
+      "path": "fgts",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "Fgts"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 43,
+          "endLine": 52
+        }
+      ]
+    },
+    {
+      "id": "angular:8f6b1175875d",
+      "path": "fgts-remessas",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "FgtsRemessas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 53,
+          "endLine": 62
+        }
+      ]
+    },
+    {
+      "id": "angular:306d9e88e63d",
+      "path": "fiscal/dctfweb",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "FiscalDctfweb"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 379,
+          "endLine": 389
+        }
+      ]
+    },
+    {
+      "id": "angular:363b236597f7",
+      "path": "fiscal/dirf",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "FiscalDirf"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 390,
+          "endLine": 399
+        }
+      ]
+    },
+    {
+      "id": "angular:e485db201762",
+      "path": "fiscal/gps-residual",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "FiscalGpsResidual"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 400,
+          "endLine": 410
+        }
+      ]
+    },
+    {
+      "id": "angular:18fc517e0a9f",
+      "path": "folha",
+      "parentId": "angular:3037bbc092dc",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 107,
+          "endLine": 113
+        }
+      ]
+    },
+    {
+      "id": "angular:1e88f7a9be45",
+      "path": "folha-pagamento",
+      "parentId": "angular:3037bbc092dc",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 105,
+          "endLine": 105
+        }
+      ]
+    },
+    {
+      "id": "angular:fb8e2d13d402",
+      "path": "folha/comprovantes-rendimentos",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "ComprovantesRendimentos"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 463,
+          "endLine": 475
+        }
+      ]
+    },
+    {
+      "id": "angular:19b1ecb53121",
+      "path": "forbidden",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "Forbidden"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 95,
+          "endLine": 98
+        }
+      ]
+    },
+    {
+      "id": "angular:9eecd4f8fc87",
+      "path": "funcionarios",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhFuncionarios"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 22,
+          "endLine": 31
+        }
+      ]
+    },
+    {
+      "id": "angular:0ad3af745f6e",
+      "path": "funcionarios/:id/abono-permanencia",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhAbonoPermanencia"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 52,
+          "endLine": 61
+        }
+      ]
+    },
+    {
+      "id": "angular:1c5f49ee174e",
+      "path": "funcionarios/:id/dados-bancarios",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhEmployeeBankAccounts"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 62,
+          "endLine": 71
+        }
+      ]
+    },
+    {
+      "id": "angular:1db2fbbb6ea2",
+      "path": "funcionarios/:id/historico",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhFuncionariosHistorico"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 42,
+          "endLine": 51
+        }
+      ]
+    },
+    {
+      "id": "angular:ca5750de4d05",
+      "path": "funcionarios/:id/pensao-alimenticia",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhEmployeeAlimony"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 72,
+          "endLine": 81
+        }
+      ]
+    },
+    {
+      "id": "angular:a549745fb894",
+      "path": "funcionarios/:id/vinculos",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhFuncionariosVinculos"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 32,
+          "endLine": 41
+        }
+      ]
+    },
+    {
+      "id": "angular:39ee4d44ce04",
+      "path": "funcionarios/vinculos",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhFuncionariosVinculos"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 82,
+          "endLine": 91
+        }
+      ]
+    },
+    {
+      "id": "angular:9a11e2dacf41",
+      "path": "gestao",
+      "parentId": "angular:3037bbc092dc",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 114,
+          "endLine": 117
+        }
+      ]
+    },
+    {
+      "id": "angular:01495cb31e22",
+      "path": "govbr-sign/callback",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "GovBrSignCallback"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 56,
+          "endLine": 59
+        }
+      ]
+    },
+    {
+      "id": "angular:cfefd7a88959",
+      "path": "lgpd/encarregado",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "LgpdEncarregado"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 44,
+          "endLine": 48
+        }
+      ]
+    },
+    {
+      "id": "angular:d052d27b94cc",
+      "path": "licencas",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhLicencas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 112,
+          "endLine": 121
+        }
+      ]
+    },
+    {
+      "id": "angular:f722858ee41e",
+      "path": "licencas/:section",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Licencas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 92,
+          "endLine": 95
+        }
+      ]
+    },
+    {
+      "id": "angular:3723d30ee151",
+      "path": "licencas/saude/:section",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "LicencasSaude"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 88,
+          "endLine": 91
+        }
+      ]
+    },
+    {
+      "id": "angular:a2c3d3d65e7b",
+      "path": "meus-dados/:section",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "MeusDados"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 80,
+          "endLine": 83
+        }
+      ]
+    },
+    {
+      "id": "angular:f9b40a85e618",
+      "path": "meus-dados/bancarios",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "MeusDadosBancarios"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 76,
+          "endLine": 79
+        }
+      ]
+    },
+    {
+      "id": "angular:20bc828aeb6e",
+      "path": "minha-equipe",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "MinhaEquipe"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 100,
+          "endLine": 103
+        }
+      ]
+    },
+    {
+      "id": "angular:dfbf840803e1",
+      "path": "pdi",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "Pdi"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 116,
+          "endLine": 119
+        }
+      ]
+    },
+    {
+      "id": "angular:44d19f5d9c09",
+      "path": "pis-pasep",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "PisPasep"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 63,
+          "endLine": 72
+        }
+      ]
+    },
+    {
+      "id": "angular:8a2c625b52b6",
+      "path": "ponto/afd",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoAfd"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 338,
+          "endLine": 341
+        }
+      ]
+    },
+    {
+      "id": "angular:a54c37715740",
+      "path": "ponto/banco-horas",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoBancoHoras"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 347,
+          "endLine": 351
+        }
+      ]
+    },
+    {
+      "id": "angular:400159f9d4ae",
+      "path": "ponto/biometria",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoBiometria"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 363,
+          "endLine": 367
+        }
+      ]
+    },
+    {
+      "id": "angular:168aec778547",
+      "path": "ponto/escalas",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoEscalas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 342,
+          "endLine": 346
+        }
+      ]
+    },
+    {
+      "id": "angular:dcfb1143cdae",
+      "path": "ponto/face",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "FaceAdmin"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 368,
+          "endLine": 378
+        }
+      ]
+    },
+    {
+      "id": "angular:e22414f73369",
+      "path": "ponto/folha",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoFolha"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 359,
+          "endLine": 362
+        }
+      ]
+    },
+    {
+      "id": "angular:b2a7b563d604",
+      "path": "ponto/geofences",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "GeofenceAdmin"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 452,
+          "endLine": 462
+        }
+      ]
+    },
+    {
+      "id": "angular:cc1442dab114",
+      "path": "ponto/jornadas",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoJornadas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 329,
+          "endLine": 333
+        }
+      ]
+    },
+    {
+      "id": "angular:23478453ae64",
+      "path": "ponto/justificativas",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoJustificativas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 352,
+          "endLine": 358
+        }
+      ]
+    },
+    {
+      "id": "angular:15c2a525fbc6",
+      "path": "ponto/proximas-escalas",
+      "parentId": "angular:2cbfa896bbd0",
+      "component": {
+        "file": "frontend/portal/src/app/app.routes.ts",
+        "name": "ProximasEscalas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/portal/src/app/app.routes.ts",
+          "startLine": 108,
+          "endLine": 111
+        }
+      ]
+    },
+    {
+      "id": "angular:ea6391922d5c",
+      "path": "ponto/rep",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoRep"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 334,
+          "endLine": 337
+        }
+      ]
+    },
+    {
+      "id": "angular:8b1300002a32",
+      "path": "portal/aso",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalAso"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 245,
+          "endLine": 248
+        }
+      ]
+    },
+    {
+      "id": "angular:d1ee36015e9f",
+      "path": "portal/comprovante-rendimentos",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalComprovanteRendimentos"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 238,
+          "endLine": 244
+        }
+      ]
+    },
+    {
+      "id": "angular:2c12991d8bbb",
+      "path": "portal/contracheque",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalContracheque"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 233,
+          "endLine": 237
+        }
+      ]
+    },
+    {
+      "id": "angular:d33559434e06",
+      "path": "portal/lgpd/encarregado",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "LgpdEncarregado"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 212,
+          "endLine": 218
+        }
+      ]
+    },
+    {
+      "id": "angular:31aca7c34726",
+      "path": "portal/meus-dados/biometria",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalBiometria"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 277,
+          "endLine": 283
+        }
+      ]
+    },
+    {
+      "id": "angular:5a73ae87882a",
+      "path": "portal/meus-dados/consignados",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalConsignados"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 219,
+          "endLine": 225
+        }
+      ]
+    },
+    {
+      "id": "angular:1faeb8efb728",
+      "path": "portal/meus-dados/face",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalFace"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 284,
+          "endLine": 290
+        }
+      ]
+    },
+    {
+      "id": "angular:5f904d0a3576",
+      "path": "portal/minha-carreira",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalMinhaCarreira"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 226,
+          "endLine": 232
+        }
+      ]
+    },
+    {
+      "id": "angular:09977af60708",
+      "path": "portal/ponto/banco-horas",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalBancoHoras"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 249,
+          "endLine": 255
+        }
+      ]
+    },
+    {
+      "id": "angular:3b0aa38e465b",
+      "path": "portal/ponto/espelho",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalEspelhoPonto"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 263,
+          "endLine": 269
+        }
+      ]
+    },
+    {
+      "id": "angular:f8e4387aaa2a",
+      "path": "portal/ponto/justificativa",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalJustificativa"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 256,
+          "endLine": 262
+        }
+      ]
+    },
+    {
+      "id": "angular:f0478be8681e",
+      "path": "portal/ponto/mobile",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PontoMobile"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 270,
+          "endLine": 276
+        }
+      ]
+    },
+    {
+      "id": "angular:992513323047",
+      "path": "portal/transferencias",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhPortalEmployeeTransfer"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 142,
+          "endLine": 151
+        }
+      ]
+    },
+    {
+      "id": "angular:1a2eea6bf3f5",
+      "path": "processamentos/rescisao",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "RescisaoFolha"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 93,
+          "endLine": 102
+        }
+      ]
+    },
+    {
+      "id": "angular:0a81d4f3da83",
+      "path": "publico/banca/verify/:token",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalBancaVerify"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 84,
+          "endLine": 90
+        }
+      ]
+    },
+    {
+      "id": "angular:be625a940ab0",
+      "path": "publico/concursos/:slug/classificacao",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalPublicoClassificacao"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 70,
+          "endLine": 76
+        }
+      ]
+    },
+    {
+      "id": "angular:2a3b0b6781f6",
+      "path": "publico/concursos/:slug/inscricao",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalPublicoInscricao"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 49,
+          "endLine": 55
+        }
+      ]
+    },
+    {
+      "id": "angular:0638abf730ea",
+      "path": "publico/concursos/:slug/prova-online",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalPublicoProvaOnline"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 77,
+          "endLine": 83
+        }
+      ]
+    },
+    {
+      "id": "angular:ff65a4f21f08",
+      "path": "publico/concursos/minhas-nomeacoes",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalPublicoMinhasNomeacoes"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 63,
+          "endLine": 69
+        }
+      ]
+    },
+    {
+      "id": "angular:079a25b19ffc",
+      "path": "publico/concursos/minhas-notas",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalPublicoMinhasNotas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 56,
+          "endLine": 62
+        }
+      ]
+    },
+    {
+      "id": "angular:cfe5f3a9c946",
+      "path": "recrutamento/avaliacao",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "RecrutamentoAvaliacao"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 139,
+          "endLine": 145
+        }
+      ]
+    },
+    {
+      "id": "angular:7e486c4e5442",
+      "path": "recrutamento/banca",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "RecrutamentoBanca"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 183,
+          "endLine": 193
+        }
+      ]
+    },
+    {
+      "id": "angular:55d8b107ba6f",
+      "path": "recrutamento/biometria",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "RecrutamentoBiometria"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 163,
+          "endLine": 169
+        }
+      ]
+    },
+    {
+      "id": "angular:9453c3a2d732",
+      "path": "recrutamento/classificacao",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "RecrutamentoClassificacao"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 146,
+          "endLine": 152
+        }
+      ]
+    },
+    {
+      "id": "angular:208a24ba334c",
+      "path": "recrutamento/concursos",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "RecrutamentoConcursos"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 132,
+          "endLine": 138
+        }
+      ]
+    },
+    {
+      "id": "angular:bc4ce3a137c2",
+      "path": "recrutamento/nomeacao",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "RecrutamentoNomeacao"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 153,
+          "endLine": 157
+        }
+      ]
+    },
+    {
+      "id": "angular:d39731e2244f",
+      "path": "recrutamento/posse",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "RecrutamentoPosse"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 158,
+          "endLine": 162
+        }
+      ]
+    },
+    {
+      "id": "angular:ff5ecacbbf57",
+      "path": "recrutamento/prova-online-review",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "RecrutamentoProvaOnlineReview"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 170,
+          "endLine": 182
+        }
+      ]
+    },
+    {
+      "id": "angular:6dcbbc3c2291",
+      "path": "reintegracao",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhReintegracao"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 132,
+          "endLine": 141
+        }
+      ]
+    },
+    {
+      "id": "angular:1ee64bdba136",
+      "path": "relatorio",
+      "parentId": "angular:3037bbc092dc",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 106,
+          "endLine": 106
+        }
+      ]
+    },
+    {
+      "id": "angular:847d10672c96",
+      "path": "relatorios",
+      "parentId": "angular:3037bbc092dc",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 127,
+          "endLine": 131
+        }
+      ]
+    },
+    {
+      "id": "angular:c6243fa1f2ab",
+      "path": "remessa-bancaria/gestao",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "RemessaBancaria"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 113,
+          "endLine": 122
+        }
+      ]
+    },
+    {
+      "id": "angular:98517de56dc6",
+      "path": "retorno-bancario/gestao",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "RetornoBancario"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 123,
+          "endLine": 132
+        }
+      ]
+    },
+    {
+      "id": "angular:913951aa1a32",
+      "path": "rh",
+      "parentId": "angular:3037bbc092dc",
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 118,
+          "endLine": 121
+        }
+      ]
+    },
+    {
+      "id": "angular:b8f1ea4eee98",
+      "path": "saude/acidentes",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudeAcidentes"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 299,
+          "endLine": 303
+        }
+      ]
+    },
+    {
+      "id": "angular:6e8e8b2bbcb3",
+      "path": "saude/aso",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudeAso"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 295,
+          "endLine": 298
+        }
+      ]
+    },
+    {
+      "id": "angular:aa10cde23579",
+      "path": "saude/epi",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudeEpi"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 317,
+          "endLine": 320
+        }
+      ]
+    },
+    {
+      "id": "angular:2b1c9f1ca877",
+      "path": "saude/exames",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudeExames"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 291,
+          "endLine": 294
+        }
+      ]
+    },
+    {
+      "id": "angular:241121b112a4",
+      "path": "saude/exposicoes",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudeExposicoes"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 312,
+          "endLine": 316
+        }
+      ]
+    },
+    {
+      "id": "angular:e9a66fb4bdf0",
+      "path": "saude/pcmso",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudePcmso"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 304,
+          "endLine": 307
+        }
+      ]
+    },
+    {
+      "id": "angular:b6c15c596713",
+      "path": "saude/pericia",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudePericia"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 325,
+          "endLine": 328
+        }
+      ]
+    },
+    {
+      "id": "angular:d1fdef59f151",
+      "path": "saude/pgr",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudePgr"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 308,
+          "endLine": 311
+        }
+      ]
+    },
+    {
+      "id": "angular:7da042b9bb49",
+      "path": "saude/ppp",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "SaudePpp"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 321,
+          "endLine": 324
+        }
+      ]
+    },
+    {
+      "id": "angular:719ff5be0048",
+      "path": "simulacao",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "SimulacaoFolha"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 103,
+          "endLine": 112
+        }
+      ]
+    },
+    {
+      "id": "angular:2d6d070072af",
+      "path": "tce/adapters",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "TceAdapters"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 411,
+          "endLine": 421
+        }
+      ]
+    },
+    {
+      "id": "angular:8191a7bac633",
+      "path": "tce/audesp-sp",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "AudespSp"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 432,
+          "endLine": 441
+        }
+      ]
+    },
+    {
+      "id": "angular:dba11f95d2f3",
+      "path": "tce/catalog",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "TceCatalog"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 422,
+          "endLine": 431
+        }
+      ]
+    },
+    {
+      "id": "angular:df1319d288ac",
+      "path": "tce/queue",
+      "parentId": "angular:3037bbc092dc",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "TceQueue"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 442,
+          "endLine": 451
+        }
+      ]
+    },
+    {
+      "id": "angular:0ff02bf001d9",
+      "path": "transferencia/gestao",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhEmployeeTransfer"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 122,
+          "endLine": 131
+        }
+      ]
+    },
+    {
+      "id": "angular:5c57421fefa0",
+      "path": "transparencia",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PublicoTransparencia"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 32,
+          "endLine": 36
+        }
+      ]
+    },
+    {
+      "id": "angular:e5aa6704b19e",
+      "path": "transparencia/concursos",
+      "component": {
+        "file": "frontend/src/app/app.routes.ts",
+        "name": "PortalTransparenciaConcursos"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/app.routes.ts",
+          "startLine": 37,
+          "endLine": 43
+        }
+      ]
+    },
+    {
+      "id": "angular:6f9a8801a3b0",
+      "path": "tsv-contratos",
+      "component": {
+        "file": "frontend/src/app/features/rh/rh-routing-module.ts",
+        "name": "RhTsvContratos"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/rh/rh-routing-module.ts",
+          "startLine": 152,
+          "endLine": 161
+        }
+      ]
+    },
+    {
+      "id": "angular:3ab72f94228b",
+      "path": "verba/gestao",
+      "component": {
+        "file": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+        "name": "Rubricas"
+      },
+      "evidence": [
+        {
+          "path": "frontend/src/app/features/folha-pagamento/folha-pagamento-routing-module.ts",
+          "startLine": 133,
+          "endLine": 142
+        }
+      ]
+    }
+  ]
+}

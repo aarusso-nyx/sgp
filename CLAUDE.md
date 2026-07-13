@@ -1,5 +1,10 @@
 # CLAUDE.md — Quick Reference for Claude Agents
 
+DEVAI Constitution Article 6 is authoritative. The governed roles are Owner,
+Architect, Inspector, Engineer, and Auditor. Read `README.md`,
+`CONSTITUTION.md`, `BUILD-PLAN.md`, `DESIGN-DECISIONS.md`, and
+`docs/framework/schemas` before applying the SGP-specific guidance below.
+
 **Read AGENTS.md first.** This file is a fast reference. Authority and detailed rules live in [AGENTS.md](./AGENTS.md).
 
 ---

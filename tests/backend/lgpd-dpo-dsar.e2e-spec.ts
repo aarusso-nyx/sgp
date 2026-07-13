@@ -8,7 +8,8 @@ import request from 'supertest';
 import type { App as SupertestApp } from 'supertest/types';
 
 import { AppModule } from '../../backend/src/app.module';
-import { SgpStynxTokenVerifier } from '../../backend/src/auth/sgp-stynx-token-verifier.service';
+import { STYNX_TOKEN_VERIFIER } from '@stynx-nyx/backend';
+import { normalizeTokenVerifierResult } from '../../backend/src/auth/sgp-stynx-auth.guard';
 import { DatabaseService } from '../../backend/src/database/database.service';
 
 const tenantId = '00000000-0000-0000-0000-000000000100';
@@ -103,10 +104,10 @@ describe('LGPD DPO and DSAR API (e2e)', () => {
   beforeAll(async () => {
     database = new FakeDpoDsarDatabase();
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
-      .overrideProvider(SgpStynxTokenVerifier)
+      .overrideProvider(STYNX_TOKEN_VERIFIER)
       .useValue({
         verifyAuthorizationHeader: jest.fn(async (authorization?: string) =>
-          actorForToken(authorization),
+          normalizeTokenVerifierResult(actorForToken(authorization)),
         ),
       })
       .overrideProvider(DatabaseService)

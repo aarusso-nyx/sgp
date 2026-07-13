@@ -749,6 +749,10 @@ function runEvidenceStepByName(stepName) {
   return runCommand(step.command, step.args);
 }
 
+function handleDevai() {
+  return runCommand(process.execPath, ['scripts/devai.mjs', ...args]);
+}
+
 const handlers = {
   help: () => {
     printHelp();
@@ -769,6 +773,7 @@ const handlers = {
   roadmap: handleRoadmap,
   health: handleHealth,
   deploy: handleDeploy,
+  devai: handleDevai,
   prepare: () => runCommand('husky', args),
   clean: () => runCommand(process.execPath, ['scripts/clean.mjs', ...args]),
   'audit:schema': () => handleAuditAlias('schema'),

@@ -1,5 +1,18 @@
 # AGENTS.md — SGP Repository Constitution
 
+## DEVAI Constitutional Authority
+
+Owner decision dated 2026-07-11: the pinned DEVAI Constitution is authoritative
+over this legacy SGP protocol wherever they conflict. Constitution Article 6
+defines authority by substrate and path. DEVAI's five roles are Owner,
+Architect, Inspector, Engineer, and Auditor.
+
+Mandatory reading order for governed work is `README.md`, `CONSTITUTION.md`,
+`BUILD-PLAN.md`, `DESIGN-DECISIONS.md`, and `docs/framework/schemas`, followed by
+the SGP-specific authority listed below. The DEVAI substrate roots under
+`docs/framework/` and `docs/meta/` are current governance surfaces, not stale
+SGP documentation paths.
+
 This file is the root agent protocol for SGP v0.0.1. It applies to every human
 or autonomous agent working in this repository unless a more specific
 subdirectory `AGENTS.md` exists.
@@ -12,7 +25,7 @@ look green.
 Build and evolve a fresh SGP implementation from authoritative engineering
 specs, with a folia-first payroll engine and no legacy compatibility runtime.
 
-Authority order for SGP:
+Authority order for SGP, subordinate to the DEVAI Constitution:
 
 1. `docs/eng/` owns product behavior, architecture, domain scope, acceptance,
    ADRs, test strategy, and developer-facing regulatory facts.
@@ -304,6 +317,11 @@ Before diagnosing script failures, inspect `scripts/run.mjs`,
 - Use concise commit messages in imperative style; include scope when helpful.
 - Do not force-push `main` or rewrite published history without explicit
   authorization.
+- Branch review policy follows `docs/gov/branch-protection-policy.json` and
+  ADR-036. In `solo-owner` mode, the named owner may merge an owner-authored PR
+  after every required check passes without an independent approval. Before a
+  second active maintainer is added or production governance begins, switch to
+  `collaborative` mode and restore CODEOWNER and last-push approval requirements.
 - After push, verify the intended branch and remote SHA when the user asks for
   publication or acceptance evidence.
 

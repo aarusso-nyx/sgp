@@ -1,6 +1,6 @@
 # Repository Discipline Evidence
 
-Status: retained evidence for the 2026-05-08 QA lift.
+Status: retained evidence, reverified 2026-07-12 for Wave 7.
 
 ## Ownership
 
@@ -8,13 +8,19 @@ Status: retained evidence for the 2026-05-08 QA lift.
   adds explicit ownership for package manifests, workflows, backend, frontend,
   database SQL, scripts, tests, ADRs, generated governance surfaces, privacy
   docs, and user docs.
-- GitHub `main` branch protection was verified through `gh api` on
-  2026-05-08 and configured with required reviews, CODEOWNERS review, stale
-  review dismissal, linear history, no force pushes, no deletions, conversation
-  resolution, and required source/security/database checks.
+- GitHub `main` branch protection is governed by ADR-036 and
+  `docs/gov/branch-protection-policy.json`. In the current `solo-owner` phase,
+  the named owner may merge after all protected checks pass without an
+  impossible independent approval. PRs, admin enforcement, conversation
+  resolution, no force pushes, no deletions and required checks remain active.
 - The required check set is expected to include workspace/source gates, database
   alignment, dependency/security review, ADR linkage, release-impact evidence,
   and deploy plan jobs before publication to `main`.
+- On 2026-07-12 the proven `DEVAI evidence gate` became the eighth required
+  context. Its successful PR run is retained on PR #57.
+- A second active maintainer or production-governance declaration requires
+  `collaborative` mode before the next merge: at least one approval, CODEOWNER
+  review and approval from someone other than the last pusher.
 
 ## Dependency And Metadata Controls
 
@@ -38,6 +44,10 @@ Status: retained evidence for the 2026-05-08 QA lift.
   release-impacting changes.
 - `.devai/config/project.json` and `scripts/lib/workspace-commands.mjs` retain
   `npm run test:types` and `npm run test:mutation` as hard-fail gates.
+- `.github/workflows/devai-evidence.yml` is reusable through `workflow_call` and
+  runs the full DB, API, browser, coverage, mutation and build tail whenever
+  retained evidence is absent or stale. It uploads DEVAI state and normal test
+  artifacts on every outcome.
 
 ## Required Local Gate List
 

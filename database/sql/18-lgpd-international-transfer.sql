@@ -61,9 +61,9 @@ CREATE TABLE lgpd.international_transfer (
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT international_transfer_pkey PRIMARY KEY (id),
-    CONSTRAINT international_transfer_country_fk FOREIGN KEY (destination_country) REFERENCES lgpd.international_transfer_country_adequacy(country_code) ON UPDATE CASCADE ON DELETE RESTRICT,
-    CONSTRAINT international_transfer_ropa_entry_fk FOREIGN KEY (ropa_entry_id) REFERENCES lgpd.ropa_entry(id) ON UPDATE CASCADE ON DELETE SET NULL,
-    CONSTRAINT international_transfer_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT international_transfer_country_fk FOREIGN KEY (destination_country) REFERENCES lgpd.international_transfer_country_adequacy(country_code) ON DELETE RESTRICT,
+    CONSTRAINT international_transfer_ropa_entry_fk FOREIGN KEY (ropa_entry_id) REFERENCES lgpd.ropa_entry(id) ON DELETE SET NULL,
+    CONSTRAINT international_transfer_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT,
     CONSTRAINT international_transfer_required_text_check CHECK (
         length(btrim(flow_key)) > 0
         AND length(btrim(destination_country)) > 0
@@ -97,9 +97,25 @@ CREATE TABLE lgpd.international_transfer_event (
     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
     detected_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT international_transfer_event_pkey PRIMARY KEY (id),
-    CONSTRAINT international_transfer_event_transfer_fk FOREIGN KEY (international_transfer_id) REFERENCES lgpd.international_transfer(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    CONSTRAINT international_transfer_event_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON UPDATE CASCADE ON DELETE RESTRICT
+    CONSTRAINT international_transfer_event_transfer_fk FOREIGN KEY (international_transfer_id) REFERENCES lgpd.international_transfer(id) ON DELETE RESTRICT,
+    CONSTRAINT international_transfer_event_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT
 );
+
+-- Keep ON DELETE before ON UPDATE in CREATE TABLE for the DEVAI SQL inventory
+-- parser, then restore the accepted ON UPDATE CASCADE behavior explicitly.
+ALTER TABLE lgpd.international_transfer
+    DROP CONSTRAINT international_transfer_country_fk,
+    ADD CONSTRAINT international_transfer_country_fk FOREIGN KEY (destination_country) REFERENCES lgpd.international_transfer_country_adequacy(country_code) ON DELETE RESTRICT ON UPDATE CASCADE,
+    DROP CONSTRAINT international_transfer_ropa_entry_fk,
+    ADD CONSTRAINT international_transfer_ropa_entry_fk FOREIGN KEY (ropa_entry_id) REFERENCES lgpd.ropa_entry(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    DROP CONSTRAINT international_transfer_tenant_fk,
+    ADD CONSTRAINT international_transfer_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE lgpd.international_transfer_event
+    DROP CONSTRAINT international_transfer_event_transfer_fk,
+    ADD CONSTRAINT international_transfer_event_transfer_fk FOREIGN KEY (international_transfer_id) REFERENCES lgpd.international_transfer(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    DROP CONSTRAINT international_transfer_event_tenant_fk,
+    ADD CONSTRAINT international_transfer_event_tenant_fk FOREIGN KEY (tenant_id) REFERENCES public.tenant(id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 CREATE INDEX international_transfer_tenant_status_idx ON lgpd.international_transfer USING btree (tenant_id, status, review_due_at ASC NULLS LAST);
 CREATE INDEX international_transfer_flow_idx ON lgpd.international_transfer USING btree (tenant_id, flow_key, processor_name);

@@ -1,6 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "project_type": "runtime-host",
+  "profile": "tier3",
   "repo": {
     "kind": "application"
   },
@@ -90,7 +91,7 @@
     "Do not normalize byte-sensitive REM, RET, XML, TXT, PDF, banking, or regulatory golden fixtures without intentional review."
   ],
   "round_prompts_dir": "docs/gov/prompts",
-  "devai_version": "0.0.0",
+  "devai_version": "0.2.1",
   "hardFailGates": [
     {
       "id": "lint-check",

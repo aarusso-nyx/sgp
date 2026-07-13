@@ -29,6 +29,11 @@ SGP consumes published `@stynx-nyx/*` and `@devai-nyx/*` packages from GitHub
 Packages. The repository `.npmrc` maps both scopes to GitHub Packages and CI
 uses the `PACKAGES_READ_TOKEN` secret through `NODE_AUTH_TOKEN` during install.
 
+Wave 0 verification on 2026-07-11 confirmed that all SGP-declared STYNX
+packages and `@devai-nyx/cli` are published and queryable through that route.
+The DEVAI CLI is not yet declared or locked by SGP; its consumption remains a
+Wave 1 obligation and must not be inferred from registry availability.
+
 Local paths, `file:` references, `link:` references, legacy `@stynx/*` scopes,
 and legacy `@stynx-web/*` scopes are prohibited in manifests, lockfiles, source
 imports, and workflow setup. `npm run check:registry-dependencies` is the

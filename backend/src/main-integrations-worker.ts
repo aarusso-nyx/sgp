@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { startWorkerReadinessProbe } from './common/bootstrap/worker-readiness-probe';
-import { usePinoLogger } from './common/logging/bootstrap-logger';
-import { createLoggingModule } from './common/logging/logging.config';
 import {
   createWorkerPollSchedulerProviders,
   registerWorkerShutdown,
@@ -12,10 +9,12 @@ import {
 } from './common/worker-scheduling/worker-poll-scheduler.service';
 import { IntegrationsWorkerModule } from './integrations-worker/integrations-worker.module';
 import { IntegrationsWorkerService } from './integrations-worker/integrations-worker.service';
+import { SgpStynxRuntimeModule } from './stynx/stynx-runtime.module';
+import { createSgpStynxWorkerRuntime } from './stynx/stynx-runtime.factory';
 
 @Module({
   imports: [
-    createLoggingModule('sgp-integrations-worker'),
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-integrations-worker' }),
     ScheduleModule.forRoot(),
     IntegrationsWorkerModule,
   ],
@@ -29,11 +28,9 @@ import { IntegrationsWorkerService } from './integrations-worker/integrations-wo
 class IntegrationsWorkerRuntimeModule {}
 
 export async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(
+  const app = await createSgpStynxWorkerRuntime(
     IntegrationsWorkerRuntimeModule,
-    { bufferLogs: true },
   );
-  usePinoLogger(app);
   const scheduler = app.get(WorkerPollSchedulerService);
   const readiness = await startWorkerReadinessProbe({
     workerName: 'sgp-integrations-worker',

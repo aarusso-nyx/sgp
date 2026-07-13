@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-15d835dc23d9478b",
+  "sensor": {
+    "name": "inventory:data-handling",
+    "kind": "inventory_data_handling",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T17:37:55.654Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "devai sense data-handling --repo-root .",
+  "command_hash": "74b3bcb5765d3e577f73acbce593efe82ad7123753bf01c2e1c07559e011fee2",
+  "tier": "L0",
+  "duration_ms": 13,
+  "evidence_path": ".devai/state/sensors/inventory_data_handling/data-model-pii.json",
+  "metrics": {
+    "table_count": 285,
+    "pii_column_count": 51,
+    "unlabeled_pii_column_count": 51,
+    "data_handling_hash": "122309a3da81f7972578f941249d82b0dafe0a62caac5603d50bb674ebf640c3"
+  }
+}

@@ -1,6 +1,366 @@
 {
   "openapi": "3.1.0",
   "paths": {
+    "/api/healthz": {
+      "get": {
+        "operationId": "StynxHealthController_liveness",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["StynxHealth"],
+        "summary": "GET /api/healthz"
+      }
+    },
+    "/api/readyz": {
+      "get": {
+        "operationId": "StynxHealthController_readiness",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["StynxHealth"],
+        "summary": "GET /api/readyz"
+      }
+    },
+    "/api/metrics": {
+      "get": {
+        "operationId": "StynxHealthController_metricsEndpoint",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["StynxHealth"],
+        "summary": "GET /api/metrics"
+      }
+    },
+    "/api/info": {
+      "get": {
+        "operationId": "StynxHealthController_info",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpOperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, tenant, or policy denial.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with current resource state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Semantically invalid request.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SgpProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["StynxHealth"],
+        "summary": "GET /api/info"
+      }
+    },
     "/api/v1/auth/me": {
       "get": {
         "operationId": "SessionController_me",

@@ -18,6 +18,7 @@ export const workspaceCommandDescriptions = {
   roadmap: 'Regenerate the deferred-backlog block in ROADMAP.md from the audit ledger.',
   health: 'Run non-destructive runtime topology and workspace health checks.',
   deploy: 'Run AWS deployment plan checks (dry-run by default).',
+  devai: 'Run registry-backed DEVAI validation, inventory, sensors, scorecards, and evidence.',
   prepare: 'Install local Git hooks through Husky.',
   clean: 'Remove generated local build, cache, coverage, and dependency outputs.',
 };

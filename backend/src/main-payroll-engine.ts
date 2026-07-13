@@ -1,26 +1,14 @@
-import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import helmet from 'helmet';
 
-import { configureCorsEntrypoint } from './common/bootstrap/cors.config';
-import { usePinoLogger } from './common/logging/bootstrap-logger';
-import { configureOpenTelemetryTracingEntrypoint } from './common/observability/otel.tracing';
-import { configurePrometheusMetricsEntrypoint } from './common/observability/prometheus.metrics';
 import { createOpenApi31Document } from './common/openapi/openapi31';
-import { configureRateLimitEntrypoint } from './common/rate-limit/rate-limit.config';
 import { PayrollEngineModule } from './payroll-engine/payroll-engine.module';
+import { createSgpStynxHttpRuntime } from './stynx/stynx-runtime.factory';
 
 export async function bootstrap() {
-  const app = await NestFactory.create(PayrollEngineModule, {
-    bufferLogs: true,
-  });
-  usePinoLogger(app);
-  configureRateLimitEntrypoint(app);
-  configureOpenTelemetryTracingEntrypoint(app, 'sgp-payroll-engine');
-  configurePrometheusMetricsEntrypoint(app, 'sgp-payroll-engine');
-  app.use(helmet());
-  app.setGlobalPrefix('api');
-  configureCorsEntrypoint(app);
+  const app = await createSgpStynxHttpRuntime(
+    PayrollEngineModule,
+    'sgp-payroll-engine',
+  );
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('SGP Payroll Engine')

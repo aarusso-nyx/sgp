@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { startWorkerReadinessProbe } from './common/bootstrap/worker-readiness-probe';
-import { usePinoLogger } from './common/logging/bootstrap-logger';
-import { createLoggingModule } from './common/logging/logging.config';
 import {
   createWorkerPollSchedulerProviders,
   registerWorkerShutdown,
@@ -12,10 +9,12 @@ import {
 } from './common/worker-scheduling/worker-poll-scheduler.service';
 import { ReportServiceModule } from './report-service/report-service.module';
 import { ReportWorkerService } from './report-service/report-worker.service';
+import { SgpStynxRuntimeModule } from './stynx/stynx-runtime.module';
+import { createSgpStynxWorkerRuntime } from './stynx/stynx-runtime.factory';
 
 @Module({
   imports: [
-    createLoggingModule('sgp-report-worker'),
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-report-worker' }),
     ScheduleModule.forRoot(),
     ReportServiceModule,
   ],
@@ -29,11 +28,7 @@ import { ReportWorkerService } from './report-service/report-worker.service';
 class ReportWorkerRuntimeModule {}
 
 export async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(
-    ReportWorkerRuntimeModule,
-    { bufferLogs: true },
-  );
-  usePinoLogger(app);
+  const app = await createSgpStynxWorkerRuntime(ReportWorkerRuntimeModule);
   const scheduler = app.get(WorkerPollSchedulerService);
   const readiness = await startWorkerReadinessProbe({
     workerName: 'sgp-report-worker',

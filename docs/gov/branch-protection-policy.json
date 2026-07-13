@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "mode": "solo-owner",
+  "owner": "aarusso-nyx",
+  "production": false,
+  "required_approving_review_count": 0,
+  "require_code_owner_reviews": false,
+  "require_last_push_approval": false,
+  "restoration_triggers": ["second-active-maintainer", "production-governance"]
+}

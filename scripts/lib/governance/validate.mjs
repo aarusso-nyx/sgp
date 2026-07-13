@@ -179,6 +179,35 @@ function validateDevaiConfig() {
   for (const command of hardFailGateCommands) {
     record(`devai-hard-fail:${command}`, hardFailCommands.has(command), command);
   }
+
+  const packageJson = readJson('package.json');
+  const devaiScripts = [
+    'devai:doctor',
+    'devai:spec',
+    'devai:inventory',
+    'devai:pack',
+    'devai:prepare',
+    'devai:sensors',
+    'devai:scorecard',
+    'devai:record',
+    'devai:evidence',
+    'devai:health',
+  ];
+  record(
+    'devai:registry-cli',
+    packageJson.devDependencies?.['@devai-nyx/cli'] === project.devai_version,
+    `@devai-nyx/cli@${packageJson.devDependencies?.['@devai-nyx/cli'] ?? '<missing>'}`,
+  );
+  record(
+    'devai:executable-surface',
+    devaiScripts.every((name) => packageJson.scripts?.[name]?.includes('scripts/run.mjs devai')),
+    devaiScripts.join(', '),
+  );
+  record(
+    'devai:classification',
+    project.project_type === 'runtime-host' && project.repo?.kind === 'application',
+    `${project.project_type}/${project.repo?.kind}`,
+  );
 }
 
 function validateCanonicalRootScripts() {
@@ -434,6 +463,55 @@ function validateBoundaryImports() {
     'architecture:forbidden-cross-tier-imports',
     forbidden.length === 0,
     forbidden.length === 0 ? `${sourceFiles.length} files scanned` : forbidden.join('; '),
+  );
+}
+
+function validateStynxCompositionBoundary() {
+  const platformModules = [
+    'StynxCoreModule',
+    'StynxLoggingModule',
+    'StynxHealthModule',
+    'StynxPlatformPipelineModule',
+  ];
+  const violations = [];
+  const files = listFiles(
+    'backend/src',
+    (file) => file.endsWith('.ts') && !file.endsWith('.spec.ts'),
+  ).filter((file) => !file.startsWith('backend/src/stynx/'));
+
+  for (const file of files) {
+    const content = readFileSync(resolve(repoRoot, file), 'utf8');
+    const directModules = platformModules.filter((moduleName) => content.includes(moduleName));
+    if (directModules.length > 0) {
+      violations.push(`${file}: ${directModules.join(', ')}`);
+    }
+  }
+
+  record(
+    'architecture:stynx-composition-boundary',
+    violations.length === 0,
+    violations.length === 0 ? `${files.length} production files scanned` : violations.join('; '),
+  );
+}
+
+function validateDbSessionContextBoundary() {
+  const violations = [];
+  const files = listFiles(
+    'backend/src',
+    (file) => file.endsWith('.ts') && !file.endsWith('.spec.ts'),
+  ).filter((file) => !file.startsWith('backend/src/stynx/'));
+
+  for (const file of files) {
+    const content = readFileSync(resolve(repoRoot, file), 'utf8');
+    if (/\bset_config\s*\(/i.test(content) || /SET\s+LOCAL\s+row_security/i.test(content)) {
+      violations.push(file);
+    }
+  }
+
+  record(
+    'architecture:db-session-context-boundary',
+    violations.length === 0,
+    violations.length === 0 ? `${files.length} production files scanned` : violations.join('; '),
   );
 }
 
@@ -766,6 +844,9 @@ function validateRepositoryDiscipline() {
   const disciplineEvidence = pathExists('docs/gov/evidence/repository-discipline.md')
     ? readFileSync(resolve(repoRoot, 'docs/gov/evidence/repository-discipline.md'), 'utf8')
     : '';
+  const branchProtectionPolicy = pathExists('docs/gov/branch-protection-policy.json')
+    ? readJson('docs/gov/branch-protection-policy.json')
+    : {};
   const requiredCodeowners = [
     '/package.json',
     '/.github/workflows/',
@@ -813,11 +894,17 @@ function validateRepositoryDiscipline() {
   record('repo-discipline:docs-work-ignored', gitignore.includes('docs/work/**'), '.gitignore');
   record(
     'repo-discipline:branch-protection-evidence',
-    disciplineEvidence.includes('required reviews') &&
-      disciplineEvidence.includes('CODEOWNERS review') &&
+    branchProtectionPolicy.mode === 'solo-owner' &&
+      branchProtectionPolicy.owner === 'aarusso-nyx' &&
+      branchProtectionPolicy.production === false &&
+      branchProtectionPolicy.required_approving_review_count === 0 &&
+      branchProtectionPolicy.require_code_owner_reviews === false &&
+      branchProtectionPolicy.require_last_push_approval === false &&
+      disciplineEvidence.includes('solo-owner') &&
+      disciplineEvidence.includes('collaborative') &&
       disciplineEvidence.includes('no force pushes') &&
       disciplineEvidence.includes('no deletions'),
-    'docs/gov/evidence/repository-discipline.md',
+    'docs/gov/branch-protection-policy.json + repository-discipline.md',
   );
 }
 
@@ -953,6 +1040,8 @@ function main() {
   validateArchitectureDecisions();
   validateArchitectureLayoutMap();
   validateBoundaryImports();
+  validateStynxCompositionBoundary();
+  validateDbSessionContextBoundary();
   validateFunctionalRequisiteScope();
   validateRouteAlignmentScope();
   validatePrivacyRedactionPolicy();

@@ -205,6 +205,18 @@ export class OpenApiClient {
     return this.api.get<unknown>('/external/v1/dicionario/entidades');
   }
 
+  getApiHealthz(): Observable<unknown> {
+    return this.api.get<unknown>('/healthz');
+  }
+
+  getApiInfo(): Observable<unknown> {
+    return this.api.get<unknown>('/info');
+  }
+
+  getApiMetrics(): Observable<unknown> {
+    return this.api.get<unknown>('/metrics');
+  }
+
   getApiPortalV1AuthGovbrSignCallback(): Observable<unknown> {
     return this.api.get<unknown>('/portal/v1/auth/govbr/sign/callback');
   }
@@ -225,6 +237,10 @@ export class OpenApiClient {
       `/publico/v1/${encodeURIComponent(params.tenant)}/transparencia/folha`,
       query,
     );
+  }
+
+  getApiReadyz(): Observable<unknown> {
+    return this.api.get<unknown>('/readyz');
   }
 
   getApiV1(): Observable<unknown> {

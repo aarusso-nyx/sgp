@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-622cb077eb7630d9",
+  "sensor": {
+    "name": "sgp-inventory-performance",
+    "kind": "inventory_performance",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:31:35.391Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm run devai:inventory",
+  "command_hash": "47c8dedabfd4df79c3067ee3f689500f12d5e6dc3bc7a7b170bb7acbc6fb4b7d",
+  "tier": "L1",
+  "exit_code": 0,
+  "duration_ms": 2700,
+  "out_head": "\n> sgp@0.1.0 devai:inventory\n> node scripts/run.mjs devai inventory\n\n[devai] inventory: 74 modules, 604 routes, 511 tests\n",
+  "err_head": ""
+}

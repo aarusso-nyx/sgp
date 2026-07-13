@@ -5,17 +5,17 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
 import { createAppCoreProviders } from './common/bootstrap/app-providers';
-import { createLoggingModule } from './common/logging/logging.config';
 import { createRateLimitOptions } from './common/rate-limit/rate-limit.config';
 import { RequestIdMiddleware } from './common/request-id/request-id.middleware';
 import { validateEnvironment } from './config/environment';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { PortalModule } from './portal/portal.module';
+import { SgpStynxRuntimeModule } from './stynx/stynx-runtime.module';
 
 @Module({
   imports: [
-    createLoggingModule('sgp-portal-api'),
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-portal-api' }),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     ThrottlerModule.forRootAsync({
       useFactory: createRateLimitOptions,

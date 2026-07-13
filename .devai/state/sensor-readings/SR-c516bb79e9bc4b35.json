@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "SR-c516bb79e9bc4b35",
+  "sensor": {
+    "name": "sgp-spec-performance",
+    "kind": "spec_performance_targets",
+    "version": "1.0.0"
+  },
+  "timestamp": "2026-07-12T18:31:31.814Z",
+  "status": "pass",
+  "deterministic": true,
+  "command": "npm run governance:check",
+  "command_hash": "a48a8d301cc52f7eb6ed50fe6c7e52c202891cee88284a10c8bf481d78b47523",
+  "tier": "L2",
+  "exit_code": 0,
+  "duration_ms": 615,
+  "out_head": "\n> sgp@0.1.0 governance:check\n> node scripts/run.mjs governance check\n\n[governance] OK runtime-pin:package.json: package.json\n[governance] OK runtime-pin:backend/package.json: backend/package.json\n[governance] OK runtime-pin:frontend/package.json: frontend/package.json\n[governance] OK path:.nvmrc: .nvmrc\n[governance] OK path:package-lock.json: package-lock.json\n[governance] OK lockfile:no-backend-lockfile: backend/package-lock.json\n[governance] OK lockfile:no-frontend-lockfile: frontend/package-lock.json\n[governance] OK governance-manifest:implemented: implemented\n[governance] OK governance-control:docs.authority.docs-eng: docs/eng/README.md\n[governance] OK governance-control:engine.payroll.folia-precedence: docs/eng/domains/payroll-benefits.md\n[governance] OK governance-control:code.naming.english-authoritative: GOVERNANCE.md\n[governance] OK governance-control:runtime.no-compat-shim: docs/gov/evidence/database-alignment-phase-1.md\n[governance] OK governance-control:archive.legacy.non-authoritative: docs/leg/rev-eng/README.md\n[governance] OK governance-control:archive.deprecation.coverage-tracker: docs/leg/rev-eng/deprecation-status.md\n[governance] OK governance-control:archive.reverse-evidence-succession: docs/eng/README.md\n[governance] OK governance-control:tooling.node24-npm-workspace: package.json\n[governance] OK governance-control:tooling.single-source-lockfile: package-lock.json\n[governance] OK governance-control:ci.source-baseline: .github/workflows/source-ci.yml\n[governance] OK governance-control:governance.devai-config: .devai/config/project.json\n[governance] OK governance-control:governance.runtime-topology: docs/gov/generated/runtime-topology.json\n[governance] OK governance-control:observability.audit-coverage-dashboard: docs/gov/observability/audit-worker-dashboard.json\n[governance] OK governance-control:observability.audit-worker-alerts: docs/gov/observability/audit-worker-alerts.yml\n[governance] OK reverse-succession:rows-present: 29 rows\n[governance] OK reverse-succession:no-uncovered-2026-04-26: 0",
+  "err_head": ""
+}

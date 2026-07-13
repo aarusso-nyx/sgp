@@ -11,7 +11,6 @@ import { PdfVerificationEvidenceAppender } from '@stynx-nyx/pdf/evidence';
 
 import { StandardExceptionFilter } from '../common/errors/standard-exception.filter';
 import { LgpdModule } from '../common/lgpd/lgpd.module';
-import { createLoggingModule } from '../common/logging/logging.config';
 import { createRateLimitOptions } from '../common/rate-limit/rate-limit.config';
 import { RequestIdMiddleware } from '../common/request-id/request-id.middleware';
 import { validateEnvironment } from '../config/environment';
@@ -37,10 +36,11 @@ import { YearlyIncomeRenderService } from './yearly-income/yearly-income-render.
 import { ReportServiceController } from './report-service.controller';
 import { ReportRuntimeService } from './report-service.service';
 import { ReportWorkerService } from './report-worker.service';
+import { SgpStynxRuntimeModule } from '../stynx/stynx-runtime.module';
 
 @Module({
   imports: [
-    createLoggingModule('sgp-report-service'),
+    SgpStynxRuntimeModule.forRoot({ serviceName: 'sgp-report-service' }),
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnvironment }),
     ThrottlerModule.forRootAsync({
       useFactory: createRateLimitOptions,

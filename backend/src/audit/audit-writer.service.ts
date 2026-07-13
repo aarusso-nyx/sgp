@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { AuditEventEnvelope, AuditSink } from '@stynx-nyx/contracts';
 
 import type { RequestWithContext } from '../common/request-id/request-with-context';
 import { AuditMutationContextStore } from '../common/audit/audit-mutation-context.store';
@@ -16,8 +17,36 @@ export interface AuditAppendOptions {
 }
 
 @Injectable()
-export class AuditWriterService {
+export class AuditWriterService implements AuditSink {
   constructor(private readonly databaseService: DatabaseService) {}
+
+  async write(event: AuditEventEnvelope): Promise<void> {
+    if (!this.databaseService.configured) return;
+    const metadata = redactAuditMetadata(event.metadata ?? {}) as Record<
+      string,
+      unknown
+    >;
+    await this.databaseService.query(
+      `
+      SELECT public.sgp_append_audit_event(
+        $1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9, $10, $11
+      )
+      `,
+      [
+        event.action.toUpperCase(),
+        event.entity,
+        event.entityId ?? null,
+        event.actorId ?? null,
+        event.actorId ?? null,
+        null,
+        event.requestId ?? event.correlationId ?? null,
+        JSON.stringify(metadata),
+        null,
+        event.ipAddress ?? null,
+        null,
+      ],
+    );
+  }
 
   async auditMutation(
     request: RequestWithContext,

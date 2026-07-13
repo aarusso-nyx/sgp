@@ -1,7 +1,7 @@
 # Deploy Rollback Runbook
 
 Owner: SGP platform operator
-Last reviewed: 2026-05-10
+Last reviewed: 2026-07-12
 
 ## Promotion Controls
 
@@ -26,8 +26,10 @@ Last reviewed: 2026-05-10
 
 ## Deploy
 
-1. Confirm Workspace CI, governance, DB alignment, API alignment, e2e, and
-   release evidence are green.
+1. Confirm Workspace CI, DEVAI evidence gate, governance, DB alignment, API
+   alignment, e2e, and release evidence are green. Verify the retained
+   `docs/gov/evidence/sbom.cdx.json` and GitHub build attestation refer to the
+   release candidate.
 2. For provision planning, run:
    `npm run deploy -- --mode provision --target <stage|prod> --stack all --dry-run`.
 3. For artifact apply, provide the accepted artifact URI, release ID,
@@ -42,6 +44,9 @@ Last reviewed: 2026-05-10
 2. Use SSM to run the rollback host script. It flips `/opt/sgp/current` back to
    the previous release and reloads PM2.
 3. Do not run destructive DB rollback unless the owner explicitly approves it.
+4. DEVAI evidence and the SBOM are release evidence, not rollback executables;
+   preserve them for diagnosis and restore the last attested application
+   artifact through the normal host rollback path.
 
 ## Verification
 

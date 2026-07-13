@@ -7,6 +7,8 @@ interface ApiHit {
   path: string;
   query: Record<string, string>;
   authorization: string;
+  requestId: string;
+  tenantId: string;
   body: unknown;
 }
 
@@ -62,13 +64,23 @@ test.describe('SGP admin Playwright e2e', () => {
   });
 
   test('renders the authenticated admin shell and RBAC menu catalog', async ({ page }) => {
-    await bootAdmin(page);
+    const hits: ApiHit[] = [];
+    await bootAdmin(page, { hits });
 
     await page.goto('/');
 
     await expect(page.getByText('Admin E2E')).toBeVisible();
     await expect(page.getByRole('link', { name: /Atividade/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Banco/ })).toBeVisible();
+    expect(hits).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          authorization: `Bearer ${adminAccessToken}`,
+          requestId: expect.stringMatching(/^[0-9a-f-]{36}$/),
+          tenantId: 'tenant-e2e',
+        }),
+      ]),
+    );
   });
 
   test('blocks payroll execution when the RBAC catalog lacks the route permission', async ({
@@ -390,6 +402,8 @@ async function bootAdmin(page: Page, options: BootOptions = {}): Promise<void> {
       path,
       query: Object.fromEntries(url.searchParams.entries()),
       authorization: request.headers()['authorization'] ?? '',
+      requestId: request.headers()['x-request-id'] ?? '',
+      tenantId: request.headers()['x-tenant-id'] ?? '',
       body,
     });
 

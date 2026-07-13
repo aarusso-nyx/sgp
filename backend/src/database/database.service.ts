@@ -1,8 +1,9 @@
-import { Injectable, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Pool, PoolClient, QueryResultRow } from 'pg';
 
 import { RequestContextStore } from '../common/request-context/request-context.store';
+import { SgpDbSessionContextApplier } from '../stynx/sgp-db-session-context.applier';
 import { TenantContextMissingError } from './tenant-context-missing.error';
 import { domainError } from '../common/errors/domain-error';
 
@@ -17,7 +18,13 @@ const BYPASS_RLS_ALLOWLIST = new Set(['payroll-engine', 'integrations-worker']);
 export class DatabaseService implements OnModuleDestroy {
   private pool?: Pool | undefined;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    @Optional()
+    private readonly contextApplier: SgpDbSessionContextApplier = new SgpDbSessionContextApplier(
+      configService,
+    ),
+  ) {}
 
   get configured(): boolean {
     return Boolean(this.configService.get<string>('DATABASE_URL'));
@@ -69,6 +76,22 @@ export class DatabaseService implements OnModuleDestroy {
     }
   }
 
+  async applyPublicLookupContext(client: PoolClient): Promise<void> {
+    await this.contextApplier.applyPublicLookup(client);
+  }
+
+  async applyTenantMutationContext(
+    client: PoolClient,
+    tenantId: string,
+    permissions: readonly string[],
+  ): Promise<void> {
+    await this.contextApplier.applyTenantMutation(
+      client,
+      tenantId,
+      permissions,
+    );
+  }
+
   async onModuleDestroy(): Promise<void> {
     if (this.pool) {
       await this.pool.end();
@@ -91,55 +114,19 @@ export class DatabaseService implements OnModuleDestroy {
       .filter(Boolean);
     const authenticated = Boolean(actor?.sub);
 
-    await client.query('SET LOCAL row_security = on');
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.request_id',
-      context?.requestId ?? '',
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_user_sub',
-      actor?.sub ?? '',
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_login',
-      actor?.username ?? '',
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_tenant_id',
+    await this.contextApplier.apply(client, {
       tenantId,
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_tenant',
-      tenantId,
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_employee_id',
-      this.claimText(actor?.claims?.employee_id),
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_permissions',
-      permissions.join('\n'),
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.current_groups',
-      groups.join('\n'),
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.authenticated',
-      authenticated ? 'true' : 'false',
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.bypass_rls',
-      context?.bypassRls ? 'true' : 'false',
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.pii_encryption_key',
-      this.configService.get<string>('SGP_PII_PGCRYPTO_KEY') ?? '',
-    ]);
-    await client.query('SELECT set_config($1, $2, true)', [
-      'app.pii_encryption_key_id',
-      this.configService.get<string>('SGP_PII_PGCRYPTO_KEY_ID') ?? '',
-    ]);
+      permissions,
+      roles: groups,
+      ...(actor?.sub ? { userId: actor.sub } : {}),
+      ...(context?.requestId ? { requestId: context.requestId } : {}),
+      extras: {
+        authenticated,
+        bypassRls: context?.bypassRls ?? false,
+        employeeId: this.claimText(actor?.claims?.employee_id),
+        login: actor?.username ?? '',
+      },
+    });
   }
 
   private assertBypassRlsAllowed(sql: string): void {

@@ -20,6 +20,18 @@ export class OpenApiClient {
     return this.api.delete<unknown>(`/v1/arquivos/${encodeURIComponent(params.id)}`);
   }
 
+  getApiHealthz(): Observable<unknown> {
+    return this.api.get<unknown>('/healthz');
+  }
+
+  getApiInfo(): Observable<unknown> {
+    return this.api.get<unknown>('/info');
+  }
+
+  getApiMetrics(): Observable<unknown> {
+    return this.api.get<unknown>('/metrics');
+  }
+
   getApiPortalV1AuthGovbrSignCallback(): Observable<unknown> {
     return this.api.get<unknown>('/portal/v1/auth/govbr/sign/callback');
   }
@@ -30,6 +42,10 @@ export class OpenApiClient {
 
   getApiPortalV1AuthMe(): Observable<unknown> {
     return this.api.get<unknown>('/portal/v1/auth/me');
+  }
+
+  getApiReadyz(): Observable<unknown> {
+    return this.api.get<unknown>('/readyz');
   }
 
   getApiV1Arquivos(query: ApiQuery = {}): Observable<unknown> {

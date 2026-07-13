@@ -1,26 +1,14 @@
-import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import helmet from 'helmet';
 
-import { configureCorsEntrypoint } from './common/bootstrap/cors.config';
-import { usePinoLogger } from './common/logging/bootstrap-logger';
-import { configureOpenTelemetryTracingEntrypoint } from './common/observability/otel.tracing';
-import { configurePrometheusMetricsEntrypoint } from './common/observability/prometheus.metrics';
 import { createOpenApi31Document } from './common/openapi/openapi31';
-import { configureRateLimitEntrypoint } from './common/rate-limit/rate-limit.config';
 import { ReportServiceModule } from './report-service/report-service.module';
+import { createSgpStynxHttpRuntime } from './stynx/stynx-runtime.factory';
 
 export async function bootstrap() {
-  const app = await NestFactory.create(ReportServiceModule, {
-    bufferLogs: true,
-  });
-  usePinoLogger(app);
-  configureRateLimitEntrypoint(app);
-  configureOpenTelemetryTracingEntrypoint(app, 'sgp-report-service');
-  configurePrometheusMetricsEntrypoint(app, 'sgp-report-service');
-  app.use(helmet());
-  app.setGlobalPrefix('api');
-  configureCorsEntrypoint(app);
+  const app = await createSgpStynxHttpRuntime(
+    ReportServiceModule,
+    'sgp-report-service',
+  );
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('SGP Report Service')

@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/source-ci.yml'
-      - 'devai.config.json'
+      - '.devai/**'
       - '.gitignore'
       - '.node-version'
       - '.nvmrc'
@@ -30,7 +30,7 @@ on:
       - develop
     paths:
       - '.github/workflows/source-ci.yml'
-      - 'devai.config.json'
+      - '.devai/**'
       - '.gitignore'
       - '.node-version'
       - '.nvmrc'
@@ -184,3 +184,18 @@ jobs:
 
       - name: Governance validation
         run: npm run governance:check
+
+      - name: Upload normal CI and DEVAI artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workspace-ci-evidence-${{ github.run_id }}
+          path: |
+            .devai/state/evidence-chain.json
+            .devai/state/inventory
+            .devai/state/scorecards
+            .devai/state/sensor-readings
+            backend/coverage
+            frontend/coverage
+            docs/gov/evidence/sbom.cdx.json
+          if-no-files-found: warn

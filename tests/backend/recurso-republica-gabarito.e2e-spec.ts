@@ -13,6 +13,14 @@ class FakeAvaliacaoDatabase {
 
   constructor(private readonly deadline: 'open' | 'closed' = 'open') {}
 
+  applyPublicLookupContext(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  applyTenantMutationContext(): Promise<void> {
+    return Promise.resolve();
+  }
+
   async query<T>() {
     return [] as T[];
   }
