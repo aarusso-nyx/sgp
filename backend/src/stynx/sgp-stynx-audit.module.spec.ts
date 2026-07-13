@@ -31,17 +31,18 @@ describe('SGP STYNX audit composition', () => {
 
     expect(query).toHaveBeenCalledTimes(1);
     const values = query.mock.calls[0]?.[1] as unknown[];
-    expect(values.slice(0, 7)).toEqual([
+    expect(values.slice(0, 8)).toEqual([
       'UPDATE',
       'employee',
       'employee-1',
+      null,
       'actor-1',
-      'actor-1',
+      null,
       null,
       'request-1',
     ]);
-    expect(String(values[7])).not.toContain('Bearer secret');
-    expect(String(values[7])).toContain('retained');
+    expect(String(values[8])).not.toContain('Bearer secret');
+    expect(String(values[8])).toContain('retained');
 
     await moduleRef.close();
   });
