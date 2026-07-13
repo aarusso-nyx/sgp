@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 
 const repository = process.env.GITHUB_REPOSITORY ?? process.argv[2];
 const branch = process.env.BRANCH_PROTECTION_BRANCH ?? 'main';
@@ -11,6 +12,10 @@ const requiredContexts = (
   .split(',')
   .map((value) => value.trim())
   .filter(Boolean);
+const policyPath =
+  process.env.BRANCH_PROTECTION_POLICY_FILE ?? 'docs/gov/branch-protection-policy.json';
+const declaredPolicy = existsSync(policyPath) ? JSON.parse(readFileSync(policyPath, 'utf8')) : {};
+const mode = process.env.BRANCH_PROTECTION_MODE ?? declaredPolicy.mode ?? 'collaborative';
 
 if (!repository) {
   console.error('[branch-protection] GITHUB_REPOSITORY or repository argument is required.');
@@ -36,14 +41,36 @@ for (const context of requiredContexts) {
 }
 
 const reviews = protection.required_pull_request_reviews;
-if (!reviews) {
-  failures.push('required pull request reviews are not configured');
-} else {
-  if ((reviews.required_approving_review_count ?? 0) < 1) {
+if (!['solo-owner', 'collaborative'].includes(mode)) {
+  failures.push(`unsupported branch protection mode: ${mode}`);
+} else if (mode === 'collaborative') {
+  if (!reviews) {
+    failures.push('required pull request reviews are not configured');
+  }
+  if ((reviews?.required_approving_review_count ?? 0) < 1) {
     failures.push('required approving review count is below 1');
   }
-  if (reviews.require_code_owner_reviews !== true) {
+  if (reviews?.require_code_owner_reviews !== true) {
     failures.push('code owner reviews are not required');
+  }
+  if (reviews?.require_last_push_approval !== true) {
+    failures.push('approval from someone other than the last pusher is not required');
+  }
+} else {
+  if (declaredPolicy.owner !== 'aarusso-nyx') {
+    failures.push('solo-owner policy must name the repository owner');
+  }
+  if (declaredPolicy.production !== false) {
+    failures.push('solo-owner mode is prohibited for production governance');
+  }
+  if ((reviews?.required_approving_review_count ?? 0) !== 0) {
+    failures.push('solo-owner required approving review count must be 0');
+  }
+  if (reviews?.require_code_owner_reviews === true) {
+    failures.push('solo-owner mode must not require an impossible CODEOWNER approval');
+  }
+  if (reviews?.require_last_push_approval === true) {
+    failures.push('solo-owner mode must not require approval from another pusher');
   }
 }
 
@@ -69,5 +96,5 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `[branch-protection] ${repository}:${branch} is compliant with ${requiredContexts.length} required check(s).`,
+  `[branch-protection] ${repository}:${branch} is compliant in ${mode} mode with ${requiredContexts.length} required check(s).`,
 );

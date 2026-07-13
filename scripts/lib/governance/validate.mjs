@@ -844,6 +844,9 @@ function validateRepositoryDiscipline() {
   const disciplineEvidence = pathExists('docs/gov/evidence/repository-discipline.md')
     ? readFileSync(resolve(repoRoot, 'docs/gov/evidence/repository-discipline.md'), 'utf8')
     : '';
+  const branchProtectionPolicy = pathExists('docs/gov/branch-protection-policy.json')
+    ? readJson('docs/gov/branch-protection-policy.json')
+    : {};
   const requiredCodeowners = [
     '/package.json',
     '/.github/workflows/',
@@ -891,11 +894,17 @@ function validateRepositoryDiscipline() {
   record('repo-discipline:docs-work-ignored', gitignore.includes('docs/work/**'), '.gitignore');
   record(
     'repo-discipline:branch-protection-evidence',
-    disciplineEvidence.includes('required reviews') &&
-      disciplineEvidence.includes('CODEOWNERS review') &&
+    branchProtectionPolicy.mode === 'solo-owner' &&
+      branchProtectionPolicy.owner === 'aarusso-nyx' &&
+      branchProtectionPolicy.production === false &&
+      branchProtectionPolicy.required_approving_review_count === 0 &&
+      branchProtectionPolicy.require_code_owner_reviews === false &&
+      branchProtectionPolicy.require_last_push_approval === false &&
+      disciplineEvidence.includes('solo-owner') &&
+      disciplineEvidence.includes('collaborative') &&
       disciplineEvidence.includes('no force pushes') &&
       disciplineEvidence.includes('no deletions'),
-    'docs/gov/evidence/repository-discipline.md',
+    'docs/gov/branch-protection-policy.json + repository-discipline.md',
   );
 }
 

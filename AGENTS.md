@@ -317,6 +317,11 @@ Before diagnosing script failures, inspect `scripts/run.mjs`,
 - Use concise commit messages in imperative style; include scope when helpful.
 - Do not force-push `main` or rewrite published history without explicit
   authorization.
+- Branch review policy follows `docs/gov/branch-protection-policy.json` and
+  ADR-036. In `solo-owner` mode, the named owner may merge an owner-authored PR
+  after every required check passes without an independent approval. Before a
+  second active maintainer is added or production governance begins, switch to
+  `collaborative` mode and restore CODEOWNER and last-push approval requirements.
 - After push, verify the intended branch and remote SHA when the user asks for
   publication or acceptance evidence.
 

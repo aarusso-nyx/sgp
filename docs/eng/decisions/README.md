@@ -41,3 +41,4 @@ Every ADR must:
 | [ADR-033](adr-033-postgis-public-schema-portability.md)            | Accepted   | PostGIS types and functions use the supported image's `public` extension schema.                                       |
 | [ADR-034](adr-034-stynx-devai-adoption-boundary.md)                | Accepted   | STYNX owns generic platform mechanisms while SGP retains product policy and DEVAI observes the plant.                  |
 | [ADR-035](adr-035-cognito-general-uuid-stynx-identity-adapters.md) | Accepted   | Cognito remains the session authority and STYNX identity contracts adapt SGP general UUID tenancy.                     |
+| [ADR-036](adr-036-solo-owner-merge-governance.md)                  | Accepted   | Solo-owner mode permits owner merge after all protected checks until collaborative or production governance begins.    |

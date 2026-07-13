@@ -55,6 +55,12 @@ changed:
 The first seven were already required on `main` when inspected on 2026-07-12.
 Add `DEVAI evidence gate` only after its successful PR check is observable.
 
+After that check passed on PR #57, it became the eighth protected context.
+ADR-036 records the Owner Decision that the current one-collaborator repository
+uses `solo-owner` review policy: all checks remain mandatory, while independent
+approval is restored when a second maintainer joins or production governance
+begins.
+
 The first monolithic PR run completed every evidence step successfully but hit
 the 90-minute job boundary during teardown, so GitHub reported it as cancelled.
 SGP now follows STYNX's CI-economy topology: a cheap source-bound evidence
