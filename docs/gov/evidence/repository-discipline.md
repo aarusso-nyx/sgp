@@ -49,6 +49,19 @@ Status: retained evidence, reverified 2026-07-12 for Wave 7.
   retained evidence is absent or stale. It uploads DEVAI state and normal test
   artifacts on every outcome.
 
+## PR-based Release Governance
+
+- SGP does not use Release Please or an automated release-PR generator.
+- Source, version, changelog and release-impact changes use the same protected
+  pull-request path as other portfolio repositories.
+- PR titles are commitlint-validated and become the semantic merge subject.
+  Push-time commitlint excludes GitHub-generated merge commits while still
+  validating non-merge commits in the pushed range.
+- Production promotion is an explicit owner action from protected `main`:
+  create an approved `vMAJOR.MINOR.PATCH` tag or dispatch the prod planning
+  workflow manually. Tagging does not bypass environment approval, provenance,
+  deployment evidence or rollback controls.
+
 ## Required Local Gate List
 
 ```bash

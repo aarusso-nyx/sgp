@@ -23,6 +23,9 @@ Last reviewed: 2026-07-12
   provenance evidence.
 - Confirm manual DB migration state. Roll back application artifacts only when
   the schema remains compatible with the previous artifact.
+- Confirm version and changelog changes were reviewed through a protected PR.
+  SGP has no automated release-PR generator; an owner-approved version tag must
+  point to protected `main` before it triggers production planning.
 
 ## Deploy
 

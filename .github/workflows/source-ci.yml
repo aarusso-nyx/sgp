@@ -110,7 +110,7 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             printf '%s\n' "$PR_TITLE" | npx commitlint
           else
-            npx commitlint --from "${{ github.event.before }}" --to "${{ github.sha }}"
+            npx commitlint --from "${{ github.event.before }}" --to "${{ github.sha }}" --git-log-args=--no-merges
           fi
 
       - name: Run npm audit
