@@ -29,15 +29,16 @@ export class AuditWriterService implements AuditSink {
     await this.databaseService.query(
       `
       SELECT public.sgp_append_audit_event(
-        $1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9, $10, $11
+        $1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb, $10, $11, $12
       )
       `,
       [
         event.action.toUpperCase(),
         event.entity,
         event.entityId ?? null,
+        null,
         event.actorId ?? null,
-        event.actorId ?? null,
+        null,
         null,
         event.requestId ?? event.correlationId ?? null,
         JSON.stringify(metadata),
@@ -96,16 +97,18 @@ export class AuditWriterService implements AuditSink {
         $5,
         $6,
         $7,
-        $8::jsonb,
-        $9,
+        $8,
+        $9::jsonb,
         $10,
-        $11
+        $11,
+        $12
       )
       `,
       [
         action,
         resourceType,
         options.resourceId ?? null,
+        null,
         request.actor?.sub ?? null,
         request.actor?.username ?? null,
         options.tableName ?? null,
