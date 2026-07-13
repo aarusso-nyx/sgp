@@ -1,6 +1,7 @@
 name: Deploy (prod)
 
-# Triggered by a release-please-generated tag or manual workflow_dispatch.
+# Triggered by an owner-approved version tag from protected `main` or manual
+# workflow_dispatch. Version and changelog changes arrive through normal PRs.
 # AWS is the only automated provision target. Prod deploy planning is gated by
 # the `prod` GitHub Environment; repository settings must require reviewer
 # approval before this job runs. Failed gates still block deploy. Artifact
