@@ -92,7 +92,7 @@
     "@nestjs/testing": "^11.1.19",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.12.4",
+    "@types/node": "^25.6.0",
     "@types/pg": "^8.20.0",
     "@types/supertest": "^7.0.0",
     "eslint": "^10.4.0",
