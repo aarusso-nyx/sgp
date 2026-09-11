@@ -61,6 +61,6 @@
     "ng-extract-i18n-merge": "^3.3.0",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   }
 }
