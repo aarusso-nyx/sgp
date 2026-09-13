@@ -54,7 +54,7 @@
     "@nestjs/core": "^11.1.19",
     "@nestjs/platform-express": "^11.1.19",
     "@nestjs/schedule": "^6.1.3",
-    "@nestjs/swagger": "^11.3.0",
+    "@nestjs/swagger": "^11.4.7",
     "@nestjs/throttler": "^6.5.0",
     "@stynx-nyx/auth": "^1.0.0",
     "@stynx-nyx/backend": "^1.0.0",
